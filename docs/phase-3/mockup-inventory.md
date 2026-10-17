@@ -1,0 +1,9 @@
+# Reference inspection
+
+Shared design: compact 48–56px header, 190–200px sidebar on high-resolution workbenches, 12–14px data text, squared cards (4–8px corners), thin cool-gray borders, white surfaces, pale blue selection, tabular amounts, blue/teal actions. Reference 04/06/07 use a light sidebar; collage references use a dark navy sidebar. The implementation uses the high-resolution workbench shell consistently, with a persisted dark-sidebar setting.
+
+Reference 01/02/03 are 1024px wide soft-focus screenshots, with a ~150px dark sidebar. 04/06/07 are high-resolution 16:9 full pages with ~195px light sidebar, 56px header, ~310px detail rail. 05/08/09/10 include other screenshot fragments and large dark caption bands; these collage artifacts are excluded from application layouts. Their visible content panels are the design standard.
+
+01: four KPI cells, 60/40 progress/insight split, two lower charts. 02: full-width directory with teal active tabs. 03: four integration cards, horizontal pipeline, sync table. 04: heading/context/status row, dense toolbar, 70/30 grid/intelligence split, summary cells and full-width balance footer. 05: date controls and 70/30 ledger/detail split. 06: 50/50 heatmap/distribution above findings, ~310px investigation rail. 07: five provider cards, six-stage pipeline, check summary, exception table. 08: engagement lifecycle on left and key dates on right, program table below. 09: ~240px task list and evidence context beside investigation output. 10: compliance tabs, four status cards, calendar and regulatory panels.
+
+Exact file dimensions are recorded by the screenshot audit script in `visual-measurements.json`. Blurred labels are replaced with legible supported fields. Fictional customer figures and implied completion claims are never copied into runtime data.

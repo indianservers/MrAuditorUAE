@@ -1,0 +1,43 @@
+{
+  "phase": 3,
+  "backend": {
+    "passed": 172,
+    "skipped": 2,
+    "coverage_percent": 91.82354593987075,
+    "core_coverage_percent": 90.34749034749035
+  },
+  "frontend": {
+    "passed": 18,
+    "failed": 0
+  },
+  "playwright": {
+    "startTime": "2026-10-17T20:23:03.419Z",
+    "duration": 34654.819,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "production_browser": {
+    "startTime": "2026-10-17T20:23:43.133Z",
+    "duration": 7768.461,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "screenshots": 26,
+  "axe_violations": 0,
+  "npm_vulnerabilities": 0,
+  "performance": {
+    "population": 180,
+    "page_limit": 50,
+    "min_ms": 24.299999999813735,
+    "median_ms": 26.09999999962747,
+    "max_ms": 28,
+    "rendered_rows": 26,
+    "max_payload_bytes": 77639
+  },
+  "production_build": "passed",
+  "phase4_started": false
+}

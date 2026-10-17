@@ -1,0 +1,11 @@
+# Reconciliation engine
+
+Reconciliation is deterministic and retains source snapshot references, run timestamp, tolerance, calculations, statuses and exception records. Use POST /api/v1/reconciliation/runs with snapshot_id, optional comparison_snapshot_id and a nonnegative tolerance. The source and comparison must have the same authorized client/entity and functional currency. Different periods are explicit comparative/opening roll-forward comparisons; same-period comparisons reconcile closing account balances.
+
+For each account, difference = computed closing − supplied source closing. Accounts missing from either side participate with zero, so a missing account cannot disappear through an inner join. Differences greater than the declared tolerance become reconciliation_exceptions. Current/prior movements return current, prior, exact variance and percentage where prior is nonzero; zero-base percentages are NULL. Causes are not inferred from arithmetic.
+
+The run independently checks stored source record count versus the batch manifest/valid count, journal-line count versus source count where journal data exists, debit/credit balance, opening + debit − credit roll-forward, source-supplied row/debit/credit controls, mapping completeness, and an optional independent GL/TB or prior closing/opening comparison. Zero net debits/credits alone never establishes completeness.
+
+A missing independent TB, missing source count/totals or incomplete API extraction yields insufficient_evidence or not_testable. TB-only data cannot claim a journal-to-ledger test. Operator source_complete assertions require accompanying passed count/total controls before source-system completeness can pass. Results distinguish failed, insufficient_evidence, warning, information and passed. Reconciled does not mean audited or approved.
+
+Every committed import is reproducible by snapshot, including superseded imports. Exact ledger amounts remain unrounded for comparison. Currency rounding is a separate display policy. Mapping warnings do not silently disappear when the accounting equation balances. Control-account-specific subsidiary-ledger reconciliation awaits supplied control ledgers; it is explicitly not testable without them.

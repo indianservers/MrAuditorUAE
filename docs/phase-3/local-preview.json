@@ -1,0 +1,6 @@
+{
+  "data": "Labeled disposable synthetic test records",
+  "frontend_status": 200,
+  "preview": "http://127.0.0.1:3000/login",
+  "backend_status": "ready"
+}

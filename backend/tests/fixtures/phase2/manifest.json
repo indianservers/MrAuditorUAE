@@ -1,0 +1,18 @@
+{
+  "synthetic": true,
+  "company": "FICTIONAL Gulf Example LLC \u2014 synthetic test only",
+  "rows": 16,
+  "debit": "1011300",
+  "credit": "1011300",
+  "fixtures": [
+    "balanced journals",
+    "unbalanced import (separate file)",
+    "duplicate journals",
+    "weekend posting",
+    "year-end adjustment",
+    "large expense",
+    "unmapped account",
+    "missing source reference",
+    "reversal"
+  ]
+}

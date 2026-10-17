@@ -1,0 +1,54 @@
+{
+  "synthetic": true,
+  "mode": "streamed file normalization + DuckDB analytics; excludes PostgreSQL writes",
+  "hardware": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "cpu_count": 12,
+    "memory_bytes": 34190524416,
+    "python": "3.12.10"
+  },
+  "runs": [
+    {
+      "lines": 10000,
+      "ingestion_seconds": 0.40432989999999336,
+      "validation_tb_seconds": 0.03394979999984571,
+      "reconciliation_seconds": 1.6599999980826396e-05,
+      "analytics_seconds": 0.3404131000002053,
+      "peak_process_rss_bytes": 78028800,
+      "source_bytes": 525564,
+      "rules": 25,
+      "rules_not_testable": 13,
+      "flags": 21802,
+      "rows_processed": 10000,
+      "independent_source_reconciliation": "passed"
+    },
+    {
+      "lines": 100000,
+      "ingestion_seconds": 3.8146037999999862,
+      "validation_tb_seconds": 0.325969299999997,
+      "reconciliation_seconds": 1.1699999959091656e-05,
+      "analytics_seconds": 1.7925270999999157,
+      "peak_process_rss_bytes": 129413120,
+      "source_bytes": 5454854,
+      "rules": 25,
+      "rules_not_testable": 13,
+      "flags": 201802,
+      "rows_processed": 100000,
+      "independent_source_reconciliation": "passed"
+    },
+    {
+      "lines": 1000000,
+      "ingestion_seconds": 38.12219779999987,
+      "validation_tb_seconds": 3.3649114999998346,
+      "reconciliation_seconds": 1.0600000223348616e-05,
+      "analytics_seconds": 14.389199799999915,
+      "peak_process_rss_bytes": 715497472,
+      "source_bytes": 56547754,
+      "rules": 25,
+      "rules_not_testable": 13,
+      "flags": 2001802,
+      "rows_processed": 1000000,
+      "independent_source_reconciliation": "passed"
+    }
+  ]
+}

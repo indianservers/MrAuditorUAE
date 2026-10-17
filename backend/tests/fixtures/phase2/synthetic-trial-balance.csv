@@ -1,0 +1,6 @@
+account_code,account_name,opening_balance,debit,credit,closing_balance
+100,Cash,10000,100,1001200,-991100
+300,Equity,-10000,0,0,-10000
+500,Expense,0,1000200,100,1000100
+777,Unmapped account,0,300,0,300
+999,Suspense,0,700,0,700

@@ -1,0 +1,44 @@
+name: backend
+on: [push, pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: auditos
+          POSTGRES_PASSWORD: ci-admin-only
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 3s --health-retries 20
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+        options: >-
+          --health-cmd "redis-cli ping" --health-interval 5s --health-timeout 3s --health-retries 20
+    env:
+      JWT_SECRET: ci-signing-secret-only-at-least-48-characters-long
+      BOOTSTRAP_SECRET: ci-first-run-only
+      DATABASE_URL: postgresql+asyncpg://auditos:ci-app-only@localhost:5432/auditos
+      REDIS_URL: redis://localhost:6379/0
+      INTEGRATION_TESTS: '1'
+      PGPASSWORD: ci-admin-only
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: '0.13.1'
+          python-version: '3.12'
+      - run: uv sync --frozen
+        working-directory: backend
+      - run: psql -h localhost -U postgres -d auditos -c "CREATE ROLE auditos LOGIN PASSWORD 'ci-app-only' NOSUPERUSER NOBYPASSRLS; GRANT USAGE, CREATE ON SCHEMA public TO auditos;"
+      - run: uv run alembic upgrade head && uv run alembic downgrade -1 && uv run alembic upgrade head
+        working-directory: backend
+      - run: uv run ruff check . && uv run ruff format --check . && uv run mypy app
+        working-directory: backend
+      - run: uv run pytest --cov=app --cov-report=term-missing --cov-report=json:coverage.json --cov-fail-under=80
+        working-directory: backend
+
+      - run: uv run python ../scripts/check_core_coverage.py coverage.json
+        working-directory: backend

@@ -1,0 +1,12 @@
+{
+  "synthetic": true,
+  "mode": "real PostgreSQL service pipeline, not HTTP; durations exclude final transaction commit overhead",
+  "lines": 10000,
+  "upload_seconds": 0.018812100000104692,
+  "validation_seconds": 1.347892899999806,
+  "ledger_commit_seconds": 5.914725999999973,
+  "reconciliation_seconds": 0.04842090000011012,
+  "analytics_with_persistence_seconds": 5.7686108000002605,
+  "peak_python_rss_bytes": 157503488,
+  "database_server_memory_excluded": true
+}

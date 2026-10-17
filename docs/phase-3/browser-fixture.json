@@ -1,0 +1,12 @@
+{
+  "synthetic": true,
+  "client_id": "09a5c841-3fea-4a40-83ec-137eb6a9cd73",
+  "entity_id": "6c7bc690-1495-4419-a1ce-d80b50ea6021",
+  "period_id": "e5563b3c-bfe4-460b-b981-cd76be9c710f",
+  "engagement_id": "a3cd2666-4884-4532-9735-8ff639fe99fe",
+  "batch_id": "b63b5653-02d5-4991-990a-b72b429b47f9",
+  "snapshot_id": "cabee096-4f59-4695-ae02-6f32ed418b84",
+  "analytics_run_id": "197391b9-3a7c-4e5d-a1ed-952ff1071d5e",
+  "reconciliation_run_id": "dd202b5e-9b74-49ed-bd89-66c35145cf79",
+  "rows": 180
+}

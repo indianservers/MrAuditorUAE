@@ -1,0 +1,9 @@
+# Connector architecture
+
+Connectors extract authorized source material; canonical normalization and financial validation remain separate services. Connections are scoped to a verified tenant/client/entity/period. Connection credentials are encrypted using an independently injected Fernet key, excluded from serializers and logs. The key must live in a production secret manager with a tested re-encryption rotation/backup procedure. A database dump alone must not contain usable connector credentials.
+
+Zoho uses allowlisted regional accounts/API domains and OAuth state/refresh handling. Raw native resources and published manual-journal details are preserved. Chart and permitted manual-journal data can be staged as derived imports; invoices/bills/credit notes/contact resources remain supporting evidence. This is not a claim of a complete GL. Reconciliation remains insufficient_evidence until independent accounting reports/counts/totals are supplied.
+
+Tally uses an outbound local Windows Python agent and native HTTP/XML collection exports. Tally ports remain loopback-only. Packages travel to AuditOS over verified HTTPS and resume using numbered hash-verified chunks. XML parsing is hardened against external entities and unsafe documents; company, voucher IDs/dates/signs and ledger presence are validated where supplied.
+
+Connection synchronization and import parsing can run through existing Celery/Redis infrastructure. Work restores tenant context, checks current operation permission and identity/membership/tenant activity, row-locks work, and persists progress/status/result references. Sources and failed imports do not become active ledger populations. Missing source controls, revoked credentials and incomplete pagination are explicit failure/insufficiency states. See zoho-integration.md and tally-integration.md for exact operator steps and official references.

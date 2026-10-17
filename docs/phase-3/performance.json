@@ -1,0 +1,44 @@
+{
+  "environment": "Windows local development server; Chromium; warm backend",
+  "population": 180,
+  "limit": 50,
+  "samples": [
+    {
+      "milliseconds": 28,
+      "bytes": 77627,
+      "status": 200,
+      "rows": 50,
+      "total": 180
+    },
+    {
+      "milliseconds": 25.299999999813735,
+      "bytes": 77632,
+      "status": 200,
+      "rows": 50,
+      "total": 180
+    },
+    {
+      "milliseconds": 26.100000000558794,
+      "bytes": 77639,
+      "status": 200,
+      "rows": 50,
+      "total": 180
+    },
+    {
+      "milliseconds": 24.299999999813735,
+      "bytes": 46485,
+      "status": 200,
+      "rows": 30,
+      "total": 180
+    },
+    {
+      "milliseconds": 26.09999999962747,
+      "bytes": 77627,
+      "status": 200,
+      "rows": 50,
+      "total": 180
+    }
+  ],
+  "rendered_center_rows": 26,
+  "limitation": "This measures the labeled 180-line browser fixture. No million-row frontend throughput or concurrent-user claim is made."
+}

@@ -1,0 +1,6 @@
+account_code,account_name
+100,Cash
+300,Equity
+500,Expense
+999,Suspense
+777,Unmapped account

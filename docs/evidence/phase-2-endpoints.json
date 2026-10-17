@@ -1,0 +1,744 @@
+[
+  {
+    "path": "/api/v1/accounting/imports",
+    "method": "POST",
+    "operation_id": "upload_api_v1_accounting_imports_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/imports",
+    "method": "GET",
+    "operation_id": "list_import_batches_api_v1_accounting_imports_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/imports/{identifier}",
+    "method": "GET",
+    "operation_id": "get_import_api_v1_accounting_imports__identifier__get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/imports/{identifier}/preview",
+    "method": "GET",
+    "operation_id": "preview_api_v1_accounting_imports__identifier__preview_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/imports/{identifier}/validate",
+    "method": "POST",
+    "operation_id": "validate_api_v1_accounting_imports__identifier__validate_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/imports/{identifier}/commit",
+    "method": "POST",
+    "operation_id": "commit_api_v1_accounting_imports__identifier__commit_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/imports/{identifier}/validations",
+    "method": "GET",
+    "operation_id": "validations_api_v1_accounting_imports__identifier__validations_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/trial-balance",
+    "method": "GET",
+    "operation_id": "balance_api_v1_accounting_trial_balance_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/trial-balance",
+    "method": "POST",
+    "operation_id": "balance_snapshot_api_v1_accounting_trial_balance_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/mappings",
+    "method": "POST",
+    "operation_id": "mapping_api_v1_accounting_mappings_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/mappings",
+    "method": "GET",
+    "operation_id": "list_account_mappings_api_v1_accounting_mappings_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/mappings/{identifier}",
+    "method": "GET",
+    "operation_id": "get_mapping_api_v1_accounting_mappings__identifier__get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/analytics/runs",
+    "method": "POST",
+    "operation_id": "analytics_api_v1_analytics_runs_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/analytics/runs",
+    "method": "GET",
+    "operation_id": "list_audit_analytics_runs_api_v1_analytics_runs_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/analytics/runs/{identifier}",
+    "method": "GET",
+    "operation_id": "get_analytics_api_v1_analytics_runs__identifier__get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/analytics/rules",
+    "method": "GET",
+    "operation_id": "rules_api_v1_analytics_rules_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/reconciliation/runs",
+    "method": "POST",
+    "operation_id": "reconcile_api_v1_reconciliation_runs_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/reconciliation/runs",
+    "method": "GET",
+    "operation_id": "list_reconciliation_runs_api_v1_reconciliation_runs_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/sampling/runs",
+    "method": "POST",
+    "operation_id": "sampling_api_v1_sampling_runs_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/sampling/runs",
+    "method": "GET",
+    "operation_id": "list_sampling_runs_api_v1_sampling_runs_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/sampling/runs/{identifier}",
+    "method": "GET",
+    "operation_id": "get_sampling_api_v1_sampling_runs__identifier__get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/lineage/{identifier}",
+    "method": "GET",
+    "operation_id": "lineage_api_v1_accounting_lineage__identifier__get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/accounts",
+    "method": "GET",
+    "operation_id": "list_accounts_api_v1_accounting_accounts_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/journals",
+    "method": "GET",
+    "operation_id": "list_journal_entries_api_v1_accounting_journals_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/ledger",
+    "method": "GET",
+    "operation_id": "list_journal_lines_api_v1_accounting_ledger_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/analytics/findings",
+    "method": "GET",
+    "operation_id": "list_audit_findings_api_v1_analytics_findings_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/analytics/risk-scores",
+    "method": "GET",
+    "operation_id": "list_risk_scores_api_v1_analytics_risk_scores_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/reconciliation/exceptions",
+    "method": "GET",
+    "operation_id": "list_reconciliation_exceptions_api_v1_reconciliation_exceptions_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/ai/account-classification",
+    "method": "POST",
+    "operation_id": "account_classification_api_v1_ai_account_classification_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/ai/anomaly-explanation",
+    "method": "POST",
+    "operation_id": "anomaly_explanation_api_v1_ai_anomaly_explanation_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/ai/audit-procedures",
+    "method": "POST",
+    "operation_id": "audit_procedures_api_v1_ai_audit_procedures_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/ai/financial-commentary",
+    "method": "POST",
+    "operation_id": "financial_commentary_api_v1_ai_financial_commentary_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/ai/suggestions/{identifier}/review",
+    "method": "POST",
+    "operation_id": "review_suggestion_api_v1_ai_suggestions__identifier__review_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/currencies",
+    "method": "POST",
+    "operation_id": "currency_policy_api_v1_accounting_currencies_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/connections",
+    "method": "POST",
+    "operation_id": "create_api_v1_accounting_connections_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/connections",
+    "method": "GET",
+    "operation_id": "connections_api_v1_accounting_connections_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/connectors/zoho/{identifier}/authorize",
+    "method": "POST",
+    "operation_id": "authorize_api_v1_connectors_zoho__identifier__authorize_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/connectors/zoho/{identifier}/callback",
+    "method": "POST",
+    "operation_id": "callback_api_v1_connectors_zoho__identifier__callback_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/connectors/zoho/{identifier}/organizations",
+    "method": "GET",
+    "operation_id": "organizations_api_v1_connectors_zoho__identifier__organizations_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/connectors/zoho/{identifier}/organization",
+    "method": "POST",
+    "operation_id": "choose_organization_api_v1_connectors_zoho__identifier__organization_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/connectors/zoho/{identifier}/sync",
+    "method": "POST",
+    "operation_id": "sync_api_v1_connectors_zoho__identifier__sync_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/connectors/tally",
+    "method": "GET",
+    "operation_id": "tally_api_v1_connectors_tally_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/uploads",
+    "method": "POST",
+    "operation_id": "create_upload_api_v1_accounting_uploads_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/uploads/{identifier}",
+    "method": "GET",
+    "operation_id": "get_upload_api_v1_accounting_uploads__identifier__get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/uploads/{identifier}/chunks/{index}",
+    "method": "PUT",
+    "operation_id": "chunk_api_v1_accounting_uploads__identifier__chunks__index__put",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/accounting/uploads/{identifier}/complete",
+    "method": "POST",
+    "operation_id": "complete_upload_api_v1_accounting_uploads__identifier__complete_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/connectors/zoho/sync-runs/{identifier}",
+    "method": "GET",
+    "operation_id": "sync_status_api_v1_connectors_zoho_sync_runs__identifier__get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/auth/bootstrap",
+    "method": "POST",
+    "operation_id": "bootstrap_api_v1_auth_bootstrap_post",
+    "security": []
+  },
+  {
+    "path": "/api/v1/auth/login",
+    "method": "POST",
+    "operation_id": "login_api_v1_auth_login_post",
+    "security": []
+  },
+  {
+    "path": "/api/v1/auth/refresh",
+    "method": "POST",
+    "operation_id": "refresh_api_v1_auth_refresh_post",
+    "security": []
+  },
+  {
+    "path": "/api/v1/auth/logout",
+    "method": "POST",
+    "operation_id": "logout_api_v1_auth_logout_post",
+    "security": []
+  },
+  {
+    "path": "/api/v1/auth/me",
+    "method": "GET",
+    "operation_id": "me_api_v1_auth_me_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/tenants",
+    "method": "GET",
+    "operation_id": "tenants_api_v1_tenants_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/clients",
+    "method": "GET",
+    "operation_id": "listing_api_v1_clients_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/clients",
+    "method": "POST",
+    "operation_id": "create_api_v1_clients_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/clients/{identifier}",
+    "method": "GET",
+    "operation_id": "get_api_v1_clients__identifier__get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/clients/{identifier}",
+    "method": "PATCH",
+    "operation_id": "patch_api_v1_clients__identifier__patch",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/entities",
+    "method": "GET",
+    "operation_id": "listing_api_v1_entities_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/entities",
+    "method": "POST",
+    "operation_id": "create_api_v1_entities_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/entities/{identifier}",
+    "method": "GET",
+    "operation_id": "get_api_v1_entities__identifier__get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/entities/{identifier}",
+    "method": "PATCH",
+    "operation_id": "patch_api_v1_entities__identifier__patch",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/engagements",
+    "method": "GET",
+    "operation_id": "listing_api_v1_engagements_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/engagements",
+    "method": "POST",
+    "operation_id": "create_api_v1_engagements_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/engagements/{identifier}",
+    "method": "GET",
+    "operation_id": "get_api_v1_engagements__identifier__get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/engagements/{identifier}",
+    "method": "PATCH",
+    "operation_id": "patch_api_v1_engagements__identifier__patch",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/financial-periods",
+    "method": "POST",
+    "operation_id": "create_api_v1_financial_periods_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/ai/health",
+    "method": "GET",
+    "operation_id": "health_api_v1_ai_health_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/ai/models",
+    "method": "GET",
+    "operation_id": "models_api_v1_ai_models_get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/ai/execute",
+    "method": "POST",
+    "operation_id": "run_api_v1_ai_execute_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/ai/executions/{identifier}",
+    "method": "GET",
+    "operation_id": "execution_api_v1_ai_executions__identifier__get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/jobs/diagnostic",
+    "method": "POST",
+    "operation_id": "diagnostic_api_v1_jobs_diagnostic_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/jobs/{identifier}",
+    "method": "GET",
+    "operation_id": "get_api_v1_jobs__identifier__get",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/jobs/{identifier}/retry",
+    "method": "POST",
+    "operation_id": "retry_api_v1_jobs__identifier__retry_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/api/v1/jobs/{identifier}/cancel",
+    "method": "POST",
+    "operation_id": "cancel_api_v1_jobs__identifier__cancel_post",
+    "security": [
+      {
+        "OAuth2PasswordBearer": []
+      }
+    ]
+  },
+  {
+    "path": "/health/live",
+    "method": "GET",
+    "operation_id": "live_health_live_get",
+    "security": []
+  },
+  {
+    "path": "/health/ready",
+    "method": "GET",
+    "operation_id": "ready_health_ready_get",
+    "security": []
+  },
+  {
+    "path": "/api/v1/system/version",
+    "method": "GET",
+    "operation_id": "version_api_v1_system_version_get",
+    "security": []
+  }
+]

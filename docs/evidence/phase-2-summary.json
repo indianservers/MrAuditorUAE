@@ -1,0 +1,12 @@
+{
+  "tests": 170,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 2,
+  "passed": 168,
+  "coverage_percent": 92.35119047619048,
+  "core_coverage_percent": 90.33505154639175,
+  "phase1_regression_tests": 52,
+  "date_local": "2026-10-18",
+  "timezone": "Asia/Calcutta"
+}

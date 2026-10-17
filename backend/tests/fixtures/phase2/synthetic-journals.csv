@@ -1,0 +1,17 @@
+account_code,account_name,journal_ref,posting_date,document_date,debit,credit,source_id,opening,manual,description,currency,reversal_ref,counterparty
+100,Cash,OPEN,2026-01-01,2026-01-01,10000,0,OPEN:1,true,false,SYNTHETIC fixture transaction,AED,,FICTIONAL Test Supplier
+300,Equity,OPEN,2026-01-01,2026-01-01,0,10000,OPEN:2,true,false,SYNTHETIC fixture transaction,AED,,FICTIONAL Test Supplier
+500,Expense,100,2026-06-01,2026-06-01,100,0,100:1,false,false,SYNTHETIC fixture transaction,AED,,FICTIONAL Test Supplier
+100,Cash,100,2026-06-01,2026-06-01,0,100,100:2,false,false,SYNTHETIC fixture transaction,AED,,FICTIONAL Test Supplier
+500,Expense,101,2026-06-01,2026-06-01,100,0,101:1,false,false,SYNTHETIC fixture transaction,AED,,FICTIONAL Test Supplier
+100,Cash,101,2026-06-01,2026-06-01,0,100,101:2,false,false,SYNTHETIC fixture transaction,AED,,FICTIONAL Test Supplier
+500,Expense,103,2026-12-26,2026-12-26,250000,0,103:1,false,false,SYNTHETIC fixture transaction,AED,,FICTIONAL Test Supplier
+100,Cash,103,2026-12-26,2026-12-26,0,250000,103:2,false,false,SYNTHETIC fixture transaction,AED,,FICTIONAL Test Supplier
+500,Expense,104,2026-12-31,2026-12-31,750000,0,104:1,false,true,SYNTHETIC year-end manual adjustment,AED,,FICTIONAL Test Supplier
+100,Cash,104,2026-12-31,2026-12-31,0,750000,104:2,false,true,SYNTHETIC year-end manual adjustment,AED,,FICTIONAL Test Supplier
+999,Suspense,105,2026-12-30,2026-12-30,700,0,105:1,false,false,SYNTHETIC fixture transaction,AED,,FICTIONAL Test Supplier
+100,Cash,105,2026-12-30,2026-12-30,0,700,105:2,false,false,SYNTHETIC fixture transaction,AED,,FICTIONAL Test Supplier
+100,Cash,106,2026-12-31,2026-12-31,100,0,106:1,false,false,SYNTHETIC fixture transaction,AED,100,FICTIONAL Test Supplier
+500,Expense,106,2026-12-31,2026-12-31,0,100,106:2,false,false,SYNTHETIC fixture transaction,AED,100,FICTIONAL Test Supplier
+777,Unmapped account,107,2026-12-29,2026-12-29,300,0,107:1,false,false,SYNTHETIC fixture transaction,AED,,FICTIONAL Test Supplier
+100,Cash,107,2026-12-29,2026-12-29,0,300,,false,false,SYNTHETIC fixture transaction,AED,,FICTIONAL Test Supplier

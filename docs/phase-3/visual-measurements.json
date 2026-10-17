@@ -1,0 +1,212 @@
+[
+  {
+    "reference": {
+      "file": "01_Executive_Dashboard.png",
+      "width": 1024,
+      "height": 682
+    },
+    "route": "http://127.0.0.1:3000/dashboard",
+    "geometry": {
+      "width": 1024,
+      "height": 682,
+      "bodyWidth": 1024,
+      "bodyHeight": 682,
+      "renderedRows": 0
+    }
+  },
+  {
+    "reference": {
+      "file": "02_Client_Company_Management.png",
+      "width": 1024,
+      "height": 682
+    },
+    "route": "http://127.0.0.1:3000/clients",
+    "geometry": {
+      "width": 1024,
+      "height": 682,
+      "bodyWidth": 1024,
+      "bodyHeight": 682,
+      "renderedRows": 7
+    }
+  },
+  {
+    "reference": {
+      "file": "03_Accounting_Integration_Center.png",
+      "width": 1024,
+      "height": 682
+    },
+    "route": "http://127.0.0.1:3000/integrations",
+    "geometry": {
+      "width": 1024,
+      "height": 682,
+      "bodyWidth": 1024,
+      "bodyHeight": 682,
+      "renderedRows": 1
+    }
+  },
+  {
+    "reference": {
+      "file": "04_Trial_Balance_Explorer.png",
+      "width": 1672,
+      "height": 941
+    },
+    "route": "http://127.0.0.1:3000/financials/trial-balance",
+    "geometry": {
+      "width": 1672,
+      "height": 941,
+      "bodyWidth": 1672,
+      "bodyHeight": 941,
+      "renderedRows": 6
+    }
+  },
+  {
+    "reference": {
+      "file": "05_General_Ledger_Journal_Explorer.png",
+      "width": 1024,
+      "height": 684
+    },
+    "route": "http://127.0.0.1:3000/financials/general-ledger",
+    "geometry": {
+      "width": 1024,
+      "height": 684,
+      "bodyWidth": 1024,
+      "bodyHeight": 684,
+      "renderedRows": 17
+    }
+  },
+  {
+    "reference": {
+      "file": "06_AI_Audit_Risk_Intelligence.png",
+      "width": 1672,
+      "height": 941
+    },
+    "route": "http://127.0.0.1:3000/audit/risk-intelligence",
+    "geometry": {
+      "width": 1672,
+      "height": 941,
+      "bodyWidth": 1672,
+      "bodyHeight": 941,
+      "renderedRows": 25
+    }
+  },
+  {
+    "reference": {
+      "file": "07_Financial_Reconciliation_Studio.png",
+      "width": 1672,
+      "height": 941
+    },
+    "route": "http://127.0.0.1:3000/financials/reconciliation",
+    "geometry": {
+      "width": 1672,
+      "height": 941,
+      "bodyWidth": 1672,
+      "bodyHeight": 941,
+      "renderedRows": 0
+    }
+  },
+  {
+    "reference": {
+      "file": "08_Audit_Engagement_Workspace.png",
+      "width": 768,
+      "height": 682
+    },
+    "route": "http://127.0.0.1:3000/engagements/a3cd2666-4884-4532-9735-8ff639fe99fe",
+    "geometry": {
+      "width": 768,
+      "height": 682,
+      "bodyWidth": 768,
+      "bodyHeight": 682,
+      "renderedRows": 0
+    }
+  },
+  {
+    "reference": {
+      "file": "09_AI_Audit_Copilot.png",
+      "width": 768,
+      "height": 682
+    },
+    "route": "http://127.0.0.1:3000/ai-copilot",
+    "geometry": {
+      "width": 768,
+      "height": 682,
+      "bodyWidth": 768,
+      "bodyHeight": 682,
+      "renderedRows": 0
+    }
+  },
+  {
+    "reference": {
+      "file": "10_Compliance_Command_Center.png",
+      "width": 768,
+      "height": 682
+    },
+    "route": "http://127.0.0.1:3000/compliance",
+    "geometry": {
+      "width": 768,
+      "height": 682,
+      "bodyWidth": 768,
+      "bodyHeight": 682,
+      "renderedRows": 0
+    }
+  },
+  {
+    "responsive": {
+      "width": 1920,
+      "height": 1080
+    },
+    "geometry": {
+      "width": 1920,
+      "height": 1080
+    }
+  },
+  {
+    "responsive": {
+      "width": 1600,
+      "height": 900
+    },
+    "geometry": {
+      "width": 1600,
+      "height": 900
+    }
+  },
+  {
+    "responsive": {
+      "width": 1440,
+      "height": 900
+    },
+    "geometry": {
+      "width": 1440,
+      "height": 900
+    }
+  },
+  {
+    "responsive": {
+      "width": 1366,
+      "height": 768
+    },
+    "geometry": {
+      "width": 1366,
+      "height": 768
+    }
+  },
+  {
+    "responsive": {
+      "width": 768,
+      "height": 1024
+    },
+    "geometry": {
+      "width": 768,
+      "height": 1024
+    }
+  },
+  {
+    "responsive": {
+      "width": 390,
+      "height": 844
+    },
+    "geometry": {
+      "width": 390,
+      "height": 844
+    }
+  }
+]

@@ -1,0 +1,18 @@
+{
+  "synthetic": true,
+  "transport": "native HTTP + separate Celery solo worker + real Redis/PostgreSQL",
+  "http_statuses": {
+    "/health/live": 200,
+    "/health/ready": 200,
+    "/docs": 200,
+    "/openapi.json": 200
+  },
+  "import_job": "completed",
+  "analytics_job": "completed",
+  "analytics_rules": 25,
+  "openapi_paths": 64,
+  "operations": 77,
+  "live_zoho": false,
+  "live_tally": false,
+  "paid_ai": false
+}
