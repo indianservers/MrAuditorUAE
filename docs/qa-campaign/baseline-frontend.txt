@@ -1,0 +1,13 @@
+
+> auditos-frontend@0.3.0 test
+> vitest run
+
+
+ RUN  v5.0.5 C:/Indian Servers/TheAuditor/frontend
+
+
+ Test Files  7 passed (7)
+      Tests  25 passed (25)
+   Start at  12:35:45
+   Duration  3.25s (environment 57%, import 19%, tests 11%, setup 10%, transform 2%, worker 1%)
+

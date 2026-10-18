@@ -1,0 +1,27 @@
+[
+  {
+    "parent": "QA FICTIONAL 13 Holding",
+    "child": "QA FICTIONAL 01 General Trading",
+    "ownership_percent": "100"
+  },
+  {
+    "parent": "QA FICTIONAL 13 Holding",
+    "child": "QA FICTIONAL 02 Manufacturing",
+    "ownership_percent": "95"
+  },
+  {
+    "parent": "QA FICTIONAL 13 Holding",
+    "child": "QA FICTIONAL 24 Foreign Subsidiary",
+    "ownership_percent": "80"
+  },
+  {
+    "parent": "QA FICTIONAL 22 Holding",
+    "child": "QA FICTIONAL 14 Free Zone",
+    "ownership_percent": "100"
+  },
+  {
+    "parent": "QA FICTIONAL 22 Holding",
+    "child": "QA FICTIONAL 25 Joint Venture",
+    "ownership_percent": "50"
+  }
+]

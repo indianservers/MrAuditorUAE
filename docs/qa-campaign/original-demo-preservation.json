@@ -1,0 +1,12 @@
+{
+  "database": "auditos_phase7_demo",
+  "before": {
+    "clients": 10,
+    "journal_lines": 250024
+  },
+  "after": {
+    "clients": 10,
+    "journal_lines": 250024
+  },
+  "unchanged": true
+}

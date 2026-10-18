@@ -1,0 +1,41 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.7.0
+rootdir: C:\Indian Servers\TheAuditor\backend
+configfile: pyproject.toml
+plugins: anyio-4.15.1, platformdirs-4.13.3, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 3 items / 2 deselected / 1 selected
+
+tests\phase12\test_qa_center.py F                                        [100%]
+
+================================== FAILURES ===================================
+___ test_client_directory_searches_name_or_code_without_wildcard_expansion ____
+
+environment = <httpx.AsyncClient object at 0x0000028AAE3A2480>
+
+    @pytest.mark.skipif(os.getenv("INTEGRATION_TESTS") != "1", reason="Disposable database required")
+    async def test_client_directory_searches_name_or_code_without_wildcard_expansion(environment):
+        c = environment
+        h, _ = await setup(c)
+        r = await c.post("/api/v1/clients", headers=h, json={"code": "QA-CODE-ONLY", "name": "Fictional Search Company"})
+        assert r.status_code == 201
+        found = await c.get("/api/v1/clients", headers=h, params={"search": "qa-code-only"})
+        assert found.status_code == 200
+>       assert found.json()["total"] == 1
+E       assert 0 == 1
+
+tests\phase12\test_qa_center.py:32: AssertionError
+---------------------------- Captured stderr call -----------------------------
+{"timestamp": "2026-10-18T07:15:33.851875+00:00", "level": "INFO", "event": "http.request", "request_id": "d7ea67a7-4199-400c-b288-6fef612f413b", "status": 201, "duration_ms": 432.137, "method": "POST", "route": "/auth/bootstrap", "release": "development"}
+{"timestamp": "2026-10-18T07:15:33.864591+00:00", "level": "INFO", "event": "http.request", "request_id": "0c3f1f41-7c23-4efb-a745-afda247580da", "status": 200, "duration_ms": 10.618, "method": "GET", "route": "/tenants", "release": "development"}
+{"timestamp": "2026-10-18T07:15:33.892483+00:00", "level": "INFO", "event": "http.request", "request_id": "e58ca60a-e3bd-4e4f-96da-15e7ec3649b1", "status": 201, "duration_ms": 25.849, "method": "POST", "route": "/clients", "release": "development"}
+{"timestamp": "2026-10-18T07:15:33.905482+00:00", "level": "INFO", "event": "http.request", "request_id": "266f358e-aed0-4b86-8fa1-2ea5216aa552", "status": 200, "duration_ms": 11.831, "method": "GET", "route": "/clients", "release": "development"}
+------------------------------ Captured log call ------------------------------
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+- generated xml file: C:\Indian Servers\TheAuditor\docs\qa-campaign\search-before.xml -
+=========================== short test summary info ===========================
+FAILED tests/phase12/test_qa_center.py::test_client_directory_searches_name_or_code_without_wildcard_expansion
+======================= 1 failed, 2 deselected in 3.30s =======================

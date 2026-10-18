@@ -339,7 +339,13 @@ async def get_analytics(identifier: uuid.UUID, db: DB, ctx: AnalyzeRead):
             )
         )
     ).all()
-    return {**serialize(run), "rules": [r.result for r in results]}
+    from app.modules.lineage.freshness import analytics_current, state
+
+    return {
+        **serialize(run),
+        "rules": [r.result for r in results],
+        "freshness": state(await analytics_current(db, ctx, run)),
+    }
 
 
 @router.get("/analytics/rules", response_model=list[dict])

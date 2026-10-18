@@ -134,6 +134,7 @@ async def prepared(c, connected=False):
             "rule_id": rules["relationships"],
         },
     )
+    engagement = (await c.get("/api/v1/engagements/" + eid, headers=h)).json()
     async with Session() as db, db.begin():
         await tenant_context(db, h["X-Tenant-ID"])
         lines = (
@@ -156,7 +157,11 @@ async def prepared(c, connected=False):
                     await db.execute(
                         select(Account.code, JournalLine)
                         .join(JournalLine, JournalLine.account_id == Account.id)
-                        .where(Account.code.in_(["400", "500"]))
+                        .where(
+                            Account.code.in_(["400", "500"]),
+                            JournalLine.entity_id == uuid.UUID(engagement["entity_id"]),
+                            JournalLine.period_id == uuid.UUID(engagement["period_id"]),
+                        )
                     )
                 ).all()
             }

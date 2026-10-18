@@ -1,0 +1,3 @@
+# Concurrency and cache invalidation
+
+The two-tab Playwright workflow opens the same client at version N, saves one editor and verifies the second editor receives 409 with the first value intact. Its grid updates through same-origin BroadcastChannel invalidation without reload. Messages contain only tenant identifiers, never tokens or data. Tenant-scoped api/access query caches are invalidated after successful mutations. Draft records are serialized through engagement/record locks and explicit versions. Fast review actions are disabled while a save is refreshing its version. Broader simultaneous archive/create, deadlock and all-role revocation stress cases remain partial.

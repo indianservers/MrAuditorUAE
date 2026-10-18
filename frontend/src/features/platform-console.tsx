@@ -4,9 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { api } from "@/lib/api/client";
 
-const areas=["overview","tenants","subscriptions","usage","services","incidents","security","releases"];
+const areas=["overview","tenants","subscriptions","usage","services","incidents","security","releases","qa-center"];
 type Tenant={id:string;name:string;status:string;subscription:null|{plan:string;status:string;version:number;limits:Record<string,number>;features:string[]};usage:{metric:string;quantity:number;period:string}[]};
-type Result={items?:Tenant[];total?:number;[key:string]:unknown};
+type Result={items?:Tenant[];total?:number;runs?:{id:string;executed_at:string;results:Record<string,unknown>}[];[key:string]:unknown};
 
 export function PlatformConsole({area}:{area:string}) {
   const [offset,setOffset]=useState(0);
@@ -22,6 +22,14 @@ export function PlatformConsole({area}:{area:string}) {
     {result.isPending&&areas.includes(area)&&<p role="status">Loading operational records…</p>}
     {result.error&&<p role="alert">{result.error.message}</p>}
     {result.data&&<>
+      {area==="qa-center"&&<section aria-label="Persisted QA campaign results">
+        <p>Executed results from the isolated development campaign. Unexecuted and blocked checks remain explicit.</p>
+        {!result.data.runs?.length&&<p>No campaign results have been recorded.</p>}
+        {result.data.runs?.map(run=><article key={run.id}><h3>Run {new Date(run.executed_at).toLocaleString()}</h3>
+          <dl>{Object.entries(run.results).filter(([,v])=>typeof v!=="object").map(([key,value])=><div key={key}><dt>{key.replaceAll("_"," ")}</dt><dd>{String(value)}</dd></div>)}</dl>
+          <details><summary>Detailed execution evidence</summary><pre className="operations-result">{JSON.stringify(run.results,null,2)}</pre></details>
+        </article>)}
+      </section>}
       {Array.isArray(result.data.items)&&["overview","tenants","subscriptions","usage"].includes(area)?<>
         <div className="operations-table"><table><caption>Tenant operational metadata</caption><thead><tr><th scope="col">Tenant</th><th scope="col">Lifecycle</th><th scope="col">Subscription</th><th scope="col">Usage this month</th><th scope="col">Action</th></tr></thead><tbody>
           {result.data.items.map(tenant=><tr key={tenant.id}><th scope="row">{tenant.name}<small>{tenant.id}</small></th><td>{tenant.status}</td><td>{tenant.subscription?`${tenant.subscription.plan} · ${tenant.subscription.status}`:"Provisioning required"}</td><td>{tenant.usage.map(row=><p key={row.metric}>{row.metric}: {row.quantity}</p>)}</td><td><button className="button" onClick={()=>{setSelected(tenant);setError("");}}>Configure {tenant.name}</button></td></tr>)}
@@ -29,7 +37,7 @@ export function PlatformConsole({area}:{area:string}) {
         {!result.data.items.length&&<p>No tenant records on this page.</p>}
         <p>{result.data.total} tenants · Billing provider not configured. No payment processing or provider invoices.</p>
         <button className="button" disabled={!offset} onClick={()=>setOffset(Math.max(0,offset-25))}>Previous</button> <button className="button" disabled={offset+25>=Number(result.data.total)} onClick={()=>setOffset(offset+25)}>Next</button>
-      </>:<pre className="operations-result">{JSON.stringify(result.data,null,2)}</pre>}
+      </>:area!=="qa-center"&&<pre className="operations-result">{JSON.stringify(result.data,null,2)}</pre>}
     </>}
     {selected&&<section aria-labelledby="subscription-heading"><h2 id="subscription-heading">Configure {selected.name}</h2><p>Changes take effect immediately. A downgrade retains records and prevents admissions beyond the new limits.</p>
       <form onSubmit={async e=>{e.preventDefault();setBusy(true);setError("");const form=new FormData(e.currentTarget);try{

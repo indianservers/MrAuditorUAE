@@ -1,0 +1,29 @@
+{"timestamp": "2026-10-18T07:19:37.280365+00:00", "level": "INFO", "event": "http.request", "request_id": "c599a9c0-031e-4071-ba4c-306cff159e09", "status": 200, "duration_ms": 512.33, "method": "POST", "route": "/auth/login", "release": "development"}
+{"timestamp": "2026-10-18T07:19:37.397309+00:00", "level": "INFO", "event": "http.request", "request_id": "0af5b430-fa08-4c22-956a-df26f7d36e4b", "status": 201, "duration_ms": 115.531, "method": "POST", "route": "/entities", "release": "development"}
+{"timestamp": "2026-10-18T07:19:37.559987+00:00", "level": "INFO", "event": "http.request", "request_id": "d44fb069-77f3-411d-9778-c06c0b11a7d3", "status": 201, "duration_ms": 161.153, "method": "POST", "route": "/financial-periods", "release": "development"}
+{"timestamp": "2026-10-18T07:19:37.751356+00:00", "level": "INFO", "event": "http.request", "request_id": "32902916-8afc-4cf7-bd52-24574417cb2e", "status": 201, "duration_ms": 187.853, "method": "POST", "route": "/accounting/imports", "release": "development"}
+{"timestamp": "2026-10-18T07:19:39.816431+00:00", "level": "INFO", "event": "http.request", "request_id": "45a4bc31-b866-43a5-892e-b62ce800c77f", "status": 200, "duration_ms": 2064.425, "method": "POST", "route": "/accounting/imports/{identifier}/validate", "release": "development"}
+{"timestamp": "2026-10-18T07:19:41.985834+00:00", "level": "INFO", "event": "http.request", "request_id": "fd37baff-2d58-49f4-bb88-1120a4469b90", "status": 200, "duration_ms": 2167.643, "method": "POST", "route": "/accounting/imports/{identifier}/commit", "release": "development"}
+{"timestamp": "2026-10-18T07:19:41.995600+00:00", "level": "INFO", "event": "http.request", "request_id": "9d230e1d-e2ea-42be-ae2d-2ea858d50ea8", "status": 200, "duration_ms": 8.613, "method": "GET", "route": "/accounting/imports/{identifier}", "release": "development"}
+{"timestamp": "2026-10-18T07:19:42.121548+00:00", "level": "INFO", "event": "http.request", "request_id": "541695d2-95b4-46c4-835e-5f2c55354d02", "status": 201, "duration_ms": 124.414, "method": "POST", "route": "/accounting/mappings", "release": "development"}
+{"timestamp": "2026-10-18T07:19:42.258315+00:00", "level": "INFO", "event": "http.request", "request_id": "31e416dd-1697-4eec-8504-ce63ecdc2795", "status": 422, "duration_ms": 135.47, "method": "POST", "route": "/analytics/runs", "release": "development"}
+Traceback (most recent call last):
+  File "C:\Indian Servers\TheAuditor\scripts\qa_exceptions.py", line 78, in <module>
+    if __name__=='__main__':asyncio.run(main())
+                            ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Sai Satish\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\Sai Satish\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Sai Satish\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Indian Servers\TheAuditor\scripts\qa_exceptions.py", line 62, in main
+    run=await post('analytics/runs',{'snapshot_id':detail['snapshot_id'],'year_end':'2026-12-31','allow_partial':True})
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Indian Servers\TheAuditor\scripts\qa_exceptions.py", line 35, in post
+    assert r.status_code<400,(path,r.status_code,r.text)
+           ^^^^^^^^^^^^^^^^^
+AssertionError: ('analytics/runs', 422, '{"error":{"code":"422","message":"Request validation failed","request_id":"31e416dd-1697-4eec-8504-ce63ecdc2795"}}')

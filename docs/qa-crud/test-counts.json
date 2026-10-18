@@ -1,0 +1,40 @@
+{
+  "backend": {
+    "PASS": 487,
+    "SKIP": 2
+  },
+  "focused_cases": 14,
+  "categories_overlap": {
+    "restore": [
+      "tests.qa_crud.test_lifecycle.test_draft_archive_restore_history",
+      "tests.qa_crud.test_lifecycle.test_client_restore_and_conflict",
+      "tests.qa_crud.test_lifecycle.test_restore_revalidates_archived_dependency"
+    ],
+    "delete_policy": [
+      "tests.qa_crud.test_lifecycle.test_draft_archive_restore_history",
+      "tests.qa_crud.test_lifecycle.test_reviewed_record_cannot_be_archived",
+      "tests.qa_crud.test_lifecycle.test_archive_requires_meaningful_reason[]",
+      "tests.qa_crud.test_lifecycle.test_archive_requires_meaningful_reason[short]",
+      "tests.qa_crud.test_lifecycle.test_archive_requires_meaningful_reason[         ]",
+      "tests.qa_crud.test_lifecycle.test_referenced_draft_archive_is_blocked",
+      "tests.qa_crud.test_lifecycle.test_cross_tenant_and_read_only_role_cannot_archive",
+      "tests.qa_crud.test_source_changes.test_archived_client_hidden_from_active_list_and_blocks_new_children",
+      "tests.qa_crud.test_source_changes.test_client_archival_cannot_bypass_active_engagement_guard",
+      "tests.qa_crud.test_lifecycle.test_restore_revalidates_archived_dependency"
+    ],
+    "dependency": [
+      "tests.qa_crud.test_source_changes.test_ml_dataset_excludes_superseded_lines_and_marks_old_features_stale",
+      "tests.qa_crud.test_lifecycle.test_restore_revalidates_archived_dependency",
+      "tests.qa_crud.test_source_changes.test_ifrs_current_status_invalidates_after_real_import_supersession[1]",
+      "tests.qa_crud.test_source_changes.test_ifrs_current_status_invalidates_after_real_import_supersession[20000]"
+    ],
+    "concurrency": [
+      "tests.qa_crud.test_lifecycle.test_draft_archive_restore_history",
+      "tests.qa_crud.test_lifecycle.test_client_restore_and_conflict"
+    ],
+    "role": [
+      "tests.qa_crud.test_lifecycle.test_cross_tenant_and_read_only_role_cannot_archive"
+    ]
+  },
+  "note": "Counts are executed test cases, not fabricated HTTP-operation counts; shared fixture operations are not double counted as separate tests."
+}

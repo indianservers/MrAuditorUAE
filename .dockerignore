@@ -16,6 +16,8 @@
 **/.coverage
 **/coverage.json
 frontend/.next
+frontend/.next-qa
+frontend/.next-qa-build
 frontend/test-results
 frontend/playwright-report
 ml-engine/dist

@@ -36,6 +36,7 @@ class ClientPatch(Input):
     name: Name | None = None
     status: Status | None = None
     version: int = Field(ge=1)
+    lifecycle_reason: str | None = Field(default=None, min_length=10, max_length=1000)
 
 
 class EntityCreate(Input):
@@ -67,6 +68,7 @@ class EntityPatch(Input):
     jurisdiction: str | None = Field(default=None, min_length=1, max_length=100)
     status: Status | None = None
     version: int = Field(ge=1)
+    lifecycle_reason: str | None = Field(default=None, min_length=10, max_length=1000)
 
 
 class EngagementCreate(Input):

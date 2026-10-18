@@ -1,0 +1,12 @@
+{
+  "required_markdown_reports": 17,
+  "source_reconciled_snapshots": 100,
+  "scanner_findings": 0,
+  "readiness": "Qualified internal synthetic QA only; no production certification",
+  "known_limitations": {
+    "CRITICAL": 0,
+    "HIGH": 4,
+    "MEDIUM": 1,
+    "LOW": 0
+  }
+}

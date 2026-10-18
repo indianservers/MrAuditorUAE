@@ -1,0 +1,8 @@
+
+Running 1 test using 1 worker
+
+(node:10548) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 e2e\qa-crud.spec.ts:126:1 › working paper actual form creates a persisted draft (3.9s)
+
+  1 passed (4.5s)

@@ -102,6 +102,8 @@ async def validate_dependencies(db, ctx, eid, deps):
             from app.modules.ml.service import get
 
             obj = await get(db, ctx, uuid.UUID(item["id"]))
+            from app.modules.lineage.freshness import require_ml_current
+            await require_ml_current(db, ctx, obj)
             if obj.engagement_id != eid:
                 raise HTTPException(404, "Resource unavailable")
         elif item["type"] == "run":

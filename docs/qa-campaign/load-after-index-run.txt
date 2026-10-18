@@ -1,0 +1,75 @@
+{"concurrency": 10, "distinct_users": 10, "requests": 20, "failures": 0, "p50_seconds": 0.4244844999993802, "p95_seconds": 1.3068914999967092, "elapsed_seconds": 1.4413066999986768, "host_available_memory_before": 16195125248, "host_available_memory_after": 16187215872, "host_cpu_user_seconds": 6.6875, "journal_lines_at_start": 1000590}
+{"concurrency": 25, "distinct_users": 25, "requests": 50, "failures": 0, "p50_seconds": 0.9648089999973308, "p95_seconds": 2.7837728000013158, "elapsed_seconds": 3.329137799999444, "host_available_memory_before": 16187215872, "host_available_memory_after": 16164999168, "host_cpu_user_seconds": 17.53125, "journal_lines_at_start": 1000590}
+{"concurrency": 50, "distinct_users": 50, "requests": 100, "failures": 0, "p50_seconds": 2.270618499998818, "p95_seconds": 4.4962220000015805, "elapsed_seconds": 6.428636299999198, "host_available_memory_before": 16165081088, "host_available_memory_after": 15959023616, "host_cpu_user_seconds": 39.15625, "journal_lines_at_start": 1000590}
+Traceback (most recent call last):
+  File "C:\Indian Servers\TheAuditor\backend\.venv\Lib\site-packages\httpx\_transports\default.py", line 101, in map_httpcore_exceptions
+    yield
+  File "C:\Indian Servers\TheAuditor\backend\.venv\Lib\site-packages\httpx\_transports\default.py", line 394, in handle_async_request
+    resp = await self._pool.handle_async_request(req)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Indian Servers\TheAuditor\backend\.venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 256, in handle_async_request
+    raise exc from None
+  File "C:\Indian Servers\TheAuditor\backend\.venv\Lib\site-packages\httpcore\_async\connection_pool.py", line 236, in handle_async_request
+    response = await connection.handle_async_request(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Indian Servers\TheAuditor\backend\.venv\Lib\site-packages\httpcore\_async\connection.py", line 103, in handle_async_request
+    return await self._connection.handle_async_request(request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Indian Servers\TheAuditor\backend\.venv\Lib\site-packages\httpcore\_async\http11.py", line 136, in handle_async_request
+    raise exc
+  File "C:\Indian Servers\TheAuditor\backend\.venv\Lib\site-packages\httpcore\_async\http11.py", line 106, in handle_async_request
+    ) = await self._receive_response_headers(**kwargs)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Indian Servers\TheAuditor\backend\.venv\Lib\site-packages\httpcore\_async\http11.py", line 177, in _receive_response_headers
+    event = await self._receive_event(timeout=timeout)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Indian Servers\TheAuditor\backend\.venv\Lib\site-packages\httpcore\_async\http11.py", line 231, in _receive_event
+    raise RemoteProtocolError(msg)
+httpcore.RemoteProtocolError: Server disconnected without sending a response.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Indian Servers\TheAuditor\scripts\qa_load.py", line 130, in <module>
+    asyncio.run(main())
+  File "C:\Users\Sai Satish\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\Sai Satish\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Sai Satish\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Indian Servers\TheAuditor\scripts\qa_load.py", line 87, in main
+    for group in await asyncio.gather(
+                 ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Indian Servers\TheAuditor\scripts\qa_load.py", line 71, in read
+    r = await c.get("/api/v1/" + path, headers=h)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Indian Servers\TheAuditor\backend\.venv\Lib\site-packages\httpx\_client.py", line 1768, in get
+    return await self.request(
+           ^^^^^^^^^^^^^^^^^^^
+  File "C:\Indian Servers\TheAuditor\backend\.venv\Lib\site-packages\httpx\_client.py", line 1540, in request
+    return await self.send(request, auth=auth, follow_redirects=follow_redirects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Indian Servers\TheAuditor\backend\.venv\Lib\site-packages\httpx\_client.py", line 1629, in send
+    response = await self._send_handling_auth(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Indian Servers\TheAuditor\backend\.venv\Lib\site-packages\httpx\_client.py", line 1657, in _send_handling_auth
+    response = await self._send_handling_redirects(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Indian Servers\TheAuditor\backend\.venv\Lib\site-packages\httpx\_client.py", line 1694, in _send_handling_redirects
+    response = await self._send_single_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Indian Servers\TheAuditor\backend\.venv\Lib\site-packages\httpx\_client.py", line 1730, in _send_single_request
+    response = await transport.handle_async_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Indian Servers\TheAuditor\backend\.venv\Lib\site-packages\httpx\_transports\default.py", line 393, in handle_async_request
+    with map_httpcore_exceptions():
+         ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Sai Satish\AppData\Local\Programs\Python\Python312\Lib\contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "C:\Indian Servers\TheAuditor\backend\.venv\Lib\site-packages\httpx\_transports\default.py", line 118, in map_httpcore_exceptions
+    raise mapped_exc(message) from exc
+httpx.RemoteProtocolError: Server disconnected without sending a response.

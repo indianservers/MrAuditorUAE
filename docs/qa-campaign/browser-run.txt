@@ -1,0 +1,51 @@
+
+Running 2 tests using 1 worker
+
+(node:26660) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 e2e\qa-campaign.spec.ts:26:1 › every source-discovered workspace renders and records actual controls, errors and network results (2.8m)
+  x  2 e2e\qa-campaign.spec.ts:56:1 › client search, sorting, pagination and backend denial stay functional (27.8s)
+
+
+  1) e2e\qa-campaign.spec.ts:56:1 › client search, sorting, pagination and backend denial stay functional 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator:  getByText('QA FICTIONAL 01 General Trading', { exact: true }).first()
+    Expected: visible
+    Received: hidden
+    Timeout:  20000ms
+
+    Call log:
+      - Expect "toBeVisible" getByText('QA FICTIONAL 01 General Trading', { exact: true }).first() with timeout 20000ms
+      - waiting for getByText('QA FICTIONAL 01 General Trading', { exact: true }).first()
+        38 × locator resolved to <option value="aab9639e-2fe1-4113-8030-d7953c943763">QA FICTIONAL 01 General Trading</option>
+           - unexpected value "hidden"
+
+
+      57 |   await page.goto("/login");await page.getByLabel("Email address").fill("qa.admin@auditos.example");await page.getByLabel("Password",{exact:true}).fill(credentials.QA_PASSWORD);await page.getByRole("button",{name:"Sign in",exact:true}).click();await page.waitForURL("**/dashboard");
+      58 |   await page.goto("/clients");
+    > 59 |   await expect(page.getByText("QA FICTIONAL 01 General Trading",{exact:true}).first()).toBeVisible();
+         |                                                                                        ^
+      60 |   const wrong=await page.request.get("/api/backend/clients",{headers:{"X-Tenant-ID":"00000000-0000-4000-8000-000000000001"}});expect(wrong.status()).toBe(403);
+      61 |   await page.goto("/platform/qa-center");await expect(page.getByRole("alert")).toContainText("Separately provisioned platform operator and MFA required");
+      62 | });
+        at C:\Indian Servers\TheAuditor\frontend\e2e\qa-campaign.spec.ts:59:88
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\qa-campaign-client-search--f5ca2-kend-denial-stay-functional\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\qa-campaign-client-search--f5ca2-kend-denial-stay-functional\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\qa-campaign-client-search--f5ca2-kend-denial-stay-functional\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\qa-campaign-client-search--f5ca2-kend-denial-stay-functional\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    e2e\qa-campaign.spec.ts:56:1 › client search, sorting, pagination and backend denial stay functional 
+  1 passed (3.3m)

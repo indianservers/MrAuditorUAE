@@ -1,0 +1,573 @@
+[
+  {
+    "id": "CT-1500000",
+    "input": {
+      "income": "1500000",
+      "threshold": "375000",
+      "rate": "0.09"
+    },
+    "expected": {
+      "tax": "101250"
+    },
+    "actual": {
+      "tax": "101250.00000000"
+    },
+    "difference": {
+      "tax": "0E-8"
+    },
+    "tolerance": "0.00000001",
+    "status": "PASS",
+    "oracle_source": "Independent arithmetic: (1500000-375000)*0.09",
+    "engine_rule_version": "Repository Phase12 candidate; period-specific professional legal validation remains required"
+  },
+  {
+    "id": "IFRS-LEASE",
+    "input": {
+      "commencement": "2026-01-01",
+      "end_date": "2027-01-01",
+      "annual_discount_rate": "0.1",
+      "payments": [
+        {
+          "date": "2027-01-01",
+          "amount": "2200"
+        }
+      ],
+      "recognition_assessment": "Synthetic recognized fixed lease",
+      "options_assessment": "No renewal/termination options"
+    },
+    "expected": {
+      "initial_liability": "2000",
+      "interest": "200",
+      "closing": "0"
+    },
+    "actual": {
+      "initial_liability": "2000.00000000",
+      "interest": "200.00000000",
+      "closing": "0.00000000"
+    },
+    "difference": {
+      "initial_liability": "0E-8",
+      "interest": "0E-8",
+      "closing": "0E-8"
+    },
+    "tolerance": "0.00000001",
+    "status": "PASS",
+    "oracle_source": "Independent one-year PV: 2200/1.1; interest=200",
+    "engine_rule_version": "Repository Phase12 candidate; period-specific professional legal validation remains required"
+  },
+  {
+    "id": "IFRS-ECL",
+    "input": {
+      "approach": "general",
+      "exposures": [
+        {
+          "reference": "P12-ECL",
+          "amount": "2000",
+          "stage": 1
+        }
+      ],
+      "scenarios": [
+        {
+          "name": "base",
+          "probability": "0.7",
+          "pd_12_month": "0.1",
+          "pd_lifetime": "0.3",
+          "lgd": "0.5"
+        },
+        {
+          "name": "stress",
+          "probability": "0.3",
+          "pd_12_month": "0.2",
+          "pd_lifetime": "0.4",
+          "lgd": "0.5"
+        }
+      ],
+      "effective_interest_rate": "0",
+      "historical_data_source": "Synthetic historical experience",
+      "sicr_methodology": "Human documented significant increase criteria",
+      "default_definition": "Human documented default policy",
+      "write_off_policy": "Human approved recovery policy"
+    },
+    "expected": {
+      "total_ecl": "130"
+    },
+    "actual": {
+      "total_ecl": "130.00000000"
+    },
+    "difference": {
+      "total_ecl": "0E-8"
+    },
+    "tolerance": "0.00000001",
+    "status": "PASS",
+    "oracle_source": "Independent probability weighted loss: 2000*(0.7*0.1*0.5+0.3*0.2*0.5)",
+    "engine_rule_version": "Repository Phase12 candidate; period-specific professional legal validation remains required"
+  },
+  {
+    "id": "VAT-INCLUSIVE",
+    "input": {
+      "narrative": "",
+      "sources": [],
+      "owner_id": null,
+      "due_date": null,
+      "area": "",
+      "assertions": [],
+      "profile_id": "00000000-0000-0000-0000-000000000001",
+      "rule_id": "00000000-0000-0000-0000-000000000001",
+      "invoice_rule_id": "00000000-0000-0000-0000-000000000001",
+      "direction": "sale",
+      "invoice_number": "INV-2026-0000",
+      "sequence": 1,
+      "issue_date": "2026-10-01",
+      "supply_date": "2026-10-01",
+      "tax_point": "2026-10-01",
+      "tax_point_basis": "Synthetic single supply date; accrual basis, no earlier payment",
+      "document_type": "invoice",
+      "invoice_type": "full",
+      "document_label": "Tax Invoice",
+      "original_invoice_id": null,
+      "supplier_name": "SYNTHETIC Local Supplier 0",
+      "supplier_address": "Synthetic test address UAE",
+      "supplier_trn": "999999999999999",
+      "supplier_jurisdiction": "AE",
+      "customer_name": "SYNTHETIC buyer",
+      "customer_address": "Synthetic test address",
+      "customer_trn": "999999999999998",
+      "customer_registered": true,
+      "customer_jurisdiction": "AE",
+      "description": "Synthetic commercial transaction for testing only",
+      "quantity": "1",
+      "unit_price": "2100",
+      "amount": "2100",
+      "discount": "0",
+      "tax_inclusive": true,
+      "currency": "AED",
+      "exchange_rate": "1",
+      "exchange_rate_source": "Synthetic deterministic FX fixture; nonproduction test value",
+      "treatment": "standard",
+      "tax_rate": "0.05",
+      "declared_net": "1000.00",
+      "declared_tax": "50.00",
+      "declared_gross": "1050.00",
+      "emirate": "Dubai",
+      "place_of_supply_assessment": "Synthetic reviewed place-of-supply facts; zero rating not inferred from foreign counterparty",
+      "treatment_facts_complete": true,
+      "reverse_charge_statement": "",
+      "recovery_treatment": "blocked",
+      "recovery_percentage": "0",
+      "recovery_basis": "Synthetic business use and recovery conditions independently reviewed",
+      "recovery_evidence_ids": [],
+      "employee_expense": false,
+      "employee_rule_id": null,
+      "employee_conditions_confirmed": false,
+      "integrity_review_evidence_id": null,
+      "supplier_annual_past": null,
+      "supplier_annual_expected": null,
+      "related_party": true,
+      "paid_amount": "500.00",
+      "net_line_ids": [
+        "00000000-0000-0000-0000-000000000001"
+      ],
+      "output_tax_line_ids": [],
+      "input_tax_line_ids": [],
+      "evidence_record_ids": [
+        "00000000-0000-0000-0000-000000000001"
+      ],
+      "ocr_state": "HUMAN_TRANSCRIBED",
+      "ocr_evidence_id": null
+    },
+    "expected": {
+      "net": "2000",
+      "tax": "100"
+    },
+    "actual": {
+      "net": "2000.00",
+      "tax": "100.00"
+    },
+    "difference": {
+      "net": "0.00",
+      "tax": "0.00"
+    },
+    "tolerance": "0.00000001",
+    "status": "PASS",
+    "oracle_source": "Independent inclusive VAT division: 2100/1.05",
+    "engine_rule_version": "Repository Phase12 candidate; period-specific professional legal validation remains required"
+  },
+  {
+    "id": "TP-INCLUSIVE-QUARTILES",
+    "input": {
+      "values": [
+        2,
+        4,
+        6,
+        8
+      ],
+      "convention": "inclusive"
+    },
+    "expected": {
+      "lower_quartile": "3.5",
+      "median": "5",
+      "upper_quartile": "6.5"
+    },
+    "actual": {
+      "lower_quartile": "3.50000000",
+      "median": "5.00000000",
+      "upper_quartile": "6.50000000"
+    },
+    "difference": {
+      "lower_quartile": "0E-8",
+      "median": "0E-8",
+      "upper_quartile": "0E-8"
+    },
+    "tolerance": "0.00000001",
+    "status": "PASS",
+    "oracle_source": "Independent linear interpolation ranks 1.75,2.5,3.25",
+    "engine_rule_version": "Repository Phase12 candidate; period-specific professional legal validation remains required"
+  },
+  {
+    "id": "LOAN-ACT365",
+    "input": {
+      "narrative": "",
+      "sources": [],
+      "owner_id": null,
+      "due_date": null,
+      "area": "",
+      "assertions": [],
+      "profile_id": "c7398b85-c401-42ed-9464-0630d10d90d5",
+      "evidence_record_ids": [
+        "5bd7ff4c-acb4-4e2a-8611-ea58e4b63e30"
+      ],
+      "rationale": "Synthetic loan calculation fixture",
+      "accrual_start": null,
+      "relationship_id": "f9f7a6d9-abfa-4b85-a977-cdb99fc83cd3",
+      "lender_id": "76f1b559-988a-4251-bef5-592156ad87b1",
+      "borrower_id": "5e33462d-0803-40b4-b762-884b814c87c8",
+      "currency": "AED",
+      "functional_currency": "AED",
+      "exchange_rate": "1",
+      "exchange_rate_source": "Synthetic reporting FX",
+      "principal": "50000",
+      "drawdown_date": "2026-01-01",
+      "maturity": "2030-01-01",
+      "calculation_end": "2027-01-01",
+      "annual_rate": "0.075",
+      "interest_type": "fixed",
+      "day_count": "ACT/365",
+      "compounding": "none",
+      "payment_frequency": "Synthetic annual contract",
+      "cashflows": [],
+      "resets": [],
+      "security": "Unsecured",
+      "guarantees": "None",
+      "covenants": "Synthetic covenant",
+      "seniority": "Senior",
+      "credit_characteristics": "Reviewed synthetic facts",
+      "prepayment_options": "Allowed",
+      "subordination": "None",
+      "purpose": "Synthetic working capital",
+      "expected_outstanding": null,
+      "benchmark_study_id": null,
+      "credit_id": null
+    },
+    "expected": {
+      "total_interest": "3750",
+      "principal_outstanding": "50000"
+    },
+    "actual": {
+      "total_interest": "3750.00000000",
+      "principal_outstanding": "50000.00000000"
+    },
+    "difference": {
+      "total_interest": "0E-8",
+      "principal_outstanding": "0E-8"
+    },
+    "tolerance": "0.00000001",
+    "status": "PASS",
+    "oracle_source": "Independent annual simple interest: 50000*.075*365/365",
+    "engine_rule_version": "Repository Phase12 candidate; period-specific professional legal validation remains required"
+  },
+  {
+    "id": "DMTT-2025",
+    "input": {
+      "group": {
+        "narrative": "",
+        "sources": [],
+        "owner_id": null,
+        "due_date": null,
+        "area": "",
+        "assertions": [],
+        "fiscal_start": "2025-01-01",
+        "fiscal_end": "2025-12-31",
+        "upe_name": "Synthetic parent",
+        "upe_jurisdiction": "GB",
+        "calculation_currency": "AED",
+        "accounting_basis": "standalone_ifrs",
+        "currency_election_evidence_id": null,
+        "constituent_entity_ids": [
+          "8c229b46-1c52-4252-aaa8-2432ac6d53b2"
+        ],
+        "multinational": true,
+        "preceding_revenues": [
+          {
+            "year": 2021,
+            "months": 12,
+            "eur": "800000000",
+            "evidence_id": "8c229b46-1c52-4252-aaa8-2432ac6d53b2"
+          },
+          {
+            "year": 2022,
+            "months": 12,
+            "eur": "800000000",
+            "evidence_id": "8c229b46-1c52-4252-aaa8-2432ac6d53b2"
+          },
+          {
+            "year": 2023,
+            "months": 12,
+            "eur": "800000000",
+            "evidence_id": "8c229b46-1c52-4252-aaa8-2432ac6d53b2"
+          },
+          {
+            "year": 2024,
+            "months": 12,
+            "eur": "800000000",
+            "evidence_id": "8c229b46-1c52-4252-aaa8-2432ac6d53b2"
+          }
+        ],
+        "rule_version": "UAE-CD142-MD96/v2",
+        "technical_evidence_id": "8c229b46-1c52-4252-aaa8-2432ac6d53b2",
+        "special_cases": [],
+        "synthetic": false
+      },
+      "entity": {
+        "narrative": "",
+        "sources": [],
+        "owner_id": null,
+        "due_date": null,
+        "area": "",
+        "assertions": [],
+        "group_id": "8c229b46-1c52-4252-aaa8-2432ac6d53b2",
+        "entity_id": "8c229b46-1c52-4252-aaa8-2432ac6d53b2",
+        "source_engagement_id": "8c229b46-1c52-4252-aaa8-2432ac6d53b2",
+        "financial_run_id": "8c229b46-1c52-4252-aaa8-2432ac6d53b2",
+        "jurisdiction": "AE",
+        "classification": "ordinary",
+        "classification_evidence_id": "8c229b46-1c52-4252-aaa8-2432ac6d53b2",
+        "fx_to_calculation": "1",
+        "fx_evidence_id": "8c229b46-1c52-4252-aaa8-2432ac6d53b2",
+        "adjustments": [],
+        "current_tax": "1800000",
+        "covered_tax_adjustments": "0",
+        "covered_tax_evidence_id": "8c229b46-1c52-4252-aaa8-2432ac6d53b2",
+        "deferred": [],
+        "eligible_payroll": "1000000",
+        "eligible_tangible_assets": "2000000",
+        "substance_evidence_id": "8c229b46-1c52-4252-aaa8-2432ac6d53b2",
+        "additional_topup": "0",
+        "additional_topup_evidence_id": null
+      },
+      "income": "20000000"
+    },
+    "expected": {
+      "etr": "0.09",
+      "sbie": "248000",
+      "uae_dmtt": "1185120"
+    },
+    "actual": {
+      "etr": "0.09",
+      "sbie": "248000.000",
+      "uae_dmtt": "1185120.00"
+    },
+    "difference": {
+      "etr": "0.00",
+      "sbie": "0.000",
+      "uae_dmtt": "0.00"
+    },
+    "tolerance": "0.00000001",
+    "status": "PASS",
+    "oracle_source": "Independent selected 2025 assumptions: SBIE=1000000*.096+2000000*.076; topup=(.15-.09)*(20000000-248000); not full-law assurance",
+    "engine_rule_version": "Repository Phase12 candidate; period-specific professional legal validation remains required"
+  },
+  {
+    "id": "TB-OPENING-MOVEMENTS",
+    "input": [
+      {
+        "account_code": "cash",
+        "functional_currency": "AED",
+        "base_debit": "125",
+        "base_credit": "0",
+        "opening": true
+      },
+      {
+        "account_code": "equity",
+        "functional_currency": "AED",
+        "base_debit": "0",
+        "base_credit": "125",
+        "opening": true
+      },
+      {
+        "account_code": "cash",
+        "functional_currency": "AED",
+        "base_debit": "75",
+        "base_credit": "0",
+        "opening": false
+      },
+      {
+        "account_code": "revenue",
+        "functional_currency": "AED",
+        "base_debit": "0",
+        "base_credit": "75",
+        "opening": false
+      },
+      {
+        "account_code": "expense",
+        "functional_currency": "AED",
+        "base_debit": "35",
+        "base_credit": "0",
+        "opening": false
+      },
+      {
+        "account_code": "cash",
+        "functional_currency": "AED",
+        "base_debit": "0",
+        "base_credit": "35",
+        "opening": false
+      }
+    ],
+    "expected": {
+      "cash": "165",
+      "equity": "-125",
+      "revenue": "-75",
+      "expense": "35",
+      "total": "0"
+    },
+    "actual": {
+      "cash": "165.00",
+      "equity": "-125.00",
+      "revenue": "-75.00",
+      "expense": "35.00",
+      "total": "0.00"
+    },
+    "difference": {
+      "cash": "0.00",
+      "equity": "0.00",
+      "revenue": "0.00",
+      "expense": "0.00",
+      "total": "0.00"
+    },
+    "tolerance": "0",
+    "status": "PASS",
+    "oracle_source": "Independent six-leg double entry fixture; cash=125+75-35",
+    "engine_rule_version": "Repository Phase12 candidate; period-specific professional legal validation remains required"
+  },
+  {
+    "id": "CT-BAND--1",
+    "actual": "0E-8",
+    "expected": "0",
+    "difference": "0E-8",
+    "status": "PASS",
+    "oracle_source": "Fixed boundary oracle: max(income-375000,0)*0.09"
+  },
+  {
+    "id": "CT-BAND-0",
+    "actual": "0E-8",
+    "expected": "0",
+    "difference": "0E-8",
+    "status": "PASS",
+    "oracle_source": "Fixed boundary oracle: max(income-375000,0)*0.09"
+  },
+  {
+    "id": "CT-BAND-374999",
+    "actual": "0E-8",
+    "expected": "0",
+    "difference": "0E-8",
+    "status": "PASS",
+    "oracle_source": "Fixed boundary oracle: max(income-375000,0)*0.09"
+  },
+  {
+    "id": "CT-BAND-375000",
+    "actual": "0E-8",
+    "expected": "0",
+    "difference": "0E-8",
+    "status": "PASS",
+    "oracle_source": "Fixed boundary oracle: max(income-375000,0)*0.09"
+  },
+  {
+    "id": "CT-BAND-375001",
+    "actual": "0.09000000",
+    "expected": "0.09",
+    "difference": "0E-8",
+    "status": "PASS",
+    "oracle_source": "Fixed boundary oracle: max(income-375000,0)*0.09"
+  },
+  {
+    "id": "CT-BAND-1000000",
+    "actual": "56250.00000000",
+    "expected": "56250",
+    "difference": "0E-8",
+    "status": "PASS",
+    "oracle_source": "Fixed boundary oracle: max(income-375000,0)*0.09"
+  },
+  {
+    "id": "ECL-STAGE-1",
+    "actual": "65.00000000",
+    "expected": "65",
+    "difference": "0E-8",
+    "status": "PASS",
+    "oracle_source": "Fixed probability-weighted scenario loss oracle, zero discount rate"
+  },
+  {
+    "id": "ECL-STAGE-2",
+    "actual": "165.00000000",
+    "expected": "165",
+    "difference": "0E-8",
+    "status": "PASS",
+    "oracle_source": "Fixed probability-weighted scenario loss oracle, zero discount rate"
+  },
+  {
+    "id": "ECL-STAGE-3",
+    "actual": "500.00000000",
+    "expected": "500",
+    "difference": "0E-8",
+    "status": "PASS",
+    "oracle_source": "Fixed probability-weighted scenario loss oracle, zero discount rate"
+  },
+  {
+    "id": "LEASE-initial_liability",
+    "actual": "1000.00000000",
+    "expected": "1000",
+    "difference": "0E-8",
+    "status": "PASS",
+    "oracle_source": "Single year:1100/1.10=1000"
+  },
+  {
+    "id": "LEASE-initial_rou",
+    "actual": "1000.00000000",
+    "expected": "1000",
+    "difference": "0E-8",
+    "status": "PASS",
+    "oracle_source": "Single year:1100/1.10=1000"
+  },
+  {
+    "id": "INTEREST-adjusted_ebitda",
+    "actual": "50000000",
+    "expected": "50000000",
+    "difference": "0",
+    "status": "PASS",
+    "oracle_source": "Adjusted EBITDA30m+20m=50m;30%=15m;20m-15m=5m"
+  },
+  {
+    "id": "INTEREST-limit",
+    "actual": "15000000.00000000",
+    "expected": "15000000",
+    "difference": "0E-8",
+    "status": "PASS",
+    "oracle_source": "Adjusted EBITDA30m+20m=50m;30%=15m;20m-15m=5m"
+  },
+  {
+    "id": "INTEREST-current_disallowed",
+    "actual": "5000000.00000000",
+    "expected": "5000000",
+    "difference": "0E-8",
+    "status": "PASS",
+    "oracle_source": "Adjusted EBITDA30m+20m=50m;30%=15m;20m-15m=5m"
+  }
+]

@@ -153,17 +153,20 @@ async def execute_job(db, ctx, payload, job_id=None):
     from starlette.concurrency import run_in_threadpool
 
     if payload["operation"] == "dataset":
-        from app.modules.accounting.models import Account, JournalLine
+        from app.modules.accounting.models import Account, ImportBatch, ImportSnapshot, JournalLine
+        from app.modules.lineage.freshness import mapping_receipt
 
         eng = await audit.engagement(db, ctx, uuid.UUID(payload["engagement_id"]), "ml.train", True)
         rows = (
             await db.execute(
                 select(JournalLine, Account.name)
                 .join(Account, Account.id == JournalLine.account_id)
+                .join(ImportBatch, ImportBatch.id == JournalLine.batch_id)
                 .where(
                     JournalLine.tenant_id == ctx.tenant_id,
                     JournalLine.entity_id == eng.entity_id,
                     JournalLine.period_id == eng.period_id,
+                    ImportBatch.status == "active",
                 )
                 .order_by(JournalLine.posting_date, JournalLine.journal_id, JournalLine.id)
                 .limit(250001)
@@ -218,6 +221,18 @@ async def execute_job(db, ctx, payload, job_id=None):
                 "object": meta,
                 "synthetic": False,
                 "total_rows": len(data),
+                "source_snapshots": [
+                    {"id": str(s.id), "sha256": s.sha256}
+                    for s in (
+                        await db.scalars(
+                            select(ImportSnapshot).where(
+                                ImportSnapshot.tenant_id == ctx.tenant_id,
+                                ImportSnapshot.id.in_({row.snapshot_id for row, _ in rows}),
+                            )
+                        )
+                    ).all()
+                ],
+                "account_mapping_receipt": await mapping_receipt(db, ctx.tenant_id, eng.entity_id),
                 "labels": {"unknown": len(data)},
                 "training_eligible": False,
                 "scope": "Single authorized entity/period; journal-grouped hash split. Curated reviewed labels required before fitting.",
@@ -234,10 +249,14 @@ async def execute_job(db, ctx, payload, job_id=None):
     if payload["operation"] == "train":
         if source.kind != "dataset":
             raise HTTPException(422, "Versioned dataset required")
+        from app.modules.lineage.freshness import require_ml_current
+
+        await require_ml_current(db, ctx, source)
         result, files = await run_in_threadpool(
             node, "train", source.body["object"], payload["config"], None, None, job_id
         )
         await audit.engagement(db, ctx, source.engagement_id, "ml.train", True)
+        await require_ml_current(db, ctx, source)
         artifacts = {
             name: await put_private(db, ctx, io.BytesIO(content)) for name, content in files.items()
         }
@@ -274,6 +293,10 @@ async def execute_job(db, ctx, payload, job_id=None):
             raise HTTPException(409, "Deployment superseded; choose current version")
         model = await get(db, ctx, uuid.UUID(source.body["model_id"]), "model")
         dataset = await get(db, ctx, uuid.UUID(payload["dataset_id"]), "dataset")
+        from app.modules.lineage.freshness import require_ml_current
+
+        await require_ml_current(db, ctx, model)
+        await require_ml_current(db, ctx, dataset)
         if dataset.engagement_id != source.engagement_id:
             raise HTTPException(422, "Same engagement scoring dataset required")
         data = json.loads(await run_in_threadpool(read_object, dataset.body["object"]))
@@ -287,6 +310,8 @@ async def execute_job(db, ctx, payload, job_id=None):
         # Immutable source reads do not hold an engagement lock through Node inference.
         # Reauthorize and serialize publication, checking deployment supersession again.
         await audit.engagement(db, ctx, source.engagement_id, "ml.score", True)
+        await require_ml_current(db, ctx, model)
+        await require_ml_current(db, ctx, dataset)
         current = await db.scalar(
             select(MLEvent.id)
             .where(

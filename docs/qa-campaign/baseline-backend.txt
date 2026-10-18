@@ -1,0 +1,56 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.7.0
+rootdir: C:\Indian Servers\TheAuditor\backend
+configfile: pyproject.toml
+testpaths: tests
+plugins: anyio-4.15.1, platformdirs-4.13.3, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 468 items
+
+tests\ai\test_providers.py .............                                 [  2%]
+tests\integration\test_platform.py ...........                           [  5%]
+tests\phase10\test_calculations.py ...........                           [  7%]
+tests\phase10\test_workflows.py .                                        [  7%]
+tests\phase11\test_contracts.py ..........                               [  9%]
+tests\phase11\test_documents.py .                                        [ 10%]
+tests\phase11\test_financial_lineage.py .                                [ 10%]
+tests\phase11\test_templates.py .                                        [ 10%]
+tests\phase11\test_workflows.py ..                                       [ 10%]
+tests\phase12\test_entrypoints.py ....                                   [ 11%]
+tests\phase12\test_hardening.py ................                         [ 15%]
+tests\phase12\test_release_gate.py .                                     [ 15%]
+tests\phase12\test_roles_and_admissions.py ............................. [ 21%]
+....................................                                     [ 29%]
+tests\phase2\test_ai_storage.py ..........                               [ 31%]
+tests\phase2\test_analytics.py .....................................     [ 39%]
+tests\phase2\test_calculations.py ...................................    [ 46%]
+tests\phase2\test_connectors.py ...............                          [ 50%]
+tests\phase2\test_live_connectors.py ss                                  [ 50%]
+tests\phase2\test_pipeline.py ...................                        [ 54%]
+tests\phase3\test_workspace.py ....                                      [ 55%]
+tests\phase4\test_ai_and_calculations.py ............................    [ 61%]
+tests\phase4\test_workflows.py ..................                        [ 65%]
+tests\phase5\test_calculations.py .............                          [ 67%]
+tests\phase5\test_reporting.py .......                                   [ 69%]
+tests\phase6\test_calculations.py ....................                   [ 73%]
+tests\phase6\test_grounding.py .                                         [ 73%]
+tests\phase6\test_specialist_workflows.py ....                           [ 74%]
+tests\phase6\test_workflows.py ........                                  [ 76%]
+tests\phase7\test_documents.py .                                         [ 76%]
+tests\phase7\test_regression_fixes.py ..                                 [ 77%]
+tests\phase7\test_vat_calculations.py ............                       [ 79%]
+tests\phase7\test_vat_workflows.py ......                                [ 80%]
+tests\phase7\test_worker_security.py ..                                  [ 81%]
+tests\phase8\test_calculations.py ...........................            [ 87%]
+tests\phase8\test_imports.py .....                                       [ 88%]
+tests\phase8\test_relationships.py ..                                    [ 88%]
+tests\phase8\test_storage.py .                                           [ 88%]
+tests\phase8\test_workflows.py .........                                 [ 90%]
+tests\phase9\test_dmtt.py ............                                   [ 93%]
+tests\phase9\test_workflows.py ...                                       [ 94%]
+tests\security\test_security.py ....................                     [ 98%]
+tests\unit\test_api.py .....                                             [ 99%]
+tests\unit\test_schema.py ...                                            [100%]
+
+- generated xml file: C:\Indian Servers\TheAuditor\docs\qa-campaign\baseline-backend.xml -
+================= 466 passed, 2 skipped in 470.54s (0:07:50) ==================

@@ -1,0 +1,294 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Indian Servers\\TheAuditor\\frontend\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.qa.config.ts"
+    ],
+    "configFile": "C:\\Indian Servers\\TheAuditor\\frontend\\playwright.qa.config.ts",
+    "rootDir": "C:/Indian Servers/TheAuditor/frontend/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Indian Servers/TheAuditor/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Indian Servers/TheAuditor/frontend/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/qa-campaign\\.spec\\.ts/"
+        ],
+        "timeout": 900000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e",
+        "snapshotDir": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e",
+        "testIgnore": [],
+        "testMatch": {},
+        "timeout": 900000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3006",
+          "viewport": {
+            "width": 1600,
+            "height": 900
+          },
+          "reducedMotion": "reduce",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/qa-campaign/browser-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "qa-campaign.spec.ts",
+      "file": "qa-campaign.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "public login and invitation routes reflow on mobile",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 900000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 546,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-18T07:31:27.790Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "166483f19c0cfe491a02-06bfc52dd52b5b55e2e0",
+          "file": "qa-campaign.spec.ts",
+          "line": 9,
+          "column": 1
+        },
+        {
+          "title": "MFA platform operator reads persisted campaign results and cannot read client data",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 900000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1601,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-18T07:31:28.421Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "166483f19c0cfe491a02-f0c84389af03dda09979",
+          "file": "qa-campaign.spec.ts",
+          "line": 21,
+          "column": 1
+        },
+        {
+          "title": "every source-discovered workspace renders and records actual controls, errors and network results",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 900000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 133962,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 90\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"alerts\": Array [\u001b[39m\n\u001b[31m+       \"Backend unavailableYour firm permissions and service availability apply. Retry\",\u001b[39m\n\u001b[31m+       \"\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"classification\": \"RENDERED_ACTIONS_NOT_FULLY_VERIFIED\",\u001b[39m\n\u001b[31m+     \"controls\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"disabled\": false,\u001b[39m\n\u001b[31m+         \"label\": \"Retry\",\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"coverage\": \"render and inventory; mutation actions covered separately\",\u001b[39m\n\u001b[31m+     \"errors\": Array [],\u001b[39m\n\u001b[31m+     \"failed\": Array [\u001b[39m\n\u001b[31m+       \"503 /api/session\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"horizontalOverflow\": false,\u001b[39m\n\u001b[31m+     \"route\": \"/ai/approvals\",\u001b[39m\n\u001b[31m+     \"seconds\": 0.598,\u001b[39m\n\u001b[31m+     \"status\": 200,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"alerts\": Array [\u001b[39m\n\u001b[31m+       \"Backend unavailableYour firm permissions and service availability apply. Retry\",\u001b[39m\n\u001b[31m+       \"\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"classification\": \"RENDERED_ACTIONS_NOT_FULLY_VERIFIED\",\u001b[39m\n\u001b[31m+     \"controls\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"disabled\": false,\u001b[39m\n\u001b[31m+         \"label\": \"Retry\",\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"coverage\": \"render and inventory; mutation actions covered separately\",\u001b[39m\n\u001b[31m+     \"errors\": Array [],\u001b[39m\n\u001b[31m+     \"failed\": Array [\u001b[39m\n\u001b[31m+       \"503 /api/session\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"horizontalOverflow\": false,\u001b[39m\n\u001b[31m+     \"route\": \"/ai/citations\",\u001b[39m\n\u001b[31m+     \"seconds\": 0.573,\u001b[39m\n\u001b[31m+     \"status\": 200,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"alerts\": Array [\u001b[39m\n\u001b[31m+       \"Backend unavailableYour firm permissions and service availability apply. Retry\",\u001b[39m\n\u001b[31m+       \"\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"classification\": \"RENDERED_ACTIONS_NOT_FULLY_VERIFIED\",\u001b[39m\n\u001b[31m+     \"controls\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"disabled\": false,\u001b[39m\n\u001b[31m+         \"label\": \"Retry\",\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"coverage\": \"render and inventory; mutation actions covered separately\",\u001b[39m\n\u001b[31m+     \"errors\": Array [],\u001b[39m\n\u001b[31m+     \"failed\": Array [\u001b[39m\n\u001b[31m+       \"503 /api/session\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"horizontalOverflow\": false,\u001b[39m\n\u001b[31m+     \"route\": \"/ai/command-center\",\u001b[39m\n\u001b[31m+     \"seconds\": 0.59,\u001b[39m\n\u001b[31m+     \"status\": 200,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"alerts\": Array [\u001b[39m\n\u001b[31m+       \"Backend unavailableYour firm permissions and service availability apply. Retry\",\u001b[39m\n\u001b[31m+       \"\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"classification\": \"RENDERED_ACTIONS_NOT_FULLY_VERIFIED\",\u001b[39m\n\u001b[31m+     \"controls\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"disabled\": false,\u001b[39m\n\u001b[31m+         \"label\": \"Retry\",\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"coverage\": \"render and inventory; mutation actions covered separately\",\u001b[39m\n\u001b[31m+     \"errors\": Array [],\u001b[39m\n\u001b[31m+     \"failed\": Array [\u001b[39m\n\u001b[31m+       \"503 /api/session\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"horizontalOverflow\": false,\u001b[39m\n\u001b[31m+     \"route\": \"/ai/designer\",\u001b[39m\n\u001b[31m+     \"seconds\": 0.605,\u001b[39m\n\u001b[31m+     \"status\": 200,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 90\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"alerts\": Array [\u001b[39m\n\u001b[31m+       \"Backend unavailableYour firm permissions and service availability apply. Retry\",\u001b[39m\n\u001b[31m+       \"\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"classification\": \"RENDERED_ACTIONS_NOT_FULLY_VERIFIED\",\u001b[39m\n\u001b[31m+     \"controls\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"disabled\": false,\u001b[39m\n\u001b[31m+         \"label\": \"Retry\",\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"coverage\": \"render and inventory; mutation actions covered separately\",\u001b[39m\n\u001b[31m+     \"errors\": Array [],\u001b[39m\n\u001b[31m+     \"failed\": Array [\u001b[39m\n\u001b[31m+       \"503 /api/session\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"horizontalOverflow\": false,\u001b[39m\n\u001b[31m+     \"route\": \"/ai/approvals\",\u001b[39m\n\u001b[31m+     \"seconds\": 0.598,\u001b[39m\n\u001b[31m+     \"status\": 200,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"alerts\": Array [\u001b[39m\n\u001b[31m+       \"Backend unavailableYour firm permissions and service availability apply. Retry\",\u001b[39m\n\u001b[31m+       \"\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"classification\": \"RENDERED_ACTIONS_NOT_FULLY_VERIFIED\",\u001b[39m\n\u001b[31m+     \"controls\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"disabled\": false,\u001b[39m\n\u001b[31m+         \"label\": \"Retry\",\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"coverage\": \"render and inventory; mutation actions covered separately\",\u001b[39m\n\u001b[31m+     \"errors\": Array [],\u001b[39m\n\u001b[31m+     \"failed\": Array [\u001b[39m\n\u001b[31m+       \"503 /api/session\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"horizontalOverflow\": false,\u001b[39m\n\u001b[31m+     \"route\": \"/ai/citations\",\u001b[39m\n\u001b[31m+     \"seconds\": 0.573,\u001b[39m\n\u001b[31m+     \"status\": 200,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"alerts\": Array [\u001b[39m\n\u001b[31m+       \"Backend unavailableYour firm permissions and service availability apply. Retry\",\u001b[39m\n\u001b[31m+       \"\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"classification\": \"RENDERED_ACTIONS_NOT_FULLY_VERIFIED\",\u001b[39m\n\u001b[31m+     \"controls\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"disabled\": false,\u001b[39m\n\u001b[31m+         \"label\": \"Retry\",\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"coverage\": \"render and inventory; mutation actions covered separately\",\u001b[39m\n\u001b[31m+     \"errors\": Array [],\u001b[39m\n\u001b[31m+     \"failed\": Array [\u001b[39m\n\u001b[31m+       \"503 /api/session\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"horizontalOverflow\": false,\u001b[39m\n\u001b[31m+     \"route\": \"/ai/command-center\",\u001b[39m\n\u001b[31m+     \"seconds\": 0.59,\u001b[39m\n\u001b[31m+     \"status\": 200,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"alerts\": Array [\u001b[39m\n\u001b[31m+       \"Backend unavailableYour firm permissions and service availability apply. Retry\",\u001b[39m\n\u001b[31m+       \"\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"classification\": \"RENDERED_ACTIONS_NOT_FULLY_VERIFIED\",\u001b[39m\n\u001b[31m+     \"controls\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"disabled\": false,\u001b[39m\n\u001b[31m+         \"label\": \"Retry\",\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"coverage\": \"render and inventory; mutation actions covered separately\",\u001b[39m\n\u001b[31m+     \"errors\": Array [],\u001b[39m\n\u001b[31m+     \"failed\": Array [\u001b[39m\n\u001b[31m+       \"503 /api/session\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"horizontalOverflow\": false,\u001b[39m\n\u001b[31m+     \"route\": \"/ai/designer\",\u001b[39m\n\u001b[31m+     \"seconds\": 0.605,\u001b[39m\n\u001b[31m+     \"status\": 200,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-campaign.spec.ts:83:69",
+                    "location": {
+                      "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-campaign.spec.ts",
+                      "column": 69,
+                      "line": 83
+                    },
+                    "snippet": "  81 |   writeFileSync(\"../docs/qa-campaign/frontend-route-results.json\",JSON.stringify(results,null,2));\n  82 |   expect(results.filter(r=>(r as {errors:string[]}).errors.length)).toEqual([]);\n> 83 |   expect(results.filter(r=>(r as {failed:string[]}).failed.length)).toEqual([]);\n     |                                                                     ^\n  84 | });\n  85 |\n  86 | test(\"client search, status filter, edit persistence and backend denial stay functional\",async({page})=>{"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-campaign.spec.ts",
+                        "column": 69,
+                        "line": 83
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  -  1\u001b[39m\n\u001b[31m+ Received  + 90\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"alerts\": Array [\u001b[39m\n\u001b[31m+       \"Backend unavailableYour firm permissions and service availability apply. Retry\",\u001b[39m\n\u001b[31m+       \"\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"classification\": \"RENDERED_ACTIONS_NOT_FULLY_VERIFIED\",\u001b[39m\n\u001b[31m+     \"controls\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"disabled\": false,\u001b[39m\n\u001b[31m+         \"label\": \"Retry\",\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"coverage\": \"render and inventory; mutation actions covered separately\",\u001b[39m\n\u001b[31m+     \"errors\": Array [],\u001b[39m\n\u001b[31m+     \"failed\": Array [\u001b[39m\n\u001b[31m+       \"503 /api/session\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"horizontalOverflow\": false,\u001b[39m\n\u001b[31m+     \"route\": \"/ai/approvals\",\u001b[39m\n\u001b[31m+     \"seconds\": 0.598,\u001b[39m\n\u001b[31m+     \"status\": 200,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"alerts\": Array [\u001b[39m\n\u001b[31m+       \"Backend unavailableYour firm permissions and service availability apply. Retry\",\u001b[39m\n\u001b[31m+       \"\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"classification\": \"RENDERED_ACTIONS_NOT_FULLY_VERIFIED\",\u001b[39m\n\u001b[31m+     \"controls\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"disabled\": false,\u001b[39m\n\u001b[31m+         \"label\": \"Retry\",\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"coverage\": \"render and inventory; mutation actions covered separately\",\u001b[39m\n\u001b[31m+     \"errors\": Array [],\u001b[39m\n\u001b[31m+     \"failed\": Array [\u001b[39m\n\u001b[31m+       \"503 /api/session\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"horizontalOverflow\": false,\u001b[39m\n\u001b[31m+     \"route\": \"/ai/citations\",\u001b[39m\n\u001b[31m+     \"seconds\": 0.573,\u001b[39m\n\u001b[31m+     \"status\": 200,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"alerts\": Array [\u001b[39m\n\u001b[31m+       \"Backend unavailableYour firm permissions and service availability apply. Retry\",\u001b[39m\n\u001b[31m+       \"\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"classification\": \"RENDERED_ACTIONS_NOT_FULLY_VERIFIED\",\u001b[39m\n\u001b[31m+     \"controls\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"disabled\": false,\u001b[39m\n\u001b[31m+         \"label\": \"Retry\",\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"coverage\": \"render and inventory; mutation actions covered separately\",\u001b[39m\n\u001b[31m+     \"errors\": Array [],\u001b[39m\n\u001b[31m+     \"failed\": Array [\u001b[39m\n\u001b[31m+       \"503 /api/session\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"horizontalOverflow\": false,\u001b[39m\n\u001b[31m+     \"route\": \"/ai/command-center\",\u001b[39m\n\u001b[31m+     \"seconds\": 0.59,\u001b[39m\n\u001b[31m+     \"status\": 200,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+   Object {\u001b[39m\n\u001b[31m+     \"alerts\": Array [\u001b[39m\n\u001b[31m+       \"Backend unavailableYour firm permissions and service availability apply. Retry\",\u001b[39m\n\u001b[31m+       \"\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"classification\": \"RENDERED_ACTIONS_NOT_FULLY_VERIFIED\",\u001b[39m\n\u001b[31m+     \"controls\": Array [\u001b[39m\n\u001b[31m+       Object {\u001b[39m\n\u001b[31m+         \"disabled\": false,\u001b[39m\n\u001b[31m+         \"label\": \"Retry\",\u001b[39m\n\u001b[31m+       },\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"coverage\": \"render and inventory; mutation actions covered separately\",\u001b[39m\n\u001b[31m+     \"errors\": Array [],\u001b[39m\n\u001b[31m+     \"failed\": Array [\u001b[39m\n\u001b[31m+       \"503 /api/session\",\u001b[39m\n\u001b[31m+     ],\u001b[39m\n\u001b[31m+     \"horizontalOverflow\": false,\u001b[39m\n\u001b[31m+     \"route\": \"/ai/designer\",\u001b[39m\n\u001b[31m+     \"seconds\": 0.605,\u001b[39m\n\u001b[31m+     \"status\": 200,\u001b[39m\n\u001b[31m+   },\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  81 |   writeFileSync(\"../docs/qa-campaign/frontend-route-results.json\",JSON.stringify(results,null,2));\n  82 |   expect(results.filter(r=>(r as {errors:string[]}).errors.length)).toEqual([]);\n> 83 |   expect(results.filter(r=>(r as {failed:string[]}).failed.length)).toEqual([]);\n     |                                                                     ^\n  84 | });\n  85 |\n  86 | test(\"client search, status filter, edit persistence and backend denial stay functional\",async({page})=>{\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-campaign.spec.ts:83:69"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-18T07:31:30.032Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\qa-campaign-every-source-d-384ea--errors-and-network-results\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\qa-campaign-every-source-d-384ea--errors-and-network-results\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\qa-campaign-every-source-d-384ea--errors-and-network-results\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-campaign.spec.ts",
+                    "column": 69,
+                    "line": 83
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "166483f19c0cfe491a02-4d642048b4cb996fca21",
+          "file": "qa-campaign.spec.ts",
+          "line": 54,
+          "column": 1
+        },
+        {
+          "title": "client search, status filter, edit persistence and backend denial stay functional",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 900000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3982,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-18T07:33:46.258Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "166483f19c0cfe491a02-e509c3de8d74de0a9b23",
+          "file": "qa-campaign.spec.ts",
+          "line": 86,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-18T07:31:27.346Z",
+    "duration": 143049.845,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,1961 @@
+{
+  "synthetic": true,
+  "company": "FICTIONAL Gulf Example LLC \u2014 synthetic test only",
+  "import": "5b1ae09e-cde4-498a-8ad8-a5bc0536e131",
+  "snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+  "trial_balance": {
+    "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+    "functional_currency": "AED",
+    "display_precision": 2,
+    "display_rounding": "ROUND_HALF_EVEN",
+    "sign_convention": "debit_positive",
+    "rounding": "unrounded NUMERIC(28,8); display precision configured by currency",
+    "journal_level_testable": true,
+    "balanced": true,
+    "debit_credit_difference": "0E-8",
+    "total_debit": "1001300.00000000",
+    "total_credit": "1001300.00000000",
+    "mapped_accounts": 0,
+    "unmapped_accounts": 5,
+    "completeness": "independent_controls_required",
+    "items": [
+      {
+        "id": "8b030f39-f55a-47bf-8cbf-dcf681d9da89",
+        "code": "100",
+        "name": "Cash",
+        "classification": null,
+        "statement_group": null,
+        "contra": false,
+        "parent_code": null,
+        "source_group": null,
+        "opening": "10000.00000000",
+        "debit": "100.00000000",
+        "credit": "1001200.00000000",
+        "closing": "-991100.00000000",
+        "display_closing": "-991100.00"
+      },
+      {
+        "id": "12d3e425-8e5d-4fdd-a232-cd4528674d45",
+        "code": "300",
+        "name": "Equity",
+        "classification": null,
+        "statement_group": null,
+        "contra": false,
+        "parent_code": null,
+        "source_group": null,
+        "opening": "-10000.00000000",
+        "debit": "0",
+        "credit": "0",
+        "closing": "-10000.00000000",
+        "display_closing": "-10000.00"
+      },
+      {
+        "id": "512ee648-fc96-4bf5-8c82-1954ae6f5c41",
+        "code": "500",
+        "name": "Expense",
+        "classification": null,
+        "statement_group": null,
+        "contra": false,
+        "parent_code": null,
+        "source_group": null,
+        "opening": "0",
+        "debit": "1000200.00000000",
+        "credit": "100.00000000",
+        "closing": "1000100.00000000",
+        "display_closing": "1000100.00"
+      },
+      {
+        "id": "39d3380a-b0e0-47cc-87cb-8e2e02f442b2",
+        "code": "777",
+        "name": "Unmapped account",
+        "classification": null,
+        "statement_group": null,
+        "contra": false,
+        "parent_code": null,
+        "source_group": null,
+        "opening": "0",
+        "debit": "300.00000000",
+        "credit": "0E-8",
+        "closing": "300.00000000",
+        "display_closing": "300.00"
+      },
+      {
+        "id": "7a117a70-0103-4eb5-967a-05de4f5752b7",
+        "code": "999",
+        "name": "Suspense",
+        "classification": null,
+        "statement_group": null,
+        "contra": false,
+        "parent_code": null,
+        "source_group": null,
+        "opening": "0",
+        "debit": "700.00000000",
+        "credit": "0E-8",
+        "closing": "700.00000000",
+        "display_closing": "700.00"
+      }
+    ],
+    "total": 5,
+    "offset": 0,
+    "limit": 50
+  },
+  "analytics": {
+    "id": "255d08cf-179c-4a0a-801b-59b85e304e49",
+    "status": "completed",
+    "result": {
+      "rules": [
+        {
+          "test_name": "Weekend postings",
+          "rule_id": "J01",
+          "rule_version": "2.0.0",
+          "status": "warning",
+          "population_size": 14,
+          "tested_population": 14,
+          "flagged_count": 2,
+          "severity": "review",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE ((isodow(posting_date)+6)%7) IN (5,6)"
+          },
+          "execution_ms": 6.839,
+          "exceptions": [
+            {
+              "line_id": "a6acead9-d651-4b2b-89f4-00880feb93ba",
+              "indicator": "Weekend postings"
+            },
+            {
+              "line_id": "d23873bd-e88f-41dd-b885-96b3c3e9580f",
+              "indicator": "Weekend postings"
+            }
+          ],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Configured public holidays",
+          "rule_id": "J02",
+          "rule_version": "2.0.0",
+          "status": "warning",
+          "population_size": 14,
+          "tested_population": 14,
+          "flagged_count": 2,
+          "severity": "review",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE posting_date IN ('2026-12-26')"
+          },
+          "execution_ms": 6.329,
+          "exceptions": [
+            {
+              "line_id": "a6acead9-d651-4b2b-89f4-00880feb93ba",
+              "indicator": "Configured public holidays"
+            },
+            {
+              "line_id": "d23873bd-e88f-41dd-b885-96b3c3e9580f",
+              "indicator": "Configured public holidays"
+            }
+          ],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "After-hours postings",
+          "rule_id": "J03",
+          "rule_version": "2.0.0",
+          "status": "not_testable",
+          "population_size": 14,
+          "tested_population": 0,
+          "flagged_count": 0,
+          "severity": "information",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE posting_timestamp IS NOT NULL AND (extract(hour FROM timezone('UTC',posting_timestamp)) < 0 OR extract(hour FROM timezone('UTC',posting_timestamp)) >= 24)"
+          },
+          "execution_ms": 2.842,
+          "exceptions": [],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Round amounts",
+          "rule_id": "J04",
+          "rule_version": "2.0.0",
+          "status": "warning",
+          "population_size": 14,
+          "tested_population": 14,
+          "flagged_count": 4,
+          "severity": "review",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE amount >= 10000 AND amount % 10000=0"
+          },
+          "execution_ms": 6.839,
+          "exceptions": [
+            {
+              "line_id": "296f82b3-f740-46d9-9fd9-89d218339071",
+              "indicator": "Round amounts"
+            },
+            {
+              "line_id": "38713c5c-29e7-4b24-88f9-e80162897615",
+              "indicator": "Round amounts"
+            },
+            {
+              "line_id": "a6acead9-d651-4b2b-89f4-00880feb93ba",
+              "indicator": "Round amounts"
+            },
+            {
+              "line_id": "d23873bd-e88f-41dd-b885-96b3c3e9580f",
+              "indicator": "Round amounts"
+            }
+          ],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Duplicate journals",
+          "rule_id": "J05",
+          "rule_version": "2.0.0",
+          "status": "warning",
+          "population_size": 14,
+          "tested_population": 14,
+          "flagged_count": 4,
+          "severity": "review",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT p.id FROM p JOIN signatures s USING(journal_ref) WHERE s.sig IN (SELECT sig FROM signatures GROUP BY sig HAVING count(*)>1)"
+          },
+          "execution_ms": 7.463,
+          "exceptions": [
+            {
+              "line_id": "50b4d180-c110-47ab-821a-5a655a2f9314",
+              "indicator": "Duplicate journals"
+            },
+            {
+              "line_id": "5fe99eb0-3e95-4e94-8978-af3b08885314",
+              "indicator": "Duplicate journals"
+            },
+            {
+              "line_id": "aa467304-b68b-457a-9418-e0c2d5202a6a",
+              "indicator": "Duplicate journals"
+            },
+            {
+              "line_id": "ca90e3c4-0308-4c6f-97a0-6b1055a52626",
+              "indicator": "Duplicate journals"
+            }
+          ],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Near-duplicate journals",
+          "rule_id": "J06",
+          "rule_version": "2.0.0",
+          "status": "passed",
+          "population_size": 14,
+          "tested_population": 14,
+          "flagged_count": 0,
+          "severity": "information",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT p.id FROM p JOIN (SELECT *, lag(debit) OVER w prev_debit,lag(posting_date) OVER w prev_date,lag(sig) OVER w prev_sig FROM signatures WINDOW w AS (PARTITION BY accounts ORDER BY debit,posting_date,journal_ref)) s USING(journal_ref) WHERE s.debit>0 AND abs(s.debit-s.prev_debit)<=s.debit*0.01 AND abs(date_diff('day',s.posting_date,s.prev_date))<=3 AND s.sig<>s.prev_sig"
+          },
+          "execution_ms": 6.682,
+          "exceptions": [],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Unusual descriptions",
+          "rule_id": "J07",
+          "rule_version": "2.0.0",
+          "status": "warning",
+          "population_size": 14,
+          "tested_population": 14,
+          "flagged_count": 2,
+          "severity": "review",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE contains(lower(coalesce(description,'')),'adjust') OR contains(lower(coalesce(description,'')),'misc') OR contains(lower(coalesce(description,'')),'override') OR contains(lower(coalesce(description,'')),'plug')"
+          },
+          "execution_ms": 6.743,
+          "exceptions": [
+            {
+              "line_id": "296f82b3-f740-46d9-9fd9-89d218339071",
+              "indicator": "Unusual descriptions"
+            },
+            {
+              "line_id": "38713c5c-29e7-4b24-88f9-e80162897615",
+              "indicator": "Unusual descriptions"
+            }
+          ],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "High-value entries",
+          "rule_id": "J08",
+          "rule_version": "2.0.0",
+          "status": "warning",
+          "population_size": 14,
+          "tested_population": 14,
+          "flagged_count": 4,
+          "severity": "review",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE amount >= 50000"
+          },
+          "execution_ms": 5.462,
+          "exceptions": [
+            {
+              "line_id": "296f82b3-f740-46d9-9fd9-89d218339071",
+              "indicator": "High-value entries"
+            },
+            {
+              "line_id": "38713c5c-29e7-4b24-88f9-e80162897615",
+              "indicator": "High-value entries"
+            },
+            {
+              "line_id": "a6acead9-d651-4b2b-89f4-00880feb93ba",
+              "indicator": "High-value entries"
+            },
+            {
+              "line_id": "d23873bd-e88f-41dd-b885-96b3c3e9580f",
+              "indicator": "High-value entries"
+            }
+          ],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Materiality exceedance",
+          "rule_id": "J09",
+          "rule_version": "2.0.0",
+          "status": "warning",
+          "population_size": 14,
+          "tested_population": 14,
+          "flagged_count": 4,
+          "severity": "review",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE amount > 100000"
+          },
+          "execution_ms": 5.47,
+          "exceptions": [
+            {
+              "line_id": "296f82b3-f740-46d9-9fd9-89d218339071",
+              "indicator": "Materiality exceedance"
+            },
+            {
+              "line_id": "38713c5c-29e7-4b24-88f9-e80162897615",
+              "indicator": "Materiality exceedance"
+            },
+            {
+              "line_id": "a6acead9-d651-4b2b-89f4-00880feb93ba",
+              "indicator": "Materiality exceedance"
+            },
+            {
+              "line_id": "d23873bd-e88f-41dd-b885-96b3c3e9580f",
+              "indicator": "Materiality exceedance"
+            }
+          ],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Manual year-end entries",
+          "rule_id": "J10",
+          "rule_version": "2.0.0",
+          "status": "warning",
+          "population_size": 14,
+          "tested_population": 14,
+          "flagged_count": 2,
+          "severity": "review",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE manual AND posting_date BETWEEN cast('2026-12-31' AS DATE)-7 AND cast('2026-12-31' AS DATE)"
+          },
+          "execution_ms": 5.536,
+          "exceptions": [
+            {
+              "line_id": "296f82b3-f740-46d9-9fd9-89d218339071",
+              "indicator": "Manual year-end entries"
+            },
+            {
+              "line_id": "38713c5c-29e7-4b24-88f9-e80162897615",
+              "indicator": "Manual year-end entries"
+            }
+          ],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Post-year-end reversals",
+          "rule_id": "J11",
+          "rule_version": "2.0.0",
+          "status": "passed",
+          "population_size": 14,
+          "tested_population": 2,
+          "flagged_count": 0,
+          "severity": "information",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE reversal_ref IS NOT NULL AND posting_date>cast('2026-12-31' AS DATE) AND posting_date<=cast('2026-12-31' AS DATE)+7"
+          },
+          "execution_ms": 5.049,
+          "exceptions": [],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Unusual debit/credit combinations",
+          "rule_id": "J12",
+          "rule_version": "2.0.0",
+          "status": "not_testable",
+          "population_size": 14,
+          "tested_population": 0,
+          "flagged_count": 0,
+          "severity": "information",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE (category IN ('Assets','Expenses') AND NOT contra AND credit>0) OR (category IN ('Liabilities','Equity','Income') AND NOT contra AND debit>0) OR (category IN ('Assets','Expenses') AND contra AND debit>0) OR (category IN ('Liabilities','Equity','Income') AND contra AND credit>0)"
+          },
+          "execution_ms": 2.911,
+          "exceptions": [],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Rare accounts",
+          "rule_id": "J13",
+          "rule_version": "2.0.0",
+          "status": "warning",
+          "population_size": 14,
+          "tested_population": 14,
+          "flagged_count": 2,
+          "severity": "review",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE account_code IN (SELECT account_code FROM p GROUP BY account_code HAVING count(*)<=2)"
+          },
+          "execution_ms": 7.529,
+          "exceptions": [
+            {
+              "line_id": "97b36ed8-b12d-4557-a149-1e2eb9cc5f38",
+              "indicator": "Rare accounts"
+            },
+            {
+              "line_id": "f86367c3-924b-455a-8c20-d0b75c39eebd",
+              "indicator": "Rare accounts"
+            }
+          ],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Unexpected account pairings",
+          "rule_id": "J14",
+          "rule_version": "2.0.0",
+          "status": "not_testable",
+          "population_size": 14,
+          "tested_population": 0,
+          "flagged_count": 0,
+          "severity": "information",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE false"
+          },
+          "execution_ms": 2.553,
+          "exceptions": [],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Dormant accounts reactivated",
+          "rule_id": "J15",
+          "rule_version": "2.0.0",
+          "status": "not_testable",
+          "population_size": 14,
+          "tested_population": 0,
+          "flagged_count": 0,
+          "severity": "information",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE false"
+          },
+          "execution_ms": 2.404,
+          "exceptions": [],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Suspense postings",
+          "rule_id": "J16",
+          "rule_version": "2.0.0",
+          "status": "not_testable",
+          "population_size": 14,
+          "tested_population": 0,
+          "flagged_count": 0,
+          "severity": "information",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE lower(coalesce(source_group,''))='suspense'"
+          },
+          "execution_ms": 2.667,
+          "exceptions": [],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Unexpected negative balance",
+          "rule_id": "J17",
+          "rule_version": "2.0.0",
+          "status": "not_testable",
+          "population_size": 14,
+          "tested_population": 0,
+          "flagged_count": 0,
+          "severity": "information",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE account_code IN (SELECT account_code FROM p GROUP BY account_code HAVING (bool_or(category IN ('Assets','Expenses') AND NOT contra) AND sum(debit-credit)<0) OR (bool_or(category IN ('Liabilities','Equity','Income') AND contra) AND sum(debit-credit)<0))"
+          },
+          "execution_ms": 3.004,
+          "exceptions": [],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Large activity changes",
+          "rule_id": "J18",
+          "rule_version": "2.0.0",
+          "status": "not_testable",
+          "population_size": 14,
+          "tested_population": 0,
+          "flagged_count": 0,
+          "severity": "information",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE false"
+          },
+          "execution_ms": 2.636,
+          "exceptions": [],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Voucher sequence gaps",
+          "rule_id": "J19",
+          "rule_version": "2.0.0",
+          "status": "warning",
+          "population_size": 14,
+          "tested_population": 14,
+          "flagged_count": 2,
+          "severity": "review",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT p.id FROM p JOIN (SELECT journal_ref,try_cast(journal_ref AS BIGINT) n,lag(try_cast(journal_ref AS BIGINT)) OVER(ORDER BY try_cast(journal_ref AS BIGINT)) previous FROM signatures WHERE try_cast(journal_ref AS BIGINT) IS NOT NULL) gaps USING(journal_ref) WHERE gaps.n-gaps.previous>1"
+          },
+          "execution_ms": 6.384,
+          "exceptions": [
+            {
+              "line_id": "a6acead9-d651-4b2b-89f4-00880feb93ba",
+              "indicator": "Voucher sequence gaps"
+            },
+            {
+              "line_id": "d23873bd-e88f-41dd-b885-96b3c3e9580f",
+              "indicator": "Voucher sequence gaps"
+            }
+          ],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Posting/document date gap",
+          "rule_id": "J20",
+          "rule_version": "2.0.0",
+          "status": "passed",
+          "population_size": 14,
+          "tested_population": 14,
+          "flagged_count": 0,
+          "severity": "information",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE document_date IS NOT NULL AND abs(date_diff('day',document_date,posting_date))>30"
+          },
+          "execution_ms": 5.35,
+          "exceptions": [],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Benford first digit",
+          "rule_id": "S21",
+          "rule_version": "2.0.0",
+          "status": "not_testable",
+          "population_size": 14,
+          "tested_population": 0,
+          "flagged_count": 0,
+          "severity": "information",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "Benford population chi-square",
+            "reason": "unsuitable Benford population",
+            "positive_count": 14,
+            "distinct": 5
+          },
+          "execution_ms": 3.891,
+          "exceptions": [],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Amount frequency",
+          "rule_id": "S22",
+          "rule_version": "2.0.0",
+          "status": "passed",
+          "population_size": 14,
+          "tested_population": 14,
+          "flagged_count": 0,
+          "severity": "information",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE amount IN (SELECT amount FROM p WHERE amount>0 GROUP BY amount HAVING count(*)>greatest(2,0.5*14))"
+          },
+          "execution_ms": 6.057,
+          "exceptions": [],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Amount outliers",
+          "rule_id": "S23",
+          "rule_version": "2.0.0",
+          "status": "passed",
+          "population_size": 14,
+          "tested_population": 14,
+          "flagged_count": 0,
+          "severity": "information",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE amount>(SELECT quantile_cont(amount,0.75)+3*(quantile_cont(amount,0.75)-quantile_cont(amount,0.25)) FROM p)"
+          },
+          "execution_ms": 5.057,
+          "exceptions": [],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Unusual daily velocity",
+          "rule_id": "S24",
+          "rule_version": "2.0.0",
+          "status": "passed",
+          "population_size": 14,
+          "tested_population": 14,
+          "flagged_count": 0,
+          "severity": "information",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE posting_date IN (SELECT posting_date FROM p GROUP BY posting_date HAVING count(*)>50)"
+          },
+          "execution_ms": 5.159,
+          "exceptions": [],
+          "exceptions_preview_limit": 20
+        },
+        {
+          "test_name": "Counterparty/user concentration",
+          "rule_id": "S25",
+          "rule_version": "2.0.0",
+          "status": "warning",
+          "population_size": 14,
+          "tested_population": 14,
+          "flagged_count": 14,
+          "severity": "review",
+          "input_snapshot": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+          "parameters": {
+            "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+            "materiality": "100000",
+            "high_value": "50000",
+            "round_unit": "10000",
+            "rare_count": 2,
+            "near_duplicate_days": 3,
+            "near_duplicate_ratio": "0.01",
+            "dormant_days": 90,
+            "activity_multiple": "3",
+            "frequency_min_count": 2,
+            "frequency_ratio": "0.5",
+            "benford_min_count": 1000,
+            "benford_min_distinct": 100,
+            "benford_min_span": "100",
+            "outlier_multiple": "3",
+            "concentration": "0.5",
+            "velocity_limit": 50,
+            "date_gap_days": 30,
+            "year_end": "2026-12-31",
+            "year_end_window": 7,
+            "holidays": [
+              "2026-12-26"
+            ],
+            "weekend_days": [
+              5,
+              6
+            ],
+            "timezone": null,
+            "business_hours": null,
+            "timestamps_reliable": false,
+            "voucher_sequential": true,
+            "expected_pairs": null,
+            "prior_activity": null,
+            "last_activity": null,
+            "unusual_words": [
+              "adjust",
+              "misc",
+              "override",
+              "plug"
+            ],
+            "benford_eligible": false,
+            "benford_chi_limit": "20.09",
+            "weights": {}
+          },
+          "calculation_evidence": {
+            "predicate": "SELECT id FROM p WHERE counterparty IN (SELECT counterparty FROM p WHERE counterparty IS NOT NULL GROUP BY counterparty HAVING count(*)>0.5*14) OR \"user\" IN (SELECT \"user\" FROM p WHERE \"user\" IS NOT NULL GROUP BY \"user\" HAVING count(*)>0.5*14)"
+          },
+          "execution_ms": 7.154,
+          "exceptions": [
+            {
+              "line_id": "296f82b3-f740-46d9-9fd9-89d218339071",
+              "indicator": "Counterparty/user concentration"
+            },
+            {
+              "line_id": "38713c5c-29e7-4b24-88f9-e80162897615",
+              "indicator": "Counterparty/user concentration"
+            },
+            {
+              "line_id": "50b4d180-c110-47ab-821a-5a655a2f9314",
+              "indicator": "Counterparty/user concentration"
+            },
+            {
+              "line_id": "5a8aa3eb-71ee-46fa-8fab-37406ab16fb9",
+              "indicator": "Counterparty/user concentration"
+            },
+            {
+              "line_id": "5fe99eb0-3e95-4e94-8978-af3b08885314",
+              "indicator": "Counterparty/user concentration"
+            },
+            {
+              "line_id": "97b36ed8-b12d-4557-a149-1e2eb9cc5f38",
+              "indicator": "Counterparty/user concentration"
+            },
+            {
+              "line_id": "a69d2661-440c-49c9-93eb-19ab97142ef7",
+              "indicator": "Counterparty/user concentration"
+            },
+            {
+              "line_id": "a6acead9-d651-4b2b-89f4-00880feb93ba",
+              "indicator": "Counterparty/user concentration"
+            },
+            {
+              "line_id": "aa467304-b68b-457a-9418-e0c2d5202a6a",
+              "indicator": "Counterparty/user concentration"
+            },
+            {
+              "line_id": "c70dc34a-b2fb-4fd8-9f3e-e7d947eb0ea8",
+              "indicator": "Counterparty/user concentration"
+            },
+            {
+              "line_id": "ca60ea6f-55ea-4911-8c7e-e5509b64f958",
+              "indicator": "Counterparty/user concentration"
+            },
+            {
+              "line_id": "ca90e3c4-0308-4c6f-97a0-6b1055a52626",
+              "indicator": "Counterparty/user concentration"
+            },
+            {
+              "line_id": "d23873bd-e88f-41dd-b885-96b3c3e9580f",
+              "indicator": "Counterparty/user concentration"
+            },
+            {
+              "line_id": "f86367c3-924b-455a-8c20-d0b75c39eebd",
+              "indicator": "Counterparty/user concentration"
+            }
+          ],
+          "exceptions_preview_limit": 20
+        }
+      ]
+    }
+  },
+  "reconciliation": {
+    "id": "dde70177-9d59-4ae7-a4ab-0867437d5fa4",
+    "status": "insufficient_evidence",
+    "result": {
+      "status": "insufficient_evidence",
+      "tolerance": "0",
+      "snapshot_id": "c552c077-70a6-4633-a5fb-918d3cde84e7",
+      "comparison_snapshot_id": null,
+      "checks": [
+        {
+          "test": "source_records_to_manifest_count",
+          "status": "passed",
+          "source": 16,
+          "calculated": 16
+        },
+        {
+          "test": "roll_forward",
+          "status": "passed"
+        },
+        {
+          "test": "ledger_balance",
+          "status": "passed",
+          "difference": "0E-8"
+        },
+        {
+          "test": "source_count",
+          "status": "passed",
+          "evidence": {}
+        },
+        {
+          "test": "source_total_debit",
+          "status": "passed",
+          "evidence": {
+            "expected": "1011300",
+            "observed": "1011300"
+          }
+        },
+        {
+          "test": "source_total_credit",
+          "status": "passed",
+          "evidence": {
+            "expected": "1011300",
+            "observed": "1011300"
+          }
+        },
+        {
+          "test": "unmapped_accounts",
+          "status": "warning",
+          "count": 5
+        },
+        {
+          "test": "journal_to_ledger_count",
+          "status": "passed",
+          "source": 16,
+          "calculated": 16
+        },
+        {
+          "test": "source_to_normalized_totals",
+          "status": "passed",
+          "source_debit": "1011300",
+          "source_credit": "1011300",
+          "calculated_debit": "1011300.00000000",
+          "calculated_credit": "1011300.00000000"
+        },
+        {
+          "test": "independent_gl_to_tb",
+          "status": "not_testable"
+        },
+        {
+          "test": "source_system_completeness",
+          "status": "passed"
+        }
+      ],
+      "note": "Balanced totals alone do not establish completeness"
+    }
+  },
+  "sampling": {
+    "id": "0a15cc30-ed8d-40c9-b396-d70f9a315d35",
+    "status": "completed",
+    "result": {
+      "population": 14,
+      "seed": 42,
+      "algorithm_version": "duckdb-exact-selection/2.0.0",
+      "excluded_zero": 0,
+      "excluded_negative": 7,
+      "assurance": "Professional sample-size decision; no ISA assurance claimed",
+      "selected_count": 2
+    }
+  },
+  "ai_explanation": {
+    "suggestion_id": "eebbc0d7-b8bc-4538-acbb-2e12e94bc30a",
+    "execution_id": "9ac878e3-eafc-45da-b357-a3636bde0609",
+    "model": "mock-diagnostic",
+    "prompt_version": 1,
+    "review_status": "pending_review",
+    "output": {
+      "explanation": "Mock suggestion: the supplied evidence requires professional investigation; causation is not established.",
+      "citations": [
+        "c552c077-70a6-4633-a5fb-918d3cde84e7",
+        "d23873bd-e88f-41dd-b885-96b3c3e9580f"
+      ],
+      "requires_review": true,
+      "potential_issues": [
+        "Review the deterministic indicator"
+      ],
+      "verification_steps": [
+        "Inspect original supporting documentation"
+      ],
+      "evidence_requirements": [
+        "Original voucher and authorization"
+      ]
+    }
+  },
+  "human_review": {
+    "id": "eebbc0d7-b8bc-4538-acbb-2e12e94bc30a",
+    "review_status": "approved",
+    "ledger_modified": false
+  },
+  "invalid_import_rejected": true
+}

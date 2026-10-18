@@ -1,0 +1,146 @@
+
+Running 4 tests using 1 worker
+
+(node:25700) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 e2e\qa-crud.spec.ts:19:1 › thirteen real role logins enforce server CRUD permissions (6.4s)
+(node:20380) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 e2e\qa-crud.spec.ts:47:1 › client form create edit archive restore with separate persisted API assertions (22.7s)
+(node:12068) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 e2e\qa-crud.spec.ts:126:1 › working paper actual form creates a persisted draft (22.1s)
+(node:19608) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  4 e2e\qa-crud.spec.ts:171:1 › two tabs invalidate cached grids and reject an older open edit (1.1s)
+
+
+  1) e2e\qa-crud.spec.ts:19:1 › thirteen real role logins enforce server CRUD permissions ──────────
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 403
+
+      35 |     expect(read.status()).toBe(permissions[role].includes("clients.read") ? 200 : 403);
+      36 |     const create = await page.request.post("/api/backend/clients", {headers, data:{code:`CRUD-ROLE-${roles.indexOf(role)}-${Date.now()}`,name:`SYNTHETIC role probe ${role}`}});
+    > 37 |     expect(create.status()).toBe(permissions[role].includes("clients.write") ? 201 : 403);
+         |                             ^
+      38 |     const cross = await page.request.get("/api/backend/clients", {headers:{"X-Tenant-ID":"00000000-0000-4000-8000-000000000001"}});
+      39 |     expect(cross.status()).toBe(403);
+      40 |     receipts.push({role, read:read.status(), create:create.status(), crossTenant:cross.status(), scope:"Real login and client CRUD authorization; specialist form workflow not covered by this probe"});
+        at C:\Indian Servers\TheAuditor\frontend\e2e\qa-crud.spec.ts:37:29
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\qa-crud-thirteen-real-role-1490f-rce-server-CRUD-permissions\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    attachment #2: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\qa-crud-thirteen-real-role-1490f-rce-server-CRUD-permissions\test-failed-2.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\qa-crud-thirteen-real-role-1490f-rce-server-CRUD-permissions\error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\qa-crud-thirteen-real-role-1490f-rce-server-CRUD-permissions\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\qa-crud-thirteen-real-role-1490f-rce-server-CRUD-permissions\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) e2e\qa-crud.spec.ts:47:1 › client form create edit archive restore with separate persisted API assertions 
+
+    TimeoutError: locator.selectOption: Timeout 20000ms exceeded.
+    Call log:
+      - waiting for getByRole('dialog', { name: 'Edit client', exact: true }).getByLabel('status', { exact: true })
+
+
+      78 |       .click();
+      79 |     const form = page.getByRole("dialog", {name: "Edit client", exact: true});
+    > 80 |     await form.getByLabel("status", { exact: true }).selectOption(status);
+         |                                                      ^
+      81 |     await form
+      82 |       .getByLabel("Lifecycle reason")
+      83 |       .fill(`Synthetic browser lifecycle review for ${status}`);
+        at C:\Indian Servers\TheAuditor\frontend\e2e\qa-crud.spec.ts:80:54
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\qa-crud-client-form-create-9b487-te-persisted-API-assertions\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\qa-crud-client-form-create-9b487-te-persisted-API-assertions\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\qa-crud-client-form-create-9b487-te-persisted-API-assertions\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\qa-crud-client-form-create-9b487-te-persisted-API-assertions\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) e2e\qa-crud.spec.ts:126:1 › working paper actual form creates a persisted draft ───────────────
+
+    TimeoutError: locator.fill: Timeout 20000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Folder', { exact: true })
+
+
+      137 |     .getByLabel("Title", { exact: true })
+      138 |     .fill("SYNTHETIC browser lifecycle paper");
+    > 139 |   await page.getByLabel(/^Folder/).fill("Planning");
+          |                                                    ^
+      140 |   await page.getByRole("button", { name: "Add section" }).click();
+      141 |   await page.getByLabel("Section 1 heading").fill("Objective");
+      142 |   await page
+        at C:\Indian Servers\TheAuditor\frontend\e2e\qa-crud.spec.ts:139:52
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\qa-crud-working-paper-actual-form-creates-a-persisted-draft\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\qa-crud-working-paper-actual-form-creates-a-persisted-draft\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\qa-crud-working-paper-actual-form-creates-a-persisted-draft\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\qa-crud-working-paper-actual-form-creates-a-persisted-draft\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) e2e\qa-crud.spec.ts:171:1 › two tabs invalidate cached grids and reject an older open edit ────
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 403
+
+      174 |   const headers = {"Origin": "http://127.0.0.1:3006", "X-Tenant-ID": data.tenant_id};
+      175 |   const created = await page.request.post("/api/backend/clients", {headers, data: {code, name: "SYNTHETIC concurrent draft"}});
+    > 176 |   expect(created.status()).toBe(201); const row = await created.json();
+          |                            ^
+      177 |   const second = await context.newPage();
+      178 |   for (const tab of [page, second]) {
+      179 |     await tab.goto("/clients"); await tab.getByLabel("Search clients").fill(code);
+        at C:\Indian Servers\TheAuditor\frontend\e2e\qa-crud.spec.ts:176:28
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\qa-crud-two-tabs-invalidat-c0e63-d-reject-an-older-open-edit\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\qa-crud-two-tabs-invalidat-c0e63-d-reject-an-older-open-edit\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\qa-crud-two-tabs-invalidat-c0e63-d-reject-an-older-open-edit\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\qa-crud-two-tabs-invalidat-c0e63-d-reject-an-older-open-edit\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    e2e\qa-crud.spec.ts:19:1 › thirteen real role logins enforce server CRUD permissions ───────────
+    e2e\qa-crud.spec.ts:47:1 › client form create edit archive restore with separate persisted API assertions 
+    e2e\qa-crud.spec.ts:126:1 › working paper actual form creates a persisted draft ────────────────
+    e2e\qa-crud.spec.ts:171:1 › two tabs invalidate cached grids and reject an older open edit ─────

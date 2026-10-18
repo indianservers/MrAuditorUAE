@@ -33,7 +33,7 @@ async def ready():
             if unsafe_role:
                 raise RuntimeError("Unsafe database role")
             revision = await db.scalar(text("SELECT version_num FROM alembic_version"))
-            if revision != "0012":
+            if revision != "0013":
                 raise RuntimeError("Database migration does not match release")
             if settings().environment == "production":
                 synthetic = await db.scalar(

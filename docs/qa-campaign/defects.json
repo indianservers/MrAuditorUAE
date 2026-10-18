@@ -1,0 +1,72 @@
+[
+  {
+    "id": "QA-001",
+    "severity": "MEDIUM",
+    "status": "FIXED",
+    "category": "product",
+    "title": "Client code search mismatch"
+  },
+  {
+    "id": "QA-002",
+    "severity": "LOW",
+    "status": "FIXED",
+    "category": "harness",
+    "title": "TP fixture selected foreign engagement ledger"
+  },
+  {
+    "id": "QA-003",
+    "severity": "LOW",
+    "status": "FIXED",
+    "category": "harness",
+    "title": "Scale fixture attempted protected active-import replacement"
+  },
+  {
+    "id": "QA-004",
+    "severity": "LOW",
+    "status": "FIXED",
+    "category": "harness",
+    "title": "Checkpoint counted unrelated workflow lines"
+  },
+  {
+    "id": "QA-005",
+    "severity": "HIGH",
+    "status": "OPEN",
+    "category": "quality",
+    "title": "Representative analytics calibration not qualified; small synthetic calibration passed"
+  },
+  {
+    "id": "QA-006",
+    "severity": "MEDIUM",
+    "status": "FIXED",
+    "category": "performance",
+    "title": "Million-line tenant pagination sort"
+  },
+  {
+    "id": "QA-007",
+    "severity": "HIGH",
+    "status": "OPEN",
+    "category": "quality",
+    "title": "Experimental classifier held-out and OOD F1 zero"
+  },
+  {
+    "id": "QA-008",
+    "severity": "HIGH",
+    "status": "OPEN",
+    "category": "coverage",
+    "title": "Every enabled control and role-operation pair not independently verified"
+  },
+  {
+    "id": "QA-009",
+    "severity": "HIGH",
+    "status": "BLOCKED",
+    "category": "integration",
+    "title": "Live external AI, connectors, scanning and production infrastructure not qualified"
+  },
+  {
+    "id": "QA-010",
+    "severity": "MEDIUM",
+    "status": "OPEN",
+    "category": "reliability",
+    "title": "One intermediate load transport disconnect; completed repeat had zero failures"
+  }
+]

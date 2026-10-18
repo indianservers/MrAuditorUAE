@@ -170,3 +170,15 @@ Phase 12 adds revocable access sessions, authenticator MFA, production demo guar
 The current local preview is `http://127.0.0.1:3004` with API `http://127.0.0.1:58007`. New local setups use `python scripts/setup_env.py` to generate independent secrets without printing them; existing setups must securely inject a dedicated Fernet `MFA_ENCRYPTION_KEY`. Run migrations through `0012`. Workers must consume `celery,grc,enterprise-ai`; use exactly one scheduler when explicitly enabling schedules. Existing valid synthetic ledger data was reused.
 
 Hosted templates are in `deploy/`; follow [deployment preparation](docs/phase-12/deployment-runbook.md), [recovery](docs/phase-12/backup-restore-test.md), [rollback](docs/phase-12/rollback-runbook.md) and [privacy acceptance](docs/phase-12/privacy-and-residency.md). Templates are not proof of deployment. No production deployment or new development phase is authorized by this delivery.
+
+## Post-development QA campaign
+
+The current checkout requires migration **0013**, which adds an index for stable tenant ledger pagination. Run `alembic upgrade head` before starting the updated API. Historical Phase 12 evidence above describes its original 0012 snapshot.
+
+The campaign uses separate `auditos_qa_campaign_demo` and disposable `auditos_qa_campaign_test` databases, private object directories and generated local credentials. Its API is at `http://127.0.0.1:58009` and frontend at `http://127.0.0.1:3006`. Existing demo data is preserved. See [actual QA results](docs/qa-campaign/final-qa-report.md), [execution commands](docs/qa-campaign/commands.md) and [coverage matrix](docs/qa-campaign/module-testing-matrix.csv).
+
+`/platform/qa-center` reads persisted campaign results and requires a separately provisioned platform operator, verified MFA, development/test mode and `QA_CAMPAIGN_ENABLED=true`. Production configuration rejects that flag. The experimental classifier failed its accuracy evaluation; external integrations and exhaustive control coverage remain unqualified. Production release remains **NO-GO**.
+
+## Advanced CRUD and dependency QA
+
+The evidence and remaining coverage gaps are in [docs/qa-crud/final-crud-qa-report.md](docs/qa-crud/final-crud-qa-report.md). The campaign remains PARTIAL / NO-GO: source freshness and representative client/working-paper lifecycle tests pass, while exhaustive specialist browser CRUD remains open. Reproduce isolated API regressions with `backend/.venv/Scripts/python.exe scripts/qa_crud_run.py test .venv/Scripts/python.exe -m pytest tests/qa_crud`; run browser checks with `npx playwright test --config playwright.crud.config.ts` from frontend against the synthetic QA services.

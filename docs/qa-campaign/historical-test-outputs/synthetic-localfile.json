@@ -1,0 +1,743 @@
+{
+  "id": "ca1dced1-1738-4e48-90bf-c1e9a9058563",
+  "sha256": "e3af3a0231d3d7ddd5c57761dd0415a276cce05131080573a7a50840b8a508e6",
+  "methodology_version": "auditos-tp/1.0",
+  "released": false,
+  "prepared_by": "afafbc4b-130c-525f-904a-a90ae14e30e7",
+  "created_at": "2026-10-18 07:24:14.250582+00:00",
+  "reviewed_by": [],
+  "inputs": {
+    "record_id": "d947153b-7367-4bf8-b7fa-de7a83a08ad8",
+    "profile_id": "60db8d5e-0e3b-451d-af14-04ef41884933"
+  },
+  "dependencies": [
+    {
+      "id": "a82d684a-10f3-4107-b847-bf6501749d68",
+      "status": "APPROVED",
+      "version": 3
+    },
+    {
+      "id": "943d35a5-1e6e-43d2-94b4-947333ba27ee",
+      "status": "APPROVED",
+      "version": 3
+    },
+    {
+      "id": "8b90aa2e-1080-4950-a0ee-d764a8cf0a79",
+      "status": "APPROVED",
+      "version": 3
+    },
+    {
+      "id": "0fb61f47-9b85-47dd-b4e2-fa110827362c",
+      "status": "APPROVED",
+      "version": 3
+    },
+    {
+      "id": "9fa5f43e-8997-4086-805a-33b59fa1bd64",
+      "status": "APPROVED",
+      "version": 3
+    },
+    {
+      "id": "76b572ba-9c22-4b61-b6d0-7e75efe17349",
+      "status": "APPROVED",
+      "version": 3
+    },
+    {
+      "id": "e79d1683-fbb2-4fcf-aa98-e1d6d389ed64",
+      "status": "APPROVED",
+      "version": 3
+    },
+    {
+      "id": "e76372b8-13df-4f10-a6ab-91ad91f44c55",
+      "status": "APPROVED",
+      "version": 3
+    },
+    {
+      "id": "d6d358d6-f1b3-4c99-9c45-7f35f00cc5ec",
+      "status": "APPROVED",
+      "version": 3
+    },
+    {
+      "id": "8c70c396-247a-4192-b84b-029bf8306150",
+      "status": "APPROVED",
+      "version": 3
+    },
+    {
+      "id": "1e5b2ee1-ebb5-4ddb-b4ed-23f3b6eb0acc",
+      "status": "APPROVED",
+      "version": 4
+    },
+    {
+      "id": "60db8d5e-0e3b-451d-af14-04ef41884933",
+      "kind": "tp-profile",
+      "status": "APPROVED",
+      "version": 3,
+      "synthetic": false
+    },
+    {
+      "id": "e171ec49-a6ed-467e-9a62-6d85cb5c8b6c",
+      "kind": "tp-rule",
+      "status": "APPROVED",
+      "version": 3,
+      "synthetic": false
+    },
+    {
+      "id": "b08a05b7-34e3-4411-97a9-cecd7db3ec18",
+      "kind": "tp-rule",
+      "status": "APPROVED",
+      "version": 3,
+      "synthetic": false
+    },
+    {
+      "id": "d9b45db4-2992-4fdc-b6f9-a780a777ea41",
+      "kind": "tp-rule",
+      "status": "APPROVED",
+      "version": 3,
+      "synthetic": false
+    },
+    {
+      "id": "17ca3d29-b5c1-42ef-8a34-5d08f87fdd4d",
+      "kind": "tp-rule",
+      "status": "APPROVED",
+      "version": 3,
+      "synthetic": false
+    },
+    {
+      "id": "4c6cb999-cf7f-4a7a-97d1-50348c5fb4de",
+      "kind": "tp-rule",
+      "status": "APPROVED",
+      "version": 3,
+      "synthetic": false
+    },
+    {
+      "id": "804a2821-15a8-4839-9e6e-b01f47c92ddc",
+      "kind": "tp-rule",
+      "status": "APPROVED",
+      "version": 3,
+      "synthetic": false
+    },
+    {
+      "id": "3a6d8ced-b128-4a09-9c55-ac14e44a66fc",
+      "kind": "tp-rule",
+      "status": "APPROVED",
+      "version": 3,
+      "synthetic": false
+    },
+    {
+      "id": "d947153b-7367-4bf8-b7fa-de7a83a08ad8",
+      "kind": "tp-localfile",
+      "status": "APPROVED",
+      "version": 4,
+      "synthetic": false
+    },
+    {
+      "id": "0c36682e-049a-4dc3-9b81-2e5c0bed55a2",
+      "kind": "tp-far",
+      "status": "APPROVED",
+      "version": 3,
+      "synthetic": false
+    },
+    {
+      "id": "0fb61f47-9b85-47dd-b4e2-fa110827362c",
+      "kind": "ifrs-note",
+      "status": "APPROVED",
+      "version": 3,
+      "synthetic": false
+    },
+    {
+      "id": "d05c72ba-4e1f-4586-b814-6c052934e289",
+      "kind": "tp-method",
+      "status": "APPROVED",
+      "version": 3,
+      "synthetic": false
+    },
+    {
+      "id": "b5a3ee6e-0506-4271-b645-fe057148acb3",
+      "kind": "tp-party",
+      "status": "APPROVED",
+      "version": 3,
+      "synthetic": true
+    },
+    {
+      "id": "72af49cd-ef1c-4f24-bfa5-aa8b653b5e6b",
+      "kind": "tp-transaction",
+      "status": "APPROVED",
+      "version": 3,
+      "synthetic": false
+    },
+    {
+      "id": "d3d66dbe-2a31-4440-8d9a-da935740f994",
+      "kind": "tp-transaction",
+      "status": "APPROVED",
+      "version": 3,
+      "synthetic": false
+    },
+    {
+      "id": "c2387964-d79c-4d82-8997-c6247d637cfa",
+      "kind": "tp-party",
+      "status": "APPROVED",
+      "version": 3,
+      "synthetic": true
+    },
+    {
+      "id": "85810cf8-23cf-4655-ba50-1cd2a43173f6",
+      "kind": "tp-relationship",
+      "status": "APPROVED",
+      "version": 3,
+      "synthetic": false
+    },
+    {
+      "id": "4c6cb999-cf7f-4a7a-97d1-50348c5fb4de",
+      "kind": "tp-rule",
+      "status": "APPROVED",
+      "version": 3,
+      "synthetic": false
+    },
+    {
+      "id": "7697645d-98a4-4c08-9673-634cb108d339",
+      "type": "run",
+      "sha256": "58f4c2bd1719bbbf094bc3a4d5722e3001f64eff4616949bf23b5d6bfadd67ad"
+    },
+    {
+      "id": "ad02cc48-884b-415b-a201-ff2c23c920e3",
+      "type": "run",
+      "sha256": "fb648a1fd917b16615c84ca1ad18b233677c55ac5bf5c4a261b2a2947cd41653"
+    },
+    {
+      "id": "afb85da7-593a-4626-861e-b0f44fd2fbf3",
+      "type": "run",
+      "sha256": "a0c4164a1fce806c5f6d5d134e9242ed4e28547a3b2296dfea723e6e9c877258"
+    }
+  ],
+  "results": {
+    "rules": {
+      "apa": {
+        "body": {
+          "area": "",
+          "article": "3",
+          "sources": [],
+          "category": "apa",
+          "due_date": null,
+          "owner_id": null,
+          "rule_key": "apa",
+          "narrative": "",
+          "source_id": "CTGAPA1",
+          "assertions": [],
+          "conditions": "Synthetic explicit fact patterns only",
+          "known_from": "2025-12-30",
+          "parameters": {
+            "rp_total": "40000000",
+            "own_revenue": "200000000",
+            "rp_category": "4000000",
+            "group_revenue": "3150000000",
+            "apa_materiality": "100000000",
+            "connected_total": "500000"
+          },
+          "effective_to": null,
+          "jurisdiction": "AE",
+          "review_cycle": 1,
+          "review_stage": 1,
+          "rule_version": 1,
+          "effective_from": "2025-12-30",
+          "document_version": "Synthetic reviewed source adoption",
+          "review_approvers": [
+            "5882671a-98f9-5362-b507-7a9aff4fb91c"
+          ],
+          "technical_review": "Synthetic independent professional rule adoption"
+        },
+        "version": 3,
+        "rule_record_id": "e171ec49-a6ed-467e-9a62-6d85cb5c8b6c",
+        "official_source": {
+          "url": "https://tax.gov.ae/Datafolder/Files/Guides/CT/APA-Guide-EN-30-12-2025.pdf",
+          "kind": "administrative_guidance",
+          "title": "FTA Advance Pricing Agreements Guide December 2025",
+          "caveat": "Readiness only; cross-border commencement must be verified separately; materiality is not an absolute acceptance condition",
+          "articles": [
+            "3",
+            "4",
+            "5",
+            "6"
+          ],
+          "known_from": "2025-12-30",
+          "effective_from": "2025-12-30"
+        }
+      },
+      "disclosure": {
+        "body": {
+          "area": "",
+          "article": "16.1",
+          "sources": [],
+          "category": "disclosure",
+          "due_date": null,
+          "owner_id": null,
+          "rule_key": "disclosure",
+          "narrative": "",
+          "source_id": "CTGTXR1",
+          "assertions": [],
+          "conditions": "Synthetic explicit fact patterns only",
+          "known_from": "2024-11-11",
+          "parameters": {
+            "rp_total": "40000000",
+            "own_revenue": "200000000",
+            "rp_category": "4000000",
+            "group_revenue": "3150000000",
+            "apa_materiality": "100000000",
+            "connected_total": "500000"
+          },
+          "effective_to": null,
+          "jurisdiction": "AE",
+          "review_cycle": 1,
+          "review_stage": 1,
+          "rule_version": 1,
+          "effective_from": "2023-06-01",
+          "document_version": "Synthetic reviewed source adoption",
+          "review_approvers": [
+            "5882671a-98f9-5362-b507-7a9aff4fb91c"
+          ],
+          "technical_review": "Synthetic independent professional rule adoption"
+        },
+        "version": 3,
+        "rule_record_id": "b08a05b7-34e3-4411-97a9-cecd7db3ec18",
+        "official_source": {
+          "url": "https://tax.gov.ae/Datafolder/Files/Guides/CT/CT-Returns-EN-11-11-2024.pdf",
+          "kind": "administrative_guidance",
+          "title": "FTA Tax Returns Guide November 2024",
+          "articles": [
+            "9.3",
+            "16.1",
+            "16.2"
+          ],
+          "known_from": "2024-11-11",
+          "effective_from": "2023-06-01"
+        }
+      },
+      "methodology": {
+        "body": {
+          "area": "",
+          "article": "II",
+          "sources": [],
+          "category": "methodology",
+          "due_date": null,
+          "owner_id": null,
+          "rule_key": "methodology",
+          "narrative": "",
+          "source_id": "OECD2022",
+          "assertions": [],
+          "conditions": "Synthetic explicit fact patterns only",
+          "known_from": "2022-01-20",
+          "parameters": {
+            "rp_total": "40000000",
+            "own_revenue": "200000000",
+            "rp_category": "4000000",
+            "group_revenue": "3150000000",
+            "apa_materiality": "100000000",
+            "connected_total": "500000"
+          },
+          "effective_to": null,
+          "jurisdiction": "AE",
+          "review_cycle": 1,
+          "review_stage": 1,
+          "rule_version": 1,
+          "effective_from": "2023-06-01",
+          "document_version": "Synthetic reviewed source adoption",
+          "review_approvers": [
+            "5882671a-98f9-5362-b507-7a9aff4fb91c"
+          ],
+          "technical_review": "Synthetic independent professional rule adoption"
+        },
+        "version": 3,
+        "rule_record_id": "d9b45db4-2992-4fdc-b6f9-a780a777ea41",
+        "official_source": {
+          "url": "https://doi.org/10.1787/0e655865-en",
+          "kind": "oecd_guidance",
+          "title": "OECD Transfer Pricing Guidelines 2022",
+          "articles": [
+            "I",
+            "II",
+            "III",
+            "V",
+            "VI",
+            "VII",
+            "VIII",
+            "IX",
+            "X"
+          ],
+          "known_from": "2022-01-20",
+          "effective_from": "2022-01-20"
+        }
+      },
+      "documentation": {
+        "body": {
+          "area": "",
+          "article": "2",
+          "sources": [],
+          "category": "documentation",
+          "due_date": null,
+          "owner_id": null,
+          "rule_key": "documentation",
+          "narrative": "",
+          "source_id": "MD97-2023",
+          "assertions": [],
+          "conditions": "Synthetic explicit fact patterns only",
+          "known_from": "2023-05-15",
+          "parameters": {
+            "rp_total": "40000000",
+            "own_revenue": "200000000",
+            "rp_category": "4000000",
+            "group_revenue": "3150000000",
+            "apa_materiality": "100000000",
+            "connected_total": "500000"
+          },
+          "effective_to": null,
+          "jurisdiction": "AE",
+          "review_cycle": 1,
+          "review_stage": 1,
+          "rule_version": 1,
+          "effective_from": "2023-06-01",
+          "document_version": "Synthetic reviewed source adoption",
+          "review_approvers": [
+            "5882671a-98f9-5362-b507-7a9aff4fb91c"
+          ],
+          "technical_review": "Synthetic independent professional rule adoption"
+        },
+        "version": 3,
+        "rule_record_id": "17ca3d29-b5c1-42ef-8a34-5d08f87fdd4d",
+        "official_source": {
+          "url": "https://mof.gov.ae/wp-content/uploads/2023/05/Ministerial-Decision-No.-97-of-2023-for-the-Purposes-of-Federal-Decree-Law-No.-47-of-2022.pdf",
+          "kind": "legislation",
+          "title": "Requirements for maintaining transfer pricing documentation",
+          "caveat": "Period applicability boundary; precise Gazette commencement requires reviewed evidence, not inference from signature date",
+          "articles": [
+            "2",
+            "3",
+            "4"
+          ],
+          "known_from": "2023-05-15",
+          "effective_from": "2023-06-01"
+        }
+      },
+      "relationships": {
+        "body": {
+          "area": "",
+          "article": "35",
+          "sources": [],
+          "category": "relationships",
+          "due_date": null,
+          "owner_id": null,
+          "rule_key": "relationships",
+          "narrative": "",
+          "source_id": "CT-LAW",
+          "assertions": [],
+          "conditions": "Synthetic explicit fact patterns only",
+          "known_from": "2022-10-10",
+          "parameters": {
+            "rp_total": "40000000",
+            "own_revenue": "200000000",
+            "rp_category": "4000000",
+            "group_revenue": "3150000000",
+            "apa_materiality": "100000000",
+            "connected_total": "500000"
+          },
+          "effective_to": null,
+          "jurisdiction": "AE",
+          "review_cycle": 1,
+          "review_stage": 1,
+          "rule_version": 1,
+          "effective_from": "2023-06-01",
+          "document_version": "Synthetic reviewed source adoption",
+          "review_approvers": [
+            "5882671a-98f9-5362-b507-7a9aff4fb91c"
+          ],
+          "technical_review": "Synthetic independent professional rule adoption"
+        },
+        "version": 3,
+        "rule_record_id": "4c6cb999-cf7f-4a7a-97d1-50348c5fb4de",
+        "official_source": {
+          "url": "https://tax.gov.ae/en/legislation/corporate.tax.aspx",
+          "kind": "legislation",
+          "title": "UAE Corporate Tax Law Articles 34 to 36 and 55",
+          "articles": [
+            "34",
+            "35",
+            "36",
+            "55"
+          ],
+          "known_from": "2022-10-10",
+          "effective_from": "2023-06-01"
+        }
+      },
+      "connected_person": {
+        "body": {
+          "area": "",
+          "article": "36",
+          "sources": [],
+          "category": "connected_person",
+          "due_date": null,
+          "owner_id": null,
+          "rule_key": "connected_person",
+          "narrative": "",
+          "source_id": "CT-LAW",
+          "assertions": [],
+          "conditions": "Synthetic explicit fact patterns only",
+          "known_from": "2022-10-10",
+          "parameters": {
+            "rp_total": "40000000",
+            "own_revenue": "200000000",
+            "rp_category": "4000000",
+            "group_revenue": "3150000000",
+            "apa_materiality": "100000000",
+            "connected_total": "500000"
+          },
+          "effective_to": null,
+          "jurisdiction": "AE",
+          "review_cycle": 1,
+          "review_stage": 1,
+          "rule_version": 1,
+          "effective_from": "2023-06-01",
+          "document_version": "Synthetic reviewed source adoption",
+          "review_approvers": [
+            "5882671a-98f9-5362-b507-7a9aff4fb91c"
+          ],
+          "technical_review": "Synthetic independent professional rule adoption"
+        },
+        "version": 3,
+        "rule_record_id": "804a2821-15a8-4839-9e6e-b01f47c92ddc",
+        "official_source": {
+          "url": "https://tax.gov.ae/en/legislation/corporate.tax.aspx",
+          "kind": "legislation",
+          "title": "UAE Corporate Tax Law Articles 34 to 36 and 55",
+          "articles": [
+            "34",
+            "35",
+            "36",
+            "55"
+          ],
+          "known_from": "2022-10-10",
+          "effective_from": "2023-06-01"
+        }
+      },
+      "connected_disclosure": {
+        "body": {
+          "area": "",
+          "article": "16.2",
+          "sources": [],
+          "category": "connected_disclosure",
+          "due_date": null,
+          "owner_id": null,
+          "rule_key": "connected_disclosure",
+          "narrative": "",
+          "source_id": "CTGTXR1",
+          "assertions": [],
+          "conditions": "Synthetic explicit fact patterns only",
+          "known_from": "2024-11-11",
+          "parameters": {
+            "rp_total": "40000000",
+            "own_revenue": "200000000",
+            "rp_category": "4000000",
+            "group_revenue": "3150000000",
+            "apa_materiality": "100000000",
+            "connected_total": "500000"
+          },
+          "effective_to": null,
+          "jurisdiction": "AE",
+          "review_cycle": 1,
+          "review_stage": 1,
+          "rule_version": 1,
+          "effective_from": "2023-06-01",
+          "document_version": "Synthetic reviewed source adoption",
+          "review_approvers": [
+            "5882671a-98f9-5362-b507-7a9aff4fb91c"
+          ],
+          "technical_review": "Synthetic independent professional rule adoption"
+        },
+        "version": 3,
+        "rule_record_id": "3a6d8ced-b128-4a09-9c55-ac14e44a66fc",
+        "official_source": {
+          "url": "https://tax.gov.ae/Datafolder/Files/Guides/CT/CT-Returns-EN-11-11-2024.pdf",
+          "kind": "administrative_guidance",
+          "title": "FTA Tax Returns Guide November 2024",
+          "articles": [
+            "9.3",
+            "16.1",
+            "16.2"
+          ],
+          "known_from": "2024-11-11",
+          "effective_from": "2023-06-01"
+        }
+      }
+    },
+    "scope": "Source-linked preparation; human verified checklist does not automatically certify all legal requirements",
+    "complete": true,
+    "sections": [
+      {
+        "key": "executive_summary",
+        "run_ids": [],
+        "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked executive summary. No real market or tax opinion is expressed.",
+        "evidence_ids": [
+          "0fb61f47-9b85-47dd-b4e2-fa110827362c"
+        ],
+        "human_verified": true
+      },
+      {
+        "key": "entity_profile",
+        "run_ids": [],
+        "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked entity profile. No real market or tax opinion is expressed.",
+        "evidence_ids": [
+          "0fb61f47-9b85-47dd-b4e2-fa110827362c"
+        ],
+        "human_verified": true
+      },
+      {
+        "key": "business",
+        "run_ids": [],
+        "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked business. No real market or tax opinion is expressed.",
+        "evidence_ids": [
+          "0fb61f47-9b85-47dd-b4e2-fa110827362c"
+        ],
+        "human_verified": true
+      },
+      {
+        "key": "industry",
+        "run_ids": [],
+        "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked industry. No real market or tax opinion is expressed.",
+        "evidence_ids": [
+          "0fb61f47-9b85-47dd-b4e2-fa110827362c"
+        ],
+        "human_verified": true
+      },
+      {
+        "key": "ownership",
+        "run_ids": [],
+        "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked ownership. No real market or tax opinion is expressed.",
+        "evidence_ids": [
+          "0fb61f47-9b85-47dd-b4e2-fa110827362c"
+        ],
+        "human_verified": true
+      },
+      {
+        "key": "controlled_transactions",
+        "run_ids": [
+          "afb85da7-593a-4626-861e-b0f44fd2fbf3"
+        ],
+        "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked controlled transactions. No real market or tax opinion is expressed.",
+        "evidence_ids": [
+          "0fb61f47-9b85-47dd-b4e2-fa110827362c"
+        ],
+        "human_verified": true
+      },
+      {
+        "key": "transaction_descriptions",
+        "run_ids": [],
+        "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked transaction descriptions. No real market or tax opinion is expressed.",
+        "evidence_ids": [
+          "0fb61f47-9b85-47dd-b4e2-fa110827362c"
+        ],
+        "human_verified": true
+      },
+      {
+        "key": "far",
+        "run_ids": [],
+        "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked far. No real market or tax opinion is expressed.",
+        "evidence_ids": [
+          "0c36682e-049a-4dc3-9b81-2e5c0bed55a2"
+        ],
+        "human_verified": true
+      },
+      {
+        "key": "method",
+        "run_ids": [],
+        "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked method. No real market or tax opinion is expressed.",
+        "evidence_ids": [
+          "d05c72ba-4e1f-4586-b814-6c052934e289"
+        ],
+        "human_verified": true
+      },
+      {
+        "key": "economic_analysis",
+        "run_ids": [],
+        "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked economic analysis. No real market or tax opinion is expressed.",
+        "evidence_ids": [
+          "0fb61f47-9b85-47dd-b4e2-fa110827362c"
+        ],
+        "human_verified": true
+      },
+      {
+        "key": "benchmarking",
+        "run_ids": [
+          "7697645d-98a4-4c08-9673-634cb108d339"
+        ],
+        "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked benchmarking. No real market or tax opinion is expressed.",
+        "evidence_ids": [
+          "0fb61f47-9b85-47dd-b4e2-fa110827362c"
+        ],
+        "human_verified": true
+      },
+      {
+        "key": "financial_reconciliation",
+        "run_ids": [],
+        "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked financial reconciliation. No real market or tax opinion is expressed.",
+        "evidence_ids": [
+          "0fb61f47-9b85-47dd-b4e2-fa110827362c"
+        ],
+        "human_verified": true
+      },
+      {
+        "key": "conclusions",
+        "run_ids": [],
+        "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked conclusions. No real market or tax opinion is expressed.",
+        "evidence_ids": [
+          "0fb61f47-9b85-47dd-b4e2-fa110827362c"
+        ],
+        "human_verified": true
+      },
+      {
+        "key": "appendices",
+        "run_ids": [],
+        "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked appendices. No real market or tax opinion is expressed.",
+        "evidence_ids": [
+          "0fb61f47-9b85-47dd-b4e2-fa110827362c"
+        ],
+        "human_verified": true
+      }
+    ],
+    "entity_id": "60dff138-325b-4f38-beab-453c9f88b8c2",
+    "synthetic": true,
+    "period_end": "2026-12-31",
+    "profile_id": "60db8d5e-0e3b-451d-af14-04ef41884933",
+    "period_start": "2026-01-01",
+    "document_type": "localfile",
+    "source_profit": "1200000.00000000",
+    "annual_version": 1,
+    "missing_sections": [],
+    "software_test_data": true,
+    "financial_source_id": "72e3721a-319e-4825-bd4c-26cdb9858a65",
+    "calculation_summaries": [
+      {
+        "kind": "matrix",
+        "run_id": "afb85da7-593a-4626-861e-b0f44fd2fbf3",
+        "results": {
+          "reconciled": true,
+          "total_gross_values": "2800000.00000000"
+        }
+      },
+      {
+        "kind": "study",
+        "run_id": "7697645d-98a4-4c08-9673-634cb108d339",
+        "results": {
+          "n": 5,
+          "pli": "operating_margin",
+          "mean": "0.05600000",
+          "median": "0.05000000",
+          "maximum": "0.09000000",
+          "minimum": "0.03000000",
+          "purpose": "profitability",
+          "currency": "AED",
+          "synthetic": true,
+          "lower_quartile": "0.04000000",
+          "upper_quartile": "0.07000000",
+          "selected_target": null
+        }
+      }
+    ],
+    "financial_reconciliation_run_id": "ad02cc48-884b-415b-a201-ff2c23c920e3"
+  }
+}

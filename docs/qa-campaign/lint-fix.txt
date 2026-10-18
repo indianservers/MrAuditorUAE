@@ -1,0 +1,12 @@
+BLE001 Do not catch blind exception: `Exception`
+   --> scripts\qa_workflows.py:101:20
+    |
+ 99 |                 await function(**kwargs)
+100 |                 result["status"] = "PASS"
+101 |             except Exception as exc:
+    |                    ^^^^^^^^^
+102 |                 result.update(status="FAIL", error=str(exc), traceback=traceback.format_exc())
+103 |             result["seconds"] = time.perf_counter()-start
+    |
+
+Found 6 errors (5 fixed, 1 remaining).

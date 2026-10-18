@@ -1,0 +1,20 @@
+{"timestamp": "2026-10-18T07:38:36.606662+00:00", "level": "INFO", "event": "http.request", "request_id": "d9e2fc72-f3a1-47c8-900c-4903526009a9", "status": 200, "duration_ms": 273.324, "method": "POST", "route": "/auth/login", "release": "development"}
+{"timestamp": "2026-10-18T07:38:36.670800+00:00", "level": "INFO", "event": "http.request", "request_id": "c1a34deb-19b5-4c3f-a7ee-cc80811ce39c", "status": 200, "duration_ms": 62.956, "method": "POST", "route": "/accounting/trial-balance", "release": "development"}
+{"timestamp": "2026-10-18T07:38:36.727885+00:00", "level": "INFO", "event": "http.request", "request_id": "b11eb7ac-472a-40a7-923f-48f53d6b6334", "status": 201, "duration_ms": 55.037, "method": "POST", "route": "/reconciliation/runs", "release": "development"}
+Traceback (most recent call last):
+  File "C:\Indian Servers\TheAuditor\scripts\qa_accounting_workflows.py", line 36, in <module>
+    if __name__=='__main__':asyncio.run(main())
+                            ^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Sai Satish\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\Sai Satish\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Sai Satish\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Indian Servers\TheAuditor\scripts\qa_accounting_workflows.py", line 30, in main
+    assert result['status'] in {'completed','balanced'},result
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: {'id': 'd875d4c0-5b2c-42b7-afbc-b6190df45de6', 'status': 'insufficient_evidence', 'result': {'status': 'insufficient_evidence', 'tolerance': '0', 'snapshot_id': '2f680180-2a7b-4ced-84a2-d754d6063630', 'comparison_snapshot_id': None, 'checks': [{'test': 'source_records_to_manifest_count', 'status': 'passed', 'source': 10000, 'calculated': 10000}, {'test': 'roll_forward', 'status': 'passed'}, {'test': 'ledger_balance', 'status': 'passed', 'difference': '0E-8'}, {'test': 'source_count', 'status': 'passed', 'evidence': {}}, {'test': 'source_total_debit', 'status': 'passed', 'evidence': {'expected': '25126728.82', 'observed': '25126728.82'}}, {'test': 'source_total_credit', 'status': 'passed', 'evidence': {'expected': '25126728.82', 'observed': '25126728.82'}}, {'test': 'unmapped_accounts', 'status': 'warning', 'count': 18}, {'test': 'journal_to_ledger_count', 'status': 'passed', 'source': 10000, 'calculated': 10000}, {'test': 'source_to_normalized_totals', 'status': 'passed', 'source_debit': '25126728.82', 'source_credit': '25126728.82', 'calculated_debit': '25126728.82000000', 'calculated_credit': '25126728.82000000'}, {'test': 'independent_gl_to_tb', 'status': 'not_testable'}, {'test': 'source_system_completeness', 'status': 'passed'}], 'note': 'Balanced totals alone do not establish completeness'}}

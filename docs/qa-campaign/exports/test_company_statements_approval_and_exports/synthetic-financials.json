@@ -1,0 +1,363 @@
+{
+  "id": "322d567e-528d-4ae5-9fd5-922945e69504",
+  "sha256": "165206d8b350ca6230157254d48486c6ef40b4149c2032897db5edf458100d82",
+  "methodology_version": "auditos-ifrs/1.0",
+  "released": true,
+  "prepared_by": "25bb296d-add9-5451-9cd4-a63a55794b6b",
+  "created_at": "2026-10-18 07:13:50.455458+00:00",
+  "reviewed_by": [
+    "1e06fd57-6f0d-512d-9c47-0c8e95a80893",
+    "74738c29-d627-5b40-856f-84c73b5e0ac5"
+  ],
+  "inputs": {
+    "profile_id": "85770be5-ed0c-4d14-a695-e4259d968792",
+    "snapshot_id": "3fbbebca-bc57-474c-99e7-8cbc9f35201b"
+  },
+  "dependencies": [
+    {
+      "id": "85770be5-ed0c-4d14-a695-e4259d968792",
+      "status": "APPROVED",
+      "version": 3
+    },
+    {
+      "id": "f4a226cf-ef69-483e-9970-6c91d2d22f6a",
+      "status": "APPROVED",
+      "version": 3
+    },
+    {
+      "id": "1ae3821e-4737-4f76-9c7e-2fd1c48bc35f",
+      "status": "APPROVED",
+      "version": 3
+    },
+    {
+      "id": "793e2f1b-0770-4e79-b1d5-e15c1092f135",
+      "status": "APPROVED",
+      "version": 3
+    },
+    {
+      "id": "e39204ce-7fba-43d3-b75d-162d943b4e93",
+      "status": "APPROVED",
+      "version": 3
+    },
+    {
+      "id": "d4b0e95e-1b89-40b4-af9a-2a5f1d985ffb",
+      "status": "APPROVED",
+      "version": 3
+    },
+    {
+      "id": "2d218eff-6bea-418a-8ba4-c2f89c1de16f",
+      "status": "APPROVED",
+      "version": 3
+    },
+    {
+      "id": "88e63930-4420-4057-9b9c-605f003ba2e8",
+      "status": "APPROVED",
+      "version": 3
+    },
+    {
+      "id": "6f1d1a5f-c4cc-4871-8ebb-fad46df9e103",
+      "status": "APPROVED",
+      "version": 3
+    },
+    {
+      "id": "dd7e3ef2-85f1-4cfa-b3bc-14f559c7e32f",
+      "status": "APPROVED",
+      "version": 3
+    }
+  ],
+  "results": {
+    "lines": [
+      {
+        "note": "N1",
+        "label": "Cash",
+        "weight": "1",
+        "current": "130.00000000",
+        "is_cash": true,
+        "opening": "100.00000000",
+        "section": "assets",
+        "category": "operating",
+        "line_code": "100",
+        "comparative": "0",
+        "cash_flow_role": "none",
+        "source_accounts": [
+          {
+            "code": "100",
+            "weight": "1",
+            "original": "130.00000000",
+            "allocated": "130.00000000",
+            "adjustment": "0"
+          }
+        ]
+      },
+      {
+        "note": "N1",
+        "label": "Capital",
+        "weight": "1",
+        "current": "-100.00000000",
+        "is_cash": false,
+        "opening": "-100.00000000",
+        "section": "equity",
+        "category": "operating",
+        "line_code": "300",
+        "comparative": "0",
+        "cash_flow_role": "none",
+        "source_accounts": [
+          {
+            "code": "300",
+            "weight": "1",
+            "original": "-100.00000000",
+            "allocated": "-100.00000000",
+            "adjustment": "0"
+          }
+        ]
+      },
+      {
+        "note": "N1",
+        "label": "Revenue",
+        "weight": "1",
+        "current": "-50.00000000",
+        "is_cash": false,
+        "opening": "0",
+        "section": "income",
+        "category": "operating",
+        "line_code": "400",
+        "comparative": "0",
+        "cash_flow_role": "none",
+        "source_accounts": [
+          {
+            "code": "400",
+            "weight": "1",
+            "original": "-50.00000000",
+            "allocated": "-50.00000000",
+            "adjustment": "0"
+          }
+        ]
+      },
+      {
+        "note": "N1",
+        "label": "Expense",
+        "weight": "1",
+        "current": "20.00000000",
+        "is_cash": false,
+        "opening": "0",
+        "section": "expenses",
+        "category": "operating",
+        "line_code": "500",
+        "comparative": "0",
+        "cash_flow_role": "none",
+        "source_accounts": [
+          {
+            "code": "500",
+            "weight": "1",
+            "original": "20.00000000",
+            "allocated": "20.00000000",
+            "adjustment": "0"
+          }
+        ]
+      }
+    ],
+    "notes": [
+      {
+        "id": "793e2f1b-0770-4e79-b1d5-e15c1092f135",
+        "text": "Synthetic disclosure for testing only. Basis and judgments independently reviewed.",
+        "lines": [
+          {
+            "code": "100",
+            "current": "130.00000000",
+            "comparative": "0"
+          },
+          {
+            "code": "300",
+            "current": "-100.00000000",
+            "comparative": "0"
+          },
+          {
+            "code": "400",
+            "current": "-50.00000000",
+            "comparative": "0"
+          },
+          {
+            "code": "500",
+            "current": "20.00000000",
+            "comparative": "0"
+          }
+        ],
+        "reference": "N1",
+        "ai_authored": false,
+        "supporting_schedules": []
+      }
+    ],
+    "scope": "Mapped full-IFRS general corporate statements; human classification, elections, disclosures and professional review required",
+    "entity": "QA FICTIONAL workflow entity 1",
+    "totals": {
+      "oci": "0",
+      "cash": "130.00000000",
+      "assets": "130.00000000",
+      "equity": "130.00000000",
+      "profit": "30.00000000",
+      "liabilities": "0",
+      "total_comprehensive_income": "30.00000000"
+    },
+    "currency": "AED",
+    "cash_flow": {
+      "method": "indirect",
+      "policy": "Synthetic interest policy",
+      "profit": "30.00000000",
+      "closing": "130.00000000",
+      "opening": "100.00000000",
+      "financing": "0",
+      "investing": "0",
+      "operating": "30.00000000",
+      "difference": "0.00000000",
+      "source_cash": "130.00000000",
+      "exchange_effect": "0",
+      "working_capital": "0",
+      "noncash_adjustments": "0"
+    },
+    "entity_id": "1edccff8-5e68-442c-8579-0f3ab178e5ca",
+    "precision": 2,
+    "period_end": "2026-12-31",
+    "validation": {
+      "ready": true,
+      "checks": [
+        {
+          "code": "source_trial_balance",
+          "passed": true
+        },
+        {
+          "code": "accounting_equation",
+          "passed": true,
+          "difference": "0.00000000"
+        },
+        {
+          "code": "adjusted_trial_balance",
+          "passed": true
+        },
+        {
+          "code": "cash_flow_reconciliation",
+          "passed": true
+        },
+        {
+          "code": "notes_reconciled",
+          "passed": true,
+          "missing": []
+        },
+        {
+          "code": "disclosures_assessed",
+          "passed": true,
+          "missing": []
+        },
+        {
+          "code": "single_cash_flow_policy",
+          "passed": true
+        },
+        {
+          "code": "comparative_opening_consistency",
+          "passed": true
+        },
+        {
+          "code": "comparative_source",
+          "passed": true
+        }
+      ],
+      "ifrs_compliance_certified": false
+    },
+    "comparative": null,
+    "period_start": "2026-01-01",
+    "presentation": "IAS 1",
+    "ifrs19_profile": "full-disclosure-original/1",
+    "changes_in_equity": {
+      "oci": "0",
+      "profit": "30.00000000",
+      "closing": "130.00000000",
+      "opening": "100.00000000",
+      "direct_equity_movements": "0.00000000"
+    },
+    "profit_categories": {
+      "tax": "0",
+      "financing": "0",
+      "investing": "0",
+      "operating": "30.00000000",
+      "discontinued": "0"
+    },
+    "presentation_settings": {
+      "precision": 2,
+      "materiality": "0",
+      "suppress_zero": true
+    },
+    "adjusted_trial_balance": [
+      {
+        "id": "9f6b0555-24e5-4ed0-83cd-26ed93767ce5",
+        "code": "100",
+        "name": "Cash",
+        "debit": "50.00000000",
+        "contra": false,
+        "credit": "20.00000000",
+        "closing": "130.00000000",
+        "opening": "100.00000000",
+        "adjusted": "130.00000000",
+        "original": "130.00000000",
+        "adjustment": "0",
+        "parent_code": null,
+        "source_group": null,
+        "classification": null,
+        "display_closing": "130.00",
+        "statement_group": null
+      },
+      {
+        "id": "8d2a0329-d560-4371-af54-02417a5ae579",
+        "code": "300",
+        "name": "Equity",
+        "debit": "0",
+        "contra": false,
+        "credit": "0",
+        "closing": "-100.00000000",
+        "opening": "-100.00000000",
+        "adjusted": "-100.00000000",
+        "original": "-100.00000000",
+        "adjustment": "0",
+        "parent_code": null,
+        "source_group": null,
+        "classification": null,
+        "display_closing": "-100.00",
+        "statement_group": null
+      },
+      {
+        "id": "e2166a0f-2971-466a-9988-72efd7c55942",
+        "code": "400",
+        "name": "Revenue",
+        "debit": "0.00000000",
+        "contra": false,
+        "credit": "50.00000000",
+        "closing": "-50.00000000",
+        "opening": "0",
+        "adjusted": "-50.00000000",
+        "original": "-50.00000000",
+        "adjustment": "0",
+        "parent_code": null,
+        "source_group": null,
+        "classification": null,
+        "display_closing": "-50.00",
+        "statement_group": null
+      },
+      {
+        "id": "730d83e3-3fc9-4df3-823d-e1c42939f440",
+        "code": "500",
+        "name": "Expense",
+        "debit": "20.00000000",
+        "contra": false,
+        "credit": "0.00000000",
+        "closing": "20.00000000",
+        "opening": "0",
+        "adjusted": "20.00000000",
+        "original": "20.00000000",
+        "adjustment": "0",
+        "parent_code": null,
+        "source_group": null,
+        "classification": null,
+        "display_closing": "20.00",
+        "statement_group": null
+      }
+    ]
+  }
+}

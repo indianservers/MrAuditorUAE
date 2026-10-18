@@ -1,0 +1,2282 @@
+[
+  {
+    "concurrency": 10,
+    "distinct_users": 10,
+    "requests": 20,
+    "failures": 0,
+    "p50_seconds": 0.9662799999969138,
+    "p95_seconds": 3.233064399995783,
+    "elapsed_seconds": 3.361317800001416,
+    "host_available_memory_before": 15803592704,
+    "host_available_memory_after": 15784034304,
+    "host_cpu_user_seconds": 19.015625,
+    "journal_lines_at_start": 1000590,
+    "requests_detail": [
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.08088400000269758,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 1.826422599995567,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.07477300000027753,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 1.8244750000012573,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.07500380000419682,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 1.8182151000000886,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.07513859999744454,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 2.1730586999983643,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.07686990000365768,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 2.828918400002294,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.10770789999514818,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 2.8656124000044656,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.11152700000093319,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 3.233064399995783,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.1080937000006088,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 3.220070899995335,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.11240180000459077,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 2.840128999996523,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.11434489999373909,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 2.9776127000004635,
+        "schema_valid": true
+      }
+    ]
+  },
+  {
+    "concurrency": 25,
+    "distinct_users": 25,
+    "requests": 50,
+    "failures": 0,
+    "p50_seconds": 1.1951551499951165,
+    "p95_seconds": 7.592690999998013,
+    "elapsed_seconds": 8.06350950000342,
+    "host_available_memory_before": 15784083456,
+    "host_available_memory_after": 15590559744,
+    "host_cpu_user_seconds": 54.1875,
+    "journal_lines_at_start": 1000590,
+    "requests_detail": [
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.04969620000338182,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.578655500001332,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.05921729999681702,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 2.6213228999986313,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.27900039999803994,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 4.924090200001956,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.07731219999550376,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 3.324632500000007,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.06259430000500288,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 2.007460999993782,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.3725613000060548,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 6.531299800000852,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.10582670000439975,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 6.555050399998436,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.0669722999955411,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 2.017034500000591,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.34162620000279276,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.830633899997338,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.33299239999905694,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 4.276628999999957,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.28066170000238344,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.22319179999613,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.20891609999671346,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.486660499998834,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.07689079999545356,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 6.5234926999983145,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.3319220000048517,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 4.759471400000621,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.3389117999977316,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 6.463596200002939,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.10258579999936046,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 6.061299900000449,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.1133202999990317,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.683956900000339,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.3141551000007894,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 4.321245699997235,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.2502050000039162,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.54799909999565,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.30661310000141384,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.071984899994277,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.3010744000057457,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.284336400000029,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.36811820000002626,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 7.592690999998013,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.3623760999980732,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 6.649895099995774,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.382849299996451,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 7.6576739000011,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.3780170000027283,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 7.599660300002142,
+        "schema_valid": true
+      }
+    ]
+  },
+  {
+    "concurrency": 50,
+    "distinct_users": 50,
+    "requests": 100,
+    "failures": 0,
+    "p50_seconds": 5.248330950002128,
+    "p95_seconds": 9.194732299998577,
+    "elapsed_seconds": 14.619574999996985,
+    "host_available_memory_before": 15590612992,
+    "host_available_memory_after": 15602737152,
+    "host_cpu_user_seconds": 97.21875,
+    "journal_lines_at_start": 1000590,
+    "requests_detail": [
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.08841799999936484,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 4.8866003999937675,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.0927596999972593,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 2.4205788999970537,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.33112509999773465,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.342636400004267,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.11568830000032904,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 4.057276100000308,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.09970230000180891,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 2.3704477999999654,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.446799899997131,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 8.023977199998626,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.14326599999913014,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 7.042701600003056,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.1047575999982655,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 2.627688799999305,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.177002899996296,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 7.245014700005413,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.359086100004788,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 7.776822299994819,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.399990099998831,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 8.957366000002366,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.3884605999992345,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 8.777881900001375,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.12163409999629948,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 10.802660300003481,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.33380279999983,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 7.483345500004361,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.3195424000005005,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 4.9342089999991,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.13603370000055293,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.408565300000191,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.2752815000058035,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.14131950000592,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.20730860000185203,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 6.766765799999121,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.14772800000355346,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 11.079126299999189,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.439683600001445,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 8.938607299998694,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.37563600000430597,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 6.399889700005588,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.3438817999995081,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.065863099996932,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.27660000000469154,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.542452600006072,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.17910180000035325,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 7.359183000000485,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.2977543999950285,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 6.404452399998263,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.23776419999921927,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.819590599996445,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.20435300000099232,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.346944400000211,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.5069398999985424,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 9.313668300004792,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.322916699995403,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 7.710796499995922,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.21953880000364734,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 4.664378599998599,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.4700470000025234,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 8.671882599999662,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.264559999995981,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 4.376653200000874,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.020669999998063,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 7.730639699999301,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.238644500001101,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 4.2439688999947975,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.89095859999361,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 3.0984582000019145,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.345911900003557,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 8.569491400005063,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.3718211999948835,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 6.99509909999324,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.375899800004845,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 9.194732299998577,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.5062764000031166,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 8.956923199999437,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.479897199998959,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 8.777333699996234,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.330523399999947,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 8.564615800001775,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.345597399995313,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 4.641045499993197,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.9297166999967885,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 7.36672830000316,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.431443000001309,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 12.11946860000171,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.283476800002973,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 7.15372170000046,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.3596646000005421,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.214844300004188,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.388387700004387,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.162426499999128,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.992750199999136,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 7.9105190000045695,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.258017400003155,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.469389899997623,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.3834391000054893,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 4.777080799998657,
+        "schema_valid": true
+      }
+    ]
+  },
+  {
+    "concurrency": 100,
+    "distinct_users": 100,
+    "requests": 200,
+    "failures": 0,
+    "p50_seconds": 5.224853800002165,
+    "p95_seconds": 22.23818559999927,
+    "elapsed_seconds": 29.364585600000282,
+    "host_available_memory_before": 15602819072,
+    "host_available_memory_after": 15680802816,
+    "host_cpu_user_seconds": 203.203125,
+    "journal_lines_at_start": 1000590,
+    "requests_detail": [
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.1416624999983469,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 8.289940199996636,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.14329690000158735,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 8.028203199995914,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.216876999998931,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 21.53080929999851,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.16153200000553625,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 2.489702099999704,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.14811680000275373,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 2.689677500005928,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.1932130999994115,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 3.4611564000006183,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.146930299997621,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 19.911204299998644,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.14870569999766303,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 2.3869937999988906,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.916118799999822,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 14.900508200000331,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.26922600000398234,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 6.408036100001482,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.35278269999980694,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.46667680000246,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.6007430999961798,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 10.168131400001585,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.16388259999803267,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.668417299995781,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.194702900000266,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 23.228897799999686,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.17032199999812292,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 10.028506100003142,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.412887599995884,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 22.93470140000136,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.9779175000003306,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 12.185309899999993,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.211449000002176,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 21.27766459999839,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.22479210000165,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 22.993269799997506,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.7098829000024125,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 4.112133900001936,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.3453743999998551,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.044571699996595,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.21407059999910416,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 4.69945590000134,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.57594020000397,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 6.145760100000189,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.25828980000369484,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 11.204067300001043,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.036558899999363,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 16.017578999999387,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.30478170000424143,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 7.681002500001341,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.094688299999689,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 19.50104669999564,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.41024649999599205,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 11.814755100000184,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.270521499995084,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 6.682305200003611,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.5236090999969747,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 10.909915800002636,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.37823889999708626,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 10.748701200005598,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.22491550000268,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 23.595555600004445,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.246165000004112,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 22.940113100004965,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.3770524999999907,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 4.862286600000516,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.259223599998222,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 21.85426460000599,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.40391030000319006,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 10.933656499997596,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.3383915000013076,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 7.652202299999772,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 6.988296299998183,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 21.677428599999985,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.47295699999813223,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 4.67098409999744,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.6515053999974043,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 8.332555600005435,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.946722400003637,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 16.418300199999067,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.38779649999924004,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.899191999997129,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.44587460000184365,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 5.289271399997233,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 3.6241439000004902,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 13.378792800001975,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.906817399998545,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 14.96414999999979,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.37123640000209,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 22.23818559999927,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.42895850000059,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 10.56096940000134,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.813798799994402,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 23.133242199997767,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.015390599997772,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 18.548361499997554,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.051591099996585,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 18.314458499997272,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 6.951900200001546,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 21.71515279999585,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.5046240000010584,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 4.6436415999996825,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.5478552000058698,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 10.419698899997456,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.079715699997905,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 23.085050400004548,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.79732420000073,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 21.396226999997452,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.8459224000034737,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 11.206863100000191,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.898584100003063,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 18.653993899999477,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.5778721000024234,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 4.282344300001569,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.90351489999739,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 15.209545600002457,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.966412399997353,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 15.798306700002286,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.6194486000022152,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 8.034535700004199,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.810026099999959,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 10.013343200000236,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.5617342999976245,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 4.554176200006623,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.724104899993108,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 21.36153370000102,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.871663600002648,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 16.780164900003,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.90643049999926,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 11.826238399997237,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.7939401999974507,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 9.825283000005584,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.603275699999358,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 12.146036599995568,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.9438593999948353,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 17.345302299996547,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 0.6772750000018277,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 9.091801000002306,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.789871200002381,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 13.250520099994901,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.9091272999939974,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 15.535372099999222,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.063146600004984,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 23.485848199998145,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.6256617000035476,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 8.215098299995589,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.5882861999998568,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 7.827699800000119,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.927580199997465,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 17.86394019999716,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.8329951999985497,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 13.967735099999118,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 6.910755099997914,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 22.08238120000169,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 3.59794420000253,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 13.825253299997712,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 6.933067799996934,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 22.344462300003215,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.809193300003244,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 10.711449900001753,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.924910200003069,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 19.652184899998247,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.6261435999986134,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 10.171427000001131,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.866378500002611,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 14.86835340000107,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.9963191999995615,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 21.133508200000506,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.885484500002349,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 18.21623179999733,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.760469799999555,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 13.049211000005016,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.8414613000059035,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 15.329077000002144,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.947820399996999,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 19.90941539999767,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.789450399999623,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 14.942657699997653,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.848176699997566,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 14.361658499998157,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 2.9082328000004054,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 12.94738900000084,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.753786199995375,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 12.747463899999275,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.8724452999958885,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 15.494685199999367,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.894108299995423,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 17.851871400001983,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.922961300006136,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 18.562929399995483,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.943106500002614,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 18.96106300000247,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.978032500002882,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 20.892680400000245,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 4.993882200004009,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 18.02142889999959,
+        "schema_valid": true
+      },
+      {
+        "path": "clients?limit=25",
+        "status": 200,
+        "seconds": 5.0122320000009495,
+        "schema_valid": true
+      },
+      {
+        "path": "accounting/ledger?limit=50",
+        "status": 200,
+        "seconds": 18.939722600000096,
+        "schema_valid": true
+      }
+    ]
+  }
+]

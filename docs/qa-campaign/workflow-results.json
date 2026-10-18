@@ -1,0 +1,78 @@
+[
+  {
+    "id": "tests.phase5.test_reporting.test_company_statements_approval_and_exports",
+    "status": "PASS",
+    "seconds": 81.16245540000091
+  },
+  {
+    "id": "tests.phase6.test_workflows.test_mainland_approved_vs_proposed_and_exports",
+    "status": "PASS",
+    "seconds": 101.86297149999882
+  },
+  {
+    "id": "tests.phase6.test_workflows.test_qfzp_contract_segmentation_and_incomplete_conditions",
+    "status": "PASS",
+    "seconds": 3.60289780000312
+  },
+  {
+    "id": "tests.phase6.test_workflows.test_loss_utilisation_versions_and_immutable_ledger",
+    "status": "PASS",
+    "seconds": 4.861010599997826
+  },
+  {
+    "id": "tests.phase7.test_vat_workflows.test_vat201_actual_sources_return_review_and_stale_export",
+    "status": "PASS",
+    "seconds": 1.6319939000022714
+  },
+  {
+    "id": "tests.phase7.test_vat_workflows.test_invoice_defects_duplicates_and_date_versions",
+    "status": "PASS",
+    "seconds": 1.2773839000001317
+  },
+  {
+    "id": "tests.phase8.test_workflows.test_actual_rp_sales_benchmark_and_segmentation",
+    "status": "FAIL",
+    "error": "{\"error\":{\"code\":\"422\",\"message\":\"Journal source missing, inactive or outside entity/period\",\"request_id\":\"547aa7cb-2ba4-4b9d-a2ca-8c84fbd01b70\"}}",
+    "traceback": "Traceback (most recent call last):\n  File \"C:\\Indian Servers\\TheAuditor\\scripts\\qa_workflows.py\", line 97, in main\n    await function(**kwargs)\n  File \"C:\\Indian Servers\\TheAuditor\\backend\\tests\\phase8\\test_workflows.py\", line 368, in test_actual_rp_sales_benchmark_and_segmentation\n    f = await prepared(c)\n        ^^^^^^^^^^^^^^^^^\n  File \"C:\\Indian Servers\\TheAuditor\\backend\\tests\\phase8\\test_workflows.py\", line 168, in prepared\n    await ready(\n  File \"C:\\Indian Servers\\TheAuditor\\backend\\tests\\phase8\\test_workflows.py\", line 46, in ready\n    obj = await create(c, preparer, base, \"tp-\" + kind, body)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Indian Servers\\TheAuditor\\backend\\tests\\phase4\\test_workflows.py\", line 77, in create\n    assert r.status_code == 201, r.text\n           ^^^^^^^^^^^^^^^^^^^^\nAssertionError: {\"error\":{\"code\":\"422\",\"message\":\"Journal source missing, inactive or outside entity/period\",\"request_id\":\"547aa7cb-2ba4-4b9d-a2ca-8c84fbd01b70\"}}\n",
+    "seconds": 5.373288299997512
+  },
+  {
+    "id": "tests.phase8.test_workflows.test_actual_loan_benchmark_credit_and_source_scope",
+    "status": "FAIL",
+    "error": "{\"error\":{\"code\":\"422\",\"message\":\"Journal source missing, inactive or outside entity/period\",\"request_id\":\"57cdc000-6ad3-493c-85b9-4a3c312e7605\"}}",
+    "traceback": "Traceback (most recent call last):\n  File \"C:\\Indian Servers\\TheAuditor\\scripts\\qa_workflows.py\", line 97, in main\n    await function(**kwargs)\n  File \"C:\\Indian Servers\\TheAuditor\\backend\\tests\\phase8\\test_workflows.py\", line 451, in test_actual_loan_benchmark_credit_and_source_scope\n    f = await prepared(c)\n        ^^^^^^^^^^^^^^^^^\n  File \"C:\\Indian Servers\\TheAuditor\\backend\\tests\\phase8\\test_workflows.py\", line 168, in prepared\n    await ready(\n  File \"C:\\Indian Servers\\TheAuditor\\backend\\tests\\phase8\\test_workflows.py\", line 46, in ready\n    obj = await create(c, preparer, base, \"tp-\" + kind, body)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Indian Servers\\TheAuditor\\backend\\tests\\phase4\\test_workflows.py\", line 77, in create\n    assert r.status_code == 201, r.text\n           ^^^^^^^^^^^^^^^^^^^^\nAssertionError: {\"error\":{\"code\":\"422\",\"message\":\"Journal source missing, inactive or outside entity/period\",\"request_id\":\"57cdc000-6ad3-493c-85b9-4a3c312e7605\"}}\n",
+    "seconds": 5.3202195999983815
+  },
+  {
+    "id": "tests.phase8.test_workflows.test_source_reconciled_services_and_reviewed_localfile_exports",
+    "status": "FAIL",
+    "error": "{\"error\":{\"code\":\"422\",\"message\":\"Journal source missing, inactive or outside entity/period\",\"request_id\":\"bae1b286-254b-4e43-b88a-5d4e5407a9ac\"}}",
+    "traceback": "Traceback (most recent call last):\n  File \"C:\\Indian Servers\\TheAuditor\\scripts\\qa_workflows.py\", line 97, in main\n    await function(**kwargs)\n  File \"C:\\Indian Servers\\TheAuditor\\backend\\tests\\phase8\\test_workflows.py\", line 628, in test_source_reconciled_services_and_reviewed_localfile_exports\n    f = await prepared(c)\n        ^^^^^^^^^^^^^^^^^\n  File \"C:\\Indian Servers\\TheAuditor\\backend\\tests\\phase8\\test_workflows.py\", line 168, in prepared\n    await ready(\n  File \"C:\\Indian Servers\\TheAuditor\\backend\\tests\\phase8\\test_workflows.py\", line 46, in ready\n    obj = await create(c, preparer, base, \"tp-\" + kind, body)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"C:\\Indian Servers\\TheAuditor\\backend\\tests\\phase4\\test_workflows.py\", line 77, in create\n    assert r.status_code == 201, r.text\n           ^^^^^^^^^^^^^^^^^^^^\nAssertionError: {\"error\":{\"code\":\"422\",\"message\":\"Journal source missing, inactive or outside entity/period\",\"request_id\":\"bae1b286-254b-4e43-b88a-5d4e5407a9ac\"}}\n",
+    "seconds": 5.227854500000831
+  },
+  {
+    "id": "tests.phase9.test_workflows.test_dmtt_actual_ifrs_approval_computation_and_ai",
+    "status": "PASS",
+    "seconds": 2.7615283999984968
+  },
+  {
+    "id": "tests.phase9.test_workflows.test_real_tensorflow_artifacts_approval_inference_rls_and_feedback",
+    "status": "PASS",
+    "seconds": 2.665486999998393
+  },
+  {
+    "id": "tests.phase10.test_workflows.test_grc_independent_approval_owner_isolation_and_immutable_snapshots",
+    "status": "PASS",
+    "seconds": 2.501037499998347
+  },
+  {
+    "id": "tests.phase11.test_workflows.test_investigation_permissions_resume_proposal_and_stale_approval",
+    "status": "PASS",
+    "seconds": 0.800468000001274
+  },
+  {
+    "id": "tests.phase11.test_templates.test_configured_readonly_graph_activation_and_execution",
+    "status": "PASS",
+    "seconds": 0.1646796999993967
+  }
+]

@@ -1,0 +1,190 @@
+{
+  "time": "2026-10-18T07:02:57.013302+00:00",
+  "host": "127.0.0.1",
+  "port": 55432,
+  "databases": [
+    "postgres",
+    "auditos",
+    "auditos_phase4_test",
+    "auditos_phase4_preview",
+    "auditos_phase5_migration_check",
+    "auditos_phase6_migration_check",
+    "auditos_phase7_demo",
+    "auditos_phase7_migration_test",
+    "auditos_phase8_migration_test",
+    "auditos_phase9_migration_test",
+    "auditos_phase10_migration_test",
+    "auditos_phase11_migration_test",
+    "auditos_phase12_migration_test",
+    "auditos_phase12_restore_test",
+    "auditos_phase12_browser_test"
+  ],
+  "existing_assessment": [
+    {
+      "database": "auditos_phase4_test",
+      "tables": 70,
+      "tenants": [
+        {
+          "id": "0eab271b-9cfe-4bde-992f-bf5da9238393",
+          "name": "TEST ONLY Firm A",
+          "status": "active"
+        }
+      ],
+      "clients": 1,
+      "journal_lines": 6
+    },
+    {
+      "database": "auditos_phase4_preview",
+      "tables": 66,
+      "tenants": [
+        {
+          "id": "58480122-5931-4b5c-914d-ce53ea0a045e",
+          "name": "SYNTHETIC Phase 4 demonstration firm",
+          "status": "active"
+        }
+      ],
+      "clients": 6,
+      "journal_lines": 28
+    },
+    {
+      "database": "auditos_phase5_migration_check",
+      "tables": 63,
+      "tenants": [],
+      "clients": 0,
+      "journal_lines": 0
+    },
+    {
+      "database": "auditos_phase6_migration_check",
+      "tables": 66,
+      "tenants": [],
+      "clients": 0,
+      "journal_lines": 0
+    },
+    {
+      "database": "auditos_phase7_demo",
+      "tables": 85,
+      "tenants": [
+        {
+          "id": "8733db06-81bc-59b3-afcc-bf0f4c0cd8a2",
+          "name": "AuditOS Demo Chartered Accountants [SYNTHETIC]",
+          "status": "active"
+        },
+        {
+          "id": "1956c54b-48a7-5a60-ae0a-411c98d426ef",
+          "name": "Phase12 SaaS QA [SYNTHETIC]",
+          "status": "active"
+        }
+      ],
+      "clients": 10,
+      "journal_lines": 250024
+    },
+    {
+      "database": "auditos_phase7_migration_test",
+      "tables": 68,
+      "tenants": [],
+      "clients": 0,
+      "journal_lines": 0
+    },
+    {
+      "database": "auditos_phase8_migration_test",
+      "tables": 71,
+      "tenants": [
+        {
+          "id": "db030bbe-ac34-4864-92fc-e5b212294cbe",
+          "name": "TEST ONLY Firm A",
+          "status": "active"
+        }
+      ],
+      "clients": 1,
+      "journal_lines": 6
+    },
+    {
+      "database": "auditos_phase9_migration_test",
+      "tables": 74,
+      "tenants": [
+        {
+          "id": "b5263e8d-c3d9-41e0-9b7e-85a5ff3cfbff",
+          "name": "TEST ONLY Firm A",
+          "status": "active"
+        }
+      ],
+      "clients": 1,
+      "journal_lines": 0
+    },
+    {
+      "database": "auditos_phase10_migration_test",
+      "tables": 80,
+      "tenants": [
+        {
+          "id": "325ad2df-bbb1-4e6d-acf3-ab6d04ad2d27",
+          "name": "TEST ONLY Firm A",
+          "status": "active"
+        }
+      ],
+      "clients": 1,
+      "journal_lines": 0
+    },
+    {
+      "database": "auditos_phase11_migration_test",
+      "tables": 81,
+      "tenants": [
+        {
+          "id": "0a4e8098-771c-4925-871e-c42fa54c05bf",
+          "name": "TEST ONLY Firm A",
+          "status": "active"
+        }
+      ],
+      "clients": 1,
+      "journal_lines": 6
+    },
+    {
+      "database": "auditos_phase12_migration_test",
+      "tables": 85,
+      "tenants": [
+        {
+          "id": "8733db06-81bc-59b3-afcc-bf0f4c0cd8a2",
+          "name": "Renamed test tenant without marker",
+          "status": "active"
+        }
+      ],
+      "clients": 0,
+      "journal_lines": 0
+    },
+    {
+      "database": "auditos_phase12_restore_test",
+      "tables": 85,
+      "tenants": [
+        {
+          "id": "8733db06-81bc-59b3-afcc-bf0f4c0cd8a2",
+          "name": "AuditOS Demo Chartered Accountants [SYNTHETIC]",
+          "status": "active"
+        }
+      ],
+      "clients": 10,
+      "journal_lines": 250024
+    },
+    {
+      "database": "auditos_phase12_browser_test",
+      "tables": 85,
+      "tenants": [
+        {
+          "id": "ab107c18-d0ad-4b2c-9754-24dbec38ab88",
+          "name": "Synthetic release smoke",
+          "status": "active"
+        }
+      ],
+      "clients": 1,
+      "journal_lines": 0
+    }
+  ],
+  "isolation": "fresh dedicated auditos_qa_campaign_demo; regression uses separate auditos_qa_campaign_test",
+  "backup": {
+    "path": ".local-runtime\\qa-campaign\\pre-campaign-demo.dump",
+    "bytes": 73820142,
+    "sha256": "2259d9481ba3c14f627de902a64fcb2ea8b34cae2b5056af63e22dc27a802719"
+  },
+  "created_databases": [
+    "auditos_qa_campaign_demo",
+    "auditos_qa_campaign_test"
+  ]
+}

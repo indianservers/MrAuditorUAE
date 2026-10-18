@@ -1,0 +1,16 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.7.0
+rootdir: C:\Indian Servers\TheAuditor\backend
+configfile: pyproject.toml
+plugins: anyio-4.15.1, platformdirs-4.13.3, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 22 items
+
+tests\phase5\test_reporting.py .......                                   [ 31%]
+tests\phase7\test_regression_fixes.py ..                                 [ 40%]
+tests\phase8\test_workflows.py .........                                 [ 81%]
+tests\phase9\test_workflows.py ...                                       [ 95%]
+tests\phase11\test_financial_lineage.py .                                [100%]
+
+- generated xml file: C:\Indian Servers\TheAuditor\docs\qa-crud\baseline.xml --
+======================= 22 passed in 143.67s (0:02:23) ========================

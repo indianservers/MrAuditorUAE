@@ -1,0 +1,21 @@
+PIE810 Call `startswith` once with a `tuple`
+   --> scripts\qa_report.py:243:101
+    |
+241 | …nts",[]) if r["path"].startswith("/api/v1/"+prefix)})
+242 | …"].startswith("/"+prefix)]
+243 | …les",{}).values() for p in values if p.startswith(prefix+".") or p.startswith(m["module"]+".")})
+    |                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+244 | …=="connectors" else "Partially functional"
+245 | ….join(module_routes) or "Shared service / see route inventory", "API":"; ".join(apis),"Database":"; ".join(f"{t}={counts.get(t,0)}" …
+    |
+help: Merge into a single `startswith` call
+    |
+242 |         module_routes = [r["route"] for r in routes if r["route"].startswith("/"+prefix)]
+    -         permissions = sorted({p for values in inventory.get("roles",{}).values() for p in values if p.startswith(prefix+".") or p.startswith(m["module"]+".")})
+243 +         permissions = sorted({p for values in inventory.get("roles",{}).values() for p in values if p.startswith((prefix + ".", m["module"] + "."))})
+244 |         status = "External integration required" if m["module"]=="connectors" else "Partially functional"
+    |
+note: This is an unsafe fix and may change runtime behavior
+
+Found 3 errors (2 fixed, 1 remaining).
+1 unsafe fix available with `--fix --unsafe-fixes`.

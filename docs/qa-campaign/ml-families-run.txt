@@ -1,0 +1,3 @@
+{"family": "autoencoder", "source_id": "aafcd027-569c-48a6-82df-031aee48e39c", "production_promoted": false, "status": "PASS_ARTIFACT_WORKFLOW", "model_id": "e707429e-054d-4ad3-b3b4-ead887613c1e", "seconds": 0.4663702000034391}
+{"family": "risk-ranking", "source_id": "aafcd027-569c-48a6-82df-031aee48e39c", "production_promoted": false, "status": "PASS_ARTIFACT_WORKFLOW", "model_id": "9293d0e6-f0c1-491f-b219-292a4db359a6", "seconds": 0.4516126999951666}
+{"family": "account-classifier", "source_id": "aafcd027-569c-48a6-82df-031aee48e39c", "production_promoted": false, "status": "PASS_ARTIFACT_WORKFLOW", "model_id": "d2634144-beec-4b16-9219-bd8f21d3e651", "seconds": 0.44128189999901224}

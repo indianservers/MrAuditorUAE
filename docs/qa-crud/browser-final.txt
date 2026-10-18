@@ -1,0 +1,78 @@
+
+Running 2 tests using 1 worker
+
+(node:26408) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 e2e\qa-crud.spec.ts:18:1 › client form create edit archive restore with separate persisted API assertions (3.0m)
+(node:24524) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 e2e\qa-crud.spec.ts:97:1 › working paper actual form creates a persisted draft (3.0m)
+
+
+  1) e2e\qa-crud.spec.ts:18:1 › client form create edit archive restore with separate persisted API assertions 
+
+    Test timeout of 180000ms exceeded.
+
+    Error: locator.selectOption: Test timeout of 180000ms exceeded.
+    Call log:
+      - waiting for getByRole('dialog').last().getByLabel('status', { exact: true })
+
+
+      49 |       .click();
+      50 |     const form = page.getByRole("dialog").last();
+    > 51 |     await form.getByLabel("status", { exact: true }).selectOption(status);
+         |                                                      ^
+      52 |     await form
+      53 |       .getByLabel("Lifecycle reason")
+      54 |       .fill(`Synthetic browser lifecycle review for ${status}`);
+        at C:\Indian Servers\TheAuditor\frontend\e2e\qa-crud.spec.ts:51:54
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\qa-crud-client-form-create-9b487-te-persisted-API-assertions\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\qa-crud-client-form-create-9b487-te-persisted-API-assertions\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\qa-crud-client-form-create-9b487-te-persisted-API-assertions\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\qa-crud-client-form-create-9b487-te-persisted-API-assertions\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) e2e\qa-crud.spec.ts:97:1 › working paper actual form creates a persisted draft ────────────────
+
+    Test timeout of 180000ms exceeded.
+
+    Error: locator.fill: Test timeout of 180000ms exceeded.
+    Call log:
+      - waiting for getByLabel('Folder', { exact: true })
+
+
+      108 |   expect(final.version).toBe(row.version + 2);
+      109 |   expect(final.name).toBe(name);
+    > 110 |   writeFileSync(
+          |                 ^
+      111 |     "../docs/qa-crud/browser-client-receipt.json",
+      112 |     JSON.stringify(
+      113 |       {
+        at C:\Indian Servers\TheAuditor\frontend\e2e\qa-crud.spec.ts:110:52
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\qa-crud-working-paper-actual-form-creates-a-persisted-draft\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\qa-crud-working-paper-actual-form-creates-a-persisted-draft\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\qa-crud-working-paper-actual-form-creates-a-persisted-draft\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\qa-crud-working-paper-actual-form-creates-a-persisted-draft\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    e2e\qa-crud.spec.ts:18:1 › client form create edit archive restore with separate persisted API assertions 
+    e2e\qa-crud.spec.ts:97:1 › working paper actual form creates a persisted draft ─────────────────

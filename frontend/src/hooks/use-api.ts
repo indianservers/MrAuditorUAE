@@ -85,7 +85,15 @@ export function useAction<T = RecordRow>() {
               : "Request accepted by the backend. Review its current state in this workflow.",
         }),
       );
-      return client.invalidateQueries({ queryKey: ["api", tenant] });
+      if (typeof BroadcastChannel !== "undefined") {
+        const channel = new BroadcastChannel("auditos:changes");
+        channel.postMessage({ tenant });
+        channel.close();
+      }
+      return Promise.all([
+        client.invalidateQueries({ queryKey: ["api", tenant] }),
+        client.invalidateQueries({ queryKey: ["access", tenant] }),
+      ]);
     },
   });
 }

@@ -1,0 +1,49 @@
+
+Running 1 test using 1 worker
+
+(node:7812) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 e2e\qa-campaign.spec.ts:56:1 › client search, status filter, edit persistence and backend denial stay functional (9.2s)
+
+
+  1) e2e\qa-campaign.spec.ts:56:1 › client search, status filter, edit persistence and backend denial stay functional 
+
+    Error: expect(locator).toContainText(expected) failed
+
+    Locator: getByRole('alert')
+    Expected substring: "Separately provisioned platform operator and MFA required"
+    Error: strict mode violation: getByRole('alert') resolved to 2 elements:
+        1) <p role="alert">Separately provisioned platform operator and MFA …</p> aka getByText('Separately provisioned')
+        2) <div role="alert" aria-live="assertive" id="__next-route-announcer__"></div> aka locator('[id="__next-route-announcer__"]')
+
+    Call log:
+      - Expect "toContainText" getByRole('alert') with timeout 20000ms
+      - waiting for getByRole('alert')
+        4 × locator resolved to <div role="alert" aria-live="assertive" id="__next-route-announcer__"></div>
+          - unexpected value ""
+
+
+      67 |   await page.reload();await page.getByLabel("Search clients").fill("QA-01");await expect(cell).toBeVisible();
+      68 |   const wrong=await page.request.get("/api/backend/clients",{headers:{"X-Tenant-ID":"00000000-0000-4000-8000-000000000001"}});expect(wrong.status()).toBe(403);
+    > 69 |   await page.goto("/platform/qa-center");await expect(page.getByRole("alert")).toContainText("Separately provisioned platform operator and MFA required");
+         |                                                                                ^
+      70 | });
+      71 |
+        at C:\Indian Servers\TheAuditor\frontend\e2e\qa-campaign.spec.ts:69:80
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\qa-campaign-client-search--986bc-kend-denial-stay-functional\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\qa-campaign-client-search--986bc-kend-denial-stay-functional\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\qa-campaign-client-search--986bc-kend-denial-stay-functional\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\qa-campaign-client-search--986bc-kend-denial-stay-functional\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    e2e\qa-campaign.spec.ts:56:1 › client search, status filter, edit persistence and backend denial stay functional 

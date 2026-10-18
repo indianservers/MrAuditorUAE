@@ -1,0 +1,3 @@
+# Role and permission tests
+
+Thirteen real browser sign-ins cover Platform Administrator, Firm Administrator, Audit Partner / Chartered Accountant, Audit Manager, Auditor, Tax Manager, TP Analyst, VAT Analyst, Internal Auditor, Client Administrator, Client Viewer, Quality Reviewer and Read-only Reviewer. Direct server GET/POST/cross-tenant probes are checked against the source permission catalogue, not button visibility. See browser-role-results.json. The focused API tests also reject draft archival by a read-only reviewer and foreign tenant. Full specialist mutation/review cycles under each role remain incomplete.

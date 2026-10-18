@@ -1,0 +1,5348 @@
+{
+  "modules": [
+    {
+      "module": "accounting",
+      "tables": [
+        "accounting_connections",
+        "connection_sync_runs",
+        "account_mappings",
+        "import_batches",
+        "import_files",
+        "import_snapshots",
+        "import_validation_results",
+        "source_records",
+        "accounts",
+        "journal_entries",
+        "journal_lines",
+        "trial_balance_snapshots",
+        "trial_balance_lines",
+        "currencies",
+        "exchange_rates",
+        "audit_analytics_runs",
+        "audit_rules",
+        "audit_rule_results",
+        "risk_scores",
+        "audit_findings",
+        "sampling_runs",
+        "sampling_items",
+        "reconciliation_runs",
+        "reconciliation_exceptions",
+        "data_transformations",
+        "source_integrity_checks",
+        "upload_sessions",
+        "financial_ai_suggestions"
+      ],
+      "functions": [
+        "trial_balance",
+        "reconcile",
+        "movements",
+        "__table_args__",
+        "scope_values",
+        "scoped",
+        "check_scope",
+        "upload",
+        "preview",
+        "validate",
+        "commit",
+        "issue",
+        "flush",
+        "val"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "ai_engine",
+      "tables": [],
+      "functions": [
+        "generate",
+        "execute"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "audit_analytics",
+      "tables": [],
+      "functions": [
+        "quote",
+        "risk_score",
+        "__init__",
+        "close",
+        "evaluate",
+        "flags",
+        "scores",
+        "available",
+        "select_items",
+        "days",
+        "tz",
+        "hours",
+        "valid_weights",
+        "population",
+        "analytics",
+        "sampling"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "audit_execution",
+      "tables": [
+        "audit_access_grants",
+        "audit_role_policies",
+        "audit_engagement_policies",
+        "audit_records",
+        "audit_record_versions",
+        "audit_review_decisions",
+        "audit_evidence_versions",
+        "audit_client_access",
+        "audit_invitations",
+        "audit_methodology_versions"
+      ],
+      "functions": [
+        "visible_engagements",
+        "role_permissions",
+        "firm_roles",
+        "engagement_permissions",
+        "validate_file",
+        "scan",
+        "known_assertions",
+        "thresholds",
+        "serialize",
+        "engagement",
+        "policy",
+        "get_record",
+        "materiality",
+        "source_record",
+        "validate_body",
+        "revision",
+        "create",
+        "update",
+        "reviewer_separation",
+        "action",
+        "completion",
+        "transition"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "audit_log",
+      "tables": [],
+      "functions": [
+        "record"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "clients",
+      "tables": [],
+      "functions": [
+        "currency",
+        "country_code",
+        "dates",
+        "__init__",
+        "get",
+        "listing",
+        "create",
+        "patch"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "connectors",
+      "tables": [],
+      "functions": [
+        "cipher",
+        "encrypt",
+        "decrypt",
+        "zoho_sync",
+        "export_request",
+        "parse_export",
+        "__init__",
+        "authorization_url",
+        "token",
+        "get",
+        "pages",
+        "journal_detail"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "demo",
+      "tables": [],
+      "functions": [
+        "identifier",
+        "generate",
+        "journal",
+        "configuration_guard",
+        "guard",
+        "test_database_guard"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "dmtt",
+      "tables": [],
+      "functions": [
+        "scope",
+        "deferred",
+        "calculate",
+        "periods",
+        "clean",
+        "evidence",
+        "record",
+        "validate_body",
+        "validate_action",
+        "computation"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "engagements",
+      "tables": [],
+      "functions": [],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "enterprise_ai",
+      "tables": [
+        "ai_workflow_runs",
+        "ai_workflow_events",
+        "ai_document_extractions",
+        "ai_document_chunks",
+        "ai_approval_requests",
+        "ai_scheduled_workflows",
+        "ai_document_match_decisions"
+      ],
+      "functions": [
+        "agents",
+        "plan",
+        "fields",
+        "extract_bytes",
+        "latest_evidence",
+        "save",
+        "extract",
+        "authorized_extraction",
+        "authorized_chunk",
+        "search",
+        "validate_corrections",
+        "match_signals",
+        "read",
+        "value",
+        "evaluate",
+        "draft",
+        "report",
+        "validate_graph",
+        "serial",
+        "digest",
+        "scope",
+        "source",
+        "validate_dependencies",
+        "locked",
+        "event",
+        "get",
+        "history",
+        "create",
+        "step",
+        "propose",
+        "proposal",
+        "decide",
+        "execute_proposal",
+        "ref",
+        "journal_source",
+        "snapshot_source",
+        "calculation_source",
+        "invoke",
+        "scrub"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "financial_ai",
+      "tables": [],
+      "functions": [
+        "suggest"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "grc",
+      "tables": [
+        "grc_execution_snapshots",
+        "grc_monitor_alerts",
+        "grc_monitor_schedules"
+      ],
+      "functions": [
+        "risk_score",
+        "plan_score",
+        "sod",
+        "next_due",
+        "score",
+        "enqueue",
+        "ledger_engine",
+        "workpaper_checks",
+        "execute",
+        "assigned",
+        "calculate",
+        "transition",
+        "dashboard",
+        "publish",
+        "published",
+        "render",
+        "footer",
+        "dimensions",
+        "dates",
+        "clean",
+        "dependency",
+        "owner_scoped",
+        "authorize_record",
+        "record",
+        "evidence",
+        "snapshot",
+        "validate_body",
+        "active_member",
+        "test_sample",
+        "validate_action",
+        "run",
+        "alert",
+        "parse"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "identity",
+      "tables": [],
+      "functions": [
+        "cipher",
+        "code",
+        "enroll",
+        "verify",
+        "issue",
+        "bootstrap",
+        "login",
+        "rotate",
+        "logout"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "ifrs",
+      "tables": [
+        "ifrs_standards_registry",
+        "ifrs_calculation_runs"
+      ],
+      "functions": [
+        "q",
+        "serial",
+        "growth",
+        "lease",
+        "ecl",
+        "instrument",
+        "revenue",
+        "deferred_tax",
+        "fixed_assets",
+        "impairment",
+        "provision",
+        "calculate",
+        "npv",
+        "rows_for",
+        "render",
+        "amount",
+        "footer",
+        "elections",
+        "weights",
+        "one_side",
+        "balanced",
+        "dates",
+        "probabilities",
+        "dependency",
+        "record",
+        "run",
+        "snapshot",
+        "validate_body",
+        "current_dependencies",
+        "validate_action",
+        "save_run",
+        "calculate_record",
+        "approved_inputs",
+        "adjusted_balance",
+        "financials",
+        "consolidate",
+        "total"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "ingestion",
+      "tables": [],
+      "functions": [
+        "map_headers",
+        "safe_cell",
+        "rows",
+        "money",
+        "date_value",
+        "normalize"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "jobs",
+      "tables": [],
+      "functions": [
+        "submit"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "lineage",
+      "tables": [],
+      "functions": [
+        "hash_file",
+        "__init__",
+        "put",
+        "local"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "ml",
+      "tables": [
+        "ml_registry_events"
+      ],
+      "functions": [
+        "event",
+        "get",
+        "put_json",
+        "put_dataset",
+        "read_object",
+        "node",
+        "execute_job"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "organizations",
+      "tables": [],
+      "functions": [],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "reconciliation",
+      "tables": [],
+      "functions": [
+        "balance",
+        "persist_balance",
+        "run_reconciliation"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "saas",
+      "tables": [
+        "platform_operators",
+        "tenant_subscriptions",
+        "tenant_usage_counters",
+        "platform_operations"
+      ],
+      "functions": [
+        "writable",
+        "enforce",
+        "background_allowed",
+        "admit_user",
+        "baseline",
+        "put_private",
+        "collect"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "tax",
+      "tables": [
+        "ct_computation_runs",
+        "ct_loss_postings",
+        "ct_current_releases"
+      ],
+      "functions": [
+        "q",
+        "standard_tax",
+        "filing_deadline",
+        "adjustment_amount",
+        "small_business",
+        "interest",
+        "qfzp",
+        "loss_allocation",
+        "sample_size",
+        "amount",
+        "render",
+        "dates",
+        "dates",
+        "scope",
+        "clean",
+        "record",
+        "run",
+        "evidence",
+        "financial_source",
+        "applicable_rule",
+        "validate_body",
+        "conditions_pass",
+        "approved",
+        "dependencies_current",
+        "save_run",
+        "profile_inputs",
+        "evidence_dependencies",
+        "loss_lots",
+        "current_release",
+        "compute",
+        "calculate_record",
+        "group",
+        "validate_action",
+        "after_action",
+        "post_transfer",
+        "find"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "tp",
+      "tables": [
+        "tp_calculation_runs",
+        "tp_comparable_observations"
+      ],
+      "functions": [
+        "q",
+        "ratio",
+        "indicators",
+        "allocate",
+        "segmentation",
+        "percentile",
+        "statistics",
+        "benchmark",
+        "add_month",
+        "fraction",
+        "loan_schedule",
+        "disclosure",
+        "working_capital",
+        "software_data",
+        "rows_for",
+        "render",
+        "parse",
+        "finite",
+        "publish",
+        "authorized_releases",
+        "download",
+        "sources",
+        "ownership_candidates",
+        "interval",
+        "dates",
+        "evidence",
+        "clean",
+        "dep",
+        "record",
+        "profile_inputs",
+        "scoped_source",
+        "selected",
+        "source_lines",
+        "verify_transaction",
+        "validate_body",
+        "licensed_dataset",
+        "get_run",
+        "record_graph",
+        "current",
+        "save",
+        "references",
+        "dependencies",
+        "matrix",
+        "_matrix",
+        "calculate",
+        "transaction_total",
+        "latest_record_run",
+        "validate_action",
+        "export_allowed",
+        "released",
+        "check",
+        "synthetic",
+        "create_adjustment"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    },
+    {
+      "module": "vat",
+      "tables": [
+        "vat_computation_runs",
+        "synthetic_datasets"
+      ],
+      "functions": [
+        "send",
+        "send",
+        "money",
+        "transaction",
+        "filing_deadline",
+        "readiness",
+        "_extract",
+        "extract_text_pdf",
+        "dates",
+        "journal_ids",
+        "clean",
+        "dep",
+        "record",
+        "evidence",
+        "evidence_ids",
+        "rules",
+        "applicable",
+        "profile_inputs",
+        "validate_body",
+        "run",
+        "current",
+        "save",
+        "selected_records",
+        "invoice_result",
+        "compute",
+        "validate_action",
+        "ledger"
+      ],
+      "status": "PARTIALLY_FUNCTIONAL",
+      "evidence": "See executed tests; discovery alone does not establish functionality"
+    }
+  ],
+  "roles": {
+    "Platform Administrator": [
+      "platform.manage"
+    ],
+    "Firm Administrator": [
+      "accounting.import",
+      "accounting.map",
+      "accounting.read",
+      "ai.agent.configure",
+      "ai.approval.decide",
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.auditlog.read",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.execute",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.knowledge.manage",
+      "ai.model.evaluate",
+      "ai.provider.manage",
+      "ai.read",
+      "ai.tools.manage",
+      "ai.usage.read",
+      "ai.workflow.run",
+      "ai.workflow.schedule",
+      "analytics.read",
+      "analytics.run",
+      "audit.evidence.review",
+      "audit.evidence.upload",
+      "audit.export",
+      "audit.finding.create",
+      "audit.finding.resolve",
+      "audit.materiality.approve",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.program.review",
+      "audit.read",
+      "audit.risk.approve",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "clients.write",
+      "compliance.approve",
+      "compliance.manage",
+      "connectors.manage",
+      "dmtt.ai.execute",
+      "dmtt.approve",
+      "dmtt.calculate",
+      "dmtt.prepare",
+      "dmtt.read",
+      "einvoice.prepare",
+      "einvoice.sandbox",
+      "engagement.accept",
+      "engagement.accept.prepare",
+      "engagement.archive",
+      "engagement.assign",
+      "engagement.create",
+      "engagement.finalize",
+      "engagement.quality_review",
+      "engagements.read",
+      "engagements.write",
+      "entities.read",
+      "entities.write",
+      "erm.appetite.manage",
+      "erm.risk.approve",
+      "erm.risk.assess",
+      "erm.risk.create",
+      "financial_ai.approve",
+      "financial_ai.execute",
+      "governance.board.read",
+      "governance.report.prepare",
+      "grc.ai.execute",
+      "grc.calculate",
+      "grc.control.create",
+      "grc.control.review",
+      "grc.control.test",
+      "grc.deficiency.manage",
+      "grc.read",
+      "grc.remediation.approve",
+      "grc.remediation.manage",
+      "grc.sod.analyze",
+      "grc.thirdparty.manage",
+      "ia.engagement.create",
+      "ia.engagement.review",
+      "ia.framework.approve",
+      "ia.framework.manage",
+      "ia.plan.approve",
+      "ia.plan.prepare",
+      "ia.report.approve",
+      "ia.report.prepare",
+      "ia.universe.manage",
+      "ifrs.adjustment.approve",
+      "ifrs.adjustment.prepare",
+      "ifrs.adjustment.review",
+      "ifrs.assumption.approve",
+      "ifrs.calculation.execute",
+      "ifrs.consolidation.approve",
+      "ifrs.consolidation.prepare",
+      "ifrs.disclosure.prepare",
+      "ifrs.disclosure.review",
+      "ifrs.financials.approve",
+      "ifrs.financials.prepare",
+      "ifrs.financials.review",
+      "ifrs.mapping.approve",
+      "ifrs.mapping.prepare",
+      "ifrs.read",
+      "ifrs.report.export",
+      "ifrs.report.lock",
+      "independence.declare",
+      "independence.review",
+      "jobs.execute",
+      "jobs.read",
+      "members.manage",
+      "methodology.manage",
+      "ml.approve",
+      "ml.deploy",
+      "ml.feedback",
+      "ml.feedback.submit",
+      "ml.prediction.read",
+      "ml.read",
+      "ml.score",
+      "ml.train",
+      "monitor.alert.review",
+      "monitor.job.execute",
+      "monitor.rule.approve",
+      "monitor.rule.create",
+      "monitor.schedule.manage",
+      "policy.acknowledge",
+      "policy.approve",
+      "policy.manage",
+      "qaip.assessment.manage",
+      "qaip.assessment.review",
+      "sampling.run",
+      "tax.adjustment.approve",
+      "tax.adjustment.propose",
+      "tax.ai.execute",
+      "tax.computation.approve",
+      "tax.computation.prepare",
+      "tax.computation.review",
+      "tax.elections.approve",
+      "tax.elections.prepare",
+      "tax.group.manage",
+      "tax.interest.calculate",
+      "tax.losses.manage",
+      "tax.profile.read",
+      "tax.profile.write",
+      "tax.qfzp.approve",
+      "tax.qfzp.assess",
+      "tax.return.approve",
+      "tax.return.export",
+      "tax.return.prepare",
+      "tax.rules.approve",
+      "tax.rules.manage",
+      "tenant.manage",
+      "tp.ai.execute",
+      "tp.benchmark.approve",
+      "tp.benchmark.import",
+      "tp.benchmark.screen",
+      "tp.calculate",
+      "tp.disclosure.approve",
+      "tp.disclosure.prepare",
+      "tp.far.prepare",
+      "tp.far.review",
+      "tp.loan.analyze",
+      "tp.localfile.approve",
+      "tp.localfile.prepare",
+      "tp.localfile.review",
+      "tp.masterfile.approve",
+      "tp.masterfile.prepare",
+      "tp.method.select",
+      "tp.read",
+      "tp.relationship.manage",
+      "tp.relationship.read",
+      "tp.remuneration.review",
+      "tp.report.export",
+      "tp.review",
+      "tp.rules.approve",
+      "tp.rules.manage",
+      "tp.segmentation.approve",
+      "tp.segmentation.prepare",
+      "tp.transaction.classify",
+      "users.assign_roles",
+      "users.invite",
+      "vat.adjustment.prepare",
+      "vat.ai.execute",
+      "vat.calculate",
+      "vat.export",
+      "vat.invoice.prepare",
+      "vat.profile.write",
+      "vat.read",
+      "vat.recovery.prepare",
+      "vat.return.approve",
+      "vat.return.prepare",
+      "vat.review",
+      "vat.rules.approve",
+      "vat.rules.manage",
+      "workingpaper.approve",
+      "workingpaper.create",
+      "workingpaper.review"
+    ],
+    "Audit Partner": [
+      "ai.approval.decide",
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.auditlog.read",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.execute",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.knowledge.manage",
+      "ai.model.evaluate",
+      "ai.read",
+      "ai.usage.read",
+      "ai.workflow.run",
+      "ai.workflow.schedule",
+      "audit.evidence.review",
+      "audit.evidence.upload",
+      "audit.export",
+      "audit.finding.create",
+      "audit.finding.resolve",
+      "audit.materiality.approve",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.program.review",
+      "audit.read",
+      "audit.risk.approve",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "engagement.accept",
+      "engagement.accept.prepare",
+      "engagement.archive",
+      "engagement.assign",
+      "engagement.finalize",
+      "engagements.read",
+      "engagements.write",
+      "entities.read",
+      "ifrs.adjustment.approve",
+      "ifrs.adjustment.prepare",
+      "ifrs.adjustment.review",
+      "ifrs.assumption.approve",
+      "ifrs.calculation.execute",
+      "ifrs.consolidation.approve",
+      "ifrs.consolidation.prepare",
+      "ifrs.disclosure.prepare",
+      "ifrs.disclosure.review",
+      "ifrs.financials.approve",
+      "ifrs.financials.prepare",
+      "ifrs.financials.review",
+      "ifrs.mapping.approve",
+      "ifrs.mapping.prepare",
+      "ifrs.read",
+      "ifrs.report.export",
+      "ifrs.report.lock",
+      "independence.declare",
+      "independence.review",
+      "jobs.read",
+      "workingpaper.approve",
+      "workingpaper.create",
+      "workingpaper.review"
+    ],
+    "Audit Manager": [
+      "ai.approval.decide",
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.auditlog.read",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.execute",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.knowledge.manage",
+      "ai.model.evaluate",
+      "ai.read",
+      "ai.usage.read",
+      "ai.workflow.run",
+      "ai.workflow.schedule",
+      "audit.evidence.review",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.finding.resolve",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.program.review",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "engagement.accept.prepare",
+      "engagement.assign",
+      "engagements.read",
+      "engagements.write",
+      "entities.read",
+      "ifrs.adjustment.approve",
+      "ifrs.adjustment.prepare",
+      "ifrs.adjustment.review",
+      "ifrs.assumption.approve",
+      "ifrs.calculation.execute",
+      "ifrs.consolidation.approve",
+      "ifrs.consolidation.prepare",
+      "ifrs.disclosure.prepare",
+      "ifrs.disclosure.review",
+      "ifrs.financials.approve",
+      "ifrs.financials.prepare",
+      "ifrs.financials.review",
+      "ifrs.mapping.approve",
+      "ifrs.mapping.prepare",
+      "ifrs.read",
+      "ifrs.report.export",
+      "ifrs.report.lock",
+      "independence.declare",
+      "workingpaper.approve",
+      "workingpaper.create",
+      "workingpaper.review"
+    ],
+    "Senior Auditor": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.execute",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "independence.declare",
+      "workingpaper.create"
+    ],
+    "Auditor": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "independence.declare",
+      "workingpaper.create"
+    ],
+    "Tax Manager": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.execute",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "dmtt.ai.execute",
+      "dmtt.approve",
+      "dmtt.calculate",
+      "dmtt.prepare",
+      "dmtt.read",
+      "einvoice.prepare",
+      "einvoice.sandbox",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "engagements.write",
+      "entities.read",
+      "ifrs.assumption.approve",
+      "ifrs.calculation.execute",
+      "ifrs.read",
+      "independence.declare",
+      "jobs.read",
+      "tax.adjustment.approve",
+      "tax.adjustment.propose",
+      "tax.ai.execute",
+      "tax.computation.approve",
+      "tax.computation.prepare",
+      "tax.computation.review",
+      "tax.elections.approve",
+      "tax.elections.prepare",
+      "tax.group.manage",
+      "tax.interest.calculate",
+      "tax.losses.manage",
+      "tax.profile.read",
+      "tax.profile.write",
+      "tax.qfzp.approve",
+      "tax.qfzp.assess",
+      "tax.return.approve",
+      "tax.return.export",
+      "tax.return.prepare",
+      "tax.rules.approve",
+      "tax.rules.manage",
+      "tp.ai.execute",
+      "tp.benchmark.approve",
+      "tp.benchmark.import",
+      "tp.benchmark.screen",
+      "tp.calculate",
+      "tp.disclosure.approve",
+      "tp.disclosure.prepare",
+      "tp.far.prepare",
+      "tp.far.review",
+      "tp.loan.analyze",
+      "tp.localfile.approve",
+      "tp.localfile.prepare",
+      "tp.localfile.review",
+      "tp.masterfile.approve",
+      "tp.masterfile.prepare",
+      "tp.method.select",
+      "tp.read",
+      "tp.relationship.manage",
+      "tp.relationship.read",
+      "tp.remuneration.review",
+      "tp.report.export",
+      "tp.review",
+      "tp.rules.approve",
+      "tp.rules.manage",
+      "tp.segmentation.approve",
+      "tp.segmentation.prepare",
+      "tp.transaction.classify",
+      "vat.adjustment.prepare",
+      "vat.ai.execute",
+      "vat.calculate",
+      "vat.export",
+      "vat.invoice.prepare",
+      "vat.profile.write",
+      "vat.read",
+      "vat.recovery.prepare",
+      "vat.return.approve",
+      "vat.return.prepare",
+      "vat.review",
+      "vat.rules.approve",
+      "vat.rules.manage",
+      "workingpaper.create"
+    ],
+    "Tax Consultant": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "einvoice.prepare",
+      "einvoice.sandbox",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "independence.declare",
+      "vat.adjustment.prepare",
+      "vat.ai.execute",
+      "vat.calculate",
+      "vat.invoice.prepare",
+      "vat.profile.write",
+      "vat.read",
+      "vat.recovery.prepare",
+      "vat.return.prepare",
+      "workingpaper.create"
+    ],
+    "Client Viewer": [
+      "portal.read"
+    ],
+    "Managing Partner": [
+      "ai.approval.decide",
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.auditlog.read",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.execute",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.knowledge.manage",
+      "ai.model.evaluate",
+      "ai.read",
+      "ai.usage.read",
+      "ai.workflow.run",
+      "ai.workflow.schedule",
+      "audit.evidence.review",
+      "audit.evidence.upload",
+      "audit.export",
+      "audit.finding.create",
+      "audit.finding.resolve",
+      "audit.materiality.approve",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.program.review",
+      "audit.read",
+      "audit.risk.approve",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "engagement.accept",
+      "engagement.accept.prepare",
+      "engagement.archive",
+      "engagement.assign",
+      "engagement.finalize",
+      "engagements.read",
+      "engagements.write",
+      "entities.read",
+      "ifrs.adjustment.approve",
+      "ifrs.adjustment.prepare",
+      "ifrs.adjustment.review",
+      "ifrs.assumption.approve",
+      "ifrs.calculation.execute",
+      "ifrs.consolidation.approve",
+      "ifrs.consolidation.prepare",
+      "ifrs.disclosure.prepare",
+      "ifrs.disclosure.review",
+      "ifrs.financials.approve",
+      "ifrs.financials.prepare",
+      "ifrs.financials.review",
+      "ifrs.mapping.approve",
+      "ifrs.mapping.prepare",
+      "ifrs.read",
+      "ifrs.report.export",
+      "ifrs.report.lock",
+      "independence.declare",
+      "independence.review",
+      "jobs.read",
+      "workingpaper.approve",
+      "workingpaper.create",
+      "workingpaper.review"
+    ],
+    "Audit Partner / Chartered Accountant": [
+      "ai.approval.decide",
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.auditlog.read",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.execute",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.knowledge.manage",
+      "ai.model.evaluate",
+      "ai.read",
+      "ai.usage.read",
+      "ai.workflow.run",
+      "ai.workflow.schedule",
+      "audit.evidence.review",
+      "audit.evidence.upload",
+      "audit.export",
+      "audit.finding.create",
+      "audit.finding.resolve",
+      "audit.materiality.approve",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.program.review",
+      "audit.read",
+      "audit.risk.approve",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "engagement.accept",
+      "engagement.accept.prepare",
+      "engagement.archive",
+      "engagement.assign",
+      "engagement.finalize",
+      "engagements.read",
+      "engagements.write",
+      "entities.read",
+      "ifrs.adjustment.approve",
+      "ifrs.adjustment.prepare",
+      "ifrs.adjustment.review",
+      "ifrs.assumption.approve",
+      "ifrs.calculation.execute",
+      "ifrs.consolidation.approve",
+      "ifrs.consolidation.prepare",
+      "ifrs.disclosure.prepare",
+      "ifrs.disclosure.review",
+      "ifrs.financials.approve",
+      "ifrs.financials.prepare",
+      "ifrs.financials.review",
+      "ifrs.mapping.approve",
+      "ifrs.mapping.prepare",
+      "ifrs.read",
+      "ifrs.report.export",
+      "ifrs.report.lock",
+      "independence.declare",
+      "independence.review",
+      "jobs.read",
+      "workingpaper.approve",
+      "workingpaper.create",
+      "workingpaper.review"
+    ],
+    "Audit Trainee": [
+      "ai.approval.request",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.read",
+      "audit.testing.execute",
+      "engagements.read",
+      "independence.declare",
+      "workingpaper.create"
+    ],
+    "Quality Reviewer": [
+      "ai.approval.request",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.read",
+      "engagement.quality_review",
+      "engagements.read",
+      "independence.declare",
+      "workingpaper.review"
+    ],
+    "Read-only Reviewer": [
+      "ai.approval.request",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.read",
+      "engagements.read"
+    ],
+    "Firm Operations User": [
+      "ai.approval.request",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.read",
+      "engagements.read",
+      "users.invite"
+    ],
+    "Platform Super Admin": [
+      "platform.manage"
+    ],
+    "Platform Support Administrator": [
+      "platform.support"
+    ],
+    "Client Administrator": [
+      "portal.read",
+      "portal.respond"
+    ],
+    "Client Finance Manager": [
+      "portal.read",
+      "portal.respond"
+    ],
+    "Client Accountant": [
+      "portal.read",
+      "portal.respond"
+    ],
+    "Client Document Contributor": [
+      "portal.read",
+      "portal.respond"
+    ],
+    "Financial Reporting Preparer": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "ifrs.adjustment.prepare",
+      "ifrs.calculation.execute",
+      "ifrs.consolidation.prepare",
+      "ifrs.disclosure.prepare",
+      "ifrs.financials.prepare",
+      "ifrs.mapping.prepare",
+      "ifrs.read",
+      "independence.declare",
+      "workingpaper.create"
+    ],
+    "Financial Reporting Manager": [
+      "ai.approval.decide",
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.auditlog.read",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.execute",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.knowledge.manage",
+      "ai.model.evaluate",
+      "ai.read",
+      "ai.usage.read",
+      "ai.workflow.run",
+      "ai.workflow.schedule",
+      "audit.evidence.review",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.finding.resolve",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.program.review",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "engagement.accept.prepare",
+      "engagement.assign",
+      "engagements.read",
+      "engagements.write",
+      "entities.read",
+      "ifrs.adjustment.approve",
+      "ifrs.adjustment.prepare",
+      "ifrs.adjustment.review",
+      "ifrs.assumption.approve",
+      "ifrs.calculation.execute",
+      "ifrs.consolidation.approve",
+      "ifrs.consolidation.prepare",
+      "ifrs.disclosure.prepare",
+      "ifrs.disclosure.review",
+      "ifrs.financials.approve",
+      "ifrs.financials.prepare",
+      "ifrs.financials.review",
+      "ifrs.mapping.approve",
+      "ifrs.mapping.prepare",
+      "ifrs.read",
+      "ifrs.report.export",
+      "ifrs.report.lock",
+      "independence.declare",
+      "workingpaper.approve",
+      "workingpaper.create",
+      "workingpaper.review"
+    ],
+    "Chartered Accountant": [
+      "ai.approval.decide",
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.auditlog.read",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.execute",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.knowledge.manage",
+      "ai.model.evaluate",
+      "ai.read",
+      "ai.usage.read",
+      "ai.workflow.run",
+      "ai.workflow.schedule",
+      "audit.evidence.review",
+      "audit.evidence.upload",
+      "audit.export",
+      "audit.finding.create",
+      "audit.finding.resolve",
+      "audit.materiality.approve",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.program.review",
+      "audit.read",
+      "audit.risk.approve",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "compliance.approve",
+      "compliance.manage",
+      "dmtt.ai.execute",
+      "dmtt.approve",
+      "dmtt.calculate",
+      "dmtt.prepare",
+      "dmtt.read",
+      "einvoice.prepare",
+      "einvoice.sandbox",
+      "engagement.accept",
+      "engagement.accept.prepare",
+      "engagement.archive",
+      "engagement.assign",
+      "engagement.finalize",
+      "engagements.read",
+      "engagements.write",
+      "entities.read",
+      "erm.appetite.manage",
+      "erm.risk.approve",
+      "erm.risk.assess",
+      "erm.risk.create",
+      "governance.board.read",
+      "governance.report.prepare",
+      "grc.ai.execute",
+      "grc.calculate",
+      "grc.control.create",
+      "grc.control.review",
+      "grc.control.test",
+      "grc.deficiency.manage",
+      "grc.read",
+      "grc.remediation.approve",
+      "grc.remediation.manage",
+      "grc.sod.analyze",
+      "grc.thirdparty.manage",
+      "ia.engagement.create",
+      "ia.engagement.review",
+      "ia.framework.approve",
+      "ia.framework.manage",
+      "ia.plan.approve",
+      "ia.plan.prepare",
+      "ia.report.approve",
+      "ia.report.prepare",
+      "ia.universe.manage",
+      "ifrs.adjustment.approve",
+      "ifrs.adjustment.prepare",
+      "ifrs.adjustment.review",
+      "ifrs.assumption.approve",
+      "ifrs.calculation.execute",
+      "ifrs.consolidation.approve",
+      "ifrs.consolidation.prepare",
+      "ifrs.disclosure.prepare",
+      "ifrs.disclosure.review",
+      "ifrs.financials.approve",
+      "ifrs.financials.prepare",
+      "ifrs.financials.review",
+      "ifrs.mapping.approve",
+      "ifrs.mapping.prepare",
+      "ifrs.read",
+      "ifrs.report.export",
+      "ifrs.report.lock",
+      "independence.declare",
+      "independence.review",
+      "jobs.read",
+      "ml.approve",
+      "ml.deploy",
+      "ml.feedback",
+      "ml.feedback.submit",
+      "ml.prediction.read",
+      "ml.read",
+      "ml.score",
+      "ml.train",
+      "monitor.alert.review",
+      "monitor.job.execute",
+      "monitor.rule.approve",
+      "monitor.rule.create",
+      "monitor.schedule.manage",
+      "policy.acknowledge",
+      "policy.approve",
+      "policy.manage",
+      "qaip.assessment.manage",
+      "qaip.assessment.review",
+      "tax.adjustment.approve",
+      "tax.adjustment.propose",
+      "tax.ai.execute",
+      "tax.computation.approve",
+      "tax.computation.prepare",
+      "tax.computation.review",
+      "tax.elections.approve",
+      "tax.elections.prepare",
+      "tax.group.manage",
+      "tax.interest.calculate",
+      "tax.losses.manage",
+      "tax.profile.read",
+      "tax.profile.write",
+      "tax.qfzp.approve",
+      "tax.qfzp.assess",
+      "tax.return.approve",
+      "tax.return.export",
+      "tax.return.prepare",
+      "tax.rules.approve",
+      "tax.rules.manage",
+      "tp.ai.execute",
+      "tp.benchmark.approve",
+      "tp.benchmark.import",
+      "tp.benchmark.screen",
+      "tp.calculate",
+      "tp.disclosure.approve",
+      "tp.disclosure.prepare",
+      "tp.far.prepare",
+      "tp.far.review",
+      "tp.loan.analyze",
+      "tp.localfile.approve",
+      "tp.localfile.prepare",
+      "tp.localfile.review",
+      "tp.masterfile.approve",
+      "tp.masterfile.prepare",
+      "tp.method.select",
+      "tp.read",
+      "tp.relationship.manage",
+      "tp.relationship.read",
+      "tp.remuneration.review",
+      "tp.report.export",
+      "tp.review",
+      "tp.rules.approve",
+      "tp.rules.manage",
+      "tp.segmentation.approve",
+      "tp.segmentation.prepare",
+      "tp.transaction.classify",
+      "vat.adjustment.prepare",
+      "vat.ai.execute",
+      "vat.calculate",
+      "vat.export",
+      "vat.invoice.prepare",
+      "vat.profile.write",
+      "vat.read",
+      "vat.recovery.prepare",
+      "vat.return.approve",
+      "vat.return.prepare",
+      "vat.review",
+      "vat.rules.approve",
+      "vat.rules.manage",
+      "workingpaper.approve",
+      "workingpaper.create",
+      "workingpaper.review"
+    ],
+    "Consolidation Specialist": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "ifrs.adjustment.prepare",
+      "ifrs.calculation.execute",
+      "ifrs.consolidation.prepare",
+      "ifrs.disclosure.prepare",
+      "ifrs.financials.prepare",
+      "ifrs.mapping.prepare",
+      "ifrs.read",
+      "independence.declare",
+      "workingpaper.create"
+    ],
+    "Corporate Tax Preparer": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "ifrs.read",
+      "independence.declare",
+      "tax.adjustment.propose",
+      "tax.ai.execute",
+      "tax.computation.prepare",
+      "tax.elections.prepare",
+      "tax.group.manage",
+      "tax.interest.calculate",
+      "tax.losses.manage",
+      "tax.profile.read",
+      "tax.profile.write",
+      "tax.qfzp.assess",
+      "tax.return.prepare",
+      "workingpaper.create"
+    ],
+    "Senior Tax Consultant": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "ifrs.read",
+      "independence.declare",
+      "tax.adjustment.propose",
+      "tax.ai.execute",
+      "tax.computation.prepare",
+      "tax.elections.prepare",
+      "tax.group.manage",
+      "tax.interest.calculate",
+      "tax.losses.manage",
+      "tax.profile.read",
+      "tax.profile.write",
+      "tax.qfzp.assess",
+      "tax.return.prepare",
+      "workingpaper.create"
+    ],
+    "Tax Director": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "dmtt.ai.execute",
+      "dmtt.approve",
+      "dmtt.calculate",
+      "dmtt.prepare",
+      "dmtt.read",
+      "einvoice.prepare",
+      "einvoice.sandbox",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "ifrs.read",
+      "independence.declare",
+      "tax.adjustment.approve",
+      "tax.adjustment.propose",
+      "tax.ai.execute",
+      "tax.computation.approve",
+      "tax.computation.prepare",
+      "tax.computation.review",
+      "tax.elections.approve",
+      "tax.elections.prepare",
+      "tax.group.manage",
+      "tax.interest.calculate",
+      "tax.losses.manage",
+      "tax.profile.read",
+      "tax.profile.write",
+      "tax.qfzp.approve",
+      "tax.qfzp.assess",
+      "tax.return.approve",
+      "tax.return.export",
+      "tax.return.prepare",
+      "tax.rules.approve",
+      "tax.rules.manage",
+      "vat.adjustment.prepare",
+      "vat.ai.execute",
+      "vat.calculate",
+      "vat.export",
+      "vat.invoice.prepare",
+      "vat.profile.write",
+      "vat.read",
+      "vat.recovery.prepare",
+      "vat.return.approve",
+      "vat.return.prepare",
+      "vat.review",
+      "vat.rules.approve",
+      "vat.rules.manage",
+      "workingpaper.create"
+    ],
+    "Tax Partner": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "dmtt.ai.execute",
+      "dmtt.approve",
+      "dmtt.calculate",
+      "dmtt.prepare",
+      "dmtt.read",
+      "einvoice.prepare",
+      "einvoice.sandbox",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "ifrs.read",
+      "independence.declare",
+      "jobs.read",
+      "tax.adjustment.approve",
+      "tax.adjustment.propose",
+      "tax.ai.execute",
+      "tax.computation.approve",
+      "tax.computation.prepare",
+      "tax.computation.review",
+      "tax.elections.approve",
+      "tax.elections.prepare",
+      "tax.group.manage",
+      "tax.interest.calculate",
+      "tax.losses.manage",
+      "tax.profile.read",
+      "tax.profile.write",
+      "tax.qfzp.approve",
+      "tax.qfzp.assess",
+      "tax.return.approve",
+      "tax.return.export",
+      "tax.return.prepare",
+      "tax.rules.approve",
+      "tax.rules.manage",
+      "tp.ai.execute",
+      "tp.benchmark.approve",
+      "tp.benchmark.import",
+      "tp.benchmark.screen",
+      "tp.calculate",
+      "tp.disclosure.approve",
+      "tp.disclosure.prepare",
+      "tp.far.prepare",
+      "tp.far.review",
+      "tp.loan.analyze",
+      "tp.localfile.approve",
+      "tp.localfile.prepare",
+      "tp.localfile.review",
+      "tp.masterfile.approve",
+      "tp.masterfile.prepare",
+      "tp.method.select",
+      "tp.read",
+      "tp.relationship.manage",
+      "tp.relationship.read",
+      "tp.remuneration.review",
+      "tp.report.export",
+      "tp.review",
+      "tp.rules.approve",
+      "tp.rules.manage",
+      "tp.segmentation.approve",
+      "tp.segmentation.prepare",
+      "tp.transaction.classify",
+      "vat.adjustment.prepare",
+      "vat.ai.execute",
+      "vat.calculate",
+      "vat.export",
+      "vat.invoice.prepare",
+      "vat.profile.write",
+      "vat.read",
+      "vat.recovery.prepare",
+      "vat.return.approve",
+      "vat.return.prepare",
+      "vat.review",
+      "vat.rules.approve",
+      "vat.rules.manage",
+      "workingpaper.create"
+    ],
+    "Independent Reviewer": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "ifrs.read",
+      "independence.declare",
+      "tax.adjustment.approve",
+      "tax.computation.approve",
+      "tax.computation.review",
+      "tax.profile.read",
+      "tax.qfzp.approve",
+      "workingpaper.create"
+    ],
+    "Client Finance User": [
+      "portal.read",
+      "portal.respond"
+    ],
+    "VAT Analyst": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "einvoice.prepare",
+      "einvoice.sandbox",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "independence.declare",
+      "vat.adjustment.prepare",
+      "vat.ai.execute",
+      "vat.calculate",
+      "vat.invoice.prepare",
+      "vat.profile.write",
+      "vat.read",
+      "vat.recovery.prepare",
+      "vat.return.prepare",
+      "workingpaper.create"
+    ],
+    "VAT Consultant": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "einvoice.prepare",
+      "einvoice.sandbox",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "independence.declare",
+      "vat.adjustment.prepare",
+      "vat.ai.execute",
+      "vat.calculate",
+      "vat.invoice.prepare",
+      "vat.profile.write",
+      "vat.read",
+      "vat.recovery.prepare",
+      "vat.return.prepare",
+      "workingpaper.create"
+    ],
+    "Invoice Validator": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "einvoice.prepare",
+      "einvoice.sandbox",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "independence.declare",
+      "vat.adjustment.prepare",
+      "vat.ai.execute",
+      "vat.calculate",
+      "vat.invoice.prepare",
+      "vat.profile.write",
+      "vat.read",
+      "vat.recovery.prepare",
+      "vat.return.prepare",
+      "workingpaper.create"
+    ],
+    "VAT Manager": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "einvoice.prepare",
+      "einvoice.sandbox",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "independence.declare",
+      "vat.adjustment.prepare",
+      "vat.ai.execute",
+      "vat.calculate",
+      "vat.export",
+      "vat.invoice.prepare",
+      "vat.profile.write",
+      "vat.read",
+      "vat.recovery.prepare",
+      "vat.return.approve",
+      "vat.return.prepare",
+      "vat.review",
+      "vat.rules.approve",
+      "vat.rules.manage",
+      "workingpaper.create"
+    ],
+    "VAT Read-only Reviewer": [
+      "ai.approval.request",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.read",
+      "engagements.read",
+      "vat.read"
+    ],
+    "TP Analyst": [
+      "ai.approval.request",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.read",
+      "clients.read",
+      "engagements.read",
+      "entities.read",
+      "ifrs.read",
+      "jobs.read",
+      "tp.ai.execute",
+      "tp.benchmark.import",
+      "tp.benchmark.screen",
+      "tp.calculate",
+      "tp.disclosure.prepare",
+      "tp.far.prepare",
+      "tp.loan.analyze",
+      "tp.localfile.prepare",
+      "tp.masterfile.prepare",
+      "tp.method.select",
+      "tp.read",
+      "tp.relationship.manage",
+      "tp.relationship.read",
+      "tp.remuneration.review",
+      "tp.report.export",
+      "tp.segmentation.prepare",
+      "tp.transaction.classify",
+      "workingpaper.create"
+    ],
+    "TP Economist": [
+      "ai.approval.request",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.read",
+      "clients.read",
+      "engagements.read",
+      "entities.read",
+      "ifrs.read",
+      "jobs.read",
+      "tp.ai.execute",
+      "tp.benchmark.import",
+      "tp.benchmark.screen",
+      "tp.calculate",
+      "tp.disclosure.prepare",
+      "tp.far.prepare",
+      "tp.loan.analyze",
+      "tp.localfile.prepare",
+      "tp.masterfile.prepare",
+      "tp.method.select",
+      "tp.read",
+      "tp.relationship.manage",
+      "tp.relationship.read",
+      "tp.remuneration.review",
+      "tp.report.export",
+      "tp.segmentation.prepare",
+      "tp.transaction.classify",
+      "workingpaper.create"
+    ],
+    "Financial Analyst": [
+      "ai.approval.request",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.read",
+      "clients.read",
+      "engagements.read",
+      "entities.read",
+      "ifrs.read",
+      "jobs.read",
+      "tp.ai.execute",
+      "tp.benchmark.import",
+      "tp.benchmark.screen",
+      "tp.calculate",
+      "tp.disclosure.prepare",
+      "tp.far.prepare",
+      "tp.loan.analyze",
+      "tp.localfile.prepare",
+      "tp.masterfile.prepare",
+      "tp.method.select",
+      "tp.read",
+      "tp.relationship.manage",
+      "tp.relationship.read",
+      "tp.remuneration.review",
+      "tp.report.export",
+      "tp.segmentation.prepare",
+      "tp.transaction.classify",
+      "workingpaper.create"
+    ],
+    "TP Manager": [
+      "ai.approval.request",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.read",
+      "clients.read",
+      "engagements.read",
+      "entities.read",
+      "ifrs.read",
+      "jobs.read",
+      "tp.ai.execute",
+      "tp.benchmark.approve",
+      "tp.benchmark.import",
+      "tp.benchmark.screen",
+      "tp.calculate",
+      "tp.disclosure.approve",
+      "tp.disclosure.prepare",
+      "tp.far.prepare",
+      "tp.far.review",
+      "tp.loan.analyze",
+      "tp.localfile.approve",
+      "tp.localfile.prepare",
+      "tp.localfile.review",
+      "tp.masterfile.approve",
+      "tp.masterfile.prepare",
+      "tp.method.select",
+      "tp.read",
+      "tp.relationship.manage",
+      "tp.relationship.read",
+      "tp.remuneration.review",
+      "tp.report.export",
+      "tp.review",
+      "tp.rules.approve",
+      "tp.rules.manage",
+      "tp.segmentation.approve",
+      "tp.segmentation.prepare",
+      "tp.transaction.classify",
+      "workingpaper.create"
+    ],
+    "Transfer Pricing Director": [
+      "ai.approval.request",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.read",
+      "clients.read",
+      "engagements.read",
+      "entities.read",
+      "ifrs.read",
+      "jobs.read",
+      "tp.ai.execute",
+      "tp.benchmark.approve",
+      "tp.benchmark.import",
+      "tp.benchmark.screen",
+      "tp.calculate",
+      "tp.disclosure.approve",
+      "tp.disclosure.prepare",
+      "tp.far.prepare",
+      "tp.far.review",
+      "tp.loan.analyze",
+      "tp.localfile.approve",
+      "tp.localfile.prepare",
+      "tp.localfile.review",
+      "tp.masterfile.approve",
+      "tp.masterfile.prepare",
+      "tp.method.select",
+      "tp.read",
+      "tp.relationship.manage",
+      "tp.relationship.read",
+      "tp.remuneration.review",
+      "tp.report.export",
+      "tp.review",
+      "tp.rules.approve",
+      "tp.rules.manage",
+      "tp.segmentation.approve",
+      "tp.segmentation.prepare",
+      "tp.transaction.classify",
+      "workingpaper.create"
+    ],
+    "TP Read-only Reviewer": [
+      "ai.approval.request",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.read",
+      "engagements.read",
+      "ifrs.read",
+      "tp.read",
+      "tp.relationship.read"
+    ],
+    "ML Engineer": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "independence.declare",
+      "ml.feedback",
+      "ml.read",
+      "ml.score",
+      "ml.train",
+      "workingpaper.create"
+    ],
+    "Model Risk Reviewer": [
+      "ai.approval.request",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.read",
+      "engagements.read",
+      "ml.approve",
+      "ml.deploy",
+      "ml.feedback",
+      "ml.read",
+      "ml.score"
+    ],
+    "Pillar Two Analyst": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "dmtt.ai.execute",
+      "dmtt.calculate",
+      "dmtt.prepare",
+      "dmtt.read",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "ifrs.read",
+      "independence.declare",
+      "tax.profile.read",
+      "workingpaper.create"
+    ],
+    "Pillar Two Reviewer": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "dmtt.ai.execute",
+      "dmtt.approve",
+      "dmtt.calculate",
+      "dmtt.read",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "ifrs.read",
+      "independence.declare",
+      "tax.profile.read",
+      "workingpaper.create"
+    ],
+    "Chief Audit Executive": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "compliance.approve",
+      "compliance.manage",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "erm.appetite.manage",
+      "erm.risk.approve",
+      "erm.risk.assess",
+      "erm.risk.create",
+      "governance.board.read",
+      "governance.report.prepare",
+      "grc.ai.execute",
+      "grc.calculate",
+      "grc.control.create",
+      "grc.control.review",
+      "grc.control.test",
+      "grc.deficiency.manage",
+      "grc.read",
+      "grc.remediation.approve",
+      "grc.remediation.manage",
+      "grc.sod.analyze",
+      "grc.thirdparty.manage",
+      "ia.engagement.create",
+      "ia.engagement.review",
+      "ia.framework.approve",
+      "ia.framework.manage",
+      "ia.plan.approve",
+      "ia.plan.prepare",
+      "ia.report.approve",
+      "ia.report.prepare",
+      "ia.universe.manage",
+      "independence.declare",
+      "ml.feedback",
+      "ml.feedback.submit",
+      "ml.prediction.read",
+      "ml.read",
+      "ml.score",
+      "monitor.alert.review",
+      "monitor.job.execute",
+      "monitor.rule.approve",
+      "monitor.rule.create",
+      "monitor.schedule.manage",
+      "policy.acknowledge",
+      "policy.approve",
+      "policy.manage",
+      "qaip.assessment.manage",
+      "qaip.assessment.review",
+      "workingpaper.create"
+    ],
+    "Head of Internal Audit": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "compliance.approve",
+      "compliance.manage",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "erm.appetite.manage",
+      "erm.risk.approve",
+      "erm.risk.assess",
+      "erm.risk.create",
+      "governance.board.read",
+      "governance.report.prepare",
+      "grc.ai.execute",
+      "grc.calculate",
+      "grc.control.create",
+      "grc.control.review",
+      "grc.control.test",
+      "grc.deficiency.manage",
+      "grc.read",
+      "grc.remediation.approve",
+      "grc.remediation.manage",
+      "grc.sod.analyze",
+      "grc.thirdparty.manage",
+      "ia.engagement.create",
+      "ia.engagement.review",
+      "ia.framework.approve",
+      "ia.framework.manage",
+      "ia.plan.approve",
+      "ia.plan.prepare",
+      "ia.report.approve",
+      "ia.report.prepare",
+      "ia.universe.manage",
+      "independence.declare",
+      "ml.feedback",
+      "ml.feedback.submit",
+      "ml.prediction.read",
+      "ml.read",
+      "ml.score",
+      "monitor.alert.review",
+      "monitor.job.execute",
+      "monitor.rule.approve",
+      "monitor.rule.create",
+      "monitor.schedule.manage",
+      "policy.acknowledge",
+      "policy.approve",
+      "policy.manage",
+      "qaip.assessment.manage",
+      "qaip.assessment.review",
+      "workingpaper.create"
+    ],
+    "Internal Audit Manager": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "compliance.approve",
+      "compliance.manage",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "erm.appetite.manage",
+      "erm.risk.approve",
+      "erm.risk.assess",
+      "erm.risk.create",
+      "governance.board.read",
+      "governance.report.prepare",
+      "grc.ai.execute",
+      "grc.calculate",
+      "grc.control.create",
+      "grc.control.review",
+      "grc.control.test",
+      "grc.deficiency.manage",
+      "grc.read",
+      "grc.remediation.approve",
+      "grc.remediation.manage",
+      "grc.sod.analyze",
+      "grc.thirdparty.manage",
+      "ia.engagement.create",
+      "ia.engagement.review",
+      "ia.framework.approve",
+      "ia.framework.manage",
+      "ia.plan.approve",
+      "ia.plan.prepare",
+      "ia.report.approve",
+      "ia.report.prepare",
+      "ia.universe.manage",
+      "independence.declare",
+      "ml.feedback",
+      "ml.feedback.submit",
+      "ml.prediction.read",
+      "ml.read",
+      "ml.score",
+      "monitor.alert.review",
+      "monitor.job.execute",
+      "monitor.rule.approve",
+      "monitor.rule.create",
+      "monitor.schedule.manage",
+      "policy.acknowledge",
+      "policy.approve",
+      "policy.manage",
+      "qaip.assessment.manage",
+      "qaip.assessment.review",
+      "workingpaper.create"
+    ],
+    "Senior Internal Auditor": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "erm.risk.assess",
+      "erm.risk.create",
+      "grc.ai.execute",
+      "grc.calculate",
+      "grc.control.create",
+      "grc.control.test",
+      "grc.deficiency.manage",
+      "grc.read",
+      "grc.remediation.manage",
+      "grc.sod.analyze",
+      "ia.engagement.create",
+      "ia.engagement.execute",
+      "ia.plan.prepare",
+      "ia.report.prepare",
+      "ia.universe.manage",
+      "independence.declare",
+      "ml.feedback",
+      "ml.feedback.submit",
+      "ml.prediction.read",
+      "ml.read",
+      "ml.score",
+      "monitor.alert.review",
+      "monitor.job.execute",
+      "monitor.rule.create",
+      "workingpaper.create"
+    ],
+    "Internal Auditor": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "erm.risk.assess",
+      "erm.risk.create",
+      "grc.ai.execute",
+      "grc.calculate",
+      "grc.control.create",
+      "grc.control.test",
+      "grc.deficiency.manage",
+      "grc.read",
+      "grc.remediation.manage",
+      "grc.sod.analyze",
+      "ia.engagement.create",
+      "ia.engagement.execute",
+      "ia.plan.prepare",
+      "ia.report.prepare",
+      "ia.universe.manage",
+      "independence.declare",
+      "ml.feedback",
+      "ml.feedback.submit",
+      "ml.prediction.read",
+      "ml.read",
+      "ml.score",
+      "monitor.alert.review",
+      "monitor.job.execute",
+      "monitor.rule.create",
+      "workingpaper.create"
+    ],
+    "Risk Manager": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "erm.appetite.manage",
+      "erm.risk.approve",
+      "erm.risk.assess",
+      "erm.risk.create",
+      "grc.ai.execute",
+      "grc.calculate",
+      "grc.read",
+      "independence.declare",
+      "ml.feedback",
+      "ml.feedback.submit",
+      "ml.prediction.read",
+      "ml.read",
+      "ml.score",
+      "workingpaper.create"
+    ],
+    "Compliance Officer": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "compliance.approve",
+      "compliance.manage",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "grc.ai.execute",
+      "grc.calculate",
+      "grc.read",
+      "grc.thirdparty.manage",
+      "independence.declare",
+      "ml.feedback",
+      "ml.feedback.submit",
+      "ml.prediction.read",
+      "ml.read",
+      "ml.score",
+      "policy.approve",
+      "policy.manage",
+      "workingpaper.create"
+    ],
+    "Risk Owner": [
+      "clients.read",
+      "engagements.read",
+      "entities.read",
+      "erm.risk.assess",
+      "erm.risk.create",
+      "grc.read",
+      "policy.acknowledge"
+    ],
+    "Control Owner": [
+      "clients.read",
+      "engagements.read",
+      "entities.read",
+      "grc.control.create",
+      "grc.read",
+      "policy.acknowledge"
+    ],
+    "Process Owner": [
+      "clients.read",
+      "engagements.read",
+      "entities.read",
+      "grc.read",
+      "ia.universe.manage",
+      "policy.acknowledge",
+      "policy.approve",
+      "policy.manage"
+    ],
+    "Remediation Owner": [
+      "clients.read",
+      "engagements.read",
+      "entities.read",
+      "grc.read",
+      "grc.remediation.manage",
+      "policy.acknowledge"
+    ],
+    "Audit Committee Member": [
+      "engagements.read",
+      "governance.board.read"
+    ],
+    "Board Viewer": [
+      "engagements.read",
+      "governance.board.read"
+    ],
+    "Internal Audit Quality Reviewer": [
+      "ai.approval.request",
+      "ai.audit.execute",
+      "ai.chat.use",
+      "ai.documents.index",
+      "ai.investigation.create",
+      "ai.investigation.read",
+      "ai.workflow.run",
+      "audit.evidence.upload",
+      "audit.finding.create",
+      "audit.materiality.prepare",
+      "audit.plan",
+      "audit.program.prepare",
+      "audit.read",
+      "audit.risk.prepare",
+      "audit.testing.execute",
+      "clients.read",
+      "engagement.accept.prepare",
+      "engagements.read",
+      "entities.read",
+      "grc.calculate",
+      "grc.control.review",
+      "grc.read",
+      "ia.engagement.review",
+      "independence.declare",
+      "ml.feedback",
+      "ml.feedback.submit",
+      "ml.prediction.read",
+      "ml.read",
+      "ml.score",
+      "qaip.assessment.manage",
+      "qaip.assessment.review",
+      "workingpaper.create"
+    ],
+    "AI Administrator": [
+      "ai.agent.configure",
+      "ai.auditlog.read",
+      "ai.model.evaluate",
+      "ai.provider.manage",
+      "ai.tools.manage",
+      "ai.usage.read"
+    ]
+  },
+  "routes": [
+    "/",
+    "/ai-copilot",
+    "/audit/analytics",
+    "/audit/journal-testing",
+    "/audit/risk-intelligence",
+    "/audit/sampling",
+    "/clients",
+    "/compliance",
+    "/dashboard",
+    "/engagements",
+    "/evidence",
+    "/financials/general-ledger",
+    "/financials/journals",
+    "/financials/mapping",
+    "/financials/reconciliation",
+    "/financials/trial-balance",
+    "/integrations",
+    "/integrations/zoho/callback",
+    "/join",
+    "/login",
+    "/reports",
+    "/security",
+    "/settings",
+    "/tax",
+    "/vat"
+  ],
+  "prior_route_inventory": [],
+  "endpoints": [
+    {
+      "method": "POST",
+      "path": "/api/v1/ifrs/engagements/{eid}/runs/{rid}/propose-journal",
+      "operation_id": "propose_api_v1_ifrs_engagements__eid__runs__rid__propose_journal_post",
+      "tags": [
+        "IFRS reporting"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ifrs/standards",
+      "operation_id": "standards_api_v1_ifrs_standards_get",
+      "tags": [
+        "IFRS reporting"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ifrs/engagements/{eid}/workspace",
+      "operation_id": "workspace_api_v1_ifrs_engagements__eid__workspace_get",
+      "tags": [
+        "IFRS reporting"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ifrs/engagements/{eid}/records/{kind}",
+      "operation_id": "records_api_v1_ifrs_engagements__eid__records__kind__get",
+      "tags": [
+        "IFRS reporting"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ifrs/engagements/{eid}/records/{kind}",
+      "operation_id": "create_api_v1_ifrs_engagements__eid__records__kind__post",
+      "tags": [
+        "IFRS reporting"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ifrs/engagements/{eid}/calculate/{rid}",
+      "operation_id": "calculate_api_v1_ifrs_engagements__eid__calculate__rid__post",
+      "tags": [
+        "IFRS reporting"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ifrs/engagements/{eid}/runs",
+      "operation_id": "runs_api_v1_ifrs_engagements__eid__runs_get",
+      "tags": [
+        "IFRS reporting"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ifrs/engagements/{eid}/runs/{rid}",
+      "operation_id": "result_api_v1_ifrs_engagements__eid__runs__rid__get",
+      "tags": [
+        "IFRS reporting"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ifrs/engagements/{eid}/financial-statements/{profile_id}",
+      "operation_id": "financials_api_v1_ifrs_engagements__eid__financial_statements__profile_id__post",
+      "tags": [
+        "IFRS reporting"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ifrs/engagements/{eid}/adjusted-trial-balance/{profile_id}",
+      "operation_id": "adjusted_api_v1_ifrs_engagements__eid__adjusted_trial_balance__profile_id__get",
+      "tags": [
+        "IFRS reporting"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ifrs/engagements/{eid}/consolidation/{rid}",
+      "operation_id": "consolidate_api_v1_ifrs_engagements__eid__consolidation__rid__post",
+      "tags": [
+        "IFRS reporting"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ifrs/engagements/{eid}/runs/{rid}/validate",
+      "operation_id": "validate_api_v1_ifrs_engagements__eid__runs__rid__validate_get",
+      "tags": [
+        "IFRS reporting"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ifrs/engagements/{eid}/runs/{rid}/export/{format}",
+      "operation_id": "export_api_v1_ifrs_engagements__eid__runs__rid__export__format__get",
+      "tags": [
+        "IFRS reporting"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/users",
+      "operation_id": "users_api_v1_admin_users_get",
+      "tags": [
+        "Firm administration"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/roles",
+      "operation_id": "roles_api_v1_admin_roles_get",
+      "tags": [
+        "Firm administration"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/permissions",
+      "operation_id": "permissions_api_v1_admin_permissions_get",
+      "tags": [
+        "Firm administration"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/roles/{rid}/permissions",
+      "operation_id": "policy_api_v1_admin_roles__rid__permissions_post",
+      "tags": [
+        "Firm administration"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/invitations",
+      "operation_id": "invite_api_v1_admin_invitations_post",
+      "tags": [
+        "Firm administration"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/invitations/redeem",
+      "operation_id": "redeem_api_v1_admin_invitations_redeem_post",
+      "tags": [
+        "Firm administration"
+      ]
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/users/{mid}",
+      "operation_id": "update_member_api_v1_admin_users__mid__patch",
+      "tags": [
+        "Firm administration"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/client-access",
+      "operation_id": "client_access_api_v1_admin_client_access_post",
+      "tags": [
+        "Firm administration"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/activity",
+      "operation_id": "activity_api_v1_admin_activity_get",
+      "tags": [
+        "Firm administration"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/evidence-files/{rid}",
+      "operation_id": "upload_api_v1_engagements__eid__audit_evidence_files__rid__post",
+      "tags": [
+        "Private audit evidence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{eid}/audit/evidence-files/{rid}",
+      "operation_id": "versions_api_v1_engagements__eid__audit_evidence_files__rid__get",
+      "tags": [
+        "Private audit evidence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{eid}/audit/evidence-files/{rid}/{vid}/download",
+      "operation_id": "download_api_v1_engagements__eid__audit_evidence_files__rid___vid__download_get",
+      "tags": [
+        "Private audit evidence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/client-portal/requests",
+      "operation_id": "listing_api_v1_client_portal_requests_get",
+      "tags": [
+        "Restricted client portal"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/client-portal/requests/{rid}/view",
+      "operation_id": "view_api_v1_client_portal_requests__rid__view_post",
+      "tags": [
+        "Restricted client portal"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/client-portal/requests/{rid}/responses",
+      "operation_id": "respond_api_v1_client_portal_requests__rid__responses_post",
+      "tags": [
+        "Restricted client portal"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/client-portal/requests/{rid}/upload",
+      "operation_id": "upload_api_v1_client_portal_requests__rid__upload_post",
+      "tags": [
+        "Restricted client portal"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/ai-actions",
+      "operation_id": "suggest_api_v1_engagements__eid__audit_ai_actions_post",
+      "tags": [
+        "Engagement AI assistance"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/ai-actions/{rid}/accept-procedure",
+      "operation_id": "accept_api_v1_engagements__eid__audit_ai_actions__rid__accept_procedure_post",
+      "tags": [
+        "Engagement AI assistance"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/methodology/starter",
+      "operation_id": "starter_api_v1_admin_methodology_starter_get",
+      "tags": [
+        "Versioned audit methodology"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/methodology",
+      "operation_id": "versions_api_v1_admin_methodology_get",
+      "tags": [
+        "Versioned audit methodology"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/methodology",
+      "operation_id": "create_api_v1_admin_methodology_post",
+      "tags": [
+        "Versioned audit methodology"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/methodology/{mid}/approve",
+      "operation_id": "approve_api_v1_admin_methodology__mid__approve_post",
+      "tags": [
+        "Versioned audit methodology"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/methodology/{mid}/instantiate",
+      "operation_id": "instantiate_api_v1_engagements__eid__audit_methodology__mid__instantiate_post",
+      "tags": [
+        "Versioned audit methodology"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{eid}/audit/workspace",
+      "operation_id": "workspace_api_v1_engagements__eid__audit_workspace_get",
+      "tags": [
+        "Audit execution"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{eid}/audit/team",
+      "operation_id": "team_api_v1_engagements__eid__audit_team_get",
+      "tags": [
+        "Audit execution"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/team",
+      "operation_id": "assign_api_v1_engagements__eid__audit_team_post",
+      "tags": [
+        "Audit execution"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{eid}/audit/linkable-sources",
+      "operation_id": "linkable_sources_api_v1_engagements__eid__audit_linkable_sources_get",
+      "tags": [
+        "Audit execution"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{eid}/audit/team-candidates",
+      "operation_id": "candidates_api_v1_engagements__eid__audit_team_candidates_get",
+      "tags": [
+        "Audit execution"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/policy",
+      "operation_id": "configure_api_v1_engagements__eid__audit_policy_post",
+      "tags": [
+        "Audit execution"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/quality-review",
+      "operation_id": "quality_api_v1_engagements__eid__audit_quality_review_post",
+      "tags": [
+        "Audit execution"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/transition",
+      "operation_id": "transition_api_v1_engagements__eid__audit_transition_post",
+      "tags": [
+        "Audit execution"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{eid}/audit/completion-checks",
+      "operation_id": "completion_api_v1_engagements__eid__audit_completion_checks_get",
+      "tags": [
+        "Audit execution"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/select-sample",
+      "operation_id": "select_sample_api_v1_engagements__eid__audit_select_sample_post",
+      "tags": [
+        "Audit execution"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{eid}/audit/review-queue",
+      "operation_id": "review_queue_api_v1_engagements__eid__audit_review_queue_get",
+      "tags": [
+        "Audit execution"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{eid}/audit/records/{rid}/history",
+      "operation_id": "history_api_v1_engagements__eid__audit_records__rid__history_get",
+      "tags": [
+        "Audit execution"
+      ]
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/engagements/{eid}/audit/records/{rid}",
+      "operation_id": "update_api_v1_engagements__eid__audit_records__rid__patch",
+      "tags": [
+        "Audit execution"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/records/{rid}/actions",
+      "operation_id": "action_api_v1_engagements__eid__audit_records__rid__actions_post",
+      "tags": [
+        "Audit execution"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{eid}/audit/{kind}",
+      "operation_id": "listing_api_v1_engagements__eid__audit__kind__get",
+      "tags": [
+        "Audit execution"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/{kind}",
+      "operation_id": "create_api_v1_engagements__eid__audit__kind__post",
+      "tags": [
+        "Audit execution"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workspace/inspect-file",
+      "operation_id": "inspect_file_api_v1_workspace_inspect_file_post",
+      "tags": [
+        "Frontend read models"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspace/access",
+      "operation_id": "access_api_v1_workspace_access_get",
+      "tags": [
+        "Frontend read models"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspace/directory",
+      "operation_id": "directory_api_v1_workspace_directory_get",
+      "tags": [
+        "Frontend read models"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspace/dashboard",
+      "operation_id": "dashboard_api_v1_workspace_dashboard_get",
+      "tags": [
+        "Frontend read models"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspace/ledger",
+      "operation_id": "ledger_api_v1_workspace_ledger_get",
+      "tags": [
+        "Frontend read models"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspace/analytics/{identifier}/summary",
+      "operation_id": "analytics_summary_api_v1_workspace_analytics__identifier__summary_get",
+      "tags": [
+        "Frontend read models"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspace/findings",
+      "operation_id": "findings_api_v1_workspace_findings_get",
+      "tags": [
+        "Frontend read models"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounting/imports",
+      "operation_id": "upload_api_v1_accounting_imports_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/imports",
+      "operation_id": "list_import_batches_api_v1_accounting_imports_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/imports/{identifier}",
+      "operation_id": "get_import_api_v1_accounting_imports__identifier__get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/imports/{identifier}/preview",
+      "operation_id": "preview_api_v1_accounting_imports__identifier__preview_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounting/imports/{identifier}/validate",
+      "operation_id": "validate_api_v1_accounting_imports__identifier__validate_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounting/imports/{identifier}/commit",
+      "operation_id": "commit_api_v1_accounting_imports__identifier__commit_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/imports/{identifier}/validations",
+      "operation_id": "validations_api_v1_accounting_imports__identifier__validations_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/trial-balance",
+      "operation_id": "balance_api_v1_accounting_trial_balance_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounting/trial-balance",
+      "operation_id": "balance_snapshot_api_v1_accounting_trial_balance_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounting/mappings",
+      "operation_id": "mapping_api_v1_accounting_mappings_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/mappings",
+      "operation_id": "list_account_mappings_api_v1_accounting_mappings_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/mappings/{identifier}",
+      "operation_id": "get_mapping_api_v1_accounting_mappings__identifier__get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/analytics/runs",
+      "operation_id": "analytics_api_v1_analytics_runs_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/analytics/runs",
+      "operation_id": "list_audit_analytics_runs_api_v1_analytics_runs_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/analytics/runs/{identifier}",
+      "operation_id": "get_analytics_api_v1_analytics_runs__identifier__get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/analytics/rules",
+      "operation_id": "rules_api_v1_analytics_rules_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/reconciliation/runs",
+      "operation_id": "reconcile_api_v1_reconciliation_runs_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/reconciliation/runs",
+      "operation_id": "list_reconciliation_runs_api_v1_reconciliation_runs_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/sampling/runs",
+      "operation_id": "sampling_api_v1_sampling_runs_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/sampling/runs",
+      "operation_id": "list_sampling_runs_api_v1_sampling_runs_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/sampling/runs/{identifier}",
+      "operation_id": "get_sampling_api_v1_sampling_runs__identifier__get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/lineage/{identifier}",
+      "operation_id": "lineage_api_v1_accounting_lineage__identifier__get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/accounts",
+      "operation_id": "list_accounts_api_v1_accounting_accounts_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/journals",
+      "operation_id": "list_journal_entries_api_v1_accounting_journals_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/ledger",
+      "operation_id": "list_journal_lines_api_v1_accounting_ledger_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/analytics/findings",
+      "operation_id": "list_audit_findings_api_v1_analytics_findings_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/analytics/risk-scores",
+      "operation_id": "list_risk_scores_api_v1_analytics_risk_scores_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/reconciliation/exceptions",
+      "operation_id": "list_reconciliation_exceptions_api_v1_reconciliation_exceptions_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/account-classification",
+      "operation_id": "account_classification_api_v1_ai_account_classification_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/anomaly-explanation",
+      "operation_id": "anomaly_explanation_api_v1_ai_anomaly_explanation_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/audit-procedures",
+      "operation_id": "audit_procedures_api_v1_ai_audit_procedures_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/financial-commentary",
+      "operation_id": "financial_commentary_api_v1_ai_financial_commentary_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/suggestions/{identifier}/review",
+      "operation_id": "review_suggestion_api_v1_ai_suggestions__identifier__review_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounting/currencies",
+      "operation_id": "currency_policy_api_v1_accounting_currencies_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounting/connections",
+      "operation_id": "create_api_v1_accounting_connections_post",
+      "tags": [
+        "Accounting connectors"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/connections",
+      "operation_id": "connections_api_v1_accounting_connections_get",
+      "tags": [
+        "Accounting connectors"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/connectors/zoho/{identifier}/authorize",
+      "operation_id": "authorize_api_v1_connectors_zoho__identifier__authorize_post",
+      "tags": [
+        "Accounting connectors"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/connectors/zoho/{identifier}/callback",
+      "operation_id": "callback_api_v1_connectors_zoho__identifier__callback_post",
+      "tags": [
+        "Accounting connectors"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/connectors/zoho/{identifier}/organizations",
+      "operation_id": "organizations_api_v1_connectors_zoho__identifier__organizations_get",
+      "tags": [
+        "Accounting connectors"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/connectors/zoho/{identifier}/organization",
+      "operation_id": "choose_organization_api_v1_connectors_zoho__identifier__organization_post",
+      "tags": [
+        "Accounting connectors"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/connectors/zoho/{identifier}/sync",
+      "operation_id": "sync_api_v1_connectors_zoho__identifier__sync_post",
+      "tags": [
+        "Accounting connectors"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/connectors/tally",
+      "operation_id": "tally_api_v1_connectors_tally_get",
+      "tags": [
+        "Accounting connectors"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounting/uploads",
+      "operation_id": "create_upload_api_v1_accounting_uploads_post",
+      "tags": [
+        "Accounting connectors"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/uploads/{identifier}",
+      "operation_id": "get_upload_api_v1_accounting_uploads__identifier__get",
+      "tags": [
+        "Accounting connectors"
+      ]
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/accounting/uploads/{identifier}/chunks/{index}",
+      "operation_id": "chunk_api_v1_accounting_uploads__identifier__chunks__index__put",
+      "tags": [
+        "Accounting connectors"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounting/uploads/{identifier}/complete",
+      "operation_id": "complete_upload_api_v1_accounting_uploads__identifier__complete_post",
+      "tags": [
+        "Accounting connectors"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/connectors/zoho/sync-runs/{identifier}",
+      "operation_id": "sync_status_api_v1_connectors_zoho_sync_runs__identifier__get",
+      "tags": [
+        "Accounting connectors"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/bootstrap",
+      "operation_id": "bootstrap_api_v1_auth_bootstrap_post",
+      "tags": [
+        "Authentication"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "operation_id": "login_api_v1_auth_login_post",
+      "tags": [
+        "Authentication"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "operation_id": "refresh_api_v1_auth_refresh_post",
+      "tags": [
+        "Authentication"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "operation_id": "logout_api_v1_auth_logout_post",
+      "tags": [
+        "Authentication"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "operation_id": "me_api_v1_auth_me_get",
+      "tags": [
+        "Authentication"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/mfa",
+      "operation_id": "mfa_status_api_v1_auth_mfa_get",
+      "tags": [
+        "Authentication"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/mfa/enroll",
+      "operation_id": "mfa_enroll_api_v1_auth_mfa_enroll_post",
+      "tags": [
+        "Authentication"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/mfa/confirm",
+      "operation_id": "mfa_confirm_api_v1_auth_mfa_confirm_post",
+      "tags": [
+        "Authentication"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tenants",
+      "operation_id": "tenants_api_v1_tenants_get",
+      "tags": [
+        "Organizations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/clients",
+      "operation_id": "listing_api_v1_clients_get",
+      "tags": [
+        "Clients"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/clients",
+      "operation_id": "create_api_v1_clients_post",
+      "tags": [
+        "Clients"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/clients/{identifier}",
+      "operation_id": "get_api_v1_clients__identifier__get",
+      "tags": [
+        "Clients"
+      ]
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/clients/{identifier}",
+      "operation_id": "patch_api_v1_clients__identifier__patch",
+      "tags": [
+        "Clients"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/entities",
+      "operation_id": "listing_api_v1_entities_get",
+      "tags": [
+        "Entities"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/entities",
+      "operation_id": "create_api_v1_entities_post",
+      "tags": [
+        "Entities"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/entities/{identifier}",
+      "operation_id": "get_api_v1_entities__identifier__get",
+      "tags": [
+        "Entities"
+      ]
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/entities/{identifier}",
+      "operation_id": "patch_api_v1_entities__identifier__patch",
+      "tags": [
+        "Entities"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements",
+      "operation_id": "listing_api_v1_engagements_get",
+      "tags": [
+        "Engagements"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements",
+      "operation_id": "create_api_v1_engagements_post",
+      "tags": [
+        "Engagements"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{identifier}",
+      "operation_id": "get_api_v1_engagements__identifier__get",
+      "tags": [
+        "Engagements"
+      ]
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/engagements/{identifier}",
+      "operation_id": "patch_api_v1_engagements__identifier__patch",
+      "tags": [
+        "Engagements"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/financial-periods",
+      "operation_id": "create_api_v1_financial_periods_post",
+      "tags": [
+        "Financial periods"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/health",
+      "operation_id": "health_api_v1_ai_health_get",
+      "tags": [
+        "AI gateway"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/models",
+      "operation_id": "models_api_v1_ai_models_get",
+      "tags": [
+        "AI gateway"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/execute",
+      "operation_id": "run_api_v1_ai_execute_post",
+      "tags": [
+        "AI gateway"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/executions/{identifier}",
+      "operation_id": "execution_api_v1_ai_executions__identifier__get",
+      "tags": [
+        "AI gateway"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/jobs/diagnostic",
+      "operation_id": "diagnostic_api_v1_jobs_diagnostic_post",
+      "tags": [
+        "Background jobs"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/jobs/{identifier}",
+      "operation_id": "get_api_v1_jobs__identifier__get",
+      "tags": [
+        "Background jobs"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/jobs/{identifier}/retry",
+      "operation_id": "retry_api_v1_jobs__identifier__retry_post",
+      "tags": [
+        "Background jobs"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/jobs/{identifier}/cancel",
+      "operation_id": "cancel_api_v1_jobs__identifier__cancel_post",
+      "tags": [
+        "Background jobs"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/health/live",
+      "operation_id": "live_health_live_get",
+      "tags": [
+        "Health"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/health/ready",
+      "operation_id": "ready_health_ready_get",
+      "tags": [
+        "Health"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/system/version",
+      "operation_id": "version_api_v1_system_version_get",
+      "tags": [
+        "Health"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ifrs/engagements/{eid}/ai-actions",
+      "operation_id": "suggest_api_v1_ifrs_engagements__eid__ai_actions_post",
+      "tags": [
+        "Engagement AI assistance"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tax/legislation",
+      "operation_id": "legislation_api_v1_tax_legislation_get",
+      "tags": [
+        "Corporate Tax"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tax/engagements/{eid}/workspace",
+      "operation_id": "workspace_api_v1_tax_engagements__eid__workspace_get",
+      "tags": [
+        "Corporate Tax"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tax/engagements/{eid}/records/{kind}",
+      "operation_id": "records_api_v1_tax_engagements__eid__records__kind__get",
+      "tags": [
+        "Corporate Tax"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tax/engagements/{eid}/records/{kind}",
+      "operation_id": "create_api_v1_tax_engagements__eid__records__kind__post",
+      "tags": [
+        "Corporate Tax"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tax/engagements/{eid}/computations/{profile_id}",
+      "operation_id": "compute_api_v1_tax_engagements__eid__computations__profile_id__post",
+      "tags": [
+        "Corporate Tax"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tax/engagements/{eid}/calculate/{rid}",
+      "operation_id": "calculate_api_v1_tax_engagements__eid__calculate__rid__post",
+      "tags": [
+        "Corporate Tax"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tax/engagements/{eid}/runs",
+      "operation_id": "runs_api_v1_tax_engagements__eid__runs_get",
+      "tags": [
+        "Corporate Tax"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tax/engagements/{eid}/loss-transfers/{rid}/post",
+      "operation_id": "post_transfer_api_v1_tax_engagements__eid__loss_transfers__rid__post_post",
+      "tags": [
+        "Corporate Tax"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tax/engagements/{eid}/runs/{rid}",
+      "operation_id": "result_api_v1_tax_engagements__eid__runs__rid__get",
+      "tags": [
+        "Corporate Tax"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tax/engagements/{eid}/loss-ledger/{profile_id}",
+      "operation_id": "losses_api_v1_tax_engagements__eid__loss_ledger__profile_id__get",
+      "tags": [
+        "Corporate Tax"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tax/engagements/{eid}/runs/{rid}/export/{format}",
+      "operation_id": "export_api_v1_tax_engagements__eid__runs__rid__export__format__get",
+      "tags": [
+        "Corporate Tax"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tax/engagements/{eid}/ai",
+      "operation_id": "suggest_api_v1_tax_engagements__eid__ai_post",
+      "tags": [
+        "Tax AI assistance"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tax/engagements/{eid}/ai/{rid}/decision",
+      "operation_id": "decide_api_v1_tax_engagements__eid__ai__rid__decision_post",
+      "tags": [
+        "Tax AI assistance"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vat/legislation",
+      "operation_id": "legislation_api_v1_vat_legislation_get",
+      "tags": [
+        "VAT and e-invoicing"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vat/demo-status",
+      "operation_id": "demo_status_api_v1_vat_demo_status_get",
+      "tags": [
+        "VAT and e-invoicing"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vat/engagements/{eid}/workspace",
+      "operation_id": "workspace_api_v1_vat_engagements__eid__workspace_get",
+      "tags": [
+        "VAT and e-invoicing"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vat/engagements/{eid}/records/{kind}",
+      "operation_id": "records_api_v1_vat_engagements__eid__records__kind__get",
+      "tags": [
+        "VAT and e-invoicing"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vat/engagements/{eid}/records/{kind}",
+      "operation_id": "create_api_v1_vat_engagements__eid__records__kind__post",
+      "tags": [
+        "VAT and e-invoicing"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vat/engagements/{eid}/invoices/{rid}/validate",
+      "operation_id": "validate_invoice_api_v1_vat_engagements__eid__invoices__rid__validate_post",
+      "tags": [
+        "VAT and e-invoicing"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vat/engagements/{eid}/invoices/{rid}/extract/{evidence_id}",
+      "operation_id": "extract_document_api_v1_vat_engagements__eid__invoices__rid__extract__evidence_id__post",
+      "tags": [
+        "VAT and e-invoicing"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vat/engagements/{eid}/computations/{pid}",
+      "operation_id": "compute_api_v1_vat_engagements__eid__computations__pid__post",
+      "tags": [
+        "VAT and e-invoicing"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vat/engagements/{eid}/runs",
+      "operation_id": "runs_api_v1_vat_engagements__eid__runs_get",
+      "tags": [
+        "VAT and e-invoicing"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vat/engagements/{eid}/runs/{rid}",
+      "operation_id": "result_api_v1_vat_engagements__eid__runs__rid__get",
+      "tags": [
+        "VAT and e-invoicing"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vat/engagements/{eid}/assessments/{rid}",
+      "operation_id": "assess_api_v1_vat_engagements__eid__assessments__rid__post",
+      "tags": [
+        "VAT and e-invoicing"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vat/engagements/{eid}/sandbox",
+      "operation_id": "sandbox_api_v1_vat_engagements__eid__sandbox_post",
+      "tags": [
+        "VAT and e-invoicing"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vat/engagements/{eid}/runs/{rid}/export/json",
+      "operation_id": "export_api_v1_vat_engagements__eid__runs__rid__export_json_get",
+      "tags": [
+        "VAT and e-invoicing"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vat/engagements/{eid}/ai",
+      "operation_id": "suggest_api_v1_vat_engagements__eid__ai_post",
+      "tags": [
+        "VAT AI assistance"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vat/engagements/{eid}/ai/{rid}/decision",
+      "operation_id": "decide_api_v1_vat_engagements__eid__ai__rid__decision_post",
+      "tags": [
+        "VAT AI assistance"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/client-documents",
+      "operation_id": "client_documents_api_v1_tp_client_documents_get",
+      "tags": [
+        "Transfer pricing"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/client-documents/{rid}/download",
+      "operation_id": "client_document_download_api_v1_tp_client_documents__rid__download_get",
+      "tags": [
+        "Transfer pricing"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/legislation",
+      "operation_id": "legislation_api_v1_tp_legislation_get",
+      "tags": [
+        "Transfer pricing"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/engagements/{eid}/workspace",
+      "operation_id": "workspace_api_v1_tp_engagements__eid__workspace_get",
+      "tags": [
+        "Transfer pricing"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/engagements/{eid}/records/{kind}",
+      "operation_id": "records_api_v1_tp_engagements__eid__records__kind__get",
+      "tags": [
+        "Transfer pricing"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tp/engagements/{eid}/records/{kind}",
+      "operation_id": "create_api_v1_tp_engagements__eid__records__kind__post",
+      "tags": [
+        "Transfer pricing"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tp/engagements/{eid}/datasets/{rid}/import",
+      "operation_id": "import_comparables_api_v1_tp_engagements__eid__datasets__rid__import_post",
+      "tags": [
+        "Transfer pricing"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/engagements/{eid}/observations",
+      "operation_id": "observations_api_v1_tp_engagements__eid__observations_get",
+      "tags": [
+        "Transfer pricing"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tp/engagements/{eid}/calculate/{rid}",
+      "operation_id": "calculate_api_v1_tp_engagements__eid__calculate__rid__post",
+      "tags": [
+        "Transfer pricing"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tp/engagements/{eid}/matrix/{pid}",
+      "operation_id": "matrix_api_v1_tp_engagements__eid__matrix__pid__post",
+      "tags": [
+        "Transfer pricing"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tp/engagements/{eid}/jobs/{jid}/{operation}",
+      "operation_id": "control_job_api_v1_tp_engagements__eid__jobs__jid___operation__post",
+      "tags": [
+        "Transfer pricing"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/engagements/{eid}/runs",
+      "operation_id": "runs_api_v1_tp_engagements__eid__runs_get",
+      "tags": [
+        "Transfer pricing"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/engagements/{eid}/runs/{rid}",
+      "operation_id": "result_api_v1_tp_engagements__eid__runs__rid__get",
+      "tags": [
+        "Transfer pricing"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/engagements/{eid}/graph/{pid}",
+      "operation_id": "graph_api_v1_tp_engagements__eid__graph__pid__get",
+      "tags": [
+        "Transfer pricing"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/engagements/{eid}/candidates/{pid}",
+      "operation_id": "candidates_api_v1_tp_engagements__eid__candidates__pid__get",
+      "tags": [
+        "Transfer pricing"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tp/engagements/{eid}/runs/{rid}/tax-adjustment",
+      "operation_id": "link_tax_api_v1_tp_engagements__eid__runs__rid__tax_adjustment_post",
+      "tags": [
+        "Transfer pricing"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/engagements/{eid}/runs/{rid}/export/{format}",
+      "operation_id": "export_api_v1_tp_engagements__eid__runs__rid__export__format__get",
+      "tags": [
+        "Transfer pricing"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tp/engagements/{eid}/ai",
+      "operation_id": "suggest_api_v1_tp_engagements__eid__ai_post",
+      "tags": [
+        "TP AI assistance"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tp/engagements/{eid}/ai/{rid}/decision",
+      "operation_id": "decide_api_v1_tp_engagements__eid__ai__rid__decision_post",
+      "tags": [
+        "TP AI assistance"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ml/engagements/{eid}/datasets",
+      "operation_id": "build_dataset_api_v1_ml_engagements__eid__datasets_post",
+      "tags": [
+        "Governed audit machine learning"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ml/predictions/{identifier}/explanation",
+      "operation_id": "explanation_api_v1_ml_predictions__identifier__explanation_post",
+      "tags": [
+        "Governed audit machine learning"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ml/datasets/{identifier}/curation",
+      "operation_id": "curate_api_v1_ml_datasets__identifier__curation_post",
+      "tags": [
+        "Governed audit machine learning"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ml/jobs/{identifier}",
+      "operation_id": "job_status_api_v1_ml_jobs__identifier__get",
+      "tags": [
+        "Governed audit machine learning"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ml/jobs/{identifier}/cancel",
+      "operation_id": "cancel_api_v1_ml_jobs__identifier__cancel_post",
+      "tags": [
+        "Governed audit machine learning"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ml/events",
+      "operation_id": "events_api_v1_ml_events_get",
+      "tags": [
+        "Governed audit machine learning"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ml/events/{identifier}",
+      "operation_id": "detail_api_v1_ml_events__identifier__get",
+      "tags": [
+        "Governed audit machine learning"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ml/training-jobs",
+      "operation_id": "training_api_v1_ml_training_jobs_post",
+      "tags": [
+        "Governed audit machine learning"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ml/models/{identifier}/approval-requests",
+      "operation_id": "submit_approval_api_v1_ml_models__identifier__approval_requests_post",
+      "tags": [
+        "Governed audit machine learning"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ml/models/{identifier}/approvals",
+      "operation_id": "approve_api_v1_ml_models__identifier__approvals_post",
+      "tags": [
+        "Governed audit machine learning"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ml/models/{identifier}/deployments",
+      "operation_id": "deploy_api_v1_ml_models__identifier__deployments_post",
+      "tags": [
+        "Governed audit machine learning"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ml/inference/batches",
+      "operation_id": "inference_api_v1_ml_inference_batches_post",
+      "tags": [
+        "Governed audit machine learning"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ml/predictions/{identifier}/feedback",
+      "operation_id": "feedback_api_v1_ml_predictions__identifier__feedback_post",
+      "tags": [
+        "Governed audit machine learning"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/dmtt/legislation",
+      "operation_id": "rules_api_v1_dmtt_legislation_get",
+      "tags": [
+        "UAE Pillar Two"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/dmtt/engagements/{eid}/workspace",
+      "operation_id": "workspace_api_v1_dmtt_engagements__eid__workspace_get",
+      "tags": [
+        "UAE Pillar Two"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/dmtt/engagements/{eid}/records/{kind}",
+      "operation_id": "records_api_v1_dmtt_engagements__eid__records__kind__get",
+      "tags": [
+        "UAE Pillar Two"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/dmtt/engagements/{eid}/records/{kind}",
+      "operation_id": "create_api_v1_dmtt_engagements__eid__records__kind__post",
+      "tags": [
+        "UAE Pillar Two"
+      ]
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/dmtt/engagements/{eid}/records/{rid}",
+      "operation_id": "update_api_v1_dmtt_engagements__eid__records__rid__patch",
+      "tags": [
+        "UAE Pillar Two"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/dmtt/engagements/{eid}/records/{rid}/actions",
+      "operation_id": "action_api_v1_dmtt_engagements__eid__records__rid__actions_post",
+      "tags": [
+        "UAE Pillar Two"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/dmtt/engagements/{eid}/groups/{gid}/calculate",
+      "operation_id": "calculate_api_v1_dmtt_engagements__eid__groups__gid__calculate_post",
+      "tags": [
+        "UAE Pillar Two"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/dmtt/engagements/{eid}/calculations",
+      "operation_id": "calculations_api_v1_dmtt_engagements__eid__calculations_get",
+      "tags": [
+        "UAE Pillar Two"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/dmtt/engagements/{eid}/ai",
+      "operation_id": "assist_api_v1_dmtt_engagements__eid__ai_post",
+      "tags": [
+        "DMTT source-grounded AI"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/dmtt/engagements/{eid}/ai/{identifier}/accept",
+      "operation_id": "accept_api_v1_dmtt_engagements__eid__ai__identifier__accept_post",
+      "tags": [
+        "DMTT source-grounded AI"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/frameworks",
+      "operation_id": "frameworks_api_v1_grc_frameworks_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/workspace",
+      "operation_id": "workspace_api_v1_grc_engagements__eid__workspace_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/dashboard",
+      "operation_id": "dashboard_api_v1_grc_engagements__eid__dashboard_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/records/{kind}",
+      "operation_id": "listing_api_v1_grc_engagements__eid__records__kind__get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/records/{kind}",
+      "operation_id": "create_api_v1_grc_engagements__eid__records__kind__post",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/grc/engagements/{eid}/records/{rid}",
+      "operation_id": "update_api_v1_grc_engagements__eid__records__rid__patch",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/records/{rid}/actions",
+      "operation_id": "action_api_v1_grc_engagements__eid__records__rid__actions_post",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/records/{rid}/history",
+      "operation_id": "history_api_v1_grc_engagements__eid__records__rid__history_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/records/{rid}/calculate",
+      "operation_id": "calculate_api_v1_grc_engagements__eid__records__rid__calculate_post",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/internal-audits/{rid}/transitions",
+      "operation_id": "transition_api_v1_grc_engagements__eid__internal_audits__rid__transitions_post",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/runs",
+      "operation_id": "runs_api_v1_grc_engagements__eid__runs_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/monitoring/{rid}/execute",
+      "operation_id": "execute_api_v1_grc_engagements__eid__monitoring__rid__execute_post",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/alerts",
+      "operation_id": "alerts_api_v1_grc_engagements__eid__alerts_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/alerts/{identifier}/source",
+      "operation_id": "alert_source_api_v1_grc_engagements__eid__alerts__identifier__source_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/schedules",
+      "operation_id": "schedule_api_v1_grc_engagements__eid__schedules_post",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/schedules",
+      "operation_id": "schedules_api_v1_grc_engagements__eid__schedules_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/grc/engagements/{eid}/schedules/{identifier}",
+      "operation_id": "schedule_state_api_v1_grc_engagements__eid__schedules__identifier__patch",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/policies/{rid}/acknowledgments",
+      "operation_id": "acknowledge_api_v1_grc_engagements__eid__policies__rid__acknowledgments_post",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/notifications",
+      "operation_id": "notifications_api_v1_grc_engagements__eid__notifications_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/board/{rid}/publish",
+      "operation_id": "publish_api_v1_grc_engagements__eid__board__rid__publish_post",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/board/packages",
+      "operation_id": "package_directory_api_v1_grc_engagements__eid__board_packages_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/rcm",
+      "operation_id": "matrix_api_v1_grc_engagements__eid__rcm_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/samples",
+      "operation_id": "sampling_api_v1_grc_engagements__eid__samples_post",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/sod/import",
+      "operation_id": "import_access_api_v1_grc_engagements__eid__sod_import_post",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/board/packages/{identifier}",
+      "operation_id": "board_package_api_v1_grc_engagements__eid__board_packages__identifier__get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/board/packages/{identifier}/export/{format}",
+      "operation_id": "board_export_api_v1_grc_engagements__eid__board_packages__identifier__export__format__get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/ai",
+      "operation_id": "assist_api_v1_grc_engagements__eid__ai_post",
+      "tags": [
+        "Source-grounded GRC suggestions"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/agents",
+      "operation_id": "registry_api_v1_ai_agents_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/tools",
+      "operation_id": "tools_api_v1_ai_tools_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/command",
+      "operation_id": "command_api_v1_ai_command_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/investigations",
+      "operation_id": "investigations_api_v1_ai_engagements__eid__investigations_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}",
+      "operation_id": "detail_api_v1_ai_engagements__eid__investigations__identifier__get",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}/step",
+      "operation_id": "advance_api_v1_ai_engagements__eid__investigations__identifier__step_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}/export/{kind}",
+      "operation_id": "export_api_v1_ai_engagements__eid__investigations__identifier__export__kind__get",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/workspace",
+      "operation_id": "workspace_api_v1_ai_engagements__eid__workspace_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}/draft",
+      "operation_id": "draft_api_v1_ai_engagements__eid__investigations__identifier__draft_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}/dispatch",
+      "operation_id": "dispatch_api_v1_ai_engagements__eid__investigations__identifier__dispatch_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}/control",
+      "operation_id": "control_api_v1_ai_engagements__eid__investigations__identifier__control_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/approvals",
+      "operation_id": "propose_api_v1_ai_engagements__eid__approvals_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/approvals",
+      "operation_id": "approvals_api_v1_ai_engagements__eid__approvals_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/approvals/{identifier}/decision",
+      "operation_id": "decision_api_v1_ai_engagements__eid__approvals__identifier__decision_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/approvals/{identifier}/execute",
+      "operation_id": "execute_api_v1_ai_engagements__eid__approvals__identifier__execute_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/documents",
+      "operation_id": "extract_api_v1_ai_engagements__eid__documents_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/documents",
+      "operation_id": "document_list_api_v1_ai_engagements__eid__documents_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/documents/{identifier}/corrections",
+      "operation_id": "correction_api_v1_ai_engagements__eid__documents__identifier__corrections_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/documents/{identifier}/matches",
+      "operation_id": "matches_api_v1_ai_engagements__eid__documents__identifier__matches_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/documents/{identifier}/matches",
+      "operation_id": "match_decision_api_v1_ai_engagements__eid__documents__identifier__matches_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/knowledge/search",
+      "operation_id": "search_api_v1_ai_engagements__eid__knowledge_search_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/citations/{identifier}",
+      "operation_id": "citation_api_v1_ai_engagements__eid__citations__identifier__get",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/citations/verify",
+      "operation_id": "verify_citation_api_v1_ai_engagements__eid__citations_verify_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/knowledge/sources",
+      "operation_id": "regulatory_sources_api_v1_ai_knowledge_sources_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/workflows/validate",
+      "operation_id": "graph_api_v1_ai_engagements__eid__workflows_validate_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/workflows",
+      "operation_id": "save_template_api_v1_ai_engagements__eid__workflows_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/workflows",
+      "operation_id": "templates_api_v1_ai_engagements__eid__workflows_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/providers",
+      "operation_id": "providers_api_v1_ai_providers_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/usage",
+      "operation_id": "usage_api_v1_ai_engagements__eid__usage_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}/evaluate",
+      "operation_id": "evaluate_api_v1_ai_engagements__eid__investigations__identifier__evaluate_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/security-events",
+      "operation_id": "security_events_api_v1_ai_engagements__eid__security_events_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/schedules",
+      "operation_id": "schedule_api_v1_ai_engagements__eid__schedules_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/schedules",
+      "operation_id": "schedules_api_v1_ai_engagements__eid__schedules_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/schedules/{identifier}/pause",
+      "operation_id": "pause_schedule_api_v1_ai_engagements__eid__schedules__identifier__pause_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/subscriptions/current",
+      "operation_id": "current_api_v1_subscriptions_current_get",
+      "tags": [
+        "SaaS operations"
+      ]
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/platform/tenants/{tenant_id}/subscription",
+      "operation_id": "change_api_v1_platform_tenants__tenant_id__subscription_put",
+      "tags": [
+        "SaaS operations"
+      ]
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/platform/tenants/{tenant_id}",
+      "operation_id": "lifecycle_api_v1_platform_tenants__tenant_id__patch",
+      "tags": [
+        "SaaS operations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/platform/qa-center",
+      "operation_id": "qa_center_api_v1_platform_qa_center_get",
+      "tags": [
+        "SaaS operations"
+      ]
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/platform/{area}",
+      "operation_id": "workspace_api_v1_platform__area__get",
+      "tags": [
+        "SaaS operations"
+      ]
+    }
+  ],
+  "tables": [
+    {
+      "tablename": "account_mappings",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "accounting_connections",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "accounts",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "ai_approval_requests",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "ai_document_chunks",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "ai_document_extractions",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "ai_document_match_decisions",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "ai_executions",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "ai_model_configurations",
+      "rowsecurity": false
+    },
+    {
+      "tablename": "ai_prompt_templates",
+      "rowsecurity": false
+    },
+    {
+      "tablename": "ai_providers",
+      "rowsecurity": false
+    },
+    {
+      "tablename": "ai_scheduled_workflows",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "ai_usage_records",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "ai_workflow_events",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "ai_workflow_runs",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "alembic_version",
+      "rowsecurity": false
+    },
+    {
+      "tablename": "audit_access_grants",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "audit_analytics_runs",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "audit_client_access",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "audit_engagement_policies",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "audit_events",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "audit_evidence_versions",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "audit_findings",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "audit_invitations",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "audit_methodology_versions",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "audit_record_versions",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "audit_records",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "audit_review_decisions",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "audit_role_policies",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "audit_rule_results",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "audit_rules",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "background_jobs",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "clients",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "connection_sync_runs",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "ct_computation_runs",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "ct_current_releases",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "ct_loss_postings",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "currencies",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "data_transformations",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "engagement_team_members",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "engagements",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "entity_relationships",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "exchange_rates",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "financial_ai_suggestions",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "financial_periods",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "grc_execution_snapshots",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "grc_monitor_alerts",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "grc_monitor_schedules",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "ifrs_calculation_runs",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "ifrs_standards_registry",
+      "rowsecurity": false
+    },
+    {
+      "tablename": "import_batches",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "import_files",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "import_snapshots",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "import_validation_results",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "journal_entries",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "journal_lines",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "legal_entities",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "membership_roles",
+      "rowsecurity": false
+    },
+    {
+      "tablename": "ml_registry_events",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "permissions",
+      "rowsecurity": false
+    },
+    {
+      "tablename": "platform_operations",
+      "rowsecurity": false
+    },
+    {
+      "tablename": "platform_operators",
+      "rowsecurity": false
+    },
+    {
+      "tablename": "reconciliation_exceptions",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "reconciliation_runs",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "refresh_sessions",
+      "rowsecurity": false
+    },
+    {
+      "tablename": "risk_scores",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "role_permissions",
+      "rowsecurity": false
+    },
+    {
+      "tablename": "roles",
+      "rowsecurity": false
+    },
+    {
+      "tablename": "sampling_items",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "sampling_runs",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "source_integrity_checks",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "source_records",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "synthetic_datasets",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "system_settings",
+      "rowsecurity": false
+    },
+    {
+      "tablename": "tenant_memberships",
+      "rowsecurity": false
+    },
+    {
+      "tablename": "tenant_subscriptions",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "tenant_usage_counters",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "tenants",
+      "rowsecurity": false
+    },
+    {
+      "tablename": "tp_calculation_runs",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "tp_comparable_observations",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "trial_balance_lines",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "trial_balance_snapshots",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "upload_sessions",
+      "rowsecurity": true
+    },
+    {
+      "tablename": "users",
+      "rowsecurity": false
+    },
+    {
+      "tablename": "vat_computation_runs",
+      "rowsecurity": true
+    }
+  ]
+}

@@ -1,0 +1,138 @@
+
+Running 4 tests using 1 worker
+
+(node:26848) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 e2e\qa-campaign.spec.ts:9:1 › public login and invitation routes reflow on mobile (546ms)
+  ok 2 e2e\qa-campaign.spec.ts:21:1 › MFA platform operator reads persisted campaign results and cannot read client data (1.6s)
+  x  3 e2e\qa-campaign.spec.ts:54:1 › every source-discovered workspace renders and records actual controls, errors and network results (2.2m)
+(node:23948) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 4 e2e\qa-campaign.spec.ts:86:1 › client search, status filter, edit persistence and backend denial stay functional (4.0s)
+
+
+  1) e2e\qa-campaign.spec.ts:54:1 › every source-discovered workspace renders and records actual controls, errors and network results 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 90
+
+    - Array []
+    + Array [
+    +   Object {
+    +     "alerts": Array [
+    +       "Backend unavailableYour firm permissions and service availability apply. Retry",
+    +       "",
+    +     ],
+    +     "classification": "RENDERED_ACTIONS_NOT_FULLY_VERIFIED",
+    +     "controls": Array [
+    +       Object {
+    +         "disabled": false,
+    +         "label": "Retry",
+    +       },
+    +     ],
+    +     "coverage": "render and inventory; mutation actions covered separately",
+    +     "errors": Array [],
+    +     "failed": Array [
+    +       "503 /api/session",
+    +     ],
+    +     "horizontalOverflow": false,
+    +     "route": "/ai/approvals",
+    +     "seconds": 0.598,
+    +     "status": 200,
+    +   },
+    +   Object {
+    +     "alerts": Array [
+    +       "Backend unavailableYour firm permissions and service availability apply. Retry",
+    +       "",
+    +     ],
+    +     "classification": "RENDERED_ACTIONS_NOT_FULLY_VERIFIED",
+    +     "controls": Array [
+    +       Object {
+    +         "disabled": false,
+    +         "label": "Retry",
+    +       },
+    +     ],
+    +     "coverage": "render and inventory; mutation actions covered separately",
+    +     "errors": Array [],
+    +     "failed": Array [
+    +       "503 /api/session",
+    +     ],
+    +     "horizontalOverflow": false,
+    +     "route": "/ai/citations",
+    +     "seconds": 0.573,
+    +     "status": 200,
+    +   },
+    +   Object {
+    +     "alerts": Array [
+    +       "Backend unavailableYour firm permissions and service availability apply. Retry",
+    +       "",
+    +     ],
+    +     "classification": "RENDERED_ACTIONS_NOT_FULLY_VERIFIED",
+    +     "controls": Array [
+    +       Object {
+    +         "disabled": false,
+    +         "label": "Retry",
+    +       },
+    +     ],
+    +     "coverage": "render and inventory; mutation actions covered separately",
+    +     "errors": Array [],
+    +     "failed": Array [
+    +       "503 /api/session",
+    +     ],
+    +     "horizontalOverflow": false,
+    +     "route": "/ai/command-center",
+    +     "seconds": 0.59,
+    +     "status": 200,
+    +   },
+    +   Object {
+    +     "alerts": Array [
+    +       "Backend unavailableYour firm permissions and service availability apply. Retry",
+    +       "",
+    +     ],
+    +     "classification": "RENDERED_ACTIONS_NOT_FULLY_VERIFIED",
+    +     "controls": Array [
+    +       Object {
+    +         "disabled": false,
+    +         "label": "Retry",
+    +       },
+    +     ],
+    +     "coverage": "render and inventory; mutation actions covered separately",
+    +     "errors": Array [],
+    +     "failed": Array [
+    +       "503 /api/session",
+    +     ],
+    +     "horizontalOverflow": false,
+    +     "route": "/ai/designer",
+    +     "seconds": 0.605,
+    +     "status": 200,
+    +   },
+    + ]
+
+      81 |   writeFileSync("../docs/qa-campaign/frontend-route-results.json",JSON.stringify(results,null,2));
+      82 |   expect(results.filter(r=>(r as {errors:string[]}).errors.length)).toEqual([]);
+    > 83 |   expect(results.filter(r=>(r as {failed:string[]}).failed.length)).toEqual([]);
+         |                                                                     ^
+      84 | });
+      85 |
+      86 | test("client search, status filter, edit persistence and backend denial stay functional",async({page})=>{
+        at C:\Indian Servers\TheAuditor\frontend\e2e\qa-campaign.spec.ts:83:69
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\qa-campaign-every-source-d-384ea--errors-and-network-results\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\qa-campaign-every-source-d-384ea--errors-and-network-results\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\qa-campaign-every-source-d-384ea--errors-and-network-results\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\qa-campaign-every-source-d-384ea--errors-and-network-results\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    e2e\qa-campaign.spec.ts:54:1 › every source-discovered workspace renders and records actual controls, errors and network results 
+  3 passed (2.4m)

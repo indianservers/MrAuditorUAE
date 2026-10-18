@@ -5,7 +5,7 @@ from typing import Any
 
 from fastapi import HTTPException
 from pydantic import ValidationError
-from sqlalchemy import func, select
+from sqlalchemy import Text, cast, func, select
 
 from app.db.models.platform import Engagement, LegalEntity, Membership, User
 from app.modules.accounting.models import (
@@ -147,6 +147,8 @@ async def source_record(db, ctx, eng, source):
         raise HTTPException(422, "Source outside engagement scope")
     if source.kind == "record" and obj.kind.startswith("ifrs-"):
         await engagement_permissions(db, ctx, eng.id, "ifrs.read")
+    if source.kind == "record" and obj.status == "ARCHIVED":
+        raise HTTPException(409, "Archived draft cannot be linked as current evidence")
     if source.kind == "record" and obj.kind.startswith("tax-"):
         await engagement_permissions(db, ctx, eng.id, "tax.profile.read")
     if source.kind == "record" and obj.kind.startswith("vat-"):
@@ -383,12 +385,92 @@ async def reviewer_separation(db, ctx, obj):
         raise HTTPException(403, "Preparers cannot approve or review their own work")
 
 
+async def draft_lifecycle(db, ctx, obj, data, request_id):
+    if len(data.comments.strip()) < 10:
+        raise HTTPException(422, "A lifecycle reason of at least ten characters is required")
+    if obj.kind not in {
+        "working-papers",
+        "risks",
+        "vat-invoice",
+        "requests",
+        "planning",
+        "programs",
+        "procedures",
+    }:
+        raise HTTPException(409, "This record requires its governed workflow, not draft archival")
+    await engagement_permissions(db, ctx, obj.engagement_id, PREPARE[obj.kind])
+    if data.action == "archive":
+        if obj.status not in {"DRAFT", "IN_PROGRESS"}:
+            raise HTTPException(409, "Only unused unapproved drafts may be archived")
+        reviewed = await db.scalar(
+            select(AuditRevision.id)
+            .where(
+                AuditRevision.record_id == obj.id,
+                AuditRevision.snapshot["status"].astext.in_(["APPROVED", "LOCKED"]),
+            )
+            .limit(1)
+        )
+        referenced = await db.scalar(
+            select(AuditRecord.id)
+            .where(
+                AuditRecord.tenant_id == ctx.tenant_id,
+                AuditRecord.engagement_id == obj.engagement_id,
+                AuditRecord.id != obj.id,
+                AuditRecord.status != "ARCHIVED",
+                cast(AuditRecord.body, Text).contains(str(obj.id), autoescape=True),
+            )
+            .limit(1)
+        )
+        if reviewed or referenced:
+            raise HTTPException(
+                409, "Reviewed or referenced records must be retained; supersede through review"
+            )
+        obj.status = "ARCHIVED"
+    else:
+        if obj.status != "ARCHIVED":
+            raise HTTPException(409, "Only archived drafts can be restored")
+        prior = await db.scalar(
+            select(AuditRevision)
+            .where(
+                AuditRevision.record_id == obj.id,
+                AuditRevision.snapshot["status"].astext != "ARCHIVED",
+            )
+            .order_by(AuditRevision.version.desc())
+            .limit(1)
+        )
+        if not prior or prior.snapshot["status"] not in {"DRAFT", "IN_PROGRESS"}:
+            raise HTTPException(409, "Restoration requires an original editable draft")
+        eng = await engagement(db, ctx, obj.engagement_id, PREPARE[obj.kind], True)
+        await validate_body(
+            db,
+            ctx,
+            eng,
+            obj.kind,
+            {k: v for k, v in obj.body.items() if k in BODIES[obj.kind].model_fields},
+            obj.id,
+        )
+        obj.status = prior.snapshot["status"]
+    obj.version += 1
+    await revision(db, ctx, obj, request_id, data.action + "d")
+    record(
+        db,
+        ctx,
+        "audit.lifecycle",
+        obj.id,
+        request_id,
+        {"action": data.action, "reason": data.comments, "version": obj.version},
+    )
+    return serialize(obj)
+
+
 async def action(db, ctx, eid, rid, data, request_id):
     obj = await get_record(db, ctx, eid, rid, mutable=True)
     if obj.kind == "tp-ai":
         raise HTTPException(409, "Use the independently grounded TP AI decision workflow")
     if obj.version != data.version:
         raise HTTPException(409, "Record version conflict")
+    if data.action in {"archive", "restore"}:
+        return await draft_lifecycle(db, ctx, obj, data, request_id)
     prior = obj.status
     if obj.kind.startswith("ifrs-"):
         from app.modules.ifrs.service import validate_action

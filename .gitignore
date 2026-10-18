@@ -5,6 +5,8 @@ frontend/node_modules/
 ml-engine/node_modules/
 ml-engine/dist/
 frontend/.next/
+frontend/.next-qa/
+frontend/.next-qa-build/
 frontend/.env.local
 frontend/tsconfig.tsbuildinfo
 frontend/test-results/

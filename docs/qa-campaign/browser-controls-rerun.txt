@@ -1,0 +1,47 @@
+
+Running 1 test using 1 worker
+
+(node:28512) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 e2e\qa-campaign.spec.ts:56:1 › client search, status filter, edit persistence and backend denial stay functional (23.7s)
+
+
+  1) e2e\qa-campaign.spec.ts:56:1 › client search, status filter, edit persistence and backend denial stay functional 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: locator('.ag-cell strong').filter({ hasText: 'QA FICTIONAL 01 General Trading' })
+    Expected: visible
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" locator('.ag-cell strong').filter({ hasText: 'QA FICTIONAL 01 General Trading' }) with timeout 20000ms
+      - waiting for locator('.ag-cell strong').filter({ hasText: 'QA FICTIONAL 01 General Trading' })
+
+
+      60 |   await page.getByLabel("Client status filter").selectOption("active");
+      61 |   const cell=page.locator(".ag-cell strong").filter({hasText:"QA FICTIONAL 01 General Trading"});
+    > 62 |   await expect(cell).toBeVisible();await cell.click();
+         |                      ^
+      63 |   await page.getByRole("button",{name:"Edit client",exact:true}).click();
+      64 |   const saved=page.waitForResponse(r=>r.url().includes("/api/backend/clients/")&&r.request().method()==="PATCH");
+      65 |   await page.getByRole("button",{name:"Save client",exact:true}).click();
+        at C:\Indian Servers\TheAuditor\frontend\e2e\qa-campaign.spec.ts:62:22
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\qa-campaign-client-search--986bc-kend-denial-stay-functional\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\qa-campaign-client-search--986bc-kend-denial-stay-functional\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\qa-campaign-client-search--986bc-kend-denial-stay-functional\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\qa-campaign-client-search--986bc-kend-denial-stay-functional\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    e2e\qa-campaign.spec.ts:56:1 › client search, status filter, edit persistence and backend denial stay functional 

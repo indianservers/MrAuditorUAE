@@ -61,6 +61,8 @@ async def check_scope(db: AsyncSession, ctx: Context, data: ScopeInput):
     period = await scoped(db, ctx, FinancialPeriod, data.period_id)
     if entity.client_id != client.id or period.entity_id != entity.id:
         raise HTTPException(422, "Client, entity and period scope mismatch")
+    if client.status != "active" or entity.status != "active":
+        raise HTTPException(409, "Restore the archived client/entity before new accounting operations")
     return entity, period
 
 

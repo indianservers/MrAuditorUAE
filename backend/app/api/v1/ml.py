@@ -9,6 +9,7 @@ from app.core.dependencies import DB, Context, require
 from app.modules.audit_execution import service as audit
 from app.modules.audit_execution.schemas import Strict
 from app.modules.audit_log.service import record
+from app.modules.lineage.freshness import ml_current, require_ml_current, state
 from app.modules.ml import service
 from app.modules.ml.models import MLEvent
 
@@ -91,6 +92,7 @@ async def explanation(
     from app.modules.financial_ai.schemas import AnomalyExplanation, GatewayInput
 
     source = await service.get(db, ctx, identifier, "inference", "ml.feedback")
+    await require_ml_current(db, ctx, source)
     prediction = next(
         (p for p in source.body["predictions"] if p["transaction_id"] == data.transaction_id), None
     )
@@ -302,7 +304,9 @@ async def events(
         )
     ).all()
     return {
-        "items": [audit.serialize(r) for r in rows],
+        "items": [
+            {**audit.serialize(r), "freshness": state(await ml_current(db, ctx, r))} for r in rows
+        ],
         "total": await db.scalar(select(func.count()).select_from(MLEvent).where(*where)),
     }
 
@@ -310,12 +314,19 @@ async def events(
 @router.get("/events/{identifier}")
 async def detail(identifier: uuid.UUID, db: DB, ctx: Actor):
     obj = await service.get(db, ctx, identifier)
-    return audit.serialize(obj)
+    return {
+        **audit.serialize(obj),
+        "freshness": state(
+            await ml_current(db, ctx, obj),
+            ["Source receipts are evaluated against active snapshots and mapping versions"],
+        ),
+    }
 
 
 @router.post("/training-jobs", status_code=202)
 async def training(data: Training, db: DB, ctx: Actor, request: Request):
     source = await service.get(db, ctx, data.source_id, "dataset", "ml.train")
+    await require_ml_current(db, ctx, source)
     from app.workers.accounting import submit
 
     return await submit(
@@ -335,6 +346,7 @@ async def training(data: Training, db: DB, ctx: Actor, request: Request):
 @router.post("/models/{identifier}/approval-requests", status_code=201)
 async def submit_approval(identifier: uuid.UUID, data: Decision, db: DB, ctx: Actor):
     model = await service.get(db, ctx, identifier, "model", "ml.train")
+    await require_ml_current(db, ctx, model)
     return audit.serialize(
         await service.event(
             db, ctx, model.engagement_id, "approval_request", data.model_dump(), model.id
@@ -345,6 +357,7 @@ async def submit_approval(identifier: uuid.UUID, data: Decision, db: DB, ctx: Ac
 @router.post("/models/{identifier}/approvals", status_code=201)
 async def approve(identifier: uuid.UUID, data: Decision, db: DB, ctx: Actor):
     model = await service.get(db, ctx, identifier, "model", "ml.approve")
+    await require_ml_current(db, ctx, model)
     if model.created_by == ctx.user_id:
         raise HTTPException(403, "Independent model reviewer required")
     requested = await db.scalar(
@@ -366,6 +379,7 @@ async def approve(identifier: uuid.UUID, data: Decision, db: DB, ctx: Actor):
 @router.post("/models/{identifier}/deployments", status_code=201)
 async def deploy(identifier: uuid.UUID, data: Decision, db: DB, ctx: Actor):
     model = await service.get(db, ctx, identifier, "model", "ml.deploy")
+    await require_ml_current(db, ctx, model)
     approved = await db.scalar(
         select(MLEvent.id).where(
             MLEvent.tenant_id == ctx.tenant_id,
@@ -395,7 +409,10 @@ async def deploy(identifier: uuid.UUID, data: Decision, db: DB, ctx: Actor):
 
 @router.post("/inference/batches", status_code=202)
 async def inference(data: Inference, db: DB, ctx: Actor, request: Request):
-    await service.get(db, ctx, data.source_id, "deployment", "ml.score")
+    deployment = await service.get(db, ctx, data.source_id, "deployment", "ml.score")
+    await require_ml_current(db, ctx, deployment)
+    dataset = await service.get(db, ctx, data.dataset_id, "dataset", "ml.score")
+    await require_ml_current(db, ctx, dataset)
     from app.workers.accounting import submit
 
     return await submit(

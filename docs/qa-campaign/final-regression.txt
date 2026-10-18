@@ -1,0 +1,23 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.7.0
+rootdir: C:\Indian Servers\TheAuditor\backend
+configfile: pyproject.toml
+plugins: anyio-4.15.1, platformdirs-4.13.3, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 207 items
+
+tests\phase12\test_entrypoints.py ....                                   [  1%]
+tests\phase12\test_hardening.py ................                         [  9%]
+tests\phase12\test_qa_center.py ...                                      [ 11%]
+tests\phase12\test_release_gate.py .                                     [ 11%]
+tests\phase12\test_roles_and_admissions.py ............................. [ 25%]
+....................................                                     [ 42%]
+tests\phase2\test_ai_storage.py ..........                               [ 47%]
+tests\phase2\test_analytics.py .....................................     [ 65%]
+tests\phase2\test_calculations.py ...................................    [ 82%]
+tests\phase2\test_connectors.py ...............                          [ 89%]
+tests\phase2\test_live_connectors.py ss                                  [ 90%]
+tests\phase2\test_pipeline.py ...................                        [100%]
+
+- generated xml file: C:\Indian Servers\TheAuditor\docs\qa-campaign\final-regression.xml -
+================= 205 passed, 2 skipped in 119.61s (0:01:59) ==================

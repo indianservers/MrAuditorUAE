@@ -1,0 +1,194 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Indian Servers\\TheAuditor\\frontend\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.qa.config.ts",
+      "--grep",
+      "client search"
+    ],
+    "configFile": "C:\\Indian Servers\\TheAuditor\\frontend\\playwright.qa.config.ts",
+    "rootDir": "C:/Indian Servers/TheAuditor/frontend/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Indian Servers/TheAuditor/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Indian Servers/TheAuditor/frontend/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/qa-campaign\\.spec\\.ts/"
+        ],
+        "timeout": 900000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e",
+        "snapshotDir": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e",
+        "testIgnore": [],
+        "testMatch": {},
+        "timeout": 900000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3006",
+          "viewport": {
+            "width": 1600,
+            "height": 900
+          },
+          "reducedMotion": "reduce",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/qa-campaign/browser-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "qa-campaign.spec.ts",
+      "file": "qa-campaign.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "client search, status filter, edit persistence and backend denial stay functional",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 900000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 23720,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.ag-cell strong').filter({ hasText: 'QA FICTIONAL 01 General Trading' })\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.ag-cell strong').filter({ hasText: 'QA FICTIONAL 01 General Trading' }) with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for locator('.ag-cell strong').filter({ hasText: 'QA FICTIONAL 01 General Trading' })\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.ag-cell strong').filter({ hasText: 'QA FICTIONAL 01 General Trading' })\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.ag-cell strong').filter({ hasText: 'QA FICTIONAL 01 General Trading' }) with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for locator('.ag-cell strong').filter({ hasText: 'QA FICTIONAL 01 General Trading' })\u001b[22m\n\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-campaign.spec.ts:62:22",
+                    "location": {
+                      "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-campaign.spec.ts",
+                      "column": 22,
+                      "line": 62
+                    },
+                    "snippet": "  60 |   await page.getByLabel(\"Client status filter\").selectOption(\"active\");\n  61 |   const cell=page.locator(\".ag-cell strong\").filter({hasText:\"QA FICTIONAL 01 General Trading\"});\n> 62 |   await expect(cell).toBeVisible();await cell.click();\n     |                      ^\n  63 |   await page.getByRole(\"button\",{name:\"Edit client\",exact:true}).click();\n  64 |   const saved=page.waitForResponse(r=>r.url().includes(\"/api/backend/clients/\")&&r.request().method()===\"PATCH\");\n  65 |   await page.getByRole(\"button\",{name:\"Save client\",exact:true}).click();"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-campaign.spec.ts",
+                        "column": 22,
+                        "line": 62
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: locator('.ag-cell strong').filter({ hasText: 'QA FICTIONAL 01 General Trading' })\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" locator('.ag-cell strong').filter({ hasText: 'QA FICTIONAL 01 General Trading' }) with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for locator('.ag-cell strong').filter({ hasText: 'QA FICTIONAL 01 General Trading' })\u001b[22m\n\n\n  60 |   await page.getByLabel(\"Client status filter\").selectOption(\"active\");\n  61 |   const cell=page.locator(\".ag-cell strong\").filter({hasText:\"QA FICTIONAL 01 General Trading\"});\n> 62 |   await expect(cell).toBeVisible();await cell.click();\n     |                      ^\n  63 |   await page.getByRole(\"button\",{name:\"Edit client\",exact:true}).click();\n  64 |   const saved=page.waitForResponse(r=>r.url().includes(\"/api/backend/clients/\")&&r.request().method()===\"PATCH\");\n  65 |   await page.getByRole(\"button\",{name:\"Save client\",exact:true}).click();\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-campaign.spec.ts:62:22"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-18T07:14:04.535Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\qa-campaign-client-search--986bc-kend-denial-stay-functional\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\qa-campaign-client-search--986bc-kend-denial-stay-functional\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\qa-campaign-client-search--986bc-kend-denial-stay-functional\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-campaign.spec.ts",
+                    "column": 22,
+                    "line": 62
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "166483f19c0cfe491a02-e509c3de8d74de0a9b23",
+          "file": "qa-campaign.spec.ts",
+          "line": 56,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-18T07:14:04.098Z",
+    "duration": 24434.221999999998,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "route": "/login",
+    "status": 200,
+    "horizontalOverflow": false,
+    "width": 390
+  },
+  {
+    "route": "/join",
+    "status": 200,
+    "horizontalOverflow": false,
+    "width": 390
+  }
+]

@@ -38,9 +38,12 @@ class Settings(BaseSettings):
     demo_tenant_id: str = ""
     mfa_encryption_key: str = ""
     release_id: str = "development"
+    qa_campaign_enabled: bool = False
 
     @model_validator(mode="after")
     def secure_production(self):
+        if self.environment == "production" and self.qa_campaign_enabled:
+            raise ValueError("QA campaign controls are forbidden in production")
         if self.environment == "production" and (
             self.bootstrap_secret or len(self.jwt_secret) < 48
         ):

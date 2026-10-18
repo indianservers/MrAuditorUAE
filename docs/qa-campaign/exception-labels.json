@@ -1,0 +1,158 @@
+[
+  {
+    "case": "Duplicate supplier payments",
+    "source_id": "QA-LABEL-00-0",
+    "expected_rules": [
+      "J05"
+    ],
+    "coverage": "DIRECT_RULE",
+    "not_a_fraud_conclusion": true
+  },
+  {
+    "case": "Duplicate invoices",
+    "source_id": "QA-LABEL-01-0",
+    "expected_rules": [
+      "J05"
+    ],
+    "coverage": "DIRECT_RULE",
+    "not_a_fraud_conclusion": true
+  },
+  {
+    "case": "Unusual revenue",
+    "source_id": "QA-LABEL-02-0",
+    "expected_rules": [
+      "J07"
+    ],
+    "coverage": "DIRECT_RULE",
+    "not_a_fraud_conclusion": true
+  },
+  {
+    "case": "Year end anomaly",
+    "source_id": "QA-LABEL-03-0",
+    "expected_rules": [
+      "J10"
+    ],
+    "coverage": "DIRECT_RULE",
+    "not_a_fraud_conclusion": true
+  },
+  {
+    "case": "Incorrect account combination",
+    "source_id": "QA-LABEL-04-0",
+    "expected_rules": [
+      "J12"
+    ],
+    "coverage": "DIRECT_RULE",
+    "not_a_fraud_conclusion": true
+  },
+  {
+    "case": "Suspense balance",
+    "source_id": "QA-LABEL-05-0",
+    "expected_rules": [
+      "J16"
+    ],
+    "coverage": "DIRECT_RULE",
+    "not_a_fraud_conclusion": true
+  },
+  {
+    "case": "Unexpected credit note",
+    "source_id": "QA-LABEL-06-0",
+    "expected_rules": [],
+    "coverage": "REQUIRES_NON_GL_WORKFLOW_CONTEXT",
+    "not_a_fraud_conclusion": true
+  },
+  {
+    "case": "Missing invoice reference",
+    "source_id": "QA-LABEL-07-0",
+    "expected_rules": [],
+    "coverage": "REQUIRES_NON_GL_WORKFLOW_CONTEXT",
+    "not_a_fraud_conclusion": true
+  },
+  {
+    "case": "Round number",
+    "source_id": "QA-LABEL-08-0",
+    "expected_rules": [
+      "J04"
+    ],
+    "coverage": "DIRECT_RULE",
+    "not_a_fraud_conclusion": true
+  },
+  {
+    "case": "Reversal anomaly",
+    "source_id": "QA-LABEL-09-0",
+    "expected_rules": [],
+    "coverage": "REQUIRES_NON_GL_WORKFLOW_CONTEXT",
+    "not_a_fraud_conclusion": true
+  },
+  {
+    "case": "Related party misclassification",
+    "source_id": "QA-LABEL-10-0",
+    "expected_rules": [],
+    "coverage": "REQUIRES_NON_GL_WORKFLOW_CONTEXT",
+    "not_a_fraud_conclusion": true
+  },
+  {
+    "case": "Expense capitalization",
+    "source_id": "QA-LABEL-11-0",
+    "expected_rules": [],
+    "coverage": "REQUIRES_NON_GL_WORKFLOW_CONTEXT",
+    "not_a_fraud_conclusion": true
+  },
+  {
+    "case": "VAT coding",
+    "source_id": "QA-LABEL-12-0",
+    "expected_rules": [],
+    "coverage": "REQUIRES_NON_GL_WORKFLOW_CONTEXT",
+    "not_a_fraud_conclusion": true
+  },
+  {
+    "case": "Unreconciled balance",
+    "source_id": "QA-LABEL-13-0",
+    "expected_rules": [],
+    "coverage": "REQUIRES_NON_GL_WORKFLOW_CONTEXT",
+    "not_a_fraud_conclusion": true
+  },
+  {
+    "case": "Unsupported accrual",
+    "source_id": "QA-LABEL-14-0",
+    "expected_rules": [
+      "J07"
+    ],
+    "coverage": "DIRECT_RULE",
+    "not_a_fraud_conclusion": true
+  },
+  {
+    "case": "Unusual vendor activity",
+    "source_id": "QA-LABEL-15-0",
+    "expected_rules": [],
+    "coverage": "REQUIRES_NON_GL_WORKFLOW_CONTEXT",
+    "not_a_fraud_conclusion": true
+  },
+  {
+    "case": "SoD conflict",
+    "source_id": "QA-LABEL-16-0",
+    "expected_rules": [],
+    "coverage": "REQUIRES_NON_GL_WORKFLOW_CONTEXT",
+    "not_a_fraud_conclusion": true
+  },
+  {
+    "case": "Incomplete support",
+    "source_id": "QA-LABEL-17-0",
+    "expected_rules": [],
+    "coverage": "REQUIRES_NON_GL_WORKFLOW_CONTEXT",
+    "not_a_fraud_conclusion": true
+  },
+  {
+    "case": "Incorrect FS mapping",
+    "source_id": "QA-LABEL-18-0",
+    "expected_rules": [],
+    "coverage": "REQUIRES_NON_GL_WORKFLOW_CONTEXT",
+    "not_a_fraud_conclusion": true
+  },
+  {
+    "case": "Review failure",
+    "source_id": "QA-LABEL-19-0",
+    "expected_rules": [],
+    "coverage": "REQUIRES_NON_GL_WORKFLOW_CONTEXT",
+    "not_a_fraud_conclusion": true
+  }
+]

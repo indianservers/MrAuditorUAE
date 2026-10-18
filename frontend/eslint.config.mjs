@@ -5,6 +5,8 @@ export default tseslint.config(
   {
     ignores: [
       ".next/**",
+      ".next-qa/**",
+      ".next-qa-build/**",
       "src/types/api.generated.ts",
       "playwright-report/**",
       "test-results/**",

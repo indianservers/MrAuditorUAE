@@ -1,0 +1,16 @@
+Traceback (most recent call last):
+  File "C:\Indian Servers\TheAuditor\scripts\qa_crud_worker_probe.py", line 45, in <module>
+    asyncio.run(main())
+  File "C:\Users\Sai Satish\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 195, in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+  File "C:\Users\Sai Satish\AppData\Local\Programs\Python\Python312\Lib\asyncio\runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\Sai Satish\AppData\Local\Programs\Python\Python312\Lib\asyncio\base_events.py", line 691, in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+  File "C:\Indian Servers\TheAuditor\scripts\qa_crud_worker_probe.py", line 34, in main
+    detail = await client.get("/ml/events/" + result["result"]["id"], headers=headers)
+                                              ~~~~~~~~~~~~~~~~^^^^^^
+KeyError: 'id'

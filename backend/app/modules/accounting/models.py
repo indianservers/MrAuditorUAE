@@ -396,6 +396,12 @@ Index(
     JournalLine.account_id,
     JournalLine.posting_date,
 )
+Index(
+    "ix_lines_tenant_created_id",
+    JournalLine.tenant_id,
+    JournalLine.created_at,
+    JournalLine.id,
+)
 
 # Enforce both tenant and legal-entity/period alignment at the database boundary.
 for mapper in list(Base.registry.mappers):

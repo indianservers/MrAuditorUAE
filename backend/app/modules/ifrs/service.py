@@ -9,7 +9,7 @@ from fastapi import HTTPException
 from sqlalchemy import select
 
 from app.db.models.platform import Engagement, FinancialPeriod, LegalEntity
-from app.modules.accounting.models import ImportSnapshot
+from app.modules.accounting.models import ImportBatch, ImportSnapshot
 from app.modules.audit_execution import service as audit
 from app.modules.audit_execution.models import AuditRecord
 from app.modules.ifrs.calculations import calculate, serial
@@ -61,6 +61,9 @@ async def snapshot(db, ctx, eng, sid, comparative=False):
         or (not comparative and obj.period_id != eng.period_id)
     ):
         raise HTTPException(422, "Snapshot outside reporting entity/period")
+    batch = await db.get(ImportBatch, obj.batch_id)
+    if not batch or batch.status != "active":
+        raise HTTPException(409, "Reporting snapshot superseded; revise and review the profile")
     return obj
 
 
@@ -222,6 +225,14 @@ async def current_dependencies(db, ctx, eid, calculation):
         )
         if not obj or obj.version != item["version"] or obj.status not in APPROVED:
             return False
+        if obj.kind == "ifrs-profile":
+            for field in ["snapshot_id", "comparative_snapshot_id"]:
+                sid = obj.body.get(field)
+                if sid:
+                    snap = await db.get(ImportSnapshot, uuid.UUID(sid))
+                    batch = await db.get(ImportBatch, snap.batch_id) if snap else None
+                    if not batch or batch.status != "active":
+                        return False
         # For group members enforce resource access, not just tenant membership.
         await audit.engagement(db, ctx, obj.engagement_id, "ifrs.read")
     return True
@@ -337,6 +348,8 @@ async def adjusted_balance(db, ctx, eid, profile_id, comparative=False):
     sid = data.comparative_snapshot_id if comparative else data.snapshot_id
     if not sid:
         raise HTTPException(409, "Comparative snapshot not supplied")
+    eng = await audit.engagement(db, ctx, eid)
+    await snapshot(db, ctx, eng, sid, comparative)
     tb = await balance(db, ctx, sid)
     values = {r["code"]: {**r, "original": r["closing"], "adjustment": ZERO} for r in tb["lines"]}
     adjustments = (

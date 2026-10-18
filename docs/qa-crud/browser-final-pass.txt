@@ -1,0 +1,46 @@
+
+Running 4 tests using 1 worker
+
+(node:11276) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 e2e\qa-crud.spec.ts:19:1 › thirteen real role logins enforce server CRUD permissions (1.1m)
+  ok 2 e2e\qa-crud.spec.ts:47:1 › client form create edit archive restore with separate persisted API assertions (4.8s)
+  x  3 e2e\qa-crud.spec.ts:126:1 › working paper actual form creates a persisted draft (22.1s)
+(node:25836) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 4 e2e\qa-crud.spec.ts:171:1 › two tabs invalidate cached grids and reject an older open edit (4.4s)
+
+
+  1) e2e\qa-crud.spec.ts:126:1 › working paper actual form creates a persisted draft ───────────────
+
+    TimeoutError: locator.fill: Timeout 20000ms exceeded.
+    Call log:
+      - waiting for getByLabel(/^Folder/)
+
+
+      137 |     .getByLabel("Title", { exact: true })
+      138 |     .fill("SYNTHETIC browser lifecycle paper");
+    > 139 |   await page.getByLabel(/^Folder/).fill("Planning");
+          |                                    ^
+      140 |   await page.getByRole("button", { name: "Add section" }).click();
+      141 |   await page.getByLabel("Section 1 heading").fill("Objective");
+      142 |   await page
+        at C:\Indian Servers\TheAuditor\frontend\e2e\qa-crud.spec.ts:139:36
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\qa-crud-working-paper-actual-form-creates-a-persisted-draft\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\qa-crud-working-paper-actual-form-creates-a-persisted-draft\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\qa-crud-working-paper-actual-form-creates-a-persisted-draft\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\qa-crud-working-paper-actual-form-creates-a-persisted-draft\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    e2e\qa-crud.spec.ts:126:1 › working paper actual form creates a persisted draft ────────────────
+  3 passed (1.6m)

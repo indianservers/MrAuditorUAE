@@ -1,0 +1,459 @@
+FFF                                                                      [100%]
+================================== FAILURES ===================================
+_____________________ test_draft_archive_restore_history ______________________
+
+environment = <httpx.AsyncClient object at 0x0000023D3DEDD310>
+
+    async def test_draft_archive_restore_history(environment):
+        c = environment
+>       h, _, _, base = await setup(c)
+                        ^^^^^^^^^^^^^^
+
+tests\qa_crud\test_lifecycle.py:14: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase4\test_workflows.py:44: in setup
+    h, options = await scope(client)
+                 ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = <httpx.AsyncClient object at 0x0000023D3DEDD310>
+
+    async def scope(client):
+        headers, _ = await setup(client)
+        c = await client.post(
+            "/api/v1/clients",
+            headers=headers,
+            json={"code": "SYNTHETIC", "name": "FICTIONAL Gulf Example LLC � synthetic test only"},
+        )
+        e = await client.post(
+            "/api/v1/entities",
+            headers=headers,
+            json={
+                "client_id": c.json()["id"],
+                "name": "FICTIONAL synthetic entity",
+                "country": "AE",
+                "jurisdiction": "Synthetic",
+                "functional_currency": "AED",
+                "presentation_currency": "AED",
+            },
+        )
+        p = await client.post(
+            "/api/v1/financial-periods",
+            headers=headers,
+            json={"entity_id": e.json()["id"], "start_date": "2026-01-01", "end_date": "2026-12-31"},
+        )
+        return headers, {
+            "client_id": c.json()["id"],
+            "entity_id": e.json()["id"],
+>           "period_id": p.json()["id"],
+                         ^^^^^^^^^^^^^^
+            "expected_rows": 4,
+            "expected_debit": "110.30",
+            "expected_credit": "110.30",
+            "source_complete": True,
+        }
+E       KeyError: 'id'
+
+tests\phase2\test_pipeline.py:47: KeyError
+---------------------------- Captured stderr call -----------------------------
+{"timestamp": "2026-10-18T08:03:03.339849+00:00", "level": "INFO", "event": "http.request", "request_id": "41c21b56-174c-4089-ac65-54b6400ddf08", "status": 201, "duration_ms": 1074.865, "method": "POST", "route": "/auth/bootstrap", "release": "development"}
+{"timestamp": "2026-10-18T08:03:03.350548+00:00", "level": "INFO", "event": "http.request", "request_id": "2e636f24-fb08-4fa9-b8a2-dba78c18c965", "status": 200, "duration_ms": 8.96, "method": "GET", "route": "/tenants", "release": "development"}
+{"timestamp": "2026-10-18T08:03:03.375928+00:00", "level": "INFO", "event": "http.request", "request_id": "cd7feb50-fa49-4be9-98d7-939667f2d729", "status": 201, "duration_ms": 24.553, "method": "POST", "route": "/clients", "release": "development"}
+{"timestamp": "2026-10-18T08:03:03.404526+00:00", "level": "INFO", "event": "http.request", "request_id": "0b8d2749-3e1a-4543-a34f-0cf7a4def6e1", "status": 201, "duration_ms": 26.283, "method": "POST", "route": "/entities", "release": "development"}
+{"timestamp": "2026-10-18T08:03:03.976687+00:00", "level": "INFO", "event": "http.request", "request_id": "f8af5139-4b69-4f78-9ae3-98969a4b0301", "status": 401, "duration_ms": 571.319, "method": "POST", "route": "/financial-periods", "release": "development"}
+------------------------------ Captured log call ------------------------------
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+___________________ test_reviewed_record_cannot_be_archived ___________________
+
+self = <sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_cursor object at 0x0000023D3FA81690>
+operation = 'INSERT INTO tenant_memberships (tenant_id, user_id, status, id) VALUES ($1::UUID, $2::UUID, $3::VARCHAR, $4::UUID) RETURNING tenant_memberships.created_at, tenant_memberships.updated_at'
+parameters = (UUID('f43cf97c-2210-4835-9933-94c84c9f6d2a'), UUID('b46728cf-ff03-4a3c-9dfc-1d829c92d14d'), 'active', UUID('939c899e-16a5-448e-8caf-ec6195764c8b'))
+
+    async def _prepare_and_execute(self, operation, parameters):
+        adapt_connection = self._adapt_connection
+    
+        async with adapt_connection._execute_mutex:
+            if adapt_connection._transaction is None:
+                await adapt_connection._start_transaction()
+    
+            if parameters is None:
+                parameters = ()
+    
+            try:
+                prepared_stmt, attributes = await adapt_connection._prepare(
+                    operation, self._invalidate_schema_cache_asof
+                )
+    
+                if attributes:
+                    self._description = [
+                        (
+                            attr.name,
+                            attr.type.oid,
+                            None,
+                            None,
+                            None,
+                            None,
+                            None,
+                        )
+                        for attr in attributes
+                    ]
+                else:
+                    self._description = None
+    
+                if self.server_side:
+                    self._cursor = await prepared_stmt.cursor(*parameters)
+                    self._rowcount = -1
+                else:
+>                   self._rows = deque(await prepared_stmt.fetch(*parameters))
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:605: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\asyncpg\prepared_stmt.py:177: in fetch
+    data = await self.__bind_execute(args, 0, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\asyncpg\prepared_stmt.py:268: in __bind_execute
+    data, status, _ = await self.__do_execute(
+.venv\Lib\site-packages\asyncpg\prepared_stmt.py:257: in __do_execute
+    return await executor(protocol)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+>   ???
+E   asyncpg.exceptions.ForeignKeyViolationError: insert or update on table "tenant_memberships" violates foreign key constraint "tenant_memberships_tenant_id_fkey"
+E   DETAIL:  Key (tenant_id)=(f43cf97c-2210-4835-9933-94c84c9f6d2a) is not present in table "tenants".
+
+asyncpg/protocol/protocol.pyx:197: ForeignKeyViolationError
+
+The above exception was the direct cause of the following exception:
+
+self = <sqlalchemy.engine.base.Connection object at 0x0000023D3FDADB50>
+dialect = <sqlalchemy.dialects.postgresql.asyncpg.PGDialect_asyncpg object at 0x0000023D3A373C50>
+context = <sqlalchemy.dialects.postgresql.asyncpg.PGExecutionContext_asyncpg object at 0x0000023D3FDAF140>
+statement = <sqlalchemy.dialects.postgresql.asyncpg.PGCompiler_asyncpg object at 0x0000023D3F95C530>
+parameters = [(UUID('f43cf97c-2210-4835-9933-94c84c9f6d2a'), UUID('b46728cf-ff03-4a3c-9dfc-1d829c92d14d'), 'active', UUID('939c899e-16a5-448e-8caf-ec6195764c8b'))]
+
+    def _exec_single_context(
+        self,
+        dialect: Dialect,
+        context: ExecutionContext,
+        statement: Union[str, Compiled],
+        parameters: Optional[_AnyMultiExecuteParams],
+    ) -> CursorResult[Unpack[TupleAny]]:
+        """continue the _execute_context() method for a single DBAPI
+        cursor.execute() or cursor.executemany() call.
+    
+        """
+        if dialect.bind_typing is BindTyping.SETINPUTSIZES:
+            generic_setinputsizes = context._prepare_set_input_sizes()
+    
+            if generic_setinputsizes:
+                try:
+                    dialect.do_set_input_sizes(
+                        context.cursor, generic_setinputsizes, context
+                    )
+                except BaseException as e:
+                    self._handle_dbapi_exception(
+                        e, str(statement), parameters, None, context
+                    )
+    
+        cursor, str_statement, parameters = (
+            context.cursor,
+            context.statement,
+            context.parameters,
+        )
+    
+        effective_parameters: Optional[_AnyExecuteParams]
+    
+        if not context.executemany:
+            effective_parameters = parameters[0]
+        else:
+            effective_parameters = parameters
+    
+        evt_handled: bool = False
+        try:
+            if self._has_events or self.engine._has_events:
+                for fn in self.dispatch.before_cursor_execute:
+                    str_statement, effective_parameters = fn(
+                        self,
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                        context.executemany,
+                    )
+    
+            if self._echo:
+                self._log_info(str_statement)
+    
+                stats = context._get_cache_stats()
+    
+                if not self.engine.hide_parameters:
+                    self._log_info(
+                        "[%s] %r",
+                        stats,
+                        sql_util._repr_params(
+                            effective_parameters,
+                            batches=10,
+                            ismulti=context.executemany,
+                        ),
+                    )
+                else:
+                    self._log_info(
+                        "[%s] [SQL parameters hidden due to "
+                        "hide_parameters=True]",
+                        stats,
+                    )
+            if context.execute_style is ExecuteStyle.EXECUTEMANY:
+                effective_parameters = cast(
+                    "_CoreMultiExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_executemany:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_executemany(
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                    )
+            elif not effective_parameters and context.no_parameters:
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute_no_params:
+                        if fn(cursor, str_statement, context):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_execute_no_params(
+                        cursor, str_statement, context
+                    )
+            else:
+                effective_parameters = cast(
+                    "_CoreSingleExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+>                   self.dialect.do_execute(
+                        cursor, str_statement, effective_parameters, context
+                    )
+
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1953: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\sqlalchemy\engine\default.py:1192: in do_execute
+    cursor.execute(statement, parameters)
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:656: in execute
+    await_(self._prepare_and_execute(operation, parameters))
+.venv\Lib\site-packages\sqlalchemy\util\concurrency.py:167: in await_
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\util\concurrency.py:205: in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:618: in _prepare_and_execute
+    self._handle_exception(error)
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:568: in _handle_exception
+    self._adapt_connection._handle_exception(error)
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:847: in _handle_exception
+    super()._handle_exception(error)
+.venv\Lib\site-packages\sqlalchemy\connectors\asyncio.py:412: in _handle_exception
+    self._handle_exception_no_connection(self.dbapi, error)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cls = <class 'sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_connection'>
+dbapi = <sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi object at 0x0000023D3A00A240>
+error = ForeignKeyViolationError('insert or update on table "tenant_memberships" violates foreign key constraint "tenant_memberships_tenant_id_fkey"')
+
+    @classmethod
+    def _handle_exception_no_connection(
+        cls, dbapi: Any, error: Exception
+    ) -> NoReturn:
+        if not isinstance(error, AsyncAdapt_asyncpg_dbapi.Error):
+            exception_mapping = dbapi._asyncpg_error_translate
+    
+            for super_ in type(error).__mro__:
+                if super_ in exception_mapping:
+                    message = error.args[0]
+                    translated_error = exception_mapping[super_](
+                        message, error
+                    )
+>                   raise translated_error from error
+E                   sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.ForeignKeyViolationError: insert or update on table "tenant_memberships" violates foreign key constraint "tenant_memberships_tenant_id_fkey"
+
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:840: ForeignKeyViolationError
+
+The above exception was the direct cause of the following exception:
+
+environment = <httpx.AsyncClient object at 0x0000023D3F9A5310>
+
+    async def test_reviewed_record_cannot_be_archived(environment):
+        c = environment
+        h, _, _, base = await setup(c)
+>       reviewer = await actor(h, "Audit Manager", "crud-reviewer")
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\qa_crud\test_lifecycle.py:34: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase4\test_workflows.py:32: in actor
+    await db.flush()
+.venv\Lib\site-packages\sqlalchemy\ext\asyncio\session.py:1030: in flush
+    await greenlet_spawn(self.sync_session.flush, objects=objects)
+.venv\Lib\site-packages\sqlalchemy\util\concurrency.py:212: in greenlet_spawn
+    result = context.switch(value)
+             ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4536: in flush
+    self._flush(objects)
+<sqlalchemy generated warned() wrapper for sqlalchemy.orm.session.Session._flush>:2: in _flush
+    return target(fn, self, objects=objects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\util\deprecations.py:281: in warned
+    return fn(*args, **kwargs)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4679: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\util\langhelpers.py:166: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4640: in _flush
+    flush_context.execute()
+.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py:467: in execute
+    rec.execute(self)
+.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py:643: in execute
+    util.preloaded.orm_persistence._save_obj(
+.venv\Lib\site-packages\sqlalchemy\orm\persistence.py:92: in _save_obj
+    _emit_insert_statements(
+.venv\Lib\site-packages\sqlalchemy\orm\persistence.py:1237: in _emit_insert_statements
+    result = connection.execute(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1458: in execute
+    return meth(
+.venv\Lib\site-packages\sqlalchemy\sql\elements.py:533: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1678: in _execute_clauseelement
+    ret = self._execute_context(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1832: in _execute_context
+    return self._exec_single_context(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1972: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:2342: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1953: in _exec_single_context
+    self.dialect.do_execute(
+.venv\Lib\site-packages\sqlalchemy\engine\default.py:1192: in do_execute
+    cursor.execute(statement, parameters)
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:656: in execute
+    await_(self._prepare_and_execute(operation, parameters))
+.venv\Lib\site-packages\sqlalchemy\util\concurrency.py:167: in await_
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\util\concurrency.py:205: in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:618: in _prepare_and_execute
+    self._handle_exception(error)
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:568: in _handle_exception
+    self._adapt_connection._handle_exception(error)
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:847: in _handle_exception
+    super()._handle_exception(error)
+.venv\Lib\site-packages\sqlalchemy\connectors\asyncio.py:412: in _handle_exception
+    self._handle_exception_no_connection(self.dbapi, error)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cls = <class 'sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_connection'>
+dbapi = <sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi object at 0x0000023D3A00A240>
+error = ForeignKeyViolationError('insert or update on table "tenant_memberships" violates foreign key constraint "tenant_memberships_tenant_id_fkey"')
+
+    @classmethod
+    def _handle_exception_no_connection(
+        cls, dbapi: Any, error: Exception
+    ) -> NoReturn:
+        if not isinstance(error, AsyncAdapt_asyncpg_dbapi.Error):
+            exception_mapping = dbapi._asyncpg_error_translate
+    
+            for super_ in type(error).__mro__:
+                if super_ in exception_mapping:
+                    message = error.args[0]
+                    translated_error = exception_mapping[super_](
+                        message, error
+                    )
+>                   raise translated_error from error
+E                   sqlalchemy.exc.IntegrityError: (sqlalchemy.dialects.postgresql.asyncpg.ForeignKeyViolationError) insert or update on table "tenant_memberships" violates foreign key constraint "tenant_memberships_tenant_id_fkey"
+E                   [SQL: INSERT INTO tenant_memberships (tenant_id, user_id, status, id) VALUES ($1::UUID, $2::UUID, $3::VARCHAR, $4::UUID) RETURNING tenant_memberships.created_at, tenant_memberships.updated_at]
+E                   [parameters: (UUID('f43cf97c-2210-4835-9933-94c84c9f6d2a'), UUID('b46728cf-ff03-4a3c-9dfc-1d829c92d14d'), 'active', UUID('939c899e-16a5-448e-8caf-ec6195764c8b'))]
+E                   (Background on this error at: https://sqlalche.me/e/21/gkpj)
+
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:840: IntegrityError
+---------------------------- Captured stderr call -----------------------------
+{"timestamp": "2026-10-18T08:03:05.624157+00:00", "level": "INFO", "event": "http.request", "request_id": "54e70552-a2c0-4969-8633-ca952db30ec6", "status": 201, "duration_ms": 762.548, "method": "POST", "route": "/auth/bootstrap", "release": "development"}
+{"timestamp": "2026-10-18T08:03:05.629859+00:00", "level": "INFO", "event": "http.request", "request_id": "42dbb865-d771-4094-be86-5ef8e3fa6864", "status": 200, "duration_ms": 4.486, "method": "GET", "route": "/tenants", "release": "development"}
+{"timestamp": "2026-10-18T08:03:05.644535+00:00", "level": "INFO", "event": "http.request", "request_id": "48233189-e4f4-4645-9894-955c4ac8a63d", "status": 201, "duration_ms": 14.256, "method": "POST", "route": "/clients", "release": "development"}
+{"timestamp": "2026-10-18T08:03:05.660197+00:00", "level": "INFO", "event": "http.request", "request_id": "57333e8a-e348-467b-b25a-1eb3e92dcae9", "status": 201, "duration_ms": 13.712, "method": "POST", "route": "/entities", "release": "development"}
+{"timestamp": "2026-10-18T08:03:05.674587+00:00", "level": "INFO", "event": "http.request", "request_id": "c957bbde-40fd-4355-b62c-6d20f2a2530c", "status": 201, "duration_ms": 13.409, "method": "POST", "route": "/financial-periods", "release": "development"}
+{"timestamp": "2026-10-18T08:03:05.691719+00:00", "level": "INFO", "event": "http.request", "request_id": "ca024397-8b9a-408c-8b8f-4a5e991fbf60", "status": 201, "duration_ms": 16.137, "method": "POST", "route": "/engagements", "release": "development"}
+------------------------------ Captured log call ------------------------------
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+______________________ test_client_restore_and_conflict _______________________
+
+environment = <httpx.AsyncClient object at 0x0000023D3FDAE120>
+
+    async def test_client_restore_and_conflict(environment):
+        c = environment
+        h, _, _, _ = await setup(c)
+        row = (await c.post("/api/v1/clients", headers=h, json={"code": "CRUD-RESTORE", "name": "SYNTHETIC \u062f\u0628\u064a"})).json()
+        url = "/api/v1/clients/" + row["id"]
+        archive = await c.patch(url, headers=h, json={"version": row["version"], "status": "archived", "lifecycle_reason": "Synthetic unused client archival"})
+        assert archive.status_code == 200, archive.text
+>       assert (await c.patch(url, headers=h, json={"version": row["version"], "name": "Concurrent overwrite"})).status_code == 409
+E       assert 401 == 409
+E        +  where 401 = <Response [401 Unauthorized]>.status_code
+
+tests\qa_crud\test_lifecycle.py:48: AssertionError
+---------------------------- Captured stderr call -----------------------------
+{"timestamp": "2026-10-18T08:03:08.092722+00:00", "level": "INFO", "event": "http.request", "request_id": "483f5fd6-00df-4fc8-8c3f-921cb546ca57", "status": 201, "duration_ms": 677.765, "method": "POST", "route": "/auth/bootstrap", "release": "development"}
+{"timestamp": "2026-10-18T08:03:08.099121+00:00", "level": "INFO", "event": "http.request", "request_id": "f7cbbcc1-ae41-4ff2-a4ae-cf042dcdbbb7", "status": 200, "duration_ms": 4.569, "method": "GET", "route": "/tenants", "release": "development"}
+{"timestamp": "2026-10-18T08:03:08.114783+00:00", "level": "INFO", "event": "http.request", "request_id": "6a2ef0af-50a2-4260-a8cb-9111528c10a8", "status": 201, "duration_ms": 15.18, "method": "POST", "route": "/clients", "release": "development"}
+{"timestamp": "2026-10-18T08:03:08.132021+00:00", "level": "INFO", "event": "http.request", "request_id": "70c3643c-e366-41e6-8585-fcc0ca1e960f", "status": 201, "duration_ms": 14.908, "method": "POST", "route": "/entities", "release": "development"}
+{"timestamp": "2026-10-18T08:03:08.147427+00:00", "level": "INFO", "event": "http.request", "request_id": "0a1ca337-7d0f-4b04-9f65-a3ab3987c8e8", "status": 201, "duration_ms": 14.518, "method": "POST", "route": "/financial-periods", "release": "development"}
+{"timestamp": "2026-10-18T08:03:08.162094+00:00", "level": "INFO", "event": "http.request", "request_id": "8a12e0cd-3db9-480e-95e0-d894eb4fdd24", "status": 201, "duration_ms": 13.159, "method": "POST", "route": "/engagements", "release": "development"}
+{"timestamp": "2026-10-18T08:03:08.174643+00:00", "level": "INFO", "event": "http.request", "request_id": "0673e0c6-d934-42cd-a938-6443c74f6f33", "status": 201, "duration_ms": 11.455, "method": "POST", "route": "/clients", "release": "development"}
+{"timestamp": "2026-10-18T08:03:08.189346+00:00", "level": "INFO", "event": "http.request", "request_id": "d2a1850b-1b04-434b-a55a-94e8678838f7", "status": 200, "duration_ms": 13.674, "method": "PATCH", "route": "/clients/{identifier}", "release": "development"}
+{"timestamp": "2026-10-18T08:03:08.750740+00:00", "level": "INFO", "event": "http.request", "request_id": "450de15a-ce5e-43aa-be15-75e5127da416", "status": 401, "duration_ms": 560.38, "method": "PATCH", "route": "/clients/{identifier}", "release": "development"}
+------------------------------ Captured log call ------------------------------
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+=========================== short test summary info ===========================
+FAILED tests/qa_crud/test_lifecycle.py::test_draft_archive_restore_history - ...
+FAILED tests/qa_crud/test_lifecycle.py::test_reviewed_record_cannot_be_archived
+FAILED tests/qa_crud/test_lifecycle.py::test_client_restore_and_conflict - as...
+3 failed in 9.18s

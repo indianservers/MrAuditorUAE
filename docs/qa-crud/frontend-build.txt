@@ -1,0 +1,37 @@
+
+> auditos-frontend@0.3.0 build
+> next build
+
+▲ Next.js 16.4.2 (Turbopack)
+✓ Running next.config.ts took 21ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 3.6s
+  Running TypeScript ...
+  Finished TypeScript in 2.8s ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/10) ...
+  Generating static pages using 11 workers (2/10) 
+  Generating static pages using 11 workers (4/10) 
+  Generating static pages using 11 workers (7/10) 
+✓ Generating static pages using 11 workers (10/10) in 229ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /[...route]
+├ ƒ /api/backend/[...path]
+├ ƒ /api/invitations
+├ ƒ /api/session
+├ ƒ /api/session/refresh
+├ ○ /icon.svg
+├ ○ /join
+├ ○ /login
+├ ƒ /platform/[area]
+└ ○ /security
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

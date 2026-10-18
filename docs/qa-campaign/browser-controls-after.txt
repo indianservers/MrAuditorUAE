@@ -1,0 +1,14 @@
+
+Running 1 test using 1 worker
+
+(node:5796) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 e2e\qa-campaign.spec.ts:56:1 › client search, status filter, edit persistence and backend denial stay functional (0ms)
+
+
+  1) e2e\qa-campaign.spec.ts:56:1 › client search, status filter, edit persistence and backend denial stay functional 
+
+    Error: worker process exited unexpectedly (code=4294967295, signal=null)
+
+  1 failed
+    e2e\qa-campaign.spec.ts:56:1 › client search, status filter, edit persistence and backend denial stay functional 

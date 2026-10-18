@@ -41,6 +41,7 @@ const schema = z.object({
   name: z.string().min(1).max(200),
   kind: z.enum(["company", "group", "individual"]),
   status: z.enum(["active", "inactive", "archived"]),
+  lifecycle_reason: z.string().max(1000).optional(),
 });
 type Form = z.infer<typeof schema>;
 export function Clients() {
@@ -102,7 +103,7 @@ export function Clients() {
               setOffset(0);
             }}
           >
-            <option value="">All statuses</option>
+            <option value="">Current clients</option>
             {["active", "inactive", "archived"].map((s) => (
               <option key={s}>{s}</option>
             ))}
@@ -177,6 +178,7 @@ export function Clients() {
                 <Button
                   onClick={() => {
                     setEditing(selected);
+                    setSelected(null);
                     setForm(true);
                   }}
                 >
@@ -239,6 +241,9 @@ function ClientForm({
                   name: values.name,
                   status: values.status,
                   version: client.version,
+                  ...(values.lifecycle_reason
+                    ? { lifecycle_reason: values.lifecycle_reason }
+                    : {}),
                 }
               : values,
           },
@@ -272,6 +277,17 @@ function ClientForm({
           </small>
         </label>
       ))}
+      {client && (
+        <label>
+          Lifecycle reason
+          <textarea
+            {...register("lifecycle_reason")}
+            minLength={10}
+            maxLength={1000}
+            placeholder="Required when archiving or restoring this client"
+          />
+        </label>
+      )}
       <ErrorState error={action.error} />
       <Button primary disabled={action.isPending}>
         {action.isPending ? "Saving…" : "Save client"}

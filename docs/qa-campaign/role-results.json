@@ -1,0 +1,2625 @@
+[
+  {
+    "role": "Platform Administrator",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Firm Administrator",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": true,
+        "status": 422,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Audit Partner",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Audit Manager",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Senior Auditor",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Auditor",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Tax Manager",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Tax Consultant",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Client Viewer",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Managing Partner",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Audit Partner / Chartered Accountant",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Audit Trainee",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Quality Reviewer",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Read-only Reviewer",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Firm Operations User",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Platform Super Admin",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Platform Support Administrator",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Client Administrator",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Client Finance Manager",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Client Accountant",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Client Document Contributor",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Financial Reporting Preparer",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Financial Reporting Manager",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Chartered Accountant",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Consolidation Specialist",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Corporate Tax Preparer",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Senior Tax Consultant",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Tax Director",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Tax Partner",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Independent Reviewer",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Client Finance User",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "VAT Analyst",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "VAT Consultant",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Invoice Validator",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "VAT Manager",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "VAT Read-only Reviewer",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "TP Analyst",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "TP Economist",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Financial Analyst",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "TP Manager",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Transfer Pricing Director",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "TP Read-only Reviewer",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "ML Engineer",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Model Risk Reviewer",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Pillar Two Analyst",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Pillar Two Reviewer",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Chief Audit Executive",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Head of Internal Audit",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Internal Audit Manager",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Senior Internal Auditor",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Internal Auditor",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Risk Manager",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Compliance Officer",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Risk Owner",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Control Owner",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Process Owner",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Remediation Owner",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Audit Committee Member",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Board Viewer",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "Internal Audit Quality Reviewer",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  },
+  {
+    "role": "AI Administrator",
+    "login": true,
+    "checks": [
+      {
+        "method": "GET",
+        "path": "clients",
+        "permission": "clients.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "PATCH",
+        "path": "clients/00000000-0000-4000-8000-000000000001",
+        "permission": "clients.write",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "analytics/rules",
+        "permission": "analytics.read",
+        "expected_permission": false,
+        "status": 403,
+        "passed": true
+      },
+      {
+        "method": "GET",
+        "path": "ai/providers",
+        "permission": "ai.provider.manage",
+        "expected_permission": true,
+        "status": 200,
+        "passed": true
+      },
+      {
+        "case": "wrong_tenant",
+        "status": 403,
+        "passed": true
+      }
+    ]
+  }
+]

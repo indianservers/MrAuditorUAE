@@ -1,0 +1,8 @@
+warning: in the working copy of '.dockerignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/app/api/v1/platform_admin.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/.dockerignore', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/eslint.config.mjs', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/next-env.d.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/next.config.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/features/platform-console.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/tsconfig.json', LF will be replaced by CRLF the next time Git touches it

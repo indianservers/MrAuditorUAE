@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="0" tests="26" time="90.350" timestamp="2026-10-18T13:31:43.118327+05:30" hostname="DESKTOP-B3SR465"><testcase classname="tests.qa_crud.test_source_changes" name="test_ifrs_current_status_invalidates_after_real_import_supersession" time="2.371" /><testcase classname="tests.qa_crud.test_source_changes" name="test_ml_dataset_excludes_superseded_lines_and_marks_old_features_stale" time="2.084" /><testcase classname="tests.qa_crud.test_source_changes" name="test_archived_client_hidden_from_active_list_and_blocks_new_children" time="0.877" /><testcase classname="tests.qa_crud.test_source_changes" name="test_client_archival_cannot_bypass_active_engagement_guard" time="1.016" /><testcase classname="tests.phase5.test_reporting" name="test_company_statements_approval_and_exports" time="2.496" /><testcase classname="tests.phase5.test_reporting" name="test_approved_calculation_and_balanced_overlay[lease-body0-initial_liability-1000]" time="2.037" /><testcase classname="tests.phase5.test_reporting" name="test_approved_calculation_and_balanced_overlay[ecl-body1-total_ecl-None]" time="2.110" /><testcase classname="tests.phase5.test_reporting" name="test_ifrs_access_and_registry" time="1.973" /><testcase classname="tests.phase5.test_reporting" name="test_ai_disclosure_source_and_independent_review" time="3.040" /><testcase classname="tests.phase5.test_reporting" name="test_group_translation_eliminations_and_nci" time="3.418" /><testcase classname="tests.phase5.test_reporting" name="test_comparatives_opening_consistency_and_tenant_rls" time="2.258" /><testcase classname="tests.phase7.test_regression_fixes" name="test_new_approved_note_invalidates_prior_ifrs_run" time="1.963" /><testcase classname="tests.phase7.test_regression_fixes" name="test_new_approved_tax_adjustment_invalidates_old_release" time="3.779" /><testcase classname="tests.phase8.test_workflows" name="test_actual_rp_sales_benchmark_and_segmentation" time="10.618" /><testcase classname="tests.phase8.test_workflows" name="test_actual_loan_benchmark_credit_and_source_scope" time="10.355" /><testcase classname="tests.phase8.test_workflows" name="test_licensing_permissions_and_immutable_sources" time="13.556" /><testcase classname="tests.phase8.test_workflows" name="test_all_thirty_ai_actions_remain_suggestions" time="11.880" /><testcase classname="tests.phase8.test_workflows" name="test_source_reconciled_services_and_reviewed_localfile_exports" time="1.411"><failure message="KeyError: 0">environment = &lt;httpx.AsyncClient object at 0x000001CA9B72F470&gt;
+
+    async def test_source_reconciled_services_and_reviewed_localfile_exports(environment):
+        from app.modules.tp.catalogue import LOCAL_SECTIONS
+    
+        c = environment
+&gt;       f = await prepared(c)
+            ^^^^^^^^^^^^^^^^^
+
+tests\phase8\test_workflows.py:633: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase8\test_workflows.py:38: in prepared
+    ) = await tax_prepared(c)
+        ^^^^^^^^^^^^^^^^^^^^^
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:22: in prepared
+    h, opts, eid, base = scope_data or await setup(c)
+                                       ^^^^^^^^^^^^^^
+tests\phase4\test_workflows.py:44: in setup
+    h, options = await scope(client)
+                 ^^^^^^^^^^^^^^^^^^^
+tests\phase2\test_pipeline.py:21: in scope
+    headers, _ = await setup(client)
+                 ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = &lt;httpx.AsyncClient object at 0x000001CA9B72F470&gt;
+
+    async def setup(client):
+        from app.core.config import settings
+    
+        response = await client.post(
+            "/api/v1/auth/bootstrap",
+            headers={"X-Bootstrap-Secret": settings().bootstrap_secret},
+            json={
+                "email": "admin@example.com",
+                "password": "test-strong-password-123",
+                "tenant_name": "TEST ONLY Firm A",
+            },
+        )
+        assert response.status_code == 201, response.text
+        tokens = response.json()
+        headers = {"Authorization": "Bearer " + tokens["access_token"]}
+        response = await client.get("/api/v1/tenants", headers=headers)
+&gt;       tenant = response.json()[0]["id"]
+                 ^^^^^^^^^^^^^^^^^^
+E       KeyError: 0
+
+tests\integration\test_platform.py:80: KeyError</failure></testcase><testcase classname="tests.phase8.test_workflows" name="test_connected_person_remuneration_and_ct_adjustment_bridge" time="0.729"><failure message="AssertionError: {&quot;error&quot;:{&quot;code&quot;:&quot;409&quot;,&quot;message&quot;:&quot;Initial setup has already completed&quot;,&quot;request_id&quot;:&quot;bdd00cb1-6856-43f0-871a-6d91ca3e85be&quot;}}&#10;assert 409 == 201&#10; +  where 409 = &lt;Response [409 Conflict]&gt;.status_code">environment = &lt;httpx.AsyncClient object at 0x000001CA9C559190&gt;
+
+    async def test_connected_person_remuneration_and_ct_adjustment_bridge(environment):
+        c = environment
+&gt;       f = await prepared(c, connected=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\phase8\test_workflows.py:783: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase8\test_workflows.py:38: in prepared
+    ) = await tax_prepared(c)
+        ^^^^^^^^^^^^^^^^^^^^^
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:22: in prepared
+    h, opts, eid, base = scope_data or await setup(c)
+                                       ^^^^^^^^^^^^^^
+tests\phase4\test_workflows.py:44: in setup
+    h, options = await scope(client)
+                 ^^^^^^^^^^^^^^^^^^^
+tests\phase2\test_pipeline.py:21: in scope
+    headers, _ = await setup(client)
+                 ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = &lt;httpx.AsyncClient object at 0x000001CA9C559190&gt;
+
+    async def setup(client):
+        from app.core.config import settings
+    
+        response = await client.post(
+            "/api/v1/auth/bootstrap",
+            headers={"X-Bootstrap-Secret": settings().bootstrap_secret},
+            json={
+                "email": "admin@example.com",
+                "password": "test-strong-password-123",
+                "tenant_name": "TEST ONLY Firm A",
+            },
+        )
+&gt;       assert response.status_code == 201, response.text
+E       AssertionError: {"error":{"code":"409","message":"Initial setup has already completed","request_id":"bdd00cb1-6856-43f0-871a-6d91ca3e85be"}}
+E       assert 409 == 201
+E        +  where 409 = &lt;Response [409 Conflict]&gt;.status_code
+
+tests\integration\test_platform.py:76: AssertionError</failure></testcase><testcase classname="tests.phase8.test_workflows" name="test_tp_job_controls_require_owner_and_exact_operation" time="1.387"><failure message="KeyError: 'id'">environment = &lt;httpx.AsyncClient object at 0x000001CA9C5E4C20&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001CA9C55B8F0&gt;
+
+    async def test_tp_job_controls_require_owner_and_exact_operation(environment, monkeypatch):
+        from app.db.models.platform import BackgroundJob, Membership
+        from app.workers.accounting import work
+    
+        c = environment
+&gt;       f = await prepared(c)
+            ^^^^^^^^^^^^^^^^^
+
+tests\phase8\test_workflows.py:855: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase8\test_workflows.py:38: in prepared
+    ) = await tax_prepared(c)
+        ^^^^^^^^^^^^^^^^^^^^^
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:22: in prepared
+    h, opts, eid, base = scope_data or await setup(c)
+                                       ^^^^^^^^^^^^^^
+tests\phase4\test_workflows.py:44: in setup
+    h, options = await scope(client)
+                 ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = &lt;httpx.AsyncClient object at 0x000001CA9C5E4C20&gt;
+
+    async def scope(client):
+        headers, _ = await setup(client)
+        c = await client.post(
+            "/api/v1/clients",
+            headers=headers,
+            json={"code": "SYNTHETIC", "name": "FICTIONAL Gulf Example LLC — synthetic test only"},
+        )
+        e = await client.post(
+            "/api/v1/entities",
+            headers=headers,
+            json={
+                "client_id": c.json()["id"],
+                "name": "FICTIONAL synthetic entity",
+                "country": "AE",
+                "jurisdiction": "Synthetic",
+                "functional_currency": "AED",
+                "presentation_currency": "AED",
+            },
+        )
+        p = await client.post(
+            "/api/v1/financial-periods",
+            headers=headers,
+            json={"entity_id": e.json()["id"], "start_date": "2026-01-01", "end_date": "2026-12-31"},
+        )
+        return headers, {
+            "client_id": c.json()["id"],
+            "entity_id": e.json()["id"],
+&gt;           "period_id": p.json()["id"],
+                         ^^^^^^^^^^^^^^
+            "expected_rows": 4,
+            "expected_debit": "110.30",
+            "expected_credit": "110.30",
+            "source_complete": True,
+        }
+E       KeyError: 'id'
+
+tests\phase2\test_pipeline.py:47: KeyError</failure></testcase><testcase classname="tests.phase8.test_workflows" name="test_transitive_far_changes_invalidate_benchmark_and_require_parent_review" time="0.808"><failure message="AssertionError: {&quot;error&quot;:{&quot;code&quot;:&quot;409&quot;,&quot;message&quot;:&quot;Initial setup has already completed&quot;,&quot;request_id&quot;:&quot;f40a7bf3-9954-4804-a5b7-29c9713edba0&quot;}}&#10;assert 409 == 201&#10; +  where 409 = &lt;Response [409 Conflict]&gt;.status_code">environment = &lt;httpx.AsyncClient object at 0x000001CA9C558110&gt;
+
+    async def test_transitive_far_changes_invalidate_benchmark_and_require_parent_review(environment):
+        c = environment
+&gt;       f = await prepared(c)
+            ^^^^^^^^^^^^^^^^^
+
+tests\phase8\test_workflows.py:890: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase8\test_workflows.py:38: in prepared
+    ) = await tax_prepared(c)
+        ^^^^^^^^^^^^^^^^^^^^^
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:22: in prepared
+    h, opts, eid, base = scope_data or await setup(c)
+                                       ^^^^^^^^^^^^^^
+tests\phase4\test_workflows.py:44: in setup
+    h, options = await scope(client)
+                 ^^^^^^^^^^^^^^^^^^^
+tests\phase2\test_pipeline.py:21: in scope
+    headers, _ = await setup(client)
+                 ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = &lt;httpx.AsyncClient object at 0x000001CA9C558110&gt;
+
+    async def setup(client):
+        from app.core.config import settings
+    
+        response = await client.post(
+            "/api/v1/auth/bootstrap",
+            headers={"X-Bootstrap-Secret": settings().bootstrap_secret},
+            json={
+                "email": "admin@example.com",
+                "password": "test-strong-password-123",
+                "tenant_name": "TEST ONLY Firm A",
+            },
+        )
+&gt;       assert response.status_code == 201, response.text
+E       AssertionError: {"error":{"code":"409","message":"Initial setup has already completed","request_id":"f40a7bf3-9954-4804-a5b7-29c9713edba0"}}
+E       assert 409 == 201
+E        +  where 409 = &lt;Response [409 Conflict]&gt;.status_code
+
+tests\integration\test_platform.py:76: AssertionError</failure></testcase><testcase classname="tests.phase8.test_workflows" name="test_manual_specialist_calculators_do_not_claim_external_ratings_or_market_rates" time="1.625"><failure message="AssertionError: {&quot;error&quot;:{&quot;code&quot;:&quot;401&quot;,&quot;message&quot;:&quot;Inactive identity&quot;,&quot;request_id&quot;:&quot;5408bcc0-3f6e-47c5-8623-3b7dee6e3ecd&quot;}}&#10;assert 401 == 200&#10; +  where 401 = &lt;Response [401 Unauthorized]&gt;.status_code">environment = &lt;httpx.AsyncClient object at 0x000001CA9C3BE690&gt;
+
+    async def test_manual_specialist_calculators_do_not_claim_external_ratings_or_market_rates(
+        environment,
+    ):
+        c = environment
+&gt;       f = await prepared(c)
+            ^^^^^^^^^^^^^^^^^
+
+tests\phase8\test_workflows.py:912: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase8\test_workflows.py:38: in prepared
+    ) = await tax_prepared(c)
+        ^^^^^^^^^^^^^^^^^^^^^
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:26: in prepared
+    await grant(c, h, base, partner)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = &lt;httpx.AsyncClient object at 0x000001CA9C3BE690&gt;
+h = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZjdmMmZmMC00ZTFjLTRmZjMtODVhOS01Mjg4MDAzNTd...IsIm1mYSI6ZmFsc2V9.LYvweb47iNAt9K1uE-0T7AWsPb0FoVqbJjPa3ZRfbs8', 'X-Tenant-ID': '2ae2499f-81fb-4466-84fc-5600c2d4480a'}
+base = '/api/v1/engagements/4bd620ae-cafd-4bab-99c0-b413244b451e/audit'
+actor_data = ({'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNDgwMDc1OS04MjkyLTQzN2MtOWNmNC03Y2NmMmViNz...'09c587e6-a75d-4b65-a809-836de60e5d70', '424aeb58-ddd8-46ce-844e-4b4b0e0fb2cb', '34800759-8292-437c-9cf4-7ccf2eb72b0d')
+
+    async def grant(client, h, base, actor_data):
+        r = await client.post(
+            base + "/team", headers=h, json={"membership_id": actor_data[1], "role_id": actor_data[2]}
+        )
+&gt;       assert r.status_code == 200, r.text
+E       AssertionError: {"error":{"code":"401","message":"Inactive identity","request_id":"5408bcc0-3f6e-47c5-8623-3b7dee6e3ecd"}}
+E       assert 401 == 200
+E        +  where 401 = &lt;Response [401 Unauthorized]&gt;.status_code
+
+tests\phase4\test_workflows.py:64: AssertionError</failure></testcase><testcase classname="tests.phase9.test_workflows" name="test_actual_node_child_cancellation_signal" time="0.014" /><testcase classname="tests.phase9.test_workflows" name="test_dmtt_actual_ifrs_approval_computation_and_ai" time="0.721"><failure message="AssertionError: {&quot;error&quot;:{&quot;code&quot;:&quot;409&quot;,&quot;message&quot;:&quot;Initial setup has already completed&quot;,&quot;request_id&quot;:&quot;5c6b22c7-1ff9-4fae-9daa-c8b1b765a271&quot;}}&#10;assert 409 == 201&#10; +  where 409 = &lt;Response [409 Conflict]&gt;.status_code">environment = &lt;httpx.AsyncClient object at 0x000001CA9C32D7C0&gt;
+
+    async def test_dmtt_actual_ifrs_approval_computation_and_ai(environment):
+        c = environment
+&gt;       h, eid, base, manager, partner, p, adj, note, rules, ready, financial = await prepared(c)
+                                                                                ^^^^^^^^^^^^^^^^^
+
+tests\phase9\test_workflows.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:22: in prepared
+    h, opts, eid, base = scope_data or await setup(c)
+                                       ^^^^^^^^^^^^^^
+tests\phase4\test_workflows.py:44: in setup
+    h, options = await scope(client)
+                 ^^^^^^^^^^^^^^^^^^^
+tests\phase2\test_pipeline.py:21: in scope
+    headers, _ = await setup(client)
+                 ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = &lt;httpx.AsyncClient object at 0x000001CA9C32D7C0&gt;
+
+    async def setup(client):
+        from app.core.config import settings
+    
+        response = await client.post(
+            "/api/v1/auth/bootstrap",
+            headers={"X-Bootstrap-Secret": settings().bootstrap_secret},
+            json={
+                "email": "admin@example.com",
+                "password": "test-strong-password-123",
+                "tenant_name": "TEST ONLY Firm A",
+            },
+        )
+&gt;       assert response.status_code == 201, response.text
+E       AssertionError: {"error":{"code":"409","message":"Initial setup has already completed","request_id":"5c6b22c7-1ff9-4fae-9daa-c8b1b765a271"}}
+E       assert 409 == 201
+E        +  where 409 = &lt;Response [409 Conflict]&gt;.status_code
+
+tests\integration\test_platform.py:76: AssertionError</failure></testcase><testcase classname="tests.phase9.test_workflows" name="test_real_tensorflow_artifacts_approval_inference_rls_and_feedback" time="4.093" /><testcase classname="tests.phase11.test_financial_lineage" name="test_snapshot_receipt_is_invalidated_when_import_is_superseded" time="1.226" /></testsuite></testsuites>

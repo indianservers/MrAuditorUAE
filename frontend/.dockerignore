@@ -1,5 +1,7 @@
 node_modules
 .next
+.next-qa
+.next-qa-build
 .env*
 test-results
 playwright-report

@@ -1,0 +1,93 @@
+[
+  {
+    "role": "Platform Administrator",
+    "read": 403,
+    "create": 403,
+    "crossTenant": 403,
+    "scope": "Real login and client CRUD authorization; specialist form workflow not covered by this probe"
+  },
+  {
+    "role": "Firm Administrator",
+    "read": 200,
+    "create": 201,
+    "crossTenant": 403,
+    "scope": "Real login and client CRUD authorization; specialist form workflow not covered by this probe"
+  },
+  {
+    "role": "Audit Partner / Chartered Accountant",
+    "read": 200,
+    "create": 403,
+    "crossTenant": 403,
+    "scope": "Real login and client CRUD authorization; specialist form workflow not covered by this probe"
+  },
+  {
+    "role": "Audit Manager",
+    "read": 200,
+    "create": 403,
+    "crossTenant": 403,
+    "scope": "Real login and client CRUD authorization; specialist form workflow not covered by this probe"
+  },
+  {
+    "role": "Auditor",
+    "read": 200,
+    "create": 403,
+    "crossTenant": 403,
+    "scope": "Real login and client CRUD authorization; specialist form workflow not covered by this probe"
+  },
+  {
+    "role": "Tax Manager",
+    "read": 200,
+    "create": 403,
+    "crossTenant": 403,
+    "scope": "Real login and client CRUD authorization; specialist form workflow not covered by this probe"
+  },
+  {
+    "role": "TP Analyst",
+    "read": 200,
+    "create": 403,
+    "crossTenant": 403,
+    "scope": "Real login and client CRUD authorization; specialist form workflow not covered by this probe"
+  },
+  {
+    "role": "VAT Analyst",
+    "read": 200,
+    "create": 403,
+    "crossTenant": 403,
+    "scope": "Real login and client CRUD authorization; specialist form workflow not covered by this probe"
+  },
+  {
+    "role": "Internal Auditor",
+    "read": 200,
+    "create": 403,
+    "crossTenant": 403,
+    "scope": "Real login and client CRUD authorization; specialist form workflow not covered by this probe"
+  },
+  {
+    "role": "Client Administrator",
+    "read": 403,
+    "create": 403,
+    "crossTenant": 403,
+    "scope": "Real login and client CRUD authorization; specialist form workflow not covered by this probe"
+  },
+  {
+    "role": "Client Viewer",
+    "read": 403,
+    "create": 403,
+    "crossTenant": 403,
+    "scope": "Real login and client CRUD authorization; specialist form workflow not covered by this probe"
+  },
+  {
+    "role": "Quality Reviewer",
+    "read": 403,
+    "create": 403,
+    "crossTenant": 403,
+    "scope": "Real login and client CRUD authorization; specialist form workflow not covered by this probe"
+  },
+  {
+    "role": "Read-only Reviewer",
+    "read": 403,
+    "create": 403,
+    "crossTenant": 403,
+    "scope": "Real login and client CRUD authorization; specialist form workflow not covered by this probe"
+  }
+]

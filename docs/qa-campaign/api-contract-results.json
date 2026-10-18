@@ -1,0 +1,3314 @@
+[
+  {
+    "method": "POST",
+    "path": "/api/v1/ifrs/engagements/{eid}/runs/{rid}/propose-journal",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ifrs/standards",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ifrs/standards",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ifrs/engagements/{eid}/workspace",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ifrs/engagements/{eid}/workspace",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ifrs/engagements/{eid}/records/{kind}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ifrs/engagements/{eid}/records/{kind}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ifrs/engagements/{eid}/records/{kind}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ifrs/engagements/{eid}/calculate/{rid}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ifrs/engagements/{eid}/runs",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ifrs/engagements/{eid}/runs",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ifrs/engagements/{eid}/runs/{rid}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ifrs/engagements/{eid}/runs/{rid}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ifrs/engagements/{eid}/financial-statements/{profile_id}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ifrs/engagements/{eid}/adjusted-trial-balance/{profile_id}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ifrs/engagements/{eid}/adjusted-trial-balance/{profile_id}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ifrs/engagements/{eid}/consolidation/{rid}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ifrs/engagements/{eid}/runs/{rid}/validate",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ifrs/engagements/{eid}/runs/{rid}/validate",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ifrs/engagements/{eid}/runs/{rid}/export/{format}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ifrs/engagements/{eid}/runs/{rid}/export/{format}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/users",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/users",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/roles",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/roles",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/permissions",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/permissions",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/admin/roles/{rid}/permissions",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/admin/invitations",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/admin/invitations/redeem",
+    "case": "missing_auth",
+    "status": 422,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/v1/admin/users/{mid}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/admin/client-access",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/activity",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/activity",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/engagements/{eid}/audit/evidence-files/{rid}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{eid}/audit/evidence-files/{rid}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{eid}/audit/evidence-files/{rid}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{eid}/audit/evidence-files/{rid}/{vid}/download",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{eid}/audit/evidence-files/{rid}/{vid}/download",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/client-portal/requests",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/client-portal/requests",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 403,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/client-portal/requests/{rid}/view",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/client-portal/requests/{rid}/responses",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/client-portal/requests/{rid}/upload",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/engagements/{eid}/audit/ai-actions",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/engagements/{eid}/audit/ai-actions/{rid}/accept-procedure",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/methodology/starter",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/methodology/starter",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/methodology",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/admin/methodology",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/admin/methodology",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/admin/methodology/{mid}/approve",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/engagements/{eid}/audit/methodology/{mid}/instantiate",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{eid}/audit/workspace",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{eid}/audit/workspace",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{eid}/audit/team",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{eid}/audit/team",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/engagements/{eid}/audit/team",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{eid}/audit/linkable-sources",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{eid}/audit/linkable-sources",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{eid}/audit/team-candidates",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{eid}/audit/team-candidates",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/engagements/{eid}/audit/policy",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/engagements/{eid}/audit/quality-review",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/engagements/{eid}/audit/transition",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{eid}/audit/completion-checks",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{eid}/audit/completion-checks",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/engagements/{eid}/audit/select-sample",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{eid}/audit/review-queue",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{eid}/audit/review-queue",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{eid}/audit/records/{rid}/history",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{eid}/audit/records/{rid}/history",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/v1/engagements/{eid}/audit/records/{rid}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/engagements/{eid}/audit/records/{rid}/actions",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{eid}/audit/{kind}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{eid}/audit/{kind}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/engagements/{eid}/audit/{kind}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/workspace/inspect-file",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspace/access",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspace/access",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspace/directory",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspace/directory",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspace/dashboard",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspace/dashboard",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspace/ledger",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspace/ledger",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 422,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspace/analytics/{identifier}/summary",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspace/analytics/{identifier}/summary",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspace/findings",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/workspace/findings",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 422,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/accounting/imports",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/imports",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/imports",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/imports/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/imports/{identifier}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/imports/{identifier}/preview",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/imports/{identifier}/preview",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/accounting/imports/{identifier}/validate",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/accounting/imports/{identifier}/commit",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/imports/{identifier}/validations",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/imports/{identifier}/validations",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/trial-balance",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/trial-balance",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 422,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/accounting/trial-balance",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/accounting/mappings",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/mappings",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/mappings",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/mappings/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/mappings/{identifier}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/analytics/runs",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/analytics/runs",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/analytics/runs",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/analytics/runs/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/analytics/runs/{identifier}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/analytics/rules",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/analytics/rules",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/reconciliation/runs",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/reconciliation/runs",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/reconciliation/runs",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/sampling/runs",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/sampling/runs",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/sampling/runs",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/sampling/runs/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/sampling/runs/{identifier}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/lineage/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/lineage/{identifier}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/accounts",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/accounts",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/journals",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/journals",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/ledger",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/ledger",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/analytics/findings",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/analytics/findings",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/analytics/risk-scores",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/analytics/risk-scores",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/reconciliation/exceptions",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/reconciliation/exceptions",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/account-classification",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/anomaly-explanation",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/audit-procedures",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/financial-commentary",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/suggestions/{identifier}/review",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/accounting/currencies",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/accounting/connections",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/connections",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/connections",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/connectors/zoho/{identifier}/authorize",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/connectors/zoho/{identifier}/callback",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/connectors/zoho/{identifier}/organizations",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/connectors/zoho/{identifier}/organizations",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/connectors/zoho/{identifier}/organization",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/connectors/zoho/{identifier}/sync",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/connectors/tally",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/connectors/tally",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/accounting/uploads",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/uploads/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/accounting/uploads/{identifier}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v1/accounting/uploads/{identifier}/chunks/{index}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/accounting/uploads/{identifier}/complete",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/connectors/zoho/sync-runs/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/connectors/zoho/sync-runs/{identifier}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/bootstrap",
+    "case": "missing_auth",
+    "status": 422,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/login",
+    "case": "missing_auth",
+    "status": 422,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/refresh",
+    "case": "missing_auth",
+    "status": 422,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/logout",
+    "case": "missing_auth",
+    "status": 422,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/me",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/mfa",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/auth/mfa",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/mfa/enroll",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/auth/mfa/confirm",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tenants",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tenants",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/clients",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/clients",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/clients",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/clients/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/clients/{identifier}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/v1/clients/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/entities",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/entities",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/entities",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/entities/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/entities/{identifier}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/v1/entities/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/engagements",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/engagements/{identifier}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/v1/engagements/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/financial-periods",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/health",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/health",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/models",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/models",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/execute",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/executions/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/executions/{identifier}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/jobs/diagnostic",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/jobs/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/jobs/{identifier}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/jobs/{identifier}/retry",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/jobs/{identifier}/cancel",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/health/live",
+    "case": "missing_auth",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/health/live",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/health/ready",
+    "case": "missing_auth",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/health/ready",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/system/version",
+    "case": "missing_auth",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/system/version",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ifrs/engagements/{eid}/ai-actions",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tax/legislation",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tax/legislation",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tax/engagements/{eid}/workspace",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tax/engagements/{eid}/workspace",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tax/engagements/{eid}/records/{kind}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tax/engagements/{eid}/records/{kind}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/tax/engagements/{eid}/records/{kind}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/tax/engagements/{eid}/computations/{profile_id}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/tax/engagements/{eid}/calculate/{rid}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tax/engagements/{eid}/runs",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tax/engagements/{eid}/runs",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/tax/engagements/{eid}/loss-transfers/{rid}/post",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tax/engagements/{eid}/runs/{rid}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tax/engagements/{eid}/runs/{rid}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tax/engagements/{eid}/loss-ledger/{profile_id}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tax/engagements/{eid}/loss-ledger/{profile_id}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tax/engagements/{eid}/runs/{rid}/export/{format}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tax/engagements/{eid}/runs/{rid}/export/{format}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/tax/engagements/{eid}/ai",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/tax/engagements/{eid}/ai/{rid}/decision",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/vat/legislation",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/vat/legislation",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/vat/demo-status",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/vat/demo-status",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/vat/engagements/{eid}/workspace",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/vat/engagements/{eid}/workspace",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/vat/engagements/{eid}/records/{kind}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/vat/engagements/{eid}/records/{kind}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/vat/engagements/{eid}/records/{kind}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/vat/engagements/{eid}/invoices/{rid}/validate",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/vat/engagements/{eid}/invoices/{rid}/extract/{evidence_id}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/vat/engagements/{eid}/computations/{pid}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/vat/engagements/{eid}/runs",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/vat/engagements/{eid}/runs",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/vat/engagements/{eid}/runs/{rid}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/vat/engagements/{eid}/runs/{rid}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/vat/engagements/{eid}/assessments/{rid}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/vat/engagements/{eid}/sandbox",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/vat/engagements/{eid}/runs/{rid}/export/json",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/vat/engagements/{eid}/runs/{rid}/export/json",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/vat/engagements/{eid}/ai",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/vat/engagements/{eid}/ai/{rid}/decision",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/client-documents",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/client-documents",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 403,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/client-documents/{rid}/download",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/client-documents/{rid}/download",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 403,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/legislation",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/legislation",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/engagements/{eid}/workspace",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/engagements/{eid}/workspace",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/engagements/{eid}/records/{kind}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/engagements/{eid}/records/{kind}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/tp/engagements/{eid}/records/{kind}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/tp/engagements/{eid}/datasets/{rid}/import",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/engagements/{eid}/observations",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/engagements/{eid}/observations",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 422,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/tp/engagements/{eid}/calculate/{rid}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/tp/engagements/{eid}/matrix/{pid}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/tp/engagements/{eid}/jobs/{jid}/{operation}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/engagements/{eid}/runs",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/engagements/{eid}/runs",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/engagements/{eid}/runs/{rid}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/engagements/{eid}/runs/{rid}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/engagements/{eid}/graph/{pid}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/engagements/{eid}/graph/{pid}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/engagements/{eid}/candidates/{pid}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/engagements/{eid}/candidates/{pid}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/tp/engagements/{eid}/runs/{rid}/tax-adjustment",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/engagements/{eid}/runs/{rid}/export/{format}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/tp/engagements/{eid}/runs/{rid}/export/{format}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 422,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/tp/engagements/{eid}/ai",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/tp/engagements/{eid}/ai/{rid}/decision",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ml/engagements/{eid}/datasets",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ml/predictions/{identifier}/explanation",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ml/datasets/{identifier}/curation",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ml/jobs/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ml/jobs/{identifier}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ml/jobs/{identifier}/cancel",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ml/events",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ml/events",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 422,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ml/events/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ml/events/{identifier}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ml/training-jobs",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ml/models/{identifier}/approval-requests",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ml/models/{identifier}/approvals",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ml/models/{identifier}/deployments",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ml/inference/batches",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ml/predictions/{identifier}/feedback",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/dmtt/legislation",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/dmtt/legislation",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/dmtt/engagements/{eid}/workspace",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/dmtt/engagements/{eid}/workspace",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/dmtt/engagements/{eid}/records/{kind}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/dmtt/engagements/{eid}/records/{kind}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/dmtt/engagements/{eid}/records/{kind}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/v1/dmtt/engagements/{eid}/records/{rid}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/dmtt/engagements/{eid}/records/{rid}/actions",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/dmtt/engagements/{eid}/groups/{gid}/calculate",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/dmtt/engagements/{eid}/calculations",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/dmtt/engagements/{eid}/calculations",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/dmtt/engagements/{eid}/ai",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/dmtt/engagements/{eid}/ai/{identifier}/accept",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/frameworks",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/frameworks",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/workspace",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/workspace",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/dashboard",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/dashboard",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/records/{kind}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/records/{kind}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/grc/engagements/{eid}/records/{kind}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/v1/grc/engagements/{eid}/records/{rid}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/grc/engagements/{eid}/records/{rid}/actions",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/records/{rid}/history",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/records/{rid}/history",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/grc/engagements/{eid}/records/{rid}/calculate",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/grc/engagements/{eid}/internal-audits/{rid}/transitions",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/runs",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/runs",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/grc/engagements/{eid}/monitoring/{rid}/execute",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/alerts",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/alerts",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/alerts/{identifier}/source",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/alerts/{identifier}/source",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/grc/engagements/{eid}/schedules",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/schedules",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/schedules",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/v1/grc/engagements/{eid}/schedules/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/grc/engagements/{eid}/policies/{rid}/acknowledgments",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/notifications",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/notifications",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/grc/engagements/{eid}/board/{rid}/publish",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/board/packages",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/board/packages",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/rcm",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/rcm",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/grc/engagements/{eid}/samples",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/grc/engagements/{eid}/sod/import",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/board/packages/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/board/packages/{identifier}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/board/packages/{identifier}/export/{format}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/grc/engagements/{eid}/board/packages/{identifier}/export/{format}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/grc/engagements/{eid}/ai",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/agents",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/agents",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/tools",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/tools",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/command",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/investigations",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/investigations",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}/step",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}/export/{kind}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}/export/{kind}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/workspace",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/workspace",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}/draft",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}/dispatch",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}/control",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/engagements/{eid}/approvals",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/approvals",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/approvals",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/engagements/{eid}/approvals/{identifier}/decision",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/engagements/{eid}/approvals/{identifier}/execute",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/engagements/{eid}/documents",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/documents",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/documents",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/engagements/{eid}/documents/{identifier}/corrections",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/documents/{identifier}/matches",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/documents/{identifier}/matches",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/engagements/{eid}/documents/{identifier}/matches",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/knowledge/search",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/knowledge/search",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 422,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/citations/{identifier}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/citations/{identifier}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/engagements/{eid}/citations/verify",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/knowledge/sources",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/knowledge/sources",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/engagements/{eid}/workflows/validate",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/engagements/{eid}/workflows",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/workflows",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/workflows",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/providers",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/providers",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/usage",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/usage",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}/evaluate",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/security-events",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/security-events",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/engagements/{eid}/schedules",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/schedules",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/ai/engagements/{eid}/schedules",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 404,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "POST",
+    "path": "/api/v1/ai/engagements/{eid}/schedules/{identifier}/pause",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/subscriptions/current",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/subscriptions/current",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 200,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "PUT",
+    "path": "/api/v1/platform/tenants/{tenant_id}/subscription",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "PATCH",
+    "path": "/api/v1/platform/tenants/{tenant_id}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/platform/qa-center",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/platform/qa-center",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 403,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/platform/{area}",
+    "case": "missing_auth",
+    "status": 401,
+    "passed": true,
+    "functional_claim": false
+  },
+  {
+    "method": "GET",
+    "path": "/api/v1/platform/{area}",
+    "case": "authorized_catalogue_or_missing_resource",
+    "status": 403,
+    "passed": true,
+    "functional_claim": false
+  }
+]

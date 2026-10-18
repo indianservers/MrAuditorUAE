@@ -1,0 +1,46 @@
+
+Running 2 tests using 1 worker
+
+(node:4472) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  1 e2e\qa-crud.spec.ts:12:1 › client form create edit archive restore with separate persisted API assertions (0ms)
+(node:21528) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  2 e2e\qa-crud.spec.ts:50:1 › working paper actual form creates a persisted draft (3.0m)
+
+
+  1) e2e\qa-crud.spec.ts:12:1 › client form create edit archive restore with separate persisted API assertions 
+
+    Error: worker process exited unexpectedly (code=4294967295, signal=null)
+
+  2) e2e\qa-crud.spec.ts:50:1 › working paper actual form creates a persisted draft ────────────────
+
+    Test timeout of 180000ms exceeded.
+
+    Error: apiRequestContext._wrapApiCall: ENOENT: no such file or directory, copyfile 'C:\Indian Servers\TheAuditor\frontend\test-results\.playwright-artifacts-1\traces\49113dc360e46c122abc-bede79bdb22cbf3706ce-recording1.network' -> 'C:\Indian Servers\TheAuditor\frontend\test-results\.playwright-artifacts-1\traces\49113dc360e46c122abc-bede79bdb22cbf3706ce-recording1-pwnetcopy-1.network'
+
+    Error: browserContext._wrapApiCall: ENOENT: no such file or directory, open 'C:\Indian Servers\TheAuditor\frontend\test-results\.playwright-artifacts-1\traces\49113dc360e46c122abc-bede79bdb22cbf3706ce.trace'
+
+    Error: locator.fill: Test ended.
+    Call log:
+      - waiting for getByLabel('Folder', { exact: true })
+
+
+      55 |     const saved = page.waitForResponse(
+      56 |       (r) =>
+    > 57 |         r.url().includes(`/api/backend/clients/${row.id}`) &&
+         |                                                    ^
+      58 |         r.request().method() === "PATCH",
+      59 |     );
+      60 |     await form.getByRole("button", { name: "Save client" }).click();
+        at C:\Indian Servers\TheAuditor\frontend\e2e\qa-crud.spec.ts:57:52
+
+    Error: ENOENT: no such file or directory, open 'C:\Indian Servers\TheAuditor\frontend\test-results\.playwright-artifacts-1\3208cf89172fd22c4a9954e760def677.zip'
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\qa-crud-working-paper-actual-form-creates-a-persisted-draft\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    e2e\qa-crud.spec.ts:12:1 › client form create edit archive restore with separate persisted API assertions 
+    e2e\qa-crud.spec.ts:50:1 › working paper actual form creates a persisted draft ─────────────────

@@ -1,0 +1,47 @@
+F............................                                            [100%]
+================================== FAILURES ===================================
+_____________________ test_draft_archive_restore_history ______________________
+
+environment = <httpx.AsyncClient object at 0x000002225887EF60>
+
+    async def test_draft_archive_restore_history(environment):
+        c = environment
+        h, _, _, base = await setup(c)
+        obj = await create(c, h, base, "working-papers", PAPER, "CRUD-UNICODE-\u062f\u0628\u064a")
+        url = base + "/records/" + obj["id"]
+        archived = await action(c, h, base, obj, "archive")
+        assert archived["status"] == "ARCHIVED"
+        assert not (await c.get(base + "/working-papers", headers=h)).json()["items"]
+        assert (await c.get(base + "/working-papers?status=ARCHIVED", headers=h)).json()["items"][0]["id"] == obj["id"]
+>       assert (await c.patch(url, headers=h, json={"version": obj["version"], "title": "Stale overwrite", "body": PAPER})).status_code == 409
+E       assert 422 == 409
+E        +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+
+tests\qa_crud\test_lifecycle.py:21: AssertionError
+---------------------------- Captured stderr call -----------------------------
+{"timestamp": "2026-10-18T08:03:34.408174+00:00", "level": "INFO", "event": "http.request", "request_id": "8af9aa26-ee10-46ff-aecc-dc3bb6d41c9d", "status": 201, "duration_ms": 429.268, "method": "POST", "route": "/auth/bootstrap", "release": "development"}
+{"timestamp": "2026-10-18T08:03:34.419546+00:00", "level": "INFO", "event": "http.request", "request_id": "8b9542f8-1c1b-4062-aa6c-fd487d10ed1e", "status": 200, "duration_ms": 9.398, "method": "GET", "route": "/tenants", "release": "development"}
+{"timestamp": "2026-10-18T08:03:34.449758+00:00", "level": "INFO", "event": "http.request", "request_id": "185aad8f-64e6-481e-bb39-32e40bd65e2e", "status": 201, "duration_ms": 28.458, "method": "POST", "route": "/clients", "release": "development"}
+{"timestamp": "2026-10-18T08:03:34.474802+00:00", "level": "INFO", "event": "http.request", "request_id": "f827a0b1-136a-42f5-8ac1-8402e1413b8b", "status": 201, "duration_ms": 24.158, "method": "POST", "route": "/entities", "release": "development"}
+{"timestamp": "2026-10-18T08:03:34.503086+00:00", "level": "INFO", "event": "http.request", "request_id": "e2d9a03c-20ae-48ed-bd09-74fe997557f7", "status": 201, "duration_ms": 26.589, "method": "POST", "route": "/financial-periods", "release": "development"}
+{"timestamp": "2026-10-18T08:03:34.519186+00:00", "level": "INFO", "event": "http.request", "request_id": "46f3760b-4a69-410c-9fe3-826d2d12f2da", "status": 201, "duration_ms": 15.08, "method": "POST", "route": "/engagements", "release": "development"}
+{"timestamp": "2026-10-18T08:03:34.542181+00:00", "level": "INFO", "event": "http.request", "request_id": "d69e1aeb-d48e-4bc8-be2d-d9a58955ac3a", "status": 201, "duration_ms": 22.488, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T08:03:34.564689+00:00", "level": "INFO", "event": "http.request", "request_id": "76c960ed-903f-4336-b468-96cbe41664b1", "status": 200, "duration_ms": 21.205, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T08:03:34.578542+00:00", "level": "INFO", "event": "http.request", "request_id": "11c90732-8c3e-479b-a5df-7e5aa3e3a13f", "status": 200, "duration_ms": 12.899, "method": "GET", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T08:03:34.592538+00:00", "level": "INFO", "event": "http.request", "request_id": "351c2996-41f6-4b7c-86ff-420719099795", "status": 200, "duration_ms": 12.777, "method": "GET", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T08:03:34.601331+00:00", "level": "INFO", "event": "http.request", "request_id": "e74d680f-2f47-4b76-a46b-3924809d77b3", "status": 422, "duration_ms": 6.872, "method": "PATCH", "route": "/engagements/{eid}/audit/records/{rid}", "release": "development"}
+------------------------------ Captured log call ------------------------------
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+=========================== short test summary info ===========================
+FAILED tests/qa_crud/test_lifecycle.py::test_draft_archive_restore_history - ...
+1 failed, 28 passed in 151.75s (0:02:31)

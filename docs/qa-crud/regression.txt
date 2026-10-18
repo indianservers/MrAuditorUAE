@@ -1,0 +1,352 @@
+.................FFFFF.F..                                               [100%]
+================================== FAILURES ===================================
+_______ test_source_reconciled_services_and_reviewed_localfile_exports ________
+
+environment = <httpx.AsyncClient object at 0x000001CA9B72F470>
+
+    async def test_source_reconciled_services_and_reviewed_localfile_exports(environment):
+        from app.modules.tp.catalogue import LOCAL_SECTIONS
+    
+        c = environment
+>       f = await prepared(c)
+            ^^^^^^^^^^^^^^^^^
+
+tests\phase8\test_workflows.py:633: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase8\test_workflows.py:38: in prepared
+    ) = await tax_prepared(c)
+        ^^^^^^^^^^^^^^^^^^^^^
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:22: in prepared
+    h, opts, eid, base = scope_data or await setup(c)
+                                       ^^^^^^^^^^^^^^
+tests\phase4\test_workflows.py:44: in setup
+    h, options = await scope(client)
+                 ^^^^^^^^^^^^^^^^^^^
+tests\phase2\test_pipeline.py:21: in scope
+    headers, _ = await setup(client)
+                 ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = <httpx.AsyncClient object at 0x000001CA9B72F470>
+
+    async def setup(client):
+        from app.core.config import settings
+    
+        response = await client.post(
+            "/api/v1/auth/bootstrap",
+            headers={"X-Bootstrap-Secret": settings().bootstrap_secret},
+            json={
+                "email": "admin@example.com",
+                "password": "test-strong-password-123",
+                "tenant_name": "TEST ONLY Firm A",
+            },
+        )
+        assert response.status_code == 201, response.text
+        tokens = response.json()
+        headers = {"Authorization": "Bearer " + tokens["access_token"]}
+        response = await client.get("/api/v1/tenants", headers=headers)
+>       tenant = response.json()[0]["id"]
+                 ^^^^^^^^^^^^^^^^^^
+E       KeyError: 0
+
+tests\integration\test_platform.py:80: KeyError
+---------------------------- Captured stderr call -----------------------------
+{"timestamp": "2026-10-18T08:03:01.607556+00:00", "level": "INFO", "event": "http.request", "request_id": "a46b688b-28f1-40ee-8368-631b08dbf1e7", "status": 201, "duration_ms": 140.157, "method": "POST", "route": "/auth/bootstrap", "release": "development"}
+{"timestamp": "2026-10-18T08:03:02.186014+00:00", "level": "INFO", "event": "http.request", "request_id": "9f590670-d82c-4fbe-8eaf-3faf5306abb4", "status": 401, "duration_ms": 577.169, "method": "GET", "route": "/tenants", "release": "development"}
+------------------------------ Captured log call ------------------------------
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+_________ test_connected_person_remuneration_and_ct_adjustment_bridge _________
+
+environment = <httpx.AsyncClient object at 0x000001CA9C559190>
+
+    async def test_connected_person_remuneration_and_ct_adjustment_bridge(environment):
+        c = environment
+>       f = await prepared(c, connected=True)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\phase8\test_workflows.py:783: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase8\test_workflows.py:38: in prepared
+    ) = await tax_prepared(c)
+        ^^^^^^^^^^^^^^^^^^^^^
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:22: in prepared
+    h, opts, eid, base = scope_data or await setup(c)
+                                       ^^^^^^^^^^^^^^
+tests\phase4\test_workflows.py:44: in setup
+    h, options = await scope(client)
+                 ^^^^^^^^^^^^^^^^^^^
+tests\phase2\test_pipeline.py:21: in scope
+    headers, _ = await setup(client)
+                 ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = <httpx.AsyncClient object at 0x000001CA9C559190>
+
+    async def setup(client):
+        from app.core.config import settings
+    
+        response = await client.post(
+            "/api/v1/auth/bootstrap",
+            headers={"X-Bootstrap-Secret": settings().bootstrap_secret},
+            json={
+                "email": "admin@example.com",
+                "password": "test-strong-password-123",
+                "tenant_name": "TEST ONLY Firm A",
+            },
+        )
+>       assert response.status_code == 201, response.text
+E       AssertionError: {"error":{"code":"409","message":"Initial setup has already completed","request_id":"bdd00cb1-6856-43f0-871a-6d91ca3e85be"}}
+E       assert 409 == 201
+E        +  where 409 = <Response [409 Conflict]>.status_code
+
+tests\integration\test_platform.py:76: AssertionError
+---------------------------- Captured stderr call -----------------------------
+{"timestamp": "2026-10-18T08:03:03.340852+00:00", "level": "INFO", "event": "http.request", "request_id": "bdd00cb1-6856-43f0-871a-6d91ca3e85be", "status": 409, "duration_ms": 51.146, "method": "POST", "route": "/auth/bootstrap", "release": "development"}
+------------------------------ Captured log call ------------------------------
+INFO     auditos:main.py:152 request
+___________ test_tp_job_controls_require_owner_and_exact_operation ____________
+
+environment = <httpx.AsyncClient object at 0x000001CA9C5E4C20>
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x000001CA9C55B8F0>
+
+    async def test_tp_job_controls_require_owner_and_exact_operation(environment, monkeypatch):
+        from app.db.models.platform import BackgroundJob, Membership
+        from app.workers.accounting import work
+    
+        c = environment
+>       f = await prepared(c)
+            ^^^^^^^^^^^^^^^^^
+
+tests\phase8\test_workflows.py:855: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase8\test_workflows.py:38: in prepared
+    ) = await tax_prepared(c)
+        ^^^^^^^^^^^^^^^^^^^^^
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:22: in prepared
+    h, opts, eid, base = scope_data or await setup(c)
+                                       ^^^^^^^^^^^^^^
+tests\phase4\test_workflows.py:44: in setup
+    h, options = await scope(client)
+                 ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = <httpx.AsyncClient object at 0x000001CA9C5E4C20>
+
+    async def scope(client):
+        headers, _ = await setup(client)
+        c = await client.post(
+            "/api/v1/clients",
+            headers=headers,
+            json={"code": "SYNTHETIC", "name": "FICTIONAL Gulf Example LLC � synthetic test only"},
+        )
+        e = await client.post(
+            "/api/v1/entities",
+            headers=headers,
+            json={
+                "client_id": c.json()["id"],
+                "name": "FICTIONAL synthetic entity",
+                "country": "AE",
+                "jurisdiction": "Synthetic",
+                "functional_currency": "AED",
+                "presentation_currency": "AED",
+            },
+        )
+        p = await client.post(
+            "/api/v1/financial-periods",
+            headers=headers,
+            json={"entity_id": e.json()["id"], "start_date": "2026-01-01", "end_date": "2026-12-31"},
+        )
+        return headers, {
+            "client_id": c.json()["id"],
+            "entity_id": e.json()["id"],
+>           "period_id": p.json()["id"],
+                         ^^^^^^^^^^^^^^
+            "expected_rows": 4,
+            "expected_debit": "110.30",
+            "expected_credit": "110.30",
+            "source_complete": True,
+        }
+E       KeyError: 'id'
+
+tests\phase2\test_pipeline.py:47: KeyError
+---------------------------- Captured stderr call -----------------------------
+{"timestamp": "2026-10-18T08:03:04.200709+00:00", "level": "INFO", "event": "http.request", "request_id": "9ffd0e97-ae92-4d11-acdb-59832af04afc", "status": 201, "duration_ms": 136.526, "method": "POST", "route": "/auth/bootstrap", "release": "development"}
+{"timestamp": "2026-10-18T08:03:04.204761+00:00", "level": "INFO", "event": "http.request", "request_id": "e0dd99d1-1cbe-4545-be8f-4ec07077ebc9", "status": 200, "duration_ms": 3.261, "method": "GET", "route": "/tenants", "release": "development"}
+{"timestamp": "2026-10-18T08:03:04.220062+00:00", "level": "INFO", "event": "http.request", "request_id": "940f3bb4-10a3-43e9-a370-70cea9ea693e", "status": 201, "duration_ms": 15.293, "method": "POST", "route": "/clients", "release": "development"}
+{"timestamp": "2026-10-18T08:03:04.234815+00:00", "level": "INFO", "event": "http.request", "request_id": "721502a5-190f-4423-893d-e49fa57ea778", "status": 201, "duration_ms": 12.203, "method": "POST", "route": "/entities", "release": "development"}
+{"timestamp": "2026-10-18T08:03:04.779286+00:00", "level": "INFO", "event": "http.request", "request_id": "a5fb3fae-c7ae-445e-b9a5-b81aea1f8d69", "status": 401, "duration_ms": 544.152, "method": "POST", "route": "/financial-periods", "release": "development"}
+------------------------------ Captured log call ------------------------------
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+_ test_transitive_far_changes_invalidate_benchmark_and_require_parent_review __
+
+environment = <httpx.AsyncClient object at 0x000001CA9C558110>
+
+    async def test_transitive_far_changes_invalidate_benchmark_and_require_parent_review(environment):
+        c = environment
+>       f = await prepared(c)
+            ^^^^^^^^^^^^^^^^^
+
+tests\phase8\test_workflows.py:890: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase8\test_workflows.py:38: in prepared
+    ) = await tax_prepared(c)
+        ^^^^^^^^^^^^^^^^^^^^^
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:22: in prepared
+    h, opts, eid, base = scope_data or await setup(c)
+                                       ^^^^^^^^^^^^^^
+tests\phase4\test_workflows.py:44: in setup
+    h, options = await scope(client)
+                 ^^^^^^^^^^^^^^^^^^^
+tests\phase2\test_pipeline.py:21: in scope
+    headers, _ = await setup(client)
+                 ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = <httpx.AsyncClient object at 0x000001CA9C558110>
+
+    async def setup(client):
+        from app.core.config import settings
+    
+        response = await client.post(
+            "/api/v1/auth/bootstrap",
+            headers={"X-Bootstrap-Secret": settings().bootstrap_secret},
+            json={
+                "email": "admin@example.com",
+                "password": "test-strong-password-123",
+                "tenant_name": "TEST ONLY Firm A",
+            },
+        )
+>       assert response.status_code == 201, response.text
+E       AssertionError: {"error":{"code":"409","message":"Initial setup has already completed","request_id":"f40a7bf3-9954-4804-a5b7-29c9713edba0"}}
+E       assert 409 == 201
+E        +  where 409 = <Response [409 Conflict]>.status_code
+
+tests\integration\test_platform.py:76: AssertionError
+---------------------------- Captured stderr call -----------------------------
+{"timestamp": "2026-10-18T08:03:05.625161+00:00", "level": "INFO", "event": "http.request", "request_id": "f40a7bf3-9954-4804-a5b7-29c9713edba0", "status": 409, "duration_ms": 119.145, "method": "POST", "route": "/auth/bootstrap", "release": "development"}
+------------------------------ Captured log call ------------------------------
+INFO     auditos:main.py:152 request
+_ test_manual_specialist_calculators_do_not_claim_external_ratings_or_market_rates _
+
+environment = <httpx.AsyncClient object at 0x000001CA9C3BE690>
+
+    async def test_manual_specialist_calculators_do_not_claim_external_ratings_or_market_rates(
+        environment,
+    ):
+        c = environment
+>       f = await prepared(c)
+            ^^^^^^^^^^^^^^^^^
+
+tests\phase8\test_workflows.py:912: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase8\test_workflows.py:38: in prepared
+    ) = await tax_prepared(c)
+        ^^^^^^^^^^^^^^^^^^^^^
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:26: in prepared
+    await grant(c, h, base, partner)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = <httpx.AsyncClient object at 0x000001CA9C3BE690>
+h = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJmZjdmMmZmMC00ZTFjLTRmZjMtODVhOS01Mjg4MDAzNTd...IsIm1mYSI6ZmFsc2V9.LYvweb47iNAt9K1uE-0T7AWsPb0FoVqbJjPa3ZRfbs8', 'X-Tenant-ID': '2ae2499f-81fb-4466-84fc-5600c2d4480a'}
+base = '/api/v1/engagements/4bd620ae-cafd-4bab-99c0-b413244b451e/audit'
+actor_data = ({'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIzNDgwMDc1OS04MjkyLTQzN2MtOWNmNC03Y2NmMmViNz...'09c587e6-a75d-4b65-a809-836de60e5d70', '424aeb58-ddd8-46ce-844e-4b4b0e0fb2cb', '34800759-8292-437c-9cf4-7ccf2eb72b0d')
+
+    async def grant(client, h, base, actor_data):
+        r = await client.post(
+            base + "/team", headers=h, json={"membership_id": actor_data[1], "role_id": actor_data[2]}
+        )
+>       assert r.status_code == 200, r.text
+E       AssertionError: {"error":{"code":"401","message":"Inactive identity","request_id":"5408bcc0-3f6e-47c5-8623-3b7dee6e3ecd"}}
+E       assert 401 == 200
+E        +  where 401 = <Response [401 Unauthorized]>.status_code
+
+tests\phase4\test_workflows.py:64: AssertionError
+---------------------------- Captured stderr call -----------------------------
+{"timestamp": "2026-10-18T08:03:06.518001+00:00", "level": "INFO", "event": "http.request", "request_id": "ac65a056-e120-44eb-998f-5a863164583e", "status": 201, "duration_ms": 147.152, "method": "POST", "route": "/auth/bootstrap", "release": "development"}
+{"timestamp": "2026-10-18T08:03:06.522192+00:00", "level": "INFO", "event": "http.request", "request_id": "d6f50c5a-367f-4777-84bd-b2060591f8f0", "status": 200, "duration_ms": 3.462, "method": "GET", "route": "/tenants", "release": "development"}
+{"timestamp": "2026-10-18T08:03:06.535110+00:00", "level": "INFO", "event": "http.request", "request_id": "573f5a31-ed4f-4c00-9354-77c35db50e71", "status": 201, "duration_ms": 11.951, "method": "POST", "route": "/clients", "release": "development"}
+{"timestamp": "2026-10-18T08:03:06.548558+00:00", "level": "INFO", "event": "http.request", "request_id": "7e3b6d4b-7b1b-4dab-aa2d-a655abda50a2", "status": 201, "duration_ms": 12.476, "method": "POST", "route": "/entities", "release": "development"}
+{"timestamp": "2026-10-18T08:03:06.561332+00:00", "level": "INFO", "event": "http.request", "request_id": "d2666aba-4f1a-4de3-9be6-7f68e5c8409e", "status": 201, "duration_ms": 11.448, "method": "POST", "route": "/financial-periods", "release": "development"}
+{"timestamp": "2026-10-18T08:03:06.573486+00:00", "level": "INFO", "event": "http.request", "request_id": "3f5d9c95-c342-425a-8b1c-918c6b62810f", "status": 201, "duration_ms": 10.745, "method": "POST", "route": "/engagements", "release": "development"}
+{"timestamp": "2026-10-18T08:03:06.697185+00:00", "level": "INFO", "event": "http.request", "request_id": "de8adcf8-b1df-4161-baf4-4872b5e97f31", "status": 200, "duration_ms": 17.679, "method": "POST", "route": "/engagements/{eid}/audit/team", "release": "development"}
+{"timestamp": "2026-10-18T08:03:07.329993+00:00", "level": "INFO", "event": "http.request", "request_id": "5408bcc0-3f6e-47c5-8623-3b7dee6e3ecd", "status": 401, "duration_ms": 631.254, "method": "POST", "route": "/engagements/{eid}/audit/team", "release": "development"}
+------------------------------ Captured log call ------------------------------
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+______________ test_dmtt_actual_ifrs_approval_computation_and_ai ______________
+
+environment = <httpx.AsyncClient object at 0x000001CA9C32D7C0>
+
+    async def test_dmtt_actual_ifrs_approval_computation_and_ai(environment):
+        c = environment
+>       h, eid, base, manager, partner, p, adj, note, rules, ready, financial = await prepared(c)
+                                                                                ^^^^^^^^^^^^^^^^^
+
+tests\phase9\test_workflows.py:49: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:22: in prepared
+    h, opts, eid, base = scope_data or await setup(c)
+                                       ^^^^^^^^^^^^^^
+tests\phase4\test_workflows.py:44: in setup
+    h, options = await scope(client)
+                 ^^^^^^^^^^^^^^^^^^^
+tests\phase2\test_pipeline.py:21: in scope
+    headers, _ = await setup(client)
+                 ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = <httpx.AsyncClient object at 0x000001CA9C32D7C0>
+
+    async def setup(client):
+        from app.core.config import settings
+    
+        response = await client.post(
+            "/api/v1/auth/bootstrap",
+            headers={"X-Bootstrap-Secret": settings().bootstrap_secret},
+            json={
+                "email": "admin@example.com",
+                "password": "test-strong-password-123",
+                "tenant_name": "TEST ONLY Firm A",
+            },
+        )
+>       assert response.status_code == 201, response.text
+E       AssertionError: {"error":{"code":"409","message":"Initial setup has already completed","request_id":"5c6b22c7-1ff9-4fae-9daa-c8b1b765a271"}}
+E       assert 409 == 201
+E        +  where 409 = <Response [409 Conflict]>.status_code
+
+tests\integration\test_platform.py:76: AssertionError
+---------------------------- Captured stderr call -----------------------------
+{"timestamp": "2026-10-18T08:03:08.094725+00:00", "level": "INFO", "event": "http.request", "request_id": "5c6b22c7-1ff9-4fae-9daa-c8b1b765a271", "status": 409, "duration_ms": 48.633, "method": "POST", "route": "/auth/bootstrap", "release": "development"}
+------------------------------ Captured log call ------------------------------
+INFO     auditos:main.py:152 request
+=========================== short test summary info ===========================
+FAILED tests/phase8/test_workflows.py::test_source_reconciled_services_and_reviewed_localfile_exports
+FAILED tests/phase8/test_workflows.py::test_connected_person_remuneration_and_ct_adjustment_bridge
+FAILED tests/phase8/test_workflows.py::test_tp_job_controls_require_owner_and_exact_operation
+FAILED tests/phase8/test_workflows.py::test_transitive_far_changes_invalidate_benchmark_and_require_parent_review
+FAILED tests/phase8/test_workflows.py::test_manual_specialist_calculators_do_not_claim_external_ratings_or_market_rates
+FAILED tests/phase9/test_workflows.py::test_dmtt_actual_ifrs_approval_computation_and_ai
+6 failed, 20 passed in 90.37s (0:01:30)

@@ -1,0 +1,12 @@
+[
+  {
+    "path": ".local-runtime\\qa-campaign\\pre-campaign-demo.dump",
+    "bytes": 73820142,
+    "sha256": "2259d9481ba3c14f627de902a64fcb2ea8b34cae2b5056af63e22dc27a802719"
+  },
+  {
+    "path": ".local-runtime\\qa-campaign\\pre-index-qa.dump",
+    "bytes": 281041255,
+    "sha256": "5b4f8c57f4a4193a65e4fcd60fad961a80cd4c4de4b8aac9cd198beabcaf5a65"
+  }
+]

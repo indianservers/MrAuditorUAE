@@ -1,0 +1,421 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Indian Servers\\TheAuditor\\frontend\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.crud.config.ts"
+    ],
+    "configFile": "C:\\Indian Servers\\TheAuditor\\frontend\\playwright.crud.config.ts",
+    "rootDir": "C:/Indian Servers/TheAuditor/frontend/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Indian Servers/TheAuditor/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Indian Servers/TheAuditor/frontend/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "/qa-crud\\.spec\\.ts/"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e",
+        "snapshotDir": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e",
+        "testIgnore": [],
+        "testMatch": {},
+        "timeout": 180000,
+        "use": {
+          "actionTimeout": 20000,
+          "navigationTimeout": 45000,
+          "baseURL": "http://127.0.0.1:3006",
+          "viewport": {
+            "width": 1600,
+            "height": 1000
+          },
+          "reducedMotion": "reduce",
+          "trace": "retain-on-failure",
+          "screenshot": "only-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/qa-crud/browser-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "qa-crud.spec.ts",
+      "file": "qa-crud.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "thirteen real role logins enforce server CRUD permissions",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 6434,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m201\u001b[39m\nReceived: \u001b[31m403\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m201\u001b[39m\nReceived: \u001b[31m403\u001b[39m\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-crud.spec.ts:37:29",
+                    "location": {
+                      "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-crud.spec.ts",
+                      "column": 29,
+                      "line": 37
+                    },
+                    "snippet": "  35 |     expect(read.status()).toBe(permissions[role].includes(\"clients.read\") ? 200 : 403);\n  36 |     const create = await page.request.post(\"/api/backend/clients\", {headers, data:{code:`CRUD-ROLE-${roles.indexOf(role)}-${Date.now()}`,name:`SYNTHETIC role probe ${role}`}});\n> 37 |     expect(create.status()).toBe(permissions[role].includes(\"clients.write\") ? 201 : 403);\n     |                             ^\n  38 |     const cross = await page.request.get(\"/api/backend/clients\", {headers:{\"X-Tenant-ID\":\"00000000-0000-4000-8000-000000000001\"}});\n  39 |     expect(cross.status()).toBe(403);\n  40 |     receipts.push({role, read:read.status(), create:create.status(), crossTenant:cross.status(), scope:\"Real login and client CRUD authorization; specialist form workflow not covered by this probe\"});"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-crud.spec.ts",
+                        "column": 29,
+                        "line": 37
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m201\u001b[39m\nReceived: \u001b[31m403\u001b[39m\n\n  35 |     expect(read.status()).toBe(permissions[role].includes(\"clients.read\") ? 200 : 403);\n  36 |     const create = await page.request.post(\"/api/backend/clients\", {headers, data:{code:`CRUD-ROLE-${roles.indexOf(role)}-${Date.now()}`,name:`SYNTHETIC role probe ${role}`}});\n> 37 |     expect(create.status()).toBe(permissions[role].includes(\"clients.write\") ? 201 : 403);\n     |                             ^\n  38 |     const cross = await page.request.get(\"/api/backend/clients\", {headers:{\"X-Tenant-ID\":\"00000000-0000-4000-8000-000000000001\"}});\n  39 |     expect(cross.status()).toBe(403);\n  40 |     receipts.push({role, read:read.status(), create:create.status(), crossTenant:cross.status(), scope:\"Real login and client CRUD authorization; specialist form workflow not covered by this probe\"});\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-crud.spec.ts:37:29"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-18T08:13:27.071Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\qa-crud-thirteen-real-role-1490f-rce-server-CRUD-permissions\\test-failed-1.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\qa-crud-thirteen-real-role-1490f-rce-server-CRUD-permissions\\test-failed-2.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\qa-crud-thirteen-real-role-1490f-rce-server-CRUD-permissions\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\qa-crud-thirteen-real-role-1490f-rce-server-CRUD-permissions\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-crud.spec.ts",
+                    "column": 29,
+                    "line": 37
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "49113dc360e46c122abc-725d2c254a445d4a3b9f",
+          "file": "qa-crud.spec.ts",
+          "line": 19,
+          "column": 1
+        },
+        {
+          "title": "client form create edit archive restore with separate persisted API assertions",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 22710,
+                  "error": {
+                    "message": "TimeoutError: locator.selectOption: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Edit client', exact: true }).getByLabel('status', { exact: true })\u001b[22m\n",
+                    "stack": "TimeoutError: locator.selectOption: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Edit client', exact: true }).getByLabel('status', { exact: true })\u001b[22m\n\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-crud.spec.ts:80:54",
+                    "location": {
+                      "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-crud.spec.ts",
+                      "column": 54,
+                      "line": 80
+                    },
+                    "snippet": "  78 |       .click();\n  79 |     const form = page.getByRole(\"dialog\", {name: \"Edit client\", exact: true});\n> 80 |     await form.getByLabel(\"status\", { exact: true }).selectOption(status);\n     |                                                      ^\n  81 |     await form\n  82 |       .getByLabel(\"Lifecycle reason\")\n  83 |       .fill(`Synthetic browser lifecycle review for ${status}`);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-crud.spec.ts",
+                        "column": 54,
+                        "line": 80
+                      },
+                      "message": "TimeoutError: locator.selectOption: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('dialog', { name: 'Edit client', exact: true }).getByLabel('status', { exact: true })\u001b[22m\n\n\n  78 |       .click();\n  79 |     const form = page.getByRole(\"dialog\", {name: \"Edit client\", exact: true});\n> 80 |     await form.getByLabel(\"status\", { exact: true }).selectOption(status);\n     |                                                      ^\n  81 |     await form\n  82 |       .getByLabel(\"Lifecycle reason\")\n  83 |       .fill(`Synthetic browser lifecycle review for ${status}`);\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-crud.spec.ts:80:54"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-18T08:13:34.319Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\qa-crud-client-form-create-9b487-te-persisted-API-assertions\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\qa-crud-client-form-create-9b487-te-persisted-API-assertions\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\qa-crud-client-form-create-9b487-te-persisted-API-assertions\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-crud.spec.ts",
+                    "column": 54,
+                    "line": 80
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "49113dc360e46c122abc-566ed38f09f60da6b0b7",
+          "file": "qa-crud.spec.ts",
+          "line": 47,
+          "column": 1
+        },
+        {
+          "title": "working paper actual form creates a persisted draft",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 22139,
+                  "error": {
+                    "message": "TimeoutError: locator.fill: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Folder', { exact: true })\u001b[22m\n",
+                    "stack": "TimeoutError: locator.fill: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Folder', { exact: true })\u001b[22m\n\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-crud.spec.ts:139:52",
+                    "location": {
+                      "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-crud.spec.ts",
+                      "column": 52,
+                      "line": 139
+                    },
+                    "snippet": "  137 |     .getByLabel(\"Title\", { exact: true })\n  138 |     .fill(\"SYNTHETIC browser lifecycle paper\");\n> 139 |   await page.getByLabel(/^Folder/).fill(\"Planning\");\n      |                                                    ^\n  140 |   await page.getByRole(\"button\", { name: \"Add section\" }).click();\n  141 |   await page.getByLabel(\"Section 1 heading\").fill(\"Objective\");\n  142 |   await page"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-crud.spec.ts",
+                        "column": 52,
+                        "line": 139
+                      },
+                      "message": "TimeoutError: locator.fill: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Folder', { exact: true })\u001b[22m\n\n\n  137 |     .getByLabel(\"Title\", { exact: true })\n  138 |     .fill(\"SYNTHETIC browser lifecycle paper\");\n> 139 |   await page.getByLabel(/^Folder/).fill(\"Planning\");\n      |                                                    ^\n  140 |   await page.getByRole(\"button\", { name: \"Add section\" }).click();\n  141 |   await page.getByLabel(\"Section 1 heading\").fill(\"Objective\");\n  142 |   await page\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-crud.spec.ts:139:52"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-18T08:13:57.626Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\qa-crud-working-paper-actual-form-creates-a-persisted-draft\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\qa-crud-working-paper-actual-form-creates-a-persisted-draft\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\qa-crud-working-paper-actual-form-creates-a-persisted-draft\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-crud.spec.ts",
+                    "column": 52,
+                    "line": 139
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "49113dc360e46c122abc-bede79bdb22cbf3706ce",
+          "file": "qa-crud.spec.ts",
+          "line": 126,
+          "column": 1
+        },
+        {
+          "title": "two tabs invalidate cached grids and reject an older open edit",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1111,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m201\u001b[39m\nReceived: \u001b[31m403\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m201\u001b[39m\nReceived: \u001b[31m403\u001b[39m\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-crud.spec.ts:176:28",
+                    "location": {
+                      "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-crud.spec.ts",
+                      "column": 28,
+                      "line": 176
+                    },
+                    "snippet": "  174 |   const headers = {\"Origin\": \"http://127.0.0.1:3006\", \"X-Tenant-ID\": data.tenant_id};\n  175 |   const created = await page.request.post(\"/api/backend/clients\", {headers, data: {code, name: \"SYNTHETIC concurrent draft\"}});\n> 176 |   expect(created.status()).toBe(201); const row = await created.json();\n      |                            ^\n  177 |   const second = await context.newPage();\n  178 |   for (const tab of [page, second]) {\n  179 |     await tab.goto(\"/clients\"); await tab.getByLabel(\"Search clients\").fill(code);"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-crud.spec.ts",
+                        "column": 28,
+                        "line": 176
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m201\u001b[39m\nReceived: \u001b[31m403\u001b[39m\n\n  174 |   const headers = {\"Origin\": \"http://127.0.0.1:3006\", \"X-Tenant-ID\": data.tenant_id};\n  175 |   const created = await page.request.post(\"/api/backend/clients\", {headers, data: {code, name: \"SYNTHETIC concurrent draft\"}});\n> 176 |   expect(created.status()).toBe(201); const row = await created.json();\n      |                            ^\n  177 |   const second = await context.newPage();\n  178 |   for (const tab of [page, second]) {\n  179 |     await tab.goto(\"/clients\"); await tab.getByLabel(\"Search clients\").fill(code);\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-crud.spec.ts:176:28"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-18T08:14:20.341Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\qa-crud-two-tabs-invalidat-c0e63-d-reject-an-older-open-edit\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\qa-crud-two-tabs-invalidat-c0e63-d-reject-an-older-open-edit\\error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\qa-crud-two-tabs-invalidat-c0e63-d-reject-an-older-open-edit\\trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\qa-crud.spec.ts",
+                    "column": 28,
+                    "line": 176
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "49113dc360e46c122abc-9be8e3ca3e0224ef1c2f",
+          "file": "qa-crud.spec.ts",
+          "line": 171,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-18T08:13:26.640Z",
+    "duration": 54993.426,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 4,
+    "flaky": 0
+  }
+}

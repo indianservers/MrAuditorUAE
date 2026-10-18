@@ -1,0 +1,20 @@
+{
+  "transport": "HTTP -> Redis 4 -> separately restarted Celery worker -> PostgreSQL -> HTTP read-time freshness",
+  "job_id": "1a33a55c-40ca-4775-b87f-d98a8cba8b92",
+  "status": "completed",
+  "dataset_id": "b7447a48-9d4c-4bbc-b701-c9f6e79b024f",
+  "rows": 10000,
+  "source_snapshot_receipts": 1,
+  "mapping_receipts": 18,
+  "freshness": {
+    "status": "CURRENT",
+    "reasons": [
+      "Source receipts are evaluated against active snapshots and mapping versions"
+    ],
+    "last_verified_at": "2026-10-18T08:28:22.132900+00:00",
+    "automatic_retraining": false
+  },
+  "elapsed_seconds": 0.2965855000002193,
+  "idempotency": "Repeated identical submission returned the already completed job from the restarted worker",
+  "elapsed_seconds_scope": "HTTP idempotent read-back probe; not first worker execution latency"
+}

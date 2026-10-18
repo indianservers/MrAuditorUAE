@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="4" time="10.354" timestamp="2026-10-18T13:21:43.513111+05:30" hostname="DESKTOP-B3SR465"><testcase classname="tests.qa_crud.test_source_changes" name="test_ifrs_current_status_invalidates_after_real_import_supersession" time="3.063"><failure message="assert True is False">environment = &lt;httpx.AsyncClient object at 0x000002A4444DE300&gt;
+
+    async def test_ifrs_current_status_invalidates_after_real_import_supersession(environment):
+        c=environment
+        h,eid,base,reviewer,partner,profile,*_=await prepared(c)
+        run=await c.post(f'/api/v1/ifrs/engagements/{eid}/financial-statements/{profile["id"]}',headers=h)
+        assert run.status_code==201,run.text
+        before=run.json();url=f'/api/v1/ifrs/engagements/{eid}/runs/{before["id"]}'
+        assert (await c.get(url+'/validate',headers=h)).json()['dependencies_current'] is True
+        await replacement(c,h,eid,profile['body']['snapshot_id'])
+        check=await c.get(url+'/validate',headers=h)
+        assert check.status_code==200
+&gt;       assert check.json()['dependencies_current'] is False
+E       assert True is False
+
+tests\qa_crud\test_source_changes.py:44: AssertionError</failure></testcase><testcase classname="tests.qa_crud.test_source_changes" name="test_ml_dataset_excludes_superseded_lines_and_marks_old_features_stale" time="2.583"><failure message="assert 12 == 6">environment = &lt;httpx.AsyncClient object at 0x000002A4460AE9C0&gt;
+
+    async def test_ml_dataset_excludes_superseded_lines_and_marks_old_features_stale(environment):
+        c=environment
+        h,eid,base,reviewer,partner,profile,*_=await prepared(c)
+        uid=decode_token(h['Authorization'].split()[1])
+        ctx=Context(uid,uuid.UUID(h['X-Tenant-ID']),frozenset(ROLE_PERMISSIONS['Firm Administrator']))
+        async with Session() as db,db.begin():
+            await tenant_context(db,h['X-Tenant-ID'])
+            old=await ml.execute_job(db,ctx,{'operation':'dataset','engagement_id':eid})
+        await replacement(c,h,eid,profile['body']['snapshot_id'])
+        async with Session() as db,db.begin():
+            await tenant_context(db,h['X-Tenant-ID'])
+            new=await ml.execute_job(db,ctx,{'operation':'dataset','engagement_id':eid})
+        latest=await c.get('/api/v1/ml/events/'+new['id'],headers=h)
+        assert latest.status_code==200
+&gt;       assert latest.json()['body']['total_rows']==6
+E       assert 12 == 6
+
+tests\qa_crud\test_source_changes.py:63: AssertionError</failure></testcase><testcase classname="tests.qa_crud.test_source_changes" name="test_archived_client_hidden_from_active_list_and_blocks_new_children" time="1.238"><failure message="assert 1 == 0">environment = &lt;httpx.AsyncClient object at 0x000002A446613C80&gt;
+
+    async def test_archived_client_hidden_from_active_list_and_blocks_new_children(environment):
+        c=environment
+        h,opts,eid,base=await setup(c)
+        client=await c.post('/api/v1/clients',headers=h,json={'code':'CRUD-ARCHIVE','name':'SYNTHETIC archived company','status':'archived'})
+        assert client.status_code==201,client.text
+        identifier=client.json()['id']
+        result=await c.get('/api/v1/clients?search=SYNTHETIC%20archived',headers=h)
+&gt;       assert result.json()['total']==0
+E       assert 1 == 0
+
+tests\qa_crud\test_source_changes.py:76: AssertionError</failure></testcase><testcase classname="tests.qa_crud.test_source_changes" name="test_client_archival_cannot_bypass_active_engagement_guard" time="1.309"><failure message="AssertionError: {&quot;error&quot;:{&quot;code&quot;:&quot;422&quot;,&quot;message&quot;:&quot;Request validation failed&quot;,&quot;request_id&quot;:&quot;96216c48-784b-46c7-8e5e-aacc2b25de2e&quot;}}&#10;assert 422 == 409&#10; +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code">environment = &lt;httpx.AsyncClient object at 0x000002A446324F80&gt;
+
+    async def test_client_archival_cannot_bypass_active_engagement_guard(environment):
+        c=environment
+        h,options,eid,base=await setup(c)
+        old=(await c.get('/api/v1/clients/'+options['client_id'],headers=h)).json()
+        changed=await c.patch('/api/v1/clients/'+old['id'],headers=h,json={'version':old['version'],'status':'archived','lifecycle_reason':'Synthetic archival with unfinished engagement'})
+&gt;       assert changed.status_code==409,changed.text
+E       AssertionError: {"error":{"code":"422","message":"Request validation failed","request_id":"96216c48-784b-46c7-8e5e-aacc2b25de2e"}}
+E       assert 422 == 409
+E        +  where 422 = &lt;Response [422 Unprocessable Entity]&gt;.status_code
+
+tests\qa_crud\test_source_changes.py:87: AssertionError</failure></testcase></testsuite></testsuites>

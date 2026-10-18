@@ -139,18 +139,25 @@ export function AuditStudio({
   const base = `engagements/${id}/audit`;
   const workspace = useAPI<Workspace>(base + "/workspace", true, true);
   const [search, setSearch] = useState("");
+  const [lifecycle, setLifecycle] = useState("");
   const [offset, setOffset] = useState(0);
   const value = useDebounced(search);
   const records = useAPI<Page<AuditRecord>>(
-    `${base}/${area}?${qs({ search: value, offset, limit: 50 })}`,
+    `${base}/${area}?${qs({ search: value, offset, limit: 50, status: lifecycle })}`,
     area !== "team",
     true,
   );
   const [selected, setSelected] = useState<AuditRecord | null>(null);
   const [creating, setCreating] = useState(false);
   const [history, setHistory] = useState(false);
+  const detail = useAPI<AuditRecord>(
+    `${base}/records/${selected?.id}`,
+    !!selected,
+  );
   const current =
-    records.data?.items.find((r) => r.id === selected?.id) || selected;
+    detail.data ||
+    records.data?.items.find((r) => r.id === selected?.id) ||
+    selected;
   const w = workspace.data;
   const canPrepare = area.startsWith("tp-")
     ? !!w?.permissions.includes(tpPermissions[area]?.[0])
@@ -211,6 +218,20 @@ export function AuditStudio({
         </nav>
       )}
       {children}
+      <label>
+        Record lifecycle filter
+        <select
+          value={lifecycle}
+          onChange={(e) => {
+            setLifecycle(e.target.value);
+            setOffset(0);
+            setSelected(null);
+          }}
+        >
+          <option value="">Current records</option>
+          <option value="ARCHIVED">Archived drafts</option>
+        </select>
+      </label>
       <div className="audit-stage-bar">
         <span>
           <ShieldCheck size={15} /> Human review required
@@ -621,7 +642,9 @@ export function AuditEditor({
       {record?.body.calculation != null && (
         <Facts data={record.body.calculation as Record<string, unknown>} />
       )}
-      {record && <RecordActions base={base} record={record} />}
+      {record && (
+        <RecordActions base={base} record={record} busy={action.isPending} />
+      )}
       {record && area === "evidence" && (
         <EvidenceFiles base={base} record={record} />
       )}
@@ -683,9 +706,11 @@ function Sections({
 function RecordActions({
   base,
   record,
+  busy = false,
 }: {
   base: string;
   record: AuditRecord;
+  busy?: boolean;
 }) {
   const access = useAPI<Workspace>(base + "/workspace");
   const canAct = (action: string) =>
@@ -695,7 +720,7 @@ function RecordActions({
         )
       : !record.kind.startsWith("vat-") ||
         !!access.data?.permissions.includes(
-          action === "submit"
+          ["submit", "archive", "restore"].includes(action)
             ? vatPreparePermissions[record.kind]
             : record.kind === "vat-rule"
               ? "vat.rules.approve"
@@ -705,21 +730,41 @@ function RecordActions({
         );
   const action = useAction();
   const [comments, setComments] = useState("");
+  const lifecycleChoices =
+    record.status === "ARCHIVED"
+      ? ["restore"]
+      : [
+            "working-papers",
+            "risks",
+            "vat-invoice",
+            "requests",
+            "planning",
+            "programs",
+            "procedures",
+          ].includes(record.kind) &&
+          ["DRAFT", "IN_PROGRESS"].includes(record.status)
+        ? ["archive"]
+        : [];
   const choices =
-    record.kind === "findings"
-      ? [
-          "UNDER_REVIEW",
-          "MANAGEMENT_RESPONSE_PENDING",
-          "REMEDIATION_PENDING",
-          "RESOLVED",
-          "ACCEPTED_UNRESOLVED",
-          "CLOSED",
-        ]
-      : record.kind === "requests"
-        ? ["SENT", "ACCEPTED", "MORE_INFORMATION_REQUIRED", "CLOSED"]
-        : record.kind === "review-notes"
-          ? ["resolve", "clear"]
-          : ["submit", "approve", "return", "lock", "reopen"];
+    record.status === "ARCHIVED"
+      ? lifecycleChoices
+      : [
+          ...lifecycleChoices,
+          ...(record.kind === "findings"
+            ? [
+                "UNDER_REVIEW",
+                "MANAGEMENT_RESPONSE_PENDING",
+                "REMEDIATION_PENDING",
+                "RESOLVED",
+                "ACCEPTED_UNRESOLVED",
+                "CLOSED",
+              ]
+            : record.kind === "requests"
+              ? ["SENT", "ACCEPTED", "MORE_INFORMATION_REQUIRED", "CLOSED"]
+              : record.kind === "review-notes"
+                ? ["resolve", "clear"]
+                : ["submit", "approve", "return", "lock", "reopen"]),
+        ];
   return (
     <section className="audit-review-actions">
       <h3>Review & clearance</h3>
@@ -737,7 +782,7 @@ function RecordActions({
         {choices.map((a) => (
           <Button
             key={a}
-            disabled={!comments || action.isPending || !canAct(a)}
+            disabled={busy || !comments || action.isPending || !canAct(a)}
             onClick={() =>
               action.mutate({
                 path: `${base}/records/${record.id}/actions`,

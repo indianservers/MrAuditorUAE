@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="3.295" timestamp="2026-10-18T12:45:30.832271+05:30" hostname="DESKTOP-B3SR465"><testcase classname="tests.phase12.test_qa_center" name="test_client_directory_searches_name_or_code_without_wildcard_expansion" time="1.179"><failure message="assert 0 == 1">environment = &lt;httpx.AsyncClient object at 0x0000028AAE3A2480&gt;
+
+    @pytest.mark.skipif(os.getenv("INTEGRATION_TESTS") != "1", reason="Disposable database required")
+    async def test_client_directory_searches_name_or_code_without_wildcard_expansion(environment):
+        c = environment
+        h, _ = await setup(c)
+        r = await c.post("/api/v1/clients", headers=h, json={"code": "QA-CODE-ONLY", "name": "Fictional Search Company"})
+        assert r.status_code == 201
+        found = await c.get("/api/v1/clients", headers=h, params={"search": "qa-code-only"})
+        assert found.status_code == 200
+&gt;       assert found.json()["total"] == 1
+E       assert 0 == 1
+
+tests\phase12\test_qa_center.py:32: AssertionError</failure></testcase></testsuite></testsuites>

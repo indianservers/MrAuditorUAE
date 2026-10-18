@@ -141,6 +141,26 @@ async def lifecycle(tenant_id: uuid.UUID, data: Lifecycle, db: DB, user: Operato
     return {"id": tenant.id, "status": tenant.status}
 
 
+@router.get("/platform/qa-center")
+async def qa_center(db: DB, user: Operator):
+    if settings().environment not in {"development", "test"} or not settings().qa_campaign_enabled:
+        raise HTTPException(404, "QA campaign is disabled")
+    rows = (
+        await db.scalars(
+            select(Operation)
+            .where(Operation.action == "qa.campaign.results")
+            .order_by(Operation.created_at.desc(), Operation.id)
+            .limit(20)
+        )
+    ).all()
+    return {
+        "runs": [
+            {"id": row.id, "executed_at": row.created_at, "results": row.details} for row in rows
+        ],
+        "production_readiness": "Not certified by this QA dashboard",
+    }
+
+
 @router.get("/platform/{area}")
 async def workspace(
     area: Literal[

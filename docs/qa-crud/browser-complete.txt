@@ -1,0 +1,11 @@
+
+Running 4 tests using 1 worker
+
+(node:19088) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 e2e\qa-crud.spec.ts:19:1 › thirteen real role logins enforce server CRUD permissions (1.1m)
+  ok 2 e2e\qa-crud.spec.ts:98:1 › client form create edit archive restore with separate persisted API assertions (4.2s)
+  ok 3 e2e\qa-crud.spec.ts:179:1 › working paper actual form creates a persisted draft (3.7s)
+  ok 4 e2e\qa-crud.spec.ts:272:1 › two tabs invalidate cached grids and reject an older open edit (4.0s)
+
+  4 passed (1.3m)

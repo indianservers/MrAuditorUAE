@@ -2,7 +2,7 @@ import uuid
 from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
-from sqlalchemy import func, select
+from sqlalchemy import func, or_, select
 
 from app.core.dependencies import DB, Context, require
 from app.db.models.platform import Membership, Role
@@ -33,6 +33,24 @@ from app.modules.audit_log.service import record
 
 router = APIRouter(prefix="/engagements/{eid}/audit", tags=["Audit execution"])
 Actor = Annotated[Context, Depends(require(""))]
+
+
+@router.get("/records/{rid}")
+async def record_detail(eid: uuid.UUID, rid: uuid.UUID, db: DB, ctx: Actor):
+    return s.serialize(await s.get_record(db, ctx, eid, rid))
+
+
+@router.get("/dependencies")
+async def dependencies(
+    eid: uuid.UUID,
+    db: DB,
+    ctx: Actor,
+    offset: int = Query(0, ge=0),
+    limit: int = Query(100, ge=1, le=100),
+):
+    from app.modules.lineage.registry import registry
+
+    return await registry(db, ctx, eid, offset, limit)
 
 
 @router.get("/workspace")
@@ -105,6 +123,7 @@ async def linkable_sources(
                 AuditRecord.tenant_id == ctx.tenant_id,
                 AuditRecord.engagement_id == eid,
                 AuditRecord.title.icontains(search, autoescape=True),
+                AuditRecord.status != "ARCHIVED",
             )
             .order_by(AuditRecord.updated_at.desc())
             .limit(40)
@@ -454,9 +473,16 @@ async def listing(
         AuditRecord.kind == kind,
     ]
     if search:
-        conditions.append(AuditRecord.title.icontains(search, autoescape=True))
+        conditions.append(
+            or_(
+                AuditRecord.title.icontains(search, autoescape=True),
+                AuditRecord.reference.icontains(search, autoescape=True),
+            )
+        )
     if status:
         conditions.append(AuditRecord.status == status)
+    else:
+        conditions.append(AuditRecord.status != "ARCHIVED")
     rows = (
         await db.scalars(
             select(AuditRecord)

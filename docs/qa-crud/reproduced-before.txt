@@ -1,0 +1,328 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.7.0
+rootdir: C:\Indian Servers\TheAuditor\backend
+configfile: pyproject.toml
+plugins: anyio-4.15.1, platformdirs-4.13.3, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 4 items
+
+tests\qa_crud\test_source_changes.py FFFF                                [100%]
+
+================================== FAILURES ===================================
+_____ test_ifrs_current_status_invalidates_after_real_import_supersession _____
+
+environment = <httpx.AsyncClient object at 0x000002A4444DE300>
+
+    async def test_ifrs_current_status_invalidates_after_real_import_supersession(environment):
+        c=environment
+        h,eid,base,reviewer,partner,profile,*_=await prepared(c)
+        run=await c.post(f'/api/v1/ifrs/engagements/{eid}/financial-statements/{profile["id"]}',headers=h)
+        assert run.status_code==201,run.text
+        before=run.json();url=f'/api/v1/ifrs/engagements/{eid}/runs/{before["id"]}'
+        assert (await c.get(url+'/validate',headers=h)).json()['dependencies_current'] is True
+        await replacement(c,h,eid,profile['body']['snapshot_id'])
+        check=await c.get(url+'/validate',headers=h)
+        assert check.status_code==200
+>       assert check.json()['dependencies_current'] is False
+E       assert True is False
+
+tests\qa_crud\test_source_changes.py:44: AssertionError
+---------------------------- Captured stderr call -----------------------------
+{"timestamp": "2026-10-18T07:51:46.832775+00:00", "level": "INFO", "event": "http.request", "request_id": "6707d150-160a-45b8-aaa4-542626872817", "status": 201, "duration_ms": 460.547, "method": "POST", "route": "/auth/bootstrap", "release": "development"}
+{"timestamp": "2026-10-18T07:51:46.842891+00:00", "level": "INFO", "event": "http.request", "request_id": "903d4bec-c551-4fc6-b256-54f810784424", "status": 200, "duration_ms": 8.958, "method": "GET", "route": "/tenants", "release": "development"}
+{"timestamp": "2026-10-18T07:51:46.877165+00:00", "level": "INFO", "event": "http.request", "request_id": "fe193dd6-2b53-4d5c-b48a-055708d3b946", "status": 201, "duration_ms": 33.308, "method": "POST", "route": "/clients", "release": "development"}
+{"timestamp": "2026-10-18T07:51:46.913086+00:00", "level": "INFO", "event": "http.request", "request_id": "4eb4fd71-76dd-47e3-b23f-787a87410d96", "status": 201, "duration_ms": 34.418, "method": "POST", "route": "/entities", "release": "development"}
+{"timestamp": "2026-10-18T07:51:46.944516+00:00", "level": "INFO", "event": "http.request", "request_id": "cd29c6f8-698d-4288-91d6-107617d15b47", "status": 201, "duration_ms": 28.781, "method": "POST", "route": "/financial-periods", "release": "development"}
+{"timestamp": "2026-10-18T07:51:46.964987+00:00", "level": "INFO", "event": "http.request", "request_id": "549fe5e0-ce2b-4a2c-983c-70495bb423b1", "status": 201, "duration_ms": 19.311, "method": "POST", "route": "/engagements", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.107632+00:00", "level": "INFO", "event": "http.request", "request_id": "d8a9c272-4379-40eb-8d7c-d2ae70b115b5", "status": 200, "duration_ms": 30.418, "method": "POST", "route": "/engagements/{eid}/audit/team", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.137102+00:00", "level": "INFO", "event": "http.request", "request_id": "ac496c48-d929-4e2f-a4ec-ae988e3fe726", "status": 200, "duration_ms": 28.637, "method": "POST", "route": "/engagements/{eid}/audit/team", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.167576+00:00", "level": "INFO", "event": "http.request", "request_id": "7647727e-38b3-47f9-bbc4-945c3baae0dd", "status": 201, "duration_ms": 29.35, "method": "POST", "route": "/accounting/imports", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.219680+00:00", "level": "INFO", "event": "http.request", "request_id": "fa59b91d-36c8-4d0a-a2d5-849336a84533", "status": 200, "duration_ms": 50.024, "method": "POST", "route": "/accounting/imports/{identifier}/validate", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.273996+00:00", "level": "INFO", "event": "http.request", "request_id": "d9260954-fbdb-4d0b-8c55-6304b2381a1a", "status": 200, "duration_ms": 53.332, "method": "POST", "route": "/accounting/imports/{identifier}/commit", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.283842+00:00", "level": "INFO", "event": "http.request", "request_id": "872d5608-7e62-46aa-a31f-2a96db142407", "status": 200, "duration_ms": 8.081, "method": "GET", "route": "/accounting/imports/{identifier}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.307941+00:00", "level": "INFO", "event": "http.request", "request_id": "df497022-4b4a-40ef-b6ca-62c60333e4ff", "status": 201, "duration_ms": 23.501, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.348465+00:00", "level": "INFO", "event": "http.request", "request_id": "73c1f00d-c738-4772-ae7c-39d40f5ff3f2", "status": 200, "duration_ms": 38.641, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.388155+00:00", "level": "INFO", "event": "http.request", "request_id": "01c540f3-28df-45df-a0da-53c334d03dc6", "status": 200, "duration_ms": 38.368, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.426734+00:00", "level": "INFO", "event": "http.request", "request_id": "d4ca8e79-a3e2-4fed-b2f1-0caf66750fff", "status": 201, "duration_ms": 36.974, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.453291+00:00", "level": "INFO", "event": "http.request", "request_id": "53ca2558-3347-4d77-a8b6-7f20a0dce397", "status": 200, "duration_ms": 25.134, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.500919+00:00", "level": "INFO", "event": "http.request", "request_id": "9b57660c-5653-4f9a-9d21-357552a829b8", "status": 200, "duration_ms": 46.437, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.522385+00:00", "level": "INFO", "event": "http.request", "request_id": "df9a160a-d0f8-408e-bc5f-888779c0c5d9", "status": 201, "duration_ms": 20.206, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.545503+00:00", "level": "INFO", "event": "http.request", "request_id": "07a82edb-5316-4deb-865c-621af3de8105", "status": 200, "duration_ms": 21.478, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.575124+00:00", "level": "INFO", "event": "http.request", "request_id": "2192f98f-96ed-4a50-9fca-dc291178c87a", "status": 200, "duration_ms": 28.759, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.605222+00:00", "level": "INFO", "event": "http.request", "request_id": "12104c2e-5127-4e80-b87e-1a0a7ee13564", "status": 201, "duration_ms": 29.49, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.635146+00:00", "level": "INFO", "event": "http.request", "request_id": "589447b5-0d07-42a2-9985-78be155b91ed", "status": 200, "duration_ms": 28.239, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.666556+00:00", "level": "INFO", "event": "http.request", "request_id": "03e9bd44-7bb3-4c19-8da3-1ee35a9c9c89", "status": 200, "duration_ms": 29.51, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.696605+00:00", "level": "INFO", "event": "http.request", "request_id": "e5d7b745-974c-4ae9-af9c-5b2954546e56", "status": 201, "duration_ms": 28.858, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.717362+00:00", "level": "INFO", "event": "http.request", "request_id": "76b7fe04-f92d-498e-bb62-8309121ba735", "status": 200, "duration_ms": 19.193, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.744793+00:00", "level": "INFO", "event": "http.request", "request_id": "52c50c6d-bcc4-4f35-a634-547c5020f24b", "status": 200, "duration_ms": 26.923, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.783940+00:00", "level": "INFO", "event": "http.request", "request_id": "4dc8bab9-a4c0-457c-933c-3e47372a92b4", "status": 201, "duration_ms": 38.288, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.810359+00:00", "level": "INFO", "event": "http.request", "request_id": "cd744f8c-aa28-4118-928c-5e4c291473ec", "status": 200, "duration_ms": 24.557, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.840547+00:00", "level": "INFO", "event": "http.request", "request_id": "3cedc139-591a-4b3a-845f-ff63c54fac03", "status": 200, "duration_ms": 28.659, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.875068+00:00", "level": "INFO", "event": "http.request", "request_id": "fbdbecd9-4f3e-452a-94f5-0fd46cb94986", "status": 201, "duration_ms": 33.353, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.895387+00:00", "level": "INFO", "event": "http.request", "request_id": "1b47836f-e1a4-4d1e-9aa8-36879411f8fc", "status": 200, "duration_ms": 19.899, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.924035+00:00", "level": "INFO", "event": "http.request", "request_id": "4a88a8c3-7211-4603-8680-693a8085b414", "status": 200, "duration_ms": 26.614, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.953899+00:00", "level": "INFO", "event": "http.request", "request_id": "e14b16b0-625e-4c26-b8af-b0b1b66f5775", "status": 201, "duration_ms": 29.1, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:47.980602+00:00", "level": "INFO", "event": "http.request", "request_id": "7388bc2a-0809-46f1-83b3-44cb42d7e499", "status": 200, "duration_ms": 25.091, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:48.015442+00:00", "level": "INFO", "event": "http.request", "request_id": "1f69646d-a485-40c3-b44a-abdb13774193", "status": 200, "duration_ms": 32.825, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:48.054815+00:00", "level": "INFO", "event": "http.request", "request_id": "6367a95e-4e7b-4d5a-bb7d-d4d26f8bc81e", "status": 201, "duration_ms": 37.914, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:48.084814+00:00", "level": "INFO", "event": "http.request", "request_id": "c6eca9d1-e2d7-4b61-8c75-34b798c6b880", "status": 200, "duration_ms": 28.756, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:48.112723+00:00", "level": "INFO", "event": "http.request", "request_id": "b34f314b-2ebb-4853-b9f3-5e820ed81fff", "status": 200, "duration_ms": 27.265, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:48.152583+00:00", "level": "INFO", "event": "http.request", "request_id": "48f6863c-3b33-43c2-99b2-d40baed057a9", "status": 201, "duration_ms": 38.12, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:48.182358+00:00", "level": "INFO", "event": "http.request", "request_id": "e6e6afbb-f7f3-4ebf-93d8-e76162f1a893", "status": 200, "duration_ms": 28.682, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:48.212010+00:00", "level": "INFO", "event": "http.request", "request_id": "f32a960d-fc67-4eaf-bbba-9af7134cabf2", "status": 200, "duration_ms": 29.154, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:48.252098+00:00", "level": "INFO", "event": "http.request", "request_id": "a47ff5f7-0449-4467-afbf-56f0b643de6e", "status": 201, "duration_ms": 37.785, "method": "POST", "route": "/ifrs/engagements/{eid}/financial-statements/{profile_id}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:48.310611+00:00", "level": "INFO", "event": "http.request", "request_id": "84d39806-4b9d-4de0-a6a0-4ffc78b59719", "status": 200, "duration_ms": 57.599, "method": "GET", "route": "/ifrs/engagements/{eid}/runs/{rid}/validate", "release": "development"}
+{"timestamp": "2026-10-18T07:51:48.391205+00:00", "level": "INFO", "event": "http.request", "request_id": "470b173e-b8ff-4acc-808c-9b03e858885d", "status": 200, "duration_ms": 78.679, "method": "GET", "route": "/engagements/{identifier}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:48.399176+00:00", "level": "INFO", "event": "http.request", "request_id": "07f5e037-3784-4358-92ab-26907afd0583", "status": 200, "duration_ms": 7.698, "method": "GET", "route": "/entities/{identifier}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:48.421006+00:00", "level": "INFO", "event": "http.request", "request_id": "3bab9b35-5a89-43d9-9258-a05023ff1263", "status": 201, "duration_ms": 18.288, "method": "POST", "route": "/accounting/imports", "release": "development"}
+{"timestamp": "2026-10-18T07:51:48.451211+00:00", "level": "INFO", "event": "http.request", "request_id": "1497b1df-7b61-49e5-a416-948cb98f8c92", "status": 200, "duration_ms": 28.965, "method": "POST", "route": "/accounting/imports/{identifier}/validate", "release": "development"}
+{"timestamp": "2026-10-18T07:51:48.477688+00:00", "level": "INFO", "event": "http.request", "request_id": "80a4548f-0697-4a1d-ba88-d9360e51f2f4", "status": 200, "duration_ms": 25.025, "method": "POST", "route": "/accounting/imports/{identifier}/commit", "release": "development"}
+{"timestamp": "2026-10-18T07:51:48.485141+00:00", "level": "INFO", "event": "http.request", "request_id": "cf33e56b-c0e9-461a-b13b-b16977ed40db", "status": 200, "duration_ms": 6.315, "method": "GET", "route": "/accounting/imports/{identifier}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:48.530324+00:00", "level": "INFO", "event": "http.request", "request_id": "994cc4dd-f217-46fe-809d-029472c45e3f", "status": 200, "duration_ms": 44.359, "method": "GET", "route": "/ifrs/engagements/{eid}/runs/{rid}/validate", "release": "development"}
+------------------------------ Captured log call ------------------------------
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+___ test_ml_dataset_excludes_superseded_lines_and_marks_old_features_stale ____
+
+environment = <httpx.AsyncClient object at 0x000002A4460AE9C0>
+
+    async def test_ml_dataset_excludes_superseded_lines_and_marks_old_features_stale(environment):
+        c=environment
+        h,eid,base,reviewer,partner,profile,*_=await prepared(c)
+        uid=decode_token(h['Authorization'].split()[1])
+        ctx=Context(uid,uuid.UUID(h['X-Tenant-ID']),frozenset(ROLE_PERMISSIONS['Firm Administrator']))
+        async with Session() as db,db.begin():
+            await tenant_context(db,h['X-Tenant-ID'])
+            old=await ml.execute_job(db,ctx,{'operation':'dataset','engagement_id':eid})
+        await replacement(c,h,eid,profile['body']['snapshot_id'])
+        async with Session() as db,db.begin():
+            await tenant_context(db,h['X-Tenant-ID'])
+            new=await ml.execute_job(db,ctx,{'operation':'dataset','engagement_id':eid})
+        latest=await c.get('/api/v1/ml/events/'+new['id'],headers=h)
+        assert latest.status_code==200
+>       assert latest.json()['body']['total_rows']==6
+E       assert 12 == 6
+
+tests\qa_crud\test_source_changes.py:63: AssertionError
+---------------------------- Captured stderr call -----------------------------
+{"timestamp": "2026-10-18T07:51:49.784835+00:00", "level": "INFO", "event": "http.request", "request_id": "2e828802-1dac-45da-9179-4e5d20ff31d9", "status": 201, "duration_ms": 136.817, "method": "POST", "route": "/auth/bootstrap", "release": "development"}
+{"timestamp": "2026-10-18T07:51:49.789187+00:00", "level": "INFO", "event": "http.request", "request_id": "c9211065-7b5d-49d9-9510-5499b52759fc", "status": 200, "duration_ms": 3.673, "method": "GET", "route": "/tenants", "release": "development"}
+{"timestamp": "2026-10-18T07:51:49.812169+00:00", "level": "INFO", "event": "http.request", "request_id": "10e7372c-b884-491c-9bea-28bc7352436e", "status": 201, "duration_ms": 21.616, "method": "POST", "route": "/clients", "release": "development"}
+{"timestamp": "2026-10-18T07:51:49.832638+00:00", "level": "INFO", "event": "http.request", "request_id": "1b00399b-f449-407a-b096-98d00cd709d7", "status": 201, "duration_ms": 19.332, "method": "POST", "route": "/entities", "release": "development"}
+{"timestamp": "2026-10-18T07:51:49.854057+00:00", "level": "INFO", "event": "http.request", "request_id": "8e0d5976-3e91-4889-b9f2-86a9e38af2d9", "status": 201, "duration_ms": 19.343, "method": "POST", "route": "/financial-periods", "release": "development"}
+{"timestamp": "2026-10-18T07:51:49.874383+00:00", "level": "INFO", "event": "http.request", "request_id": "484bbb12-720b-47bd-bb8f-f74215d789fa", "status": 201, "duration_ms": 19.025, "method": "POST", "route": "/engagements", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.000879+00:00", "level": "INFO", "event": "http.request", "request_id": "e9c86618-b8e3-4aaa-965b-5b50e2de5a36", "status": 200, "duration_ms": 19.736, "method": "POST", "route": "/engagements/{eid}/audit/team", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.021268+00:00", "level": "INFO", "event": "http.request", "request_id": "b86b5c7f-3b88-4b13-8b8a-ddd4834f7f2d", "status": 200, "duration_ms": 19.292, "method": "POST", "route": "/engagements/{eid}/audit/team", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.049022+00:00", "level": "INFO", "event": "http.request", "request_id": "8c5ac5ec-e699-4e54-8206-838a96dddeda", "status": 201, "duration_ms": 26.098, "method": "POST", "route": "/accounting/imports", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.083414+00:00", "level": "INFO", "event": "http.request", "request_id": "a726fedd-e86c-4274-a4b1-b4da79ef9d3f", "status": 200, "duration_ms": 33.356, "method": "POST", "route": "/accounting/imports/{identifier}/validate", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.123697+00:00", "level": "INFO", "event": "http.request", "request_id": "a266e444-40a5-4ed7-936a-a5aaa6b5df89", "status": 200, "duration_ms": 38.679, "method": "POST", "route": "/accounting/imports/{identifier}/commit", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.134819+00:00", "level": "INFO", "event": "http.request", "request_id": "4b00e070-d1e5-4667-bb90-d1b504b5d4ab", "status": 200, "duration_ms": 9.534, "method": "GET", "route": "/accounting/imports/{identifier}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.160463+00:00", "level": "INFO", "event": "http.request", "request_id": "1e2469ad-cafb-4562-8f22-a8c387176242", "status": 201, "duration_ms": 24.757, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.193584+00:00", "level": "INFO", "event": "http.request", "request_id": "07d7fa3d-f0c6-43aa-b73e-96e55cbec930", "status": 200, "duration_ms": 31.482, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.221680+00:00", "level": "INFO", "event": "http.request", "request_id": "69d15fe1-ac43-46c1-9267-9173083b6f7d", "status": 200, "duration_ms": 27.623, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.248563+00:00", "level": "INFO", "event": "http.request", "request_id": "d435cf98-4adf-4010-be0f-3f6101b3915d", "status": 201, "duration_ms": 24.695, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.270133+00:00", "level": "INFO", "event": "http.request", "request_id": "52944e50-a29a-4cff-bb4f-593ea04dd417", "status": 200, "duration_ms": 20.892, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.303017+00:00", "level": "INFO", "event": "http.request", "request_id": "3ddfd903-29f5-4b91-ba54-83f509413fae", "status": 200, "duration_ms": 31.861, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.336515+00:00", "level": "INFO", "event": "http.request", "request_id": "6685c5d3-4280-46ba-8f22-e02adea595c2", "status": 201, "duration_ms": 31.437, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.365080+00:00", "level": "INFO", "event": "http.request", "request_id": "dbf3c33c-353d-4bfe-ab40-cdc511463e1f", "status": 200, "duration_ms": 27.863, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.404084+00:00", "level": "INFO", "event": "http.request", "request_id": "7a1d784e-d038-4d45-8a07-272ffd7143d7", "status": 200, "duration_ms": 37.217, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.437819+00:00", "level": "INFO", "event": "http.request", "request_id": "dcc155f6-b295-48a9-8ed7-fb1ab1abdfbc", "status": 201, "duration_ms": 32.554, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.463009+00:00", "level": "INFO", "event": "http.request", "request_id": "b6f543fa-7eaa-4223-91d3-b95ea8ff4938", "status": 200, "duration_ms": 23.584, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.505628+00:00", "level": "INFO", "event": "http.request", "request_id": "5c995634-20b2-4394-93b9-d44740f5a854", "status": 200, "duration_ms": 41.086, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.538113+00:00", "level": "INFO", "event": "http.request", "request_id": "cba0a135-bc17-45d4-8320-8c0964c93cfb", "status": 201, "duration_ms": 31.033, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.559868+00:00", "level": "INFO", "event": "http.request", "request_id": "eaa3f552-ac86-44b9-9bef-762bbaafa797", "status": 200, "duration_ms": 20.706, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.593101+00:00", "level": "INFO", "event": "http.request", "request_id": "a6cd7cfe-7f43-433e-8992-4c80b700e743", "status": 200, "duration_ms": 31.713, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.626656+00:00", "level": "INFO", "event": "http.request", "request_id": "0360062c-5648-4380-8b08-974c18a1e13c", "status": 201, "duration_ms": 31.775, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.649136+00:00", "level": "INFO", "event": "http.request", "request_id": "86c899ca-5ed7-4642-a084-165e539b0286", "status": 200, "duration_ms": 21.112, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.681293+00:00", "level": "INFO", "event": "http.request", "request_id": "c9c444a5-51b7-43e2-afde-490f90d51f0b", "status": 200, "duration_ms": 31.754, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.715409+00:00", "level": "INFO", "event": "http.request", "request_id": "c8891719-8f90-4dee-8ecb-fd35d2702531", "status": 201, "duration_ms": 32.21, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.743043+00:00", "level": "INFO", "event": "http.request", "request_id": "9cc6f109-a240-498e-9398-5affff554dc1", "status": 200, "duration_ms": 26.452, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.771424+00:00", "level": "INFO", "event": "http.request", "request_id": "4e37d033-c758-4042-8973-22345813d067", "status": 200, "duration_ms": 26.783, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.804968+00:00", "level": "INFO", "event": "http.request", "request_id": "6a4c837e-a385-4b6d-b53f-dabe11e9795b", "status": 201, "duration_ms": 32.667, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.838087+00:00", "level": "INFO", "event": "http.request", "request_id": "a3ce94d0-2dc1-4ec7-9955-ecff5ba7570c", "status": 200, "duration_ms": 31.866, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.870718+00:00", "level": "INFO", "event": "http.request", "request_id": "0088b445-6650-4af4-82b2-2b116a649f97", "status": 200, "duration_ms": 31.899, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.904537+00:00", "level": "INFO", "event": "http.request", "request_id": "cb10aadb-5d9d-42a1-aefb-0bfaa3a62e50", "status": 201, "duration_ms": 32.095, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.926663+00:00", "level": "INFO", "event": "http.request", "request_id": "c8f9b036-2092-4c54-b9ec-db4401984638", "status": 200, "duration_ms": 20.812, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.955699+00:00", "level": "INFO", "event": "http.request", "request_id": "5a3bfe39-3ad1-4374-8c39-34526dc04798", "status": 200, "duration_ms": 27.351, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:50.981621+00:00", "level": "INFO", "event": "http.request", "request_id": "2774930f-aa30-43c7-9956-63a525ff8e17", "status": 201, "duration_ms": 25.232, "method": "POST", "route": "/engagements/{eid}/audit/{kind}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:51.003250+00:00", "level": "INFO", "event": "http.request", "request_id": "5ffa6e0b-fd2f-4701-aa91-19a124b94ae7", "status": 200, "duration_ms": 20.939, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:51.025710+00:00", "level": "INFO", "event": "http.request", "request_id": "6371d963-3bd6-4770-8807-9ab85adc5ce8", "status": 200, "duration_ms": 21.053, "method": "POST", "route": "/engagements/{eid}/audit/records/{rid}/actions", "release": "development"}
+{"timestamp": "2026-10-18T07:51:51.050065+00:00", "level": "INFO", "event": "http.request", "request_id": "9c587860-a22e-4c62-bd92-d59d623a8baf", "status": 200, "duration_ms": 10.699, "method": "GET", "route": "/engagements/{identifier}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:51.059856+00:00", "level": "INFO", "event": "http.request", "request_id": "427f5158-0c83-4123-8ecd-b562e7c1c01b", "status": 200, "duration_ms": 8.735, "method": "GET", "route": "/entities/{identifier}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:51.083544+00:00", "level": "INFO", "event": "http.request", "request_id": "3edf34d1-9a89-4571-b14d-4bab11ee382d", "status": 201, "duration_ms": 19.135, "method": "POST", "route": "/accounting/imports", "release": "development"}
+{"timestamp": "2026-10-18T07:51:51.107177+00:00", "level": "INFO", "event": "http.request", "request_id": "f703ab72-72c8-4b27-9c26-3ef85db160e2", "status": 200, "duration_ms": 22.751, "method": "POST", "route": "/accounting/imports/{identifier}/validate", "release": "development"}
+{"timestamp": "2026-10-18T07:51:51.129623+00:00", "level": "INFO", "event": "http.request", "request_id": "25fbf9d4-781c-41af-8e75-55cce6a4dae3", "status": 200, "duration_ms": 20.951, "method": "POST", "route": "/accounting/imports/{identifier}/commit", "release": "development"}
+{"timestamp": "2026-10-18T07:51:51.137350+00:00", "level": "INFO", "event": "http.request", "request_id": "f654ead1-70db-4732-9cc6-bb504f46c18e", "status": 200, "duration_ms": 6.573, "method": "GET", "route": "/accounting/imports/{identifier}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:51.286780+00:00", "level": "INFO", "event": "http.request", "request_id": "d2f4f295-b0b0-4dee-973a-4c505a6c1e41", "status": 200, "duration_ms": 134.664, "method": "GET", "route": "/ml/events/{identifier}", "release": "development"}
+------------------------------ Captured log call ------------------------------
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+____ test_archived_client_hidden_from_active_list_and_blocks_new_children _____
+
+environment = <httpx.AsyncClient object at 0x000002A446613C80>
+
+    async def test_archived_client_hidden_from_active_list_and_blocks_new_children(environment):
+        c=environment
+        h,opts,eid,base=await setup(c)
+        client=await c.post('/api/v1/clients',headers=h,json={'code':'CRUD-ARCHIVE','name':'SYNTHETIC archived company','status':'archived'})
+        assert client.status_code==201,client.text
+        identifier=client.json()['id']
+        result=await c.get('/api/v1/clients?search=SYNTHETIC%20archived',headers=h)
+>       assert result.json()['total']==0
+E       assert 1 == 0
+
+tests\qa_crud\test_source_changes.py:76: AssertionError
+---------------------------- Captured stderr call -----------------------------
+{"timestamp": "2026-10-18T07:51:52.425575+00:00", "level": "INFO", "event": "http.request", "request_id": "016f77cf-acde-4c5e-9cea-8933c9407c11", "status": 201, "duration_ms": 145.418, "method": "POST", "route": "/auth/bootstrap", "release": "development"}
+{"timestamp": "2026-10-18T07:51:52.431582+00:00", "level": "INFO", "event": "http.request", "request_id": "e0cfae33-65db-4d2a-8f3f-237b9352357d", "status": 200, "duration_ms": 4.745, "method": "GET", "route": "/tenants", "release": "development"}
+{"timestamp": "2026-10-18T07:51:52.451688+00:00", "level": "INFO", "event": "http.request", "request_id": "3c777ea1-43a7-4e46-92f5-ece3e19a3cdb", "status": 201, "duration_ms": 18.75, "method": "POST", "route": "/clients", "release": "development"}
+{"timestamp": "2026-10-18T07:51:52.466878+00:00", "level": "INFO", "event": "http.request", "request_id": "db734ea4-f91c-4162-8201-7c4f2907e228", "status": 201, "duration_ms": 13.886, "method": "POST", "route": "/entities", "release": "development"}
+{"timestamp": "2026-10-18T07:51:52.488250+00:00", "level": "INFO", "event": "http.request", "request_id": "1c1c9728-5b11-416d-a7b6-0ed745011e39", "status": 201, "duration_ms": 19.502, "method": "POST", "route": "/financial-periods", "release": "development"}
+{"timestamp": "2026-10-18T07:51:52.507974+00:00", "level": "INFO", "event": "http.request", "request_id": "f6908722-c191-4d1f-8af4-d856247818c9", "status": 201, "duration_ms": 19.251, "method": "POST", "route": "/engagements", "release": "development"}
+{"timestamp": "2026-10-18T07:51:52.519091+00:00", "level": "INFO", "event": "http.request", "request_id": "760772fb-21be-44e8-aee3-12f9b6c2fbed", "status": 201, "duration_ms": 9.599, "method": "POST", "route": "/clients", "release": "development"}
+{"timestamp": "2026-10-18T07:51:52.531944+00:00", "level": "INFO", "event": "http.request", "request_id": "efcca99e-a693-45e2-9652-ccfe549c1df8", "status": 200, "duration_ms": 12.009, "method": "GET", "route": "/clients", "release": "development"}
+------------------------------ Captured log call ------------------------------
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+_________ test_client_archival_cannot_bypass_active_engagement_guard __________
+
+environment = <httpx.AsyncClient object at 0x000002A446324F80>
+
+    async def test_client_archival_cannot_bypass_active_engagement_guard(environment):
+        c=environment
+        h,options,eid,base=await setup(c)
+        old=(await c.get('/api/v1/clients/'+options['client_id'],headers=h)).json()
+        changed=await c.patch('/api/v1/clients/'+old['id'],headers=h,json={'version':old['version'],'status':'archived','lifecycle_reason':'Synthetic archival with unfinished engagement'})
+>       assert changed.status_code==409,changed.text
+E       AssertionError: {"error":{"code":"422","message":"Request validation failed","request_id":"96216c48-784b-46c7-8e5e-aacc2b25de2e"}}
+E       assert 422 == 409
+E        +  where 422 = <Response [422 Unprocessable Entity]>.status_code
+
+tests\qa_crud\test_source_changes.py:87: AssertionError
+---------------------------- Captured stderr call -----------------------------
+{"timestamp": "2026-10-18T07:51:53.741966+00:00", "level": "INFO", "event": "http.request", "request_id": "3d321f04-76eb-4184-bb3d-cdf8de1c1026", "status": 201, "duration_ms": 232.307, "method": "POST", "route": "/auth/bootstrap", "release": "development"}
+{"timestamp": "2026-10-18T07:51:53.747405+00:00", "level": "INFO", "event": "http.request", "request_id": "55b277de-ad89-4fde-bcd9-2a572d8af321", "status": 200, "duration_ms": 4.404, "method": "GET", "route": "/tenants", "release": "development"}
+{"timestamp": "2026-10-18T07:51:53.769358+00:00", "level": "INFO", "event": "http.request", "request_id": "ed70d8e1-3a21-46ea-adfe-814cceec4f88", "status": 201, "duration_ms": 20.258, "method": "POST", "route": "/clients", "release": "development"}
+{"timestamp": "2026-10-18T07:51:53.788357+00:00", "level": "INFO", "event": "http.request", "request_id": "b0c49163-c6af-4ebe-9053-0856a28ed2f8", "status": 201, "duration_ms": 18.219, "method": "POST", "route": "/entities", "release": "development"}
+{"timestamp": "2026-10-18T07:51:53.808782+00:00", "level": "INFO", "event": "http.request", "request_id": "c6a36387-abd6-4aaa-80cc-04f92335b618", "status": 201, "duration_ms": 18.183, "method": "POST", "route": "/financial-periods", "release": "development"}
+{"timestamp": "2026-10-18T07:51:53.827431+00:00", "level": "INFO", "event": "http.request", "request_id": "bda99dc8-9a34-4abd-b2d4-d1d174e9defd", "status": 201, "duration_ms": 18.384, "method": "POST", "route": "/engagements", "release": "development"}
+{"timestamp": "2026-10-18T07:51:53.838726+00:00", "level": "INFO", "event": "http.request", "request_id": "8e41e247-ee26-4bdb-97d7-0c8dc185795a", "status": 200, "duration_ms": 9.434, "method": "GET", "route": "/clients/{identifier}", "release": "development"}
+{"timestamp": "2026-10-18T07:51:53.847701+00:00", "level": "INFO", "event": "http.request", "request_id": "96216c48-784b-46c7-8e5e-aacc2b25de2e", "status": 422, "duration_ms": 7.55, "method": "PATCH", "route": "/clients/{identifier}", "release": "development"}
+------------------------------ Captured log call ------------------------------
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+INFO     auditos:main.py:152 request
+- generated xml file: C:\Indian Servers\TheAuditor\docs\qa-crud\reproduced-before.xml -
+=========================== short test summary info ===========================
+FAILED tests/qa_crud/test_source_changes.py::test_ifrs_current_status_invalidates_after_real_import_supersession
+FAILED tests/qa_crud/test_source_changes.py::test_ml_dataset_excludes_superseded_lines_and_marks_old_features_stale
+FAILED tests/qa_crud/test_source_changes.py::test_archived_client_hidden_from_active_list_and_blocks_new_children
+FAILED tests/qa_crud/test_source_changes.py::test_client_archival_cannot_bypass_active_engagement_guard
+============================= 4 failed in 10.36s ==============================

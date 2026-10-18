@@ -41,6 +41,7 @@ export const dmttAreas = [
 ] as const;
 type Event = RecordRow & {
   kind: string;
+  freshness?: { status: string };
   body: Record<string, unknown>;
   created_at: string;
 };
@@ -309,6 +310,12 @@ function MLPanel({ eid, area }: { eid: string; area: string }) {
   };
   return (
     <>
+      {rows.some((r) => r.freshness?.status === "STALE") && (
+        <p role="alert">
+          Some historical ML results have stale source data. Regenerate
+          features, train and review before further use.
+        </p>
+      )}
       {events.error && <ErrorState error={events.error} />}{" "}
       {action.error && <ErrorState error={action.error} />}
       <div className="source-strip">

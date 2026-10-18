@@ -19,6 +19,18 @@ export function Providers({ children }: { children: React.ReactNode }) {
         },
       }),
   );
+  useEffect(() => {
+    if (typeof BroadcastChannel === "undefined") return;
+    const channel = new BroadcastChannel("auditos:changes");
+    channel.onmessage = (event: MessageEvent<{ tenant?: unknown }>) => {
+      if (typeof event.data?.tenant !== "string") return;
+      void client.invalidateQueries({ queryKey: ["api", event.data.tenant] });
+      void client.invalidateQueries({
+        queryKey: ["access", event.data.tenant],
+      });
+    };
+    return () => channel.close();
+  }, [client]);
   return (
     <QueryClientProvider client={client}>
       <Tooltip.Provider delayDuration={350}>

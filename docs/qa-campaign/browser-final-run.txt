@@ -1,0 +1,43 @@
+
+Running 4 tests using 1 worker
+
+(node:29716) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 e2e\qa-campaign.spec.ts:9:1 › public login and invitation routes reflow on mobile (665ms)
+  ok 2 e2e\qa-campaign.spec.ts:21:1 › MFA platform operator reads persisted campaign results and cannot read client data (1.7s)
+  x  3 e2e\qa-campaign.spec.ts:54:1 › every source-discovered workspace renders and records actual controls, errors and network results (1.7m)
+(node:20396) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 4 e2e\qa-campaign.spec.ts:86:1 › client search, status filter, edit persistence and backend denial stay functional (4.4s)
+
+
+  1) e2e\qa-campaign.spec.ts:54:1 › every source-discovered workspace renders and records actual controls, errors and network results 
+
+    Error: UNKNOWN: unknown error, open 'C:\Indian Servers\TheAuditor\docs\qa-campaign\frontend-route-results.json'
+
+      77 |     const result={route,status:response?.status(),classification,seconds:(Date.now()-started)/1000,errors:[...errors],failed:[...failed],alerts,controls,horizontalOverflow:await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),coverage:"render and inventory; mutation actions covered separately"};
+      78 |     results.push(result);
+    > 79 |     writeFileSync("../docs/qa-campaign/frontend-route-results.json",JSON.stringify(results,null,2));
+         |     ^
+      80 |     if(route==="/dashboard"||route==="/clients"||route==="/platform/qa-center") await page.screenshot({path:`../docs/qa-campaign/screenshots/${route.replaceAll("/","-")}.png`,fullPage:true});
+      81 |   }
+      82 |   expect(results.filter(r=>(r as {errors:string[]}).errors.length)).toEqual([]);
+        at C:\Indian Servers\TheAuditor\frontend\e2e\qa-campaign.spec.ts:79:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\qa-campaign-every-source-d-384ea--errors-and-network-results\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\qa-campaign-every-source-d-384ea--errors-and-network-results\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\qa-campaign-every-source-d-384ea--errors-and-network-results\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\qa-campaign-every-source-d-384ea--errors-and-network-results\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    e2e\qa-campaign.spec.ts:54:1 › every source-discovered workspace renders and records actual controls, errors and network results 
+  3 passed (1.8m)
