@@ -30,6 +30,10 @@ from app.modules.reconciliation.service import run_reconciliation
 
 
 async def main():
+    from app.modules.demo.guard import guard
+    async with Session() as safety_db, safety_db.begin():
+        await guard(safety_db)
+
     if os.getenv("BENCHMARK_DATABASE") != "1" or settings().environment != "development":
         raise SystemExit("Use a disposable development database and explicit BENCHMARK_DATABASE=1")
     count = int(os.getenv("BENCHMARK_LINES", "10000"))

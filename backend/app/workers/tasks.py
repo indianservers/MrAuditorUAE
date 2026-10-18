@@ -10,9 +10,6 @@ from app.core.dependencies import Context
 from app.db.models.platform import (
     BackgroundJob,
     Membership,
-    MembershipRole,
-    Permission,
-    RolePermission,
     Tenant,
     User,
 )
@@ -51,15 +48,13 @@ async def process(job_id: str, tenant_id: str, user_id: str) -> None:
             )
             allowed = None
             if membership:
-                allowed = await db.scalar(
-                    select(Permission.code)
-                    .join(RolePermission, RolePermission.permission_id == Permission.id)
-                    .join(MembershipRole, MembershipRole.role_id == RolePermission.role_id)
-                    .where(
-                        MembershipRole.membership_id == membership.id,
-                        Permission.code == "jobs.execute",
-                    )
+                from app.modules.audit_execution.access import firm_roles, role_permissions
+
+                roles = await firm_roles(db, uuid.UUID(tenant_id), uuid.UUID(user_id))
+                effective = await role_permissions(
+                    db, uuid.UUID(tenant_id), [role.id for role in roles]
                 )
+                allowed = "jobs.execute" if "jobs.execute" in effective else None
             job.started_at = datetime.now(UTC)
             try:
                 if not allowed or job.created_by != uuid.UUID(user_id):

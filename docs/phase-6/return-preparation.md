@@ -1,0 +1,9 @@
+# Return preparation and compliance calendar
+
+Return workpapers link an immutable tax run and record taxpayer/source/adjustment/election/loss/review-completion checks. Submit/review/approval requires all canonical checks to pass with evidence and the current independently approved computation with current dependencies. Tax Manager then Tax Partner/Chartered Accountant review is independent of preparation and each other. Return workpapers do not overwrite calculations.
+
+States cover preparation, review, return approval, ready-for-filing, filed-externally and acknowledged. Filed/acknowledged assertions require external reference and the corresponding approved evidence. No EmaraTax/FTA submission, professional signature or invented acknowledgement is generated. Corrected approved returns are new versions/workpapers; approved historical bodies cannot reopen.
+
+Standard filing/payment due date is nine calendar months following period end with end-of-month preservation (31December→30September;30June→31March). Approved evidence-backed deadline assessments can record actual extensions or event-specific deadlines. Registration, election, documentation and group-application dates are manual event assessments, not a universal nine-month calculation. FTA6 AUP submission has a separate30-day helper following the normal return due date. Extensions affecting that specialist date require professional reassessment.
+
+PDF/XLSX/JSON are generated from immutable stored amounts, not recalculated at export. Drafts remain drafts; approved status requires the currently released computation and current dependencies. XLSX uses literal exact-decimal strings, no formula execution/external links, and dedicated populated adjustment/interest/loss/QFZP/group/legal tabs. JSON preserves full precision. The inherited DOCX endpoint is structurally supported but was not visually verified in this environment; do not treat it as a verified deliverable.

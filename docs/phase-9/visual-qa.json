@@ -1,0 +1,17 @@
+{
+  "screenshots": "screenshots/",
+  "pages": 24,
+  "widths": [
+    1920,
+    1600,
+    1440,
+    1366
+  ],
+  "visually_reviewed": [
+    "confusion-1366.png",
+    "measured-training.png",
+    "dmtt-calculated.png"
+  ],
+  "notes": "Final charts and cards inspected separately; financial arithmetic stays on backend. Technical schedule JSON editor remains a documented UX limitation.",
+  "final_review": "Measured loss chart, confusion matrix and formatted DMTT cards inspected after final four-scenario browser pass"
+}

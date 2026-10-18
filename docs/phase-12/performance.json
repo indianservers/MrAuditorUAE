@@ -1,0 +1,258 @@
+{
+  "scope": "Local development loopback HTTP; real distinct synthetic identities; not a production capacity or SLO qualification",
+  "api_workloads": [
+    {
+      "concurrent_distinct_users": 10,
+      "requests": 10,
+      "endpoint": "/api/v1/clients?limit=25",
+      "p50_seconds": 0.09118879999732599,
+      "p95_seconds": 0.09897039999486879,
+      "p99_seconds": 0.09897039999486879,
+      "elapsed_seconds": 0.20690399999875808,
+      "throughput_rps": 48.331593396261184,
+      "errors": 0,
+      "status_codes": [
+        200
+      ],
+      "population_totals": [
+        10
+      ]
+    },
+    {
+      "concurrent_distinct_users": 10,
+      "requests": 10,
+      "endpoint": "/api/v1/accounting/ledger?limit=50",
+      "p50_seconds": 0.7785982999994303,
+      "p95_seconds": 0.8957884000046761,
+      "p99_seconds": 0.8957884000046761,
+      "elapsed_seconds": 0.9067628000047989,
+      "throughput_rps": 11.0282424465881,
+      "errors": 0,
+      "status_codes": [
+        200
+      ],
+      "population_totals": [
+        250024
+      ]
+    },
+    {
+      "concurrent_distinct_users": 50,
+      "requests": 50,
+      "endpoint": "/api/v1/clients?limit=25",
+      "p50_seconds": 0.20698260000062874,
+      "p95_seconds": 0.35848339999938617,
+      "p99_seconds": 0.37196929999481654,
+      "elapsed_seconds": 0.4094422999987728,
+      "throughput_rps": 122.11732886453076,
+      "errors": 0,
+      "status_codes": [
+        200
+      ],
+      "population_totals": [
+        10
+      ]
+    },
+    {
+      "concurrent_distinct_users": 50,
+      "requests": 50,
+      "endpoint": "/api/v1/accounting/ledger?limit=50",
+      "p50_seconds": 2.1994587000008323,
+      "p95_seconds": 3.3158973999961745,
+      "p99_seconds": 3.327428399999917,
+      "elapsed_seconds": 3.4092104000010295,
+      "throughput_rps": 14.666152608235883,
+      "errors": 0,
+      "status_codes": [
+        200
+      ],
+      "population_totals": [
+        250024
+      ]
+    },
+    {
+      "concurrent_distinct_users": 100,
+      "requests": 100,
+      "endpoint": "/api/v1/clients?limit=25",
+      "p50_seconds": 0.46215179999853717,
+      "p95_seconds": 0.8046071999997366,
+      "p99_seconds": 0.8735004000045592,
+      "elapsed_seconds": 0.9069584000026225,
+      "throughput_rps": 110.25864030777028,
+      "errors": 0,
+      "status_codes": [
+        200
+      ],
+      "population_totals": [
+        10
+      ]
+    },
+    {
+      "concurrent_distinct_users": 100,
+      "requests": 100,
+      "endpoint": "/api/v1/accounting/ledger?limit=50",
+      "p50_seconds": 3.4478275000001304,
+      "p95_seconds": 5.7288772000028985,
+      "p99_seconds": 5.864859000001161,
+      "elapsed_seconds": 5.983625199995004,
+      "throughput_rps": 16.71227669809324,
+      "errors": 0,
+      "status_codes": [
+        200
+      ],
+      "population_totals": [
+        250024
+      ]
+    }
+  ],
+  "financial_workloads": [
+    {
+      "rows": 10000,
+      "trial_balance_seconds": 0.022105399999418296,
+      "trial_balance_sum": "0.00",
+      "analytics_seconds": 0.289071100000001,
+      "rule_statuses": {
+        "J01": "passed",
+        "J02": "not_testable",
+        "J03": "not_testable",
+        "J04": "passed",
+        "J05": "warning",
+        "J06": "passed",
+        "J07": "passed",
+        "J08": "passed",
+        "J09": "passed",
+        "J10": "not_testable",
+        "J11": "not_testable",
+        "J12": "not_testable",
+        "J13": "passed",
+        "J14": "not_testable",
+        "J15": "not_testable",
+        "J16": "not_testable",
+        "J17": "not_testable",
+        "J18": "not_testable",
+        "J19": "not_testable",
+        "J20": "not_testable",
+        "S21": "not_testable",
+        "S22": "warning",
+        "S23": "passed",
+        "S24": "warning",
+        "S25": "not_testable"
+      },
+      "driver_rss_after_bytes": 135450624,
+      "memory_measurement": "driver point-in-time RSS, not sampled peak API/worker/DB memory"
+    },
+    {
+      "rows": 100000,
+      "trial_balance_seconds": 0.22815519999858225,
+      "trial_balance_sum": "0.00",
+      "analytics_seconds": 1.8642354000039632,
+      "rule_statuses": {
+        "J01": "passed",
+        "J02": "not_testable",
+        "J03": "not_testable",
+        "J04": "passed",
+        "J05": "warning",
+        "J06": "passed",
+        "J07": "passed",
+        "J08": "passed",
+        "J09": "passed",
+        "J10": "not_testable",
+        "J11": "not_testable",
+        "J12": "not_testable",
+        "J13": "passed",
+        "J14": "not_testable",
+        "J15": "not_testable",
+        "J16": "not_testable",
+        "J17": "not_testable",
+        "J18": "not_testable",
+        "J19": "not_testable",
+        "J20": "not_testable",
+        "S21": "not_testable",
+        "S22": "warning",
+        "S23": "passed",
+        "S24": "warning",
+        "S25": "not_testable"
+      },
+      "driver_rss_after_bytes": 136970240,
+      "memory_measurement": "driver point-in-time RSS, not sampled peak API/worker/DB memory"
+    },
+    {
+      "rows": 250000,
+      "trial_balance_seconds": 0.5276649000006728,
+      "trial_balance_sum": "0.00",
+      "analytics_seconds": 4.265393800000311,
+      "rule_statuses": {
+        "J01": "passed",
+        "J02": "not_testable",
+        "J03": "not_testable",
+        "J04": "passed",
+        "J05": "warning",
+        "J06": "passed",
+        "J07": "passed",
+        "J08": "passed",
+        "J09": "passed",
+        "J10": "not_testable",
+        "J11": "not_testable",
+        "J12": "not_testable",
+        "J13": "passed",
+        "J14": "not_testable",
+        "J15": "not_testable",
+        "J16": "not_testable",
+        "J17": "not_testable",
+        "J18": "not_testable",
+        "J19": "not_testable",
+        "J20": "not_testable",
+        "S21": "not_testable",
+        "S22": "warning",
+        "S23": "passed",
+        "S24": "warning",
+        "S25": "not_testable"
+      },
+      "driver_rss_after_bytes": 166096896,
+      "memory_measurement": "driver point-in-time RSS, not sampled peak API/worker/DB memory"
+    },
+    {
+      "rows": 1000000,
+      "trial_balance_seconds": 2.6393047999954433,
+      "trial_balance_sum": "0.00",
+      "analytics_seconds": 23.180130900000222,
+      "rule_statuses": {
+        "J01": "passed",
+        "J02": "not_testable",
+        "J03": "not_testable",
+        "J04": "passed",
+        "J05": "warning",
+        "J06": "passed",
+        "J07": "passed",
+        "J08": "passed",
+        "J09": "passed",
+        "J10": "not_testable",
+        "J11": "not_testable",
+        "J12": "not_testable",
+        "J13": "passed",
+        "J14": "not_testable",
+        "J15": "not_testable",
+        "J16": "not_testable",
+        "J17": "not_testable",
+        "J18": "not_testable",
+        "J19": "not_testable",
+        "J20": "not_testable",
+        "S21": "not_testable",
+        "S22": "warning",
+        "S23": "passed",
+        "S24": "warning",
+        "S25": "not_testable"
+      },
+      "driver_rss_after_bytes": 215777280,
+      "memory_measurement": "driver point-in-time RSS, not sampled peak API/worker/DB memory"
+    }
+  ],
+  "not_measured": [
+    "production network latency",
+    "database CPU and peak RSS",
+    "worker queue saturation",
+    "100-user professional write mix",
+    "end-to-end authentication load",
+    "all specialist engine load",
+    "cloud cost per file"
+  ]
+}

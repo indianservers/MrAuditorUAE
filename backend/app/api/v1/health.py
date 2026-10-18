@@ -32,7 +32,17 @@ async def ready():
             )
             if unsafe_role:
                 raise RuntimeError("Unsafe database role")
-            await db.execute(text("SELECT version_num FROM alembic_version"))
+            revision = await db.scalar(text("SELECT version_num FROM alembic_version"))
+            if revision != "0012":
+                raise RuntimeError("Database migration does not match release")
+            if settings().environment == "production":
+                synthetic = await db.scalar(
+                    text(
+                        "SELECT EXISTS (SELECT 1 FROM tenants WHERE name ILIKE '%[SYNTHETIC]%' OR id='8733db06-81bc-59b3-afcc-bf0f4c0cd8a2'::uuid)"
+                    )
+                )
+                if synthetic:
+                    raise RuntimeError("Synthetic tenants forbidden in production")
         async with Redis.from_url(
             settings().redis_url, socket_connect_timeout=2, socket_timeout=2
         ) as redis:

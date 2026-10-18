@@ -1,0 +1,3 @@
+# Training Datasets
+
+The guarded demo export contains 250,024 original journal lines with unknown labels and 13,200 controlled synthetic fixture lines, 263,224 total. Unknown source records are excluded from supervised fitting and autoencoder normal selection. Fixture labels: {'unknown': 250024, 'synthetic_injected': 1890, 'synthetic_normal': 11310}. Complete balanced two-leg fixture journals stay in one split. All original accounting facts remain unchanged. Fixture clients and journal groups separate train/validation/test/OOD sets. OOD changes amounts and acquisition narrations; it is a synthetic shift, not an independent real-world audit cohort. See demo-dataset.json and scripts/enrich_phase9.py.

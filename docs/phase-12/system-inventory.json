@@ -1,0 +1,5456 @@
+{
+  "scope": "Source/schema discovery with executed-test evidence linked separately; not a complete independent audit",
+  "modules": [
+    {
+      "id": "MODULE-ACCOUNTING",
+      "module": "accounting",
+      "files": [
+        "backend\\app\\modules\\accounting\\__init__.py",
+        "backend\\app\\modules\\accounting\\calculations.py",
+        "backend\\app\\modules\\accounting\\models.py",
+        "backend\\app\\modules\\accounting\\schemas.py",
+        "backend\\app\\modules\\accounting\\service.py"
+      ],
+      "tables": [
+        "accounting_connections",
+        "connection_sync_runs",
+        "account_mappings",
+        "import_batches",
+        "import_files",
+        "import_snapshots",
+        "import_validation_results",
+        "source_records",
+        "accounts",
+        "journal_entries",
+        "journal_lines",
+        "trial_balance_snapshots",
+        "trial_balance_lines",
+        "currencies",
+        "exchange_rates",
+        "audit_analytics_runs",
+        "audit_rules",
+        "audit_rule_results",
+        "risk_scores",
+        "audit_findings",
+        "sampling_runs",
+        "sampling_items",
+        "reconciliation_runs",
+        "reconciliation_exceptions",
+        "data_transformations",
+        "source_integrity_checks",
+        "upload_sessions",
+        "financial_ai_suggestions"
+      ],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\accounting\\calculations.py",
+          "function": "trial_balance",
+          "line": 10
+        },
+        {
+          "file": "backend\\app\\modules\\accounting\\calculations.py",
+          "function": "reconcile",
+          "line": 45
+        },
+        {
+          "file": "backend\\app\\modules\\accounting\\calculations.py",
+          "function": "movements",
+          "line": 72
+        },
+        {
+          "file": "backend\\app\\modules\\accounting\\models.py",
+          "function": "__table_args__",
+          "line": 35
+        },
+        {
+          "file": "backend\\app\\modules\\accounting\\service.py",
+          "function": "scope_values",
+          "line": 39
+        },
+        {
+          "file": "backend\\app\\modules\\accounting\\service.py",
+          "function": "scoped",
+          "line": 46
+        },
+        {
+          "file": "backend\\app\\modules\\accounting\\service.py",
+          "function": "check_scope",
+          "line": 58
+        },
+        {
+          "file": "backend\\app\\modules\\accounting\\service.py",
+          "function": "upload",
+          "line": 67
+        },
+        {
+          "file": "backend\\app\\modules\\accounting\\service.py",
+          "function": "preview",
+          "line": 168
+        },
+        {
+          "file": "backend\\app\\modules\\accounting\\service.py",
+          "function": "validate",
+          "line": 193
+        },
+        {
+          "file": "backend\\app\\modules\\accounting\\service.py",
+          "function": "commit",
+          "line": 469
+        },
+        {
+          "file": "backend\\app\\modules\\accounting\\service.py",
+          "function": "issue",
+          "line": 216
+        },
+        {
+          "file": "backend\\app\\modules\\accounting\\service.py",
+          "function": "flush",
+          "line": 230
+        },
+        {
+          "file": "backend\\app\\modules\\accounting\\service.py",
+          "function": "val",
+          "line": 638
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-AI_ENGINE",
+      "module": "ai_engine",
+      "files": [
+        "backend\\app\\modules\\ai_engine\\__init__.py",
+        "backend\\app\\modules\\ai_engine\\schemas.py",
+        "backend\\app\\modules\\ai_engine\\service.py"
+      ],
+      "tables": [],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\ai_engine\\schemas.py",
+          "function": "generate",
+          "line": 63
+        },
+        {
+          "file": "backend\\app\\modules\\ai_engine\\service.py",
+          "function": "execute",
+          "line": 23
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-AUDIT_ANALYTICS",
+      "module": "audit_analytics",
+      "files": [
+        "backend\\app\\modules\\audit_analytics\\__init__.py",
+        "backend\\app\\modules\\audit_analytics\\engine.py",
+        "backend\\app\\modules\\audit_analytics\\sampling.py",
+        "backend\\app\\modules\\audit_analytics\\schemas.py",
+        "backend\\app\\modules\\audit_analytics\\service.py"
+      ],
+      "tables": [],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\audit_analytics\\engine.py",
+          "function": "quote",
+          "line": 66
+        },
+        {
+          "file": "backend\\app\\modules\\audit_analytics\\engine.py",
+          "function": "risk_score",
+          "line": 70
+        },
+        {
+          "file": "backend\\app\\modules\\audit_analytics\\engine.py",
+          "function": "__init__",
+          "line": 88
+        },
+        {
+          "file": "backend\\app\\modules\\audit_analytics\\engine.py",
+          "function": "close",
+          "line": 130
+        },
+        {
+          "file": "backend\\app\\modules\\audit_analytics\\engine.py",
+          "function": "evaluate",
+          "line": 134
+        },
+        {
+          "file": "backend\\app\\modules\\audit_analytics\\engine.py",
+          "function": "flags",
+          "line": 323
+        },
+        {
+          "file": "backend\\app\\modules\\audit_analytics\\engine.py",
+          "function": "scores",
+          "line": 328
+        },
+        {
+          "file": "backend\\app\\modules\\audit_analytics\\engine.py",
+          "function": "available",
+          "line": 205
+        },
+        {
+          "file": "backend\\app\\modules\\audit_analytics\\sampling.py",
+          "function": "select_items",
+          "line": 8
+        },
+        {
+          "file": "backend\\app\\modules\\audit_analytics\\schemas.py",
+          "function": "days",
+          "line": 46
+        },
+        {
+          "file": "backend\\app\\modules\\audit_analytics\\schemas.py",
+          "function": "tz",
+          "line": 53
+        },
+        {
+          "file": "backend\\app\\modules\\audit_analytics\\schemas.py",
+          "function": "hours",
+          "line": 60
+        },
+        {
+          "file": "backend\\app\\modules\\audit_analytics\\schemas.py",
+          "function": "valid_weights",
+          "line": 67
+        },
+        {
+          "file": "backend\\app\\modules\\audit_analytics\\service.py",
+          "function": "population",
+          "line": 26
+        },
+        {
+          "file": "backend\\app\\modules\\audit_analytics\\service.py",
+          "function": "analytics",
+          "line": 42
+        },
+        {
+          "file": "backend\\app\\modules\\audit_analytics\\service.py",
+          "function": "sampling",
+          "line": 158
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-AUDIT_EXECUTION",
+      "module": "audit_execution",
+      "files": [
+        "backend\\app\\modules\\audit_execution\\__init__.py",
+        "backend\\app\\modules\\audit_execution\\access.py",
+        "backend\\app\\modules\\audit_execution\\ai_output.py",
+        "backend\\app\\modules\\audit_execution\\catalogue.py",
+        "backend\\app\\modules\\audit_execution\\evidence.py",
+        "backend\\app\\modules\\audit_execution\\models.py",
+        "backend\\app\\modules\\audit_execution\\schemas.py",
+        "backend\\app\\modules\\audit_execution\\service.py"
+      ],
+      "tables": [
+        "audit_access_grants",
+        "audit_role_policies",
+        "audit_engagement_policies",
+        "audit_records",
+        "audit_record_versions",
+        "audit_review_decisions",
+        "audit_evidence_versions",
+        "audit_client_access",
+        "audit_invitations",
+        "audit_methodology_versions"
+      ],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\audit_execution\\access.py",
+          "function": "visible_engagements",
+          "line": 19
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\access.py",
+          "function": "role_permissions",
+          "line": 36
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\access.py",
+          "function": "firm_roles",
+          "line": 60
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\access.py",
+          "function": "engagement_permissions",
+          "line": 75
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\evidence.py",
+          "function": "validate_file",
+          "line": 21
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\evidence.py",
+          "function": "scan",
+          "line": 60
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\schemas.py",
+          "function": "known_assertions",
+          "line": 29
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\schemas.py",
+          "function": "thresholds",
+          "line": 79
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\service.py",
+          "function": "serialize",
+          "line": 32
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\service.py",
+          "function": "engagement",
+          "line": 38
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\service.py",
+          "function": "policy",
+          "line": 53
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\service.py",
+          "function": "get_record",
+          "line": 66
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\service.py",
+          "function": "materiality",
+          "line": 106
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\service.py",
+          "function": "source_record",
+          "line": 128
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\service.py",
+          "function": "validate_body",
+          "line": 165
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\service.py",
+          "function": "revision",
+          "line": 278
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\service.py",
+          "function": "create",
+          "line": 310
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\service.py",
+          "function": "update",
+          "line": 331
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\service.py",
+          "function": "reviewer_separation",
+          "line": 363
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\service.py",
+          "function": "action",
+          "line": 386
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\service.py",
+          "function": "completion",
+          "line": 598
+        },
+        {
+          "file": "backend\\app\\modules\\audit_execution\\service.py",
+          "function": "transition",
+          "line": 700
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-AUDIT_LOG",
+      "module": "audit_log",
+      "files": [
+        "backend\\app\\modules\\audit_log\\__init__.py",
+        "backend\\app\\modules\\audit_log\\service.py"
+      ],
+      "tables": [],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\audit_log\\service.py",
+          "function": "record",
+          "line": 9
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-CLIENTS",
+      "module": "clients",
+      "files": [
+        "backend\\app\\modules\\clients\\__init__.py",
+        "backend\\app\\modules\\clients\\schemas.py",
+        "backend\\app\\modules\\clients\\service.py"
+      ],
+      "tables": [],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\clients\\schemas.py",
+          "function": "currency",
+          "line": 52
+        },
+        {
+          "file": "backend\\app\\modules\\clients\\schemas.py",
+          "function": "country_code",
+          "line": 59
+        },
+        {
+          "file": "backend\\app\\modules\\clients\\schemas.py",
+          "function": "dates",
+          "line": 92
+        },
+        {
+          "file": "backend\\app\\modules\\clients\\service.py",
+          "function": "__init__",
+          "line": 15
+        },
+        {
+          "file": "backend\\app\\modules\\clients\\service.py",
+          "function": "get",
+          "line": 18
+        },
+        {
+          "file": "backend\\app\\modules\\clients\\service.py",
+          "function": "listing",
+          "line": 32
+        },
+        {
+          "file": "backend\\app\\modules\\clients\\service.py",
+          "function": "create",
+          "line": 94
+        },
+        {
+          "file": "backend\\app\\modules\\clients\\service.py",
+          "function": "patch",
+          "line": 114
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-CONNECTORS",
+      "module": "connectors",
+      "files": [
+        "backend\\app\\modules\\connectors\\__init__.py",
+        "backend\\app\\modules\\connectors\\secrets.py",
+        "backend\\app\\modules\\connectors\\service.py",
+        "backend\\app\\modules\\connectors\\tally.py",
+        "backend\\app\\modules\\connectors\\zoho.py"
+      ],
+      "tables": [],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\connectors\\secrets.py",
+          "function": "cipher",
+          "line": 8
+        },
+        {
+          "file": "backend\\app\\modules\\connectors\\secrets.py",
+          "function": "encrypt",
+          "line": 15
+        },
+        {
+          "file": "backend\\app\\modules\\connectors\\secrets.py",
+          "function": "decrypt",
+          "line": 19
+        },
+        {
+          "file": "backend\\app\\modules\\connectors\\service.py",
+          "function": "zoho_sync",
+          "line": 21
+        },
+        {
+          "file": "backend\\app\\modules\\connectors\\tally.py",
+          "function": "export_request",
+          "line": 14
+        },
+        {
+          "file": "backend\\app\\modules\\connectors\\tally.py",
+          "function": "parse_export",
+          "line": 50
+        },
+        {
+          "file": "backend\\app\\modules\\connectors\\zoho.py",
+          "function": "__init__",
+          "line": 34
+        },
+        {
+          "file": "backend\\app\\modules\\connectors\\zoho.py",
+          "function": "authorization_url",
+          "line": 55
+        },
+        {
+          "file": "backend\\app\\modules\\connectors\\zoho.py",
+          "function": "token",
+          "line": 74
+        },
+        {
+          "file": "backend\\app\\modules\\connectors\\zoho.py",
+          "function": "get",
+          "line": 105
+        },
+        {
+          "file": "backend\\app\\modules\\connectors\\zoho.py",
+          "function": "pages",
+          "line": 145
+        },
+        {
+          "file": "backend\\app\\modules\\connectors\\zoho.py",
+          "function": "journal_detail",
+          "line": 176
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-DEMO",
+      "module": "demo",
+      "files": [
+        "backend\\app\\modules\\demo\\__init__.py",
+        "backend\\app\\modules\\demo\\generator.py",
+        "backend\\app\\modules\\demo\\guard.py"
+      ],
+      "tables": [],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\demo\\generator.py",
+          "function": "identifier",
+          "line": 52
+        },
+        {
+          "file": "backend\\app\\modules\\demo\\generator.py",
+          "function": "generate",
+          "line": 56
+        },
+        {
+          "file": "backend\\app\\modules\\demo\\generator.py",
+          "function": "journal",
+          "line": 64
+        },
+        {
+          "file": "backend\\app\\modules\\demo\\guard.py",
+          "function": "configuration_guard",
+          "line": 15
+        },
+        {
+          "file": "backend\\app\\modules\\demo\\guard.py",
+          "function": "guard",
+          "line": 29
+        },
+        {
+          "file": "backend\\app\\modules\\demo\\guard.py",
+          "function": "test_database_guard",
+          "line": 42
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-DMTT",
+      "module": "dmtt",
+      "files": [
+        "backend\\app\\modules\\dmtt\\__init__.py",
+        "backend\\app\\modules\\dmtt\\calculations.py",
+        "backend\\app\\modules\\dmtt\\schemas.py",
+        "backend\\app\\modules\\dmtt\\service.py"
+      ],
+      "tables": [],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\dmtt\\calculations.py",
+          "function": "scope",
+          "line": 27
+        },
+        {
+          "file": "backend\\app\\modules\\dmtt\\calculations.py",
+          "function": "deferred",
+          "line": 36
+        },
+        {
+          "file": "backend\\app\\modules\\dmtt\\calculations.py",
+          "function": "calculate",
+          "line": 64
+        },
+        {
+          "file": "backend\\app\\modules\\dmtt\\schemas.py",
+          "function": "periods",
+          "line": 39
+        },
+        {
+          "file": "backend\\app\\modules\\dmtt\\service.py",
+          "function": "clean",
+          "line": 59
+        },
+        {
+          "file": "backend\\app\\modules\\dmtt\\service.py",
+          "function": "evidence",
+          "line": 63
+        },
+        {
+          "file": "backend\\app\\modules\\dmtt\\service.py",
+          "function": "record",
+          "line": 69
+        },
+        {
+          "file": "backend\\app\\modules\\dmtt\\service.py",
+          "function": "validate_body",
+          "line": 78
+        },
+        {
+          "file": "backend\\app\\modules\\dmtt\\service.py",
+          "function": "validate_action",
+          "line": 148
+        },
+        {
+          "file": "backend\\app\\modules\\dmtt\\service.py",
+          "function": "computation",
+          "line": 155
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-ENGAGEMENTS",
+      "module": "engagements",
+      "files": [
+        "backend\\app\\modules\\engagements\\__init__.py"
+      ],
+      "tables": [],
+      "functions": [],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-ENTERPRISE_AI",
+      "module": "enterprise_ai",
+      "files": [
+        "backend\\app\\modules\\enterprise_ai\\__init__.py",
+        "backend\\app\\modules\\enterprise_ai\\catalogue.py",
+        "backend\\app\\modules\\enterprise_ai\\documents.py",
+        "backend\\app\\modules\\enterprise_ai\\evaluation.py",
+        "backend\\app\\modules\\enterprise_ai\\models.py",
+        "backend\\app\\modules\\enterprise_ai\\narrative.py",
+        "backend\\app\\modules\\enterprise_ai\\reporting.py",
+        "backend\\app\\modules\\enterprise_ai\\schemas.py",
+        "backend\\app\\modules\\enterprise_ai\\security.py",
+        "backend\\app\\modules\\enterprise_ai\\service.py",
+        "backend\\app\\modules\\enterprise_ai\\tools.py"
+      ],
+      "tables": [
+        "ai_workflow_runs",
+        "ai_workflow_events",
+        "ai_document_extractions",
+        "ai_document_chunks",
+        "ai_approval_requests",
+        "ai_scheduled_workflows",
+        "ai_document_match_decisions"
+      ],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\catalogue.py",
+          "function": "agents",
+          "line": 137
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\catalogue.py",
+          "function": "plan",
+          "line": 167
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\documents.py",
+          "function": "fields",
+          "line": 32
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\documents.py",
+          "function": "extract_bytes",
+          "line": 55
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\documents.py",
+          "function": "latest_evidence",
+          "line": 126
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\documents.py",
+          "function": "save",
+          "line": 154
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\documents.py",
+          "function": "extract",
+          "line": 203
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\documents.py",
+          "function": "authorized_extraction",
+          "line": 242
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\documents.py",
+          "function": "authorized_chunk",
+          "line": 273
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\documents.py",
+          "function": "search",
+          "line": 293
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\documents.py",
+          "function": "validate_corrections",
+          "line": 324
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\documents.py",
+          "function": "match_signals",
+          "line": 353
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\documents.py",
+          "function": "read",
+          "line": 227
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\documents.py",
+          "function": "value",
+          "line": 354
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\evaluation.py",
+          "function": "evaluate",
+          "line": 75
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\narrative.py",
+          "function": "draft",
+          "line": 15
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\reporting.py",
+          "function": "report",
+          "line": 7
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\schemas.py",
+          "function": "validate_graph",
+          "line": 104
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\security.py",
+          "function": "serial",
+          "line": 15
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\security.py",
+          "function": "digest",
+          "line": 19
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\security.py",
+          "function": "scope",
+          "line": 25
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\security.py",
+          "function": "source",
+          "line": 43
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\security.py",
+          "function": "validate_dependencies",
+          "line": 81
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\service.py",
+          "function": "locked",
+          "line": 18
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\service.py",
+          "function": "event",
+          "line": 25
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\service.py",
+          "function": "get",
+          "line": 42
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\service.py",
+          "function": "history",
+          "line": 57
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\service.py",
+          "function": "create",
+          "line": 74
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\service.py",
+          "function": "step",
+          "line": 141
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\service.py",
+          "function": "propose",
+          "line": 231
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\service.py",
+          "function": "proposal",
+          "line": 292
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\service.py",
+          "function": "decide",
+          "line": 309
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\service.py",
+          "function": "execute_proposal",
+          "line": 337
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\tools.py",
+          "function": "ref",
+          "line": 16
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\tools.py",
+          "function": "journal_source",
+          "line": 26
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\tools.py",
+          "function": "snapshot_source",
+          "line": 44
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\tools.py",
+          "function": "calculation_source",
+          "line": 64
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\tools.py",
+          "function": "invoke",
+          "line": 89
+        },
+        {
+          "file": "backend\\app\\modules\\enterprise_ai\\tools.py",
+          "function": "scrub",
+          "line": 256
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-FINANCIAL_AI",
+      "module": "financial_ai",
+      "files": [
+        "backend\\app\\modules\\financial_ai\\__init__.py",
+        "backend\\app\\modules\\financial_ai\\schemas.py",
+        "backend\\app\\modules\\financial_ai\\service.py"
+      ],
+      "tables": [],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\financial_ai\\service.py",
+          "function": "suggest",
+          "line": 30
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-GRC",
+      "module": "grc",
+      "files": [
+        "backend\\app\\modules\\grc\\__init__.py",
+        "backend\\app\\modules\\grc\\calculations.py",
+        "backend\\app\\modules\\grc\\catalogue.py",
+        "backend\\app\\modules\\grc\\imports.py",
+        "backend\\app\\modules\\grc\\models.py",
+        "backend\\app\\modules\\grc\\monitoring.py",
+        "backend\\app\\modules\\grc\\notifications.py",
+        "backend\\app\\modules\\grc\\operations.py",
+        "backend\\app\\modules\\grc\\reporting.py",
+        "backend\\app\\modules\\grc\\schemas.py",
+        "backend\\app\\modules\\grc\\service.py",
+        "backend\\app\\modules\\grc\\sod_import.py"
+      ],
+      "tables": [
+        "grc_execution_snapshots",
+        "grc_monitor_alerts",
+        "grc_monitor_schedules"
+      ],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\grc\\calculations.py",
+          "function": "risk_score",
+          "line": 6
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\calculations.py",
+          "function": "plan_score",
+          "line": 29
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\calculations.py",
+          "function": "sod",
+          "line": 73
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\calculations.py",
+          "function": "next_due",
+          "line": 103
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\calculations.py",
+          "function": "score",
+          "line": 7
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\imports.py",
+          "function": "enqueue",
+          "line": 11
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\monitoring.py",
+          "function": "ledger_engine",
+          "line": 24
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\monitoring.py",
+          "function": "workpaper_checks",
+          "line": 228
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\monitoring.py",
+          "function": "execute",
+          "line": 361
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\notifications.py",
+          "function": "assigned",
+          "line": 9
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\operations.py",
+          "function": "calculate",
+          "line": 17
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\operations.py",
+          "function": "transition",
+          "line": 104
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\operations.py",
+          "function": "dashboard",
+          "line": 211
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\reporting.py",
+          "function": "publish",
+          "line": 29
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\reporting.py",
+          "function": "published",
+          "line": 84
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\reporting.py",
+          "function": "render",
+          "line": 131
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\reporting.py",
+          "function": "footer",
+          "line": 196
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\schemas.py",
+          "function": "dimensions",
+          "line": 74
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\schemas.py",
+          "function": "dates",
+          "line": 97
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\service.py",
+          "function": "clean",
+          "line": 20
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\service.py",
+          "function": "dependency",
+          "line": 28
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\service.py",
+          "function": "owner_scoped",
+          "line": 37
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\service.py",
+          "function": "authorize_record",
+          "line": 47
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\service.py",
+          "function": "record",
+          "line": 60
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\service.py",
+          "function": "evidence",
+          "line": 69
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\service.py",
+          "function": "snapshot",
+          "line": 108
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\service.py",
+          "function": "validate_body",
+          "line": 130
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\service.py",
+          "function": "active_member",
+          "line": 323
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\service.py",
+          "function": "test_sample",
+          "line": 329
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\service.py",
+          "function": "validate_action",
+          "line": 358
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\service.py",
+          "function": "run",
+          "line": 385
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\service.py",
+          "function": "alert",
+          "line": 407
+        },
+        {
+          "file": "backend\\app\\modules\\grc\\sod_import.py",
+          "function": "parse",
+          "line": 7
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-IDENTITY",
+      "module": "identity",
+      "files": [
+        "backend\\app\\modules\\identity\\__init__.py",
+        "backend\\app\\modules\\identity\\mfa.py",
+        "backend\\app\\modules\\identity\\schemas.py",
+        "backend\\app\\modules\\identity\\service.py"
+      ],
+      "tables": [],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\identity\\mfa.py",
+          "function": "cipher",
+          "line": 17
+        },
+        {
+          "file": "backend\\app\\modules\\identity\\mfa.py",
+          "function": "code",
+          "line": 24
+        },
+        {
+          "file": "backend\\app\\modules\\identity\\mfa.py",
+          "function": "enroll",
+          "line": 31
+        },
+        {
+          "file": "backend\\app\\modules\\identity\\mfa.py",
+          "function": "verify",
+          "line": 45
+        },
+        {
+          "file": "backend\\app\\modules\\identity\\service.py",
+          "function": "issue",
+          "line": 31
+        },
+        {
+          "file": "backend\\app\\modules\\identity\\service.py",
+          "function": "bootstrap",
+          "line": 51
+        },
+        {
+          "file": "backend\\app\\modules\\identity\\service.py",
+          "function": "login",
+          "line": 93
+        },
+        {
+          "file": "backend\\app\\modules\\identity\\service.py",
+          "function": "rotate",
+          "line": 111
+        },
+        {
+          "file": "backend\\app\\modules\\identity\\service.py",
+          "function": "logout",
+          "line": 134
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-IFRS",
+      "module": "ifrs",
+      "files": [
+        "backend\\app\\modules\\ifrs\\__init__.py",
+        "backend\\app\\modules\\ifrs\\calculations.py",
+        "backend\\app\\modules\\ifrs\\catalogue.py",
+        "backend\\app\\modules\\ifrs\\exports.py",
+        "backend\\app\\modules\\ifrs\\models.py",
+        "backend\\app\\modules\\ifrs\\schemas.py",
+        "backend\\app\\modules\\ifrs\\service.py"
+      ],
+      "tables": [
+        "ifrs_standards_registry",
+        "ifrs_calculation_runs"
+      ],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\ifrs\\calculations.py",
+          "function": "q",
+          "line": 17
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\calculations.py",
+          "function": "serial",
+          "line": 21
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\calculations.py",
+          "function": "growth",
+          "line": 33
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\calculations.py",
+          "function": "lease",
+          "line": 37
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\calculations.py",
+          "function": "ecl",
+          "line": 107
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\calculations.py",
+          "function": "instrument",
+          "line": 171
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\calculations.py",
+          "function": "revenue",
+          "line": 230
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\calculations.py",
+          "function": "deferred_tax",
+          "line": 277
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\calculations.py",
+          "function": "fixed_assets",
+          "line": 320
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\calculations.py",
+          "function": "impairment",
+          "line": 375
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\calculations.py",
+          "function": "provision",
+          "line": 416
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\calculations.py",
+          "function": "calculate",
+          "line": 448
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\calculations.py",
+          "function": "npv",
+          "line": 184
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\exports.py",
+          "function": "rows_for",
+          "line": 9
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\exports.py",
+          "function": "render",
+          "line": 92
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\exports.py",
+          "function": "amount",
+          "line": 31
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\exports.py",
+          "function": "footer",
+          "line": 219
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\schemas.py",
+          "function": "elections",
+          "line": 36
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\schemas.py",
+          "function": "weights",
+          "line": 64
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\schemas.py",
+          "function": "one_side",
+          "line": 82
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\schemas.py",
+          "function": "balanced",
+          "line": 107
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\schemas.py",
+          "function": "dates",
+          "line": 139
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\schemas.py",
+          "function": "probabilities",
+          "line": 179
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\service.py",
+          "function": "dependency",
+          "line": 25
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\service.py",
+          "function": "record",
+          "line": 29
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\service.py",
+          "function": "run",
+          "line": 38
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\service.py",
+          "function": "snapshot",
+          "line": 52
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\service.py",
+          "function": "validate_body",
+          "line": 67
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\service.py",
+          "function": "current_dependencies",
+          "line": 192
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\service.py",
+          "function": "validate_action",
+          "line": 230
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\service.py",
+          "function": "save_run",
+          "line": 245
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\service.py",
+          "function": "calculate_record",
+          "line": 270
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\service.py",
+          "function": "approved_inputs",
+          "line": 316
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\service.py",
+          "function": "adjusted_balance",
+          "line": 332
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\service.py",
+          "function": "financials",
+          "line": 368
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\service.py",
+          "function": "consolidate",
+          "line": 679
+        },
+        {
+          "file": "backend\\app\\modules\\ifrs\\service.py",
+          "function": "total",
+          "line": 463
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-INGESTION",
+      "module": "ingestion",
+      "files": [
+        "backend\\app\\modules\\ingestion\\__init__.py",
+        "backend\\app\\modules\\ingestion\\parser.py"
+      ],
+      "tables": [],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\ingestion\\parser.py",
+          "function": "map_headers",
+          "line": 55
+        },
+        {
+          "file": "backend\\app\\modules\\ingestion\\parser.py",
+          "function": "safe_cell",
+          "line": 74
+        },
+        {
+          "file": "backend\\app\\modules\\ingestion\\parser.py",
+          "function": "rows",
+          "line": 79
+        },
+        {
+          "file": "backend\\app\\modules\\ingestion\\parser.py",
+          "function": "money",
+          "line": 188
+        },
+        {
+          "file": "backend\\app\\modules\\ingestion\\parser.py",
+          "function": "date_value",
+          "line": 214
+        },
+        {
+          "file": "backend\\app\\modules\\ingestion\\parser.py",
+          "function": "normalize",
+          "line": 223
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-JOBS",
+      "module": "jobs",
+      "files": [
+        "backend\\app\\modules\\jobs\\__init__.py",
+        "backend\\app\\modules\\jobs\\service.py"
+      ],
+      "tables": [],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\jobs\\service.py",
+          "function": "submit",
+          "line": 10
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-LINEAGE",
+      "module": "lineage",
+      "files": [
+        "backend\\app\\modules\\lineage\\__init__.py",
+        "backend\\app\\modules\\lineage\\storage.py"
+      ],
+      "tables": [],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\lineage\\storage.py",
+          "function": "hash_file",
+          "line": 100
+        },
+        {
+          "file": "backend\\app\\modules\\lineage\\storage.py",
+          "function": "__init__",
+          "line": 17
+        },
+        {
+          "file": "backend\\app\\modules\\lineage\\storage.py",
+          "function": "put",
+          "line": 24
+        },
+        {
+          "file": "backend\\app\\modules\\lineage\\storage.py",
+          "function": "local",
+          "line": 83
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-ML",
+      "module": "ml",
+      "files": [
+        "backend\\app\\modules\\ml\\__init__.py",
+        "backend\\app\\modules\\ml\\models.py",
+        "backend\\app\\modules\\ml\\service.py"
+      ],
+      "tables": [
+        "ml_registry_events"
+      ],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\ml\\service.py",
+          "function": "event",
+          "line": 28
+        },
+        {
+          "file": "backend\\app\\modules\\ml\\service.py",
+          "function": "get",
+          "line": 44
+        },
+        {
+          "file": "backend\\app\\modules\\ml\\service.py",
+          "function": "put_json",
+          "line": 58
+        },
+        {
+          "file": "backend\\app\\modules\\ml\\service.py",
+          "function": "put_dataset",
+          "line": 64
+        },
+        {
+          "file": "backend\\app\\modules\\ml\\service.py",
+          "function": "read_object",
+          "line": 70
+        },
+        {
+          "file": "backend\\app\\modules\\ml\\service.py",
+          "function": "node",
+          "line": 83
+        },
+        {
+          "file": "backend\\app\\modules\\ml\\service.py",
+          "function": "execute_job",
+          "line": 152
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-ORGANIZATIONS",
+      "module": "organizations",
+      "files": [
+        "backend\\app\\modules\\organizations\\__init__.py"
+      ],
+      "tables": [],
+      "functions": [],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-RECONCILIATION",
+      "module": "reconciliation",
+      "files": [
+        "backend\\app\\modules\\reconciliation\\__init__.py",
+        "backend\\app\\modules\\reconciliation\\service.py"
+      ],
+      "tables": [],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\reconciliation\\service.py",
+          "function": "balance",
+          "line": 22
+        },
+        {
+          "file": "backend\\app\\modules\\reconciliation\\service.py",
+          "function": "persist_balance",
+          "line": 86
+        },
+        {
+          "file": "backend\\app\\modules\\reconciliation\\service.py",
+          "function": "run_reconciliation",
+          "line": 116
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-SAAS",
+      "module": "saas",
+      "files": [
+        "backend\\app\\modules\\saas\\__init__.py",
+        "backend\\app\\modules\\saas\\models.py",
+        "backend\\app\\modules\\saas\\service.py",
+        "backend\\app\\modules\\saas\\storage.py"
+      ],
+      "tables": [
+        "platform_operators",
+        "tenant_subscriptions",
+        "tenant_usage_counters",
+        "platform_operations"
+      ],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\saas\\service.py",
+          "function": "writable",
+          "line": 38
+        },
+        {
+          "file": "backend\\app\\modules\\saas\\service.py",
+          "function": "enforce",
+          "line": 45
+        },
+        {
+          "file": "backend\\app\\modules\\saas\\service.py",
+          "function": "background_allowed",
+          "line": 123
+        },
+        {
+          "file": "backend\\app\\modules\\saas\\service.py",
+          "function": "admit_user",
+          "line": 131
+        },
+        {
+          "file": "backend\\app\\modules\\saas\\storage.py",
+          "function": "baseline",
+          "line": 13
+        },
+        {
+          "file": "backend\\app\\modules\\saas\\storage.py",
+          "function": "put_private",
+          "line": 56
+        },
+        {
+          "file": "backend\\app\\modules\\saas\\storage.py",
+          "function": "collect",
+          "line": 20
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-TAX",
+      "module": "tax",
+      "files": [
+        "backend\\app\\modules\\tax\\__init__.py",
+        "backend\\app\\modules\\tax\\ai_output.py",
+        "backend\\app\\modules\\tax\\calculations.py",
+        "backend\\app\\modules\\tax\\catalogue.py",
+        "backend\\app\\modules\\tax\\exports.py",
+        "backend\\app\\modules\\tax\\models.py",
+        "backend\\app\\modules\\tax\\schemas.py",
+        "backend\\app\\modules\\tax\\service.py"
+      ],
+      "tables": [
+        "ct_computation_runs",
+        "ct_loss_postings",
+        "ct_current_releases"
+      ],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\tax\\calculations.py",
+          "function": "q",
+          "line": 40
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\calculations.py",
+          "function": "standard_tax",
+          "line": 44
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\calculations.py",
+          "function": "filing_deadline",
+          "line": 50
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\calculations.py",
+          "function": "adjustment_amount",
+          "line": 62
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\calculations.py",
+          "function": "small_business",
+          "line": 90
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\calculations.py",
+          "function": "interest",
+          "line": 110
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\calculations.py",
+          "function": "qfzp",
+          "line": 211
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\calculations.py",
+          "function": "loss_allocation",
+          "line": 322
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\calculations.py",
+          "function": "sample_size",
+          "line": 341
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\exports.py",
+          "function": "amount",
+          "line": 9
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\exports.py",
+          "function": "render",
+          "line": 13
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\schemas.py",
+          "function": "dates",
+          "line": 64
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\schemas.py",
+          "function": "dates",
+          "line": 107
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\schemas.py",
+          "function": "scope",
+          "line": 149
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "clean",
+          "line": 27
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "record",
+          "line": 31
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "run",
+          "line": 40
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "evidence",
+          "line": 52
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "financial_source",
+          "line": 70
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "applicable_rule",
+          "line": 90
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "validate_body",
+          "line": 108
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "conditions_pass",
+          "line": 415
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "approved",
+          "line": 429
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "dependencies_current",
+          "line": 445
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "save_run",
+          "line": 477
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "profile_inputs",
+          "line": 505
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "evidence_dependencies",
+          "line": 525
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "loss_lots",
+          "line": 555
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "current_release",
+          "line": 600
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "compute",
+          "line": 612
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "calculate_record",
+          "line": 900
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "group",
+          "line": 981
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "validate_action",
+          "line": 1093
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "after_action",
+          "line": 1127
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "post_transfer",
+          "line": 1217
+        },
+        {
+          "file": "backend\\app\\modules\\tax\\service.py",
+          "function": "find",
+          "line": 528
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-TP",
+      "module": "tp",
+      "files": [
+        "backend\\app\\modules\\tp\\__init__.py",
+        "backend\\app\\modules\\tp\\ai_output.py",
+        "backend\\app\\modules\\tp\\calculations.py",
+        "backend\\app\\modules\\tp\\catalogue.py",
+        "backend\\app\\modules\\tp\\exports.py",
+        "backend\\app\\modules\\tp\\imports.py",
+        "backend\\app\\modules\\tp\\models.py",
+        "backend\\app\\modules\\tp\\publication.py",
+        "backend\\app\\modules\\tp\\relationships.py",
+        "backend\\app\\modules\\tp\\schemas.py",
+        "backend\\app\\modules\\tp\\service.py",
+        "backend\\app\\modules\\tp\\tax_bridge.py"
+      ],
+      "tables": [
+        "tp_calculation_runs",
+        "tp_comparable_observations"
+      ],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\tp\\calculations.py",
+          "function": "q",
+          "line": 15
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\calculations.py",
+          "function": "ratio",
+          "line": 19
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\calculations.py",
+          "function": "indicators",
+          "line": 23
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\calculations.py",
+          "function": "allocate",
+          "line": 55
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\calculations.py",
+          "function": "segmentation",
+          "line": 77
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\calculations.py",
+          "function": "percentile",
+          "line": 134
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\calculations.py",
+          "function": "statistics",
+          "line": 150
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\calculations.py",
+          "function": "benchmark",
+          "line": 177
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\calculations.py",
+          "function": "add_month",
+          "line": 266
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\calculations.py",
+          "function": "fraction",
+          "line": 272
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\calculations.py",
+          "function": "loan_schedule",
+          "line": 286
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\calculations.py",
+          "function": "disclosure",
+          "line": 396
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\calculations.py",
+          "function": "working_capital",
+          "line": 475
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\exports.py",
+          "function": "software_data",
+          "line": 11
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\exports.py",
+          "function": "rows_for",
+          "line": 20
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\exports.py",
+          "function": "render",
+          "line": 78
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\imports.py",
+          "function": "parse",
+          "line": 50
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\imports.py",
+          "function": "finite",
+          "line": 42
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\publication.py",
+          "function": "publish",
+          "line": 19
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\publication.py",
+          "function": "authorized_releases",
+          "line": 53
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\publication.py",
+          "function": "download",
+          "line": 95
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\publication.py",
+          "function": "sources",
+          "line": 29
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\relationships.py",
+          "function": "ownership_candidates",
+          "line": 8
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\schemas.py",
+          "function": "interval",
+          "line": 111
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\schemas.py",
+          "function": "dates",
+          "line": 313
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "evidence",
+          "line": 28
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "clean",
+          "line": 44
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "dep",
+          "line": 59
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "record",
+          "line": 70
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "profile_inputs",
+          "line": 79
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "scoped_source",
+          "line": 103
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "selected",
+          "line": 110
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "source_lines",
+          "line": 126
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "verify_transaction",
+          "line": 149
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "validate_body",
+          "line": 197
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "licensed_dataset",
+          "line": 574
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "get_run",
+          "line": 587
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "record_graph",
+          "line": 599
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "current",
+          "line": 736
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "save",
+          "line": 799
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "references",
+          "line": 844
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "dependencies",
+          "line": 887
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "matrix",
+          "line": 913
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "_matrix",
+          "line": 919
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "calculate",
+          "line": 999
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "transaction_total",
+          "line": 1397
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "latest_record_run",
+          "line": 1405
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "validate_action",
+          "line": 1422
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "export_allowed",
+          "line": 1460
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "released",
+          "line": 1478
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "check",
+          "line": 1465
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\service.py",
+          "function": "synthetic",
+          "line": 527
+        },
+        {
+          "file": "backend\\app\\modules\\tp\\tax_bridge.py",
+          "function": "create_adjustment",
+          "line": 23
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    },
+    {
+      "id": "MODULE-VAT",
+      "module": "vat",
+      "files": [
+        "backend\\app\\modules\\vat\\__init__.py",
+        "backend\\app\\modules\\vat\\adapters.py",
+        "backend\\app\\modules\\vat\\ai_output.py",
+        "backend\\app\\modules\\vat\\calculations.py",
+        "backend\\app\\modules\\vat\\catalogue.py",
+        "backend\\app\\modules\\vat\\documents.py",
+        "backend\\app\\modules\\vat\\models.py",
+        "backend\\app\\modules\\vat\\schemas.py",
+        "backend\\app\\modules\\vat\\service.py"
+      ],
+      "tables": [
+        "vat_computation_runs",
+        "synthetic_datasets"
+      ],
+      "functions": [
+        {
+          "file": "backend\\app\\modules\\vat\\adapters.py",
+          "function": "send",
+          "line": 7
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\adapters.py",
+          "function": "send",
+          "line": 11
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\calculations.py",
+          "function": "money",
+          "line": 12
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\calculations.py",
+          "function": "transaction",
+          "line": 16
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\calculations.py",
+          "function": "filing_deadline",
+          "line": 110
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\calculations.py",
+          "function": "readiness",
+          "line": 117
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\documents.py",
+          "function": "_extract",
+          "line": 8
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\documents.py",
+          "function": "extract_text_pdf",
+          "line": 43
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\schemas.py",
+          "function": "dates",
+          "line": 54
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\service.py",
+          "function": "journal_ids",
+          "line": 26
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\service.py",
+          "function": "clean",
+          "line": 36
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\service.py",
+          "function": "dep",
+          "line": 40
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\service.py",
+          "function": "record",
+          "line": 44
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\service.py",
+          "function": "evidence",
+          "line": 53
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\service.py",
+          "function": "evidence_ids",
+          "line": 69
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\service.py",
+          "function": "rules",
+          "line": 79
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\service.py",
+          "function": "applicable",
+          "line": 90
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\service.py",
+          "function": "profile_inputs",
+          "line": 95
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\service.py",
+          "function": "validate_body",
+          "line": 105
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\service.py",
+          "function": "run",
+          "line": 229
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\service.py",
+          "function": "current",
+          "line": 241
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\service.py",
+          "function": "save",
+          "line": 289
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\service.py",
+          "function": "selected_records",
+          "line": 318
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\service.py",
+          "function": "invoice_result",
+          "line": 334
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\service.py",
+          "function": "compute",
+          "line": 351
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\service.py",
+          "function": "validate_action",
+          "line": 589
+        },
+        {
+          "file": "backend\\app\\modules\\vat\\service.py",
+          "function": "ledger",
+          "line": 419
+        }
+      ],
+      "status": "PARTIALLY_VERIFIED",
+      "readiness": "Internal synthetic evaluation only; see test matrix and module limitations",
+      "authorization": "API require() plus existing service checks; tenant-owned tables FORCE RLS. See role-permissions.json. Individual actions require their own test evidence."
+    }
+  ],
+  "api_operations": [
+    {
+      "method": "POST",
+      "path": "/api/v1/ifrs/engagements/{eid}/runs/{rid}/propose-journal",
+      "operation_id": "propose_api_v1_ifrs_engagements__eid__runs__rid__propose_journal_post",
+      "tags": [
+        "IFRS reporting"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ifrs/standards",
+      "operation_id": "standards_api_v1_ifrs_standards_get",
+      "tags": [
+        "IFRS reporting"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ifrs/engagements/{eid}/workspace",
+      "operation_id": "workspace_api_v1_ifrs_engagements__eid__workspace_get",
+      "tags": [
+        "IFRS reporting"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ifrs/engagements/{eid}/records/{kind}",
+      "operation_id": "records_api_v1_ifrs_engagements__eid__records__kind__get",
+      "tags": [
+        "IFRS reporting"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ifrs/engagements/{eid}/records/{kind}",
+      "operation_id": "create_api_v1_ifrs_engagements__eid__records__kind__post",
+      "tags": [
+        "IFRS reporting"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ifrs/engagements/{eid}/calculate/{rid}",
+      "operation_id": "calculate_api_v1_ifrs_engagements__eid__calculate__rid__post",
+      "tags": [
+        "IFRS reporting"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ifrs/engagements/{eid}/runs",
+      "operation_id": "runs_api_v1_ifrs_engagements__eid__runs_get",
+      "tags": [
+        "IFRS reporting"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ifrs/engagements/{eid}/runs/{rid}",
+      "operation_id": "result_api_v1_ifrs_engagements__eid__runs__rid__get",
+      "tags": [
+        "IFRS reporting"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ifrs/engagements/{eid}/financial-statements/{profile_id}",
+      "operation_id": "financials_api_v1_ifrs_engagements__eid__financial_statements__profile_id__post",
+      "tags": [
+        "IFRS reporting"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ifrs/engagements/{eid}/adjusted-trial-balance/{profile_id}",
+      "operation_id": "adjusted_api_v1_ifrs_engagements__eid__adjusted_trial_balance__profile_id__get",
+      "tags": [
+        "IFRS reporting"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ifrs/engagements/{eid}/consolidation/{rid}",
+      "operation_id": "consolidate_api_v1_ifrs_engagements__eid__consolidation__rid__post",
+      "tags": [
+        "IFRS reporting"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ifrs/engagements/{eid}/runs/{rid}/validate",
+      "operation_id": "validate_api_v1_ifrs_engagements__eid__runs__rid__validate_get",
+      "tags": [
+        "IFRS reporting"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ifrs/engagements/{eid}/runs/{rid}/export/{format}",
+      "operation_id": "export_api_v1_ifrs_engagements__eid__runs__rid__export__format__get",
+      "tags": [
+        "IFRS reporting"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/users",
+      "operation_id": "users_api_v1_admin_users_get",
+      "tags": [
+        "Firm administration"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/roles",
+      "operation_id": "roles_api_v1_admin_roles_get",
+      "tags": [
+        "Firm administration"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/permissions",
+      "operation_id": "permissions_api_v1_admin_permissions_get",
+      "tags": [
+        "Firm administration"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/roles/{rid}/permissions",
+      "operation_id": "policy_api_v1_admin_roles__rid__permissions_post",
+      "tags": [
+        "Firm administration"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/invitations",
+      "operation_id": "invite_api_v1_admin_invitations_post",
+      "tags": [
+        "Firm administration"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/invitations/redeem",
+      "operation_id": "redeem_api_v1_admin_invitations_redeem_post",
+      "tags": [
+        "Firm administration"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/admin/users/{mid}",
+      "operation_id": "update_member_api_v1_admin_users__mid__patch",
+      "tags": [
+        "Firm administration"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/client-access",
+      "operation_id": "client_access_api_v1_admin_client_access_post",
+      "tags": [
+        "Firm administration"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/activity",
+      "operation_id": "activity_api_v1_admin_activity_get",
+      "tags": [
+        "Firm administration"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/evidence-files/{rid}",
+      "operation_id": "upload_api_v1_engagements__eid__audit_evidence_files__rid__post",
+      "tags": [
+        "Private audit evidence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{eid}/audit/evidence-files/{rid}",
+      "operation_id": "versions_api_v1_engagements__eid__audit_evidence_files__rid__get",
+      "tags": [
+        "Private audit evidence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{eid}/audit/evidence-files/{rid}/{vid}/download",
+      "operation_id": "download_api_v1_engagements__eid__audit_evidence_files__rid___vid__download_get",
+      "tags": [
+        "Private audit evidence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/client-portal/requests",
+      "operation_id": "listing_api_v1_client_portal_requests_get",
+      "tags": [
+        "Restricted client portal"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/client-portal/requests/{rid}/view",
+      "operation_id": "view_api_v1_client_portal_requests__rid__view_post",
+      "tags": [
+        "Restricted client portal"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/client-portal/requests/{rid}/responses",
+      "operation_id": "respond_api_v1_client_portal_requests__rid__responses_post",
+      "tags": [
+        "Restricted client portal"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/client-portal/requests/{rid}/upload",
+      "operation_id": "upload_api_v1_client_portal_requests__rid__upload_post",
+      "tags": [
+        "Restricted client portal"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/ai-actions",
+      "operation_id": "suggest_api_v1_engagements__eid__audit_ai_actions_post",
+      "tags": [
+        "Engagement AI assistance"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/ai-actions/{rid}/accept-procedure",
+      "operation_id": "accept_api_v1_engagements__eid__audit_ai_actions__rid__accept_procedure_post",
+      "tags": [
+        "Engagement AI assistance"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/methodology/starter",
+      "operation_id": "starter_api_v1_admin_methodology_starter_get",
+      "tags": [
+        "Versioned audit methodology"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/admin/methodology",
+      "operation_id": "versions_api_v1_admin_methodology_get",
+      "tags": [
+        "Versioned audit methodology"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/methodology",
+      "operation_id": "create_api_v1_admin_methodology_post",
+      "tags": [
+        "Versioned audit methodology"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/admin/methodology/{mid}/approve",
+      "operation_id": "approve_api_v1_admin_methodology__mid__approve_post",
+      "tags": [
+        "Versioned audit methodology"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/methodology/{mid}/instantiate",
+      "operation_id": "instantiate_api_v1_engagements__eid__audit_methodology__mid__instantiate_post",
+      "tags": [
+        "Versioned audit methodology"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{eid}/audit/workspace",
+      "operation_id": "workspace_api_v1_engagements__eid__audit_workspace_get",
+      "tags": [
+        "Audit execution"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{eid}/audit/team",
+      "operation_id": "team_api_v1_engagements__eid__audit_team_get",
+      "tags": [
+        "Audit execution"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/team",
+      "operation_id": "assign_api_v1_engagements__eid__audit_team_post",
+      "tags": [
+        "Audit execution"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{eid}/audit/linkable-sources",
+      "operation_id": "linkable_sources_api_v1_engagements__eid__audit_linkable_sources_get",
+      "tags": [
+        "Audit execution"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{eid}/audit/team-candidates",
+      "operation_id": "candidates_api_v1_engagements__eid__audit_team_candidates_get",
+      "tags": [
+        "Audit execution"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/policy",
+      "operation_id": "configure_api_v1_engagements__eid__audit_policy_post",
+      "tags": [
+        "Audit execution"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/quality-review",
+      "operation_id": "quality_api_v1_engagements__eid__audit_quality_review_post",
+      "tags": [
+        "Audit execution"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/transition",
+      "operation_id": "transition_api_v1_engagements__eid__audit_transition_post",
+      "tags": [
+        "Audit execution"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{eid}/audit/completion-checks",
+      "operation_id": "completion_api_v1_engagements__eid__audit_completion_checks_get",
+      "tags": [
+        "Audit execution"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/select-sample",
+      "operation_id": "select_sample_api_v1_engagements__eid__audit_select_sample_post",
+      "tags": [
+        "Audit execution"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{eid}/audit/review-queue",
+      "operation_id": "review_queue_api_v1_engagements__eid__audit_review_queue_get",
+      "tags": [
+        "Audit execution"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{eid}/audit/records/{rid}/history",
+      "operation_id": "history_api_v1_engagements__eid__audit_records__rid__history_get",
+      "tags": [
+        "Audit execution"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/engagements/{eid}/audit/records/{rid}",
+      "operation_id": "update_api_v1_engagements__eid__audit_records__rid__patch",
+      "tags": [
+        "Audit execution"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/records/{rid}/actions",
+      "operation_id": "action_api_v1_engagements__eid__audit_records__rid__actions_post",
+      "tags": [
+        "Audit execution"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{eid}/audit/{kind}",
+      "operation_id": "listing_api_v1_engagements__eid__audit__kind__get",
+      "tags": [
+        "Audit execution"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements/{eid}/audit/{kind}",
+      "operation_id": "create_api_v1_engagements__eid__audit__kind__post",
+      "tags": [
+        "Audit execution"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/workspace/inspect-file",
+      "operation_id": "inspect_file_api_v1_workspace_inspect_file_post",
+      "tags": [
+        "Frontend read models"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspace/access",
+      "operation_id": "access_api_v1_workspace_access_get",
+      "tags": [
+        "Frontend read models"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspace/directory",
+      "operation_id": "directory_api_v1_workspace_directory_get",
+      "tags": [
+        "Frontend read models"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspace/dashboard",
+      "operation_id": "dashboard_api_v1_workspace_dashboard_get",
+      "tags": [
+        "Frontend read models"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspace/ledger",
+      "operation_id": "ledger_api_v1_workspace_ledger_get",
+      "tags": [
+        "Frontend read models"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspace/analytics/{identifier}/summary",
+      "operation_id": "analytics_summary_api_v1_workspace_analytics__identifier__summary_get",
+      "tags": [
+        "Frontend read models"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/workspace/findings",
+      "operation_id": "findings_api_v1_workspace_findings_get",
+      "tags": [
+        "Frontend read models"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounting/imports",
+      "operation_id": "upload_api_v1_accounting_imports_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/imports",
+      "operation_id": "list_import_batches_api_v1_accounting_imports_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/imports/{identifier}",
+      "operation_id": "get_import_api_v1_accounting_imports__identifier__get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/imports/{identifier}/preview",
+      "operation_id": "preview_api_v1_accounting_imports__identifier__preview_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounting/imports/{identifier}/validate",
+      "operation_id": "validate_api_v1_accounting_imports__identifier__validate_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounting/imports/{identifier}/commit",
+      "operation_id": "commit_api_v1_accounting_imports__identifier__commit_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/imports/{identifier}/validations",
+      "operation_id": "validations_api_v1_accounting_imports__identifier__validations_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/trial-balance",
+      "operation_id": "balance_api_v1_accounting_trial_balance_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounting/trial-balance",
+      "operation_id": "balance_snapshot_api_v1_accounting_trial_balance_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounting/mappings",
+      "operation_id": "mapping_api_v1_accounting_mappings_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/mappings",
+      "operation_id": "list_account_mappings_api_v1_accounting_mappings_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/mappings/{identifier}",
+      "operation_id": "get_mapping_api_v1_accounting_mappings__identifier__get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/analytics/runs",
+      "operation_id": "analytics_api_v1_analytics_runs_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/analytics/runs",
+      "operation_id": "list_audit_analytics_runs_api_v1_analytics_runs_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/analytics/runs/{identifier}",
+      "operation_id": "get_analytics_api_v1_analytics_runs__identifier__get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/analytics/rules",
+      "operation_id": "rules_api_v1_analytics_rules_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/reconciliation/runs",
+      "operation_id": "reconcile_api_v1_reconciliation_runs_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/reconciliation/runs",
+      "operation_id": "list_reconciliation_runs_api_v1_reconciliation_runs_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/sampling/runs",
+      "operation_id": "sampling_api_v1_sampling_runs_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/sampling/runs",
+      "operation_id": "list_sampling_runs_api_v1_sampling_runs_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/sampling/runs/{identifier}",
+      "operation_id": "get_sampling_api_v1_sampling_runs__identifier__get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/lineage/{identifier}",
+      "operation_id": "lineage_api_v1_accounting_lineage__identifier__get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/accounts",
+      "operation_id": "list_accounts_api_v1_accounting_accounts_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/journals",
+      "operation_id": "list_journal_entries_api_v1_accounting_journals_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/ledger",
+      "operation_id": "list_journal_lines_api_v1_accounting_ledger_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/analytics/findings",
+      "operation_id": "list_audit_findings_api_v1_analytics_findings_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/analytics/risk-scores",
+      "operation_id": "list_risk_scores_api_v1_analytics_risk_scores_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/reconciliation/exceptions",
+      "operation_id": "list_reconciliation_exceptions_api_v1_reconciliation_exceptions_get",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/account-classification",
+      "operation_id": "account_classification_api_v1_ai_account_classification_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/anomaly-explanation",
+      "operation_id": "anomaly_explanation_api_v1_ai_anomaly_explanation_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/audit-procedures",
+      "operation_id": "audit_procedures_api_v1_ai_audit_procedures_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/financial-commentary",
+      "operation_id": "financial_commentary_api_v1_ai_financial_commentary_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/suggestions/{identifier}/review",
+      "operation_id": "review_suggestion_api_v1_ai_suggestions__identifier__review_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounting/currencies",
+      "operation_id": "currency_policy_api_v1_accounting_currencies_post",
+      "tags": [
+        "Accounting and audit intelligence"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounting/connections",
+      "operation_id": "create_api_v1_accounting_connections_post",
+      "tags": [
+        "Accounting connectors"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/connections",
+      "operation_id": "connections_api_v1_accounting_connections_get",
+      "tags": [
+        "Accounting connectors"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/connectors/zoho/{identifier}/authorize",
+      "operation_id": "authorize_api_v1_connectors_zoho__identifier__authorize_post",
+      "tags": [
+        "Accounting connectors"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/connectors/zoho/{identifier}/callback",
+      "operation_id": "callback_api_v1_connectors_zoho__identifier__callback_post",
+      "tags": [
+        "Accounting connectors"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/connectors/zoho/{identifier}/organizations",
+      "operation_id": "organizations_api_v1_connectors_zoho__identifier__organizations_get",
+      "tags": [
+        "Accounting connectors"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/connectors/zoho/{identifier}/organization",
+      "operation_id": "choose_organization_api_v1_connectors_zoho__identifier__organization_post",
+      "tags": [
+        "Accounting connectors"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/connectors/zoho/{identifier}/sync",
+      "operation_id": "sync_api_v1_connectors_zoho__identifier__sync_post",
+      "tags": [
+        "Accounting connectors"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/connectors/tally",
+      "operation_id": "tally_api_v1_connectors_tally_get",
+      "tags": [
+        "Accounting connectors"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounting/uploads",
+      "operation_id": "create_upload_api_v1_accounting_uploads_post",
+      "tags": [
+        "Accounting connectors"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/accounting/uploads/{identifier}",
+      "operation_id": "get_upload_api_v1_accounting_uploads__identifier__get",
+      "tags": [
+        "Accounting connectors"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/accounting/uploads/{identifier}/chunks/{index}",
+      "operation_id": "chunk_api_v1_accounting_uploads__identifier__chunks__index__put",
+      "tags": [
+        "Accounting connectors"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/accounting/uploads/{identifier}/complete",
+      "operation_id": "complete_upload_api_v1_accounting_uploads__identifier__complete_post",
+      "tags": [
+        "Accounting connectors"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/connectors/zoho/sync-runs/{identifier}",
+      "operation_id": "sync_status_api_v1_connectors_zoho_sync_runs__identifier__get",
+      "tags": [
+        "Accounting connectors"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/bootstrap",
+      "operation_id": "bootstrap_api_v1_auth_bootstrap_post",
+      "tags": [
+        "Authentication"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/login",
+      "operation_id": "login_api_v1_auth_login_post",
+      "tags": [
+        "Authentication"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/refresh",
+      "operation_id": "refresh_api_v1_auth_refresh_post",
+      "tags": [
+        "Authentication"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/logout",
+      "operation_id": "logout_api_v1_auth_logout_post",
+      "tags": [
+        "Authentication"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/me",
+      "operation_id": "me_api_v1_auth_me_get",
+      "tags": [
+        "Authentication"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/auth/mfa",
+      "operation_id": "mfa_status_api_v1_auth_mfa_get",
+      "tags": [
+        "Authentication"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/mfa/enroll",
+      "operation_id": "mfa_enroll_api_v1_auth_mfa_enroll_post",
+      "tags": [
+        "Authentication"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/auth/mfa/confirm",
+      "operation_id": "mfa_confirm_api_v1_auth_mfa_confirm_post",
+      "tags": [
+        "Authentication"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tenants",
+      "operation_id": "tenants_api_v1_tenants_get",
+      "tags": [
+        "Organizations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/clients",
+      "operation_id": "listing_api_v1_clients_get",
+      "tags": [
+        "Clients"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/clients",
+      "operation_id": "create_api_v1_clients_post",
+      "tags": [
+        "Clients"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/clients/{identifier}",
+      "operation_id": "get_api_v1_clients__identifier__get",
+      "tags": [
+        "Clients"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/clients/{identifier}",
+      "operation_id": "patch_api_v1_clients__identifier__patch",
+      "tags": [
+        "Clients"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/entities",
+      "operation_id": "listing_api_v1_entities_get",
+      "tags": [
+        "Entities"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/entities",
+      "operation_id": "create_api_v1_entities_post",
+      "tags": [
+        "Entities"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/entities/{identifier}",
+      "operation_id": "get_api_v1_entities__identifier__get",
+      "tags": [
+        "Entities"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/entities/{identifier}",
+      "operation_id": "patch_api_v1_entities__identifier__patch",
+      "tags": [
+        "Entities"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements",
+      "operation_id": "listing_api_v1_engagements_get",
+      "tags": [
+        "Engagements"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/engagements",
+      "operation_id": "create_api_v1_engagements_post",
+      "tags": [
+        "Engagements"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/engagements/{identifier}",
+      "operation_id": "get_api_v1_engagements__identifier__get",
+      "tags": [
+        "Engagements"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/engagements/{identifier}",
+      "operation_id": "patch_api_v1_engagements__identifier__patch",
+      "tags": [
+        "Engagements"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/financial-periods",
+      "operation_id": "create_api_v1_financial_periods_post",
+      "tags": [
+        "Financial periods"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/health",
+      "operation_id": "health_api_v1_ai_health_get",
+      "tags": [
+        "AI gateway"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/models",
+      "operation_id": "models_api_v1_ai_models_get",
+      "tags": [
+        "AI gateway"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/execute",
+      "operation_id": "run_api_v1_ai_execute_post",
+      "tags": [
+        "AI gateway"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/executions/{identifier}",
+      "operation_id": "execution_api_v1_ai_executions__identifier__get",
+      "tags": [
+        "AI gateway"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/jobs/diagnostic",
+      "operation_id": "diagnostic_api_v1_jobs_diagnostic_post",
+      "tags": [
+        "Background jobs"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/jobs/{identifier}",
+      "operation_id": "get_api_v1_jobs__identifier__get",
+      "tags": [
+        "Background jobs"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/jobs/{identifier}/retry",
+      "operation_id": "retry_api_v1_jobs__identifier__retry_post",
+      "tags": [
+        "Background jobs"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/jobs/{identifier}/cancel",
+      "operation_id": "cancel_api_v1_jobs__identifier__cancel_post",
+      "tags": [
+        "Background jobs"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/health/live",
+      "operation_id": "live_health_live_get",
+      "tags": [
+        "Health"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/health/ready",
+      "operation_id": "ready_health_ready_get",
+      "tags": [
+        "Health"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/system/version",
+      "operation_id": "version_api_v1_system_version_get",
+      "tags": [
+        "Health"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ifrs/engagements/{eid}/ai-actions",
+      "operation_id": "suggest_api_v1_ifrs_engagements__eid__ai_actions_post",
+      "tags": [
+        "Engagement AI assistance"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tax/legislation",
+      "operation_id": "legislation_api_v1_tax_legislation_get",
+      "tags": [
+        "Corporate Tax"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tax/engagements/{eid}/workspace",
+      "operation_id": "workspace_api_v1_tax_engagements__eid__workspace_get",
+      "tags": [
+        "Corporate Tax"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tax/engagements/{eid}/records/{kind}",
+      "operation_id": "records_api_v1_tax_engagements__eid__records__kind__get",
+      "tags": [
+        "Corporate Tax"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tax/engagements/{eid}/records/{kind}",
+      "operation_id": "create_api_v1_tax_engagements__eid__records__kind__post",
+      "tags": [
+        "Corporate Tax"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tax/engagements/{eid}/computations/{profile_id}",
+      "operation_id": "compute_api_v1_tax_engagements__eid__computations__profile_id__post",
+      "tags": [
+        "Corporate Tax"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tax/engagements/{eid}/calculate/{rid}",
+      "operation_id": "calculate_api_v1_tax_engagements__eid__calculate__rid__post",
+      "tags": [
+        "Corporate Tax"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tax/engagements/{eid}/runs",
+      "operation_id": "runs_api_v1_tax_engagements__eid__runs_get",
+      "tags": [
+        "Corporate Tax"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tax/engagements/{eid}/loss-transfers/{rid}/post",
+      "operation_id": "post_transfer_api_v1_tax_engagements__eid__loss_transfers__rid__post_post",
+      "tags": [
+        "Corporate Tax"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tax/engagements/{eid}/runs/{rid}",
+      "operation_id": "result_api_v1_tax_engagements__eid__runs__rid__get",
+      "tags": [
+        "Corporate Tax"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tax/engagements/{eid}/loss-ledger/{profile_id}",
+      "operation_id": "losses_api_v1_tax_engagements__eid__loss_ledger__profile_id__get",
+      "tags": [
+        "Corporate Tax"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tax/engagements/{eid}/runs/{rid}/export/{format}",
+      "operation_id": "export_api_v1_tax_engagements__eid__runs__rid__export__format__get",
+      "tags": [
+        "Corporate Tax"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tax/engagements/{eid}/ai",
+      "operation_id": "suggest_api_v1_tax_engagements__eid__ai_post",
+      "tags": [
+        "Tax AI assistance"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tax/engagements/{eid}/ai/{rid}/decision",
+      "operation_id": "decide_api_v1_tax_engagements__eid__ai__rid__decision_post",
+      "tags": [
+        "Tax AI assistance"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vat/legislation",
+      "operation_id": "legislation_api_v1_vat_legislation_get",
+      "tags": [
+        "VAT and e-invoicing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vat/demo-status",
+      "operation_id": "demo_status_api_v1_vat_demo_status_get",
+      "tags": [
+        "VAT and e-invoicing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vat/engagements/{eid}/workspace",
+      "operation_id": "workspace_api_v1_vat_engagements__eid__workspace_get",
+      "tags": [
+        "VAT and e-invoicing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vat/engagements/{eid}/records/{kind}",
+      "operation_id": "records_api_v1_vat_engagements__eid__records__kind__get",
+      "tags": [
+        "VAT and e-invoicing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vat/engagements/{eid}/records/{kind}",
+      "operation_id": "create_api_v1_vat_engagements__eid__records__kind__post",
+      "tags": [
+        "VAT and e-invoicing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vat/engagements/{eid}/invoices/{rid}/validate",
+      "operation_id": "validate_invoice_api_v1_vat_engagements__eid__invoices__rid__validate_post",
+      "tags": [
+        "VAT and e-invoicing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vat/engagements/{eid}/invoices/{rid}/extract/{evidence_id}",
+      "operation_id": "extract_document_api_v1_vat_engagements__eid__invoices__rid__extract__evidence_id__post",
+      "tags": [
+        "VAT and e-invoicing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vat/engagements/{eid}/computations/{pid}",
+      "operation_id": "compute_api_v1_vat_engagements__eid__computations__pid__post",
+      "tags": [
+        "VAT and e-invoicing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vat/engagements/{eid}/runs",
+      "operation_id": "runs_api_v1_vat_engagements__eid__runs_get",
+      "tags": [
+        "VAT and e-invoicing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vat/engagements/{eid}/runs/{rid}",
+      "operation_id": "result_api_v1_vat_engagements__eid__runs__rid__get",
+      "tags": [
+        "VAT and e-invoicing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vat/engagements/{eid}/assessments/{rid}",
+      "operation_id": "assess_api_v1_vat_engagements__eid__assessments__rid__post",
+      "tags": [
+        "VAT and e-invoicing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vat/engagements/{eid}/sandbox",
+      "operation_id": "sandbox_api_v1_vat_engagements__eid__sandbox_post",
+      "tags": [
+        "VAT and e-invoicing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/vat/engagements/{eid}/runs/{rid}/export/json",
+      "operation_id": "export_api_v1_vat_engagements__eid__runs__rid__export_json_get",
+      "tags": [
+        "VAT and e-invoicing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vat/engagements/{eid}/ai",
+      "operation_id": "suggest_api_v1_vat_engagements__eid__ai_post",
+      "tags": [
+        "VAT AI assistance"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/vat/engagements/{eid}/ai/{rid}/decision",
+      "operation_id": "decide_api_v1_vat_engagements__eid__ai__rid__decision_post",
+      "tags": [
+        "VAT AI assistance"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/client-documents",
+      "operation_id": "client_documents_api_v1_tp_client_documents_get",
+      "tags": [
+        "Transfer pricing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/client-documents/{rid}/download",
+      "operation_id": "client_document_download_api_v1_tp_client_documents__rid__download_get",
+      "tags": [
+        "Transfer pricing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/legislation",
+      "operation_id": "legislation_api_v1_tp_legislation_get",
+      "tags": [
+        "Transfer pricing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/engagements/{eid}/workspace",
+      "operation_id": "workspace_api_v1_tp_engagements__eid__workspace_get",
+      "tags": [
+        "Transfer pricing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/engagements/{eid}/records/{kind}",
+      "operation_id": "records_api_v1_tp_engagements__eid__records__kind__get",
+      "tags": [
+        "Transfer pricing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tp/engagements/{eid}/records/{kind}",
+      "operation_id": "create_api_v1_tp_engagements__eid__records__kind__post",
+      "tags": [
+        "Transfer pricing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tp/engagements/{eid}/datasets/{rid}/import",
+      "operation_id": "import_comparables_api_v1_tp_engagements__eid__datasets__rid__import_post",
+      "tags": [
+        "Transfer pricing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/engagements/{eid}/observations",
+      "operation_id": "observations_api_v1_tp_engagements__eid__observations_get",
+      "tags": [
+        "Transfer pricing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tp/engagements/{eid}/calculate/{rid}",
+      "operation_id": "calculate_api_v1_tp_engagements__eid__calculate__rid__post",
+      "tags": [
+        "Transfer pricing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tp/engagements/{eid}/matrix/{pid}",
+      "operation_id": "matrix_api_v1_tp_engagements__eid__matrix__pid__post",
+      "tags": [
+        "Transfer pricing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tp/engagements/{eid}/jobs/{jid}/{operation}",
+      "operation_id": "control_job_api_v1_tp_engagements__eid__jobs__jid___operation__post",
+      "tags": [
+        "Transfer pricing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/engagements/{eid}/runs",
+      "operation_id": "runs_api_v1_tp_engagements__eid__runs_get",
+      "tags": [
+        "Transfer pricing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/engagements/{eid}/runs/{rid}",
+      "operation_id": "result_api_v1_tp_engagements__eid__runs__rid__get",
+      "tags": [
+        "Transfer pricing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/engagements/{eid}/graph/{pid}",
+      "operation_id": "graph_api_v1_tp_engagements__eid__graph__pid__get",
+      "tags": [
+        "Transfer pricing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/engagements/{eid}/candidates/{pid}",
+      "operation_id": "candidates_api_v1_tp_engagements__eid__candidates__pid__get",
+      "tags": [
+        "Transfer pricing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tp/engagements/{eid}/runs/{rid}/tax-adjustment",
+      "operation_id": "link_tax_api_v1_tp_engagements__eid__runs__rid__tax_adjustment_post",
+      "tags": [
+        "Transfer pricing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/tp/engagements/{eid}/runs/{rid}/export/{format}",
+      "operation_id": "export_api_v1_tp_engagements__eid__runs__rid__export__format__get",
+      "tags": [
+        "Transfer pricing"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tp/engagements/{eid}/ai",
+      "operation_id": "suggest_api_v1_tp_engagements__eid__ai_post",
+      "tags": [
+        "TP AI assistance"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/tp/engagements/{eid}/ai/{rid}/decision",
+      "operation_id": "decide_api_v1_tp_engagements__eid__ai__rid__decision_post",
+      "tags": [
+        "TP AI assistance"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ml/engagements/{eid}/datasets",
+      "operation_id": "build_dataset_api_v1_ml_engagements__eid__datasets_post",
+      "tags": [
+        "Governed audit machine learning"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ml/predictions/{identifier}/explanation",
+      "operation_id": "explanation_api_v1_ml_predictions__identifier__explanation_post",
+      "tags": [
+        "Governed audit machine learning"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ml/datasets/{identifier}/curation",
+      "operation_id": "curate_api_v1_ml_datasets__identifier__curation_post",
+      "tags": [
+        "Governed audit machine learning"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ml/jobs/{identifier}",
+      "operation_id": "job_status_api_v1_ml_jobs__identifier__get",
+      "tags": [
+        "Governed audit machine learning"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ml/jobs/{identifier}/cancel",
+      "operation_id": "cancel_api_v1_ml_jobs__identifier__cancel_post",
+      "tags": [
+        "Governed audit machine learning"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ml/events",
+      "operation_id": "events_api_v1_ml_events_get",
+      "tags": [
+        "Governed audit machine learning"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ml/events/{identifier}",
+      "operation_id": "detail_api_v1_ml_events__identifier__get",
+      "tags": [
+        "Governed audit machine learning"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ml/training-jobs",
+      "operation_id": "training_api_v1_ml_training_jobs_post",
+      "tags": [
+        "Governed audit machine learning"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ml/models/{identifier}/approval-requests",
+      "operation_id": "submit_approval_api_v1_ml_models__identifier__approval_requests_post",
+      "tags": [
+        "Governed audit machine learning"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ml/models/{identifier}/approvals",
+      "operation_id": "approve_api_v1_ml_models__identifier__approvals_post",
+      "tags": [
+        "Governed audit machine learning"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ml/models/{identifier}/deployments",
+      "operation_id": "deploy_api_v1_ml_models__identifier__deployments_post",
+      "tags": [
+        "Governed audit machine learning"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ml/inference/batches",
+      "operation_id": "inference_api_v1_ml_inference_batches_post",
+      "tags": [
+        "Governed audit machine learning"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ml/predictions/{identifier}/feedback",
+      "operation_id": "feedback_api_v1_ml_predictions__identifier__feedback_post",
+      "tags": [
+        "Governed audit machine learning"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/dmtt/legislation",
+      "operation_id": "rules_api_v1_dmtt_legislation_get",
+      "tags": [
+        "UAE Pillar Two"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/dmtt/engagements/{eid}/workspace",
+      "operation_id": "workspace_api_v1_dmtt_engagements__eid__workspace_get",
+      "tags": [
+        "UAE Pillar Two"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/dmtt/engagements/{eid}/records/{kind}",
+      "operation_id": "records_api_v1_dmtt_engagements__eid__records__kind__get",
+      "tags": [
+        "UAE Pillar Two"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/dmtt/engagements/{eid}/records/{kind}",
+      "operation_id": "create_api_v1_dmtt_engagements__eid__records__kind__post",
+      "tags": [
+        "UAE Pillar Two"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/dmtt/engagements/{eid}/records/{rid}",
+      "operation_id": "update_api_v1_dmtt_engagements__eid__records__rid__patch",
+      "tags": [
+        "UAE Pillar Two"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/dmtt/engagements/{eid}/records/{rid}/actions",
+      "operation_id": "action_api_v1_dmtt_engagements__eid__records__rid__actions_post",
+      "tags": [
+        "UAE Pillar Two"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/dmtt/engagements/{eid}/groups/{gid}/calculate",
+      "operation_id": "calculate_api_v1_dmtt_engagements__eid__groups__gid__calculate_post",
+      "tags": [
+        "UAE Pillar Two"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/dmtt/engagements/{eid}/calculations",
+      "operation_id": "calculations_api_v1_dmtt_engagements__eid__calculations_get",
+      "tags": [
+        "UAE Pillar Two"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/dmtt/engagements/{eid}/ai",
+      "operation_id": "assist_api_v1_dmtt_engagements__eid__ai_post",
+      "tags": [
+        "DMTT source-grounded AI"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/dmtt/engagements/{eid}/ai/{identifier}/accept",
+      "operation_id": "accept_api_v1_dmtt_engagements__eid__ai__identifier__accept_post",
+      "tags": [
+        "DMTT source-grounded AI"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/frameworks",
+      "operation_id": "frameworks_api_v1_grc_frameworks_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/workspace",
+      "operation_id": "workspace_api_v1_grc_engagements__eid__workspace_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/dashboard",
+      "operation_id": "dashboard_api_v1_grc_engagements__eid__dashboard_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/records/{kind}",
+      "operation_id": "listing_api_v1_grc_engagements__eid__records__kind__get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/records/{kind}",
+      "operation_id": "create_api_v1_grc_engagements__eid__records__kind__post",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/grc/engagements/{eid}/records/{rid}",
+      "operation_id": "update_api_v1_grc_engagements__eid__records__rid__patch",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/records/{rid}/actions",
+      "operation_id": "action_api_v1_grc_engagements__eid__records__rid__actions_post",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/records/{rid}/history",
+      "operation_id": "history_api_v1_grc_engagements__eid__records__rid__history_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/records/{rid}/calculate",
+      "operation_id": "calculate_api_v1_grc_engagements__eid__records__rid__calculate_post",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/internal-audits/{rid}/transitions",
+      "operation_id": "transition_api_v1_grc_engagements__eid__internal_audits__rid__transitions_post",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/runs",
+      "operation_id": "runs_api_v1_grc_engagements__eid__runs_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/monitoring/{rid}/execute",
+      "operation_id": "execute_api_v1_grc_engagements__eid__monitoring__rid__execute_post",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/alerts",
+      "operation_id": "alerts_api_v1_grc_engagements__eid__alerts_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/alerts/{identifier}/source",
+      "operation_id": "alert_source_api_v1_grc_engagements__eid__alerts__identifier__source_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/schedules",
+      "operation_id": "schedule_api_v1_grc_engagements__eid__schedules_post",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/schedules",
+      "operation_id": "schedules_api_v1_grc_engagements__eid__schedules_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/grc/engagements/{eid}/schedules/{identifier}",
+      "operation_id": "schedule_state_api_v1_grc_engagements__eid__schedules__identifier__patch",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/policies/{rid}/acknowledgments",
+      "operation_id": "acknowledge_api_v1_grc_engagements__eid__policies__rid__acknowledgments_post",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/notifications",
+      "operation_id": "notifications_api_v1_grc_engagements__eid__notifications_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/board/{rid}/publish",
+      "operation_id": "publish_api_v1_grc_engagements__eid__board__rid__publish_post",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/board/packages",
+      "operation_id": "package_directory_api_v1_grc_engagements__eid__board_packages_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/rcm",
+      "operation_id": "matrix_api_v1_grc_engagements__eid__rcm_get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/samples",
+      "operation_id": "sampling_api_v1_grc_engagements__eid__samples_post",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/sod/import",
+      "operation_id": "import_access_api_v1_grc_engagements__eid__sod_import_post",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/board/packages/{identifier}",
+      "operation_id": "board_package_api_v1_grc_engagements__eid__board_packages__identifier__get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/grc/engagements/{eid}/board/packages/{identifier}/export/{format}",
+      "operation_id": "board_export_api_v1_grc_engagements__eid__board_packages__identifier__export__format__get",
+      "tags": [
+        "Internal audit ERM and controls"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/grc/engagements/{eid}/ai",
+      "operation_id": "assist_api_v1_grc_engagements__eid__ai_post",
+      "tags": [
+        "Source-grounded GRC suggestions"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/agents",
+      "operation_id": "registry_api_v1_ai_agents_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/tools",
+      "operation_id": "tools_api_v1_ai_tools_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/command",
+      "operation_id": "command_api_v1_ai_command_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/investigations",
+      "operation_id": "investigations_api_v1_ai_engagements__eid__investigations_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}",
+      "operation_id": "detail_api_v1_ai_engagements__eid__investigations__identifier__get",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}/step",
+      "operation_id": "advance_api_v1_ai_engagements__eid__investigations__identifier__step_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}/export/{kind}",
+      "operation_id": "export_api_v1_ai_engagements__eid__investigations__identifier__export__kind__get",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/workspace",
+      "operation_id": "workspace_api_v1_ai_engagements__eid__workspace_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}/draft",
+      "operation_id": "draft_api_v1_ai_engagements__eid__investigations__identifier__draft_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}/dispatch",
+      "operation_id": "dispatch_api_v1_ai_engagements__eid__investigations__identifier__dispatch_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}/control",
+      "operation_id": "control_api_v1_ai_engagements__eid__investigations__identifier__control_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/approvals",
+      "operation_id": "propose_api_v1_ai_engagements__eid__approvals_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/approvals",
+      "operation_id": "approvals_api_v1_ai_engagements__eid__approvals_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/approvals/{identifier}/decision",
+      "operation_id": "decision_api_v1_ai_engagements__eid__approvals__identifier__decision_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/approvals/{identifier}/execute",
+      "operation_id": "execute_api_v1_ai_engagements__eid__approvals__identifier__execute_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/documents",
+      "operation_id": "extract_api_v1_ai_engagements__eid__documents_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/documents",
+      "operation_id": "document_list_api_v1_ai_engagements__eid__documents_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/documents/{identifier}/corrections",
+      "operation_id": "correction_api_v1_ai_engagements__eid__documents__identifier__corrections_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/documents/{identifier}/matches",
+      "operation_id": "matches_api_v1_ai_engagements__eid__documents__identifier__matches_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/documents/{identifier}/matches",
+      "operation_id": "match_decision_api_v1_ai_engagements__eid__documents__identifier__matches_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/knowledge/search",
+      "operation_id": "search_api_v1_ai_engagements__eid__knowledge_search_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/citations/{identifier}",
+      "operation_id": "citation_api_v1_ai_engagements__eid__citations__identifier__get",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/citations/verify",
+      "operation_id": "verify_citation_api_v1_ai_engagements__eid__citations_verify_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/knowledge/sources",
+      "operation_id": "regulatory_sources_api_v1_ai_knowledge_sources_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/workflows/validate",
+      "operation_id": "graph_api_v1_ai_engagements__eid__workflows_validate_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/workflows",
+      "operation_id": "save_template_api_v1_ai_engagements__eid__workflows_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/workflows",
+      "operation_id": "templates_api_v1_ai_engagements__eid__workflows_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/providers",
+      "operation_id": "providers_api_v1_ai_providers_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/usage",
+      "operation_id": "usage_api_v1_ai_engagements__eid__usage_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/investigations/{identifier}/evaluate",
+      "operation_id": "evaluate_api_v1_ai_engagements__eid__investigations__identifier__evaluate_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/security-events",
+      "operation_id": "security_events_api_v1_ai_engagements__eid__security_events_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/schedules",
+      "operation_id": "schedule_api_v1_ai_engagements__eid__schedules_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/ai/engagements/{eid}/schedules",
+      "operation_id": "schedules_api_v1_ai_engagements__eid__schedules_get",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/ai/engagements/{eid}/schedules/{identifier}/pause",
+      "operation_id": "pause_schedule_api_v1_ai_engagements__eid__schedules__identifier__pause_post",
+      "tags": [
+        "Enterprise AI investigations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/subscriptions/current",
+      "operation_id": "current_api_v1_subscriptions_current_get",
+      "tags": [
+        "SaaS operations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/v1/platform/tenants/{tenant_id}/subscription",
+      "operation_id": "change_api_v1_platform_tenants__tenant_id__subscription_put",
+      "tags": [
+        "SaaS operations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/v1/platform/tenants/{tenant_id}",
+      "operation_id": "lifecycle_api_v1_platform_tenants__tenant_id__patch",
+      "tags": [
+        "SaaS operations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    },
+    {
+      "method": "GET",
+      "path": "/api/v1/platform/{area}",
+      "operation_id": "workspace_api_v1_platform__area__get",
+      "tags": [
+        "SaaS operations"
+      ],
+      "status": "NOT_TESTED",
+      "note": "Discovered contract; execution coverage requires matching test assertions, not route existence"
+    }
+  ],
+  "migration": "0012",
+  "database_role": {
+    "rolsuper": false,
+    "rolbypassrls": false
+  },
+  "schema_tables": [
+    {
+      "relname": "account_mappings",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "accounting_connections",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "accounts",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ai_approval_requests",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ai_document_chunks",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ai_document_extractions",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ai_document_match_decisions",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ai_executions",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ai_model_configurations",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "ai_prompt_templates",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "ai_providers",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "ai_scheduled_workflows",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ai_usage_records",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ai_workflow_events",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ai_workflow_runs",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "alembic_version",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "audit_access_grants",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "audit_analytics_runs",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "audit_client_access",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "audit_engagement_policies",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "audit_events",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "audit_evidence_versions",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "audit_findings",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "audit_invitations",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "audit_methodology_versions",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "audit_record_versions",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "audit_records",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "audit_review_decisions",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "audit_role_policies",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "audit_rule_results",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "audit_rules",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "background_jobs",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "clients",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "connection_sync_runs",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ct_computation_runs",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ct_current_releases",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ct_loss_postings",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "currencies",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "data_transformations",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "engagement_team_members",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "engagements",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "entity_relationships",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "exchange_rates",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "financial_ai_suggestions",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "financial_periods",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "grc_execution_snapshots",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "grc_monitor_alerts",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "grc_monitor_schedules",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ifrs_calculation_runs",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ifrs_standards_registry",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "import_batches",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "import_files",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "import_snapshots",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "import_validation_results",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "journal_entries",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "journal_lines",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "legal_entities",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "membership_roles",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "ml_registry_events",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "permissions",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "platform_operations",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "platform_operators",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "reconciliation_exceptions",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "reconciliation_runs",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "refresh_sessions",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "risk_scores",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "role_permissions",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "roles",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "sampling_items",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "sampling_runs",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "source_integrity_checks",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "source_records",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "synthetic_datasets",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "system_settings",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "tenant_memberships",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "tenant_subscriptions",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "tenant_usage_counters",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "tenants",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "tp_calculation_runs",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "tp_comparable_observations",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "trial_balance_lines",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "trial_balance_snapshots",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "upload_sessions",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "users",
+      "relrowsecurity": false,
+      "relforcerowsecurity": false
+    },
+    {
+      "relname": "vat_computation_runs",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    }
+  ],
+  "demo_journal_lines": 250024,
+  "active_ai_schedules": 0,
+  "active_load_users": 0,
+  "module_count": 25,
+  "api_operation_count": 275,
+  "api_path_count": 246
+}

@@ -1,0 +1,54 @@
+{
+  "synthetic": true,
+  "financial_lines": 250024,
+  "indexed_documents": 1000,
+  "chunks": 1000,
+  "amount_and_page_oracle": {
+    "correct": 50,
+    "total": 50
+  },
+  "semantic_benchmark": "NOT_CONFIGURED",
+  "external_model_tokens": "NOT_MEASURED; no external model used",
+  "external_model_cost": "NOT_MEASURED",
+  "rss_before_bytes": 103235584,
+  "real_worker": {
+    "run_id": "4fd2ff6e-f053-45ae-b928-1fe74a4b28a4",
+    "state": "COMPLETED",
+    "steps": 3,
+    "replay_duplicates": 0
+  },
+  "scheduler_tick": {
+    "queued": 1
+  },
+  "scheduled_run": {
+    "id": "f490a9df-bd3f-4b85-9b15-c6828b3bcd77",
+    "state": "COMPLETED",
+    "paused_after_proof": true
+  },
+  "concurrent_requests": {
+    "requests": 5,
+    "identities": 1,
+    "seconds": 0.7070979999989504,
+    "scope": "Same authorized synthetic investigator; not a multi-user load qualification"
+  },
+  "latency": {
+    "keyword_1000_documents": {
+      "samples": 5,
+      "p50_seconds": 0.1368806999962544,
+      "max_seconds": 0.1425113000004785
+    },
+    "document_directory": {
+      "samples": 5,
+      "p50_seconds": 0.7922183999980916,
+      "max_seconds": 0.8988279000041075
+    },
+    "workflow_directory": {
+      "samples": 5,
+      "p50_seconds": 0.01809990000037942,
+      "max_seconds": 0.020258800002920907
+    }
+  },
+  "rss_after_bytes": 181882880,
+  "memory_basis": "Verification process RSS before/after; not sampled peak API or worker RSS",
+  "export_run_id": "4fd2ff6e-f053-45ae-b928-1fe74a4b28a4"
+}

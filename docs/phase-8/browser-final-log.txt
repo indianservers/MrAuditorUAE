@@ -1,0 +1,17 @@
+
+> auditos-frontend@0.3.0 test:e2e:phase8
+> playwright test --config playwright.phase8.config.ts
+
+
+Running 6 tests using 1 worker
+
+(node:23956) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 e2e\phase8.spec.ts:41:1 › 18 TP workspaces use persisted APIs without browser errors (12.1s)
+  ok 2 e2e\phase8.spec.ts:62:1 › source matrix calculates and exports through real API (2.9s)
+  ok 3 e2e\phase8.spec.ts:84:1 › dated graph and persisted benchmark chart render at four enterprise widths (9.0s)
+  ok 4 e2e\phase8.spec.ts:110:1 › client sees issued-document boundary and cannot open internal TP (1.2s)
+  ok 5 e2e\phase8.spec.ts:131:1 › queued loan and source service workpapers calculate in browser (4.2s)
+  ok 6 e2e\phase8.spec.ts:175:1 › AI suggestion is accepted by a separate TP reviewer (3.9s)
+
+  6 passed (34.0s)

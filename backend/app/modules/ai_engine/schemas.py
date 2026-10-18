@@ -2,12 +2,16 @@ from typing import Literal, Protocol
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from app.modules.audit_execution.ai_output import AuditAIOutput
 from app.modules.financial_ai.schemas import (
     AnomalyExplanation,
     AuditProcedures,
     Classification,
     Commentary,
 )
+from app.modules.tax.ai_output import TaxAIOutput
+from app.modules.tp.ai_output import TPAIOutput
+from app.modules.vat.ai_output import VATAIOutput
 
 
 class Summary(BaseModel):
@@ -37,7 +41,17 @@ class AIRequest(BaseModel):
 
 
 class AIResponse(BaseModel):
-    output: Summary | Classification | AnomalyExplanation | AuditProcedures | Commentary
+    output: (
+        Summary
+        | Classification
+        | AnomalyExplanation
+        | AuditProcedures
+        | Commentary
+        | AuditAIOutput
+        | TaxAIOutput
+        | VATAIOutput
+        | TPAIOutput
+    )
     input_tokens: int | None = Field(default=None, ge=0)
     output_tokens: int | None = Field(default=None, ge=0)
     usage_source: Literal["provider_reported", "mock_word_estimate", "unavailable"] = (

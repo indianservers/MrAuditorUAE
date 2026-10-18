@@ -1,0 +1,87 @@
+{"timestamp": "2026-10-18T03:55:42.919124+00:00", "level": "INFO", "event": "http.request", "request_id": "ab1d5512-87c7-493b-9167-139419a9195c", "status": 201}
+{"timestamp": "2026-10-18T03:55:42.986876+00:00", "level": "INFO", "event": "http.request", "request_id": "13c0dfe2-a7fa-42f5-b72f-b9a468be0938", "status": 202}
+{"timestamp": "2026-10-18T03:55:43.000175+00:00", "level": "INFO", "event": "http.request", "request_id": "5fcc11f8-c189-4929-b69c-fb159ff51c31", "status": 200}
+{"timestamp": "2026-10-18T03:55:43.314866+00:00", "level": "INFO", "event": "http.request", "request_id": "4756ce15-efe1-4c31-818f-8933a9c05de6", "status": 200}
+{"timestamp": "2026-10-18T03:55:43.623179+00:00", "level": "INFO", "event": "http.request", "request_id": "ab0d915e-13aa-4c2a-bebf-8768b0fa10e8", "status": 200}
+{"timestamp": "2026-10-18T03:55:43.667451+00:00", "level": "INFO", "event": "http.request", "request_id": "f109dc82-7ca0-4ae3-8de1-e9772fff71e8", "status": 202}
+{"timestamp": "2026-10-18T03:55:43.711528+00:00", "level": "INFO", "event": "http.request", "request_id": "4c80d711-510f-447f-b624-4420023c0667", "status": 200}
+{"timestamp": "2026-10-18T03:55:43.733197+00:00", "level": "INFO", "event": "http.request", "request_id": "44511921-920b-4e4e-86c8-84fff75a8524", "status": 201}
+{"timestamp": "2026-10-18T03:55:43.840739+00:00", "level": "INFO", "event": "http.request", "request_id": "358afe03-af8a-4351-90d8-23b8f8a5dc30", "status": 200}
+{"timestamp": "2026-10-18T03:55:44.125032+00:00", "level": "INFO", "event": "http.request", "request_id": "e1e0cfda-b3b4-4e6f-b872-d8ea41bfb7d7", "status": 200}
+{"timestamp": "2026-10-18T03:55:44.139068+00:00", "level": "INFO", "event": "http.request", "request_id": "c32eb94c-d4f9-4b32-ac67-ac112e3ca871", "status": 200}
+{"timestamp": "2026-10-18T03:55:44.276232+00:00", "level": "INFO", "event": "http.request", "request_id": "0b4c8a98-57bc-4ebe-a69b-cb985e895947", "status": 200}
+{"timestamp": "2026-10-18T03:55:44.407583+00:00", "level": "INFO", "event": "http.request", "request_id": "795a86cb-4a8e-4641-9ae0-ca8bf4f70f6a", "status": 200}
+{"timestamp": "2026-10-18T03:55:44.547732+00:00", "level": "INFO", "event": "http.request", "request_id": "adc20216-39ed-4f2e-be96-3d48a3c2bff5", "status": 200}
+{"timestamp": "2026-10-18T03:55:44.684152+00:00", "level": "INFO", "event": "http.request", "request_id": "11441737-fa19-48a7-957a-6827891d9cbc", "status": 200}
+{"timestamp": "2026-10-18T03:55:44.827293+00:00", "level": "INFO", "event": "http.request", "request_id": "c6ab6c15-a9d1-427b-b85e-f5b5e2e23917", "status": 200}
+{"timestamp": "2026-10-18T03:55:45.649841+00:00", "level": "INFO", "event": "http.request", "request_id": "2c18f3a3-7d0c-49dd-98b0-a1fc1e18515a", "status": 200}
+{"timestamp": "2026-10-18T03:55:46.442349+00:00", "level": "INFO", "event": "http.request", "request_id": "f7576942-b4ae-4d8d-b5d7-7c114331a93f", "status": 200}
+{"timestamp": "2026-10-18T03:55:47.186292+00:00", "level": "INFO", "event": "http.request", "request_id": "04f4fe5b-5ebb-44bd-b0ba-85e623faa313", "status": 200}
+{"timestamp": "2026-10-18T03:55:47.940186+00:00", "level": "INFO", "event": "http.request", "request_id": "97645d9f-4240-45d2-915b-a95528e29777", "status": 200}
+{"timestamp": "2026-10-18T03:55:48.838833+00:00", "level": "INFO", "event": "http.request", "request_id": "128c8a19-4eaa-40c0-bbfb-208e118a7107", "status": 200}
+{"timestamp": "2026-10-18T03:55:48.858740+00:00", "level": "INFO", "event": "http.request", "request_id": "e29b2818-7c76-48a4-9338-3181f4222954", "status": 200}
+{"timestamp": "2026-10-18T03:55:48.876849+00:00", "level": "INFO", "event": "http.request", "request_id": "be7c5de9-45d7-4671-a26d-0f53a6e21234", "status": 200}
+{"timestamp": "2026-10-18T03:55:48.896286+00:00", "level": "INFO", "event": "http.request", "request_id": "a13ee16a-296d-4e1a-b127-bf1bf2b7f264", "status": 200}
+{"timestamp": "2026-10-18T03:55:48.914450+00:00", "level": "INFO", "event": "http.request", "request_id": "295ca608-60c3-4232-b52e-f9ff49fb1921", "status": 200}
+{"timestamp": "2026-10-18T03:55:48.927859+00:00", "level": "INFO", "event": "http.request", "request_id": "cc970767-b1f9-4620-a26f-7cae8e323248", "status": 200}
+{"timestamp": "2026-10-18T03:55:49.149026+00:00", "level": "INFO", "event": "http.request", "request_id": "5515dc63-2384-4646-a900-6f67168589b4", "status": 200}
+{"timestamp": "2026-10-18T03:55:49.295204+00:00", "level": "INFO", "event": "http.request", "request_id": "48628475-e3c1-49ff-b3df-1df00cd65c09", "status": 200}
+{"timestamp": "2026-10-18T03:55:49.411011+00:00", "level": "INFO", "event": "http.request", "request_id": "6a97cf5f-3109-4f63-a16d-fc520a7d0036", "status": 200}
+{"timestamp": "2026-10-18T03:55:49.512917+00:00", "level": "INFO", "event": "http.request", "request_id": "00b38ec6-7bf1-44ea-81d0-d6a40a2793a6", "status": 200}
+{"timestamp": "2026-10-18T03:55:49.634965+00:00", "level": "INFO", "event": "http.request", "request_id": "caf62e38-2313-4011-9386-baa8f04c3300", "status": 200}
+{"timestamp": "2026-10-18T03:55:49.750008+00:00", "level": "INFO", "event": "http.request", "request_id": "9bdbcaf1-2eb2-4ab7-ac86-684e930a2069", "status": 200}
+{"timestamp": "2026-10-18T03:55:49.850912+00:00", "level": "INFO", "event": "http.request", "request_id": "336f0b42-d965-4349-9c77-976a071189ef", "status": 200}
+{
+  "synthetic": true,
+  "financial_lines": 250024,
+  "indexed_documents": 1000,
+  "chunks": 1000,
+  "amount_and_page_oracle": {
+    "correct": 50,
+    "total": 50
+  },
+  "semantic_benchmark": "NOT_CONFIGURED",
+  "external_model_tokens": "NOT_MEASURED; no external model used",
+  "external_model_cost": "NOT_MEASURED",
+  "rss_before_bytes": 103235584,
+  "real_worker": {
+    "run_id": "4fd2ff6e-f053-45ae-b928-1fe74a4b28a4",
+    "state": "COMPLETED",
+    "steps": 3,
+    "replay_duplicates": 0
+  },
+  "scheduler_tick": {
+    "queued": 1
+  },
+  "scheduled_run": {
+    "id": "f490a9df-bd3f-4b85-9b15-c6828b3bcd77",
+    "state": "COMPLETED",
+    "paused_after_proof": true
+  },
+  "concurrent_requests": {
+    "requests": 5,
+    "identities": 1,
+    "seconds": 0.7070979999989504,
+    "scope": "Same authorized synthetic investigator; not a multi-user load qualification"
+  },
+  "latency": {
+    "keyword_1000_documents": {
+      "samples": 5,
+      "p50_seconds": 0.1368806999962544,
+      "max_seconds": 0.1425113000004785
+    },
+    "document_directory": {
+      "samples": 5,
+      "p50_seconds": 0.7922183999980916,
+      "max_seconds": 0.8988279000041075
+    },
+    "workflow_directory": {
+      "samples": 5,
+      "p50_seconds": 0.01809990000037942,
+      "max_seconds": 0.020258800002920907
+    }
+  },
+  "rss_after_bytes": 181882880,
+  "memory_basis": "Verification process RSS before/after; not sampled peak API or worker RSS",
+  "export_run_id": "4fd2ff6e-f053-45ae-b928-1fe74a4b28a4"
+}

@@ -33,3 +33,8 @@ The stock postgres image does not ship pgvector; Phase 1 has no embeddings/RAG a
 ## Phase 2 additive schema
 
 Migration 0002 adds 28 physical tables plus four security-invoker views, retaining all original tables. It also adds composite entity/client and period/entity alternate keys and operation/payload/result/progress fields to background_jobs. See accounting-engine.md and data-lineage.md for the new relationships. Source versions, canonical GL, period balances and record lineage use views to avoid redundant authoritative copies. Downgrade removes Phase 2 financial tables and job fields while retaining historical prompt/permission catalogue records referenced by Phase 1 execution records; back up before any destructive downgrade.
+# Phase 12 migration 0012
+
+Adds encrypted user MFA secret/enablement/replay counter and refresh-session MFA assurance. New tables: `platform_operators`, `tenant_subscriptions`, `tenant_usage_counters`, `platform_operations`. Subscription and usage tables FORCE RLS. Operator grants are separate from tenant memberships; operations are immutable. Subscription versions prevent stale updates, and admission counters serialize per tenant. Do not use database-owner credentials for the API.
+
+See `phase-12/system-inventory.json`, migration review and recovery evidence. Clean migration and guarded existing-demo upgrade were exercised; local encrypted recovery compared every public table and 1,205 private object hashes. Production migration lock timing/PITR/application rollback still require hosted rehearsal.

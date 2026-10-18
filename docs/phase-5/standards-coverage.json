@@ -1,0 +1,282 @@
+[
+  {
+    "code": "IFRS 1",
+    "title": "First-time Adoption",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IFRS 2",
+    "title": "Share-based Payment",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IFRS 3",
+    "title": "Business Combinations",
+    "rule_version": 1,
+    "status": "CalculationSupportedLimitedScope",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IFRS 5",
+    "title": "Held for Sale and Discontinued Operations",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IFRS 7",
+    "title": "Financial Instruments Disclosures",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IFRS 8",
+    "title": "Operating Segments",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IFRS 9",
+    "title": "Financial Instruments",
+    "rule_version": 1,
+    "status": "CalculationSupportedLimitedScope",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IFRS 10",
+    "title": "Consolidated Financial Statements",
+    "rule_version": 1,
+    "status": "CalculationSupportedLimitedScope",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IFRS 11",
+    "title": "Joint Arrangements",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IFRS 12",
+    "title": "Interests in Other Entities",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IFRS 13",
+    "title": "Fair Value Measurement",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IFRS 15",
+    "title": "Revenue from Contracts with Customers",
+    "rule_version": 1,
+    "status": "CalculationSupportedLimitedScope",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IFRS 16",
+    "title": "Leases",
+    "rule_version": 1,
+    "status": "CalculationSupportedLimitedScope",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IFRS 18",
+    "title": "Presentation and Disclosure",
+    "rule_version": 1,
+    "status": "ChecklistSupportedOriginalCategories",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IFRS 19",
+    "title": "Subsidiaries without Public Accountability Disclosures",
+    "rule_version": 1,
+    "status": "ChecklistSupportedOriginalCategories",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IAS 1",
+    "title": "Presentation of Financial Statements",
+    "rule_version": 1,
+    "status": "ChecklistSupportedOriginalCategories",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IAS 2",
+    "title": "Inventories",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IAS 7",
+    "title": "Statement of Cash Flows",
+    "rule_version": 1,
+    "status": "CalculationSupportedLimitedScope",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IAS 8",
+    "title": "Accounting Policies and Estimates / Basis of Preparation subject to IFRS 18 transition",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IAS 10",
+    "title": "Events after the Reporting Period",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IAS 12",
+    "title": "Income Taxes",
+    "rule_version": 1,
+    "status": "CalculationSupportedLimitedScope",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IAS 16",
+    "title": "Property Plant and Equipment",
+    "rule_version": 1,
+    "status": "CalculationSupportedLimitedScope",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IAS 19",
+    "title": "Employee Benefits",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IAS 21",
+    "title": "Foreign Exchange",
+    "rule_version": 1,
+    "status": "CalculationSupportedLimitedScope",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IAS 23",
+    "title": "Borrowing Costs",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IAS 24",
+    "title": "Related Party Disclosures",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IAS 27",
+    "title": "Separate Financial Statements",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IAS 28",
+    "title": "Associates and Joint Ventures",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IAS 32",
+    "title": "Financial Instruments Presentation",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IAS 34",
+    "title": "Interim Reporting",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IAS 36",
+    "title": "Impairment",
+    "rule_version": 1,
+    "status": "CalculationSupportedLimitedScope",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IAS 37",
+    "title": "Provisions and Contingencies",
+    "rule_version": 1,
+    "status": "CalculationSupportedLimitedScope",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IAS 38",
+    "title": "Intangible Assets",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IAS 40",
+    "title": "Investment Property",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  },
+  {
+    "code": "IAS 41",
+    "title": "Agriculture",
+    "rule_version": 1,
+    "status": "ReferenceOnly",
+    "full_standard_implemented": false,
+    "licensed_full_text": false
+  }
+]

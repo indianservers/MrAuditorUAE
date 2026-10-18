@@ -31,6 +31,7 @@ from app.modules.accounting.schemas import ImportOptions, ScopeInput
 from app.modules.audit_log.service import record
 from app.modules.ingestion.parser import ImportProblem, normalize, rows
 from app.modules.lineage.storage import ObjectStore, hash_file
+from app.modules.saas.storage import put_private
 
 NORMALIZER_VERSION = "2.0.0"
 
@@ -121,7 +122,7 @@ async def upload(
     if existing:
         return existing
     try:
-        stored = ObjectStore().put(str(ctx.tenant_id), stream)
+        stored = await put_private(db, ctx, stream)
     except ValueError as exc:
         raise HTTPException(422, str(exc)) from None
     values = {
@@ -686,6 +687,9 @@ async def commit(db: AsyncSession, ctx: Context, batch_id: uuid.UUID, request_id
         if observed != batch.valid_count:
             raise HTTPException(409, "Ledger activation completeness check failed")
     batch.status = "active"
+    from app.modules.grc.imports import enqueue as enqueue_monitoring
+
+    await enqueue_monitoring(db, batch)
     record(db, ctx, "accounting.activated", batch.id, request_id)
     await db.flush()
     await db.refresh(batch)

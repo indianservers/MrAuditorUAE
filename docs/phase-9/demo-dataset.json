@@ -1,0 +1,22 @@
+{
+  "dataset_id": "7a6076af-f513-4a84-8d8b-b9d8391b5e86",
+  "engagement_id": "4c102ee3-94d0-4ba4-94bf-faecb852da9d",
+  "seed_version": "phase9-v2",
+  "synthetic": true,
+  "source_rows": 250024,
+  "fixture_rows": 13200,
+  "total_rows": 263224,
+  "splits": {
+    "train": 90540,
+    "test": 169084,
+    "validation": 2400,
+    "ood": 1200
+  },
+  "labels": {
+    "unknown": 250024,
+    "synthetic_injected": 1890,
+    "synthetic_normal": 11310
+  },
+  "split_method": "Source chronological, unknown excluded from supervised fitting; controlled fixtures client-separated and journal-grouped",
+  "scope": "Guarded isolated demo tenant only; no cross-tenant pooling"
+}

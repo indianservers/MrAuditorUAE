@@ -1,0 +1,7 @@
+# Ai Vat Engine
+
+Twenty gateway tasks: classification, input recovery, reverse charge, invoice extraction/explanation, reconciliation exceptions, return variance, designated zones, export evidence, real estate, credit notes, partial exemption, readiness, ASP rejection, supplier masters, controls, missing evidence, technical memo, client request and checklist. Structured output adds VAT risk, extracted fields and document-processing state to the source-grounded tax suggestion schema.
+
+Tenant/engagement permissions and approved configured models apply. External disclosure is disabled unless explicitly configured. Context is bounded12,000characters; Redis limits tenant requests (default20/hour). Source text is untrusted; source IDs, approved legal record IDs/articles/versions and legal period are allowlisted. Model/prompt/execution/source versions are persisted. Suggestions remain SUGGESTED; independent review decisions recheck current dependencies and never change calculations, approve records or post journals.
+
+All20 task schemas were executed with the diagnostic mock in one integration test; the21st request was rejected429. Mock output has no semantic VAT expertise and does not perform OCR. Separate actual text-PDF processing is tested. Live external legal reasoning, extraction precision/recall, multilingual invoice OCR and production model quality are BLOCKED/unmeasured; no invented accuracy percentage is reported.

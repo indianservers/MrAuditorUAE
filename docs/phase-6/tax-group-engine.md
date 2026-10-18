@@ -1,0 +1,7 @@
+# Tax Group engine
+
+Group membership is explicitly approved and distinct from IFRS consolidation. Members retain their own entity/engagement/profile identity. The parent is included once; repeated engagements or duplicate entities are rejected. Share capital, voting and profit/net-asset rights each require95% ownership. Resident juridical status, exempt/QFZP exclusions, full-period membership, aligned periods/framework, FTA application/approval and special-purpose audited-statement evidence are checked. Reviewers need active source access to every member engagement.
+
+The scoped computation aggregates approved member PBT once and uses explicitly reviewed group tax adjustments with each member's actual account/evidence sources. It applies one group AED375k band, not a band per subsidiary. Group adjustments must supply source_engagement_id. Parent-level rule versions and group assessment/evidence are snapshotted with member financial dependencies. Source changes prevent release/export as current.
+
+Synthetic two-member benchmark: PBT2.4M plus800k group adjustments =3.2M taxable income; (3.2M−375k)×9%=254,250. A94.99% voting-rights case fails. Restricted pre-group losses/interest and partial-period entries/exits block this scoped computation; no automatic consolidated tax basis, complex intercompany eliminations or loss allocation is inferred. Those require a separately validated methodology rather than reuse of the IFRS consolidation result.

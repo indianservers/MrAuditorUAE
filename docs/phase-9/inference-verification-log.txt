@@ -1,0 +1,20 @@
+{"timestamp": "2026-10-18T01:57:55.704825+00:00", "level": "INFO", "event": "http.request", "request_id": "48700841-f960-499a-8d9a-229207f1ed89", "status": 201}
+{"timestamp": "2026-10-18T01:57:55.736197+00:00", "level": "INFO", "event": "http.request", "request_id": "c852ea2b-c865-43a9-addb-e14a2a9db182", "status": 201}
+{"timestamp": "2026-10-18T01:57:55.762886+00:00", "level": "INFO", "event": "http.request", "request_id": "43fbb2d7-ab7e-460d-9b53-135103433366", "status": 201}
+{"timestamp": "2026-10-18T01:57:59.049472+00:00", "level": "INFO", "event": "http.request", "request_id": "de9041ea-75f1-4756-bc3b-e675df1e8388", "status": 200}
+{"timestamp": "2026-10-18T01:57:59.067486+00:00", "level": "INFO", "event": "http.request", "request_id": "b7448cef-ada0-473f-98a8-708d6e180d40", "status": 201}
+{"timestamp": "2026-10-18T01:57:59.085925+00:00", "level": "INFO", "event": "http.request", "request_id": "e0b2f2c3-7515-4c00-a41e-c21bccfd6e1d", "status": 201}
+{"timestamp": "2026-10-18T01:57:59.107433+00:00", "level": "INFO", "event": "http.request", "request_id": "650b083d-2ac9-4279-ad0e-456651062771", "status": 201}
+{"timestamp": "2026-10-18T01:58:01.194799+00:00", "level": "INFO", "event": "http.request", "request_id": "d07d68e9-11fa-41fe-b193-fc70f2792974", "status": 200}
+{"timestamp": "2026-10-18T01:58:01.216305+00:00", "level": "INFO", "event": "http.request", "request_id": "1eb8a352-c2f7-4474-b776-6729a9720dbe", "status": 201}
+{"timestamp": "2026-10-18T01:58:01.236305+00:00", "level": "INFO", "event": "http.request", "request_id": "9110901c-e717-4e68-8066-343a12217a68", "status": 201}
+{"timestamp": "2026-10-18T01:58:01.257310+00:00", "level": "INFO", "event": "http.request", "request_id": "a6e940ef-4c56-4610-b7d1-7f236385819b", "status": 201}
+{"timestamp": "2026-10-18T01:58:03.132425+00:00", "level": "INFO", "event": "http.request", "request_id": "3156edb0-85b9-4b72-9c15-efcf977369b0", "status": 200}
+{"timestamp": "2026-10-18T01:58:03.152063+00:00", "level": "INFO", "event": "http.request", "request_id": "74c12803-b654-4d8c-854b-d21edf17f5f5", "status": 201}
+{"timestamp": "2026-10-18T01:58:03.169038+00:00", "level": "INFO", "event": "http.request", "request_id": "11e9b7c7-cd55-40cb-92d9-6c644e76c0e7", "status": 201}
+{"timestamp": "2026-10-18T01:58:03.186776+00:00", "level": "INFO", "event": "http.request", "request_id": "0544b5ab-fca4-4067-a18a-fa3137c85793", "status": 201}
+{"timestamp": "2026-10-18T01:58:05.585558+00:00", "level": "INFO", "event": "http.request", "request_id": "eac8c03f-bfad-45bf-91bd-40042605d362", "status": 200}
+{"timestamp": "2026-10-18T01:58:05.612273+00:00", "level": "INFO", "event": "http.request", "request_id": "5946493f-b540-4c1e-9343-8be71a6ca097", "status": 201}
+{"timestamp": "2026-10-18T01:58:05.619193+00:00", "level": "INFO", "event": "http.request", "request_id": "c44181dc-2839-4dc0-9a93-7512fea41346", "status": 403}
+{"timestamp": "2026-10-18T01:58:05.626983+00:00", "level": "INFO", "event": "http.request", "request_id": "2af0ac20-14b1-48d1-91bd-96bfab87bced", "status": 403}
+[{"family": "autoencoder", "model_id": "ad19a351-d6d5-4310-919a-c6b1fd28476c", "deployment_id": "22baac90-d325-4deb-97a2-e1b431cbd9bf", "inference_id": "ef28454d-45a3-4753-bd83-1534275758ed", "predictions": 1000, "reload_max_delta": 0, "drift_features": 16}, {"family": "journal-classifier", "model_id": "b8546696-ff08-47a0-9e26-589fa1279367", "deployment_id": "374172cf-1d9b-412a-a020-bb7d06c3c978", "inference_id": "a24dd17d-8e8d-488e-94fe-aa2faa70e423", "predictions": 1000, "reload_max_delta": 0, "drift_features": 16}, {"family": "risk-ranking", "model_id": "3934d7b7-36e2-44d1-bd4f-b43a6413be22", "deployment_id": "acaa7b2e-61cf-4f36-9cf9-e7f16a5c6954", "inference_id": "7e709303-e3f2-4c71-bc00-d441eeb679fc", "predictions": 1000, "reload_max_delta": 0, "drift_features": 16}, {"family": "account-classifier", "model_id": "20bce302-bf5d-4d55-b402-d5440c16d631", "deployment_id": "00781ac7-0342-42e9-a036-638375eb18d2", "inference_id": "07baad18-ae66-4b83-b5cc-ffb2993c00a5", "predictions": 1000, "reload_max_delta": 0, "drift_features": 32}]

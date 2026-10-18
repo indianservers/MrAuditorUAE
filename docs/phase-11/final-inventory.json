@@ -1,0 +1,61 @@
+{
+  "synthetic": true,
+  "database": "auditos_phase7_demo",
+  "migration": "0011",
+  "role": {
+    "name": "auditos_phase4_app",
+    "superuser": false,
+    "bypass_rls": false
+  },
+  "journal_lines": 250024,
+  "ai_workflow_runs": 120,
+  "ai_workflow_events": 810,
+  "ai_document_extractions": 1000,
+  "ai_document_chunks": 1000,
+  "ai_approval_requests": 100,
+  "ai_scheduled_workflows": 1,
+  "ai_document_match_decisions": 50,
+  "workflow_states": {
+    "TEMPLATE_ACTIVE": 4,
+    "COMPLETED": 44,
+    "PARTIALLY_COMPLETED": 72
+  },
+  "active_ai_schedules": 0,
+  "rls": [
+    {
+      "relname": "ai_approval_requests",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ai_document_chunks",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ai_document_extractions",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ai_document_match_decisions",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ai_scheduled_workflows",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ai_workflow_events",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ai_workflow_runs",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    }
+  ]
+}

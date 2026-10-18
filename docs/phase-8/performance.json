@@ -1,0 +1,69 @@
+{
+  "synthetic": true,
+  "timings_seconds": {
+    "candidate_scan_100k": 0.5929024999968533,
+    "weighted_15000_observations_3_years": 0.17722159999902942,
+    "loan_schedules_1000": 0.023157399999035988,
+    "allocation_1000": 0.0029208000014477875,
+    "screened_observation_calculation_5000": 0.4144830000004731
+  },
+  "scope": "Local sequential workload; no production capacity claim",
+  "candidate_scan": {
+    "source_rows": 100000,
+    "candidates": 0,
+    "scope": "Same exact-name/keyword predicate over first 100,000 existing synthetic source rows; candidate only"
+  },
+  "multi_year": {
+    "companies": 5000,
+    "observations": 15000,
+    "scope": "In-memory three-year replicas of synthetic observations; calculation benchmark, not a stored multi-year economic study"
+  },
+  "loan_schedules": 1000,
+  "allocation_difference": "0E-8",
+  "controlled_matrix_100": {
+    "seconds": 0.5408303999975033,
+    "sql_queries": 165,
+    "rows": 100,
+    "response_bytes": 375
+  },
+  "benchmark_population": 5000,
+  "benchmark_api": {
+    "sql_queries": 197,
+    "response_bytes": 8635,
+    "transport": "in-process ASGI including auth/permissions/RLS; excludes network"
+  },
+  "paginated_run_api": {
+    "seconds": 0.28587340000012773,
+    "response_bytes": 9452,
+    "population_rows": 50
+  },
+  "localfile_exports": {
+    "pdf": {
+      "seconds": 0.4519628999987617,
+      "bytes": 7656,
+      "sql_queries": 357
+    },
+    "docx": {
+      "seconds": 0.365037299998221,
+      "bytes": 39004,
+      "sql_queries": 357
+    },
+    "xlsx": {
+      "seconds": 0.3113761999993585,
+      "bytes": 18097,
+      "sql_queries": 357
+    },
+    "json": {
+      "seconds": 0.24987419999888516,
+      "bytes": 22359,
+      "sql_queries": 357
+    }
+  },
+  "process_memory": {
+    "rss_before_bytes": 116125696,
+    "sampled_peak_rss_bytes": 238235648,
+    "rss_after_bytes": 211931136,
+    "scope": "Sampled whole-process RSS including libraries and all sequential workloads; not per-operation memory"
+  },
+  "sql_queries_total": 2067
+}

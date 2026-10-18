@@ -1,0 +1,250 @@
+{
+  "environment": "Local in-process ASGI / PostgreSQL / DuckDB, synthetic data; no network SLA",
+  "api": {
+    "dashboard": {
+      "p50_ms": 101.95,
+      "max_ms": 646.57,
+      "samples": 5,
+      "bytes": 67528,
+      "total": null
+    },
+    "rcm_300": {
+      "p50_ms": 80.41,
+      "max_ms": 99.33,
+      "samples": 5,
+      "bytes": 828238,
+      "total": 300
+    },
+    "risk_100": {
+      "p50_ms": 19.98,
+      "max_ms": 25.55,
+      "samples": 5,
+      "bytes": 123316,
+      "total": 100
+    },
+    "controls_200_page": {
+      "p50_ms": 25.23,
+      "max_ms": 88.24,
+      "samples": 5,
+      "bytes": 131921,
+      "total": 200
+    },
+    "alert_page_50": {
+      "p50_ms": 22.02,
+      "max_ms": 25.92,
+      "samples": 5,
+      "bytes": 45209,
+      "total": 13320
+    },
+    "board_package": {
+      "p50_ms": 11.26,
+      "max_ms": 14.64,
+      "samples": 5,
+      "bytes": 2480,
+      "total": null
+    },
+    "500_alerts_paged_seconds": 0.248
+  },
+  "retained_population": {
+    "rows": 250024,
+    "extract_seconds": 11.205,
+    "duckdb_load_seconds": 4.56,
+    "rules_seconds": 1.0,
+    "rules": 25,
+    "status_counts": {
+      "not_testable": 14,
+      "passed": 3,
+      "warning": 8
+    },
+    "scope": "Cross-period synthetic benchmark only; not an engagement conclusion",
+    "memory_limit": "DuckDB 1GB, two threads; peak process RSS not measured"
+  },
+  "engagement_monitors": [
+    {
+      "rule": "duplicate_payments",
+      "seconds": 5.071,
+      "population": 8332,
+      "status": "warning"
+    },
+    {
+      "rule": "duplicate_invoices",
+      "seconds": 0.017,
+      "population": null,
+      "status": "NOT_TESTABLE"
+    },
+    {
+      "rule": "unusual_journals",
+      "seconds": 0.687,
+      "population": 8332,
+      "status": "passed"
+    },
+    {
+      "rule": "weekend_postings",
+      "seconds": 1.751,
+      "population": 8332,
+      "status": "warning"
+    },
+    {
+      "rule": "large_manual_journals",
+      "seconds": 0.68,
+      "population": 8332,
+      "status": "passed"
+    },
+    {
+      "rule": "dormant_account_activity",
+      "seconds": 0.687,
+      "population": 8332,
+      "status": "not_testable"
+    },
+    {
+      "rule": "unusual_vendor_payments",
+      "seconds": 0.014,
+      "population": null,
+      "status": "NOT_TESTABLE"
+    },
+    {
+      "rule": "below_approval_threshold",
+      "seconds": 0.013,
+      "population": null,
+      "status": "NOT_TESTABLE"
+    },
+    {
+      "rule": "negative_inventory",
+      "seconds": 0.013,
+      "population": null,
+      "status": "NOT_TESTABLE"
+    },
+    {
+      "rule": "inventory_movements",
+      "seconds": 0.014,
+      "population": null,
+      "status": "NOT_TESTABLE"
+    },
+    {
+      "rule": "invoice_sequence_gaps",
+      "seconds": 0.014,
+      "population": null,
+      "status": "NOT_TESTABLE"
+    },
+    {
+      "rule": "unreconciled_bank_balances",
+      "seconds": 0.013,
+      "population": null,
+      "status": "NOT_TESTABLE"
+    },
+    {
+      "rule": "aged_receivables",
+      "seconds": 0.013,
+      "population": null,
+      "status": "NOT_TESTABLE"
+    },
+    {
+      "rule": "unusual_credit_notes",
+      "seconds": 0.013,
+      "population": null,
+      "status": "NOT_TESTABLE"
+    },
+    {
+      "rule": "unusual_writeoffs",
+      "seconds": 0.014,
+      "population": null,
+      "status": "NOT_TESTABLE"
+    },
+    {
+      "rule": "bank_detail_changes",
+      "seconds": 0.014,
+      "population": null,
+      "status": "NOT_TESTABLE"
+    },
+    {
+      "rule": "new_vendor_payments",
+      "seconds": 0.016,
+      "population": null,
+      "status": "NOT_TESTABLE"
+    },
+    {
+      "rule": "related_party_changes",
+      "seconds": 0.016,
+      "population": null,
+      "status": "NOT_TESTABLE"
+    },
+    {
+      "rule": "access_conflicts",
+      "seconds": 0.015,
+      "population": null,
+      "status": "NOT_TESTABLE"
+    },
+    {
+      "rule": "tax_code_anomalies",
+      "seconds": 0.013,
+      "population": null,
+      "status": "NOT_TESTABLE"
+    },
+    {
+      "rule": "vat_control_exceptions",
+      "seconds": 0.012,
+      "population": null,
+      "status": "NOT_TESTABLE"
+    },
+    {
+      "rule": "interest_accrual_differences",
+      "seconds": 0.012,
+      "population": null,
+      "status": "NOT_TESTABLE"
+    },
+    {
+      "rule": "overdue_reconciliations",
+      "seconds": 0.016,
+      "population": 475,
+      "status": "TESTED"
+    },
+    {
+      "rule": "missing_control_evidence",
+      "seconds": 0.061,
+      "population": 475,
+      "status": "TESTED"
+    },
+    {
+      "rule": "unresolved_findings",
+      "seconds": 0.037,
+      "population": 475,
+      "status": "TESTED"
+    },
+    {
+      "rule": "regulatory_deadlines",
+      "seconds": 0.018,
+      "population": 475,
+      "status": "TESTED"
+    },
+    {
+      "rule": "einvoice_rejections",
+      "seconds": 0.013,
+      "population": null,
+      "status": "NOT_TESTABLE"
+    },
+    {
+      "rule": "late_approvals",
+      "seconds": 0.013,
+      "population": null,
+      "status": "NOT_TESTABLE"
+    },
+    {
+      "rule": "abnormal_concentration",
+      "seconds": 0.676,
+      "population": 8332,
+      "status": "not_testable"
+    },
+    {
+      "rule": "unexpected_balance_movements",
+      "seconds": 0.694,
+      "population": 8332,
+      "status": "not_testable"
+    },
+    {
+      "rule": "access_conflicts_configured",
+      "seconds": 0.028,
+      "population": 4,
+      "status": "TESTED"
+    }
+  ]
+}

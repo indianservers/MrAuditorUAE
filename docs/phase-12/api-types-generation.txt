@@ -1,0 +1,6 @@
+
+> auditos-frontend@0.3.0 api:types
+> openapi-typescript ../docs/phase-12/openapi.json -o src/types/api.generated.ts
+
+✨ openapi-typescript 7.13.0
+🚀 ../docs/phase-12/openapi.json → src/types/api.generated.ts [384.6ms]

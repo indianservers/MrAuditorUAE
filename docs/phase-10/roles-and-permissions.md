@@ -1,0 +1,7 @@
+# Roles and permissions
+
+New roles include Chief Audit Executive, Head of Internal Audit, Internal Audit Manager, Senior/Internal Auditor, Risk Manager/Owner, Control/Process/Remediation Owner, Compliance Officer, Audit Committee Member, Board Viewer and Internal Audit Quality Reviewer. Permission categories separate universe, planning, scope, risk/appetite, control tests, SoD, monitoring execution/review, remediation, obligations, policies, governance, AI and quality.
+
+Services recheck active membership and engagement grants rather than trusting a supplied Context. Owner-only identities can access assigned/prepared GRC records, with shared approved framework/policy/scoring metadata; they cannot read professional execution models. Board roles have only published governance access, without grc.read. Preparer/editor separation, version checks and module evidence permissions apply to review. The synthetic CAE also has an explicit Financial Reporting Manager assignment solely to read the demo IFRS-note fixture; that grant is not added to the CAE role globally.
+
+Real tests cover self-approval rejection, owner isolation, board denial, immutable database history and FORCE RLS. The retained Phase 1–9 suite covers tenant isolation, IDOR, revoked roles, source authorization and other platform controls. A new external penetration test and exhaustive custom-role combinations have not been performed.

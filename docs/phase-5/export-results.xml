@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="0" skipped="0" tests="1" time="3.879" timestamp="2026-10-18T03:11:23.835961+05:30" hostname="DESKTOP-B3SR465"><testcase classname="tests.phase5.test_reporting" name="test_company_statements_approval_and_exports" time="2.438" /></testsuite></testsuites>

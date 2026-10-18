@@ -1,0 +1,3 @@
+2026-10-18T10:48:27+05:30	INFO	[misconfig] Misconfiguration scanning is enabled
+2026-10-18T10:48:27+05:30	INFO	[checks-client] Using existing checks from cache	path="C:\\Users\\Sai Satish\\AppData\\Local\\trivy\\policy\\content"
+2026-10-18T10:48:28+05:30	INFO	Detected config files	num=0

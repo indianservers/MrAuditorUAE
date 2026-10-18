@@ -1,0 +1,21 @@
+{
+  "database": "auditos_phase7_migration_test",
+  "revision": "0007",
+  "table_count": 68,
+  "role": {
+    "rolsuper": false,
+    "rolbypassrls": false
+  },
+  "vat_rls": [
+    {
+      "relname": "vat_computation_runs",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "synthetic_datasets",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    }
+  ]
+}

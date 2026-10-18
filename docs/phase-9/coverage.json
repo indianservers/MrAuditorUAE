@@ -1,0 +1,50 @@
+{
+  "phase": 9,
+  "phase10_started": false,
+  "Fully implemented and tested": [
+    "Actual four-family TensorFlow.js training and held-out metrics",
+    "Private artifact save/load with hashes",
+    "Journal/client fixture splits and train-only preprocessing",
+    "Append-only RLS registry and independent approval",
+    "Per-family experimental deployment/rollback",
+    "Bounded inference, feedback and independent curation",
+    "Progress/cancellation without engagement-lock blocking",
+    "Ordinary Decimal tax arithmetic and independent numerical fixtures",
+    "24 secured frontend routes"
+  ],
+  "Implemented with limited scope": [
+    "16 transaction features and 32 account token dimensions",
+    "Binary exception classifier and risk model sharing the same objective",
+    "Reconstruction/input-deviation explanations and grounded commentary",
+    "Input drift against a saved baseline sample",
+    "Manual reviewed DMTT source adjustments and ordinary UAE blending",
+    "Deferred/transition schedules with unsupported-case blocking",
+    "Reviewed transitional CbCR and de minimis tests",
+    "15 DMTT AI tasks using only minimized supplied context",
+    "Shared structured forms for complex schedules"
+  ],
+  "Awaiting authorized external data": [
+    "Representative real audited datasets",
+    "Production AI credentials and semantic evaluation",
+    "Production operational security assessment"
+  ],
+  "Partially implemented": [
+    "Longitudinal score/performance drift and sufficient-label trends",
+    "Full tax recapture/transition/loss-DTA utilization ledgers",
+    "Automatic IAS12/CT reconciliation",
+    "Full graphical architecture/entity editing",
+    "Alternative accounting bases and special group structures"
+  ],
+  "Not implemented": [
+    "Confidential cross-tenant model pooling",
+    "Automatic retraining or approved mapping replacement",
+    "SHAP/causal/perturbation and historical peer retrieval",
+    "Model rejection/deprecation UI",
+    "Non-UAE IIR/UTPR",
+    "JV/PE/minority/stateless special blending",
+    "Full Article 9.1 transfers and complex allocations",
+    "Foreign QDMTT effects and simplified non-material-entity safe harbour",
+    "Electronic DMTT/GIR filing",
+    "One-million-record performance measurement"
+  ]
+}

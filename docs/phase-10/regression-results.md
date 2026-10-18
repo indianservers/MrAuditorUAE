@@ -1,0 +1,7 @@
+# Regression and security evidence
+
+Baseline: 353 backend passed / 2 skipped; 22 frontend passed. Latest full backend result: 365 passed, 2 skipped in 291.13s (0:04:51). Frontend: 24 tests passed; see frontend-tests.txt and frontend-build.txt. Browser: see browser-results.json and browser-run.txt; four scenarios cover all 24 routes, typed draft persistence, four viewport widths and board access. Twelve focused Phase 10 tests (plus the retained calculation suite: 47 focused checks passed) include all 30 diagnostic AI task paths, import-triggered worker execution, source-version staleness, independent approval, owner isolation, immutable history and CSV/SoD/scoring/calendar/large-signature behavior.
+
+Fresh migration from zero to 0010 succeeded in auditos_phase10_migration_test as auditos_phase4_app, which remains a non-superuser without BYPASSRLS. End-to-end-verification.json records actual Redis/Celery jobs, deduplication replay, source investigation, evidence-backed ML feedback and approved test/deficiency/action/retest/closure chain. The two inherited optional smoke tests are live Zoho (explicit opt-in and authorized OAuth credentials) and live Tally (explicit opt-in and an authorized local installation); these remain skipped.
+
+No claim of production penetration-test certification, live ERP integration, live LLM semantic accuracy or professional standards conformance is made. Export QA used actual PDF/DOCX output, LibreOffice rendering and visual page inspection.

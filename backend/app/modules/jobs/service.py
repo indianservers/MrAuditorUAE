@@ -18,6 +18,8 @@ async def submit(db: AsyncSession, ctx: Context, key: str, request_id: str):
             BackgroundJob.tenant_id == ctx.tenant_id, BackgroundJob.idempotency_key == key
         )
     )
+    if existing and existing.created_by != ctx.user_id:
+        raise HTTPException(409, "Idempotency key belongs to another user")
     if existing and existing.status != "pending":
         return existing
     if existing:

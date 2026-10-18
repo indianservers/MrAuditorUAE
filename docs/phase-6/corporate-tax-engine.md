@@ -1,0 +1,9 @@
+# Corporate Tax computation
+
+PBT = approved IFRS profit − signed tax-expense category. Before-loss income = PBT + approved adjustment amounts − approved exempt income + statutory interest adjustment. Taxable income = max(0, before-loss income − eligible utilized losses). Gross standard tax = max(0, taxable income − approved threshold) × approved rate. Defaults are AED375,000 and9%. Foreign tax credit reduces gross tax subject to the reviewed attributed UAE/foreign-paid limits. Current tax loss is separately reported; it does not create a new ledger bucket without review.
+
+Draft adjustments do not affect results. Canonical exemption conditions and evidence must pass; selected amounts must fit approved source lines. SBR is explicitly elected and eligible, sets taxable income/current tax/loss utilization to zero, and suppresses new GIDLR carryforward generation. QFZP uses a separate segmented computation and must reconcile segment profit to the approved tax bridge. Missing conditions, duplicated specialist schedules, failed SBR elections, unsupported QFZP loss allocation, Pillar Two or missing required audit evidence prevent approval.
+
+Only current approved IFRS dependencies and period/as-of applicable approved legal rules are used. Every run retains source amounts, formulas through methodology version, rules/effective dates, reviewers, evidence dependencies and immutable version/hash. New calculations create new snapshots, including when inputs are unchanged. Approving a replacement updates the current release and reverses prior-period utilization entries atomically. Approved runs cannot be edited or reopened.
+
+Financial fixtures: test_calculations.py and test_workflows.py. Synthetic mainland: PBT1,200,000 + customer entertainment disallowance400,000 = income1,600,000; (1,600,000−375,000)×9%=110,250. With1,200,000 eligible losses used, taxable income400,000 and tax2,250. These are synthetic verification fixtures, not tax advice.

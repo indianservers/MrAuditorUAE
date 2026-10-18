@@ -27,6 +27,7 @@ from app.modules.ingestion.parser import normalize, rows
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--sizes", nargs="+", type=int, default=[10000, 100000, 1000000])
+parser.add_argument("--output", default="")
 args = parser.parse_args()
 evidence = {
     "synthetic": True,
@@ -147,6 +148,6 @@ for size in args.sizes:
         }
         evidence["runs"].append(run)
         print(json.dumps(run), flush=True)
-        out = Path(__file__).resolve().parents[1] / "docs/evidence/phase-2-benchmarks.json"
+        out = Path(args.output).resolve() if args.output else Path(__file__).resolve().parents[1] / "docs/evidence/phase-2-benchmarks.json"
         out.parent.mkdir(parents=True, exist_ok=True)
         out.write_text(json.dumps(evidence, indent=2), encoding="utf-8")

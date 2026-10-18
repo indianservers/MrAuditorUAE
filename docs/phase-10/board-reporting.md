@@ -1,0 +1,5 @@
+# Internal audit and board reporting
+
+Reports have governed narrative chapters, scope, methodology, assessment, recommendations, management response, appendices and approved deficiencies. An independently approved board package explicitly chooses audit committee, board or both audiences and a validity date. Publication freezes whitelisted report/deficiency narratives in a separate immutable snapshot; board users receive no generic working-paper access.
+
+Every read and export checks current engagement permission, intended audience, expiry and dependency version/status. Reopening or changing a published source invalidates access until republication. PDF and DOCX exports reproduce the published package with its hash and conspicuous synthetic marking. Rendered PDFs and Word documents were visually inspected; the Word title is plain black without inherited decorative borders. The designer is a typed chapter editor, not a full WYSIWYG publication suite. Board professional commentary and unrelated evidence are not automatically included.

@@ -13,9 +13,6 @@ from app.core.dependencies import Context
 from app.db.models.platform import (
     BackgroundJob,
     Membership,
-    MembershipRole,
-    Permission,
-    RolePermission,
     Tenant,
     User,
 )
@@ -23,6 +20,11 @@ from app.db.session import tenant_context
 from app.workers.celery_app import celery_app
 
 PERMISSIONS = {
+    "grc.monitor": "monitor.job.execute",
+    "ml.train": "ml.train",
+    "ml.score": "ml.score",
+    "ml.dataset": "ml.train",
+    "tp.calculate": "tp.calculate",
     "import.validate": "accounting.import",
     "analytics": "analytics.run",
     "reconciliation": "analytics.run",
@@ -69,7 +71,9 @@ async def submit(db: AsyncSession, ctx: Context, kind: str, payload: dict, reque
     if job.status == "pending":
         try:
             work.apply_async(
-                args=[str(job.id), str(ctx.tenant_id), str(ctx.user_id)], task_id=str(job.id)
+                args=[str(job.id), str(ctx.tenant_id), str(ctx.user_id)],
+                task_id=str(job.id),
+                queue="grc" if kind == "grc.monitor" else "celery",
             )
         except Exception:
             raise HTTPException(
@@ -82,10 +86,7 @@ async def authorized(
     db: AsyncSession, tenant_id: uuid.UUID, user_id: uuid.UUID, permission: str
 ) -> bool:
     value = await db.scalar(
-        select(Permission.code)
-        .join(RolePermission, RolePermission.permission_id == Permission.id)
-        .join(MembershipRole, MembershipRole.role_id == RolePermission.role_id)
-        .join(Membership, Membership.id == MembershipRole.membership_id)
+        select(Membership.id)
         .join(User, User.id == Membership.user_id)
         .join(Tenant, Tenant.id == Membership.tenant_id)
         .where(
@@ -94,10 +95,15 @@ async def authorized(
             Membership.status == "active",
             User.status == "active",
             Tenant.status == "active",
-            Permission.code == permission,
         )
     )
-    return value is not None
+    if value is None:
+        return False
+    from app.modules.audit_execution.access import firm_roles, role_permissions
+
+    roles = await firm_roles(db, tenant_id, user_id)
+    effective = await role_permissions(db, tenant_id, [role.id for role in roles])
+    return permission in effective
 
 
 async def process(job_id: str, tenant_id: str, user_id: str):
@@ -120,6 +126,14 @@ async def process(job_id: str, tenant_id: str, user_id: str):
         try:
             async with factory() as db, db.begin():
                 await tenant_context(db, tenant_id)
+                # Same order as API admissions: tenant quota lock before job/
+                # engagement locks. Cancellation deliberately bypasses this lock.
+                from sqlalchemy import text
+
+                await db.execute(
+                    text("SELECT pg_advisory_xact_lock(hashtextextended(:key, 12))"),
+                    {"key": tenant_id},
+                )
                 job = await db.scalar(
                     select(BackgroundJob)
                     .where(BackgroundJob.tenant_id == tenant, BackgroundJob.id == identifier)
@@ -135,6 +149,17 @@ async def process(job_id: str, tenant_id: str, user_id: str):
                 ):
                     raise PermissionError("Authorization revoked")
                 ctx = Context(user, tenant, frozenset([permission]))
+                from app.modules.saas.service import background_allowed
+
+                feature = {
+                    "grc.monitor": "grc",
+                    "ml.train": "ml",
+                    "ml.score": "ml",
+                    "ml.dataset": "ml",
+                    "tp.calculate": "tp",
+                    "financial_ai": "ai",
+                }.get(job.job_type, "accounting")
+                await background_allowed(db, tenant, feature)
                 payload = job.payload
                 if job.job_type == "import.validate":
                     from app.modules.accounting.service import validate
@@ -174,6 +199,36 @@ async def process(job_id: str, tenant_id: str, user_id: str):
                         FinancialRequest.model_validate(payload["request"]),
                         job_id,
                     )
+                elif job.job_type in {"ml.train", "ml.score", "ml.dataset"}:
+                    from app.modules.audit_execution.access import firm_roles, role_permissions
+                    from app.modules.ml.service import execute_job
+
+                    roles = await firm_roles(db, tenant, user)
+                    permissions = await role_permissions(db, tenant, [role.id for role in roles])
+                    result = await execute_job(
+                        db, Context(user, tenant, permissions), payload, job.id
+                    )
+                elif job.job_type == "grc.monitor":
+                    from app.modules.audit_execution.access import firm_roles, role_permissions
+                    from app.modules.grc.monitoring import execute
+
+                    roles = await firm_roles(db, tenant, user)
+                    permissions = await role_permissions(db, tenant, [role.id for role in roles])
+                    result = await execute(db, Context(user, tenant, permissions), payload)
+                elif job.job_type == "tp.calculate":
+                    from app.modules.audit_execution.access import firm_roles, role_permissions
+                    from app.modules.tp.service import calculate
+
+                    roles = await firm_roles(db, tenant, user)
+                    permissions = await role_permissions(db, tenant, [role.id for role in roles])
+                    ctx = Context(user, tenant, permissions)
+                    run = await calculate(
+                        db,
+                        ctx,
+                        uuid.UUID(payload["engagement_id"]),
+                        uuid.UUID(payload["record_id"]),
+                    )
+                    result = {"id": str(run.id), "status": "completed"}
                 else:
                     from app.modules.connectors.service import zoho_sync
 
@@ -195,7 +250,9 @@ async def process(job_id: str, tenant_id: str, user_id: str):
                     update(BackgroundJob)
                     .where(BackgroundJob.id == identifier, BackgroundJob.tenant_id == tenant)
                     .values(
-                        status="failed",
+                        status="cancelled"
+                        if type(exc).__name__ == "TrainingCancelled"
+                        else "failed",
                         error_category="authorization"
                         if isinstance(exc, PermissionError)
                         else "processing",

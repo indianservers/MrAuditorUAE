@@ -1,0 +1,20 @@
+# Prometheus rule examples. Exporter/log pipeline and paging receivers must be connected
+# and fault-tested in authorized staging before monitoring is considered operational.
+groups:
+  - name: auditos-release
+    rules:
+      - alert: AuditOSUnavailable
+        expr: probe_success{job="auditos-ready"} == 0
+        for: 2m
+        labels: {severity: critical}
+        annotations: {summary: "AuditOS readiness probe failed; follow incident-response.md"}
+      - alert: AuditOSBackupStale
+        expr: time() - auditos_backup_last_success_timestamp_seconds > 90000
+        for: 5m
+        labels: {severity: critical}
+        annotations: {summary: "Backup exporter reports no successful backup within 25 hours"}
+      - alert: AuditOSQueueStalled
+        expr: auditos_oldest_queued_job_age_seconds > 900
+        for: 5m
+        labels: {severity: high}
+        annotations: {summary: "Queue age exceeded provisional operational threshold"}

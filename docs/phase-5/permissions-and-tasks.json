@@ -1,0 +1,43 @@
+{
+  "permissions": [
+    "ifrs.adjustment.approve",
+    "ifrs.adjustment.prepare",
+    "ifrs.adjustment.review",
+    "ifrs.assumption.approve",
+    "ifrs.calculation.execute",
+    "ifrs.consolidation.approve",
+    "ifrs.consolidation.prepare",
+    "ifrs.disclosure.prepare",
+    "ifrs.disclosure.review",
+    "ifrs.financials.approve",
+    "ifrs.financials.prepare",
+    "ifrs.financials.review",
+    "ifrs.mapping.approve",
+    "ifrs.mapping.prepare",
+    "ifrs.read",
+    "ifrs.report.export",
+    "ifrs.report.lock"
+  ],
+  "tasks": [
+    "account_classification",
+    "accounting_policy",
+    "contract_interpretation",
+    "lease_review",
+    "ecl_commentary",
+    "impairment_assumptions",
+    "deferred_tax_issues",
+    "related_party_disclosures",
+    "movement_explanation",
+    "consolidation_anomalies",
+    "disclosure_gaps",
+    "technical_memorandum",
+    "note_draft",
+    "adjustment_explanation",
+    "policy_comparison",
+    "reviewer_summary",
+    "management_queries",
+    "missing_schedules",
+    "ifrs18_transition",
+    "ifrs19_eligibility"
+  ]
+}

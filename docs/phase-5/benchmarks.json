@@ -1,0 +1,49 @@
+{
+  "scope": "Local Windows single process, validation + Decimal engine + serialization; excludes DB/network/export concurrency",
+  "results": [
+    {
+      "engine": "ecl",
+      "rows": 1000,
+      "scenarios": 2,
+      "seconds": 0.0118,
+      "independent_expected": "65000",
+      "passed": true
+    },
+    {
+      "engine": "ecl",
+      "rows": 10000,
+      "scenarios": 2,
+      "seconds": 0.1385,
+      "independent_expected": "650000",
+      "passed": true
+    },
+    {
+      "engine": "ecl",
+      "rows": 20000,
+      "scenarios": 2,
+      "seconds": 0.2647,
+      "independent_expected": "1300000",
+      "passed": true
+    },
+    {
+      "engine": "fixed-assets",
+      "rows": 1000,
+      "seconds": 0.0137,
+      "independent_expected": "365000",
+      "passed": true
+    },
+    {
+      "engine": "fixed-assets",
+      "rows": 10000,
+      "seconds": 0.116,
+      "independent_expected": "3650000",
+      "passed": true
+    },
+    {
+      "engine": "mapping-validation",
+      "rows": 10000,
+      "seconds": 0.0394,
+      "passed": true
+    }
+  ]
+}

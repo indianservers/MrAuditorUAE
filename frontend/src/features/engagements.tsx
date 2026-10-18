@@ -22,7 +22,7 @@ import type { Engagement, Page, RecordRow } from "@/types/models";
 import { Briefcase, Flag } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
-import { Future, PageHeader } from "./shared";
+import { PageHeader } from "./shared";
 export function Engagements({ id }: { id?: string }) {
   return id ? <EngagementDetail key={id} id={id} /> : <EngagementList />;
 }
@@ -88,8 +88,7 @@ function EngagementList() {
 function EngagementDetail({ id }: { id: string }) {
   const q = useAPI<Engagement>("engagements/" + id);
   const [tab, setTab] = useState("Overview"),
-    [name, setName] = useState(""),
-    [status, setStatus] = useState("");
+    [name, setName] = useState("");
   const action = useAction();
   const can = useCan("engagements.write");
   const analyticsRead = useCan("analytics.read");
@@ -127,6 +126,12 @@ function EngagementDetail({ id }: { id: string }) {
                 </div>
                 <Status value={q.data.status} />
                 <span className="spacer" />
+                <Link
+                  className="button primary"
+                  href={`/engagements/${id}/planning`}
+                >
+                  Open audit workspace
+                </Link>
                 <Button
                   onClick={() => {
                     if (entity.data) {
@@ -187,7 +192,8 @@ function EngagementDetail({ id }: { id: string }) {
                           period_id: q.data.period_id || "Not assigned",
                           created_at: q.data.created_at,
                           version: q.data.version,
-                          assigned_team: "Not exposed by current API",
+                          assigned_team:
+                            "Manage in the engagement Team workspace",
                         }}
                       />
                       {can && (
@@ -200,7 +206,6 @@ function EngagementDetail({ id }: { id: string }) {
                               method: "PATCH",
                               body: {
                                 name: name || q.data!.name,
-                                status: status || q.data!.status,
                                 version: q.data!.version,
                               },
                             });
@@ -213,22 +218,6 @@ function EngagementDetail({ id }: { id: string }) {
                               onChange={(e) => setName(e.target.value)}
                               maxLength={200}
                             />
-                          </label>
-                          <label>
-                            Status
-                            <select
-                              value={status || q.data.status}
-                              onChange={(e) => setStatus(e.target.value)}
-                            >
-                              {[
-                                "draft",
-                                "active",
-                                "completed",
-                                "cancelled",
-                              ].map((s) => (
-                                <option key={s}>{s}</option>
-                              ))}
-                            </select>
                           </label>
                           <Button primary disabled={action.isPending}>
                             Save engagement
@@ -272,10 +261,15 @@ function EngagementDetail({ id }: { id: string }) {
                   </Link>
                 </section>
               ) : (
-                <Future
-                  title={tab + " workspace"}
-                  description="The visual workspace is ready. Audit programs, team responsibilities, sign-offs, document review and timeline workflows arrive in Phase 4."
-                />
+                <section className="card">
+                  <h3>{tab} workspace</h3>
+                  <Link
+                    className="button primary"
+                    href={`/engagements/${id}/${({ Planning: "planning", Testing: "testing", Team: "team", Timeline: "completion", Documents: "evidence" } as Record<string, string>)[tab] || "working-papers"}`}
+                  >
+                    Open {tab}
+                  </Link>
+                </section>
               )}
             </>
           )}

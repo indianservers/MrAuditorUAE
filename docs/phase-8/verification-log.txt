@@ -1,0 +1,25 @@
+{"timestamp": "2026-10-18T01:28:13.535031+00:00", "level": "INFO", "event": "http.request", "request_id": "7fa6c0cc-81da-4dec-9c1b-27af16161ffd", "status": 200}
+{"timestamp": "2026-10-18T01:28:13.591553+00:00", "level": "INFO", "event": "http.request", "request_id": "f61ae58b-b9a7-4878-a05a-aba51d2f5c12", "status": 200}
+{"timestamp": "2026-10-18T01:28:13.651538+00:00", "level": "INFO", "event": "http.request", "request_id": "3c67bb1a-1874-4518-bf81-d48912e42606", "status": 200}
+{"timestamp": "2026-10-18T01:28:13.706939+00:00", "level": "INFO", "event": "http.request", "request_id": "cf55be66-976f-439c-91e7-fe56dc7404ca", "status": 200}
+{"timestamp": "2026-10-18T01:28:13.819384+00:00", "level": "INFO", "event": "http.request", "request_id": "49c65a64-ab5e-45df-951a-19ca47a9441c", "status": 200}
+{"timestamp": "2026-10-18T01:28:13.871889+00:00", "level": "INFO", "event": "http.request", "request_id": "7c064eaf-d8c8-44e1-9f43-e084751c332a", "status": 200}
+{"timestamp": "2026-10-18T01:28:13.924554+00:00", "level": "INFO", "event": "http.request", "request_id": "fedeb584-f7c7-43c9-a046-12c6ec7861e5", "status": 200}
+{"timestamp": "2026-10-18T01:28:13.963019+00:00", "level": "INFO", "event": "http.request", "request_id": "11588b3e-c513-4e2a-881a-ded5f93ec219", "status": 200}
+{"timestamp": "2026-10-18T01:28:14.004890+00:00", "level": "INFO", "event": "http.request", "request_id": "2f30f7a2-d8cc-48d8-9d6e-5be165c08c05", "status": 200}
+{"timestamp": "2026-10-18T01:28:14.049703+00:00", "level": "INFO", "event": "http.request", "request_id": "62fc46ed-73ac-4d77-9314-704e1fb6c68b", "status": 200}
+{"timestamp": "2026-10-18T01:28:14.466292+00:00", "level": "INFO", "event": "http.request", "request_id": "63d82e95-da60-4af7-9621-dc3b385d0172", "status": 200}
+{"timestamp": "2026-10-18T01:28:14.511115+00:00", "level": "INFO", "event": "http.request", "request_id": "a44db1c9-0c35-4ca2-9a0c-ef051e3b58ce", "status": 200}
+{"timestamp": "2026-10-18T01:28:14.557353+00:00", "level": "INFO", "event": "http.request", "request_id": "a9897e80-c0d1-4034-b999-70d32a1d45b5", "status": 200}
+{"timestamp": "2026-10-18T01:28:14.604682+00:00", "level": "INFO", "event": "http.request", "request_id": "51bfe811-199e-4971-91af-2dab14bc0c3a", "status": 200}
+{"timestamp": "2026-10-18T01:28:14.648220+00:00", "level": "INFO", "event": "http.request", "request_id": "dd05bfc5-7bb6-4f2d-a487-b0ea31da1994", "status": 200}
+{"timestamp": "2026-10-18T01:28:14.699572+00:00", "level": "INFO", "event": "http.request", "request_id": "60764ae9-a47b-48e9-af85-fdf62de8d27e", "status": 200}
+{"timestamp": "2026-10-18T01:28:14.711166+00:00", "level": "INFO", "event": "http.request", "request_id": "dbc57dfc-c0e4-4cc8-ba17-b023f3009847", "status": 403}
+{"timestamp": "2026-10-18T01:28:14.723068+00:00", "level": "INFO", "event": "http.request", "request_id": "3dc11b95-639d-43e9-8ae4-75ad12619658", "status": 403}
+{"timestamp": "2026-10-18T01:28:14.733754+00:00", "level": "INFO", "event": "http.request", "request_id": "a9bfccdd-205a-42f4-9d7b-bc9191dd9923", "status": 403}
+{"timestamp": "2026-10-18T01:28:14.737472+00:00", "level": "INFO", "event": "http.request", "request_id": "64a24077-048d-4ef4-a916-32c37b5392e1", "status": 401}
+{"timestamp": "2026-10-18T01:28:14.921998+00:00", "level": "INFO", "event": "http.request", "request_id": "ffc13360-12b2-4efc-b966-eca3801659db", "status": 200}
+{"timestamp": "2026-10-18T01:28:15.116627+00:00", "level": "INFO", "event": "http.request", "request_id": "692b73aa-cd2e-445c-9816-40e1e635e0fd", "status": 201}
+{"timestamp": "2026-10-18T01:28:15.125230+00:00", "level": "INFO", "event": "http.request", "request_id": "41f0a56b-7ca6-401a-9d07-391207e0e304", "status": 200}
+{"timestamp": "2026-10-18T01:28:15.132513+00:00", "level": "INFO", "event": "http.request", "request_id": "abeb899f-97ea-43a7-91ed-3c65bbeb3be8", "status": 403}
+{"synthetic": true, "role_probes": [{"role": "TP Analyst", "workspace": 200}, {"role": "TP Manager", "workspace": 200}, {"role": "Transfer Pricing Director", "workspace": 200}, {"role": "TP Economist", "workspace": 200}, {"role": "Financial Analyst", "workspace": 200}, {"role": "TP Read-only Reviewer", "workspace": 200}, {"role": "Auditor", "disabled": false, "workspace": 403}, {"role": "Client Viewer", "disabled": false, "workspace": 403}, {"role": "Auditor", "disabled": true, "workspace": 401}], "base_sources": {"journal_lines": 250024, "unbalanced_journals": 0, "source_snapshots_reconciled": 30, "approved_ifrs_runs_current": 10}, "readonly_calculate": 403, "candidate_count": 0, "worker_job": {"id": "26454279-d8ea-4972-96b5-412e6f65160f", "status": "completed", "progress": 100, "resource_id": "2bb5d0fb-80d4-441a-9ee1-04b2137a8a36"}, "readonly_job_read": 403, "browser_ai_source_id": "37270031-aa74-476c-b810-c40acf0ceb6c"}

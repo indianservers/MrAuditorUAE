@@ -1,0 +1,23 @@
+name: Manual release evidence gate
+on:
+  workflow_dispatch:
+    inputs:
+      evidence_artifact:
+        description: Reviewed release evidence identifier
+        required: true
+      image_digest:
+        description: Verified immutable image digest
+        required: true
+permissions:
+  contents: read
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    environment: production-review
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.12'}
+      - run: python scripts/release_gate.py docs/phase-12/release-gates.json
+      # No deploy step. Deployment requires a separate explicitly authorized workflow,
+      # environment approvals, immutable images, and tested rollback/restore evidence.

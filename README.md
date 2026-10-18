@@ -107,3 +107,66 @@ New permissions initially belong to Firm Administrator only. Platform Administra
 See [accounting conventions](docs/accounting-engine.md), [import format](docs/import-format.md), [connector setup](docs/connectors.md), [analytics catalogue](docs/audit-analytics.md), [risk and sampling](docs/risk-scoring.md), [financial AI](docs/financial-ai.md), [lineage](docs/data-lineage.md) and [Phase 2 verification](docs/phase-2-report.md).
 
 Synthetic fixtures are clearly labelled under `backend/tests/fixtures/phase2`; regenerate with `python scripts/generate_accounting_fixtures.py`. Their actual end-to-end results are in `docs/evidence/phase-2-demonstration.json`. Never run destructive integration tests against live data. To benchmark the file/calculation engine from backend: `uv run python ../scripts/benchmark_accounting.py --sizes 10000 100000 1000000`. The separate database benchmark requires explicit BENCHMARK_DATABASE=1 against a disposable database; results record their measurement scope.
+# Phase 4: external audit execution
+
+The Phase 4 implementation extends the existing application with engagement-scoped roles, acceptance, independence, materiality, risks/programs/testing, versioned working papers, private evidence, findings, review chains, completion controls, firm administration and a restricted client portal. Start with [the implementation report](docs/phase-4/phase-4-report.md); it classifies tested functionality and remaining release gaps.
+
+Apply `alembic upgrade head` in the backend before running the updated application. Migrations 0003/0004 preserve professional history and deliberately refuse destructive downgrade. Verify with `alembic check` and use an independently reviewed backup restoration plan for production rollback.
+
+Administration is under `/admin/users`, `/admin/roles`, `/admin/permissions`, `/admin/teams`, `/admin/activity` and `/admin/firm-settings`. Open any assigned engagement and choose **Open audit workspace**. The restricted client route is `/client-portal`; invitation recipients activate through `/join` using a securely delivered token. Invitations do not send email automatically.
+
+Set `EVIDENCE_CLAMAV_HOST` to enable scanning. Unscanned uploads remain quarantined; production private object storage requirements from Phase 2 still apply. `AUDIT_AI_EXTERNAL_APPROVED=false` is the default; enabling approved external disclosure also requires the existing approved provider/model configuration. Diagnostic mock AI is labeled and cannot issue opinions or approve records.
+
+Frontend verification: `npm run typecheck`, `npm run lint`, `npm test`, `npm run build`, and `npm run test:e2e:phase4`. The Phase 4 Playwright suite expects a disposable real API on port 58002 and the frontend on port 3000. `scripts/seed_phase4_preview.py` creates explicitly synthetic records only when `DEMO_SEED=1`; its source identifies the local test account credentials. Never use that seed as a production onboarding flow. The local test and browser preview databases are separate.
+
+# Phase 5: IFRS reporting foundation
+
+Open `/ifrs` for reporting profiles, mappings, approved adjustments, financial versions and accounting schedules. Migration 0005 adds immutable standards metadata and calculation runs. Apply `alembic upgrade head`; backend export dependencies are locked in `backend/uv.lock`. The sixteen workspaces reuse the existing shell and independent review workflow.
+
+Read the [Phase 5 report](docs/phase-5/phase-5-report.md), [standards coverage](docs/phase-5/standards-coverage.json), [API/routes](docs/phase-5/api-inventory.md) and [validation evidence](docs/phase-5/test-results.md) before relying on results. This is bounded support, not full IFRS certification. Consolidation outputs remain draft-only pending group cash flows, notes and acquisition validation. DOCX visual rendering remains unverified without LibreOffice.
+
+Run `pytest tests/phase5` against a disposable migrated database with `INTEGRATION_TESTS=1`; run `npm run test:e2e:phase5` for browser checks after creating synthetic preview fixtures with `scripts/seed_phase5_preview.py` and `DEMO_SEED=1`. Never point destructive integration fixtures at production. Phase 6 is not included.
+# Phase 6 corporate tax workbench
+
+The Corporate Tax module extends approved IFRS reporting with source-linked tax rules, computation, QFZP, interest, loss postings/transfers, scoped Tax Groups, professional assessments and independently reviewed return preparation. See [Phase 6 delivery report](docs/phase-6/phase-6-report.md) and its regulatory coverage/limitations before production use. Migration `0006` adds forced-RLS tax snapshots, loss postings and current releases. New workspaces begin at `/tax`; run browser scenarios with `npm run test:e2e:phase6` after seeding an isolated preview. No Phase 7 implementation is included.
+
+# Phase 8 transfer pricing workbench
+
+Phase 8 adds 18 TP workspaces, source-linked immutable calculations, controlled transaction classification, benchmark imports and screening, loan/service/disclosure engines, reviewed Local/Master File workpapers, a CT draft bridge and scoped client PDF issue. Apply migrations through `0008`; review [Phase 8 report](docs/phase-8/phase-8-report.md) and [coverage](docs/phase-8/coverage.json) before use. Licensed market data and production AI evaluation remain external prerequisites.
+
+Run backend tests from `backend` with `INTEGRATION_TESTS=1` against an isolated migrated PostgreSQL database. Run `npm run test:e2e:phase8` from `frontend` with the guarded demo API on 58003 and preview on 3001. `scripts/enrich_phase8.py` refuses non-demo database/tenant targets and extends the existing synthetic Phase 7 seed. Never run resetting integration fixtures against the demo or production database. Phase 9 has not been started.
+
+# Phase 9 audit ML and Pillar Two
+
+Migration `0009` adds an append-only RLS registry. In `ml-engine`, run `npm ci`, `npm run build` and `npm test`; the existing Celery worker launches a resource-bounded Node child for ML jobs. TensorFlow.js uses the portable CPU backend. No native bindings or public model-upload execution are required. See [Phase 9 report](docs/phase-9/phase-9-report.md) and [coverage](docs/phase-9/coverage.json) for measured model results, tax limitations and current MD96/2026 adoption metadata. Models are experimental; synthetic results do not establish real-client audit effectiveness.
+
+New workspaces start at `/ai-lab/training` and `/pillar-two/overview`. Run `npm run test:e2e:phase9` against the guarded synthetic API on port 58004 and frontend preview on 3002. Run backend tests from `backend` against an isolated migrated test database, never the demo database. `scripts/enrich_phase9.py` and `scripts/demo_phase9_dmtt.py` enforce the existing exact demo database/tenant guard. No Phase 10 work is included.
+
+## Phase 10 — internal audit, ERM and GRC
+
+Phase 10 adds typed governed GRC workpapers, versioned risk/planning calculations, RCM/control testing/SoD, real deterministic monitoring with optional TensorFlow.js signals, recoverable schedule/import jobs, remediation/retesting, and restricted published governance reports. Migration `0010` reuses existing audit/evidence/review infrastructure and adds three tenant-scoped tables with forced RLS.
+
+The delivery is **implemented with limited scope**. Live enterprise source adapters, external semantic AI validation, exhaustive licensed standards and automated reminder/escalation delivery remain outside the verified scope. See [Phase 10 report](docs/phase-10/phase-10-report.md), [API inventory](docs/phase-10/api-inventory.md), [regression evidence](docs/phase-10/regression-results.md) and [performance](docs/phase-10/performance.md).
+
+UI: `/grc/{engagementId}/{area}` exposes 24 workspaces; `/board` exposes published narrative packages. The local verification preview uses port 3003 with API port 58005. A GRC worker consumes queue `grc`; run Celery Beat separately for recurring schedule dispatch. Guarded scripts are `enrich_phase10.py`, `verify_phase10.py`, `benchmark_phase10.py`, `export_phase10.py`, and `document_phase10.py` under `scripts/`.
+
+Phase 11 has not been started. Phase 10 changes are not committed or pushed.
+## Phase 11 enterprise AI investigation foundation
+
+The source-bound AI Command Center is available at `/ai/command-center`, with fifteen related workspaces for agents, investigations, workflow graphs, approvals, documents, retrieval, citations, evaluations and administration. It reuses FastAPI, PostgreSQL, the existing AI gateway, private evidence repository and TensorFlow.js model ledger.
+
+Apply migration `0011`. Run an authorized worker with `celery -A app.workers.celery_app:celery_app worker --pool=solo -Q enterprise-ai`; the optional Beat task `auditos.enterprise_ai.tick` dispatches only explicitly enabled schedules or explicitly queued runs. No schedule is enabled by installation.
+
+Implemented scope includes durable read-only specialist workflows, exact-payload approval for unapproved draft workpaper creation, bounded document extraction, keyword retrieval and deterministic journal comparisons. Semantic embeddings, OCR, licensed technical corpora, live model quality qualification and automatic downstream professional actions remain unavailable or limited. Synthetic scanner fixtures are explicitly test doubles.
+
+See [Phase 11 implementation report](docs/phase-11/phase-11-report.md) for historical tests, screenshots, measured performance and readiness limits. The Phase 12 section below supersedes its preview ports and readiness state.
+
+# Phase 12 — release hardening and evidence
+
+Production release remains **NO-GO**; internal synthetic evaluation is recommended only within the documented scope. See [final report](docs/phase-12/final-phase-report.md), [readiness scorecard](docs/phase-12/production-readiness.md), [test matrix](docs/phase-12/release-test-matrix.csv) and [open defects](docs/phase-12/unresolved-issues.md).
+
+Phase 12 adds revocable access sessions, authenticator MFA, production demo guards, tenant subscription/feature/usage admission controls and a separately authorized metadata-only platform console. `/security` manages MFA enrollment; `/platform/overview` requires a separately provisioned operator and verified MFA. Billing and hosted monitoring remain explicitly disconnected.
+
+The current local preview is `http://127.0.0.1:3004` with API `http://127.0.0.1:58007`. New local setups use `python scripts/setup_env.py` to generate independent secrets without printing them; existing setups must securely inject a dedicated Fernet `MFA_ENCRYPTION_KEY`. Run migrations through `0012`. Workers must consume `celery,grc,enterprise-ai`; use exactly one scheduler when explicitly enabling schedules. Existing valid synthetic ledger data was reused.
+
+Hosted templates are in `deploy/`; follow [deployment preparation](docs/phase-12/deployment-runbook.md), [recovery](docs/phase-12/backup-restore-test.md), [rollback](docs/phase-12/rollback-runbook.md) and [privacy acceptance](docs/phase-12/privacy-and-residency.md). Templates are not proof of deployment. No production deployment or new development phase is authorized by this delivery.

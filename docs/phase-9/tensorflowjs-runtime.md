@@ -1,0 +1,3 @@
+# Tensorflowjs Runtime
+
+Actual TensorFlow.js 4.22.0 runs on the JavaScript CPU backend under Node 24.15.0 on Windows. Native bindings were not required or claimed. Run npm ci and npm run build in ml-engine, then start the existing Celery worker. Dockerfile provides the same dedicated runtime. No public model topology/JavaScript upload endpoint exists. npm audit reports three moderate transitive advisories through argparse/sprintf-js in the umbrella package; the vulnerable formatting CLI is not exposed to user input. No safe current dependency fix was available; no obsolete TensorFlow downgrade was applied. See npm-audit.json.

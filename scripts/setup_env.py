@@ -14,9 +14,13 @@ values = {
     "replace-with-generated-database-password": secrets.token_urlsafe(32),
     "replace-with-independent-admin-password": secrets.token_urlsafe(32),
 }
-content = (root / ".env.example").read_text()
+content = (root / ".env.example").read_text(encoding="utf-8")
 for old, new in values.items():
     content = content.replace(old, new)
+content = content.replace(
+    "MFA_ENCRYPTION_KEY=\n",
+    "MFA_ENCRYPTION_KEY=" + base64.urlsafe_b64encode(secrets.token_bytes(32)).decode() + "\n",
+)
 with (root / ".env").open("x", encoding="utf-8") as stream:
     stream.write(content)
 print("Created .env with independent random secrets. Protect this file.")

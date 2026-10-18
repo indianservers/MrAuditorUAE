@@ -1,0 +1,53 @@
+{
+  "verified_as_of": "2026-10-18",
+  "active_rule_version": "UAE-CD142-MD96/v2",
+  "sources": {
+    "CD142": {
+      "url": "https://tax.gov.ae/Datafolder/Files/Legislation/Cabinet-Decision-No-142-of-2024-on-Top-up-Tax-on-MNEs.pdf",
+      "effective": "2025-01-01",
+      "version": "UAE-CD142-MD96/v2"
+    },
+    "MD88": {
+      "url": "https://mof.gov.ae/wp-content/uploads/2025/04/English-Ministerial-Decision-No.-88-of-2025-on-Commentary-and-Guidance-for-Top-Up-Tax.pdf",
+      "effective": "2025-01-01",
+      "adopted": "2024 Consolidated Commentary (2023); June 2024 guidance; January 2025 Central Record, Articles 8.1.4/8.1.5, Article 9.1 and GIR",
+      "lifecycle": "REPEALED_BY_MD96_2026"
+    },
+    "MD96": {
+      "url": "https://mof.gov.ae/wp-content/uploads/2026/06/Ministerial-Decision-No.-96-of-2026-on-the-Commentary-and-Agreed-Administrative-Guidance-for-the-Purposes-of-Cabinet-Decision-No.-142-of-2024-on-the-Imposition-of-Top-Up-Tax-on-Multinational-Enterprises-en.pdf",
+      "effective": "2026-06-22",
+      "applies_fiscal_start": "2025-01-01",
+      "adopted": "OECD Consolidated Commentary 2026; Central Record 2026; GIR January 2025",
+      "lifecycle": "ACTIVE",
+      "coverage": "Ordinary cases only; advanced adopted guidance requires technical schedules"
+    },
+    "MD133": {
+      "url": "https://mof.gov.ae/wp-content/uploads/2026/08/Ministerial-Decision-No133-of-2026-on-Pillar-Two-Information-Return-EN.pdf",
+      "effective": "2026-08-03",
+      "applies_fiscal_start": "2025-01-01",
+      "coverage": "Reporting evidence and manual obligations assessment; no electronic filing"
+    }
+  },
+  "implemented": [
+    "Ordinary scope and proportionate short-year revenue threshold",
+    "Source-linked signed adjustment workflow",
+    "Ordinary jurisdictional blending",
+    "Limited deferred recast with attribution and recapture blocks",
+    "Period-aware SBIE and top-up allocation",
+    "Reviewed transitional CbCR/de minimis tests"
+  ],
+  "limitations": [
+    "Longitudinal score/performance drift and sufficient-label trends",
+    "Full tax recapture/transition/loss-DTA utilization ledgers",
+    "Automatic IAS12/CT reconciliation",
+    "Full graphical architecture/entity editing",
+    "Alternative accounting bases and special group structures",
+    "Non-UAE IIR/UTPR",
+    "JV/PE/minority/stateless special blending",
+    "Full Article 9.1 transfers and complex allocations",
+    "Foreign QDMTT effects and simplified non-material-entity safe harbour",
+    "Electronic DMTT/GIR filing",
+    "One-million-record performance measurement"
+  ],
+  "unlisted_guidance_not_automatically_applied": true
+}

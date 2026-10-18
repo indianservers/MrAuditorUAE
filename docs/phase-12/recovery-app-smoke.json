@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "database": "auditos_phase12_restore_test",
+  "ledger_before": 250024,
+  "ledger_after": 250024,
+  "api_results": {
+    "/health/ready": {
+      "status": 200,
+      "total": null
+    },
+    "/api/v1/clients?limit=25": {
+      "status": 200,
+      "total": 10
+    },
+    "/api/v1/accounting/ledger?limit=50": {
+      "status": 200,
+      "total": 250024
+    },
+    "private_download": {
+      "status": 200,
+      "sha256_matches": true,
+      "bytes": 207,
+      "scanner_scope": "Original synthetic test-double verdict retained; not real scanner qualification"
+    }
+  },
+  "scope": "Local isolated restored DB and restored object directory; only authentication/audit metadata writes"
+}

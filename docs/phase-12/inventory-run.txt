@@ -1,0 +1,1 @@
+{"scope": "Source/schema discovery with executed-test evidence linked separately; not a complete independent audit", "migration": "0012", "database_role": {"rolsuper": false, "rolbypassrls": false}, "demo_journal_lines": 250024, "active_ai_schedules": 0, "active_load_users": 0, "module_count": 25, "api_operation_count": 275, "api_path_count": 246}

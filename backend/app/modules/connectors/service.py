@@ -15,7 +15,7 @@ from app.modules.accounting.schemas import ImportOptions
 from app.modules.accounting.service import scope_values, scoped, upload
 from app.modules.connectors.secrets import decrypt, encrypt
 from app.modules.connectors.zoho import RESOURCES, ZohoConnector
-from app.modules.lineage.storage import ObjectStore
+from app.modules.saas.storage import put_private
 
 
 async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID):
@@ -71,7 +71,7 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID):
         for resource in RESOURCES:
             async for page in adapter.pages(resource, connection.organization_id):
                 data = adapter.last_raw or json.dumps(page, sort_keys=True, default=str).encode()
-                stored = ObjectStore().put(str(ctx.tenant_id), io.BytesIO(data))
+                stored = await put_private(db, ctx, io.BytesIO(data))
                 manifest.append({"resource": resource, "page": page["page"], **stored})
                 if resource == "chartofaccounts":
                     for account in page["raw"][resource]:
@@ -90,7 +90,7 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID):
                             str(header["journal_id"]), connection.organization_id
                         )
                         detail_raw = adapter.last_raw or json.dumps(detail, default=str).encode()
-                        original = ObjectStore().put(str(ctx.tenant_id), io.BytesIO(detail_raw))
+                        original = await put_private(db, ctx, io.BytesIO(detail_raw))
                         manifest.append(
                             {
                                 "resource": "journal_detail",

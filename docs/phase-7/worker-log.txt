@@ -1,0 +1,64 @@
+ 
+ -------------- phase7-demo@localhost v5.6.3 (recovery)
+--- ***** ----- 
+-- ******* ---- Windows-11-10.0.26200-SP0 2026-10-18 04:36:11
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         auditos:0x25cea7d6720
+- ** ---------- .> transport:   redis://127.0.0.1:56379/13
+- ** ---------- .> results:     disabled://
+- *** --- * --- .> concurrency: 1 (solo)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+                
+
+[tasks]
+  . auditos.accounting
+  . auditos.diagnostic
+
+[2026-10-18 04:36:11,724: INFO/MainProcess] Connected to redis://127.0.0.1:56379/13
+[2026-10-18 04:36:11,726: INFO/MainProcess] mingle: searching for neighbors
+[2026-10-18 04:36:12,739: INFO/MainProcess] mingle: all alone
+[2026-10-18 04:36:12,751: INFO/MainProcess] phase7-demo@localhost ready.
+[2026-10-18 04:36:42,959: INFO/MainProcess] Task auditos.diagnostic[846b4548-89ad-4965-bda3-2893405fc9ea] received
+[2026-10-18 04:36:43,033: INFO/MainProcess] Task auditos.diagnostic[846b4548-89ad-4965-bda3-2893405fc9ea] succeeded in 0.07800000000133878s: None
+[2026-10-18 04:36:43,034: INFO/MainProcess] Task auditos.diagnostic[ee702692-a4b2-4480-b4b3-bd9ca4924d06] received
+[2026-10-18 04:36:43,085: INFO/MainProcess] Task auditos.diagnostic[ee702692-a4b2-4480-b4b3-bd9ca4924d06] succeeded in 0.046999999998661224s: None
+[2026-10-18 04:36:43,086: INFO/MainProcess] Task auditos.diagnostic[fdd83ebf-43da-41fa-9c9c-44452aab3c8f] received
+[2026-10-18 04:36:43,149: INFO/MainProcess] Task auditos.diagnostic[fdd83ebf-43da-41fa-9c9c-44452aab3c8f] succeeded in 0.06300000000192085s: None
+[2026-10-18 04:36:43,150: INFO/MainProcess] Task auditos.diagnostic[926e7874-a8c7-43e9-9653-dfd0e6614436] received
+[2026-10-18 04:36:43,195: INFO/MainProcess] Task auditos.diagnostic[926e7874-a8c7-43e9-9653-dfd0e6614436] succeeded in 0.046999999998661224s: None
+[2026-10-18 04:36:43,197: INFO/MainProcess] Task auditos.diagnostic[0d423768-40d3-41b8-a152-97782c27d55b] received
+[2026-10-18 04:36:43,260: INFO/MainProcess] Task auditos.diagnostic[0d423768-40d3-41b8-a152-97782c27d55b] succeeded in 0.062000000001717126s: None
+[2026-10-18 04:36:43,260: INFO/MainProcess] Task auditos.diagnostic[24fe2b8f-26dd-473d-9a07-cf6b62524942] received
+[2026-10-18 04:36:43,322: INFO/MainProcess] Task auditos.diagnostic[24fe2b8f-26dd-473d-9a07-cf6b62524942] succeeded in 0.06299999999828287s: None
+[2026-10-18 04:36:43,323: INFO/MainProcess] Task auditos.diagnostic[f50f608b-f2fb-4b92-8f13-957a9f90b7ed] received
+[2026-10-18 04:36:43,368: INFO/MainProcess] Task auditos.diagnostic[f50f608b-f2fb-4b92-8f13-957a9f90b7ed] succeeded in 0.0470000000022992s: None
+[2026-10-18 04:36:43,369: INFO/MainProcess] Task auditos.diagnostic[2afbb17c-d651-44c4-84b1-0642c9dbe376] received
+[2026-10-18 04:36:43,414: INFO/MainProcess] Task auditos.diagnostic[2afbb17c-d651-44c4-84b1-0642c9dbe376] succeeded in 0.030999999999039574s: None
+[2026-10-18 04:36:43,415: INFO/MainProcess] Task auditos.diagnostic[ed04dfd1-c24a-43bd-96cc-93f1e04659be] received
+[2026-10-18 04:36:43,476: INFO/MainProcess] Task auditos.diagnostic[ed04dfd1-c24a-43bd-96cc-93f1e04659be] succeeded in 0.0459999999984575s: None
+[2026-10-18 04:36:43,477: INFO/MainProcess] Task auditos.diagnostic[1a773ab5-fc55-401f-8540-c75ab55de7ae] received
+[2026-10-18 04:36:43,522: INFO/MainProcess] Task auditos.diagnostic[1a773ab5-fc55-401f-8540-c75ab55de7ae] succeeded in 0.030999999999039574s: None
+[2026-10-18 04:36:43,523: INFO/MainProcess] Task auditos.diagnostic[f45f8c8f-be13-4719-b3fc-084590d50ed7] received
+[2026-10-18 04:36:43,569: INFO/MainProcess] Task auditos.diagnostic[f45f8c8f-be13-4719-b3fc-084590d50ed7] succeeded in 0.030999999999039574s: None
+[2026-10-18 04:36:43,571: INFO/MainProcess] Task auditos.diagnostic[5f7abd96-41a0-427b-b9af-461852214e4e] received
+[2026-10-18 04:36:43,616: INFO/MainProcess] Task auditos.diagnostic[5f7abd96-41a0-427b-b9af-461852214e4e] succeeded in 0.031000000002677552s: None
+[2026-10-18 04:36:43,616: INFO/MainProcess] Task auditos.diagnostic[9a574596-9753-487b-8e53-cde22c69bf2a] received
+[2026-10-18 04:36:43,662: INFO/MainProcess] Task auditos.diagnostic[9a574596-9753-487b-8e53-cde22c69bf2a] succeeded in 0.046999999998661224s: None
+[2026-10-18 04:36:43,663: INFO/MainProcess] Task auditos.diagnostic[5ce8d278-2e4d-4792-ada1-3e9cf2f42ee0] received
+[2026-10-18 04:36:43,710: INFO/MainProcess] Task auditos.diagnostic[5ce8d278-2e4d-4792-ada1-3e9cf2f42ee0] succeeded in 0.046999999998661224s: None
+[2026-10-18 04:36:43,711: INFO/MainProcess] Task auditos.diagnostic[f018257c-4e82-4d48-967b-63cf8105e79f] received
+[2026-10-18 04:36:43,774: INFO/MainProcess] Task auditos.diagnostic[f018257c-4e82-4d48-967b-63cf8105e79f] succeeded in 0.06300000000192085s: None
+[2026-10-18 04:36:43,775: INFO/MainProcess] Task auditos.diagnostic[d927a5b4-6634-4432-8658-bdfe3070b5cf] received
+[2026-10-18 04:36:43,836: INFO/MainProcess] Task auditos.diagnostic[d927a5b4-6634-4432-8658-bdfe3070b5cf] succeeded in 0.046999999998661224s: None
+[2026-10-18 04:36:43,837: INFO/MainProcess] Task auditos.diagnostic[12199153-1f5a-42ac-96b5-e0a80372e784] received
+[2026-10-18 04:36:43,897: INFO/MainProcess] Task auditos.diagnostic[12199153-1f5a-42ac-96b5-e0a80372e784] succeeded in 0.0470000000022992s: None
+[2026-10-18 04:36:43,898: INFO/MainProcess] Task auditos.diagnostic[aa6738a2-a1e3-42e7-9f00-7e1d50e518ad] received
+[2026-10-18 04:36:43,933: INFO/MainProcess] Task auditos.diagnostic[aa6738a2-a1e3-42e7-9f00-7e1d50e518ad] succeeded in 0.030999999999039574s: None
+[2026-10-18 04:36:43,933: INFO/MainProcess] Task auditos.diagnostic[b56feb06-b8dc-4d5f-980b-6492076eb562] received
+[2026-10-18 04:36:43,990: INFO/MainProcess] Task auditos.diagnostic[b56feb06-b8dc-4d5f-980b-6492076eb562] succeeded in 0.0470000000022992s: None
+[2026-10-18 04:36:43,991: INFO/MainProcess] Task auditos.diagnostic[49856bff-1483-4da9-9779-b4c3b77262ab] received
+[2026-10-18 04:36:44,037: INFO/MainProcess] Task auditos.diagnostic[49856bff-1483-4da9-9779-b4c3b77262ab] succeeded in 0.046999999998661224s: None

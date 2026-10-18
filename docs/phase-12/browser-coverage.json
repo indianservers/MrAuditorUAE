@@ -1,0 +1,1289 @@
+{
+  "visited_routes": [
+    "/admin/activity",
+    "/admin/firm-settings",
+    "/admin/permissions",
+    "/admin/roles",
+    "/admin/teams",
+    "/admin/users",
+    "/ai-lab/architecture",
+    "/ai-lab/confusion",
+    "/ai-lab/datasets",
+    "/ai-lab/deployment",
+    "/ai-lab/drift",
+    "/ai-lab/evaluation",
+    "/ai-lab/features",
+    "/ai-lab/feedback",
+    "/ai-lab/investigator",
+    "/ai-lab/overview",
+    "/ai-lab/registry",
+    "/ai-lab/training",
+    "/ai/agents",
+    "/ai/approvals",
+    "/ai/citations",
+    "/ai/command-center",
+    "/ai/designer",
+    "/ai/documents",
+    "/ai/evaluations",
+    "/ai/investigations",
+    "/ai/knowledge",
+    "/ai/matching",
+    "/ai/monitor",
+    "/ai/providers",
+    "/ai/research",
+    "/ai/schedules",
+    "/ai/security",
+    "/ai/usage",
+    "/board",
+    "/client-portal",
+    "/clients",
+    "/dashboard",
+    "/engagements",
+    "/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/acceptance",
+    "/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/ai",
+    "/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/completion",
+    "/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/evidence",
+    "/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/findings",
+    "/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/independence",
+    "/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/materiality",
+    "/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/planning",
+    "/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/procedures",
+    "/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/programs",
+    "/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/requests",
+    "/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/review-notes",
+    "/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/risks",
+    "/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/team",
+    "/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/testing",
+    "/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/working-papers",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/alerts",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/board",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/command",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/controls",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/copilot",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/deficiencies",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/effectiveness",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/engagement",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/executions",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/heatmap",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/kris",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/obligations",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/plan",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/policies",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/quality",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/rcm",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/remediation",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/reports",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/risks",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/rules",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/sod",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/testing",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/third-parties",
+    "/grc/4c102ee3-94d0-4ba4-94bf-faecb852da9d/universe",
+    "/ifrs/4c102ee3-94d0-4ba4-94bf-faecb852da9d/adjustments",
+    "/ifrs/4c102ee3-94d0-4ba4-94bf-faecb852da9d/ai",
+    "/ifrs/4c102ee3-94d0-4ba4-94bf-faecb852da9d/cash-flow",
+    "/ifrs/4c102ee3-94d0-4ba4-94bf-faecb852da9d/consolidation",
+    "/ifrs/4c102ee3-94d0-4ba4-94bf-faecb852da9d/dashboard",
+    "/ifrs/4c102ee3-94d0-4ba4-94bf-faecb852da9d/deferred-tax",
+    "/ifrs/4c102ee3-94d0-4ba4-94bf-faecb852da9d/designer",
+    "/ifrs/4c102ee3-94d0-4ba4-94bf-faecb852da9d/disclosures",
+    "/ifrs/4c102ee3-94d0-4ba4-94bf-faecb852da9d/ecl",
+    "/ifrs/4c102ee3-94d0-4ba4-94bf-faecb852da9d/fixed-assets",
+    "/ifrs/4c102ee3-94d0-4ba4-94bf-faecb852da9d/impairment",
+    "/ifrs/4c102ee3-94d0-4ba4-94bf-faecb852da9d/intercompany",
+    "/ifrs/4c102ee3-94d0-4ba4-94bf-faecb852da9d/leases",
+    "/ifrs/4c102ee3-94d0-4ba4-94bf-faecb852da9d/notes",
+    "/ifrs/4c102ee3-94d0-4ba4-94bf-faecb852da9d/revenue",
+    "/ifrs/4c102ee3-94d0-4ba4-94bf-faecb852da9d/trial-balance",
+    "/integrations",
+    "/login",
+    "/pillar-two/ai",
+    "/pillar-two/deferred",
+    "/pillar-two/elections",
+    "/pillar-two/entities",
+    "/pillar-two/etr",
+    "/pillar-two/income",
+    "/pillar-two/overview",
+    "/pillar-two/reporting",
+    "/pillar-two/sbie",
+    "/pillar-two/scope",
+    "/pillar-two/taxes",
+    "/pillar-two/topup",
+    "/platform/incidents",
+    "/platform/overview",
+    "/platform/releases",
+    "/platform/security",
+    "/platform/services",
+    "/platform/subscriptions",
+    "/platform/tenants",
+    "/platform/usage",
+    "/reports",
+    "/security",
+    "/settings",
+    "/tax/4c102ee3-94d0-4ba4-94bf-faecb852da9d/adjustments",
+    "/tax/4c102ee3-94d0-4ba4-94bf-faecb852da9d/ai",
+    "/tax/4c102ee3-94d0-4ba4-94bf-faecb852da9d/calendar",
+    "/tax/4c102ee3-94d0-4ba4-94bf-faecb852da9d/computation",
+    "/tax/4c102ee3-94d0-4ba4-94bf-faecb852da9d/dashboard",
+    "/tax/4c102ee3-94d0-4ba4-94bf-faecb852da9d/de-minimis",
+    "/tax/4c102ee3-94d0-4ba4-94bf-faecb852da9d/free-zone-compliance",
+    "/tax/4c102ee3-94d0-4ba4-94bf-faecb852da9d/income-segmentation",
+    "/tax/4c102ee3-94d0-4ba4-94bf-faecb852da9d/interest",
+    "/tax/4c102ee3-94d0-4ba4-94bf-faecb852da9d/losses",
+    "/tax/4c102ee3-94d0-4ba4-94bf-faecb852da9d/qfzp",
+    "/tax/4c102ee3-94d0-4ba4-94bf-faecb852da9d/related-parties",
+    "/tax/4c102ee3-94d0-4ba4-94bf-faecb852da9d/reliefs",
+    "/tax/4c102ee3-94d0-4ba4-94bf-faecb852da9d/restructuring",
+    "/tax/4c102ee3-94d0-4ba4-94bf-faecb852da9d/returns",
+    "/tax/4c102ee3-94d0-4ba4-94bf-faecb852da9d/rules",
+    "/tax/4c102ee3-94d0-4ba4-94bf-faecb852da9d/small-business",
+    "/tax/4c102ee3-94d0-4ba4-94bf-faecb852da9d/tax-groups",
+    "/tax/4c102ee3-94d0-4ba4-94bf-faecb852da9d/taxpayers",
+    "/tax/4c102ee3-94d0-4ba4-94bf-faecb852da9d/transitional",
+    "/tp/4c102ee3-94d0-4ba4-94bf-faecb852da9d/ai",
+    "/tp/4c102ee3-94d0-4ba4-94bf-faecb852da9d/benchmarking",
+    "/tp/4c102ee3-94d0-4ba4-94bf-faecb852da9d/credit",
+    "/tp/4c102ee3-94d0-4ba4-94bf-faecb852da9d/dashboard",
+    "/tp/4c102ee3-94d0-4ba4-94bf-faecb852da9d/datasets",
+    "/tp/4c102ee3-94d0-4ba4-94bf-faecb852da9d/disclosure",
+    "/tp/4c102ee3-94d0-4ba4-94bf-faecb852da9d/far",
+    "/tp/4c102ee3-94d0-4ba4-94bf-faecb852da9d/intangibles",
+    "/tp/4c102ee3-94d0-4ba4-94bf-faecb852da9d/loans",
+    "/tp/4c102ee3-94d0-4ba4-94bf-faecb852da9d/localfile",
+    "/tp/4c102ee3-94d0-4ba4-94bf-faecb852da9d/masterfile",
+    "/tp/4c102ee3-94d0-4ba4-94bf-faecb852da9d/methods",
+    "/tp/4c102ee3-94d0-4ba4-94bf-faecb852da9d/relationships",
+    "/tp/4c102ee3-94d0-4ba4-94bf-faecb852da9d/remuneration",
+    "/tp/4c102ee3-94d0-4ba4-94bf-faecb852da9d/screening",
+    "/tp/4c102ee3-94d0-4ba4-94bf-faecb852da9d/segmentation",
+    "/tp/4c102ee3-94d0-4ba4-94bf-faecb852da9d/services",
+    "/tp/4c102ee3-94d0-4ba4-94bf-faecb852da9d/transactions",
+    "/vat/4c102ee3-94d0-4ba4-94bf-faecb852da9d/ai",
+    "/vat/4c102ee3-94d0-4ba4-94bf-faecb852da9d/asp",
+    "/vat/4c102ee3-94d0-4ba4-94bf-faecb852da9d/dashboard",
+    "/vat/4c102ee3-94d0-4ba4-94bf-faecb852da9d/einvoicing",
+    "/vat/4c102ee3-94d0-4ba4-94bf-faecb852da9d/exceptions",
+    "/vat/4c102ee3-94d0-4ba4-94bf-faecb852da9d/imports",
+    "/vat/4c102ee3-94d0-4ba4-94bf-faecb852da9d/invoices",
+    "/vat/4c102ee3-94d0-4ba4-94bf-faecb852da9d/profiles",
+    "/vat/4c102ee3-94d0-4ba4-94bf-faecb852da9d/purchases",
+    "/vat/4c102ee3-94d0-4ba4-94bf-faecb852da9d/reconciliation",
+    "/vat/4c102ee3-94d0-4ba4-94bf-faecb852da9d/returns",
+    "/vat/4c102ee3-94d0-4ba4-94bf-faecb852da9d/rules",
+    "/vat/4c102ee3-94d0-4ba4-94bf-faecb852da9d/sales",
+    "/vat/4c102ee3-94d0-4ba4-94bf-faecb852da9d/transactions"
+  ],
+  "api_observations": [
+    {
+      "method": "GET",
+      "path": "/api/backend/accounting/connections",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/accounting/imports",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/admin/activity",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/admin/methodology",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/admin/methodology/starter",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/admin/permissions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ai/agents",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/documents",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/investigations",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/investigations/161d8eff-ee36-4a54-82ab-3b00ebd34361",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/investigations/161d8eff-ee36-4a54-82ab-3b00ebd34361/export/pdf",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/investigations/81d6e523-c7a5-4cc2-9174-523b0837bda5",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/investigations/81d6e523-c7a5-4cc2-9174-523b0837bda5/export/pdf",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/investigations/c4ca6d90-f1cb-4a7e-988c-5a81c08b6313",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/investigations/f511f858-6ac1-4e4f-8863-6f10f617872f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/knowledge/search",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/schedules",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/security-events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/usage",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/workflows",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/workspace",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ai/health",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ai/knowledge/sources",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ai/providers",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/auth/mfa",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/client-portal/requests",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/clients",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/dmtt/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/calculations",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/dmtt/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/election",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/dmtt/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/entity",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/dmtt/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/group",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/dmtt/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/memo",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/dmtt/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/workspace",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/ifrs-disclosure",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/ifrs-note",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/review-queue",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/tax-rule",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/tp-credit",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/tp-dataset",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/tp-disclosure",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/tp-far",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/tp-judgment",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/tp-loan",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/tp-localfile",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/tp-masterfile",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/tp-method",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/tp-profile",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/tp-relationship",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/tp-remuneration",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/tp-royalty",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/tp-screening",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/tp-segmentation",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/tp-service",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/tp-study",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/tp-transaction",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/vat-adjustment",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/vat-einvoicing",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/vat-invoice",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/vat-profile",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/vat-return",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/vat-rule",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/audit/workspace",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/alerts",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/board/packages",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/board/packages/002468fc-85ce-43cd-b09d-c527e727cc80",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/dashboard",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/rcm",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/19eddd06-85a7-435a-9244-8ed1c4e4bef4/history",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/690e8b7a-f5ad-45eb-acc7-fee716e034cf/history",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/alert-decision",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/assessment",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/board",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/control",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/deficiency",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/engagement",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/kri",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/link",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/monitor-rule",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/obligation",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/plan",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/policy",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/qaip",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/remediation",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/report",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/risk",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/scoring",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/sod-access",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/test",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/third-party",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/universe",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/runs",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/schedules",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/workspace",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/grc/frameworks",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ifrs/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/adjustment",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ifrs/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/ai",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ifrs/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/cash-flow",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ifrs/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/consolidation",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ifrs/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/deferred-tax",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ifrs/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/disclosure",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ifrs/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/ecl",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ifrs/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/fixed-assets",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ifrs/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/impairment",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ifrs/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/lease",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ifrs/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/mapping",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ifrs/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/note",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ifrs/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/profile",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ifrs/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/revenue",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ifrs/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/runs",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ifrs/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/workspace",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ifrs/standards",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/jobs/4c556099-72fb-436d-91ce-c8f8c0099364",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/jobs/63bc64bb-5374-44f0-91cd-306540469593",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ml/events",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ml/jobs/1d004464-3253-4e9b-aaa3-19a68b53cba9",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ml/jobs/6439703d-7b8a-4bbb-9914-cfe10f5f2740",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ml/jobs/97a0cc17-5394-422c-a9ee-6d1ce88fa4fd",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/ml/jobs/a1b90cce-eb95-40d9-917c-bff1390ceb4a",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/platform/incidents",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/platform/overview",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/platform/releases",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/platform/security",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/platform/services",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/platform/subscriptions",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/platform/tenants",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/platform/tenants",
+      "status": 403
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/platform/usage",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tax/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/adjustment",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tax/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/ai",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tax/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/computation",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tax/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/deadline",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tax/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/exemption",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tax/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/group",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tax/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/interest",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tax/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/loss",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tax/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/profile",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tax/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/qfzp",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tax/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/restructuring",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tax/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/return",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tax/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/rule",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tax/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/sbr",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tax/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/transitional",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tax/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/runs",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tax/legislation",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tenants",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/client-documents",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/client-documents/5e4766fb-f01a-40b9-864d-39eaf060d77b/download",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/candidates/3f21a6e8-0c57-4ee4-8e09-75b03752e5f8",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/graph/3f21a6e8-0c57-4ee4-8e09-75b03752e5f8",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/ai",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/credit",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/dataset",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/disclosure",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/far",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/judgment",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/loan",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/localfile",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/masterfile",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/method",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/profile",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/relationship",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/remuneration",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/royalty",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/screening",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/segmentation",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/service",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/study",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/transaction",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/runs",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/runs/03732c47-efea-44bd-818e-65e18ecb7a60",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/runs/03732c47-efea-44bd-818e-65e18ecb7a60/export/json",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/runs/264ef40c-3211-4840-a41d-b429e9ef619a",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/runs/407b2506-4237-42a8-a5cc-086708e29a70",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/runs/65319778-5ad0-42dd-b999-b322174899c7",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/runs/89192e2b-61e1-4271-a627-1d68510028e6",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/runs/b7a2fa6d-8b02-404d-bd79-37e35be4d38f",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/runs/b85ace34-2f09-4e7f-b53a-4773eaa7a416",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/runs/b85ace34-2f09-4e7f-b53a-4773eaa7a416/export/json",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/workspace",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/vat/demo-status",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/vat/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/adjustment",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/vat/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/ai",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/vat/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/einvoicing",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/vat/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/invoice",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/vat/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/profile",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/vat/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/return",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/vat/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/rule",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/vat/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/runs",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/vat/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/runs/07be7315-370f-43fe-89ad-4e5ad9722284",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/vat/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/runs/07be7315-370f-43fe-89ad-4e5ad9722284/export/json",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/vat/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/runs/1d0d022f-235f-447d-9a0c-a7b7779cfaa8",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/vat/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/runs/1d0d022f-235f-447d-9a0c-a7b7779cfaa8/export/json",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/vat/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/workspace",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/vat/legislation",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/workspace/access",
+      "status": 200
+    },
+    {
+      "method": "GET",
+      "path": "/api/backend/workspace/dashboard",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/19eddd06-85a7-435a-9244-8ed1c4e4bef4",
+      "status": 200
+    },
+    {
+      "method": "PATCH",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/690e8b7a-f5ad-45eb-acc7-fee716e034cf",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/ai/command",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/citations/verify",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/investigations/161d8eff-ee36-4a54-82ab-3b00ebd34361/dispatch",
+      "status": 202
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/investigations/81d6e523-c7a5-4cc2-9174-523b0837bda5/dispatch",
+      "status": 202
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/investigations/c4ca6d90-f1cb-4a7e-988c-5a81c08b6313/dispatch",
+      "status": 202
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/investigations/f511f858-6ac1-4e4f-8863-6f10f617872f/dispatch",
+      "status": 202
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/workflows",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/ai/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/workflows/validate",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/dmtt/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/groups/c0d78d9e-04c3-42a1-a8a5-0df3c4762e28/calculate",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/19eddd06-85a7-435a-9244-8ed1c4e4bef4/actions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/690e8b7a-f5ad-45eb-acc7-fee716e034cf/actions",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/scoring",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/ml/jobs/1d004464-3253-4e9b-aaa3-19a68b53cba9/cancel",
+      "status": 409
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/ml/jobs/a1b90cce-eb95-40d9-917c-bff1390ceb4a/cancel",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/ml/training-jobs",
+      "status": 202
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/ai",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/ai/69e36581-3ef1-4860-99b8-ef3f6ed03f9b/decision",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/ai/c085de85-8940-41e2-ac19-d9de32884c8c/decision",
+      "status": 200
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/calculate/23cde258-d8db-4684-900c-e01afc21b068",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/calculate/ceae16c1-9565-4747-88d9-cc4cc9b764ac",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/tp/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/matrix/3f21a6e8-0c57-4ee4-8e09-75b03752e5f8",
+      "status": 201
+    },
+    {
+      "method": "POST",
+      "path": "/api/backend/vat/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/computations/f7a045a4-2e92-5f4b-9671-e544ec152368",
+      "status": 201
+    },
+    {
+      "method": "PUT",
+      "path": "/api/backend/platform/tenants/1956c54b-48a7-5a60-ae0a-411c98d426ef/subscription",
+      "status": 200
+    }
+  ],
+  "note": "Observed navigation/responses are not proof that every action or contract is verified. Some observations include earlier failing runs retained for defect investigation."
+}

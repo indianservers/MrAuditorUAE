@@ -1,5 +1,6 @@
 "use client";
 import { Chart, Heatmap } from "@/components/charts";
+import { MLSignals } from "./ml-signals";
 import type { ChartDatum } from "@/components/charts/financial-chart";
 import {
   FinancialDataGrid,
@@ -50,6 +51,7 @@ type Summary = {
 export function Analytics() {
   return (
     <>
+      <MLSignals />
       <PageHeader
         eyebrow="Audit Intelligence › Risk Investigation"
         title="AI Audit Risk Investigation Studio"

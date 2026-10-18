@@ -1,0 +1,585 @@
+{
+  "agents": [
+    {
+      "id": "orchestrator",
+      "description": "Audit Orchestrator",
+      "task_types": [
+        "revenue",
+        "corporate-tax",
+        "qfzp",
+        "transfer-pricing",
+        "pillar-two",
+        "document-ledger",
+        "grc-monitoring",
+        "audit-planning",
+        "monthly-anomalies",
+        "reconciliation",
+        "evidence-request",
+        "workpaper-review",
+        "vat-exceptions",
+        "loan-interest",
+        "ifrs-disclosure"
+      ],
+      "allowed_tools": [],
+      "required_permissions": [],
+      "input_schema": "ToolInput/v1",
+      "output_schema": "ToolResult/v1",
+      "prompt_version": "enterprise-ai/1",
+      "max_tool_calls": 12,
+      "max_duration_seconds": 90,
+      "max_context_characters": 11000,
+      "max_output_tokens": 1000,
+      "cost_budget": "external calls disabled unless explicitly approved in existing gateway",
+      "error_policy": "record bounded failure; preserve partial state",
+      "approval_policy": "propose only; independent professional review",
+      "audit_logging": true
+    },
+    {
+      "id": "financial",
+      "description": "Financial Data Agent",
+      "task_types": [
+        "revenue",
+        "corporate-tax",
+        "document-ledger",
+        "audit-planning",
+        "monthly-anomalies",
+        "reconciliation",
+        "loan-interest"
+      ],
+      "allowed_tools": [
+        "financial.get_general_ledger",
+        "financial.get_trial_balance",
+        "financial.get_reconciliation"
+      ],
+      "required_permissions": [
+        "accounting.read",
+        "analytics.read"
+      ],
+      "input_schema": "ToolInput/v1",
+      "output_schema": "ToolResult/v1",
+      "prompt_version": "enterprise-ai/1",
+      "max_tool_calls": 12,
+      "max_duration_seconds": 90,
+      "max_context_characters": 11000,
+      "max_output_tokens": 1000,
+      "cost_budget": "external calls disabled unless explicitly approved in existing gateway",
+      "error_policy": "record bounded failure; preserve partial state",
+      "approval_policy": "propose only; independent professional review",
+      "audit_logging": true
+    },
+    {
+      "id": "audit",
+      "description": "External Audit Agent",
+      "task_types": [
+        "revenue",
+        "document-ledger",
+        "audit-planning",
+        "monthly-anomalies",
+        "evidence-request",
+        "workpaper-review"
+      ],
+      "allowed_tools": [
+        "audit.get_risks",
+        "audit.get_working_papers",
+        "audit.get_analytics",
+        "audit.get_evidence"
+      ],
+      "required_permissions": [
+        "analytics.read",
+        "audit.read"
+      ],
+      "input_schema": "ToolInput/v1",
+      "output_schema": "ToolResult/v1",
+      "prompt_version": "enterprise-ai/1",
+      "max_tool_calls": 12,
+      "max_duration_seconds": 90,
+      "max_context_characters": 11000,
+      "max_output_tokens": 1000,
+      "cost_budget": "external calls disabled unless explicitly approved in existing gateway",
+      "error_policy": "record bounded failure; preserve partial state",
+      "approval_policy": "propose only; independent professional review",
+      "audit_logging": true
+    },
+    {
+      "id": "ifrs",
+      "description": "IFRS Reporting Agent",
+      "task_types": [
+        "revenue",
+        "corporate-tax",
+        "qfzp",
+        "ifrs-disclosure"
+      ],
+      "allowed_tools": [
+        "ifrs.get_financial_statements",
+        "ifrs.get_schedules"
+      ],
+      "required_permissions": [
+        "ifrs.read"
+      ],
+      "input_schema": "ToolInput/v1",
+      "output_schema": "ToolResult/v1",
+      "prompt_version": "enterprise-ai/1",
+      "max_tool_calls": 12,
+      "max_duration_seconds": 90,
+      "max_context_characters": 11000,
+      "max_output_tokens": 1000,
+      "cost_budget": "external calls disabled unless explicitly approved in existing gateway",
+      "error_policy": "record bounded failure; preserve partial state",
+      "approval_policy": "propose only; independent professional review",
+      "audit_logging": true
+    },
+    {
+      "id": "tax",
+      "description": "UAE Corporate Tax Agent",
+      "task_types": [
+        "corporate-tax",
+        "qfzp",
+        "loan-interest"
+      ],
+      "allowed_tools": [
+        "tax.get_ct_computation",
+        "tax.get_qfzp_assessment",
+        "tax.get_interest_schedule"
+      ],
+      "required_permissions": [
+        "tax.profile.read"
+      ],
+      "input_schema": "ToolInput/v1",
+      "output_schema": "ToolResult/v1",
+      "prompt_version": "enterprise-ai/1",
+      "max_tool_calls": 12,
+      "max_duration_seconds": 90,
+      "max_context_characters": 11000,
+      "max_output_tokens": 1000,
+      "cost_budget": "external calls disabled unless explicitly approved in existing gateway",
+      "error_policy": "record bounded failure; preserve partial state",
+      "approval_policy": "propose only; independent professional review",
+      "audit_logging": true
+    },
+    {
+      "id": "vat",
+      "description": "UAE VAT Agent",
+      "task_types": [
+        "revenue",
+        "vat-exceptions"
+      ],
+      "allowed_tools": [
+        "vat.get_reconciliation",
+        "vat.get_invoice_exceptions"
+      ],
+      "required_permissions": [
+        "vat.read"
+      ],
+      "input_schema": "ToolInput/v1",
+      "output_schema": "ToolResult/v1",
+      "prompt_version": "enterprise-ai/1",
+      "max_tool_calls": 12,
+      "max_duration_seconds": 90,
+      "max_context_characters": 11000,
+      "max_output_tokens": 1000,
+      "cost_budget": "external calls disabled unless explicitly approved in existing gateway",
+      "error_policy": "record bounded failure; preserve partial state",
+      "approval_policy": "propose only; independent professional review",
+      "audit_logging": true
+    },
+    {
+      "id": "tp",
+      "description": "Transfer Pricing Agent",
+      "task_types": [
+        "revenue",
+        "transfer-pricing",
+        "loan-interest"
+      ],
+      "allowed_tools": [
+        "tp.get_related_party_transactions",
+        "tp.get_benchmark_study",
+        "tp.get_loan_analysis"
+      ],
+      "required_permissions": [
+        "tp.read"
+      ],
+      "input_schema": "ToolInput/v1",
+      "output_schema": "ToolResult/v1",
+      "prompt_version": "enterprise-ai/1",
+      "max_tool_calls": 12,
+      "max_duration_seconds": 90,
+      "max_context_characters": 11000,
+      "max_output_tokens": 1000,
+      "cost_budget": "external calls disabled unless explicitly approved in existing gateway",
+      "error_policy": "record bounded failure; preserve partial state",
+      "approval_policy": "propose only; independent professional review",
+      "audit_logging": true
+    },
+    {
+      "id": "dmtt",
+      "description": "Pillar Two / DMTT Agent",
+      "task_types": [
+        "pillar-two"
+      ],
+      "allowed_tools": [
+        "dmtt.get_scope_assessment",
+        "dmtt.get_etr_calculation"
+      ],
+      "required_permissions": [
+        "dmtt.read"
+      ],
+      "input_schema": "ToolInput/v1",
+      "output_schema": "ToolResult/v1",
+      "prompt_version": "enterprise-ai/1",
+      "max_tool_calls": 12,
+      "max_duration_seconds": 90,
+      "max_context_characters": 11000,
+      "max_output_tokens": 1000,
+      "cost_budget": "external calls disabled unless explicitly approved in existing gateway",
+      "error_policy": "record bounded failure; preserve partial state",
+      "approval_policy": "propose only; independent professional review",
+      "audit_logging": true
+    },
+    {
+      "id": "grc",
+      "description": "Internal Audit & GRC Agent",
+      "task_types": [
+        "grc-monitoring"
+      ],
+      "allowed_tools": [
+        "grc.get_controls",
+        "grc.get_monitoring_alerts",
+        "grc.get_remediation_actions"
+      ],
+      "required_permissions": [
+        "grc.read",
+        "monitor.alert.review"
+      ],
+      "input_schema": "ToolInput/v1",
+      "output_schema": "ToolResult/v1",
+      "prompt_version": "enterprise-ai/1",
+      "max_tool_calls": 12,
+      "max_duration_seconds": 90,
+      "max_context_characters": 11000,
+      "max_output_tokens": 1000,
+      "cost_budget": "external calls disabled unless explicitly approved in existing gateway",
+      "error_policy": "record bounded failure; preserve partial state",
+      "approval_policy": "propose only; independent professional review",
+      "audit_logging": true
+    },
+    {
+      "id": "documents",
+      "description": "Document Intelligence Agent",
+      "task_types": [
+        "revenue",
+        "corporate-tax",
+        "qfzp",
+        "transfer-pricing",
+        "pillar-two",
+        "document-ledger",
+        "evidence-request",
+        "ifrs-disclosure"
+      ],
+      "allowed_tools": [
+        "documents.search",
+        "documents.get_authorized_excerpt"
+      ],
+      "required_permissions": [
+        "audit.read"
+      ],
+      "input_schema": "ToolInput/v1",
+      "output_schema": "ToolResult/v1",
+      "prompt_version": "enterprise-ai/1",
+      "max_tool_calls": 12,
+      "max_duration_seconds": 90,
+      "max_context_characters": 11000,
+      "max_output_tokens": 1000,
+      "cost_budget": "external calls disabled unless explicitly approved in existing gateway",
+      "error_policy": "record bounded failure; preserve partial state",
+      "approval_policy": "propose only; independent professional review",
+      "audit_logging": true
+    },
+    {
+      "id": "ml",
+      "description": "TensorFlow.js ML Investigation Agent",
+      "task_types": [
+        "revenue",
+        "monthly-anomalies"
+      ],
+      "allowed_tools": [
+        "ml.get_predictions",
+        "ml.get_model_evaluations"
+      ],
+      "required_permissions": [
+        "ml.read"
+      ],
+      "input_schema": "ToolInput/v1",
+      "output_schema": "ToolResult/v1",
+      "prompt_version": "enterprise-ai/1",
+      "max_tool_calls": 12,
+      "max_duration_seconds": 90,
+      "max_context_characters": 11000,
+      "max_output_tokens": 1000,
+      "cost_budget": "external calls disabled unless explicitly approved in existing gateway",
+      "error_policy": "record bounded failure; preserve partial state",
+      "approval_policy": "propose only; independent professional review",
+      "audit_logging": true
+    },
+    {
+      "id": "quality",
+      "description": "Quality & Professional Review Agent",
+      "task_types": [
+        "revenue",
+        "corporate-tax",
+        "qfzp",
+        "transfer-pricing",
+        "pillar-two",
+        "document-ledger",
+        "grc-monitoring",
+        "audit-planning",
+        "monthly-anomalies",
+        "reconciliation",
+        "evidence-request",
+        "workpaper-review",
+        "vat-exceptions",
+        "loan-interest",
+        "ifrs-disclosure"
+      ],
+      "allowed_tools": [
+        "quality.validate_sources"
+      ],
+      "required_permissions": [
+        "ai.investigation.read"
+      ],
+      "input_schema": "ToolInput/v1",
+      "output_schema": "ToolResult/v1",
+      "prompt_version": "enterprise-ai/1",
+      "max_tool_calls": 12,
+      "max_duration_seconds": 90,
+      "max_context_characters": 11000,
+      "max_output_tokens": 1000,
+      "cost_budget": "external calls disabled unless explicitly approved in existing gateway",
+      "error_policy": "record bounded failure; preserve partial state",
+      "approval_policy": "propose only; independent professional review",
+      "audit_logging": true
+    }
+  ],
+  "tools": {
+    "financial.get_general_ledger": [
+      "financial",
+      "accounting.read",
+      "ledger"
+    ],
+    "financial.get_trial_balance": [
+      "financial",
+      "accounting.read",
+      "balance"
+    ],
+    "financial.get_reconciliation": [
+      "financial",
+      "analytics.read",
+      "reconciliation"
+    ],
+    "audit.get_risks": [
+      "audit",
+      "audit.read",
+      "risks"
+    ],
+    "audit.get_working_papers": [
+      "audit",
+      "audit.read",
+      "working-papers"
+    ],
+    "audit.get_analytics": [
+      "audit",
+      "analytics.read",
+      "analytics"
+    ],
+    "audit.get_evidence": [
+      "audit",
+      "audit.read",
+      "evidence"
+    ],
+    "ifrs.get_financial_statements": [
+      "ifrs",
+      "ifrs.read",
+      "ifrs-run"
+    ],
+    "ifrs.get_schedules": [
+      "ifrs",
+      "ifrs.read",
+      "ifrs-records"
+    ],
+    "tax.get_ct_computation": [
+      "tax",
+      "tax.profile.read",
+      "tax-run"
+    ],
+    "tax.get_qfzp_assessment": [
+      "tax",
+      "tax.profile.read",
+      "tax-qfzp"
+    ],
+    "tax.get_interest_schedule": [
+      "tax",
+      "tax.profile.read",
+      "tax-interest"
+    ],
+    "vat.get_reconciliation": [
+      "vat",
+      "vat.read",
+      "vat-run"
+    ],
+    "vat.get_invoice_exceptions": [
+      "vat",
+      "vat.read",
+      "vat-invoice"
+    ],
+    "tp.get_related_party_transactions": [
+      "tp",
+      "tp.read",
+      "tp-transaction"
+    ],
+    "tp.get_benchmark_study": [
+      "tp",
+      "tp.read",
+      "tp-study"
+    ],
+    "tp.get_loan_analysis": [
+      "tp",
+      "tp.read",
+      "tp-loan"
+    ],
+    "dmtt.get_scope_assessment": [
+      "dmtt",
+      "dmtt.read",
+      "dmtt-group"
+    ],
+    "dmtt.get_etr_calculation": [
+      "dmtt",
+      "dmtt.read",
+      "dmtt-run"
+    ],
+    "grc.get_controls": [
+      "grc",
+      "grc.read",
+      "grc-control"
+    ],
+    "grc.get_monitoring_alerts": [
+      "grc",
+      "monitor.alert.review",
+      "alerts"
+    ],
+    "grc.get_remediation_actions": [
+      "grc",
+      "grc.read",
+      "grc-remediation"
+    ],
+    "ml.get_predictions": [
+      "ml",
+      "ml.read",
+      "inference"
+    ],
+    "ml.get_model_evaluations": [
+      "ml",
+      "ml.read",
+      "model"
+    ],
+    "documents.search": [
+      "documents",
+      "audit.read",
+      "search"
+    ],
+    "documents.get_authorized_excerpt": [
+      "documents",
+      "audit.read",
+      "excerpt"
+    ],
+    "quality.validate_sources": [
+      "quality",
+      "ai.investigation.read",
+      "quality"
+    ]
+  },
+  "input_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "query": {
+        "default": "",
+        "maxLength": 200,
+        "title": "Query",
+        "type": "string"
+      },
+      "source_id": {
+        "anyOf": [
+          {
+            "format": "uuid",
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Source Id"
+      },
+      "limit": {
+        "default": 20,
+        "maximum": 50,
+        "minimum": 1,
+        "title": "Limit",
+        "type": "integer"
+      }
+    },
+    "title": "ToolInput",
+    "type": "object"
+  },
+  "output_schema": {
+    "additionalProperties": false,
+    "properties": {
+      "status": {
+        "enum": [
+          "COMPLETED",
+          "MISSING",
+          "LIMITED",
+          "DENIED",
+          "FAILED"
+        ],
+        "title": "Status",
+        "type": "string"
+      },
+      "agent": {
+        "title": "Agent",
+        "type": "string"
+      },
+      "tool": {
+        "title": "Tool",
+        "type": "string"
+      },
+      "sources": {
+        "items": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "maxItems": 50,
+        "title": "Sources",
+        "type": "array"
+      },
+      "data": {
+        "additionalProperties": true,
+        "title": "Data",
+        "type": "object"
+      },
+      "uncertainty": {
+        "items": {
+          "type": "string"
+        },
+        "maxItems": 20,
+        "title": "Uncertainty",
+        "type": "array"
+      }
+    },
+    "required": [
+      "status",
+      "agent",
+      "tool"
+    ],
+    "title": "ToolResult",
+    "type": "object"
+  }
+}

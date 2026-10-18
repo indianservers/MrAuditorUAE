@@ -1,0 +1,11 @@
+
+Running 4 tests using 1 worker
+
+(node:2136) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 e2e\phase9.spec.ts:31:1 › 24 workspaces render with real persisted datasets and tax records (18.7s)
+  ok 2 e2e\phase9.spec.ts:98:1 › training controls run and cancel real Node worker jobs (11.0s)
+  ok 3 e2e\phase9.spec.ts:134:1 › DMTT calculation uses reviewed group and displays source-backed result (1.7s)
+  ok 4 e2e\phase9.spec.ts:152:1 › held-out confusion chart renders at enterprise widths (2.3s)
+
+  4 passed (34.5s)

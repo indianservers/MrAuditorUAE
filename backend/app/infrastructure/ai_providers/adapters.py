@@ -4,7 +4,25 @@ import json
 import httpx
 
 from app.modules.ai_engine.schemas import AIRequest, AIResponse, Summary
+from app.modules.audit_execution.ai_output import AuditAIOutput
 from app.modules.financial_ai.schemas import OUTPUTS
+from app.modules.tax.ai_output import TaxAIOutput
+from app.modules.tp.ai_output import TPAIOutput
+from app.modules.vat.ai_output import VATAIOutput
+
+
+def output_schema(task):
+    if task.startswith("tp_v8_"):
+        return TPAIOutput
+    if task.startswith("vat_v7_"):
+        return VATAIOutput
+    if task.startswith(("tax_v6_", "dmtt_v9_")):
+        return TaxAIOutput
+    return (
+        AuditAIOutput
+        if task.startswith(("audit_v4_", "grc_v10_", "enterprise_ai_v11_"))
+        else OUTPUTS.get(task, Summary)
+    )
 
 
 class ProviderFailure(Exception):
@@ -13,6 +31,98 @@ class ProviderFailure(Exception):
 
 class MockProvider:
     async def generate(self, request: AIRequest) -> AIResponse:
+        if request.task_type.startswith("tp_v8_"):
+            evidence = json.loads(request.text)
+            return AIResponse(
+                output=TPAIOutput(
+                    issue=evidence["task"],
+                    relevant_facts=["Synthetic supplied facts require independent verification"],
+                    applicable_legislation=evidence["legal_references"],
+                    tax_period=evidence["tax_period"],
+                    analysis="MOCK DIAGNOSTIC ONLY. No economic research, loan OCR, market data retrieval or arm's length determination performed.",
+                    potential_treatment="Undetermined pending professional economic review",
+                    missing_facts=["Authorized comparable evidence and economic assessment"],
+                    uncertainties=[
+                        "Substantive comparability and legal scope not independently established"
+                    ],
+                    supporting_references=evidence["evidence_ids"],
+                    required_human_action="Review original evidence, licensed source data and deterministic calculations; record an independent decision",
+                    requires_human_review=True,
+                    tax_position_approved=False,
+                    economic_risks=[
+                        "Unsupported comparable or market-rate inferences are prohibited"
+                    ],
+                    comparable_information_verified=False,
+                    arms_length_conclusion_approved=False,
+                ),
+                input_tokens=max(1, len(request.text.split())),
+                output_tokens=100,
+                usage_source="mock_word_estimate",
+            )
+        if request.task_type.startswith("vat_v7_"):
+            evidence = json.loads(request.text)
+            return AIResponse(
+                output=VATAIOutput(
+                    issue=evidence["task"],
+                    relevant_facts=["Selected synthetic source facts; require human verification"],
+                    applicable_legislation=evidence["legal_references"],
+                    tax_period=evidence["tax_period"],
+                    analysis="MOCK DIAGNOSTIC ONLY: no semantic VAT research or visual OCR performed.",
+                    potential_treatment="Undetermined pending professional review",
+                    missing_facts=["Original evidence and applicable conditions"],
+                    uncertainties=["Classification and evidence completeness not established"],
+                    supporting_references=evidence["evidence_ids"],
+                    required_human_action="Verify source facts and dated rules; approve any figure change separately",
+                    requires_human_review=True,
+                    tax_position_approved=False,
+                    risk="Unreviewed legal treatment",
+                    extracted_fields={},
+                    document_processing="NOT_PROCESSED",
+                ),
+                input_tokens=len(request.text.split()),
+                output_tokens=100,
+                usage_source="mock_word_estimate",
+            )
+        if request.task_type.startswith(("tax_v6_", "dmtt_v9_")):
+            evidence = json.loads(request.text)
+            return AIResponse(
+                output=TaxAIOutput(
+                    issue=evidence["task"],
+                    relevant_facts=["Supplied source records require verification"],
+                    applicable_legislation=evidence["legal_references"],
+                    tax_period=evidence["tax_period"],
+                    analysis="MOCK DIAGNOSTIC ONLY: no semantic legal analysis performed.",
+                    potential_treatment="Undetermined pending professional review",
+                    missing_facts=["Verify original documents and contradictory evidence"],
+                    uncertainties=["Legal eligibility and source completeness not established"],
+                    supporting_references=evidence["evidence_ids"],
+                    required_human_action="Review facts and approved period-specific legislation; record an independent decision",
+                    requires_human_review=True,
+                    tax_position_approved=False,
+                ),
+                input_tokens=len(request.text.split()),
+                output_tokens=80,
+                usage_source="mock_word_estimate",
+            )
+        if request.task_type.startswith(("audit_v4_", "grc_v10_", "enterprise_ai_v11_")):
+            evidence = json.loads(request.text)
+            return AIResponse(
+                output=AuditAIOutput(
+                    summary="MOCK DIAGNOSTIC ONLY: professional review of the supplied source records is required.",
+                    observations=[
+                        "Diagnostic transport output; no semantic audit analysis performed"
+                    ],
+                    proposed_procedures=[],
+                    missing_information=["Inspect original evidence"],
+                    citations=evidence["evidence_ids"],
+                    requires_human_review=True,
+                    evidence_sufficiency_determined=False,
+                    opinion_issued=False,
+                ),
+                input_tokens=len(request.text.split()),
+                output_tokens=50,
+                usage_source="mock_word_estimate",
+            )
         if request.task_type in OUTPUTS:
             evidence = json.loads(request.text)
             data = {
@@ -93,9 +203,7 @@ class OpenAICompatibleProvider:
                                 "json_schema": {
                                     "name": "summary",
                                     "strict": True,
-                                    "schema": OUTPUTS.get(
-                                        request.task_type, Summary
-                                    ).model_json_schema(),
+                                    "schema": output_schema(request.task_type).model_json_schema(),
                                 },
                             },
                         },
@@ -110,7 +218,7 @@ class OpenAICompatibleProvider:
                     data = response.json()
                     usage = data.get("usage", {})
                     return AIResponse(
-                        output=OUTPUTS.get(request.task_type, Summary).model_validate(
+                        output=output_schema(request.task_type).model_validate(
                             json.loads(data["choices"][0]["message"]["content"])
                         ),
                         input_tokens=usage.get("prompt_tokens"),

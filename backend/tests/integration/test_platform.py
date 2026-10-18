@@ -36,6 +36,10 @@ async def environment():
     # Database is reset through Alembic externally, not ORM create_all.
     async with Session() as db:
         async with db.begin():
+            from app.core.config import settings
+            from app.modules.demo.guard import test_database_guard
+
+            test_database_guard(settings(), await db.scalar(text("SELECT current_database()")))
             await db.execute(
                 text(
                     "TRUNCATE users, tenants, roles, permissions, refresh_sessions, tenant_memberships, membership_roles, role_permissions CASCADE"
@@ -233,7 +237,8 @@ async def test_tenant_isolation_rls_and_permissions(environment):
             db.add(MembershipRole(membership_id=member.id, role_id=role.id))
             b_id = tenant_b.id
     b_headers = {**headers, "X-Tenant-ID": str(b_id)}
-    assert (await client.get("/api/v1/clients/" + obj["id"], headers=b_headers)).status_code == 404
+    # Phase 4 client identities are restricted to allowlisted portal responses.
+    assert (await client.get("/api/v1/clients/" + obj["id"], headers=b_headers)).status_code == 403
     assert (
         await client.post("/api/v1/clients", headers=b_headers, json={"code": "B", "name": "Test"})
     ).status_code == 403
@@ -458,7 +463,7 @@ async def test_ready_health_and_resource_updates(environment):
         await client.patch(
             "/api/v1/engagements/" + engagement["id"],
             headers=headers,
-            json={"version": 1, "status": "active"},
+            json={"version": 1, "name": "Updated engagement"},
         )
     ).status_code == 200
     assert (

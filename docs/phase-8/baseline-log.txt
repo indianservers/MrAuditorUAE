@@ -1,0 +1,120 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.7.0
+rootdir: C:\Indian Servers\TheAuditor\backend
+configfile: pyproject.toml
+plugins: anyio-4.15.1, platformdirs-4.13.3, asyncio-1.4.0, cov-7.1.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collected 296 items
+
+backend\tests\ai\test_providers.py .............                         [  4%]
+backend\tests\integration\test_platform.py ...........                   [  8%]
+backend\tests\phase2\test_ai_storage.py ..........                       [ 11%]
+backend\tests\phase2\test_analytics.py ................................. [ 22%]
+....                                                                     [ 23%]
+backend\tests\phase2\test_calculations.py .............................. [ 34%]
+.....                                                                    [ 35%]
+backend\tests\phase2\test_connectors.py ...............                  [ 40%]
+backend\tests\phase2\test_live_connectors.py ss                          [ 41%]
+backend\tests\phase2\test_pipeline.py ............F......                [ 47%]
+backend\tests\phase3\test_workspace.py ....                              [ 49%]
+backend\tests\phase4\test_ai_and_calculations.py ....................... [ 57%]
+.....                                                                    [ 58%]
+backend\tests\phase4\test_workflows.py ..................                [ 64%]
+backend\tests\phase5\test_calculations.py .............                  [ 69%]
+backend\tests\phase5\test_reporting.py .......                           [ 71%]
+backend\tests\phase6\test_calculations.py ....................           [ 78%]
+backend\tests\phase6\test_grounding.py .                                 [ 78%]
+backend\tests\phase6\test_specialist_workflows.py ....                   [ 80%]
+backend\tests\phase6\test_workflows.py ........                          [ 82%]
+backend\tests\phase7\test_documents.py .                                 [ 83%]
+backend\tests\phase7\test_regression_fixes.py ..                         [ 83%]
+backend\tests\phase7\test_vat_calculations.py ............               [ 87%]
+backend\tests\phase7\test_vat_workflows.py ......                        [ 89%]
+backend\tests\phase7\test_worker_security.py ..                          [ 90%]
+backend\tests\security\test_security.py ....................             [ 97%]
+backend\tests\unit\test_api.py .....                                     [ 98%]
+backend\tests\unit\test_schema.py ..F                                    [100%]
+
+================================== FAILURES ===================================
+____________________ test_synthetic_fixture_demonstration _____________________
+
+environment = <httpx.AsyncClient object at 0x00000250D6392810>
+
+    async def test_synthetic_fixture_demonstration(environment):
+        from pathlib import Path
+    
+        client = environment
+        headers, options = await scope(client)
+        fixture = Path("tests/fixtures/phase2")
+>       manifest = json.loads((fixture / "manifest.json").read_text(encoding="utf-8"))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\phase2\test_pipeline.py:513: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\Sai Satish\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1027: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('tests/fixtures/phase2/manifest.json'), mode = 'r'
+buffering = -1, encoding = 'utf-8', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'tests\\fixtures\\phase2\\manifest.json'
+
+C:\Users\Sai Satish\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError
+---------------------------- Captured stderr call -----------------------------
+{"timestamp": "2026-10-17T23:25:39.749615+00:00", "level": "INFO", "event": "http.request", "request_id": "7ddee7e3-8abc-4bbc-8361-d8675d90a2d8", "status": 201}
+{"timestamp": "2026-10-17T23:25:39.753747+00:00", "level": "INFO", "event": "http.request", "request_id": "74c3be2a-84be-4d13-a408-0b95ba4a0f85", "status": 200}
+{"timestamp": "2026-10-17T23:25:39.764148+00:00", "level": "INFO", "event": "http.request", "request_id": "c82f6948-432c-48eb-85bd-968b531f475f", "status": 201}
+{"timestamp": "2026-10-17T23:25:39.776503+00:00", "level": "INFO", "event": "http.request", "request_id": "38a45b02-7d84-4326-8dcd-77ef1c2fe80a", "status": 201}
+{"timestamp": "2026-10-17T23:25:39.788387+00:00", "level": "INFO", "event": "http.request", "request_id": "61aeedc1-8aa0-46e6-8f63-241ff396667a", "status": 201}
+------------------------------ Captured log call ------------------------------
+INFO     auditos:main.py:134 request
+INFO     auditos:main.py:134 request
+INFO     auditos:main.py:134 request
+INFO     auditos:main.py:134 request
+INFO     auditos:main.py:134 request
+_______________ test_frozen_migration_has_rls_and_no_create_all _______________
+
+    def test_frozen_migration_has_rls_and_no_create_all():
+>       source = Path("alembic/versions/0001_foundation.py").read_text()
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+backend\tests\unit\test_schema.py:36: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+C:\Users\Sai Satish\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1027: in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = WindowsPath('alembic/versions/0001_foundation.py'), mode = 'r'
+buffering = -1, encoding = 'locale', errors = None, newline = None
+
+    def open(self, mode='r', buffering=-1, encoding=None,
+             errors=None, newline=None):
+        """
+        Open the file pointed to by this path and return a file object, as
+        the built-in open() function does.
+        """
+        if "b" not in mode:
+            encoding = io.text_encoding(encoding)
+>       return io.open(self, mode, buffering, encoding, errors, newline)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'alembic\\versions\\0001_foundation.py'
+
+C:\Users\Sai Satish\AppData\Local\Programs\Python\Python312\Lib\pathlib.py:1013: FileNotFoundError
+- generated xml file: C:\Indian Servers\TheAuditor\docs\phase-8\baseline.xml --
+=========================== short test summary info ===========================
+FAILED backend\tests\phase2\test_pipeline.py::test_synthetic_fixture_demonstration
+FAILED backend\tests\unit\test_schema.py::test_frozen_migration_has_rls_and_no_create_all
+============ 2 failed, 292 passed, 2 skipped in 154.73s (0:02:34) =============

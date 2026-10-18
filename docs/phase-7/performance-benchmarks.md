@@ -1,0 +1,7 @@
+# Performance Benchmarks
+
+Executed `python ../scripts/benchmark_accounting.py --sizes 10000 100000 250000 --output ../docs/phase-7/scale-file-benchmarks.json` using backend venv. See JSON for exact timings/RSS. On this Windows host (Python3.12.10,12 logical CPUs), 250k file rows: ingestion9.5301s, validation/TB0.7886s, DuckDB analytics3.8497s, peak process RSS240,836,608bytes. Independent source reconciliation passed for all10k/100k/250k populations. File timings exclude PostgreSQL persistence and are not end-to-end import throughput.
+
+Actual PostgreSQL imports were performed in30 chunks of8,334 rows (250,020 total); each chunk's timings are in demo-manifest.json. Queries recomputed the full250k population integrity. Actual local invoice list API20-request sample: p50 0.021343s, p95 0.022985s. Sequential warm local requests do not measure concurrent production capacity. VAT grid loads50 rows/server page; approved invoice computation is bounded20k but synchronous and not benchmarked at20k.
+
+The restarted solo Celery worker completed20 fresh diagnostic jobs (worker-log.txt). Latest verification fetched20 completed job states in0.3399s using idempotent replay keys; that replay time is not execution throughput. This measures harmless diagnostics, not financial imports or CPU-heavy worker throughput. No large concurrent soak, cloud PostgreSQL, object-store or live ASP latency test was run. Model cost/latency is unmeasured for external AI. Hardware/concurrency limitations must be considered before production sizing.

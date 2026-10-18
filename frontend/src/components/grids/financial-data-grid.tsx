@@ -67,6 +67,7 @@ export function FinancialDataGrid({
   name = "financial",
   currency = "",
   server = false,
+  exportable = true,
 }: {
   rows: RecordRow[];
   columns: ColDef<RecordRow>[];
@@ -76,6 +77,7 @@ export function FinancialDataGrid({
   name?: string;
   currency?: string;
   server?: boolean;
+  exportable?: boolean;
 }) {
   const ref = useRef<AgGridReact<RecordRow>>(null);
   const { density, setDensity } = useUI();
@@ -164,13 +166,13 @@ export function FinancialDataGrid({
             <RotateCcw size={13} />
           </Button>
           <Button
-            disabled={!rows.length}
+            disabled={!rows.length || !exportable}
             onClick={() => {
               const displayed: RecordRow[] = [];
               ref.current?.api?.forEachNodeAfterFilterAndSort((n) => {
                 if (n.data) displayed.push(n.data);
               });
-              downloadCSV(name + "-loaded-page.csv", displayed);
+              if (exportable) downloadCSV(name + "-loaded-page.csv", displayed);
             }}
           >
             <Download size={13} /> CSV · page
@@ -204,9 +206,15 @@ export function FinancialDataGrid({
             checkboxes: true,
           }}
           onRowClicked={(e) => {
+            if (
+              e.event?.target instanceof Element &&
+              e.event.target.closest(".ag-selection-checkbox")
+            )
+              return;
             if (e.data) onSelect?.(e.data);
           }}
           onSelectionChanged={(e) => {
+            if (!["checkboxSelected", "spaceKey"].includes(e.source)) return;
             const selected = e.api.getSelectedRows()[0];
             if (selected) onSelect?.(selected);
           }}

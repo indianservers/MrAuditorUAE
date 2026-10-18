@@ -1,0 +1,63 @@
+{
+  "runtime": {
+    "node": "v24.15.0",
+    "tfjs": "4.22.0",
+    "backend": "cpu",
+    "cpu": "12th Gen Intel(R) Core(TM) i5-12400F",
+    "logical_cpus": 12,
+    "total_memory_bytes": 34190524416,
+    "platform": "win32"
+  },
+  "model_load_seconds": 0.007482699999999965,
+  "results": [
+    {
+      "records": 10000,
+      "feature_seconds": 0.06712319999999994,
+      "preprocess_seconds": 0.017334100000000036,
+      "inference_seconds": 0.07170090000000005,
+      "predictions": 10000,
+      "rss_bytes": 478461952,
+      "cpu_microseconds": {
+        "user": 203000,
+        "system": 63000
+      }
+    },
+    {
+      "records": 100000,
+      "feature_seconds": 0.4325879000000001,
+      "preprocess_seconds": 0.020943399999999883,
+      "inference_seconds": 0.22669589999999995,
+      "predictions": 100000,
+      "rss_bytes": 532049920,
+      "cpu_microseconds": {
+        "user": 734000,
+        "system": 62000
+      }
+    },
+    {
+      "records": 250000,
+      "feature_seconds": 0.8671447000000001,
+      "preprocess_seconds": 0.03557659999999987,
+      "inference_seconds": 0.5149801000000003,
+      "predictions": 250000,
+      "rss_bytes": 652738560,
+      "cpu_microseconds": {
+        "user": 1531000,
+        "system": 78000
+      }
+    }
+  ],
+  "million_records": "Not run: only 263224 source/fixture rows available; no invented throughput",
+  "scope": "Local sequential pure JavaScript CPU, dense inference excluding DB/network. Memory is whole-process RSS.",
+  "database": {
+    "journal_lines": 250024,
+    "count_query_seconds": 0.047616899999411544
+  },
+  "dmtt": {
+    "entities": 500,
+    "calculations": 100,
+    "seconds": 0.17834489999950165,
+    "scope": "Repeated typed synthetic golden-test schedules; pure Decimal arithmetic excluding database and source-review overhead",
+    "allocation_reconciles": true
+  }
+}

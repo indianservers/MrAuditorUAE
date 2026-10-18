@@ -1,0 +1,21 @@
+{
+  "revision": "0006",
+  "tables": [
+    {
+      "relname": "ct_computation_runs",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ct_loss_postings",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "ct_current_releases",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    }
+  ],
+  "non_superuser": true
+}

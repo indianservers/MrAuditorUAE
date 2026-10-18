@@ -1,0 +1,43 @@
+{
+  "families": [
+    {
+      "family": "autoencoder",
+      "model_id": "ad19a351-d6d5-4310-919a-c6b1fd28476c",
+      "deployment_id": "22baac90-d325-4deb-97a2-e1b431cbd9bf",
+      "inference_id": "ef28454d-45a3-4753-bd83-1534275758ed",
+      "predictions": 1000,
+      "reload_max_delta": 0,
+      "drift_features": 16
+    },
+    {
+      "family": "journal-classifier",
+      "model_id": "b8546696-ff08-47a0-9e26-589fa1279367",
+      "deployment_id": "374172cf-1d9b-412a-a020-bb7d06c3c978",
+      "inference_id": "a24dd17d-8e8d-488e-94fe-aa2faa70e423",
+      "predictions": 1000,
+      "reload_max_delta": 0,
+      "drift_features": 16
+    },
+    {
+      "family": "risk-ranking",
+      "model_id": "3934d7b7-36e2-44d1-bd4f-b43a6413be22",
+      "deployment_id": "acaa7b2e-61cf-4f36-9cf9-e7f16a5c6954",
+      "inference_id": "7e709303-e3f2-4c71-bc00-d441eeb679fc",
+      "predictions": 1000,
+      "reload_max_delta": 0,
+      "drift_features": 16
+    },
+    {
+      "family": "account-classifier",
+      "model_id": "20bce302-bf5d-4d55-b402-d5440c16d631",
+      "deployment_id": "00781ac7-0342-42e9-a036-638375eb18d2",
+      "inference_id": "07baad18-ae66-4b83-b5cc-ffb2993c00a5",
+      "predictions": 1000,
+      "reload_max_delta": 0,
+      "drift_features": 32
+    }
+  ],
+  "rollback_model_id": "ad19a351-d6d5-4310-919a-c6b1fd28476c",
+  "auditor_internal_denied": true,
+  "client_internal_denied": true
+}

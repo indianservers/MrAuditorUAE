@@ -1,0 +1,16 @@
+
+> auditos-frontend@0.3.0 test:e2e:phase7
+> playwright test --config playwright.phase7.config.ts
+
+
+Running 5 tests using 1 worker
+
+(node:20988) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 e2e\phase7.spec.ts:21:1 › fourteen VAT workspaces render persisted synthetic data (9.9s)
+  ok 2 e2e\phase7.spec.ts:54:1 › VAT calculation retrieves ledger reconciliation and downloads immutable JSON (2.7s)
+  ok 3 e2e\phase7.spec.ts:78:1 › readonly VAT reviewer cannot prepare and mobile workspace remains usable (1.2s)
+  ok 4 e2e\phase7.spec.ts:98:1 › prior phase audit IFRS and Corporate Tax workspaces remain usable (9.3s)
+  ok 5 e2e\phase7.spec.ts:168:1 › audit administration and core route regression (6.4s)
+
+  5 passed (30.3s)

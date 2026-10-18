@@ -1,0 +1,8 @@
+{
+  "synthetic_tenant_only": "8733db06-81bc-59b3-afcc-bf0f4c0cd8a2",
+  "copied_objects": 1,
+  "existing_identical_objects": 0,
+  "bytes_copied": 7656,
+  "legacy_objects_preserved": true,
+  "operation": "copy missing immutable synthetic versions; no deletion or overwrite"
+}

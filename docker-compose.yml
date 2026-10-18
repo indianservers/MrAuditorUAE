@@ -83,7 +83,7 @@ services:
     build: ./backend
     volumes: ["source_objects:/srv/backend/source-objects"]
     environment: *app-environment
-    command: ["celery", "-A", "app.workers.celery_app:celery_app", "worker", "--loglevel=WARNING", "--concurrency=2"]
+    command: ["celery", "-A", "app.workers.celery_app:celery_app", "worker", "-Q", "celery,grc,enterprise-ai", "--loglevel=WARNING", "--concurrency=2"]
     depends_on:
       migrate: {condition: service_completed_successfully}
       redis: {condition: service_healthy}

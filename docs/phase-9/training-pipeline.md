@@ -1,0 +1,3 @@
+# Training Pipeline
+
+FastAPI authorizes a private dataset version; Redis/Celery launches a bounded dedicated Node process. TensorFlow callbacks record real epochs/losses, select validation checkpoints and stop early. Test/OOD metrics are calculated after selection. Genuine model.json, weights.bin and metadata.json are stored privately with hashes. Fresh load reproduces recorded predictions within 1e-6 (all four measured zero). Independent approval precedes experimental deployment. Curation never triggers automatic retraining. Cancellation/progress use permission checks without the engagement lock held during fitting.

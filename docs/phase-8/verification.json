@@ -1,0 +1,60 @@
+{
+  "synthetic": true,
+  "role_probes": [
+    {
+      "role": "TP Analyst",
+      "workspace": 200
+    },
+    {
+      "role": "TP Manager",
+      "workspace": 200
+    },
+    {
+      "role": "Transfer Pricing Director",
+      "workspace": 200
+    },
+    {
+      "role": "TP Economist",
+      "workspace": 200
+    },
+    {
+      "role": "Financial Analyst",
+      "workspace": 200
+    },
+    {
+      "role": "TP Read-only Reviewer",
+      "workspace": 200
+    },
+    {
+      "role": "Auditor",
+      "disabled": false,
+      "workspace": 403
+    },
+    {
+      "role": "Client Viewer",
+      "disabled": false,
+      "workspace": 403
+    },
+    {
+      "role": "Auditor",
+      "disabled": true,
+      "workspace": 401
+    }
+  ],
+  "base_sources": {
+    "journal_lines": 250024,
+    "unbalanced_journals": 0,
+    "source_snapshots_reconciled": 30,
+    "approved_ifrs_runs_current": 10
+  },
+  "readonly_calculate": 403,
+  "candidate_count": 0,
+  "worker_job": {
+    "id": "26454279-d8ea-4972-96b5-412e6f65160f",
+    "status": "completed",
+    "progress": 100,
+    "resource_id": "2bb5d0fb-80d4-441a-9ee1-04b2137a8a36"
+  },
+  "readonly_job_read": 403,
+  "browser_ai_source_id": "37270031-aa74-476c-b810-c40acf0ceb6c"
+}

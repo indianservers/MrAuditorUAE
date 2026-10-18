@@ -19,6 +19,7 @@ from app.modules.connectors.secrets import decrypt, encrypt
 from app.modules.connectors.service import zoho_sync
 from app.modules.connectors.zoho import REGIONS, ZohoConnector
 from app.modules.lineage.storage import ObjectStore
+from app.modules.saas.storage import put_private
 
 router = APIRouter(tags=["Accounting connectors"])
 Manage = Annotated[Context, Depends(require("connectors.manage"))]
@@ -240,7 +241,7 @@ async def chunk(identifier: uuid.UUID, index: int, db: DB, ctx: Write, request: 
         if existing["sha256"] != sha:
             raise HTTPException(409, "Chunk retry content differs")
     else:
-        stored = ObjectStore().put(str(ctx.tenant_id), io.BytesIO(data))
+        stored = await put_private(db, ctx, io.BytesIO(data))
         session.chunks = {**session.chunks, str(index): stored}
     return {"index": index, "sha256": sha, "status": "stored"}
 

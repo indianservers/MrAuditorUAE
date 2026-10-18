@@ -180,6 +180,21 @@ async def sampling(db: AsyncSession, ctx: Context, request: SamplingRequest):
             params: list[Any] = []
             if request.method == "full":
                 query = "SELECT id,1 hits FROM p ORDER BY id"
+            elif request.method == "judgmental":
+                if not request.selected_line_ids or not request.selection_rationale.strip():
+                    raise HTTPException(
+                        422,
+                        "Judgmental selection requires documented rationale and explicit population items",
+                    )
+                chosen = sorted({str(i) for i in request.selected_line_ids})
+                placeholders = ",".join("?" for _ in chosen)
+                matched = engine.db.execute(
+                    "SELECT count(*) FROM p WHERE id IN (" + placeholders + ")", chosen
+                ).fetchone()[0]
+                if matched != len(chosen):
+                    raise HTTPException(422, "Judgmental item outside the source population")
+                query = "SELECT id,1 hits FROM p WHERE id IN (" + placeholders + ") ORDER BY id"
+                params = chosen
             elif request.method == "high_value":
                 query = "SELECT id,1 hits FROM p WHERE amount>=? ORDER BY id"
                 params = [request.threshold]

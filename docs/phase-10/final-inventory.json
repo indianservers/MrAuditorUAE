@@ -1,0 +1,152 @@
+{
+  "synthetic": true,
+  "journal_lines": 250024,
+  "alerts": 13320,
+  "rcm_total": 300,
+  "rcm_distinct_pairs": 300,
+  "grc_records": [
+    {
+      "kind": "grc-alert-decision",
+      "status": "APPROVED",
+      "count": 1
+    },
+    {
+      "kind": "grc-assessment",
+      "status": "APPROVED",
+      "count": 100
+    },
+    {
+      "kind": "grc-board",
+      "status": "APPROVED",
+      "count": 2
+    },
+    {
+      "kind": "grc-closure",
+      "status": "APPROVED",
+      "count": 1
+    },
+    {
+      "kind": "grc-control",
+      "status": "APPROVED",
+      "count": 200
+    },
+    {
+      "kind": "grc-deficiency",
+      "status": "APPROVED",
+      "count": 51
+    },
+    {
+      "kind": "grc-engagement",
+      "status": "APPROVED",
+      "count": 10
+    },
+    {
+      "kind": "grc-framework",
+      "status": "APPROVED",
+      "count": 1
+    },
+    {
+      "kind": "grc-kri",
+      "status": "APPROVED",
+      "count": 20
+    },
+    {
+      "kind": "grc-link",
+      "status": "APPROVED",
+      "count": 300
+    },
+    {
+      "kind": "grc-monitor-rule",
+      "status": "APPROVED",
+      "count": 32
+    },
+    {
+      "kind": "grc-obligation",
+      "status": "APPROVED",
+      "count": 20
+    },
+    {
+      "kind": "grc-plan",
+      "status": "APPROVED",
+      "count": 1
+    },
+    {
+      "kind": "grc-policy",
+      "status": "APPROVED",
+      "count": 1
+    },
+    {
+      "kind": "grc-qaip",
+      "status": "APPROVED",
+      "count": 1
+    },
+    {
+      "kind": "grc-remediation",
+      "status": "APPROVED",
+      "count": 101
+    },
+    {
+      "kind": "grc-report",
+      "status": "APPROVED",
+      "count": 1
+    },
+    {
+      "kind": "grc-report",
+      "status": "REVIEW_NOTES",
+      "count": 1
+    },
+    {
+      "kind": "grc-risk",
+      "status": "APPROVED",
+      "count": 100
+    },
+    {
+      "kind": "grc-scoring",
+      "status": "APPROVED",
+      "count": 1
+    },
+    {
+      "kind": "grc-scoring",
+      "status": "IN_PROGRESS",
+      "count": 3
+    },
+    {
+      "kind": "grc-scoring",
+      "status": "REVIEW_REQUIRED",
+      "count": 1
+    },
+    {
+      "kind": "grc-sod-access",
+      "status": "APPROVED",
+      "count": 1
+    },
+    {
+      "kind": "grc-sod-rule",
+      "status": "APPROVED",
+      "count": 1
+    },
+    {
+      "kind": "grc-test",
+      "status": "APPROVED",
+      "count": 102
+    },
+    {
+      "kind": "grc-third-party",
+      "status": "APPROVED",
+      "count": 10
+    },
+    {
+      "kind": "grc-universe",
+      "status": "APPROVED",
+      "count": 10
+    }
+  ],
+  "monitor_jobs": {
+    "completed": 9
+  },
+  "database_role": {
+    "name": "auditos_phase4_app",
+    "superuser": false,
+    "bypassrls": false
+  }
+}

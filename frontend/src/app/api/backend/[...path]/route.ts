@@ -2,13 +2,17 @@ import { backend, failure, noStore, sameOrigin } from "@/lib/auth/server";
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 const allowed =
-  /^(tenants|workspace(?:\/.*)?|clients(?:\/[a-f0-9-]+)?|entities(?:\/[a-f0-9-]+)?|engagements(?:\/[a-f0-9-]+)?|financial-periods|accounting(?:\/.*)?|analytics(?:\/.*)?|reconciliation(?:\/.*)?|sampling(?:\/.*)?|connectors(?:\/.*)?|ai(?:\/.*)?|jobs(?:\/.*)?)$/;
+  /^(tenants|workspace(?:\/.*)?|clients(?:\/[a-f0-9-]+)?|entities(?:\/[a-f0-9-]+)?|engagements(?:\/[a-f0-9-]+(?:\/audit(?:\/[a-z0-9-]+)*)?)?|admin(?:\/[a-z0-9-]+)*|client-portal(?:\/[a-z0-9-]+)*|financial-periods|accounting(?:\/.*)?|analytics(?:\/.*)?|reconciliation(?:\/.*)?|sampling(?:\/.*)?|connectors(?:\/.*)?|vat(?:\/.*)?|tax(?:\/.*)?|ifrs(?:\/.*)?|ai(?:\/.*)?|jobs(?:\/.*)?)$/;
 async function proxy(
   request: NextRequest,
   context: { params: Promise<{ path: string[] }> },
 ) {
   const path = (await context.params).path.join("/");
-  if (!allowed.test(path) || path.includes("..") || path.includes("%"))
+  if (
+    (!allowed.test(path) && !/^(?:tp|ml|dmtt|grc|governance|platform|subscriptions)(?:\/[a-zA-Z0-9/-]+)?$/.test(path) && !/^auth\/mfa(?:\/(?:enroll|confirm))?$/.test(path)) ||
+    path.includes("..") ||
+    path.includes("%")
+  )
     return failure(404, "Unknown API resource");
   if (request.method !== "GET" && !sameOrigin(request))
     return failure(403, "Same-origin request required");
@@ -51,6 +55,16 @@ async function proxy(
       headers: {
         ...noStore,
         "Content-Type": r.headers.get("content-type") || "application/json",
+        ...(r.headers.get("content-disposition")
+          ? { "Content-Disposition": r.headers.get("content-disposition")! }
+          : {}),
+        ...(r.headers.get("content-security-policy")
+          ? {
+              "Content-Security-Policy": r.headers.get(
+                "content-security-policy",
+              )!,
+            }
+          : {}),
       },
     });
   } catch {

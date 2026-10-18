@@ -1,0 +1,78 @@
+ 
+ -------------- phase8-demo@localhost v5.6.3 (recovery)
+--- ***** ----- 
+-- ******* ---- Windows-11-10.0.26200-SP0 2026-10-18 05:35:06
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         auditos:0x13e28841520
+- ** ---------- .> transport:   redis://127.0.0.1:56379/13
+- ** ---------- .> results:     disabled://
+- *** --- * --- .> concurrency: 1 (solo)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+                
+
+[tasks]
+  . auditos.accounting
+  . auditos.diagnostic
+
+[2026-10-18 05:35:06,121: INFO/MainProcess] Connected to redis://127.0.0.1:56379/13
+[2026-10-18 05:35:06,123: INFO/MainProcess] mingle: searching for neighbors
+[2026-10-18 05:35:07,140: INFO/MainProcess] mingle: all alone
+[2026-10-18 05:35:07,145: INFO/MainProcess] phase8-demo@localhost ready.
+[2026-10-18 05:41:07,393: INFO/MainProcess] Task auditos.accounting[51317d4e-e1c4-4d37-8ce2-f4f2429a8120] received
+[2026-10-18 05:41:08,083: INFO/MainProcess] Task auditos.accounting[51317d4e-e1c4-4d37-8ce2-f4f2429a8120] succeeded in 0.6879999999982829s: None
+ 
+ -------------- phase8-demo@localhost v5.6.3 (recovery)
+--- ***** ----- 
+-- ******* ---- Windows-11-10.0.26200-SP0 2026-10-18 06:05:07
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         auditos:0x1ec0b6e21e0
+- ** ---------- .> transport:   redis://127.0.0.1:56379/13
+- ** ---------- .> results:     disabled://
+- *** --- * --- .> concurrency: 1 (solo)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+                
+
+[tasks]
+  . auditos.accounting
+  . auditos.diagnostic
+
+[2026-10-18 06:05:07,413: INFO/MainProcess] Connected to redis://127.0.0.1:56379/13
+[2026-10-18 06:05:07,416: INFO/MainProcess] mingle: searching for neighbors
+[2026-10-18 06:05:08,436: INFO/MainProcess] mingle: all alone
+[2026-10-18 06:05:08,442: INFO/MainProcess] phase8-demo@localhost ready.
+[2026-10-18 06:06:44,077: INFO/MainProcess] Task auditos.accounting[e4989df2-5b8e-4404-9cf8-7d6bd90ad9cd] received
+[2026-10-18 06:06:45,051: INFO/MainProcess] Task auditos.accounting[e4989df2-5b8e-4404-9cf8-7d6bd90ad9cd] succeeded in 0.9690000000009604s: None
+[2026-10-18 06:11:05,652: INFO/MainProcess] Task auditos.accounting[26454279-d8ea-4972-96b5-412e6f65160f] received
+[2026-10-18 06:11:05,832: INFO/MainProcess] Task auditos.accounting[26454279-d8ea-4972-96b5-412e6f65160f] succeeded in 0.17199999999866122s: None
+ 
+ -------------- phase8-demo@localhost v5.6.3 (recovery)
+--- ***** ----- 
+-- ******* ---- Windows-11-10.0.26200-SP0 2026-10-18 06:48:51
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         auditos:0x1d0badf5340
+- ** ---------- .> transport:   redis://127.0.0.1:56379/13
+- ** ---------- .> results:     disabled://
+- *** --- * --- .> concurrency: 1 (solo)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+                
+
+[tasks]
+  . auditos.accounting
+  . auditos.diagnostic
+
+[2026-10-18 06:48:51,759: INFO/MainProcess] Connected to redis://127.0.0.1:56379/13
+[2026-10-18 06:48:51,760: INFO/MainProcess] mingle: searching for neighbors
+[2026-10-18 06:48:52,774: INFO/MainProcess] mingle: all alone
+[2026-10-18 06:48:52,783: INFO/MainProcess] phase8-demo@localhost ready.

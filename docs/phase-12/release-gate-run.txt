@@ -1,0 +1,1 @@
+{"decision": "NO-GO", "blocked_gates": ["ai_authorization", "audit_history", "critical_security", "demo_isolation", "deployment_rollback", "financial_accuracy", "professional_approvals", "recovery", "tenant_isolation"]}

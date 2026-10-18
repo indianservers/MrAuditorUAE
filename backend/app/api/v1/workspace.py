@@ -98,7 +98,7 @@ async def inspect_file(
 
 
 @router.get("/access")
-async def access(ctx: Read):
+async def access(ctx: Annotated[Context, Depends(require(""))]):
     return {"tenant_id": str(ctx.tenant_id), "permissions": sorted(ctx.permissions)}
 
 
@@ -157,6 +157,11 @@ async def dashboard(
     if client_id:
         clients = clients.where(Client.id == client_id)
     conditions = [Engagement.tenant_id == ctx.tenant_id]
+    from app.modules.audit_execution.access import visible_engagements
+
+    visible = await visible_engagements(db, ctx)
+    if visible is not None:
+        conditions.append(Engagement.id.in_(visible))
     if client_id:
         conditions.append(
             Engagement.entity_id.in_(

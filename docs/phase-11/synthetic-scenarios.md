@@ -1,0 +1,7 @@
+# Guarded synthetic scenarios
+
+`scripts/enrich_phase11.py` requires the existing guarded development demo DB, fixed synthetic tenant and explicit local demo password. It provisions an independent synthetic reviewer and creates evidence through the actual upload/review APIs. The scanner test double accepts only generated fixture hashes within that process; all fixture bodies explicitly disclose its synthetic status.
+
+Recorded inventory: {"journal_lines_before": 250024, "journal_lines_after": 250024, "ai_workflow_runs": 105, "ai_document_extractions": 1000, "ai_document_chunks": 1000, "ai_approval_requests": 100, "ai_document_match_decisions": 50}. Fifty fixtures have independent amount/page oracles; fifty actual journal comparisons have accept/reject decisions. There are 105 stored investigations spanning all fifteen recipes, and 100 independent approved/rejected proposal examples. No original accounting fact is replaced. Recipe executions are test workflows; this is not a claim of thirty distinct production automation templates.
+
+Original receipt statuses across the 105 seeded investigations: {'MISSING': 84, 'COMPLETED': 343, 'LIMITED': 14}. MISSING and LIMITED receipts are deliberately retained. Eight requested scenario families are exercised by real source-collection code, document comparison/proposals and client denial. End-to-end final accounting/tax treatment approval is not automated by this phase. The demo does not establish substantive legal, economic or audit conclusions.

@@ -1,0 +1,19 @@
+
+> auditos-ml-engine@0.9.0 test
+> npm run build && node --test dist/tests/*.js
+
+
+> auditos-ml-engine@0.9.0 build
+> tsc
+
+✔ train-only preprocessing and unavailable fields (1.5278ms)
+✔ independent confusion and budget fixtures (0.379ms)
+✔ features never use label or future records (8.1858ms)
+ℹ tests 3
+ℹ suites 0
+ℹ pass 3
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 82.3807

@@ -1,0 +1,55 @@
+{
+  ".github/workflows/ci.yml": {
+    "syntax": "PARSED",
+    "jobs": [
+      "verify",
+      "frontend",
+      "ml",
+      "security",
+      "containers",
+      "browser-smoke"
+    ],
+    "services": []
+  },
+  ".github/workflows/release-gate.yml": {
+    "syntax": "PARSED",
+    "jobs": [
+      "evidence"
+    ],
+    "services": []
+  },
+  "docker-compose.yml": {
+    "syntax": "PARSED",
+    "jobs": [],
+    "services": [
+      "postgres",
+      "redis",
+      "migrate",
+      "backend",
+      "frontend",
+      "worker"
+    ]
+  },
+  "deploy/compose.staging.yml": {
+    "syntax": "PARSED",
+    "jobs": [],
+    "services": [
+      "migrate",
+      "backend",
+      "worker",
+      "beat",
+      "frontend",
+      "scanner",
+      "edge"
+    ]
+  },
+  "deploy/alerts.yml": {
+    "syntax": "PARSED",
+    "jobs": [],
+    "services": []
+  },
+  "deploy/terraform/main.tf": {
+    "syntax": "PARSED",
+    "provider_validation": "NOT_EXECUTED"
+  }
+}

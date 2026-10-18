@@ -1,0 +1,7 @@
+Installed 8 packages in 112ms
+[main]	INFO	profile include tests: None
+[main]	INFO	profile exclude tests: None
+[main]	INFO	cli include tests: None
+[main]	INFO	cli exclude tests: None
+Working... ---------------------------------------- 100% 0:00:01
+[json]	INFO	JSON output written to file: docs/phase-12/sast-bandit.json

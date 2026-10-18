@@ -1,0 +1,9 @@
+# Tax adjustment engine
+
+Adjustments record approved source account codes, accounting amount, proposed amount, category, statutory treatment, legal rule, rationale, evidence, optional accepted AI reference, preparer and independent review history. Source accounting amounts cannot exceed selected adjusted trial-balance balances. Proposed entries remain visible in workpapers but only APPROVED/LOCKED entries affect a computation. The engine never posts a source journal.
+
+Customer/supplier/partner entertainment disallows50% under the approved Article29 rule; employee-only expenditure does not automatically receive that restriction. Ambiguous recipients require a manual assessment. Fines, nonbusiness and nondeductible categories require the correct Articles33/28. Timing and other differences require explicit professional treatment. Provisions are not universally disallowed. AI acceptance is only a review event; a new adjustment still needs source-bound human preparation and separate approval.
+
+Domestic dividend, participation and foreign PE schedules record source lines and canonical eligibility conditions. Manual tax neutral/restructuring/transitional conclusions do not automatically become adjustments. Foreign credits require Article47 and approved foreign-income sources; overlap with an exempt line is rejected so taxable/exempt foreign income must be separated. UAE-attributable tax cannot exceed the selected foreign income at the standard rate; allocation methodology remains a reviewed input.
+
+Limitations: no automatic ledger semantic classification, transaction-level foreign-income allocation, tax depreciation engine or deferred-tax rollforward linkage. Source ceilings alone do not prove the expenditure's legal character. Preparers must prevent duplicate manual schedules on the same economic item; aggregate overlapping-adjustment detection is not comprehensive.

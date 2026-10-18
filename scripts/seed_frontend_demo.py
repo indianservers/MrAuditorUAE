@@ -17,6 +17,7 @@ import httpx
 
 
 def main():
+    raise SystemExit("Legacy preview seeding is disabled: use the guarded Phase 7 seed-demo command against its explicit demo database and tenant.")
     if os.getenv("DEMO_SEED") != "1":
         raise SystemExit("Set DEMO_SEED=1 only against the disposable local test backend")
     root = Path(__file__).resolve().parents[1]

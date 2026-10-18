@@ -1,0 +1,1158 @@
+E702 Multiple statements on one line (semicolon)
+  --> scripts\benchmark_phase9.py:20:77
+   |
+18 | ROOT=Path(__file__).resolve().parents[1]
+19 | async def main():
+20 |     runs=json.loads((ROOT/'docs/phase-9/training-results.json').read_text());chosen=next(x for x in runs if x['family']=='journal-clas…
+   |                                                                             ^
+21 |     async with Session() as db,db.begin():
+22 |         await guard(db);await tenant_context(db,str(DEMO_TENANT));model=await db.get(MLEvent,__import__('uuid').UUID(chosen['id']));da…
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\benchmark_phase9.py:22:24
+   |
+20 |     runs=json.loads((ROOT/'docs/phase-9/training-results.json').read_text());chosen=next(x for x in runs if x['family']=='journal-clas…
+21 |     async with Session() as db,db.begin():
+22 |         await guard(db);await tenant_context(db,str(DEMO_TENANT));model=await db.get(MLEvent,__import__('uuid').UUID(chosen['id']));da…
+   |                        ^
+23 |         started=time.perf_counter();count=await db.scalar(select(func.count()).select_from(JournalLine));query=time.perf_counter()-sta…
+24 |     with tempfile.TemporaryDirectory(prefix='phase9-benchmark-') as folder:
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\benchmark_phase9.py:22:66
+   |
+20 |     runs=json.loads((ROOT/'docs/phase-9/training-results.json').read_text());chosen=next(x for x in runs if x['family']=='journal-clas…
+21 |     async with Session() as db,db.begin():
+22 |         await guard(db);await tenant_context(db,str(DEMO_TENANT));model=await db.get(MLEvent,__import__('uuid').UUID(chosen['id']));da…
+   |                                                                  ^
+23 |         started=time.perf_counter();count=await db.scalar(select(func.count()).select_from(JournalLine));query=time.perf_counter()-sta…
+24 |     with tempfile.TemporaryDirectory(prefix='phase9-benchmark-') as folder:
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\benchmark_phase9.py:22:132
+   |
+20 | …ead_text());chosen=next(x for x in runs if x['family']=='journal-classifier')
+21 | …
+22 | …;model=await db.get(MLEvent,__import__('uuid').UUID(chosen['id']));dataset=await db.get(MLEvent,model.parent_id)
+   |                                                                    ^
+23 | …func.count()).select_from(JournalLine));query=time.perf_counter()-started
+24 | …as folder:
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\benchmark_phase9.py:23:36
+   |
+21 |     async with Session() as db,db.begin():
+22 |         await guard(db);await tenant_context(db,str(DEMO_TENANT));model=await db.get(MLEvent,__import__('uuid').UUID(chosen['id']));da…
+23 |         started=time.perf_counter();count=await db.scalar(select(func.count()).select_from(JournalLine));query=time.perf_counter()-sta…
+   |                                    ^
+24 |     with tempfile.TemporaryDirectory(prefix='phase9-benchmark-') as folder:
+25 |         p=Path(folder);(p/'dataset.json').write_bytes(read_object(dataset.body['object']))
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\benchmark_phase9.py:23:105
+   |
+21 |     async with Session() as db,db.begin():
+22 |         await guard(db);await tenant_context(db,str(DEMO_TENANT));model=await db.get(MLEvent,__import__('uuid').UUID(chosen['id']));da…
+23 |         started=time.perf_counter();count=await db.scalar(select(func.count()).select_from(JournalLine));query=time.perf_counter()-sta…
+   |                                                                                                         ^
+24 |     with tempfile.TemporaryDirectory(prefix='phase9-benchmark-') as folder:
+25 |         p=Path(folder);(p/'dataset.json').write_bytes(read_object(dataset.body['object']))
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\benchmark_phase9.py:25:23
+   |
+23 |         started=time.perf_counter();count=await db.scalar(select(func.count()).select_from(JournalLine));query=time.perf_counter()-sta…
+24 |     with tempfile.TemporaryDirectory(prefix='phase9-benchmark-') as folder:
+25 |         p=Path(folder);(p/'dataset.json').write_bytes(read_object(dataset.body['object']))
+   |                       ^
+26 |         for name,obj in model.body['artifacts'].items():(p/name).write_bytes(read_object(obj))
+27 |         subprocess.run(['node','--max-old-space-size=1536',str(ROOT/'ml-engine/dist/src/benchmark.js'),str(p/'dataset.json'),str(p),st…
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\benchmark_phase9.py:26:56
+   |
+24 |     with tempfile.TemporaryDirectory(prefix='phase9-benchmark-') as folder:
+25 |         p=Path(folder);(p/'dataset.json').write_bytes(read_object(dataset.body['object']))
+26 |         for name,obj in model.body['artifacts'].items():(p/name).write_bytes(read_object(obj))
+   |                                                        ^
+27 |         subprocess.run(['node','--max-old-space-size=1536',str(ROOT/'ml-engine/dist/src/benchmark.js'),str(p/'dataset.json'),str(p),st…
+28 |     f=ROOT/'docs/phase-9/performance.json';data=json.loads(f.read_text());data['database']={'journal_lines':count,'count_query_seconds…
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\benchmark_phase9.py:28:43
+   |
+26 |         for name,obj in model.body['artifacts'].items():(p/name).write_bytes(read_object(obj))
+27 |         subprocess.run(['node','--max-old-space-size=1536',str(ROOT/'ml-engine/dist/src/benchmark.js'),str(p/'dataset.json'),str(p),st…
+28 |     f=ROOT/'docs/phase-9/performance.json';data=json.loads(f.read_text());data['database']={'journal_lines':count,'count_query_seconds…
+   |                                           ^
+29 | if __name__=='__main__':asyncio.run(main())
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\benchmark_phase9.py:28:74
+   |
+26 |         for name,obj in model.body['artifacts'].items():(p/name).write_bytes(read_object(obj))
+27 |         subprocess.run(['node','--max-old-space-size=1536',str(ROOT/'ml-engine/dist/src/benchmark.js'),str(p/'dataset.json'),str(p),st…
+28 |     f=ROOT/'docs/phase-9/performance.json';data=json.loads(f.read_text());data['database']={'journal_lines':count,'count_query_seconds…
+   |                                                                          ^
+29 | if __name__=='__main__':asyncio.run(main())
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\benchmark_phase9.py:28:143
+   |
+26 | …(read_object(obj))
+27 | …ne/dist/src/benchmark.js'),str(p/'dataset.json'),str(p),str(ROOT/'docs/phase-9/performance.json')],check=True,timeout=300)
+28 | …ta['database']={'journal_lines':count,'count_query_seconds':query};f.write_text(json.dumps(data,indent=2)+'\n');await engine.dispose()
+   |                                                                    ^
+29 | …
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\benchmark_phase9.py:28:188
+   |
+26 | …
+27 | …n'),str(p),str(ROOT/'docs/phase-9/performance.json')],check=True,timeout=300)
+28 | …query_seconds':query};f.write_text(json.dumps(data,indent=2)+'\n');await engine.dispose()
+   |                                                                    ^
+29 | …
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\benchmark_phase9.py:29:24
+   |
+27 |         subprocess.run(['node','--max-old-space-size=1536',str(ROOT/'ml-engine/dist/src/benchmark.js'),str(p/'dataset.json'),str(p),st…
+28 |     f=ROOT/'docs/phase-9/performance.json';data=json.loads(f.read_text());data['database']={'journal_lines':count,'count_query_seconds…
+29 | if __name__=='__main__':asyncio.run(main())
+   |                        ^
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\compare_phase9_rules.py:20:24
+   |
+18 |     manifest=json.loads((ROOT/'docs/phase-9/demo-dataset.json').read_text())
+19 |     async with Session() as db,db.begin():
+20 |         await guard(db);await tenant_context(db,str(DEMO_TENANT));source=await db.get(MLEvent,uuid.UUID(manifest['dataset_id']))
+   |                        ^
+21 |     data=json.loads(read_object(source.body['object']));rows=[r for i,r in enumerate(data['rows']) if data['split'][i]=='test' and 'la…
+22 |     population=[{'id':r['id'],'account_code':r['account'],'journal_ref':r['journal'],'posting_date':r['date'],'debit':str(r['debit']),…
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\compare_phase9_rules.py:20:66
+   |
+18 |     manifest=json.loads((ROOT/'docs/phase-9/demo-dataset.json').read_text())
+19 |     async with Session() as db,db.begin():
+20 |         await guard(db);await tenant_context(db,str(DEMO_TENANT));source=await db.get(MLEvent,uuid.UUID(manifest['dataset_id']))
+   |                                                                  ^
+21 |     data=json.loads(read_object(source.body['object']));rows=[r for i,r in enumerate(data['rows']) if data['split'][i]=='test' and 'la…
+22 |     population=[{'id':r['id'],'account_code':r['account'],'journal_ref':r['journal'],'posting_date':r['date'],'debit':str(r['debit']),…
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\compare_phase9_rules.py:21:56
+   |
+19 |     async with Session() as db,db.begin():
+20 |         await guard(db);await tenant_context(db,str(DEMO_TENANT));source=await db.get(MLEvent,uuid.UUID(manifest['dataset_id']))
+21 |     data=json.loads(read_object(source.body['object']));rows=[r for i,r in enumerate(data['rows']) if data['split'][i]=='test' and 'la…
+   |                                                        ^
+22 |     population=[{'id':r['id'],'account_code':r['account'],'journal_ref':r['journal'],'posting_date':r['date'],'debit':str(r['debit']),…
+23 |     rules=AnalyticsEngine(population)
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\compare_phase9_rules.py:27:70
+   |
+25 | …     summaries=rules.evaluate(AnalyticsRequest(snapshot_id=uuid.uuid4(),year_end='2025-12-31'))
+26 | …     flagged={x[0] for x in rules.db.execute('SELECT DISTINCT id FROM flags').fetchall()}
+27 | …     tp=sum(bool(r['label']) and r['id'] in flagged for r in rows);fp=sum(not r['label'] and r['id'] in flagged for r in rows);fn=sum…
+   |                                                                    ^
+28 | …     report={'engine_version':VERSION,'dataset_id':manifest['dataset_id'],'held_out_rows':len(rows),'parameters':'Existing AnalyticsR…
+29 | …     (ROOT/'docs/phase-9/existing-rule-comparison.json').write_text(json.dumps(report,indent=2,default=str)+'\n')
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\compare_phase9_rules.py:27:130
+   |
+25 | …     summaries=rules.evaluate(AnalyticsRequest(snapshot_id=uuid.uuid4(),year_end='2025-12-31'))
+26 | …     flagged={x[0] for x in rules.db.execute('SELECT DISTINCT id FROM flags').fetchall()}
+27 | …     tp=sum(bool(r['label']) and r['id'] in flagged for r in rows);fp=sum(not r['label'] and r['id'] in flagged for r in rows);fn=sum…
+   |                                                                                                                                ^
+28 | …     report={'engine_version':VERSION,'dataset_id':manifest['dataset_id'],'held_out_rows':len(rows),'parameters':'Existing AnalyticsR…
+29 | …     (ROOT/'docs/phase-9/existing-rule-comparison.json').write_text(json.dumps(report,indent=2,default=str)+'\n')
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\compare_phase9_rules.py:27:196
+   |
+25 | …
+26 | …
+27 | …;fn=sum(bool(r['label']) and r['id'] not in flagged for r in rows);tn=len(rows)-tp-fp-fn;precision=tp/(tp+fp or 1);recall=tp/(tp+fn o…
+   |                                                                    ^
+28 | …lyticsRequest defaults; year_end 2025-12-31; no labels supplied to rule engine','precision':precision,'recall':recall,'f1':2*precisio…
+29 | …
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\compare_phase9_rules.py:27:218
+   |
+25 | …
+26 | …
+27 | …]) and r['id'] not in flagged for r in rows);tn=len(rows)-tp-fp-fn;precision=tp/(tp+fp or 1);recall=tp/(tp+fn or 1)
+   |                                                                    ^
+28 | …; year_end 2025-12-31; no labels supplied to rule engine','precision':precision,'recall':recall,'f1':2*precision*recall/(precision+re…
+29 | …
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\compare_phase9_rules.py:27:244
+   |
+25 | …
+26 | …
+27 | …ged for r in rows);tn=len(rows)-tp-fp-fn;precision=tp/(tp+fp or 1);recall=tp/(tp+fn or 1)
+   |                                                                    ^
+28 | …labels supplied to rule engine','precision':precision,'recall':recall,'f1':2*precision*recall/(precision+recall or 1),'false_positive…
+29 | …
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\compare_phase9_rules.py:30:12
+   |
+28 |         report={'engine_version':VERSION,'dataset_id':manifest['dataset_id'],'held_out_rows':len(rows),'parameters':'Existing Analytic…
+29 |         (ROOT/'docs/phase-9/existing-rule-comparison.json').write_text(json.dumps(report,indent=2,default=str)+'\n')
+30 |     finally:rules.close()
+   |            ^
+31 |     await engine.dispose()
+32 | if __name__=='__main__':asyncio.run(main())
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\compare_phase9_rules.py:32:24
+   |
+30 |     finally:rules.close()
+31 |     await engine.dispose()
+32 | if __name__=='__main__':asyncio.run(main())
+   |                        ^
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\demo_phase9_dmtt.py:20:71
+   |
+18 | ROOT=Path(__file__).resolve().parents[1]
+19 | async def main():
+20 |     m=json.loads((ROOT/'docs/phase-7/demo-manifest.json').read_text());entries=[x for x in m['engagements'] if x['year']==2026];entry=…
+   |                                                                       ^
+21 |     async with Session() as db,db.begin():
+22 |         await guard(db);await tenant_context(db,str(DEMO_TENANT))
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\demo_phase9_dmtt.py:20:128
+   |
+18 | ROOT=Path(__file__).resolve().parents[1]
+19 | async def main():
+20 |     m=json.loads((ROOT/'docs/phase-7/demo-manifest.json').read_text());entries=[x for x in m['engagements'] if x['year']==2026];entry=…
+   |                                                                                                                                ^
+21 |     async with Session() as db,db.begin():
+22 |         await guard(db);await tenant_context(db,str(DEMO_TENANT))
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\demo_phase9_dmtt.py:20:145
+   |
+18 | …
+19 | …
+20 | …=[x for x in m['engagements'] if x['year']==2026];entry=entries[0];eid=entry['id'];base=f'/api/v1/engagements/{eid}/audit'
+   |                                                                    ^
+21 | …
+22 | …
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\demo_phase9_dmtt.py:20:161
+   |
+18 | …
+19 | …
+20 | …engagements'] if x['year']==2026];entry=entries[0];eid=entry['id'];base=f'/api/v1/engagements/{eid}/audit'
+   |                                                                    ^
+21 | …
+22 | …
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\demo_phase9_dmtt.py:22:24
+   |
+20 |     m=json.loads((ROOT/'docs/phase-7/demo-manifest.json').read_text());entries=[x for x in m['engagements'] if x['year']==2026];entry=…
+21 |     async with Session() as db,db.begin():
+22 |         await guard(db);await tenant_context(db,str(DEMO_TENANT))
+   |                        ^
+23 |         note=await db.scalar(select(AuditRecord).where(AuditRecord.engagement_id==uuid.UUID(eid),AuditRecord.kind=='ifrs-note',AuditRe…
+24 |         if not note:raise ValueError('Existing approved synthetic IFRS note required')
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\demo_phase9_dmtt.py:24:20
+   |
+22 |         await guard(db);await tenant_context(db,str(DEMO_TENANT))
+23 |         note=await db.scalar(select(AuditRecord).where(AuditRecord.engagement_id==uuid.UUID(eid),AuditRecord.kind=='ifrs-note',AuditRe…
+24 |         if not note:raise ValueError('Existing approved synthetic IFRS note required')
+   |                    ^
+25 |         existing=(await db.scalars(select(AuditRecord).where(AuditRecord.engagement_id==uuid.UUID(eid),AuditRecord.reference.like('P9-…
+26 |     def headers(i):return {'Authorization':'Bearer '+access_token(m['users'][i]['id']),'X-Tenant-ID':str(DEMO_TENANT)}
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\demo_phase9_dmtt.py:25:147
+   |
+23 | …==uuid.UUID(eid),AuditRecord.kind=='ifrs-note',AuditRecord.status.in_(['APPROVED','LOCKED'])).limit(1))
+24 | …ired')
+25 | …ent_id==uuid.UUID(eid),AuditRecord.reference.like('P9-%')))).all();cache={x.reference:x for x in existing}
+   |                                                                    ^
+26 | …'id']),'X-Tenant-ID':str(DEMO_TENANT)}
+27 | …
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\demo_phase9_dmtt.py:30:28
+   |
+28 |     async with httpx.AsyncClient(transport=httpx.ASGITransport(app=app),base_url='http://testserver') as c:
+29 |         async def ready(kind,ref,body):
+30 |             if ref in cache:return {'id':str(cache[ref].id),'version':cache[ref].version,'status':cache[ref].status}
+   |                            ^
+31 |             r=await c.post(f'/api/v1/dmtt/engagements/{eid}/records/{kind}',headers=headers(1),json={'reference':ref,'title':'SYNTHETI…
+32 |             for action,who in [('submit',1),('approve',9)]:
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\demo_phase9_dmtt.py:31:170
+   |
+29 | …
+30 | …[ref].status}
+31 | …eference':ref,'title':'SYNTHETIC SOFTWARE TEST '+ref,'body':body});assert r.status_code==201,r.text;obj=r.json()
+   |                                                                    ^
+32 | …
+33 | …':obj['version'],'action':action,'comments':'Synthetic independent technical evidence review; not a genuine tax opinion'});assert r.s…
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\demo_phase9_dmtt.py:31:203
+   |
+29 | …
+30 | …
+31 | …SOFTWARE TEST '+ref,'body':body});assert r.status_code==201,r.text;obj=r.json()
+   |                                                                    ^
+32 | …
+33 | …'comments':'Synthetic independent technical evidence review; not a genuine tax opinion'});assert r.status_code==200,r.text;obj=r.json…
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\demo_phase9_dmtt.py:33:226
+   |
+31 | …dy':body});assert r.status_code==201,r.text;obj=r.json()
+32 | …
+33 | …ndependent technical evidence review; not a genuine tax opinion'});assert r.status_code==200,r.text;obj=r.json()
+   |                                                                    ^
+34 | …
+35 | …harbour','no_safe_harbour']):
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\demo_phase9_dmtt.py:33:259
+   |
+31 | …201,r.text;obj=r.json()
+32 | …
+33 | …iew; not a genuine tax opinion'});assert r.status_code==200,r.text;obj=r.json()
+   |                                                                    ^
+34 | …
+35 | …
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\demo_phase9_dmtt.py:38:20
+   |
+36 | …     g=await ready('group','P9-G-'+name,{'fiscal_start':'2026-01-01','fiscal_end':'2026-12-31','upe_name':'SYNTHETIC '+name,'upe_juri…
+37 | …     e={'group_id':g['id'],'entity_id':entry['entity_id'],'source_engagement_id':eid,'financial_run_id':entry['ifrs_run_id'],'jurisdi…
+38 | …     if i==3:e['adjustments']=[{'category':'other','amount':'-999999999','article':'3.2','evidence_id':str(note.id),'rationale':'Synt…
+   |              ^
+39 | …     if i==4:e['deferred']=[{'amount':'9000','recorded_rate':'.09','treatment':'transition','evidence_id':str(note.id),'transition_ex…
+40 | …     await ready('entity','P9-E-'+name,e)
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\demo_phase9_dmtt.py:39:20
+   |
+37 | …     e={'group_id':g['id'],'entity_id':entry['entity_id'],'source_engagement_id':eid,'financial_run_id':entry['ifrs_run_id'],'jurisdi…
+38 | …     if i==3:e['adjustments']=[{'category':'other','amount':'-999999999','article':'3.2','evidence_id':str(note.id),'rationale':'Synt…
+39 | …     if i==4:e['deferred']=[{'amount':'9000','recorded_rate':'.09','treatment':'transition','evidence_id':str(note.id),'transition_ex…
+   |              ^
+40 | …     await ready('entity','P9-E-'+name,e)
+41 | …     if i in [6,7]:await ready('election','P9-SH-'+name,{'group_id':g['id'],'type':'transitional_cbcr','evidence_id':str(note.id),'qu…
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\demo_phase9_dmtt.py:41:26
+   |
+39 | …     if i==4:e['deferred']=[{'amount':'9000','recorded_rate':'.09','treatment':'transition','evidence_id':str(note.id),'transition_ex…
+40 | …     await ready('entity','P9-E-'+name,e)
+41 | …     if i in [6,7]:await ready('election','P9-SH-'+name,{'group_id':g['id'],'type':'transitional_cbcr','evidence_id':str(note.id),'qu…
+   |                    ^
+42 | …     r=await c.post(f'/api/v1/dmtt/engagements/{eid}/groups/{g["id"]}/calculate',headers=headers(1));assert r.status_code==201,r.text
+43 | …     output.append({'scenario':name,'group_id':g['id'],'run_id':r.json()['id'],'result':r.json()['body']['results']})
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\demo_phase9_dmtt.py:42:108
+   |
+40 |             await ready('entity','P9-E-'+name,e)
+41 |             if i in [6,7]:await ready('election','P9-SH-'+name,{'group_id':g['id'],'type':'transitional_cbcr','evidence_id':str(note.i…
+42 |             r=await c.post(f'/api/v1/dmtt/engagements/{eid}/groups/{g["id"]}/calculate',headers=headers(1));assert r.status_code==201,…
+   |                                                                                                            ^
+43 |             output.append({'scenario':name,'group_id':g['id'],'run_id':r.json()['id'],'result':r.json()['body']['results']})
+44 |     (ROOT/'docs/phase-9/dmtt-demo-results.json').write_text(json.dumps(output,indent=2)+'\n');print(json.dumps({'groups':len(output),'…
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\demo_phase9_dmtt.py:44:94
+   |
+42 |             r=await c.post(f'/api/v1/dmtt/engagements/{eid}/groups/{g["id"]}/calculate',headers=headers(1));assert r.status_code==201,…
+43 |             output.append({'scenario':name,'group_id':g['id'],'run_id':r.json()['id'],'result':r.json()['body']['results']})
+44 |     (ROOT/'docs/phase-9/dmtt-demo-results.json').write_text(json.dumps(output,indent=2)+'\n');print(json.dumps({'groups':len(output),'…
+   |                                                                                              ^
+45 | if __name__=='__main__':asyncio.run(main())
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\demo_phase9_dmtt.py:44:173
+   |
+42 | …);assert r.status_code==201,r.text
+43 | …ody']['results']})
+44 | …umps({'groups':len(output),'engagement_id':eid,'synthetic':True}));await engine.dispose()
+   |                                                                    ^
+45 | …
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\demo_phase9_dmtt.py:45:24
+   |
+43 |             output.append({'scenario':name,'group_id':g['id'],'run_id':r.json()['id'],'result':r.json()['body']['results']})
+44 |     (ROOT/'docs/phase-9/dmtt-demo-results.json').write_text(json.dumps(output,indent=2)+'\n');print(json.dumps({'groups':len(output),'…
+45 | if __name__=='__main__':asyncio.run(main())
+   |                        ^
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:24:28
+   |
+23 | def fixtures(seed=2026):
+24 |     rng=random.Random(seed);rows=[];splits=[]
+   |                            ^
+25 |     names=['Bank current cash','Supplier payable liability','Owner capital equity','Sales revenue income','Payroll operating expense']
+26 |     patterns=['normal','duplicate','unusual_account','amount','cutoff','reversal']
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:24:36
+   |
+23 | def fixtures(seed=2026):
+24 |     rng=random.Random(seed);rows=[];splits=[]
+   |                                    ^
+25 |     names=['Bank current cash','Supplier payable liability','Owner capital equity','Sales revenue income','Payroll operating expense']
+26 |     patterns=['normal','duplicate','unusual_account','amount','cutoff','reversal']
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:29:25
+   |
+27 |     for split,n in [('train',3600),('validation',1200),('test',1200),('ood',600)]:
+28 |         for i in range(n):
+29 |             category=i%5;label=int(i%7==0);scenario=patterns[1+i%5] if label else 'normal';amount=round(rng.uniform(100,15000),2);day=…
+   |                         ^
+30 |             description=['Customer receipt','Supplier invoice','Payroll accrual','Depreciation expense','Interest settlement','Invento…
+31 |             manual=False
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:29:43
+   |
+27 |     for split,n in [('train',3600),('validation',1200),('test',1200),('ood',600)]:
+28 |         for i in range(n):
+29 |             category=i%5;label=int(i%7==0);scenario=patterns[1+i%5] if label else 'normal';amount=round(rng.uniform(100,15000),2);day=…
+   |                                           ^
+30 |             description=['Customer receipt','Supplier invoice','Payroll accrual','Depreciation expense','Interest settlement','Invento…
+31 |             manual=False
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:29:91
+   |
+27 |     for split,n in [('train',3600),('validation',1200),('test',1200),('ood',600)]:
+28 |         for i in range(n):
+29 |             category=i%5;label=int(i%7==0);scenario=patterns[1+i%5] if label else 'normal';amount=round(rng.uniform(100,15000),2);day=…
+   |                                                                                           ^
+30 |             description=['Customer receipt','Supplier invoice','Payroll accrual','Depreciation expense','Interest settlement','Invento…
+31 |             manual=False
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:29:130
+   |
+27 | …1200),('ood',600)]:
+28 | …
+29 | …i%5] if label else 'normal';amount=round(rng.uniform(100,15000),2);day=date(2025,1,1)+timedelta(days=rng.randrange(300))
+   |                                                                    ^
+30 | …'Payroll accrual','Depreciation expense','Interest settlement','Inventory purchase','Bank payment','Standard reversal'][i%8]
+31 | …
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\enrich_phase9.py:32:34
+   |
+30 | …     description=['Customer receipt','Supplier invoice','Payroll accrual','Depreciation expense','Interest settlement','Inventory pur…
+31 | …     manual=False
+32 | …     if scenario=='amount':amount=100000*(1+i%7);manual=True
+   |                            ^
+33 | …     elif scenario=='cutoff':day=date(2025,12,31);amount*=8
+34 | …     elif scenario=='reversal':description='Unusual manual reversing adjustment';manual=True;amount*=20
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:32:56
+   |
+30 | …     description=['Customer receipt','Supplier invoice','Payroll accrual','Depreciation expense','Interest settlement','Inventory pur…
+31 | …     manual=False
+32 | …     if scenario=='amount':amount=100000*(1+i%7);manual=True
+   |                                                  ^
+33 | …     elif scenario=='cutoff':day=date(2025,12,31);amount*=8
+34 | …     elif scenario=='reversal':description='Unusual manual reversing adjustment';manual=True;amount*=20
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\enrich_phase9.py:33:36
+   |
+31 | …     manual=False
+32 | …     if scenario=='amount':amount=100000*(1+i%7);manual=True
+33 | …     elif scenario=='cutoff':day=date(2025,12,31);amount*=8
+   |                              ^
+34 | …     elif scenario=='reversal':description='Unusual manual reversing adjustment';manual=True;amount*=20
+35 | …     elif scenario=='unusual_account':description='Manual exceptional account combination';manual=True;category=(category+2)%5;amount…
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:33:57
+   |
+31 | …     manual=False
+32 | …     if scenario=='amount':amount=100000*(1+i%7);manual=True
+33 | …     elif scenario=='cutoff':day=date(2025,12,31);amount*=8
+   |                                                   ^
+34 | …     elif scenario=='reversal':description='Unusual manual reversing adjustment';manual=True;amount*=20
+35 | …     elif scenario=='unusual_account':description='Manual exceptional account combination';manual=True;category=(category+2)%5;amount…
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\enrich_phase9.py:34:38
+   |
+32 | …     if scenario=='amount':amount=100000*(1+i%7);manual=True
+33 | …     elif scenario=='cutoff':day=date(2025,12,31);amount*=8
+34 | …     elif scenario=='reversal':description='Unusual manual reversing adjustment';manual=True;amount*=20
+   |                                ^
+35 | …     elif scenario=='unusual_account':description='Manual exceptional account combination';manual=True;category=(category+2)%5;amount…
+36 | …     elif scenario=='duplicate':description='Repeated payment reference';amount=50000;manual=True
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:34:88
+   |
+32 | …     if scenario=='amount':amount=100000*(1+i%7);manual=True
+33 | …     elif scenario=='cutoff':day=date(2025,12,31);amount*=8
+34 | …     elif scenario=='reversal':description='Unusual manual reversing adjustment';manual=True;amount*=20
+   |                                                                                  ^
+35 | …     elif scenario=='unusual_account':description='Manual exceptional account combination';manual=True;category=(category+2)%5;amount…
+36 | …     elif scenario=='duplicate':description='Repeated payment reference';amount=50000;manual=True
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:34:100
+   |
+32 | …     if scenario=='amount':amount=100000*(1+i%7);manual=True
+33 | …     elif scenario=='cutoff':day=date(2025,12,31);amount*=8
+34 | …     elif scenario=='reversal':description='Unusual manual reversing adjustment';manual=True;amount*=20
+   |                                                                                              ^
+35 | …     elif scenario=='unusual_account':description='Manual exceptional account combination';manual=True;category=(category+2)%5;amount…
+36 | …     elif scenario=='duplicate':description='Repeated payment reference';amount=50000;manual=True
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\enrich_phase9.py:35:45
+   |
+33 | …     elif scenario=='cutoff':day=date(2025,12,31);amount*=8
+34 | …     elif scenario=='reversal':description='Unusual manual reversing adjustment';manual=True;amount*=20
+35 | …     elif scenario=='unusual_account':description='Manual exceptional account combination';manual=True;category=(category+2)%5;amount…
+   |                                       ^
+36 | …     elif scenario=='duplicate':description='Repeated payment reference';amount=50000;manual=True
+37 | …     if split=='ood':amount*=3.17;description='Unseen acquisition settlement '+description
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:35:98
+   |
+33 | …     elif scenario=='cutoff':day=date(2025,12,31);amount*=8
+34 | …     elif scenario=='reversal':description='Unusual manual reversing adjustment';manual=True;amount*=20
+35 | …     elif scenario=='unusual_account':description='Manual exceptional account combination';manual=True;category=(category+2)%5;amount…
+   |                                                                                            ^
+36 | …     elif scenario=='duplicate':description='Repeated payment reference';amount=50000;manual=True
+37 | …     if split=='ood':amount*=3.17;description='Unseen acquisition settlement '+description
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:35:110
+   |
+33 | …     elif scenario=='cutoff':day=date(2025,12,31);amount*=8
+34 | …     elif scenario=='reversal':description='Unusual manual reversing adjustment';manual=True;amount*=20
+35 | …     elif scenario=='unusual_account':description='Manual exceptional account combination';manual=True;category=(category+2)%5;amount…
+   |                                                                                                        ^
+36 | …     elif scenario=='duplicate':description='Repeated payment reference';amount=50000;manual=True
+37 | …     if split=='ood':amount*=3.17;description='Unseen acquisition settlement '+description
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:35:134
+   |
+33 | …     elif scenario=='cutoff':day=date(2025,12,31);amount*=8
+34 | …     elif scenario=='reversal':description='Unusual manual reversing adjustment';manual=True;amount*=20
+35 | …     elif scenario=='unusual_account':description='Manual exceptional account combination';manual=True;category=(category+2)%5;amount…
+   |                                                                                                                                ^
+36 | …     elif scenario=='duplicate':description='Repeated payment reference';amount=50000;manual=True
+37 | …     if split=='ood':amount*=3.17;description='Unseen acquisition settlement '+description
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\enrich_phase9.py:36:39
+   |
+34 | …     elif scenario=='reversal':description='Unusual manual reversing adjustment';manual=True;amount*=20
+35 | …     elif scenario=='unusual_account':description='Manual exceptional account combination';manual=True;category=(category+2)%5;amount…
+36 | …     elif scenario=='duplicate':description='Repeated payment reference';amount=50000;manual=True
+   |                                 ^
+37 | …     if split=='ood':amount*=3.17;description='Unseen acquisition settlement '+description
+38 | …     journal=f'p9-{split}-{i}';client=f'SYNTHETIC-{split}';uid=str(uuid.uuid5(DEMO_TENANT,journal))
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:36:80
+   |
+34 | …     elif scenario=='reversal':description='Unusual manual reversing adjustment';manual=True;amount*=20
+35 | …     elif scenario=='unusual_account':description='Manual exceptional account combination';manual=True;category=(category+2)%5;amount…
+36 | …     elif scenario=='duplicate':description='Repeated payment reference';amount=50000;manual=True
+   |                                                                          ^
+37 | …     if split=='ood':amount*=3.17;description='Unseen acquisition settlement '+description
+38 | …     journal=f'p9-{split}-{i}';client=f'SYNTHETIC-{split}';uid=str(uuid.uuid5(DEMO_TENANT,journal))
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:36:93
+   |
+34 | …     elif scenario=='reversal':description='Unusual manual reversing adjustment';manual=True;amount*=20
+35 | …     elif scenario=='unusual_account':description='Manual exceptional account combination';manual=True;category=(category+2)%5;amount…
+36 | …     elif scenario=='duplicate':description='Repeated payment reference';amount=50000;manual=True
+   |                                                                                       ^
+37 | …     if split=='ood':amount*=3.17;description='Unseen acquisition settlement '+description
+38 | …     journal=f'p9-{split}-{i}';client=f'SYNTHETIC-{split}';uid=str(uuid.uuid5(DEMO_TENANT,journal))
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\enrich_phase9.py:37:28
+   |
+35 | …     elif scenario=='unusual_account':description='Manual exceptional account combination';manual=True;category=(category+2)%5;amount…
+36 | …     elif scenario=='duplicate':description='Repeated payment reference';amount=50000;manual=True
+37 | …     if split=='ood':amount*=3.17;description='Unseen acquisition settlement '+description
+   |                      ^
+38 | …     journal=f'p9-{split}-{i}';client=f'SYNTHETIC-{split}';uid=str(uuid.uuid5(DEMO_TENANT,journal))
+39 | …     # A complete balanced journal lives entirely in one split.
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:37:41
+   |
+35 | …     elif scenario=='unusual_account':description='Manual exceptional account combination';manual=True;category=(category+2)%5;amount…
+36 | …     elif scenario=='duplicate':description='Repeated payment reference';amount=50000;manual=True
+37 | …     if split=='ood':amount*=3.17;description='Unseen acquisition settlement '+description
+   |                                   ^
+38 | …     journal=f'p9-{split}-{i}';client=f'SYNTHETIC-{split}';uid=str(uuid.uuid5(DEMO_TENANT,journal))
+39 | …     # A complete balanced journal lives entirely in one split.
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:38:38
+   |
+36 |             elif scenario=='duplicate':description='Repeated payment reference';amount=50000;manual=True
+37 |             if split=='ood':amount*=3.17;description='Unseen acquisition settlement '+description
+38 |             journal=f'p9-{split}-{i}';client=f'SYNTHETIC-{split}';uid=str(uuid.uuid5(DEMO_TENANT,journal))
+   |                                      ^
+39 |             # A complete balanced journal lives entirely in one split.
+40 |             for leg in range(2):
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:38:66
+   |
+36 |             elif scenario=='duplicate':description='Repeated payment reference';amount=50000;manual=True
+37 |             if split=='ood':amount*=3.17;description='Unseen acquisition settlement '+description
+38 |             journal=f'p9-{split}-{i}';client=f'SYNTHETIC-{split}';uid=str(uuid.uuid5(DEMO_TENANT,journal))
+   |                                                                  ^
+39 |             # A complete balanced journal lives entirely in one split.
+40 |             for leg in range(2):
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:46:78
+   |
+45 | async def main():
+46 |     manifest=json.loads((ROOT/'docs/phase-7/demo-manifest.json').read_text());entry=next(x for x in manifest['engagements'] if x['year…
+   |                                                                              ^
+47 |     async with Session() as db,db.begin():
+48 |         await guard(db);await tenant_context(db,str(DEMO_TENANT))
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:48:24
+   |
+46 |     manifest=json.loads((ROOT/'docs/phase-7/demo-manifest.json').read_text());entry=next(x for x in manifest['engagements'] if x['year…
+47 |     async with Session() as db,db.begin():
+48 |         await guard(db);await tenant_context(db,str(DEMO_TENANT))
+   |                        ^
+49 |         existing=await db.scalar(select(MLEvent).where(MLEvent.kind=='dataset',MLEvent.tenant_id==DEMO_TENANT,MLEvent.body['seed_versi…
+50 |         if existing: print(json.dumps({'dataset_id':str(existing.id),'replayed':True}));return
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\enrich_phase9.py:50:20
+   |
+48 | …     await guard(db);await tenant_context(db,str(DEMO_TENANT))
+49 | …     existing=await db.scalar(select(MLEvent).where(MLEvent.kind=='dataset',MLEvent.tenant_id==DEMO_TENANT,MLEvent.body['seed_version…
+50 | …     if existing: print(json.dumps({'dataset_id':str(existing.id),'replayed':True}));return
+   |                  ^
+51 | …     query=select(JournalLine,Account.name).join(Account,Account.id==JournalLine.account_id).where(JournalLine.tenant_id==DEMO_TENANT…
+52 | …     rows=[];splits=[]
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:50:88
+   |
+48 | …     await guard(db);await tenant_context(db,str(DEMO_TENANT))
+49 | …     existing=await db.scalar(select(MLEvent).where(MLEvent.kind=='dataset',MLEvent.tenant_id==DEMO_TENANT,MLEvent.body['seed_version…
+50 | …     if existing: print(json.dumps({'dataset_id':str(existing.id),'replayed':True}));return
+   |                                                                                      ^
+51 | …     query=select(JournalLine,Account.name).join(Account,Account.id==JournalLine.account_id).where(JournalLine.tenant_id==DEMO_TENANT…
+52 | …     rows=[];splits=[]
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:52:16
+   |
+50 | …     if existing: print(json.dumps({'dataset_id':str(existing.id),'replayed':True}));return
+51 | …     query=select(JournalLine,Account.name).join(Account,Account.id==JournalLine.account_id).where(JournalLine.tenant_id==DEMO_TENANT…
+52 | …     rows=[];splits=[]
+   |              ^
+53 | …     for r,name in (await db.execute(query)).all():
+54 | …         rows.append({'id':str(r.id),'journal':str(r.journal_id),'client':str(r.client_id),'date':str(r.posting_date),'debit':float(r…
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:56:24
+   |
+54 | …         rows.append({'id':str(r.id),'journal':str(r.journal_id),'client':str(r.client_id),'date':str(r.posting_date),'debit':float(r…
+55 | …         splits.append('train' if r.posting_date.year<2025 else 'test')
+56 | …     count=len(rows);f,sp=fixtures();rows+=f;splits+=sp
+   |                      ^
+57 | …     data={'rows':rows,'split':splits,'synthetic':True}
+58 | …     meta=service.put_json(DEMO_TENANT,data);ctx=Context(uuid.UUID(manifest['users'][1]['id']),DEMO_TENANT,frozenset())
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:56:40
+   |
+54 | …         rows.append({'id':str(r.id),'journal':str(r.journal_id),'client':str(r.client_id),'date':str(r.posting_date),'debit':float(r…
+55 | …         splits.append('train' if r.posting_date.year<2025 else 'test')
+56 | …     count=len(rows);f,sp=fixtures();rows+=f;splits+=sp
+   |                                      ^
+57 | …     data={'rows':rows,'split':splits,'synthetic':True}
+58 | …     meta=service.put_json(DEMO_TENANT,data);ctx=Context(uuid.UUID(manifest['users'][1]['id']),DEMO_TENANT,frozenset())
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:56:48
+   |
+54 | …         rows.append({'id':str(r.id),'journal':str(r.journal_id),'client':str(r.client_id),'date':str(r.posting_date),'debit':float(r…
+55 | …         splits.append('train' if r.posting_date.year<2025 else 'test')
+56 | …     count=len(rows);f,sp=fixtures();rows+=f;splits+=sp
+   |                                              ^
+57 | …     data={'rows':rows,'split':splits,'synthetic':True}
+58 | …     meta=service.put_json(DEMO_TENANT,data);ctx=Context(uuid.UUID(manifest['users'][1]['id']),DEMO_TENANT,frozenset())
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:58:48
+   |
+56 | …     count=len(rows);f,sp=fixtures();rows+=f;splits+=sp
+57 | …     data={'rows':rows,'split':splits,'synthetic':True}
+58 | …     meta=service.put_json(DEMO_TENANT,data);ctx=Context(uuid.UUID(manifest['users'][1]['id']),DEMO_TENANT,frozenset())
+   |                                              ^
+59 | …     obj=await service.event(db,ctx,uuid.UUID(entry['id']),'dataset',{'seed_version':'phase9-v2','object':meta,'synthetic':True,'sour…
+60 | …     summary={'dataset_id':str(obj.id),'engagement_id':entry['id'],**{k:v for k,v in obj.body.items() if k!='object'}}
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\enrich_phase9.py:61:94
+   |
+59 |         obj=await service.event(db,ctx,uuid.UUID(entry['id']),'dataset',{'seed_version':'phase9-v2','object':meta,'synthetic':True,'so…
+60 |         summary={'dataset_id':str(obj.id),'engagement_id':entry['id'],**{k:v for k,v in obj.body.items() if k!='object'}}
+61 |         (ROOT/'docs/phase-9/demo-dataset.json').write_text(json.dumps(summary,indent=2)+'\n');print(json.dumps(summary))
+   |                                                                                              ^
+62 |     await engine.dispose()
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\enrich_phase9.py:64:24
+   |
+62 |     await engine.dispose()
+63 |
+64 | if __name__=='__main__':asyncio.run(main())
+   |                        ^
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\train_phase9.py:14:74
+   |
+12 | ROOT=Path(__file__).resolve().parents[1]
+13 | async def main():
+14 |     demo=json.loads((ROOT/'docs/phase-7/demo-manifest.json').read_text());dataset=json.loads((ROOT/'docs/phase-9/demo-dataset.json').r…
+   |                                                                          ^
+15 |     async with httpx.AsyncClient(base_url='http://127.0.0.1:58004',timeout=30) as c:
+16 |         for family in ['autoencoder','journal-classifier','risk-ranking','account-classifier']:
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\train_phase9.py:14:146
+   |
+12 | …
+13 | …
+14 | …et=json.loads((ROOT/'docs/phase-9/demo-dataset.json').read_text());h={'Authorization':'Bearer '+access_token(demo['users'][1]['id']),…
+   |                                                                    ^
+15 | …as c:
+16 | …nt-classifier']:
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\train_phase9.py:14:245
+   |
+12 | …
+13 | …
+14 | …ess_token(demo['users'][1]['id']),'X-Tenant-ID':demo['tenant_id']};runs=[]
+   |                                                                    ^
+15 | …
+16 | …
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\train_phase9.py:17:197
+   |
+15 | …
+16 | …
+17 | …2,'batch_size':128,'learning_rate':.003,'seed':2027,'patience':3});r.raise_for_status();job=r.json();print(json.dumps({'family':famil…
+   |                                                                    ^
+18 | …
+19 | …
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\train_phase9.py:17:218
+   |
+15 | …
+16 | …
+17 | …earning_rate':.003,'seed':2027,'patience':3});r.raise_for_status();job=r.json();print(json.dumps({'family':family,'job':job}),flush=T…
+   |                                                                    ^
+18 | …
+19 | …
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\train_phase9.py:17:231
+   |
+15 | …
+16 | …
+17 | …:.003,'seed':2027,'patience':3});r.raise_for_status();job=r.json();print(json.dumps({'family':family,'job':job}),flush=True)
+   |                                                                    ^
+18 | …
+19 | …
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\train_phase9.py:19:67
+   |
+17 | …     r=await c.post('/api/v1/ml/training-jobs',headers=h,json={'source_id':dataset['dataset_id'],'family':family,'epochs':12,'batch_s…
+18 | …     for _ in range(500):
+19 | …         r=await c.get('/api/v1/jobs/'+job['id'],headers=h);r.raise_for_status();state=r.json()
+   |                                                             ^
+20 | …         if state['status'] in ['completed','failed','cancelled']:break
+21 | …         await asyncio.sleep(2)
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\train_phase9.py:19:88
+   |
+17 | …     r=await c.post('/api/v1/ml/training-jobs',headers=h,json={'source_id':dataset['dataset_id'],'family':family,'epochs':12,'batch_s…
+18 | …     for _ in range(500):
+19 | …         r=await c.get('/api/v1/jobs/'+job['id'],headers=h);r.raise_for_status();state=r.json()
+   |                                                                                  ^
+20 | …         if state['status'] in ['completed','failed','cancelled']:break
+21 | …         await asyncio.sleep(2)
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\train_phase9.py:20:73
+   |
+18 |             for _ in range(500):
+19 |                 r=await c.get('/api/v1/jobs/'+job['id'],headers=h);r.raise_for_status();state=r.json()
+20 |                 if state['status'] in ['completed','failed','cancelled']:break
+   |                                                                         ^
+21 |                 await asyncio.sleep(2)
+22 |             if state['status']!='completed':raise RuntimeError(state)
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\train_phase9.py:22:44
+   |
+20 | …         if state['status'] in ['completed','failed','cancelled']:break
+21 | …         await asyncio.sleep(2)
+22 | …     if state['status']!='completed':raise RuntimeError(state)
+   |                                      ^
+23 | …     r=await c.get('/api/v1/ml/events/'+state['result']['resource_id'],headers=h);r.raise_for_status();model=r.json();runs.append({'i…
+24 | …     (ROOT/'docs/phase-9/training-results.json').write_text(json.dumps(runs,indent=2)+'\n');print(json.dumps({'family':family,'model_…
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\train_phase9.py:23:89
+   |
+21 |                 await asyncio.sleep(2)
+22 |             if state['status']!='completed':raise RuntimeError(state)
+23 |             r=await c.get('/api/v1/ml/events/'+state['result']['resource_id'],headers=h);r.raise_for_status();model=r.json();runs.appe…
+   |                                                                                         ^
+24 |             (ROOT/'docs/phase-9/training-results.json').write_text(json.dumps(runs,indent=2)+'\n');print(json.dumps({'family':family,'…
+25 | if __name__=='__main__':asyncio.run(main())
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\train_phase9.py:23:110
+   |
+21 |                 await asyncio.sleep(2)
+22 |             if state['status']!='completed':raise RuntimeError(state)
+23 |             r=await c.get('/api/v1/ml/events/'+state['result']['resource_id'],headers=h);r.raise_for_status();model=r.json();runs.appe…
+   |                                                                                                              ^
+24 |             (ROOT/'docs/phase-9/training-results.json').write_text(json.dumps(runs,indent=2)+'\n');print(json.dumps({'family':family,'…
+25 | if __name__=='__main__':asyncio.run(main())
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\train_phase9.py:23:125
+   |
+21 |                 await asyncio.sleep(2)
+22 |             if state['status']!='completed':raise RuntimeError(state)
+23 |             r=await c.get('/api/v1/ml/events/'+state['result']['resource_id'],headers=h);r.raise_for_status();model=r.json();runs.appe…
+   |                                                                                                                             ^
+24 |             (ROOT/'docs/phase-9/training-results.json').write_text(json.dumps(runs,indent=2)+'\n');print(json.dumps({'family':family,'…
+25 | if __name__=='__main__':asyncio.run(main())
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\train_phase9.py:24:99
+   |
+22 |             if state['status']!='completed':raise RuntimeError(state)
+23 |             r=await c.get('/api/v1/ml/events/'+state['result']['resource_id'],headers=h);r.raise_for_status();model=r.json();runs.appe…
+24 |             (ROOT/'docs/phase-9/training-results.json').write_text(json.dumps(runs,indent=2)+'\n');print(json.dumps({'family':family,'…
+   |                                                                                                   ^
+25 | if __name__=='__main__':asyncio.run(main())
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\train_phase9.py:25:24
+   |
+23 |             r=await c.get('/api/v1/ml/events/'+state['result']['resource_id'],headers=h);r.raise_for_status();model=r.json();runs.appe…
+24 |             (ROOT/'docs/phase-9/training-results.json').write_text(json.dumps(runs,indent=2)+'\n');print(json.dumps({'family':family,'…
+25 | if __name__=='__main__':asyncio.run(main())
+   |                        ^
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\verify_phase9_ml.py:19:71
+   |
+17 | ROOT=Path(__file__).resolve().parents[1]
+18 | async def main():
+19 |     m=json.loads((ROOT/'docs/phase-7/demo-manifest.json').read_text());runs=json.loads((ROOT/'docs/phase-9/training-results.json').rea…
+   |                                                                       ^
+20 |     async with Session() as db,db.begin():await guard(db)
+21 |     def h(i):return {'Authorization':'Bearer '+access_token(m['users'][i]['id']),'X-Tenant-ID':str(DEMO_TENANT)}
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\verify_phase9_ml.py:19:144
+   |
+17 | …
+18 | …
+19 | …son.loads((ROOT/'docs/phase-9/training-results.json').read_text());dataset=json.loads((ROOT/'docs/phase-9/demo-dataset.json').read_te…
+   |                                                                    ^
+20 | …
+21 | …']),'X-Tenant-ID':str(DEMO_TENANT)}
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\verify_phase9_ml.py:20:42
+   |
+18 | async def main():
+19 |     m=json.loads((ROOT/'docs/phase-7/demo-manifest.json').read_text());runs=json.loads((ROOT/'docs/phase-9/training-results.json').rea…
+20 |     async with Session() as db,db.begin():await guard(db)
+   |                                          ^
+21 |     def h(i):return {'Authorization':'Bearer '+access_token(m['users'][i]['id']),'X-Tenant-ID':str(DEMO_TENANT)}
+22 |     decision={'rationale':'Synthetic independent review of measured held-out results, baselines, artifact reproducibility and limitati…
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\verify_phase9_ml.py:22:177
+   |
+20 | …
+21 | …)}
+22 | …oducibility and limitations','experimental_use_acknowledged':True};report=[]
+   |                                                                    ^
+23 | …
+24 | …
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\verify_phase9_ml.py:27:97
+   |
+25 |             mid=run['id']
+26 |             for suffix,who in [('approval-requests',1),('approvals',3),('deployments',3)]:
+27 |                 r=await c.post(f'/api/v1/ml/models/{mid}/{suffix}',headers=h(who),json=decision);assert r.status_code==201,r.text
+   |                                                                                                 ^
+28 |             deployment=r.json()['id']
+29 |             async with Session() as db,db.begin():
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\verify_phase9_ml.py:30:58
+   |
+28 | …     deployment=r.json()['id']
+29 | …     async with Session() as db,db.begin():
+30 | …         await tenant_context(db,str(DEMO_TENANT));ctx=Context(uuid.UUID(m['users'][1]['id']),DEMO_TENANT,frozenset())
+   |                                                    ^
+31 | …         result=await service.execute_job(db,ctx,{'operation':'infer','source_id':deployment,'dataset_id':dataset['dataset_id'],'offs…
+32 | …     r=await c.get('/api/v1/ml/events/'+result['id'],headers=h(1));assert r.status_code==200,r.text;body=r.json()['body'];assert len(…
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\verify_phase9_ml.py:32:74
+   |
+30 | …             await tenant_context(db,str(DEMO_TENANT));ctx=Context(uuid.UUID(m['users'][1]['id']),DEMO_TENANT,frozenset())
+31 | …             result=await service.execute_job(db,ctx,{'operation':'infer','source_id':deployment,'dataset_id':dataset['dataset_id'],'…
+32 | …         r=await c.get('/api/v1/ml/events/'+result['id'],headers=h(1));assert r.status_code==200,r.text;body=r.json()['body'];assert …
+   |                                                                        ^
+33 | …     # Explicit rollback to first approved version and immutable deployment history.
+34 | …     r=await c.post(f'/api/v1/ml/models/{runs[0]["id"]}/deployments',headers=h(3),json={**decision,'rationale':'Synthetic rollback to…
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\verify_phase9_ml.py:32:107
+   |
+30 | …             await tenant_context(db,str(DEMO_TENANT));ctx=Context(uuid.UUID(m['users'][1]['id']),DEMO_TENANT,frozenset())
+31 | …             result=await service.execute_job(db,ctx,{'operation':'infer','source_id':deployment,'dataset_id':dataset['dataset_id'],'…
+32 | …         r=await c.get('/api/v1/ml/events/'+result['id'],headers=h(1));assert r.status_code==200,r.text;body=r.json()['body'];assert …
+   |                                                                                                         ^
+33 | …     # Explicit rollback to first approved version and immutable deployment history.
+34 | …     r=await c.post(f'/api/v1/ml/models/{runs[0]["id"]}/deployments',headers=h(3),json={**decision,'rationale':'Synthetic rollback to…
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\verify_phase9_ml.py:32:129
+   |
+30 | …             await tenant_context(db,str(DEMO_TENANT));ctx=Context(uuid.UUID(m['users'][1]['id']),DEMO_TENANT,frozenset())
+31 | …             result=await service.execute_job(db,ctx,{'operation':'infer','source_id':deployment,'dataset_id':dataset['dataset_id'],'…
+32 | …         r=await c.get('/api/v1/ml/events/'+result['id'],headers=h(1));assert r.status_code==200,r.text;body=r.json()['body'];assert …
+   |                                                                                                                               ^
+33 | …     # Explicit rollback to first approved version and immutable deployment history.
+34 | …     r=await c.post(f'/api/v1/ml/models/{runs[0]["id"]}/deployments',headers=h(3),json={**decision,'rationale':'Synthetic rollback to…
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\verify_phase9_ml.py:32:167
+   |
+30 | …,DEMO_TENANT,frozenset())
+31 | …'dataset_id':dataset['dataset_id'],'offset':260824,'limit':1000})
+32 | …r.text;body=r.json()['body'];assert len(body['predictions'])==1000;assert not body['calibrated_probability'];report.append({'family':…
+   |                                                                    ^
+33 | …
+34 | …n,'rationale':'Synthetic rollback to earlier independently approved autoencoder version'});assert r.status_code==201,r.text
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\verify_phase9_ml.py:32:209
+   |
+30 | …
+31 | …':260824,'limit':1000})
+32 | …dy['predictions'])==1000;assert not body['calibrated_probability'];report.append({'family':run['family'],'model_id':mid,'deployment_i…
+   |                                                                    ^
+33 | …
+34 | …er independently approved autoencoder version'});assert r.status_code==201,r.text
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\verify_phase9_ml.py:34:191
+   |
+32 | …dy'];assert len(body['predictions'])==1000;assert not body['calibrated_probability'];report.append({'family':run['family'],'model_id'…
+33 | …
+34 | … rollback to earlier independently approved autoencoder version'});assert r.status_code==201,r.text
+   |                                                                    ^
+35 | …
+36 | …
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\verify_phase9_ml.py:36:92
+   |
+34 |         r=await c.post(f'/api/v1/ml/models/{runs[0]["id"]}/deployments',headers=h(3),json={**decision,'rationale':'Synthetic rollback …
+35 |         for i in [6,18]:
+36 |             r=await c.get(f'/api/v1/ml/events?eid={dataset["engagement_id"]}',headers=h(i));assert r.status_code==403,r.text
+   |                                                                                            ^
+37 |     (ROOT/'docs/phase-9/inference-verification.json').write_text(json.dumps({'families':report,'rollback_model_id':runs[0]['id'],'audi…
+38 | if __name__=='__main__':asyncio.run(main())
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\verify_phase9_ml.py:37:207
+   |
+35 | …
+36 | …
+37 | …ternal_denied':True,'client_internal_denied':True},indent=2)+'\n');print(json.dumps(report));await engine.dispose()
+   |                                                                    ^
+38 | …
+   |
+
+E702 Multiple statements on one line (semicolon)
+  --> scripts\verify_phase9_ml.py:37:233
+   |
+35 | …
+36 | …
+37 | …t_internal_denied':True},indent=2)+'\n');print(json.dumps(report));await engine.dispose()
+   |                                                                    ^
+38 | …
+   |
+
+E701 Multiple statements on one line (colon)
+  --> scripts\verify_phase9_ml.py:38:24
+   |
+36 |             r=await c.get(f'/api/v1/ml/events?eid={dataset["engagement_id"]}',headers=h(i));assert r.status_code==403,r.text
+37 |     (ROOT/'docs/phase-9/inference-verification.json').write_text(json.dumps({'families':report,'rollback_model_id':runs[0]['id'],'audi…
+38 | if __name__=='__main__':asyncio.run(main())
+   |                        ^
+
+Found 128 errors (20 fixed, 108 remaining).

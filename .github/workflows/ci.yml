@@ -1,5 +1,7 @@
 name: backend
 on: [push, pull_request]
+permissions:
+  contents: read
 jobs:
   verify:
     runs-on: ubuntu-latest
@@ -7,8 +9,8 @@ jobs:
       postgres:
         image: postgres:16
         env:
-          POSTGRES_DB: auditos
-          POSTGRES_PASSWORD: ci-admin-only
+          POSTGRES_DB: auditos_test
+          POSTGRES_HOST_AUTH_METHOD: trust # Isolated disposable CI service only; never production.
         ports: ["5432:5432"]
         options: >-
           --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 3s --health-retries 20
@@ -18,27 +20,166 @@ jobs:
         options: >-
           --health-cmd "redis-cli ping" --health-interval 5s --health-timeout 3s --health-retries 20
     env:
-      JWT_SECRET: ci-signing-secret-only-at-least-48-characters-long
-      BOOTSTRAP_SECRET: ci-first-run-only
-      DATABASE_URL: postgresql+asyncpg://auditos:ci-app-only@localhost:5432/auditos
+      DATABASE_URL: postgresql+asyncpg://auditos@localhost:5432/auditos_test
       REDIS_URL: redis://localhost:6379/0
       INTEGRATION_TESTS: '1'
-      PGPASSWORD: ci-admin-only
+      ENVIRONMENT: test
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
         with:
           version: '0.13.1'
           python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ml-engine/package-lock.json
+      - name: Generate masked disposable signing and setup secrets
+        shell: bash
+        run: |
+          for key in JWT_SECRET BOOTSTRAP_SECRET; do
+            value=$(openssl rand -hex 32)
+            echo "::add-mask::$value"
+            echo "$key=$value" >> "$GITHUB_ENV"
+          done
       - run: uv sync --frozen
         working-directory: backend
-      - run: psql -h localhost -U postgres -d auditos -c "CREATE ROLE auditos LOGIN PASSWORD 'ci-app-only' NOSUPERUSER NOBYPASSRLS; GRANT USAGE, CREATE ON SCHEMA public TO auditos;"
-      - run: uv run alembic upgrade head && uv run alembic downgrade -1 && uv run alembic upgrade head
+      - run: psql -h localhost -U postgres -d auditos_test -c "CREATE ROLE auditos LOGIN NOSUPERUSER NOBYPASSRLS; GRANT USAGE, CREATE ON SCHEMA public TO auditos;"
+      - run: uv run alembic upgrade head && uv run alembic check
         working-directory: backend
       - run: uv run ruff check . && uv run ruff format --check . && uv run mypy app
         working-directory: backend
+      - run: npm ci && npm run build
+        working-directory: ml-engine
       - run: uv run pytest --cov=app --cov-report=term-missing --cov-report=json:coverage.json --cov-fail-under=80
         working-directory: backend
 
       - run: uv run python ../scripts/check_core_coverage.py coverage.json
         working-directory: backend
+
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+        working-directory: frontend
+      - run: npm test && npm run lint && npm run typecheck && npm run build
+        working-directory: frontend
+      - run: npm audit --audit-level=high
+        working-directory: frontend
+
+  ml:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ml-engine/package-lock.json
+      - run: npm ci && npm test && npm audit --audit-level=high
+        working-directory: ml-engine
+
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: astral-sh/setup-uv@v6
+        with: {version: '0.13.1', python-version: '3.12'}
+      - run: uv sync --frozen
+        working-directory: backend
+      - run: uv tool run pip-audit --path backend/.venv/lib/python3.12/site-packages --format json --output dependency-audit.json
+      - run: uv tool run bandit -r backend/app -lll -f json -o sast.json
+      - uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_ENABLE_COMMENTS: 'false'
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: security-evidence
+          path: |
+            dependency-audit.json
+            sast.json
+
+  containers:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -f deploy/backend.Dockerfile -t auditos-backend:ci .
+      - run: docker build -t auditos-frontend:ci frontend
+      - uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8 # v0.33.1
+        with:
+          image-ref: auditos-backend:ci
+          severity: CRITICAL,HIGH
+          exit-code: '1'
+          ignore-unfixed: false
+
+      - uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8 # v0.33.1
+        with:
+          image-ref: auditos-frontend:ci
+          severity: CRITICAL,HIGH
+          exit-code: '1'
+          ignore-unfixed: false
+
+  browser-smoke:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_DB: auditos_smoke_test
+          POSTGRES_HOST_AUTH_METHOD: trust
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 3s --health-retries 20
+      redis:
+        image: redis:7-alpine
+        ports: ["6379:6379"]
+    env:
+      ENVIRONMENT: test
+      DATABASE_URL: postgresql+asyncpg://auditos@localhost:5432/auditos_smoke_test
+      REDIS_URL: redis://localhost:6379/0
+      AUDITOS_SMOKE_EMAIL: release-smoke@example.com
+      AUDITOS_E2E_ORIGIN: http://127.0.0.1:3005
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with: {version: '0.13.1', python-version: '3.12'}
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - name: Generate disposable masked test credentials
+        shell: bash
+        run: |
+          for key in JWT_SECRET BOOTSTRAP_SECRET AUDITOS_SMOKE_PASSWORD; do
+            value=$(openssl rand -hex 32)
+            echo "::add-mask::$value"
+            echo "$key=$value" >> "$GITHUB_ENV"
+          done
+      - run: psql -h localhost -U postgres -d auditos_smoke_test -c "CREATE ROLE auditos LOGIN NOSUPERUSER NOBYPASSRLS; GRANT USAGE, CREATE ON SCHEMA public TO auditos;"
+      - run: uv sync --frozen && uv run alembic upgrade head
+        working-directory: backend
+      - run: backend/.venv/bin/python scripts/seed_release_smoke.py
+      - run: npm ci && npm run build && npx playwright install --with-deps chromium
+        working-directory: frontend
+      - name: Start isolated local test services
+        shell: bash
+        run: |
+          cd backend
+          nohup .venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 58008 --no-access-log > /tmp/auditos-api.log 2>&1 &
+          cd ../frontend
+          nohup node scripts/start.mjs --port 3005 --api-origin http://127.0.0.1:58008 --web-origin http://127.0.0.1:3005 > /tmp/auditos-web.log 2>&1 &
+          for i in $(seq 1 30); do
+            if curl --fail --silent http://127.0.0.1:58008/health/ready && curl --fail --silent http://127.0.0.1:3005/login > /dev/null; then exit 0; fi
+            sleep 2
+          done
+          exit 1
+      - run: npx playwright test --config playwright.smoke.config.ts
+        working-directory: frontend

@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-18",
+  "baseline_commit": "cb94d52d1571d1d83309922de9c9d2b4f3ca1926",
+  "backend": {
+    "passed": 218,
+    "skipped": 2,
+    "failures": 0,
+    "errors": 0,
+    "coverage_percent": 90.02678755409025,
+    "phase2_core_coverage_percent": 90.34749034749035
+  },
+  "frontend": {
+    "passed": 22,
+    "failed": 0
+  },
+  "playwright": {
+    "startTime": "2026-10-17T21:01:35.415Z",
+    "duration": 31383.054,
+    "expected": 3,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "screenshots": 27,
+  "production_build": "passed",
+  "production_browser": "not_run_optional_server_start_blocked_by_automatic_review",
+  "migration_head": "0004",
+  "schema_drift": "none",
+  "ruff": "passed",
+  "mypy": "90 source files passed",
+  "frontend_typecheck_lint": "passed",
+  "live_integrations": {
+    "ai": "not exercised",
+    "clamav": "not available; fail-closed quarantine tested; clean path uses declared test double",
+    "s3_kms": "not exercised",
+    "zoho_tally": "2 opt-in tests skipped"
+  },
+  "phase4_commercial_feature_set_complete": false,
+  "phase5_started": false
+}

@@ -1,0 +1,12 @@
+
+Running 5 tests using 1 worker
+
+(node:26100) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 e2e\phase11.spec.ts:32:1 › all 16 AI workspaces use actual APIs (8.9s)
+  ok 2 e2e\phase11.spec.ts:85:1 › reviewed plan executes in a real worker and exports a draft (4.0s)
+  ok 3 e2e\phase11.spec.ts:121:1 › document retrieval and mismatches show stored source values (1.0s)
+  ok 4 e2e\phase11.spec.ts:139:1 › command center is usable at four enterprise viewport widths (1.9s)
+  ok 5 e2e\phase11.spec.ts:160:1 › configured read-only graph creates a separate executable run and citations open (4.2s)
+
+  5 passed (20.7s)

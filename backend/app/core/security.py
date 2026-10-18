@@ -31,7 +31,7 @@ def refresh_token() -> str:
     return secrets.token_urlsafe(48)
 
 
-def access_token(user_id: uuid.UUID) -> str:
+def access_token(user_id: uuid.UUID, session_id: uuid.UUID | None = None, mfa: bool = False) -> str:
     now = datetime.now(UTC)
     return jwt.encode(
         {
@@ -41,6 +41,7 @@ def access_token(user_id: uuid.UUID) -> str:
             "iss": "auditos",
             "aud": "auditos-api",
             "type": "access",
+            **({"sid": str(session_id), "mfa": mfa} if session_id else {}),
         },
         settings().jwt_secret,
         algorithm="HS256",
@@ -48,6 +49,10 @@ def access_token(user_id: uuid.UUID) -> str:
 
 
 def decode_token(token: str) -> uuid.UUID:
+    return uuid.UUID(decode_claims(token)["sub"])
+
+
+def decode_claims(token: str) -> dict:
     data = jwt.decode(
         token,
         settings().jwt_secret,
@@ -58,4 +63,4 @@ def decode_token(token: str) -> uuid.UUID:
     )
     if data.get("type") != "access":
         raise ValueError("Invalid token type")
-    return uuid.UUID(data["sub"])
+    return data

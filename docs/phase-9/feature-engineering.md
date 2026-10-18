@@ -1,0 +1,3 @@
+# Feature Engineering
+
+audit-features/1 contains 16 numeric transaction features: log amount, direction, cyclical month, weekday, month/year end, round thousands, description length, currency mismatch, reversal narration, known manual/missing manual, prior account/counterparty frequency and amount relative to prior account mean. History updates only after a posting date. Tenant identifiers are grouping keys, never predictive values. Account classification uses 32 hashed name-token features. Unavailable time/holiday/tax/evidence/user/RP facts are declared, not fabricated. Inference history is local to the supplied batch; changing batch context can change peer features and must be considered when interpreting results.

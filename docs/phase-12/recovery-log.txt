@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "source_database": "auditos_phase7_demo",
+  "isolated_target": "auditos_phase12_restore_test",
+  "migration": "0012",
+  "database_restore_and_verify_seconds": 43.12992849999864,
+  "private_objects": 1205,
+  "private_object_hashes_equal": true,
+  "elapsed_seconds": 69.73471740000241,
+  "encrypted_database_bytes": 98183076,
+  "scope": "Synthetic local recovery only; not production PITR, remote retention, or deployment rollback qualification"
+}

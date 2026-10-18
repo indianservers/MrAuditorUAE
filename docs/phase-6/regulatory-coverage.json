@@ -1,0 +1,122 @@
+[
+  {
+    "feature": "Standard bands",
+    "coverage": "Fully calculated and tested",
+    "sources": "CT-RATES",
+    "scope": "Taxable income through AED375,000 at 0%; excess at 9%; approved version parameters"
+  },
+  {
+    "feature": "Accounting-to-tax bridge",
+    "coverage": "Fully calculated and tested",
+    "sources": "CT-LAW",
+    "scope": "Approved IFRS PBT, source-bounded reviewed adjustments, approved exempt-income schedules"
+  },
+  {
+    "feature": "Expense deductibility",
+    "coverage": "Supported with manual professional input",
+    "sources": "CT-LAW",
+    "scope": "Entertainment recipient scope/50%, fines, nonbusiness, explicit permanent/timing/other decisions; no blanket provisions add-back"
+  },
+  {
+    "feature": "SBR",
+    "coverage": "Supported with manual professional input",
+    "sources": "MD73-2023 / MD131-2026",
+    "scope": "3M current/history ceiling, election, residence, MNE/QFZP and anti-fragmentation facts; historical completeness reviewed"
+  },
+  {
+    "feature": "QFZP conditions/activity",
+    "coverage": "Supported with manual professional input",
+    "sources": "CT-LAW / MD229-2025",
+    "scope": "Canonical evidence-backed conditions, reviewed contracts and transaction classifications; unresolved IP nexus blocked"
+  },
+  {
+    "feature": "De minimis",
+    "coverage": "Fully calculated and tested",
+    "sources": "MD229-2025",
+    "scope": "Lower of5% applicable revenue and5M; explicit special-category denominator exclusions; no generic 9% nonqualifying-revenue shortcut"
+  },
+  {
+    "feature": "2026 distribution procedures",
+    "coverage": "Assessment checklist only",
+    "sources": "FTA6-2026",
+    "scope": "Period/as-of gating, approved procedures rule, evidence-backed AUP condition; sample-size helper and 30-day submission due date; no auditor AUP report creation"
+  },
+  {
+    "feature": "Interest limitation",
+    "coverage": "Supported with manual professional input",
+    "sources": "MD126-2023 / CTGIDL1",
+    "scope": "Statutory EBITDA bridge, pro-rated12M/30%, older carry first,10 subsequent periods, amortized capitalized interest; reviewed manual source balances"
+  },
+  {
+    "feature": "Loss utilization",
+    "coverage": "Fully calculated and tested",
+    "sources": "CT-LAW37",
+    "scope": "75% cap, eligible prior-period lots, immutable postings, serialized posting, correction reversals; no automatic eligibility conclusion"
+  },
+  {
+    "feature": "Loss eligibility/transfer",
+    "coverage": "Supported with manual professional input",
+    "sources": "CT-LAW38/39",
+    "scope": "Continuity/same-business and75% common ownership facts reviewed; explicit prior-period transfer posted once; current-year loss transfer excluded"
+  },
+  {
+    "feature": "Tax Group",
+    "coverage": "Supported with manual professional input",
+    "sources": "CT-LAW40\u201342 / CTP007",
+    "scope": "Full-period95% three-rights tests, aligned resident members, FTA and audit evidence; one group threshold, explicit consolidated tax adjustments"
+  },
+  {
+    "feature": "Qualifying group/restructuring relief",
+    "coverage": "Assessment checklist only",
+    "sources": "CT-LAW26/27",
+    "scope": "Evidence-backed election/eligibility,75% qualifying group threshold and two-year clawback monitoring; no automatic tax-neutral journal"
+  },
+  {
+    "feature": "Transitional",
+    "coverage": "Supported with manual professional input",
+    "sources": "CT-LAW61",
+    "scope": "First-period election, valuation evidence, manual assessed adjustment; standalone workpaper does not automatically post adjustment"
+  },
+  {
+    "feature": "Domestic dividend/participation/foreignPE",
+    "coverage": "Supported with manual professional input",
+    "sources": "CT-LAW22\u201324 / MD302-2024",
+    "scope": "Reviewed canonical conditions and source-bounded exemption; complex eligibility/netting remains professional input"
+  },
+  {
+    "feature": "Foreign tax credit",
+    "coverage": "Supported with manual professional input",
+    "sources": "CT-LAW47",
+    "scope": "Min foreign paid/UAE attributable, capped current tax; source-income ceiling and no overlap with exempt line; allocation is manual"
+  },
+  {
+    "feature": "Related/connected persons",
+    "coverage": "Assessment checklist only",
+    "sources": "CT-LAW34\u201336",
+    "scope": "Dated relationships, contracts/accounts, risk review and separate approved adjustment link; no TP benchmarking"
+  },
+  {
+    "feature": "Foundations",
+    "coverage": "Assessment checklist only",
+    "sources": "CTGFF1",
+    "scope": "Governance, beneficiaries, application and FTA approval evidence; never automatic transparency"
+  },
+  {
+    "feature": "Returns/deadlines",
+    "coverage": "Fully calculated and tested",
+    "sources": "CT-LAW53",
+    "scope": "Nine-month calendar deadline plus explicitly approved overrides; checklist and current computation gate; external filing evidence only"
+  },
+  {
+    "feature": "Registration/exemption2026",
+    "coverage": "Research/reference only",
+    "sources": "FTA12-2026 / FTA15-2026",
+    "scope": "Manual event-based deadline assessments; no automatic application"
+  },
+  {
+    "feature": "Pillar Two/special taxpayer computations",
+    "coverage": "Not implemented",
+    "sources": "N/A",
+    "scope": "Pillar Two blocks release; natural persons, transparent partnerships, exempt persons and foundations require specialist methodology"
+  }
+]

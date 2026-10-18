@@ -112,6 +112,7 @@ class EntityOut(OwnedOut, EntityCreate):
 
 
 class EngagementOut(OwnedOut, EngagementCreate):
+    status: str  # type: ignore[assignment]
     version: int
 
 

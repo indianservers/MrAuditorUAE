@@ -1,0 +1,24 @@
+{
+  "backend": {
+    "passed": 271,
+    "skipped": 2,
+    "failures": 0,
+    "errors": 0,
+    "seconds": 131.182
+  },
+  "frontend_unit_passed": 22,
+  "browser": {
+    "startTime": "2026-10-17T22:24:34.457Z",
+    "duration": 30175.493,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "ruff": "passed",
+  "mypy": "109 source files passed",
+  "typescript": "passed",
+  "eslint": "passed",
+  "production_build": "passed",
+  "migration": "fresh0001-through0006; no drift; forced RLS all3tables"
+}

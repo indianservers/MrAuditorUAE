@@ -1,0 +1,1 @@
+{"periods_reconciled": 30, "journal_lines": 250024, "roles_probed": 25, "p95_seconds": 0.022985499999776948}

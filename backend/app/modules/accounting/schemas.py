@@ -86,11 +86,13 @@ class ReconcileRequest(SnapshotRequest):
 
 
 class SamplingRequest(SnapshotRequest):
-    method: Literal["random", "systematic", "mus", "high_value", "risk", "full"]
+    method: Literal["random", "systematic", "mus", "high_value", "risk", "full", "judgmental"]
     size: int = Field(default=10, ge=1, le=1000000)
     seed: int = Field(default=0, ge=0, le=2147483647)
     threshold: Decimal = Field(default=Decimal("0"), ge=0)
     analytics_run_id: uuid.UUID | None = None
+    selected_line_ids: list[uuid.UUID] = Field(default_factory=list, max_length=1000)
+    selection_rationale: str = Field(default="", max_length=4000)
 
 
 class RunOut(BaseModel):

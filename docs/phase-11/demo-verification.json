@@ -1,0 +1,3538 @@
+{
+  "synthetic": true,
+  "engagement_id": "4c102ee3-94d0-4ba4-94bf-faecb852da9d",
+  "reviewer_id": "f7b4d2fa-5077-5354-9982-00779b4e00c9",
+  "scanner": "Hash-allowlisted synthetic fixture test double; NOT real malware scanning",
+  "investigations": [
+    {
+      "id": "b3ac804a-92db-48fa-87a5-e5bb7659ba6e",
+      "task": "revenue",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_analytics",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ml.get_predictions",
+          "status": "LIMITED"
+        },
+        {
+          "tool": "ifrs.get_schedules",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "vat.get_invoice_exceptions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tp.get_related_party_transactions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "2fa5eb92-9588-4b83-a3d4-40d8c894c87f",
+      "task": "corporate-tax",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tax.get_ct_computation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "f7544295-43a2-4945-87ca-749f1e4dce69",
+      "task": "qfzp",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "tax.get_qfzp_assessment",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "daac838f-86a6-4ed8-a849-5244b14e1922",
+      "task": "transfer-pricing",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "tp.get_related_party_transactions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tp.get_benchmark_study",
+          "status": "MISSING"
+        },
+        {
+          "tool": "tp.get_loan_analysis",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "4888e4a6-1227-491a-b279-96c88433b1f0",
+      "task": "pillar-two",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "dmtt.get_scope_assessment",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "dmtt.get_etr_calculation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "f05bee47-68da-4877-9375-8c046f07bd8c",
+      "task": "document-ledger",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_evidence",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "6ae8089b-3eb3-4eaf-93bd-a75ef613ef7c",
+      "task": "grc-monitoring",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "grc.get_monitoring_alerts",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "grc.get_controls",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "grc.get_remediation_actions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "da2c6265-821b-4eb9-b219-886fcfdc1bdb",
+      "task": "audit-planning",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_trial_balance",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_working_papers",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "bb382173-85c8-40e2-8c66-4d06fe62135b",
+      "task": "monthly-anomalies",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_analytics",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ml.get_predictions",
+          "status": "LIMITED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "91ea741c-f207-406a-bf44-8ae50b6795d0",
+      "task": "reconciliation",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_reconciliation",
+          "status": "MISSING"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "7c443a5c-bb2b-43ff-b176-5795cdaeec77",
+      "task": "evidence-request",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_evidence",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "3277fb37-0a9e-4d44-9bff-09b8b9f07875",
+      "task": "workpaper-review",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_working_papers",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "ec1fb25e-d07b-4f3e-92ba-3bce656dde3f",
+      "task": "vat-exceptions",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "vat.get_reconciliation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "vat.get_invoice_exceptions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "ac410521-ea09-4104-8ba1-52b7db783f27",
+      "task": "loan-interest",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "tp.get_loan_analysis",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tax.get_interest_schedule",
+          "status": "MISSING"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "cb8f8a38-065b-4cf6-99da-5034da5fd0f0",
+      "task": "ifrs-disclosure",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ifrs.get_schedules",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "93ad89ea-56c6-45f1-b1f1-144b983beb30",
+      "task": "revenue",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_analytics",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ml.get_predictions",
+          "status": "LIMITED"
+        },
+        {
+          "tool": "ifrs.get_schedules",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "vat.get_invoice_exceptions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tp.get_related_party_transactions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "e7624c97-eba1-415e-a7bc-e66dcac00086",
+      "task": "corporate-tax",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tax.get_ct_computation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "ec6c93d2-c7cb-43c2-b7eb-127612445344",
+      "task": "qfzp",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "tax.get_qfzp_assessment",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "9e0afdd8-9d9e-4d96-96ef-45dfc0dfaf53",
+      "task": "transfer-pricing",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "tp.get_related_party_transactions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tp.get_benchmark_study",
+          "status": "MISSING"
+        },
+        {
+          "tool": "tp.get_loan_analysis",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "6d24b043-250a-4fd7-b46e-0bb4019a06ba",
+      "task": "pillar-two",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "dmtt.get_scope_assessment",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "dmtt.get_etr_calculation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "1ea58cfe-6c89-4e55-854c-1147fa3864b9",
+      "task": "document-ledger",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_evidence",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "68330e77-fc7d-4063-85da-4c8888f159bf",
+      "task": "grc-monitoring",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "grc.get_monitoring_alerts",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "grc.get_controls",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "grc.get_remediation_actions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "21ca74c2-b986-4a0f-8c36-4ac3602aa719",
+      "task": "audit-planning",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_trial_balance",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_working_papers",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "7b5a50be-8c1f-404d-abda-d05ddafa053a",
+      "task": "monthly-anomalies",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_analytics",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ml.get_predictions",
+          "status": "LIMITED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "dfa3eb80-b26b-45b0-b8f2-a06cf5917fc0",
+      "task": "reconciliation",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_reconciliation",
+          "status": "MISSING"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "c42ef4d1-d581-44e5-b0f4-3728a221938d",
+      "task": "evidence-request",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_evidence",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "1e1b6bc2-79ec-41ae-bdc9-42abdbb0aab3",
+      "task": "workpaper-review",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_working_papers",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "6b0a78d2-7d61-4bc6-ab2f-5e28ed038c87",
+      "task": "vat-exceptions",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "vat.get_reconciliation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "vat.get_invoice_exceptions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "7eb585a7-4f7a-4a16-a629-46799415d8b0",
+      "task": "loan-interest",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "tp.get_loan_analysis",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tax.get_interest_schedule",
+          "status": "MISSING"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "82b2e74b-3623-4457-a064-9dccfffbeeeb",
+      "task": "ifrs-disclosure",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ifrs.get_schedules",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "b92c5cfc-a320-44fe-9bf1-88c76689fa4f",
+      "task": "revenue",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_analytics",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ml.get_predictions",
+          "status": "LIMITED"
+        },
+        {
+          "tool": "ifrs.get_schedules",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "vat.get_invoice_exceptions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tp.get_related_party_transactions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "bda35e12-ab93-4cf8-8dac-239ba00bb08f",
+      "task": "corporate-tax",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tax.get_ct_computation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "cd4d4de3-d7b7-46aa-9b65-8ea3f328c5fc",
+      "task": "qfzp",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "tax.get_qfzp_assessment",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "c4fa0cd5-ce10-4834-a630-aa10f57648ec",
+      "task": "transfer-pricing",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "tp.get_related_party_transactions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tp.get_benchmark_study",
+          "status": "MISSING"
+        },
+        {
+          "tool": "tp.get_loan_analysis",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "949fd79c-ca65-4eeb-ae14-15411b30c468",
+      "task": "pillar-two",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "dmtt.get_scope_assessment",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "dmtt.get_etr_calculation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "f85d3353-638d-44e3-bf2c-136517b7ebfe",
+      "task": "document-ledger",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_evidence",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "8214f382-b241-45c8-8fae-ba424919d8a3",
+      "task": "grc-monitoring",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "grc.get_monitoring_alerts",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "grc.get_controls",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "grc.get_remediation_actions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "f8cb2c10-6e32-4af1-ac69-47d5bea41091",
+      "task": "audit-planning",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_trial_balance",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_working_papers",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "29cb9591-8524-4e92-9ce9-b68ce240551f",
+      "task": "monthly-anomalies",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_analytics",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ml.get_predictions",
+          "status": "LIMITED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "78fe52d4-5179-4f38-88d6-1172abd46c45",
+      "task": "reconciliation",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_reconciliation",
+          "status": "MISSING"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "aa07981c-5aed-47a5-a034-13b14afbe9df",
+      "task": "evidence-request",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_evidence",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "a62c33d8-7e3a-4cd2-9a8d-752bd4180813",
+      "task": "workpaper-review",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_working_papers",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "661e1a51-b236-429b-912b-98bbba904030",
+      "task": "vat-exceptions",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "vat.get_reconciliation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "vat.get_invoice_exceptions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "b62c296a-105b-4f4d-b36a-1a5a573b8241",
+      "task": "loan-interest",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "tp.get_loan_analysis",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tax.get_interest_schedule",
+          "status": "MISSING"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "7da0942c-8bb8-4f17-b909-da47a65d984f",
+      "task": "ifrs-disclosure",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ifrs.get_schedules",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "d4de75df-2ffe-4913-95e3-72cedcda3ca4",
+      "task": "revenue",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_analytics",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ml.get_predictions",
+          "status": "LIMITED"
+        },
+        {
+          "tool": "ifrs.get_schedules",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "vat.get_invoice_exceptions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tp.get_related_party_transactions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "c3f1d1c1-fdf5-436c-a019-e1a4c2d5d787",
+      "task": "corporate-tax",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tax.get_ct_computation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "0c1106c9-46ec-45c1-b48a-217d69ba4d26",
+      "task": "qfzp",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "tax.get_qfzp_assessment",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "f0e41c96-b0fd-4fc0-af1a-fcf8472104cf",
+      "task": "transfer-pricing",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "tp.get_related_party_transactions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tp.get_benchmark_study",
+          "status": "MISSING"
+        },
+        {
+          "tool": "tp.get_loan_analysis",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "d8d03f4e-dccd-4e07-8b78-9be02d8dcf2c",
+      "task": "pillar-two",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "dmtt.get_scope_assessment",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "dmtt.get_etr_calculation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "181cf78b-5108-4dc7-a46c-a3c868f73a18",
+      "task": "document-ledger",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_evidence",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "5d458dc9-0562-4d35-afe7-5463c71dc8fe",
+      "task": "grc-monitoring",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "grc.get_monitoring_alerts",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "grc.get_controls",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "grc.get_remediation_actions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "6c89027d-4125-405c-bda3-c3f37f56dc96",
+      "task": "audit-planning",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_trial_balance",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_working_papers",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "c91f1bc7-1fae-4ef9-bae1-691d53a5cdb6",
+      "task": "monthly-anomalies",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_analytics",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ml.get_predictions",
+          "status": "LIMITED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "32ab867e-fddd-4836-b758-644a30bf288d",
+      "task": "reconciliation",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_reconciliation",
+          "status": "MISSING"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "5ed676b1-91a9-4d28-84f1-670480392e9f",
+      "task": "evidence-request",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_evidence",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "fb1ca2d9-4462-4e8a-8a07-b60ff37a5851",
+      "task": "workpaper-review",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_working_papers",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "e6d7ab71-7d71-4748-9fba-fa2e56aca13a",
+      "task": "vat-exceptions",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "vat.get_reconciliation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "vat.get_invoice_exceptions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "155cedf0-b51b-4960-891f-bff7a5d7e4bc",
+      "task": "loan-interest",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "tp.get_loan_analysis",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tax.get_interest_schedule",
+          "status": "MISSING"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "62aa5bd8-4c3e-4c10-b7ff-132210287dfe",
+      "task": "ifrs-disclosure",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ifrs.get_schedules",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "6fabe17e-1a4b-43f9-b681-f52a68323aad",
+      "task": "revenue",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_analytics",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ml.get_predictions",
+          "status": "LIMITED"
+        },
+        {
+          "tool": "ifrs.get_schedules",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "vat.get_invoice_exceptions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tp.get_related_party_transactions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "dc504450-29a7-4b2c-a9ca-92a60032ecb7",
+      "task": "corporate-tax",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tax.get_ct_computation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "514ac8fa-c253-4f20-83c3-18f55f4ee373",
+      "task": "qfzp",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "tax.get_qfzp_assessment",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "d58d6f01-88b9-41d0-8987-bf1271c2e6f3",
+      "task": "transfer-pricing",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "tp.get_related_party_transactions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tp.get_benchmark_study",
+          "status": "MISSING"
+        },
+        {
+          "tool": "tp.get_loan_analysis",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "2204344c-a2aa-4bd1-9d45-b325980921fd",
+      "task": "pillar-two",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "dmtt.get_scope_assessment",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "dmtt.get_etr_calculation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "53dd49e8-7024-4515-9004-ed794b36ef88",
+      "task": "document-ledger",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_evidence",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "43d42a74-ebe8-4418-a7ce-620803db1c79",
+      "task": "grc-monitoring",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "grc.get_monitoring_alerts",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "grc.get_controls",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "grc.get_remediation_actions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "8064f24a-b224-4ede-8470-297c5554e1fd",
+      "task": "audit-planning",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_trial_balance",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_working_papers",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "e968a96f-7ed5-4cd9-86df-e78898a882a8",
+      "task": "monthly-anomalies",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_analytics",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ml.get_predictions",
+          "status": "LIMITED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "097f49b9-8298-499c-8f97-026952a9005e",
+      "task": "reconciliation",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_reconciliation",
+          "status": "MISSING"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "4cf3afb6-9e95-49a0-acaa-5f782834049f",
+      "task": "evidence-request",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_evidence",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "0aa69466-14a9-4c63-addd-e89b67f5ba1a",
+      "task": "workpaper-review",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_working_papers",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "0b717c72-06ee-420e-a9b4-315b53374ad2",
+      "task": "vat-exceptions",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "vat.get_reconciliation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "vat.get_invoice_exceptions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "b70aadbf-13b8-4729-9274-b766d90d1549",
+      "task": "loan-interest",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "tp.get_loan_analysis",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tax.get_interest_schedule",
+          "status": "MISSING"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "de9eb60d-b10f-47d2-87b2-030980305013",
+      "task": "ifrs-disclosure",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ifrs.get_schedules",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "d990722f-fbb7-4888-96f2-c71a86039564",
+      "task": "revenue",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_analytics",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ml.get_predictions",
+          "status": "LIMITED"
+        },
+        {
+          "tool": "ifrs.get_schedules",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "vat.get_invoice_exceptions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tp.get_related_party_transactions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "ef33d66b-979c-45f7-8e54-d7b88ab3382e",
+      "task": "corporate-tax",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tax.get_ct_computation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "c2463f7c-a97a-487e-979e-7f8a4905f6be",
+      "task": "qfzp",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "tax.get_qfzp_assessment",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "5f57bf88-39dd-4c5e-bd7f-2c3028ce3e90",
+      "task": "transfer-pricing",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "tp.get_related_party_transactions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tp.get_benchmark_study",
+          "status": "MISSING"
+        },
+        {
+          "tool": "tp.get_loan_analysis",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "dca09f07-55cf-448c-936f-80d6752f86d6",
+      "task": "pillar-two",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "dmtt.get_scope_assessment",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "dmtt.get_etr_calculation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "5ad66c4f-d877-42a0-9254-3e51d72337ad",
+      "task": "document-ledger",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_evidence",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "b1debc2a-b8a7-41af-b289-089852898543",
+      "task": "grc-monitoring",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "grc.get_monitoring_alerts",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "grc.get_controls",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "grc.get_remediation_actions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "96b8a807-0ddc-462b-955e-b7c523606b95",
+      "task": "audit-planning",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_trial_balance",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_working_papers",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "bae87049-f4a6-4fc6-929e-59376ab55eaa",
+      "task": "monthly-anomalies",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_analytics",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ml.get_predictions",
+          "status": "LIMITED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "e3e56327-a85b-4566-96a7-e67ed2e42bd1",
+      "task": "reconciliation",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_reconciliation",
+          "status": "MISSING"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "2c6f48df-f9fa-4834-a35e-248fc1c8fcaf",
+      "task": "evidence-request",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_evidence",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "3a4c19fb-ee9a-43d3-8e0a-2236d2297396",
+      "task": "workpaper-review",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_working_papers",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "b6094730-ef78-4c45-a027-0187f11709be",
+      "task": "vat-exceptions",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "vat.get_reconciliation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "vat.get_invoice_exceptions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "cf0068cb-7160-462c-872d-3b982610dfb7",
+      "task": "loan-interest",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "tp.get_loan_analysis",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tax.get_interest_schedule",
+          "status": "MISSING"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "4b9b9bfd-adb7-4f01-a3d9-ca9f0670eebe",
+      "task": "ifrs-disclosure",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ifrs.get_schedules",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "4d50e7f0-af05-4bfa-abe9-038dfec4e6c2",
+      "task": "revenue",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_analytics",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ml.get_predictions",
+          "status": "LIMITED"
+        },
+        {
+          "tool": "ifrs.get_schedules",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "vat.get_invoice_exceptions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tp.get_related_party_transactions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "a5318ecb-c40c-462a-b4bd-457af809d10a",
+      "task": "corporate-tax",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tax.get_ct_computation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "b72cc547-830b-4c96-8d64-0415874a3f67",
+      "task": "qfzp",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "tax.get_qfzp_assessment",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "cff9e35a-f8a6-4f89-b828-02ad954a479b",
+      "task": "transfer-pricing",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "tp.get_related_party_transactions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tp.get_benchmark_study",
+          "status": "MISSING"
+        },
+        {
+          "tool": "tp.get_loan_analysis",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "6397cd15-1356-42fa-8d66-07fb123f79ef",
+      "task": "pillar-two",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "dmtt.get_scope_assessment",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "dmtt.get_etr_calculation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "1def922f-9daf-434a-97e3-31c7eb12bfc3",
+      "task": "document-ledger",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_evidence",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "cfa6ec0c-37bf-400e-8560-6552e14931cb",
+      "task": "grc-monitoring",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "grc.get_monitoring_alerts",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "grc.get_controls",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "grc.get_remediation_actions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "ad0ec945-e0bc-4dbb-97d2-338eb082d274",
+      "task": "audit-planning",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_trial_balance",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "audit.get_working_papers",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "634ea6a0-955b-4788-a390-ce5581520739",
+      "task": "monthly-anomalies",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_analytics",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ml.get_predictions",
+          "status": "LIMITED"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "28b58e20-cf2f-42a1-9396-ed90893a80e5",
+      "task": "reconciliation",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "financial.get_reconciliation",
+          "status": "MISSING"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "0e818326-03f2-412d-9d9c-8af2617b94d4",
+      "task": "evidence-request",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_evidence",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "3ea4630b-bbab-4375-9bb2-86a51212e366",
+      "task": "workpaper-review",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "audit.get_working_papers",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "audit.get_risks",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "ec8ae29c-2e32-4342-a927-13a20e252240",
+      "task": "vat-exceptions",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "vat.get_reconciliation",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "vat.get_invoice_exceptions",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "ac4e1485-1e8f-4ed4-ac4d-a9b912a9a3b7",
+      "task": "loan-interest",
+      "state": "PARTIALLY_COMPLETED",
+      "steps": [
+        {
+          "tool": "tp.get_loan_analysis",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "tax.get_interest_schedule",
+          "status": "MISSING"
+        },
+        {
+          "tool": "financial.get_general_ledger",
+          "status": "MISSING"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "921c7093-9fe7-48de-ab9e-e95da8dd0b13",
+      "task": "ifrs-disclosure",
+      "state": "COMPLETED",
+      "steps": [
+        {
+          "tool": "ifrs.get_financial_statements",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "ifrs.get_schedules",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "documents.search",
+          "status": "COMPLETED"
+        },
+        {
+          "tool": "quality.validate_sources",
+          "status": "COMPLETED"
+        }
+      ]
+    }
+  ],
+  "extractions": [
+    {
+      "id": "7692ba71-6132-4138-84be-1333c755db02",
+      "record_id": "f5700df1-4b4e-4b03-8028-e97a477fd72c",
+      "expected_amount": "66.01000000",
+      "expected_page": 1
+    },
+    {
+      "id": "111e0148-d24a-48d5-a010-8ed3c2f68121",
+      "record_id": "93be2efe-efd0-4bad-96a7-ade1a0e32a64",
+      "expected_amount": "51.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "533c97e2-bf96-4723-8d4a-43c1e12de0fd",
+      "record_id": "3657c2ed-e35e-4de1-94a1-9430efb6a1c6",
+      "expected_amount": "65.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "c5ea336e-3e27-4d5c-85f2-67f0475b8bab",
+      "record_id": "635dfc61-5b89-4f53-a4b9-5fc7af1505da",
+      "expected_amount": "97.01000000",
+      "expected_page": 1
+    },
+    {
+      "id": "95a03e10-e060-4db6-b724-62bd777f7ed8",
+      "record_id": "9fba1371-95a4-4791-ad50-1f64e63d37e1",
+      "expected_amount": "1000000.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "f04d342e-0d04-4e28-8d69-80ef8e4d168a",
+      "record_id": "99c736eb-e3c9-42a2-a18f-c95d14c2b0d7",
+      "expected_amount": "69.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "8fa56b53-cb37-4290-bc64-6a4bea0114e5",
+      "record_id": "4af245b2-4e7b-4df4-b978-d2bdd6cb76bb",
+      "expected_amount": "64.01000000",
+      "expected_page": 1
+    },
+    {
+      "id": "bc2339bf-c0c9-4d59-b689-b6328b991f9a",
+      "record_id": "d185fc1a-8787-4a7a-93e4-d8ed85f6fd58",
+      "expected_amount": "90.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "4bb065fb-6016-4c21-b3d0-dcea3d2bf7be",
+      "record_id": "0446b831-a530-4aad-98a1-89969fe7b5c6",
+      "expected_amount": "71.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "2175110f-e5b4-4f75-bc98-300abe7efae4",
+      "record_id": "b45e4638-2a4c-4a08-8697-bd6994e426e9",
+      "expected_amount": "57.01000000",
+      "expected_page": 1
+    },
+    {
+      "id": "ee324a78-60d7-40a7-8615-e9340d760ad2",
+      "record_id": "21347324-4c56-4897-8642-d55d3f783a08",
+      "expected_amount": "82.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "328923e5-b8ae-4065-ba8d-19d7797cb00e",
+      "record_id": "de5a9234-2710-47d1-a22c-0f300a419a19",
+      "expected_amount": "56.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "97159622-289a-4398-b59f-0a3cc67ec54a",
+      "record_id": "482522e6-73a6-4d11-afbe-9287f5331d62",
+      "expected_amount": "85.01000000",
+      "expected_page": 1
+    },
+    {
+      "id": "4e232819-89e8-43bc-a614-b09fac2b9c85",
+      "record_id": "d05a36cc-0066-4ce3-ab4a-c9b5cbbd4957",
+      "expected_amount": "69.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "f847e7e7-c2ef-4468-9d84-f9d6137a76b8",
+      "record_id": "393f7394-0c22-4750-868c-32161fd178d6",
+      "expected_amount": "58.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "2c2d708d-0782-46f1-9edc-59f8b3d51945",
+      "record_id": "14a22afe-5385-42e8-8bae-910804e26725",
+      "expected_amount": "67.01000000",
+      "expected_page": 1
+    },
+    {
+      "id": "5dbb6c5b-d850-467a-89ba-ea639d783bc7",
+      "record_id": "14dc86f8-b804-440e-8227-991365015665",
+      "expected_amount": "93.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "c5db2e5e-d9c7-4379-917a-1dbc42ee9bc4",
+      "record_id": "bd4b9985-19ba-49d1-b661-78e8a66df8b4",
+      "expected_amount": "57.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "89853db1-7751-427f-9d6b-7d30db80f8e0",
+      "record_id": "de77fd9b-42d7-4c26-af85-6a1d818b5837",
+      "expected_amount": "41.01000000",
+      "expected_page": 1
+    },
+    {
+      "id": "7f9aa07d-b0b1-435a-9d44-67eeb69d1426",
+      "record_id": "c819d886-f342-41eb-a545-47858337a0b1",
+      "expected_amount": "50.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "8045a0fd-8478-4cf9-bb11-f3f3e74195e8",
+      "record_id": "39dd9618-dd4b-4122-a1fb-43255f58438f",
+      "expected_amount": "64.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "2c098c2b-1428-4edc-987b-7e2d4e9f87a2",
+      "record_id": "26055131-6310-4874-b22b-cea1e3b9093f",
+      "expected_amount": "14.01000000",
+      "expected_page": 1
+    },
+    {
+      "id": "4bdba957-4c10-4e3d-a3df-0e2483f6e4aa",
+      "record_id": "3c1c7dfb-24fd-4715-a848-0171e699d16b",
+      "expected_amount": "62.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "c4d11de6-257a-4d10-9f26-3528a948e0d4",
+      "record_id": "6827eb30-f30e-45dd-bbec-eccc15a42a60",
+      "expected_amount": "62.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "af4b9039-e82c-48dd-9138-20217a86a07f",
+      "record_id": "817ed0d4-b99a-497e-a503-bf7c42927d9a",
+      "expected_amount": "71.01000000",
+      "expected_page": 1
+    },
+    {
+      "id": "65eddf26-e2da-4ae6-ba20-eb1513821bbf",
+      "record_id": "51148878-57ce-4b04-9469-4eac2a90643c",
+      "expected_amount": "22.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "7966c60f-18c1-4ae9-b394-f039ae41b91f",
+      "record_id": "6db004e6-e8f6-4c16-969a-5aeaa0db79d5",
+      "expected_amount": "70.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "9095fe42-4320-4d7b-8fa6-895b54beab56",
+      "record_id": "bfdcc85b-70da-4610-86f5-4614d3e4b396",
+      "expected_amount": "93.01000000",
+      "expected_page": 1
+    },
+    {
+      "id": "ee0beb6a-27b2-4c76-b8f2-767dadeec205",
+      "record_id": "0070b0b9-6f56-4b2c-b942-88bab66e921f",
+      "expected_amount": "71.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "6c47cd78-1222-486e-9eb7-ac03bd64f2d6",
+      "record_id": "e5477c7e-385f-442e-9f10-f6b470960a1b",
+      "expected_amount": "41.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "9aea947a-0a9b-416e-b725-6ee04588b5e9",
+      "record_id": "4bf7456e-5436-48e3-a8ee-8c9b0de607f1",
+      "expected_amount": "28.01000000",
+      "expected_page": 1
+    },
+    {
+      "id": "761fb61c-03f6-4dfd-aeb9-3a2015687a8d",
+      "record_id": "261ac3bb-bc9d-459f-8979-1ddfff4a6b87",
+      "expected_amount": "67.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "462f23e8-f496-4950-8465-8780452c3730",
+      "record_id": "dc50ca6d-3229-4292-ac51-10cff8b0e743",
+      "expected_amount": "82.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "847bba2d-9407-45ce-b8bc-9c5355ee1ff9",
+      "record_id": "7029254f-569d-4e29-8ce1-1f2bcf22d85a",
+      "expected_amount": "49.01000000",
+      "expected_page": 1
+    },
+    {
+      "id": "fd9dee70-b828-4051-8f56-78b3818ee4dd",
+      "record_id": "ec06ee61-31d9-4fd5-9b05-d0f81781def9",
+      "expected_amount": "50.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "65af8749-52ee-42fd-b502-4e837fc2eff7",
+      "record_id": "ff6b6fe5-e0ad-43ee-a873-9406e694a63f",
+      "expected_amount": "65.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "5b8dfe80-f00f-460e-8468-3f0a440d5a14",
+      "record_id": "fab1e9b4-618a-42e0-921e-28e112c2c27e",
+      "expected_amount": "85.01000000",
+      "expected_page": 1
+    },
+    {
+      "id": "5cbaf15c-f4b4-4def-bfd3-e70467bad979",
+      "record_id": "c7398e45-2141-4abd-adc4-ce4447be382b",
+      "expected_amount": "73.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "54f8ef66-abe5-4b5b-95ad-650f6220588c",
+      "record_id": "2efaded6-0bcc-4ada-a6ef-ca2a8ea06832",
+      "expected_amount": "61.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "5fef095e-8971-408a-8964-533425dc0e7d",
+      "record_id": "1724068e-4918-4a3d-8713-edc534256ffa",
+      "expected_amount": "26.01000000",
+      "expected_page": 1
+    },
+    {
+      "id": "935de1de-40d8-4dc5-94cf-4b523920f5a9",
+      "record_id": "c0e2aef4-b1c9-42ab-9212-eb9107298bd6",
+      "expected_amount": "65.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "58f40b9f-05af-4e38-90b9-6eccf9a1a2d1",
+      "record_id": "49927228-5be9-48e0-9c3c-d84e068decb2",
+      "expected_amount": "57.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "6a678ae3-c165-49a9-8132-dc584838aae5",
+      "record_id": "fa1ff120-ebab-453a-ab35-3549b105d30d",
+      "expected_amount": "49.01000000",
+      "expected_page": 1
+    },
+    {
+      "id": "13f5810b-6795-4563-affe-9ceedc0f4d27",
+      "record_id": "dcf9f399-2845-4fbf-bde4-98ac88a468c1",
+      "expected_amount": "61.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "ab95e9b6-0381-473e-bcda-ae3f9a36e717",
+      "record_id": "04cb70dc-86b2-4dac-a06d-1d23a4d6703f",
+      "expected_amount": "36.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "a709c6ad-7109-4a4f-a12e-a394bc04279b",
+      "record_id": "74279dd3-92f6-41b8-93ff-3d636c0fa701",
+      "expected_amount": "88.01000000",
+      "expected_page": 1
+    },
+    {
+      "id": "07acff18-eef2-432d-a5a8-d0dd13c7d8b3",
+      "record_id": "b08f4e33-ea86-4020-96be-1aa6ff5926d5",
+      "expected_amount": "93.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "5157a834-a18a-43c6-ae09-d7cf52329cf5",
+      "record_id": "58693f3e-76f3-4cbb-8ad9-b1df4f7fcb51",
+      "expected_amount": "36.00000000",
+      "expected_page": 1
+    },
+    {
+      "id": "43e094db-d4bf-4499-9b4d-afc8f69c7bf4",
+      "record_id": "9b3a5f4b-35ce-4745-ac30-68c120c9b087",
+      "expected_amount": "22.01000000",
+      "expected_page": 1
+    },
+    {
+      "id": "7381d6c9-30ff-4e2e-9523-1d6638607d5c",
+      "record_id": "05254a68-fe4e-4bb0-9f3c-f0b759bc38aa",
+      "expected_amount": "92.00000000",
+      "expected_page": 1
+    }
+  ],
+  "matching": [
+    {
+      "id": "b7754b1b-a977-4999-bae4-d365ff681576",
+      "decision": "reject",
+      "amount_matches": false
+    },
+    {
+      "id": "ddec775e-3e51-4ff1-be4e-a05ab40a7f9b",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "92f975e1-193a-457f-947f-647b83781cab",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "92cd36f0-26aa-471b-80e5-3b3471b76ae4",
+      "decision": "reject",
+      "amount_matches": false
+    },
+    {
+      "id": "62c0803d-a3ed-43b5-a8b4-ca9637c18682",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "87eb260a-a770-4204-8b26-ba0825d8fb3f",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "d53fa681-8935-402b-874e-38c71f0c83ff",
+      "decision": "reject",
+      "amount_matches": false
+    },
+    {
+      "id": "0286876e-f1d6-484f-b515-3da872fb3e94",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "9a4ab709-a4f1-4bf6-8d0f-042da44c902b",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "1bc35cde-b6d0-48d3-aa4d-03541bb48269",
+      "decision": "reject",
+      "amount_matches": false
+    },
+    {
+      "id": "0a63ceca-e06d-4413-92e6-298e9cbe7193",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "4729591a-f700-4f81-8a50-da2f396896e3",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "55952d2e-0653-4cf4-b3c3-fe61c433f8d3",
+      "decision": "reject",
+      "amount_matches": false
+    },
+    {
+      "id": "17d4ba67-8aaa-4914-8a72-5f3d56fdc649",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "dfbeb1b5-23a6-4ff5-9eaa-33ed5453a8bb",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "51971b26-d5ca-44b0-84d1-0e04ed84d47b",
+      "decision": "reject",
+      "amount_matches": false
+    },
+    {
+      "id": "4612d002-6d07-46ca-a02d-1d1b30c4023d",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "01b3f72c-b2d9-47ee-886d-7e373f735781",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "e8bb57da-6ae9-456a-a549-124bb60804ab",
+      "decision": "reject",
+      "amount_matches": false
+    },
+    {
+      "id": "33046c1b-43e3-476f-9c8a-6fe38a823d06",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "e5ad4be8-5aae-4bd2-a95b-92ce76ba0599",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "6c3d8e8d-0edf-4815-85b9-ca85ab1b6f85",
+      "decision": "reject",
+      "amount_matches": false
+    },
+    {
+      "id": "a1baa57c-fc97-4ebf-9290-f6d45979827f",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "02ce4697-377c-4061-bf6a-14c2bbd1eea6",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "3fdffd69-a6f7-4ae0-a1fd-5d5df4d52501",
+      "decision": "reject",
+      "amount_matches": false
+    },
+    {
+      "id": "7253e51d-4883-428e-b9bc-f2a0be69209b",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "9bc6c5e7-b11b-4b4c-b1a4-dead631b8207",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "c118c09d-d781-45e1-804f-47aee39bd587",
+      "decision": "reject",
+      "amount_matches": false
+    },
+    {
+      "id": "e25d870a-5585-4325-b21f-6426e16ec43b",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "d185d06a-6776-4f46-984e-ef72e1b0037d",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "4b48397a-f0d3-4793-90e3-109dec5e94de",
+      "decision": "reject",
+      "amount_matches": false
+    },
+    {
+      "id": "a1ebc94c-a84b-4032-933d-0177d0a0c022",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "131e7735-d53c-4cbb-adff-d21b18885db2",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "67ecb4cd-d07d-4987-8b9e-e35d79c311f1",
+      "decision": "reject",
+      "amount_matches": false
+    },
+    {
+      "id": "30ed63a3-dac7-4d98-9376-75f79a626b6d",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "9b91600a-22a9-445c-ae7e-60bee45cdd37",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "f8e5ea6e-2cbc-478e-af1c-d00c056e8aff",
+      "decision": "reject",
+      "amount_matches": false
+    },
+    {
+      "id": "0bfce358-e828-41c8-8e92-c362ca389a6e",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "a0b6e005-344c-4d14-a04a-f20fd609de4b",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "3d3668a3-1606-4008-ab65-1d5ec00ec50b",
+      "decision": "reject",
+      "amount_matches": false
+    },
+    {
+      "id": "4136b1bd-9fb1-4063-9942-102bd94d85c4",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "0c6e83d2-54da-49e4-a2cc-4683756658ab",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "94902e9b-da0c-42e7-84ac-0d9dfe263367",
+      "decision": "reject",
+      "amount_matches": false
+    },
+    {
+      "id": "cd6eb0a8-fb50-4187-a058-755fec2d98f0",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "faad3376-a025-4bf2-99e2-9e35d0533550",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "d690552e-e067-469d-8a44-1b46542e3222",
+      "decision": "reject",
+      "amount_matches": false
+    },
+    {
+      "id": "45a2216b-06b5-45f4-9025-44bae14f1e1f",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "c15aaed8-6c48-4ce1-be43-0b19ed4e30a6",
+      "decision": "accept",
+      "amount_matches": true
+    },
+    {
+      "id": "96e5b49d-c04a-4ad7-9e0b-4f24f38411a5",
+      "decision": "reject",
+      "amount_matches": false
+    },
+    {
+      "id": "1c81ee1f-8ac6-4c24-b653-8cb9452c0350",
+      "decision": "accept",
+      "amount_matches": true
+    }
+  ],
+  "proposals": [
+    {
+      "id": "e259df66-e3a6-4afe-b86f-598e94852b8b",
+      "state": "APPROVED"
+    },
+    {
+      "id": "ae1ae792-1e25-4d19-9ba6-b94c2f63880e",
+      "state": "REJECTED"
+    },
+    {
+      "id": "7ac9833b-eb0e-4ee3-9f0a-b2b447e4be4c",
+      "state": "APPROVED"
+    },
+    {
+      "id": "1e0927a9-cd81-4765-a30f-c6947076c6b3",
+      "state": "REJECTED"
+    },
+    {
+      "id": "04a629de-0a4b-421a-a43d-3846bcd73d2a",
+      "state": "APPROVED"
+    },
+    {
+      "id": "5a4f891e-af31-4888-83ff-f7967c19c659",
+      "state": "REJECTED"
+    },
+    {
+      "id": "0cd32697-81dc-4ee8-991c-13e10a4d2e85",
+      "state": "APPROVED"
+    },
+    {
+      "id": "2ff3e426-fd20-4246-97ee-764e88c67b9c",
+      "state": "REJECTED"
+    },
+    {
+      "id": "4f0d92ef-face-4ce1-b051-d09ffb6d750d",
+      "state": "APPROVED"
+    },
+    {
+      "id": "2d45477a-090d-48ce-be88-caa864538b63",
+      "state": "REJECTED"
+    },
+    {
+      "id": "08f6693a-6e70-4810-948e-ee098bc9be03",
+      "state": "APPROVED"
+    },
+    {
+      "id": "b0d04488-0b00-40ff-a26e-512b79671fc0",
+      "state": "REJECTED"
+    },
+    {
+      "id": "5e4a5e5c-cc39-4afe-a48d-6769fc5aa33f",
+      "state": "APPROVED"
+    },
+    {
+      "id": "5f8daeac-db56-4ec1-9533-7ad9630e13df",
+      "state": "REJECTED"
+    },
+    {
+      "id": "41988207-c83b-4a56-8353-7dc74bcd969a",
+      "state": "APPROVED"
+    },
+    {
+      "id": "909cd121-2918-4375-9a74-f9696911481b",
+      "state": "REJECTED"
+    },
+    {
+      "id": "cd6e9220-48b0-4168-ab1b-82c5947ddae7",
+      "state": "APPROVED"
+    },
+    {
+      "id": "10bdbea1-c219-49fa-80eb-a738d1e50a80",
+      "state": "REJECTED"
+    },
+    {
+      "id": "b92abb25-d79a-49e7-a6fc-7892cf77faba",
+      "state": "APPROVED"
+    },
+    {
+      "id": "91252103-f1c9-45b4-97e0-a3e708b2dffb",
+      "state": "REJECTED"
+    },
+    {
+      "id": "fe872c51-1826-4bfd-965d-31e6c2304750",
+      "state": "APPROVED"
+    },
+    {
+      "id": "577ba905-2978-4b70-bb35-f698c187707a",
+      "state": "REJECTED"
+    },
+    {
+      "id": "03f47905-6ace-48ec-81b9-e53d1d515f57",
+      "state": "APPROVED"
+    },
+    {
+      "id": "d87240d8-07e2-495d-b444-f47828daa9c3",
+      "state": "REJECTED"
+    },
+    {
+      "id": "f4f5ee57-9b49-4a37-a903-dd3fed74dee5",
+      "state": "APPROVED"
+    },
+    {
+      "id": "8d07cba5-644d-4ec9-8a8b-6b3ffa04ad5e",
+      "state": "REJECTED"
+    },
+    {
+      "id": "e3e042a1-1dbd-4dd7-b050-64a84aadf7e6",
+      "state": "APPROVED"
+    },
+    {
+      "id": "dc5b1bc3-0f61-4c14-9a18-43b866d68b59",
+      "state": "REJECTED"
+    },
+    {
+      "id": "931b2f4c-4b87-4639-bd06-296d6445e26c",
+      "state": "APPROVED"
+    },
+    {
+      "id": "1155faaf-5bf5-4dc2-88bc-829a26add1c3",
+      "state": "REJECTED"
+    },
+    {
+      "id": "77855cbb-a08c-40e3-ac31-f392726e7a4e",
+      "state": "APPROVED"
+    },
+    {
+      "id": "6904eaef-836b-4d70-ab7f-e4f7ed3e49da",
+      "state": "REJECTED"
+    },
+    {
+      "id": "47738c8f-5523-4471-b473-4fcda600402d",
+      "state": "APPROVED"
+    },
+    {
+      "id": "b7aaf07d-5d99-434f-9637-2865f0f2f4a0",
+      "state": "REJECTED"
+    },
+    {
+      "id": "51e01a10-410b-4fac-a859-f73fa90c2744",
+      "state": "APPROVED"
+    },
+    {
+      "id": "50cdf5d6-2269-4ef5-a189-7777ea0b2bfc",
+      "state": "REJECTED"
+    },
+    {
+      "id": "01236fbc-9c86-4184-b2a5-fc59485b459b",
+      "state": "APPROVED"
+    },
+    {
+      "id": "7bcc2e36-9738-457b-87f6-61e21f19ec5a",
+      "state": "REJECTED"
+    },
+    {
+      "id": "706827cb-14ee-4c48-a618-d08e2646c09a",
+      "state": "APPROVED"
+    },
+    {
+      "id": "95fc2a56-9f43-46aa-b085-e970e550a721",
+      "state": "REJECTED"
+    },
+    {
+      "id": "2d7bbb17-0b44-4fb9-baf6-dcd0b7b46272",
+      "state": "APPROVED"
+    },
+    {
+      "id": "534a8cf1-84db-400a-8a37-d046f21ad70a",
+      "state": "REJECTED"
+    },
+    {
+      "id": "2eb36600-d23c-4da6-800b-007815602709",
+      "state": "APPROVED"
+    },
+    {
+      "id": "5c299446-547f-4667-9cbc-e286eac674f6",
+      "state": "REJECTED"
+    },
+    {
+      "id": "da6de799-e22b-46ee-af63-d59a036a35c3",
+      "state": "APPROVED"
+    },
+    {
+      "id": "c7f2dc22-0cad-44b6-a319-7c4622d373ff",
+      "state": "REJECTED"
+    },
+    {
+      "id": "79218e47-2a71-4533-9417-3a7095f15c27",
+      "state": "APPROVED"
+    },
+    {
+      "id": "45e9aae8-8fdc-45ca-bf2e-40a6cd23ae45",
+      "state": "REJECTED"
+    },
+    {
+      "id": "dc238d39-0063-4cff-be72-5693cb06ffd6",
+      "state": "APPROVED"
+    },
+    {
+      "id": "6a51289c-e900-4056-9b1b-0513cecef5bb",
+      "state": "REJECTED"
+    },
+    {
+      "id": "80085f5e-35c0-4ad2-821c-b9b6e7183476",
+      "state": "APPROVED"
+    },
+    {
+      "id": "c85a6481-1e42-4dcd-8239-348aec27a682",
+      "state": "REJECTED"
+    },
+    {
+      "id": "6f93d8eb-acc7-4548-926d-0489b7e13d42",
+      "state": "APPROVED"
+    },
+    {
+      "id": "751bb617-b160-4fff-a448-1a2d703cd29c",
+      "state": "REJECTED"
+    },
+    {
+      "id": "91fe749d-ca67-4fed-a5f5-18f4e0563c3f",
+      "state": "APPROVED"
+    },
+    {
+      "id": "0ec11bf7-ce84-4577-b817-ea26e52e5e43",
+      "state": "REJECTED"
+    },
+    {
+      "id": "0f96a1a9-6f00-4ae2-9eb0-c88272a95690",
+      "state": "APPROVED"
+    },
+    {
+      "id": "997f855f-2ce4-488b-838d-9c4120c611cd",
+      "state": "REJECTED"
+    },
+    {
+      "id": "e6fe41d7-ae48-47d5-937c-86f7353b8b4f",
+      "state": "APPROVED"
+    },
+    {
+      "id": "9ffa7407-a17d-4f15-b8d6-3df4c7af62dc",
+      "state": "REJECTED"
+    },
+    {
+      "id": "e553f966-40e6-4ef5-a46e-2b9e6a29bc28",
+      "state": "APPROVED"
+    },
+    {
+      "id": "c7881076-1aae-46e5-b927-997c00e3821c",
+      "state": "REJECTED"
+    },
+    {
+      "id": "f06e0a7e-e5fd-40a5-9ffc-82d6ddb28bc7",
+      "state": "APPROVED"
+    },
+    {
+      "id": "f54665d4-3add-46fe-bece-295258252498",
+      "state": "REJECTED"
+    },
+    {
+      "id": "66d3efe9-2941-4f8a-8c3e-3272063f732d",
+      "state": "APPROVED"
+    },
+    {
+      "id": "946dacfa-7e67-47b3-a0e6-cc3e1dcc8676",
+      "state": "REJECTED"
+    },
+    {
+      "id": "4fb64bae-e6db-4241-93c6-02781df32fa7",
+      "state": "APPROVED"
+    },
+    {
+      "id": "7a714151-249b-49d4-8e29-cede08e870d5",
+      "state": "REJECTED"
+    },
+    {
+      "id": "7c632e4d-2c04-4e41-9401-0c124ba23381",
+      "state": "APPROVED"
+    },
+    {
+      "id": "4e9a5da8-05b3-43c3-a420-57e94a21c879",
+      "state": "REJECTED"
+    },
+    {
+      "id": "b6e2d829-7605-40d4-94e8-76842ddae83c",
+      "state": "APPROVED"
+    },
+    {
+      "id": "b64782fa-1d23-49a0-a019-8fd8717755f8",
+      "state": "REJECTED"
+    },
+    {
+      "id": "5caab356-0e8a-434c-957d-3d5b5255f408",
+      "state": "APPROVED"
+    },
+    {
+      "id": "2d0bcda5-f4d9-49ad-9734-9c220ad6027d",
+      "state": "REJECTED"
+    },
+    {
+      "id": "44f5d061-8651-4cf4-a4aa-7fffdb9a8fbd",
+      "state": "APPROVED"
+    },
+    {
+      "id": "f5f1c0a0-cd18-410a-93e9-03bd1c8497fd",
+      "state": "REJECTED"
+    },
+    {
+      "id": "9c552263-9d10-4b21-a8d4-30848583a379",
+      "state": "APPROVED"
+    },
+    {
+      "id": "9cd14788-d582-4b31-8e00-76c69f47291f",
+      "state": "REJECTED"
+    },
+    {
+      "id": "7f0f8811-b4bf-4561-8ce4-249d88280eaf",
+      "state": "APPROVED"
+    },
+    {
+      "id": "9382c0ec-65bc-4bb2-9420-8083f9b9a5d3",
+      "state": "REJECTED"
+    },
+    {
+      "id": "003e0e77-9a50-4899-ae57-4a37cd1d6eca",
+      "state": "APPROVED"
+    },
+    {
+      "id": "706086d6-e180-4676-8e7c-c02fc1f532d6",
+      "state": "REJECTED"
+    },
+    {
+      "id": "8d0850fc-2d44-406b-b551-475748f3b180",
+      "state": "APPROVED"
+    },
+    {
+      "id": "27746c1d-a1da-47b6-8784-01c1e10aa376",
+      "state": "REJECTED"
+    },
+    {
+      "id": "02b03541-4e6d-43aa-bd7e-454a5987e492",
+      "state": "APPROVED"
+    },
+    {
+      "id": "d2f35cd9-668d-47b9-9824-8adf73fd9824",
+      "state": "REJECTED"
+    },
+    {
+      "id": "0fa7bb17-c19a-4ea3-a30d-f9a8ad8e014e",
+      "state": "APPROVED"
+    },
+    {
+      "id": "0aafbbbd-779c-4189-88fd-aa92823fbf2e",
+      "state": "REJECTED"
+    },
+    {
+      "id": "11fc1763-39e6-440f-8143-d67899fab0fb",
+      "state": "APPROVED"
+    },
+    {
+      "id": "40ef7783-02f1-4b0c-beb9-4288b5c150f1",
+      "state": "REJECTED"
+    },
+    {
+      "id": "05ecc9fc-6789-455d-b3b3-c5d8761f8138",
+      "state": "APPROVED"
+    },
+    {
+      "id": "3be7be54-64b9-43a3-ac00-45fc2799d784",
+      "state": "REJECTED"
+    },
+    {
+      "id": "340603c0-8984-45b9-b91b-ff85fdebcb7c",
+      "state": "APPROVED"
+    },
+    {
+      "id": "1666b284-7397-4de7-ab6f-63b911df2544",
+      "state": "REJECTED"
+    },
+    {
+      "id": "8d11795d-0138-4854-ae38-262cfa0fa81d",
+      "state": "APPROVED"
+    },
+    {
+      "id": "3b2a5a89-4229-4335-994f-120bcd51be71",
+      "state": "REJECTED"
+    },
+    {
+      "id": "5a3c714f-7c0e-4245-a184-9801d251d4ea",
+      "state": "APPROVED"
+    },
+    {
+      "id": "7532bb33-7deb-4433-92c9-ddf5f38bf7e2",
+      "state": "REJECTED"
+    },
+    {
+      "id": "8d7b5f5f-4af4-4251-93c9-93eae39a1fb1",
+      "state": "APPROVED"
+    },
+    {
+      "id": "bfd43b27-4870-414e-80c1-126c681b6f72",
+      "state": "REJECTED"
+    }
+  ],
+  "evaluation": {
+    "run_id": "0e818326-03f2-412d-9d9c-8af2617b94d4",
+    "key": "evaluation/v1",
+    "kind": "evaluation",
+    "body": {
+      "dataset": "independently-authored-explicit-label-fixtures/v1",
+      "synthetic": true,
+      "cases": [
+        {
+          "kind": "invoice",
+          "expected": 6,
+          "correct": 6,
+          "extra_fields": []
+        },
+        {
+          "kind": "loan",
+          "expected": 5,
+          "correct": 5,
+          "extra_fields": []
+        },
+        {
+          "kind": "lease",
+          "expected": 4,
+          "correct": 4,
+          "extra_fields": []
+        },
+        {
+          "kind": "bank-statement",
+          "expected": 4,
+          "correct": 4,
+          "extra_fields": []
+        },
+        {
+          "kind": "financial-statement",
+          "expected": 4,
+          "correct": 4,
+          "extra_fields": []
+        },
+        {
+          "kind": "contract",
+          "expected": 4,
+          "correct": 4,
+          "extra_fields": []
+        }
+      ],
+      "field_precision": 1.0,
+      "field_recall": 1.0,
+      "source_page_correctness": 1.0,
+      "hallucinated_field_count": 0,
+      "unsupported_intents_rejected": 4,
+      "unsupported_intents_tested": 4,
+      "mismatch_detected": true,
+      "semantic_quality": "NOT_EVALUATED",
+      "table_accuracy": "NOT_EVALUATED",
+      "scope": "Six explicit-label text fixtures; excludes real OCR and layout diversity"
+    },
+    "sha256": "94303a696b1675f93492aa26f8b20b887d4372604b3313d28236b8fd9898a34d",
+    "engagement_id": "4c102ee3-94d0-4ba4-94bf-faecb852da9d",
+    "tenant_id": "8733db06-81bc-59b3-afcc-bf0f4c0cd8a2",
+    "created_by": "d53cd46a-a408-5a77-9644-99b7b9393000",
+    "id": "2d017d74-2016-43f9-bcec-f2af81be6623",
+    "created_at": "2026-10-18T03:55:09.288797+00:00",
+    "updated_at": "2026-10-18T03:55:09.288797+00:00"
+  },
+  "client_denial_status": 403,
+  "inventory": {
+    "journal_lines_before": 250024,
+    "journal_lines_after": 250024,
+    "ai_workflow_runs": 105,
+    "ai_document_extractions": 1000,
+    "ai_document_chunks": 1000,
+    "ai_approval_requests": 100,
+    "ai_document_match_decisions": 50
+  },
+  "seconds": 187.396
+}

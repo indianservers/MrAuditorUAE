@@ -1,0 +1,23 @@
+{
+  "pdf_pages": 4,
+  "pdf_all_pages_have_text": true,
+  "pdf_contains_formatted_tax": true,
+  "xlsx_sheets": [
+    "Corporate Tax package",
+    "Sources",
+    "Immutable run",
+    "Adjustment schedule",
+    "Legal rule snapshots"
+  ],
+  "xlsx_formula_count": 0,
+  "xlsx_external_links": 0,
+  "xlsx_all_populated_cells_literal": true,
+  "xlsx_rows": {
+    "Corporate Tax package": 70,
+    "Sources": 132,
+    "Immutable run": 1558,
+    "Adjustment schedule": 22,
+    "Legal rule snapshots": 676
+  },
+  "raw_json_valid": true
+}

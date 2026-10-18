@@ -1,0 +1,9 @@
+# Document intelligence scope
+
+Evidence binaries remain in the existing private versioned object store. Extraction requires approved current evidence, CLEAN scan status and a matching source hash. Without available ClamAV, ordinary upload remains QUARANTINED and cannot be submitted or indexed. The synthetic demo alone uses a hash-allowlisted scanner test double inside its guarded seed process; that is not malware-scanning assurance.
+
+Supported extraction: unencrypted text PDFs up to 100 pages; UTF-8 CSV; bounded XLSX sheets with cached values; DOCX paragraphs and bounded tables. Input is limited to 16 MiB, extracted text to 250000 characters. Office archive validation remains in the existing uploader. CSV/XLSX/DOCX provide structured tables; PDF text extraction does not infer table layout. Scanned/image pages return OCR_REQUIRED or a clear warning; OCR is not configured.
+
+Classification is selected by an authorized user. Explicit-label regex extraction supports reference, date, currency, amount, counterparty and tax amount. It does not understand arbitrary invoice or contract layouts. Fields preserve page/section, extraction method and unverified quality. Missing fields are explicit. A human correction creates a new extraction and new chunks; old citations become stale. The UI supports amount correction; the API accepts bounded supported fields with existing page references. Corrections are not professional evidence confirmation.
+
+Approved workpapers, IFRS notes, GRC policies and adopted engagement technical rules may be indexed directly from their authorized database bodies. Their references are sections, not physical pages. No second binary store is created. Repeated approved-source indexing preserves immutable history; only the latest extraction is served. Global duplicate-content search and automated semantic classification are not implemented.

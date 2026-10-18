@@ -7,7 +7,7 @@ from sqlalchemy import func, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.dependencies import Context
-from app.db.models.platform import Client, FinancialPeriod, LegalEntity
+from app.db.models.platform import Client, Engagement, FinancialPeriod, LegalEntity
 from app.modules.audit_log.service import record
 
 
@@ -23,6 +23,10 @@ class ResourceService:
         )
         if obj is None:
             raise HTTPException(404, "Resource not found")
+        if self.model is Engagement:
+            from app.modules.audit_execution.access import engagement_permissions
+
+            await engagement_permissions(db, ctx, obj.id, "audit.read")
         return obj
 
     async def listing(
@@ -36,6 +40,32 @@ class ResourceService:
         sort: str,
     ):
         conditions = [self.model.tenant_id == ctx.tenant_id]
+        if self.model is Engagement:
+            from datetime import UTC, datetime
+
+            from sqlalchemy import or_
+
+            from app.db.models.platform import Membership
+            from app.modules.audit_execution.access import firm_roles
+            from app.modules.audit_execution.models import AuditAccess
+
+            roles = await firm_roles(db, ctx.tenant_id, ctx.user_id)
+            if not any(r.name == "Firm Administrator" for r in roles):
+                conditions.append(
+                    Engagement.id.in_(
+                        select(AuditAccess.engagement_id)
+                        .join(Membership, Membership.id == AuditAccess.membership_id)
+                        .where(
+                            AuditAccess.tenant_id == ctx.tenant_id,
+                            Membership.user_id == ctx.user_id,
+                            AuditAccess.active.is_(True),
+                            or_(
+                                AuditAccess.expires_at.is_(None),
+                                AuditAccess.expires_at > datetime.now(UTC),
+                            ),
+                        )
+                    )
+                )
         if status:
             conditions.append(self.model.status == status)
         if search:
@@ -63,6 +93,8 @@ class ResourceService:
 
     async def create(self, db: AsyncSession, ctx: Context, data: BaseModel, request_id: str):
         values = data.model_dump()
+        if self.model is Engagement and values.get("status", "draft").upper() != "DRAFT":
+            raise HTTPException(422, "New engagements must begin in DRAFT")
         for field, model in [
             ("client_id", Client),
             ("entity_id", LegalEntity),
@@ -89,6 +121,8 @@ class ResourceService:
     ):
         obj = await self.get(db, ctx, identifier)
         values = data.model_dump(exclude_unset=True)
+        if self.model is Engagement and "status" in values:
+            raise HTTPException(422, "Use the controlled engagement transition endpoint")
         if obj.version != values.pop("version"):
             raise HTTPException(409, "Resource version conflict")
         for field, value in values.items():

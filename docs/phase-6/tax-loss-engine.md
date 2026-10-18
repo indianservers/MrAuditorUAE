@@ -1,0 +1,9 @@
+# Tax loss eligibility, utilization and transfer
+
+Loss buckets are entity-linked reviewed tax losses, with origin period, source reference/run, amount, continuity or same-business assessment, listed/natural exception and exclusion flags. Pre-CT/exempt and current-period manual carry lots are rejected. One origin registration per entity avoids duplicate original buckets. Eligibility remains professional judgment; accounting losses are not automatically available tax losses.
+
+Utilization follows oldest eligible origin and is capped at75% of positive before-loss income. Draft runs do not reserve balances. Final approval locks the entity, rechecks availability and appends immutable postings. A superseding release appends reversals of prior corporate/group use for that entity/period, then its own allocations. Transfers are retained. All histories remain reconstructible; database triggers reject updating/deleting postings or runs.
+
+Transfer requires distinct donor/recipient entities, approved aligned resident-juridical profiles,75% common ownership, complete evidence-backed conditions and the donor's current approved computation with current dependencies. The engine locks both entities in deterministic order, checks unutilized eligible balance, posts donor consumption once and creates a recipient lot tied to the approved transfer. Recipient utilization is separately capped. Reposting the transfer returns409.
+
+Tests use2M prior loss against1.6M income:1.2M used,800k available, tax2,250. Repeated superseding releases leave800k available. A500k transfer leaves300k after donor recomputation and appears as500k available to the recipient. Tests use the non-superuser forced-RLS runtime. Current-year loss transfers, comprehensive ownership-chain inference and restricted pre-group loss attribution are outside scope. New/corrected prior losses require reviewed correction design; approved original loss bodies cannot be reopened.

@@ -1,0 +1,3 @@
+# Data Leakage Controls
+
+Labels, review status, post-investigation findings and tenant IDs are excluded from predictive vectors. Scalers fit eligible training rows only. Validation selects early-stopping weights and calibrates the autoencoder normal-error threshold. Final test and OOD metrics are calculated after weight selection, never used to select the checkpoint. Controlled fixtures use client-separated journal-grouped splits. Feedback curation preserves original split assignments and requires a different authorized curator; reviewed test outcomes do not move into training. No confidential cross-tenant pool is supported.

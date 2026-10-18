@@ -1,0 +1,7 @@
+# Invoice Validation
+
+Structured facts validate full/simplified invoice fields, supplier/registered customer identifiers, dates, sequential reference, amounts, discount, rounding, currency/FX and reverse-charge statement. Simplified invoices are rejected for reverse charge and for registered recipients above the AED10,000 gross threshold. Unregistered-recipient and <=10,000 registered-recipient cases are tested. Approval is blocked when validation issues remain.
+
+Real text-PDF extraction uses pypdf6.21.1 in a subprocess, limited to2MiB,5pages and6seconds. Only linked, independently reviewed CLEAN PDF evidence may be processed. Literal text candidates include invoice number, supplier TRN and selected totals; comparisons and uncertainty are persisted in an immutable extraction run. Original invoice facts are never overwritten. Invalid numeric candidates become mismatches. The test suite creates and parses an actual PDF; its scanner result is explicitly mocked CLEAN in that isolated test.
+
+This is text-layer extraction, not image OCR or visual verification. Scanned image/PDF OCR, robust multi-layout invoice parsing and semantic extraction quality require an approved provider and measured fixtures. Windows has no hard subprocess memory ceiling beyond file/page/time guards; compressed-stream memory risk remains. The demo's real client PDF remains quarantined because no live antivirus service is configured. See `portal-invoice-scenarios.json`.

@@ -1,0 +1,42 @@
+{
+  "vat_analyst": {
+    "reconciliation_run_id": "451b66ed-b1d9-4ddd-a0de-f3c4361018c4",
+    "return_id": "92c76d1d-3ec5-46a4-bc6f-82ef924ded9b",
+    "net_vat": "2290.06"
+  },
+  "invoice_validation": {
+    "record_id": "82164c5d-8dbf-4661-a088-9ce02479b79e",
+    "result": {
+      "id": "82164c5d-8dbf-4661-a088-9ce02479b79e",
+      "version": 1,
+      "net": "1000.00",
+      "tax": "50.00",
+      "gross": "1050.00",
+      "output_vat": "50.00",
+      "recoverable_input": "0",
+      "rate": "0.05",
+      "issues": [
+        "Declared AED net/tax/gross does not reconcile",
+        "Supplier identity/address incomplete"
+      ],
+      "valid": false,
+      "formula": "AED net=round((consideration-discount)/(1+rate if inclusive else1)*FX,2); VAT=round(unrounded AED net*rate,2); credit note reverses amounts",
+      "document_processing": "HUMAN_TRANSCRIBED",
+      "legal_qualification_automated": false
+    }
+  },
+  "portal_upload_review": {
+    "request_id": "e287282b-792a-49b2-b01c-7669cbbd5596",
+    "evidence_id": "9211b11c-9f26-4e33-b37f-c93e0a1baee6",
+    "reviewer": "synthetic.user04@auditos.test",
+    "state": "QUARANTINED",
+    "submission_blocked": {
+      "error": {
+        "code": "409",
+        "message": "Clean scanned evidence version required",
+        "request_id": "d3d5d628-79b7-4a4d-aa8a-cbeb7d6ecf4e"
+      }
+    },
+    "live_scanner": "unavailable"
+  }
+}

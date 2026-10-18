@@ -1,0 +1,33 @@
+# Phase 8 delivery report
+
+Phase 8 extends the existing application with a transfer pricing workbench: 18 routes, 24 typed workpaper kinds, 30 governed AI suggestion tasks, immutable source-linked calculation runs and licensed comparable observations. Migration 0008 is additive and enforces tenant RLS and immutability. No Phase 9 work was started.
+
+The implemented workflow connects approved IFRS financial sources to RP classification, controlled transactions, financial segmentation, FAR and method selection, dataset imports, screening and benchmarking. Deterministic engines cover percentile conventions, selected years and pooling, FX/allocation checks, loan events and interest, service allocation, remuneration/disclosure arithmetic, manual credit/royalty/guarantee/comparability workpapers and reviewed CT adjustment drafts. Separate RP/CP adoption and explicit CP payments/benefits prevent receipts being silently included as benefits provided.
+
+Reviewed Local File sections export PDF, DOCX, XLSX and JSON. Master File and APA readiness use reviewed structured workpapers. Final document issue requires independent review and exposes only a hash-verified PDF to an existing scoped client. Source changes, stale transitive dependencies, expired or restricted licenses, cross-tenant access and synthetic conclusions are checked at calculation, review, export and AI boundaries.
+
+Validation: the final serial backend suite passed 338 tests with two configured skips in 282.15 seconds. This includes 44 Phase 8 tests. Frontend unit tests passed 22 tests; all six real-API browser scenarios passed. Ruff, Mypy (137 source files), TypeScript, ESLint and production build passed. Fresh migration 0001 through 0008 and Alembic drift check passed at the migration checkpoint. PDF four pages and Word three pages were visually inspected. Browser evidence exercises 18 routes and graph/chart layouts at 1920, 1600, 1440 and 1366 widths. See full-regression-log.txt, browser-final-log.txt, frontend-build-log.txt and visual-qa.json. Earlier overlapping pytest runs failed because resetting fixtures shared a database; final tests ran alone. Historical XML files are checkpoints, not the final run.
+
+The guarded Phase 7 demo was extended without replacing its base sources. Verification found 250,024 journal lines, zero unbalanced journals, 30 reconciled source snapshots and 10 current approved IFRS runs. Added fixtures include 100 reviewed GL-backed synthetic RP classifications, 20 loan cases, 10 service cases, 10 incomplete remuneration drafts, five datasets/studies with 5,020 observations, three Local File drafts, one Master File draft and a separately labelled issued software-test Local File. Six TP roles were exercised; Auditor and Client Viewer internal access returned 403 and a disabled user returned 401. The real worker job completed at 100 percent. No genuine comparable, credit or salary survey data is represented by these fixtures.
+
+Measured local sequential performance: 100,000 source-row candidate scan 0.59 seconds (zero exact-name candidates); 5,000 screened observations 0.41 seconds; 100-transaction matrix 0.54 seconds; 1,000 loan schedules 0.023 seconds; 1,000-driver allocation 0.003 seconds with zero difference. Three-year 15,000-observation arithmetic used in-memory synthetic replicas, not a stored economic study. Final Local File exports used 357 SQL calls versus 1,023 before batching. Whole-process sampled peak RSS was approximately 227 MiB. ASGI timings exclude network; no concurrent production capacity claim is made. Full figures and scopes are in performance.json.
+
+Coverage is explicitly classified in coverage.json and regulatory-coverage.json. Licensed commercial datasets/market curves and approved production AI credentials and quality evaluation remain prerequisites. Thirty AI workflows were tested with the deterministic provider, not validated as expert economic advice. Credit proxies and advanced comparability/treasury methods are limited; residual profit split calculation, commercial vendor connectors, native agreement OCR, direct graph edge creation and FTA/APA submission are not implemented. Complex arrays and chapters still use the shared JSON forms. Group narratives and economic conclusions require professional input and review. Existing Phase 4–7 changes remain preserved in the working tree; no commit or push was performed for this delivery.
+
+Phase 9 readiness is conditional on licensed data, production AI/economic evaluation, operational security configuration and closure of the documented partial features. This delivery is bounded software support, not a professional transfer pricing opinion or regulatory certification.
+
+## Delivery evidence index
+
+1. Modules and calculation engines: related-party-engine.md, transaction-classification.md, financial-segmentation.md, far-analysis.md, tp-methods.md, benchmarking-engine.md, interest-benchmarking.md, remuneration-benchmarking.md, service-cost-allocation.md and disclosure-engine.md.
+2. Regulatory coverage: regulatory-coverage.json and tp-legislation-registry.md; implementation classification: coverage.json.
+3. New migration: backend/alembic/versions/0008_transfer_pricing.py (0008).
+4. Accuracy and loan tests: financial-accuracy-tests.md and backend/tests/phase8/test_calculations.py; API scenarios: test_workflows.py. Tests include principal events, floating resets, compounding, reporting-period boundaries and FX. The browser fixture verifies 10,000 interest.
+5. AI functions: ai-tp-assistant.md and the 30-task catalogue in backend/app/modules/tp/catalogue.py.
+6. Frontend routes: /tp/{engagement_id}/{dashboard,relationships,transactions,segmentation,far,methods,datasets,screening,benchmarking,loans,credit,remuneration,services,intangibles,disclosure,localfile,masterfile,ai}.
+7. Roles, source preservation and background worker: security-regression.md and verification.json.
+8. Demo counts: demo-manifest.json and sample-data-inventory.md.
+9. Regression: full-regression-log.txt (338 passed, two skipped), frontend unit suite (22 passed), browser-final-log.txt (six passed, 34.0 seconds).
+10. Fixes: bugs-found-and-fixed.md; measured performance: performance.json.
+11. Screenshots: screenshots/graph-1366.png and screenshots/benchmark-1920.png show the complete visual components; the folder includes all 18 routes and four requested widths. Scroll-container component captures avoid misleading full-page clipping.
+12. Document exports: export-evidence/ and visual-qa.json.
+13. Limitations and Phase 9 readiness: coverage.json and the final two paragraphs above.

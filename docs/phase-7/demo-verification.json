@@ -1,0 +1,305 @@
+{
+  "database_checks": [
+    {
+      "engagement_id": "c6ae364a-538d-4ab3-baa7-581ce8066f7a",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "849aaf89-a485-4599-ba1c-f79e1c148f3f",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "4c102ee3-94d0-4ba4-94bf-faecb852da9d",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "79d6a019-16f7-4e6c-b920-13bb39c218a3",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "f60ad39b-6ab5-4b26-a319-06245f24d987",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "cb6dbbe2-627b-425f-9a2e-1679d60e3bd8",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "2c5883ec-5a88-4822-b3eb-1cdd5f9c94bd",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "b16ce5c1-1d42-452e-8f6e-483e4d355107",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "d2b66472-5a0f-4d3b-9a6b-51b844c962f8",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "e9f4e20d-127c-42ea-8e31-7a1e5829c595",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "8e240795-7af7-4f99-8c48-29e54aaab6d8",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "d2f17b7e-62fa-43d4-904f-692e47ab55ba",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "60577869-c5df-416d-bab1-54b724de5eb0",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "309c9b49-fabe-4e31-a3c4-104706a2e80e",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "8b0b625b-2d8b-4b10-8d98-42dca78c0dc3",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "9c706a8f-5769-491f-ac5d-91ea62501c11",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "da56cb0f-ca9f-4edc-9a94-875b8e3c2e68",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "64817b60-6a6b-4c56-adc4-0772c69eb99c",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "2d7d8946-4612-4ea6-a32c-2069a8b104d6",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "f438a7b0-696d-4a5a-ada4-0aca0389466e",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "240c3836-495e-46e6-b375-de53030ddb69",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "53b68b09-01cf-4831-b977-7d64666ab616",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "fc7ff042-03f5-4668-a57f-879456eaefa5",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "b3f8f7d1-e630-4692-9bd1-4118463685a7",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "9fedb4af-e989-41bb-8ea4-7ef8ddbd46eb",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "72a86c5a-8533-4e36-add8-b79d2fbe0496",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "c6dd98b0-1ab7-4cfb-9879-8bf2a53bbfec",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "47148c34-5230-41e1-af97-e1b422ba394c",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "84182f79-4563-43cf-b0d0-ae42dc732bfe",
+      "gl_expected_balances": "PASS"
+    },
+    {
+      "engagement_id": "38d6be69-5c54-48ea-8736-5bf1f0fb200c",
+      "gl_expected_balances": "PASS"
+    }
+  ],
+  "role_probes": [
+    {
+      "role": "Platform Super Admin",
+      "email": "synthetic.user00@auditos.test",
+      "vat_workspace_status": 403
+    },
+    {
+      "role": "Firm Administrator",
+      "email": "synthetic.user01@auditos.test",
+      "vat_workspace_status": 200
+    },
+    {
+      "role": "Managing Partner",
+      "email": "synthetic.user02@auditos.test",
+      "vat_workspace_status": 403
+    },
+    {
+      "role": "Chartered Accountant",
+      "email": "synthetic.user03@auditos.test",
+      "vat_workspace_status": 200
+    },
+    {
+      "role": "Audit Manager",
+      "email": "synthetic.user04@auditos.test",
+      "vat_workspace_status": 403
+    },
+    {
+      "role": "Senior Auditor",
+      "email": "synthetic.user05@auditos.test",
+      "vat_workspace_status": 403
+    },
+    {
+      "role": "Auditor",
+      "email": "synthetic.user06@auditos.test",
+      "vat_workspace_status": 403
+    },
+    {
+      "role": "Audit Trainee",
+      "email": "synthetic.user07@auditos.test",
+      "vat_workspace_status": 403
+    },
+    {
+      "role": "Tax Director",
+      "email": "synthetic.user08@auditos.test",
+      "vat_workspace_status": 403
+    },
+    {
+      "role": "Tax Manager",
+      "email": "synthetic.user09@auditos.test",
+      "vat_workspace_status": 200
+    },
+    {
+      "role": "Tax Consultant",
+      "email": "synthetic.user10@auditos.test",
+      "vat_workspace_status": 200
+    },
+    {
+      "role": "Financial Reporting Manager",
+      "email": "synthetic.user11@auditos.test",
+      "vat_workspace_status": 403
+    },
+    {
+      "role": "Consolidation Specialist",
+      "email": "synthetic.user12@auditos.test",
+      "vat_workspace_status": 403
+    },
+    {
+      "role": "Quality Reviewer",
+      "email": "synthetic.user13@auditos.test",
+      "vat_workspace_status": 403
+    },
+    {
+      "role": "Client Administrator",
+      "email": "synthetic.user14@auditos.test",
+      "vat_workspace_status": 403
+    },
+    {
+      "role": "Client Finance Manager",
+      "email": "synthetic.user15@auditos.test",
+      "vat_workspace_status": 403
+    },
+    {
+      "role": "Client Accountant",
+      "email": "synthetic.user16@auditos.test",
+      "vat_workspace_status": 403
+    },
+    {
+      "role": "Client Document Contributor",
+      "email": "synthetic.user17@auditos.test",
+      "vat_workspace_status": 403
+    },
+    {
+      "role": "Client Viewer",
+      "email": "synthetic.user18@auditos.test",
+      "vat_workspace_status": 403
+    },
+    {
+      "role": "Read-only Reviewer",
+      "email": "synthetic.user19@auditos.test",
+      "vat_workspace_status": 403
+    },
+    {
+      "role": "VAT Analyst",
+      "email": "synthetic.user20@auditos.test",
+      "vat_workspace_status": 200
+    },
+    {
+      "role": "VAT Manager",
+      "email": "synthetic.user21@auditos.test",
+      "vat_workspace_status": 200
+    },
+    {
+      "role": "VAT Read-only Reviewer",
+      "email": "synthetic.user22@auditos.test",
+      "vat_workspace_status": 200
+    },
+    {
+      "role": "Auditor",
+      "email": "synthetic.user23@auditos.test",
+      "vat_workspace_status": 403
+    },
+    {
+      "role": "Auditor",
+      "email": "synthetic.user24@auditos.test",
+      "vat_workspace_status": 401
+    }
+  ],
+  "api_latency_seconds": [
+    0.025604899998143082,
+    0.02097409999987576,
+    0.02075870000044233,
+    0.0218602999993891,
+    0.021875700000236975,
+    0.020670200003223727,
+    0.02075900000272668,
+    0.01987619999999879,
+    0.02291770000010729,
+    0.02230979999876581,
+    0.020309999999881256,
+    0.021343399999750545,
+    0.020939500001986744,
+    0.021306900001945905,
+    0.022034800000255927,
+    0.021210400002019014,
+    0.022142400001030182,
+    0.022985499999776948,
+    0.021863199999643257,
+    0.020397099997353507
+  ],
+  "journal_lines": 250024,
+  "unbalanced_journals": 0,
+  "invalid_tb_equations": 0,
+  "rls_tables": [
+    {
+      "relname": "journal_lines",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "audit_records",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "vat_computation_runs",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    },
+    {
+      "relname": "synthetic_datasets",
+      "relrowsecurity": true,
+      "relforcerowsecurity": true
+    }
+  ],
+  "worker_diagnostics": {
+    "completed": 20,
+    "submit_to_all_complete_seconds": 0.3398935999975947,
+    "scope": "20 harmless diagnostic jobs; no inference of financial workload throughput; replay keys return existing jobs"
+  },
+  "api_latency_p50_seconds": 0.021343399999750545,
+  "api_latency_p95_seconds": 0.022985499999776948
+}

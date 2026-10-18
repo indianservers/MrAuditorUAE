@@ -13,6 +13,10 @@ class JSONFormatter(logging.Formatter):
                 "event": getattr(record, "event", "application"),
                 "request_id": getattr(record, "request_id", None),
                 "status": getattr(record, "status", None),
+                "duration_ms": getattr(record, "duration_ms", None),
+                "method": getattr(record, "method", None),
+                "route": getattr(record, "route", None),
+                "release": getattr(record, "release", None),
             }
         )
 

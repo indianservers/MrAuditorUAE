@@ -1,0 +1,137 @@
+[
+  {
+    "route": "/engagements/79196aa2-bc8c-4e7c-b542-38e898535b13/acceptance",
+    "name": "acceptance",
+    "screenshot": "acceptance.png"
+  },
+  {
+    "route": "/engagements/79196aa2-bc8c-4e7c-b542-38e898535b13/independence",
+    "name": "independence",
+    "screenshot": "independence.png"
+  },
+  {
+    "route": "/engagements/79196aa2-bc8c-4e7c-b542-38e898535b13/planning",
+    "name": "planning",
+    "screenshot": "planning.png"
+  },
+  {
+    "route": "/engagements/79196aa2-bc8c-4e7c-b542-38e898535b13/materiality",
+    "name": "materiality",
+    "screenshot": "materiality.png"
+  },
+  {
+    "route": "/engagements/79196aa2-bc8c-4e7c-b542-38e898535b13/risks",
+    "name": "risks",
+    "screenshot": "risks.png"
+  },
+  {
+    "route": "/engagements/79196aa2-bc8c-4e7c-b542-38e898535b13/programs",
+    "name": "programs",
+    "screenshot": "programs.png"
+  },
+  {
+    "route": "/engagements/79196aa2-bc8c-4e7c-b542-38e898535b13/procedures",
+    "name": "procedures",
+    "screenshot": "procedures.png"
+  },
+  {
+    "route": "/engagements/79196aa2-bc8c-4e7c-b542-38e898535b13/testing",
+    "name": "testing",
+    "screenshot": "testing.png"
+  },
+  {
+    "route": "/engagements/79196aa2-bc8c-4e7c-b542-38e898535b13/working-papers",
+    "name": "working-papers",
+    "screenshot": "working-papers.png"
+  },
+  {
+    "route": "/engagements/79196aa2-bc8c-4e7c-b542-38e898535b13/evidence",
+    "name": "evidence",
+    "screenshot": "evidence.png"
+  },
+  {
+    "route": "/engagements/79196aa2-bc8c-4e7c-b542-38e898535b13/findings",
+    "name": "findings",
+    "screenshot": "findings.png"
+  },
+  {
+    "route": "/engagements/79196aa2-bc8c-4e7c-b542-38e898535b13/review-notes",
+    "name": "review-notes",
+    "screenshot": "review-notes.png"
+  },
+  {
+    "route": "/engagements/79196aa2-bc8c-4e7c-b542-38e898535b13/completion",
+    "name": "completion",
+    "screenshot": "completion.png"
+  },
+  {
+    "route": "/engagements/79196aa2-bc8c-4e7c-b542-38e898535b13/requests",
+    "name": "requests",
+    "screenshot": "requests.png"
+  },
+  {
+    "route": "/engagements/79196aa2-bc8c-4e7c-b542-38e898535b13/ai",
+    "name": "ai",
+    "screenshot": "ai.png"
+  },
+  {
+    "route": "/engagements/79196aa2-bc8c-4e7c-b542-38e898535b13/team",
+    "name": "team",
+    "screenshot": "team.png"
+  },
+  {
+    "route": "/admin/users",
+    "name": "admin-users",
+    "screenshot": "admin-users.png"
+  },
+  {
+    "route": "/admin/roles",
+    "name": "admin-roles",
+    "screenshot": "admin-roles.png"
+  },
+  {
+    "route": "/admin/permissions",
+    "name": "admin-permissions",
+    "screenshot": "admin-permissions.png"
+  },
+  {
+    "route": "/admin/teams",
+    "name": "admin-teams",
+    "screenshot": "admin-teams.png"
+  },
+  {
+    "route": "/admin/activity",
+    "name": "admin-activity",
+    "screenshot": "admin-activity.png"
+  },
+  {
+    "route": "/admin/firm-settings",
+    "name": "admin-firm-settings",
+    "screenshot": "admin-firm-settings.png"
+  },
+  {
+    "route": "/join",
+    "name": "invitation-activation",
+    "screenshot": "invitation-activation.png"
+  },
+  {
+    "route": "/client-portal",
+    "name": "Client document request portal",
+    "screenshot": "client-portal.png"
+  },
+  {
+    "route": "/engagements/79196aa2-bc8c-4e7c-b542-38e898535b13/working-papers",
+    "name": "Mobile working paper editor",
+    "screenshot": "working-papers-mobile.png"
+  },
+  {
+    "route": "/engagements/79196aa2-bc8c-4e7c-b542-38e898535b13/working-papers",
+    "name": "Reviewed working paper history",
+    "screenshot": "working-paper-reviewed-history.png"
+  },
+  {
+    "route": "/engagements/79196aa2-bc8c-4e7c-b542-38e898535b13/risks",
+    "name": "Client access denial",
+    "screenshot": "client-internal-access-denied.png"
+  }
+]

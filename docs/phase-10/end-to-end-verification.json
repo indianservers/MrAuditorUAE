@@ -1,0 +1,199 @@
+{
+  "synthetic": true,
+  "engagement_id": "4c102ee3-94d0-4ba4-94bf-faecb852da9d",
+  "steps": [
+    {
+      "path": "/api/v1/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/monitoring/1e314792-0914-4260-96f5-be7547870924/execute",
+      "role": "Firm Administrator",
+      "status": 202,
+      "seconds": 0.5702
+    },
+    {
+      "path": "/api/v1/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/monitoring/1e314792-0914-4260-96f5-be7547870924/execute",
+      "role": "Firm Administrator",
+      "status": 202,
+      "seconds": 0.0242
+    },
+    {
+      "path": "/api/v1/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/alerts/0665ad0a-bc49-4cf6-adc8-6ae61d2bb161/source",
+      "role": "Firm Administrator",
+      "status": 200,
+      "seconds": 0.0181
+    },
+    {
+      "path": "/api/v1/ml/predictions/6488abbe-7342-482d-9958-93e17590dd97/feedback",
+      "role": "Chief Audit Executive",
+      "status": 201,
+      "seconds": 0.033
+    },
+    {
+      "path": "/api/v1/ml/datasets/3821d5c4-4dc4-47da-adfa-6a7b00817dfb/curation",
+      "role": "Firm Administrator",
+      "status": 201,
+      "seconds": 0.0292
+    },
+    {
+      "path": "/api/v1/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/samples",
+      "role": "Firm Administrator",
+      "status": 201,
+      "seconds": 0.4781
+    },
+    {
+      "path": "/api/v1/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/f16b936a-9c4f-48a2-85c5-6daf034b35e3/actions",
+      "role": "Remediation Owner",
+      "status": 403,
+      "seconds": 0.017
+    },
+    {
+      "path": "/api/v1/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/risk",
+      "role": "Board Viewer",
+      "status": 403,
+      "seconds": 0.0075
+    },
+    {
+      "path": "/api/v1/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/board/packages/342748d6-54e3-402d-b528-9aebf85c8c61",
+      "role": "Board Viewer",
+      "status": 200,
+      "seconds": 0.018
+    },
+    {
+      "path": "/api/v1/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/schedules",
+      "role": "Firm Administrator",
+      "status": 201,
+      "seconds": 0.0187
+    },
+    {
+      "path": "/api/v1/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/schedules/1ab9fc4f-6031-4ebf-8e7f-48bbe072277c",
+      "role": "Firm Administrator",
+      "status": 200,
+      "seconds": 0.0255
+    },
+    {
+      "path": "/api/v1/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/report",
+      "role": "Firm Administrator",
+      "status": 201,
+      "seconds": 0.0509
+    },
+    {
+      "path": "/api/v1/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/1ae729de-de46-493c-a262-393b3873b149/actions",
+      "role": "Firm Administrator",
+      "status": 200,
+      "seconds": 0.0586
+    },
+    {
+      "path": "/api/v1/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/1ae729de-de46-493c-a262-393b3873b149/actions",
+      "role": "Chief Audit Executive",
+      "status": 200,
+      "seconds": 0.0957
+    },
+    {
+      "path": "/api/v1/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/board",
+      "role": "Firm Administrator",
+      "status": 201,
+      "seconds": 0.0179
+    },
+    {
+      "path": "/api/v1/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/02b5f811-84a3-446d-89f5-9194dc745611/actions",
+      "role": "Firm Administrator",
+      "status": 200,
+      "seconds": 0.0322
+    },
+    {
+      "path": "/api/v1/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/02b5f811-84a3-446d-89f5-9194dc745611/actions",
+      "role": "Chief Audit Executive",
+      "status": 200,
+      "seconds": 0.0486
+    },
+    {
+      "path": "/api/v1/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/board/02b5f811-84a3-446d-89f5-9194dc745611/publish",
+      "role": "Firm Administrator",
+      "status": 201,
+      "seconds": 0.053
+    },
+    {
+      "path": "/api/v1/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/board/packages/723c6ff9-1609-423d-942a-206977e38649",
+      "role": "Board Viewer",
+      "status": 403,
+      "seconds": 0.0105
+    },
+    {
+      "path": "/api/v1/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/board/packages/723c6ff9-1609-423d-942a-206977e38649",
+      "role": "Audit Committee Member",
+      "status": 200,
+      "seconds": 0.0131
+    },
+    {
+      "path": "/api/v1/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/records/1ae729de-de46-493c-a262-393b3873b149/actions",
+      "role": "Chief Audit Executive",
+      "status": 200,
+      "seconds": 0.0342
+    },
+    {
+      "path": "/api/v1/grc/engagements/4c102ee3-94d0-4ba4-94bf-faecb852da9d/board/packages/723c6ff9-1609-423d-942a-206977e38649",
+      "role": "Audit Committee Member",
+      "status": 409,
+      "seconds": 0.0127
+    }
+  ],
+  "worker_job": {
+    "id": "a63c4daf-e92b-4938-9f87-962d8ec813ad",
+    "status": "completed",
+    "result": {
+      "status": "completed",
+      "resource_id": "1a9be8f4-e19e-4758-8425-fcf870921228"
+    }
+  },
+  "dedup_replay_job": {
+    "id": "73f312c7-22b1-489e-a61e-1917c0337118",
+    "status": "completed",
+    "result": {
+      "status": "completed",
+      "resource_id": "0576f996-3534-49bd-bb82-126473a5fbf0"
+    }
+  },
+  "alert_id": "0665ad0a-bc49-4cf6-adc8-6ae61d2bb161",
+  "ml_feedback_id": "3e03a56a-0d6a-4246-9204-3cd17b568542",
+  "curated_dataset_id": "9871b0f2-ee75-4037-8d3f-44eb15ea5e25",
+  "training_rows_after_curation": 0,
+  "chain": {
+    "rule": "1e314792-0914-4260-96f5-be7547870924",
+    "alert": "0665ad0a-bc49-4cf6-adc8-6ae61d2bb161",
+    "sample": "a5ccc6ac-ae73-4706-9908-82124ac9c9fb",
+    "test": "d6e2043f-f25e-4d70-aee4-2f77fe33039f",
+    "deficiency": "3ad6e55b-94f8-434d-920a-82f161cd1271",
+    "remediation": "5266f96f-bab1-4ca4-bfdb-5f9c032c88ad",
+    "retest": "4a94a202-4f8f-4681-a6c3-779ec44051e8",
+    "closure": "f16b936a-9c4f-48a2-85c5-6daf034b35e3"
+  },
+  "pdf_bytes": 3724,
+  "docx_bytes": 37368,
+  "scheduler_dispatch": {
+    "dispatched": 1
+  },
+  "scheduled_job": {
+    "id": "67c56cf5-1756-4c2e-a470-7c9c54084b16",
+    "status": "completed",
+    "result": {
+      "status": "completed",
+      "resource_id": "8016afa8-ba38-4056-947f-281831fcaf58"
+    }
+  },
+  "monitoring_receipts": {
+    "worker_job": {
+      "deduplicated": 2455,
+      "created_alerts": 0,
+      "candidate_signals": 2455
+    },
+    "dedup_replay_job": {
+      "deduplicated": 2455,
+      "created_alerts": 0,
+      "candidate_signals": 2455
+    },
+    "scheduled_job": {
+      "deduplicated": 2455,
+      "created_alerts": 0,
+      "candidate_signals": 2455
+    }
+  },
+  "board_audience_and_revocation_verified": true
+}

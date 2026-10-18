@@ -1,0 +1,12 @@
+warning: in the working copy of 'backend/app/api/v1/workspace.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/pyproject.toml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'backend/uv.lock', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/evidence/phase-2-demonstration.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'docs/evidence/phase-2-pipeline.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/grids/financial-data-grid.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/components/navigation/routes.ts', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/features/analytics.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/features/engagements.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/features/workbench.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/styles/globals.css', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'frontend/src/types/api.generated.ts', LF will be replaced by CRLF the next time Git touches it

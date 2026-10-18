@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
         chunks.push(value);
       }
     }
-    const { email, password } = JSON.parse(
+    const { email, password, otp = "" } = JSON.parse(
       Buffer.concat(chunks).toString("utf8"),
     );
     if (
@@ -51,12 +51,13 @@ export async function POST(request: NextRequest) {
       typeof password !== "string" ||
       email.length > 254 ||
       password.length > 128
+      || typeof otp !== "string" || !/^(?:[0-9]{6})?$/.test(otp)
     )
       return failure(422, "Invalid credentials format");
     const r = await backend("auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({ username: email, password }),
+      body: new URLSearchParams({ username: email, password, otp }),
     });
     if (!r.ok)
       return NextResponse.json(await r.json(), {

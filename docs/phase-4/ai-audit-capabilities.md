@@ -1,0 +1,11 @@
+# Engagement AI assistance
+
+One reusable orchestration path serves all 20 action definitions in `AI_TASKS`: acceptance questions, independence summary, planning considerations, benchmark considerations, financial-statement risks, assertions, procedures, journal explanation, population summary, testing observations, evidence summary, missing evidence, paper conclusions, findings summary, review-note responses, completion summary, management-letter observations, variance analysis, related-party considerations and management questions.
+
+The existing provider abstraction supplies approved model selection, structured response schemas, retries/timeouts and token/usage execution logging. Phase 4 adds task-specific prompt names/versions, bounded engagement retrieval, citations checked against the exact supplied records, output-token caps and tenant hourly request budgets. Output schemas force human review and prohibit claimed opinion issuance or evidence-sufficiency determination.
+
+Source text is treated as untrusted data. No SQL tools, arbitrary external retrieval or mutation tools are provided to the model. `AUDIT_AI_EXTERNAL_APPROVED=true` is required in addition to the existing approved model configuration before audit context can be sent to a real provider. Default mock results explicitly identify themselves as transport diagnostics, not semantic audit analysis.
+
+AI suggestions are separate REVIEW_REQUIRED records. An independent authorized human may accept an explicitly proposed procedure through a controlled endpoint; the resulting procedure retains a link to the suggestion and still follows normal program review. AI cannot approve its own work. Hallucinated citations are rejected and the execution is marked failed.
+
+Verified: the shared structured mock contract for all 20 tasks, forbidden professional assertions, scoped source validation, human-review states and hallucinated-citation rejection. Awaiting external integration: real-provider audit quality/cost evaluation, document field extraction/OCR/page citations and semantic evidence comparison. The endpoint awaits an async provider call; durable queued audit-AI jobs and price-based currency budgets are not implemented. The existing token/request limits bound use, but are not a provider invoice reconciliation system.

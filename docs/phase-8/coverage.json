@@ -1,0 +1,46 @@
+{
+  "phase": 8,
+  "next_phase_started": false,
+  "statuses": {
+    "Fully implemented and tested": [
+      "Tenant-scoped immutable calculations and observations",
+      "Independent review and approved document release",
+      "RP transaction source validation and duplicate journal control",
+      "Deterministic benchmarking statistics and segmentation",
+      "Loan schedules, service allocation and disclosure arithmetic",
+      "18 TP workspaces, paginated data and server exports",
+      "CT adjustment draft bridge and scoped client PDF access"
+    ],
+    "Implemented with limited scope": [
+      "Four-format Local File export with reviewed manual sections",
+      "Master File section builder and APA readiness workpapers",
+      "30 AI suggestion workflows verified with deterministic test provider",
+      "Synthetic demo and six real API/browser scenarios"
+    ],
+    "Awaiting licensed external data": [
+      "Commercial comparable observations and market curves",
+      "Salary survey and credit rating calibration data",
+      "Production AI credentials and economic quality evaluation"
+    ],
+    "Partially implemented": [
+      "Manual credit ratios and rating proxy",
+      "Manual working capital/comparability adjustments",
+      "Simple royalty and guarantee fee arithmetic",
+      "Profit split method documentation without residual split calculator",
+      "Loan expected outstanding reconciliation requires manual book input",
+      "Complex arrays and document chapters use shared JSON forms; graph edits use record forms"
+    ],
+    "Not implemented": [
+      "Commercial vendor connectors",
+      "Native agreement OCR and automatic clause extraction",
+      "Automated FTA filing or APA submission",
+      "Full treasury/cash pooling pricing engine",
+      "Direct graph edge creation"
+    ]
+  },
+  "limitations": [
+    "Synthetic data is software evidence, never a professional arm-length conclusion.",
+    "Local performance measurements exclude network and concurrent production load.",
+    "Source transactions are conservatively limited to one classified economic leg per journal. Multi-economic journals need partitioning or manual review."
+  ]
+}

@@ -1,0 +1,45 @@
+{
+  "bandit": {
+    "status": "EXECUTED",
+    "findings_by_severity": {
+      "LOW": 17,
+      "MEDIUM": 25
+    },
+    "note": "Raw construction/import findings retained; not independent exploit clearance"
+  },
+  "trivy_configuration": {
+    "status": "EXECUTED",
+    "findings_by_severity": {
+      "LOW": 2
+    }
+  },
+  "gitleaks_history": {
+    "status": "EXECUTED",
+    "findings": 0
+  },
+  "gitleaks_worktree": {
+    "status": "EXECUTED",
+    "findings": 0
+  },
+  "frontend_npm": {
+    "info": 0,
+    "low": 0,
+    "moderate": 0,
+    "high": 0,
+    "critical": 0,
+    "total": 0
+  },
+  "ml_npm": {
+    "info": 0,
+    "low": 0,
+    "moderate": 3,
+    "high": 0,
+    "critical": 0,
+    "total": 3
+  },
+  "container_images": "NOT_TESTED",
+  "independent_dast": "NOT_TESTED",
+  "cloud_provider_validation": "NOT_TESTED",
+  "ci_config_trivy": "NO_SUPPORTED_FILES_DETECTED; NOT_SCANNED",
+  "production_decision": "NO-GO"
+}

@@ -1,0 +1,446 @@
+"""Corporate Tax immutable runs, posted loss ledger and current approvals."""
+
+import uuid
+
+import sqlalchemy as sa
+from alembic import op
+
+revision = "0006"
+down_revision = "0005"
+branch_labels = None
+depends_on = None
+
+
+def upgrade():
+    op.execute(
+        "\nCREATE TABLE ct_computation_runs (\n\tengagement_id UUID NOT NULL, \n\trecord_id UUID, \n\tkind VARCHAR NOT NULL, \n\tmethodology_version VARCHAR NOT NULL, \n\tinputs JSONB NOT NULL, \n\tdependencies JSONB NOT NULL, \n\tresults JSONB NOT NULL, \n\taccounting_profit NUMERIC(28, 8) NOT NULL, \n\ttaxable_income NUMERIC(28, 8) NOT NULL, \n\tcurrent_tax NUMERIC(28, 8) NOT NULL, \n\tsha256 VARCHAR NOT NULL, \n\ttenant_id UUID NOT NULL, \n\tcreated_by UUID, \n\tid UUID NOT NULL, \n\tcreated_at TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL, \n\tupdated_at TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL, \n\tPRIMARY KEY (id), \n\tUNIQUE (tenant_id, id), \n\tFOREIGN KEY(tenant_id, engagement_id) REFERENCES engagements (tenant_id, id), \n\tFOREIGN KEY(tenant_id, record_id) REFERENCES audit_records (tenant_id, id), \n\tFOREIGN KEY(tenant_id) REFERENCES tenants (id), \n\tFOREIGN KEY(created_by) REFERENCES users (id)\n)\n\n"
+    )
+    op.execute("CREATE INDEX ix_ct_computation_runs_kind ON ct_computation_runs (kind)")
+    op.execute("CREATE INDEX ix_ct_computation_runs_tenant_id ON ct_computation_runs (tenant_id)")
+    op.execute(
+        "CREATE INDEX ix_ct_computation_runs_engagement_id ON ct_computation_runs (engagement_id)"
+    )
+    op.execute("ALTER TABLE ct_computation_runs ENABLE ROW LEVEL SECURITY")
+    op.execute("ALTER TABLE ct_computation_runs FORCE ROW LEVEL SECURITY")
+    op.execute(
+        "CREATE POLICY tenant_isolation ON ct_computation_runs USING (tenant_id = nullif(current_setting('app.tenant_id', true), '')::uuid) WITH CHECK (tenant_id = nullif(current_setting('app.tenant_id', true), '')::uuid)"
+    )
+    op.execute(
+        "CREATE TRIGGER immutable_history BEFORE UPDATE OR DELETE ON ct_computation_runs FOR EACH ROW EXECUTE FUNCTION reject_audit_mutation()"
+    )
+    op.execute(
+        "\nCREATE TABLE ct_loss_postings (\n\tentity_id UUID NOT NULL, \n\tperiod_id UUID NOT NULL, \n\tbucket_id UUID NOT NULL, \n\ttax_run_id UUID NOT NULL, \n\tamount_used NUMERIC(28, 8) NOT NULL, \n\treason VARCHAR NOT NULL, \n\ttenant_id UUID NOT NULL, \n\tcreated_by UUID, \n\tid UUID NOT NULL, \n\tcreated_at TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL, \n\tupdated_at TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL, \n\tPRIMARY KEY (id), \n\tFOREIGN KEY(tenant_id, entity_id) REFERENCES legal_entities (tenant_id, id), \n\tFOREIGN KEY(tenant_id, period_id) REFERENCES financial_periods (tenant_id, id), \n\tFOREIGN KEY(tenant_id, bucket_id) REFERENCES audit_records (tenant_id, id), \n\tFOREIGN KEY(tenant_id, tax_run_id) REFERENCES ct_computation_runs (tenant_id, id), \n\tFOREIGN KEY(tenant_id) REFERENCES tenants (id), \n\tFOREIGN KEY(created_by) REFERENCES users (id)\n)\n\n"
+    )
+    op.execute("CREATE INDEX ix_ct_loss_postings_tenant_id ON ct_loss_postings (tenant_id)")
+    op.execute("CREATE INDEX ix_ct_loss_postings_bucket_id ON ct_loss_postings (bucket_id)")
+    op.execute("CREATE INDEX ix_ct_loss_postings_period_id ON ct_loss_postings (period_id)")
+    op.execute("CREATE INDEX ix_ct_loss_postings_entity_id ON ct_loss_postings (entity_id)")
+    op.execute("ALTER TABLE ct_loss_postings ENABLE ROW LEVEL SECURITY")
+    op.execute("ALTER TABLE ct_loss_postings FORCE ROW LEVEL SECURITY")
+    op.execute(
+        "CREATE POLICY tenant_isolation ON ct_loss_postings USING (tenant_id = nullif(current_setting('app.tenant_id', true), '')::uuid) WITH CHECK (tenant_id = nullif(current_setting('app.tenant_id', true), '')::uuid)"
+    )
+    op.execute(
+        "CREATE TRIGGER immutable_history BEFORE UPDATE OR DELETE ON ct_loss_postings FOR EACH ROW EXECUTE FUNCTION reject_audit_mutation()"
+    )
+    op.execute(
+        "\nCREATE TABLE ct_current_releases (\n\tentity_id UUID NOT NULL, \n\tperiod_id UUID NOT NULL, \n\ttax_run_id UUID NOT NULL, \n\tapproval_id UUID NOT NULL, \n\ttenant_id UUID NOT NULL, \n\tcreated_by UUID, \n\tid UUID NOT NULL, \n\tcreated_at TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL, \n\tupdated_at TIMESTAMP WITH TIME ZONE DEFAULT now() NOT NULL, \n\tPRIMARY KEY (id), \n\tUNIQUE (tenant_id, entity_id, period_id), \n\tFOREIGN KEY(tenant_id, entity_id) REFERENCES legal_entities (tenant_id, id), \n\tFOREIGN KEY(tenant_id, period_id) REFERENCES financial_periods (tenant_id, id), \n\tFOREIGN KEY(tenant_id, tax_run_id) REFERENCES ct_computation_runs (tenant_id, id), \n\tFOREIGN KEY(tenant_id, approval_id) REFERENCES audit_records (tenant_id, id), \n\tFOREIGN KEY(tenant_id) REFERENCES tenants (id), \n\tFOREIGN KEY(created_by) REFERENCES users (id)\n)\n\n"
+    )
+    op.execute("CREATE INDEX ix_ct_current_releases_tenant_id ON ct_current_releases (tenant_id)")
+    op.execute("ALTER TABLE ct_current_releases ENABLE ROW LEVEL SECURITY")
+    op.execute("ALTER TABLE ct_current_releases FORCE ROW LEVEL SECURITY")
+    op.execute(
+        "CREATE POLICY tenant_isolation ON ct_current_releases USING (tenant_id = nullif(current_setting('app.tenant_id', true), '')::uuid) WITH CHECK (tenant_id = nullif(current_setting('app.tenant_id', true), '')::uuid)"
+    )
+    connection = op.get_bind()
+    defaults = {
+        "Firm Administrator": [
+            "accounting.import",
+            "accounting.map",
+            "accounting.read",
+            "ai.audit.execute",
+            "ai.execute",
+            "ai.read",
+            "analytics.read",
+            "analytics.run",
+            "audit.evidence.review",
+            "audit.evidence.upload",
+            "audit.export",
+            "audit.finding.create",
+            "audit.finding.resolve",
+            "audit.materiality.approve",
+            "audit.materiality.prepare",
+            "audit.plan",
+            "audit.program.prepare",
+            "audit.program.review",
+            "audit.read",
+            "audit.risk.approve",
+            "audit.risk.prepare",
+            "audit.testing.execute",
+            "clients.read",
+            "clients.write",
+            "connectors.manage",
+            "engagement.accept",
+            "engagement.accept.prepare",
+            "engagement.archive",
+            "engagement.assign",
+            "engagement.create",
+            "engagement.finalize",
+            "engagement.quality_review",
+            "engagements.read",
+            "engagements.write",
+            "entities.read",
+            "entities.write",
+            "financial_ai.approve",
+            "financial_ai.execute",
+            "ifrs.adjustment.approve",
+            "ifrs.adjustment.prepare",
+            "ifrs.adjustment.review",
+            "ifrs.assumption.approve",
+            "ifrs.calculation.execute",
+            "ifrs.consolidation.approve",
+            "ifrs.consolidation.prepare",
+            "ifrs.disclosure.prepare",
+            "ifrs.disclosure.review",
+            "ifrs.financials.approve",
+            "ifrs.financials.prepare",
+            "ifrs.financials.review",
+            "ifrs.mapping.approve",
+            "ifrs.mapping.prepare",
+            "ifrs.read",
+            "ifrs.report.export",
+            "ifrs.report.lock",
+            "independence.declare",
+            "independence.review",
+            "jobs.execute",
+            "jobs.read",
+            "members.manage",
+            "methodology.manage",
+            "sampling.run",
+            "tax.adjustment.approve",
+            "tax.adjustment.propose",
+            "tax.ai.execute",
+            "tax.computation.approve",
+            "tax.computation.prepare",
+            "tax.computation.review",
+            "tax.elections.approve",
+            "tax.elections.prepare",
+            "tax.group.manage",
+            "tax.interest.calculate",
+            "tax.losses.manage",
+            "tax.profile.read",
+            "tax.profile.write",
+            "tax.qfzp.approve",
+            "tax.qfzp.assess",
+            "tax.return.approve",
+            "tax.return.export",
+            "tax.return.prepare",
+            "tax.rules.approve",
+            "tax.rules.manage",
+            "tenant.manage",
+            "users.assign_roles",
+            "users.invite",
+            "workingpaper.approve",
+            "workingpaper.create",
+            "workingpaper.review",
+        ],
+        "Tax Manager": [
+            "ai.audit.execute",
+            "ai.execute",
+            "ai.read",
+            "audit.evidence.upload",
+            "audit.finding.create",
+            "audit.materiality.prepare",
+            "audit.plan",
+            "audit.program.prepare",
+            "audit.read",
+            "audit.risk.prepare",
+            "audit.testing.execute",
+            "clients.read",
+            "engagement.accept.prepare",
+            "engagements.read",
+            "engagements.write",
+            "entities.read",
+            "ifrs.assumption.approve",
+            "ifrs.calculation.execute",
+            "ifrs.read",
+            "independence.declare",
+            "tax.adjustment.approve",
+            "tax.adjustment.propose",
+            "tax.ai.execute",
+            "tax.computation.approve",
+            "tax.computation.prepare",
+            "tax.computation.review",
+            "tax.elections.approve",
+            "tax.elections.prepare",
+            "tax.group.manage",
+            "tax.interest.calculate",
+            "tax.losses.manage",
+            "tax.profile.read",
+            "tax.profile.write",
+            "tax.qfzp.approve",
+            "tax.qfzp.assess",
+            "tax.return.approve",
+            "tax.return.export",
+            "tax.return.prepare",
+            "tax.rules.approve",
+            "tax.rules.manage",
+            "workingpaper.create",
+        ],
+        "Chartered Accountant": [
+            "ai.audit.execute",
+            "ai.execute",
+            "ai.read",
+            "audit.evidence.review",
+            "audit.evidence.upload",
+            "audit.export",
+            "audit.finding.create",
+            "audit.finding.resolve",
+            "audit.materiality.approve",
+            "audit.materiality.prepare",
+            "audit.plan",
+            "audit.program.prepare",
+            "audit.program.review",
+            "audit.read",
+            "audit.risk.approve",
+            "audit.risk.prepare",
+            "audit.testing.execute",
+            "clients.read",
+            "engagement.accept",
+            "engagement.accept.prepare",
+            "engagement.archive",
+            "engagement.assign",
+            "engagement.finalize",
+            "engagements.read",
+            "engagements.write",
+            "entities.read",
+            "ifrs.adjustment.approve",
+            "ifrs.adjustment.prepare",
+            "ifrs.adjustment.review",
+            "ifrs.assumption.approve",
+            "ifrs.calculation.execute",
+            "ifrs.consolidation.approve",
+            "ifrs.consolidation.prepare",
+            "ifrs.disclosure.prepare",
+            "ifrs.disclosure.review",
+            "ifrs.financials.approve",
+            "ifrs.financials.prepare",
+            "ifrs.financials.review",
+            "ifrs.mapping.approve",
+            "ifrs.mapping.prepare",
+            "ifrs.read",
+            "ifrs.report.export",
+            "ifrs.report.lock",
+            "independence.declare",
+            "independence.review",
+            "jobs.read",
+            "tax.adjustment.approve",
+            "tax.adjustment.propose",
+            "tax.ai.execute",
+            "tax.computation.approve",
+            "tax.computation.prepare",
+            "tax.computation.review",
+            "tax.elections.approve",
+            "tax.elections.prepare",
+            "tax.group.manage",
+            "tax.interest.calculate",
+            "tax.losses.manage",
+            "tax.profile.read",
+            "tax.profile.write",
+            "tax.qfzp.approve",
+            "tax.qfzp.assess",
+            "tax.return.approve",
+            "tax.return.export",
+            "tax.return.prepare",
+            "tax.rules.approve",
+            "tax.rules.manage",
+            "workingpaper.approve",
+            "workingpaper.create",
+            "workingpaper.review",
+        ],
+        "Corporate Tax Preparer": [
+            "ai.audit.execute",
+            "audit.evidence.upload",
+            "audit.finding.create",
+            "audit.materiality.prepare",
+            "audit.plan",
+            "audit.program.prepare",
+            "audit.read",
+            "audit.risk.prepare",
+            "audit.testing.execute",
+            "clients.read",
+            "engagement.accept.prepare",
+            "engagements.read",
+            "entities.read",
+            "ifrs.read",
+            "independence.declare",
+            "tax.adjustment.propose",
+            "tax.ai.execute",
+            "tax.computation.prepare",
+            "tax.elections.prepare",
+            "tax.group.manage",
+            "tax.interest.calculate",
+            "tax.losses.manage",
+            "tax.profile.read",
+            "tax.profile.write",
+            "tax.qfzp.assess",
+            "tax.return.prepare",
+            "workingpaper.create",
+        ],
+        "Senior Tax Consultant": [
+            "ai.audit.execute",
+            "audit.evidence.upload",
+            "audit.finding.create",
+            "audit.materiality.prepare",
+            "audit.plan",
+            "audit.program.prepare",
+            "audit.read",
+            "audit.risk.prepare",
+            "audit.testing.execute",
+            "clients.read",
+            "engagement.accept.prepare",
+            "engagements.read",
+            "entities.read",
+            "ifrs.read",
+            "independence.declare",
+            "tax.adjustment.propose",
+            "tax.ai.execute",
+            "tax.computation.prepare",
+            "tax.elections.prepare",
+            "tax.group.manage",
+            "tax.interest.calculate",
+            "tax.losses.manage",
+            "tax.profile.read",
+            "tax.profile.write",
+            "tax.qfzp.assess",
+            "tax.return.prepare",
+            "workingpaper.create",
+        ],
+        "Tax Director": [
+            "ai.audit.execute",
+            "audit.evidence.upload",
+            "audit.finding.create",
+            "audit.materiality.prepare",
+            "audit.plan",
+            "audit.program.prepare",
+            "audit.read",
+            "audit.risk.prepare",
+            "audit.testing.execute",
+            "clients.read",
+            "engagement.accept.prepare",
+            "engagements.read",
+            "entities.read",
+            "ifrs.read",
+            "independence.declare",
+            "tax.adjustment.approve",
+            "tax.adjustment.propose",
+            "tax.ai.execute",
+            "tax.computation.approve",
+            "tax.computation.prepare",
+            "tax.computation.review",
+            "tax.elections.approve",
+            "tax.elections.prepare",
+            "tax.group.manage",
+            "tax.interest.calculate",
+            "tax.losses.manage",
+            "tax.profile.read",
+            "tax.profile.write",
+            "tax.qfzp.approve",
+            "tax.qfzp.assess",
+            "tax.return.approve",
+            "tax.return.export",
+            "tax.return.prepare",
+            "tax.rules.approve",
+            "tax.rules.manage",
+            "workingpaper.create",
+        ],
+        "Tax Partner": [
+            "ai.audit.execute",
+            "audit.evidence.upload",
+            "audit.finding.create",
+            "audit.materiality.prepare",
+            "audit.plan",
+            "audit.program.prepare",
+            "audit.read",
+            "audit.risk.prepare",
+            "audit.testing.execute",
+            "clients.read",
+            "engagement.accept.prepare",
+            "engagements.read",
+            "entities.read",
+            "ifrs.read",
+            "independence.declare",
+            "tax.adjustment.approve",
+            "tax.adjustment.propose",
+            "tax.ai.execute",
+            "tax.computation.approve",
+            "tax.computation.prepare",
+            "tax.computation.review",
+            "tax.elections.approve",
+            "tax.elections.prepare",
+            "tax.group.manage",
+            "tax.interest.calculate",
+            "tax.losses.manage",
+            "tax.profile.read",
+            "tax.profile.write",
+            "tax.qfzp.approve",
+            "tax.qfzp.assess",
+            "tax.return.approve",
+            "tax.return.export",
+            "tax.return.prepare",
+            "tax.rules.approve",
+            "tax.rules.manage",
+            "workingpaper.create",
+        ],
+        "Independent Reviewer": [
+            "ai.audit.execute",
+            "audit.evidence.upload",
+            "audit.finding.create",
+            "audit.materiality.prepare",
+            "audit.plan",
+            "audit.program.prepare",
+            "audit.read",
+            "audit.risk.prepare",
+            "audit.testing.execute",
+            "clients.read",
+            "engagement.accept.prepare",
+            "engagements.read",
+            "entities.read",
+            "ifrs.read",
+            "independence.declare",
+            "tax.adjustment.approve",
+            "tax.computation.approve",
+            "tax.computation.review",
+            "tax.profile.read",
+            "tax.qfzp.approve",
+            "workingpaper.create",
+        ],
+        "Client Finance User": ["portal.read", "portal.respond"],
+    }
+    for name, codes in defaults.items():
+        rid = connection.scalar(sa.text("SELECT id FROM roles WHERE name=:name"), {"name": name})
+        if rid is None:
+            rid = uuid.uuid4()
+            connection.execute(
+                sa.text("INSERT INTO roles(id,name) VALUES (:id,:name)"), {"id": rid, "name": name}
+            )
+        for code in codes:
+            pid = connection.scalar(
+                sa.text("SELECT id FROM permissions WHERE code=:code"), {"code": code}
+            )
+            if pid is None:
+                pid = uuid.uuid4()
+                connection.execute(
+                    sa.text("INSERT INTO permissions(id,code) VALUES (:id,:code)"),
+                    {"id": pid, "code": code},
+                )
+            connection.execute(
+                sa.text(
+                    "INSERT INTO role_permissions(role_id,permission_id) VALUES (:r,:p) ON CONFLICT DO NOTHING"
+                ),
+                {"r": rid, "p": pid},
+            )
+
+
+def downgrade():
+    raise RuntimeError("Immutable tax history requires reviewed backup restoration")

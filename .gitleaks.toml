@@ -1,0 +1,18 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Public .env.example signing-key placeholder; never a usable production credential"
+regexTarget = "secret"
+regexes = ['''^replace-with-generated-signing-secret-at-least-48-characters$''']
+
+[[allowlists]]
+description = "Reviewed synthetic idempotency keys and monitor rule labels, not credentials"
+regexTarget = "secret"
+regexes = ['''^p11-synthetic-idempotency$''', '''^P10-PROOF-WEEKEND-ML$''']
+
+[[allowlists]]
+description = "Reviewed SOD rule UUID in synthetic demonstration inventory"
+paths = ['''(?:^|[\\/])docs[\\/]phase-10[\\/]demo-verification\.json$''']
+regexTarget = "secret"
+regexes = ['''^6d9e57b5-bc1f-4850-96ea-ca0b2ffa95b0$''']

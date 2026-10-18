@@ -1,0 +1,12 @@
+{
+  "pdf_pages_reviewed": 4,
+  "docx_pages_reviewed": 3,
+  "renderer": "Official LibreOffice 26.8.1.1 isolated runtime and Poppler",
+  "review": "All pages inspected; no clipped text or overlapping body content",
+  "artifacts": {
+    "synthetic-localfile.docx": "f0e42baeba64398748c8cf233117d20c837f3467fb4d55bfa8d5dac72115d44c",
+    "synthetic-localfile.json": "65f375c05ac13990bad77c1ceb936a01ebb29c5b1c95c861eaeec1ef210a4ffb",
+    "synthetic-localfile.pdf": "9cfc5ded6b39640f2e5fb5da6528012d788f7470396fe1350148f0b98069bab2",
+    "synthetic-localfile.xlsx": "89b4788452f13c7da457a0a51206a42e3fae5d13aae9c93a30769580b686fbb2"
+  }
+}

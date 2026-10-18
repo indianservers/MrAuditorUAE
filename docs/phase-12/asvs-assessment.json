@@ -1,0 +1,189 @@
+[
+  {
+    "reference": "ASVS v5.0.0 V1",
+    "name": "Encoding and Sanitization",
+    "applicable": true,
+    "status": "PARTIALLY_VERIFIED",
+    "evidence": [
+      "security-assessment.md",
+      "release-test-matrix.csv"
+    ],
+    "limit": "Chapter mapping only; requirement-level independent assessment pending"
+  },
+  {
+    "reference": "ASVS v5.0.0 V2",
+    "name": "Validation and Business Logic",
+    "applicable": true,
+    "status": "PARTIALLY_VERIFIED",
+    "evidence": [
+      "security-assessment.md",
+      "release-test-matrix.csv"
+    ],
+    "limit": "Chapter mapping only; requirement-level independent assessment pending"
+  },
+  {
+    "reference": "ASVS v5.0.0 V3",
+    "name": "Web Frontend Security",
+    "applicable": true,
+    "status": "PARTIALLY_VERIFIED",
+    "evidence": [
+      "security-assessment.md",
+      "release-test-matrix.csv"
+    ],
+    "limit": "Chapter mapping only; requirement-level independent assessment pending"
+  },
+  {
+    "reference": "ASVS v5.0.0 V4",
+    "name": "API and Web Service",
+    "applicable": true,
+    "status": "PARTIALLY_VERIFIED",
+    "evidence": [
+      "security-assessment.md",
+      "release-test-matrix.csv"
+    ],
+    "limit": "Chapter mapping only; requirement-level independent assessment pending"
+  },
+  {
+    "reference": "ASVS v5.0.0 V5",
+    "name": "File Handling",
+    "applicable": true,
+    "status": "PARTIALLY_VERIFIED",
+    "evidence": [
+      "security-assessment.md",
+      "release-test-matrix.csv"
+    ],
+    "limit": "Chapter mapping only; requirement-level independent assessment pending"
+  },
+  {
+    "reference": "ASVS v5.0.0 V6",
+    "name": "Authentication",
+    "applicable": true,
+    "status": "PARTIALLY_VERIFIED",
+    "evidence": [
+      "security-assessment.md",
+      "release-test-matrix.csv"
+    ],
+    "limit": "Chapter mapping only; requirement-level independent assessment pending"
+  },
+  {
+    "reference": "ASVS v5.0.0 V7",
+    "name": "Session Management",
+    "applicable": true,
+    "status": "PARTIALLY_VERIFIED",
+    "evidence": [
+      "security-assessment.md",
+      "release-test-matrix.csv"
+    ],
+    "limit": "Chapter mapping only; requirement-level independent assessment pending"
+  },
+  {
+    "reference": "ASVS v5.0.0 V8",
+    "name": "Authorization",
+    "applicable": true,
+    "status": "PARTIALLY_VERIFIED",
+    "evidence": [
+      "security-assessment.md",
+      "release-test-matrix.csv"
+    ],
+    "limit": "Chapter mapping only; requirement-level independent assessment pending"
+  },
+  {
+    "reference": "ASVS v5.0.0 V9",
+    "name": "Self-contained Tokens",
+    "applicable": true,
+    "status": "PARTIALLY_VERIFIED",
+    "evidence": [
+      "security-assessment.md",
+      "release-test-matrix.csv"
+    ],
+    "limit": "Chapter mapping only; requirement-level independent assessment pending"
+  },
+  {
+    "reference": "ASVS v5.0.0 V10",
+    "name": "OAuth and OIDC",
+    "applicable": true,
+    "status": "PARTIALLY_VERIFIED",
+    "evidence": [
+      "security-assessment.md",
+      "release-test-matrix.csv"
+    ],
+    "limit": "Chapter mapping only; requirement-level independent assessment pending"
+  },
+  {
+    "reference": "ASVS v5.0.0 V11",
+    "name": "Cryptography",
+    "applicable": true,
+    "status": "PARTIALLY_VERIFIED",
+    "evidence": [
+      "security-assessment.md",
+      "release-test-matrix.csv"
+    ],
+    "limit": "Chapter mapping only; requirement-level independent assessment pending"
+  },
+  {
+    "reference": "ASVS v5.0.0 V12",
+    "name": "Secure Communication",
+    "applicable": true,
+    "status": "PARTIALLY_VERIFIED",
+    "evidence": [
+      "security-assessment.md",
+      "release-test-matrix.csv"
+    ],
+    "limit": "Chapter mapping only; requirement-level independent assessment pending"
+  },
+  {
+    "reference": "ASVS v5.0.0 V13",
+    "name": "Configuration",
+    "applicable": true,
+    "status": "PARTIALLY_VERIFIED",
+    "evidence": [
+      "security-assessment.md",
+      "release-test-matrix.csv"
+    ],
+    "limit": "Chapter mapping only; requirement-level independent assessment pending"
+  },
+  {
+    "reference": "ASVS v5.0.0 V14",
+    "name": "Data Protection",
+    "applicable": true,
+    "status": "PARTIALLY_VERIFIED",
+    "evidence": [
+      "security-assessment.md",
+      "release-test-matrix.csv"
+    ],
+    "limit": "Chapter mapping only; requirement-level independent assessment pending"
+  },
+  {
+    "reference": "ASVS v5.0.0 V15",
+    "name": "Secure Coding and Architecture",
+    "applicable": true,
+    "status": "PARTIALLY_VERIFIED",
+    "evidence": [
+      "security-assessment.md",
+      "release-test-matrix.csv"
+    ],
+    "limit": "Chapter mapping only; requirement-level independent assessment pending"
+  },
+  {
+    "reference": "ASVS v5.0.0 V16",
+    "name": "Security Logging and Error Handling",
+    "applicable": true,
+    "status": "PARTIALLY_VERIFIED",
+    "evidence": [
+      "security-assessment.md",
+      "release-test-matrix.csv"
+    ],
+    "limit": "Chapter mapping only; requirement-level independent assessment pending"
+  },
+  {
+    "reference": "ASVS v5.0.0 V17",
+    "name": "WebRTC",
+    "applicable": false,
+    "status": "NOT_TESTED",
+    "evidence": [
+      "security-assessment.md",
+      "release-test-matrix.csv"
+    ],
+    "limit": "No WebRTC surface found"
+  }
+]

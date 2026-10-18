@@ -32,6 +32,9 @@ class User(Record, Base):
     email: Mapped[str] = mapped_column(String(320), unique=True)
     password_hash: Mapped[str] = mapped_column(Text)
     status: Mapped[str] = mapped_column(default="active")
+    mfa_secret: Mapped[str | None] = mapped_column(Text)
+    mfa_enabled: Mapped[bool] = mapped_column(default=False, server_default="false")
+    mfa_last_counter: Mapped[int] = mapped_column(default=-1, server_default="-1")
 
 
 class Membership(Record, Base):
@@ -73,6 +76,7 @@ class RefreshSession(Record, Base):
     token_hash: Mapped[str] = mapped_column(unique=True)
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     revoked: Mapped[bool] = mapped_column(default=False)
+    mfa_verified: Mapped[bool] = mapped_column(default=False, server_default="false")
 
 
 class Owned(Record):

@@ -1,0 +1,487 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="4" skipped="0" tests="44" time="62.751" timestamp="2026-10-18T06:51:39.640259+05:30" hostname="DESKTOP-B3SR465"><testcase classname="tests.phase8.test_calculations" name="test_independent_segment_pli_distinguishes_revenue_and_cost_denominators" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_independent_percentile_conventions[values0-inclusive-2-3-4]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_independent_percentile_conventions[values1-inclusive-1.75-2.5-3.25]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_independent_percentile_conventions[values2-exclusive-1.25-2.5-3.75]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_independent_percentile_conventions[values3-exclusive-None-1.5-None]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_independent_percentile_conventions[values4-inclusive--2-0-2]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_independent_percentile_conventions[values5-inclusive-1.5-2-2.5]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_independent_percentile_conventions[values6-inclusive-None-None-None]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_allocation_conserves_rounding_and_rejects_bad_drivers" time="0.000" /><testcase classname="tests.phase8.test_calculations" name="test_loan_day_counts_bullet_and_original_currency[ACT/365-10000]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_loan_day_counts_bullet_and_original_currency[ACT/360-10138.88888889]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_loan_day_counts_bullet_and_original_currency[30E/360-10000]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_mid_period_repayment_and_early_settlement" time="0.000" /><testcase classname="tests.phase8.test_calculations" name="test_floating_reset_and_multiple_disbursements" time="0.000" /><testcase classname="tests.phase8.test_calculations" name="test_monthly_repayment_schedule_and_compounding" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_fx_translation_and_invalid_cashflows" time="0.000" /><testcase classname="tests.phase8.test_calculations" name="test_disclosure_total_strictly_exceeds_threshold[39999999-False]" time="0.000" /><testcase classname="tests.phase8.test_calculations" name="test_disclosure_total_strictly_exceeds_threshold[40000000-False]" time="0.000" /><testcase classname="tests.phase8.test_calculations" name="test_disclosure_total_strictly_exceeds_threshold[40000001-True]" time="0.000" /><testcase classname="tests.phase8.test_calculations" name="test_documentation_inclusive_threshold[199999999-False]" time="0.000" /><testcase classname="tests.phase8.test_calculations" name="test_documentation_inclusive_threshold[200000000-True]" time="0.000" /><testcase classname="tests.phase8.test_calculations" name="test_documentation_inclusive_threshold[200000001-True]" time="0.000" /><testcase classname="tests.phase8.test_calculations" name="test_category_cp_group_dividend_and_settlement_controls" time="0.000" /><testcase classname="tests.phase8.test_calculations" name="test_benchmark_weighted_and_unweighted_missing_currency_explicitness" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_histogram_accounts_for_negative_constant_and_missing_values" time="0.000" /><testcase classname="tests.phase8.test_calculations" name="test_connected_receipts_are_separate_from_benefits_and_overlap_is_explicit" time="0.000" /><testcase classname="tests.phase8.test_calculations" name="test_disclosure_reversal_applies_to_reviewed_market_value" time="0.000" /><testcase classname="tests.phase8.test_imports" name="test_csv_and_xlsx_preserve_the_same_observations_and_hash" time="0.010" /><testcase classname="tests.phase8.test_imports" name="test_nonfinite_and_formula_observations_are_rejected[revenue-NaN]" time="0.001" /><testcase classname="tests.phase8.test_imports" name="test_nonfinite_and_formula_observations_are_rejected[value-Infinity]" time="0.001" /><testcase classname="tests.phase8.test_imports" name="test_nonfinite_and_formula_observations_are_rejected[name-=HYPERLINK(1)]" time="0.000" /><testcase classname="tests.phase8.test_imports" name="test_duplicate_columns_and_duplicate_company_year_are_rejected" time="0.001" /><testcase classname="tests.phase8.test_relationships" name="test_indirect_common_and_circular_ownership_remain_candidates" time="0.000" /><testcase classname="tests.phase8.test_relationships" name="test_path_growth_is_bounded" time="0.001" /><testcase classname="tests.phase8.test_storage" name="test_generated_document_is_readable_across_cli_and_api_working_directories" time="0.010" /><testcase classname="tests.phase8.test_workflows" name="test_actual_rp_sales_benchmark_and_segmentation" time="1.965"><failure message="sqlalchemy.exc.IntegrityError: (sqlalchemy.dialects.postgresql.asyncpg.ForeignKeyViolationError) insert or update on table &quot;tenant_memberships&quot; violates foreign key constraint &quot;tenant_memberships_tenant_id_fkey&quot;&#10;[SQL: INSERT INTO tenant_memberships (tenant_id, user_id, status, id) VALUES ($1::UUID, $2::UUID, $3::VARCHAR, $4::UUID) RETURNING tenant_memberships.created_at, tenant_memberships.updated_at]&#10;[parameters: (UUID('bb5eebb9-a795-44c9-b3af-892cea604aa2'), UUID('54903124-c6e7-411a-8662-af92bf464583'), 'active', UUID('9839aa59-030d-461f-9b12-47bee485a1f4'))]&#10;(Background on this error at: https://sqlalche.me/e/21/gkpj)">self = &lt;sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_cursor object at 0x000001C66C46EAB0&gt;
+operation = 'INSERT INTO tenant_memberships (tenant_id, user_id, status, id) VALUES ($1::UUID, $2::UUID, $3::VARCHAR, $4::UUID) RETURNING tenant_memberships.created_at, tenant_memberships.updated_at'
+parameters = (UUID('bb5eebb9-a795-44c9-b3af-892cea604aa2'), UUID('54903124-c6e7-411a-8662-af92bf464583'), 'active', UUID('9839aa59-030d-461f-9b12-47bee485a1f4'))
+
+    async def _prepare_and_execute(self, operation, parameters):
+        adapt_connection = self._adapt_connection
+    
+        async with adapt_connection._execute_mutex:
+            if adapt_connection._transaction is None:
+                await adapt_connection._start_transaction()
+    
+            if parameters is None:
+                parameters = ()
+    
+            try:
+                prepared_stmt, attributes = await adapt_connection._prepare(
+                    operation, self._invalidate_schema_cache_asof
+                )
+    
+                if attributes:
+                    self._description = [
+                        (
+                            attr.name,
+                            attr.type.oid,
+                            None,
+                            None,
+                            None,
+                            None,
+                            None,
+                        )
+                        for attr in attributes
+                    ]
+                else:
+                    self._description = None
+    
+                if self.server_side:
+                    self._cursor = await prepared_stmt.cursor(*parameters)
+                    self._rowcount = -1
+                else:
+&gt;                   self._rows = deque(await prepared_stmt.fetch(*parameters))
+                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:605: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\asyncpg\prepared_stmt.py:177: in fetch
+    data = await self.__bind_execute(args, 0, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\asyncpg\prepared_stmt.py:268: in __bind_execute
+    data, status, _ = await self.__do_execute(
+.venv\Lib\site-packages\asyncpg\prepared_stmt.py:257: in __do_execute
+    return await executor(protocol)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+&gt;   ???
+E   asyncpg.exceptions.ForeignKeyViolationError: insert or update on table "tenant_memberships" violates foreign key constraint "tenant_memberships_tenant_id_fkey"
+E   DETAIL:  Key (tenant_id)=(bb5eebb9-a795-44c9-b3af-892cea604aa2) is not present in table "tenants".
+
+asyncpg/protocol/protocol.pyx:197: ForeignKeyViolationError
+
+The above exception was the direct cause of the following exception:
+
+self = &lt;sqlalchemy.engine.base.Connection object at 0x000001C66C49EFF0&gt;
+dialect = &lt;sqlalchemy.dialects.postgresql.asyncpg.PGDialect_asyncpg object at 0x000001C668618500&gt;
+context = &lt;sqlalchemy.dialects.postgresql.asyncpg.PGExecutionContext_asyncpg object at 0x000001C66C49DFA0&gt;
+statement = &lt;sqlalchemy.dialects.postgresql.asyncpg.PGCompiler_asyncpg object at 0x000001C66C330CE0&gt;
+parameters = [(UUID('bb5eebb9-a795-44c9-b3af-892cea604aa2'), UUID('54903124-c6e7-411a-8662-af92bf464583'), 'active', UUID('9839aa59-030d-461f-9b12-47bee485a1f4'))]
+
+    def _exec_single_context(
+        self,
+        dialect: Dialect,
+        context: ExecutionContext,
+        statement: Union[str, Compiled],
+        parameters: Optional[_AnyMultiExecuteParams],
+    ) -&gt; CursorResult[Unpack[TupleAny]]:
+        """continue the _execute_context() method for a single DBAPI
+        cursor.execute() or cursor.executemany() call.
+    
+        """
+        if dialect.bind_typing is BindTyping.SETINPUTSIZES:
+            generic_setinputsizes = context._prepare_set_input_sizes()
+    
+            if generic_setinputsizes:
+                try:
+                    dialect.do_set_input_sizes(
+                        context.cursor, generic_setinputsizes, context
+                    )
+                except BaseException as e:
+                    self._handle_dbapi_exception(
+                        e, str(statement), parameters, None, context
+                    )
+    
+        cursor, str_statement, parameters = (
+            context.cursor,
+            context.statement,
+            context.parameters,
+        )
+    
+        effective_parameters: Optional[_AnyExecuteParams]
+    
+        if not context.executemany:
+            effective_parameters = parameters[0]
+        else:
+            effective_parameters = parameters
+    
+        evt_handled: bool = False
+        try:
+            if self._has_events or self.engine._has_events:
+                for fn in self.dispatch.before_cursor_execute:
+                    str_statement, effective_parameters = fn(
+                        self,
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                        context.executemany,
+                    )
+    
+            if self._echo:
+                self._log_info(str_statement)
+    
+                stats = context._get_cache_stats()
+    
+                if not self.engine.hide_parameters:
+                    self._log_info(
+                        "[%s] %r",
+                        stats,
+                        sql_util._repr_params(
+                            effective_parameters,
+                            batches=10,
+                            ismulti=context.executemany,
+                        ),
+                    )
+                else:
+                    self._log_info(
+                        "[%s] [SQL parameters hidden due to "
+                        "hide_parameters=True]",
+                        stats,
+                    )
+            if context.execute_style is ExecuteStyle.EXECUTEMANY:
+                effective_parameters = cast(
+                    "_CoreMultiExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_executemany:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_executemany(
+                        cursor,
+                        str_statement,
+                        effective_parameters,
+                        context,
+                    )
+            elif not effective_parameters and context.no_parameters:
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute_no_params:
+                        if fn(cursor, str_statement, context):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+                    self.dialect.do_execute_no_params(
+                        cursor, str_statement, context
+                    )
+            else:
+                effective_parameters = cast(
+                    "_CoreSingleExecuteParams", effective_parameters
+                )
+                if self.dialect._has_events:
+                    for fn in self.dialect.dispatch.do_execute:
+                        if fn(
+                            cursor,
+                            str_statement,
+                            effective_parameters,
+                            context,
+                        ):
+                            evt_handled = True
+                            break
+                if not evt_handled:
+&gt;                   self.dialect.do_execute(
+                        cursor, str_statement, effective_parameters, context
+                    )
+
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1953: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+.venv\Lib\site-packages\sqlalchemy\engine\default.py:1192: in do_execute
+    cursor.execute(statement, parameters)
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:656: in execute
+    await_(self._prepare_and_execute(operation, parameters))
+.venv\Lib\site-packages\sqlalchemy\util\concurrency.py:167: in await_
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\util\concurrency.py:205: in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:618: in _prepare_and_execute
+    self._handle_exception(error)
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:568: in _handle_exception
+    self._adapt_connection._handle_exception(error)
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:847: in _handle_exception
+    super()._handle_exception(error)
+.venv\Lib\site-packages\sqlalchemy\connectors\asyncio.py:412: in _handle_exception
+    self._handle_exception_no_connection(self.dbapi, error)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cls = &lt;class 'sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_connection'&gt;
+dbapi = &lt;sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi object at 0x000001C668618830&gt;
+error = ForeignKeyViolationError('insert or update on table "tenant_memberships" violates foreign key constraint "tenant_memberships_tenant_id_fkey"')
+
+    @classmethod
+    def _handle_exception_no_connection(
+        cls, dbapi: Any, error: Exception
+    ) -&gt; NoReturn:
+        if not isinstance(error, AsyncAdapt_asyncpg_dbapi.Error):
+            exception_mapping = dbapi._asyncpg_error_translate
+    
+            for super_ in type(error).__mro__:
+                if super_ in exception_mapping:
+                    message = error.args[0]
+                    translated_error = exception_mapping[super_](
+                        message, error
+                    )
+&gt;                   raise translated_error from error
+E                   sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.ForeignKeyViolationError: insert or update on table "tenant_memberships" violates foreign key constraint "tenant_memberships_tenant_id_fkey"
+
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:840: ForeignKeyViolationError
+
+The above exception was the direct cause of the following exception:
+
+environment = &lt;httpx.AsyncClient object at 0x000001C66B5D9A60&gt;
+
+    async def test_actual_rp_sales_benchmark_and_segmentation(environment):
+        c = environment
+&gt;       f = await prepared(c)
+            ^^^^^^^^^^^^^^^^^
+
+tests\phase8\test_workflows.py:368: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase8\test_workflows.py:38: in prepared
+    ) = await tax_prepared(c)
+        ^^^^^^^^^^^^^^^^^^^^^
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:23: in prepared
+    reviewer = await actor(h, "Audit Manager", "ifrs-reviewer" + suffix)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\phase4\test_workflows.py:32: in actor
+    await db.flush()
+.venv\Lib\site-packages\sqlalchemy\ext\asyncio\session.py:1030: in flush
+    await greenlet_spawn(self.sync_session.flush, objects=objects)
+.venv\Lib\site-packages\sqlalchemy\util\concurrency.py:212: in greenlet_spawn
+    result = context.switch(value)
+             ^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4536: in flush
+    self._flush(objects)
+&lt;sqlalchemy generated warned() wrapper for sqlalchemy.orm.session.Session._flush&gt;:2: in _flush
+    return target(fn, self, objects=objects)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\util\deprecations.py:281: in warned
+    return fn(*args, **kwargs)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4679: in _flush
+    with util.safe_reraise():
+         ^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\util\langhelpers.py:166: in __exit__
+    raise exc_value.with_traceback(exc_tb)
+.venv\Lib\site-packages\sqlalchemy\orm\session.py:4640: in _flush
+    flush_context.execute()
+.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py:467: in execute
+    rec.execute(self)
+.venv\Lib\site-packages\sqlalchemy\orm\unitofwork.py:643: in execute
+    util.preloaded.orm_persistence._save_obj(
+.venv\Lib\site-packages\sqlalchemy\orm\persistence.py:92: in _save_obj
+    _emit_insert_statements(
+.venv\Lib\site-packages\sqlalchemy\orm\persistence.py:1237: in _emit_insert_statements
+    result = connection.execute(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1458: in execute
+    return meth(
+.venv\Lib\site-packages\sqlalchemy\sql\elements.py:533: in _execute_on_connection
+    return connection._execute_clauseelement(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1678: in _execute_clauseelement
+    ret = self._execute_context(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1832: in _execute_context
+    return self._exec_single_context(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1972: in _exec_single_context
+    self._handle_dbapi_exception(
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:2342: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+.venv\Lib\site-packages\sqlalchemy\engine\base.py:1953: in _exec_single_context
+    self.dialect.do_execute(
+.venv\Lib\site-packages\sqlalchemy\engine\default.py:1192: in do_execute
+    cursor.execute(statement, parameters)
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:656: in execute
+    await_(self._prepare_and_execute(operation, parameters))
+.venv\Lib\site-packages\sqlalchemy\util\concurrency.py:167: in await_
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\util\concurrency.py:205: in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:618: in _prepare_and_execute
+    self._handle_exception(error)
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:568: in _handle_exception
+    self._adapt_connection._handle_exception(error)
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:847: in _handle_exception
+    super()._handle_exception(error)
+.venv\Lib\site-packages\sqlalchemy\connectors\asyncio.py:412: in _handle_exception
+    self._handle_exception_no_connection(self.dbapi, error)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+cls = &lt;class 'sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_connection'&gt;
+dbapi = &lt;sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi object at 0x000001C668618830&gt;
+error = ForeignKeyViolationError('insert or update on table "tenant_memberships" violates foreign key constraint "tenant_memberships_tenant_id_fkey"')
+
+    @classmethod
+    def _handle_exception_no_connection(
+        cls, dbapi: Any, error: Exception
+    ) -&gt; NoReturn:
+        if not isinstance(error, AsyncAdapt_asyncpg_dbapi.Error):
+            exception_mapping = dbapi._asyncpg_error_translate
+    
+            for super_ in type(error).__mro__:
+                if super_ in exception_mapping:
+                    message = error.args[0]
+                    translated_error = exception_mapping[super_](
+                        message, error
+                    )
+&gt;                   raise translated_error from error
+E                   sqlalchemy.exc.IntegrityError: (sqlalchemy.dialects.postgresql.asyncpg.ForeignKeyViolationError) insert or update on table "tenant_memberships" violates foreign key constraint "tenant_memberships_tenant_id_fkey"
+E                   [SQL: INSERT INTO tenant_memberships (tenant_id, user_id, status, id) VALUES ($1::UUID, $2::UUID, $3::VARCHAR, $4::UUID) RETURNING tenant_memberships.created_at, tenant_memberships.updated_at]
+E                   [parameters: (UUID('bb5eebb9-a795-44c9-b3af-892cea604aa2'), UUID('54903124-c6e7-411a-8662-af92bf464583'), 'active', UUID('9839aa59-030d-461f-9b12-47bee485a1f4'))]
+E                   (Background on this error at: https://sqlalche.me/e/21/gkpj)
+
+.venv\Lib\site-packages\sqlalchemy\dialects\postgresql\asyncpg.py:840: IntegrityError</failure></testcase><testcase classname="tests.phase8.test_workflows" name="test_actual_loan_benchmark_credit_and_source_scope" time="1.200"><failure message="KeyError: 0">environment = &lt;httpx.AsyncClient object at 0x000001C66C5D8980&gt;
+
+    async def test_actual_loan_benchmark_credit_and_source_scope(environment):
+        c = environment
+&gt;       f = await prepared(c)
+            ^^^^^^^^^^^^^^^^^
+
+tests\phase8\test_workflows.py:451: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase8\test_workflows.py:38: in prepared
+    ) = await tax_prepared(c)
+        ^^^^^^^^^^^^^^^^^^^^^
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:22: in prepared
+    h, opts, eid, base = scope_data or await setup(c)
+                                       ^^^^^^^^^^^^^^
+tests\phase4\test_workflows.py:44: in setup
+    h, options = await scope(client)
+                 ^^^^^^^^^^^^^^^^^^^
+tests\phase2\test_pipeline.py:21: in scope
+    headers, _ = await setup(client)
+                 ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = &lt;httpx.AsyncClient object at 0x000001C66C5D8980&gt;
+
+    async def setup(client):
+        from app.core.config import settings
+    
+        response = await client.post(
+            "/api/v1/auth/bootstrap",
+            headers={"X-Bootstrap-Secret": settings().bootstrap_secret},
+            json={
+                "email": "admin@example.com",
+                "password": "test-strong-password-123",
+                "tenant_name": "TEST ONLY Firm A",
+            },
+        )
+        assert response.status_code == 201, response.text
+        tokens = response.json()
+        headers = {"Authorization": "Bearer " + tokens["access_token"]}
+        response = await client.get("/api/v1/tenants", headers=headers)
+&gt;       tenant = response.json()[0]["id"]
+                 ^^^^^^^^^^^^^^^^^^
+E       KeyError: 0
+
+tests\integration\test_platform.py:80: KeyError</failure></testcase><testcase classname="tests.phase8.test_workflows" name="test_licensing_permissions_and_immutable_sources" time="1.203"><failure message="KeyError: 0">environment = &lt;httpx.AsyncClient object at 0x000001C66C5F3F20&gt;
+
+    async def test_licensing_permissions_and_immutable_sources(environment):
+        c = environment
+&gt;       f = await prepared(c)
+            ^^^^^^^^^^^^^^^^^
+
+tests\phase8\test_workflows.py:482: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase8\test_workflows.py:38: in prepared
+    ) = await tax_prepared(c)
+        ^^^^^^^^^^^^^^^^^^^^^
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:22: in prepared
+    h, opts, eid, base = scope_data or await setup(c)
+                                       ^^^^^^^^^^^^^^
+tests\phase4\test_workflows.py:44: in setup
+    h, options = await scope(client)
+                 ^^^^^^^^^^^^^^^^^^^
+tests\phase2\test_pipeline.py:21: in scope
+    headers, _ = await setup(client)
+                 ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = &lt;httpx.AsyncClient object at 0x000001C66C5F3F20&gt;
+
+    async def setup(client):
+        from app.core.config import settings
+    
+        response = await client.post(
+            "/api/v1/auth/bootstrap",
+            headers={"X-Bootstrap-Secret": settings().bootstrap_secret},
+            json={
+                "email": "admin@example.com",
+                "password": "test-strong-password-123",
+                "tenant_name": "TEST ONLY Firm A",
+            },
+        )
+        assert response.status_code == 201, response.text
+        tokens = response.json()
+        headers = {"Authorization": "Bearer " + tokens["access_token"]}
+        response = await client.get("/api/v1/tenants", headers=headers)
+&gt;       tenant = response.json()[0]["id"]
+                 ^^^^^^^^^^^^^^^^^^
+E       KeyError: 0
+
+tests\integration\test_platform.py:80: KeyError</failure></testcase><testcase classname="tests.phase8.test_workflows" name="test_all_thirty_ai_actions_remain_suggestions" time="1.256"><failure message="KeyError: 0">environment = &lt;httpx.AsyncClient object at 0x000001C66C5DADE0&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x000001C66DDA8C80&gt;
+
+    async def test_all_thirty_ai_actions_remain_suggestions(environment, monkeypatch):
+        from redis.asyncio import Redis
+    
+        from app.core.config import settings
+        from app.modules.tp.catalogue import AI_TASKS
+    
+        c = environment
+&gt;       f = await prepared(c)
+            ^^^^^^^^^^^^^^^^^
+
+tests\phase8\test_workflows.py:582: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase8\test_workflows.py:38: in prepared
+    ) = await tax_prepared(c)
+        ^^^^^^^^^^^^^^^^^^^^^
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:22: in prepared
+    h, opts, eid, base = scope_data or await setup(c)
+                                       ^^^^^^^^^^^^^^
+tests\phase4\test_workflows.py:44: in setup
+    h, options = await scope(client)
+                 ^^^^^^^^^^^^^^^^^^^
+tests\phase2\test_pipeline.py:21: in scope
+    headers, _ = await setup(client)
+                 ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = &lt;httpx.AsyncClient object at 0x000001C66C5DADE0&gt;
+
+    async def setup(client):
+        from app.core.config import settings
+    
+        response = await client.post(
+            "/api/v1/auth/bootstrap",
+            headers={"X-Bootstrap-Secret": settings().bootstrap_secret},
+            json={
+                "email": "admin@example.com",
+                "password": "test-strong-password-123",
+                "tenant_name": "TEST ONLY Firm A",
+            },
+        )
+        assert response.status_code == 201, response.text
+        tokens = response.json()
+        headers = {"Authorization": "Bearer " + tokens["access_token"]}
+        response = await client.get("/api/v1/tenants", headers=headers)
+&gt;       tenant = response.json()[0]["id"]
+                 ^^^^^^^^^^^^^^^^^^
+E       KeyError: 0
+
+tests\integration\test_platform.py:80: KeyError</failure></testcase><testcase classname="tests.phase8.test_workflows" name="test_source_reconciled_services_and_reviewed_localfile_exports" time="16.828" /><testcase classname="tests.phase8.test_workflows" name="test_connected_person_remuneration_and_ct_adjustment_bridge" time="12.372" /><testcase classname="tests.phase8.test_workflows" name="test_tp_job_controls_require_owner_and_exact_operation" time="6.413" /><testcase classname="tests.phase8.test_workflows" name="test_transitive_far_changes_invalidate_benchmark_and_require_parent_review" time="8.915" /><testcase classname="tests.phase8.test_workflows" name="test_manual_specialist_calculators_do_not_claim_external_ratings_or_market_rates" time="10.087" /></testsuite></testsuites>

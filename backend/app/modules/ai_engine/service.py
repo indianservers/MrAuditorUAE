@@ -1,5 +1,6 @@
 import asyncio
 import time
+from typing import Any
 
 from fastapi import HTTPException
 from sqlalchemy import select
@@ -15,14 +16,11 @@ from app.db.models.platform import (
     PromptTemplate,
 )
 from app.infrastructure.ai_providers.adapters import MockProvider, OpenAICompatibleProvider
-from app.modules.ai_engine.schemas import AIProvider, AIRequest, ExecuteRequest
+from app.modules.ai_engine.schemas import AIProvider, AIRequest
 from app.modules.audit_log.service import record
-from app.modules.financial_ai.schemas import FinancialGatewayRequest
 
 
-async def execute(
-    db: AsyncSession, ctx: Context, data: ExecuteRequest | FinancialGatewayRequest, request_id: str
-):
+async def execute(db: AsyncSession, ctx: Context, data: Any, request_id: str):
     model = await db.scalar(
         select(AIModelConfiguration).where(
             AIModelConfiguration.name == data.model, AIModelConfiguration.enabled.is_(True)

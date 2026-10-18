@@ -1,0 +1,318 @@
+[
+  {
+    "scenario": "below_threshold",
+    "group_id": "10d727a9-b83e-46ee-bf1a-126575c55a77",
+    "run_id": "4ae535ea-098a-45dc-8ae2-56ad2092f0c4",
+    "result": {
+      "in_scope": false,
+      "qualifying_years": 0,
+      "rule": "CD142/1.1",
+      "uae_dmtt": "0",
+      "status": "OUT_OF_SCOPE"
+    }
+  },
+  {
+    "scenario": "above_threshold",
+    "group_id": "c0d78d9e-04c3-42a1-a8a5-0df3c4762e28",
+    "run_id": "3a2189b6-8992-425f-9269-d6308ded437e",
+    "result": {
+      "in_scope": true,
+      "qualifying_years": 4,
+      "rule": "CD142/1.1",
+      "status": "DRAFT_TECHNICAL_REVIEW",
+      "currency": "AED",
+      "net_globe_income": "64221.28000000",
+      "covered_taxes": "90000",
+      "etr": "1.4014046434452879170268795639077888201543164508711",
+      "topup_percentage": "0",
+      "sbie": "24200.000",
+      "payroll_rate": "0.094",
+      "asset_rate": "0.074",
+      "excess_profit": "40021.28000000",
+      "core_topup": "0.00000000",
+      "additional_topup": "0",
+      "safe_harbours": [],
+      "uae_dmtt": "0.00",
+      "allocation": [
+        {
+          "entity_id": "b500f045-e303-4dc2-be40-f0c2178e7f9e",
+          "tax": "0.00"
+        }
+      ],
+      "entity_rows": [
+        {
+          "entity_id": "b500f045-e303-4dc2-be40-f0c2178e7f9e",
+          "income": "64221.28000000",
+          "covered": "90000",
+          "payroll": "100000",
+          "assets": "200000",
+          "additional": "0",
+          "deferred": []
+        }
+      ],
+      "iir_utpr_included": false
+    }
+  },
+  {
+    "scenario": "uae_and_foreign_parent",
+    "group_id": "9d41a3e8-b4fa-4568-b965-8316388b05e2",
+    "run_id": "5952c2c3-7e94-4258-a88d-196174a1af4a",
+    "result": {
+      "in_scope": true,
+      "qualifying_years": 4,
+      "rule": "CD142/1.1",
+      "status": "DRAFT_TECHNICAL_REVIEW",
+      "currency": "AED",
+      "net_globe_income": "64221.28000000",
+      "covered_taxes": "90000",
+      "etr": "1.4014046434452879170268795639077888201543164508711",
+      "topup_percentage": "0",
+      "sbie": "24200.000",
+      "payroll_rate": "0.094",
+      "asset_rate": "0.074",
+      "excess_profit": "40021.28000000",
+      "core_topup": "0.00000000",
+      "additional_topup": "0",
+      "safe_harbours": [],
+      "uae_dmtt": "0.00",
+      "allocation": [
+        {
+          "entity_id": "b500f045-e303-4dc2-be40-f0c2178e7f9e",
+          "tax": "0.00"
+        }
+      ],
+      "entity_rows": [
+        {
+          "entity_id": "b500f045-e303-4dc2-be40-f0c2178e7f9e",
+          "income": "64221.28000000",
+          "covered": "90000",
+          "payroll": "100000",
+          "assets": "200000",
+          "additional": "0",
+          "deferred": []
+        }
+      ],
+      "iir_utpr_included": false
+    }
+  },
+  {
+    "scenario": "globe_loss",
+    "group_id": "825300d5-20fb-4334-9e59-6773399c2ac6",
+    "run_id": "84c91652-ffd6-42ed-a53c-4e8484dcfdb0",
+    "result": {
+      "in_scope": true,
+      "qualifying_years": 4,
+      "rule": "CD142/1.1",
+      "status": "LOSS_OR_NEGATIVE_TAX_TECHNICAL_REVIEW",
+      "net_globe_income": "-999935777.72000000",
+      "covered_taxes": "90000",
+      "sbie": "24200.000",
+      "uae_dmtt": null,
+      "loss_dta_candidate": "149990366.6580000000",
+      "entity_rows": [
+        {
+          "entity_id": "b500f045-e303-4dc2-be40-f0c2178e7f9e",
+          "income": "-999935777.72000000",
+          "covered": "90000",
+          "payroll": "100000",
+          "assets": "200000",
+          "additional": "0",
+          "deferred": []
+        }
+      ]
+    }
+  },
+  {
+    "scenario": "transition_deferred",
+    "group_id": "5fbfeca4-cb22-4183-9cc2-20f3c40315b1",
+    "run_id": "20070ffb-3ce2-441c-a52c-4808a83542d0",
+    "result": {
+      "in_scope": true,
+      "qualifying_years": 4,
+      "rule": "CD142/1.1",
+      "status": "DRAFT_TECHNICAL_REVIEW",
+      "currency": "AED",
+      "net_globe_income": "64221.28000000",
+      "covered_taxes": "99000",
+      "etr": "1.5415451077898167087295675202985677021697480959582",
+      "topup_percentage": "0",
+      "sbie": "24200.000",
+      "payroll_rate": "0.094",
+      "asset_rate": "0.074",
+      "excess_profit": "40021.28000000",
+      "core_topup": "0.00000000",
+      "additional_topup": "0",
+      "safe_harbours": [],
+      "uae_dmtt": "0.00",
+      "allocation": [
+        {
+          "entity_id": "b500f045-e303-4dc2-be40-f0c2178e7f9e",
+          "tax": "0.00"
+        }
+      ],
+      "entity_rows": [
+        {
+          "entity_id": "b500f045-e303-4dc2-be40-f0c2178e7f9e",
+          "income": "64221.28000000",
+          "covered": "99000",
+          "payroll": "100000",
+          "assets": "200000",
+          "additional": "0",
+          "deferred": [
+            {
+              "adjusted_deferred": "9000",
+              "recapture_assessment_required": false
+            }
+          ]
+        }
+      ],
+      "iir_utpr_included": false
+    }
+  },
+  {
+    "scenario": "substantial_substance",
+    "group_id": "249ab290-213c-4a56-b546-11d1f0c7c008",
+    "run_id": "fbb014d7-37ac-4145-ac1a-8cccb2e1537d",
+    "result": {
+      "in_scope": true,
+      "qualifying_years": 4,
+      "rule": "CD142/1.1",
+      "status": "DRAFT_TECHNICAL_REVIEW",
+      "currency": "AED",
+      "net_globe_income": "64221.28000000",
+      "covered_taxes": "90000",
+      "etr": "1.4014046434452879170268795639077888201543164508711",
+      "topup_percentage": "0",
+      "sbie": "242000.000",
+      "payroll_rate": "0.094",
+      "asset_rate": "0.074",
+      "excess_profit": "0",
+      "core_topup": "0",
+      "additional_topup": "0",
+      "safe_harbours": [],
+      "uae_dmtt": "0.00",
+      "allocation": [
+        {
+          "entity_id": "b500f045-e303-4dc2-be40-f0c2178e7f9e",
+          "tax": "0.00"
+        }
+      ],
+      "entity_rows": [
+        {
+          "entity_id": "b500f045-e303-4dc2-be40-f0c2178e7f9e",
+          "income": "64221.28000000",
+          "covered": "90000",
+          "payroll": "1000000",
+          "assets": "2000000",
+          "additional": "0",
+          "deferred": []
+        }
+      ],
+      "iir_utpr_included": false
+    }
+  },
+  {
+    "scenario": "safe_harbour",
+    "group_id": "83baa620-6db0-4356-8a0d-79bb02528bc9",
+    "run_id": "e2597880-27c1-4325-a3e0-72b355691108",
+    "result": {
+      "in_scope": true,
+      "qualifying_years": 4,
+      "rule": "CD142/1.1",
+      "status": "DRAFT_TECHNICAL_REVIEW",
+      "currency": "AED",
+      "net_globe_income": "64221.28000000",
+      "covered_taxes": "90000",
+      "etr": "1.4014046434452879170268795639077888201543164508711",
+      "topup_percentage": "0",
+      "sbie": "24200.000",
+      "payroll_rate": "0.094",
+      "asset_rate": "0.074",
+      "excess_profit": "40021.28000000",
+      "core_topup": "0.00000000",
+      "additional_topup": "0",
+      "safe_harbours": [
+        {
+          "type": "transitional_cbcr",
+          "tests": {
+            "de_minimis": false,
+            "simplified_etr": true,
+            "routine_profits": false
+          },
+          "qualifies": true
+        }
+      ],
+      "uae_dmtt": "0.00",
+      "allocation": [
+        {
+          "entity_id": "b500f045-e303-4dc2-be40-f0c2178e7f9e",
+          "tax": "0.00"
+        }
+      ],
+      "entity_rows": [
+        {
+          "entity_id": "b500f045-e303-4dc2-be40-f0c2178e7f9e",
+          "income": "64221.28000000",
+          "covered": "90000",
+          "payroll": "100000",
+          "assets": "200000",
+          "additional": "0",
+          "deferred": []
+        }
+      ],
+      "iir_utpr_included": false
+    }
+  },
+  {
+    "scenario": "no_safe_harbour",
+    "group_id": "f3ac574f-8e9a-4e83-b70b-8c5758d1b2c6",
+    "run_id": "af610509-77e9-4bab-801a-f56595a1ee48",
+    "result": {
+      "in_scope": true,
+      "qualifying_years": 4,
+      "rule": "CD142/1.1",
+      "status": "DRAFT_TECHNICAL_REVIEW",
+      "currency": "AED",
+      "net_globe_income": "64221.28000000",
+      "covered_taxes": "90000",
+      "etr": "1.4014046434452879170268795639077888201543164508711",
+      "topup_percentage": "0",
+      "sbie": "24200.000",
+      "payroll_rate": "0.094",
+      "asset_rate": "0.074",
+      "excess_profit": "40021.28000000",
+      "core_topup": "0.00000000",
+      "additional_topup": "0",
+      "safe_harbours": [
+        {
+          "type": "transitional_cbcr",
+          "tests": {
+            "de_minimis": false,
+            "simplified_etr": false,
+            "routine_profits": false
+          },
+          "qualifies": false
+        }
+      ],
+      "uae_dmtt": "0.00",
+      "allocation": [
+        {
+          "entity_id": "b500f045-e303-4dc2-be40-f0c2178e7f9e",
+          "tax": "0.00"
+        }
+      ],
+      "entity_rows": [
+        {
+          "entity_id": "b500f045-e303-4dc2-be40-f0c2178e7f9e",
+          "income": "64221.28000000",
+          "covered": "90000",
+          "payroll": "100000",
+          "assets": "200000",
+          "additional": "0",
+          "deferred": []
+        }
+      ],
+      "iir_utpr_included": false
+    }
+  }
+]

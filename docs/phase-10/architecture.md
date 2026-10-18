@@ -1,0 +1,7 @@
+# Architecture
+
+GRC workpapers are strict Pydantic bodies registered under 24 grc-* kinds in the existing audit execution service. They retain immutable revisions, optimistic versions, preparer history and independent review. New tables are grc_execution_snapshots, grc_monitor_alerts and grc_monitor_schedules. Migration 0010 contains frozen PostgreSQL DDL, composite tenant foreign keys, FORCE RLS policies, immutable update/delete triggers on snapshots and alerts, and role permission additions.
+
+GRCRun hashes canonical inputs, results and dependency versions. Approved assessment calculations freeze the methodology used; later source changes flag stale assessments instead of changing historical scores. Monitoring jobs use approved rule versions, current identity/grant checks, existing Decimal analytics and optional actual TensorFlow.js inference. Alerts retain separate deterministic, ML and human-review fields. Schedules and import triggers use a transactional job outbox and dispatch only after commit. Board publication has a distinct redacted read model and audience checks.
+
+The shared typed editor supports nested arrays, maps and source references. Distinct planning, heatmap, graph, KRI, investigation, deadline, remediation and governance interactions sit above it. Some source references still require manual selection/paste; this is a limited enterprise workflow, not a claim of complete product polish.

@@ -1,0 +1,22 @@
+{
+  "authority": "Human-approved rule adoption required; OECD methodology is not UAE law",
+  "implemented": [
+    "Articles 34/35 related-party and method workpapers",
+    "Article 36 separate connected-person adoption",
+    "Article 55 and MD 97/2023 documentation scope",
+    "CT return guide 16.1 RP and 16.2 CP disclosure separation",
+    "Downward adjustment requires recorded FTA approval evidence",
+    "APA readiness and materiality indicator"
+  ],
+  "limited": [
+    "Gazette commencement date not independently established; catalogue date is period applicability",
+    "Cross-border APA availability not asserted",
+    "No filing, legal opinion or autonomous economic conclusion"
+  ],
+  "sources": [
+    "https://tax.gov.ae/en/legislation/corporate.tax.aspx",
+    "https://mof.gov.ae/wp-content/uploads/2023/05/Ministerial-Decision-No.-97-of-2023-for-the-Purposes-of-Federal-Decree-Law-No.-47-of-2022.pdf",
+    "https://tax.gov.ae/Datafolder/Files/Guides/CT/CT-Returns-EN-11-11-2024.pdf",
+    "https://tax.gov.ae/Datafolder/Files/Guides/CT/APA-Guide-EN-30-12-2025.pdf"
+  ]
+}

@@ -10,8 +10,16 @@
     "lint": "eslint .",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "api:types": "openapi-typescript ../docs/evidence/phase-3-openapi.json -o src/types/api.generated.ts",
-    "format": "prettier --write src tests e2e *.ts *.mjs"
+    "api:types": "openapi-typescript ../docs/phase-12/openapi.json -o src/types/api.generated.ts",
+    "test:e2e:phase4": "playwright test --config playwright.phase4.config.ts",
+    "format": "prettier --write src tests e2e *.ts *.mjs",
+    "test:e2e:phase5": "playwright test --config playwright.phase5.config.ts",
+    "test:e2e:phase6": "playwright test --config playwright.phase6.config.ts",
+    "test:e2e:phase7": "playwright test --config playwright.phase7.config.ts",
+    "test:e2e:phase8": "playwright test --config playwright.phase8.config.ts",
+    "test:e2e:phase9": "playwright test --config playwright.phase9.config.ts",
+    "test:e2e:phase12": "playwright test --config playwright.phase12.config.ts",
+    "test:e2e:smoke": "playwright test --config playwright.smoke.config.ts"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",

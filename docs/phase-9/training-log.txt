@@ -1,0 +1,8 @@
+{"family": "autoencoder", "job": {"id": "fccca2b3-78a1-41b3-a17f-2fdba36cbbbf", "status": "pending", "progress": 0}}
+{"family": "autoencoder", "model_id": "ad19a351-d6d5-4310-919a-c6b1fd28476c", "counts": {"ood": 1200, "test": 2400, "train": 6170, "source": 263224, "validation": 2400}, "seconds": 1.8707628000000003}
+{"family": "journal-classifier", "job": {"id": "869fc97a-b4a9-4109-915c-ccf6440797a6", "status": "pending", "progress": 0}}
+{"family": "journal-classifier", "model_id": "b8546696-ff08-47a0-9e26-589fa1279367", "counts": {"ood": 1200, "test": 2400, "train": 7200, "source": 263224, "validation": 2400}, "seconds": 1.5537680999999999}
+{"family": "risk-ranking", "job": {"id": "40162ca7-5457-4c9b-aebd-09f183bfab6a", "status": "pending", "progress": 0}}
+{"family": "risk-ranking", "model_id": "3934d7b7-36e2-44d1-bd4f-b43a6413be22", "counts": {"ood": 1200, "test": 2400, "train": 7200, "source": 263224, "validation": 2400}, "seconds": 1.4614682999999997}
+{"family": "account-classifier", "job": {"id": "7ac1223a-474a-4261-afc5-96415074745c", "status": "pending", "progress": 0}}
+{"family": "account-classifier", "model_id": "20bce302-bf5d-4d55-b402-d5440c16d631", "counts": {"ood": 1200, "test": 2400, "train": 7200, "source": 263224, "validation": 2400}, "seconds": 2.0764949}

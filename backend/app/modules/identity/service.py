@@ -28,19 +28,21 @@ from app.modules.identity.schemas import Bootstrap, Tokens
 logger = logging.getLogger("auditos")
 
 
-async def issue(db: AsyncSession, user_id: uuid.UUID, family_id: uuid.UUID | None = None) -> Tokens:
+async def issue(
+    db: AsyncSession, user_id: uuid.UUID, family_id: uuid.UUID | None = None, mfa: bool = False
+) -> Tokens:
     raw = refresh_token()
-    db.add(
-        RefreshSession(
-            user_id=user_id,
-            family_id=family_id or uuid.uuid4(),
-            token_hash=digest(raw),
-            expires_at=datetime.now(UTC) + timedelta(days=settings().refresh_days),
-        )
+    session = RefreshSession(
+        user_id=user_id,
+        family_id=family_id or uuid.uuid4(),
+        token_hash=digest(raw),
+        expires_at=datetime.now(UTC) + timedelta(days=settings().refresh_days),
+        mfa_verified=mfa,
     )
+    db.add(session)
     await db.flush()
     return Tokens(
-        access_token=access_token(user_id),
+        access_token=access_token(user_id, session.id, mfa),
         refresh_token=raw,
         expires_in=settings().access_minutes * 60,
     )
@@ -59,18 +61,26 @@ async def bootstrap(db: AsyncSession, data: Bootstrap, secret: str) -> Tokens:
     await db.flush()
     membership = Membership(tenant_id=tenant.id, user_id=user.id)
     db.add(membership)
-    permissions = {
-        code: Permission(code=code) for codes in ROLE_PERMISSIONS.values() for code in codes
-    }
-    db.add_all(list(permissions.values()))
-    roles = {name: Role(name=name) for name in ROLE_PERMISSIONS}
-    db.add_all(list(roles.values()))
+    permissions = {p.code: p for p in (await db.scalars(select(Permission))).all()}
+    for code in {code for codes in ROLE_PERMISSIONS.values() for code in codes}:
+        if code not in permissions:
+            permissions[code] = Permission(code=code)
+            db.add(permissions[code])
+    roles = {r.name: r for r in (await db.scalars(select(Role))).all()}
+    for name in ROLE_PERMISSIONS:
+        if name not in roles:
+            roles[name] = Role(name=name)
+            db.add(roles[name])
     await db.flush()
+    existing = set(
+        (await db.execute(select(RolePermission.role_id, RolePermission.permission_id))).all()
+    )
     for name, codes in ROLE_PERMISSIONS.items():
         db.add_all(
             [
                 RolePermission(role_id=roles[name].id, permission_id=permissions[code].id)
                 for code in codes
+                if (roles[name].id, permissions[code].id) not in existing
             ]
         )
     # Explicit firm administrator membership; platform role carries no client privileges.
@@ -80,15 +90,19 @@ async def bootstrap(db: AsyncSession, data: Bootstrap, secret: str) -> Tokens:
     return await issue(db, user.id)
 
 
-async def login(db: AsyncSession, email: str, password: str) -> Tokens:
-    user = await db.scalar(select(User).where(User.email == email.lower()))
+async def login(db: AsyncSession, email: str, password: str, otp: str = "") -> Tokens:
+    user = await db.scalar(select(User).where(User.email == email.lower()).with_for_update())
     # Always perform a password check, including unknown identities.
     encoded = user.password_hash if user else DUMMY_HASH
     valid = verify_password(password, encoded)
     if not user or not valid or user.status != "active":
         logger.info("security", extra={"event": "auth.login_denied", "status": 401})
         raise HTTPException(401, "Invalid credentials")
-    return await issue(db, user.id)
+    if user.mfa_enabled:
+        from app.modules.identity.mfa import verify
+
+        verify(user, otp)
+    return await issue(db, user.id, mfa=user.mfa_enabled)
 
 
 DUMMY_HASH = hash_password("timing-defense-only-not-a-user-password")
@@ -114,7 +128,7 @@ async def rotate(db: AsyncSession, token: str) -> Tokens:
     if row.expires_at <= datetime.now(UTC) or not user or user.status != "active":
         raise HTTPException(401, "Expired or inactive refresh session")
     row.revoked = True
-    return await issue(db, row.user_id, row.family_id)
+    return await issue(db, row.user_id, row.family_id, row.mfa_verified)
 
 
 async def logout(db: AsyncSession, token: str) -> None:

@@ -1,0 +1,7 @@
+# Measured performance
+
+Population: 250024 existing journal lines; 1000 indexed synthetic documents; 1000 chunks. The tests use targeted retrieval rather than sending the ledger to a model.
+
+Five-sample measurements in seconds: {"keyword_1000_documents": {"samples": 5, "p50_seconds": 0.1368806999962544, "max_seconds": 0.1425113000004785}, "document_directory": {"samples": 5, "p50_seconds": 0.7922183999980916, "max_seconds": 0.8988279000041075}, "workflow_directory": {"samples": 5, "p50_seconds": 0.01809990000037942, "max_seconds": 0.020258800002920907}}. Concurrent request measurement: {"requests": 5, "identities": 1, "seconds": 0.7070979999989504, "scope": "Same authorized synthetic investigator; not a multi-user load qualification"}. RSS before 103235584 bytes; after 181882880 bytes. This is verification-process RSS before/after, not sampled peak API/worker memory. No database CPU/load or multi-identity production saturation benchmark is claimed.
+
+Real worker: {"run_id": "4fd2ff6e-f053-45ae-b928-1fe74a4b28a4", "state": "COMPLETED", "steps": 3, "replay_duplicates": 0}. Actual scheduled run: {"id": "f490a9df-bd3f-4b85-9b15-c6828b3bcd77", "state": "COMPLETED", "paused_after_proof": true}. Queue recovery is durable and scheduled processing was explicitly enabled then paused. Semantic retrieval, OCR throughput, external model tokens/cost and real legal corpus performance could not be measured. Existing gateway usage retains provider-vs-mock provenance; no monetary price is invented when pricing is absent.

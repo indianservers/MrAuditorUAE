@@ -16,7 +16,10 @@ from app.core.config import settings
 class ObjectStore:
     def __init__(self):
         self.config = settings()
-        self.root = Path(self.config.source_storage_path).resolve()
+        # CLI seeds and ASGI workers may start in different directories. Resolve
+        # development-relative storage against the backend, never the process cwd.
+        configured = Path(self.config.source_storage_path)
+        self.root = (Path(__file__).resolve().parents[3] / configured).resolve()
 
     def put(self, tenant: str, stream: BinaryIO) -> dict:
         key = f"{uuid.UUID(tenant)}/{uuid.uuid4()}"

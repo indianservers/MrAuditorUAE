@@ -14,6 +14,79 @@ import {
 } from "lucide-react";
 export const navigation = [
   {
+    label: "AI Providers",
+    href: "/ai/providers",
+    icon: Settings,
+    permission: "ai.provider.manage",
+  },
+  {
+    label: "AI Command Center",
+    href: "/ai/command-center",
+    icon: Sparkles,
+    permission: "ai.investigation.read",
+  },
+  {
+    label: "Internal Audit & GRC",
+    href: "/grc",
+    icon: ShieldCheck,
+    permission: "grc.read",
+  },
+  {
+    label: "Board Portal",
+    href: "/board",
+    icon: Landmark,
+    permission: "governance.board.read",
+  },
+  {
+    label: "Audit ML Lab",
+    href: "/ai-lab",
+    icon: Sparkles,
+    permission: "ml.read",
+  },
+  {
+    label: "Pillar Two",
+    href: "/pillar-two",
+    icon: Landmark,
+    permission: "dmtt.read",
+  },
+  {
+    label: "Transfer Pricing",
+    href: "/tp",
+    icon: Scale,
+    permission: "tp.read",
+  },
+  {
+    label: "VAT & E-Invoicing",
+    href: "/vat",
+    icon: ScanLine,
+    permission: "vat.read",
+  },
+  {
+    label: "IFRS Reporting",
+    href: "/ifrs",
+    icon: FileBarChart,
+    permission: "ifrs.read",
+  },
+  {
+    label: "Firm Administration",
+    href: "/admin/users",
+    icon: Users,
+    permission: "users.assign_roles",
+    children: [
+      ["Users", "/admin/users"],
+      ["Roles & Permissions", "/admin/roles"],
+      ["Teams", "/admin/teams"],
+      ["Activity", "/admin/activity"],
+      ["Firm Settings", "/admin/firm-settings"],
+    ],
+  },
+  {
+    label: "Client Portal",
+    href: "/client-portal",
+    icon: Files,
+    permission: "portal.read",
+  },
+  {
     label: "Dashboard",
     href: "/dashboard",
     icon: LayoutDashboard,
@@ -74,7 +147,12 @@ export const navigation = [
     icon: Sparkles,
     permission: "financial_ai.execute",
   },
-  { label: "Tax", href: "/tax", icon: Scale, permission: "clients.read" },
+  {
+    label: "Corporate Tax",
+    href: "/tax",
+    icon: Scale,
+    permission: "tax.profile.read",
+  },
   {
     label: "Compliance",
     href: "/compliance",

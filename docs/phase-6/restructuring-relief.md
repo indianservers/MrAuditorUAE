@@ -1,0 +1,5 @@
+# Qualifying group and business restructuring relief
+
+Reviewed assessments record counterparties, asset/business, date, consideration, accounting/tax values, common ownership, election and statutory conditions. Articles26/27 must match the selected relief. Qualifying group relief checks75% common ownership; business restructuring relies on its reviewed statutory transfer conditions. Residence, alignment, exempt/QFZP exclusions, commercial reason and transfer conditions require evidence-backed PASS.
+
+The workpaper reports assessed eligibility, unrealized difference and a two-year clawback monitoring date/event. It is not an automatic tax-neutral transaction or journal. A separate source-bound approved tax adjustment is required for any accounting-to-tax effect. Legal entities/counterparty facts and consideration structure remain manually substantiated; complex cross-border, consideration, exit and clawback tax arithmetic are not implemented. The integration fixture tests an in-window clawback and verifies that this standalone assessment does not change current tax.

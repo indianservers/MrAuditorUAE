@@ -8,6 +8,7 @@ import { z } from "zod";
 const schema = z.object({
   email: z.string().email(),
   password: z.string().min(1).max(128),
+  otp: z.string().regex(/^(?:[0-9]{6})?$/).optional(),
 });
 export default function Login() {
   const [error, setError] = useState("");
@@ -77,6 +78,11 @@ export default function Login() {
           {errors.password && (
             <small role="alert">{errors.password.message}</small>
           )}
+          <label>
+            Authenticator code (if enabled)
+            <input autoComplete="one-time-code" inputMode="numeric" maxLength={6} {...register("otp")} />
+          </label>
+          {errors.otp && <small role="alert">Enter a six digit code.</small>}
           {error && (
             <div className="error" role="alert">
               {error}
@@ -89,6 +95,7 @@ export default function Login() {
           <p className="subtle">
             Account access is managed by your firm administrator.
           </p>
+          <a href="/security">Set up authenticator MFA</a>
         </form>
       </section>
     </main>

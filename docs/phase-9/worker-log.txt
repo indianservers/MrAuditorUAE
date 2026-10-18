@@ -1,0 +1,58 @@
+ 
+ -------------- phase9-demo@localhost v5.6.3 (recovery)
+--- ***** ----- 
+-- ******* ---- Windows-11-10.0.26200-SP0 2026-10-18 07:26:38
+- *** --- * --- 
+- ** ---------- [config]
+- ** ---------- .> app:         auditos:0x18ff661fd70
+- ** ---------- .> transport:   redis://127.0.0.1:56379/13
+- ** ---------- .> results:     disabled://
+- *** --- * --- .> concurrency: 12 (solo)
+-- ******* ---- .> task events: OFF (enable -E to monitor tasks in this worker)
+--- ***** ----- 
+ -------------- [queues]
+                .> celery           exchange=celery(direct) key=celery
+                
+
+[tasks]
+  . auditos.accounting
+  . auditos.diagnostic
+
+[2026-10-18 07:26:38,152: INFO/MainProcess] Connected to redis://127.0.0.1:56379/13
+[2026-10-18 07:26:38,154: INFO/MainProcess] mingle: searching for neighbors
+[2026-10-18 07:26:39,174: INFO/MainProcess] mingle: all alone
+[2026-10-18 07:26:39,181: INFO/MainProcess] phase9-demo@localhost ready.
+[2026-10-18 07:28:12,414: INFO/MainProcess] Task auditos.accounting[833de0a8-9f12-4bce-b607-490baa3502ff] received
+[2026-10-18 07:28:16,894: INFO/MainProcess] Task auditos.accounting[833de0a8-9f12-4bce-b607-490baa3502ff] succeeded in 4.484000000000378s: None
+[2026-10-18 07:28:19,401: INFO/MainProcess] Task auditos.accounting[ac64f88c-ce18-41f9-8b57-48bf03a439b1] received
+[2026-10-18 07:28:34,567: INFO/MainProcess] Task auditos.accounting[ac64f88c-ce18-41f9-8b57-48bf03a439b1] succeeded in 15.15599999999904s: None
+[2026-10-18 07:33:50,038: INFO/MainProcess] Task auditos.accounting[755409db-24b7-465b-bdd2-e6bbdc30a81a] received
+[2026-10-18 07:33:54,025: INFO/MainProcess] Task auditos.accounting[755409db-24b7-465b-bdd2-e6bbdc30a81a] succeeded in 3.9840000000003783s: None
+[2026-10-18 07:33:55,482: INFO/MainProcess] Task auditos.accounting[f098c674-366f-4247-a20c-6b91bee712e5] received
+[2026-10-18 07:33:56,991: INFO/MainProcess] Task auditos.accounting[f098c674-366f-4247-a20c-6b91bee712e5] succeeded in 1.5s: None
+[2026-10-18 07:37:34,577: INFO/MainProcess] Task auditos.accounting[9428dd4b-fadf-4070-bff1-c2921b552b38] received
+[2026-10-18 07:37:38,758: INFO/MainProcess] Task auditos.accounting[9428dd4b-fadf-4070-bff1-c2921b552b38] succeeded in 4.187000000001717s: None
+[2026-10-18 07:37:39,673: INFO/MainProcess] Task auditos.accounting[2fd1f1d6-1c49-4fc3-822f-ff5d0cd35316] received
+[2026-10-18 07:37:41,234: INFO/MainProcess] Task auditos.accounting[2fd1f1d6-1c49-4fc3-822f-ff5d0cd35316] succeeded in 1.5620000000017171s: None
+[2026-10-18 08:15:39,697: INFO/MainProcess] sync with phase10-demo@localhost
+[2026-10-18 08:44:27,868: INFO/MainProcess] sync with phase10-demo@localhost
+[2026-10-18 08:57:59,772: INFO/MainProcess] sync with phase10-demo@localhost
+[2026-10-18 09:23:19,637: INFO/MainProcess] sync with phase11-demo@localhost
+[2026-10-18 09:34:00,561: INFO/MainProcess] missed heartbeat from phase11-demo@localhost
+[2026-10-18 09:39:06,594: INFO/MainProcess] sync with phase11-demo@localhost
+[2026-10-18 09:48:50,775: INFO/MainProcess] missed heartbeat from phase11-demo@localhost
+[2026-10-18 09:51:11,943: INFO/MainProcess] sync with phase11-demo@localhost
+[2026-10-18 10:15:41,113: INFO/MainProcess] Task auditos.accounting[0805f9c0-39ed-43b0-af76-58b5edf17550] received
+[2026-10-18 10:15:41,698: INFO/MainProcess] Task auditos.accounting[0805f9c0-39ed-43b0-af76-58b5edf17550] succeeded in 0.5930000000007567s: None
+[2026-10-18 10:16:15,912: INFO/MainProcess] Task auditos.accounting[c74f2407-9f60-4d6b-a4da-867592f2abe3] received
+[2026-10-18 10:16:19,715: INFO/MainProcess] Task auditos.accounting[c74f2407-9f60-4d6b-a4da-867592f2abe3] succeeded in 3.812999999994645s: None
+[2026-10-18 10:16:21,428: INFO/MainProcess] Task auditos.accounting[3fc695a3-0e51-4ebd-bb7c-77ca400a8c44] received
+[2026-10-18 10:16:22,978: INFO/MainProcess] Task auditos.accounting[3fc695a3-0e51-4ebd-bb7c-77ca400a8c44] succeeded in 1.5630000000019209s: None
+[2026-10-18 10:21:56,936: INFO/MainProcess] Task auditos.accounting[4c556099-72fb-436d-91ce-c8f8c0099364] received
+[2026-10-18 10:21:57,351: INFO/MainProcess] Task auditos.accounting[4c556099-72fb-436d-91ce-c8f8c0099364] succeeded in 0.40600000000267755s: None
+[2026-10-18 10:22:33,962: INFO/MainProcess] Task auditos.accounting[97a0cc17-5394-422c-a9ee-6d1ce88fa4fd] received
+[2026-10-18 10:22:38,674: INFO/MainProcess] Task auditos.accounting[97a0cc17-5394-422c-a9ee-6d1ce88fa4fd] succeeded in 4.718000000000757s: None
+[2026-10-18 10:22:39,607: INFO/MainProcess] Task auditos.accounting[1d004464-3253-4e9b-aaa3-19a68b53cba9] received
+[2026-10-18 10:22:46,123: INFO/MainProcess] missed heartbeat from phase10-demo@localhost
+[2026-10-18 10:22:46,123: INFO/MainProcess] missed heartbeat from phase11-demo@localhost
+[2026-10-18 10:22:52,202: INFO/MainProcess] Task auditos.accounting[1d004464-3253-4e9b-aaa3-19a68b53cba9] succeeded in 12.593999999997322s: None

@@ -1,0 +1,9 @@
+# Taxpayer and tax-period classification
+
+Tax profiles link to an independently approved, current individual IFRS run within the same engagement. The selected tax period must align with the engagement financial period. AED statements are required; the engine does not invent exchange rates. Revenue must reconcile to approved income lines plus an explicit evidenced revenue bridge. Accounting profit starts at IFRS profit less the IFRS tax category, preserving expense signs.
+
+Profiles record legal form, registration, optional15-digit TRN, residence, licensed activities, ownership, accounting framework, Free Zone status, audit requirement/evidence, Pillar Two scope, legal-as-of date and approved rule IDs. Classification covers resident/nonresident juridical persons, PE, natural persons, ordinary Free Zone Persons, QFZPs, exempt persons, Tax Groups, partnerships and family foundations. Residence/QFZP facts must agree with classification. Classification is a reviewed professional assessment, not an automatically inferred legal conclusion.
+
+Standard computations support the documented juridical-person/PE/ordinary-Free-Zone scope and the separate QFZP path. Special natural-person, exempt, partnership, foundation and group-profile computations require a separately validated methodology and are rejected by the standard endpoint. Group computations use their own approved membership assessment. Pillar Two in-scope blocks final release.
+
+Current limitation: a completed audit engagement cannot be reopened for tax preparation, and cross-engagement IFRS source selection is not implemented. Prepare tax within an active engagement containing its approved IFRS package. Client portal roles retain restricted request/evidence access; internal tax files are not automatically client deliverables.

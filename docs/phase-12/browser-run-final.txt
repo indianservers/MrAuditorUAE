@@ -1,0 +1,109 @@
+
+Running 27 tests using 1 worker
+
+(node:5208) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 e2e\phase10.spec.ts:47:1 › all 24 GRC workspaces render actual authorized data (10.9s)
+  ok  2 e2e\phase10.spec.ts:95:1 › typed scoring editor persists a real draft (2.5s)
+  ok  3 e2e\phase10.spec.ts:144:1 › enterprise views fit four viewport widths (2.8s)
+  ok  4 e2e\phase10.spec.ts:162:1 › board viewer reads only a published package (939ms)
+  ok  5 e2e\phase11.spec.ts:32:1 › all 16 AI workspaces use actual APIs (7.6s)
+  ok  6 e2e\phase11.spec.ts:85:1 › reviewed plan executes in a real worker and exports a draft (3.9s)
+  ok  7 e2e\phase11.spec.ts:121:1 › document retrieval and mismatches show stored source values (1.1s)
+  ok  8 e2e\phase11.spec.ts:139:1 › command center is usable at four enterprise viewport widths (2.0s)
+  ok  9 e2e\phase11.spec.ts:160:1 › configured read-only graph creates a separate executable run and citations open (4.3s)
+  ok 10 e2e\phase12.spec.ts:25:1 › platform operator MFA, eight metadata workspaces and audited subscription change (1.6s)
+  ok 11 e2e\phase12.spec.ts:46:1 › firm administrator cannot enter platform console (720ms)
+  x  12 e2e\phase12.spec.ts:51:1 › WCAG automated checks and reflow across five enterprise viewports (2.7s)
+(node:21872) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 13 e2e\phase7.spec.ts:21:1 › fourteen VAT workspaces render persisted synthetic data (11.2s)
+  ok 14 e2e\phase7.spec.ts:54:1 › VAT calculation retrieves ledger reconciliation and downloads immutable JSON (3.2s)
+  ok 15 e2e\phase7.spec.ts:78:1 › readonly VAT reviewer cannot prepare and mobile workspace remains usable (1.4s)
+  ok 16 e2e\phase7.spec.ts:98:1 › prior phase audit IFRS and Corporate Tax workspaces remain usable (12.7s)
+  ok 17 e2e\phase7.spec.ts:168:1 › audit administration and core route regression (8.0s)
+  ok 18 e2e\phase8.spec.ts:41:1 › 18 TP workspaces use persisted APIs without browser errors (12.4s)
+  ok 19 e2e\phase8.spec.ts:62:1 › source matrix calculates and exports through real API (3.0s)
+  ok 20 e2e\phase8.spec.ts:84:1 › dated graph and persisted benchmark chart render at four enterprise widths (10.2s)
+  ok 21 e2e\phase8.spec.ts:115:1 › client sees issued-document boundary and cannot open internal TP (1.2s)
+  ok 22 e2e\phase8.spec.ts:136:1 › queued loan and source service workpapers calculate in browser (4.6s)
+  ok 23 e2e\phase8.spec.ts:180:1 › AI suggestion is accepted by a separate TP reviewer (4.3s)
+  ok 24 e2e\phase9.spec.ts:31:1 › 24 workspaces render with real persisted datasets and tax records (26.7s)
+  x  25 e2e\phase9.spec.ts:98:1 › training controls run and cancel real Node worker jobs (1.9m)
+(node:3116) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 26 e2e\phase9.spec.ts:134:1 › DMTT calculation uses reviewed group and displays source-backed result (1.3s)
+  ok 27 e2e\phase9.spec.ts:152:1 › held-out confusion chart renders at enterprise widths (2.8s)
+
+
+  1) e2e\phase12.spec.ts:51:1 › WCAG automated checks and reflow across five enterprise viewports ──
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      57 |     results.push({route:"/login",width,height,violations:report.violations});
+      58 |     expect(report.violations.filter(v=>v.impact==="critical"||v.impact==="serious")).toEqual([]);
+    > 59 |     expect(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth)).toBe(true);
+         |                                                                                              ^
+      60 |     await page.screenshot({path:`${shots}/login-${width}.png`,fullPage:true});
+      61 |   }
+      62 |   await login(page);await page.goto("/security");
+        at C:\Indian Servers\TheAuditor\frontend\e2e\phase12.spec.ts:59:94
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\phase12-WCAG-automated-che-5ebbf-s-five-enterprise-viewports\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\phase12-WCAG-automated-che-5ebbf-s-five-enterprise-viewports\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\phase12-WCAG-automated-che-5ebbf-s-five-enterprise-viewports\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\phase12-WCAG-automated-che-5ebbf-s-five-enterprise-viewports\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) e2e\phase9.spec.ts:98:1 › training controls run and cancel real Node worker jobs ──────────────
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByRole('status', { name: '' }).filter({ hasText: 'cancelled' }).first()
+    Expected: visible
+    Timeout: 90000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByRole('status', { name: '' }).filter({ hasText: 'cancelled' }).first() with timeout 90000ms
+      - waiting for getByRole('status', { name: '' }).filter({ hasText: 'cancelled' }).first()
+
+
+      123 |       .filter({ hasText: "cancelled" })
+      124 |       .first(),
+    > 125 |   ).toBeVisible({ timeout: 90000 });
+          |     ^
+      126 |   await page.getByLabel("Model version").selectOption(models[1].id);
+      127 |   await expect(
+      128 |     page.getByLabel("Measured training and validation loss").locator("canvas"),
+        at C:\Indian Servers\TheAuditor\frontend\e2e\phase9.spec.ts:125:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results\phase9-training-controls-r-876c6-ancel-real-Node-worker-jobs\test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results\phase9-training-controls-r-876c6-ancel-real-Node-worker-jobs\error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results\phase9-training-controls-r-876c6-ancel-real-Node-worker-jobs\trace.zip
+    Usage:
+
+        npx playwright show-trace test-results\phase9-training-controls-r-876c6-ancel-real-Node-worker-jobs\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    e2e\phase12.spec.ts:51:1 › WCAG automated checks and reflow across five enterprise viewports ───
+    e2e\phase9.spec.ts:98:1 › training controls run and cancel real Node worker jobs ───────────────
+  25 passed (4.3m)

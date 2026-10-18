@@ -1,0 +1,6 @@
+{
+  "standard_tax_calls": 10000,
+  "elapsed_seconds": 0.01564930000131426,
+  "result": "110250.00000000",
+  "scope": "Local CPU arithmetic only; excludes API, database, concurrent exports and large group workloads"
+}

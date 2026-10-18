@@ -1,0 +1,9 @@
+# Interest deduction limitation
+
+Interest uses a reviewed statutory bridge, not IFRS EBITDA. Approved source accounts and evidence are mandatory. General deductibility, arm's length and specific-purpose restrictions must be assessed before the general limitation. Expense/income, permanently disallowed amounts, historical/infrastructure exclusions, capitalized amortization, tax-deductible depreciation and tax-adjusted pre-GIDLR income are explicit inputs. Exclusion totals cannot exceed reconciled amounts. Capitalized interest is included when amortized, not merely incurred.
+
+Adjusted EBITDA = max(0, pre-GIDLR taxable income + net interest + deductible tax depreciation/amortization + assessed statutory adjustments). Deduction ceiling = higher of AED12M pro-rated for period months/12 and30% adjusted EBITDA. Eligible oldest carried interest is deducted before current interest. Carried balances expire after ten subsequent tax periods; current/prior balances cannot originate in the same period. Excluded taxpayers need an explicit basis and cannot silently deduct old carryforwards.
+
+The corporate-tax bridge must agree with the interest schedule's pre-GIDLR figure. Disallowed current interest increases income; utilized carried interest reduces income. SBR does not create or utilize GIDLR carryforwards. Schedules and movements remain immutable in run snapshots; manual opening carry balances and period indexes require independent review. There is no posted interest ledger equivalent to the tax-loss ledger, no group transfer and no automated historical-financing discovery.
+
+Independent examples test AED20M net interest +30M pre-GIDLR income: EBITDA50M, ceiling15M, disallowed5M. Short-period tests prove pro-rating. FIFO, expiry, taxpayer exclusions and capitalization have independent expected assertions. A related-party loan workflow traces approved accounts and contract evidence without treating related-party status alone as a deduction violation.

@@ -1,0 +1,1 @@
+Initial synthetic fixture mistakes were corrected. Final document workflow tests are included in phase11-tests.txt and regression-backend.txt. See bugs-found-and-fixed.md.

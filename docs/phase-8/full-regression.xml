@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="6" skipped="2" tests="340" time="224.973" timestamp="2026-10-18T06:48:04.187407+05:30" hostname="DESKTOP-B3SR465"><testcase classname="tests.ai.test_providers" name="test_mock_deterministic" time="0.002" /><testcase classname="tests.ai.test_providers" name="test_real_missing_credentials" time="0.001" /><testcase classname="tests.ai.test_providers" name="test_real_adapter_transport[success]" time="0.172" /><testcase classname="tests.ai.test_providers" name="test_real_adapter_transport[invalid-json]" time="0.145" /><testcase classname="tests.ai.test_providers" name="test_real_adapter_transport[invalid-schema]" time="0.152" /><testcase classname="tests.ai.test_providers" name="test_real_adapter_transport[unauthorized]" time="0.152" /><testcase classname="tests.ai.test_providers" name="test_real_adapter_transport[server-retry]" time="0.468" /><testcase classname="tests.ai.test_providers" name="test_real_adapter_transport[timeout]" time="0.444" /><testcase classname="tests.ai.test_providers" name="test_real_adapter_transport[oversized]" time="0.143" /><testcase classname="tests.ai.test_providers" name="test_gateway_input_limits[payload0]" time="0.000" /><testcase classname="tests.ai.test_providers" name="test_gateway_input_limits[payload1]" time="0.000" /><testcase classname="tests.ai.test_providers" name="test_gateway_input_limits[payload2]" time="0.000" /><testcase classname="tests.ai.test_providers" name="test_gateway_input_limits[payload3]" time="0.000" /><testcase classname="tests.integration.test_platform" name="test_auth_rotation_logout_and_bootstrap" time="1.073" /><testcase classname="tests.integration.test_platform" name="test_clients_entities_engagements_and_ai" time="0.879" /><testcase classname="tests.integration.test_platform" name="test_tenant_isolation_rls_and_permissions" time="0.734" /><testcase classname="tests.integration.test_platform" name="test_disabled_identity" time="0.795" /><testcase classname="tests.integration.test_platform" name="test_job_persistence_and_idempotency" time="0.794" /><testcase classname="tests.integration.test_platform" name="test_ai_failure_metadata" time="0.734" /><testcase classname="tests.integration.test_platform" name="test_job_failure_and_cross_tenant_access" time="0.747" /><testcase classname="tests.integration.test_platform" name="test_database_constraints_and_append_only" time="0.696" /><testcase classname="tests.integration.test_platform" name="test_expired_refresh_and_rate_limit" time="1.737" /><testcase classname="tests.integration.test_platform" name="test_ready_health_and_resource_updates" time="0.975" /><testcase classname="tests.integration.test_platform" name="test_cross_tenant_engagement_fk_and_denial" time="1.006" /><testcase classname="tests.phase2.test_ai_storage" name="test_structured_financial_mock[account_classification]" time="0.002" /><testcase classname="tests.phase2.test_ai_storage" name="test_structured_financial_mock[anomaly_explanation]" time="0.003" /><testcase classname="tests.phase2.test_ai_storage" name="test_structured_financial_mock[audit_procedures]" time="0.002" /><testcase classname="tests.phase2.test_ai_storage" name="test_structured_financial_mock[financial_commentary]" time="0.001" /><testcase classname="tests.phase2.test_ai_storage" name="test_human_approval_cannot_be_fabricated" time="0.001" /><testcase classname="tests.phase2.test_ai_storage" name="test_connector_secret_encryption" time="0.002" /><testcase classname="tests.phase2.test_ai_storage" name="test_private_immutable_objects" time="0.013" /><testcase classname="tests.phase2.test_ai_storage" name="test_s3_versioning_and_kms[Enabled]" time="0.005" /><testcase classname="tests.phase2.test_ai_storage" name="test_s3_versioning_and_kms[Suspended]" time="0.006" /><testcase classname="tests.phase2.test_ai_storage" name="test_generated_environment_has_valid_independent_keys" time="0.016" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[J01]" time="0.584" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[J02]" time="0.535" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[J03]" time="0.518" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[J04]" time="0.485" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[J05]" time="0.509" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[J06]" time="0.483" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[J07]" time="0.494" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[J08]" time="0.538" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[J09]" time="0.496" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[J10]" time="0.551" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[J11]" time="0.511" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[J12]" time="0.506" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[J13]" time="0.524" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[J14]" time="0.497" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[J15]" time="0.500" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[J16]" time="0.479" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[J17]" time="0.463" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[J18]" time="0.707" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[J19]" time="0.701" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[J20]" time="0.633" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[S21]" time="0.554" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[S22]" time="0.469" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[S23]" time="0.530" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[S24]" time="0.532" /><testcase classname="tests.phase2.test_analytics" name="test_each_rule_reproducible_positive[S25]" time="0.539" /><testcase classname="tests.phase2.test_analytics" name="test_missing_prerequisites[J02]" time="0.458" /><testcase classname="tests.phase2.test_analytics" name="test_missing_prerequisites[J03]" time="0.445" /><testcase classname="tests.phase2.test_analytics" name="test_missing_prerequisites[J10]" time="0.475" /><testcase classname="tests.phase2.test_analytics" name="test_missing_prerequisites[J11]" time="0.416" /><testcase classname="tests.phase2.test_analytics" name="test_missing_prerequisites[J14]" time="0.406" /><testcase classname="tests.phase2.test_analytics" name="test_missing_prerequisites[J15]" time="0.390" /><testcase classname="tests.phase2.test_analytics" name="test_missing_prerequisites[J18]" time="0.393" /><testcase classname="tests.phase2.test_analytics" name="test_missing_prerequisites[J19]" time="0.431" /><testcase classname="tests.phase2.test_analytics" name="test_missing_prerequisites[S21]" time="0.441" /><testcase classname="tests.phase2.test_analytics" name="test_risk_and_boundary" time="0.001" /><testcase classname="tests.phase2.test_analytics" name="test_empty_population" time="0.121" /><testcase classname="tests.phase2.test_analytics" name="test_clean_population_and_threshold_boundaries" time="0.395" /><testcase classname="tests.phase2.test_calculations" name="test_money[1,234.56-.-1234.56]" time="0.001" /><testcase classname="tests.phase2.test_calculations" name="test_money[1.234,56-,-1234.56]" time="0.000" /><testcase classname="tests.phase2.test_calculations" name="test_money[(0.01)-.--0.01]" time="0.000" /><testcase classname="tests.phase2.test_calculations" name="test_money[0.10000001-.-0.10000001]" time="0.000" /><testcase classname="tests.phase2.test_calculations" name="test_money[-.-0]" time="0.000" /><testcase classname="tests.phase2.test_calculations" name="test_bad_money[NaN]" time="0.000" /><testcase classname="tests.phase2.test_calculations" name="test_bad_money[Infinity]" time="0.000" /><testcase classname="tests.phase2.test_calculations" name="test_bad_money[12,34]" time="0.000" /><testcase classname="tests.phase2.test_calculations" name="test_bad_money[1.000000001]" time="0.000" /><testcase classname="tests.phase2.test_calculations" name="test_bad_money[1e40]" time="0.000" /><testcase classname="tests.phase2.test_calculations" name="test_bad_money[=SUM(A1)]" time="0.000" /><testcase classname="tests.phase2.test_calculations" name="test_normalize_sign_and_currency" time="0.008" /><testcase classname="tests.phase2.test_calculations" name="test_bad_normalization[change0]" time="0.001" /><testcase classname="tests.phase2.test_calculations" name="test_bad_normalization[change1]" time="0.002" /><testcase classname="tests.phase2.test_calculations" name="test_bad_normalization[change2]" time="0.001" /><testcase classname="tests.phase2.test_calculations" name="test_bad_normalization[change3]" time="0.000" /><testcase classname="tests.phase2.test_calculations" name="test_bad_normalization[change4]" time="0.000" /><testcase classname="tests.phase2.test_calculations" name="test_bad_normalization[change5]" time="0.000" /><testcase classname="tests.phase2.test_calculations" name="test_bad_normalization[change6]" time="0.001" /><testcase classname="tests.phase2.test_calculations" name="test_signed_and_tb_only" time="0.001" /><testcase classname="tests.phase2.test_calculations" name="test_tb_exact_and_opening" time="0.000" /><testcase classname="tests.phase2.test_calculations" name="test_sampling_reproducibility[random]" time="0.001" /><testcase classname="tests.phase2.test_calculations" name="test_sampling_reproducibility[systematic]" time="0.001" /><testcase classname="tests.phase2.test_calculations" name="test_sampling_reproducibility[mus]" time="0.001" /><testcase classname="tests.phase2.test_calculations" name="test_sampling_reproducibility[high_value]" time="0.001" /><testcase classname="tests.phase2.test_calculations" name="test_sampling_reproducibility[risk]" time="0.001" /><testcase classname="tests.phase2.test_calculations" name="test_sampling_reproducibility[full]" time="0.001" /><testcase classname="tests.phase2.test_calculations" name="test_invalid_sampling" time="0.000" /><testcase classname="tests.phase2.test_calculations" name="test_csv_mapping_and_security" time="0.004" /><testcase classname="tests.phase2.test_calculations" name="test_xlsx_multisheet_and_corruption" time="0.028" /><testcase classname="tests.phase2.test_calculations" name="test_excel_malicious_archive[xl/vbaProject.bin]" time="0.003" /><testcase classname="tests.phase2.test_calculations" name="test_excel_malicious_archive[xl/externalLinks/link.xml]" time="0.003" /><testcase classname="tests.phase2.test_calculations" name="test_excel_malicious_archive[large.xml]" time="0.008" /><testcase classname="tests.phase2.test_calculations" name="test_alternate_csv_encoding_and_dates" time="0.004" /><testcase classname="tests.phase2.test_calculations" name="test_fx_conflicting_base_and_contra_precision" time="0.001" /><testcase classname="tests.phase2.test_connectors" name="test_zoho_pagination_refresh_errors[ok]" time="0.002" /><testcase classname="tests.phase2.test_connectors" name="test_zoho_pagination_refresh_errors[rate]" time="0.002" /><testcase classname="tests.phase2.test_connectors" name="test_zoho_pagination_refresh_errors[refresh]" time="0.003" /><testcase classname="tests.phase2.test_connectors" name="test_zoho_pagination_refresh_errors[partial]" time="0.004" /><testcase classname="tests.phase2.test_connectors" name="test_zoho_pagination_refresh_errors[forbidden]" time="0.002" /><testcase classname="tests.phase2.test_connectors" name="test_zoho_pagination_refresh_errors[bad_region]" time="0.002" /><testcase classname="tests.phase2.test_connectors" name="test_zoho_oauth_state_and_wrong_dc" time="0.002" /><testcase classname="tests.phase2.test_connectors" name="test_tally_realistic_vouchers_and_request" time="0.001" /><testcase classname="tests.phase2.test_connectors" name="test_tally_rejects_bad_xml[bad]" time="0.001" /><testcase classname="tests.phase2.test_connectors" name="test_tally_rejects_bad_xml[&lt;!DOCTYPE doc [&lt;!ENTITY xx SYSTEM &quot;file:///secret&quot;&gt;]&gt;&lt;doc&gt;&amp;xx;&lt;/doc&gt;]" time="0.001" /><testcase classname="tests.phase2.test_connectors" name="test_tally_rejects_bad_xml[&lt;ENVELOPE&gt;&lt;BODY&gt;&lt;DATA&gt;&lt;COMPANYNAME&gt;FICTIONAL Test&lt;/COMPANYNAME&gt;&lt;LEDGER NAME=&quot;Cash&quot;&gt;&lt;PARENT&gt;Cash-in-hand&lt;/PARENT&gt;&lt;/LEDGER&gt;&lt;LEDGER NAME=&quot;Sales&quot;&gt;&lt;PARENT&gt;Sales Accounts&lt;/PARENT&gt;&lt;/LEDGER&gt;&lt;VOUCHER&gt;&lt;GUID&gt;&lt;/GUID&gt;&lt;DATE&gt;20261226&lt;/DATE&gt;&lt;NARRATION&gt;Synthetic sale&lt;/NARRATION&gt;&lt;ALLLEDGERENTRIES.LIST&gt;&lt;LEDGERNAME&gt;Cash&lt;/LEDGERNAME&gt;&lt;ISDEEMEDPOSITIVE&gt;Yes&lt;/ISDEEMEDPOSITIVE&gt;&lt;AMOUNT&gt;-100.25&lt;/AMOUNT&gt;&lt;/ALLLEDGERENTRIES.LIST&gt;&lt;ALLLEDGERENTRIES.LIST&gt;&lt;LEDGERNAME&gt;Sales&lt;/LEDGERNAME&gt;&lt;ISDEEMEDPOSITIVE&gt;No&lt;/ISDEEMEDPOSITIVE&gt;&lt;AMOUNT&gt;100.25&lt;/AMOUNT&gt;&lt;/ALLLEDGERENTRIES.LIST&gt;&lt;/VOUCHER&gt;&lt;/DATA&gt;&lt;/BODY&gt;&lt;/ENVELOPE&gt;]" time="0.001" /><testcase classname="tests.phase2.test_connectors" name="test_tally_rejects_bad_xml[&lt;ENVELOPE&gt;&lt;BODY&gt;&lt;DATA&gt;&lt;COMPANYNAME&gt;FICTIONAL Test&lt;/COMPANYNAME&gt;&lt;LEDGER NAME=&quot;Cash&quot;&gt;&lt;PARENT&gt;Cash-in-hand&lt;/PARENT&gt;&lt;/LEDGER&gt;&lt;LEDGER NAME=&quot;Sales&quot;&gt;&lt;PARENT&gt;Sales Accounts&lt;/PARENT&gt;&lt;/LEDGER&gt;&lt;VOUCHER&gt;&lt;GUID&gt;voucher-1&lt;/GUID&gt;&lt;DATE&gt;bad&lt;/DATE&gt;&lt;NARRATION&gt;Synthetic sale&lt;/NARRATION&gt;&lt;ALLLEDGERENTRIES.LIST&gt;&lt;LEDGERNAME&gt;Cash&lt;/LEDGERNAME&gt;&lt;ISDEEMEDPOSITIVE&gt;Yes&lt;/ISDEEMEDPOSITIVE&gt;&lt;AMOUNT&gt;-100.25&lt;/AMOUNT&gt;&lt;/ALLLEDGERENTRIES.LIST&gt;&lt;ALLLEDGERENTRIES.LIST&gt;&lt;LEDGERNAME&gt;Sales&lt;/LEDGERNAME&gt;&lt;ISDEEMEDPOSITIVE&gt;No&lt;/ISDEEMEDPOSITIVE&gt;&lt;AMOUNT&gt;100.25&lt;/AMOUNT&gt;&lt;/ALLLEDGERENTRIES.LIST&gt;&lt;/VOUCHER&gt;&lt;/DATA&gt;&lt;/BODY&gt;&lt;/ENVELOPE&gt;]" time="0.001" /><testcase classname="tests.phase2.test_connectors" name="test_tally_rejects_bad_xml[&lt;ENVELOPE&gt;&lt;BODY&gt;&lt;DATA&gt;&lt;COMPANYNAME&gt;FICTIONAL Test&lt;/COMPANYNAME&gt;&lt;LEDGER NAME=&quot;Cash&quot;&gt;&lt;PARENT&gt;Cash-in-hand&lt;/PARENT&gt;&lt;/LEDGER&gt;&lt;LEDGER NAME=&quot;Sales&quot;&gt;&lt;PARENT&gt;Sales Accounts&lt;/PARENT&gt;&lt;/LEDGER&gt;&lt;VOUCHER&gt;&lt;GUID&gt;voucher-1&lt;/GUID&gt;&lt;DATE&gt;20261226&lt;/DATE&gt;&lt;NARRATION&gt;Synthetic sale&lt;/NARRATION&gt;&lt;ALLLEDGERENTRIES.LIST&gt;&lt;LEDGERNAME&gt;Cash&lt;/LEDGERNAME&gt;&lt;ISDEEMEDPOSITIVE&gt;Yes&lt;/ISDEEMEDPOSITIVE&gt;&lt;AMOUNT&gt;USD 100&lt;/AMOUNT&gt;&lt;/ALLLEDGERENTRIES.LIST&gt;&lt;ALLLEDGERENTRIES.LIST&gt;&lt;LEDGERNAME&gt;Sales&lt;/LEDGERNAME&gt;&lt;ISDEEMEDPOSITIVE&gt;No&lt;/ISDEEMEDPOSITIVE&gt;&lt;AMOUNT&gt;100.25&lt;/AMOUNT&gt;&lt;/ALLLEDGERENTRIES.LIST&gt;&lt;/VOUCHER&gt;&lt;/DATA&gt;&lt;/BODY&gt;&lt;/ENVELOPE&gt;]" time="0.001" /><testcase classname="tests.phase2.test_connectors" name="test_tally_rejects_bad_xml[&lt;ENVELOPE&gt;&lt;BODY&gt;&lt;DATA&gt;&lt;COMPANYNAME&gt;Other company&lt;/COMPANYNAME&gt;&lt;LEDGER NAME=&quot;Cash&quot;&gt;&lt;PARENT&gt;Cash-in-hand&lt;/PARENT&gt;&lt;/LEDGER&gt;&lt;LEDGER NAME=&quot;Sales&quot;&gt;&lt;PARENT&gt;Sales Accounts&lt;/PARENT&gt;&lt;/LEDGER&gt;&lt;VOUCHER&gt;&lt;GUID&gt;voucher-1&lt;/GUID&gt;&lt;DATE&gt;20261226&lt;/DATE&gt;&lt;NARRATION&gt;Synthetic sale&lt;/NARRATION&gt;&lt;ALLLEDGERENTRIES.LIST&gt;&lt;LEDGERNAME&gt;Cash&lt;/LEDGERNAME&gt;&lt;ISDEEMEDPOSITIVE&gt;Yes&lt;/ISDEEMEDPOSITIVE&gt;&lt;AMOUNT&gt;-100.25&lt;/AMOUNT&gt;&lt;/ALLLEDGERENTRIES.LIST&gt;&lt;ALLLEDGERENTRIES.LIST&gt;&lt;LEDGERNAME&gt;Sales&lt;/LEDGERNAME&gt;&lt;ISDEEMEDPOSITIVE&gt;No&lt;/ISDEEMEDPOSITIVE&gt;&lt;AMOUNT&gt;100.25&lt;/AMOUNT&gt;&lt;/ALLLEDGERENTRIES.LIST&gt;&lt;/VOUCHER&gt;&lt;/DATA&gt;&lt;/BODY&gt;&lt;/ENVELOPE&gt;]" time="0.001" /><testcase classname="tests.phase2.test_connectors" name="test_tally_missing_master_and_duplicate_id" time="0.003" /><testcase classname="tests.phase2.test_live_connectors" name="test_live_zoho_organizations" time="0.000"><skipped type="pytest.skip" message="Live Zoho requires explicit opt-in and authorized OAuth credentials">C:\Indian Servers\TheAuditor\backend\tests\phase2\test_live_connectors.py:13: Live Zoho requires explicit opt-in and authorized OAuth credentials</skipped></testcase><testcase classname="tests.phase2.test_live_connectors" name="test_live_tally_export" time="0.000"><skipped type="pytest.skip" message="Live Tally requires an explicitly authorized local installation">C:\Indian Servers\TheAuditor\backend\tests\phase2\test_live_connectors.py:28: Live Tally requires an explicitly authorized local installation</skipped></testcase><testcase classname="tests.phase2.test_pipeline" name="test_full_pipeline_and_lineage" time="1.556" /><testcase classname="tests.phase2.test_pipeline" name="test_failed_import_and_replacement" time="1.275" /><testcase classname="tests.phase2.test_pipeline" name="test_tenant_and_client_scope_denial" time="0.939" /><testcase classname="tests.phase2.test_pipeline" name="test_resumable_upload" time="1.582" /><testcase classname="tests.phase2.test_pipeline" name="test_sampling_api_methods[random]" time="1.320" /><testcase classname="tests.phase2.test_pipeline" name="test_sampling_api_methods[systematic]" time="1.110" /><testcase classname="tests.phase2.test_pipeline" name="test_sampling_api_methods[mus]" time="0.976" /><testcase classname="tests.phase2.test_pipeline" name="test_sampling_api_methods[high_value]" time="0.953" /><testcase classname="tests.phase2.test_pipeline" name="test_sampling_api_methods[full]" time="1.056" /><testcase classname="tests.phase2.test_pipeline" name="test_accounting_worker_and_reauthorization" time="1.682" /><testcase classname="tests.phase2.test_pipeline" name="test_tb_only_reconciliation_and_profiles" time="1.186" /><testcase classname="tests.phase2.test_pipeline" name="test_connector_metadata_and_encrypted_sync" time="1.014" /><testcase classname="tests.phase2.test_pipeline" name="test_synthetic_fixture_demonstration" time="1.559" /><testcase classname="tests.phase2.test_pipeline" name="test_risk_sampling_currency_and_review_guards" time="1.301" /><testcase classname="tests.phase2.test_pipeline" name="test_zoho_native_journal_and_chart_staging" time="1.118" /><testcase classname="tests.phase2.test_pipeline" name="test_tally_native_package_pipeline[xml]" time="0.892" /><testcase classname="tests.phase2.test_pipeline" name="test_tally_native_package_pipeline[json]" time="0.878" /><testcase classname="tests.phase2.test_pipeline" name="test_approved_source_group_classification_reuse" time="0.921" /><testcase classname="tests.phase2.test_pipeline" name="test_job_cancel_retry_state_transitions" time="0.974" /><testcase classname="tests.phase3.test_workspace" name="test_context_dashboard_and_ledger_filters" time="0.994" /><testcase classname="tests.phase3.test_workspace" name="test_analytics_aggregates_filter_and_scope" time="1.447" /><testcase classname="tests.phase3.test_workspace" name="test_source_preview_sheet_selection_and_format_guards" time="0.884" /><testcase classname="tests.phase3.test_workspace" name="test_preserved_xlsx_validates_and_commits_from_opaque_storage" time="0.947" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_shared_structured_ai_tasks[acceptance_questions]" time="0.002" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_shared_structured_ai_tasks[independence_summary]" time="0.001" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_shared_structured_ai_tasks[planning_considerations]" time="0.001" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_shared_structured_ai_tasks[materiality_benchmarks]" time="0.001" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_shared_structured_ai_tasks[financial_statement_risks]" time="0.002" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_shared_structured_ai_tasks[risk_assertions]" time="0.002" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_shared_structured_ai_tasks[audit_procedures]" time="0.002" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_shared_structured_ai_tasks[journal_explanation]" time="0.002" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_shared_structured_ai_tasks[population_summary]" time="0.002" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_shared_structured_ai_tasks[testing_observations]" time="0.002" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_shared_structured_ai_tasks[evidence_summary]" time="0.002" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_shared_structured_ai_tasks[missing_evidence]" time="0.002" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_shared_structured_ai_tasks[working_paper_conclusions]" time="0.002" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_shared_structured_ai_tasks[open_findings]" time="0.002" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_shared_structured_ai_tasks[review_note_responses]" time="0.001" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_shared_structured_ai_tasks[completion_summary]" time="0.001" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_shared_structured_ai_tasks[management_letter]" time="0.001" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_shared_structured_ai_tasks[variance_analysis]" time="0.001" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_shared_structured_ai_tasks[related_parties]" time="0.001" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_shared_structured_ai_tasks[management_questions]" time="0.001" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_ai_cannot_assert_professional_approval[requires_human_review]" time="0.000" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_ai_cannot_assert_professional_approval[opinion_issued]" time="0.000" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_ai_cannot_assert_professional_approval[evidence_sufficiency_determined]" time="0.000" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_evidence_extension_signature_checks[bad.pdf-MZ executable]" time="0.001" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_evidence_extension_signature_checks[bad.png-&lt;script&gt;]" time="0.001" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_evidence_extension_signature_checks[bad.docm-ZIP]" time="0.001" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_evidence_extension_signature_checks[bad.csv-&lt;html&gt;script&lt;/html&gt;]" time="0.001" /><testcase classname="tests.phase4.test_ai_and_calculations" name="test_materiality_decimal_rounding_and_invalid_percentages" time="0.001" /><testcase classname="tests.phase4.test_workflows" name="test_materiality_self_approval_versions_and_lock" time="1.299" /><testcase classname="tests.phase4.test_workflows" name="test_working_paper_review_chain_and_clearance" time="1.313" /><testcase classname="tests.phase4.test_workflows" name="test_role_revocation_unassigned_and_disabled" time="1.062" /><testcase classname="tests.phase4.test_workflows" name="test_quality_reviewer_independence_and_trainee_finalize" time="1.144" /><testcase classname="tests.phase4.test_workflows" name="test_invalid_lifecycle_and_completion_gates" time="0.939" /><testcase classname="tests.phase4.test_workflows" name="test_evidence_versions_quarantine_hash_and_isolation" time="0.992" /><testcase classname="tests.phase4.test_workflows" name="test_client_portal_request_response_and_internal_denial" time="1.142" /><testcase classname="tests.phase4.test_workflows" name="test_anomaly_risk_ai_source_lineage" time="1.419" /><testcase classname="tests.phase4.test_workflows" name="test_complete_statutory_audit_human_workflow[False]" time="3.326" /><testcase classname="tests.phase4.test_workflows" name="test_complete_statutory_audit_human_workflow[True]" time="3.591" /><testcase classname="tests.phase4.test_workflows" name="test_methodology_versions_and_independent_approval" time="1.093" /><testcase classname="tests.phase4.test_workflows" name="test_concurrent_edits_and_history_immutability" time="0.885" /><testcase classname="tests.phase4.test_workflows" name="test_cross_tenant_audit_records_and_disabled_identity" time="0.855" /><testcase classname="tests.phase4.test_workflows" name="test_hallucinated_ai_citation_is_rejected" time="0.895" /><testcase classname="tests.phase4.test_workflows" name="test_judgmental_sampling_requires_scoped_items_and_reason" time="1.095" /><testcase classname="tests.phase4.test_workflows" name="test_ai_procedure_acceptance_requires_independent_human" time="0.999" /><testcase classname="tests.phase4.test_workflows" name="test_multiple_roles_differ_between_engagements_and_expire" time="1.437" /><testcase classname="tests.phase4.test_workflows" name="test_finding_response_and_independent_resolution" time="1.077" /><testcase classname="tests.phase5.test_calculations" name="test_large_journal_preserves_eight_decimal_places" time="0.001" /><testcase classname="tests.phase5.test_calculations" name="test_lease_present_value_interest_and_advance" time="0.001" /><testcase classname="tests.phase5.test_calculations" name="test_ecl_probability_weighted_stages[1-65]" time="0.001" /><testcase classname="tests.phase5.test_calculations" name="test_ecl_probability_weighted_stages[2-165]" time="0.001" /><testcase classname="tests.phase5.test_calculations" name="test_ecl_probability_weighted_stages[3-500]" time="0.001" /><testcase classname="tests.phase5.test_calculations" name="test_ecl_matrix_and_probabilities" time="0.001" /><testcase classname="tests.phase5.test_calculations" name="test_effective_interest_amortised_cost" time="0.001" /><testcase classname="tests.phase5.test_calculations" name="test_revenue_allocation_and_contract_liability" time="0.001" /><testcase classname="tests.phase5.test_calculations" name="test_deferred_tax_assets_liabilities_losses" time="0.001" /><testcase classname="tests.phase5.test_calculations" name="test_depreciation_roll_forward" time="0.001" /><testcase classname="tests.phase5.test_calculations" name="test_impairment_and_provision" time="0.001" /><testcase classname="tests.phase5.test_calculations" name="test_no_duplicate_mapping_weight" time="0.001" /><testcase classname="tests.phase5.test_calculations" name="test_ifrs19_ineligible_election_rejected" time="0.001" /><testcase classname="tests.phase5.test_reporting" name="test_company_statements_approval_and_exports" time="2.530" /><testcase classname="tests.phase5.test_reporting" name="test_approved_calculation_and_balanced_overlay[lease-body0-initial_liability-1000]" time="2.008" /><testcase classname="tests.phase5.test_reporting" name="test_approved_calculation_and_balanced_overlay[ecl-body1-total_ecl-None]" time="2.308" /><testcase classname="tests.phase5.test_reporting" name="test_ifrs_access_and_registry" time="1.952" /><testcase classname="tests.phase5.test_reporting" name="test_ai_disclosure_source_and_independent_review" time="3.189" /><testcase classname="tests.phase5.test_reporting" name="test_group_translation_eliminations_and_nci" time="3.450" /><testcase classname="tests.phase5.test_reporting" name="test_comparatives_opening_consistency_and_tenant_rls" time="2.240" /><testcase classname="tests.phase6.test_calculations" name="test_standard_bands[-1-0]" time="0.001" /><testcase classname="tests.phase6.test_calculations" name="test_standard_bands[0-0]" time="0.001" /><testcase classname="tests.phase6.test_calculations" name="test_standard_bands[374999-0]" time="0.001" /><testcase classname="tests.phase6.test_calculations" name="test_standard_bands[375000-0]" time="0.001" /><testcase classname="tests.phase6.test_calculations" name="test_standard_bands[375001-0.09]" time="0.001" /><testcase classname="tests.phase6.test_calculations" name="test_standard_bands[1000000-56250]" time="0.001" /><testcase classname="tests.phase6.test_calculations" name="test_deadlines[end0-expected0]" time="0.001" /><testcase classname="tests.phase6.test_calculations" name="test_deadlines[end1-expected1]" time="0.001" /><testcase classname="tests.phase6.test_calculations" name="test_deadlines[end2-expected2]" time="0.001" /><testcase classname="tests.phase6.test_calculations" name="test_deadlines[end3-expected3]" time="0.001" /><testcase classname="tests.phase6.test_calculations" name="test_interest_ebitda_and_threshold" time="0.001" /><testcase classname="tests.phase6.test_calculations" name="test_interest_small_short_and_capitalised" time="0.000" /><testcase classname="tests.phase6.test_calculations" name="test_interest_old_first_and_expiry" time="0.001" /><testcase classname="tests.phase6.test_calculations" name="test_interest_excluded_and_invalid" time="0.001" /><testcase classname="tests.phase6.test_calculations" name="test_qfzp_de_minimis_and_uncertainty" time="0.001" /><testcase classname="tests.phase6.test_calculations" name="test_qfzp_exclusions_require_legal_category" time="0.001" /><testcase classname="tests.phase6.test_calculations" name="test_sbr_extension_election_and_history" time="0.001" /><testcase classname="tests.phase6.test_calculations" name="test_loss_limit_fifo_and_negative_income" time="0.000" /><testcase classname="tests.phase6.test_calculations" name="test_entertainment_partial_and_provision_not_automatic" time="0.000" /><testcase classname="tests.phase6.test_calculations" name="test_fta_sampling_bound" time="0.000" /><testcase classname="tests.phase6.test_grounding" name="test_grounded_tax_output_and_forged_citations" time="0.001" /><testcase classname="tests.phase6.test_specialist_workflows" name="test_loss_transfer_posts_once_and_survives_donor_recalculation" time="6.993" /><testcase classname="tests.phase6.test_specialist_workflows" name="test_return_requires_current_release_checklist_and_external_evidence" time="4.232" /><testcase classname="tests.phase6.test_specialist_workflows" name="test_foreign_tax_credit_and_exempt_income_never_double_relieve" time="3.748" /><testcase classname="tests.phase6.test_specialist_workflows" name="test_relief_transitional_and_foundation_are_explicit_assessments" time="3.861" /><testcase classname="tests.phase6.test_workflows" name="test_mainland_approved_vs_proposed_and_exports" time="4.559" /><testcase classname="tests.phase6.test_workflows" name="test_sbr_election_and_rule_applicability" time="3.106" /><testcase classname="tests.phase6.test_workflows" name="test_loss_utilisation_versions_and_immutable_ledger" time="5.327" /><testcase classname="tests.phase6.test_workflows" name="test_qfzp_contract_segmentation_and_incomplete_conditions" time="4.330" /><testcase classname="tests.phase6.test_workflows" name="test_tax_group_aggregation_and_ownership_boundaries" time="6.586" /><testcase classname="tests.phase6.test_workflows" name="test_related_party_loan_uses_reconciled_statutory_bridge" time="3.429" /><testcase classname="tests.phase6.test_workflows" name="test_ai_tax_sources_independent_decisions_and_no_direct_posting" time="8.215" /><testcase classname="tests.phase6.test_workflows" name="test_tax_permissions_rule_control_and_isolation" time="2.813" /><testcase classname="tests.phase7.test_documents" name="test_actual_text_pdf_extracts_fields_without_visual_verification" time="0.215" /><testcase classname="tests.phase7.test_regression_fixes" name="test_new_approved_note_invalidates_prior_ifrs_run" time="1.728" /><testcase classname="tests.phase7.test_regression_fixes" name="test_new_approved_tax_adjustment_invalidates_old_release" time="3.430" /><testcase classname="tests.phase7.test_vat_calculations" name="test_output_categories_inclusive_credit_fx[changes0-1000-50]" time="0.004" /><testcase classname="tests.phase7.test_vat_calculations" name="test_output_categories_inclusive_credit_fx[changes1-1000-50]" time="0.001" /><testcase classname="tests.phase7.test_vat_calculations" name="test_output_categories_inclusive_credit_fx[changes2-1000-0]" time="0.001" /><testcase classname="tests.phase7.test_vat_calculations" name="test_output_categories_inclusive_credit_fx[changes3-1000-0]" time="0.001" /><testcase classname="tests.phase7.test_vat_calculations" name="test_output_categories_inclusive_credit_fx[changes4-1000-0]" time="0.001" /><testcase classname="tests.phase7.test_vat_calculations" name="test_output_categories_inclusive_credit_fx[changes5--1000--50]" time="0.001" /><testcase classname="tests.phase7.test_vat_calculations" name="test_output_categories_inclusive_credit_fx[changes6-3672.50-183.63]" time="0.001" /><testcase classname="tests.phase7.test_vat_calculations" name="test_input_recovery_and_no_account_name_inference" time="0.001" /><testcase classname="tests.phase7.test_vat_calculations" name="test_invoice_simplified_full_and_missing_facts" time="0.001" /><testcase classname="tests.phase7.test_vat_calculations" name="test_reverse_charge_and_supplier_integrity_thresholds" time="0.001" /><testcase classname="tests.phase7.test_vat_calculations" name="test_deadline_holidays_and_rollout_boundary" time="0.000" /><testcase classname="tests.phase7.test_vat_calculations" name="test_demo_guards_and_deterministic_balances" time="0.083" /><testcase classname="tests.phase7.test_vat_workflows" name="test_vat201_actual_sources_return_review_and_stale_export" time="2.359" /><testcase classname="tests.phase7.test_vat_workflows" name="test_invoice_defects_duplicates_and_date_versions" time="2.513" /><testcase classname="tests.phase7.test_vat_workflows" name="test_asp_sandbox_idempotency_retry_and_readiness" time="2.587" /><testcase classname="tests.phase7.test_vat_workflows" name="test_vat_permissions_no_legacy_ai_bypass_and_immutable_runs" time="2.215" /><testcase classname="tests.phase7.test_vat_workflows" name="test_all_vat_ai_tasks_grounded_independent_and_budgeted" time="4.774" /><testcase classname="tests.phase7.test_vat_workflows" name="test_text_pdf_endpoint_requires_linked_reviewed_clean_evidence" time="2.493" /><testcase classname="tests.phase7.test_worker_security" name="test_workers_obey_tenant_policy_revocation" time="0.737" /><testcase classname="tests.phase7.test_worker_security" name="test_completed_job_idempotency_key_cannot_be_reused_by_another_user" time="0.700" /><testcase classname="tests.phase8.test_calculations" name="test_independent_segment_pli_distinguishes_revenue_and_cost_denominators" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_independent_percentile_conventions[values0-inclusive-2-3-4]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_independent_percentile_conventions[values1-inclusive-1.75-2.5-3.25]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_independent_percentile_conventions[values2-exclusive-1.25-2.5-3.75]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_independent_percentile_conventions[values3-exclusive-None-1.5-None]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_independent_percentile_conventions[values4-inclusive--2-0-2]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_independent_percentile_conventions[values5-inclusive-1.5-2-2.5]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_independent_percentile_conventions[values6-inclusive-None-None-None]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_allocation_conserves_rounding_and_rejects_bad_drivers" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_loan_day_counts_bullet_and_original_currency[ACT/365-10000]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_loan_day_counts_bullet_and_original_currency[ACT/360-10138.88888889]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_loan_day_counts_bullet_and_original_currency[30E/360-10000]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_mid_period_repayment_and_early_settlement" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_floating_reset_and_multiple_disbursements" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_monthly_repayment_schedule_and_compounding" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_fx_translation_and_invalid_cashflows" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_disclosure_total_strictly_exceeds_threshold[39999999-False]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_disclosure_total_strictly_exceeds_threshold[40000000-False]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_disclosure_total_strictly_exceeds_threshold[40000001-True]" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_documentation_inclusive_threshold[199999999-False]" time="0.000" /><testcase classname="tests.phase8.test_calculations" name="test_documentation_inclusive_threshold[200000000-True]" time="0.000" /><testcase classname="tests.phase8.test_calculations" name="test_documentation_inclusive_threshold[200000001-True]" time="0.000" /><testcase classname="tests.phase8.test_calculations" name="test_category_cp_group_dividend_and_settlement_controls" time="0.000" /><testcase classname="tests.phase8.test_calculations" name="test_benchmark_weighted_and_unweighted_missing_currency_explicitness" time="0.001" /><testcase classname="tests.phase8.test_calculations" name="test_histogram_accounts_for_negative_constant_and_missing_values" time="0.000" /><testcase classname="tests.phase8.test_calculations" name="test_connected_receipts_are_separate_from_benefits_and_overlap_is_explicit" time="0.000" /><testcase classname="tests.phase8.test_calculations" name="test_disclosure_reversal_applies_to_reviewed_market_value" time="0.000" /><testcase classname="tests.phase8.test_imports" name="test_csv_and_xlsx_preserve_the_same_observations_and_hash" time="0.007" /><testcase classname="tests.phase8.test_imports" name="test_nonfinite_and_formula_observations_are_rejected[revenue-NaN]" time="0.001" /><testcase classname="tests.phase8.test_imports" name="test_nonfinite_and_formula_observations_are_rejected[value-Infinity]" time="0.001" /><testcase classname="tests.phase8.test_imports" name="test_nonfinite_and_formula_observations_are_rejected[name-=HYPERLINK(1)]" time="0.001" /><testcase classname="tests.phase8.test_imports" name="test_duplicate_columns_and_duplicate_company_year_are_rejected" time="0.001" /><testcase classname="tests.phase8.test_relationships" name="test_indirect_common_and_circular_ownership_remain_candidates" time="0.000" /><testcase classname="tests.phase8.test_relationships" name="test_path_growth_is_bounded" time="0.000" /><testcase classname="tests.phase8.test_storage" name="test_generated_document_is_readable_across_cli_and_api_working_directories" time="0.007" /><testcase classname="tests.phase8.test_workflows" name="test_actual_rp_sales_benchmark_and_segmentation" time="9.798" /><testcase classname="tests.phase8.test_workflows" name="test_actual_loan_benchmark_credit_and_source_scope" time="9.370" /><testcase classname="tests.phase8.test_workflows" name="test_licensing_permissions_and_immutable_sources" time="12.151" /><testcase classname="tests.phase8.test_workflows" name="test_all_thirty_ai_actions_remain_suggestions" time="4.864"><failure message="AssertionError: {&quot;error&quot;:{&quot;code&quot;:&quot;401&quot;,&quot;message&quot;:&quot;Inactive identity&quot;,&quot;request_id&quot;:&quot;049c5f58-adbc-4e75-94e0-bb0e926363f9&quot;}}&#10;assert 401 == 201&#10; +  where 401 = &lt;Response [401 Unauthorized]&gt;.status_code">environment = &lt;httpx.AsyncClient object at 0x0000025A57B5C890&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000025A57AF2240&gt;
+
+        headers=f["analyst"][0],
+        json={
+            "profile_id": f["profile"]["id"],
+            "source_id": agreement["id"],
+            "run_id": loan_run.json()["id"],
+            "task": "loan_memo",
+        },
+&gt;   )
+      
+
+tests\phase8\test_workflows.py:558: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase8\test_workflows.py:121: in prepared
+    relationship = await ready(
+tests\phase8\test_workflows.py:46: in ready
+    obj = await create(c, preparer, base, "tp-" + kind, body)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = &lt;httpx.AsyncClient object at 0x0000025A57B5C890&gt;
+h = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyNTJiYTg0Ni02MmM2LTQ1YmYtOWU1Zi1jMjAxMDk3NWE...lwZSI6ImFjY2VzcyJ9.tCNtJTmArdSyYJkSMMMElm-zsxciz8kJUqfo5ZrUuc4', 'X-Tenant-ID': 'fb12356d-e90b-43a4-903e-61201855629d'}
+base = '/api/v1/engagements/18a67f39-f2be-472b-bcd1-a3b13ae1987f/audit'
+kind = 'tp-relationship'
+body = {'profile_id': 'e8a3be60-1a6e-452f-a4e1-cc2d04c7ed36', 'evidence_record_ids': ['a8f251c5-86bc-47cd-a50c-9563d3063b5f']...ale': 'Synthetic source-linked fact and economic review', 'from_party_id': 'd68ca254-e1c0-424b-9c17-7c6d0654810b', ...}
+reference = None
+
+    async def create(client, h, base, kind, body, reference=None):
+        r = await client.post(
+            base + "/" + kind,
+            headers=h,
+            json={
+                "reference": reference or kind + "-" + str(uuid.uuid4())[:8],
+                "title": "SYNTHETIC " + kind,
+                "body": body,
+            },
+        )
+&gt;       assert r.status_code == 201, r.text
+E       AssertionError: {"error":{"code":"401","message":"Inactive identity","request_id":"049c5f58-adbc-4e75-94e0-bb0e926363f9"}}
+E       assert 401 == 201
+E        +  where 401 = &lt;Response [401 Unauthorized]&gt;.status_code
+
+tests\phase4\test_workflows.py:77: AssertionError</failure></testcase><testcase classname="tests.phase8.test_workflows" name="test_source_reconciled_services_and_reviewed_localfile_exports" time="0.681"><failure message="AssertionError: {&quot;error&quot;:{&quot;code&quot;:&quot;409&quot;,&quot;message&quot;:&quot;Initial setup has already completed&quot;,&quot;request_id&quot;:&quot;b38c2e96-c084-4e1e-8b9c-8477b00a8f37&quot;}}&#10;assert 409 == 201&#10; +  where 409 = &lt;Response [409 Conflict]&gt;.status_code">environment = &lt;httpx.AsyncClient object at 0x0000025A5746F260&gt;
+
+        headers=f["analyst"][0],
+        json={"profile_id": f["profile"]["id"], "source_id": f["far"]["id"], "task": AI_TASKS[0]},
+    )
+    assert rejected.status_code == 429
+&gt;   bypass = await c.post(
+        ^^^^^^^^^^^^^^^^^
+        f["base"] + f"/records/{last['id']}/actions",
+        headers=f["analyst"][0],
+        json={"version": last["version"], "action": "submit", "comments": "Attempt generic path"},
+    )
+
+tests\phase8\test_workflows.py:604: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase8\test_workflows.py:38: in prepared
+    ) = await tax_prepared(c)
+        ^^^^^^^^^^^^^^^^^^^^^
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:22: in prepared
+    h, opts, eid, base = scope_data or await setup(c)
+                                       ^^^^^^^^^^^^^^
+tests\phase4\test_workflows.py:44: in setup
+    h, options = await scope(client)
+                 ^^^^^^^^^^^^^^^^^^^
+tests\phase2\test_pipeline.py:21: in scope
+    headers, _ = await setup(client)
+                 ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = &lt;httpx.AsyncClient object at 0x0000025A5746F260&gt;
+
+    async def setup(client):
+        from app.core.config import settings
+    
+        response = await client.post(
+            "/api/v1/auth/bootstrap",
+            headers={"X-Bootstrap-Secret": settings().bootstrap_secret},
+            json={
+                "email": "admin@example.com",
+                "password": "test-strong-password-123",
+                "tenant_name": "TEST ONLY Firm A",
+            },
+        )
+&gt;       assert response.status_code == 201, response.text
+E       AssertionError: {"error":{"code":"409","message":"Initial setup has already completed","request_id":"b38c2e96-c084-4e1e-8b9c-8477b00a8f37"}}
+E       assert 409 == 201
+E        +  where 409 = &lt;Response [409 Conflict]&gt;.status_code
+
+tests\integration\test_platform.py:76: AssertionError</failure></testcase><testcase classname="tests.phase8.test_workflows" name="test_connected_person_remuneration_and_ct_adjustment_bridge" time="1.553"><failure message="AssertionError: {&quot;error&quot;:{&quot;code&quot;:&quot;401&quot;,&quot;message&quot;:&quot;Inactive identity&quot;,&quot;request_id&quot;:&quot;3613442f-da71-4653-90ca-db9c4ae9d72e&quot;}}&#10;assert 401 == 200&#10; +  where 401 = &lt;Response [401 Unauthorized]&gt;.status_code">environment = &lt;httpx.AsyncClient object at 0x0000025A579CC3B0&gt;
+
+    async with Session() as db, db.begin():
+        await tenant_context(db, f["h"]["X-Tenant-ID"])
+&gt;       eng = await db.get(Engagement, uuid.UUID(f["eid"]))
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+tests\phase8\test_workflows.py:754: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase8\test_workflows.py:38: in prepared
+    ) = await tax_prepared(c)
+        ^^^^^^^^^^^^^^^^^^^^^
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:43: in prepared
+    p = await ready(
+tests\phase5\test_reporting.py:41: in ready
+    return await approve(c, h, reviewer[0], base, obj)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+tests\phase4\test_workflows.py:97: in approve
+    return await action(client, reviewer, base, obj, "approve")
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = &lt;httpx.AsyncClient object at 0x0000025A579CC3B0&gt;
+h = {'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJlZThhMzFhMy01NDVhLTRhY2EtOWI3Mi1lM2JmNTcxYmI...lwZSI6ImFjY2VzcyJ9.9tFGxJZB9i46mhfCsNtv-w3RnWVB4FOHqtWKbu8TZfY', 'X-Tenant-ID': '5d85ae92-d599-4fe8-91bf-bdf0501ffe8e'}
+base = '/api/v1/engagements/db046cc3-a978-4af4-a78f-e0192d8741e0/audit'
+obj = {'engagement_id': 'db046cc3-a978-4af4-a78f-e0192d8741e0', 'kind': 'ifrs-profile', 'reference': 'ifrs-profile-5433d24b', 'title': 'SYNTHETIC ifrs-profile', ...}
+value = 'approve', expected = 200
+
+    async def action(client, h, base, obj, value, expected=200):
+        r = await client.post(
+            base + "/records/" + obj["id"] + "/actions",
+            headers=h,
+            json={
+                "version": obj["version"],
+                "action": value,
+                "comments": "Synthetic recorded professional decision for workflow test",
+            },
+        )
+&gt;       assert r.status_code == expected, r.text
+E       AssertionError: {"error":{"code":"401","message":"Inactive identity","request_id":"3613442f-da71-4653-90ca-db9c4ae9d72e"}}
+E       assert 401 == 200
+E        +  where 401 = &lt;Response [401 Unauthorized]&gt;.status_code
+
+tests\phase4\test_workflows.py:91: AssertionError</failure></testcase><testcase classname="tests.phase8.test_workflows" name="test_tp_job_controls_require_owner_and_exact_operation" time="1.278"><failure message="KeyError: 0">environment = &lt;httpx.AsyncClient object at 0x0000025A57427980&gt;
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x0000025A57592D80&gt;
+
+            **f["common"],
+            "run_id": run["id"],
+            "conclusion": "NOT_SUPPORTED",
+            "proposed_tax_adjustment": "10000",
+            "software_test_only": True,
+&gt;           "no_automatic_percentile_conclusion": True,
+        ^^^^^^^^^^^^^^^^^
+        },
+        stages=True,
+    )
+
+tests\phase8\test_workflows.py:826: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase8\test_workflows.py:38: in prepared
+    ) = await tax_prepared(c)
+        ^^^^^^^^^^^^^^^^^^^^^
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:22: in prepared
+    h, opts, eid, base = scope_data or await setup(c)
+                                       ^^^^^^^^^^^^^^
+tests\phase4\test_workflows.py:44: in setup
+    h, options = await scope(client)
+                 ^^^^^^^^^^^^^^^^^^^
+tests\phase2\test_pipeline.py:21: in scope
+    headers, _ = await setup(client)
+                 ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = &lt;httpx.AsyncClient object at 0x0000025A57427980&gt;
+
+    async def setup(client):
+        from app.core.config import settings
+    
+        response = await client.post(
+            "/api/v1/auth/bootstrap",
+            headers={"X-Bootstrap-Secret": settings().bootstrap_secret},
+            json={
+                "email": "admin@example.com",
+                "password": "test-strong-password-123",
+                "tenant_name": "TEST ONLY Firm A",
+            },
+        )
+        assert response.status_code == 201, response.text
+        tokens = response.json()
+        headers = {"Authorization": "Bearer " + tokens["access_token"]}
+        response = await client.get("/api/v1/tenants", headers=headers)
+&gt;       tenant = response.json()[0]["id"]
+                 ^^^^^^^^^^^^^^^^^^
+E       KeyError: 0
+
+tests\integration\test_platform.py:80: KeyError</failure></testcase><testcase classname="tests.phase8.test_workflows" name="test_transitive_far_changes_invalidate_benchmark_and_require_parent_review" time="1.185"><failure message="KeyError: 0">environment = &lt;httpx.AsyncClient object at 0x0000025A4FF9E660&gt;
+
+        ("analytics", "pending"),
+    ]:
+&gt;       job = BackgroundJob(
+    ^^^^^^^^^^^^^^^^^
+            tenant_id=uuid.UUID(f["h"]["X-Tenant-ID"]),
+            created_by=member.user_id,
+            job_type=kind,
+            status=state,
+            idempotency_key=str(uuid.uuid4()),
+            payload={"engagement_id": f["eid"], "record_id": f["far"]["id"]},
+        )
+
+tests\phase8\test_workflows.py:861: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase8\test_workflows.py:38: in prepared
+    ) = await tax_prepared(c)
+        ^^^^^^^^^^^^^^^^^^^^^
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:22: in prepared
+    h, opts, eid, base = scope_data or await setup(c)
+                                       ^^^^^^^^^^^^^^
+tests\phase4\test_workflows.py:44: in setup
+    h, options = await scope(client)
+                 ^^^^^^^^^^^^^^^^^^^
+tests\phase2\test_pipeline.py:21: in scope
+    headers, _ = await setup(client)
+                 ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = &lt;httpx.AsyncClient object at 0x0000025A4FF9E660&gt;
+
+    async def setup(client):
+        from app.core.config import settings
+    
+        response = await client.post(
+            "/api/v1/auth/bootstrap",
+            headers={"X-Bootstrap-Secret": settings().bootstrap_secret},
+            json={
+                "email": "admin@example.com",
+                "password": "test-strong-password-123",
+                "tenant_name": "TEST ONLY Firm A",
+            },
+        )
+        assert response.status_code == 201, response.text
+        tokens = response.json()
+        headers = {"Authorization": "Bearer " + tokens["access_token"]}
+        response = await client.get("/api/v1/tenants", headers=headers)
+&gt;       tenant = response.json()[0]["id"]
+                 ^^^^^^^^^^^^^^^^^^
+E       KeyError: 0
+
+tests\integration\test_platform.py:80: KeyError</failure></testcase><testcase classname="tests.phase8.test_workflows" name="test_manual_specialist_calculators_do_not_claim_external_ratings_or_market_rates" time="1.267"><failure message="KeyError: 0">environment = &lt;httpx.AsyncClient object at 0x0000025A579BDC70&gt;
+
+        assert retried.status_code == 200 and retried.json()["status"] == "pending", retried.text
+        assert (await c.post(path + jobs[2] + "/cancel", headers=f["analyst"][0])).status_code == 404
+    
+    
+&gt;   async def test_transitive_far_changes_invalidate_benchmark_and_require_parent_review(environment):
+            ^^^^^^^^^^^^^^^^^
+
+tests\phase8\test_workflows.py:883: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\phase8\test_workflows.py:38: in prepared
+    ) = await tax_prepared(c)
+        ^^^^^^^^^^^^^^^^^^^^^
+tests\phase6\test_workflows.py:20: in prepared
+    h, eid, base, manager, partner, p, mapping, note, ready_ifrs = await ifrs_prepared(
+tests\phase5\test_reporting.py:22: in prepared
+    h, opts, eid, base = scope_data or await setup(c)
+                                       ^^^^^^^^^^^^^^
+tests\phase4\test_workflows.py:44: in setup
+    h, options = await scope(client)
+                 ^^^^^^^^^^^^^^^^^^^
+tests\phase2\test_pipeline.py:21: in scope
+    headers, _ = await setup(client)
+                 ^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+client = &lt;httpx.AsyncClient object at 0x0000025A579BDC70&gt;
+
+    async def setup(client):
+        from app.core.config import settings
+    
+        response = await client.post(
+            "/api/v1/auth/bootstrap",
+            headers={"X-Bootstrap-Secret": settings().bootstrap_secret},
+            json={
+                "email": "admin@example.com",
+                "password": "test-strong-password-123",
+                "tenant_name": "TEST ONLY Firm A",
+            },
+        )
+        assert response.status_code == 201, response.text
+        tokens = response.json()
+        headers = {"Authorization": "Bearer " + tokens["access_token"]}
+        response = await client.get("/api/v1/tenants", headers=headers)
+&gt;       tenant = response.json()[0]["id"]
+                 ^^^^^^^^^^^^^^^^^^
+E       KeyError: 0
+
+tests\integration\test_platform.py:80: KeyError</failure></testcase><testcase classname="tests.security.test_security" name="test_argon2[correct horse battery staple]" time="0.178" /><testcase classname="tests.security.test_security" name="test_argon2[unicode-password-\xe9\u20ac]" time="0.167" /><testcase classname="tests.security.test_security" name="test_malformed_hash" time="0.000" /><testcase classname="tests.security.test_security" name="test_random_refresh_and_digest" time="0.000" /><testcase classname="tests.security.test_security" name="test_access_roundtrip" time="0.001" /><testcase classname="tests.security.test_security" name="test_access_claim_validation[claims0]" time="0.001" /><testcase classname="tests.security.test_security" name="test_access_claim_validation[claims1]" time="0.001" /><testcase classname="tests.security.test_security" name="test_access_claim_validation[claims2]" time="0.001" /><testcase classname="tests.security.test_security" name="test_access_claim_validation[claims3]" time="0.001" /><testcase classname="tests.security.test_security" name="test_access_claim_validation[claims4]" time="0.001" /><testcase classname="tests.security.test_security" name="test_signature_and_missing_claims" time="0.000" /><testcase classname="tests.security.test_security" name="test_platform_role_cannot_read_clients" time="0.000" /><testcase classname="tests.security.test_security" name="test_production_config_rejects_bootstrap" time="0.002" /><testcase classname="tests.security.test_security" name="test_period_range" time="0.000" /><testcase classname="tests.security.test_security" name="test_client_validation[code-bad code]" time="0.001" /><testcase classname="tests.security.test_security" name="test_client_validation[name-]" time="0.001" /><testcase classname="tests.security.test_security" name="test_client_validation[kind-unknown]" time="0.001" /><testcase classname="tests.security.test_security" name="test_currency_and_country_validation" time="0.000" /><testcase classname="tests.security.test_security" name="test_unknown_iso_codes[country-ZZ]" time="0.001" /><testcase classname="tests.security.test_security" name="test_unknown_iso_codes[functional_currency-ZZZ]" time="0.000" /><testcase classname="tests.unit.test_api" name="test_liveness_and_version" time="0.113" /><testcase classname="tests.unit.test_api" name="test_payload_limit" time="0.003" /><testcase classname="tests.unit.test_api" name="test_invalid_host" time="0.002" /><testcase classname="tests.unit.test_api" name="test_request_id_sanitization" time="0.003" /><testcase classname="tests.unit.test_api" name="test_openapi_routes_and_auth" time="0.235" /><testcase classname="tests.unit.test_schema" name="test_all_22_tables_compile_for_postgres" time="0.019" /><testcase classname="tests.unit.test_schema" name="test_composite_tenant_foreign_keys" time="0.000" /><testcase classname="tests.unit.test_schema" name="test_frozen_migration_has_rls_and_no_create_all" time="0.001" /></testsuite></testsuites>

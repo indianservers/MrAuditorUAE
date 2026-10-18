@@ -111,9 +111,21 @@ class AnalyticsEngine:
         count_row = self.db.execute("SELECT count(*) FROM p").fetchone()
         assert count_row is not None
         self.count = count_row[0]
+        # Ordered string aggregates allocate per journal and cannot reliably spill.
+        # Hash-partition whole journals, retaining exact canonical signatures while
+        # bounding the number of aggregate states alive at once on large populations.
+        partitions = max(1, min(64, (self.count + 24999) // 25000))
+        signature = "SELECT journal_ref, string_agg(DISTINCT account_code, '|' ORDER BY account_code) accounts, min(posting_date) posting_date, sum(debit) debit, string_agg(account_code||':'||cast(debit AS VARCHAR)||':'||cast(credit AS VARCHAR),'|' ORDER BY account_code,debit,credit) sig FROM p"
         self.db.execute(
-            "CREATE TABLE signatures AS SELECT journal_ref, string_agg(DISTINCT account_code, '|' ORDER BY account_code) accounts, min(posting_date) posting_date, sum(debit) debit, string_agg(account_code||':'||cast(debit AS VARCHAR)||':'||cast(credit AS VARCHAR),'|' ORDER BY account_code,debit,credit) sig FROM p GROUP BY journal_ref"
+            "CREATE TABLE signatures AS " + signature + " WHERE false GROUP BY journal_ref"
         )
+        for partition in range(partitions):
+            self.db.execute(
+                "INSERT INTO signatures "
+                + signature
+                + " WHERE hash(journal_ref) % ? = ? GROUP BY journal_ref",
+                [partitions, partition],
+            )
 
     def close(self):
         self.db.close()

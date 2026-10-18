@@ -1,0 +1,20 @@
+{
+  "pdf": {
+    "pages": 3,
+    "rendered": true
+  },
+  "xlsx": {
+    "sheets": [
+      "Financial package",
+      "Sources",
+      "Immutable run"
+    ],
+    "formula_cells": 0
+  },
+  "docx": {
+    "financial_tables": 5,
+    "valid_zip_xml": true,
+    "page_number_field": true,
+    "visual_render": "Unavailable: LibreOffice missing"
+  }
+}
