@@ -26,7 +26,7 @@ def source_rows(results, registration, period_start, period_end, adjustments):
         raise ValueError("A VAT201 mapping version is required")
     with localcontext() as arithmetic:
         arithmetic.prec = 80
-        adjustment_totals = defaultdict(Decimal)
+        adjustment_totals: defaultdict[str, Decimal] = defaultdict(Decimal)
         for adj in adjustments:
             if (
                 adj.box not in {"1", "2", "3", "4", "5", "6", "7", "9", "10"}

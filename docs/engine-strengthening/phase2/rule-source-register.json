@@ -1,0 +1,230 @@
+{
+  "verified_on": "2026-10-24",
+  "scope": "Limited primary-source checks; no automatic engagement rule activation",
+  "sources": [
+    {
+      "source_id": "CT-RATES",
+      "url": "https://tax.gov.ae/Datafolder/Files/Legislation/Corporate%20Tax/Cabinet%20Decision%20No.%20116%20of%202022%20-%20for%20publishing.pdf",
+      "retrieved_at": "2026-10-24T18:17:43.296787+00:00",
+      "issuing_authority": "UAE Ministry of Finance / Federal Tax Authority",
+      "category": "legislation",
+      "professional_approval": "REQUIRED_SEPARATELY",
+      "http_status": 200,
+      "retrieval_status": "RETRIEVED",
+      "sha256": "6c830b72ad61feb3cf55d1bdc11272306f3f27d809e201cf9d2d3a483817d415",
+      "retained_path": "C:\\Indian Servers\\TheAuditor\\.local-runtime\\connected-tax\\legal-sources\\CT-RATES.pdf",
+      "bytes": 183478,
+      "verification_status": "RETRIEVAL_CONFIRMED_CONTENT_REVIEW_SCOPED_SEPARATELY",
+      "provisions": [
+        "Articles 2-3"
+      ],
+      "checked_parameters": {
+        "standard_threshold_aed": "375000",
+        "standard_rate": "0.09"
+      },
+      "issued": "2022-12-30",
+      "effective_from": "2023-02-01",
+      "content_status": "LIMITED_PROVISIONS_CHECKED",
+      "rule_version": "connected-tax-source-review/1",
+      "publication_date": null,
+      "applicability": "Subject to reviewed entity facts, elections, source date and complete supporting evidence",
+      "translation_caveat": "Officially hosted English translations may be labelled unofficial; consult controlling Arabic text for legal interpretation"
+    },
+    {
+      "source_id": "CD142",
+      "url": "https://tax.gov.ae/Datafolder/Files/Legislation/Cabinet-Decision-No-142-of-2024-on-Top-up-Tax-on-MNEs.pdf",
+      "retrieved_at": "2026-10-24T18:17:43.296787+00:00",
+      "issuing_authority": "UAE Ministry of Finance / Federal Tax Authority",
+      "category": "legislation",
+      "professional_approval": "REQUIRED_SEPARATELY",
+      "http_status": 200,
+      "retrieval_status": "RETRIEVED",
+      "sha256": "13528d9196ee2e624f06637426a79e4021d346428aa6bba34a87f11e3cbcca44",
+      "retained_path": "C:\\Indian Servers\\TheAuditor\\.local-runtime\\connected-tax\\legal-sources\\CD142.pdf",
+      "bytes": 1028894,
+      "verification_status": "RETRIEVAL_CONFIRMED_CONTENT_REVIEW_SCOPED_SEPARATELY",
+      "provisions": [
+        "1.1",
+        "5.1-5.3",
+        "7 special categories",
+        "9.2"
+      ],
+      "checked_parameters": {
+        "scope_eur": "750000000",
+        "history": "2 of 4; proportionate short-year threshold",
+        "minimum_rate": "0.15",
+        "sbie": "2025-2032 table; Article 5.3 base thereafter"
+      },
+      "issued": "2024-12-31",
+      "effective_from": "2025-01-01",
+      "content_status": "LIMITED_PROVISIONS_CHECKED",
+      "rule_version": "connected-tax-source-review/1",
+      "publication_date": null,
+      "applicability": "Subject to reviewed entity facts, elections, source date and complete supporting evidence",
+      "translation_caveat": "Officially hosted English translations may be labelled unofficial; consult controlling Arabic text for legal interpretation"
+    },
+    {
+      "source_id": "MD96",
+      "url": "https://mof.gov.ae/wp-content/uploads/2026/06/Ministerial-Decision-No.-96-of-2026-on-the-Commentary-and-Agreed-Administrative-Guidance-for-the-Purposes-of-Cabinet-Decision-No.-142-of-2024-on-the-Imposition-of-Top-Up-Tax-on-Multinational-Enterprises-en.pdf",
+      "retrieved_at": "2026-10-24T18:17:43.296787+00:00",
+      "issuing_authority": "UAE Ministry of Finance / Federal Tax Authority",
+      "category": "legislation",
+      "professional_approval": "REQUIRED_SEPARATELY",
+      "http_status": 200,
+      "retrieval_status": "RETRIEVED",
+      "sha256": "69358dc17d758542ea3db40a15fe8905722fe30f0e780d38f264fd49e8a23678",
+      "retained_path": "C:\\Indian Servers\\TheAuditor\\.local-runtime\\connected-tax\\legal-sources\\MD96.pdf",
+      "bytes": 163764,
+      "verification_status": "RETRIEVAL_CONFIRMED_CONTENT_REVIEW_SCOPED_SEPARATELY",
+      "provisions": [
+        "Articles 1-4"
+      ],
+      "checked_parameters": {
+        "repeals": "MD88/2025",
+        "application": "Fiscal years starting from 2025-01-01"
+      },
+      "issued": "2026-06-22",
+      "effective_from": "2026-06-22",
+      "content_status": "ADOPTION_INSTRUMENT_CHECKED_NOT_ALL_ADOPTED_GUIDANCE_IMPLEMENTED",
+      "rule_version": "connected-tax-source-review/1",
+      "publication_date": null,
+      "applicability": "Subject to reviewed entity facts, elections, source date and complete supporting evidence",
+      "translation_caveat": "Officially hosted English translations may be labelled unofficial; consult controlling Arabic text for legal interpretation"
+    },
+    {
+      "source_id": "MD229-2025",
+      "url": "https://mof.gov.ae/wp-content/uploads/2025/09/EN-Ministerial-Decision-No.-229-of-2025-Regarding-Qualifying-Activities-and-Excluded-Activities.pdf",
+      "retrieved_at": "2026-10-24T18:17:43.297785+00:00",
+      "issuing_authority": "UAE Ministry of Finance / Federal Tax Authority",
+      "category": "legislation",
+      "professional_approval": "REQUIRED_SEPARATELY",
+      "http_status": 200,
+      "retrieval_status": "RETRIEVED",
+      "sha256": "5cc8ce8dd0fbe5ba2d5a265ee3a37e54aa7317ebdd70836e32b82521005c6dba",
+      "retained_path": "C:\\Indian Servers\\TheAuditor\\.local-runtime\\connected-tax\\legal-sources\\MD229-2025.pdf",
+      "bytes": 185478,
+      "verification_status": "RETRIEVAL_CONFIRMED_CONTENT_REVIEW_SCOPED_SEPARATELY",
+      "provisions": [
+        "Articles 2-3",
+        "5-7"
+      ],
+      "checked_parameters": {
+        "de_minimis_rate": "0.05",
+        "de_minimis_cap_aed": "5000000",
+        "failure_periods_including_current": 5
+      },
+      "issued": "2025-08-28",
+      "effective_from": "2023-06-01",
+      "content_status": "LIMITED_PROVISIONS_CHECKED",
+      "rule_version": "connected-tax-source-review/1",
+      "publication_date": null,
+      "applicability": "Subject to reviewed entity facts, elections, source date and complete supporting evidence",
+      "translation_caveat": "Officially hosted English translations may be labelled unofficial; consult controlling Arabic text for legal interpretation"
+    },
+    {
+      "source_id": "MD131-2026",
+      "url": "https://mof.gov.ae/wp-content/uploads/2026/08/Ministerial-Decision-No.-131-of-2026-Amending-Certain-Provisions-of-Ministerial-Decision-No.-73-of-2023-on-Small-Business-Relief-for-the-Purposes-of-Federal-Decree-Law-No.-47-of-2022-EN.pdf",
+      "retrieved_at": "2026-10-24T18:17:48.530634+00:00",
+      "issuing_authority": "UAE Ministry of Finance / Federal Tax Authority",
+      "category": "legislation",
+      "professional_approval": "REQUIRED_SEPARATELY",
+      "http_status": 200,
+      "retrieval_status": "RETRIEVED",
+      "sha256": "6200cfa6196d94630100f8ae820ad3c359d25f661cc0358ac4fb182c96c0d755",
+      "retained_path": "C:\\Indian Servers\\TheAuditor\\.local-runtime\\connected-tax\\legal-sources\\MD131-2026.pdf",
+      "bytes": 173899,
+      "verification_status": "RETRIEVAL_CONFIRMED_CONTENT_REVIEW_SCOPED_SEPARATELY",
+      "provisions": [
+        "Articles One-Two"
+      ],
+      "checked_parameters": {
+        "last_period_end": "2029-12-31"
+      },
+      "issued": "2026-07-29",
+      "effective_from": null,
+      "publication_date": null,
+      "content_status": "EXTENSION_TEXT_CHECKED_PUBLICATION_COMMENCEMENT_AWAITING_EVIDENCE",
+      "restriction": "A reviewed Gazette/publication receipt is required before adopting extended eligibility",
+      "rule_version": "connected-tax-source-review/1",
+      "applicability": "Subject to reviewed entity facts, elections, source date and complete supporting evidence",
+      "translation_caveat": "Officially hosted English translations may be labelled unofficial; consult controlling Arabic text for legal interpretation"
+    },
+    {
+      "source_id": "VAT-ER",
+      "url": "https://tax.gov.ae/Datafolder/Files/Legislation/2026/Law-No-8-of-2017-and-its-amendments--09-2026.pdf",
+      "retrieved_at": "2026-10-24T18:17:48.801877+00:00",
+      "issuing_authority": "UAE Ministry of Finance / Federal Tax Authority",
+      "category": "legislation",
+      "professional_approval": "REQUIRED_SEPARATELY",
+      "http_status": 200,
+      "retrieval_status": "RETRIEVED",
+      "sha256": "7e0882e3d6f9e4bae4acdfd5420b4266d23f9bf38f22df910db106b24f145840",
+      "retained_path": "C:\\Indian Servers\\TheAuditor\\.local-runtime\\connected-tax\\legal-sources\\VAT-ER.pdf",
+      "bytes": 879857,
+      "verification_status": "RETRIEVAL_CONFIRMED_CONTENT_REVIEW_SCOPED_SEPARATELY",
+      "provisions": [
+        "Article 61; credit-note provisions require entity-specific facts"
+      ],
+      "checked_parameters": {
+        "rounding": "nearest fils, mathematical"
+      },
+      "issued": "2017-11-26",
+      "effective_from": "2018-01-01",
+      "content_status": "CONSOLIDATED_TEXT_RETRIEVED_LIMITED_ROUNDING_PROVISION_CHECKED",
+      "rule_version": "connected-tax-source-review/1",
+      "publication_date": null,
+      "applicability": "Subject to reviewed entity facts, elections, source date and complete supporting evidence",
+      "translation_caveat": "Officially hosted English translations may be labelled unofficial; consult controlling Arabic text for legal interpretation"
+    },
+    {
+      "source_id": "FTA13-2026",
+      "url": "https://tax.gov.ae/Datafolder/Files/Legislation/2026/FTA%20Decision%20No.%2013%20of%202026%20on%20Measures%2018%2008%202026.pdf",
+      "retrieved_at": "2026-10-24T18:17:48.953897+00:00",
+      "issuing_authority": "UAE Ministry of Finance / Federal Tax Authority",
+      "category": "legislation",
+      "professional_approval": "REQUIRED_SEPARATELY",
+      "http_status": 200,
+      "retrieval_status": "RETRIEVED",
+      "sha256": "9fa47501162be25e68850c15bcc3f27f8c7cff5fa774ae668ae554f868ae6463",
+      "retained_path": "C:\\Indian Servers\\TheAuditor\\.local-runtime\\connected-tax\\legal-sources\\FTA13-2026.pdf",
+      "bytes": 406342,
+      "verification_status": "RETRIEVAL_CONFIRMED_CONTENT_REVIEW_SCOPED_SEPARATELY",
+      "provisions": [
+        "identity and commencement; existing supplier integrity logic not rewritten"
+      ],
+      "checked_parameters": {},
+      "issued": "2026-07-22",
+      "effective_from": "2026-10-01",
+      "content_status": "SOURCE_IDENTITY_AND_COMMENCEMENT_CHECKED",
+      "rule_version": "connected-tax-source-review/1",
+      "publication_date": null,
+      "applicability": "Subject to reviewed entity facts, elections, source date and complete supporting evidence",
+      "translation_caveat": "Officially hosted English translations may be labelled unofficial; consult controlling Arabic text for legal interpretation"
+    },
+    {
+      "source_id": "CTGTP1",
+      "url": "https://tax.gov.ae/Datafolder/Files/Pdf/2023/Transfer%20Pricing%20Guide%20-%20EN%20-%2023%2010%202023.pdf",
+      "retrieved_at": "2026-10-24T18:17:51.161125+00:00",
+      "issuing_authority": "UAE Ministry of Finance / Federal Tax Authority",
+      "category": "official_guidance",
+      "professional_approval": "REQUIRED_SEPARATELY",
+      "http_status": 200,
+      "retrieval_status": "RETRIEVED",
+      "sha256": "209c6123b79475d24f6407c2a7e36eb90ba91db50a519c9981d0c4d78bcabab4",
+      "retained_path": "C:\\Indian Servers\\TheAuditor\\.local-runtime\\connected-tax\\legal-sources\\CTGTP1.pdf",
+      "bytes": 1105428,
+      "verification_status": "RETRIEVAL_CONFIRMED_CONTENT_REVIEW_SCOPED_SEPARATELY",
+      "provisions": [
+        "source identity; method, comparability and documentation context"
+      ],
+      "checked_parameters": {},
+      "issued": "2023-10-23",
+      "effective_from": null,
+      "content_status": "OFFICIAL_GUIDANCE_RETRIEVED_NOT_LICENSED_MARKET_DATA",
+      "rule_version": "connected-tax-source-review/1",
+      "publication_date": null,
+      "applicability": "Subject to reviewed entity facts, elections, source date and complete supporting evidence",
+      "translation_caveat": "Officially hosted English translations may be labelled unofficial; consult controlling Arabic text for legal interpretation"
+    }
+  ]
+}

@@ -86,6 +86,9 @@ async def prepared(c, scope_data=None, suffix="", scale=40000):
                 "exceptions": "Unsupported cases require professional review",
                 "technical_review": "Synthetic technical review recorded by independent test actor",
                 "parameters": {"sbr_last_period_end": "2029-12-31"} if category == "sbr" else {},
+                # Synthetic commencement attestation exercises controls; not a Gazette claim.
+                **({"publication_date": "2026-08-01", "publication_evidence_id": note["id"],
+                    "source_sha256": "a" * 64} if category == "sbr" else {}),
             },
         )
         rule_ids[category] = obj["id"]

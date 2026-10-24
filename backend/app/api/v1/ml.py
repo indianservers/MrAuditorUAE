@@ -384,6 +384,8 @@ async def detail(identifier: uuid.UUID, db: DB, ctx: Actor):
 async def training(data: Training, db: DB, ctx: Actor, request: Request):
     source = await service.get(db, ctx, data.source_id, "dataset", "ml.train")
     await require_ml_current(db, ctx, source)
+    if source.body.get("training_eligible") is False:
+        raise HTTPException(409, "Reviewed training labels are required; explicitly selected baselines remain available")
     from app.workers.accounting import submit
 
     return await submit(

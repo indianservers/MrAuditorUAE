@@ -25,38 +25,49 @@ from app.modules.connectors.quota import OrganizationQuota, QuotaDeferred
 from app.modules.connectors.runtime import ConnectorRuntime
 from app.modules.lineage.storage import ObjectStore
 
-pytestmark = pytest.mark.skipif(not os.getenv("CONNECTOR_TEST_DATABASE_URL"), reason="Run scripts/connector_operations_run.py for isolated real DB tests")
+pytestmark = pytest.mark.skipif(
+    not os.getenv("CONNECTOR_TEST_DATABASE_URL"),
+    reason="Run scripts/connector_operations_run.py for isolated real DB tests",
+)
 
 
 @pytest.fixture
 async def database(monkeypatch, tmp_path):
     url = os.environ["CONNECTOR_TEST_DATABASE_URL"]
-    assert re.fullmatch(r"connector_test_[a-f0-9]{32}", make_url(url).database or "")
+    assert re.fullmatch(r"connector_test_[a-f0-9]{32}_test", make_url(url).database or "")
     role = os.environ["CONNECTOR_TEST_ROLE"]
-    assert re.fullmatch(r"connector_test_[a-f0-9]{32}_app", role)
+    assert re.fullmatch(r"connector_test_[a-f0-9]{32}_test_app", role)
     admin_url = os.environ["CONNECTOR_TEST_ADMIN_URL"]
     assert make_url(admin_url).database == make_url(url).database
     admin = await asyncpg.connect(admin_url)
-    await admin.execute('DROP TABLE IF EXISTS connector_states, tenants, users CASCADE')
-    await admin.execute('DROP FUNCTION IF EXISTS protect_connector_evidence()')
-    await admin.execute('CREATE TABLE tenants(id UUID PRIMARY KEY); CREATE TABLE users(id UUID PRIMARY KEY)')
+    await admin.execute("DROP TABLE IF EXISTS connector_states, tenants, users CASCADE")
+    await admin.execute("DROP FUNCTION IF EXISTS protect_connector_evidence()")
+    await admin.execute(
+        "CREATE TABLE tenants(id UUID PRIMARY KEY); CREATE TABLE users(id UUID PRIMARY KEY)"
+    )
     admin_engine = create_async_engine(admin_url.replace("postgresql://", "postgresql+asyncpg://"))
-    migration_path = Path(__file__).resolve().parents[2] / "alembic/versions/0019_connector_operations.py"
+    migration_path = (
+        Path(__file__).resolve().parents[2] / "alembic/versions/0019_connector_operations.py"
+    )
     spec = importlib.util.spec_from_file_location("connector_migration", migration_path)
     migration = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(migration)
     async with admin_engine.begin() as connection:
+
         def upgrade(sync):
             migration.op = Operations(MigrationContext.configure(sync))
             migration.upgrade()
+
         await connection.run_sync(upgrade)
     await admin_engine.dispose()
-    await admin.execute(f'GRANT USAGE ON SCHEMA public TO "{role}"; GRANT SELECT,INSERT,UPDATE,DELETE ON ALL TABLES IN SCHEMA public TO "{role}"')
+    await admin.execute(
+        f'GRANT USAGE ON SCHEMA public TO "{role}"; GRANT SELECT,INSERT,UPDATE,DELETE ON ALL TABLES IN SCHEMA public TO "{role}"'
+    )
     tenants = [uuid.uuid4(), uuid.uuid4()]
     user = uuid.uuid4()
     for tenant in tenants:
-        await admin.execute('INSERT INTO tenants VALUES($1)', tenant)
-    await admin.execute('INSERT INTO users VALUES($1)', user)
+        await admin.execute("INSERT INTO tenants VALUES($1)", tenant)
+    await admin.execute("INSERT INTO users VALUES($1)", user)
     await admin.close()
     monkeypatch.setattr(settings(), "connector_encryption_key", Fernet.generate_key().decode())
     monkeypatch.setattr(settings(), "source_storage_path", str(tmp_path))
@@ -80,7 +91,9 @@ async def test_rls_tenant_isolation_and_immutable_evidence(database):
         await runtime.put("source_revision", "immutable", {"evidence": False})
     async with factory() as db, db.begin():
         await tenant_context(db, str(contexts[0].tenant_id))
-        deleted = await db.execute(text("DELETE FROM connector_states WHERE namespace='session' RETURNING id"))
+        deleted = await db.execute(
+            text("DELETE FROM connector_states WHERE namespace='session' RETURNING id")
+        )
         assert len(deleted.all()) == 1  # Trigger must RETURN OLD on nonimmutable DELETE.
     assert await runtime.get("session", "same-key") is None
 
@@ -89,30 +102,57 @@ async def test_parallel_grant_refresh_rotates_once_and_keeps_current_client_secr
     factory, contexts = database
     runtimes = [ConnectorRuntime(factory, contexts[0], uuid.uuid4()) for _ in range(4)]
     exchanges = []
+
     async def exchange(source):
         exchanges.append(source)
-        await asyncio.sleep(.02)
+        await asyncio.sleep(0.02)
         return {**source, "access_token": "new-access", "refresh_token": "new-refresh"}
-    original = {"client_id": "client", "client_secret": "old-secret", "access_token": "old-access", "refresh_token": "old-refresh"}
-    values = await asyncio.gather(*(r.rotate_grant("shared-grant", original, exchange, force=True) for r in runtimes))
+
+    original = {
+        "client_id": "client",
+        "client_secret": "old-secret",
+        "access_token": "old-access",
+        "refresh_token": "old-refresh",
+    }
+    values = await asyncio.gather(
+        *(r.rotate_grant("shared-grant", original, exchange, force=True) for r in runtimes)
+    )
     assert len(exchanges) == 1 and all(value["refresh_token"] == "new-refresh" for value in values)
-    latest = await runtimes[0].rotate_grant("shared-grant", {**original, "client_secret": "new-secret"}, exchange)
+    latest = await runtimes[0].rotate_grant(
+        "shared-grant", {**original, "client_secret": "new-secret"}, exchange
+    )
     assert latest["client_secret"] == "new-secret"
+    await runtimes[0].rotate_grant(
+        "shared-grant", {**original, "refresh_token": "new-consent-token"}, exchange
+    )
+    assert len(exchanges) == 2 and exchanges[-1]["refresh_token"] == "new-consent-token"
 
 
 async def test_checkpoint_commits_outside_caller_and_rejects_tampered_bytes(database, monkeypatch):
     factory, contexts = database
     runtime = ConnectorRuntime(factory, contexts[0], uuid.uuid4())
+
     async def persist(raw):
-        return ObjectStore().put(str(contexts[0].tenant_id), io.BytesIO(raw))
+        async with factory() as writer, writer.begin():
+            await writer.execute(
+                text("SELECT pg_advisory_xact_lock(hashtextextended(:key,12))"),
+                {"key": str(contexts[0].tenant_id)},
+            )
+            return ObjectStore().put(str(contexts[0].tenant_id), io.BytesIO(raw))
+
     monkeypatch.setattr(runtime, "persist_object", persist)
     calls = []
+
     async def fetch():
         calls.append(True)
         return {"amount": 12}, b'{"amount":12}'
+
     async with factory() as caller, caller.begin():
         await tenant_context(caller, str(contexts[0].tenant_id))
-        await runtime.cached_read("session", "page", fetch)
+        from app.modules.connectors.locking import begin_sync
+
+        await begin_sync(caller, contexts[0], runtime.connection_id)
+        await asyncio.wait_for(runtime.cached_read("session", "page", fetch), timeout=3)
         await caller.rollback()
     second = ConnectorRuntime(factory, contexts[0], runtime.connection_id)
     assert (await second.cached_read("session", "page", fetch))[0] == {"amount": 12}

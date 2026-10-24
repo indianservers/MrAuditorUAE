@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.config import settings
 from app.core.dependencies import Context
+from app.db.models.platform import AIModelConfiguration, AIProviderConfig
 from app.modules.accounting.models import (
     Account,
     AnalyticsRun,
@@ -34,6 +35,14 @@ async def suggest(
     batch = await scoped(db, ctx, ImportBatch, snapshot.batch_id)
     if batch.status not in {"active", "superseded"}:
         raise HTTPException(409, "Committed accounting snapshot required")
+    configured_model = await db.scalar(select(AIModelConfiguration).where(
+        AIModelConfiguration.name == request.model, AIModelConfiguration.enabled.is_(True)
+    ))
+    provider = await db.get(AIProviderConfig, configured_model.provider_id) if configured_model else None
+    if not provider:
+        raise HTTPException(422, "Approved AI model required")
+    if provider.adapter != "mock" and not settings().audit_ai_external_approved:
+        raise HTTPException(403, "Approved external financial disclosure required")
     evidence: dict = {
         "evidence_ids": [str(snapshot.id)],
         "snapshot": str(snapshot.id),

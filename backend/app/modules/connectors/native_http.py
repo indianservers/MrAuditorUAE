@@ -130,7 +130,9 @@ class NativeHTTP:
         lease = await self.governor.acquire() if self.governor else None
         try:
             self.requests += 1
-            async with self.client.stream("GET", url, headers={"Accept": ", ".join(sorted(allowed_types))}) as response:
+            async with self.client.stream(
+                "GET", url, headers={"Accept": ", ".join(sorted(allowed_types))}
+            ) as response:
                 if response.status_code != 200:
                     raise ConnectorError("Source attachment/metadata download failed or redirected")
                 content_type = response.headers.get("Content-Type", "").split(";", 1)[0].lower()
@@ -142,6 +144,8 @@ class NativeHTTP:
                     if len(data) > max_bytes:
                         raise ConnectorError("Source attachment/metadata exceeds its size limit")
             return bytes(data), content_type
+        except httpx.HTTPError:
+            raise ConnectorError("Source attachment/metadata download was interrupted") from None
         finally:
             if lease is not None:
                 await self.governor.release(lease)

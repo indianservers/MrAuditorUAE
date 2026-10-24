@@ -22,11 +22,12 @@ async def main():
         or not settings().database_url.endswith("/auditos_country_workflows_test")
         or os.getenv("INTEGRATION_TESTS") != "1"
     ):
-        raise SystemExit("Only the owned disposable country workflow test database is allowed")
+        raise SystemExit(
+            "Only the owned disposable country workflow test database is allowed"
+        )
     import pytest
-
     from tests.integration.test_platform import environment
-    from tests.phase4.test_workflows import setup
+    from tests.phase4.test_workflows import create, setup
     from tests.qa_crud.test_country_workflows import (
         bank_payload,
         double_boundaries,
@@ -34,6 +35,8 @@ async def main():
         source,
     )
     from tests.unit.country_workflow_cases import document, return_box, transaction
+    from tests.unit.native_source_examples import CAMT, SIF, SIF_FILENAME
+    from tests.unit.test_india_invoice_source import invoice
 
     fixture = environment.__wrapped__()
     client = await anext(fixture)
@@ -157,6 +160,34 @@ async def main():
                 "rationale": "Synthetic independent canonical return and purchase schedules",
             },
         )
+
+        async def native_file(engagement_id, filename, content, media):
+            audit = f"/api/v1/engagements/{engagement_id}/audit"
+            record = await create(
+                client,
+                h,
+                audit,
+                "evidence",
+                {"category": "Other", "retain_until": "2036-12-31"},
+            )
+            uploaded = await client.post(
+                audit + "/evidence-files/" + record["id"],
+                headers=h,
+                files={"file": (filename, content, media)},
+            )
+            assert uploaded.status_code == 201, uploaded.text
+            return uploaded.json()["id"]
+
+        camt_evidence = await native_file(
+            eid, "SYNTHETIC-native-camt.xml", CAMT, "application/xml"
+        )
+        wps_evidence = await native_file(eid, SIF_FILENAME, SIF, "text/csv")
+        india_evidence = await native_file(
+            india,
+            "SYNTHETIC-native-inv01.json",
+            json.dumps(invoice()).encode(),
+            "application/json",
+        )
         dest = ROOT / ".local-runtime/country-workflows/fixture.json"
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(
@@ -172,6 +203,9 @@ async def main():
                     "uae_statement_source": statement["id"],
                     "india_engagement": india,
                     "india_result": gst["id"],
+                    "camt_evidence": camt_evidence,
+                    "wps_evidence": wps_evidence,
+                    "india_invoice_evidence": india_evidence,
                     "tenant": h["X-Tenant-ID"],
                 },
                 indent=2,

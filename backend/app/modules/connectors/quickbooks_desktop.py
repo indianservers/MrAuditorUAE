@@ -33,7 +33,12 @@ def request(kind, start: date, end: date, version="13.0"):
             SubElement(node, "IncludeColumn").text = column
     else:
         raise ConnectorError("Desktop SDK permits only approved read queries")
-    return '<?xml version="1.0"?><?qbxml version="' + version + '"?>' + tostring(root, encoding="unicode")
+    return (
+        '<?xml version="1.0"?><?qbxml version="'
+        + version
+        + '"?>'
+        + tostring(root, encoding="unicode")
+    )
 
 
 def response(raw):
@@ -61,12 +66,18 @@ def package_rows(package, options):
             raise ConnectorError("Desktop SDK chart identity is missing or ambiguous")
         accounts[name] = code
         if options.kind == "coa":
-            yield {"account_code": code, "account_name": name, "source_id": code,
-                   "source_group": node.findtext("AccountType") or ""}
+            yield {
+                "account_code": code,
+                "account_name": name,
+                "source_id": code,
+                "source_group": node.findtext("AccountType") or "",
+            }
     if options.kind == "coa":
         return
     if options.kind not in {"gl", "journals"}:
-        raise ConnectorError("Desktop SDK trial-balance controls require an independently qualified source report")
+        raise ConnectorError(
+            "Desktop SDK trial-balance controls require an independently qualified source report"
+        )
     occurrences: Counter = Counter()
     for raw in package["ledger_xml"]:
         root = response(raw.encode())
@@ -74,15 +85,25 @@ def package_rows(package, options):
         if not {"TxnID", "Date", "Account", "Debit", "Credit"} <= set(columns.values()):
             raise ConnectorError("Unsupported Desktop SDK report column contract")
         for node in root.findall(".//DataRow"):
-            values = {columns.get(n.get("colID")): n.get("value", "") for n in node.findall("ColData")}
+            values = {
+                columns.get(n.get("colID")): n.get("value", "") for n in node.findall("ColData")
+            }
             code = accounts.get(values.get("Account"))
             if not code or not values.get("TxnID") or not values.get("Date"):
-                raise ConnectorError("Desktop SDK posting lacks an account, transaction identity or date")
+                raise ConnectorError(
+                    "Desktop SDK posting lacks an account, transaction identity or date"
+                )
             fingerprint = hashlib.sha256(json.dumps(values, sort_keys=True).encode()).hexdigest()
             occurrences[fingerprint] += 1
-            yield {"account_code": code, "account_name": values["Account"],
-                "journal_ref": values["TxnID"], "posting_date": values["Date"],
-                "debit": values.get("Debit") or "0", "credit": values.get("Credit") or "0",
-                "description": values.get("Memo", ""), "source_transaction_id": values["TxnID"],
+            yield {
+                "account_code": code,
+                "account_name": values["Account"],
+                "journal_ref": values["TxnID"],
+                "posting_date": values["Date"],
+                "debit": values.get("Debit") or "0",
+                "credit": values.get("Credit") or "0",
+                "description": values.get("Memo", ""),
+                "source_transaction_id": values["TxnID"],
                 "source_id": f"desktop-report:{fingerprint}:{occurrences[fingerprint]}",
-                "source_identity_quality": "report_snapshot; native_posting_line_id_not_available"}
+                "source_identity_quality": "report_snapshot; native_posting_line_id_not_available",
+            }

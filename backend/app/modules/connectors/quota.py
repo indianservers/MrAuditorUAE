@@ -22,18 +22,24 @@ return {1,0}
 class QuotaDeferred(ConnectorError):
     def __init__(self, retry_after):
         self.retry_after = retry_after
-        super().__init__(f"Organization API budget exhausted; retry after {retry_after} seconds using the saved checkpoint")
+        super().__init__(
+            f"Organization API budget exhausted; retry after {retry_after} seconds using the saved checkpoint"
+        )
 
 
 class OrganizationQuota:
-    def __init__(self, redis, provider, company, client_id, per_minute=60, per_day=10000, concurrency=2):
+    def __init__(
+        self, redis, provider, company, client_id, per_minute=60, per_day=10000, concurrency=2
+    ):
         self.redis = redis
         self.key = "connector-quota:" + digest([provider, company])
         self.limits = per_minute, per_day, concurrency
 
     async def acquire(self):
         lease = str(uuid.uuid4())
-        accepted, wait = await self.redis.eval(ACQUIRE, 2, self.key, self.key + ":leases", *self.limits, lease)
+        accepted, wait = await self.redis.eval(
+            ACQUIRE, 2, self.key, self.key + ":leases", *self.limits, lease
+        )
         if not accepted:
             raise QuotaDeferred(int(wait))
         return lease

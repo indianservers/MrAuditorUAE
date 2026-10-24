@@ -18,13 +18,15 @@ export function validateRows(input: unknown, maxRows = 10000, requireAccountName
     if (!/^\d{4}-\d{2}-\d{2}$/.test(r.date as string) || !Number.isFinite(Date.parse(r.date as string)) || new Date(r.date as string).toISOString().slice(0,10) !== r.date) throw Error('Invalid accounting date');
     if (!/^[A-Z]{3}$/.test(r.currency as string) || !/^[A-Z]{3}$/.test(r.functional_currency as string)) throw Error('Invalid currency');
     for (const field of ['debit', 'credit']) if (typeof r[field] !== 'number' || !Number.isFinite(r[field]) || (r[field] as number) < 0) throw Error('Invalid debit/credit');
-    if (r.description !== undefined && (typeof r.description !== 'string' || r.description.length > 12000)) throw Error('Invalid description');
-    if (r.counterparty !== undefined && (typeof r.counterparty !== 'string' || r.counterparty.length > 200)) throw Error('Invalid counterparty');
-    if (r.manual !== undefined && typeof r.manual !== 'boolean') throw Error('Invalid manual flag');
-    if (r.account_name !== undefined && (typeof r.account_name !== 'string' || r.account_name.length > 1000)) throw Error('Invalid account name');
+    if (r.description != null && (typeof r.description !== 'string' || r.description.length > 12000)) throw Error('Invalid description');
+    if (r.counterparty != null && (typeof r.counterparty !== 'string' || r.counterparty.length > 200)) throw Error('Invalid counterparty');
+    if (r.manual != null && typeof r.manual !== 'boolean') throw Error('Invalid manual flag');
+    if (r.account_name != null && (typeof r.account_name !== 'string' || r.account_name.length > 1000)) throw Error('Invalid account name');
     if (requireAccountName && (typeof r.account_name !== 'string' || !r.account_name.trim())) throw Error('Account classifier requires account_name');
-    if (r.category !== undefined && (!Number.isInteger(r.category) || (r.category as number) < 0 || (r.category as number) > 4)) throw Error('Invalid account category');
-    return {...r, description: r.description ?? ''} as Row;
+    if (r.category != null && (!Number.isInteger(r.category) || (r.category as number) < 0 || (r.category as number) > 4)) throw Error('Invalid account category');
+    return {...r, description: r.description ?? '', counterparty:r.counterparty??undefined,
+      manual:r.manual??undefined, account_name:r.account_name??undefined,
+      category:r.category??undefined,label:r.label??undefined} as Row;
   });
 }
 export function features(rows:Row[]):number[][] {

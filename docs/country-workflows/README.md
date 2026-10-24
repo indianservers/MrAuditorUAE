@@ -1,5 +1,7 @@
 # Country workflows — first implementation increment
 
+Later additions, verification receipts and remaining native-format gaps are documented in [Native adapters](native-adapters.md). The original twelve-workflow/142-scenario and delivery receipts below describe the first increment, rather than all subsequent workspace changes.
+
 UAE first, then India. This increment adds twelve operational workflows and 142 named synthetic reference scenarios. It does **not** complete the entire regulatory roadmap or qualify the application for production statutory reporting.
 
 ## Implemented

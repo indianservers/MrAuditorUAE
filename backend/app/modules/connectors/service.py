@@ -3,8 +3,9 @@ import io
 import json
 import tempfile
 import uuid
-from decimal import Decimal
+from collections import defaultdict
 from datetime import UTC, datetime
+from decimal import Decimal
 
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -20,10 +21,13 @@ from app.modules.connectors.ledger import zoho_ledger_row
 from app.modules.connectors.runtime import ConnectorRuntime, digest
 from app.modules.connectors.secrets import decrypt, encrypt
 from app.modules.connectors.zoho import DETAIL_RESOURCES, RESOURCES, ZohoConnector
+from app.modules.ingestion.parser import normalize
 from app.modules.saas.storage import put_private
 
 
-async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, resume_session: str | None = None):
+async def zoho_sync(
+    db: AsyncSession, ctx: Context, connection_id: uuid.UUID, resume_session: str | None = None
+):
     runtime = ConnectorRuntime.for_session(db, ctx, connection_id)
     if runtime:
         from app.modules.connectors.locking import begin_sync
@@ -48,7 +52,16 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, re
     )
     initial_config, initial_credentials = digest(config), connection.encrypted_credentials
     session_id = resume_session or str(uuid.uuid4())
-    cache_scope = digest([str(connection.id), str(connection.period_id), connection.region, connection.organization_id, config, session_id])
+    cache_scope = digest(
+        [
+            str(connection.id),
+            str(connection.period_id),
+            connection.region,
+            connection.organization_id,
+            config,
+            session_id,
+        ]
+    )
     quota_client = None
     if runtime:
         from redis.asyncio import Redis
@@ -56,24 +69,48 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, re
         from app.modules.connectors.quota import OrganizationQuota
 
         adapter.read_cache = lambda key, fetch: runtime.cached_read(cache_scope, key, fetch)
+
         async def rotate(current, force):
             async def exchange(source):
                 adapter.refresh_token = source.get("refresh_token", "")
                 return {**source, **await adapter.exchange_token()}
-            return await runtime.rotate_grant(digest(["zoho", connection.region, credentials["client_id"],
-                config.get("oauth_grant_id") or connection.organization_id]), current, exchange, force)
+
+            return await runtime.rotate_grant(
+                digest(
+                    [
+                        "zoho",
+                        connection.region,
+                        credentials["client_id"],
+                        config.get("oauth_grant_id") or connection.organization_id,
+                    ]
+                ),
+                current,
+                exchange,
+                force,
+            )
+
         adapter.token_handler = rotate
         quota_client = Redis.from_url(settings().redis_url)
-        adapter.governor = OrganizationQuota(quota_client, "zoho", connection.organization_id, credentials["client_id"],
-            60, 10000, 2)
-        await runtime.put("session", cache_scope, {"resume_session": session_id, "status": "extracting"}, ttl_hours=168)
+        adapter.governor = OrganizationQuota(
+            quota_client, "zoho", connection.organization_id, credentials["client_id"], 60, 10000, 2
+        )
+        await runtime.put(
+            "session",
+            cache_scope,
+            {"resume_session": session_id, "status": "extracting"},
+            ttl_hours=168,
+        )
 
     async def preserve(raw):
         if runtime:
             import hashlib
 
             candidate = runtime.last_object
-            return candidate if candidate and candidate["sha256"] == hashlib.sha256(raw).hexdigest() else await runtime.persist_object(raw)
+            return (
+                candidate
+                if candidate and candidate["sha256"] == hashlib.sha256(raw).hexdigest()
+                else await runtime.persist_object(raw)
+            )
         return await put_private(db, ctx, io.BytesIO(raw))
 
     document_controls = []
@@ -116,6 +153,17 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, re
     ledger_totals: dict[str, dict[str, Decimal]] = {}
     seen_accounts = set()
     seen_postings = set()
+    fingerprints: dict[str, str] = {}
+    comparable = True
+    journal_balances: dict[str, Decimal] = defaultdict(Decimal)
+    base_debit = base_credit = Decimal(0)
+    validation_options = ImportOptions(
+        client_id=connection.client_id,
+        entity_id=connection.entity_id,
+        period_id=connection.period_id,
+        source_system="zoho",
+        currency=entity.functional_currency,
+    )
     status = "completed"
     error = None
     # Partial failures persist already received raw pages, never claim complete GL coverage.
@@ -123,10 +171,24 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, re
         if runtime:
             organization_reply = await adapter.get("organizations", {})
             organizations = organization_reply.get("organizations", [])
-            organization = next((o for o in organizations if str(o.get("organization_id")) == connection.organization_id), None)
+            organization = next(
+                (
+                    o
+                    for o in organizations
+                    if str(o.get("organization_id")) == connection.organization_id
+                ),
+                None,
+            )
             if not organization or organization.get("currency_code") != entity.functional_currency:
                 raise ValueError("Zoho organization/base currency mismatch")
-            manifest.append({"resource": "organization_identity", **await preserve(adapter.last_raw)})
+            manifest.append(
+                {
+                    "resource": "organization_identity",
+                    **await preserve(
+                        adapter.last_raw or json.dumps(organization_reply, default=str).encode()
+                    ),
+                }
+            )
         resources = dict(RESOURCES)
         if config.get("include_documents"):
             resources.update(customerpayments="customerpayments", vendorpayments="vendorpayments")
@@ -136,8 +198,12 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, re
                 from app.modules.connectors.incremental import ZOHO_MODIFIED, modified_filter
 
                 if resource in ZOHO_MODIFIED:
-                    watermark = await runtime.get("watermark", digest([str(connection.id), resource]))
-                    extra = modified_filter(resource, watermark.get("last_completed_start") if watermark else None)
+                    watermark = await runtime.get(
+                        "watermark", digest([str(connection.id), resource])
+                    )
+                    extra = modified_filter(
+                        resource, watermark.get("last_completed_start") if watermark else None
+                    )
                     delta_resources.add(resource)
             async for page in adapter.pages(resource, connection.organization_id, extra):
                 data = adapter.last_raw or json.dumps(page, sort_keys=True, default=str).encode()
@@ -169,7 +235,10 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, re
                                 "filter_by": "TransactionType.All",
                             },
                         ):
-                            original = await preserve(adapter.last_raw or json.dumps(transactions["raw"], default=str).encode())
+                            original = await preserve(
+                                adapter.last_raw
+                                or json.dumps(transactions["raw"], default=str).encode()
+                            )
                             manifest.append(
                                 {
                                     "resource": "accounttransactions",
@@ -187,6 +256,27 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, re
                                 seen_postings.add(row["source_id"])
                                 if row["currency"] == entity.functional_currency:
                                     row["exchange_rate"] = "1"
+                                canonical, _ = normalize(
+                                    row,
+                                    validation_options,
+                                    period.start_date,
+                                    period.end_date,
+                                    entity.functional_currency,
+                                    extracted_lines + 2,
+                                )
+                                source_debit, source_credit = (
+                                    Decimal(canonical["base_debit"]),
+                                    Decimal(canonical["base_credit"]),
+                                )
+                                base_debit += source_debit
+                                base_credit += source_credit
+                                journal_balances[canonical["journal_ref"]] += (
+                                    source_debit - source_credit
+                                )
+                                if len(fingerprints) < 100000:
+                                    fingerprints[row["source_id"]] = digest(row)
+                                else:
+                                    comparable = False
                                 writer.writerow(row)
                                 extracted_lines += 1
                                 totals = ledger_totals.setdefault(
@@ -200,28 +290,58 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, re
                     singular, id_key = DETAIL_RESOURCES[resource]
                     for summary in page["raw"][resource]:
                         identity = str(summary[id_key])
-                        detail = await adapter.document_detail(resource, identity, connection.organization_id)
+                        detail = await adapter.document_detail(
+                            resource, identity, connection.organization_id
+                        )
                         document = detail.get(singular)
                         if not isinstance(document, dict) or str(document.get(id_key)) != identity:
                             raise ValueError("Zoho detail identity mismatch")
-                        manifest.append({"resource": resource + "/detail", "id": identity,
-                            **await preserve(adapter.last_raw)})
-                        if document.get("exchange_rate") is not None and Decimal(str(document["exchange_rate"])) <= 0:
+                        manifest.append(
+                            {
+                                "resource": resource + "/detail",
+                                "id": identity,
+                                **await preserve(adapter.last_raw),
+                            }
+                        )
+                        if (
+                            document.get("exchange_rate") is not None
+                            and Decimal(str(document["exchange_rate"])) <= 0
+                        ):
                             raise ValueError("Invalid Zoho source exchange rate")
-                        document_controls.append({"resource": resource, "id": identity,
-                            "currency": document.get("currency_code"), "exchange_rate": str(document.get("exchange_rate", "")),
-                            "tax": tax_evidence(document, "zoho")})
-                        if resource == "invoices" and document.get("has_attachment") and config.get("include_attachments"):
-                            content, mime = await adapter.invoice_attachment(identity, connection.organization_id)
-                            manifest.append({"resource": "invoice_attachment", "id": identity, "content_type": mime,
-                                **await preserve(content)})
+                        document_controls.append(
+                            {
+                                "resource": resource,
+                                "id": identity,
+                                "currency": document.get("currency_code"),
+                                "exchange_rate": str(document.get("exchange_rate", "")),
+                                "tax": tax_evidence(document, "zoho"),
+                            }
+                        )
+                        if (
+                            resource == "invoices"
+                            and document.get("has_attachment")
+                            and config.get("include_attachments")
+                        ):
+                            content, mime = await adapter.invoice_attachment(
+                                identity, connection.organization_id
+                            )
+                            manifest.append(
+                                {
+                                    "resource": "invoice_attachment",
+                                    "id": identity,
+                                    "content_type": mime,
+                                    **await preserve(content),
+                                }
+                            )
                 if resource == "journals":
                     # Manual details remain evidence; never append them again to GL.
                     for header in page["raw"]["journals"]:
                         detail = await adapter.journal_detail(
                             str(header["journal_id"]), connection.organization_id
                         )
-                        original = await preserve(adapter.last_raw or json.dumps(detail, default=str).encode())
+                        original = await preserve(
+                            adapter.last_raw or json.dumps(detail, default=str).encode()
+                        )
                         manifest.append(
                             {
                                 "resource": "journal_detail",
@@ -230,6 +350,8 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, re
                             }
                         )
 
+        if not extracted_lines or any(journal_balances.values()):
+            raise ValueError("Zoho full ledger is empty or contains unbalanced journal groups")
     except Exception:
         status = "failed"
         error = "partial_extraction"
@@ -240,7 +362,11 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, re
         from app.modules.connectors.locking import finish_sync
 
         connection = await finish_sync(db, ctx, connection_id)
-        changed = not connection or digest(connection.config) != initial_config or connection.encrypted_credentials != initial_credentials
+        changed = (
+            not connection
+            or digest(connection.config) != initial_config
+            or connection.encrypted_credentials != initial_credentials
+        )
         if changed:
             status, error = "failed", "configuration_changed_during_extraction"
     credentials.update(access_token=adapter.access_token, refresh_token=adapter.refresh_token)
@@ -252,7 +378,10 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, re
         "objects": manifest,
         "resume_session": session_id,
         "counts": {"gl": extracted_lines, "coa": chart_count},
-        "checkpoint": {"replayed": runtime.replayed, "downloaded": runtime.downloaded} if runtime else {},
+        "functional_totals": {"debit": str(base_debit), "credit": str(base_credit)},
+        "checkpoint": {"replayed": runtime.replayed, "downloaded": runtime.downloaded}
+        if runtime
+        else {},
         "execution_mode": "live" if adapter.transport is None else "simulated",
         "document_controls": document_controls,
         "connector_version": adapter.version,
@@ -268,8 +397,17 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, re
         "requires_validation": True,
         "period_start": str(period.start_date),
         "period_end": str(period.end_date),
-        "incremental_support": {"document_resources": sorted(delta_resources), "gl": "full_account_transaction_pagination", "deletions": "full_population_comparison_required"},
+        "incremental_support": {
+            "document_resources": sorted(delta_resources),
+            "gl": "full_account_transaction_pagination",
+            "deletions": "full_population_comparison_required",
+        },
     }
+    if status == "completed" and runtime:
+        from app.modules.connectors.revisions import append_revision
+
+        revision = await append_revision(db, ctx, connection, run.id, fingerprints, comparable)
+        run.manifest = {**run.manifest, "source_revision": revision}
     if status == "completed" and runtime and delta_resources:
         from app.modules.connectors.incremental import commit_watermarks
 
@@ -327,8 +465,17 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, re
     chart.close()
     normalized.close()
     if runtime:
-        await runtime.put("session", cache_scope, {"resume_session": session_id, "status": status,
-            "sync_run_id": str(run.id), "counts": {"gl": extracted_lines, "coa": chart_count}}, ttl_hours=168)
+        await runtime.put(
+            "session",
+            cache_scope,
+            {
+                "resume_session": session_id,
+                "status": status,
+                "sync_run_id": str(run.id),
+                "counts": {"gl": extracted_lines, "coa": chart_count},
+            },
+            ttl_hours=168,
+        )
     connection.status = "sync_failed" if status == "failed" else "extracted_pending_review"
     run.completeness = "insufficient_evidence"
     await db.flush()

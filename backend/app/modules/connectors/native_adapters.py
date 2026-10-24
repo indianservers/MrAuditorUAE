@@ -14,7 +14,7 @@ import httpx
 
 from app.modules.connectors.native_auth import token
 from app.modules.connectors.native_config import configure, partner_mode
-from app.modules.connectors.native_http import AuthorizationError, NativeHTTP, approved_base
+from app.modules.connectors.native_http import AuthorizationError, NativeHTTP, approved_base, origin
 from app.modules.connectors.zoho import ConnectorError
 from app.modules.ingestion.parser import money
 
@@ -69,7 +69,7 @@ def field(item: dict, path: str):
 
 
 class NativeAdapter:
-    version = "direct-accounting/1.0.0"
+    version = "direct-accounting/2.0.0"
 
     def __init__(
         self,
@@ -182,11 +182,78 @@ class NativeAdapter:
         if self.refresh_handler:
             self.credentials = await self.refresh_handler(self.credentials, force)
         else:
-            self.credentials = await token(self.provider, self.config, self.credentials, transport=self.transport)
+            self.credentials = await token(
+                self.provider, self.config, self.credentials, transport=self.transport
+            )
         self.http.client.headers["Authorization"] = "Bearer " + self.credentials["access_token"]
+
+    async def attachment(self, item):
+        """No API bearer token is forwarded to an attachment CDN or signed URL."""
+        assert self.http is not None
+        identity = str(item.get("Id", ""))
+        result = {"id": identity, "content_type": item.get("ContentType"), "size": item.get("Size")}
+        target = item.get("TempDownloadUri")
+        if not isinstance(target, str) or not target.startswith("https://"):
+            return {**result, "status": "metadata_preserved; temporary_download_url_unavailable"}
+        allowed_types = {"application/pdf", "image/png", "image/jpeg", "application/octet-stream"}
+        try:
+            root = approved_base(origin(target) + "/", self.allowed_origins)
+        except ConnectorError:
+            return {
+                **result,
+                "status": "metadata_preserved; download_origin_requires_operator_approval",
+            }
+        http = NativeHTTP(root, transport=self.transport)
+        http.governor = self.governor
+        try:
+            raw, content_type = await http.binary(target, allowed_types)
+            await self.preserve("Attachable/binary/" + identity, raw)
+            return {
+                **result,
+                "status": "binary_preserved",
+                "content_type": content_type,
+                "sha256": hashlib.sha256(raw).hexdigest(),
+                "received_bytes": len(raw),
+            }
+        finally:
+            await http.close()
+
+    async def qbo_attachments(self, identity, kind):
+        position = 1
+        controls: list[dict] = []
+        seen = set()
+        for _ in range(self.config.max_pages):
+            data = await self.read(
+                "query",
+                "Attachable/query",
+                params={
+                    "query": f"select * from Attachable where AttachableRef.EntityRef.value = '{identity}' STARTPOSITION {position} MAXRESULTS 1000"
+                },
+            )
+            items = data.get("QueryResponse", {}).get("Attachable", [])
+            if not isinstance(items, list):
+                raise ConnectorError("QuickBooks attachment metadata is invalid")
+            if not items:
+                return controls
+            for item in items:
+                refs = item.get("AttachableRef", [])
+                if not any(
+                    str(ref.get("EntityRef", {}).get("value")) == identity
+                    and str(ref.get("EntityRef", {}).get("type", "")).lower() == kind
+                    for ref in refs
+                ):
+                    raise ConnectorError("QuickBooks attachment references another source document")
+                identifier = required(item, "Id")
+                if identifier in seen:
+                    raise ConnectorError("Repeated QuickBooks attachment page")
+                seen.add(identifier)
+                controls.append(await self.attachment(item))
+            position += len(items)
+        raise ConnectorError("QuickBooks attachment pagination safety limit reached")
 
     async def read(self, path: str, resource: str, method="GET", **kwargs) -> dict:
         assert self.http is not None
+
         async def fetch():
             assert self.http is not None
             try:
@@ -194,12 +261,24 @@ class NativeAdapter:
             except AuthorizationError:
                 if self.provider == "sap-b1":
                     await self.login_b1()
-                elif self.credentials.get("refresh_token") or (self.provider == "dynamics" and not partner_mode(self.config)):
+                elif self.credentials.get("refresh_token") or (
+                    self.provider == "dynamics" and not partner_mode(self.config)
+                ):
                     await self.refresh(force=True)
                 else:
                     raise
                 return await self.http.request(path, method, **kwargs)
-        identity_resources = {"CompanyInfo", "company", "Organisation", "subsidiary", "currency", "companyInformation", "CompanyService_GetAdminInfo"}
+
+        identity_resources = {
+            "CompanyInfo",
+            "company",
+            "Organisation",
+            "subsidiary",
+            "currency",
+            "companyInformation",
+            "CompanyService_GetAdminInfo",
+            "partner/company",
+        }
         if self.read_cache and resource not in identity_resources:
             from app.modules.connectors.runtime import digest
 
@@ -306,25 +385,43 @@ class NativeAdapter:
                 raise ConnectorError("SAP journal detail identity or lines are missing")
             for line in detail["JournalEntryLines"]:
                 row = gl_row(
-                        required(line, "AccountCode"),
-                        ref,
-                        required(detail, "ReferenceDate"),
-                        ref + ":" + required(line, "Line_ID"),
-                        currency,
-                        required(line, "Debit"),
-                        required(line, "Credit"),
-                        description=line.get("LineMemo", detail.get("Memo", "")),
-                        counterparty=line.get("ShortName", ""),
-                        cost_center=line.get("CostingCode", ""),
-                    )
+                    required(line, "AccountCode"),
+                    ref,
+                    required(detail, "ReferenceDate"),
+                    ref + ":" + required(line, "Line_ID"),
+                    currency,
+                    required(line, "Debit"),
+                    required(line, "Credit"),
+                    description=line.get("LineMemo", detail.get("Memo", "")),
+                    counterparty=line.get("ShortName", ""),
+                    cost_center=line.get("CostingCode", ""),
+                )
                 from app.modules.connectors.enrichment import foreign_provenance
 
                 if line.get("FCCurrency"):
-                    row = foreign_provenance(row, line["FCCurrency"], line.get("FCDebit"), line.get("FCCredit"), line.get("Rate"))
+                    row = foreign_provenance(
+                        row,
+                        line["FCCurrency"],
+                        line.get("FCDebit"),
+                        line.get("FCCredit"),
+                        line.get("Rate"),
+                    )
                 row["branch"] = str(line.get("BPLID", ""))
-                row["dimensions"] = json.dumps({key: line[key] for key in (
-                    "CostingCode", "CostingCode2", "CostingCode3", "CostingCode4", "CostingCode5", "ProjectCode"
-                ) if line.get(key)}, sort_keys=True)
+                row["dimensions"] = json.dumps(
+                    {
+                        key: line[key]
+                        for key in (
+                            "CostingCode",
+                            "CostingCode2",
+                            "CostingCode3",
+                            "CostingCode4",
+                            "CostingCode5",
+                            "ProjectCode",
+                        )
+                        if line.get(key)
+                    },
+                    sort_keys=True,
+                )
                 yield "gl", row
 
     async def extract_sap_s4(self, start, end, currency):
@@ -339,12 +436,24 @@ class NativeAdapter:
             assert self.http is not None
             from app.modules.connectors.enrichment import odata_metadata
 
-            raw, _ = await self.http.binary("$metadata", {"application/xml", "text/xml"}, 8 * 1024 * 1024)
+            raw, _ = await self.http.binary(
+                "$metadata", {"application/xml", "text/xml"}, 8 * 1024 * 1024
+            )
             await self.preserve("service_metadata", raw)
-            self.scope_evidence["metadata"] = odata_metadata(raw, path.rsplit("/", 1)[-1], {
-                "CompanyCode", "CompanyCodeCurrency", "GLAccount", "PostingDate", "AmountInCompanyCodeCurrency",
-                "AccountingDocument", "FiscalYear", *( {"Ledger"} if c.edition == "ledger-odata" else set()),
-            })
+            self.scope_evidence["metadata"] = odata_metadata(
+                raw,
+                path.rsplit("/", 1)[-1],
+                {
+                    "CompanyCode",
+                    "CompanyCodeCurrency",
+                    "GLAccount",
+                    "PostingDate",
+                    "AmountInCompanyCodeCurrency",
+                    "AccountingDocument",
+                    "FiscalYear",
+                    *({"Ledger"} if c.edition == "ledger-odata" else set()),
+                },
+            )
         company = c.company_id.replace("'", "''")
         filters = f"CompanyCode eq '{company}' and PostingDate ge datetime'{start}T00:00:00' and PostingDate le datetime'{end}T23:59:59'"
         if c.edition == "ledger-odata":
@@ -433,9 +542,13 @@ class NativeAdapter:
         finally:
             await connections.close()
         try:
-            first_journals = await self.read("Journals", "Journals", params={"offset": 0, "paymentsOnly": "false"})
+            first_journals = await self.read(
+                "Journals", "Journals", params={"offset": 0, "paymentsOnly": "false"}
+            )
         except AuthorizationError:
-            raise ConnectorError("Xero Journals access denied; verify accounting.journals.read consent and the app's Journals entitlement before syncing") from None
+            raise ConnectorError(
+                "Xero Journals access denied; verify accounting.journals.read consent and the app's Journals entitlement before syncing"
+            ) from None
         if not isinstance(first_journals.get("Journals"), list):
             raise ConnectorError("Xero Journals entitlement/response contract cannot be verified")
         accounts = await self.read("Accounts", "Accounts")
@@ -453,8 +566,12 @@ class NativeAdapter:
             )
         offset = 0
         for _ in range(self.config.max_pages):
-            data = first_journals if offset == 0 else await self.read(
-                "Journals", "Journals", params={"offset": offset, "paymentsOnly": "false"}
+            data = (
+                first_journals
+                if offset == 0
+                else await self.read(
+                    "Journals", "Journals", params={"offset": offset, "paymentsOnly": "false"}
+                )
             )
             journals = data.get("Journals")
             if not isinstance(journals, list):
@@ -566,7 +683,9 @@ class NativeAdapter:
 
         c = self.config
         assert self.http is not None
-        raw, _ = await self.http.binary("$metadata", {"application/xml", "text/xml"}, 8 * 1024 * 1024)
+        raw, _ = await self.http.binary(
+            "$metadata", {"application/xml", "text/xml"}, 8 * 1024 * 1024
+        )
         await self.preserve("finance_metadata", raw)
         checks = {}
         for kind, path in (("coa", c.accounts_path), ("gl", c.ledger_path)):
@@ -574,9 +693,14 @@ class NativeAdapter:
             if kind == "gl":
                 fields.update([c.posting_date_field, c.finance_company_field])
             checks[kind] = odata_metadata(raw, path, fields)
-        checks["company"] = odata_metadata(raw, c.company_path, {c.company_id_field, c.currency_field})
-        company_rows = [row async for row in self.odata(c.company_path)]
-        company = next((row for row in company_rows if str(field(row, c.company_id_field)) == c.company_id), None)
+        checks["company"] = odata_metadata(
+            raw, c.company_path, {c.company_id_field, c.currency_field}
+        )
+        company_rows = [row async for row in self.odata(c.company_path, {"cross-company": "true"})]
+        company = next(
+            (row for row in company_rows if str(field(row, c.company_id_field)) == c.company_id),
+            None,
+        )
         if not company or field(company, c.currency_field) != currency:
             raise ConnectorError("Dynamics Finance company/base currency cannot be verified")
         for kind, path in (("coa", c.accounts_path), ("gl", c.ledger_path)):
@@ -585,27 +709,42 @@ class NativeAdapter:
                 company_id = c.company_id.replace("'", "''")
                 source_type = checks["gl"]["property_types"].get(c.posting_date_field)
                 if source_type == "Edm.Date":
-                    date_filter = f"{c.posting_date_field} ge {start} and {c.posting_date_field} le {end}"
+                    date_filter = (
+                        f"{c.posting_date_field} ge {start} and {c.posting_date_field} le {end}"
+                    )
                 elif source_type == "Edm.DateTimeOffset":
                     from datetime import timedelta
 
                     stop = end + timedelta(days=1)
                     date_filter = f"{c.posting_date_field} ge {start}T00:00:00Z and {c.posting_date_field} lt {stop}T00:00:00Z"
                 else:
-                    raise ConnectorError("Finance posting-date metadata must declare Edm.Date or Edm.DateTimeOffset")
-                filters = {"$filter": f"{c.finance_company_field} eq '{company_id}' and " + date_filter}
+                    raise ConnectorError(
+                        "Finance posting-date metadata must declare Edm.Date or Edm.DateTimeOffset"
+                    )
+                filters = {
+                    "$filter": f"{c.finance_company_field} eq '{company_id}' and " + date_filter
+                }
             elif c.finance_company_field in checks["coa"]["property_types"]:
                 company_id = c.company_id.replace("'", "''")
                 filters = {"$filter": f"{c.finance_company_field} eq '{company_id}'"}
+            filters = {"cross-company": "true", **(filters or {})}
             async for source in self.odata(path, filters):
-                if c.finance_company_field in checks[kind]["property_types"] and str(field(source, c.finance_company_field)) != c.company_id:
+                if (
+                    c.finance_company_field in checks[kind]["property_types"]
+                    and str(field(source, c.finance_company_field)) != c.company_id
+                ):
                     raise ConnectorError("Dynamics Finance legal-entity mismatch")
                 row = {key: str(field(source, value)) for key, value in c.mappings[kind].items()}
                 row.setdefault("currency", currency)
                 if kind == "gl" and not row.get("source_id"):
                     raise ConnectorError("Dynamics Finance requires a native posting identity")
                 yield kind, row
-        self.scope_evidence = {"company_id": c.company_id, "currency": currency, "edition": "finance-odata", "metadata": checks}
+        self.scope_evidence = {
+            "company_id": c.company_id,
+            "currency": currency,
+            "edition": "finance-odata",
+            "metadata": checks,
+        }
 
     async def suiteql(self, query: str) -> AsyncIterator[dict]:
         offset = 0
@@ -641,11 +780,24 @@ class NativeAdapter:
         c = self.config
         discovery = {}
         if c.discover_scope:
-            subsidiaries = [r async for r in self.suiteql("SELECT id, name, currency FROM subsidiary ORDER BY id")]
-            books = [r async for r in self.suiteql("SELECT id, name FROM accountingbook ORDER BY id")]
-            if c.subsidiary_id not in {str(r.get("id")) for r in subsidiaries} or c.accounting_book not in {str(r.get("id")) for r in books}:
-                raise ConnectorError("Selected NetSuite subsidiary/book is not visible in the source discovery population")
-            discovery = {"subsidiaries": subsidiaries, "accounting_books": books, "consolidation": "separate_company_currency_extracts_required"}
+            subsidiaries = [
+                r
+                async for r in self.suiteql("SELECT id, name, currency FROM subsidiary ORDER BY id")
+            ]
+            books = [
+                r async for r in self.suiteql("SELECT id, name FROM accountingbook ORDER BY id")
+            ]
+            if c.subsidiary_id not in {
+                str(r.get("id")) for r in subsidiaries
+            } or c.accounting_book not in {str(r.get("id")) for r in books}:
+                raise ConnectorError(
+                    "Selected NetSuite subsidiary/book is not visible in the source discovery population"
+                )
+            discovery = {
+                "subsidiaries": subsidiaries,
+                "accounting_books": books,
+                "consolidation": "separate_company_currency_extracts_required",
+            }
         metadata = await self.read("record/v1/subsidiary/" + c.subsidiary_id, "subsidiary")
         if str(metadata.get("id")) != c.subsidiary_id:
             raise ConnectorError("NetSuite subsidiary mismatch")
@@ -722,7 +874,9 @@ class NativeAdapter:
             from app.modules.connectors.webhooks import cdc_parameters
 
             since = datetime.fromisoformat(self.config.cdc_since.replace("Z", "+00:00"))
-            await self.read("cdc", "CDC/repair_hints", params=cdc_parameters(since, self.config.cdc_entities))
+            await self.read(
+                "cdc", "CDC/repair_hints", params=cdc_parameters(since, self.config.cdc_entities)
+            )
         position = 1
         for _ in range(self.config.max_pages):
             data = await self.read(
@@ -767,9 +921,18 @@ class NativeAdapter:
         if header.get("StartPeriod") != str(start) or header.get("EndPeriod") != str(end):
             raise ConnectorError("QuickBooks report ignored the selected period")
         contract = quickbooks_report_contract(report)
+        if (
+            self.config.expected_report_schema_digest
+            and contract["schema_digest"] != self.config.expected_report_schema_digest
+        ):
+            raise ConnectorError("QuickBooks report schema changed from the qualified contract")
         documents = {}
         for row in quickbooks_report_rows(report, currency):
-            if self.config.include_documents or self.config.tax_details or self.config.include_attachments:
+            if (
+                self.config.include_documents
+                or self.config.tax_details
+                or self.config.include_attachments
+            ):
                 from app.modules.connectors.enrichment import (
                     match_qbo_posting,
                     qbo_document_type,
@@ -786,21 +949,22 @@ class NativeAdapter:
                         if not isinstance(document, dict) or str(document.get("Id")) != identity:
                             raise ConnectorError("QuickBooks source document identity mismatch")
                         documents[key] = document
-                        control = {"entity": kind, "id": identity, "tax": tax_evidence(document, "quickbooks")}
+                        control = {
+                            "entity": kind,
+                            "id": identity,
+                            "tax": tax_evidence(document, "quickbooks"),
+                        }
                         if self.config.include_attachments:
-                            attached = await self.read("query", "Attachable/query", params={"query":
-                                "select * from Attachable where AttachableRef.EntityRef.value = '" + identity + "'"})
-                            attachments = attached.get("QueryResponse", {}).get("Attachable", [])
-                            if not isinstance(attachments, list):
-                                raise ConnectorError("QuickBooks attachment metadata is invalid")
-                            control["attachments"] = [{"id": str(a.get("Id", "")), "content_type": a.get("ContentType"),
-                                "size": a.get("Size"), "status": "metadata_preserved_binary_not_downloaded"} for a in attachments]
+                            control["attachments"] = await self.qbo_attachments(identity, kind)
                         self.document_controls.append(control)
                     document = documents[key]
                     row = match_qbo_posting(row, document)
                     row["original_currency"] = document.get("CurrencyRef", {}).get("value", "")
                     row["source_exchange_rate"] = str(document.get("ExchangeRate", ""))
-                    row["source_fx_status"] = "document_rate_preserved; posting_conversion_not_inferred"
+                    row.setdefault(
+                        "source_fx_status",
+                        "document_rate_preserved; posting_conversion_not_inferred",
+                    )
             yield "gl", row
         await self.read(
             "reports/TrialBalance",
@@ -894,6 +1058,7 @@ class NativeAdapter:
 
 
 def quickbooks_report_rows(report: dict, currency: str):
+    quickbooks_report_contract(report)
     columns = report.get("Columns", {}).get("Column", [])
     keys = [
         next((m.get("Value") for m in col.get("MetaData", []) if m.get("Name") == "ColKey"), "")
@@ -950,10 +1115,21 @@ def quickbooks_report_rows(report: dict, currency: str):
 def quickbooks_report_contract(report):
     """Version the actual published column contract, never localized column titles."""
     columns = report.get("Columns", {}).get("Column", [])
-    keys = [next((m.get("Value") for m in col.get("MetaData", []) if m.get("Name") == "ColKey"), "") for col in columns]
-    if not keys or len(keys) != len(set(keys)) or not {"tx_date", "txn_type", "account_name", "debt_amt", "credit_amt"} <= set(keys):
+    keys = [
+        next((m.get("Value") for m in col.get("MetaData", []) if m.get("Name") == "ColKey"), "")
+        for col in columns
+    ]
+    if (
+        not keys
+        or len(keys) != len(set(keys))
+        or not {"tx_date", "txn_type", "account_name", "debt_amt", "credit_amt"} <= set(keys)
+    ):
         raise ConnectorError("Unsupported QuickBooks report column contract")
     from app.modules.connectors.runtime import digest
 
-    return {"parser_version": "qbo-general-ledger/2", "column_keys": keys, "schema_digest": digest(keys),
-            "report_name": report.get("Header", {}).get("ReportName", "GeneralLedger")}
+    return {
+        "parser_version": "qbo-general-ledger/2",
+        "column_keys": keys,
+        "schema_digest": digest(keys),
+        "report_name": report.get("Header", {}).get("ReportName", "GeneralLedger"),
+    }

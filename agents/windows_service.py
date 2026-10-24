@@ -38,14 +38,31 @@ class TallyReaderService(win32serviceutil.ServiceFramework):
                 run_config.write_text(json.dumps(config), encoding="utf-8")
                 # No shell, inherited credentials or logged API bodies. Evidence and
                 # resume state remain in this service account's protected directory.
-                result = subprocess.run([config["python_executable"], str(Path(__file__).with_name("tally_agent.py")),
-                    str(run_config)], capture_output=True, timeout=3600, check=False,
-                    creationflags=subprocess.CREATE_NO_WINDOW)
-                servicemanager.LogInfoMsg("AuditOS Tally extraction completed" if result.returncode == 0 else "AuditOS Tally extraction failed; inspect preserved package and sync diagnostics")
+                result = subprocess.run(
+                    [
+                        config["python_executable"],
+                        str(Path(__file__).with_name("tally_agent.py")),
+                        str(run_config),
+                    ],
+                    capture_output=True,
+                    timeout=3600,
+                    check=False,
+                    creationflags=subprocess.CREATE_NO_WINDOW,
+                )
+                servicemanager.LogInfoMsg(
+                    "AuditOS Tally extraction completed"
+                    if result.returncode == 0
+                    else "AuditOS Tally extraction failed; inspect preserved package and sync diagnostics"
+                )
             except Exception:
                 interval = 3600
-                servicemanager.LogErrorMsg("AuditOS Tally service failed; check configuration, local Tally and vault enrollment")
-            if win32event.WaitForSingleObject(self.stop_event, interval * 1000) == win32event.WAIT_OBJECT_0:
+                servicemanager.LogErrorMsg(
+                    "AuditOS Tally service failed; check configuration, local Tally and vault enrollment"
+                )
+            if (
+                win32event.WaitForSingleObject(self.stop_event, interval * 1000)
+                == win32event.WAIT_OBJECT_0
+            ):
                 return
 
 

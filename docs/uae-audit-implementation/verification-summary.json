@@ -1,0 +1,54 @@
+{
+  "backend_unit_and_calculation_regression": {
+    "file": "unit-results.xml",
+    "tests": 488,
+    "passed": 484,
+    "failed": 0,
+    "skipped": 4,
+    "skip_reasons": [
+      "Run scripts/connector_operations_run.py for isolated real DB tests"
+    ]
+  },
+  "backend_broad_integration": {
+    "file": "integration-results.xml",
+    "tests": 26,
+    "passed": 26,
+    "failed": 0,
+    "skipped": 0,
+    "skip_reasons": []
+  },
+  "backend_final_focused_integration": {
+    "file": "final-focused-results.xml",
+    "tests": 5,
+    "passed": 5,
+    "failed": 0,
+    "skipped": 0,
+    "skip_reasons": []
+  },
+  "counts_overlap": true,
+  "integration_boundary_doubles": [
+    "malware scanner",
+    "broker dispatch"
+  ],
+  "real_execution": [
+    "PostgreSQL",
+    "HTTP services",
+    "private evidence objects",
+    "job processors",
+    "TensorFlow.js CPU fitting/inference"
+  ],
+  "new_browser_scenario": "Not executed; UI type/build/component checks and real backend workflow checks were executed",
+  "production_qualified": false,
+  "frontend_unit": {
+    "tests": 42,
+    "passed": 42,
+    "failed": 0
+  },
+  "backend_types": "Success: no issues found in 260 source files",
+  "frontend_build": "passed",
+  "local_ml_runtime": {
+    "receipt": "ml-runtime-tests.txt",
+    "passed": true,
+    "scope": "Synthetic pipeline, CPU, hashes/schema, queue bounds and tensor ownership; not an accuracy benchmark"
+  }
+}

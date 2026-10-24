@@ -249,6 +249,7 @@ def qfzp(data: QFZP, profile, parameters: RuleParameters):
         denominator = ZERO
         numerator = ZERO
         uncertain_revenue = ZERO
+        confirmed_nonqualifying = ZERO
         qual_profit = ZERO
         special_profit = ZERO
         for segment in data.segments:
@@ -277,6 +278,8 @@ def qfzp(data: QFZP, profile, parameters: RuleParameters):
                     uncertain_revenue += segment.revenue
                 if segment.classification in {"nonqualifying", "excluded", "other_ip"}:
                     numerator += segment.revenue
+                    if segment.counterparty_type != "unknown":
+                        confirmed_nonqualifying += segment.revenue
             if segment.classification in {"qualifying", "nonqualifying", "excluded"}:
                 qual_profit += segment.taxable_profit
             else:
@@ -306,11 +309,11 @@ def qfzp(data: QFZP, profile, parameters: RuleParameters):
                 "threshold": q(limit),
                 "de_minimis_passed": de_minimis,
                 "classification_sensitivity": {
-                    "confirmed_nonqualifying": numerator,
+                    "confirmed_nonqualifying": confirmed_nonqualifying,
                     "unresolved_revenue": uncertain_revenue,
-                    "maximum_nonqualifying": min(denominator, numerator + uncertain_revenue),
-                    "all_unresolved_nonqualifying_passes": min(denominator, numerator + uncertain_revenue) <= limit,
-                    "all_unresolved_qualifying_passes": numerator <= limit,
+                    "maximum_nonqualifying": confirmed_nonqualifying + uncertain_revenue,
+                    "all_unresolved_nonqualifying_passes": confirmed_nonqualifying + uncertain_revenue <= limit,
+                    "all_unresolved_qualifying_passes": confirmed_nonqualifying <= limit,
                     "conclusion": "UNRESOLVED" if uncertain_revenue else "CLASSIFIED_INPUTS_ONLY",
                 },
                 "qualifying_profit_if_qualified": qual_profit,

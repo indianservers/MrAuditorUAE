@@ -19,9 +19,21 @@ export function ConnectorOperations({ connection }: { connection: RecordRow }) {
   const action = useAction<RecordRow>();
   const [session, setSession] = useState("");
   const [job, setJob] = useState("");
-  const [documents, setDocuments] = useState(false);
-  const [attachments, setAttachments] = useState(false);
-  const [incremental, setIncremental] = useState(false);
+  const preferences = (connection.config || {}) as Record<string, unknown>;
+  const [documents, setDocuments] = useState(
+    Boolean(preferences.include_documents),
+  );
+  const [attachments, setAttachments] = useState(
+    Boolean(preferences.include_attachments),
+  );
+  const [incremental, setIncremental] = useState(
+    Boolean(preferences.incremental_documents),
+  );
+  const [company, setCompany] = useState(String(preferences.company || ""));
+  const [fingerprint, setFingerprint] = useState(
+    String(preferences.company_fingerprint || ""),
+  );
+  const [batch, setBatch] = useState("");
   const native = connection.provider !== "tally";
   const records = health.data?.records || [];
   const resume = (id: string) =>
@@ -55,7 +67,14 @@ export function ConnectorOperations({ connection }: { connection: RecordRow }) {
       {connection.provider === "zoho" && (
         <fieldset>
           <legend>Supporting evidence</legend>
-          <label><input type="checkbox" checked={incremental} onChange={(event) => setIncremental(event.target.checked)} />Use documented document deltas; refresh the full ledger</label>
+          <label>
+            <input
+              type="checkbox"
+              checked={incremental}
+              onChange={(event) => setIncremental(event.target.checked)}
+            />
+            Use documented document deltas; refresh the full ledger
+          </label>
           <label>
             <input
               type="checkbox"
@@ -81,12 +100,65 @@ export function ConnectorOperations({ connection }: { connection: RecordRow }) {
                 body: {
                   include_documents: documents,
                   include_attachments: attachments,
-            incremental_documents: incremental,
+                  incremental_documents: incremental,
                 },
               })
             }
           >
             Save evidence preferences
+          </Button>
+        </fieldset>
+      )}
+      {connection.provider === "tally" && (
+        <fieldset>
+          <legend>Tally source identity and history</legend>
+          <label>
+            Selected Tally company
+            <input
+              value={company}
+              onChange={(event) => setCompany(event.target.value)}
+            />
+          </label>
+          <label>
+            Company fingerprint from the local agent
+            <input
+              value={fingerprint}
+              onChange={(event) => setFingerprint(event.target.value)}
+            />
+          </label>
+          <Button
+            disabled={
+              action.isPending ||
+              !company ||
+              !/^[a-f0-9]{64}$/.test(fingerprint)
+            }
+            onClick={() =>
+              action.mutate({
+                path: `connectors/operations/${connection.id}/tally-identity`,
+                method: "PATCH",
+                body: { company, company_fingerprint: fingerprint },
+              })
+            }
+          >
+            Pin selected company identity
+          </Button>
+          <label>
+            Uploaded Tally ledger batch identifier
+            <input
+              value={batch}
+              onChange={(event) => setBatch(event.target.value)}
+            />
+          </label>
+          <Button
+            disabled={action.isPending || !/^[0-9a-f-]{36}$/i.test(batch)}
+            onClick={() =>
+              action.mutate({
+                path: `connectors/operations/${connection.id}/agent-revisions`,
+                body: { batch_id: batch },
+              })
+            }
+          >
+            Compare native voucher revisions
           </Button>
         </fieldset>
       )}

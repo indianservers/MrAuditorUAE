@@ -54,6 +54,8 @@ class Rule(Body):
     known_from: date
     source_document_version: str = Field(min_length=1, max_length=300)
     source_sha256: str = Field(default="", pattern=r"^([a-f0-9]{64})?$")
+    publication_date: date | None = None
+    publication_evidence_id: uuid.UUID | None = None
     conditions: str = Field(min_length=1, max_length=6000)
     exceptions: str = Field(min_length=1, max_length=6000)
     technical_review: str = Field(min_length=1, max_length=6000)

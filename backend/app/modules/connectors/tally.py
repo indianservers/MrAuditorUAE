@@ -10,7 +10,7 @@ from defusedxml.ElementTree import fromstring
 
 from app.modules.connectors.zoho import ConnectorError
 
-VERSION = "tally-xml/3.0.0"
+VERSION = "tally-xml/4.0.0"
 
 
 def export_request(company: str, kind: str, start: date, end: date) -> bytes:
@@ -43,7 +43,9 @@ def export_request(company: str, kind: str, start: date, end: date) -> bytes:
     ).text = "*,AllLedgerEntries.*,LedgerEntries.*,CategoryAllocations.*"
     if kind == "companies":
         SubElement(collection, "FILTER").text = "AuditOSCompanyFilter"
-        SubElement(tdl, "SYSTEM", TYPE="Formulae", NAME="AuditOSCompanyFilter").text = "$Name = ##SVCurrentCompany"
+        SubElement(
+            tdl, "SYSTEM", TYPE="Formulae", NAME="AuditOSCompanyFilter"
+        ).text = "$Name = ##SVCurrentCompany"
     if kind == "vouchers":
         SubElement(collection, "FILTER").text = "AuditOSDateFilter"
         SubElement(
@@ -52,7 +54,15 @@ def export_request(company: str, kind: str, start: date, end: date) -> bytes:
     return tostring(root, encoding="utf-8", xml_declaration=True)
 
 
-def parse_export(content: bytes, company: str, start: date, end: date, *, master_catalog=None, expected_fingerprint=None) -> dict:
+def parse_export(
+    content: bytes,
+    company: str,
+    start: date,
+    end: date,
+    *,
+    master_catalog=None,
+    expected_fingerprint=None,
+) -> dict:
     if len(content) > 64 * 1024 * 1024:
         raise ConnectorError("Tally XML too large")
     try:
@@ -74,14 +84,33 @@ def parse_export(content: bytes, company: str, start: date, end: date, *, master
         name = node.get("NAME") or node.findtext("NAME")
         if name != company:
             continue
-        identities.append({"name": name, **{tag.lower(): node.findtext(tag) or "" for tag in
-            ("GUID", "GSTREGISTRATIONNUMBER", "INCOMETAXNUMBER", "BOOKSFROM", "STARTINGFROM")}})
+        identities.append(
+            {
+                "name": name,
+                **{
+                    tag.lower(): node.findtext(tag) or ""
+                    for tag in (
+                        "GUID",
+                        "GSTREGISTRATIONNUMBER",
+                        "INCOMETAXNUMBER",
+                        "BOOKSFROM",
+                        "STARTINGFROM",
+                    )
+                },
+            }
+        )
     if len(identities) > 1:
         raise ConnectorError("Ambiguous Tally company fingerprint")
     identity = identities[0] if identities else None
-    fingerprint = hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest() if identity and identity["guid"] else None
+    fingerprint = (
+        hashlib.sha256(json.dumps(identity, sort_keys=True).encode()).hexdigest()
+        if identity and identity["guid"]
+        else None
+    )
     if expected_fingerprint and fingerprint != expected_fingerprint:
-        raise ConnectorError("Tally company fingerprint changed or cannot be verified; review restore/company selection")
+        raise ConnectorError(
+            "Tally company fingerprint changed or cannot be verified; review restore/company selection"
+        )
     masters = dict(master_catalog or {})
     for node in root.findall(".//LEDGER"):
         name = node.get("NAME") or node.findtext("NAME")
@@ -103,18 +132,25 @@ def parse_export(content: bytes, company: str, start: date, end: date, *, master
     excluded_vouchers = 0
     voucher_revisions = []
     for voucher in root.findall(".//VOUCHER"):
-        source_identifier = voucher.findtext("GUID") or voucher.get("REMOTEID") or voucher.findtext("MASTERID")
-        source_status = next((tag for tag in ("ISCANCELLED", "ISOPTIONAL", "ISDELETED")
-            if (voucher.findtext(tag) or "").strip().lower() == "yes"), "POSTED")
-        voucher_revisions.append({"guid": source_identifier, "alter_id": voucher.findtext("ALTERID"),
-            "status": source_status, "sha256": hashlib.sha256(tostring(voucher)).hexdigest()})
-        # These vouchers do not form part of the posted accounting population.
-        if any(
-            (voucher.findtext(tag) or "").strip().lower() == "yes"
-            for tag in ("ISCANCELLED", "ISOPTIONAL", "ISDELETED")
-        ):
-            excluded_vouchers += 1
-            continue
+        source_identifier = (
+            voucher.findtext("GUID") or voucher.get("REMOTEID") or voucher.findtext("MASTERID")
+        )
+        source_status = next(
+            (
+                tag
+                for tag in ("ISCANCELLED", "ISOPTIONAL", "ISDELETED")
+                if (voucher.findtext(tag) or "").strip().lower() == "yes"
+            ),
+            "POSTED",
+        )
+        voucher_revisions.append(
+            {
+                "guid": source_identifier,
+                "alter_id": voucher.findtext("ALTERID"),
+                "status": source_status,
+                "sha256": hashlib.sha256(tostring(voucher)).hexdigest(),
+            }
+        )
         identifier = (
             voucher.findtext("GUID") or voucher.get("REMOTEID") or voucher.findtext("MASTERID")
         )
@@ -128,6 +164,13 @@ def parse_export(content: bytes, company: str, start: date, end: date, *, master
             raise ConnectorError("Invalid Tally voucher date") from exc
         if not start <= posting <= end:
             raise ConnectorError("Tally voucher outside requested financial period")
+        # These vouchers do not form part of the posted accounting population.
+        if any(
+            (voucher.findtext(tag) or "").strip().lower() == "yes"
+            for tag in ("ISCANCELLED", "ISOPTIONAL", "ISDELETED")
+        ):
+            excluded_vouchers += 1
+            continue
         nodes = voucher.findall("ALLLEDGERENTRIES.LIST") or voucher.findall("LEDGERENTRIES.LIST")
         lines = []
         if not nodes:
@@ -158,12 +201,33 @@ def parse_export(content: bytes, company: str, start: date, end: date, *, master
             lines.append(
                 {
                     "source_id": identifier + ":" + str(index),
-                    "voucher_guid": identifier, "alter_id": voucher.findtext("ALTERID") or "",
-                    "bill_allocations": json.dumps([{child.tag: child.text or "" for child in allocation}
-                        for allocation in node.findall("BILLALLOCATIONS.LIST")], sort_keys=True),
+                    "voucher_guid": identifier,
+                    "alter_id": voucher.findtext("ALTERID") or "",
+                    "voucher_inventory_allocations": json.dumps(
+                        [
+                            {child.tag: child.text or "" for child in allocation if not list(child)}
+                            for allocation in voucher.findall("ALLINVENTORYENTRIES.LIST")
+                            + voucher.findall("INVENTORYENTRIES.LIST")
+                        ],
+                        sort_keys=True,
+                    )
+                    if index == 1
+                    else "",
+                    "bill_allocations": json.dumps(
+                        [
+                            {child.tag: child.text or "" for child in allocation}
+                            for allocation in node.findall("BILLALLOCATIONS.LIST")
+                        ],
+                        sort_keys=True,
+                    ),
                     "cost_center_allocations": json.dumps(centers, sort_keys=True),
-                    "inventory_allocations": json.dumps([{child.tag: child.text or "" for child in allocation
-                        if not list(child)} for allocation in node.findall("INVENTORYALLOCATIONS.LIST")], sort_keys=True),
+                    "inventory_allocations": json.dumps(
+                        [
+                            {child.tag: child.text or "" for child in allocation if not list(child)}
+                            for allocation in node.findall("INVENTORYALLOCATIONS.LIST")
+                        ],
+                        sort_keys=True,
+                    ),
                     "account_code": name,
                     "account_name": name,
                     "journal_ref": identifier,

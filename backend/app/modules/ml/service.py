@@ -220,6 +220,7 @@ async def execute_job(db, ctx, payload, job_id=None):
                     "account": str(row.account_id),
                     "account_name": name,
                     "counterparty": row.counterparty,
+                    **({"manual": row.attributes["manual"]} if isinstance(row.attributes.get("manual"), bool) else {}),
                     "label_kind": "unknown",
                     "snapshot_id": str(row.snapshot_id),
                 }
@@ -297,6 +298,8 @@ async def execute_job(db, ctx, payload, job_id=None):
     if payload["operation"] == "train":
         if source.kind != "dataset":
             raise HTTPException(422, "Versioned dataset required")
+        if source.body.get("training_eligible") is False:
+            raise HTTPException(409, "Reviewed training labels are required before fitting a local model")
         from app.modules.lineage.freshness import require_ml_current
 
         await require_ml_current(db, ctx, source)

@@ -1,0 +1,32 @@
+{
+  "Version": "1.1",
+  "TranDtls": {
+    "TaxSch": "GST",
+    "SupTyp": "B2B",
+    "RegRev": "N"
+  },
+  "DocDtls": {
+    "Typ": "INV",
+    "No": "SYNTHETIC-1",
+    "Dt": "15/06/2026"
+  },
+  "SellerDtls": {
+    "Gstin": "29ABCDE1234F1Z5"
+  },
+  "BuyerDtls": {
+    "Gstin": "27ABCDE5678G1Z8"
+  },
+  "ItemList": [
+    {
+      "SlNo": "1",
+      "AssAmt": 100,
+      "IgstAmt": 18,
+      "TotItemVal": 118
+    }
+  ],
+  "ValDtls": {
+    "AssVal": 100,
+    "IgstVal": 18,
+    "TotInvVal": 118
+  }
+}

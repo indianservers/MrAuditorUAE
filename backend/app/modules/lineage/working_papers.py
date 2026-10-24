@@ -67,7 +67,14 @@ async def capture(db, ctx, obj):
         if identifier in records:
             row = records[identifier]
             if row.engagement_id != obj.engagement_id:
-                raise HTTPException(422, "Cross-engagement working-paper source requires an authorized link")
+                members = {uuid.UUID(member["engagement_id"]) for member in obj.body.get("members", [])} if getattr(obj, "kind", None) == "tax-group" else set()
+                if row.engagement_id not in members:
+                    raise HTTPException(422, "Cross-engagement working-paper source requires an authorized link")
+                # A tax group explicitly names its member engagements. Recheck access
+                # to the actual referenced record; a shared tenant is insufficient.
+                from app.modules.audit_execution import service as audit
+
+                await audit.get_record(db, ctx, row.engagement_id, row.id, lock=False)
             receipts.append(
                 {"type": "record", "id": str(identifier), "version": row.version, "path": path}
             )

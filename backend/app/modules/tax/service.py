@@ -106,6 +106,13 @@ async def applicable_rule(db, ctx, eid, rid, profile, category=None):
         )
     if category and rule.category != category:
         raise HTTPException(422, "Rule category does not match tax calculation")
+    if rule.source_id == "MD131-2026" and rule.parameters.sbr_last_period_end > date(2026, 12, 31):
+        from datetime import timedelta
+
+        if (not rule.publication_date or not rule.publication_evidence_id
+            or profile.legal_as_of < rule.publication_date + timedelta(days=1)):
+            raise HTTPException(409, "MD131 extension requires reviewed publication evidence and legal knowledge after commencement")
+        await evidence(db, ctx, eid, rule.publication_evidence_id)
     return obj, rule
 
 
@@ -117,6 +124,11 @@ async def validate_body(db, ctx, eng, kind, data, record_id=None):
         source = SOURCES[data.source_id]
         if data.article and data.article not in source["articles"]:
             raise HTTPException(422, "Article is not verified in the registered source")
+        if data.source_id == "MD131-2026" and data.parameters.sbr_last_period_end > date(2026, 12, 31):
+            if (data.parameters.sbr_last_period_end != date(2029, 12, 31)
+                or not data.publication_date or not data.publication_evidence_id or not data.source_sha256):
+                raise HTTPException(409, "Verify MD131 publication and retained source before adopting the 2029 end-date extension")
+            await evidence(db, ctx, eng.id, data.publication_evidence_id)
         issued = {
             "MD131-2026": date(2026, 7, 29),
             "MD229-2025": date(2025, 8, 28),
@@ -533,6 +545,8 @@ async def profile_inputs(db, ctx, eid, pid):
         rule, parsed = await applicable_rule(db, ctx, eid, rid, profile, category)
         rules[category] = parsed
         deps.append(ifrs.dependency(rule))
+        if parsed.publication_evidence_id:
+            deps.append(ifrs.dependency(await evidence(db, ctx, eid, parsed.publication_evidence_id)))
         snapshots[category] = {
             "id": str(rule.id),
             "version": rule.version,

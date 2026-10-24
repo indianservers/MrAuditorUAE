@@ -157,12 +157,13 @@ async def validate_action(db, ctx, eid, obj, action):
         if obj.kind == "dmtt-memo":
             from app.modules.ml.models import MLEvent
 
-            if not data.calculation_id:
+            memo = s.Memo.model_validate(clean(obj.body))
+            if not memo.calculation_id:
                 raise HTTPException(409, "Select an immutable DMTT calculation before concluding")
             calculation = await db.scalar(select(MLEvent).where(
                 MLEvent.tenant_id == ctx.tenant_id, MLEvent.engagement_id == eid,
-                MLEvent.id == data.calculation_id, MLEvent.kind == "dmtt_calculation"))
-            if not calculation or calculation.body.get("group_id") != str(data.group_id):
+                MLEvent.id == memo.calculation_id, MLEvent.kind == "dmtt_calculation"))
+            if not calculation or calculation.body.get("group_id") != str(memo.group_id):
                 raise HTTPException(422, "DMTT calculation outside selected group")
             if not await current(db, ctx, eid, calculation):
                 raise HTTPException(409, "DMTT sources changed; recalculate before review")
@@ -171,8 +172,8 @@ async def validate_action(db, ctx, eid, obj, action):
 
 
 async def current(db, ctx, eid, calculation):
-    from app.modules.tax.contracts import current as receipt_current
     from app.modules.ifrs.service import current_dependencies
+    from app.modules.tax.contracts import current as receipt_current
 
     if calculation.tenant_id != ctx.tenant_id or calculation.engagement_id != eid:
         return False
@@ -249,7 +250,10 @@ async def computation(db, ctx, eid, gid):
     try:
         results = serial(calculate(g, entities, elections))
     except (ValueError, ArithmeticError) as exc:
-        raise HTTPException(422, str(exc)) from None
+        results = {"status": "UNSUPPORTED_CASE", "uae_dmtt": None,
+                   "blocking_issues": [str(exc)], "scope_assessed_separately": True,
+                   "supported_source_schedules_preserved": [str(obj.id) for obj in objects],
+                   "iir_utpr_included": False}
     from app.modules.tax.contracts import attach
 
     results = await attach(db, ctx, eid, "DMTT", results,

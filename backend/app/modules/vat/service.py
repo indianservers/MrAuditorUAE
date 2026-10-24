@@ -398,8 +398,8 @@ async def compute(db, ctx, eid, pid):
     sequence = set()
     evidence_set = set()
     emirates: dict[str, dict[str, Decimal]] = {}
-    credit_totals = {}
-    supplies = {}
+    credit_totals: dict[str, list[Decimal]] = {}
+    supplies: dict[str, list[str]] = {}
     with localcontext() as precision:
         precision.prec = 64
         for obj in invoices:
@@ -409,6 +409,8 @@ async def compute(db, ctx, eid, pid):
             applicable(selected["invoice"][1], inv.tax_point)
             value = calc.transaction(inv, treatment_rule, selected["invoice"][1])
             issues = list(value["issues"])
+            if inv.supply_stage == "final":
+                issues.append("Final invoice after an advance requires a separately reconciled advance-netting schedule; this unsupported bridge cannot be assumed")
             if inv.supply_reference:
                 previous = supplies.setdefault(inv.supply_reference, [])
                 if previous and (inv.supply_stage in {"advance", "final"} or any(x in {"advance", "final"} for x in previous)):

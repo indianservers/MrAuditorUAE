@@ -45,7 +45,13 @@ async def upload(
         if status == "REJECTED":
             raise HTTPException(422, "Evidence rejected by malware scanner")
         file.file.seek(0)
-        digest = hashlib.file_digest(file.file, "sha256").hexdigest()
+        def digest_upload():
+            digest = hashlib.sha256()
+            while chunk := file.file.read(1024 * 1024):
+                digest.update(chunk)
+            return digest.hexdigest()
+
+        digest = await run_in_threadpool(digest_upload)
         file.file.seek(0)
         duplicate = await db.scalar(select(EvidenceVersion).where(
             EvidenceVersion.tenant_id == ctx.tenant_id, EvidenceVersion.record_id == rid

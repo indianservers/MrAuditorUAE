@@ -168,7 +168,11 @@ async def direct_sync(
                 "request_key": request.headers.get("Idempotency-Key") or str(uuid.uuid4())}, request.state.request_id
         )
     await db.commit()  # Release admission lock before independent checkpoint transactions.
-    return await execute(db, ctx, identifier, str(resume_session) if resume_session else None)
+    from app.db.session import Session, tenant_context
+
+    async with Session() as execution, execution.begin():
+        await tenant_context(execution, str(ctx.tenant_id))
+        return await execute(execution, ctx, identifier, str(resume_session) if resume_session else None)
 
 
 @router.get("/connectors/native/sync-runs/{identifier}", response_model=dict)
@@ -440,10 +444,12 @@ async def choose_organization(identifier: uuid.UUID, data: Organization, db: DB,
         credentials.get("refresh_token", ""),
     )
     organizations = await adapter.get("organizations", {})
-    if data.organization_id not in {
-        str(o["organization_id"]) for o in organizations.get("organizations", [])
-    }:
+    organization = next((o for o in organizations.get("organizations", []) if str(o["organization_id"]) == data.organization_id), None)
+    if not organization:
         raise HTTPException(403, "Organization access not established")
+    entity, _ = await check_scope(db, ctx, connection)
+    if organization.get("currency_code") != entity.functional_currency:
+        raise HTTPException(422, "Zoho organization base currency differs from the selected legal entity")
     connection.organization_id = data.organization_id
     return {"status": "organization_selected"}
 
@@ -465,7 +471,11 @@ async def sync(
                 "request_key": request.headers.get("Idempotency-Key") or str(uuid.uuid4())}, request.state.request_id
         )
     await db.commit()  # Release admission lock before independent checkpoint transactions.
-    return await zoho_sync(db, ctx, identifier, str(resume_session) if resume_session else None)
+    from app.db.session import Session, tenant_context
+
+    async with Session() as execution, execution.begin():
+        await tenant_context(execution, str(ctx.tenant_id))
+        return await zoho_sync(execution, ctx, identifier, str(resume_session) if resume_session else None)
 
 
 @router.get("/connectors/tally", response_model=dict)

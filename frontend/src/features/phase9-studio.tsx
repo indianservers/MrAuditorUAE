@@ -1,4 +1,5 @@
 "use client";
+import { TaxExecutionNotice } from "./tax-execution-notice";
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import * as echarts from "echarts";
@@ -422,6 +423,12 @@ function MLPanel({ eid, area }: { eid: string; area: string }) {
       {area === "training" && (
         <section className="p9-card">
           <h2>Train a TensorFlow.js model</h2>
+          {family === "journal-classifier" && (
+            <p>
+              This family produces a binary exception-review signal. A
+              journal-type classification model is not implemented.
+            </p>
+          )}
           <div className="toolbar">
             <label>
               Family
@@ -908,6 +915,11 @@ function DMTTPanel({ eid, area }: { eid: string; area: string }) {
               ]),
             )}
           />
+          {result && (
+            <TaxExecutionNotice
+              result={result.body.results as Record<string, unknown>}
+            />
+          )}
           <Json data={result?.body.results} />
         </>
       )}

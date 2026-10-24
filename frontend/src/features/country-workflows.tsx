@@ -138,6 +138,9 @@ export function CountryWorkflows({
   const [statementIdentifier, setStatementIdentifier] = useState("");
   const [employerRegistration, setEmployerRegistration] = useState("");
   const [obligationDue, setObligationDue] = useState("");
+  const [gstRegistration, setGSTRegistration] = useState("");
+  const [gstDirection, setGSTDirection] = useState("purchase");
+  const [gstPeriod, setGSTPeriod] = useState("");
   const [ledgerSnapshot, setLedgerSnapshot] = useState("");
   const [ledgerAccount, setLedgerAccount] = useState("");
   const [ledgerFrom, setLedgerFrom] = useState("");
@@ -226,6 +229,13 @@ export function CountryWorkflows({
         payload = {
           evidence_version_id: evidence,
           file_format: sourceFormat,
+          ...(sourceFormat === "india-inv01-json"
+            ? {
+                gst_registration: gstRegistration,
+                gst_direction: gstDirection,
+                gst_period: gstPeriod,
+              }
+            : {}),
           ...(sourceFormat !== "canonical-csv" && account
             ? { account_identifier: account }
             : {}),
@@ -657,6 +667,43 @@ export function CountryWorkflows({
                       <p>
                         A SIF is an instruction file. Actual bank payment
                         evidence is required separately.
+                      </p>
+                    </>
+                  )}
+                  {sourceFormat === "india-inv01-json" && (
+                    <>
+                      <label>
+                        Entity GSTIN
+                        <input
+                          value={gstRegistration}
+                          onChange={(e) => setGSTRegistration(e.target.value)}
+                        />
+                      </label>
+                      <label>
+                        Invoice direction
+                        <select
+                          value={gstDirection}
+                          onChange={(e) => setGSTDirection(e.target.value)}
+                        >
+                          <option value="purchase">
+                            Purchase — entity is buyer
+                          </option>
+                          <option value="sale">Sale — entity is seller</option>
+                        </select>
+                      </label>
+                      <label>
+                        Reporting month
+                        <input
+                          type="month"
+                          value={gstPeriod}
+                          onChange={(e) => setGSTPeriod(e.target.value)}
+                        />
+                      </label>
+                      <p>
+                        Enter five data rows per invoice and an INR total of
+                        signed tax across all components. This imports invoice
+                        data; IRP authenticity, cancellation status and credit
+                        eligibility require separate evidence.
                       </p>
                     </>
                   )}

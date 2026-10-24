@@ -1,7 +1,9 @@
 """Additive tax execution receipts. Filing, cash and authority states are never inferred."""
 
+import hashlib
 import uuid
 from datetime import date
+from pathlib import Path
 from typing import Literal
 
 from pydantic import Field
@@ -24,6 +26,7 @@ class TaxExecution(Contract):
     period_end: date
     tax_type: Literal["VAT", "CT", "QFZP", "TP", "DMTT"]
     calculation_version: str
+    implementation_sha256: str | None = None
     execution_mode: Literal["deterministic"] = "deterministic"
     input_completeness: Literal["complete_for_supported_case", "partial", "unknown"]
     professional_review: Literal["DRAFT_REQUIRES_REVIEW"] = "DRAFT_REQUIRES_REVIEW"
@@ -42,47 +45,132 @@ class TaxExecution(Contract):
     evidence_references: list[dict] = Field(default_factory=list)
 
 
+def implementation_hash(tax_type):
+    module = {"CT": "tax", "QFZP": "tax", "VAT": "vat", "TP": "tp", "DMTT": "dmtt"}[tax_type]
+    root = Path(__file__).resolve().parent.parent / module
+    return hashlib.sha256(
+        b"".join(
+            (root / name).read_bytes() for name in ["calculations.py", "schemas.py", "service.py"]
+        )
+    ).hexdigest()
+
+
 async def snapshots(db, tenant, entity, period):
-    rows = (await db.scalars(select(ImportSnapshot).join(
-        ImportBatch, ImportBatch.id == ImportSnapshot.batch_id
-    ).where(ImportSnapshot.tenant_id == tenant, ImportSnapshot.entity_id == entity,
-            ImportSnapshot.period_id == period, ImportBatch.status == "active",
-            ImportBatch.kind.in_(["gl", "journals"]))
-        .order_by(ImportSnapshot.id))).all()
-    return [{"id": str(row.id), "sha256": row.sha256} for row in rows]
+    rows = (
+        await db.execute(
+            select(ImportSnapshot, ImportBatch.options)
+            .join(ImportBatch, ImportBatch.id == ImportSnapshot.batch_id)
+            .where(
+                ImportSnapshot.tenant_id == tenant,
+                ImportSnapshot.entity_id == entity,
+                ImportSnapshot.period_id == period,
+                ImportBatch.status == "active",
+                ImportBatch.kind.in_(["gl", "journals"]),
+            )
+            .order_by(ImportSnapshot.id)
+        )
+    ).all()
+    return [
+        {
+            "id": str(row.id),
+            "sha256": row.sha256,
+            "source_complete": bool(options.get("source_complete")),
+        }
+        for row, options in rows
+    ]
 
 
 async def attach(db, ctx, eid, tax_type, result, inputs, dependencies, profile=None):
     eng = await db.get(Engagement, eid)
     period = await db.get(FinancialPeriod, eng.period_id)
     questions = [str(x) for x in result.get("issues", [])]
-    questions += [x.get("message", str(x)) for x in result.get("exceptions", [])]
+    questions += [
+        x.get("message", str(x)) if isinstance(x, dict) else str(x)
+        for x in result.get("exceptions", [])
+    ]
     questions += [str(x) for x in result.get("unresolved", [])]
+    if tax_type == "TP" and (result.get("software_test_data") or result.get("synthetic")):
+        questions.append(
+            "Synthetic benchmark population is technical test evidence, not market support for a live pricing conclusion"
+        )
     if result.get("assessment") in {"INSUFFICIENT_DATA", "REVIEW_REQUIRED"}:
         questions.append("Legal eligibility remains unresolved")
-    if result.get("status") in {"INCOMPLETE_SCOPE", "UNSUPPORTED_CASE", "LOSS_OR_NEGATIVE_TAX_TECHNICAL_REVIEW"}:
+    if result.get("status") in {
+        "INCOMPLETE_SCOPE",
+        "UNSUPPORTED_CASE",
+        "LOSS_OR_NEGATIVE_TAX_TECHNICAL_REVIEW",
+    }:
         questions.append(result["status"])
     receipts = await snapshots(db, ctx.tenant_id, eng.entity_id, eng.period_id)
     if not receipts:
         questions.append("No active journal snapshot; source coverage requires review")
+    elif any(not item["source_complete"] for item in receipts):
+        questions.append("Source journal population is partial or completeness is unconfirmed")
     # Never imply all tax cases are covered merely because arithmetic succeeded.
     liability = result.get("current_tax", result.get("net_vat", result.get("uae_dmtt")))
+    from app.modules.audit_execution.models import AuditRecord
+
+    identifiers = [uuid.UUID(str(item["id"])) for item in dependencies if item.get("id")]
+    adopted = (
+        await db.scalars(
+            select(AuditRecord).where(
+                AuditRecord.tenant_id == ctx.tenant_id,
+                AuditRecord.id.in_(identifiers),
+                AuditRecord.kind.in_(["tax-rule", "vat-rule", "tp-rule"]),
+            )
+        )
+    ).all()
+    rule_versions = inputs.get("rules", result.get("rules", {})) or {
+        str(row.id): {
+            "record_version": row.version,
+            "rule_version": row.body.get("rule_version"),
+            "source_id": row.body.get("source_id"),
+            "effective_from": row.body.get("effective_from"),
+            "effective_to": row.body.get("effective_to"),
+            "professional_status": row.status,
+        }
+        for row in adopted
+    }
+    profile_record = (
+        await db.get(AuditRecord, uuid.UUID(str(inputs["profile_id"])))
+        if inputs.get("profile_id")
+        else None
+    )
+    profile_body = (
+        profile_record.body if profile_record and profile_record.tenant_id == ctx.tenant_id else {}
+    )
     contract = TaxExecution(
-        tenant_id=ctx.tenant_id, entity_id=eng.entity_id, engagement_id=eid, period_id=eng.period_id,
-        period_start=getattr(profile, "tax_start", getattr(profile, "period_start", period.start_date)),
+        tenant_id=ctx.tenant_id,
+        entity_id=eng.entity_id,
+        engagement_id=eid,
+        period_id=eng.period_id,
+        period_start=getattr(
+            profile, "tax_start", getattr(profile, "period_start", period.start_date)
+        ),
         period_end=getattr(profile, "tax_end", getattr(profile, "period_end", period.end_date)),
-        tax_type=tax_type, calculation_version=f"connected-{tax_type.lower()}/1",
+        tax_type=tax_type,
+        calculation_version=f"connected-{tax_type.lower()}/1",
+        implementation_sha256=implementation_hash(tax_type),
         input_completeness="partial" if questions else "complete_for_supported_case",
         source_snapshots=receipts,
         account_mapping_receipt=await mapping_receipt(db, ctx.tenant_id, eng.entity_id),
-        rule_versions=inputs.get("rules", result.get("rules", {})),
-        registrations_and_elections={"profile_id": inputs.get("profile_id"),
-            "elections": result.get("safe_harbours", []), "sbr": result.get("sbr"),
-            "registration": getattr(profile, "trn", None)},
-        assumptions=["Approved human classifications remain legal inputs; no AI eligibility determination"],
-        unresolved_questions=questions, evidence_references=dependencies,
+        rule_versions=rule_versions,
+        registrations_and_elections={
+            "profile_id": inputs.get("profile_id"),
+            "elections": result.get("safe_harbours", []),
+            "sbr": result.get("sbr"),
+            "registration": getattr(profile, "trn", None) or profile_body.get("trn"),
+            "taxpayer_classification": profile_body.get("classification"),
+        },
+        assumptions=[
+            "Approved human classifications remain legal inputs; no AI eligibility determination"
+        ],
+        unresolved_questions=questions,
+        evidence_references=dependencies,
         rounding="VAT/DMTT: explicit nearest 0.01 HALF_UP; CT/TP internal schedules: 0.00000001 HALF_UP; filing rounding requires reviewed return mapping",
-        accounting_amount=str(result["accounting_profit"]) if "accounting_profit" in result else None,
+        accounting_amount=str(result["accounting_profit"])
+        if "accounting_profit" in result
+        else None,
         calculated_liability=str(liability) if liability is not None else None,
     )
     return {**result, "tax_execution": contract.model_dump(mode="json")}
@@ -93,9 +181,14 @@ async def current(db, ctx, eid, result):
     if receipt is None:
         return True  # Existing legacy adapters retain their prior checks; no invented receipts.
     eng = await db.get(Engagement, eid)
-    return bool(receipt.get("schema_version") == "tax/1"
+    return bool(
+        receipt.get("schema_version") == "tax/1"
+        and receipt.get("implementation_sha256") == implementation_hash(receipt.get("tax_type"))
         and receipt.get("tenant_id") == str(ctx.tenant_id)
         and receipt.get("engagement_id") == str(eid)
         and receipt.get("entity_id") == str(eng.entity_id)
-        and receipt.get("source_snapshots") == await snapshots(db, ctx.tenant_id, eng.entity_id, eng.period_id)
-        and receipt.get("account_mapping_receipt") == await mapping_receipt(db, ctx.tenant_id, eng.entity_id))
+        and receipt.get("source_snapshots")
+        == await snapshots(db, ctx.tenant_id, eng.entity_id, eng.period_id)
+        and receipt.get("account_mapping_receipt")
+        == await mapping_receipt(db, ctx.tenant_id, eng.entity_id)
+    )

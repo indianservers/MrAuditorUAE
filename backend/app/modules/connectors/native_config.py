@@ -111,6 +111,7 @@ class NativeConfig(Input):
     requests_per_day: int = Field(default=10000, ge=0, le=10000000)
     concurrency: int = Field(default=2, ge=1, le=20)
     oauth_grant_id: str = Field(default="", max_length=100, pattern=r"^[A-Za-z0-9_-]*$")
+    expected_report_schema_digest: str = Field(default="", pattern=r"^([a-f0-9]{64})?$")
     include_documents: bool = False
     include_attachments: bool = False
     tax_details: bool = False
@@ -121,7 +122,9 @@ class NativeConfig(Input):
     posting_date_field: str = Field(default="AccountingDate", pattern=r"^[A-Za-z_][A-Za-z0-9_]*$")
     finance_company_field: str = Field(default="dataAreaId", pattern=r"^[A-Za-z_][A-Za-z0-9_]*$")
     cdc_since: str = Field(default="", max_length=40)
-    cdc_entities: list[str] = Field(default_factory=lambda: ["Invoice", "Bill", "Payment", "JournalEntry"], max_length=20)
+    cdc_entities: list[str] = Field(
+        default_factory=lambda: ["Invoice", "Bill", "Payment", "JournalEntry"], max_length=20
+    )
     supersedes_ids: dict[str, str] = Field(default_factory=dict, max_length=3)
 
 
@@ -196,15 +199,28 @@ def configure(provider: str, raw: dict, complete: bool = False) -> NativeConfig:
                 uuid.UUID(config.company_id)
             except ValueError:
                 raise ConnectorError("Business Central company identifier must be a GUID") from None
-        elif not all((config.base_url, config.company_path, config.accounts_path, config.ledger_path,
-                      config.mappings.get("gl"), config.mappings.get("coa"))):
-            raise ConnectorError("Dynamics Finance requires its deployed read entities and explicit field mappings")
+        elif not all(
+            (
+                config.base_url,
+                config.company_path,
+                config.accounts_path,
+                config.ledger_path,
+                config.mappings.get("gl"),
+                config.mappings.get("coa"),
+            )
+        ):
+            raise ConnectorError(
+                "Dynamics Finance requires its deployed read entities and explicit field mappings"
+            )
     if config.edition == "finance-odata":
         for path in (config.company_path, config.accounts_path, config.ledger_path):
             if path and not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", path):
                 raise ConnectorError("Finance OData paths must name published entity sets")
         for mapping in config.mappings.values():
-            if any(not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)*", value) for value in mapping.values()):
+            if any(
+                not re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*(\.[A-Za-z_][A-Za-z0-9_]*)*", value)
+                for value in mapping.values()
+            ):
                 raise ConnectorError("Finance fields must be published property paths")
     if provider == "xero" and complete:
         import uuid

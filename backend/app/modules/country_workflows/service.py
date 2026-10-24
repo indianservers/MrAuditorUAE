@@ -145,6 +145,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "camt053": {"application/xml", "text/xml"},
             "swift-mt940": {"text/plain"},
             "uae-wps-sif": {"text/csv"},
+            "india-inv01-json": {"application/json"},
         }
         if evidence.media_type not in supported_media[data.file_format]:
             raise HTTPException(

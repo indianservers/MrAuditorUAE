@@ -1,4 +1,5 @@
 "use client";
+import { TaxExecutionNotice } from "./tax-execution-notice";
 import { useState } from "react";
 import Link from "next/link";
 import { AuditStudio } from "./audit-studio";
@@ -620,6 +621,7 @@ function TPWorkspace({
               value={run.data.dependencies_current ? "CURRENT" : "STALE"}
             />
             <TPRangeChart result={run.data.results} />
+            <TaxExecutionNotice result={run.data.results} />
             <TPTaxBridge
               base={base}
               runId={rid}

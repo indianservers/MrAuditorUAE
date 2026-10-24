@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="2" failures="0" errors="0" time="0.0344399">
+    <testsuite name="tests/tax-execution-notice.test.tsx" timestamp="2026-10-24T18:31:07.688Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.0344399">
+        <testcase classname="tests/tax-execution-notice.test.tsx" name="tax execution state separation &gt; discloses legacy provenance without manufacturing a status" time="0.0207678">
+        </testcase>
+        <testcase classname="tests/tax-execution-notice.test.tsx" name="tax execution state separation &gt; keeps calculation, review, filing and payment states separate" time="0.0115028">
+        </testcase>
+    </testsuite>
+</testsuites>

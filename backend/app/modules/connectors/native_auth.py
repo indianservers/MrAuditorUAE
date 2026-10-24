@@ -76,8 +76,11 @@ async def token(
             "grant_type": "client_credentials",
             "client_id": credentials["client_id"],
             "client_secret": credentials["client_secret"],
-            "scope": ((origin(config.base_url) + "/.default")
-                      if config.edition == "finance-odata" else "https://api.businesscentral.dynamics.com/.default"),
+            "scope": (
+                (origin(config.base_url) + "/.default")
+                if config.edition == "finance-odata"
+                else "https://api.businesscentral.dynamics.com/.default"
+            ),
         }
         auth = None
     elif not code and not body["refresh_token"]:

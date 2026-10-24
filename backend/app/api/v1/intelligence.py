@@ -320,7 +320,8 @@ async def events(
                 "created_at": row.created_at.isoformat(),
                 "created_by": str(row.created_by),
                 "review_status": row.body.get("review_status", "UNVERIFIED"),
-                "label": row.body.get("source_filename")
+                "label": (row.body.get("title") if row.kind == "workflow-source" else None)
+                or row.body.get("source_filename")
                 or row.body.get("section")
                 or row.body.get("title")
                 or row.kind,
@@ -369,7 +370,9 @@ async def event_details(
         "limit": limit,
         "freshness": "CURRENT" if await service.current(db, ctx, obj) else "STALE",
         "latest_version": await service.head(db, ctx, obj),
-        "provenance_status": "receipts_retained" if any(d.get("type") != "context" for d in obj.dependencies) else "legacy provenance incomplete",
+        "provenance_status": "receipts_retained"
+        if any(d.get("type") != "context" for d in obj.dependencies)
+        else "legacy provenance incomplete",
     }
 
 
@@ -416,13 +419,21 @@ async def correct(
             "prior_event_id": str(obj.id),
             "reason": data.reason,
         }
-    messages = [message for message in obj.body.get("validation_messages", [])
-                if message != "Net plus tax does not equal gross"
-                and not any(message.startswith(key + ":") and value is not None for key, value in data.fields.items())]
+    messages = [
+        message
+        for message in obj.body.get("validation_messages", [])
+        if message != "Net plus tax does not equal gross"
+        and not any(
+            message.startswith(key + ":") and value is not None
+            for key, value in data.fields.items()
+        )
+    ]
     if all(fields.get(key) is not None for key in ["gross_amount", "net_amount", "tax_amount"]):
         from decimal import Decimal
 
-        if Decimal(fields["net_amount"]) + Decimal(fields["tax_amount"]) != Decimal(fields["gross_amount"]):
+        if Decimal(fields["net_amount"]) + Decimal(fields["tax_amount"]) != Decimal(
+            fields["gross_amount"]
+        ):
             messages.append("Net plus tax does not equal gross")
     body = {
         **obj.body,
@@ -553,18 +564,24 @@ async def review(
         raise HTTPException(409, "Result version conflict")
     reviewer = data.action in {"approve", "reject"}
     needed = (
-        "audit.evidence.review"
-        if obj.kind in {"ocr", "source-table", "workflow-source"} and reviewer
-        else "workingpaper.approve"
-        if reviewer
-        else {
-            "submit": "workingpaper.create",
-            "finding": "audit.finding.create",
-            "note": "workingpaper.review",
-            "request-evidence": "audit.evidence.upload",
-        }.get(data.action, "audit.testing.execute")
+        "tax.computation.approve"
+        if obj.kind == "tax-connected-assessment" and reviewer
+        else (
+            "audit.evidence.review"
+            if obj.kind in {"ocr", "source-table", "workflow-source"} and reviewer
+            else "workingpaper.approve"
+            if reviewer
+            else {
+                "submit": "workingpaper.create",
+                "finding": "audit.finding.create",
+                "note": "workingpaper.review",
+                "request-evidence": "audit.evidence.upload",
+            }.get(data.action, "audit.testing.execute")
+        )
     )
     await engagement_permissions(db, ctx, eid, needed)
+    if obj.kind == "tax-connected-assessment" and reviewer:
+        await engagement_permissions(db, ctx, eid, "tax.computation.approve")
     if reviewer and str(ctx.user_id) in obj.body.get("contributors", [str(obj.created_by)]):
         raise HTTPException(403, "Independent reviewer required")
     body = dict(obj.body)
@@ -751,6 +768,10 @@ async def review(
         )
     else:
         if data.action == "approve":
+            if obj.kind == "tax-connected-assessment" and obj.body.get("issues"):
+                raise HTTPException(
+                    409, "Resolve connected tax issues and regenerate before approval"
+                )
             if obj.kind == "foundation-validation" and (
                 obj.body.get("review_status") != "PREPARED"
                 or obj.body.get("completeness") != "complete"

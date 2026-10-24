@@ -139,14 +139,52 @@ def tax_documents(data, tables):
                 raise ValueError("Document reference must contain letters or numbers")
             if date.fromisoformat(r["date"]) > data.as_of:
                 raise ValueError("Tax document dated after reconciliation date")
+            if r["period"] > data.as_of.strftime("%Y-%m"):
+                raise ValueError("Tax document reporting period is after reconciliation date")
     books, portal = (unique(tables[role], key) for role in ["books", "return"])
+    document_groups = []
+    for population in (books, portal):
+        grouped = defaultdict(list)
+        for domain_key, record in population.items():
+            grouped[domain_key[:4] + domain_key[5:]].append(record)
+        document_groups.append(grouped)
+
+    def absent_native_zero(record, opposite, domain_key):
+        # A present document's omitted zero head is not a missing invoice. Only a
+        # native, explicitly checked zero qualifies; canonical absence alone does not.
+        if (
+            not record
+            or record.get("native_zero_component") is not True
+            or amount(record, "tax") != 0
+        ):
+            return False
+        others = opposite.get(domain_key[:4] + domain_key[5:], [])
+        return (
+            bool(others)
+            and record["status"] == "active"
+            and all(
+                other["status"] == "active"
+                and other["date"] == record["date"]
+                and other["period"] == record["period"]
+                and abs(amount(other, "net") - amount(record, "net")) <= data.tolerance
+                for other in others
+            )
+        )
+
     rows: list[dict[str, Any]] = []
     for index, k in enumerate(sorted(books.keys() | portal.keys()), 1):
         left, right = books.get(k), portal.get(k)
         delta = amount(left, "tax") - amount(right, "tax") if left and right else None
         base_delta = amount(left, "net") - amount(right, "net") if left and right else None
+        explicit_zero = (not right and absent_native_zero(left, document_groups[1], k)) or (
+            not left and absent_native_zero(right, document_groups[0], k)
+        )
+        if explicit_zero:
+            delta = base_delta = Decimal(0)
         state = (
-            "BOOKS_ONLY"
+            "MATCHED"
+            if explicit_zero
+            else "BOOKS_ONLY"
             if not right
             else "RETURN_ONLY"
             if not left
@@ -186,6 +224,9 @@ def tax_documents(data, tables):
                 "books_period": left["period"] if left else None,
                 "return_period": right["period"] if right else None,
                 "legal_credit_eligibility": "NOT_DETERMINED",
+                "comparison_basis": "EXPLICIT_NATIVE_ZERO_COMPONENT_WITH_OPPOSITE_DOCUMENT_PRESENT"
+                if explicit_zero
+                else "DIRECT_COMPONENT_COMPARISON",
             }
         )
     totals: defaultdict[str, defaultdict[str, Decimal]] = defaultdict(lambda: defaultdict(Decimal))
@@ -607,9 +648,10 @@ def calculate(data, country, sources):
         **result,
         "title": data.title,
         "workflow": data.workflow,
-        "workflow_version": "audit-extensions-1" if data.workflow in {
-            *AUDIT_CALCULATORS, *PRACTICE_CALCULATORS, *SECTOR_CALCULATORS, *DILIGENCE_CALCULATORS
-        } else "country-workflows-1",
+        "workflow_version": "audit-extensions-1"
+        if data.workflow
+        in {*AUDIT_CALCULATORS, *PRACTICE_CALCULATORS, *SECTOR_CALCULATORS, *DILIGENCE_CALCULATORS}
+        else "country-workflows-1",
         "as_of": data.as_of.isoformat(),
         "rationale": data.rationale,
         "review_status": "UNVERIFIED",

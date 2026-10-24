@@ -19,7 +19,9 @@ from app.modules.saas.storage import put_private
 
 
 def digest(value) -> str:
-    return hashlib.sha256(json.dumps(value, sort_keys=True, default=str, separators=(",", ":")).encode()).hexdigest()
+    return hashlib.sha256(
+        json.dumps(value, sort_keys=True, default=str, separators=(",", ":")).encode()
+    ).hexdigest()
 
 
 class ConnectorRuntime:
@@ -39,10 +41,13 @@ class ConnectorRuntime:
     async def get(self, namespace, key):
         async with self.factory() as db, db.begin():
             await tenant_context(db, self.ctx.tenant_id)
-            row = await db.scalar(select(ConnectorState).where(
-                ConnectorState.tenant_id == self.ctx.tenant_id,
-                ConnectorState.namespace == namespace, ConnectorState.key == key,
-            ))
+            row = await db.scalar(
+                select(ConnectorState).where(
+                    ConnectorState.tenant_id == self.ctx.tenant_id,
+                    ConnectorState.namespace == namespace,
+                    ConnectorState.key == key,
+                )
+            )
             if row and (row.expires_at is None or row.expires_at > datetime.now(UTC)):
                 return row.payload
         return None
@@ -51,13 +56,27 @@ class ConnectorRuntime:
         async with self.factory() as db, db.begin():
             await tenant_context(db, self.ctx.tenant_id)
             expires = datetime.now(UTC) + timedelta(hours=ttl_hours) if ttl_hours else None
-            statement = insert(ConnectorState).values(
-                id=uuid.uuid4(), tenant_id=self.ctx.tenant_id, created_by=self.ctx.user_id,
-                connection_id=self.connection_id, namespace=namespace, key=key,
-                payload=payload, expires_at=expires,
-            ).on_conflict_do_update(constraint="uq_connector_state", set_={
-                "payload": payload, "expires_at": expires, "updated_at": datetime.now(UTC),
-            })
+            statement = (
+                insert(ConnectorState)
+                .values(
+                    id=uuid.uuid4(),
+                    tenant_id=self.ctx.tenant_id,
+                    created_by=self.ctx.user_id,
+                    connection_id=self.connection_id,
+                    namespace=namespace,
+                    key=key,
+                    payload=payload,
+                    expires_at=expires,
+                )
+                .on_conflict_do_update(
+                    constraint="uq_connector_state",
+                    set_={
+                        "payload": payload,
+                        "expires_at": expires,
+                        "updated_at": datetime.now(UTC),
+                    },
+                )
+            )
             await db.execute(statement)
 
     async def cached_read(self, session_key, request_key, fetch):
@@ -90,28 +109,78 @@ class ConnectorRuntime:
         """Grant ciphertext and refresh rotation commit together under a cross-worker lock."""
         async with self.factory() as db, db.begin():
             await tenant_context(db, self.ctx.tenant_id)
-            await db.execute(text("SELECT pg_advisory_xact_lock(hashtextextended(:key,29))"),
-                             {"key": str(self.ctx.tenant_id) + grant_key})
-            row = await db.scalar(select(ConnectorState).where(
-                ConnectorState.tenant_id == self.ctx.tenant_id,
-                ConnectorState.namespace == "grant", ConnectorState.key == grant_key,
-            ))
+            await db.execute(
+                text("SELECT pg_advisory_xact_lock(hashtextextended(:key,29))"),
+                {"key": str(self.ctx.tenant_id) + grant_key},
+            )
+            row = await db.scalar(
+                select(ConnectorState).where(
+                    ConnectorState.tenant_id == self.ctx.tenant_id,
+                    ConnectorState.namespace == "grant",
+                    ConnectorState.key == grant_key,
+                )
+            )
             now = datetime.now(UTC)
             source = current
+            known = set(row.payload.get("known_refresh_hashes", [])) if row else set()
+            current_hash = (
+                digest(current["refresh_token"]) if current.get("refresh_token") else None
+            )
             if row:
                 cached = decrypt(row.payload["ciphertext"])
-                source = {**current, **{k: v for k, v in cached.items() if k in {"access_token", "refresh_token", "expires_in", "token_type"}}}
-                newer = cached.get("access_token") != current.get("access_token")
-                if (not force or newer) and datetime.fromisoformat(row.payload["refresh_after"]) > now:
-                    return source
+                cached_hash = (
+                    digest(cached["refresh_token"]) if cached.get("refresh_token") else None
+                )
+                reauthorized = bool(
+                    current_hash and current_hash != cached_hash and current_hash not in known
+                )
+                if not reauthorized:
+                    source = {
+                        **current,
+                        **{
+                            k: v
+                            for k, v in cached.items()
+                            if k in {"access_token", "refresh_token", "expires_in", "token_type"}
+                        },
+                    }
+                    newer = cached.get("access_token") != current.get("access_token")
+                    if (not force or newer) and datetime.fromisoformat(
+                        row.payload["refresh_after"]
+                    ) > now:
+                        return source
             updated = await exchange(source)
-            payload = {"ciphertext": encrypt(updated), "refresh_after": (now + timedelta(minutes=5)).isoformat()}
+            known.update(
+                digest(value)
+                for value in (
+                    current.get("refresh_token"),
+                    source.get("refresh_token"),
+                    updated.get("refresh_token"),
+                )
+                if value
+            )
+            payload = {
+                "ciphertext": encrypt(
+                    {
+                        k: v
+                        for k, v in updated.items()
+                        if k in {"access_token", "refresh_token", "expires_in", "token_type"}
+                    }
+                ),
+                "known_refresh_hashes": sorted(known),
+                "refresh_after": (now + timedelta(minutes=5)).isoformat(),
+            }
             if row:
                 row.payload = payload
             else:
-                db.add(ConnectorState(
-                    tenant_id=self.ctx.tenant_id, created_by=self.ctx.user_id,
-                    connection_id=self.connection_id, namespace="grant", key=grant_key,
-                    payload=payload, expires_at=None,
-                ))
+                db.add(
+                    ConnectorState(
+                        tenant_id=self.ctx.tenant_id,
+                        created_by=self.ctx.user_id,
+                        connection_id=self.connection_id,
+                        namespace="grant",
+                        key=grant_key,
+                        payload=payload,
+                        expires_at=None,
+                    )
+                )
             return updated

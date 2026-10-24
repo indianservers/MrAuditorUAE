@@ -2,13 +2,31 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { CountryWorkflows } from "@/features/country-workflows";
 
-const state = vi.hoisted(() => ({ mutate: vi.fn(), result: null as unknown }));
+const state = vi.hoisted(() => ({
+  mutate: vi.fn(),
+  result: null as unknown,
+  country: "AE",
+}));
 vi.mock("@/hooks/use-api", () => ({
   useCan: () => true,
   useAPI: (path: string) => ({
     data: path.endsWith("country-workflows")
       ? {
-          country: "AE",
+          country: state.country,
+          source_formats: [
+            {
+              id: "canonical-csv",
+              label: "Controlled canonical CSV",
+              available: true,
+              table_type: null,
+            },
+            {
+              id: "india-inv01-json",
+              label: "India INV-01 JSON",
+              available: state.country === "IN",
+              table_type: "tax-documents",
+            },
+          ],
           check_templates: { controls: ["access-review"] },
           scenarios: [
             { id: "RW-001", title: "Bank receipt", workflow: "bank-brs" },
@@ -28,6 +46,10 @@ vi.mock("@/hooks/use-api", () => ({
             },
           ],
           source_contracts: {
+            "tax-documents": {
+              id: { required: true, type: "str" },
+              tax: { required: true, type: "Decimal" },
+            },
             transactions: {
               id: { required: true, type: "str" },
               amount: { required: true, type: "Decimal" },
@@ -108,11 +130,41 @@ vi.mock("@/features/shared", () => ({
 }));
 
 beforeEach(() => {
+  state.country = "AE";
   state.mutate.mockReset();
   state.mutate.mockResolvedValue({ id: "queued" });
   state.result = null;
 });
 describe("country workflows", () => {
+  it("queues an India invoice with explicit GSTIN, direction, month and component controls", async () => {
+    state.country = "IN";
+    render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+    fireEvent.change(screen.getByLabelText("Source file format"), {
+      target: { value: "india-inv01-json" },
+    });
+    for (const [label, value] of [
+      ["Schedule title", "India native invoices"],
+      ["Entity GSTIN", "27ABCDE5678G1Z8"],
+      ["Invoice direction", "purchase"],
+      ["Reporting month", "2026-06"],
+      ["Clean retained evidence", "clean"],
+      ["Expected data rows", "5"],
+      ["Independent totals by currency", "INR=18"],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    expect(screen.getByLabelText("Source table type")).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+      file_format: "india-inv01-json",
+      table_type: "tax-documents",
+      gst_registration: "27ABCDE5678G1Z8",
+      gst_direction: "purchase",
+      gst_period: "2026-06",
+      expected_rows: 5,
+      control_totals: { INR: "18" },
+    });
+  });
   it("queues a credit-normal payable GL control without a movement date", async () => {
     render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
     fireEvent.change(screen.getByLabelText("Source origin"), {

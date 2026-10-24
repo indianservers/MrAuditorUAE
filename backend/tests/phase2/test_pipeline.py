@@ -434,7 +434,7 @@ async def test_connector_metadata_and_encrypted_sync(environment, monkeypatch):
 
     async def get(self, resource, params):
         if resource == "organizations":
-            return {"code": 0, "organizations": [{"organization_id": "123", "name": "FICTIONAL"}]}
+            return {"code": 0, "organizations": [{"organization_id": "123", "name": "FICTIONAL", "currency_code": "AED"}]}
         return {"code": 0, resource: [], "page_context": {"page": 1, "has_more_page": False}}
 
     async def token(self, code=None, redirect_uri=None):
@@ -651,7 +651,7 @@ async def test_zoho_native_journal_and_chart_staging(environment, monkeypatch):
 
     async def get(self, resource, params):
         if resource == "organizations":
-            return {"code": 0, "organizations": [{"organization_id": "123"}]}
+            return {"code": 0, "organizations": [{"organization_id": "123", "currency_code": "AED"}]}
         if resource == "chartofaccounts/accounttransactions":
             account = params["account_id"]
             debit = account == "101"

@@ -66,31 +66,81 @@ def main():
 
                     from defusedxml.ElementTree import fromstring
 
-                    first, last = date.fromisoformat(config["start_date"]), date.fromisoformat(config["end_date"])
+                    first, last = (
+                        date.fromisoformat(config["start_date"]),
+                        date.fromisoformat(config["end_date"]),
+                    )
                     root = Element("ENVELOPE")
                     for kind in ["companies", "groups", "ledgers"]:
-                        response = client.post(tally, content=export_request(config["company"], kind, first, last),
-                            headers={"Content-Type": "text/xml; charset=utf-8"})
+                        response = client.post(
+                            tally,
+                            content=export_request(config["company"], kind, first, last),
+                            headers={"Content-Type": "text/xml; charset=utf-8"},
+                        )
                         response.raise_for_status()
                         root.append(fromstring(response.content))
                     raw_masters = tostring(root)
-                    source = parse_export(raw_masters, config["company"], first, last,
-                        expected_fingerprint=config.get("company_fingerprint"))
+                    source = parse_export(
+                        raw_masters,
+                        config["company"],
+                        first,
+                        last,
+                        expected_fingerprint=config.get("company_fingerprint"),
+                    )
                     if not source["company_fingerprint"]:
-                        raise SystemExit("Tally company GUID is unavailable; company identity cannot be bound")
+                        raise SystemExit(
+                            "Tally company GUID is unavailable; company identity cannot be bound"
+                        )
+                    print(
+                        json.dumps(
+                            {
+                                "company_fingerprint": source["company_fingerprint"],
+                                "status": "verify_and_pin_this_company_identity",
+                            }
+                        )
+                    )
                     # Exclusive creation preserves earlier evidence. An interrupted file
                     # cannot be resumed until extraction completes all windows.
                     with package_path.open("x", encoding="utf-8") as file:
-                        file.write(json.dumps({"format": "tally-window-package/1", "company": config["company"],
-                            "start_date": str(first), "end_date": str(last), "company_fingerprint": source["company_fingerprint"],
-                            "masters_xml": base64.b64encode(raw_masters).decode()}) + "\n")
+                        file.write(
+                            json.dumps(
+                                {
+                                    "format": "tally-window-package/1",
+                                    "company": config["company"],
+                                    "start_date": str(first),
+                                    "end_date": str(last),
+                                    "company_fingerprint": source["company_fingerprint"],
+                                    "masters_xml": base64.b64encode(raw_masters).decode(),
+                                }
+                            )
+                            + "\n"
+                        )
                         for window_start, window_end in date_windows(first, last, args.window_days):
-                            response = client.post(tally, content=export_request(config["company"], "vouchers", window_start, window_end),
-                                headers={"Content-Type": "text/xml; charset=utf-8"})
+                            response = client.post(
+                                tally,
+                                content=export_request(
+                                    config["company"], "vouchers", window_start, window_end
+                                ),
+                                headers={"Content-Type": "text/xml; charset=utf-8"},
+                            )
                             response.raise_for_status()
-                            parse_export(response.content, config["company"], window_start, window_end, master_catalog=source["masters"])
-                            file.write(json.dumps({"start_date": str(window_start), "end_date": str(window_end),
-                                "xml": base64.b64encode(response.content).decode()}) + "\n")
+                            parse_export(
+                                response.content,
+                                config["company"],
+                                window_start,
+                                window_end,
+                                master_catalog=source["masters"],
+                            )
+                            file.write(
+                                json.dumps(
+                                    {
+                                        "start_date": str(window_start),
+                                        "end_date": str(window_end),
+                                        "xml": base64.b64encode(response.content).decode(),
+                                    }
+                                )
+                                + "\n"
+                            )
                             file.flush()
                 kinds = ["coa", "gl", "tb"] if args.kind == "all" else [args.kind]
                 for kind in kinds:

@@ -12,6 +12,7 @@ from app.modules.audit_execution.schemas import BODIES as AUDIT_BODIES
 from app.modules.audit_execution.schemas import RecordInput
 from app.modules.tax import service
 from app.modules.tax.catalogue import AI_TASKS, KINDS, SOURCES
+from app.modules.tax.connected import ConnectedInput
 from app.modules.tax.models import TaxRun
 from app.modules.tax.schemas import BODIES
 
@@ -22,6 +23,16 @@ for name, (prepare, approve) in KINDS.items():
     APPROVE["tax-" + name] = approve
 router = APIRouter(prefix="/tax", tags=["Corporate Tax"])
 Actor = Annotated[Context, Depends(require(""))]
+
+
+
+
+@router.post("/engagements/{eid}/connected-assessments", status_code=201)
+async def connected_assessment(eid: uuid.UUID, data: ConnectedInput, db: DB, ctx: Actor, request: Request):
+    from app.modules.tax.connected import assess
+
+    eng = await audit.engagement(db, ctx, eid, "tax.computation.prepare", True)
+    return audit.serialize(await assess(db, ctx, eng, data, request.state.request_id))
 
 
 @router.get("/legislation")

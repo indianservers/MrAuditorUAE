@@ -116,7 +116,14 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
 
 class SourceInput(Strict):
     evidence_version_id: uuid.UUID
-    file_format: Literal["canonical-csv", "camt053", "swift-mt940", "uae-wps-sif"] = "canonical-csv"
+    file_format: Literal[
+        "canonical-csv", "camt053", "swift-mt940", "uae-wps-sif", "india-inv01-json"
+    ] = "canonical-csv"
+    gst_registration: str | None = Field(
+        default=None, pattern=r"^\d{2}[A-Z]{5}\d{4}[A-Z][A-Z0-9]Z[A-Z0-9]$"
+    )
+    gst_direction: Literal["purchase", "sale"] | None = None
+    gst_period: str | None = Field(default=None, pattern=r"^\d{4}-(0[1-9]|1[0-2])$")
     account_identifier: Identifier | None = None
     statement_identifier: Identifier | None = None
     employer_registration: Identifier | None = None
@@ -150,7 +157,9 @@ class SourceInput(Strict):
         "escrow-authorisations",
         "billing-lines",
         "construction-projects",
-        "asset-register", "accounting-controls", "stock-movements",
+        "asset-register",
+        "accounting-controls",
+        "stock-movements",
         "diligence-subjects",
         "ownership-edges",
         "ownership-policies",
@@ -218,7 +227,8 @@ class WorkflowInput(Strict):
         "hospitality-revenue",
         "healthcare-billing",
         "construction-contracts",
-        "asset-register-review", "inventory-count-bridge",
+        "asset-register-review",
+        "inventory-count-bridge",
         "kyc-edd-review",
         "ownership-lookthrough",
         "sanctions-name-review",
@@ -269,9 +279,12 @@ class WorkflowInput(Strict):
         }:
             if self.review_through is None or self.review_through < self.as_of:
                 raise ValueError("Declare a review window ending on or after the reporting date")
-        if self.workflow in {"expense-cutoff", "excise-reconciliation", "gold-reconciliation", "asset-register-review"} and (
-            self.period_start is None or self.period_start > self.as_of
-        ):
+        if self.workflow in {
+            "expense-cutoff",
+            "excise-reconciliation",
+            "gold-reconciliation",
+            "asset-register-review",
+        } and (self.period_start is None or self.period_start > self.as_of):
             raise ValueError("This workflow requires an ordered reporting-period start")
         if len(set(self.source_ids.values())) != len(self.source_ids):
             raise ValueError("Each source role requires an independent source version")

@@ -47,13 +47,28 @@ COLUMNS = [
     "cost_center",
     "department",
     "project",
-    "branch", "dimensions", "source_transaction_id", "source_transaction_type",
-    "source_line_id", "source_identity_quality", "original_currency", "original_debit",
-    "original_credit", "source_exchange_rate", "source_fx_status",
+    "branch",
+    "dimensions",
+    "source_transaction_id",
+    "source_transaction_type",
+    "source_line_id",
+    "source_identity_quality",
+    "original_currency",
+    "original_debit",
+    "original_credit",
+    "source_exchange_rate",
+    "source_fx_status",
 ]
 
 
-async def direct_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, resume_session: str | None = None, *, repair_since: str | None = None):
+async def direct_sync(
+    db: AsyncSession,
+    ctx: Context,
+    connection_id: uuid.UUID,
+    resume_session: str | None = None,
+    *,
+    repair_since: str | None = None,
+):
     runtime = ConnectorRuntime.for_session(db, ctx, connection_id)
     if runtime:
         from app.modules.connectors.locking import begin_sync
@@ -71,7 +86,15 @@ async def direct_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, 
     initial_config = digest(connection.config)
     initial_credentials = connection.encrypted_credentials
     session_id = resume_session or str(uuid.uuid4())
-    cache_scope = digest([str(connection.id), str(connection.tenant_id), str(connection.period_id), connection.config, session_id])
+    cache_scope = digest(
+        [
+            str(connection.id),
+            str(connection.tenant_id),
+            str(connection.period_id),
+            connection.config,
+            session_id,
+        ]
+    )
     run = SyncRun(**scope_values(connection), connection_id=connection.id)
     db.add(run)
     await db.flush()
@@ -92,8 +115,11 @@ async def direct_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, 
             candidate = runtime.last_object
             import hashlib
 
-            stored = (candidate if candidate and candidate["sha256"] == hashlib.sha256(raw).hexdigest()
-                      else await runtime.persist_object(raw))
+            stored = (
+                candidate
+                if candidate and candidate["sha256"] == hashlib.sha256(raw).hexdigest()
+                else await runtime.persist_object(raw)
+            )
         else:
             stored = await put_private(db, ctx, io.BytesIO(raw))
         objects.append({"resource": resource[:300], **stored})
@@ -109,24 +135,48 @@ async def direct_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, 
     )
     quota_client = None
     if runtime:
-        await runtime.put("session", cache_scope, {"resume_session": session_id, "status": "extracting"}, ttl_hours=168)
+        await runtime.put(
+            "session",
+            cache_scope,
+            {"resume_session": session_id, "status": "extracting"},
+            ttl_hours=168,
+        )
         from redis.asyncio import Redis
 
         from app.modules.connectors.native_auth import token
         from app.modules.connectors.quota import OrganizationQuota
 
         adapter.read_cache = lambda key, fetch: runtime.cached_read(cache_scope, key, fetch)
-        grant_key = digest([connection.provider, adapter.config.oauth_grant_id or adapter.config.company_id,
-                            credentials.get("client_id", ""), adapter.config.account_id,
-                            adapter.config.environment, adapter.config.directory_tenant])
+        grant_key = digest(
+            [
+                connection.provider,
+                adapter.config.oauth_grant_id or adapter.config.company_id,
+                credentials.get("client_id", ""),
+                adapter.config.account_id,
+                adapter.config.environment,
+                adapter.config.directory_tenant,
+            ]
+        )
+
         async def refresh(current, force):
-            return await runtime.rotate_grant(grant_key, current,
-                lambda source: token(connection.provider, adapter.config, source), force=force)
+            return await runtime.rotate_grant(
+                grant_key,
+                current,
+                lambda source: token(connection.provider, adapter.config, source),
+                force=force,
+            )
+
         adapter.refresh_handler = refresh
         quota_client = Redis.from_url(settings().redis_url)
-        adapter.governor = OrganizationQuota(quota_client, connection.provider, adapter.config.company_id,
-            credentials.get("client_id", ""), adapter.config.requests_per_minute,
-            adapter.config.requests_per_day, adapter.config.concurrency)
+        adapter.governor = OrganizationQuota(
+            quota_client,
+            connection.provider,
+            adapter.config.company_id,
+            credentials.get("client_id", ""),
+            adapter.config.requests_per_minute,
+            adapter.config.requests_per_day,
+            adapter.config.concurrency,
+        )
     counts: dict[str, int] = defaultdict(int)
     identities: dict[str, set[str]] = defaultdict(set)
     accounts = set()
@@ -214,7 +264,9 @@ async def direct_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, 
                                 fingerprints[identity] = digest(row)
                             else:
                                 comparable = False
-                            if identity.startswith("report:") or row.get("source_identity_quality", "").startswith("snapshot"):
+                            if identity.startswith("report:") or row.get(
+                                "source_identity_quality", ""
+                            ).startswith("snapshot"):
                                 comparable = False
                             debit_total += Decimal(canonical["base_debit"])
                             credit_total += Decimal(canonical["base_credit"])
@@ -287,9 +339,15 @@ async def direct_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, 
             from app.modules.connectors.locking import finish_sync
 
             connection = await finish_sync(db, ctx, connection_id)
-            if not connection or digest(connection.config) != initial_config or connection.encrypted_credentials != initial_credentials:
+            if (
+                not connection
+                or digest(connection.config) != initial_config
+                or connection.encrypted_credentials != initial_credentials
+            ):
                 failure = "Connection configuration or credentials changed during extraction; start a new session"
-        if connection and not (runtime and failure and failure.startswith("Connection configuration")):
+        if connection and not (
+            runtime and failure and failure.startswith("Connection configuration")
+        ):
             connection.encrypted_credentials = encrypt(adapter.credentials)
         run.status = "failed" if failure else "completed"
         run.error_category = "extraction_or_validation_failed" if failure else None
@@ -301,7 +359,9 @@ async def direct_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, 
             "account_population": "source_chart" if counts["coa"] else "not_extracted",
             "functional_totals": {"debit": str(debit_total), "credit": str(credit_total)},
             "source_control_reference": adapter.config.control_reference,
-            "checkpoint": {"replayed": runtime.replayed, "downloaded": runtime.downloaded} if runtime else {},
+            "checkpoint": {"replayed": runtime.replayed, "downloaded": runtime.downloaded}
+            if runtime
+            else {},
             "execution_mode": "live" if adapter.transport is None else "simulated",
             "scope_verification": adapter.scope_evidence,
             "validation_error": failure,
@@ -311,7 +371,9 @@ async def direct_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, 
             if runtime:
                 from app.modules.connectors.revisions import append_revision
 
-                revision = await append_revision(db, ctx, connection, run.id, fingerprints, comparable)
+                revision = await append_revision(
+                    db, ctx, connection, run.id, fingerprints, comparable
+                )
                 run.manifest = {**run.manifest, "source_revision": revision}
             batches = {}
             for kind in ("coa", "tb", "gl"):
@@ -352,11 +414,18 @@ async def direct_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, 
         record(db, ctx, "connector.direct_sync", connection.id, str(run.id))
         await db.flush()
         if runtime:
-            await runtime.put("session", cache_scope, {
-                "resume_session": session_id, "status": run.status,
-                "sync_run_id": str(run.id), "counts": dict(counts),
-                "checkpoint": run.manifest["checkpoint"],
-            }, ttl_hours=168)
+            await runtime.put(
+                "session",
+                cache_scope,
+                {
+                    "resume_session": session_id,
+                    "status": run.status,
+                    "sync_run_id": str(run.id),
+                    "counts": dict(counts),
+                    "checkpoint": run.manifest["checkpoint"],
+                },
+                ttl_hours=168,
+            )
     return {
         "id": str(run.id),
         "status": run.status,

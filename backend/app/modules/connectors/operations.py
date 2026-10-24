@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import Field
 from sqlalchemy import select
 from sqlalchemy.dialects.postgresql import insert
+from starlette.concurrency import run_in_threadpool
 
 from app.api.v1.accounting import serialize
 from app.core.config import settings
@@ -30,7 +31,9 @@ Read = Annotated[Context, Depends(require("accounting.read"))]
 
 class Qualification(Input):
     sync_run_id: uuid.UUID
-    scenario: str = Field(pattern=r"^(baseline|refund|reversal|cancelled|tax|foreign_currency|opening|year_end|pagination|recovery|amendment|deletion)$")
+    scenario: str = Field(
+        pattern=r"^(baseline|refund|reversal|cancelled|tax|foreign_currency|opening|year_end|pagination|recovery|amendment|deletion)$"
+    )
     control: SourceControl
 
 
@@ -51,6 +54,76 @@ class ZohoPreferences(Input):
     incremental_documents: bool = False
     include_documents: bool = False
     include_attachments: bool = False
+
+
+class TallyIdentity(Input):
+    company: str = Field(min_length=1, max_length=200)
+    company_fingerprint: str = Field(pattern=r"^[a-f0-9]{64}$")
+
+
+@router.patch("/connectors/operations/{identifier}/tally-identity", response_model=dict)
+async def tally_identity(identifier: uuid.UUID, data: TallyIdentity, db: DB, ctx: Manage):
+    connection = await scoped(db, ctx, Connection, identifier, True)
+    if connection.provider != "tally":
+        raise HTTPException(422, "A Tally connection is required")
+    connection.config = data.model_dump()
+    return {"status": "company_identity_enrolled", "company_fingerprint": data.company_fingerprint}
+
+
+class AgentRevision(Input):
+    batch_id: uuid.UUID
+
+
+@router.post("/connectors/operations/{identifier}/agent-revisions", response_model=dict)
+async def agent_revision(identifier: uuid.UUID, data: AgentRevision, db: DB, ctx: Manage):
+    from app.modules.accounting.models import ImportBatch, ImportFile
+    from app.modules.accounting.schemas import ImportOptions
+    from app.modules.accounting.service import check_scope
+    from app.modules.connectors.revisions import append_revision
+    from app.modules.connectors.tally_windows import source_revisions
+    from app.modules.lineage.storage import ObjectStore, hash_file
+
+    connection = await scoped(db, ctx, Connection, identifier)
+    if connection.provider != "tally" or not connection.config.get("company_fingerprint"):
+        raise HTTPException(422, "Enroll the Tally company fingerprint first")
+    _, period = await check_scope(db, ctx, connection)
+    batch = await scoped(db, ctx, ImportBatch, data.batch_id)
+    if (
+        batch.source_system != "tally"
+        or batch.kind != "gl"
+        or (batch.client_id, batch.entity_id, batch.period_id)
+        != (connection.client_id, connection.entity_id, connection.period_id)
+    ):
+        raise HTTPException(
+            422, "A matching Tally ledger package in this connection's scope is required"
+        )
+    source = await db.scalar(
+        select(ImportFile).where(
+            ImportFile.tenant_id == ctx.tenant_id, ImportFile.batch_id == batch.id
+        )
+    )
+    if not source or not source.filename.endswith(".ndjson"):
+        raise HTTPException(422, "Voucher revisions require a native window package")
+    options = ImportOptions.model_validate(batch.options).model_copy(
+        update={
+            "tally_company": connection.config["company"],
+            "tally_company_fingerprint": connection.config["company_fingerprint"],
+        }
+    )
+    with ObjectStore().local(source.object_key, source.object_version) as path:
+        if hash_file(path) != source.sha256:
+            raise HTTPException(409, "Agent source evidence integrity mismatch")
+        fingerprints = await run_in_threadpool(
+            source_revisions, path, options, period.start_date, period.end_date
+        )
+    result = await append_revision(
+        db, ctx, connection, batch.id, fingerprints, True, source_kind="source_batch"
+    )
+    return {
+        "status": "revision_recorded_pending_review",
+        "source_batch_id": str(batch.id),
+        "revision": result,
+    }
 
 
 @router.patch("/connectors/operations/{identifier}/preferences", response_model=dict)
@@ -75,11 +148,17 @@ async def balance_controls(identifier: uuid.UUID, data: BalanceControls, db: DB,
     run = await scoped(db, ctx, SyncRun, data.sync_run_id)
     if run.connection_id != identifier or run.status != "completed":
         raise HTTPException(422, "A completed extraction for this connection is required")
-    batch_id = run.manifest.get("derived_import_batch_ids", {}).get("gl") or run.manifest.get("derived_import_batch_id")
+    batch_id = run.manifest.get("derived_import_batch_ids", {}).get("gl") or run.manifest.get(
+        "derived_import_batch_id"
+    )
     if not batch_id:
         raise HTTPException(422, "No extracted ledger is available for balance controls")
     batch = await scoped(db, ctx, ImportBatch, uuid.UUID(batch_id))
-    source = await db.scalar(select(ImportFile).where(ImportFile.tenant_id == ctx.tenant_id, ImportFile.batch_id == batch.id))
+    source = await db.scalar(
+        select(ImportFile).where(
+            ImportFile.tenant_id == ctx.tenant_id, ImportFile.batch_id == batch.id
+        )
+    )
     if not source:
         raise HTTPException(422, "Source ledger evidence is unavailable")
     options = ImportOptions.model_validate(batch.options)
@@ -87,16 +166,42 @@ async def balance_controls(identifier: uuid.UUID, data: BalanceControls, db: DB,
         with ObjectStore().local(source.object_key, source.object_version) as path:
             if hash_file(path) != source.sha256:
                 raise ValueError("Ledger evidence integrity mismatch")
-            ledger = (normalize(row, options, period.start_date, period.end_date, entity.functional_currency, index)[0]
-                      for index, row in rows(path, source.filename, options))
-            result = reconcile_balances(ledger, [v.model_dump() for v in data.opening], [v.model_dump() for v in data.closing])
+            ledger = (
+                normalize(
+                    row,
+                    options,
+                    period.start_date,
+                    period.end_date,
+                    entity.functional_currency,
+                    index,
+                )[0]
+                for index, row in rows(path, source.filename, options)
+            )
+            result = reconcile_balances(
+                ledger,
+                [v.model_dump() for v in data.opening],
+                [v.model_dump() for v in data.closing],
+            )
     except ValueError as exc:
         raise HTTPException(422, str(exc)) from None
-    state = ConnectorState(tenant_id=ctx.tenant_id, created_by=ctx.user_id, connection_id=identifier,
-        namespace="qualification", key=str(uuid.uuid4()), payload={**result, "scenario": "opening_gl_closing",
-        "sync_run_id": str(run.id), "opening_reference": data.opening_reference,
-        "closing_reference": data.closing_reference, "source_sha256": source.sha256,
-        "opening": [v.model_dump() for v in data.opening], "closing": [v.model_dump() for v in data.closing]}, expires_at=None)
+    state = ConnectorState(
+        tenant_id=ctx.tenant_id,
+        created_by=ctx.user_id,
+        connection_id=identifier,
+        namespace="qualification",
+        key=str(uuid.uuid4()),
+        payload={
+            **result,
+            "scenario": "opening_gl_closing",
+            "sync_run_id": str(run.id),
+            "opening_reference": data.opening_reference,
+            "closing_reference": data.closing_reference,
+            "source_sha256": source.sha256,
+            "opening": [v.model_dump() for v in data.opening],
+            "closing": [v.model_dump() for v in data.closing],
+        },
+        expires_at=None,
+    )
     db.add(state)
     await db.flush()
     return serialize(state)
@@ -105,26 +210,60 @@ async def balance_controls(identifier: uuid.UUID, data: BalanceControls, db: DB,
 @router.get("/connectors/operations/{identifier}", response_model=dict)
 async def health(identifier: uuid.UUID, db: DB, ctx: Manage):
     connection = await scoped(db, ctx, Connection, identifier)
-    states = (await db.scalars(select(ConnectorState).where(
-        ConnectorState.tenant_id == ctx.tenant_id, ConnectorState.connection_id == identifier,
-        ConnectorState.namespace.in_(["session", "event", "qualification", "watermark", "source_revision"]),
-    ).order_by(ConnectorState.created_at.desc()).limit(100))).all()
-    return {"connection_id": str(identifier), "status": connection.status,
-            "live_qualified": False, "records": [serialize(s) for s in states],
-            "actions": ["resume_failed_session", "renew_consent", "run_source_controls", "verify_vendor_contract"],
-            "credential_storage": "encrypted; never included in diagnostics"}
+    states = (
+        await db.scalars(
+            select(ConnectorState)
+            .where(
+                ConnectorState.tenant_id == ctx.tenant_id,
+                ConnectorState.connection_id == identifier,
+                ConnectorState.namespace.in_(
+                    ["session", "event", "qualification", "watermark", "source_revision"]
+                ),
+            )
+            .order_by(ConnectorState.created_at.desc())
+            .limit(100)
+        )
+    ).all()
+    return {
+        "connection_id": str(identifier),
+        "status": connection.status,
+        "live_qualified": False,
+        "records": [serialize(s) for s in states],
+        "actions": [
+            "resume_failed_session",
+            "renew_consent",
+            "run_source_controls",
+            "verify_vendor_contract",
+        ],
+        "credential_storage": "encrypted; never included in diagnostics",
+        "capabilities": {
+            "native_balance_controls": "independent opening/closing reports required; no undocumented report endpoint assumed",
+            "automatic_activation": False,
+            "signed_windows_release": "requires_release_certificate_and_qualification"
+            if connection.provider == "tally"
+            else "not_applicable",
+        },
+    }
 
 
-@router.post("/connectors/operations/{identifier}/qualifications", response_model=dict, status_code=201)
+@router.post(
+    "/connectors/operations/{identifier}/qualifications", response_model=dict, status_code=201
+)
 async def qualification(identifier: uuid.UUID, data: Qualification, db: DB, ctx: Manage):
     await scoped(db, ctx, Connection, identifier)
     run = await scoped(db, ctx, SyncRun, data.sync_run_id)
     if run.connection_id != identifier:
         raise HTTPException(422, "Qualification run belongs to another connection")
     result = qualify(serialize(run), data.control, data.scenario)
-    state = ConnectorState(tenant_id=ctx.tenant_id, created_by=ctx.user_id,
-        connection_id=identifier, namespace="qualification", key=str(uuid.uuid4()),
-        payload={**result, "sync_run_id": str(run.id)}, expires_at=None)
+    state = ConnectorState(
+        tenant_id=ctx.tenant_id,
+        created_by=ctx.user_id,
+        connection_id=identifier,
+        namespace="qualification",
+        key=str(uuid.uuid4()),
+        payload={**result, "sync_run_id": str(run.id)},
+        expires_at=None,
+    )
     db.add(state)
     await db.flush()
     return serialize(state)
@@ -133,10 +272,22 @@ async def qualification(identifier: uuid.UUID, data: Qualification, db: DB, ctx:
 @router.post("/connectors/vendor-profiles", response_model=dict, status_code=201)
 async def create_profile(data: PartnerProfile, db: DB, ctx: Manage):
     sealed = data.seal()
-    state = ConnectorState(tenant_id=ctx.tenant_id, created_by=ctx.user_id, connection_id=None,
-        namespace="profile", key=sealed["contract_hash"], payload=sealed, expires_at=None)
-    existing = await db.scalar(select(ConnectorState).where(ConnectorState.tenant_id == ctx.tenant_id,
-        ConnectorState.namespace == "profile", ConnectorState.key == state.key))
+    state = ConnectorState(
+        tenant_id=ctx.tenant_id,
+        created_by=ctx.user_id,
+        connection_id=None,
+        namespace="profile",
+        key=sealed["contract_hash"],
+        payload=sealed,
+        expires_at=None,
+    )
+    existing = await db.scalar(
+        select(ConnectorState).where(
+            ConnectorState.tenant_id == ctx.tenant_id,
+            ConnectorState.namespace == "profile",
+            ConnectorState.key == state.key,
+        )
+    )
     if existing:
         return serialize(existing)
     db.add(state)
@@ -147,8 +298,13 @@ async def create_profile(data: PartnerProfile, db: DB, ctx: Manage):
 @router.post("/connectors/operations/{identifier}/profile/{profile_id}", response_model=dict)
 async def apply_profile(identifier: uuid.UUID, profile_id: uuid.UUID, db: DB, ctx: Manage):
     connection = await scoped(db, ctx, Connection, identifier, True)
-    profile = await db.scalar(select(ConnectorState).where(ConnectorState.id == profile_id,
-        ConnectorState.tenant_id == ctx.tenant_id, ConnectorState.namespace == "profile"))
+    profile = await db.scalar(
+        select(ConnectorState).where(
+            ConnectorState.id == profile_id,
+            ConnectorState.tenant_id == ctx.tenant_id,
+            ConnectorState.namespace == "profile",
+        )
+    )
     if not profile or profile.payload["provider"] != connection.provider:
         raise HTTPException(422, "A matching tenant-owned vendor profile is required")
     body = dict(profile.payload)
@@ -163,25 +319,46 @@ async def apply_profile(identifier: uuid.UUID, profile_id: uuid.UUID, db: DB, ct
 @router.post("/connectors/webhooks/quickbooks/{tenant_id}", status_code=202)
 async def quickbooks_webhook(tenant_id: uuid.UUID, request: Request, db: DB):
     try:
-        events = verify_quickbooks(await request.body(), request.headers.get("intuit-signature", ""),
-                                  settings().connector_quickbooks_webhook_token)
+        events = verify_quickbooks(
+            await request.body(),
+            request.headers.get("intuit-signature", ""),
+            settings().connector_quickbooks_webhook_token,
+        )
     except (ConnectorError, KeyError, TypeError, ValueError):
         raise HTTPException(403, "Webhook signature or envelope is invalid") from None
     await tenant_context(db, str(tenant_id))
     accepted = 0
     for event in events:
-        connections = (await db.scalars(select(Connection).where(
-            Connection.tenant_id == tenant_id, Connection.provider == "quickbooks",
-            Connection.config["company_id"].astext == event["realm_id"],
-        ))).all()
+        connections = (
+            await db.scalars(
+                select(Connection).where(
+                    Connection.tenant_id == tenant_id,
+                    Connection.provider == "quickbooks",
+                    Connection.config["company_id"].astext == event["realm_id"],
+                )
+            )
+        ).all()
         for connection in connections:
             key = digest([str(connection.id), event["key"]])
-            result = await db.execute(insert(ConnectorState).values(
-                id=uuid.uuid4(), tenant_id=tenant_id, created_by=connection.created_by,
-                connection_id=connection.id, namespace="event", key=key,
-                payload={**event, "state": "repair_pending", "received_at": datetime.now(UTC).isoformat()},
-                expires_at=None,
-            ).on_conflict_do_nothing(constraint="uq_connector_state").returning(ConnectorState.id))
+            result = await db.execute(
+                insert(ConnectorState)
+                .values(
+                    id=uuid.uuid4(),
+                    tenant_id=tenant_id,
+                    created_by=connection.created_by,
+                    connection_id=connection.id,
+                    namespace="event",
+                    key=key,
+                    payload={
+                        **event,
+                        "state": "repair_pending",
+                        "received_at": datetime.now(UTC).isoformat(),
+                    },
+                    expires_at=None,
+                )
+                .on_conflict_do_nothing(constraint="uq_connector_state")
+                .returning(ConnectorState.id)
+            )
             accepted += int(result.scalar_one_or_none() is not None)
     # Processing requires an authorized repair invocation; the anonymous callback
     # cannot acquire arbitrary user permissions or start accounting activation.
@@ -194,7 +371,18 @@ async def repair(identifier: uuid.UUID, request: Request, db: DB, ctx: Manage):
     from app.workers.accounting import submit
 
     connection = await scoped(db, ctx, Connection, identifier)
-    if connection.provider != "quickbooks" or connection.config.get("edition", "online") != "online":
+    if (
+        connection.provider != "quickbooks"
+        or connection.config.get("edition", "online") != "online"
+    ):
         raise HTTPException(422, "CDC repair applies to QuickBooks Online")
-    return await submit(db, ctx, "connector.repair", {"connection_id": str(identifier),
-        "request_key": request.headers.get("Idempotency-Key") or str(uuid.uuid4())}, request.state.request_id)
+    return await submit(
+        db,
+        ctx,
+        "connector.repair",
+        {
+            "connection_id": str(identifier),
+            "request_key": request.headers.get("Idempotency-Key") or str(uuid.uuid4()),
+        },
+        request.state.request_id,
+    )

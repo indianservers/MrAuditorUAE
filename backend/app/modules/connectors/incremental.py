@@ -22,10 +22,27 @@ def modified_filter(resource, watermark):
 
 async def commit_watermarks(db, ctx, connection_id, resources, started, run_id):
     for resource in resources:
-        payload = {"resource": resource, "last_completed_start": started.isoformat(),
-                   "sync_run_id": str(run_id), "mode": "supporting_document_delta; full_gl_required",
-                   "deletion_detection": "not_supported_by_modified_filter"}
-        await db.execute(insert(ConnectorState).values(id=uuid.uuid4(), tenant_id=ctx.tenant_id,
-            created_by=ctx.user_id, connection_id=connection_id, namespace="watermark",
-            key=digest([str(connection_id), resource]), payload=payload, expires_at=None)
-            .on_conflict_do_update(constraint="uq_connector_state", set_={"payload": payload, "updated_at": datetime.now(UTC)}))
+        payload = {
+            "resource": resource,
+            "last_completed_start": started.isoformat(),
+            "sync_run_id": str(run_id),
+            "mode": "supporting_document_delta; full_gl_required",
+            "deletion_detection": "not_supported_by_modified_filter",
+        }
+        await db.execute(
+            insert(ConnectorState)
+            .values(
+                id=uuid.uuid4(),
+                tenant_id=ctx.tenant_id,
+                created_by=ctx.user_id,
+                connection_id=connection_id,
+                namespace="watermark",
+                key=digest([str(connection_id), resource]),
+                payload=payload,
+                expires_at=None,
+            )
+            .on_conflict_do_update(
+                constraint="uq_connector_state",
+                set_={"payload": payload, "updated_at": datetime.now(UTC)},
+            )
+        )

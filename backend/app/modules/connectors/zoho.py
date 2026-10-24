@@ -23,10 +23,19 @@ RESOURCES = {
     "creditnotes": "creditnotes",
     "contacts": "contacts",
 }
-DETAIL_RESOURCES = {"invoices": ("invoice", "invoice_id"), "bills": ("bill", "bill_id"),
-    "creditnotes": ("creditnote", "creditnote_id"), "customerpayments": ("payment", "payment_id"),
-    "vendorpayments": ("vendorpayment", "payment_id")}
-PAGE_KEYS = {"customerpayments": "customerpayments", "vendorpayments": "vendorpayments", **RESOURCES, "chartofaccounts/accounttransactions": "transactions"}
+DETAIL_RESOURCES = {
+    "invoices": ("invoice", "invoice_id"),
+    "bills": ("bill", "bill_id"),
+    "creditnotes": ("creditnote", "creditnote_id"),
+    "customerpayments": ("payment", "payment_id"),
+    "vendorpayments": ("vendorpayment", "payment_id"),
+}
+PAGE_KEYS = {
+    "customerpayments": "customerpayments",
+    "vendorpayments": "vendorpayments",
+    **RESOURCES,
+    "chartofaccounts/accounttransactions": "transactions",
+}
 SCOPES = "ZohoBooks.settings.READ,ZohoBooks.accountants.READ,ZohoBooks.invoices.READ,ZohoBooks.bills.READ,ZohoBooks.creditnotes.READ,ZohoBooks.contacts.READ,ZohoBooks.customerpayments.READ,ZohoBooks.vendorpayments.READ"
 
 
@@ -35,7 +44,7 @@ class ConnectorError(ValueError):
 
 
 class ZohoConnector:
-    version = "zoho-books-v3/3.0.0"
+    version = "zoho-books-v3/4.0.0"
 
     def __init__(
         self,
@@ -80,15 +89,29 @@ class ZohoConnector:
             )
         )
 
-    async def token(self, code: str | None = None, redirect_uri: str | None = None, force=False) -> dict:
+    async def token(
+        self, code: str | None = None, redirect_uri: str | None = None, force=False
+    ) -> dict:
         if self.token_handler and not code:
-            data = await self.token_handler({"client_id": self.client_id, "client_secret": self.client_secret,
-                "refresh_token": self.refresh_token, "access_token": self.access_token}, force)
-            self.access_token, self.refresh_token = data["access_token"], data.get("refresh_token", self.refresh_token)
+            data = await self.token_handler(
+                {
+                    "client_id": self.client_id,
+                    "client_secret": self.client_secret,
+                    "refresh_token": self.refresh_token,
+                    "access_token": self.access_token,
+                },
+                force,
+            )
+            self.access_token, self.refresh_token = (
+                data["access_token"],
+                data.get("refresh_token", self.refresh_token),
+            )
             return data
         return await self.exchange_token(code, redirect_uri)
 
-    async def exchange_token(self, code: str | None = None, redirect_uri: str | None = None) -> dict:
+    async def exchange_token(
+        self, code: str | None = None, redirect_uri: str | None = None
+    ) -> dict:
         payload = {
             "client_id": self.client_id,
             "client_secret": self.client_secret,
@@ -122,9 +145,11 @@ class ZohoConnector:
     async def get(self, resource: str, params: dict) -> dict:
         if not re.fullmatch(r"[A-Za-z0-9_/]+", resource):
             raise ConnectorError("Invalid Zoho resource path")
+
         async def fetch():
             data = await self._get(resource, params)
             return data, self.last_raw
+
         if self.read_cache and resource != "organizations":
             from app.modules.connectors.runtime import digest
 
@@ -146,11 +171,24 @@ class ZohoConnector:
                 async with httpx.AsyncClient(
                     transport=self.transport, timeout=30, follow_redirects=False
                 ) as client:
-                    response = await client.get(
+                    async with client.stream(
+                        "GET",
                         self.api + "/" + resource,
                         params=params,
                         headers={"Authorization": "Zoho-oauthtoken " + self.access_token},
-                    )
+                    ) as incoming:
+                        raw = bytearray()
+                        if incoming.status_code < 300:
+                            async for block in incoming.aiter_bytes():
+                                raw.extend(block)
+                                if len(raw) > 64 * 1024 * 1024:
+                                    raise ConnectorError("Zoho API page exceeds 64 MiB")
+                        response = httpx.Response(
+                            incoming.status_code,
+                            headers=incoming.headers,
+                            content=bytes(raw),
+                            request=incoming.request,
+                        )
                 if response.status_code == 401 and not refreshed:
                     await self.token(force=True)
                     refreshed = True
@@ -166,10 +204,10 @@ class ZohoConnector:
                 response.raise_for_status()
                 data = response.json(parse_float=Decimal)
                 self.last_raw = response.content
-                if data.get("code") != 0:
+                if not isinstance(data, dict) or data.get("code") != 0:
                     raise ConnectorError("Zoho API rejected extraction")
                 return data
-            except (httpx.TimeoutException, httpx.NetworkError):
+            except (httpx.TimeoutException, httpx.NetworkError, httpx.RemoteProtocolError):
                 if attempt == 3:
                     raise ConnectorError("Zoho network extraction incomplete") from None
                 await asyncio.sleep(2**attempt)
@@ -224,7 +262,6 @@ class ZohoConnector:
             raise ConnectorError("Invalid journal identifier")
         return await self.get("journals/" + journal_id, {"organization_id": organization_id})
 
-
     async def document_detail(self, resource, identity, organization_id):
         if resource not in DETAIL_RESOURCES or not identity.isdigit():
             raise ConnectorError("Unsupported Zoho document identity")
@@ -237,10 +274,19 @@ class ZohoConnector:
 
         if not self.access_token:
             await self.token()
-        http = NativeHTTP(self.api + "/", {"Authorization": "Zoho-oauthtoken " + self.access_token}, self.transport)
+        http = NativeHTTP(
+            self.api + "/",
+            {"Authorization": "Zoho-oauthtoken " + self.access_token},
+            self.transport,
+        )
         http.governor = self.governor
         try:
-            return await http.binary("invoices/" + identity + "/attachment?" + urlencode({"organization_id": organization_id}),
-                {"application/pdf", "image/png", "image/jpeg", "application/octet-stream"})
+            return await http.binary(
+                "invoices/"
+                + identity
+                + "/attachment?"
+                + urlencode({"organization_id": organization_id}),
+                {"application/pdf", "image/png", "image/jpeg", "application/octet-stream"},
+            )
         finally:
             await http.close()

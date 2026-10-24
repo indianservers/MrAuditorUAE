@@ -7,6 +7,7 @@ import * as tf from '@tensorflow/tfjs';
 import {train, infer, type Dataset} from '../src/engine.js';
 import {clearInferenceCache} from '../src/inference.js';
 import {validateRows, transform} from '../src/features.js';
+import type {Row} from '../src/features.js';
 
 const row = (i=0) => ({id:'r'+i,journal:'j'+i,client:'tenant-synthetic-client',date:'2026-01-15',debit:100+i,credit:0,currency:'AED',functional_currency:'AED',description:'SYNTHETIC journal',account:'A1',label:i%2,label_kind:'synthetic_injected'});
 
@@ -28,6 +29,8 @@ test('local CPU training/inference, cache, schema and artifact failures without 
   const tensorCount=tf.memory().numTensors;
   for(let i=0;i<20;i++)assert.deepEqual((await infer(rows.slice(100),dir)).predictions,first.predictions);
   assert.equal(tf.memory().numTensors,tensorCount,'Repeated inference must not leak tensors');
+  const nullable=await infer(rows.slice(100).map(r=>({...r,counterparty:null,manual:null,description:null})) as unknown as Row[],dir);
+  assert.deepEqual(nullable.predictions[0].missing_optional_fields,['description','counterparty','manual']);
   const parallel=await Promise.all([infer(rows.slice(100),dir),infer(rows.slice(100),dir)]);
   assert.deepEqual(parallel[0].predictions,parallel[1].predictions);
   const burst=await Promise.allSettled(Array.from({length:12},()=>infer(rows.slice(100),dir)));
@@ -63,6 +66,7 @@ test('canonical dates, missing fields, finite features and reviewed dimensions',
  assert.throws(()=>validateRows([{...row(),account_name:''}],10000,true),/account_name/);
  const missing={...row(),description:undefined};
  assert.equal(validateRows([missing])[0].description,'');
+ assert.equal(validateRows([{...row(),counterparty:null,manual:null}])[0].manual,undefined);
  assert.throws(()=>transform([[1]],{mean:[0],sd:[0]}),/scaler/);
  assert.throws(()=>transform([[1]],{mean:[NaN],sd:[1]}),/scaler/);
 });

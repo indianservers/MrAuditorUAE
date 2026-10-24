@@ -10,6 +10,7 @@ frontend/.next-qa-build/
 frontend/.next-financial/
 frontend/.next-country-workflows/
 frontend/.next-country-workflows-build/
+frontend/.next-audit-gap-build/
 frontend/.env.local
 frontend/tsconfig.tsbuildinfo
 frontend/test-results/

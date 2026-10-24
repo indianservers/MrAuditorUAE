@@ -37,6 +37,9 @@ async def test_explicit_baselines_real_jobs_tools_and_source_staleness(environme
         await tenant_context(db, str(tenant))
         built = await service.execute_job(db, ctx, {"operation": "dataset", "engagement_id": eid})
         dataset_id = built["id"]
+    unlabelled = await c.post("/api/v1/ml/training-jobs", headers=h,
+                             json={"source_id": dataset_id, "family": "journal-classifier"})
+    assert unlabelled.status_code == 409
     modes = []
     for mode in ["rules_baseline", "statistical_baseline", "diagnostic_mock"]:
         queued = await c.post(

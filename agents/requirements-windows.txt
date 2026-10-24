@@ -1,0 +1,3 @@
+# Additional local Windows dependency for Desktop COM and service hosting.
+# The Python environment must also contain the backend project dependencies.
+pywin32>=311; sys_platform == "win32"

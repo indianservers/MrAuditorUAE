@@ -99,7 +99,7 @@ async function run(input: Row[], dir: string, load: Loader) {
       feature_deviations:components.map((v,j)=>({feature:account?'token_bucket_'+j:schema.names[j],value:v})).sort((a,b)=>b.value-a.value).slice(0,5),
       explanation_method:ae?'reconstruction components':'absolute standardized input deviation; not causal attribution',
       deterministic_rules:{round_thousands:account?null:raw[i][7]===1,year_end:account?null:raw[i][6]===1},
-      missing_optional_fields:['description','counterparty','manual'].filter(k=>(input[i] as unknown as Record<string,unknown>)[k]===undefined),
+      missing_optional_fields:['description','counterparty','manual'].filter(k=>(input[i] as unknown as Record<string,unknown>)[k]==null),
       fraud_conclusion:false,
     };
   });

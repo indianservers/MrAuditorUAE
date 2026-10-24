@@ -246,6 +246,16 @@ async def test_real_tensorflow_artifacts_approval_inference_rls_and_feedback(env
         model = await db.get(MLEvent, uuid.UUID(model_id))
         assert model.body["metrics"]["reload_max_delta"] <= 1e-6
         assert len(model.body["metrics"]["history"]) > 0
+        ledger_dataset = await service.execute_job(db, ctx, {"operation": "dataset", "engagement_id": eid})
+        ledger_scored = await service.execute_job(db, ctx, {
+            "operation": "infer", "source_id": deployment,
+            "dataset_id": ledger_dataset["id"], "offset": 0, "limit": 1000,
+        })
+        ledger_result = await db.get(MLEvent, uuid.UUID(ledger_scored["id"]))
+        assert ledger_result.body["execution_mode"] == "trained_model"
+        assert ledger_result.body["backend"] == "cpu"
+        assert ledger_result.body["source_snapshots"]
+        assert ledger_result.body["language_model_dependency"] is False
     r = await c.get("/api/v1/ml/events/" + inference_id, headers=h)
     assert r.status_code == 200
     predictions = r.json()["body"]["predictions"]
@@ -271,6 +281,8 @@ async def test_real_tensorflow_artifacts_approval_inference_rls_and_feedback(env
     )
     assert r.status_code == 201, r.text
     assert r.json()["body"]["score_changes"] is False
+    assert r.json()["body"]["execution_mode"] == "diagnostic_mock"
+    assert r.json()["body"]["prediction_execution_mode"] == "trained_model"
 
     r = await c.post(
         f"/api/v1/ml/datasets/{dataset_id}/curation",

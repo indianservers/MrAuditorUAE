@@ -22,6 +22,14 @@ from app.modules.country_workflows.sources import MAX_BYTES
 
 FORMATS: list[dict[str, Any]] = [
     {
+        "id": "india-inv01-json",
+        "label": "India INV-01 1.1 invoice JSON",
+        "countries": ["IN"],
+        "table_type": "tax-documents",
+        "description": "Plain registered-party invoices, credit and debit notes; five component rows per document; IRP authenticity and ITC eligibility are not verified",
+        "source": "https://einvoice6.gst.gov.in/content/notified-e-invoice-schema/",
+    },
+    {
         "id": "canonical-csv",
         "label": "Controlled canonical CSV",
         "countries": [],
@@ -505,6 +513,10 @@ def parse_native(content, data, country, filename):
                 rows, metadata = camt(content, data)
             elif data.file_format == "swift-mt940":
                 rows, metadata = mt940(content, data)
+            elif data.file_format == "india-inv01-json":
+                from app.modules.country_workflows.india_invoice_source import parse_invoice_json
+
+                rows, metadata = parse_invoice_json(content, data)
             else:
                 rows, metadata = wps(content, data, filename)
         except ValidationError:
@@ -513,10 +525,12 @@ def parse_native(content, data, country, filename):
             ) from None
         if len(rows) != data.expected_rows:
             raise ValueError("Native source row-count control does not agree")
+        if len(rows) > 5000:
+            raise ValueError("Native source exceeds 5,000 derived rows")
         totals: dict[str, Decimal] = {}
         for row in rows:
             totals[row["currency"]] = totals.get(row["currency"], Decimal(0)) + Decimal(
-                row["amount"]
+                row["tax"] if data.table_type == "tax-documents" else row["amount"]
             )
         if not rows:
             if not data.nil_reason or any(v != 0 for v in data.control_totals.values()):
@@ -531,6 +545,8 @@ def parse_native(content, data, country, filename):
         "control_totals": {k: str(v) for k, v in sorted(totals.items())},
         "population_completeness": "SELECTED_NATIVE_STATEMENT_CONTROLS"
         if data.table_type == "transactions"
+        else "INV01_SELECTED_DOCUMENT_ITEM_CONTROLS"
+        if data.file_format == "india-inv01-json"
         else "WPS_INSTRUCTION_FILE_CONTROLS",
         "review_status": "UNVERIFIED",
         "nil_reason": data.nil_reason,

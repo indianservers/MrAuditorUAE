@@ -84,6 +84,14 @@ async def event(db, ctx, eid, identifier, require_current=False, auth_seen=None)
     )
     if not obj:
         raise HTTPException(404, "Intelligence result not found")
+    if obj.kind == "tax-connected-assessment":
+        from app.modules.regulatory.reporting import engines
+
+        for dependency in obj.dependencies:
+            if dependency["type"] == "calculation":
+                await engagement_permissions(db, ctx, eid, engines()[dependency["module"]][1])
+            elif dependency["type"] == "dmtt":
+                await engagement_permissions(db, ctx, eid, "dmtt.read")
     from app.modules.country_workflows.diligence_schemas import (
         DILIGENCE_ROW_TYPES,
         DILIGENCE_WORKFLOWS,
@@ -101,6 +109,7 @@ async def event(db, ctx, eid, identifier, require_current=False, auth_seen=None)
         "statutory-checklist",
         "report-template",
         "statutory-report",
+        "tax-connected-assessment",
     }:
         await engagement_permissions(db, ctx, eid, "accounting.read")
     for dependency in obj.dependencies:
@@ -246,6 +255,15 @@ async def current(db, ctx, obj, visited=None):
                 or calculated.sha256 != dependency["sha256"]
                 or not await check(db, ctx, obj.engagement_id, calculated)
             ):
+                return False
+        elif kind == "dmtt":
+            from app.modules.dmtt import service as dmtt
+            from app.modules.ml.models import MLEvent
+
+            await engagement_permissions(db, ctx, obj.engagement_id, "dmtt.read")
+            item = await db.get(MLEvent, uuid.UUID(dependency["id"]))
+            if (not item or item.engagement_id != obj.engagement_id
+                or item.sha256 != dependency["sha256"] or not await dmtt.current(db, ctx, obj.engagement_id, item)):
                 return False
         elif kind == "event":
             parent = await db.get(IntelligenceEvent, uuid.UUID(dependency["id"]))

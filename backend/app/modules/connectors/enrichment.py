@@ -8,11 +8,23 @@ from app.modules.connectors.zoho import ConnectorError
 from app.modules.ingestion.parser import money
 
 QBO_TYPES = {
-    "invoice": "invoice", "bill": "bill", "payment": "payment", "billpaymentcheck": "billpayment",
-    "billpaymentcreditcard": "billpayment", "billpayment": "billpayment", "journalentry": "journalentry",
-    "salesreceipt": "salesreceipt", "refundreceipt": "refundreceipt", "creditmemo": "creditmemo",
-    "vendorcredit": "vendorcredit", "purchase": "purchase", "check": "purchase", "expense": "purchase",
-    "deposit": "deposit", "transfer": "transfer", "creditcardcredit": "creditcardcredit",
+    "invoice": "invoice",
+    "bill": "bill",
+    "payment": "payment",
+    "billpaymentcheck": "billpayment",
+    "billpaymentcreditcard": "billpayment",
+    "billpayment": "billpayment",
+    "journalentry": "journalentry",
+    "salesreceipt": "salesreceipt",
+    "refundreceipt": "refundreceipt",
+    "creditmemo": "creditmemo",
+    "vendorcredit": "vendorcredit",
+    "purchase": "purchase",
+    "check": "purchase",
+    "expense": "purchase",
+    "deposit": "deposit",
+    "transfer": "transfer",
+    "creditcardcredit": "purchase",
 }
 
 
@@ -23,6 +35,7 @@ def qbo_document_type(label):
 def match_qbo_posting(row: dict, document: dict):
     """Only assign a native line identity when account and base amount match uniquely."""
     candidates = []
+    original_amounts = {}
     for line in document.get("Line", []):
         detail = line.get(line.get("DetailType", ""), {})
         account = detail.get("AccountRef", {}).get("value")
@@ -34,9 +47,27 @@ def match_qbo_posting(row: dict, document: dict):
             numeric.prec = 48
             if amount * rate == money(row["debit"]) + money(row["credit"]):
                 candidates.append(str(line["Id"]))
+                original_amounts[str(line["Id"])] = amount
     if len(candidates) == 1:
-        row = {**row, "source_id": ":".join(["txn", row["source_transaction_id"], candidates[0], row["account_code"]]),
-               "source_line_id": candidates[0], "source_identity_quality": "matched_native_line"}
+        row = {
+            **row,
+            "source_id": ":".join(
+                ["txn", row["source_transaction_id"], candidates[0], row["account_code"]]
+            ),
+            "source_line_id": candidates[0],
+            "source_identity_quality": "matched_native_line",
+        }
+        original_currency = document.get("CurrencyRef", {}).get("value")
+        source_rate = document.get("ExchangeRate")
+        if original_currency and source_rate is not None:
+            amount = original_amounts[candidates[0]]
+            row = foreign_provenance(
+                row,
+                original_currency,
+                amount if money(row["debit"]) else "0",
+                amount if money(row["credit"]) else "0",
+                source_rate,
+            )
     else:
         row = {**row, "source_identity_quality": "snapshot_scoped_ambiguous"}
     return row
@@ -56,10 +87,16 @@ def foreign_provenance(row, currency, debit=None, credit=None, rate=None):
             tolerance = Decimal(1).scaleb(-get_currency_precision(row["currency"]))
             with localcontext() as numeric:
                 numeric.prec = 48
-                if exchange <= 0 or any(abs(source * exchange - money(row[key])) > tolerance
-                                      for source, key in ((original_debit, "debit"), (original_credit, "credit"))):
-                    raise ConnectorError("Source original/base amounts conflict with the source exchange rate")
-            result.update(source_exchange_rate=str(exchange), source_fx_status="source_rate_verified")
+                if exchange <= 0 or any(
+                    abs(source * exchange - money(row[key])) > tolerance
+                    for source, key in ((original_debit, "debit"), (original_credit, "credit"))
+                ):
+                    raise ConnectorError(
+                        "Source original/base amounts conflict with the source exchange rate"
+                    )
+            result.update(
+                source_exchange_rate=str(exchange), source_fx_status="source_rate_verified"
+            )
     return result
 
 
@@ -75,11 +112,15 @@ def tax_evidence(document: dict, provider: str):
         amounts = [money(str(line["tax_amount"])) for line in lines if "tax_amount" in line]
         total = money(str(document["tax_total"])) if "tax_total" in document else None
         codes = [line.get("tax_id") for line in lines]
-    return {"tax_total": str(total) if total is not None else None,
-            "source_tax_codes": [str(code) for code in codes if code],
-            "components_match": sum(amounts, Decimal(0)) == total if total is not None and len(amounts) == len(lines) and lines else None,
-            "jurisdiction": document.get("place_of_supply") or document.get("Country", ""),
-            "interpretation": "source_data_only; no inferred GST/VAT treatment"}
+    return {
+        "tax_total": str(total) if total is not None else None,
+        "source_tax_codes": [str(code) for code in codes if code],
+        "components_match": sum(amounts, Decimal(0)) == total
+        if total is not None and len(amounts) == len(lines) and lines
+        else None,
+        "jurisdiction": document.get("place_of_supply") or document.get("Country", ""),
+        "interpretation": "source_data_only; no inferred GST/VAT treatment",
+    }
 
 
 def odata_metadata(xml: bytes, entity_set: str, required_fields: set[str]):
@@ -93,9 +134,11 @@ def odata_metadata(xml: bytes, entity_set: str, required_fields: set[str]):
     aliases = {n.get("Alias"): n.get("Namespace") for n in schemas if n.get("Alias")}
     types = {}
     sets = {}
+
     def qualified(name):
         prefix, _, suffix = name.rpartition(".")
         return (aliases.get(prefix) or prefix) + "." + suffix if prefix else name
+
     for schema in schemas:
         namespace = schema.get("Namespace", "")
         for node in schema:
@@ -132,5 +175,11 @@ def odata_metadata(xml: bytes, entity_set: str, required_fields: set[str]):
         type_name = qualified(entity.get("BaseType", "")) if entity.get("BaseType") else ""
     missing = required_fields - fields.keys()
     if missing:
-        raise ConnectorError("Deployed OData contract is missing fields: " + ", ".join(sorted(missing)))
-    return {"entity_set": entity_set, "fields_verified": sorted(required_fields), "property_types": fields}
+        raise ConnectorError(
+            "Deployed OData contract is missing fields: " + ", ".join(sorted(missing))
+        )
+    return {
+        "entity_set": entity_set,
+        "fields_verified": sorted(required_fields),
+        "property_types": fields,
+    }

@@ -3,7 +3,7 @@ import { readFileSync, mkdirSync } from "node:fs";
 const fixture = JSON.parse(
   readFileSync("../.local-runtime/country-workflows/fixture.json", "utf8"),
 );
-const shots = "../docs/country-workflows/screenshots";
+const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
 
 test("UAE source controls, BRS exceptions, exports and India isolation", async ({
@@ -164,5 +164,96 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
     path: `${shots}/real-worker-result.png`,
     fullPage: true,
   });
+  expect(errors).toEqual([]);
+  for (const source of [
+    {
+      engagement: fixture.uae_engagement,
+      format: "camt053",
+      evidence: fixture.camt_evidence,
+      count: "2",
+      total: "AED=95",
+      title: "SYNTHETIC native browser CAMT",
+    },
+    {
+      engagement: fixture.uae_engagement,
+      format: "uae-wps-sif",
+      evidence: fixture.wps_evidence,
+      count: "2",
+      total: "AED=1500",
+      title: "SYNTHETIC native browser WPS",
+    },
+    {
+      engagement: fixture.india_engagement,
+      format: "india-inv01-json",
+      evidence: fixture.india_invoice_evidence,
+      count: "5",
+      total: "INR=18",
+      title: "SYNTHETIC native browser INV01",
+    },
+  ]) {
+    await page.goto(`/intelligence/${source.engagement}/workflow-source`);
+    await page.getByLabel("Source file format").selectOption(source.format);
+    await page.getByLabel("Schedule title", { exact: true }).fill(source.title);
+    await page
+      .getByLabel("Clean retained evidence")
+      .selectOption(source.evidence);
+    await page.getByLabel("Expected data rows").fill(source.count);
+    await page.getByLabel("Independent totals by currency").fill(source.total);
+    if (source.format === "india-inv01-json") {
+      await page.getByLabel("Entity GSTIN").fill("27ABCDE5678G1Z8");
+      await page.getByLabel("Invoice direction").selectOption("purchase");
+      await page.getByLabel("Reporting month").fill("2026-06");
+      await expect(
+        page
+          .getByLabel("Source file format")
+          .getByRole("option", { name: /UAE WPS/ }),
+      ).toHaveCount(0);
+    } else {
+      await expect(
+        page
+          .getByLabel("Source file format")
+          .getByRole("option", { name: /India INV-01/ }),
+      ).toHaveCount(0);
+    }
+    const queuedNative = page.waitForResponse(
+      (r) =>
+        r.url().includes(`/engagements/${source.engagement}/jobs`) &&
+        r.request().method() === "POST",
+    );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    expect((await queuedNative).status()).toBe(202);
+    const option = page
+      .getByLabel("Saved source or result")
+      .getByRole("option", { name: new RegExp(source.title) });
+    await expect(option).toHaveCount(1);
+    await page
+      .getByLabel("Saved source or result")
+      .selectOption((await option.getAttribute("value"))!);
+    await expect(
+      page.getByRole("heading", { name: source.title, exact: true }),
+    ).toBeVisible();
+    await page
+      .getByText("Original source controls and calculation basis", {
+        exact: true,
+      })
+      .click();
+    if (source.format === "uae-wps-sif")
+      await expect(
+        page.getByText("NOT_EVIDENCED_BY_INSTRUCTION_FILE", { exact: true }),
+      ).toBeVisible();
+    if (source.format === "india-inv01-json")
+      await expect(
+        page.getByText(
+          "FIVE_TAX_COMPONENTS_PER_DOCUMENT_INCLUDING_ZERO_COMPONENTS",
+          { exact: true },
+        ),
+      ).toBeVisible();
+    await page.screenshot({
+      path: `${shots}/${source.format}-native-review.png`,
+      fullPage: true,
+    });
+  }
   expect(errors).toEqual([]);
 });

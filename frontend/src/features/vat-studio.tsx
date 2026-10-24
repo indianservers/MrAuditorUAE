@@ -1,4 +1,5 @@
 "use client";
+import { TaxExecutionNotice } from "./tax-execution-notice";
 import { useState } from "react";
 import Link from "next/link";
 import { AuditStudio } from "./audit-studio";
@@ -246,6 +247,7 @@ function VATWorkspace({
         {error && <ErrorState error={new Error(error)} />}
         {data ? (
           <>
+            <TaxExecutionNotice result={data} />
             <div className="toolbar">
               <strong>
                 {String(data.period_start || "")} –{" "}

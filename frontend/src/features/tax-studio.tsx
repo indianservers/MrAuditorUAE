@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import { TaxExecutionNotice } from "./tax-execution-notice";
+import { ConnectedTaxReview } from "./connected-tax-review";
 import Link from "next/link";
 import { AuditStudio } from "./audit-studio";
 import { PageHeader } from "./shared";
@@ -138,6 +140,9 @@ export function TaxStudio({
         </div>
       )}
       {area === "rules" && <LegalRegistry />}
+      {(area === "dashboard" || area === "computation") && (
+        <ConnectedTaxReview eid={id} />
+      )}
       {area === "ai" ? (
         <TaxAI id={id} profile={profile} />
       ) : (
@@ -401,6 +406,7 @@ function TaxWorkspace({
             <Status
               value={run.data?.dependencies_current ? "CURRENT" : "STALE"}
             />
+            <TaxExecutionNotice result={data} />
             <Button onClick={() => run.refetch()}>Validate dependencies</Button>
             {["pdf", "xlsx", "json"].map((f) => (
               <Button key={f} onClick={() => download(f)}>
