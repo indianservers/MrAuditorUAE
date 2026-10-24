@@ -17,6 +17,7 @@ from app.modules.jurisdictions.workspace import resolved
 
 class Execute(Strict):
     action: Literal[
+        "advanced-review",
         "calculate",
         "registration-exposure",
         "historical-vat-errors",
@@ -179,7 +180,30 @@ async def execute(db, ctx, eid, identifier, data: Execute, request_id):
         await intelligence.event(db, ctx, eid, previous.id, True)
         return audit.serialize(previous)
     dependencies = []
-    if data.action == "workflow":
+    if data.action == "advanced-review":
+        from app.modules.jurisdictions.ae.advanced import Schedule, calculate
+        from app.modules.audit_execution.access import engagement_permissions
+        from app.modules.enterprise_ai.security import source
+
+        if identifier < 51 or not data.record_id or data.payload:
+            raise HTTPException(422, "Select an approved case-specific schedule; runtime input overrides are forbidden")
+        proof = await source(db, ctx, eid, data.record_id)
+        if proof.kind != "working-papers" or not proof.body.get("advanced_input"):
+            raise HTTPException(422, "Approved structured schedule workpaper required")
+        schedule = Schedule.model_validate(proof.body["advanced_input"])
+        if schedule.use_case_id != identifier:
+            raise HTTPException(422, "Schedule belongs to a different use case")
+        for engine, permission in {"E04":"vat.calculate", "E05":"tax.computation.prepare", "E07":"tp.calculate", "E08":"dmtt.calculate", "E09":"ifrs.calculation.execute"}.items():
+            if engine in case.engines:
+                await engagement_permissions(db, ctx, eid, permission)
+        for source_id in {str(proof.id), str(schedule.policy.source_id), *(r["evidence_id"] for r in schedule.rows)}:
+            evidence = await source(db, ctx, eid, uuid.UUID(source_id))
+            dependencies.append({"type":"record", "id":str(evidence.id), "version":evidence.version})
+        output = {"engine":"uae-advanced-schedules", "results":calculate(schedule),
+                  "entity_id":str(eng.entity_id), "period_id":str(eng.period_id) if eng.period_id else None,
+                  "input_record_id":str(proof.id), "input_version":proof.version,
+                  "preparer_id":str(ctx.user_id), "input_assurance":"Independently approved supplied schedule; automatic source extraction/tie-out is not asserted"}
+    elif data.action == "workflow":
         from app.modules.intelligence.jobs import submit
         from app.modules.intelligence.schemas import JobInput
 
@@ -443,7 +467,7 @@ async def execute(db, ctx, eid, identifier, data: Execute, request_id):
                         {"type": "record", "id": str(src.id), "version": src.version}
                     )
         if data.action == "draft-finding":
-            if identifier != 38 or not draft.body.get("sources"):
+            if (identifier != 38 and identifier < 51) or not draft.body.get("sources"):
                 raise HTTPException(422, "Finding workflow requires reviewed source exceptions")
             for field in ("condition", "criteria", "cause", "effect", "recommendation"):
                 if not str(draft.body.get(field, "")).strip():

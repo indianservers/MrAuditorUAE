@@ -63,16 +63,17 @@ async def business_cases(eid: uuid.UUID, db: DB, ctx: Actor):
 
     from app.modules.enterprise_ai.business import case_scope, module_url
     from app.modules.jurisdictions.ae.use_cases import CASES, ENGINE_TOOLS
+    from app.modules.jurisdictions.ae.advanced_specs import spec
 
     await case_scope(db, ctx, eid, 1)
     sources = json.loads((Path(__file__).resolve().parents[2] / "modules/jurisdictions/ae/source_register.json").read_text())
     return {
         "legal_source_register": sources,
         "country": "AE",
-        "version": "mr-auditor-uae/1",
+        "version": "mr-auditor-uae/2",
         "engine_connections": ENGINE_TOOLS,
         "items": [
-            {**case.model_dump(), "module_url": module_url(case, eid),
+            {**case.model_dump(), "advanced_contract": spec(case.id) if case.id >= 51 else None, "module_url": module_url(case, eid),
              "calculation_module_url": module_url(case.model_copy(update={"workflow": None}), eid) if case.calculation else None}
             for case in CASES.values()
         ],

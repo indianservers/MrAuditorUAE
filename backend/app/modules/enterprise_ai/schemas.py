@@ -8,7 +8,7 @@ from app.modules.audit_execution.schemas import Strict
 
 
 class ToolInput(Strict):
-    use_case_id: int | None = Field(default=None, ge=1, le=50)
+    use_case_id: int | None = Field(default=None, ge=1, le=100)
     query: str = Field(default="", max_length=200)
     source_id: uuid.UUID | None = None
     limit: int = Field(default=20, ge=1, le=50)

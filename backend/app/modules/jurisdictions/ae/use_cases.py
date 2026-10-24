@@ -13,7 +13,7 @@ class Calculation(Strict):
 
 
 class UseCase(Strict):
-    id: int = Field(ge=1, le=50)
+    id: int = Field(ge=1, le=100)
     key: str
     title: str
     description: str

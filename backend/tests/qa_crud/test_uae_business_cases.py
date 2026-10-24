@@ -20,7 +20,7 @@ async def test_case_catalogue_real_tools_controlled_drafts_idempotency_and_tenan
     base = f"/api/v1/ai/engagements/{eid}"
     listing = await c.get(base + "/use-cases", headers=h)
     assert listing.status_code == 200, listing.text
-    assert len(listing.json()["items"]) == 50
+    assert len(listing.json()["items"]) == 100
     command = await c.post(
         "/api/v1/ai/command",
         headers=h,

@@ -148,6 +148,20 @@ class Section(Strict):
 
 class WorkingPaper(Body):
     inherit_source_permissions: bool = False
+    advanced_input: dict | None = None
+
+    @model_validator(mode="after")
+    def advanced_contract(self):
+        if self.advanced_input is not None:
+            from app.modules.jurisdictions.ae.advanced import Schedule
+            schedule = Schedule.model_validate(self.advanced_input)
+            linked = {str(s.id) for s in self.sources if s.kind == "record"}
+            required = {str(schedule.policy.source_id), *(r["evidence_id"] for r in schedule.rows)}
+            if not required <= linked:
+                raise ValueError("Every schedule row and adopted policy must link to a source record")
+            self.advanced_input = schedule.model_dump(mode="json")
+            self.inherit_source_permissions = True
+        return self
     folder: str = Field(min_length=1, max_length=200)
     sections: list[Section] = Field(min_length=1, max_length=30)
     financial_tables: list[dict] = Field(default_factory=list, max_length=10)
