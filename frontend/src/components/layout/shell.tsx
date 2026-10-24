@@ -94,6 +94,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
     "/clients",
     "/engagements",
     "/intelligence",
+    "/compliance/country",
     "/modules",
     "/working-papers",
     "/findings",

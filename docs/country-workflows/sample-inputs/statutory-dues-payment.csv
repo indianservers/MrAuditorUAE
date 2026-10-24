@@ -1,0 +1,2 @@
+id,registration,subject,period,component,currency,amount,due_date,payment_date
+payment1,EMPLOYER-1,EMP-1,2026-05,PF:EMPLOYEE,AED,100,2026-06-05,2026-06-01

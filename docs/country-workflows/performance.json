@@ -1,0 +1,16 @@
+{
+  "synthetic": true,
+  "scope": "In-process unique-reference/amount matching, excluding DB, parsing, worker queue and worst-case collisions",
+  "results": [
+    {
+      "rows_per_side": 1000,
+      "seconds": 0.0355,
+      "matches": 1000
+    },
+    {
+      "rows_per_side": 5000,
+      "seconds": 0.1696,
+      "matches": 5000
+    }
+  ]
+}

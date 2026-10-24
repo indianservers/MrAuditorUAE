@@ -1,9 +1,9 @@
 {
   "synthetic": true,
-  "import": "84c663af-3703-4440-8aae-d2488f4c5939",
-  "snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+  "import": "ddac9ed8-e5bd-4b04-bdd9-35a1449bac7b",
+  "snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
   "trial_balance": {
-    "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+    "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
     "functional_currency": "AED",
     "display_precision": 2,
     "display_rounding": "ROUND_HALF_EVEN",
@@ -16,10 +16,50 @@
     "total_credit": "100.20000000",
     "mapped_accounts": 0,
     "unmapped_accounts": 3,
-    "completeness": "independent_controls_required",
+    "completeness": "controls_reconciled",
+    "current_accounts": 3,
+    "source_status": "active",
+    "period": {
+      "start": "2026-01-01",
+      "end": "2026-12-31"
+    },
+    "comparison_candidates": [],
+    "comparison_snapshot_id": null,
+    "source_controls": [
+      {
+        "rule": "source_count",
+        "status": "passed",
+        "evidence": {}
+      },
+      {
+        "rule": "source_total_debit",
+        "status": "passed",
+        "evidence": {
+          "expected": "110.30",
+          "observed": "110.30"
+        }
+      },
+      {
+        "rule": "source_total_credit",
+        "status": "passed",
+        "evidence": {
+          "expected": "110.30",
+          "observed": "110.30"
+        }
+      }
+    ],
+    "monthly_movements": [
+      {
+        "id": "2026-12",
+        "month": "2026-12",
+        "debit": "100.20000000",
+        "credit": "100.20000000"
+      }
+    ],
+    "monthly_testable": true,
     "items": [
       {
-        "id": "82ea7371-f829-4fe6-ac10-ccc3f517874a",
+        "id": "60b73cdb-19e7-42e0-8db8-c6bd5532a613",
         "code": "100",
         "name": "Cash",
         "classification": null,
@@ -34,7 +74,7 @@
         "display_closing": "-90.10"
       },
       {
-        "id": "35a69383-0d8c-42ee-8d66-00057d9e4cc5",
+        "id": "c485376d-df84-4378-9e27-de76226dee8c",
         "code": "300",
         "name": "Equity",
         "classification": null,
@@ -49,7 +89,7 @@
         "display_closing": "-10.10"
       },
       {
-        "id": "4e5f49b6-843e-4dbe-a478-ee60d14cd66d",
+        "id": "733b9d77-577d-4eba-aa4f-5f5811b299c7",
         "code": "500",
         "name": "Expense",
         "classification": null,
@@ -69,7 +109,7 @@
     "limit": 50
   },
   "analytics": {
-    "id": "9a30ce30-9c35-4557-87d6-c93e1603385e",
+    "id": "f6ca16db-faf2-48e6-a647-04faa40ff233",
     "status": "completed",
     "result": {
       "rules": [
@@ -82,9 +122,9 @@
           "tested_population": 2,
           "flagged_count": 2,
           "severity": "review",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -131,14 +171,14 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE ((isodow(posting_date)+6)%7) IN (5,6)"
           },
-          "execution_ms": 9.924,
+          "execution_ms": 8.928,
           "exceptions": [
             {
-              "line_id": "08216d61-8d0c-4ac2-9636-5cf505ca3583",
+              "line_id": "2dd81068-7ede-48db-a84a-5377efccbe04",
               "indicator": "Weekend postings"
             },
             {
-              "line_id": "39c80d18-9497-4055-848c-52d5e3f8485f",
+              "line_id": "3fad3a6d-3127-491f-8a4d-81909addefa2",
               "indicator": "Weekend postings"
             }
           ],
@@ -153,9 +193,9 @@
           "tested_population": 2,
           "flagged_count": 2,
           "severity": "review",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -202,14 +242,14 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE posting_date IN ('2026-12-26')"
           },
-          "execution_ms": 7.743,
+          "execution_ms": 7.245,
           "exceptions": [
             {
-              "line_id": "08216d61-8d0c-4ac2-9636-5cf505ca3583",
+              "line_id": "2dd81068-7ede-48db-a84a-5377efccbe04",
               "indicator": "Configured public holidays"
             },
             {
-              "line_id": "39c80d18-9497-4055-848c-52d5e3f8485f",
+              "line_id": "3fad3a6d-3127-491f-8a4d-81909addefa2",
               "indicator": "Configured public holidays"
             }
           ],
@@ -224,9 +264,9 @@
           "tested_population": 0,
           "flagged_count": 0,
           "severity": "information",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -273,7 +313,7 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE posting_timestamp IS NOT NULL AND (extract(hour FROM timezone('UTC',posting_timestamp)) < 0 OR extract(hour FROM timezone('UTC',posting_timestamp)) >= 24)"
           },
-          "execution_ms": 3.739,
+          "execution_ms": 3.152,
           "exceptions": [],
           "exceptions_preview_limit": 20
         },
@@ -286,9 +326,9 @@
           "tested_population": 2,
           "flagged_count": 0,
           "severity": "information",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -335,7 +375,7 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE amount >= 10000 AND amount % 10000=0"
           },
-          "execution_ms": 6.385,
+          "execution_ms": 5.937,
           "exceptions": [],
           "exceptions_preview_limit": 20
         },
@@ -348,9 +388,9 @@
           "tested_population": 2,
           "flagged_count": 0,
           "severity": "information",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -397,7 +437,7 @@
           "calculation_evidence": {
             "predicate": "SELECT p.id FROM p JOIN signatures s USING(journal_ref) WHERE s.sig IN (SELECT sig FROM signatures GROUP BY sig HAVING count(*)>1)"
           },
-          "execution_ms": 7.724,
+          "execution_ms": 6.4,
           "exceptions": [],
           "exceptions_preview_limit": 20
         },
@@ -410,9 +450,9 @@
           "tested_population": 2,
           "flagged_count": 0,
           "severity": "information",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -459,7 +499,7 @@
           "calculation_evidence": {
             "predicate": "SELECT p.id FROM p JOIN (SELECT *, lag(debit) OVER w prev_debit,lag(posting_date) OVER w prev_date,lag(sig) OVER w prev_sig FROM signatures WINDOW w AS (PARTITION BY accounts ORDER BY debit,posting_date,journal_ref)) s USING(journal_ref) WHERE s.debit>0 AND abs(s.debit-s.prev_debit)<=s.debit*0.01 AND abs(date_diff('day',s.posting_date,s.prev_date))<=3 AND s.sig<>s.prev_sig"
           },
-          "execution_ms": 7.385,
+          "execution_ms": 6.889,
           "exceptions": [],
           "exceptions_preview_limit": 20
         },
@@ -472,9 +512,9 @@
           "tested_population": 2,
           "flagged_count": 2,
           "severity": "review",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -521,14 +561,14 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE contains(lower(coalesce(description,'')),'adjust') OR contains(lower(coalesce(description,'')),'misc') OR contains(lower(coalesce(description,'')),'override') OR contains(lower(coalesce(description,'')),'plug')"
           },
-          "execution_ms": 7.867,
+          "execution_ms": 7.77,
           "exceptions": [
             {
-              "line_id": "08216d61-8d0c-4ac2-9636-5cf505ca3583",
+              "line_id": "2dd81068-7ede-48db-a84a-5377efccbe04",
               "indicator": "Unusual descriptions"
             },
             {
-              "line_id": "39c80d18-9497-4055-848c-52d5e3f8485f",
+              "line_id": "3fad3a6d-3127-491f-8a4d-81909addefa2",
               "indicator": "Unusual descriptions"
             }
           ],
@@ -543,9 +583,9 @@
           "tested_population": 2,
           "flagged_count": 0,
           "severity": "information",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -592,7 +632,7 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE amount >= 50000"
           },
-          "execution_ms": 6.287,
+          "execution_ms": 5.242,
           "exceptions": [],
           "exceptions_preview_limit": 20
         },
@@ -605,9 +645,9 @@
           "tested_population": 2,
           "flagged_count": 2,
           "severity": "review",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -654,14 +694,14 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE amount > 50"
           },
-          "execution_ms": 7.544,
+          "execution_ms": 7.928,
           "exceptions": [
             {
-              "line_id": "08216d61-8d0c-4ac2-9636-5cf505ca3583",
+              "line_id": "2dd81068-7ede-48db-a84a-5377efccbe04",
               "indicator": "Materiality exceedance"
             },
             {
-              "line_id": "39c80d18-9497-4055-848c-52d5e3f8485f",
+              "line_id": "3fad3a6d-3127-491f-8a4d-81909addefa2",
               "indicator": "Materiality exceedance"
             }
           ],
@@ -676,9 +716,9 @@
           "tested_population": 2,
           "flagged_count": 2,
           "severity": "review",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -725,14 +765,14 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE manual AND posting_date BETWEEN cast('2026-12-31' AS DATE)-7 AND cast('2026-12-31' AS DATE)"
           },
-          "execution_ms": 8.587,
+          "execution_ms": 6.638,
           "exceptions": [
             {
-              "line_id": "08216d61-8d0c-4ac2-9636-5cf505ca3583",
+              "line_id": "2dd81068-7ede-48db-a84a-5377efccbe04",
               "indicator": "Manual year-end entries"
             },
             {
-              "line_id": "39c80d18-9497-4055-848c-52d5e3f8485f",
+              "line_id": "3fad3a6d-3127-491f-8a4d-81909addefa2",
               "indicator": "Manual year-end entries"
             }
           ],
@@ -747,9 +787,9 @@
           "tested_population": 0,
           "flagged_count": 0,
           "severity": "information",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -796,7 +836,7 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE reversal_ref IS NOT NULL AND posting_date>cast('2026-12-31' AS DATE) AND posting_date<=cast('2026-12-31' AS DATE)+7"
           },
-          "execution_ms": 3.697,
+          "execution_ms": 4.277,
           "exceptions": [],
           "exceptions_preview_limit": 20
         },
@@ -809,9 +849,9 @@
           "tested_population": 2,
           "flagged_count": 1,
           "severity": "review",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -858,10 +898,10 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE (category IN ('Assets','Expenses') AND NOT contra AND credit>0) OR (category IN ('Liabilities','Equity','Income') AND NOT contra AND debit>0) OR (category IN ('Assets','Expenses') AND contra AND debit>0) OR (category IN ('Liabilities','Equity','Income') AND contra AND credit>0)"
           },
-          "execution_ms": 9.293,
+          "execution_ms": 9.266,
           "exceptions": [
             {
-              "line_id": "08216d61-8d0c-4ac2-9636-5cf505ca3583",
+              "line_id": "3fad3a6d-3127-491f-8a4d-81909addefa2",
               "indicator": "Unusual debit/credit combinations"
             }
           ],
@@ -876,9 +916,9 @@
           "tested_population": 2,
           "flagged_count": 2,
           "severity": "review",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -925,14 +965,14 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE account_code IN (SELECT account_code FROM p GROUP BY account_code HAVING count(*)<=2)"
           },
-          "execution_ms": 8.569,
+          "execution_ms": 8.667,
           "exceptions": [
             {
-              "line_id": "08216d61-8d0c-4ac2-9636-5cf505ca3583",
+              "line_id": "2dd81068-7ede-48db-a84a-5377efccbe04",
               "indicator": "Rare accounts"
             },
             {
-              "line_id": "39c80d18-9497-4055-848c-52d5e3f8485f",
+              "line_id": "3fad3a6d-3127-491f-8a4d-81909addefa2",
               "indicator": "Rare accounts"
             }
           ],
@@ -947,9 +987,9 @@
           "tested_population": 0,
           "flagged_count": 0,
           "severity": "information",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -996,7 +1036,7 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE false"
           },
-          "execution_ms": 3.808,
+          "execution_ms": 3.685,
           "exceptions": [],
           "exceptions_preview_limit": 20
         },
@@ -1009,9 +1049,9 @@
           "tested_population": 0,
           "flagged_count": 0,
           "severity": "information",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -1058,7 +1098,7 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE false"
           },
-          "execution_ms": 5.14,
+          "execution_ms": 4.092,
           "exceptions": [],
           "exceptions_preview_limit": 20
         },
@@ -1071,9 +1111,9 @@
           "tested_population": 0,
           "flagged_count": 0,
           "severity": "information",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -1120,7 +1160,7 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE lower(coalesce(source_group,''))='suspense'"
           },
-          "execution_ms": 5.004,
+          "execution_ms": 4.459,
           "exceptions": [],
           "exceptions_preview_limit": 20
         },
@@ -1133,9 +1173,9 @@
           "tested_population": 2,
           "flagged_count": 1,
           "severity": "review",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -1182,10 +1222,10 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE account_code IN (SELECT account_code FROM p GROUP BY account_code HAVING (bool_or(category IN ('Assets','Expenses') AND NOT contra) AND sum(debit-credit)<0) OR (bool_or(category IN ('Liabilities','Equity','Income') AND contra) AND sum(debit-credit)<0))"
           },
-          "execution_ms": 9.881,
+          "execution_ms": 10.347,
           "exceptions": [
             {
-              "line_id": "08216d61-8d0c-4ac2-9636-5cf505ca3583",
+              "line_id": "3fad3a6d-3127-491f-8a4d-81909addefa2",
               "indicator": "Unexpected negative balance"
             }
           ],
@@ -1200,9 +1240,9 @@
           "tested_population": 0,
           "flagged_count": 0,
           "severity": "information",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -1249,7 +1289,7 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE false"
           },
-          "execution_ms": 3.45,
+          "execution_ms": 2.862,
           "exceptions": [],
           "exceptions_preview_limit": 20
         },
@@ -1262,9 +1302,9 @@
           "tested_population": 0,
           "flagged_count": 0,
           "severity": "information",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -1311,7 +1351,7 @@
           "calculation_evidence": {
             "predicate": "SELECT p.id FROM p JOIN (SELECT journal_ref,try_cast(journal_ref AS BIGINT) n,lag(try_cast(journal_ref AS BIGINT)) OVER(ORDER BY try_cast(journal_ref AS BIGINT)) previous FROM signatures WHERE try_cast(journal_ref AS BIGINT) IS NOT NULL) gaps USING(journal_ref) WHERE gaps.n-gaps.previous>1"
           },
-          "execution_ms": 3.425,
+          "execution_ms": 3.81,
           "exceptions": [],
           "exceptions_preview_limit": 20
         },
@@ -1324,9 +1364,9 @@
           "tested_population": 0,
           "flagged_count": 0,
           "severity": "information",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -1373,7 +1413,7 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE document_date IS NOT NULL AND abs(date_diff('day',document_date,posting_date))>30"
           },
-          "execution_ms": 3.926,
+          "execution_ms": 4.504,
           "exceptions": [],
           "exceptions_preview_limit": 20
         },
@@ -1386,9 +1426,9 @@
           "tested_population": 0,
           "flagged_count": 0,
           "severity": "information",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -1438,7 +1478,7 @@
             "positive_count": 2,
             "distinct": 1
           },
-          "execution_ms": 4.417,
+          "execution_ms": 5.444,
           "exceptions": [],
           "exceptions_preview_limit": 20
         },
@@ -1451,9 +1491,9 @@
           "tested_population": 2,
           "flagged_count": 0,
           "severity": "information",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -1500,7 +1540,7 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE amount IN (SELECT amount FROM p WHERE amount>0 GROUP BY amount HAVING count(*)>greatest(2,0.5*2))"
           },
-          "execution_ms": 7.719,
+          "execution_ms": 6.516,
           "exceptions": [],
           "exceptions_preview_limit": 20
         },
@@ -1513,9 +1553,9 @@
           "tested_population": 2,
           "flagged_count": 0,
           "severity": "information",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -1562,7 +1602,7 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE amount>(SELECT quantile_cont(amount,0.75)+3*(quantile_cont(amount,0.75)-quantile_cont(amount,0.25)) FROM p)"
           },
-          "execution_ms": 7.117,
+          "execution_ms": 8.808,
           "exceptions": [],
           "exceptions_preview_limit": 20
         },
@@ -1575,9 +1615,9 @@
           "tested_population": 2,
           "flagged_count": 0,
           "severity": "information",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -1624,7 +1664,7 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE posting_date IN (SELECT posting_date FROM p GROUP BY posting_date HAVING count(*)>50)"
           },
-          "execution_ms": 6.753,
+          "execution_ms": 7.472,
           "exceptions": [],
           "exceptions_preview_limit": 20
         },
@@ -1637,9 +1677,9 @@
           "tested_population": 0,
           "flagged_count": 0,
           "severity": "information",
-          "input_snapshot": "56d2873f-e755-4de9-8697-36b86d239f07",
+          "input_snapshot": "129790bb-c502-4cce-92ab-5f0afda7a420",
           "parameters": {
-            "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+            "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
             "materiality": "50",
             "high_value": "50000",
             "round_unit": "10000",
@@ -1686,7 +1726,7 @@
           "calculation_evidence": {
             "predicate": "SELECT id FROM p WHERE counterparty IN (SELECT counterparty FROM p WHERE counterparty IS NOT NULL GROUP BY counterparty HAVING count(*)>0.5*2) OR \"user\" IN (SELECT \"user\" FROM p WHERE \"user\" IS NOT NULL GROUP BY \"user\" HAVING count(*)>0.5*2)"
           },
-          "execution_ms": 3.449,
+          "execution_ms": 3.325,
           "exceptions": [],
           "exceptions_preview_limit": 20
         }
@@ -1694,12 +1734,12 @@
     }
   },
   "reconciliation": {
-    "id": "64a20ad8-271d-4b1d-8e70-6d1f5c3dba93",
+    "id": "b6f216a8-138b-4d05-a70e-3d3e666759f4",
     "status": "insufficient_evidence",
     "result": {
       "status": "insufficient_evidence",
       "tolerance": "0",
-      "snapshot_id": "56d2873f-e755-4de9-8697-36b86d239f07",
+      "snapshot_id": "129790bb-c502-4cce-92ab-5f0afda7a420",
       "comparison_snapshot_id": null,
       "checks": [
         {
@@ -1770,7 +1810,7 @@
     }
   },
   "sampling": {
-    "id": "d4d41f12-88d8-4578-8053-936afd3137cf",
+    "id": "2b83e5c3-49f5-4eb9-8654-4a722f18fae5",
     "status": "completed",
     "result": {
       "population": 2,

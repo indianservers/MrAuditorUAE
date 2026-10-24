@@ -22,6 +22,15 @@ export type BalanceRow = RecordRow & {
   display_closing: string;
 };
 export type Balance = Page<BalanceRow> & {
+  current_accounts: number;
+  display_precision: number;
+  comparison_candidates: { id: string; label: string }[];
+  comparison_snapshot_id: string | null;
+  completeness: string;
+  source_status: string;
+  monthly_testable: boolean;
+  monthly_movements: RecordRow[];
+  source_controls: RecordRow[];
   functional_currency: string;
   balanced: boolean;
   debit_credit_difference: string;

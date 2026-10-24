@@ -1,0 +1,187 @@
+{
+  "date": "2026-10-24",
+  "stage": "FIRST_IMPLEMENTATION_INCREMENT",
+  "production_release": "NOT_QUALIFIED",
+  "assessed_workflows": [
+    "bank-brs",
+    "controls",
+    "india-gst",
+    "india-withholding",
+    "nonprofit-diligence",
+    "payroll-settlement",
+    "statutory-dues",
+    "stock-audit",
+    "tax-close",
+    "uae-vat",
+    "uae-vat-return",
+    "vendor-diligence"
+  ],
+  "assessed_workflow_count": 12,
+  "named_synthetic_scenarios": 142,
+  "scenario_interpretation": "Operational evidence comparisons and safeguards; not independently qualified laws or live integrations",
+  "other_workspace_workflows_not_claimed_by_this_receipt": [
+    "balance-confirmations",
+    "employee-expenses",
+    "expense-cutoff",
+    "going-concern-cash",
+    "procurement-match",
+    "receivables-ecl",
+    "subledger-control",
+    "subsequent-settlements",
+    "uae-benefit-review",
+    "vendor-employee-conflicts"
+  ],
+  "verification": {
+    "backend_unit": {
+      "tests": 268,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "database_api": {
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "frontend": {
+      "numTotalTests": 36,
+      "numPassedTests": 36,
+      "numFailedTests": 0,
+      "success": true
+    },
+    "browser": {
+      "startTime": "2026-10-24T17:15:49.202Z",
+      "duration": 14362.316,
+      "expected": 1,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "production_build": "PASSED",
+    "frontend_typecheck": "PASSED",
+    "frontend_lint": "PASSED",
+    "backend_ruff": "PASSED",
+    "country_module_mypy": "PASSED"
+  },
+  "test_boundaries": {
+    "database": "auditos_country_workflows_test",
+    "redis_database": 10,
+    "integration_scanner": "EXPLICIT_TEST_DOUBLE",
+    "integration_broker_dispatch": "EXPLICIT_TEST_DOUBLE",
+    "browser_fixture_scanner": "EXPLICIT_TEST_DOUBLE",
+    "browser_queue_worker": "REAL_REDIS_AND_CELERY"
+  },
+  "reference_use_case_mapping": [
+    {
+      "reference": "TCS reconciliation",
+      "implemented": [
+        "india-withholding"
+      ],
+      "remaining": "Native return adapters and qualified collection thresholds/certificates/current Act mapping"
+    },
+    {
+      "reference": "Bank reconciliation",
+      "implemented": [
+        "bank-brs",
+        "committed GL source bridge"
+      ],
+      "remaining": "Qualified native bank PDF/XLSX adapters, account identity/ownership verification and larger populations"
+    },
+    {
+      "reference": "PF/ESI/PT reconciliation",
+      "implemented": [
+        "statutory-dues"
+      ],
+      "remaining": "Native ECR/ESIC/state exports and independently qualified contribution/membership/deadline calculations"
+    },
+    {
+      "reference": "GST reconciliation",
+      "implemented": [
+        "india-gst"
+      ],
+      "remaining": "Native GSTR/IMS parsers, RCM/ITC legal calculations, annual return mapping"
+    },
+    {
+      "reference": "TDS reconciliation",
+      "implemented": [
+        "india-withholding"
+      ],
+      "remaining": "Native 26AS/AIS/TRACES/successor formats and qualified tax calculations; explicit deductor/deductee legal-role modeling"
+    },
+    {
+      "reference": "Indian tax audit",
+      "implemented": [
+        "tax-close",
+        "existing statutory practice/report composer"
+      ],
+      "remaining": "Complete approved legacy/new form crosswalk and clause calculations; checklist is not a tax-audit engine"
+    },
+    {
+      "reference": "GST and tax audit orchestration",
+      "implemented": [
+        "tax-close",
+        "india-gst",
+        "india-withholding"
+      ],
+      "remaining": "Qualified turnover/exposure bridges, complete annual outputs and filing adapters"
+    },
+    {
+      "reference": "Statutory audit",
+      "implemented": [
+        "existing audit execution/evidence/review",
+        "country workpapers"
+      ],
+      "remaining": "Complete profession-approved country/regulator reporting and mandatory evidence scope"
+    },
+    {
+      "reference": "SOX/internal controls",
+      "implemented": [
+        "controls",
+        "existing GRC"
+      ],
+      "remaining": "Live access/event connectors, SOX issuer applicability and complete operating-effectiveness qualification"
+    },
+    {
+      "reference": "Nonprofit diligence",
+      "implemented": [
+        "nonprofit-diligence"
+      ],
+      "remaining": "Live eligibility/registry checks, licensed screening and professional attestation"
+    },
+    {
+      "reference": "Vendor diligence",
+      "implemented": [
+        "vendor-diligence"
+      ],
+      "remaining": "Live registries/UBO/sanctions/PEP screening and verified identity resolution"
+    },
+    {
+      "reference": "Stock audit",
+      "implemented": [
+        "stock-audit"
+      ],
+      "remaining": "Physical procedures, complete cutoff/movement evidence, native inventory adapters and any separately mandated drawing-power work"
+    },
+    {
+      "reference": "Payroll audit",
+      "implemented": [
+        "payroll-settlement",
+        "statutory-dues"
+      ],
+      "remaining": "Native WPS/ECR files, qualified pension/cohort/end-of-service/salary-tax engines"
+    }
+  ],
+  "source_hashes_at_report_generation": {
+    "backend\\app\\modules\\country_workflows\\audit_calculations.py": "72523d09677e2b7022e860003a97e4f7db6aa57efec37d175fae75aae78ebfed",
+    "backend\\app\\modules\\country_workflows\\audit_schemas.py": "1431fe78f9857690f03d66902726e80594f797f2517c2c27ff40bf9a74d48728",
+    "backend\\app\\modules\\country_workflows\\calculations.py": "bb84f898d2bd7ead195ea54729092174afc9c8aea3143a78695c186d91098e7a",
+    "backend\\app\\modules\\country_workflows\\catalogue.py": "212f2e0675fd461a600a06ffcf15888c4ad1b89ea2db2a623ceef90acb5e0971",
+    "backend\\app\\modules\\country_workflows\\review.py": "1fd97ab216a2b2331e24fb775c94c466637b7f2c03bc7854d2c016ec25766d93",
+    "backend\\app\\modules\\country_workflows\\schemas.py": "eb7fee5b41dc14645615f9d4f863ab7b8c74e864549e6430f26ebf2284a57977",
+    "backend\\app\\modules\\country_workflows\\service.py": "6bf6c628ad2097e2a2e61c5b3dbbe906158ba6087434326b16c0e894d0135b07",
+    "backend\\app\\modules\\country_workflows\\sources.py": "ea4502c9764217f2a055ea0bf7495927d7e4bb3ee2146fa636b22676b2b141da",
+    "backend\\app\\modules\\country_workflows\\__init__.py": "8f7353cfc92152a79342af626ebd3c3103b13828b8614b5399b286f6f1a48ffc"
+  },
+  "shared_checkout_note": "Concurrent edits are preserved; these receipts do not certify untested additional workflows or changes made after the test runs."
+}

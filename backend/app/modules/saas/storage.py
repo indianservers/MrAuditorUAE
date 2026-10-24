@@ -11,6 +11,7 @@ from app.modules.saas.service import writable
 
 
 async def baseline(db, tenant):
+    from app.modules.connectors.models import ConnectorState
     from app.modules.accounting.models import ImportFile, SyncRun, UploadSession
     from app.modules.audit_execution.models import AuditRecord, EvidenceVersion
     from app.modules.ml.models import MLEvent
@@ -40,6 +41,7 @@ async def baseline(db, tenant):
     from typing import Any
 
     sources: list[tuple[Any, Any]] = [
+        (ConnectorState, ConnectorState.payload),
         (SyncRun, SyncRun.manifest),
         (UploadSession, UploadSession.chunks),
         (AuditRecord, AuditRecord.body),

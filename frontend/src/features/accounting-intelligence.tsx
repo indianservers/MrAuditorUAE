@@ -16,6 +16,7 @@ import { PageHeader, LineageDetail } from "./shared";
 import { ReactFlow, Background, Controls, MiniMap } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import type { Page, RecordRow } from "@/types/models";
+import { CountryWorkflows } from "./country-workflows";
 
 type Choice = { id: string; label: string; scan_status?: string };
 type Result = {
@@ -24,6 +25,7 @@ type Result = {
   version: number;
   sha256: string;
   freshness: string;
+  provenance_status?: string;
   label: string;
   review_status: string;
   body: Record<string, unknown>;
@@ -39,6 +41,7 @@ type Job = {
   error_details?: { message: string };
 };
 const areas = {
+  "foundation-validation": "Foundation validation",
   ocr: "Document extraction",
   "source-table": "Supporting tables",
   mapping: "Mapping proposals",
@@ -87,6 +90,8 @@ export function AccountingIntelligence({
         </div>
       </>
     );
+  if (area === "workflow-source" || area === "country-workflow")
+    return <CountryWorkflows key={`${eid}:${area}`} eid={eid} mode={area} />;
   return (
     <IntelligenceBody
       key={`${eid}:${selectedArea}`}
@@ -105,6 +110,10 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
   const [snapshot, setSnapshot] = useState("");
   const [evidence, setEvidence] = useState("");
   const [source, setSource] = useState("");
+  const [assessments, setAssessments] = useState<string[]>([]);
+  const [documentLinks, setDocumentLinks] = useState<Record<string, string>>(
+    {},
+  );
   const [sample, setSample] = useState("");
   const [accountIds, setAccounts] = useState<string[]>([]);
   const [extractions, setExtractions] = useState<string[]>([]);
@@ -131,6 +140,25 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
   );
   const records = useAPI<{ items: Result[] }>(`${prefix}/events?limit=100`);
   const jobs = useAPI<{ items: Job[] }>(`${prefix}/jobs`, true, true);
+  const foundation = useAPI<{
+    runtime: string;
+    professional_correctness: string;
+    period: { state: string; version: number };
+    job_counts: Record<string, number>;
+  }>(`${prefix}/foundation-status`, area === "foundation-validation", true);
+  const journalLines = useAPI<{
+    items: {
+      id: string;
+      description: string;
+      posting_date: string;
+      debit: string;
+      credit: string;
+    }[];
+    total: number;
+  }>(
+    `accounting/ledger?snapshot_id=${snapshot}&limit=500`,
+    area === "foundation-validation" && !!snapshot,
+  );
   const detail = useAPI<Result>(
     `${prefix}/events/${selected}?offset=${offset}&limit=100`,
     !!selected,
@@ -148,8 +176,28 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
   };
   async function run() {
     const payload: Record<string, unknown> = {};
-    if (["lead", "mapping", "flow", "reconciliation"].includes(area))
+    if (
+      [
+        "lead",
+        "mapping",
+        "flow",
+        "reconciliation",
+        "foundation-validation",
+      ].includes(area)
+    )
       payload.snapshot_id = snapshot;
+    if (area === "foundation-validation")
+      Object.assign(payload, {
+        extraction_ids: extractions,
+        assessment_ids: assessments,
+        rationale: comments,
+        document_links: extractions
+          .filter((id) => documentLinks[id])
+          .map((id) => ({
+            extraction_id: id,
+            journal_line_id: documentLinks[id],
+          })),
+      });
     if (["lead", "mapping", "reconciliation"].includes(area))
       payload.account_ids = accountIds;
     if (area === "lead")
@@ -240,9 +288,13 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
   const sourceChoices = choices.filter(
     (r) => r.kind === "source-table" && r.freshness === "CURRENT",
   );
-  const financial = ["lead", "mapping", "flow", "reconciliation"].includes(
-    area,
-  );
+  const financial = [
+    "lead",
+    "mapping",
+    "flow",
+    "reconciliation",
+    "foundation-validation",
+  ].includes(area);
   const tableRows =
     body &&
     [
@@ -266,6 +318,9 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
         }
       />
       <nav className="toolbar" aria-label="Accounting workflows">
+        <Link className="button" href={`/intelligence/${eid}/country-workflow`}>
+          Country workflows
+        </Link>
         {Object.entries(areas).map(([key, label]) => (
           <Link
             className="button"
@@ -320,7 +375,7 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
               </select>
             </label>
           )}
-          {financial && area !== "flow" && (
+          {financial && area !== "flow" && area !== "foundation-validation" && (
             <label>
               Explicit account selection (first 1,000)
               <select
@@ -340,6 +395,81 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
                 ))}
               </select>
             </label>
+          )}
+          {area === "foundation-validation" && (
+            <>
+              <label>
+                Reviewed document extractions
+                <select
+                  multiple
+                  value={extractions}
+                  onChange={(e) =>
+                    setExtractions(
+                      Array.from(e.target.selectedOptions, (o) => o.value),
+                    )
+                  }
+                >
+                  {choices
+                    .filter((c) => c.kind === "ocr")
+                    .map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.label} · {c.review_status} · {c.freshness}
+                      </option>
+                    ))}
+                </select>
+              </label>
+              <label>
+                Reviewed rule assessments
+                <select
+                  multiple
+                  value={assessments}
+                  onChange={(e) =>
+                    setAssessments(
+                      Array.from(e.target.selectedOptions, (o) => o.value),
+                    )
+                  }
+                >
+                  {choices
+                    .filter((c) => c.kind === "regulatory-assessment")
+                    .map((c) => (
+                      <option key={c.id} value={c.id}>
+                        {c.label} · {c.review_status} · {c.freshness}
+                      </option>
+                    ))}
+                </select>
+              </label>
+              {extractions.map((id) => (
+                <label key={id}>
+                  Supporting transaction for{" "}
+                  {choices.find((c) => c.id === id)?.label || id}
+                  <select
+                    value={documentLinks[id] || ""}
+                    onChange={(e) =>
+                      setDocumentLinks({
+                        ...documentLinks,
+                        [id]: e.target.value,
+                      })
+                    }
+                  >
+                    <option value="">Select retained journal line</option>
+                    {journalLines.data?.items.map((line) => (
+                      <option key={line.id} value={line.id}>
+                        {line.posting_date} · {line.description} · debit{" "}
+                        {line.debit} / credit {line.credit}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              ))}
+              {(journalLines.data?.total || 0) > 500 && (
+                <p>
+                  First 500 journal lines shown. Use the API for larger
+                  selections.
+                </p>
+              )}
+              <ErrorState error={journalLines.error} />
+              <Link href="/compliance/country">Resolve applicable rules</Link>
+            </>
           )}
           {(area === "ocr" || area === "source-table") && (
             <>
@@ -569,6 +699,41 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
       </section>
       <section className="main-panel" style={{ padding: 20 }}>
         <h2>Results and preserved history</h2>
+        {area === "foundation-validation" && foundation.data && (
+          <aside>
+            <p>
+              Runtime: {foundation.data.runtime}. Professional correctness: not
+              assessed by health checks. Period: {foundation.data.period.state}.
+            </p>
+            <p>
+              Jobs:{" "}
+              {Object.entries(foundation.data.job_counts)
+                .map(([state, count]) => `${state}: ${count}`)
+                .join(" · ") || "No jobs submitted"}
+            </p>
+            <Button
+              disabled={action.isPending}
+              onClick={() =>
+                action.mutate({
+                  path: `${prefix}/period-actions`,
+                  body: {
+                    action:
+                      foundation.data!.period.state === "OPEN"
+                        ? "lock"
+                        : "reopen",
+                    expected_version: foundation.data!.period.version,
+                    reason: comments,
+                  },
+                })
+              }
+            >
+              {foundation.data.period.state === "OPEN"
+                ? "Lock period"
+                : "Reopen period with recorded reason"}
+            </Button>
+            <ErrorState error={foundation.error} />
+          </aside>
+        )}
         <label>
           Result version
           <select value={selected} onChange={(e) => choose(e.target.value)}>
@@ -588,7 +753,16 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
         ) : (
           <>
             <div className="toolbar">
+              {detail.data.kind === "foundation-validation" && (
+                <Button
+                  disabled={action.isPending}
+                  onClick={() => decide("submit")}
+                >
+                  Submit foundation workpaper for review
+                </Button>
+              )}
               <Badge>{detail.data.freshness}</Badge>
+              {detail.data.provenance_status === "legacy provenance incomplete" && <Badge>Legacy provenance incomplete</Badge>}
               <Status value={body?.review_status} />
               <span>Version {detail.data.version}</span>
               {["xlsx", "pdf", "docx"].map((f) => (
@@ -675,6 +849,36 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
             )}
             {detail.data.kind === "ocr" && body && (
               <EvidencePreview prefix={prefix} body={body} />
+            )}
+            {detail.data.kind === "foundation-validation" && body && (
+              <section>
+                <h3>Foundation controls</h3>
+                <p>
+                  Execution: {val(body.execution_status)} · Completeness:{" "}
+                  {val(body.completeness)} · Review: {val(body.review_status)}
+                </p>
+                {(
+                  (body.issues as {
+                    code: string;
+                    reason: string;
+                    remediation: string;
+                    url?: string;
+                    blocking: boolean;
+                  }[]) || []
+                ).map((issue, index) => (
+                  <article key={index}>
+                    <strong>
+                      {issue.blocking ? "Blocker" : "Warning"}: {issue.reason}
+                    </strong>
+                    <p>
+                      {issue.remediation}{" "}
+                      {issue.url && (
+                        <Link href={issue.url}>Open affected workspace</Link>
+                      )}
+                    </p>
+                  </article>
+                ))}
+              </section>
             )}
             {detail.data.kind === "flow" && body && (
               <TransactionGraph body={body} />
@@ -1115,7 +1319,9 @@ function ResultTable({
               {name === "matches" && Array.isArray(r.left_ids) && (
                 <td>
                   <Button
-                      onClick={() => decide("accept", String((r.left_ids as unknown[])[0]))}
+                    onClick={() =>
+                      decide("accept", String((r.left_ids as unknown[])[0]))
+                    }
                   >
                     Accept proposed match
                   </Button>

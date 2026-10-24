@@ -29,15 +29,23 @@ import {
 } from "./global-workspace";
 import { WorkingPaperGraph } from "./working-paper-graph";
 import { AccountingIntelligence } from "./accounting-intelligence";
+import { RegulatoryLibrary } from "./regulatory-library";
+import { StatutoryPractice } from "./statutory-practice";
+import { StatutoryReportBuilder } from "./statutory-report-builder";
+import { IndiaFinancialReporting } from "./india-financial-reporting";
+import { CountryCompliance } from "./country-compliance";
+import {ClientCollaboration} from "./client-collaboration";
 import { AuditStudio } from "./audit-studio";
 import { AuditAdministration, ClientPortal } from "./audit-administration";
 export function Workbench({ route }: { route: string }) {
   const reduced = useReducedMotion();
   const access = useAccess();
   const scope = useScope();
-  const required = navigation.find(
-    (n) => route === n.href || route.startsWith(n.href + "/"),
-  )?.permission;
+  const required = [...navigation]
+    .sort((a, b) => b.href.length - a.href.length)
+    .find(
+      (n) => route === n.href || route.startsWith(n.href + "/"),
+    )?.permission;
   if (required && !access.data?.permissions.includes(required))
     return (
       <Empty title="Access restricted">
@@ -47,6 +55,33 @@ export function Workbench({ route }: { route: string }) {
     );
   let page: React.ReactNode;
   switch (route) {
+    case "/client-collaboration":
+      page = <ClientCollaboration />;
+      break;
+    case "/compliance/country":
+      page = <CountryCompliance />;
+      break;
+    case "/reports/statutory":
+      page = <StatutoryReportBuilder />;
+      break;
+    case "/audit/india/statutory":
+      page = <StatutoryPractice area="companies-act" />;
+      break;
+    case "/audit/india/caro":
+      page = <StatutoryPractice area="caro" />;
+      break;
+    case "/audit/india/tax-audit":
+      page = <StatutoryPractice area="india-tax-audit" />;
+      break;
+    case "/audit/india/financial-reporting":
+      page = <IndiaFinancialReporting />;
+      break;
+    case "/audit/india/disclosures":
+      page = <StatutoryPractice area="india-disclosures" />;
+      break;
+    case "/settings/regulatory-rules":
+      page = <RegulatoryLibrary />;
+      break;
     case "/settings":
     case "/settings/countries":
       page = <CountrySettings />;
@@ -121,7 +156,10 @@ export function Workbench({ route }: { route: string }) {
     default:
       page =
         route === "/intelligence" || route.startsWith("/intelligence/") ? (
-          <AccountingIntelligence eid={route.split("/")[2]} area={route.split("/")[3]} />
+          <AccountingIntelligence
+            eid={route.split("/")[2]}
+            area={route.split("/")[3]}
+          />
         ) : route === "/board" ? (
           <BoardPortal />
         ) : route === "/grc" || route.startsWith("/grc/") ? (

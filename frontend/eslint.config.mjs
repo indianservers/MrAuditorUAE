@@ -4,7 +4,7 @@ import a11y from "eslint-plugin-jsx-a11y";
 export default tseslint.config(
   {
     ignores: [
-      ".next/**",
+      ".next*/**",
       ".next-qa/**",
       ".next-qa-build/**",
       "src/types/api.generated.ts",

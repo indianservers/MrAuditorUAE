@@ -6,7 +6,7 @@ from sqlalchemy import insert, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.dependencies import Context
-from app.db.models.platform import LegalEntity
+from app.db.models.platform import FinancialPeriod, LegalEntity
 from app.modules.accounting.calculations import movements, reconcile
 from app.modules.accounting.models import (
     ImportBatch,
@@ -81,6 +81,140 @@ async def balance(db: AsyncSession, ctx: Context, snapshot_id: uuid.UUID) -> dic
         "lines": lines,
         "completeness": "independent_controls_required",
     }
+
+
+async def financial_workspace(db, ctx, snapshot_id, comparison_id=None):
+    """Read-only view over committed populations, including historical sources."""
+    from decimal import localcontext
+
+    with localcontext() as precision:
+        precision.prec = 48
+        return await _financial_workspace(db, ctx, snapshot_id, comparison_id)
+
+
+async def _financial_workspace(db, ctx, snapshot_id, comparison_id):
+    snapshot = await scoped(db, ctx, ImportSnapshot, snapshot_id)
+    result = await balance(db, ctx, snapshot_id)
+    result["current_accounts"] = len(result["lines"])
+    batch = await scoped(db, ctx, ImportBatch, snapshot.batch_id)
+    period = await scoped(db, ctx, FinancialPeriod, snapshot.period_id)
+    result["source_status"] = batch.status
+    result["period"] = {"start": str(period.start_date), "end": str(period.end_date)}
+    candidates = (
+        await db.execute(
+            select(
+                ImportSnapshot.id,
+                FinancialPeriod.start_date,
+                FinancialPeriod.end_date,
+                ImportBatch.status,
+            )
+            .join(ImportBatch, ImportBatch.id == ImportSnapshot.batch_id)
+            .join(FinancialPeriod, FinancialPeriod.id == ImportSnapshot.period_id)
+            .where(
+                ImportSnapshot.tenant_id == ctx.tenant_id,
+                ImportBatch.tenant_id == ctx.tenant_id,
+                FinancialPeriod.tenant_id == ctx.tenant_id,
+                ImportSnapshot.entity_id == snapshot.entity_id,
+                ImportSnapshot.client_id == snapshot.client_id,
+                FinancialPeriod.end_date < period.start_date,
+                ImportBatch.status.in_(["active", "superseded"]),
+                ImportBatch.kind.in_(["gl", "journals", "tb"]),
+            )
+            .order_by(FinancialPeriod.end_date.desc(), ImportSnapshot.created_at.desc())
+            .limit(100)
+        )
+    ).all()
+    result["comparison_candidates"] = [
+        {"id": str(r.id), "label": f"{r.start_date} – {r.end_date} · {r.status} · {str(r.id)[:8]}"}
+        for r in candidates
+    ]
+    result["comparison_snapshot_id"] = None
+    if comparison_id:
+        prior = await scoped(db, ctx, ImportSnapshot, comparison_id)
+        prior_period = await scoped(db, ctx, FinancialPeriod, prior.period_id)
+        if (prior.entity_id, prior.client_id) != (snapshot.entity_id, snapshot.client_id):
+            raise HTTPException(422, "Comparison client/entity mismatch")
+        if prior_period.end_date >= period.start_date:
+            raise HTTPException(422, "Comparison period must precede current period")
+        previous = await balance(db, ctx, comparison_id)
+        if previous["functional_currency"] != result["functional_currency"]:
+            raise HTTPException(422, "Comparative functional currencies differ")
+        movement = {
+            r["account_code"]: r
+            for r in movements(
+                {r["code"]: r["closing"] for r in result["lines"]},
+                {r["code"]: r["closing"] for r in previous["lines"]},
+            )
+        }
+        current_codes = {r["code"] for r in result["lines"]}
+        result["lines"] += [
+            {
+                **r,
+                "opening": Decimal(0),
+                "debit": Decimal(0),
+                "credit": Decimal(0),
+                "closing": Decimal(0),
+                "display_closing": "0",
+                "comparison_only": True,
+            }
+            for r in previous["lines"]
+            if r["code"] not in current_codes
+        ]
+        for row in result["lines"]:
+            values = movement[row["code"]]
+            row.update(
+                previous=values["previous"],
+                variance=values["variance"],
+                percentage=values["percentage"],
+            )
+        result["comparison_snapshot_id"] = str(comparison_id)
+    controls = (
+        (
+            await db.execute(
+                text(
+                    "SELECT rule,status,evidence FROM import_validation_results WHERE tenant_id=:tenant AND batch_id=:batch AND rule IN ('source_count','source_total_debit','source_total_credit')"
+                ),
+                {"tenant": ctx.tenant_id, "batch": batch.id},
+            )
+        )
+        .mappings()
+        .all()
+    )
+    required = {"source_count", "source_total_debit", "source_total_credit"}
+    passed = {r["rule"] for r in controls if r["status"] == "passed"}
+    result["source_controls"] = [dict(r) for r in controls]
+    result["completeness"] = (
+        "failed"
+        if any(r["status"] == "failed" for r in controls)
+        else "controls_reconciled"
+        if required <= passed
+        else "independent_controls_required"
+    )
+    result["monthly_movements"] = []
+    if batch.kind in {"gl", "journals"}:
+        monthly = (
+            (
+                await db.execute(
+                    text(
+                        "SELECT to_char(posting_date,'YYYY-MM') AS month_label, SUM(base_debit) debit, SUM(base_credit) credit FROM journal_lines WHERE tenant_id=:tenant AND batch_id=:batch AND NOT opening GROUP BY 1 ORDER BY 1"
+                    ),
+                    {"tenant": ctx.tenant_id, "batch": batch.id},
+                )
+            )
+            .mappings()
+            .all()
+        )
+        result["monthly_movements"] = [
+            {
+                "id": r["month_label"],
+                "month": r["month_label"],
+                "debit": str(r["debit"]),
+                "credit": str(r["credit"]),
+            }
+            for r in monthly
+        ]
+    result["monthly_testable"] = batch.kind in {"gl", "journals"}
+    return result
 
 
 async def persist_balance(db: AsyncSession, ctx: Context, snapshot_id: uuid.UUID):

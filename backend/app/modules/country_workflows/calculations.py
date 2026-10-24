@@ -1,0 +1,635 @@
+"""Deterministic evidence comparisons. Expected dues are inputs, not inferred law."""
+
+import hashlib
+import unicodedata
+from collections import defaultdict
+from datetime import date
+from decimal import Decimal, localcontext
+from typing import Any
+
+from app.modules.country_workflows.audit_calculations import AUDIT_CALCULATORS
+from app.modules.country_workflows.catalogue import WORKFLOWS, country_guidance
+from app.modules.country_workflows.diligence_calculations import DILIGENCE_CALCULATORS
+from app.modules.country_workflows.practice_calculations import PRACTICE_CALCULATORS
+from app.modules.country_workflows.sector_calculations import SECTOR_CALCULATORS
+from app.modules.intelligence.matching import reconcile_transactions
+
+
+def document_key(value):
+    return "".join(
+        ch for ch in unicodedata.normalize("NFKC", str(value)).casefold() if ch.isalnum()
+    )
+
+
+def matching_token(value):
+    normalized = document_key(value)
+    return hashlib.sha256(normalized.encode("utf-8")).hexdigest() if normalized else ""
+
+
+def amount(row, key="amount"):
+    return Decimal(str(row[key]))
+
+
+def unique(rows, key):
+    result = {}
+    for row in rows:
+        value = key(row)
+        if value in result:
+            raise ValueError(
+                "Duplicate domain key; select one corrected source version or aggregate explicitly"
+            )
+        result[value] = row
+    return result
+
+
+def bank(data, tables):
+    left, right = tables["books"], tables["statement"]
+    for row in [*left, *right]:
+        if row["account"] != data.account or row["currency"] != data.currency:
+            raise ValueError("Bank BRS requires a single selected account and currency")
+        if date.fromisoformat(row["date"]) > data.as_of:
+            raise ValueError("Statement/book transaction is after the reconciliation date")
+
+    # The shared matcher historically normalizes ASCII. Supply stable Unicode-aware
+    # tokens, retaining the original source text in the saved table and output rows.
+    def match_rows(rows):
+        return [
+            {
+                **r,
+                "reference": matching_token(r["reference"]),
+                "counterparty": matching_token(r.get("counterparty", "")),
+            }
+            for r in rows
+        ]
+
+    matches = reconcile_transactions(
+        match_rows(left), match_rows(right), data.tolerance, data.date_tolerance, 3
+    )
+    book_movement = sum((amount(r) for r in left), Decimal(0))
+    bank_movement = sum((amount(r) for r in right), Decimal(0))
+    controls = {
+        "book_balance_control": data.book_opening + book_movement - data.book_closing,
+        "statement_balance_control": data.statement_opening
+        + bank_movement
+        - data.statement_closing,
+        "opening_balance_difference": data.book_opening - data.statement_opening,
+    }
+    paired_left = {i for m in matches["matches"] for i in m["left_ids"]}
+    paired_right = {i for m in matches["matches"] for i in m["right_ids"]}
+    unmatched_left = [r for r in left if r["id"] not in paired_left]
+    unmatched_right = [r for r in right if r["id"] not in paired_right]
+    adjusted = (
+        data.book_closing
+        + sum((amount(r) for r in unmatched_right), Decimal(0))
+        - sum((amount(r) for r in unmatched_left), Decimal(0))
+    )
+    controls["unexplained_bridge_residual"] = data.statement_closing - adjusted
+    rows: list[dict[str, Any]] = []
+    for side, rows_ in [("books", unmatched_left), ("statement", unmatched_right)]:
+        for r in rows_:
+            age = (data.as_of - date.fromisoformat(r["date"])).days
+            rows.append(
+                {
+                    "id": side + ":" + r["id"],
+                    "source_id": r["id"],
+                    "side": side,
+                    "reference": r["reference"],
+                    "amount": r["amount"],
+                    "currency": r["currency"],
+                    "age_days": age,
+                    "stale": age > data.stale_days,
+                    "cause": "UNPRESENTED_PAYMENT_CANDIDATE"
+                    if side == "books" and amount(r) < 0
+                    else "UNCREDITED_DEPOSIT_CANDIDATE"
+                    if side == "books"
+                    else "UNBOOKED_BANK_ITEM",
+                    "state": "EXCEPTION",
+                    "cause_status": "REQUIRES_EVIDENCE",
+                }
+            )
+    return {
+        "rows": rows,
+        "matches": matches["matches"],
+        "ambiguous": matches["ambiguous"],
+        "control_comparison": {k: str(v) for k, v in controls.items()},
+        "adjusted_book_balance": str(adjusted),
+        "blocked": any(v != 0 for v in controls.values()),
+        "exception_count": len(rows),
+        "limitations": [
+            "Bridge explains arithmetic differences only; proposed causes need supporting evidence",
+            "Declared opening/closing controls require independent source review",
+        ],
+    }
+
+
+def tax_documents(data, tables):
+    def key(r):
+        return (
+            r["registration"].strip().upper(),
+            r["counterparty"].strip().upper(),
+            document_key(r["reference"]),
+            r["document_type"],
+            r["component"].upper(),
+            r["currency"],
+        )
+
+    for source_rows in tables.values():
+        for r in source_rows:
+            if not document_key(r["reference"]):
+                raise ValueError("Document reference must contain letters or numbers")
+            if date.fromisoformat(r["date"]) > data.as_of:
+                raise ValueError("Tax document dated after reconciliation date")
+    books, portal = (unique(tables[role], key) for role in ["books", "return"])
+    rows: list[dict[str, Any]] = []
+    for index, k in enumerate(sorted(books.keys() | portal.keys()), 1):
+        left, right = books.get(k), portal.get(k)
+        delta = amount(left, "tax") - amount(right, "tax") if left and right else None
+        base_delta = amount(left, "net") - amount(right, "net") if left and right else None
+        state = (
+            "BOOKS_ONLY"
+            if not right
+            else "RETURN_ONLY"
+            if not left
+            else "SOURCE_STATUS_PENDING"
+            if right["status"] == "pending"
+            else "REJECTED_ON_RETURN"
+            if right["status"] == "rejected"
+            else "SOURCE_STATUS_PENDING"
+            if left["status"] != "active"
+            else "PERIOD_DIFFERENCE"
+            if left["period"] != right["period"]
+            else "DATE_DIFFERENCE"
+            if left["date"] != right["date"]
+            else "MATCHED"
+            if delta is not None
+            and base_delta is not None
+            and abs(delta) <= data.tolerance
+            and abs(base_delta) <= data.tolerance
+            else "VARIANCE"
+        )
+        rows.append(
+            {
+                "id": f"doc-{index}",
+                "registration": k[0],
+                "counterparty": k[1],
+                "reference": (left or right)["reference"],
+                "document_type": k[3],
+                "component": k[4],
+                "currency": k[5],
+                "state": state,
+                "books_id": left["id"] if left else None,
+                "return_id": right["id"] if right else None,
+                "books_tax": left["tax"] if left else None,
+                "return_tax": right["tax"] if right else None,
+                "tax_difference": str(delta) if delta is not None else None,
+                "net_difference": str(base_delta) if base_delta is not None else None,
+                "books_period": left["period"] if left else None,
+                "return_period": right["period"] if right else None,
+                "legal_credit_eligibility": "NOT_DETERMINED",
+            }
+        )
+    totals: defaultdict[str, defaultdict[str, Decimal]] = defaultdict(lambda: defaultdict(Decimal))
+    for role in ["books", "return"]:
+        for r in tables[role]:
+            partition = "|".join(
+                [r["registration"].upper(), r["period"], r["component"].upper(), r["currency"]]
+            )
+            totals[partition][role + "_tax"] += amount(r, "tax")
+    return {
+        "rows": rows,
+        "totals": {
+            k: {s: str(v) for s, v in values.items()} for k, values in sorted(totals.items())
+        },
+        "exception_count": sum(r["state"] != "MATCHED" for r in rows),
+        "blocked": False,
+        "limitations": [
+            "Canonical document comparison only; native government export adapters are not qualified",
+            "No input-credit eligibility, reverse-charge liability, interest or filing conclusion is calculated",
+            "UAE VAT returns contain aggregates; do not represent them as a supplier-matching portal",
+            "Canonical return documents require independently prepared document schedules",
+        ],
+    }
+
+
+def obligations(data, tables, country):
+    roles = list(WORKFLOWS[data.workflow][2])
+    expected_role = roles[0]
+    groups: dict[str, defaultdict[tuple, dict[str, Any]]] = {}
+    forbidden = {"PF", "ESI", "PT", "TDS", "TCS"} if country == "AE" else set()
+    for role, source in tables.items():
+        grouped: defaultdict[tuple, dict[str, Any]] = defaultdict(
+            lambda: {
+                "amount": Decimal(0),
+                "ids": [],
+                "late": False,
+                "unknown_due": False,
+                "due_dates": set(),
+                "payment_dates": [],
+            }
+        )
+        for r in source:
+            component = r["component"].upper()
+            if component.split(":")[0] in forbidden:
+                raise ValueError("Indian domestic statutory component cannot run in a UAE workflow")
+            if component == "TCS:206C(1H)" and r["period"] >= "2025-04":
+                raise ValueError(
+                    "Section206C(1H) is withdrawn for this period; select a qualified applicable obligation"
+                )
+            if (
+                role in {"payment", "channel", "bank"}
+                and r.get("payment_date")
+                and date.fromisoformat(r["payment_date"]) > data.as_of
+            ):
+                raise ValueError("Future payment cannot settle the current reconciliation")
+            if r["period"] > data.as_of.strftime("%Y-%m"):
+                raise ValueError(
+                    "Future obligation period cannot settle the current reconciliation"
+                )
+            if r["amount"].startswith("-"):
+                raise ValueError(
+                    "Corrected obligation sources must be restated; negative settlements require a qualified allocation adapter"
+                )
+            k = (
+                r["registration"].upper(),
+                r["subject"].upper(),
+                r["period"],
+                component,
+                r["currency"],
+            )
+            g = grouped[k]
+            g["amount"] += amount(r)
+            g["ids"].append(r["id"])
+            if r.get("due_date"):
+                g["due_dates"].add(r["due_date"])
+            if r.get("payment_date"):
+                g["payment_dates"].append(r["payment_date"])
+            if role == expected_role:
+                g["unknown_due"] |= not r.get("due_date")
+            if role in {"payment", "bank"}:
+                g["unknown_due"] |= not r.get("due_date") or not r.get("payment_date")
+                g["late"] |= bool(
+                    r.get("due_date")
+                    and r.get("payment_date")
+                    and r["payment_date"] > r["due_date"]
+                )
+        groups[role] = grouped
+    keys = sorted(set().union(*(g.keys() for g in groups.values())))
+    rows: list[dict[str, Any]] = []
+    for index, k in enumerate(keys, 1):
+        present = {role: groups[role].get(k) for role in roles}
+        missing = [role for role, value in present.items() if value is None]
+        amounts = {role: str(value["amount"]) if value else None for role, value in present.items()}
+        expected = present[expected_role]
+        expected_dates = expected["due_dates"] if expected else set()
+        payment_roles = [role for role in roles if role in {"bank", "payment"}]
+        inconsistent_due_dates = any(
+            value and value["due_dates"] and value["due_dates"] != expected_dates
+            for role, value in present.items()
+            if role in payment_roles
+        )
+        late_from_expected = len(expected_dates) == 1 and any(
+            when > next(iter(expected_dates))
+            for role in payment_roles
+            if present[role]
+            for when in (present[role] or {})["payment_dates"]
+        )
+        state = (
+            "MISSING_SOURCE_PARTITION"
+            if missing
+            else "VARIANCE"
+            if any(
+                abs(value["amount"] - expected["amount"]) > data.tolerance
+                if value is not None and expected is not None
+                else False
+                for value in present.values()
+            )
+            else "DUE_DATE_ALLOCATION_REQUIRED"
+            if len(expected_dates) > 1
+            else "DUE_DATE_DIFFERENCE"
+            if inconsistent_due_dates
+            else "LATE_PAYMENT"
+            if late_from_expected
+            else "TIMING_NOT_VERIFIED"
+            if any(v["unknown_due"] for v in present.values() if v is not None)
+            else "MATCHED"
+        )
+        rows.append(
+            {
+                "id": f"obligation-{index}",
+                "registration": k[0],
+                "subject": k[1],
+                "period": k[2],
+                "component": k[3],
+                "currency": k[4],
+                "state": state,
+                "amounts": amounts,
+                "source_ids": {
+                    role: value["ids"] if value else [] for role, value in present.items()
+                },
+                "missing_roles": missing,
+                "liability_calculation": "DECLARED_INPUT_NOT_LEGAL_COMPUTATION",
+            }
+        )
+    return {
+        "rows": rows,
+        "exception_count": sum(r["state"] != "MATCHED" for r in rows),
+        "blocked": False,
+        "limitations": [
+            "Declared expected amounts and due dates require independent professional validation",
+            "This compares sources; it does not compute statutory contributions, salary tax or benefit entitlement",
+            "Due dates must be the obligation due dates, not bank processing dates; no deadline is inferred",
+        ],
+    }
+
+
+def vat_return(data, tables):
+    def key(r):
+        return (
+            r["registration"].upper(),
+            r["period_start"],
+            r["period_end"],
+            r["box"],
+            r["currency"],
+        )
+
+    filed = unique(tables["return"], key)
+    books: defaultdict[tuple, dict[str, Any]] = defaultdict(
+        lambda: {
+            "taxable_amount": Decimal(0),
+            "tax": Decimal(0),
+            "adjustment": Decimal(0),
+            "ids": [],
+        }
+    )
+    for r in tables["books"]:
+        group = books[key(r)]
+        for field in ["taxable_amount", "tax", "adjustment"]:
+            group[field] += amount(r, field)
+        group["ids"].append(r["id"])
+    scopes = {key(r)[:3] + (r["currency"],) for rows in tables.values() for r in rows}
+    if not scopes:
+        raise ValueError(
+            "A nil VAT return needs explicit period/registration box rows; missing return boxes are not a nil return"
+        )
+    if any(date.fromisoformat(end) > data.as_of for registration, start, end, currency in scopes):
+        raise ValueError("Return period extends beyond the reconciliation date")
+    keys = {
+        (registration, start, end, box, currency)
+        for registration, start, end, currency in scopes
+        for box in data.required_boxes
+    }
+    keys.update(books)
+    keys.update(filed)
+    rows = []
+    for index, k in enumerate(sorted(keys), 1):
+        b, r = books.get(k), filed.get(k)
+        deltas = {
+            field: str(b[field] - amount(r, field)) if b and r else None
+            for field in ["taxable_amount", "tax", "adjustment"]
+        }
+        state = (
+            "MISSING_BOX_EVIDENCE"
+            if not b and not r
+            else "BOOKS_ONLY"
+            if not r
+            else "RETURN_ONLY"
+            if not b
+            else "MATCHED"
+            if all(v is not None and abs(Decimal(v)) <= data.tolerance for v in deltas.values())
+            else "VARIANCE"
+        )
+        rows.append(
+            {
+                "id": f"box-{index}",
+                "registration": k[0],
+                "period_start": k[1],
+                "period_end": k[2],
+                "box": k[3],
+                "currency": k[4],
+                "state": state,
+                "differences": deltas,
+                "book_source_ids": b["ids"] if b else [],
+                "return_source_id": r["id"] if r else None,
+            }
+        )
+    return {
+        "rows": rows,
+        "exception_count": sum(r["state"] != "MATCHED" for r in rows),
+        "blocked": any(r["state"] == "MISSING_BOX_EVIDENCE" for r in rows),
+        "limitations": [
+            "VAT201 box assignments and required-box scope must be independently assessed",
+            "Taxable amounts, tax and adjustments compare separately; no tax rate or recovery entitlement is inferred",
+            "Canonical source contracts do not imply a live FTA connection or native VAT201 parser",
+        ],
+    }
+
+
+def inventory(data, tables):
+    def key(r):
+        return (r["site"], r["sku"], r["uom"], r["currency"])
+
+    books, counts = (unique(tables[role], key) for role in ["books", "count"])
+    rows: list[dict[str, Any]] = []
+    total = covered = Decimal(0)
+    for index, k in enumerate(sorted(books.keys() | counts.keys()), 1):
+        b, c = books.get(k), counts.get(k)
+        for r in [r for r in [b, c] if r]:
+            if date.fromisoformat(r["count_date"]) > data.as_of:
+                raise ValueError(
+                    "Future inventory evidence requires a separately qualified roll-back procedure"
+                )
+        variance = amount(c, "quantity") - amount(b, "quantity") if b and c else None
+        carrying = amount(b, "quantity") * amount(b, "unit_cost") if b else None
+        valuation = (
+            None
+            if not b or b["unit_nrv"] is None
+            else max(Decimal(0), amount(b, "unit_cost") - amount(b, "unit_nrv"))
+            * max(Decimal(0), amount(b, "quantity"))
+        )
+        aligned = bool(b and c and b["count_date"] == c["count_date"] == data.as_of.isoformat())
+        state = (
+            "BOOKS_ONLY"
+            if not c
+            else "COUNT_ONLY"
+            if not b
+            else "COUNT_DATE_BRIDGE_REQUIRED"
+            if not aligned
+            else "OWNERSHIP_UNCONFIRMED"
+            if any(r["ownership"] != "owned" for r in [b, c])
+            else "CONDITION_EXCEPTION"
+            if c["condition"] != "good"
+            else "NEGATIVE_QUANTITY"
+            if amount(b, "quantity") < 0 or amount(c, "quantity") < 0
+            else "VALUATION_INPUT_MISSING"
+            if b["unit_nrv"] is None
+            else "VARIANCE"
+            if variance != 0
+            else "NRV_WRITEDOWN"
+            if valuation is not None and valuation > 0
+            else "MATCHED"
+        )
+        if carrying is not None:
+            total += abs(carrying)
+            if aligned and c["ownership"] == b["ownership"] == "owned":
+                covered += min(abs(amount(c, "quantity")), abs(amount(b, "quantity"))) * amount(
+                    b, "unit_cost"
+                )
+        rows.append(
+            {
+                "id": f"stock-{index}",
+                "site": k[0],
+                "sku": k[1],
+                "uom": k[2],
+                "currency": k[3],
+                "state": state,
+                "quantity_difference": str(variance) if variance is not None else None,
+                "carrying_value": str(carrying) if carrying is not None else None,
+                "potential_nrv_writedown": str(valuation) if valuation is not None else None,
+                "books_id": b["id"] if b else None,
+                "count_id": c["id"] if c else None,
+            }
+        )
+    # Monetary coverage across currencies must not be aggregated.
+    currencies = {k[3] for k in books}
+    return {
+        "rows": rows,
+        "exception_count": sum(r["state"] != "MATCHED" for r in rows),
+        "blocked": False,
+        "coverage": {
+            "basis": "Book monetary value supported by aligned uploaded counts; not physical verification",
+            "book_value": str(total) if len(currencies) == 1 else None,
+            "count_supported_value": str(covered) if len(currencies) == 1 else None,
+            "percent": str(covered / total * 100) if total and len(currencies) == 1 else None,
+        },
+        "limitations": [
+            "No physical attendance, ownership assurance or drawing-power calculation is implied",
+            "Counts before reporting date require a separately evidenced movement bridge",
+        ],
+    }
+
+
+def checks(data, tables):
+    supplied = unique(tables["checks"], lambda r: (r["subject"], r["requirement"]))
+    subjects = sorted(data.subjects)
+    if any(r["subject"] not in subjects for r in tables["checks"]):
+        raise ValueError("Evidence includes subjects outside the declared population")
+    rows: list[dict[str, Any]] = []
+    for subject in subjects:
+        for requirement in data.required_checks:
+            r = supplied.get((subject, requirement))
+            state = (
+                "MISSING"
+                if not r
+                else "EXPIRED"
+                if r.get("expires_on") and date.fromisoformat(r["expires_on"]) < data.as_of
+                else "EVIDENCE_MISSING"
+                if r["state"] in {"supported", "exception"} and not r["evidence_reference"]
+                else "RATIONALE_MISSING"
+                if r["state"] == "not-applicable" and not r["rationale"]
+                else r["state"].upper()
+            )
+            rows.append(
+                {
+                    "id": f"check-{len(rows) + 1}",
+                    "subject": subject,
+                    "requirement": requirement,
+                    "state": state,
+                    "source_id": r["id"] if r else None,
+                    "evidence_reference": r["evidence_reference"] if r else None,
+                    "rationale": r["rationale"] if r else None,
+                }
+            )
+    extra = [r["id"] for r in supplied.values() if r["requirement"] not in data.required_checks]
+    return {
+        "rows": rows,
+        "out_of_scope_source_ids": extra,
+        "exception_count": sum(r["state"] not in {"SUPPORTED", "NOT-APPLICABLE"} for r in rows),
+        "blocked": any(
+            r["state"] in {"MISSING", "EVIDENCE_MISSING", "RATIONALE_MISSING", "EXPIRED"}
+            for r in rows
+        ),
+        "limitations": [
+            "Evidence references are declared references, not verified external registry responses",
+            "No automatic sanctions clearance, legal eligibility or professional attestation is issued",
+            "Requirement scope is engagement-specific and must be independently assessed",
+        ],
+    }
+
+
+def calculate(data, country, sources):
+    title, countries, roles = WORKFLOWS[data.workflow]
+    if countries and country not in countries:
+        raise ValueError("Workflow is unavailable for this engagement country")
+    if set(sources) != set(roles):
+        raise ValueError("Select every required source role exactly once")
+    for role, table in sources.items():
+        if table["table_type"] != roles[role] or (
+            not table["rows"] and not table.get("nil_reason")
+        ):
+            raise ValueError("Wrong source type or empty source population")
+        if data.workflow == "bank-brs" and table.get("native_format") in {"camt053", "swift-mt940"}:
+            native = table["native_metadata"]
+            prefix = "book" if role == "books" else "statement"
+            if (
+                native["account"] != data.account
+                or native["currency"] != data.currency
+                or native["through"] != data.as_of.isoformat()
+                or Decimal(native["opening"]) != getattr(data, prefix + "_opening")
+                or Decimal(native["closing"]) != getattr(data, prefix + "_closing")
+            ):
+                raise ValueError(
+                    "BRS scope and balance controls must agree to the original native bank statement"
+                )
+    tables = {role: source["rows"] for role, source in sources.items()}
+    with localcontext() as arithmetic:
+        arithmetic.prec = 80
+        if data.workflow in AUDIT_CALCULATORS:
+            result = AUDIT_CALCULATORS[data.workflow](data, tables)
+        elif data.workflow in PRACTICE_CALCULATORS:
+            result = PRACTICE_CALCULATORS[data.workflow](data, tables)
+        elif data.workflow in SECTOR_CALCULATORS:
+            result = SECTOR_CALCULATORS[data.workflow](data, tables)
+        elif data.workflow in DILIGENCE_CALCULATORS:
+            result = DILIGENCE_CALCULATORS[data.workflow](data, tables, country)
+        elif data.workflow == "bank-brs":
+            result = bank(data, tables)
+        elif data.workflow in {"uae-vat", "india-gst"}:
+            result = tax_documents(data, tables)
+        elif data.workflow == "uae-vat-return":
+            result = vat_return(data, tables)
+        elif data.workflow in {"payroll-settlement", "statutory-dues", "india-withholding"}:
+            result = obligations(data, tables, country)
+        elif data.workflow == "stock-audit":
+            result = inventory(data, tables)
+        else:
+            result = checks(data, tables)
+    return {
+        **result,
+        "title": data.title,
+        "workflow": data.workflow,
+        "workflow_version": "country-workflows-1",
+        "as_of": data.as_of.isoformat(),
+        "rationale": data.rationale,
+        "review_status": "UNVERIFIED",
+        "country_guidance": country_guidance(country, data.as_of, data.tax_year_start),
+        "statutory_calculation_qualified": False,
+        "professional_conclusion": "NOT_DETERMINED",
+        "execution_mode": "deterministic_engine",
+        "ml_execution_mode": None,
+        "language_model_dependency": False,
+        "population_completeness": "UPLOADED_FILE_CONTROLS_ONLY",
+        "nil_population": all(not s["rows"] for s in sources.values()),
+        "nil_declarations": {
+            role: s["nil_reason"] for role, s in sources.items() if s.get("nil_reason")
+        },
+        "parameters": data.model_dump(mode="json"),
+        "source_roles": {
+            role: {
+                "row_count": len(s["rows"]),
+                "control_totals": s["control_totals"],
+                "source_range": s.get("source_range"),
+                "source_snapshot_id": s.get("source_snapshot_id"),
+            }
+            for role, s in sources.items()
+        },
+    }

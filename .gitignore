@@ -7,6 +7,9 @@ ml-engine/dist/
 frontend/.next/
 frontend/.next-qa/
 frontend/.next-qa-build/
+frontend/.next-financial/
+frontend/.next-country-workflows/
+frontend/.next-country-workflows-build/
 frontend/.env.local
 frontend/tsconfig.tsbuildinfo
 frontend/test-results/
@@ -30,3 +33,7 @@ backend/test-evidence/
 *.tally.json
 *.resume.json
 *.local.json
+
+frontend/.next-phase3/
+
+frontend/.next-ui-refresh/

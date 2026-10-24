@@ -48,7 +48,7 @@ async def scoped(
 ):
     query = select(model).where(model.tenant_id == ctx.tenant_id, model.id == identifier)
     if lock:
-        query = query.with_for_update()
+        query = query.with_for_update().execution_options(populate_existing=True)
     result = await db.scalar(query)
     if result is None:
         raise HTTPException(404, "Accounting resource not found")
@@ -84,7 +84,7 @@ async def upload(
         ):
             raise HTTPException(422, "Source sync scope mismatch")
     if Path(filename).suffix.lower() not in (
-        {".csv", ".xlsx", ".xml", ".json"} if data.source_system == "tally" else {".csv", ".xlsx"}
+        {".csv", ".xlsx", ".xml", ".json", ".ndjson"} if data.source_system == "tally" else {".csv", ".xlsx"}
     ):
         raise HTTPException(422, "Only CSV/XLSX accepted")
     if data.profile_id:
@@ -320,8 +320,8 @@ async def validate(db: AsyncSession, ctx: Context, batch_id: uuid.UUID, request_
             issue(
                 "journal_balance",
                 "failed",
-                "Unbalanced journal",
-                evidence={"journal": ref, "difference": str(difference)},
+                "Unbalanced journal" if options.source_complete else "Incomplete extract: imbalance does not establish a ledger error",
+                evidence={"journal": ref, "difference": str(difference), "source_complete": options.source_complete, "accounting_error_conclusion": False},
             )
             errors += 1
         if not errors:
@@ -469,9 +469,13 @@ async def validate(db: AsyncSession, ctx: Context, batch_id: uuid.UUID, request_
 
 
 async def commit(db: AsyncSession, ctx: Context, batch_id: uuid.UUID, request_id: str):
+    candidate = await scoped(db, ctx, ImportBatch, batch_id)
+    period = await scoped(db, ctx, FinancialPeriod, candidate.period_id, lock=True)
     batch = await scoped(db, ctx, ImportBatch, batch_id, lock=True)
     if batch.status == "active":
         return batch
+    if period.lock_state != "OPEN":
+        raise HTTPException(409, "Financial period is locked; authorized reopening is required")
     if batch.status != "validated":
         raise HTTPException(409, "Only a validated import can be activated")
     population_kind = "ledger" if batch.kind in {"gl", "journals"} else batch.kind

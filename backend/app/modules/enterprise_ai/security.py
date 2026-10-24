@@ -98,6 +98,12 @@ async def validate_dependencies(db, ctx, eid, deps):
             obj = await snapshot_source(db, ctx, eid, uuid.UUID(item["id"]))
             if item.get("sha256") != obj.sha256:
                 raise HTTPException(409, "Financial source integrity differs")
+        elif item["type"] == "intelligence":
+            from app.modules.intelligence import service as intelligence
+
+            obj = await intelligence.event(db, ctx, eid, uuid.UUID(item["id"]), True)
+            if obj.sha256 != item.get("sha256"):
+                raise HTTPException(409, "Audit workflow source integrity differs")
         elif item["type"] == "ml":
             from app.modules.ml.service import get
 

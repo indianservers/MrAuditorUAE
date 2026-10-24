@@ -203,9 +203,15 @@ async def balance(
     ctx: Read,
     offset: int = Query(0, ge=0),
     limit: int = Query(50, ge=1, le=100),
+    comparison_snapshot_id: uuid.UUID | None = None,
+    unmapped_only: bool = False,
 ):
-    result = await reconciliation.balance(db, ctx, snapshot_id)
+    result = await reconciliation.financial_workspace(db, ctx, snapshot_id, comparison_snapshot_id)
     lines = result.pop("lines")
+    if unmapped_only:
+        lines = [
+            r for r in lines if not r["classification"] or r["classification"] == "Unclassified"
+        ]
     return {
         **result,
         "items": lines[offset : offset + limit],
@@ -223,6 +229,16 @@ async def balance_snapshot(data: SnapshotRequest, db: DB, ctx: Write):
 @router.post("/accounting/mappings", response_model=dict, status_code=201)
 async def mapping(data: MappingCreate, db: DB, ctx: Map, request: Request):
     await service.check_scope(db, ctx, data)
+    if data.approved:
+        from app.db.models.platform import FinancialPeriod
+
+        # Account mappings are entity-wide today; do not let another period bypass a lock.
+        periods = (await db.scalars(select(FinancialPeriod).where(
+            FinancialPeriod.tenant_id == ctx.tenant_id,
+            FinancialPeriod.entity_id == data.entity_id
+        ).order_by(FinancialPeriod.id).with_for_update().execution_options(populate_existing=True))).all()
+        if any(period.lock_state != "OPEN" for period in periods):
+            raise HTTPException(409, "Entity has a locked period; reopen before changing entity-wide account mappings")
     if data.approved:
         try:
             for key in ["accounts", "groups"]:

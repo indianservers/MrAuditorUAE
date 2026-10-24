@@ -19,7 +19,15 @@ import { qs } from "@/lib/api/client";
 import { textValue } from "@/lib/formatting/money";
 import { useScope } from "@/stores/workspace";
 import type { Engagement, Page, RecordRow } from "@/types/models";
-import { Briefcase, Flag } from "lucide-react";
+import { EngagementSetup } from "./engagement-setup";
+import {
+  ArrowUpRight,
+  LayoutGrid,
+  List,
+  Plus,
+  Briefcase,
+  Flag,
+} from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { PageHeader } from "./shared";
@@ -29,16 +37,30 @@ export function Engagements({ id }: { id?: string }) {
 function EngagementList() {
   const [search, setSearch] = useState(""),
     [offset, setOffset] = useState(0);
+  const [view, setView] = useState("cards");
+  const [statusFilter, setStatusFilter] = useState("");
+  const [setup, setSetup] = useState(false);
+  const canWrite = useCan("engagements.write");
+  const canReadEntities = useCan("entities.read");
+  const canCreate = canWrite && canReadEntities;
   const value = useDebounced(search);
   const q = useAPI<Page<Engagement>>(
-    "engagements?" + qs({ search: value, offset, limit: 50 }),
+    "engagements?" +
+      qs({ search: value, offset, limit: 50, status: statusFilter }),
   );
   return (
     <>
       <PageHeader
         eyebrow="Audit workspace"
-        title="Engagements"
-        description="Open a real engagement to review its scope, financial context and available records."
+        title="Your audit portfolio"
+        description="One place to move every engagement forward. Open the work, see the dependencies and act on what needs review."
+        actions={
+          canCreate ? (
+            <Button primary onClick={() => setSetup(true)}>
+              <Plus size={16} /> New engagement
+            </Button>
+          ) : undefined
+        }
       />
       <div className="workbench-body">
         <div className="toolbar">
@@ -51,31 +73,100 @@ function EngagementList() {
               setOffset(0);
             }}
           />
-          <small>
-            Create engagements from the client legal-entity details.
-          </small>
+          <select
+            aria-label="Filter portfolio status"
+            value={statusFilter}
+            onChange={(e) => {
+              setStatusFilter(e.target.value);
+              setOffset(0);
+            }}
+          >
+            <option value="">All statuses</option>
+            {["draft", "active", "completed", "cancelled"].map((s) => (
+              <option key={s}>{s}</option>
+            ))}
+          </select>
+          <span className="spacer" />
+          <span>{q.data?.total ?? "�"} engagements</span>
+          <Button
+            aria-pressed={view === "cards"}
+            onClick={() => setView("cards")}
+          >
+            <LayoutGrid size={16} /> Cards
+          </Button>
+          <Button
+            aria-pressed={view === "table"}
+            onClick={() => setView("table")}
+          >
+            <List size={16} /> Table
+          </Button>
         </div>
-        <FinancialDataGrid
-          name="engagements"
-          rows={(q.data?.items || []) as unknown as RecordRow[]}
-          loading={q.isLoading}
-          error={q.error}
-          columns={[
-            column("name", "Engagement", 350, {
-              cellRenderer: (p: { data: Engagement; value: string }) => (
-                <Link href={"/engagements/" + p.data.id + "/workspace"}>
-                  {p.value}
+        {view === "cards" ? (
+          <QueryState query={q}>
+            <div className="audit-portfolio">
+              {q.data?.items.map((e) => (
+                <Link
+                  key={e.id}
+                  href={`/engagements/${e.id}/workspace`}
+                  className="audit-portfolio-card"
+                >
+                  <div className="portfolio-card-top">
+                    <span className="portfolio-icon">
+                      <Briefcase size={22} />
+                    </span>
+                    <Status value={e.status} />
+                  </div>
+                  <span className="eyebrow">{e.engagement_type}</span>
+                  <h2>{e.name}</h2>
+                  <p>
+                    Updated{" "}
+                    {new Date(e.updated_at).toLocaleDateString(undefined, {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    })}
+                  </p>
+                  <div className="portfolio-card-footer">
+                    <span>Open audit workspace</span>
+                    <ArrowUpRight size={18} />
+                  </div>
                 </Link>
-              ),
-            }),
-            column("engagement_type", "Type", 170),
-            column("status", "Status", 130, {
-              cellRenderer: (p: { value: string }) => (
-                <Status value={p.value} />
-              ),
-            }),
-            column("updated_at", "Updated", 200),
-          ]}
+              ))}
+            </div>
+            {!q.data?.items.length && (
+              <Empty title="No matching engagements">
+                Try another search or create a new engagement.
+              </Empty>
+            )}
+          </QueryState>
+        ) : (
+          <FinancialDataGrid
+            name="engagements"
+            rows={(q.data?.items || []) as unknown as RecordRow[]}
+            loading={q.isLoading}
+            error={q.error}
+            columns={[
+              column("name", "Engagement", 350, {
+                cellRenderer: (p: { data: Engagement; value: string }) => (
+                  <Link href={"/engagements/" + p.data.id + "/workspace"}>
+                    {p.value}
+                  </Link>
+                ),
+              }),
+              column("engagement_type", "Type", 170),
+              column("status", "Status", 130, {
+                cellRenderer: (p: { value: string }) => (
+                  <Status value={p.value} />
+                ),
+              }),
+              column("updated_at", "Updated", 200),
+            ]}
+          />
+        )}
+        <EngagementSetup
+          key={setup ? "open" : "closed"}
+          open={setup}
+          onClose={() => setSetup(false)}
         />
         <Pagination
           offset={offset}

@@ -56,11 +56,20 @@ export function TrialBalance() {
 function TrialBalanceBody() {
   const { snapshot, detail } = usePopulation();
   const scope = useScope();
+  const [comparison, setComparison] = useState({ snapshot: "", id: "" });
+  const comparisonId = comparison.snapshot === snapshot ? comparison.id : "";
+  const [unmappedOnly, setUnmappedOnly] = useState(false);
   const [offset, setOffset] = useState(0),
     [selected, setSelected] = useState<RecordRow | null>(null);
   const balance = useAPI<Balance>(
     "accounting/trial-balance?" +
-      qs({ snapshot_id: snapshot, offset, limit: 100 }),
+      qs({
+        snapshot_id: snapshot,
+        offset,
+        limit: 100,
+        comparison_snapshot_id: comparisonId,
+        unmapped_only: unmappedOnly,
+      }),
     !!snapshot,
   );
   const accountId = selected?.id;
@@ -78,7 +87,7 @@ function TrialBalanceBody() {
   useEffect(() => {
     setSelected(null);
     setOffset(0);
-  }, [snapshot]);
+  }, [snapshot, comparisonId, unmappedOnly]);
   return (
     <div className="workbench-body">
       <div className="toolbar">
@@ -87,7 +96,34 @@ function TrialBalanceBody() {
           Select an account to inspect its financial source.
         </span>
         <span className="spacer" />
-        <Badge tone="neutral">Prior-period variance unavailable</Badge>
+        <label>
+          Compare period
+          <select
+            aria-label="Compare period"
+            value={comparisonId}
+            onChange={(e) =>
+              setComparison({ snapshot: snapshot || "", id: e.target.value })
+            }
+          >
+            <option value="">No comparison</option>
+            {balance.data?.comparison_candidates.map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            checked={unmappedOnly}
+            onChange={(e) => setUnmappedOnly(e.target.checked)}
+          />{" "}
+          Unmapped accounts only
+        </label>
+        {balance.data && (
+          <Badge tone="neutral">{balance.data.source_status} source</Badge>
+        )}
       </div>
       <ErrorState error={detail.error} />
       {!snapshot ? (
@@ -125,6 +161,30 @@ function TrialBalanceBody() {
                   "Closing Balance",
                   balance.data?.functional_currency,
                 ),
+                ...(comparisonId
+                  ? [
+                      amount(
+                        "previous",
+                        "Prior closing",
+                        balance.data?.functional_currency,
+                      ),
+                      amount(
+                        "variance",
+                        "Movement",
+                        balance.data?.functional_currency,
+                      ),
+                      column("percentage", "Movement %", 125, {
+                        valueFormatter: (p) =>
+                          p.value == null
+                            ? "No prior balance"
+                            : money(p.value) + "%",
+                      }),
+                      column("comparison_only", "Source", 120, {
+                        valueFormatter: (p) =>
+                          p.value ? "Prior period only" : "Current period",
+                      }),
+                    ]
+                  : []),
                 column("classification", "Mapping Status", 110, {
                   colId: "mapping",
                   valueFormatter: (p) =>
@@ -132,7 +192,15 @@ function TrialBalanceBody() {
                       ? "Unmapped"
                       : "Mapped",
                 }),
-              ]}
+              ].map((c) =>
+                c.type === "numericColumn"
+                  ? {
+                      ...c,
+                      valueFormatter: (p) =>
+                        money(p.value, balance.data?.display_precision ?? 2),
+                    }
+                  : c,
+              )}
               onSelect={setSelected}
               loading={balance.isLoading}
               error={balance.error}
@@ -146,8 +214,8 @@ function TrialBalanceBody() {
             />
             <div className="summary-strip">
               <div>
-                <small>Total accounts</small>
-                <strong>{balance.data?.total ?? "—"}</strong>
+                <small>Current source accounts</small>
+                <strong>{balance.data?.current_accounts ?? "—"}</strong>
               </div>
               <div>
                 <small>Mapped accounts</small>
@@ -163,7 +231,10 @@ function TrialBalanceBody() {
               </div>
               <div>
                 <small>Completeness</small>
-                <span>Independent controls required</span>
+                <span>
+                  {balance.data?.completeness.replaceAll("_", " ") ||
+                    "Independent controls required"}
+                </span>
               </div>
             </div>
           </section>
@@ -195,7 +266,10 @@ function TrialBalanceBody() {
                     period_debit: money(selected.debit),
                     period_credit: money(selected.credit),
                     closing: money(selected.closing),
-                    prior_period: "Unavailable",
+                    prior_period: comparisonId
+                      ? money(selected.previous)
+                      : "Select a comparison period",
+                    movement: comparisonId ? money(selected.variance) : "—",
                     transaction_count: ledger.data?.total ?? "Unavailable",
                   }}
                 />
@@ -240,6 +314,55 @@ function TrialBalanceBody() {
             </aside>
           )}
         </div>
+      )}
+      {balance.data && (
+        <details className="card">
+          <summary>Monthly movements and source controls</summary>
+          <p>
+            Period debits and credits exclude opening entries. Balance and
+            source controls do not certify that the source ledger is complete.
+          </p>
+          {balance.data.monthly_testable ? (
+            <div className="financial-review-scroll">
+              <table className="financial-review-table">
+                <caption>
+                  Monthly ledger movements ({balance.data.functional_currency})
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Month</th>
+                    <th scope="col">Period debit</th>
+                    <th scope="col">Period credit</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {balance.data.monthly_movements.map((r) => (
+                    <tr key={r.id}>
+                      <th scope="row">{String(r.month)}</th>
+                      <td>
+                        {money(r.debit, balance.data?.display_precision ?? 2)}
+                      </td>
+                      <td>
+                        {money(r.credit, balance.data?.display_precision ?? 2)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <p>Monthly movements require a general ledger or journal source.</p>
+          )}
+          <h3>Independent source controls</h3>
+          <ul>
+            {balance.data.source_controls.map((control) => (
+              <li key={String(control.rule)}>
+                {String(control.rule).replaceAll("_", " ")}:{" "}
+                <Status value={String(control.status)} />
+              </li>
+            ))}
+          </ul>
+        </details>
       )}
       {balance.data && (
         <footer className="balance-bar">

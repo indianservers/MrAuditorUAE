@@ -15,9 +15,24 @@ class ScopeInput(Input):
     period_id: uuid.UUID
 
 
+SourceSystem = Literal[
+    "file",
+    "tally",
+    "zoho",
+    "busy",
+    "marg",
+    "sap-b1",
+    "sap-s4",
+    "netsuite",
+    "quickbooks",
+    "dynamics",
+    "xero",
+]
+
+
 class ImportOptions(ScopeInput):
     kind: Literal["gl", "journals", "tb", "coa"] = "gl"
-    source_system: Literal["file", "tally", "zoho"] = "file"
+    source_system: SourceSystem = "file"
     mapping: dict[str, str] = Field(default_factory=dict, max_length=60)
     profile_id: uuid.UUID | None = None
     sheet: str | None = None
@@ -34,7 +49,9 @@ class ImportOptions(ScopeInput):
     supersedes_id: uuid.UUID | None = None
     tax_codes: list[str] | None = None
     tally_company: str | None = None
+    tally_company_fingerprint: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
     source_sync_run_id: uuid.UUID | None = None
+    report_package: dict = Field(default_factory=dict, max_length=12)
 
 
 class ImportOut(BaseModel):

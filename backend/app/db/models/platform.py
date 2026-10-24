@@ -152,6 +152,8 @@ class FinancialPeriod(Owned, Base):
     entity_id: Mapped[uuid.UUID]
     start_date: Mapped[date]
     end_date: Mapped[date]
+    lock_state: Mapped[str] = mapped_column(default="OPEN", server_default="OPEN")
+    lock_version: Mapped[int] = mapped_column(default=1, server_default="1")
 
 
 class Engagement(Owned, Base):

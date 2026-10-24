@@ -37,6 +37,8 @@ import {
 import { useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
 import { ContextGate, JobProgress, PageHeader } from "./shared";
+import { ReportPackageWizard } from "./report-import";
+import { NativeConnection } from "./native-connection";
 type Preview = {
   sheets: string[];
   selected_sheet: string;
@@ -44,6 +46,9 @@ type Preview = {
   rows: string[][];
 };
 export function Integrations() {
+  const [uploadProvider, setUploadProvider] = useState("file");
+  const [connectionProvider, setConnectionProvider] = useState("zoho");
+  const [packageUpload, setPackageUpload] = useState(false);
   const [upload, setUpload] = useState(false),
     [connect, setConnect] = useState(false),
     [selected, setSelected] = useState<RecordRow | null>(null),
@@ -108,7 +113,6 @@ export function Integrations() {
                   : true,
             )
             .map(({ name, id: provider, status: qualification }, i) => {
-              const implemented = ["zoho", "tally", "file"].includes(provider);
               const connection = connections.data?.items.find(
                 (c) =>
                   c.provider === provider &&
@@ -126,42 +130,33 @@ export function Integrations() {
                             ? "X"
                             : name === "QuickBooks"
                               ? "qb"
-                              : "xero"}
+                              : name
+                                  .split(/\s+/)
+                                  .map((word) => word[0])
+                                  .join("")
+                                  .slice(0, 2)}
                     </span>
                     <strong>{name}</strong>
                   </div>
                   <Status
                     value={
-                      !implemented
-                        ? qualification
-                        : name === "Excel / CSV"
-                          ? "File import available"
-                          : connection?.status || qualification
+                      name === "Excel / CSV"
+                        ? "File import available"
+                        : connection?.status || qualification
                     }
                   />
                   <small>
                     {name === "TallyPrime"
                       ? "Local agent connectivity: not probed"
                       : name === "Zoho Books"
-                        ? "Published journals + source evidence"
+                        ? "Account transactions + source evidence"
                         : name === "Excel / CSV"
                           ? "CSV · XLSX · Tally export"
-                          : "Connector unavailable"}
+                          : ["busy", "marg"].includes(provider)
+                            ? "Direct partner API + report import"
+                            : "Direct vendor API + report import"}
                   </small>
-                  {!implemented ? (
-                    <>
-                      <p className="subtle">
-                        Live API adapter is not implemented. A normalized export
-                        can use file import.
-                      </p>
-                      <Button
-                        disabled={!canImport}
-                        onClick={() => setUpload(true)}
-                      >
-                        Import normalized export
-                      </Button>
-                    </>
-                  ) : name === "Excel / CSV" ? (
+                  {name === "Excel / CSV" ? (
                     <Button
                       disabled={!canImport}
                       onClick={() => setUpload(true)}
@@ -171,13 +166,26 @@ export function Integrations() {
                   ) : (
                     <Button
                       disabled={!canManage}
-                      onClick={() =>
-                        connection ? setSelected(connection) : setConnect(true)
-                      }
+                      onClick={() => {
+                        if (connection) setSelected(connection);
+                        else {
+                          setConnectionProvider(provider);
+                          setConnect(true);
+                        }
+                      }}
                     >
                       {connection ? "Connection details" : "Configure"}
                     </Button>
                   )}
+                  <Button
+                    disabled={!canImport}
+                    onClick={() => {
+                      setUploadProvider(provider);
+                      setPackageUpload(true);
+                    }}
+                  >
+                    Import complete report set
+                  </Button>
                 </section>
               );
             })}
@@ -253,7 +261,11 @@ export function Integrations() {
         wide
       >
         <ContextGate>
-          <ImportWizard onDone={() => setUpload(false)} />
+          <ImportWizard
+            key={uploadProvider}
+            provider={uploadProvider}
+            onDone={() => setUpload(false)}
+          />
         </ContextGate>
       </Modal>
       <Modal
@@ -262,7 +274,24 @@ export function Integrations() {
         onOpenChange={setConnect}
       >
         <ContextGate>
-          <ConnectionForm onDone={() => setConnect(false)} />
+          <ConnectionForm
+            key={connectionProvider}
+            initialProvider={connectionProvider}
+            onDone={() => setConnect(false)}
+          />
+        </ContextGate>
+      </Modal>
+      <Modal
+        title="Import accounting report set"
+        open={packageUpload}
+        onOpenChange={setPackageUpload}
+      >
+        <ContextGate>
+          <ReportPackageWizard
+            key={uploadProvider}
+            provider={uploadProvider}
+            renderBatch={(id) => <ImportDetail key={id} batchId={id} />}
+          />
         </ContextGate>
       </Modal>
       <Drawer
@@ -282,7 +311,19 @@ export function Integrations() {
     </>
   );
 }
-function ImportWizard({ onDone }: { onDone: () => void }) {
+function ImportWizard({
+  onDone,
+  provider,
+}: {
+  onDone: () => void;
+  provider: string;
+}) {
+  const catalogue = useAPI<{ items: { id: string; name: string }[] }>(
+    "connectors/catalogue",
+  );
+  const [sourceSystem, setSourceSystem] = useState(provider);
+  const [company, setCompany] = useState("");
+  const [previewedFile, setPreviewedFile] = useState<File | null>(null);
   const currency = useCurrency();
   const scope = useScope();
   const inspect = useAction<Preview>();
@@ -298,8 +339,11 @@ function ImportWizard({ onDone }: { onDone: () => void }) {
     [supersedes, setSupersedes] = useState(""),
     [delimiter, setDelimiter] = useState(","),
     [encoding, setEncoding] = useState("utf-8-sig");
+  const nativeTally =
+    sourceSystem === "tally" && !!file && /\.(xml|json)$/i.test(file.name);
   const pop = usePopulation();
   const preview = (selected: File, sheetName = "") => {
+    setPreviewedFile(null);
     const data = new FormData();
     data.append("file", selected);
     if (sheetName) data.append("sheet", sheetName);
@@ -309,6 +353,7 @@ function ImportWizard({ onDone }: { onDone: () => void }) {
       { path: "workspace/inspect-file", body: data },
       {
         onSuccess: (p) => {
+          setPreviewedFile(selected);
           setSheet(p.selected_sheet || "");
           const initial: Record<string, string> = {};
           for (const h of p.headers) {
@@ -337,15 +382,17 @@ function ImportWizard({ onDone }: { onDone: () => void }) {
   function choose(selected?: File) {
     if (!selected) return;
     if (
-      !/\.(csv|xlsx)$/i.test(selected.name) ||
+      !(
+        sourceSystem === "tally" ? /\.(csv|xlsx|xml|json)$/i : /\.(csv|xlsx)$/i
+      ).test(selected.name) ||
       selected.size > 64 * 1024 * 1024
     ) {
-      setError("Choose a CSV or XLSX file up to 64 MiB.");
+      setError("Choose a supported accounting file up to 64 MiB.");
       return;
     }
     setError("");
     setFile(selected);
-    preview(selected);
+    if (!/\.(xml|json)$/i.test(selected.name)) preview(selected);
   }
   return (
     <div className="import-wizard">
@@ -376,17 +423,46 @@ function ImportWizard({ onDone }: { onDone: () => void }) {
             <CloudUpload size={28} />
             <strong>{file?.name || "Drop your financial file here"}</strong>
             <small>
-              CSV or XLSX · Maximum 64 MiB · source file remains private
+              CSV or XLSX · Tally also accepts XML/JSON · Maximum 64 MiB
             </small>
             <input
               ref={input}
               type="file"
               hidden
-              accept=".csv,.xlsx"
+              accept={
+                sourceSystem === "tally"
+                  ? ".csv,.xlsx,.xml,.json"
+                  : ".csv,.xlsx"
+              }
               onChange={(e) => choose(e.target.files?.[0])}
             />
           </div>
           <div className="form-grid">
+            <label>
+              Source system
+              <select
+                value={sourceSystem}
+                onChange={(e) => {
+                  setSourceSystem(e.target.value);
+                  setFile(null);
+                }}
+              >
+                {catalogue.data?.items.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            {sourceSystem === "tally" && (
+              <label>
+                Tally company name
+                <input
+                  value={company}
+                  onChange={(e) => setCompany(e.target.value)}
+                />
+              </label>
+            )}
             <label>
               Population type
               <select value={kind} onChange={(e) => setKind(e.target.value)}>
@@ -452,14 +528,14 @@ function ImportWizard({ onDone }: { onDone: () => void }) {
               </select>
             </label>
             <Button
-              disabled={!file || inspect.isPending}
+              disabled={!file || nativeTally || inspect.isPending}
               onClick={() => file && preview(file, sheet)}
             >
               Refresh preview
             </Button>
           </div>
           <ErrorState error={inspect.error} />
-          {inspect.data && (
+          {!nativeTally && file === previewedFile && inspect.data && (
             <>
               <h3>Column mapping</h3>
               <div className="mapping-fields">
@@ -527,7 +603,15 @@ function ImportWizard({ onDone }: { onDone: () => void }) {
           <ErrorState error={action.error} />
           <Button
             primary
-            disabled={!file || !inspect.data || action.isPending}
+            disabled={
+              !file ||
+              (nativeTally
+                ? !company
+                : !inspect.data ||
+                  file !== previewedFile ||
+                  inspect.isPending) ||
+              action.isPending
+            }
             onClick={() => {
               if (!file) return;
               const data = new FormData();
@@ -539,14 +623,17 @@ function ImportWizard({ onDone }: { onDone: () => void }) {
                   entity_id: scope.entity,
                   period_id: scope.period,
                   kind,
-                  source_system: "file",
+                  source_system: sourceSystem,
+                  tally_company: nativeTally ? company : null,
                   currency,
                   sheet: sheet || null,
                   delimiter,
                   encoding,
-                  mapping: Object.fromEntries(
-                    Object.entries(mapping).filter(([, v]) => v),
-                  ),
+                  mapping: nativeTally
+                    ? {}
+                    : Object.fromEntries(
+                        Object.entries(mapping).filter(([, v]) => v),
+                      ),
                   supersedes_id: supersedes || null,
                 }),
               );
@@ -713,9 +800,18 @@ function ImportDetail({
     </>
   );
 }
-function ConnectionForm({ onDone }: { onDone: () => void }) {
+function ConnectionForm({
+  onDone,
+  initialProvider,
+}: {
+  onDone: () => void;
+  initialProvider: string;
+}) {
   const scope = useScope();
-  const [provider, setProvider] = useState("zoho"),
+  const catalogue = useAPI<{ items: { id: string; name: string }[] }>(
+    "connectors/catalogue",
+  );
+  const [provider, setProvider] = useState(initialProvider),
     [name, setName] = useState(""),
     [clientId, setClientId] = useState(""),
     [secret, setSecret] = useState(""),
@@ -754,8 +850,13 @@ function ConnectionForm({ onDone }: { onDone: () => void }) {
       <label>
         Provider
         <select value={provider} onChange={(e) => setProvider(e.target.value)}>
-          <option value="zoho">Zoho Books</option>
-          <option value="tally">TallyPrime</option>
+          {catalogue.data?.items
+            .filter((p) => p.id !== "file")
+            .map((p) => (
+              <option key={p.id} value={p.id}>
+                {p.name}
+              </option>
+            ))}
         </select>
       </label>
       <label>
@@ -863,6 +964,8 @@ function ConnectionDetail({ connection: initial }: { connection: RecordRow }) {
             establish a live connection.
           </p>
         </>
+      ) : connection.provider !== "zoho" ? (
+        <NativeConnection key={connection.id} connection={connection} />
       ) : (
         <>
           <label>
@@ -975,8 +1078,10 @@ function ConnectionDetail({ connection: initial }: { connection: RecordRow }) {
             <RefreshCw size={14} /> Start supported sync
           </Button>
           <p className="subtle">
-            Published journals and evidence only. Full GL completeness and
-            incremental sync are unavailable.
+            Extracts all supported account transaction types and preserves
+            source evidence. Review the resulting GL and chart batches, and
+            reconcile to an independent period trial balance. Live qualification
+            and incremental sync remain pending.
           </p>
         </>
       )}
@@ -990,13 +1095,17 @@ function ConnectionDetail({ connection: initial }: { connection: RecordRow }) {
 }
 export function ZohoCallback() {
   const params = useSearchParams();
+  const native = params.get("native") === "1";
+  const storageKey = native
+    ? "auditos-native-connection"
+    : "auditos-zoho-connection";
   const action = useAction<RecordRow>();
   const [connectionId, setConnectionId] = useState("");
   return (
     <>
       <PageHeader
         eyebrow="Integrations"
-        title="Zoho authorization callback"
+        title="Accounting authorization callback"
         description="Exchange the authorization code through the secure backend connector."
       />
       <div className="page-body">
@@ -1020,9 +1129,7 @@ export function ZohoCallback() {
         </label>
         <Button
           onClick={() =>
-            setConnectionId(
-              sessionStorage.getItem("auditos-zoho-connection") || "",
-            )
+            setConnectionId(sessionStorage.getItem(storageKey) || "")
           }
         >
           Use original connection
@@ -1039,16 +1146,24 @@ export function ZohoCallback() {
           onClick={() =>
             action.mutate(
               {
-                path: `connectors/zoho/${connectionId}/callback`,
-                body: { code: params.get("code"), state: params.get("state") },
+                path: `connectors/${native ? "native" : "zoho"}/${connectionId}/callback`,
+                body: {
+                  code: params.get("code"),
+                  state: params.get("state"),
+                  ...(native
+                    ? { realm_id: params.get("realmId") || null }
+                    : {}),
+                },
               },
               {
                 onSuccess: () => {
-                  sessionStorage.removeItem("auditos-zoho-connection");
+                  sessionStorage.removeItem(storageKey);
                   window.history.replaceState(
                     null,
                     "",
-                    "/integrations/zoho/callback",
+                    native
+                      ? "/integrations/zoho/callback?native=1"
+                      : "/integrations/zoho/callback",
                   );
                 },
               },

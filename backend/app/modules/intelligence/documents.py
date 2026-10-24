@@ -28,10 +28,22 @@ FIELDS = {
     "withholding_tax": r"(?:Withholding\s*Tax|TDS|TCS)\s*(?:Amount)?\s*:\s*([-()0-9.,]+)",
 }
 MONEY = {"gross_amount", "net_amount", "tax_amount", "withholding_tax", "cgst", "sgst", "igst"}
+NUMERALS = str.maketrans("٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹٫٬−", "01234567890123456789.,-")
+ARABIC_FIELDS = {
+    "supplier": r"(?:المورد|البائع)\s*:\s*([^\n]+)",
+    "customer": r"(?:العميل|المشتري)\s*:\s*([^\n]+)",
+    "invoice_number": r"رقم\s*(?:الفاتورة|الإشعار الدائن)\s*:\s*([^\s]+)",
+    "document_date": r"تاريخ\s*(?:الفاتورة|المستند)\s*:\s*([0-9/-]+)",
+    "gross_amount": r"(?:الإجمالي|المبلغ الإجمالي)\s*:\s*([-()0-9.,]+)",
+    "net_amount": r"(?:صافي المبلغ|المجموع الفرعي)\s*:\s*([-()0-9.,]+)",
+    "tax_amount": r"(?:مبلغ الضريبة|ضريبة القيمة المضافة)\s*:\s*([-()0-9.,]+)",
+    "currency": r"العملة\s*:\s*([A-Z]{3})\b",
+    "trn": r"رقم التسجيل الضريبي\s*:\s*(\d{15})",
+}
 
 
 def money(value, decimal_separator="."):
-    value = value.strip().replace(" ", "")
+    value = value.translate(NUMERALS).strip().replace(" ", "")
     if value.startswith("(") and value.endswith(")"):
         value = "-" + value[1:-1]
     grouping, point = (r"\.", ",") if decimal_separator == "," else (",", r"\.")
@@ -69,7 +81,10 @@ def structured(pages, country, decimal_separator=".", date_format="iso"):
         found = []
         for page in pages:
             for block in page["blocks"]:
-                for match in re.finditer(pattern, block["text"], re.I):
+                candidates = [pattern]
+                if key in ARABIC_FIELDS:
+                    candidates.append(ARABIC_FIELDS[key])
+                for match in (m for p in candidates for m in re.finditer(p, block["text"].translate(NUMERALS), re.I)):
                     found.append(
                         (
                             match.group(1).strip(),
@@ -77,7 +92,9 @@ def structured(pages, country, decimal_separator=".", date_format="iso"):
                                 "page": page["page"],
                                 "block_id": block["id"],
                                 "bbox": block.get("bbox"),
-                                "raw_text": match.group(0),
+                                "raw_text": block["text"][match.start():match.end()],
+                                "method": page.get("provider", "structured-text"),
+                                "confidence": None,
                             },
                         )
                     )
@@ -101,7 +118,11 @@ def structured(pages, country, decimal_separator=".", date_format="iso"):
                     .isoformat()
                 )
             elif key == "currency":
+                import pycountry
+
                 value = value.upper()
+                if pycountry.currencies.get(alpha_3=value) is None:
+                    raise ValueError("Invalid ISO currency")
         except (ValueError, InvalidOperation):
             messages.append(f"{key}: parsing failed under selected convention")
             continue
@@ -124,6 +145,7 @@ def structured(pages, country, decimal_separator=".", date_format="iso"):
         "date_format": date_format,
         "review_status": "UNVERIFIED",
         "confidence_interpretation": "OCR recognition scores are raw model output, not calibrated accounting correctness probabilities",
+        "language_limitations": "Arabic/English labeled fields only; scanned Arabic recognition depends on installed OCR models and requires review",
     }
 
 
@@ -153,6 +175,7 @@ def _worker(path, media_type, country, options, queue):
         from PIL import Image
 
         Image.MAX_IMAGE_PIXELS = 20_000_000
+        max_pages = options.get("max_pages", 20)
         engine = None
 
         def ocr(image, page):
@@ -177,7 +200,7 @@ def _worker(path, media_type, country, options, queue):
                 from pypdf import PdfReader
 
                 reader = PdfReader(io.BytesIO(data), strict=True)
-                if reader.is_encrypted or len(reader.pages) > 20:
+                if reader.is_encrypted or len(reader.pages) > max_pages:
                     raise ValueError("Encrypted PDF or page limit exceeded")
                 root: Any = reader.trailer["/Root"]
                 if "/OpenAction" in root or "/JavaScript" in str(root.get("/Names", {})):
@@ -233,7 +256,7 @@ def _worker(path, media_type, country, options, queue):
                     document.close()
             else:
                 with Image.open(io.BytesIO(data)) as image:
-                    if getattr(image, "n_frames", 1) > 20:
+                    if getattr(image, "n_frames", 1) > max_pages:
                         raise ValueError("Image page limit exceeded")
                     for index in range(getattr(image, "n_frames", 1)):
                         image.seek(index)
@@ -248,7 +271,7 @@ def _worker(path, media_type, country, options, queue):
                                 "provider": "rapidocr-local",
                             }
                         )
-            if len(pages) > 20:
+            if len(pages) > max_pages:
                 raise ValueError("Document batch exceeds page limit")
 
         if media_type == "application/zip":
@@ -328,8 +351,12 @@ def _worker(path, media_type, country, options, queue):
 
 
 def extract_document(path, media_type, country, options=None):
-    if Path(path).stat().st_size > 25 * 1024 * 1024:
-        raise ValueError("OCR document limit is 25 MiB")
+    from app.core.config import settings
+
+    config = settings()
+    if Path(path).stat().st_size > config.document_max_bytes:
+        raise ValueError("OCR document exceeds configured byte limit")
+    options = {**(options or {}), "max_pages": config.document_max_pages}
     context = multiprocessing.get_context("spawn")
     queue = context.Queue(maxsize=1)
     process = context.Process(
@@ -356,8 +383,13 @@ def preview_page(path, media_type, page_number, member=None):
     """Raster-only bounded preview; never serve an executable source document inline."""
     from PIL import Image
 
-    if Path(path).stat().st_size > 25 * 1024 * 1024:
-        raise ValueError("Document preview limit is 25 MiB")
+    from app.core.config import settings
+
+    config = settings()
+    if page_number < 1:
+        raise ValueError("Page numbers start at one")
+    if Path(path).stat().st_size > config.document_max_bytes:
+        raise ValueError("Document preview exceeds configured byte limit")
     data = Path(path).read_bytes()
     if media_type == "application/zip":
         if not member:
@@ -375,7 +407,7 @@ def preview_page(path, media_type, page_number, member=None):
         import pypdfium2 as pdfium
 
         with pdfium.PdfDocument(data) as document:
-            if len(document) > 20 or page_number > len(document):
+            if len(document) > config.document_max_pages or page_number > len(document):
                 raise ValueError("PDF preview page out of bounds")
             page = document[page_number - 1]
             try:
@@ -390,7 +422,7 @@ def preview_page(path, media_type, page_number, member=None):
     else:
         Image.MAX_IMAGE_PIXELS = 20_000_000
         with Image.open(io.BytesIO(data)) as original:
-            if getattr(original, "n_frames", 1) > 20:
+            if getattr(original, "n_frames", 1) > config.document_max_pages:
                 raise ValueError("Image preview page limit")
             original.seek(page_number - 1)
             if original.width * original.height > 20_000_000:

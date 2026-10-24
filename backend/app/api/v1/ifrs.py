@@ -260,6 +260,39 @@ async def validate(eid: uuid.UUID, rid: uuid.UUID, db: DB, ctx: Actor):
     }
 
 
+@router.get("/engagements/{eid}/runs/{rid}/review")
+async def review(
+    eid: uuid.UUID, rid: uuid.UUID, db: DB, ctx: Actor, comparison_run_id: uuid.UUID | None = None
+):
+    from app.modules.ifrs.review import review_statements
+
+    calc = await service.run(db, ctx, eid, rid)
+    if calc.kind != "financials":
+        raise HTTPException(422, "Structured single-entity financial statements required")
+    previous = None
+    if comparison_run_id:
+        previous = await service.run(db, ctx, eid, comparison_run_id)
+        if previous.kind != "financials" or any(
+            previous.results.get(k) != calc.results.get(k)
+            for k in ("entity_id", "currency", "period_start", "period_end")
+        ):
+            raise HTTPException(
+                422, "Draft comparison requires the same entity, currency and reporting period"
+            )
+        if previous.id == calc.id or previous.created_at > calc.created_at:
+            raise HTTPException(422, "Select a distinct earlier financial statement version")
+    current = await service.current_dependencies(db, ctx, eid, calc)
+    result = review_statements(calc.results, previous.results if previous else None)
+    return {
+        **result,
+        "ready": result["ready"] and current,
+        "dependencies_current": current,
+        "run_id": str(calc.id),
+        "sha256": calc.sha256,
+        "comparison_run_id": str(previous.id) if previous else None,
+    }
+
+
 @router.get("/engagements/{eid}/runs/{rid}/export/{format}")
 async def export(eid: uuid.UUID, rid: uuid.UUID, format: str, db: DB, ctx: Actor, request: Request):
     from app.modules.audit_log.service import record as log
@@ -280,6 +313,10 @@ async def export(eid: uuid.UUID, rid: uuid.UUID, format: str, db: DB, ctx: Actor
         )
     )
     released = bool(approval and current and calc.results.get("validation", {}).get("ready"))
+    if released and calc.kind == "financials":
+        from app.modules.ifrs.review import review_statements
+
+        released = review_statements(calc.results)["ready"]
     content, mime = render(
         calc, format, released, approval.body.get("review_approvers", []) if approval else []
     )

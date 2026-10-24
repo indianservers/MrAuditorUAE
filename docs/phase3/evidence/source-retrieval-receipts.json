@@ -1,0 +1,34 @@
+[
+  {
+    "url": "https://www.mca.gov.in/Ministry/pdf/Orders_25022020.pdf",
+    "http_status": 403,
+    "bytes": 418,
+    "retrieval_status": "AWAITING_VALIDATION",
+    "sha256": null,
+    "professional_validation": "PENDING"
+  },
+  {
+    "url": "https://www.icai.org/post/extension-applicability-date-caro-2020-for-one-year",
+    "http_status": 200,
+    "bytes": 47024,
+    "retrieval_status": "RETRIEVED",
+    "sha256": "a2865ed73b46449b837fd62ad73addd1cdb2109c0c925360559ce654feae40f3",
+    "professional_validation": "PENDING"
+  },
+  {
+    "url": "https://www.incometax.gov.in/iec/foportal/help/statutory-forms/popular-form/form3ca-3cd-um",
+    "http_status": 200,
+    "bytes": 146964,
+    "retrieval_status": "RETRIEVED",
+    "sha256": "4538d2654cd0b2e0e5bc51b89b7fb50ea6e83012e7c72c5c46e1423165c5b37e",
+    "professional_validation": "PENDING"
+  },
+  {
+    "url": "https://mof.gov.ae/wp-content/uploads/2025/02/English-Cabinet-Decision-142-of-2024-on-Top-up-Tax-on-MNEs-1.pdf",
+    "http_status": 200,
+    "bytes": 18470910,
+    "retrieval_status": "RETRIEVED",
+    "sha256": "84dce5266b43c038eb32ee8cbbbdf67916dee306ede982bbce64ca47bdb163e6",
+    "professional_validation": "PENDING"
+  }
+]

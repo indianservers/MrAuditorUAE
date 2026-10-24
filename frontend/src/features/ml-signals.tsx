@@ -16,7 +16,9 @@ export function MLSignals() {
     items: {
       id: string;
       body: {
-        model_id: string;
+        model_id: string | null;
+        execution_mode?: string;
+        feature_version?: string;
         predictions: { transaction_id: string; score: number | number[] }[];
       };
     }[];
@@ -24,17 +26,22 @@ export function MLSignals() {
     `ml/events?eid=${engagement?.id}&kind=inference&limit=1`,
     can && !!engagement,
   );
+  const capabilities = useAPI<{ local_runtime_present: boolean; training_data_gap: string }>(
+    `ml/engagements/${engagement?.id}/capabilities`, can && !!engagement,
+  );
   if (!can) return null;
   return (
     <section className="p9-card">
-      <h2>Experimental ML review signals</h2>
+      <h2>Review signals and execution mode</h2>
       <p>
         {result.data?.items.length
-          ? `${result.data.items[0].body.predictions.length} persisted predictions in the latest authorized batch. Model ${result.data.items[0].body.model_id.slice(0, 8)}.`
+          ? `${result.data.items[0].body.predictions.length} persisted signals. Execution mode: ${result.data.items[0].body.execution_mode || "unavailable (historical mode not recorded)"}. ${result.data.items[0].body.model_id ? `Model ${result.data.items[0].body.model_id.slice(0, 8)}.` : "No trained model used."}`
           : "No ML inference batch is available for this engagement."}{" "}
         Deterministic audit findings remain independent. An anomaly signal does
         not establish fraud.
       </p>
+      <p>Local CPU runtime: {capabilities.data ? (capabilities.data.local_runtime_present ? "installed; inference requires qualified artifacts" : "unavailable") : "not verified"}.
+        Deterministic workflows and explicitly selected baselines do not require language-model credentials.</p>
       <Link href="/ai-lab/investigator">
         Inspect model signals and source transactions
       </Link>

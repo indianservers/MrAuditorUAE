@@ -2,11 +2,19 @@
 
 import io
 import json
-from decimal import ROUND_HALF_UP, Decimal
+from decimal import Decimal, localcontext
 from html import escape
+
+from app.modules.ifrs.review import presentation_lines, presented
 
 
 def rows_for(run, released, reviewers=()):
+    with localcontext() as precision:
+        precision.prec = 48
+        return _rows_for(run, released, reviewers)
+
+
+def _rows_for(run, released, reviewers):
     data = run.results
     rows = [
         ["AUDITOS UAE", "Financial reporting package"],
@@ -26,50 +34,121 @@ def rows_for(run, released, reviewers=()):
         ["Scope", data.get("scope", "Limited-scope deterministic calculation")],
     ]
     precision = data.get("precision", 2)
-    quantum = Decimal(1).scaleb(-precision)
-
     def amount(value):
-        rounded = Decimal(str(value)).quantize(quantum, rounding=ROUND_HALF_UP)
-        return str(abs(rounded) if rounded == 0 else rounded)
+        return presented(value, "assets", precision)
 
     for section in ["assets", "liabilities", "equity", "income", "expenses", "oci"]:
-        lines = [r for r in data.get("lines", []) if r["section"] == section]
+        lines = [r for r in presentation_lines(data) if r["section"] == section]
         if not lines:
             continue
         rows.append([section.upper(), "Current", "Comparative", "Note"])
         for line in lines:
-            sign = -1 if section in {"liabilities", "equity", "income", "oci"} else 1
             rows.append(
                 [
                     line["label"],
-                    amount(Decimal(line["current"]) * sign),
-                    amount(Decimal(line.get("comparative", "0")) * sign)
-                    if data.get("comparative")
-                    else "Not supplied",
+                    line["display_current"],
+                    line["display_comparative"] if data.get("comparative") else "Not supplied",
                     line.get("note", ""),
                 ]
             )
-    for section in ["totals", "changes_in_equity", "cash_flow", "validation"]:
-        rows.append([section.replace("_", " ").upper()])
-        for key, value in (data.get(section) or {}).items():
+        rows.append(
+            [
+                "Total " + section,
+                amount(sum((Decimal(r["display_current"]) for r in lines), Decimal(0))),
+                amount(sum((Decimal(r["display_comparative"]) for r in lines), Decimal(0)))
+                if data.get("comparative")
+                else "Not supplied",
+                "Sum of displayed lines",
+            ]
+        )
+    summaries = {
+        "totals": [
+            "assets",
+            "liabilities",
+            "equity",
+            "profit",
+            "oci",
+            "total_comprehensive_income",
+            "cash",
+        ],
+        "changes_in_equity": ["opening", "profit", "oci", "direct_equity_movements", "closing"],
+        "cash_flow": [
+            "opening",
+            "profit",
+            "noncash_adjustments",
+            "working_capital",
+            "operating",
+            "investing",
+            "financing",
+            "exchange_effect",
+            "closing",
+            "source_cash",
+            "difference",
+        ],
+    }
+    for section, keys in summaries.items():
+        values = data.get(section) or {}
+        if not values:
+            continue
+        rows.append([section.replace("_", " ").upper(), "Current", "Comparative", "Basis"])
+        for key in keys:
+            if key in values:
+                rows.append(
+                    [
+                        key.replace("_", " ").capitalize(),
+                        amount(values[key]),
+                        "See statement lines" if data.get("comparative") else "Not supplied",
+                        "Rounded exact amount",
+                    ]
+                )
+        if section == "cash_flow":
+            for key in ("method", "policy"):
+                if key in values:
+                    rows.append([key.capitalize(), str(values[key])])
+    if data.get("validation"):
+        rows.append(["VALIDATION"])
+        for check in data["validation"].get("checks", []):
             rows.append(
                 [
-                    key,
-                    json.dumps(value, ensure_ascii=False)
-                    if isinstance(value, (dict, list))
-                    else str(value),
+                    check["code"].replace("_", " ").capitalize(),
+                    "Passed" if check["passed"] else "Review required",
+                    amount(check["difference"]) if "difference" in check else "",
+                    ", ".join(str(v) for v in check.get("missing", [])),
                 ]
             )
     for note in data.get("notes", []):
-        rows.append(["Note " + note["reference"], note["text"]])
+        rows.append(["NOTE " + note["reference"]])
+        rows.append(["Disclosure", note["text"]])
         rows.append(["Note line", "Current", "Comparative", "Basis"])
         for line in note["lines"]:
+            source = next(
+                (r for r in data.get("lines", []) if r["line_code"] == line["code"]), None
+            )
             rows.append(
                 [
                     line["code"],
-                    amount(line["current"]),
-                    amount(line["comparative"]) if data.get("comparative") else "Not supplied",
-                    "Source signs",
+                    presented(line["current"], source["section"], precision)
+                    if source
+                    else amount(line["current"]),
+                    (
+                        presented(line["comparative"], source["section"], precision)
+                        if source
+                        else amount(line["comparative"])
+                    )
+                    if data.get("comparative")
+                    else "Not supplied",
+                    "Presentation signs" if source else "Source signs",
+                ]
+            )
+    if data.get("review"):
+        rows.append(["FINANCIAL STATEMENT REVIEW"])
+        for issue in data["review"]["issues"]:
+            rows.append(
+                [
+                    issue["severity"],
+                    issue["location"],
+                    issue["message"],
+                    json.dumps(issue["evidence"]),
                 ]
             )
     if not data.get("lines"):

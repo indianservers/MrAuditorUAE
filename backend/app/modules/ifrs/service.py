@@ -255,6 +255,11 @@ async def validate_action(db, ctx, eid, obj, action):
             )
         if not calc.results.get("validation", {}).get("ready", False):
             raise HTTPException(409, "Financial reconciliation/disclosure controls are outstanding")
+        if calc.kind == "financials":
+            from app.modules.ifrs.review import review_statements
+
+            if not review_statements(calc.results)["ready"]:
+                raise HTTPException(409, "Financial statement review controls are outstanding")
 
 
 async def save_run(db, ctx, eid, kind, inputs, deps, results, record_id=None):
@@ -268,6 +273,7 @@ async def save_run(db, ctx, eid, kind, inputs, deps, results, record_id=None):
         engagement_id=eid,
         record_id=record_id,
         kind=kind,
+        methodology_version="auditos-ifrs/1.1" if kind == "financials" else "auditos-ifrs/1.0",
         inputs=payload["inputs"],
         dependencies=payload["dependencies"],
         results=payload["results"],
@@ -682,6 +688,12 @@ async def financials(db, ctx, eid, profile_id):
         },
         "scope": "Mapped full-IFRS general corporate statements; human classification, elections, disclosures and professional review required",
     }
+    from app.modules.ifrs.review import review_statements
+
+    results["review"] = review_statements(results)
+    results["presentation_lines"] = results["review"].pop("presentation_lines")
+    checks.append({"code": "statement_review", "passed": results["review"]["ready"]})
+    results["validation"]["ready"] = all(c["passed"] for c in checks)
     return await save_run(
         db,
         ctx,

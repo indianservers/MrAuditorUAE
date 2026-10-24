@@ -1,5 +1,6 @@
 """Recoverable queue execution with authorization and source rechecks at publication."""
 
+import time
 import uuid
 from datetime import UTC, datetime, timedelta
 
@@ -128,7 +129,9 @@ async def process(identifier, tenant):
                 await tenant_context(db, str(tenant))
                 ctx = await actor(db, tenant, user)
                 eng = await service.scope(db, ctx, eid, operation)
+                started = time.monotonic()
                 body, dependencies = await service.compute(db, ctx, eng, operation, payload)
+                body = {**body, "processing_duration_seconds": round(time.monotonic() - started, 6)}
             async with sessions() as db, db.begin():
                 await tenant_context(db, str(tenant))
                 ctx = await actor(db, tenant, user)
@@ -145,7 +148,9 @@ async def process(identifier, tenant):
                     db,
                     ctx,
                     eng,
-                    operation,
+                    "workflow-source"
+                    if operation in {"workflow-ledger", "workflow-vat"}
+                    else operation,
                     {
                         **body,
                         "job_id": str(job.id),

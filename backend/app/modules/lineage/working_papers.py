@@ -66,6 +66,8 @@ async def capture(db, ctx, obj):
             continue
         if identifier in records:
             row = records[identifier]
+            if row.engagement_id != obj.engagement_id:
+                raise HTTPException(422, "Cross-engagement working-paper source requires an authorized link")
             receipts.append(
                 {"type": "record", "id": str(identifier), "version": row.version, "path": path}
             )
@@ -80,6 +82,8 @@ async def capture(db, ctx, obj):
             )
         elif identifier in intelligence:
             intel_row = intelligence[identifier]
+            if intel_row.engagement_id != obj.engagement_id:
+                raise HTTPException(422, "Cross-engagement intelligence source requires an authorized link")
             receipts.append(
                 {
                     "type": "intelligence",
@@ -92,7 +96,7 @@ async def capture(db, ctx, obj):
     return receipts
 
 
-async def check(db, ctx, receipt):
+async def check(db, ctx, receipt, visiting=None):
     identifier = uuid.UUID(receipt["id"])
     if receipt["type"] == "intelligence":
         from app.modules.intelligence.service import current
@@ -100,7 +104,9 @@ async def check(db, ctx, receipt):
         result = await db.get(IntelligenceEvent, identifier)
         return (
             "CURRENT"
-            if result and result.sha256 == receipt["sha256"] and await current(db, ctx, result)
+            if result
+            and result.sha256 == receipt["sha256"]
+            and await current(db, ctx, result, visiting)
             else "STALE"
         )
     if receipt["type"] == "record":
@@ -187,7 +193,7 @@ async def freshness(db, ctx, obj, visiting=None, cache=None, expected=None):
         return "UNVERIFIED" if await capture(db, ctx, obj) else "CURRENT"
     statuses = []
     for receipt in receipts:
-        status = await check(db, ctx, receipt)
+        status = await check(db, ctx, receipt, visiting)
         if status == "CURRENT" and receipt["type"] == "record":
             source = await db.get(AuditRecord, uuid.UUID(receipt["id"]))
             status = await freshness(db, ctx, source, visiting, cache, expected)

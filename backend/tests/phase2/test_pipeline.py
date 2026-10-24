@@ -650,6 +650,26 @@ async def test_zoho_native_journal_and_chart_staging(environment, monkeypatch):
     headers, options = await scope(client)
 
     async def get(self, resource, params):
+        if resource == "organizations":
+            return {"code": 0, "organizations": [{"organization_id": "123"}]}
+        if resource == "chartofaccounts/accounttransactions":
+            account = params["account_id"]
+            debit = account == "101"
+            return {
+                "code": 0,
+                "transactions": [{
+                    "account_id": account,
+                    "transaction_id": "501",
+                    "transaction_type": "journal",
+                    "transaction_date": "2026-06-01",
+                    "categorized_transaction_id": account,
+                    "currency_code": "AED",
+                    "debit_or_credit": "debit" if debit else "credit",
+                    "debit_amount": "100" if debit else "0",
+                    "credit_amount": "0" if debit else "100",
+                }],
+                "page_context": {"page": 1, "has_more_page": False},
+            }
         if resource in {"journals/501", "journals/502"}:
             return {
                 "code": 0,
@@ -697,7 +717,6 @@ async def test_zoho_native_journal_and_chart_staging(environment, monkeypatch):
             **body,
             "provider": "zoho",
             "name": "TEST ONLY native extraction",
-            "organization_id": "123",
             "credentials": {
                 "client_id": "synthetic",
                 "client_secret": "synthetic",
@@ -705,7 +724,14 @@ async def test_zoho_native_journal_and_chart_staging(environment, monkeypatch):
             },
         },
     )
+    assert response.status_code == 201, response.text
     connection = response.json()["id"]
+    selected = await client.post(
+        f"/api/v1/connectors/zoho/{connection}/organization",
+        headers=headers,
+        json={"organization_id": "123"},
+    )
+    assert selected.status_code == 200, selected.text
     sync = await client.post(
         f"/api/v1/connectors/zoho/{connection}/sync?background=false", headers=headers
     )
@@ -722,7 +748,9 @@ async def test_zoho_native_journal_and_chart_staging(environment, monkeypatch):
         ).status_code == 200
     assert sync.json()["completeness"] == "insufficient_evidence"
     assert result["extracted_lines"] == 2 and result["extracted_accounts"] == 2
-    assert result["excluded_out_of_period_journals"] == 1
+    assert result["ledger_coverage"] == "all_account_transaction_types"
+    # Manual-journal details remain evidence and are never double-counted into GL.
+    assert sum(o["resource"] == "journal_detail" for o in result["objects"]) == 2
 
 
 @pytest.mark.parametrize("format", ["xml", "json"])

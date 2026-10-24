@@ -1,0 +1,1323 @@
+[
+  {
+    "id": "RW-001",
+    "title": "UAE exact bank receipt ties to cashbook",
+    "workflow": "bank-brs",
+    "country": "AE",
+    "expected": {
+      "exceptions": 0,
+      "blocked": false
+    }
+  },
+  {
+    "id": "RW-002",
+    "title": "Unpresented cheque remains open",
+    "workflow": "bank-brs",
+    "country": "AE",
+    "expected": {
+      "exceptions": 2,
+      "blocked": false
+    }
+  },
+  {
+    "id": "RW-003",
+    "title": "Deposit awaits bank credit",
+    "workflow": "bank-brs",
+    "country": "AE",
+    "expected": {
+      "exceptions": 2,
+      "blocked": false
+    }
+  },
+  {
+    "id": "RW-004",
+    "title": "Bank fee not recorded in cashbook",
+    "workflow": "bank-brs",
+    "country": "AE",
+    "expected": {
+      "exceptions": 1,
+      "blocked": false
+    }
+  },
+  {
+    "id": "RW-005",
+    "title": "Bank interest not recorded in cashbook",
+    "workflow": "bank-brs",
+    "country": "AE",
+    "expected": {
+      "exceptions": 1,
+      "blocked": false
+    }
+  },
+  {
+    "id": "RW-006",
+    "title": "Unexplained opening balance difference blocks approval",
+    "workflow": "bank-brs",
+    "country": "AE",
+    "expected": {
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-007",
+    "title": "Incomplete cashbook population fails closing control",
+    "workflow": "bank-brs",
+    "country": "AE",
+    "expected": {
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-008",
+    "title": "Incomplete statement population fails closing control",
+    "workflow": "bank-brs",
+    "country": "AE",
+    "expected": {
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-009",
+    "title": "Foreign currency statement cannot clear AED cashbook",
+    "workflow": "bank-brs",
+    "country": "AE",
+    "expected": {
+      "error": "single selected account"
+    }
+  },
+  {
+    "id": "RW-010",
+    "title": "Wrong bank account cannot clear selected account",
+    "workflow": "bank-brs",
+    "country": "AE",
+    "expected": {
+      "error": "single selected account"
+    }
+  },
+  {
+    "id": "RW-011",
+    "title": "Identical receipt amounts stay ambiguous",
+    "workflow": "bank-brs",
+    "country": "AE",
+    "expected": {
+      "exceptions": 3,
+      "blocked": false
+    }
+  },
+  {
+    "id": "RW-012",
+    "title": "Old outstanding cheque is visibly stale",
+    "workflow": "bank-brs",
+    "country": "AE",
+    "expected": {
+      "stale": true
+    }
+  },
+  {
+    "id": "RW-013",
+    "title": "Split settlement ties by bounded reference group",
+    "workflow": "bank-brs",
+    "country": "AE",
+    "expected": {
+      "exceptions": 0,
+      "blocked": false
+    }
+  },
+  {
+    "id": "RW-014",
+    "title": "Receipt reversal retained as an independent item",
+    "workflow": "bank-brs",
+    "country": "AE",
+    "expected": {
+      "exceptions": 0,
+      "blocked": false
+    }
+  },
+  {
+    "id": "RW-015",
+    "title": "Matching tolerance never hides BRS residual",
+    "workflow": "bank-brs",
+    "country": "AE",
+    "expected": {
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-016",
+    "title": "Future-dated bank settlement rejected",
+    "workflow": "bank-brs",
+    "country": "AE",
+    "expected": {
+      "error": "after the reconciliation date"
+    }
+  },
+  {
+    "id": "RW-017",
+    "title": "AE invoice independently agrees",
+    "workflow": "uae-vat",
+    "country": "AE",
+    "expected": {
+      "state": "MATCHED"
+    }
+  },
+  {
+    "id": "RW-018",
+    "title": "AE credit note retained separately",
+    "workflow": "uae-vat",
+    "country": "AE",
+    "expected": {
+      "state": "MATCHED"
+    }
+  },
+  {
+    "id": "RW-019",
+    "title": "AE debit note retained separately",
+    "workflow": "uae-vat",
+    "country": "AE",
+    "expected": {
+      "state": "MATCHED"
+    }
+  },
+  {
+    "id": "RW-020",
+    "title": "AE invoice absent from return",
+    "workflow": "uae-vat",
+    "country": "AE",
+    "expected": {
+      "state": "BOOKS_ONLY"
+    }
+  },
+  {
+    "id": "RW-021",
+    "title": "AE invoice absent from books",
+    "workflow": "uae-vat",
+    "country": "AE",
+    "expected": {
+      "state": "RETURN_ONLY"
+    }
+  },
+  {
+    "id": "RW-022",
+    "title": "AE tax amount differs",
+    "workflow": "uae-vat",
+    "country": "AE",
+    "expected": {
+      "state": "VARIANCE",
+      "tax_difference": "1"
+    }
+  },
+  {
+    "id": "RW-023",
+    "title": "AE taxable base differs despite equal tax",
+    "workflow": "uae-vat",
+    "country": "AE",
+    "expected": {
+      "state": "VARIANCE"
+    }
+  },
+  {
+    "id": "RW-024",
+    "title": "AE late filing creates period difference",
+    "workflow": "uae-vat",
+    "country": "AE",
+    "expected": {
+      "state": "PERIOD_DIFFERENCE"
+    }
+  },
+  {
+    "id": "RW-025",
+    "title": "AE rejected portal document stays visible",
+    "workflow": "uae-vat",
+    "country": "AE",
+    "expected": {
+      "state": "REJECTED_ON_RETURN"
+    }
+  },
+  {
+    "id": "RW-026",
+    "title": "AE pending portal document cannot be clean",
+    "workflow": "uae-vat",
+    "country": "AE",
+    "expected": {
+      "state": "SOURCE_STATUS_PENDING"
+    }
+  },
+  {
+    "id": "RW-027",
+    "title": "AE amendment duplicates cannot be summed",
+    "workflow": "uae-vat",
+    "country": "AE",
+    "expected": {
+      "error": "Duplicate domain key"
+    }
+  },
+  {
+    "id": "RW-028",
+    "title": "AE registration boundaries prevent false matching",
+    "workflow": "uae-vat",
+    "country": "AE",
+    "expected": {
+      "state": "BOOKS_ONLY"
+    }
+  },
+  {
+    "id": "RW-029",
+    "title": "IN invoice independently agrees",
+    "workflow": "india-gst",
+    "country": "IN",
+    "expected": {
+      "state": "MATCHED"
+    }
+  },
+  {
+    "id": "RW-030",
+    "title": "IN credit note retained separately",
+    "workflow": "india-gst",
+    "country": "IN",
+    "expected": {
+      "state": "MATCHED"
+    }
+  },
+  {
+    "id": "RW-031",
+    "title": "IN debit note retained separately",
+    "workflow": "india-gst",
+    "country": "IN",
+    "expected": {
+      "state": "MATCHED"
+    }
+  },
+  {
+    "id": "RW-032",
+    "title": "IN invoice absent from return",
+    "workflow": "india-gst",
+    "country": "IN",
+    "expected": {
+      "state": "BOOKS_ONLY"
+    }
+  },
+  {
+    "id": "RW-033",
+    "title": "IN invoice absent from books",
+    "workflow": "india-gst",
+    "country": "IN",
+    "expected": {
+      "state": "RETURN_ONLY"
+    }
+  },
+  {
+    "id": "RW-034",
+    "title": "IN tax amount differs",
+    "workflow": "india-gst",
+    "country": "IN",
+    "expected": {
+      "state": "VARIANCE",
+      "tax_difference": "1"
+    }
+  },
+  {
+    "id": "RW-035",
+    "title": "IN taxable base differs despite equal tax",
+    "workflow": "india-gst",
+    "country": "IN",
+    "expected": {
+      "state": "VARIANCE"
+    }
+  },
+  {
+    "id": "RW-036",
+    "title": "IN late filing creates period difference",
+    "workflow": "india-gst",
+    "country": "IN",
+    "expected": {
+      "state": "PERIOD_DIFFERENCE"
+    }
+  },
+  {
+    "id": "RW-037",
+    "title": "IN rejected portal document stays visible",
+    "workflow": "india-gst",
+    "country": "IN",
+    "expected": {
+      "state": "REJECTED_ON_RETURN"
+    }
+  },
+  {
+    "id": "RW-038",
+    "title": "IN pending portal document cannot be clean",
+    "workflow": "india-gst",
+    "country": "IN",
+    "expected": {
+      "state": "SOURCE_STATUS_PENDING"
+    }
+  },
+  {
+    "id": "RW-039",
+    "title": "IN amendment duplicates cannot be summed",
+    "workflow": "india-gst",
+    "country": "IN",
+    "expected": {
+      "error": "Duplicate domain key"
+    }
+  },
+  {
+    "id": "RW-040",
+    "title": "IN registration boundaries prevent false matching",
+    "workflow": "india-gst",
+    "country": "IN",
+    "expected": {
+      "state": "BOOKS_ONLY"
+    }
+  },
+  {
+    "id": "RW-041",
+    "title": "AE three-way settlement agrees",
+    "workflow": "payroll-settlement",
+    "country": "AE",
+    "expected": {
+      "state": "MATCHED"
+    }
+  },
+  {
+    "id": "RW-042",
+    "title": "AE underpayment remains quantified",
+    "workflow": "payroll-settlement",
+    "country": "AE",
+    "expected": {
+      "state": "VARIANCE"
+    }
+  },
+  {
+    "id": "RW-043",
+    "title": "AE missing payment partition remains missing",
+    "workflow": "payroll-settlement",
+    "country": "AE",
+    "expected": {
+      "state": "MISSING_SOURCE_PARTITION"
+    }
+  },
+  {
+    "id": "RW-044",
+    "title": "AE late bank payment stays an exception",
+    "workflow": "payroll-settlement",
+    "country": "AE",
+    "expected": {
+      "state": "LATE_PAYMENT"
+    }
+  },
+  {
+    "id": "RW-045",
+    "title": "AE missing due date cannot prove timely settlement",
+    "workflow": "payroll-settlement",
+    "country": "AE",
+    "expected": {
+      "state": "TIMING_NOT_VERIFIED"
+    }
+  },
+  {
+    "id": "RW-046",
+    "title": "AE split payment reconciles without duplicate allocation",
+    "workflow": "payroll-settlement",
+    "country": "AE",
+    "expected": {
+      "state": "MATCHED"
+    }
+  },
+  {
+    "id": "RW-047",
+    "title": "AE arrears retain their wage month",
+    "workflow": "payroll-settlement",
+    "country": "AE",
+    "expected": {
+      "state": "MATCHED"
+    }
+  },
+  {
+    "id": "RW-048",
+    "title": "AE different employee cannot clear payroll",
+    "workflow": "payroll-settlement",
+    "country": "AE",
+    "expected": {
+      "state": "MISSING_SOURCE_PARTITION"
+    }
+  },
+  {
+    "id": "RW-049",
+    "title": "AE different employer registration stays separate",
+    "workflow": "payroll-settlement",
+    "country": "AE",
+    "expected": {
+      "state": "MISSING_SOURCE_PARTITION"
+    }
+  },
+  {
+    "id": "RW-050",
+    "title": "AE employer and employee components cannot net",
+    "workflow": "payroll-settlement",
+    "country": "AE",
+    "expected": {
+      "state": "MISSING_SOURCE_PARTITION"
+    }
+  },
+  {
+    "id": "RW-051",
+    "title": "AE negative correction requires explicit allocation adapter",
+    "workflow": "payroll-settlement",
+    "country": "AE",
+    "expected": {
+      "error": "negative settlements"
+    }
+  },
+  {
+    "id": "RW-052",
+    "title": "AE future payment cannot settle current dues",
+    "workflow": "payroll-settlement",
+    "country": "AE",
+    "expected": {
+      "error": "Future payment"
+    }
+  },
+  {
+    "id": "RW-053",
+    "title": "IN three-way settlement agrees",
+    "workflow": "statutory-dues",
+    "country": "IN",
+    "expected": {
+      "state": "MATCHED"
+    }
+  },
+  {
+    "id": "RW-054",
+    "title": "IN underpayment remains quantified",
+    "workflow": "statutory-dues",
+    "country": "IN",
+    "expected": {
+      "state": "VARIANCE"
+    }
+  },
+  {
+    "id": "RW-055",
+    "title": "IN missing payment partition remains missing",
+    "workflow": "statutory-dues",
+    "country": "IN",
+    "expected": {
+      "state": "MISSING_SOURCE_PARTITION"
+    }
+  },
+  {
+    "id": "RW-056",
+    "title": "IN late bank payment stays an exception",
+    "workflow": "statutory-dues",
+    "country": "IN",
+    "expected": {
+      "state": "LATE_PAYMENT"
+    }
+  },
+  {
+    "id": "RW-057",
+    "title": "IN missing due date cannot prove timely settlement",
+    "workflow": "statutory-dues",
+    "country": "IN",
+    "expected": {
+      "state": "TIMING_NOT_VERIFIED"
+    }
+  },
+  {
+    "id": "RW-058",
+    "title": "IN split payment reconciles without duplicate allocation",
+    "workflow": "statutory-dues",
+    "country": "IN",
+    "expected": {
+      "state": "MATCHED"
+    }
+  },
+  {
+    "id": "RW-059",
+    "title": "IN arrears retain their wage month",
+    "workflow": "statutory-dues",
+    "country": "IN",
+    "expected": {
+      "state": "MATCHED"
+    }
+  },
+  {
+    "id": "RW-060",
+    "title": "IN different employee cannot clear payroll",
+    "workflow": "statutory-dues",
+    "country": "IN",
+    "expected": {
+      "state": "MISSING_SOURCE_PARTITION"
+    }
+  },
+  {
+    "id": "RW-061",
+    "title": "IN different employer registration stays separate",
+    "workflow": "statutory-dues",
+    "country": "IN",
+    "expected": {
+      "state": "MISSING_SOURCE_PARTITION"
+    }
+  },
+  {
+    "id": "RW-062",
+    "title": "IN employer and employee components cannot net",
+    "workflow": "statutory-dues",
+    "country": "IN",
+    "expected": {
+      "state": "MISSING_SOURCE_PARTITION"
+    }
+  },
+  {
+    "id": "RW-063",
+    "title": "IN negative correction requires explicit allocation adapter",
+    "workflow": "statutory-dues",
+    "country": "IN",
+    "expected": {
+      "error": "negative settlements"
+    }
+  },
+  {
+    "id": "RW-064",
+    "title": "IN future payment cannot settle current dues",
+    "workflow": "statutory-dues",
+    "country": "IN",
+    "expected": {
+      "error": "Future payment"
+    }
+  },
+  {
+    "id": "RW-065",
+    "title": "IN three-way settlement agrees",
+    "workflow": "india-withholding",
+    "country": "IN",
+    "expected": {
+      "state": "MATCHED"
+    }
+  },
+  {
+    "id": "RW-066",
+    "title": "IN underpayment remains quantified",
+    "workflow": "india-withholding",
+    "country": "IN",
+    "expected": {
+      "state": "VARIANCE"
+    }
+  },
+  {
+    "id": "RW-067",
+    "title": "IN missing payment partition remains missing",
+    "workflow": "india-withholding",
+    "country": "IN",
+    "expected": {
+      "state": "MISSING_SOURCE_PARTITION"
+    }
+  },
+  {
+    "id": "RW-068",
+    "title": "IN late bank payment stays an exception",
+    "workflow": "india-withholding",
+    "country": "IN",
+    "expected": {
+      "state": "LATE_PAYMENT"
+    }
+  },
+  {
+    "id": "RW-069",
+    "title": "IN missing due date cannot prove timely settlement",
+    "workflow": "india-withholding",
+    "country": "IN",
+    "expected": {
+      "state": "TIMING_NOT_VERIFIED"
+    }
+  },
+  {
+    "id": "RW-070",
+    "title": "IN split payment reconciles without duplicate allocation",
+    "workflow": "india-withholding",
+    "country": "IN",
+    "expected": {
+      "state": "MATCHED"
+    }
+  },
+  {
+    "id": "RW-071",
+    "title": "IN arrears retain their wage month",
+    "workflow": "india-withholding",
+    "country": "IN",
+    "expected": {
+      "state": "MATCHED"
+    }
+  },
+  {
+    "id": "RW-072",
+    "title": "IN different employee cannot clear payroll",
+    "workflow": "india-withholding",
+    "country": "IN",
+    "expected": {
+      "state": "MISSING_SOURCE_PARTITION"
+    }
+  },
+  {
+    "id": "RW-073",
+    "title": "IN different employer registration stays separate",
+    "workflow": "india-withholding",
+    "country": "IN",
+    "expected": {
+      "state": "MISSING_SOURCE_PARTITION"
+    }
+  },
+  {
+    "id": "RW-074",
+    "title": "IN employer and employee components cannot net",
+    "workflow": "india-withholding",
+    "country": "IN",
+    "expected": {
+      "state": "MISSING_SOURCE_PARTITION"
+    }
+  },
+  {
+    "id": "RW-075",
+    "title": "IN negative correction requires explicit allocation adapter",
+    "workflow": "india-withholding",
+    "country": "IN",
+    "expected": {
+      "error": "negative settlements"
+    }
+  },
+  {
+    "id": "RW-076",
+    "title": "IN future payment cannot settle current dues",
+    "workflow": "india-withholding",
+    "country": "IN",
+    "expected": {
+      "error": "Future payment"
+    }
+  },
+  {
+    "id": "RW-077",
+    "title": "Item count and book quantity agree",
+    "workflow": "stock-audit",
+    "country": "AE",
+    "expected": {
+      "state": "MATCHED"
+    }
+  },
+  {
+    "id": "RW-078",
+    "title": "Book item has no matching count",
+    "workflow": "stock-audit",
+    "country": "AE",
+    "expected": {
+      "state": "BOOKS_ONLY"
+    }
+  },
+  {
+    "id": "RW-079",
+    "title": "Physical count item absent from book register",
+    "workflow": "stock-audit",
+    "country": "AE",
+    "expected": {
+      "state": "COUNT_ONLY"
+    }
+  },
+  {
+    "id": "RW-080",
+    "title": "Count shortage is quantified",
+    "workflow": "stock-audit",
+    "country": "AE",
+    "expected": {
+      "state": "VARIANCE"
+    }
+  },
+  {
+    "id": "RW-081",
+    "title": "NRV impairment remains visible",
+    "workflow": "stock-audit",
+    "country": "AE",
+    "expected": {
+      "state": "NRV_WRITEDOWN"
+    }
+  },
+  {
+    "id": "RW-082",
+    "title": "Inventory ownership not confirmed",
+    "workflow": "stock-audit",
+    "country": "AE",
+    "expected": {
+      "state": "OWNERSHIP_UNCONFIRMED"
+    }
+  },
+  {
+    "id": "RW-083",
+    "title": "Consignment stock is not treated as owned",
+    "workflow": "stock-audit",
+    "country": "AE",
+    "expected": {
+      "state": "OWNERSHIP_UNCONFIRMED"
+    }
+  },
+  {
+    "id": "RW-084",
+    "title": "Expired inventory condition requires action",
+    "workflow": "stock-audit",
+    "country": "AE",
+    "expected": {
+      "state": "CONDITION_EXCEPTION"
+    }
+  },
+  {
+    "id": "RW-085",
+    "title": "Count before year end requires movement bridge",
+    "workflow": "stock-audit",
+    "country": "AE",
+    "expected": {
+      "state": "COUNT_DATE_BRIDGE_REQUIRED"
+    }
+  },
+  {
+    "id": "RW-086",
+    "title": "Negative stock requires investigation",
+    "workflow": "stock-audit",
+    "country": "AE",
+    "expected": {
+      "state": "NEGATIVE_QUANTITY"
+    }
+  },
+  {
+    "id": "RW-087",
+    "title": "Missing NRV is not a clean valuation",
+    "workflow": "stock-audit",
+    "country": "AE",
+    "expected": {
+      "state": "VALUATION_INPUT_MISSING"
+    }
+  },
+  {
+    "id": "RW-088",
+    "title": "Different units of measure cannot be added",
+    "workflow": "stock-audit",
+    "country": "AE",
+    "expected": {
+      "state": "BOOKS_ONLY"
+    }
+  },
+  {
+    "id": "RW-089",
+    "title": "Different warehouses cannot clear each other",
+    "workflow": "stock-audit",
+    "country": "AE",
+    "expected": {
+      "state": "BOOKS_ONLY"
+    }
+  },
+  {
+    "id": "RW-090",
+    "title": "Future stock count requires a separate roll-back procedure",
+    "workflow": "stock-audit",
+    "country": "AE",
+    "expected": {
+      "error": "Future inventory"
+    }
+  },
+  {
+    "id": "RW-091",
+    "title": "access-review: retained evidence supports scoped check",
+    "workflow": "controls",
+    "country": "AE",
+    "expected": {
+      "state": "SUPPORTED",
+      "blocked": false
+    }
+  },
+  {
+    "id": "RW-092",
+    "title": "access-review: expired evidence cannot establish current compliance",
+    "workflow": "controls",
+    "country": "AE",
+    "expected": {
+      "state": "EXPIRED",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-093",
+    "title": "access-review: expiry on review date remains current",
+    "workflow": "controls",
+    "country": "AE",
+    "expected": {
+      "state": "SUPPORTED"
+    }
+  },
+  {
+    "id": "RW-094",
+    "title": "access-review: declared support without reference stays missing",
+    "workflow": "controls",
+    "country": "AE",
+    "expected": {
+      "state": "EVIDENCE_MISSING",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-095",
+    "title": "access-review: documented exception requires disposition",
+    "workflow": "controls",
+    "country": "AE",
+    "expected": {
+      "state": "EXCEPTION",
+      "exceptions": 1
+    }
+  },
+  {
+    "id": "RW-096",
+    "title": "access-review: unknown status is not clean",
+    "workflow": "controls",
+    "country": "AE",
+    "expected": {
+      "state": "MISSING",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-097",
+    "title": "access-review: justified non-applicability retained",
+    "workflow": "controls",
+    "country": "AE",
+    "expected": {
+      "state": "NOT-APPLICABLE"
+    }
+  },
+  {
+    "id": "RW-098",
+    "title": "access-review: unexplained non-applicability blocked",
+    "workflow": "controls",
+    "country": "AE",
+    "expected": {
+      "state": "RATIONALE_MISSING",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-099",
+    "title": "access-review: missing scoped check visible despite other evidence",
+    "workflow": "controls",
+    "country": "AE",
+    "expected": {
+      "state": "MISSING",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-100",
+    "title": "access-review: whole missing entity is visible",
+    "workflow": "controls",
+    "country": "AE",
+    "expected": {
+      "state": "MISSING",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-101",
+    "title": "trade-licence: retained evidence supports scoped check",
+    "workflow": "vendor-diligence",
+    "country": "AE",
+    "expected": {
+      "state": "SUPPORTED",
+      "blocked": false
+    }
+  },
+  {
+    "id": "RW-102",
+    "title": "trade-licence: expired evidence cannot establish current compliance",
+    "workflow": "vendor-diligence",
+    "country": "AE",
+    "expected": {
+      "state": "EXPIRED",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-103",
+    "title": "trade-licence: expiry on review date remains current",
+    "workflow": "vendor-diligence",
+    "country": "AE",
+    "expected": {
+      "state": "SUPPORTED"
+    }
+  },
+  {
+    "id": "RW-104",
+    "title": "trade-licence: declared support without reference stays missing",
+    "workflow": "vendor-diligence",
+    "country": "AE",
+    "expected": {
+      "state": "EVIDENCE_MISSING",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-105",
+    "title": "trade-licence: documented exception requires disposition",
+    "workflow": "vendor-diligence",
+    "country": "AE",
+    "expected": {
+      "state": "EXCEPTION",
+      "exceptions": 1
+    }
+  },
+  {
+    "id": "RW-106",
+    "title": "trade-licence: unknown status is not clean",
+    "workflow": "vendor-diligence",
+    "country": "AE",
+    "expected": {
+      "state": "MISSING",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-107",
+    "title": "trade-licence: justified non-applicability retained",
+    "workflow": "vendor-diligence",
+    "country": "AE",
+    "expected": {
+      "state": "NOT-APPLICABLE"
+    }
+  },
+  {
+    "id": "RW-108",
+    "title": "trade-licence: unexplained non-applicability blocked",
+    "workflow": "vendor-diligence",
+    "country": "AE",
+    "expected": {
+      "state": "RATIONALE_MISSING",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-109",
+    "title": "trade-licence: missing scoped check visible despite other evidence",
+    "workflow": "vendor-diligence",
+    "country": "AE",
+    "expected": {
+      "state": "MISSING",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-110",
+    "title": "trade-licence: whole missing entity is visible",
+    "workflow": "vendor-diligence",
+    "country": "AE",
+    "expected": {
+      "state": "MISSING",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-111",
+    "title": "fundraising-permit: retained evidence supports scoped check",
+    "workflow": "nonprofit-diligence",
+    "country": "AE",
+    "expected": {
+      "state": "SUPPORTED",
+      "blocked": false
+    }
+  },
+  {
+    "id": "RW-112",
+    "title": "fundraising-permit: expired evidence cannot establish current compliance",
+    "workflow": "nonprofit-diligence",
+    "country": "AE",
+    "expected": {
+      "state": "EXPIRED",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-113",
+    "title": "fundraising-permit: expiry on review date remains current",
+    "workflow": "nonprofit-diligence",
+    "country": "AE",
+    "expected": {
+      "state": "SUPPORTED"
+    }
+  },
+  {
+    "id": "RW-114",
+    "title": "fundraising-permit: declared support without reference stays missing",
+    "workflow": "nonprofit-diligence",
+    "country": "AE",
+    "expected": {
+      "state": "EVIDENCE_MISSING",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-115",
+    "title": "fundraising-permit: documented exception requires disposition",
+    "workflow": "nonprofit-diligence",
+    "country": "AE",
+    "expected": {
+      "state": "EXCEPTION",
+      "exceptions": 1
+    }
+  },
+  {
+    "id": "RW-116",
+    "title": "fundraising-permit: unknown status is not clean",
+    "workflow": "nonprofit-diligence",
+    "country": "AE",
+    "expected": {
+      "state": "MISSING",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-117",
+    "title": "fundraising-permit: justified non-applicability retained",
+    "workflow": "nonprofit-diligence",
+    "country": "AE",
+    "expected": {
+      "state": "NOT-APPLICABLE"
+    }
+  },
+  {
+    "id": "RW-118",
+    "title": "fundraising-permit: unexplained non-applicability blocked",
+    "workflow": "nonprofit-diligence",
+    "country": "AE",
+    "expected": {
+      "state": "RATIONALE_MISSING",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-119",
+    "title": "fundraising-permit: missing scoped check visible despite other evidence",
+    "workflow": "nonprofit-diligence",
+    "country": "AE",
+    "expected": {
+      "state": "MISSING",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-120",
+    "title": "fundraising-permit: whole missing entity is visible",
+    "workflow": "nonprofit-diligence",
+    "country": "AE",
+    "expected": {
+      "state": "MISSING",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-121",
+    "title": "tax-period-assessment: retained evidence supports scoped check",
+    "workflow": "tax-close",
+    "country": "IN",
+    "expected": {
+      "state": "SUPPORTED",
+      "blocked": false
+    }
+  },
+  {
+    "id": "RW-122",
+    "title": "tax-period-assessment: expired evidence cannot establish current compliance",
+    "workflow": "tax-close",
+    "country": "IN",
+    "expected": {
+      "state": "EXPIRED",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-123",
+    "title": "tax-period-assessment: expiry on review date remains current",
+    "workflow": "tax-close",
+    "country": "IN",
+    "expected": {
+      "state": "SUPPORTED"
+    }
+  },
+  {
+    "id": "RW-124",
+    "title": "tax-period-assessment: declared support without reference stays missing",
+    "workflow": "tax-close",
+    "country": "IN",
+    "expected": {
+      "state": "EVIDENCE_MISSING",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-125",
+    "title": "tax-period-assessment: documented exception requires disposition",
+    "workflow": "tax-close",
+    "country": "IN",
+    "expected": {
+      "state": "EXCEPTION",
+      "exceptions": 1
+    }
+  },
+  {
+    "id": "RW-126",
+    "title": "tax-period-assessment: unknown status is not clean",
+    "workflow": "tax-close",
+    "country": "IN",
+    "expected": {
+      "state": "MISSING",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-127",
+    "title": "tax-period-assessment: justified non-applicability retained",
+    "workflow": "tax-close",
+    "country": "IN",
+    "expected": {
+      "state": "NOT-APPLICABLE"
+    }
+  },
+  {
+    "id": "RW-128",
+    "title": "tax-period-assessment: unexplained non-applicability blocked",
+    "workflow": "tax-close",
+    "country": "IN",
+    "expected": {
+      "state": "RATIONALE_MISSING",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-129",
+    "title": "tax-period-assessment: missing scoped check visible despite other evidence",
+    "workflow": "tax-close",
+    "country": "IN",
+    "expected": {
+      "state": "MISSING",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-130",
+    "title": "tax-period-assessment: whole missing entity is visible",
+    "workflow": "tax-close",
+    "country": "IN",
+    "expected": {
+      "state": "MISSING",
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-131",
+    "title": "UAE VAT201 declared box agrees to register",
+    "workflow": "uae-vat-return",
+    "country": "AE",
+    "expected": {
+      "state": "MATCHED"
+    }
+  },
+  {
+    "id": "RW-132",
+    "title": "UAE VAT201 multiple book rows aggregate without netting tax fields",
+    "workflow": "uae-vat-return",
+    "country": "AE",
+    "expected": {
+      "state": "MATCHED"
+    }
+  },
+  {
+    "id": "RW-133",
+    "title": "UAE VAT201 tax variance is distinct from base variance",
+    "workflow": "uae-vat-return",
+    "country": "AE",
+    "expected": {
+      "state": "VARIANCE"
+    }
+  },
+  {
+    "id": "RW-134",
+    "title": "UAE VAT201 taxable-base variance survives equal tax",
+    "workflow": "uae-vat-return",
+    "country": "AE",
+    "expected": {
+      "state": "VARIANCE"
+    }
+  },
+  {
+    "id": "RW-135",
+    "title": "UAE VAT201 adjustment is independently compared",
+    "workflow": "uae-vat-return",
+    "country": "AE",
+    "expected": {
+      "state": "VARIANCE"
+    }
+  },
+  {
+    "id": "RW-136",
+    "title": "UAE VAT201 book box absent from filed return",
+    "workflow": "uae-vat-return",
+    "country": "AE",
+    "expected": {
+      "state": "BOOKS_ONLY"
+    }
+  },
+  {
+    "id": "RW-137",
+    "title": "UAE VAT201 filed box absent from book mapping",
+    "workflow": "uae-vat-return",
+    "country": "AE",
+    "expected": {
+      "state": "RETURN_ONLY"
+    }
+  },
+  {
+    "id": "RW-138",
+    "title": "UAE VAT201 required box absent from both sources is missing",
+    "workflow": "uae-vat-return",
+    "country": "AE",
+    "expected": {
+      "exceptions": 1,
+      "blocked": true
+    }
+  },
+  {
+    "id": "RW-139",
+    "title": "UAE VAT201 duplicate amended return boxes cannot be added",
+    "workflow": "uae-vat-return",
+    "country": "AE",
+    "expected": {
+      "error": "Duplicate domain key"
+    }
+  },
+  {
+    "id": "RW-140",
+    "title": "UAE VAT201 different tax registrations stay separate",
+    "workflow": "uae-vat-return",
+    "country": "AE",
+    "expected": {
+      "state": "BOOKS_ONLY"
+    }
+  },
+  {
+    "id": "RW-141",
+    "title": "UAE VAT201 different assigned tax periods stay separate",
+    "workflow": "uae-vat-return",
+    "country": "AE",
+    "expected": {
+      "exceptions": 2
+    }
+  },
+  {
+    "id": "RW-142",
+    "title": "UAE VAT201 future tax period cannot close early",
+    "workflow": "uae-vat-return",
+    "country": "AE",
+    "expected": {
+      "error": "beyond the reconciliation date"
+    }
+  }
+]

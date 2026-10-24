@@ -78,7 +78,14 @@ def safe_cell(value: object) -> str:
 
 def rows(path: Path, filename: str, options: ImportOptions) -> Iterator[tuple[int, dict[str, str]]]:
     suffix = Path(filename).suffix.lower()
-    if suffix in {".xml", ".json"} and options.source_system == "tally":
+    if suffix == ".ndjson" and options.source_system == "tally":
+        from app.modules.connectors.tally_windows import package_rows
+
+        if not options.tally_company:
+            raise ImportProblem("Tally company must be explicitly selected")
+        for index, row in enumerate(package_rows(path, options), 2):
+            yield index, row
+    elif suffix in {".xml", ".json"} and options.source_system == "tally":
         from app.modules.connectors.tally import parse_export
 
         if not options.tally_company:
@@ -91,15 +98,40 @@ def rows(path: Path, filename: str, options: ImportOptions) -> Iterator[tuple[in
             from defusedxml.ElementTree import fromstring
 
             package = json.loads(path.read_text(encoding="utf-8"))
+            if (
+                not isinstance(package, dict)
+                or not isinstance(package.get("exports"), dict)
+                or not package["exports"]
+            ):
+                raise ImportProblem("Invalid Tally package: native exports are required")
+            if package.get("company", options.tally_company) != options.tally_company:
+                raise ImportProblem("Tally package company does not match selected company")
             root = Element("ENVELOPE")
             for encoded in package["exports"].values():
+                if not isinstance(encoded, str):
+                    raise ImportProblem("Invalid Tally package export encoding")
                 root.append(fromstring(base64.b64decode(encoded, validate=True)))
             content = tostring(root)
         else:
             content = path.read_bytes()
         # Period checks are repeated during canonical normalization.
-        result = parse_export(content, options.tally_company, date.min, date.max)
-        for index, row in enumerate(result["lines"], 2):
+        result = parse_export(content, options.tally_company, date.min, date.max, expected_fingerprint=options.tally_company_fingerprint)
+        selected = result["lines"]
+        if options.kind == "coa":
+            selected = [
+                {
+                    "account_code": name,
+                    "account_name": name,
+                    "source_group": master.get("group") or "",
+                    "source_id": "ledger:" + name,
+                }
+                for name, master in result["masters"].items()
+            ]
+        elif options.kind == "tb":
+            from app.modules.connectors.tally import trial_balance_rows
+
+            selected = trial_balance_rows(result)
+        for index, row in enumerate(selected, 2):
             yield index, row
     elif suffix == ".csv":
         try:
@@ -265,7 +297,8 @@ def normalize(
     if pycountry.currencies.get(alpha_3=currency) is None:
         raise ImportProblem("Invalid ISO currency")
     rate = money(
-        data.get("exchange_rate", "1" if currency == functional else ""), options.decimal_separator
+        data.get("exchange_rate") or ("1" if currency == functional else ""),
+        options.decimal_separator,
     )
     if rate <= 0:
         raise ImportProblem("Missing supported source exchange rate")

@@ -54,6 +54,13 @@ class Inference(Strict):
     limit: int = Field(default=1000, ge=1, le=10000)
 
 
+class BaselineInference(Strict):
+    dataset_id: uuid.UUID
+    mode: Literal["rules_baseline", "statistical_baseline", "diagnostic_mock"]
+    offset: int = Field(default=0, ge=0)
+    limit: int = Field(default=1000, ge=1, le=10000)
+
+
 class Feedback(Strict):
     transaction_id: str = Field(max_length=100)
     label: Literal[
@@ -143,6 +150,8 @@ async def explanation(
             "explanation",
             {
                 "prediction": prediction,
+                "execution_mode": result["execution_mode"],
+                "prediction_execution_mode": source.body.get("execution_mode", "unavailable"),
                 "commentary": output.model_dump(mode="json"),
                 "status": "SUGGESTED",
                 "score_changes": False,
@@ -234,6 +243,8 @@ async def job_status(identifier: uuid.UUID, db: DB, ctx: Actor):
         "progress": job.progress,
         "result": job.result,
         "epochs": epochs,
+        "execution_mode": (job.result or {}).get("execution_mode", "unavailable"),
+        "error_category": job.error_category,
     }
 
 
@@ -309,6 +320,51 @@ async def events(
         ],
         "total": await db.scalar(select(func.count()).select_from(MLEvent).where(*where)),
     }
+
+
+@router.get("/engagements/{eid}/capabilities")
+async def capabilities(eid: uuid.UUID, db: DB, ctx: Actor):
+    import shutil
+
+    eng = await audit.engagement(db, ctx, eid, "ml.read", lock=False)
+    deployments = (await db.scalars(select(MLEvent).where(
+        MLEvent.tenant_id == ctx.tenant_id, MLEvent.engagement_id == eid,
+        MLEvent.kind == "deployment",
+    ).order_by(MLEvent.created_at.desc(), MLEvent.id.desc()).limit(100))).all()
+    families = {}
+    for deployment in deployments:
+        family = deployment.body.get("family")
+        if family in families:
+            continue
+        current = await ml_current(db, ctx, deployment)
+        families[family] = {"deployment_id": str(deployment.id), "sources_current": current,
+                            "execution_mode": "trained_model" if current else "unavailable",
+                            "runtime_inference_verified": False,
+                            "production_validated": False}
+    return {
+        "entity_id": str(eng.entity_id), "period_id": str(eng.period_id),
+        "local_runtime_present": bool(shutil.which("node") and
+                                      (service.ROOT / "ml-engine/dist/src/worker.js").is_file()),
+        "backend": "cpu", "language_model_dependency": False,
+        "explicit_baseline_modes": ["rules_baseline", "statistical_baseline", "diagnostic_mock"],
+        "trained_deployments": families,
+        "execution_mode": "unavailable", "status": "not_executed",
+        "state_meaning": "Deployment/source configuration only; actual inference must verify artifact hashes, schema and runtime",
+        "journal_type_classification": "unavailable; existing journal-classifier is a binary review classifier",
+        "training_data_gap": "Reviewed labels and independent held-out evaluation are needed; synthetic pipeline evidence is not production accuracy",
+    }
+
+
+@router.post("/inference/baselines", status_code=202)
+async def baseline(data: BaselineInference, db: DB, ctx: Actor, request: Request):
+    source = await service.get(db, ctx, data.dataset_id, "dataset", "ml.score")
+    await require_ml_current(db, ctx, source)
+    from app.workers.accounting import submit
+
+    return await submit(db, ctx, "ml.score", {
+        "operation": "baseline", "source_id": str(source.id),
+        "mode": data.mode, "offset": data.offset, "limit": data.limit,
+    }, request.state.request_id)
 
 
 @router.get("/events/{identifier}")

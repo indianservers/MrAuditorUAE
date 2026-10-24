@@ -5,6 +5,7 @@ import json
 import shutil
 import subprocess
 import tempfile
+import threading
 import time
 import uuid
 from pathlib import Path
@@ -23,6 +24,7 @@ class TrainingCancelled(Exception):
 
 
 ROOT = Path(__file__).resolve().parents[4]
+_NODE_SLOTS = threading.BoundedSemaphore(2)
 
 
 async def event(db, ctx, eid, kind, body, parent=None):
@@ -81,6 +83,15 @@ def read_object(meta):
 
 
 def node(operation, dataset=None, config=None, model=None, rows=None, job_id=None):
+    if not _NODE_SLOTS.acquire(blocking=False):
+        raise HTTPException(429, "Local ML worker capacity reached; retry the queued operation")
+    try:
+        return _node(operation, dataset, config, model, rows, job_id)
+    finally:
+        _NODE_SLOTS.release()
+
+
+def _node(operation, dataset=None, config=None, model=None, rows=None, job_id=None):
     """Only server-created files/topology; no uploaded JS, paths or arbitrary models."""
     with tempfile.TemporaryDirectory(prefix="auditos-ml-") as directory:
         root = Path(directory)
@@ -88,7 +99,18 @@ def node(operation, dataset=None, config=None, model=None, rows=None, job_id=Non
         artifacts.mkdir()
         if model:
             for name in ("model.json", "weights.bin", "metadata.json"):
-                (artifacts / name).write_bytes(read_object(model[name]))
+                if name not in model:
+                    raise ValueError("ML_MODEL_UNAVAILABLE: required model artifact is missing")
+                try:
+                    (artifacts / name).write_bytes(read_object(model[name]))
+                except (OSError, ValueError):
+                    raise ValueError("ML_ARTIFACT_INVALID: private model artifact is absent or corrupt") from None
+        if operation == "infer" and not model:
+            raise ValueError("ML_MODEL_UNAVAILABLE: inference requires explicit trained artifacts")
+        runtime = shutil.which("node")
+        worker = ROOT / "ml-engine/dist/src/worker.js"
+        if not runtime or not worker.is_file():
+            raise ValueError("ML_RUNTIME_UNAVAILABLE: build the local Node CPU worker")
         request = {
             "operation": operation,
             "artifact_dir": str(artifacts),
@@ -108,9 +130,9 @@ def node(operation, dataset=None, config=None, model=None, rows=None, job_id=Non
         started = time.monotonic()
         process = subprocess.Popen(
             [
-                shutil.which("node") or "node",
+                runtime,
                 "--max-old-space-size=1536",
-                str(ROOT / "ml-engine/dist/src/worker.js"),
+                str(worker),
                 str(root / "request.json"),
                 str(root / "result.json"),
             ],
@@ -131,7 +153,13 @@ def node(operation, dataset=None, config=None, model=None, rows=None, job_id=Non
                     raise TimeoutError("ML worker exceeded wall-clock limit")
                 time.sleep(0.2)
             if process.returncode:
-                raise ValueError("ML worker failed; inspect bounded input schema/runtime")
+                category = "ML_INFERENCE_FAILED"
+                error_path = root / "result.json"
+                if error_path.is_file() and error_path.stat().st_size < 4096:
+                    reported = json.loads(error_path.read_text()).get("error_category")
+                    if reported in {"ML_ARTIFACT_INVALID", "ML_INPUT_INVALID", "ML_INFERENCE_FAILED"}:
+                        category = reported
+                raise ValueError(category + ": local worker failed; no baseline or mock was substituted")
         finally:
             if process.poll() is None:
                 process.kill()
@@ -246,6 +274,26 @@ async def execute_job(db, ctx, payload, job_id=None):
         uuid.UUID(payload["source_id"]),
         permission="ml.train" if payload["operation"] == "train" else "ml.score",
     )
+    if payload["operation"] == "baseline":
+        from app.modules.lineage.freshness import require_ml_current
+        from app.modules.ml.baselines import predict
+
+        if source.kind != "dataset":
+            raise HTTPException(422, "A current versioned dataset is required for baseline execution")
+        await require_ml_current(db, ctx, source)
+        data = json.loads(await run_in_threadpool(read_object, source.body["object"]))
+        start, size = payload.get("offset", 0), payload.get("limit", 1000)
+        result = await run_in_threadpool(predict, data["rows"][start:start + size], payload["mode"])
+        eng = await audit.engagement(db, ctx, source.engagement_id, "ml.score", True)
+        await require_ml_current(db, ctx, source)
+        obj = await event(db, ctx, eng.id, "inference", {
+            **result, "model_id": None, "dataset_id": str(source.id),
+            "entity_id": str(eng.entity_id), "period_id": str(eng.period_id),
+            "source_snapshots": source.body.get("source_snapshots", []),
+            "snapshot": source.sha256, "offset": start,
+            "language_model_dependency": False,
+        }, source.id)
+        return {"id": str(obj.id), "status": "completed", "execution_mode": result["execution_mode"]}
     if payload["operation"] == "train":
         if source.kind != "dataset":
             raise HTTPException(422, "Versioned dataset required")
@@ -309,7 +357,7 @@ async def execute_job(db, ctx, payload, job_id=None):
         )
         # Immutable source reads do not hold an engagement lock through Node inference.
         # Reauthorize and serialize publication, checking deployment supersession again.
-        await audit.engagement(db, ctx, source.engagement_id, "ml.score", True)
+        eng = await audit.engagement(db, ctx, source.engagement_id, "ml.score", True)
         await require_ml_current(db, ctx, model)
         await require_ml_current(db, ctx, dataset)
         current = await db.scalar(
@@ -336,7 +384,10 @@ async def execute_job(db, ctx, payload, job_id=None):
                 "snapshot": dataset.sha256,
                 "offset": start,
                 **result,
+                "entity_id": str(eng.entity_id), "period_id": str(eng.period_id),
+                "source_snapshots": dataset.body.get("source_snapshots", []),
+                "language_model_dependency": False,
             },
             source.id,
         )
-    return {"id": str(obj.id), "status": "completed"}
+    return {"id": str(obj.id), "status": "completed", "execution_mode": "trained_model"}

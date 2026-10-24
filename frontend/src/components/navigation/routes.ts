@@ -179,6 +179,7 @@ const order = [
   "/clients",
   "/engagements",
   "/intelligence",
+  "/compliance/country",
   "/modules",
   "/working-papers",
   "/findings",
@@ -188,9 +189,39 @@ const order = [
   "/admin/users",
   "/settings",
 ];
-export const navigation = [
+export const navigation: {
+  label: string;
+  href: string;
+  icon: typeof Files;
+  permission: string;
+  children?: string[][];
+}[] = [
+  {
+    label: "Regulatory Rule Library",
+    href: "/settings/regulatory-rules",
+    icon: Files,
+    permission: "audit.read",
+  },
   ...existingNavigation,
-  { label: "Accounting Intelligence", href: "/intelligence", icon: ScanLine, permission: "accounting.read" },
+  {label:"Client Collaboration",href:"/client-collaboration",icon:Users,permission:"audit.read"},
+  {
+    label: "Country Compliance",
+    href: "/compliance/country",
+    icon: Scale,
+    permission: "audit.read",
+  },
+  {
+    label: "Statutory Report Designer",
+    href: "/reports/statutory",
+    icon: FileBarChart,
+    permission: "audit.read",
+  },
+  {
+    label: "Accounting Intelligence",
+    href: "/intelligence",
+    icon: ScanLine,
+    permission: "accounting.read",
+  },
   {
     label: "Audit Modules",
     href: "/modules",

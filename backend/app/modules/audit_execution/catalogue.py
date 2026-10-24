@@ -86,6 +86,10 @@ AREAS = [
     "Financial statement presentation",
 ]
 AI_TASKS = [
+    "caro_clause_commentary",
+    "schedule_iii_variance",
+    "statutory_reporting_blockers",
+    "regulatory_disclosure_gaps",
     "acceptance_questions",
     "independence_summary",
     "planning_considerations",

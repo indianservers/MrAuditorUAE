@@ -2,6 +2,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { AuditStudio } from "./audit-studio";
+import { FinancialReview } from "./financial-review";
+import { money } from "@/lib/formatting/money";
 import { PageHeader } from "./shared";
 import { useAPI, useAction } from "@/hooks/use-api";
 import { useScope } from "@/stores/workspace";
@@ -206,7 +208,11 @@ function ReportingRuns({
       const url = URL.createObjectURL(await response.blob());
       const a = document.createElement("a");
       a.href = url;
-      a.download = `AuditOS-${rid}.${format}`;
+      a.download =
+        response.headers
+          .get("Content-Disposition")
+          ?.match(/filename="([^"]+)"/)?.[1] ||
+        `AuditOS-${rid}-draft.${format}`;
       a.click();
       URL.revokeObjectURL(url);
     } catch (e) {
@@ -214,7 +220,13 @@ function ReportingRuns({
     }
   }
   const data = result.data?.results;
-  const lines = (data?.lines || []) as RecordRow[];
+  const usesPresentation = !!data?.presentation_lines;
+  const lines: RecordRow[] = (
+    (data?.presentation_lines || data?.lines || []) as RecordRow[]
+  ).map((line) => ({
+    ...line,
+    id: String(line.line_code || line.code || line.id),
+  }));
   const checks = (
     data?.validation as { checks?: { code: string; passed: boolean }[] }
   )?.checks;
@@ -348,6 +360,15 @@ function ReportingRuns({
             ))}
           </div>
           {downloadError && <p role="alert">{downloadError}</p>}
+          {result.data?.kind === "financials" && (
+            <FinancialReview
+              key={rid}
+              base={base}
+              rid={rid}
+              runs={runs.data?.items || []}
+              precision={Number(data.precision ?? 2)}
+            />
+          )}
           {lines.length > 0 ? (
             <div className="ifrs-designer">
               <nav aria-label="Statement sections">
@@ -364,8 +385,9 @@ function ReportingRuns({
                   </Button>
                 ))}
                 <p>
-                  Figures use debit-positive source signs. Presentation exports
-                  convert credit sections.
+                  {usesPresentation
+                    ? "Figures use the approved presentation precision and credit-section signs. Select a line to trace its unrounded source values."
+                    : "Figures use debit-positive source signs. Presentation exports convert credit sections."}
                 </p>
                 <Facts data={(data.totals || {}) as RecordRow} />
               </nav>
@@ -381,9 +403,27 @@ function ReportingRuns({
                     column("label", "Financial statement line", 200, {
                       flex: 2,
                     }),
-                    amount("current", "Current"),
+                    {
+                      ...amount(
+                        usesPresentation ? "display_current" : "current",
+                        "Current",
+                        String(data.currency || ""),
+                      ),
+                      valueFormatter: (p) =>
+                        money(p.value, Number(data.precision ?? 2)),
+                    },
                     data.comparative
-                      ? amount("comparative", "Comparative")
+                      ? {
+                          ...amount(
+                            usesPresentation
+                              ? "display_comparative"
+                              : "comparative",
+                            "Comparative",
+                            String(data.currency || ""),
+                          ),
+                          valueFormatter: (p) =>
+                            money(p.value, Number(data.precision ?? 2)),
+                        }
                       : column("comparative", "Comparative", 140, {
                           valueFormatter: () => "Not supplied",
                         }),

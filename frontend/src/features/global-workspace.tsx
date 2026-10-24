@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { AuditJourney } from "./audit-journey";
 import {
   ReactFlow,
   Background,
@@ -149,7 +150,7 @@ type RecordNode = {
   freshness: string;
   url: string;
 };
-type Workspace = {
+export type Workspace = {
   team: { user_id: string; email: string; role: string }[];
   engagement: { id: string; name: string; status: string; updated_at: string };
   entity: {
@@ -260,6 +261,7 @@ export function EngagementWorkspace({ eid }: { eid: string }) {
           </nav>
           {tab === "Overview" ? (
             <>
+              <AuditJourney data={data} eid={eid} />
               <div className="workspace-metrics">
                 {[
                   [

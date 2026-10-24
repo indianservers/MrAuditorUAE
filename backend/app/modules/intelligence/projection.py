@@ -96,6 +96,24 @@ async def graph(db, ctx, eid, requested=(), limit=100):
                 )
             if not source:
                 continue
+            if dep["type"] == "regulatory":
+                from app.modules.regulatory.models import RuleVersion
+
+                version = await db.get(RuleVersion, uuid.UUID(source))
+                if version:
+                    nodes.setdefault(
+                        source,
+                        {
+                            "id": source,
+                            "type": "regulatory-rule",
+                            "kind": "regulatory-rule",
+                            "label": f"{version.rule_key} / v{version.version}",
+                            "status": "PUBLISHED_RECEIPT",
+                            "sha256": version.sha256,
+                            "freshness": nodes[identifier]["freshness"],
+                            "url": f"/settings/regulatory-rules?rule={source}",
+                        },
+                    )
             if dep["type"] == "snapshot":
                 snapshot = await db.get(ImportSnapshot, uuid.UUID(source))
                 if snapshot:

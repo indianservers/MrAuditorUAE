@@ -23,7 +23,7 @@ async def registry(db, ctx, eid, offset=0, limit=100):
     items = []
     modules: list[tuple[str, str, Any, Any]] = [
         ("ifrs", "ifrs.read", CalculationRun, current_dependencies),
-        ("tax", "tax.read", TaxRun, dependencies_current),
+        ("tax", "tax.profile.read", TaxRun, dependencies_current),
         ("vat", "vat.read", VATRun, vat_current),
         ("tp", "tp.read", TPRun, tp_current),
         ("ml", "ml.read", MLEvent, None),

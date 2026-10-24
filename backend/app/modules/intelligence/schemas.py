@@ -5,6 +5,13 @@ from typing import Literal
 
 from pydantic import BaseModel, Field, model_validator
 
+from app.modules.country_workflows.schemas import (
+    LedgerSourceInput,
+    SourceInput,
+    VATSourceInput,
+    WorkflowInput,
+)
+from app.modules.intelligence.foundations import ValidationInput
 from app.modules.jurisdictions.profiles import Strict
 
 SECTIONS = [
@@ -136,6 +143,11 @@ class FlowInput(Strict):
 
 
 OPERATIONS: dict[str, type[BaseModel]] = {
+    "workflow-vat": VATSourceInput,
+    "foundation-validation": ValidationInput,
+    "workflow-ledger": LedgerSourceInput,
+    "workflow-source": SourceInput,
+    "country-workflow": WorkflowInput,
     "ocr": OCRInput,
     "source-table": TableInput,
     "lead": LeadInput,
@@ -149,7 +161,19 @@ OPERATIONS: dict[str, type[BaseModel]] = {
 
 class JobInput(Strict):
     operation: Literal[
-        "ocr", "source-table", "lead", "ageing", "reconciliation", "vouching", "mapping", "flow"
+        "foundation-validation",
+        "ocr",
+        "source-table",
+        "lead",
+        "ageing",
+        "reconciliation",
+        "vouching",
+        "mapping",
+        "flow",
+        "workflow-source",
+        "workflow-ledger",
+        "workflow-vat",
+        "country-workflow",
     ]
     payload: dict
 
@@ -175,7 +199,7 @@ class MappingDecision(Strict):
 
 class Review(Strict):
     expected_version: int = Field(ge=1)
-    action: Literal["approve", "reject", "accept", "request-evidence", "finding", "note"]
+    action: Literal["approve", "reject", "accept", "request-evidence", "finding", "note", "submit"]
     item_id: str | None = Field(default=None, max_length=100)
     candidate_id: uuid.UUID | None = None
     comments: str = Field(min_length=10, max_length=6000)

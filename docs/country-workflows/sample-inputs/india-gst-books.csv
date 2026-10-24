@@ -1,0 +1,2 @@
+id,registration,counterparty,reference,period,date,currency,document_type,net,tax,component,status
+1,REG-1,SUP-1,INV-1,2026-06,2026-06-01,AED,invoice,100,5,CGST,active

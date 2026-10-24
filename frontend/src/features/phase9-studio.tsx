@@ -250,6 +250,7 @@ function MLPanel({ eid, area }: { eid: string; area: string }) {
   );
   const action = useAction<{ id: string; status?: string }>();
   const canTrain = useCan("ml.train"),
+    canScore = useCan("ml.score"),
     canApprove = useCan("ml.approve"),
     canDeploy = useCan("ml.deploy");
   const [selected, setSelected] = useState(""),
@@ -267,6 +268,8 @@ function MLPanel({ eid, area }: { eid: string; area: string }) {
     [feedback, setFeedback] = useState("false_positive"),
     [transaction, setTransaction] = useState(""),
     [evidence, setEvidence] = useState("");
+  const [baselineMode, setBaselineMode] = useState("rules_baseline");
+  const [explanationModel, setExplanationModel] = useState("mock-diagnostic");
   const rows = events.data?.items || [],
     models = rows.filter((x) => x.kind === "model"),
     datasets = rows.filter((x) => x.kind === "dataset"),
@@ -323,6 +326,22 @@ function MLPanel({ eid, area }: { eid: string; area: string }) {
         Scores are review signals; they are not fraud or audited misstatement
         probabilities.
       </div>
+      {(area === "deployment" || area === "investigator") && <section className="p9-card">
+        <h2>Explicit baseline execution</h2>
+        <p>Runs independently of trained artifacts and language-model credentials. These are review heuristics, not trained AI or fraud probabilities.</p>
+        <label>Execution mode
+          <select value={baselineMode} onChange={(e) => setBaselineMode(e.target.value)}>
+            <option value="rules_baseline">Rules baseline</option>
+            <option value="statistical_baseline">Statistical baseline</option>
+            <option value="diagnostic_mock">Diagnostic mock — no inference</option>
+          </select>
+        </label>
+        <Button disabled={!dataset || !canScore} onClick={async () => {
+          const r = await action.mutateAsync({path: "ml/inference/baselines",
+            body: {dataset_id: dataset, mode: baselineMode, offset, limit: 1000}});
+          setJob(r.id);
+        }}>Run selected baseline</Button>
+      </section>}
       <div className="toolbar">
         <label>
           Model version
@@ -618,13 +637,16 @@ function MLPanel({ eid, area }: { eid: string; area: string }) {
       {area === "investigator" && (
         <>
           <h2>Source-linked predictions and deterministic signals</h2>
+          <p>Execution mode: {String(inference?.body.execution_mode || "unavailable")}. Feature version: {String(inference?.body.feature_version || "not recorded")}.
+            Scores remain uncalibrated review signals. Accounting and tax decisions require independent approval.</p>
           <FinancialDataGrid
             rows={(
               (inference?.body.predictions || []) as Record<string, unknown>[]
             ).map((p) => ({ id: String(p.transaction_id), ...p }))}
             columns={[
               column("transaction_id", "Source transaction"),
-              column("score", "ML score"),
+              column("score", "Review score"),
+              column("execution_mode", "Execution mode"),
               column("threshold", "Threshold"),
               column("reconstruction_error", "Reconstruction error"),
             ]}
@@ -639,16 +661,19 @@ function MLPanel({ eid, area }: { eid: string; area: string }) {
               onChange={(e) => setTransaction(e.target.value)}
             />
           </label>
+          <label>Approved explanation model
+            <input value={explanationModel} onChange={(e) => setExplanationModel(e.target.value)} />
+          </label>
           <Button
             disabled={!inference || !transaction}
             onClick={() =>
               action.mutate({
                 path: `ml/predictions/${selected}/explanation`,
-                body: { transaction_id: transaction, model: "mock-diagnostic" },
+                body: { transaction_id: transaction, model: explanationModel },
               })
             }
           >
-            Explain validated factors
+            {explanationModel === "mock-diagnostic" ? "Run diagnostic explanation (no language model)" : "Explain using configured language model"}
           </Button>
           <Json data={action.data} />
           <p>

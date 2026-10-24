@@ -17,22 +17,74 @@ from app.modules.audit_execution.schemas import RecordInput, RecordPatch, Source
 from app.modules.audit_log.service import record
 from app.modules.intelligence import jobs, service
 from app.modules.intelligence import schemas as s
+from app.modules.intelligence.foundations import PeriodAction
 from app.modules.intelligence.models import IntelligenceEvent, IntelligenceJob
 
 router = APIRouter(prefix="/intelligence", tags=["Accounting intelligence"])
 
 
+@router.get("/engagements/{eid}/foundation-status")
+async def foundation_status(eid: uuid.UUID, db: DB, ctx: Actor):
+    from app.modules.intelligence.foundations import diagnostics
+
+    eng = await audit.engagement(db, ctx, eid, "accounting.read", lock=False)
+    return await diagnostics(db, ctx, eng)
+
+
+@router.post("/engagements/{eid}/period-actions")
+async def period_action(eid: uuid.UUID, data: PeriodAction, db: DB, ctx: Actor, request: Request):
+    from app.db.models.platform import FinancialPeriod
+
+    action = data
+    eng = await audit.engagement(db, ctx, eid, "workingpaper.approve", True)
+    period = await db.scalar(
+        select(FinancialPeriod)
+        .where(FinancialPeriod.tenant_id == ctx.tenant_id, FinancialPeriod.id == eng.period_id)
+        .with_for_update()
+        .execution_options(populate_existing=True)
+    )
+    if not period or period.lock_version != action.expected_version:
+        raise HTTPException(409, "Period lock version conflict")
+    target = "LOCKED" if action.action == "lock" else "OPEN"
+    if period.lock_state == target:
+        raise HTTPException(409, "Period is already in the requested state")
+    previous = period.lock_state
+    period.lock_state = target
+    period.lock_version += 1
+    record(
+        db,
+        ctx,
+        "accounting.period." + action.action,
+        period.id,
+        request.state.request_id,
+        {
+            "entity_id": str(eng.entity_id),
+            "engagement_id": str(eid),
+            "before": previous,
+            "after": target,
+            "version": period.lock_version,
+            "reason": action.reason,
+        },
+    )
+    return {"id": str(period.id), "state": target, "version": period.lock_version}
+
+
 @router.get("/capabilities")
 async def capabilities(ctx: Actor):
+    from app.core.config import settings
+    from app.modules.country_workflows.catalogue import catalogue, scenarios
+
     return {
+        "country_workflows": catalogue(),
+        "real_world_scenario_count": len(scenarios()),
         "engine_version": "accounting-intelligence-1",
         "operations": list(s.OPERATIONS),
         "lead_sections": s.SECTIONS,
         "ocr": {
             "providers": ["pdfium-text", "rapidocr-local"],
             "external_document_transfer": False,
-            "max_pages": 20,
-            "max_bytes": 25 * 1024 * 1024,
+            "max_pages": settings().document_max_pages,
+            "max_bytes": settings().document_max_bytes,
             "requires_clean_evidence": True,
             "scores_calibrated": False,
         },
@@ -43,6 +95,35 @@ async def capabilities(ctx: Actor):
             "graph_journals": 10000,
         },
         "statutory_qualification": False,
+    }
+
+
+@router.get("/engagements/{eid}/country-workflows")
+async def country_workflows(eid: uuid.UUID, db: DB, ctx: Actor):
+    from app.modules.country_workflows.catalogue import catalogue, check_templates, scenarios
+    from app.modules.country_workflows.schemas import ROW_TYPES
+    from app.modules.jurisdictions.workspace import resolved
+
+    eng = await service.scope(db, ctx, eid)
+    await engagement_permissions(db, ctx, eid, "accounting.read")
+    package, _ = await resolved(db, ctx, eng)
+    from app.modules.country_workflows.native_sources import formats
+
+    return {
+        "source_formats": formats(package.country),
+        "check_templates": check_templates(package.country),
+        "scenarios": scenarios(),
+        "country": package.country,
+        "items": catalogue(package.country),
+        "source_contracts": {
+            name: {
+                field: {"required": info.is_required(), "type": str(info.annotation)}
+                for field, info in model.model_fields.items()
+            }
+            for name, model in ROW_TYPES.items()
+        },
+        "max_rows_per_source": 5000,
+        "statutory_calculation_qualified": False,
     }
 
 
@@ -58,6 +139,48 @@ async def submit(
     return audit.serialize(
         await jobs.submit(db, ctx, eid, data, idempotency_key, request.state.request_id)
     )
+
+
+@router.get("/engagements/{eid}/vat-sources")
+async def vat_sources(eid: uuid.UUID, db: DB, ctx: Actor):
+    from app.modules.jurisdictions.workspace import resolved
+    from app.modules.vat.models import VATRun
+    from app.modules.vat.service import current
+
+    eng = await service.scope(db, ctx, eid)
+    await engagement_permissions(db, ctx, eid, "accounting.read")
+    await engagement_permissions(db, ctx, eid, "vat.read")
+    package, _ = await resolved(db, ctx, eng)
+    if package.country != "AE":
+        raise HTTPException(422, "UAE VAT sources are unavailable for this engagement country")
+    rows = (
+        await db.scalars(
+            select(VATRun)
+            .where(
+                VATRun.tenant_id == ctx.tenant_id,
+                VATRun.engagement_id == eid,
+                VATRun.kind == "vat201",
+            )
+            .order_by(VATRun.created_at.desc(), VATRun.id)
+            .limit(51)
+        )
+    ).all()
+    items = []
+    for row in rows[:50]:
+        if (
+            row.results.get("validation", {}).get("ready") is True
+            and not row.results.get("exceptions")
+            and await current(db, ctx, eid, row)
+        ):
+            items.append(
+                {
+                    "id": str(row.id),
+                    "label": f"VAT201 {row.period_start} – {row.period_end}",
+                    "sha256": row.sha256,
+                    "mapping_version": row.results.get("mapping_version"),
+                }
+            )
+    return {"items": items, "limit": 50, "truncated": len(rows) > 50}
 
 
 @router.get("/engagements/{eid}/jobs")
@@ -160,6 +283,7 @@ async def events(
     kind: str | None = None,
     after: uuid.UUID | None = None,
     limit: int = Query(50, ge=1, le=100),
+    newest: bool = False,
 ):
     await service.scope(db, ctx, eid)
     query = select(IntelligenceEvent).where(
@@ -168,8 +292,15 @@ async def events(
     if kind:
         query = query.where(IntelligenceEvent.kind == kind)
     if after:
+        if newest:
+            raise HTTPException(422, "Newest result selection does not support an ID cursor")
         query = query.where(IntelligenceEvent.id > after)
-    rows = (await db.scalars(query.order_by(IntelligenceEvent.id).limit(limit + 1))).all()
+    ordering = (
+        [IntelligenceEvent.created_at.desc(), IntelligenceEvent.id.desc()]
+        if newest
+        else [IntelligenceEvent.id]
+    )
+    rows = (await db.scalars(query.order_by(*ordering).limit(limit + 1))).all()
     items = []
     for row in rows[:limit]:
         try:
@@ -183,6 +314,7 @@ async def events(
                 "id": str(row.id),
                 "root_id": str(row.root_id),
                 "kind": row.kind,
+                "table_type": row.body.get("table_type"),
                 "version": row.version,
                 "sha256": row.sha256,
                 "created_at": row.created_at.isoformat(),
@@ -197,7 +329,8 @@ async def events(
         )
     return {
         "items": items,
-        "next_cursor": str(rows[limit - 1].id) if len(rows) > limit else None,
+        "next_cursor": str(rows[limit - 1].id) if len(rows) > limit and not newest else None,
+        "truncated": len(rows) > limit,
         "limit": limit,
     }
 
@@ -236,6 +369,7 @@ async def event_details(
         "limit": limit,
         "freshness": "CURRENT" if await service.current(db, ctx, obj) else "STALE",
         "latest_version": await service.head(db, ctx, obj),
+        "provenance_status": "receipts_retained" if any(d.get("type") != "context" for d in obj.dependencies) else "legacy provenance incomplete",
     }
 
 
@@ -269,8 +403,12 @@ async def correct(
                     value = datetime.strptime(value, "%Y-%m-%d").date().isoformat()
                 except ValueError:
                     raise HTTPException(422, "Corrected date must use YYYY-MM-DD") from None
-            if key == "currency" and (len(value) != 3 or not value.isalpha()):
-                raise HTTPException(422, "ISO currency required")
+            if key == "currency":
+                import pycountry
+
+                value = value.upper()
+                if pycountry.currencies.get(alpha_3=value) is None:
+                    raise HTTPException(422, "ISO currency required")
         fields[key] = value
         locations[key] = {
             "origin": "HUMAN_CORRECTION",
@@ -278,9 +416,18 @@ async def correct(
             "prior_event_id": str(obj.id),
             "reason": data.reason,
         }
+    messages = [message for message in obj.body.get("validation_messages", [])
+                if message != "Net plus tax does not equal gross"
+                and not any(message.startswith(key + ":") and value is not None for key, value in data.fields.items())]
+    if all(fields.get(key) is not None for key in ["gross_amount", "net_amount", "tax_amount"]):
+        from decimal import Decimal
+
+        if Decimal(fields["net_amount"]) + Decimal(fields["tax_amount"]) != Decimal(fields["gross_amount"]):
+            messages.append("Net plus tax does not equal gross")
     body = {
         **obj.body,
         "fields": fields,
+        "validation_messages": messages,
         "field_locations": locations,
         "correction_reason": data.reason,
         "review_status": "UNVERIFIED",
@@ -407,10 +554,11 @@ async def review(
     reviewer = data.action in {"approve", "reject"}
     needed = (
         "audit.evidence.review"
-        if obj.kind in {"ocr", "source-table"} and reviewer
+        if obj.kind in {"ocr", "source-table", "workflow-source"} and reviewer
         else "workingpaper.approve"
         if reviewer
         else {
+            "submit": "workingpaper.create",
             "finding": "audit.finding.create",
             "note": "workingpaper.review",
             "request-evidence": "audit.evidence.upload",
@@ -420,6 +568,43 @@ async def review(
     if reviewer and str(ctx.user_id) in obj.body.get("contributors", [str(obj.created_by)]):
         raise HTTPException(403, "Independent reviewer required")
     body = dict(obj.body)
+    if data.action == "submit":
+        if obj.kind != "foundation-validation" or body.get("review_status") not in {
+            "UNVERIFIED",
+            "REJECTED",
+        }:
+            raise HTTPException(409, "Only an unsubmitted foundation validation may be submitted")
+        body.update(
+            review_status="PREPARED",
+            submission_reason=data.comments,
+            contributors=sorted({*body.get("contributors", []), str(ctx.user_id)}),
+        )
+        return audit.serialize(
+            await service.append(
+                db, ctx, eng, obj.kind, body, obj.dependencies, request.state.request_id, obj
+            )
+        )
+    if data.action == "accept" and obj.kind == "country-workflow":
+        rows = [dict(row) for row in body["rows"]]
+        selected_row = next((row for row in rows if row["id"] == data.item_id), None)
+        if selected_row is None:
+            raise HTTPException(422, "Select a workflow exception row")
+        selected_row.update(
+            auditor_status="EXCEPTION_DOCUMENTED",
+            auditor_comments=data.comments,
+            auditor=str(ctx.user_id),
+            auditor_at=datetime.now(UTC).isoformat(),
+        )
+        body.update(
+            rows=rows,
+            review_status="PREPARED",
+            contributors=sorted({*body.get("contributors", []), str(ctx.user_id)}),
+        )
+        return audit.serialize(
+            await service.append(
+                db, ctx, eng, obj.kind, body, obj.dependencies, request.state.request_id, obj
+            )
+        )
     if data.action == "accept" and obj.kind == "reconciliation":
         matches = [dict(i) for i in body["matches"]]
         selected_match = next((i for i in matches if data.item_id in i["left_ids"]), None)
@@ -566,13 +751,45 @@ async def review(
         )
     else:
         if data.action == "approve":
+            if obj.kind == "foundation-validation" and (
+                obj.body.get("review_status") != "PREPARED"
+                or obj.body.get("completeness") != "complete"
+                or any(
+                    i.get("blocking", True) and i.get("disposition", "open") == "open"
+                    for i in obj.body.get("issues", [])
+                )
+            ):
+                raise HTTPException(
+                    409, "Resolve foundation blockers and regenerate before approval"
+                )
+            if obj.kind == "regulatory-assessment" and any(
+                r.get("applicability") == "PENDING" for r in obj.body["rows"]
+            ):
+                raise HTTPException(
+                    409,
+                    "Resolve required applicability facts and numeric source provenance before approval",
+                )
+            if obj.kind == "country-workflow":
+                from app.modules.country_workflows.review import approval_error
+
+                error = approval_error(obj.body)
+                if error:
+                    raise HTTPException(409, error)
+            if obj.kind == "statutory-checklist" and any(
+                i["state"] not in {"PREPARED", "NOT_APPLICABLE", "EXCEPTION_IDENTIFIED"}
+                for i in obj.body["items"]
+            ):
+                raise HTTPException(
+                    409,
+                    "Resolve pending applicability and evidence requirements before approving the specialist checklist",
+                )
             for dependency in obj.dependencies:
                 if dependency["type"] == "event":
                     supporting = await service.event(
                         db, ctx, eid, uuid.UUID(dependency["id"]), True
                     )
                     if (
-                        supporting.kind == "source-table"
+                        supporting.kind in {"source-table", "workflow-source"}
                         and supporting.body.get("review_status") != "REVIEWED"
                     ):
                         raise HTTPException(
@@ -623,7 +840,7 @@ async def generate_paper(
     ctx: Actor,
     request: Request,
 ):
-    eng = await service.scope(db, ctx, eid, "lead", True)
+    eng = await audit.engagement(db, ctx, eid, "workingpaper.create", True)
     obj = await service.event(db, ctx, eid, identifier, True)
     if obj.body.get("review_status") != "REVIEWED":
         raise HTTPException(
@@ -832,9 +1049,13 @@ async def export_result(
     await engagement_permissions(db, ctx, eid, "audit.export")
     from starlette.concurrency import run_in_threadpool
 
+    from app.db.models.platform import Tenant
     from app.modules.intelligence.exports import render
 
-    content, media = await run_in_threadpool(render, audit.serialize(obj), format)
+    tenant = await db.get(Tenant, ctx.tenant_id)
+    content, media = await run_in_threadpool(
+        render, {**audit.serialize(obj), "firm_name": tenant.name if tenant else ""}, format
+    )
     record(
         db,
         ctx,

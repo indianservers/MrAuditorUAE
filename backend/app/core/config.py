@@ -24,6 +24,9 @@ class Settings(BaseSettings):
     source_kms_key: str = ""
     connector_encryption_key: str = ""
     zoho_redirect_uris: list[str] = ["http://localhost:8000/oauth/zoho"]
+    connector_allowed_origins: list[str] = []
+    connector_redirect_uris: list[str] = []
+    connector_quickbooks_webhook_token: str = ""
     financial_ai_hourly_requests: int = 20
     ai_base_url: str = "https://api.openai.com/v1"
     ai_api_key: str = ""
@@ -32,6 +35,8 @@ class Settings(BaseSettings):
     ai_max_tokens: int = 512
     evidence_clamav_host: str = ""
     evidence_clamav_port: int = 3310
+    document_max_pages: int = Field(default=20, ge=1, le=100)
+    document_max_bytes: int = Field(default=25 * 1024 * 1024, ge=1024, le=100 * 1024 * 1024)
     audit_ai_external_approved: bool = False
     synthetic_data_enabled: bool = False
     demo_database_name: str = ""

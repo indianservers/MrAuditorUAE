@@ -3,26 +3,34 @@ import io
 import json
 import tempfile
 import uuid
-from datetime import date
+from decimal import Decimal
 
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.core.config import settings
 from app.core.dependencies import Context
 from app.db.models.platform import FinancialPeriod
 from app.modules.accounting.models import Connection, SyncRun
 from app.modules.accounting.schemas import ImportOptions
 from app.modules.accounting.service import scope_values, scoped, upload
+from app.modules.connectors.enrichment import tax_evidence
+from app.modules.connectors.ledger import zoho_ledger_row
+from app.modules.connectors.runtime import ConnectorRuntime, digest
 from app.modules.connectors.secrets import decrypt, encrypt
-from app.modules.connectors.zoho import RESOURCES, ZohoConnector
+from app.modules.connectors.zoho import DETAIL_RESOURCES, RESOURCES, ZohoConnector
 from app.modules.saas.storage import put_private
 
 
-async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID):
+async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, resume_session: str | None = None):
     connection = await scoped(db, ctx, Connection, connection_id, True)
     if connection.provider != "zoho" or not connection.organization_id:
         raise HTTPException(422, "Zoho organization selection required")
     period = await scoped(db, ctx, FinancialPeriod, connection.period_id)
+    from app.db.models.platform import LegalEntity
+
+    entity = await scoped(db, ctx, LegalEntity, connection.entity_id)
+    config = getattr(connection, "config", {})
     credentials = decrypt(connection.encrypted_credentials or "")
     adapter = ZohoConnector(
         connection.region,
@@ -30,6 +38,37 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID):
         credentials["client_secret"],
         credentials.get("refresh_token", ""),
     )
+    runtime = ConnectorRuntime.for_session(db, ctx, connection_id)
+    session_id = resume_session or str(uuid.uuid4())
+    cache_scope = digest([str(connection.id), str(connection.period_id), connection.region, connection.organization_id, session_id])
+    quota_client = None
+    if runtime:
+        from redis.asyncio import Redis
+
+        from app.modules.connectors.quota import OrganizationQuota
+
+        adapter.read_cache = lambda key, fetch: runtime.cached_read(cache_scope, key, fetch)
+        async def rotate(current, force):
+            async def exchange(source):
+                adapter.refresh_token = source.get("refresh_token", "")
+                return {**source, **await adapter.exchange_token()}
+            return await runtime.rotate_grant(digest(["zoho", connection.region, credentials["client_id"],
+                config.get("oauth_grant_id") or connection.organization_id]), current, exchange, force)
+        adapter.token_handler = rotate
+        quota_client = Redis.from_url(settings().redis_url)
+        adapter.governor = OrganizationQuota(quota_client, "zoho", connection.organization_id, credentials["client_id"],
+            60, 10000, 2)
+        await runtime.put("session", cache_scope, {"resume_session": session_id, "status": "extracting"}, ttl_hours=168)
+
+    async def preserve(raw):
+        if runtime:
+            import hashlib
+
+            candidate = runtime.last_object
+            return candidate if candidate and candidate["sha256"] == hashlib.sha256(raw).hexdigest() else await runtime.persist_object(raw)
+        return await put_private(db, ctx, io.BytesIO(raw))
+
+    document_controls = []
     run = SyncRun(**scope_values(connection), connection_id=connection.id)
     db.add(run)
     await db.flush()
@@ -52,6 +91,7 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID):
         "tax_code",
         "project",
         "manual",
+        "opening",
     ]
     writer = csv.DictWriter(normalized, fieldnames=columns)
     writer.writeheader()
@@ -62,19 +102,35 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID):
     chart_writer.writeheader()
     chart_count = 0
     extracted_lines = 0
-    excluded_journals = 0
-    excluded_out_of_period = 0
+    extracted_accounts = 0
+    ledger_totals: dict[str, dict[str, Decimal]] = {}
+    seen_accounts = set()
+    seen_postings = set()
     status = "completed"
     error = None
     # Partial failures persist already received raw pages, never claim complete GL coverage.
     try:
-        for resource in RESOURCES:
-            async for page in adapter.pages(resource, connection.organization_id):
+        if runtime:
+            organization_reply = await adapter.get("organizations", {})
+            organizations = organization_reply.get("organizations", [])
+            organization = next((o for o in organizations if str(o.get("organization_id")) == connection.organization_id), None)
+            if not organization or organization.get("currency_code") != entity.functional_currency:
+                raise ValueError("Zoho organization/base currency mismatch")
+            manifest.append({"resource": "organization_identity", **await preserve(adapter.last_raw)})
+        resources = dict(RESOURCES)
+        if config.get("include_documents"):
+            resources.update(customerpayments="customerpayments", vendorpayments="vendorpayments")
+        for resource in resources:
+            extra = {"filter_by": "AccountType.All"} if resource == "chartofaccounts" else None
+            async for page in adapter.pages(resource, connection.organization_id, extra):
                 data = adapter.last_raw or json.dumps(page, sort_keys=True, default=str).encode()
-                stored = await put_private(db, ctx, io.BytesIO(data))
+                stored = await preserve(data)
                 manifest.append({"resource": resource, "page": page["page"], **stored})
                 if resource == "chartofaccounts":
                     for account in page["raw"][resource]:
+                        if account["account_id"] in seen_accounts:
+                            raise ValueError("Duplicate Zoho account")
+                        seen_accounts.add(account["account_id"])
                         chart_writer.writerow(
                             {
                                 "account_code": str(account["account_id"]),
@@ -84,13 +140,71 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID):
                             }
                         )
                         chart_count += 1
+                        # Fetch ALL posting types for every account, including inactive
+                        # accounts returned by the unfiltered chart endpoint.
+                        async for transactions in adapter.pages(
+                            "chartofaccounts/accounttransactions",
+                            connection.organization_id,
+                            {
+                                "account_id": str(account["account_id"]),
+                                "date_start": str(period.start_date),
+                                "date_end": str(period.end_date),
+                                "filter_by": "TransactionType.All",
+                            },
+                        ):
+                            original = await preserve(adapter.last_raw or json.dumps(transactions["raw"], default=str).encode())
+                            manifest.append(
+                                {
+                                    "resource": "accounttransactions",
+                                    "account_id": str(account["account_id"]),
+                                    "page": transactions["page"],
+                                    **original,
+                                }
+                            )
+                            for item in transactions["raw"]["transactions"]:
+                                row = zoho_ledger_row(
+                                    item, account, period.start_date, period.end_date
+                                )
+                                if row["source_id"] in seen_postings:
+                                    raise ValueError("Duplicate Zoho ledger posting")
+                                seen_postings.add(row["source_id"])
+                                if row["currency"] == entity.functional_currency:
+                                    row["exchange_rate"] = "1"
+                                writer.writerow(row)
+                                extracted_lines += 1
+                                totals = ledger_totals.setdefault(
+                                    row["currency"] or "unspecified",
+                                    {"debit": Decimal(0), "credit": Decimal(0)},
+                                )
+                                totals["debit"] += Decimal(row["debit"])
+                                totals["credit"] += Decimal(row["credit"])
+                        extracted_accounts += 1
+                if config.get("include_documents") and resource in DETAIL_RESOURCES:
+                    singular, id_key = DETAIL_RESOURCES[resource]
+                    for summary in page["raw"][resource]:
+                        identity = str(summary[id_key])
+                        detail = await adapter.document_detail(resource, identity, connection.organization_id)
+                        document = detail.get(singular)
+                        if not isinstance(document, dict) or str(document.get(id_key)) != identity:
+                            raise ValueError("Zoho detail identity mismatch")
+                        manifest.append({"resource": resource + "/detail", "id": identity,
+                            **await preserve(adapter.last_raw)})
+                        if document.get("exchange_rate") is not None and Decimal(str(document["exchange_rate"])) <= 0:
+                            raise ValueError("Invalid Zoho source exchange rate")
+                        document_controls.append({"resource": resource, "id": identity,
+                            "currency": document.get("currency_code"), "exchange_rate": str(document.get("exchange_rate", "")),
+                            "tax": tax_evidence(document, "zoho")})
+                        if resource == "invoices" and document.get("has_attachment") and config.get("include_attachments"):
+                            content, mime = await adapter.invoice_attachment(identity, connection.organization_id)
+                            manifest.append({"resource": "invoice_attachment", "id": identity, "content_type": mime,
+                                **await preserve(content)})
                 if resource == "journals":
+                    # Manual details remain evidence; never append them again to GL.
                     for header in page["raw"]["journals"]:
                         detail = await adapter.journal_detail(
                             str(header["journal_id"]), connection.organization_id
                         )
-                        detail_raw = adapter.last_raw or json.dumps(detail, default=str).encode()
-                        original = await put_private(db, ctx, io.BytesIO(detail_raw))
+                        original = await preserve(adapter.last_raw or json.dumps(detail, default=str).encode())
                         manifest.append(
                             {
                                 "resource": "journal_detail",
@@ -98,77 +212,46 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID):
                                 **original,
                             }
                         )
-                        journal = detail["journal"]
-                        if journal.get("status") != "published":
-                            excluded_journals += 1
-                            continue
-                        if (
-                            not period.start_date
-                            <= date.fromisoformat(journal["journal_date"])
-                            <= period.end_date
-                        ):
-                            excluded_out_of_period += 1
-                            continue
-                        for item in journal.get("line_items", []):
-                            side = item.get("debit_or_credit")
-                            if side not in {"debit", "credit"}:
-                                raise ValueError("Unsupported journal side")
-                            amount = str(item["amount"])
-                            base = str(item["bcy_amount"]) if "bcy_amount" in item else ""
-                            writer.writerow(
-                                {
-                                    "account_code": str(item["account_id"]),
-                                    "account_name": item.get(
-                                        "account_name", str(item["account_id"])
-                                    ),
-                                    "journal_ref": str(header["journal_id"]),
-                                    "posting_date": journal["journal_date"],
-                                    "debit": amount if side == "debit" else "0",
-                                    "credit": amount if side == "credit" else "0",
-                                    "base_debit": base if side == "debit" else "0",
-                                    "base_credit": base if side == "credit" else "0",
-                                    "currency": journal.get("currency_code", ""),
-                                    "exchange_rate": str(journal.get("exchange_rate", "")),
-                                    "source_id": str(header["journal_id"])
-                                    + ":"
-                                    + str(item["line_id"]),
-                                    "counterparty": item.get("customer_id", ""),
-                                    "description": item.get("description", ""),
-                                    "tax_code": item.get("tax_id", ""),
-                                    "project": item.get("project_id", ""),
-                                    "manual": "true",
-                                }
-                            )
-                            extracted_lines += 1
 
     except Exception:
         status = "failed"
         error = "partial_extraction"
+    if quota_client:
+        await quota_client.aclose()
     credentials.update(access_token=adapter.access_token, refresh_token=adapter.refresh_token)
     connection.encrypted_credentials = encrypt(credentials)
     run.status = status
     run.error_category = error
     run.manifest = {
         "objects": manifest,
+        "resume_session": session_id,
+        "counts": {"gl": extracted_lines, "coa": chart_count},
+        "checkpoint": {"replayed": runtime.replayed, "downloaded": runtime.downloaded} if runtime else {},
+        "execution_mode": "live" if adapter.transport is None else "simulated",
+        "document_controls": document_controls,
         "connector_version": adapter.version,
         "fallback": "Upload an independently controlled GL and trial-balance report",
         "complete_general_ledger": False,
-        "excluded_out_of_period_journals": excluded_out_of_period,
+        "ledger_coverage": "all_account_transaction_types",
+        "accounts_with_completed_pagination": extracted_accounts,
+        "extracted_lines": extracted_lines,
+        "transaction_totals_by_currency": {
+            currency: {k: str(v) for k, v in totals.items()}
+            for currency, totals in ledger_totals.items()
+        },
+        "requires_validation": True,
         "period_start": str(period.start_date),
         "period_end": str(period.end_date),
         "incremental_support": "Only use resource-documented filters; this release performs complete resource pagination",
     }
     if status == "completed" and extracted_lines:
-        from app.db.models.platform import LegalEntity
-
-        entity = await scoped(db, ctx, LegalEntity, connection.entity_id)
         normalized.seek(0)
         # The derived CSV has lineage to every original API page/detail via the sync run.
         options = ImportOptions(
             client_id=connection.client_id,
             entity_id=connection.entity_id,
             period_id=connection.period_id,
-            kind="journals",
+            kind="gl",
             source_system="zoho",
             currency=entity.functional_currency,
             source_sync_run_id=run.id,
@@ -178,7 +261,7 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID):
             db,
             ctx,
             options,
-            "zoho-manual-journals.csv",
+            "zoho-general-ledger.csv",
             io.BytesIO(normalized.read().encode()),
             str(run.id),
         )
@@ -186,7 +269,6 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID):
             **run.manifest,
             "derived_import_batch_id": str(batch.id),
             "extracted_lines": extracted_lines,
-            "excluded_nonpublished_journals": excluded_journals,
         }
     if status == "completed" and chart_count:
         chart.seek(0)
@@ -214,6 +296,10 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID):
         }
     chart.close()
     normalized.close()
+    if runtime:
+        await runtime.put("session", cache_scope, {"resume_session": session_id, "status": status,
+            "sync_run_id": str(run.id), "counts": {"gl": extracted_lines, "coa": chart_count}}, ttl_hours=168)
+    connection.status = "sync_failed" if status == "failed" else "extracted_pending_review"
     run.completeness = "insufficient_evidence"
     await db.flush()
     return {

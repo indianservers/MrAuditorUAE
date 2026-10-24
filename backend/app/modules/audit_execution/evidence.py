@@ -8,6 +8,10 @@ from pathlib import Path
 from app.core.config import settings
 
 TYPES = {
+    ".xml": "application/xml",
+    ".mt940": "text/plain",
+    ".sta": "text/plain",
+    ".sif": "text/csv",
     ".pdf": "application/pdf",
     ".csv": "text/csv",
     ".xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -25,7 +29,7 @@ def validate_file(stream, filename):
     extension = Path(filename).suffix.lower()
     if extension not in TYPES:
         raise ValueError(
-            "Supported evidence: PDF, CSV, XLSX, DOCX, PNG, JPEG, TIFF and bounded document ZIP"
+            "Supported evidence: PDF, CSV, XML, MT940/STA, SIF, XLSX, DOCX, images and bounded document ZIP"
         )
     stream.seek(0)
     header = stream.read(1024)
@@ -64,6 +68,28 @@ def validate_file(stream, filename):
                     raise ValueError("Unsafe document ZIP")
     if extension == ".csv" and (b"\x00" in header or header.lstrip().startswith((b"<", b"MZ"))):
         raise ValueError("Invalid CSV evidence")
+    if extension in {".xml", ".mt940", ".sta", ".sif"}:
+        stream.seek(0)
+        content = stream.read(10 * 1024 * 1024 + 1)
+        if len(content) > 10 * 1024 * 1024 or b"\x00" in content:
+            raise ValueError("Structured evidence exceeds limits or contains null bytes")
+        if extension == ".xml":
+            from defusedxml import ElementTree as safe_xml
+
+            try:
+                safe_xml.fromstring(
+                    content, forbid_dtd=True, forbid_entities=True, forbid_external=True
+                )
+            except Exception:
+                raise ValueError("Invalid or unsafe XML evidence") from None
+        elif extension == ".sif" and not content.lstrip(b"\xef\xbb\xbf").startswith(
+            (b"EDR,", b"SCR,")
+        ):
+            raise ValueError("Invalid SIF evidence record signature")
+        elif extension in {".mt940", ".sta"} and not content.lstrip(
+            b"\xef\xbb\xbf\r\n "
+        ).startswith((b":20:", b"{1:")):
+            raise ValueError("Invalid MT940 evidence record signature")
     if extension in {".xlsx", ".docx"}:
         stream.seek(0)
         with zipfile.ZipFile(stream) as archive:

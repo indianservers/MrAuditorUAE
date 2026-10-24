@@ -113,10 +113,6 @@ test("real queued lead schedule, preserved results, review guard and connector t
     await expect(page.getByText(name, { exact: true })).toBeVisible();
   }
   await expect(
-    page
-      .getByText(
-        "Live API adapter is not implemented. A normalized export can use file import.",
-      )
-      .first(),
+    page.getByText("credentials qualification pending").first(),
   ).toBeVisible();
 });

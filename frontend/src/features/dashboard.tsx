@@ -1,5 +1,5 @@
 "use client";
-import { Badge, Empty, QueryState, Status } from "@/components/ui/primitives";
+import { Empty, QueryState, Status } from "@/components/ui/primitives";
 import { useAPI } from "@/hooks/use-api";
 import { qs } from "@/lib/api/client";
 import { useScope } from "@/stores/workspace";
@@ -34,9 +34,13 @@ export function Dashboard() {
     <>
       <PageHeader
         eyebrow="Firm overview"
-        title="Executive Dashboard"
+        title="Your audit command center"
         description="Your authorized portfolio, financial exceptions and recent firm activity."
-        actions={<Badge tone="blue">Live backend records</Badge>}
+        actions={
+          <Link className="button primary" href="/engagements">
+            Open audit portfolio <ArrowUpRight size={15} />
+          </Link>
+        }
       />
       <div className="page-body dashboard">
         <div className="toolbar">
@@ -197,12 +201,12 @@ export function Dashboard() {
             </section>
             <section className="card">
               <h3>Compliance Status</h3>
-              <Empty title="Not yet configured">
-                Corporate Tax, VAT, Transfer Pricing and Pillar Two services are
-                available in Phase 5. No deadlines or compliance ratings are
-                inferred.
+              <Empty title="Review jurisdiction and engagement context">
+                Open the country workspace for statutory, financial reporting
+                and tax workflows. Review applicable rules and evidence before
+                concluding compliance.
               </Empty>
-              <Link className="button" href="/compliance">
+              <Link className="button" href="/compliance/country">
                 Open Compliance Command Center <ArrowUpRight size={13} />
               </Link>
             </section>

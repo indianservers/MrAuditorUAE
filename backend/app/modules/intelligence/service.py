@@ -31,6 +31,11 @@ from app.modules.lineage.freshness import mapping_receipt
 from app.modules.lineage.storage import ObjectStore, hash_file
 
 PERMISSIONS = {
+    "workflow-vat": "workingpaper.create",
+    "foundation-validation": "workingpaper.create",
+    "workflow-ledger": "workingpaper.create",
+    "workflow-source": "audit.evidence.upload",
+    "country-workflow": "workingpaper.create",
     "ocr": "audit.evidence.upload",
     "source-table": "audit.evidence.upload",
     "lead": "workingpaper.create",
@@ -46,12 +51,29 @@ async def scope(db, ctx, eid, operation=None, mutable=False):
     eng = await audit.engagement(
         db, ctx, eid, PERMISSIONS[operation] if operation else "audit.read", mutable, lock=mutable
     )
-    if operation in {"lead", "ageing", "reconciliation", "vouching", "mapping", "flow"}:
+    if operation in {
+        "lead",
+        "ageing",
+        "reconciliation",
+        "vouching",
+        "mapping",
+        "flow",
+        "workflow-source",
+        "workflow-ledger",
+        "workflow-vat",
+        "country-workflow",
+    }:
         await engagement_permissions(db, ctx, eid, "accounting.read")
+    if operation == "workflow-vat":
+        await engagement_permissions(db, ctx, eid, "vat.read")
     return eng
 
 
-async def event(db, ctx, eid, identifier, require_current=False):
+async def event(db, ctx, eid, identifier, require_current=False, auth_seen=None):
+    auth_seen = set() if auth_seen is None else auth_seen
+    if identifier in auth_seen or len(auth_seen) >= 100:
+        raise HTTPException(409, "Source authorization depth or cycle limit")
+    auth_seen = auth_seen | {identifier}
     await scope(db, ctx, eid)
     obj = await db.scalar(
         select(IntelligenceEvent).where(
@@ -62,8 +84,67 @@ async def event(db, ctx, eid, identifier, require_current=False):
     )
     if not obj:
         raise HTTPException(404, "Intelligence result not found")
-    if obj.kind not in {"ocr", "source-table", "tick"}:
+    from app.modules.country_workflows.diligence_schemas import (
+        DILIGENCE_ROW_TYPES,
+        DILIGENCE_WORKFLOWS,
+    )
+
+    if (
+        obj.body.get("table_type") in DILIGENCE_ROW_TYPES
+        or obj.body.get("workflow") in DILIGENCE_WORKFLOWS
+    ):
+        await engagement_permissions(db, ctx, eid, "audit.evidence.review")
+    if obj.kind not in {
+        "ocr",
+        "source-table",
+        "tick",
+        "statutory-checklist",
+        "report-template",
+        "statutory-report",
+    }:
         await engagement_permissions(db, ctx, eid, "accounting.read")
+    for dependency in obj.dependencies:
+        if dependency["type"] == "calculation":
+            from app.modules.regulatory.reporting import engines
+
+            engine = engines().get(dependency["module"])
+            if not engine:
+                raise HTTPException(409, "Unsupported source calculation module")
+            await engagement_permissions(db, ctx, eid, engine[1])
+        elif dependency["type"] == "event":
+            await event(db, ctx, eid, uuid.UUID(dependency["id"]), auth_seen=auth_seen)
+    if obj.kind == "statutory-report":
+        for block in obj.body["blocks"]:
+            if block.get("calculation_module"):
+                await engagement_permissions(
+                    db,
+                    ctx,
+                    eid,
+                    "tax.profile.read"
+                    if block["calculation_module"] == "tax"
+                    else block["calculation_module"] + ".read",
+                )
+            if block.get("source_kind") == "record":
+                await audit.get_record(db, ctx, eid, uuid.UUID(block["source_id"]), lock=False)
+            elif block.get("source_kind") == "intelligence":
+                parent = await db.get(IntelligenceEvent, uuid.UUID(block["source_id"]))
+                if not parent or parent.kind == "statutory-report":
+                    raise HTTPException(
+                        409, "Nested report sources require a separately qualified source adapter"
+                    )
+                await event(db, ctx, eid, parent.id, auth_seen=auth_seen)
+    bindings = list(obj.body.get("fact_sources", {}).values())
+    if obj.kind == "statutory-checklist":
+        bindings += [
+            binding
+            for item in obj.body["items"]
+            for binding in item.get("fact_sources", {}).values()
+        ]
+    for binding in bindings:
+        if binding["kind"] == "record":
+            await audit.get_record(db, ctx, eid, uuid.UUID(binding["id"]), lock=False)
+        else:
+            await event(db, ctx, eid, uuid.UUID(binding["id"]), auth_seen=auth_seen)
     if require_current and not await current(db, ctx, obj):
         raise HTTPException(
             409,
@@ -81,6 +162,8 @@ async def head(db, ctx, obj):
 
 
 async def current(db, ctx, obj, visited=None):
+    if obj.tenant_id != ctx.tenant_id:
+        return False
     visited = set() if visited is None else visited
     if obj.id in visited or len(visited) > 100:
         return False
@@ -109,24 +192,84 @@ async def current(db, ctx, obj, visited=None):
                 or batch.status != "active"
             ):
                 return False
+        elif kind == "regulatory":
+            from datetime import date
+
+            from app.db.models.platform import Engagement
+            from app.modules.regulatory.service import selection
+
+            eng = await db.get(Engagement, obj.engagement_id)
+            period = await db.get(FinancialPeriod, eng.period_id)
+            chosen = await selection(
+                db,
+                ctx,
+                dependency["rule_key"],
+                period.start_date,
+                period.end_date,
+                date.fromisoformat(dependency["transaction_date"])
+                if dependency.get("transaction_date")
+                else None,
+            )
+            if (
+                not chosen
+                or str(chosen.id) != dependency["id"]
+                or chosen.sha256 != dependency["sha256"]
+            ):
+                return False
         elif kind == "mapping":
             if (
                 await mapping_receipt(db, ctx.tenant_id, uuid.UUID(dependency["entity_id"]))
                 != dependency["receipt"]
             ):
                 return False
+        elif kind == "mapping-profile":
+            from app.modules.accounting.models import MappingProfile
+
+            profile = await db.get(MappingProfile, uuid.UUID(dependency["id"]))
+            if (
+                not profile
+                or not profile.approved
+                or profile.version != dependency["version"]
+                or fingerprint(profile.mapping) != dependency["sha256"]
+            ):
+                return False
+        elif kind == "calculation":
+            from app.modules.regulatory.reporting import engines
+
+            model, permission, check = engines()[dependency["module"]]
+            await engagement_permissions(db, ctx, obj.engagement_id, permission)
+            calculated = await db.get(model, uuid.UUID(dependency["id"]))
+            if (
+                not calculated
+                or calculated.sha256 != dependency["sha256"]
+                or not await check(db, ctx, obj.engagement_id, calculated)
+            ):
+                return False
         elif kind == "event":
             parent = await db.get(IntelligenceEvent, uuid.UUID(dependency["id"]))
             if (
                 not parent
+                or parent.tenant_id != ctx.tenant_id
+                or parent.engagement_id != obj.engagement_id
                 or parent.sha256 != dependency["sha256"]
                 or not await current(db, ctx, parent, visited)
             ):
                 return False
         elif kind == "record":
             row = await db.get(AuditRecord, uuid.UUID(dependency["id"]))
-            if not row or row.version != dependency["version"] or row.status == "ARCHIVED":
+            if (
+                not row
+                or row.tenant_id != ctx.tenant_id
+                or row.engagement_id != obj.engagement_id
+                or row.version != dependency["version"]
+                or row.status == "ARCHIVED"
+            ):
                 return False
+            if row.kind == "working-papers":
+                from app.modules.lineage.working_papers import freshness
+
+                if await freshness(db, ctx, row, visiting=visited) != "CURRENT":
+                    return False
         elif kind == "evidence":
             version = await db.get(EvidenceVersion, uuid.UUID(dependency["id"]))
             latest = await db.scalar(
@@ -142,6 +285,8 @@ async def current(db, ctx, obj, visited=None):
                 or latest != version.number
             ):
                 return False
+        else:
+            return False  # Unknown receipt schemas cannot establish provenance.
     return True
 
 
@@ -296,7 +441,9 @@ def read_table(version, kind, separator, date_format):
                     "counterparty": row.get("counterparty") or None,
                     "account_code": row.get("account_code") or None,
                 }
-                if len(item["currency"]) != 3 or not item["currency"].isalpha():
+                import pycountry
+
+                if pycountry.currencies.get(alpha_3=item["currency"]) is None:
                     raise ValueError(f"Invalid currency at row {number}")
                 for key in ["date", "due_date", "document_date"]:
                     item[key] = (
@@ -317,7 +464,7 @@ def read_table(version, kind, separator, date_format):
     return rows
 
 
-async def ledger(db, ctx, eng, source, account_ids):
+async def ledger(db, ctx, eng, source, account_ids, as_of=None, from_date=None):
     allowed = (
         await db.scalars(
             select(Account.id).where(
@@ -342,6 +489,10 @@ async def ledger(db, ctx, eng, source, account_ids):
         .order_by(JournalLine.id)
         .limit(20001)
     )
+    if as_of is not None:
+        query = query.where(JournalLine.posting_date <= as_of)
+    if from_date is not None:
+        query = query.where(JournalLine.posting_date >= from_date)
     rows = (await db.execute(query)).all()
     if len(rows) > 20000:
         raise HTTPException(422, "Matching population exceeds 20,000 lines; partition by account")
@@ -362,8 +513,16 @@ async def ledger(db, ctx, eng, source, account_ids):
 
 async def compute(db, ctx, eng, operation, payload):
     data: Any = s.OPERATIONS[operation].model_validate(payload)
+    if operation == "foundation-validation":
+        from app.modules.intelligence.foundations import validate
+
+        return await validate(db, ctx, eng, data)
     package, context = await resolved(db, ctx, eng)
     deps = [{"type": "context", "version": context["version"], "sha256": package.package_sha256}]
+    if operation in {"workflow-source", "workflow-ledger", "workflow-vat", "country-workflow"}:
+        from app.modules.country_workflows.service import compute as workflow_compute
+
+        return await workflow_compute(db, ctx, eng, operation, data, package, deps)
     if operation in {"ocr", "source-table"}:
         version, receipt = await evidence(db, ctx, eng, data.evidence_version_id)
         deps.append(receipt)
@@ -704,6 +863,8 @@ async def compute(db, ctx, eng, operation, payload):
                     if proposed
                     else "No deterministic suggestion",
                     "method": "NAME_TOKEN_CANDIDATE",
+                    "execution_mode": "rules_baseline",
+                    "feature_version": "account-name-tokens/1",
                     "confidence": None,
                     "limitation": "Account names alone do not establish reporting, tax or statutory classification",
                     "country_dimension": "Schedule III candidate requires statutory review"
@@ -714,6 +875,8 @@ async def compute(db, ctx, eng, operation, payload):
             )
         return {
             "suggestions": suggestions,
+            "execution_mode": "rules_baseline",
+            "language_model_dependency": False,
             "snapshot_id": str(source.id),
             "review_status": "UNVERIFIED",
             "automatic_approval": False,

@@ -6,6 +6,10 @@ from xml.sax.saxutils import escape
 
 
 def render(event, format):
+    if event["kind"] == "statutory-report":
+        from app.modules.regulatory.report_exports import render as report_render
+
+        return report_render(event, format)
     body = event["body"]
     rows = (
         body.get("rows")
@@ -28,6 +32,18 @@ def render(event, format):
         "Generated result timestamp": event["created_at"],
         "Financial convention": "Exact Decimal strings; no audit opinion or evidence sufficiency inferred",
     }
+    if event["kind"] in {"workflow-source", "country-workflow"}:
+        metadata.update(
+            {
+                "Workflow": body.get("workflow", body.get("table_type")),
+                "Population completeness": body.get("population_completeness"),
+                "Statutory calculation qualified": body.get(
+                    "statutory_calculation_qualified", False
+                ),
+                "Professional conclusion": body.get("professional_conclusion", "NOT_DETERMINED"),
+                "Workflow limitations": body.get("limitations", []),
+            }
+        )
     summary = {
         k: v
         for k, v in body.items()
@@ -44,6 +60,24 @@ def render(event, format):
             "source_batch_id",
             "source_snapshot_id",
             "source_filename",
+            "coverage",
+            "adjusted_book_balance",
+            "country_guidance",
+            "source_roles",
+            "exception_count",
+            "blocked",
+            "parameters",
+            "nil_population",
+            "nil_declarations",
+            "execution_mode",
+            "ml_execution_mode",
+            "language_model_dependency",
+            "calculation_engine",
+            "total_ecl_by_currency",
+            "count_bridges",
+            "native_format",
+            "native_metadata",
+            "native_controls_verified",
         }
     }
 

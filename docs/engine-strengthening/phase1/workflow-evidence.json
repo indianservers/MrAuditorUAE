@@ -1,0 +1,16 @@
+{
+  "fixture": "SYNTHETIC technical workflow; no real legal verification",
+  "scanner": "test double CLEAN",
+  "broker_dispatch": "test double; real job processor invoked",
+  "blocked_approval": 409,
+  "source_correction_stales_approved_result": true,
+  "approved_version_preserved": true,
+  "recalculated_and_reapproved": true,
+  "mapping_change_stales_result": true,
+  "foundation_event": "d8edb2db-7d91-4e58-8b8b-1efecd25c9c8",
+  "reapproved_event": "80cf29e2-74d5-47f6-8a2c-dcc3c12b4473",
+  "working_paper": "18cd3e4a-1411-4a2f-9058-290886e491a0",
+  "working_paper_approved": "APPROVED",
+  "replacement_working_paper_approved": "APPROVED",
+  "stale_working_paper_release_blocked": true
+}

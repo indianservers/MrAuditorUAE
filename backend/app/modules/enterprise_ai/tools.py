@@ -107,6 +107,37 @@ async def invoke(db, ctx, eid, name, data: ToolInput):
         result.sources = [
             {"type": "chunk", "id": r["id"], "version": r["record_version"]} for r in rows
         ]
+    elif operation == "shared-workflows":
+        from app.modules.intelligence import service as intelligence
+        from app.modules.intelligence.models import IntelligenceEvent
+
+        candidates = (await db.scalars(select(IntelligenceEvent).where(
+            IntelligenceEvent.tenant_id == ctx.tenant_id,
+            IntelligenceEvent.engagement_id == eid,
+            IntelligenceEvent.kind == "country-workflow",
+        ).order_by(IntelligenceEvent.created_at.desc(), IntelligenceEvent.id.desc()).limit(data.limit))).all()
+        items = []
+        for obj in candidates:
+            try:
+                await intelligence.event(db, ctx, eid, obj.id)
+            except HTTPException as exc:
+                if exc.status_code == 403:
+                    continue
+                raise
+            if not await intelligence.current(db, ctx, obj):
+                continue
+            items.append({"id": str(obj.id), "workflow": obj.body.get("workflow"),
+                          "execution_mode": "deterministic_engine", "ml_execution_mode": None,
+                          "calculation_mode": "deterministic_engine",
+                          "review_status": obj.body.get("review_status", "UNVERIFIED"),
+                          "blocked": obj.body.get("blocked"), "exception_count": obj.body.get("exception_count"),
+                          "rows_preview": obj.body.get("rows", [])[:5],
+                          "row_count": len(obj.body.get("rows", [])),
+                          "limitations": obj.body.get("limitations", [])})
+            result.sources.append({"id": str(obj.id), "type": "intelligence", "sha256": obj.sha256})
+        result.data = {"items": items, "language_model_dependency": False,
+                       "professional_conclusion": False}
+        result.uncertainty.append("Retained deterministic engine results; previews are bounded and review status is explicit")
     elif operation == "ledger":
         entity = await db.get(LegalEntity, eng.entity_id)
         from app.api.v1.accounting import page
@@ -239,6 +270,15 @@ async def invoke(db, ctx, eid, name, data: ToolInput):
         for obj in rows:
             if operation != "dmtt-run":
                 await get(db, ctx, obj.id)
+                from app.modules.lineage.freshness import require_ml_current
+
+                try:
+                    await require_ml_current(db, ctx, obj)
+                except HTTPException as exc:
+                    if exc.status_code != 409:
+                        raise
+                    result.uncertainty.append("A stale ML result was omitted; regenerate from current sources")
+                    continue
                 value = {
                     k: v
                     for k, v in obj.body.items()
@@ -263,6 +303,7 @@ async def invoke(db, ctx, eid, name, data: ToolInput):
                     return [scrub(x) for x in v[:5]] if isinstance(v, list) else v
 
                 value = scrub(value)
+                value.setdefault("execution_mode", "unavailable")
                 result.sources.append({"id": str(obj.id), "type": "ml"})
             else:
                 from app.modules.enterprise_ai.security import validate_dependencies

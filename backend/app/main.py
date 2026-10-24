@@ -25,6 +25,7 @@ from app.api.v1 import (
     auth,
     client_portal,
     clients,
+    collaboration,
     connectors,
     engagements,
     entities,
@@ -34,12 +35,15 @@ from app.api.v1 import (
     jobs,
     jurisdictions,
     periods,
+    regulatory,
     tenants,
     workspace,
 )
 from app.core.config import settings
 from app.core.exceptions import ErrorResponse
 from app.core.logging import configure_logging
+from app.modules.connectors.zoho import ConnectorError
+from app.modules.connectors.operations import router as connector_operations
 
 config = settings()
 configure_logging()
@@ -61,6 +65,7 @@ app = FastAPI(
     redoc_url=None,
     responses={code: {"model": ErrorResponse} for code in [401, 403, 404, 409, 413, 422, 429, 503]},
 )
+app.include_router(connector_operations, prefix="/api/v1")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=config.cors_origins,
@@ -86,7 +91,11 @@ async def safeguards(request: Request, call_next):
     )
     try:
         is_upload = (
-            request.url.path in {"/api/v1/accounting/imports", "/api/v1/workspace/inspect-file"}
+            request.url.path in {
+                "/api/v1/accounting/imports",
+                "/api/v1/workspace/inspect-file",
+                "/api/v1/connectors/report-packages",
+            }
             or "/chunks/" in request.url.path
             or "/audit/evidence-files/" in request.url.path
             or request.url.path.startswith("/api/v1/tp/engagements/")
@@ -199,6 +208,11 @@ async def stale_error(request: Request, exc: StaleDataError):
     return error(request, 409, "Resource version conflict")
 
 
+@app.exception_handler(ConnectorError)
+async def connector_error(request: Request, exc: ConnectorError):
+    return error(request, 422, str(exc))
+
+
 for router in [
     ifrs.router,
     audit_admin.router,
@@ -222,6 +236,8 @@ for router in [
     app.include_router(router, prefix="/api/v1")
 app.include_router(jurisdictions.router, prefix="/api/v1")
 app.include_router(intelligence.router, prefix="/api/v1")
+app.include_router(regulatory.router, prefix="/api/v1")
+app.include_router(collaboration.router, prefix="/api/v1")
 app.include_router(health.router)
 
 from app.api.v1.ifrs_ai import router as ifrs_ai_router  # noqa: E402

@@ -1,3 +1,4 @@
+import hashlib
 import uuid
 import zipfile
 from pathlib import Path
@@ -43,6 +44,16 @@ async def upload(
         status = await run_in_threadpool(scan, file.file)
         if status == "REJECTED":
             raise HTTPException(422, "Evidence rejected by malware scanner")
+        file.file.seek(0)
+        digest = hashlib.file_digest(file.file, "sha256").hexdigest()
+        file.file.seek(0)
+        duplicate = await db.scalar(select(EvidenceVersion).where(
+            EvidenceVersion.tenant_id == ctx.tenant_id, EvidenceVersion.record_id == rid
+        ).order_by(EvidenceVersion.number.desc()).limit(1))
+        if duplicate and duplicate.sha256 == digest and duplicate.scan_status == status:
+            record(db, ctx, "evidence.duplicate_detected", duplicate.id, request.state.request_id,
+                   {"engagement_id": str(eid), "record_id": str(rid), "sha256": digest})
+            return {**s.serialize(duplicate), "duplicate_detected": True}
         metadata = await put_private(db, ctx, file.file)
     except (ValueError, OSError, zipfile.BadZipFile) as exc:
         raise HTTPException(422, str(exc)) from None
