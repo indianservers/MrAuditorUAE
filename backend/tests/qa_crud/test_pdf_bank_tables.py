@@ -59,7 +59,7 @@ async def test_retained_pdf_grid_review_bridge_controls_export_and_staleness(
             "expected_rows": 2,
             "control_totals": {currency: "95.25"},
         },
-        failed="media type",
+        failed="review a mapped PDF",
     )
     table = await execute(
         c,
@@ -140,7 +140,20 @@ async def test_retained_pdf_grid_review_bridge_controls_export_and_staleness(
     )
     assert result["body"]["exception_count"] == 0 and not result["body"]["blocked"]
     assert (await decision(c, uploader[0], eid, result)).status_code == 403
+    final_result = await decision(c, final[0], eid, result)
+    assert final_result.status_code == 201, final_result.text
+    result = final_result.json()
     prefix = f"/api/v1/intelligence/engagements/{eid}"
+    paper = await c.post(
+        f"{prefix}/events/{result['id']}/working-paper",
+        headers=h,
+        json={
+            "reference": "SYN-PDF-BRS",
+            "title": "Synthetic PDF bank source bridge",
+            "objective": "Document reviewed PDF grid sources and independent cashbook balance controls",
+        },
+    )
+    assert paper.status_code == 201, paper.text
     preview = await c.get(f"{prefix}/evidence/{uploaded.json()['id']}/preview?page=1", headers=h)
     assert preview.status_code == 200 and preview.content.startswith(b"\x89PNG")
     export = await c.get(f"{prefix}/events/{reviewed.json()['id']}/export?format=xlsx", headers=h)

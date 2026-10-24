@@ -236,6 +236,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "india-gstr2b-json": {"application/json"},
         }
         if evidence.media_type not in supported_media[data.file_format]:
+            if evidence.media_type == "application/pdf" and supporting is None:
+                raise HTTPException(422, "Prepare and independently review a mapped PDF supporting table before using it in a workflow")
             raise HTTPException(
                 422, "Retained evidence media type does not match the selected source format"
             )

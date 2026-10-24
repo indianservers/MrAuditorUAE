@@ -393,6 +393,8 @@ async def main():
             },
         )
         dest = ROOT / ".local-runtime/country-workflows/fixture.json"
+        from tests.unit.pdf_bank_example import layout as pdf_layout
+        from tests.unit.pdf_bank_example import statement as pdf_statement
         from tests.unit.test_credit_applications import population as credit_population
         from tests.unit.test_withholding_workflows import pooled_certificate_population
         from tests.unit.test_withholding_workflows import population as withholding_population
@@ -470,6 +472,44 @@ async def main():
                 approved = await decision(client, supporting_reviewer[0], india, prepared)
                 assert approved.status_code == 201, approved.text
                 withholding_sources[scope][role] = approved.json()["id"]
+        pdf_evidence, pdf_books = {}, {}
+        pdf_final_reviewer = await actor(h, "Firm Administrator", "browser-pdf-final-reviewer")
+        for country, engagement, currency in (("AE", eid, "AED"), ("IN", india, "INR")):
+            await grant(client, h, f"/api/v1/engagements/{engagement}/audit", pdf_final_reviewer)
+            pdf_evidence[country] = await native_file(
+                engagement,
+                f"SYNTHETIC-{country}-bank-grid.pdf",
+                pdf_statement(currency),
+                "application/pdf",
+            )
+            book = await source(
+                client,
+                h,
+                engagement,
+                [
+                    transaction(
+                        id="PDF-BOOK-1",
+                        reference="REF-1",
+                        date="2026-06-30",
+                        amount="100.25",
+                        currency=currency,
+                        counterparty="SYN-CLIENT",
+                    ),
+                    transaction(
+                        id="PDF-BOOK-2",
+                        reference="REF-2",
+                        date="2026-06-30",
+                        amount="-5",
+                        currency=currency,
+                        counterparty="SYN-CLIENT",
+                    ),
+                ],
+                f"SYNTHETIC {country} independent PDF cashbook",
+                totals={currency: "95.25"},
+            )
+            approved = await decision(client, supporting_reviewer[0], engagement, book)
+            assert approved.status_code == 201, approved.text
+            pdf_books[country] = approved.json()["id"]
         if implementation_hash() != implementation:
             raise RuntimeError(
                 "Backend implementation changed during fixture preparation; prepare fresh fixtures before browser verification"
@@ -481,6 +521,11 @@ async def main():
                     "synthetic": True,
                     "credit_application_sources": credit_sources,
                     "withholding_sources": withholding_sources,
+                    "pdf_bank_evidence": pdf_evidence,
+                    "pdf_bank_books": pdf_books,
+                    "pdf_bank_layouts": {"AE": pdf_layout("AED"), "IN": pdf_layout("INR")},
+                    "pdf_table_reviewer_email": "browser-supporting-table-reviewer@synthetic.example",
+                    "pdf_final_reviewer_email": "browser-pdf-final-reviewer@synthetic.example",
                     "implementation_sha256": implementation,
                     "scanner_test_double": True,
                     "broker_test_double": True,

@@ -3,7 +3,7 @@ import { beforeEach, expect, it, vi } from "vitest";
 import { AccountingIntelligence } from "@/features/accounting-intelligence";
 import { validPDFDraft } from "./pdf-grid-fixtures";
 
-const state = vi.hoisted(() => ({ mutate: vi.fn() }));
+const state = vi.hoisted(() => ({ mutate: vi.fn(), result: null as unknown }));
 vi.mock("next/navigation", () => ({
   useSearchParams: () => new URLSearchParams(),
 }));
@@ -24,26 +24,40 @@ vi.mock("@/hooks/use-api", () => ({
   useAPI: (path: string, enabled = true) => ({
     data: !enabled
       ? undefined
-      : path.endsWith("inputs")
-        ? {
-            snapshots: [],
-            samples: [],
-            evidence: [
-              {
-                id: "pdf-original",
-                label: "Synthetic statement.pdf",
-                scan_status: "CLEAN",
+      : path.includes("/events/result")
+        ? state.result
+        : path.endsWith("inputs")
+          ? {
+              snapshots: [],
+              samples: [],
+              evidence: [
+                {
+                  id: "pdf-original",
+                  label: "Synthetic statement.pdf",
+                  scan_status: "CLEAN",
+                },
+                {
+                  id: "xlsx-original",
+                  label: "Synthetic schedule.xlsx",
+                  scan_status: "CLEAN",
+                },
+              ],
+            }
+          : path.endsWith("capabilities")
+            ? { lead_sections: [] }
+            : {
+                items: state.result
+                  ? [
+                      {
+                        id: "result",
+                        kind: "source-table",
+                        label: "Prepared PDF table",
+                        version: 1,
+                        freshness: "CURRENT",
+                      },
+                    ]
+                  : [],
               },
-              {
-                id: "xlsx-original",
-                label: "Synthetic schedule.xlsx",
-                scan_status: "CLEAN",
-              },
-            ],
-          }
-        : path.endsWith("capabilities")
-          ? { lead_sections: [] }
-          : { items: [] },
     error: null,
   }),
   useAction: () => ({
@@ -55,8 +69,47 @@ vi.mock("@/hooks/use-api", () => ({
 }));
 
 beforeEach(() => {
+  state.result = null;
   state.mutate.mockReset();
   state.mutate.mockResolvedValue({ id: "queued" });
+});
+it("shows supporting-table amounts before expanded PDF provenance", () => {
+  state.result = {
+    id: "result",
+    kind: "source-table",
+    version: 1,
+    freshness: "CURRENT",
+    body: {
+      table_kind: "bank",
+      rows: [
+        {
+          id: "row-1",
+          reference: "REF-1",
+          date: "2026-06-30",
+          account_code: "BANK-1",
+          currency: "AED",
+          amount: "100.25",
+          source_page: 1,
+          source_pdf_cells: { credit: "100.25" },
+        },
+      ],
+    },
+  };
+  render(<AccountingIntelligence eid="engagement" area="source-table" />);
+  fireEvent.change(screen.getByLabelText("Result version"), {
+    target: { value: "result" },
+  });
+  expect(screen.getByRole("columnheader", { name: "amount" })).toBeVisible();
+  expect(screen.getByRole("cell", { name: "100.25" })).toBeVisible();
+  expect(
+    screen.queryByRole("columnheader", { name: "source_pdf_cells" }),
+  ).not.toBeInTheDocument();
+  fireEvent.click(
+    screen.getByLabelText("Show all supporting-table provenance"),
+  );
+  expect(
+    screen.getByRole("columnheader", { name: "source_pdf_cells" }),
+  ).toBeVisible();
 });
 it("queues PDF geometry with header scope and clears worksheet-only configuration", async () => {
   render(<AccountingIntelligence eid="engagement" area="source-table" />);

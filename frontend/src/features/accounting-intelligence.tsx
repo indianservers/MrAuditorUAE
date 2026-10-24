@@ -1012,6 +1012,33 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
                 name={key}
                 values={body![key] as unknown[]}
                 decide={decide}
+                preferredColumns={
+                  area === "source-table" && key === "rows"
+                    ? body?.table_kind === "bank"
+                      ? [
+                          "reference",
+                          "date",
+                          "account_code",
+                          "currency",
+                          "amount",
+                          "counterparty",
+                          "source_page",
+                          "source_page_row",
+                          "source_worksheet",
+                        ]
+                      : [
+                          "reference",
+                          "counterparty",
+                          "account_code",
+                          "currency",
+                          "open_amount",
+                          "document_type",
+                          "document_date",
+                          "due_date",
+                          "balance_date",
+                        ]
+                    : undefined
+                }
               />
             ))}
             {body && (
@@ -1381,21 +1408,49 @@ function ResultTable({
   name,
   values,
   decide,
+  preferredColumns,
 }: {
   name: string;
   values: unknown[];
   decide: (action: string, item?: string, candidate?: string) => Promise<void>;
+  preferredColumns?: string[];
 }) {
+  const [showAll, setShowAll] = useState(false);
   const rows = values.filter((v) => v && typeof v === "object") as Record<
     string,
     unknown
   >[];
-  const columns = Array.from(new Set(rows.flatMap(Object.keys)))
-    .filter((k) => k !== "candidates")
-    .slice(0, 12);
+  const allColumns = Array.from(new Set(rows.flatMap(Object.keys))).filter(
+    (key) => key !== "candidates",
+  );
+  const columns = showAll
+    ? allColumns
+    : preferredColumns
+      ? preferredColumns.filter((key) => allColumns.includes(key))
+      : allColumns.slice(0, 12);
   return (
     <div style={{ overflowX: "auto" }}>
       <h3>{name.replaceAll("_", " ")}</h3>
+      {(preferredColumns || allColumns.length > 12) && (
+        <label
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
+          <input
+            type="checkbox"
+            style={{ width: 16, height: 16, minHeight: 0 }}
+            checked={showAll}
+            onChange={(event) => setShowAll(event.target.checked)}
+          />
+          {preferredColumns
+            ? "Show all supporting-table provenance"
+            : "Show all result columns"}
+        </label>
+      )}
       <table>
         <thead>
           <tr>
