@@ -22,6 +22,14 @@ from app.modules.country_workflows.sources import MAX_BYTES
 
 FORMATS: list[dict[str, Any]] = [
     {
+        "id": "india-epfo-ecr",
+        "label": "India EPFO monthly ECR text",
+        "countries": ["IN"],
+        "table_type": "obligations",
+        "description": "Eleven #~# fields; declared establishment/month/member controls; return text does not prove filing, payment or statutory rate correctness",
+        "source": "https://www.epfindia.nic.in/site_docs/PDFs/MiscPDFs/User-Manual-ReECR_v3.0.pdf",
+    },
+    {
         "id": "india-inv01-json",
         "label": "India INV-01 1.1 invoice JSON",
         "countries": ["IN"],
@@ -517,6 +525,10 @@ def parse_native(content, data, country, filename):
                 from app.modules.country_workflows.india_invoice_source import parse_invoice_json
 
                 rows, metadata = parse_invoice_json(content, data)
+            elif data.file_format == "india-epfo-ecr":
+                from app.modules.country_workflows.india_ecr_source import parse_ecr
+
+                rows, metadata = parse_ecr(content, data)
             else:
                 rows, metadata = wps(content, data, filename)
         except ValidationError:
@@ -547,6 +559,8 @@ def parse_native(content, data, country, filename):
         if data.table_type == "transactions"
         else "INV01_SELECTED_DOCUMENT_ITEM_CONTROLS"
         if data.file_format == "india-inv01-json"
+        else "ECR_DECLARED_MEMBER_AND_COMPONENT_CONTROLS"
+        if data.file_format == "india-epfo-ecr"
         else "WPS_INSTRUCTION_FILE_CONTROLS",
         "review_status": "UNVERIFIED",
         "nil_reason": data.nil_reason,

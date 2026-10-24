@@ -146,6 +146,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "swift-mt940": {"text/plain"},
             "uae-wps-sif": {"text/csv"},
             "india-inv01-json": {"application/json"},
+            "india-epfo-ecr": {"text/plain"},
         }
         if evidence.media_type not in supported_media[data.file_format]:
             raise HTTPException(

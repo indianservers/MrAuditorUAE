@@ -40,6 +40,8 @@ Actual receipts are in `evidence/`; `verification-summary.json` is generated fro
 
 Integration fixtures use a separately owned `auditos_audit_gap_test` database, separate Redis DB and object directory. They execute real database/HTTP/object/job processors. Scanner verdicts and broker dispatch are explicit test doubles; the actual processor functions are invoked. TensorFlow.js fitting/inference uses the real CPU runtime with language-model credentials absent.
 
+Verification spans 24–25 October 2026. A later shared-checkout tax-rule gate rejected three older fixture setups; the updated synthetic fixture carries explicit publication evidence. The subsequent 29-test integration retest passed without weakening that gate. Both the intermediate failure receipt and the passing retest are retained. Separate ML/financial checks also exercised real CPU inference on a committed-ledger dataset with nullable source fields, and an explicitly labelled diagnostic explanation.
+
 Reproduce from the repository root:
 
 ```powershell

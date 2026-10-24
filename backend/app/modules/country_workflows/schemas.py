@@ -117,7 +117,12 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
 class SourceInput(Strict):
     evidence_version_id: uuid.UUID
     file_format: Literal[
-        "canonical-csv", "camt053", "swift-mt940", "uae-wps-sif", "india-inv01-json"
+        "canonical-csv",
+        "camt053",
+        "swift-mt940",
+        "uae-wps-sif",
+        "india-inv01-json",
+        "india-epfo-ecr",
     ] = "canonical-csv"
     gst_registration: str | None = Field(
         default=None, pattern=r"^\d{2}[A-Z]{5}\d{4}[A-Z][A-Z0-9]Z[A-Z0-9]$"
@@ -128,6 +133,8 @@ class SourceInput(Strict):
     statement_identifier: Identifier | None = None
     employer_registration: Identifier | None = None
     obligation_due_date: date | None = None
+    obligation_period: str | None = Field(default=None, pattern=r"^\d{4}-(0[1-9]|1[0-2])$")
+    expected_members: int | None = Field(default=None, ge=1, le=1666)
     table_type: Literal[
         "transactions",
         "tax-documents",

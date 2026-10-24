@@ -1,0 +1,64 @@
+{
+  "fixture": "SYNTHETIC technical test values, not taxpayer advice or market observations",
+  "cases": [
+    {
+      "engine": "VAT",
+      "source_test": "tests/phase7/test_vat_workflows.py::test_vat201_actual_sources_return_review_and_stale_export",
+      "source_control_output": "50.00",
+      "source_control_input": "50.50",
+      "draft_net_vat": "-0.50",
+      "reconciliation": "Actual source journal lines and full control accounts; no unexplained balance inserted"
+    },
+    {
+      "engine": "CT",
+      "source_test": "tests/phase6/test_workflows.py::test_mainland_approved_vs_proposed_and_exports",
+      "accounting_profit": "1200000",
+      "approved_adjustments": "400000",
+      "taxable_income": "1600000",
+      "calculation": "(1600000 - 375000) * 0.09",
+      "draft_current_tax": "110250",
+      "unapproved_adjustments_included": false
+    },
+    {
+      "engine": "QFZP",
+      "source_test": "tests/phase6/test_workflows.py::test_qfzp_contract_segmentation_and_incomplete_conditions",
+      "de_minimis_threshold": "100000",
+      "initial_profit_bridge": "BLOCKED_UNRECONCILED",
+      "reviewed_segment_profits": [
+        "1140000",
+        "60000"
+      ],
+      "supported_final_case_ct": "0",
+      "limitation": "Zero applies only to the approved synthetic qualified case"
+    },
+    {
+      "engine": "TP",
+      "source_test": "tests/phase8/test_calculations.py",
+      "schedule": "1000 principal, 50% repayment after 15 days, 30-day ACT/365 at 10%",
+      "independent_expected_interest": "6.16438356",
+      "market_rate_asserted": false,
+      "scope": "Supplied synthetic contractual terms; no generic arm-length conclusion"
+    },
+    {
+      "engine": "DMTT",
+      "source_test": "tests/phase9/test_dmtt.py::test_independent_uae_2025_golden",
+      "globe_income": "10000000",
+      "covered_taxes": "900000",
+      "etr": "0.09",
+      "payroll": "1000000",
+      "assets": "2000000",
+      "sbie": "248000",
+      "calculation": "(0.15 - 0.09) * (10000000 - 248000)",
+      "draft_uae_dmtt": "585120.00"
+    },
+    {
+      "engine": "DMTT",
+      "source_test": "tests/phase9/test_workflows.py::test_dmtt_actual_ifrs_approval_computation_and_ai",
+      "ordinary_2026_globe_income": "1200000",
+      "covered_taxes": "108000",
+      "sbie": "24200",
+      "draft_uae_dmtt": "70548.00",
+      "basis": "Approved standalone IFRS source; not UPE-package import"
+    }
+  ]
+}

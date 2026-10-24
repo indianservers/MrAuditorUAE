@@ -413,7 +413,7 @@ export function ClientPortal() {
                   Upload requested evidence
                   <input
                     type="file"
-                    accept=".pdf,.csv,.json,.xml,.mt940,.sta,.sif,.xlsx,.docx,.png,.jpg,.jpeg,.tif,.tiff,.zip"
+                    accept=".pdf,.csv,.json,.xml,.txt,.ecr,.mt940,.sta,.sif,.xlsx,.docx,.png,.jpg,.jpeg,.tif,.tiff,.zip"
                     onChange={(e) => {
                       const f = e.target.files?.[0];
                       if (f) {

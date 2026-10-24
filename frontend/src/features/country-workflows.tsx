@@ -138,6 +138,8 @@ export function CountryWorkflows({
   const [statementIdentifier, setStatementIdentifier] = useState("");
   const [employerRegistration, setEmployerRegistration] = useState("");
   const [obligationDue, setObligationDue] = useState("");
+  const [obligationPeriod, setObligationPeriod] = useState("");
+  const [expectedMembers, setExpectedMembers] = useState("");
   const [gstRegistration, setGSTRegistration] = useState("");
   const [gstDirection, setGSTDirection] = useState("purchase");
   const [gstPeriod, setGSTPeriod] = useState("");
@@ -242,11 +244,19 @@ export function CountryWorkflows({
           ...(sourceFormat === "camt053" && statementIdentifier
             ? { statement_identifier: statementIdentifier }
             : {}),
-          ...(sourceFormat === "uae-wps-sif" && employerRegistration
+          ...(["uae-wps-sif", "india-epfo-ecr"].includes(sourceFormat) &&
+          employerRegistration
             ? { employer_registration: employerRegistration }
             : {}),
-          ...(sourceFormat === "uae-wps-sif" && obligationDue
+          ...(["uae-wps-sif", "india-epfo-ecr"].includes(sourceFormat) &&
+          obligationDue
             ? { obligation_due_date: obligationDue }
+            : {}),
+          ...(sourceFormat === "india-epfo-ecr"
+            ? {
+                obligation_period: obligationPeriod,
+                expected_members: Number(expectedMembers),
+              }
             : {}),
           table_type: tableType,
           label,
@@ -704,6 +714,53 @@ export function CountryWorkflows({
                         signed tax across all components. This imports invoice
                         data; IRP authenticity, cancellation status and credit
                         eligibility require separate evidence.
+                      </p>
+                    </>
+                  )}
+                  {sourceFormat === "india-epfo-ecr" && (
+                    <>
+                      <label>
+                        EPFO establishment registration
+                        <input
+                          value={employerRegistration}
+                          onChange={(e) =>
+                            setEmployerRegistration(e.target.value)
+                          }
+                        />
+                      </label>
+                      <label>
+                        ECR wage month
+                        <input
+                          type="month"
+                          value={obligationPeriod}
+                          onChange={(e) => setObligationPeriod(e.target.value)}
+                        />
+                      </label>
+                      <label>
+                        Independent ECR member count
+                        <input
+                          type="number"
+                          min={1}
+                          max={1666}
+                          value={expectedMembers}
+                          onChange={(e) => setExpectedMembers(e.target.value)}
+                        />
+                      </label>
+                      <label>
+                        Declared obligation due date (optional)
+                        <input
+                          type="date"
+                          value={obligationDue}
+                          onChange={(e) => setObligationDue(e.target.value)}
+                        />
+                      </label>
+                      <p>
+                        Enter three contribution rows per member, plus one for
+                        each non-zero advance refund. INR controls include those
+                        contributions and refunds. Establishment and month are
+                        declared separately from the text. Filing, payment,
+                        rates, membership, insurance and administration charges
+                        need separate evidence.
                       </p>
                     </>
                   )}

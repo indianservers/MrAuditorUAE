@@ -37,6 +37,11 @@ verification = {"backend_unit_and_calculation_regression": receipt("unit-results
                                    "job processors", "TensorFlow.js CPU fitting/inference"],
                 "new_browser_scenario": "Not executed; UI type/build/component checks and real backend workflow checks were executed",
                 "production_qualified": False}
+verification["intermediate_run_note"] = (
+    "Three intermediate setup rejections occurred while shared tax publication-attestation rules/fixtures changed. "
+    "The strict source gate was retained. Consult backend_latest_integration for the subsequent retest; "
+    "counts and intermediate failure receipts are preserved."
+)
 frontend = json.loads((EVIDENCE / "frontend-unit-results.json").read_text(encoding="utf-8"))
 verification["frontend_unit"] = {"tests": frontend["numTotalTests"],
                                   "passed": frontend["numPassedTests"],
@@ -67,7 +72,8 @@ page = '''<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewp
 verification_items = []
 for name, item in verification.items():
     if isinstance(item, dict) and "tests" in item:
-        verification_items.append(f"{name}: {item['passed']} passed; {item['failed']} failed; {item.get('skipped', 0)} skipped")
+        suffix = " (historical intermediate run; see later retest)" if name == "backend_intermediate_run" else ""
+        verification_items.append(f"{name}: {item['passed']} passed; {item['failed']} failed; {item.get('skipped', 0)} skipped" + suffix)
 verification_items += ["Backend types: " + verification["backend_types"],
                        "Frontend production build: " + verification["frontend_build"],
                        "Local ML runtime: five passing pipeline/runtime tests; no accuracy benchmark"]

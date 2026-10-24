@@ -8,6 +8,8 @@ from pathlib import Path
 from app.core.config import settings
 
 TYPES = {
+    ".txt": "text/plain",
+    ".ecr": "text/plain",
     ".json": "application/json",
     ".xml": "application/xml",
     ".mt940": "text/plain",
@@ -69,12 +71,19 @@ def validate_file(stream, filename):
                     raise ValueError("Unsafe document ZIP")
     if extension == ".csv" and (b"\x00" in header or header.lstrip().startswith((b"<", b"MZ"))):
         raise ValueError("Invalid CSV evidence")
-    if extension in {".json", ".xml", ".mt940", ".sta", ".sif"}:
+    if extension in {".txt", ".ecr", ".json", ".xml", ".mt940", ".sta", ".sif"}:
         stream.seek(0)
         content = stream.read(10 * 1024 * 1024 + 1)
         if len(content) > 10 * 1024 * 1024 or b"\x00" in content:
             raise ValueError("Structured evidence exceeds limits or contains null bytes")
-        if extension == ".json":
+        if extension in {".txt", ".ecr"}:
+            try:
+                decoded = content.decode("utf-8-sig")
+            except UnicodeDecodeError:
+                raise ValueError("Text evidence must use UTF-8 encoding") from None
+            if any(ord(ch) < 32 and ch not in "\r\n\t" for ch in decoded):
+                raise ValueError("Text evidence contains unsupported control characters")
+        elif extension == ".json":
             from app.core.json_documents import read_json_document
 
             if not isinstance(read_json_document(content), (dict, list)):

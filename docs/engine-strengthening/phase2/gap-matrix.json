@@ -1,0 +1,203 @@
+{
+  "scope": "Phase 2 E04-E08 only",
+  "items": [
+    {
+      "engine": "shared",
+      "capability": "Execution identity and state separation",
+      "observed_issue": "Different engines saved incompatible metadata; calculation status could be confused with review or filing",
+      "financial_or_control_consequence": "Incomplete traceability and unsafe readiness interpretation",
+      "fix": "Add tax/1 receipts inside existing save paths; separate liability, payment, review, filing and authority states",
+      "verification": "Contract unit cases, actual CT/TP/VAT/DMTT integration outputs, shared UI notice",
+      "status": "implemented"
+    },
+    {
+      "engine": "shared",
+      "capability": "Source and implementation versions",
+      "observed_issue": "Snapshot population/mapping changes not uniformly captured across tax engines",
+      "financial_or_control_consequence": "Older calculations could look current after changed financial basis",
+      "fix": "Capture active source hashes/completeness, mappings and implementation fingerprint; compare at currentness checks",
+      "verification": "Connected approved assessment becomes stale after new approved adjustment; existing source-staleness regressions",
+      "status": "implemented"
+    },
+    {
+      "engine": "E04",
+      "capability": "Credit-note and cancellation controls",
+      "observed_issue": "Original-reference existence alone did not constrain cumulative notes",
+      "financial_or_control_consequence": "More VAT could be reversed than the original supply",
+      "fix": "Track cumulative net/VAT reversals; compare supplier/currency/treatment; block return readiness on excess",
+      "verification": "New excess-credit integration case and existing credit-note/rounding units",
+      "status": "implemented_for_supported_profile_scope"
+    },
+    {
+      "engine": "E04",
+      "capability": "Advance/final supply overlap",
+      "observed_issue": "No explicit supply stage or common supply identifier",
+      "financial_or_control_consequence": "Advance and final consideration could be counted twice",
+      "fix": "Add optional supply metadata, flag overlaps and block unsupported final advance-netting bridge",
+      "verification": "Existing invoice regressions; explicit blocker path retained",
+      "status": "partial_unsupported_netting_blocked"
+    },
+    {
+      "engine": "E04",
+      "capability": "Place of supply and special workflows",
+      "observed_issue": "Human treatment flags do not implement a universal legal determination model",
+      "financial_or_control_consequence": "Location, grouping, property/export/relief conditions can remain unresolved",
+      "fix": "Preserve reviewed classifications and rule/evidence controls; disclose bounded scope",
+      "verification": "VAT201 source/control reconciliation and rule-date tests",
+      "status": "open_specialist_adapters"
+    },
+    {
+      "engine": "E04",
+      "capability": "Prior-period notes and VAT group chronology",
+      "observed_issue": "Existing invoice link is profile-bound; grouping evidence has no full membership ledger",
+      "financial_or_control_consequence": "Cross-period or membership changes need a specialist bridge",
+      "fix": "Do not weaken period guards or fabricate offsets",
+      "verification": "Supported/unsupported inventory in README",
+      "status": "open"
+    },
+    {
+      "engine": "E05",
+      "capability": "Loss utilization",
+      "observed_issue": "Pure allocation accepted duplicate lot identifiers",
+      "financial_or_control_consequence": "Duplicated lots could duplicate utilization",
+      "fix": "Reject repeated lots and invalid cap/balances; reuse existing posted-loss ledger",
+      "verification": "Independent loss cap/duplicate unit and loss/transfer integration suites",
+      "status": "implemented"
+    },
+    {
+      "engine": "E05",
+      "capability": "SBR commencement",
+      "observed_issue": "Signature/retrieval dates do not establish MD131 publication commencement",
+      "financial_or_control_consequence": "Extended benefit could be applied before legal knowledge/commencement",
+      "fix": "Require retained source, explicit publication date/evidence and legal-as-of after commencement for extended adoption",
+      "verification": "Primary retained text; missing-evidence integration case; synthetic attestation in positive fixtures",
+      "status": "implemented_gate_actual_gazette_adoption_requires_evidence"
+    },
+    {
+      "engine": "E05",
+      "capability": "Reliefs, tax groups and continuing balances",
+      "observed_issue": "Existing bounded specialist modules need entity-specific conditions; shared group references hit Phase 1 guard",
+      "financial_or_control_consequence": "Unsupported relief or rejected legitimate group sources",
+      "fix": "Retain conditions/elections/release controls; authorize explicit group member links; no automatic relief posting",
+      "verification": "Specialist eligibility, credit/exemption, group and loss-transfer regressions",
+      "status": "implemented_with_existing_scope_limits"
+    },
+    {
+      "engine": "E05",
+      "capability": "Deferred-tax interface",
+      "observed_issue": "Current tax should not hide deferred-tax calculations",
+      "financial_or_control_consequence": "Unreviewable timing/current-tax mixture",
+      "fix": "Typed E05-E09 handoff only; recognition/recoverability remain E09",
+      "verification": "Contract file and inventory; no deferred-tax implementation claim",
+      "status": "interface_defined_only"
+    },
+    {
+      "engine": "E06",
+      "capability": "Unresolved revenue sensitivity",
+      "observed_issue": "Incomplete classifications did not expose distinct best/adverse numerator bounds",
+      "financial_or_control_consequence": "Passing raw arithmetic could mask factual uncertainty",
+      "fix": "Separate confirmed nonqualifying and unresolved revenue; report scenario bounds while leaving assessment open",
+      "verification": "QFZP calculator and real segmentation/correction/CT consequence workflow",
+      "status": "implemented_for_existing_segment_model"
+    },
+    {
+      "engine": "E06",
+      "capability": "Special activities and continuing conditions",
+      "observed_issue": "No universal IP nexus/activity inference or full longitudinal disqualification engine",
+      "financial_or_control_consequence": "Free-zone status could be overgeneralized",
+      "fix": "Preserve explicit facts, evidence, unsupported-case restrictions and reconciled CT bridge",
+      "verification": "Existing incomplete-condition and profit reconciliation tests",
+      "status": "open_specialist_scope"
+    },
+    {
+      "engine": "E07",
+      "capability": "Transitive approved judgment to CT",
+      "observed_issue": "CT generic dependency versions did not necessarily revalidate TP analytical sources",
+      "financial_or_control_consequence": "Changed benchmark/FAR inputs could leave a CT adjustment appearing current",
+      "fix": "Follow TP judgment run through authoritative TP currentness checks",
+      "verification": "Existing TP transitive-FAR and CT bridge regressions; new code path source review",
+      "status": "implemented"
+    },
+    {
+      "engine": "E07",
+      "capability": "Real comparable/loan data",
+      "observed_issue": "Synthetic test observations are not market evidence",
+      "financial_or_control_consequence": "Technical pass could be mistaken for a supported live pricing position",
+      "fix": "Retain licensing controls and identify synthetic benchmark support as unresolved in new receipt",
+      "verification": "Benchmark licensing, source/party, specialist and synthetic-data tests",
+      "status": "real_data_prerequisite"
+    },
+    {
+      "engine": "E07",
+      "capability": "Tax effects and posting",
+      "observed_issue": "Generic TP adjustments do not establish VAT treatment or an approved entry",
+      "financial_or_control_consequence": "Potential unreviewed posting or assumed VAT effect",
+      "fix": "Keep existing reviewed CT bridge and explicit separate VAT determination; no automatic posting",
+      "verification": "Related-party/connected-person bridge and immutable publication tests",
+      "status": "partial_no_universal_financing_posting_workflow"
+    },
+    {
+      "engine": "E08",
+      "capability": "Scope completeness",
+      "observed_issue": "Missing group facts must not mean out of scope",
+      "financial_or_control_consequence": "False zero tax",
+      "fix": "Separate incomplete scope and pre-effective-period states from out-of-scope result",
+      "verification": "Missing-group HTTP/permissions test and independent scope units",
+      "status": "implemented"
+    },
+    {
+      "engine": "E08",
+      "capability": "Investment and other special categories",
+      "observed_issue": "UAE investment entities were skipped from ordinary blending without a complete separate calculation",
+      "financial_or_control_consequence": "Partial ordinary result could appear complete",
+      "fix": "Block special case; retain source schedules and null liability in unsupported result",
+      "verification": "Investment-category unit; ordinary UAE and specialist category regressions",
+      "status": "implemented_blocker_not_specialist_calculation"
+    },
+    {
+      "engine": "E08",
+      "capability": "Review and staleness",
+      "observed_issue": "Memo lacked mandatory immutable calculation link; list did not expose freshness",
+      "financial_or_control_consequence": "Stale or incomplete result could support a conclusion",
+      "fix": "Require matching current determinate calculation for memo actions; check sources/roster and show freshness",
+      "verification": "Ordinary DMTT integration and currentness code; detailed memo positive/negative path remains additional QA need",
+      "status": "implemented_with_additional_memo_qa_needed"
+    },
+    {
+      "engine": "E08",
+      "capability": "Advanced adopted guidance and UPE packages",
+      "observed_issue": "Ordinary standalone IFC/IFRS adapter is not all Pillar Two or UPE reporting packages",
+      "financial_or_control_consequence": "Unsupported scope could be represented as a general implementation",
+      "fix": "Keep explicit basis/category restrictions, staged data and safe-harbour distinction",
+      "verification": "CD142/MD96 source checks and ordinary/safe-harbour/deferred units",
+      "status": "open_specialist_adapters"
+    },
+    {
+      "engine": "shared",
+      "capability": "Automatic invalidation follow-up",
+      "observed_issue": "Read/action-time staleness does not create every required review task or recalculate all drafts",
+      "financial_or_control_consequence": "Operational follow-up still requires preparer action",
+      "fix": "Reuse existing idempotent jobs and retries; retain blocking checks; do not claim generic automatic dispatch",
+      "verification": "Existing job regressions; current connected stale-reuse rejection",
+      "status": "open"
+    },
+    {
+      "engine": "shared",
+      "capability": "Complete requested demonstrations A-C",
+      "observed_issue": "Individual VAT/CT and financing modules have real tests, but not every requested same-entity end-to-end combination",
+      "financial_or_control_consequence": "Overclaiming connected production readiness",
+      "fix": "Report exact exercised paths and missing combined-fixture/posting/market evidence",
+      "verification": "README workflow evidence and individual XML test cases",
+      "status": "partially_demonstrated"
+    },
+    {
+      "engine": "E03 dependency",
+      "capability": "Live connector route",
+      "observed_issue": "Previously documented synchronous checkpoint/storage lock issue not qualified by file-source tax tests",
+      "financial_or_control_consequence": "Unreliable live source acquisition can block downstream tax",
+      "fix": "Keep this as a Phase 3/use-case prerequisite; do not restart Phase 1 or bypass admission controls",
+      "verification": "Phase 1 blocker report; this phase uses independent controlled file sources",
+      "status": "existing_blocker_outside_verified_source_path"
+    }
+  ]
+}

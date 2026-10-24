@@ -15,6 +15,12 @@ vi.mock("@/hooks/use-api", () => ({
           country: state.country,
           source_formats: [
             {
+              id: "india-epfo-ecr",
+              label: "India EPFO monthly ECR text",
+              available: state.country === "IN",
+              table_type: "obligations",
+            },
+            {
               id: "canonical-csv",
               label: "Controlled canonical CSV",
               available: true,
@@ -46,6 +52,10 @@ vi.mock("@/hooks/use-api", () => ({
             },
           ],
           source_contracts: {
+            obligations: {
+              id: { required: true, type: "str" },
+              amount: { required: true, type: "Decimal" },
+            },
             "tax-documents": {
               id: { required: true, type: "str" },
               tax: { required: true, type: "Decimal" },
@@ -136,6 +146,34 @@ beforeEach(() => {
   state.result = null;
 });
 describe("country workflows", () => {
+  it("prepares ECR with declared establishment, wage month, members and amounts", async () => {
+    state.country = "IN";
+    render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+    fireEvent.change(screen.getByLabelText("Source file format"), {
+      target: { value: "india-epfo-ecr" },
+    });
+    for (const [label, value] of [
+      ["Schedule title", "ECR June review"],
+      ["EPFO establishment registration", "SYNTHETIC-EPFO-001"],
+      ["ECR wage month", "2026-06"],
+      ["Independent ECR member count", "2"],
+      ["Clean retained evidence", "clean"],
+      ["Expected data rows", "7"],
+      ["Independent totals by currency", "INR=6100"],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+      file_format: "india-epfo-ecr",
+      table_type: "obligations",
+      employer_registration: "SYNTHETIC-EPFO-001",
+      obligation_period: "2026-06",
+      expected_members: 2,
+      expected_rows: 7,
+      control_totals: { INR: "6100" },
+    });
+  });
   it("queues an India invoice with explicit GSTIN, direction, month and component controls", async () => {
     state.country = "IN";
     render(<CountryWorkflows eid="engagement" mode="workflow-source" />);

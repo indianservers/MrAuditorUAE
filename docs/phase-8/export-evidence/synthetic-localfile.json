@@ -1,211 +1,211 @@
 {
-  "id": "ecfbb0fa-ebfc-407e-89ba-d1ce4da270fd",
-  "sha256": "9f2c27d589631f58d622b46242fc35a386dc3437e0fd152c7bed3f9a88d7ea03",
+  "id": "342f126e-d16f-4cac-bec8-2c13a4833ba3",
+  "sha256": "099843472321e21f9215341804f6d400dbc19e6b8e845127925240acdd6fbd05",
   "methodology_version": "auditos-tp/1.0",
   "released": false,
-  "prepared_by": "fc84e85f-5daf-4922-94ec-3769b3209b34",
-  "created_at": "2026-10-24 18:15:34.799967+00:00",
+  "prepared_by": "368c7cfa-ac0d-4a06-a71c-247c923c7eee",
+  "created_at": "2026-10-24 18:34:29.653566+00:00",
   "reviewed_by": [],
   "inputs": {
-    "record_id": "59b42a56-53d1-4e78-ac48-7b302efed0c2",
-    "profile_id": "6e9a8d48-f8fd-4609-b907-cfed7ebb2312"
+    "record_id": "d56ca2f7-3b45-4fc5-87b1-a298cb1f4645",
+    "profile_id": "0a129ba1-1e8f-490f-8b33-748d6c2db1f3"
   },
   "dependencies": [
     {
-      "id": "fba122e6-a861-4885-a671-2af0427f0fb7",
+      "id": "5d6b30ea-667e-4f01-8d3b-219507024f74",
       "status": "APPROVED",
       "version": 3
     },
     {
-      "id": "8fe5bdc8-1093-4d49-8f15-90410db4e1e3",
+      "id": "5151ae5a-ab3c-4239-9116-57444f6179d2",
       "status": "APPROVED",
       "version": 3
     },
     {
-      "id": "dbf3317a-59a9-402c-ba5b-10b1b400241c",
+      "id": "07be194f-aefb-4021-891f-f42b00d1d380",
       "status": "APPROVED",
       "version": 3
     },
     {
-      "id": "383073ea-6483-447a-8c74-fb38b6226a58",
+      "id": "26e3325b-a5cb-418e-8025-167c64388709",
       "status": "APPROVED",
       "version": 3
     },
     {
-      "id": "59ca1c3b-9f10-4420-a563-de85bfd450e3",
+      "id": "8111fdc0-a0c3-4220-8d4f-506d02e02aed",
       "status": "APPROVED",
       "version": 3
     },
     {
-      "id": "697585b8-3531-4640-925d-f04faec2c8b6",
+      "id": "c5f2f746-f2ee-44cb-987c-56136d5c2de1",
       "status": "APPROVED",
       "version": 3
     },
     {
-      "id": "515c2499-1c25-477a-be19-599581b605ff",
+      "id": "b7bc0e8e-c44c-4000-bc9b-6575a6a3f090",
       "status": "APPROVED",
       "version": 3
     },
     {
-      "id": "cc5edb4c-b679-4bfb-8f5c-92c60a7455fb",
+      "id": "bec5f73f-4547-4fa6-b494-4636bbb1ae62",
       "status": "APPROVED",
       "version": 3
     },
     {
-      "id": "75f25a9d-d846-445a-84a3-47cfd15c89ca",
+      "id": "3bcba9a4-298d-403c-bd92-b88dcd0de1e6",
       "status": "APPROVED",
       "version": 3
     },
     {
-      "id": "092d6bde-2841-4ef9-9d18-c01e78611952",
+      "id": "eaf1cd80-da44-4287-9129-98e9e720b8a0",
       "status": "APPROVED",
       "version": 3
     },
     {
-      "id": "979752dc-31f7-417a-8724-59dc251c823f",
+      "id": "6a96a1eb-21dd-4cd6-b52d-39e1d24c5c8b",
       "status": "APPROVED",
       "version": 4
     },
     {
-      "id": "6e9a8d48-f8fd-4609-b907-cfed7ebb2312",
+      "id": "0a129ba1-1e8f-490f-8b33-748d6c2db1f3",
       "kind": "tp-profile",
       "status": "APPROVED",
       "version": 3,
       "synthetic": false
     },
     {
-      "id": "414fe600-3da4-49aa-818e-682e7ff12ee9",
+      "id": "f387e7fd-fe7a-4fff-893c-f1eb47aa0ed3",
       "kind": "tp-rule",
       "status": "APPROVED",
       "version": 3,
       "synthetic": false
     },
     {
-      "id": "e5e6af42-61a4-4860-8d74-366cdf0e170c",
+      "id": "33ed8bae-2f18-4b6a-8347-39373f58e484",
       "kind": "tp-rule",
       "status": "APPROVED",
       "version": 3,
       "synthetic": false
     },
     {
-      "id": "46495fd8-4d00-44a0-be16-adc6dbbb38c9",
+      "id": "63b9bd2c-df96-469f-82d3-857205b0f694",
       "kind": "tp-rule",
       "status": "APPROVED",
       "version": 3,
       "synthetic": false
     },
     {
-      "id": "54f18b07-b4cf-4405-9fe2-fd35d1245db7",
+      "id": "134ca4a1-d675-4d20-a5cc-25061178240b",
       "kind": "tp-rule",
       "status": "APPROVED",
       "version": 3,
       "synthetic": false
     },
     {
-      "id": "634078e1-cba6-4e97-b213-f6b5d5c0c729",
+      "id": "749bfec7-47a7-4cfb-919f-6c420f9fc15f",
       "kind": "tp-rule",
       "status": "APPROVED",
       "version": 3,
       "synthetic": false
     },
     {
-      "id": "30f134e4-9320-4637-86c8-c08b0b422abb",
+      "id": "a4399843-db68-4b86-8733-f33e5245e9c0",
       "kind": "tp-rule",
       "status": "APPROVED",
       "version": 3,
       "synthetic": false
     },
     {
-      "id": "acc88b17-2731-439a-9376-1efb4a18ff87",
+      "id": "599f6bca-5333-467c-bbc9-5b60b04c9b3e",
       "kind": "tp-rule",
       "status": "APPROVED",
       "version": 3,
       "synthetic": false
     },
     {
-      "id": "59b42a56-53d1-4e78-ac48-7b302efed0c2",
+      "id": "d56ca2f7-3b45-4fc5-87b1-a298cb1f4645",
       "kind": "tp-localfile",
       "status": "APPROVED",
       "version": 4,
       "synthetic": false
     },
     {
-      "id": "caded7dc-f14d-4d3e-9103-8ceb4c8dd3ac",
-      "kind": "tp-method",
-      "status": "APPROVED",
-      "version": 3,
-      "synthetic": false
-    },
-    {
-      "id": "fdb9fdcd-b9c1-4573-a126-230767690bb4",
-      "kind": "tp-far",
-      "status": "APPROVED",
-      "version": 3,
-      "synthetic": false
-    },
-    {
-      "id": "383073ea-6483-447a-8c74-fb38b6226a58",
+      "id": "26e3325b-a5cb-418e-8025-167c64388709",
       "kind": "ifrs-note",
       "status": "APPROVED",
       "version": 3,
       "synthetic": false
     },
     {
-      "id": "64db4a8a-54e5-40a7-8654-4a16cd084ed7",
+      "id": "98678ad6-7d06-424d-ac6a-0c1f973f72ed",
+      "kind": "tp-method",
+      "status": "APPROVED",
+      "version": 3,
+      "synthetic": false
+    },
+    {
+      "id": "e94f2c1e-966f-4abb-87a5-66d8467d8f35",
+      "kind": "tp-far",
+      "status": "APPROVED",
+      "version": 3,
+      "synthetic": false
+    },
+    {
+      "id": "ad4c54ff-da6c-4474-a0d7-99c82e42ba9b",
       "kind": "tp-party",
       "status": "APPROVED",
       "version": 3,
       "synthetic": true
     },
     {
-      "id": "8d3d9472-dd0e-4e55-ac64-2e8c2cecbfc9",
+      "id": "249b5cc3-1aa2-4fc2-a638-fa4a21f8b192",
       "kind": "tp-transaction",
       "status": "APPROVED",
       "version": 3,
       "synthetic": false
     },
     {
-      "id": "7c6f52dd-0b10-4849-bb5b-63937e8b3f7a",
+      "id": "0ceeb1f1-b2a2-43ec-8d87-840f74b2dd70",
       "kind": "tp-transaction",
       "status": "APPROVED",
       "version": 3,
       "synthetic": false
     },
     {
-      "id": "26997a51-b558-43e8-a18b-8bcb0385cfe6",
+      "id": "60346b5b-473b-4889-a5da-68b017ca186b",
       "kind": "tp-party",
       "status": "APPROVED",
       "version": 3,
       "synthetic": true
     },
     {
-      "id": "5fdd6fbd-f1f1-4e9c-80b8-f76c0a7d4293",
+      "id": "8534d3b8-8b3a-44de-b207-57cc951802f9",
       "kind": "tp-relationship",
       "status": "APPROVED",
       "version": 3,
       "synthetic": false
     },
     {
-      "id": "634078e1-cba6-4e97-b213-f6b5d5c0c729",
+      "id": "749bfec7-47a7-4cfb-919f-6c420f9fc15f",
       "kind": "tp-rule",
       "status": "APPROVED",
       "version": 3,
       "synthetic": false
     },
     {
-      "id": "9f1251fa-b233-4ecd-9d23-99b681941173",
+      "id": "4728be13-cd4e-4cff-b944-aaa72314e339",
       "type": "run",
-      "sha256": "4abe92101801f412f14c63a55305380d3ce93db85011148e89d4401f451873aa"
+      "sha256": "bb6f6c59ca6fe7f3b2a629ba29c663b12a97df4414d9aad8e355a7a861a82292"
     },
     {
-      "id": "5361f161-7a01-4173-a92e-a24f2285d076",
+      "id": "3ad8dcc4-73bb-4757-860b-d47162b2a4cf",
       "type": "run",
-      "sha256": "06691a9635e7694772fa02a48b97c4543778bd2c484c0845dab710f92384f4a5"
+      "sha256": "938fe13b721d15eebe42e4915709301cad961dd4f53e781a1f34575768e4a668"
     },
     {
-      "id": "59896288-0bc4-4ef3-9045-b5dfac9177de",
+      "id": "8a856c62-8985-46d5-913a-50057385d3f4",
       "type": "run",
-      "sha256": "09fbdfee5c061267875b5ed8b9767c4068a3c86a466e2f7464e3e39c653017a6"
+      "sha256": "11a5e9130b9b012d21bd7ed155d7173f79fb0221274b4c0d06f2ac557133d3bf"
     }
   ],
   "results": {
@@ -240,12 +240,12 @@
           "effective_from": "2025-12-30",
           "document_version": "Synthetic reviewed source adoption",
           "review_approvers": [
-            "e46262e7-fad4-498f-a048-cbdce542c22a"
+            "da75be6b-463d-44e4-8dc4-1e26094a7ff7"
           ],
           "technical_review": "Synthetic independent professional rule adoption"
         },
         "version": 3,
-        "rule_record_id": "414fe600-3da4-49aa-818e-682e7ff12ee9",
+        "rule_record_id": "f387e7fd-fe7a-4fff-893c-f1eb47aa0ed3",
         "official_source": {
           "url": "https://tax.gov.ae/Datafolder/Files/Guides/CT/APA-Guide-EN-30-12-2025.pdf",
           "kind": "administrative_guidance",
@@ -291,12 +291,12 @@
           "effective_from": "2023-06-01",
           "document_version": "Synthetic reviewed source adoption",
           "review_approvers": [
-            "e46262e7-fad4-498f-a048-cbdce542c22a"
+            "da75be6b-463d-44e4-8dc4-1e26094a7ff7"
           ],
           "technical_review": "Synthetic independent professional rule adoption"
         },
         "version": 3,
-        "rule_record_id": "e5e6af42-61a4-4860-8d74-366cdf0e170c",
+        "rule_record_id": "33ed8bae-2f18-4b6a-8347-39373f58e484",
         "official_source": {
           "url": "https://tax.gov.ae/Datafolder/Files/Guides/CT/CT-Returns-EN-11-11-2024.pdf",
           "kind": "administrative_guidance",
@@ -340,12 +340,12 @@
           "effective_from": "2023-06-01",
           "document_version": "Synthetic reviewed source adoption",
           "review_approvers": [
-            "e46262e7-fad4-498f-a048-cbdce542c22a"
+            "da75be6b-463d-44e4-8dc4-1e26094a7ff7"
           ],
           "technical_review": "Synthetic independent professional rule adoption"
         },
         "version": 3,
-        "rule_record_id": "46495fd8-4d00-44a0-be16-adc6dbbb38c9",
+        "rule_record_id": "63b9bd2c-df96-469f-82d3-857205b0f694",
         "official_source": {
           "url": "https://doi.org/10.1787/0e655865-en",
           "kind": "oecd_guidance",
@@ -395,12 +395,12 @@
           "effective_from": "2023-06-01",
           "document_version": "Synthetic reviewed source adoption",
           "review_approvers": [
-            "e46262e7-fad4-498f-a048-cbdce542c22a"
+            "da75be6b-463d-44e4-8dc4-1e26094a7ff7"
           ],
           "technical_review": "Synthetic independent professional rule adoption"
         },
         "version": 3,
-        "rule_record_id": "54f18b07-b4cf-4405-9fe2-fd35d1245db7",
+        "rule_record_id": "134ca4a1-d675-4d20-a5cc-25061178240b",
         "official_source": {
           "url": "https://mof.gov.ae/wp-content/uploads/2023/05/Ministerial-Decision-No.-97-of-2023-for-the-Purposes-of-Federal-Decree-Law-No.-47-of-2022.pdf",
           "kind": "legislation",
@@ -445,12 +445,12 @@
           "effective_from": "2023-06-01",
           "document_version": "Synthetic reviewed source adoption",
           "review_approvers": [
-            "e46262e7-fad4-498f-a048-cbdce542c22a"
+            "da75be6b-463d-44e4-8dc4-1e26094a7ff7"
           ],
           "technical_review": "Synthetic independent professional rule adoption"
         },
         "version": 3,
-        "rule_record_id": "634078e1-cba6-4e97-b213-f6b5d5c0c729",
+        "rule_record_id": "749bfec7-47a7-4cfb-919f-6c420f9fc15f",
         "official_source": {
           "url": "https://tax.gov.ae/en/legislation/corporate.tax.aspx",
           "kind": "legislation",
@@ -495,12 +495,12 @@
           "effective_from": "2023-06-01",
           "document_version": "Synthetic reviewed source adoption",
           "review_approvers": [
-            "e46262e7-fad4-498f-a048-cbdce542c22a"
+            "da75be6b-463d-44e4-8dc4-1e26094a7ff7"
           ],
           "technical_review": "Synthetic independent professional rule adoption"
         },
         "version": 3,
-        "rule_record_id": "30f134e4-9320-4637-86c8-c08b0b422abb",
+        "rule_record_id": "a4399843-db68-4b86-8733-f33e5245e9c0",
         "official_source": {
           "url": "https://tax.gov.ae/en/legislation/corporate.tax.aspx",
           "kind": "legislation",
@@ -545,12 +545,12 @@
           "effective_from": "2023-06-01",
           "document_version": "Synthetic reviewed source adoption",
           "review_approvers": [
-            "e46262e7-fad4-498f-a048-cbdce542c22a"
+            "da75be6b-463d-44e4-8dc4-1e26094a7ff7"
           ],
           "technical_review": "Synthetic independent professional rule adoption"
         },
         "version": 3,
-        "rule_record_id": "acc88b17-2731-439a-9376-1efb4a18ff87",
+        "rule_record_id": "599f6bca-5333-467c-bbc9-5b60b04c9b3e",
         "official_source": {
           "url": "https://tax.gov.ae/Datafolder/Files/Guides/CT/CT-Returns-EN-11-11-2024.pdf",
           "kind": "administrative_guidance",
@@ -573,7 +573,7 @@
         "run_ids": [],
         "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked executive summary. No real market or tax opinion is expressed.",
         "evidence_ids": [
-          "383073ea-6483-447a-8c74-fb38b6226a58"
+          "26e3325b-a5cb-418e-8025-167c64388709"
         ],
         "human_verified": true
       },
@@ -582,7 +582,7 @@
         "run_ids": [],
         "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked entity profile. No real market or tax opinion is expressed.",
         "evidence_ids": [
-          "383073ea-6483-447a-8c74-fb38b6226a58"
+          "26e3325b-a5cb-418e-8025-167c64388709"
         ],
         "human_verified": true
       },
@@ -591,7 +591,7 @@
         "run_ids": [],
         "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked business. No real market or tax opinion is expressed.",
         "evidence_ids": [
-          "383073ea-6483-447a-8c74-fb38b6226a58"
+          "26e3325b-a5cb-418e-8025-167c64388709"
         ],
         "human_verified": true
       },
@@ -600,7 +600,7 @@
         "run_ids": [],
         "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked industry. No real market or tax opinion is expressed.",
         "evidence_ids": [
-          "383073ea-6483-447a-8c74-fb38b6226a58"
+          "26e3325b-a5cb-418e-8025-167c64388709"
         ],
         "human_verified": true
       },
@@ -609,18 +609,18 @@
         "run_ids": [],
         "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked ownership. No real market or tax opinion is expressed.",
         "evidence_ids": [
-          "383073ea-6483-447a-8c74-fb38b6226a58"
+          "26e3325b-a5cb-418e-8025-167c64388709"
         ],
         "human_verified": true
       },
       {
         "key": "controlled_transactions",
         "run_ids": [
-          "9f1251fa-b233-4ecd-9d23-99b681941173"
+          "4728be13-cd4e-4cff-b944-aaa72314e339"
         ],
         "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked controlled transactions. No real market or tax opinion is expressed.",
         "evidence_ids": [
-          "383073ea-6483-447a-8c74-fb38b6226a58"
+          "26e3325b-a5cb-418e-8025-167c64388709"
         ],
         "human_verified": true
       },
@@ -629,7 +629,7 @@
         "run_ids": [],
         "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked transaction descriptions. No real market or tax opinion is expressed.",
         "evidence_ids": [
-          "383073ea-6483-447a-8c74-fb38b6226a58"
+          "26e3325b-a5cb-418e-8025-167c64388709"
         ],
         "human_verified": true
       },
@@ -638,7 +638,7 @@
         "run_ids": [],
         "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked far. No real market or tax opinion is expressed.",
         "evidence_ids": [
-          "fdb9fdcd-b9c1-4573-a126-230767690bb4"
+          "e94f2c1e-966f-4abb-87a5-66d8467d8f35"
         ],
         "human_verified": true
       },
@@ -647,7 +647,7 @@
         "run_ids": [],
         "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked method. No real market or tax opinion is expressed.",
         "evidence_ids": [
-          "caded7dc-f14d-4d3e-9103-8ceb4c8dd3ac"
+          "98678ad6-7d06-424d-ac6a-0c1f973f72ed"
         ],
         "human_verified": true
       },
@@ -656,18 +656,18 @@
         "run_ids": [],
         "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked economic analysis. No real market or tax opinion is expressed.",
         "evidence_ids": [
-          "383073ea-6483-447a-8c74-fb38b6226a58"
+          "26e3325b-a5cb-418e-8025-167c64388709"
         ],
         "human_verified": true
       },
       {
         "key": "benchmarking",
         "run_ids": [
-          "59896288-0bc4-4ef3-9045-b5dfac9177de"
+          "8a856c62-8985-46d5-913a-50057385d3f4"
         ],
         "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked benchmarking. No real market or tax opinion is expressed.",
         "evidence_ids": [
-          "383073ea-6483-447a-8c74-fb38b6226a58"
+          "26e3325b-a5cb-418e-8025-167c64388709"
         ],
         "human_verified": true
       },
@@ -676,7 +676,7 @@
         "run_ids": [],
         "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked financial reconciliation. No real market or tax opinion is expressed.",
         "evidence_ids": [
-          "383073ea-6483-447a-8c74-fb38b6226a58"
+          "26e3325b-a5cb-418e-8025-167c64388709"
         ],
         "human_verified": true
       },
@@ -685,7 +685,7 @@
         "run_ids": [],
         "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked conclusions. No real market or tax opinion is expressed.",
         "evidence_ids": [
-          "383073ea-6483-447a-8c74-fb38b6226a58"
+          "26e3325b-a5cb-418e-8025-167c64388709"
         ],
         "human_verified": true
       },
@@ -694,31 +694,31 @@
         "run_ids": [],
         "narrative": "SYNTHETIC SOFTWARE TEST ONLY. Independently reviewed source-linked appendices. No real market or tax opinion is expressed.",
         "evidence_ids": [
-          "383073ea-6483-447a-8c74-fb38b6226a58"
+          "26e3325b-a5cb-418e-8025-167c64388709"
         ],
         "human_verified": true
       }
     ],
-    "entity_id": "00818376-5b2e-4cac-91ac-c24aa237221b",
+    "entity_id": "26047f96-aba9-4e5f-97eb-a04d18c3e2ce",
     "synthetic": true,
     "period_end": "2026-12-31",
-    "profile_id": "6e9a8d48-f8fd-4609-b907-cfed7ebb2312",
+    "profile_id": "0a129ba1-1e8f-490f-8b33-748d6c2db1f3",
     "period_start": "2026-01-01",
     "document_type": "localfile",
     "source_profit": "1200000.00000000",
     "tax_execution": {
       "rounding": "VAT/DMTT: explicit nearest 0.01 HALF_UP; CT/TP internal schedules: 0.00000001 HALF_UP; filing rounding requires reviewed return mapping",
       "tax_type": "TP",
-      "entity_id": "00818376-5b2e-4cac-91ac-c24aa237221b",
-      "period_id": "59bda27d-f8a8-4b3d-a618-87f20488ba0d",
-      "tenant_id": "af66d068-09b3-4e17-853f-7d3a21413081",
+      "entity_id": "26047f96-aba9-4e5f-97eb-a04d18c3e2ce",
+      "period_id": "075ce9a3-fc18-4d94-b850-2f7a6e4d0e3f",
+      "tenant_id": "3c52af75-856a-4d05-aed4-aa0f5f067823",
       "period_end": "2026-12-31",
       "assumptions": [
         "Approved human classifications remain legal inputs; no AI eligibility determination"
       ],
-      "execution_id": "698ba3ce-bb24-43a9-9100-b576651730fa",
+      "execution_id": "438cd359-30fc-4896-a3d6-f01396f930d7",
       "period_start": "2026-01-01",
-      "engagement_id": "d313758b-f840-4233-b6ca-99550d8c8043",
+      "engagement_id": "8566cd98-1801-41ee-94c0-604933ca119c",
       "filing_status": "NOT_SUBMITTED",
       "rule_versions": {
         "apa": {
@@ -751,12 +751,12 @@
             "effective_from": "2025-12-30",
             "document_version": "Synthetic reviewed source adoption",
             "review_approvers": [
-              "e46262e7-fad4-498f-a048-cbdce542c22a"
+              "da75be6b-463d-44e4-8dc4-1e26094a7ff7"
             ],
             "technical_review": "Synthetic independent professional rule adoption"
           },
           "version": 3,
-          "rule_record_id": "414fe600-3da4-49aa-818e-682e7ff12ee9",
+          "rule_record_id": "f387e7fd-fe7a-4fff-893c-f1eb47aa0ed3",
           "official_source": {
             "url": "https://tax.gov.ae/Datafolder/Files/Guides/CT/APA-Guide-EN-30-12-2025.pdf",
             "kind": "administrative_guidance",
@@ -802,12 +802,12 @@
             "effective_from": "2023-06-01",
             "document_version": "Synthetic reviewed source adoption",
             "review_approvers": [
-              "e46262e7-fad4-498f-a048-cbdce542c22a"
+              "da75be6b-463d-44e4-8dc4-1e26094a7ff7"
             ],
             "technical_review": "Synthetic independent professional rule adoption"
           },
           "version": 3,
-          "rule_record_id": "e5e6af42-61a4-4860-8d74-366cdf0e170c",
+          "rule_record_id": "33ed8bae-2f18-4b6a-8347-39373f58e484",
           "official_source": {
             "url": "https://tax.gov.ae/Datafolder/Files/Guides/CT/CT-Returns-EN-11-11-2024.pdf",
             "kind": "administrative_guidance",
@@ -851,12 +851,12 @@
             "effective_from": "2023-06-01",
             "document_version": "Synthetic reviewed source adoption",
             "review_approvers": [
-              "e46262e7-fad4-498f-a048-cbdce542c22a"
+              "da75be6b-463d-44e4-8dc4-1e26094a7ff7"
             ],
             "technical_review": "Synthetic independent professional rule adoption"
           },
           "version": 3,
-          "rule_record_id": "46495fd8-4d00-44a0-be16-adc6dbbb38c9",
+          "rule_record_id": "63b9bd2c-df96-469f-82d3-857205b0f694",
           "official_source": {
             "url": "https://doi.org/10.1787/0e655865-en",
             "kind": "oecd_guidance",
@@ -906,12 +906,12 @@
             "effective_from": "2023-06-01",
             "document_version": "Synthetic reviewed source adoption",
             "review_approvers": [
-              "e46262e7-fad4-498f-a048-cbdce542c22a"
+              "da75be6b-463d-44e4-8dc4-1e26094a7ff7"
             ],
             "technical_review": "Synthetic independent professional rule adoption"
           },
           "version": 3,
-          "rule_record_id": "54f18b07-b4cf-4405-9fe2-fd35d1245db7",
+          "rule_record_id": "134ca4a1-d675-4d20-a5cc-25061178240b",
           "official_source": {
             "url": "https://mof.gov.ae/wp-content/uploads/2023/05/Ministerial-Decision-No.-97-of-2023-for-the-Purposes-of-Federal-Decree-Law-No.-47-of-2022.pdf",
             "kind": "legislation",
@@ -956,12 +956,12 @@
             "effective_from": "2023-06-01",
             "document_version": "Synthetic reviewed source adoption",
             "review_approvers": [
-              "e46262e7-fad4-498f-a048-cbdce542c22a"
+              "da75be6b-463d-44e4-8dc4-1e26094a7ff7"
             ],
             "technical_review": "Synthetic independent professional rule adoption"
           },
           "version": 3,
-          "rule_record_id": "634078e1-cba6-4e97-b213-f6b5d5c0c729",
+          "rule_record_id": "749bfec7-47a7-4cfb-919f-6c420f9fc15f",
           "official_source": {
             "url": "https://tax.gov.ae/en/legislation/corporate.tax.aspx",
             "kind": "legislation",
@@ -1006,12 +1006,12 @@
             "effective_from": "2023-06-01",
             "document_version": "Synthetic reviewed source adoption",
             "review_approvers": [
-              "e46262e7-fad4-498f-a048-cbdce542c22a"
+              "da75be6b-463d-44e4-8dc4-1e26094a7ff7"
             ],
             "technical_review": "Synthetic independent professional rule adoption"
           },
           "version": 3,
-          "rule_record_id": "30f134e4-9320-4637-86c8-c08b0b422abb",
+          "rule_record_id": "a4399843-db68-4b86-8733-f33e5245e9c0",
           "official_source": {
             "url": "https://tax.gov.ae/en/legislation/corporate.tax.aspx",
             "kind": "legislation",
@@ -1056,12 +1056,12 @@
             "effective_from": "2023-06-01",
             "document_version": "Synthetic reviewed source adoption",
             "review_approvers": [
-              "e46262e7-fad4-498f-a048-cbdce542c22a"
+              "da75be6b-463d-44e4-8dc4-1e26094a7ff7"
             ],
             "technical_review": "Synthetic independent professional rule adoption"
           },
           "version": 3,
-          "rule_record_id": "acc88b17-2731-439a-9376-1efb4a18ff87",
+          "rule_record_id": "599f6bca-5333-467c-bbc9-5b60b04c9b3e",
           "official_source": {
             "url": "https://tax.gov.ae/Datafolder/Files/Guides/CT/CT-Returns-EN-11-11-2024.pdf",
             "kind": "administrative_guidance",
@@ -1081,218 +1081,222 @@
       "schema_version": "tax/1",
       "source_snapshots": [
         {
-          "id": "87cc43ff-587c-4ade-884f-bfc99e606f76",
-          "sha256": "6085cfbf4bfe45b540a5a50bb448d4df30ebea28df6bf25abff07a20f59be395"
+          "id": "8816bb6e-d8c5-4b32-aedd-acba6f466682",
+          "sha256": "7ce31010c21c2309ceeee64b6f08535e9fd76e831e50de13686c36437ac5b613",
+          "source_complete": true
         }
       ],
       "accounting_amount": null,
-      "input_completeness": "complete_for_supported_case",
+      "input_completeness": "partial",
       "calculation_version": "connected-tp/1",
       "evidence_references": [
         {
-          "id": "fba122e6-a861-4885-a671-2af0427f0fb7",
+          "id": "5d6b30ea-667e-4f01-8d3b-219507024f74",
           "status": "APPROVED",
           "version": 3
         },
         {
-          "id": "8fe5bdc8-1093-4d49-8f15-90410db4e1e3",
+          "id": "5151ae5a-ab3c-4239-9116-57444f6179d2",
           "status": "APPROVED",
           "version": 3
         },
         {
-          "id": "dbf3317a-59a9-402c-ba5b-10b1b400241c",
+          "id": "07be194f-aefb-4021-891f-f42b00d1d380",
           "status": "APPROVED",
           "version": 3
         },
         {
-          "id": "383073ea-6483-447a-8c74-fb38b6226a58",
+          "id": "26e3325b-a5cb-418e-8025-167c64388709",
           "status": "APPROVED",
           "version": 3
         },
         {
-          "id": "59ca1c3b-9f10-4420-a563-de85bfd450e3",
+          "id": "8111fdc0-a0c3-4220-8d4f-506d02e02aed",
           "status": "APPROVED",
           "version": 3
         },
         {
-          "id": "697585b8-3531-4640-925d-f04faec2c8b6",
+          "id": "c5f2f746-f2ee-44cb-987c-56136d5c2de1",
           "status": "APPROVED",
           "version": 3
         },
         {
-          "id": "515c2499-1c25-477a-be19-599581b605ff",
+          "id": "b7bc0e8e-c44c-4000-bc9b-6575a6a3f090",
           "status": "APPROVED",
           "version": 3
         },
         {
-          "id": "cc5edb4c-b679-4bfb-8f5c-92c60a7455fb",
+          "id": "bec5f73f-4547-4fa6-b494-4636bbb1ae62",
           "status": "APPROVED",
           "version": 3
         },
         {
-          "id": "75f25a9d-d846-445a-84a3-47cfd15c89ca",
+          "id": "3bcba9a4-298d-403c-bd92-b88dcd0de1e6",
           "status": "APPROVED",
           "version": 3
         },
         {
-          "id": "092d6bde-2841-4ef9-9d18-c01e78611952",
+          "id": "eaf1cd80-da44-4287-9129-98e9e720b8a0",
           "status": "APPROVED",
           "version": 3
         },
         {
-          "id": "979752dc-31f7-417a-8724-59dc251c823f",
+          "id": "6a96a1eb-21dd-4cd6-b52d-39e1d24c5c8b",
           "status": "APPROVED",
           "version": 4
         },
         {
-          "id": "6e9a8d48-f8fd-4609-b907-cfed7ebb2312",
+          "id": "0a129ba1-1e8f-490f-8b33-748d6c2db1f3",
           "kind": "tp-profile",
           "status": "APPROVED",
           "version": 3,
           "synthetic": false
         },
         {
-          "id": "414fe600-3da4-49aa-818e-682e7ff12ee9",
+          "id": "f387e7fd-fe7a-4fff-893c-f1eb47aa0ed3",
           "kind": "tp-rule",
           "status": "APPROVED",
           "version": 3,
           "synthetic": false
         },
         {
-          "id": "e5e6af42-61a4-4860-8d74-366cdf0e170c",
+          "id": "33ed8bae-2f18-4b6a-8347-39373f58e484",
           "kind": "tp-rule",
           "status": "APPROVED",
           "version": 3,
           "synthetic": false
         },
         {
-          "id": "46495fd8-4d00-44a0-be16-adc6dbbb38c9",
+          "id": "63b9bd2c-df96-469f-82d3-857205b0f694",
           "kind": "tp-rule",
           "status": "APPROVED",
           "version": 3,
           "synthetic": false
         },
         {
-          "id": "54f18b07-b4cf-4405-9fe2-fd35d1245db7",
+          "id": "134ca4a1-d675-4d20-a5cc-25061178240b",
           "kind": "tp-rule",
           "status": "APPROVED",
           "version": 3,
           "synthetic": false
         },
         {
-          "id": "634078e1-cba6-4e97-b213-f6b5d5c0c729",
+          "id": "749bfec7-47a7-4cfb-919f-6c420f9fc15f",
           "kind": "tp-rule",
           "status": "APPROVED",
           "version": 3,
           "synthetic": false
         },
         {
-          "id": "30f134e4-9320-4637-86c8-c08b0b422abb",
+          "id": "a4399843-db68-4b86-8733-f33e5245e9c0",
           "kind": "tp-rule",
           "status": "APPROVED",
           "version": 3,
           "synthetic": false
         },
         {
-          "id": "acc88b17-2731-439a-9376-1efb4a18ff87",
+          "id": "599f6bca-5333-467c-bbc9-5b60b04c9b3e",
           "kind": "tp-rule",
           "status": "APPROVED",
           "version": 3,
           "synthetic": false
         },
         {
-          "id": "59b42a56-53d1-4e78-ac48-7b302efed0c2",
+          "id": "d56ca2f7-3b45-4fc5-87b1-a298cb1f4645",
           "kind": "tp-localfile",
           "status": "APPROVED",
           "version": 4,
           "synthetic": false
         },
         {
-          "id": "caded7dc-f14d-4d3e-9103-8ceb4c8dd3ac",
-          "kind": "tp-method",
-          "status": "APPROVED",
-          "version": 3,
-          "synthetic": false
-        },
-        {
-          "id": "fdb9fdcd-b9c1-4573-a126-230767690bb4",
-          "kind": "tp-far",
-          "status": "APPROVED",
-          "version": 3,
-          "synthetic": false
-        },
-        {
-          "id": "383073ea-6483-447a-8c74-fb38b6226a58",
+          "id": "26e3325b-a5cb-418e-8025-167c64388709",
           "kind": "ifrs-note",
           "status": "APPROVED",
           "version": 3,
           "synthetic": false
         },
         {
-          "id": "64db4a8a-54e5-40a7-8654-4a16cd084ed7",
+          "id": "98678ad6-7d06-424d-ac6a-0c1f973f72ed",
+          "kind": "tp-method",
+          "status": "APPROVED",
+          "version": 3,
+          "synthetic": false
+        },
+        {
+          "id": "e94f2c1e-966f-4abb-87a5-66d8467d8f35",
+          "kind": "tp-far",
+          "status": "APPROVED",
+          "version": 3,
+          "synthetic": false
+        },
+        {
+          "id": "ad4c54ff-da6c-4474-a0d7-99c82e42ba9b",
           "kind": "tp-party",
           "status": "APPROVED",
           "version": 3,
           "synthetic": true
         },
         {
-          "id": "8d3d9472-dd0e-4e55-ac64-2e8c2cecbfc9",
+          "id": "249b5cc3-1aa2-4fc2-a638-fa4a21f8b192",
           "kind": "tp-transaction",
           "status": "APPROVED",
           "version": 3,
           "synthetic": false
         },
         {
-          "id": "7c6f52dd-0b10-4849-bb5b-63937e8b3f7a",
+          "id": "0ceeb1f1-b2a2-43ec-8d87-840f74b2dd70",
           "kind": "tp-transaction",
           "status": "APPROVED",
           "version": 3,
           "synthetic": false
         },
         {
-          "id": "26997a51-b558-43e8-a18b-8bcb0385cfe6",
+          "id": "60346b5b-473b-4889-a5da-68b017ca186b",
           "kind": "tp-party",
           "status": "APPROVED",
           "version": 3,
           "synthetic": true
         },
         {
-          "id": "5fdd6fbd-f1f1-4e9c-80b8-f76c0a7d4293",
+          "id": "8534d3b8-8b3a-44de-b207-57cc951802f9",
           "kind": "tp-relationship",
           "status": "APPROVED",
           "version": 3,
           "synthetic": false
         },
         {
-          "id": "634078e1-cba6-4e97-b213-f6b5d5c0c729",
+          "id": "749bfec7-47a7-4cfb-919f-6c420f9fc15f",
           "kind": "tp-rule",
           "status": "APPROVED",
           "version": 3,
           "synthetic": false
         },
         {
-          "id": "9f1251fa-b233-4ecd-9d23-99b681941173",
+          "id": "4728be13-cd4e-4cff-b944-aaa72314e339",
           "type": "run",
-          "sha256": "4abe92101801f412f14c63a55305380d3ce93db85011148e89d4401f451873aa"
+          "sha256": "bb6f6c59ca6fe7f3b2a629ba29c663b12a97df4414d9aad8e355a7a861a82292"
         },
         {
-          "id": "5361f161-7a01-4173-a92e-a24f2285d076",
+          "id": "3ad8dcc4-73bb-4757-860b-d47162b2a4cf",
           "type": "run",
-          "sha256": "06691a9635e7694772fa02a48b97c4543778bd2c484c0845dab710f92384f4a5"
+          "sha256": "938fe13b721d15eebe42e4915709301cad961dd4f53e781a1f34575768e4a668"
         },
         {
-          "id": "59896288-0bc4-4ef3-9045-b5dfac9177de",
+          "id": "8a856c62-8985-46d5-913a-50057385d3f4",
           "type": "run",
-          "sha256": "09fbdfee5c061267875b5ed8b9767c4068a3c86a466e2f7464e3e39c653017a6"
+          "sha256": "11a5e9130b9b012d21bd7ed155d7173f79fb0221274b4c0d06f2ac557133d3bf"
         }
       ],
       "professional_review": "DRAFT_REQUIRES_REVIEW",
       "authority_assessment": "NOT_ESTABLISHED",
       "calculated_liability": null,
-      "unresolved_questions": [],
+      "unresolved_questions": [
+        "Synthetic benchmark population is technical test evidence, not market support for a live pricing conclusion"
+      ],
+      "implementation_sha256": "f0117e65088943ec8e367a4d1c7c49644aaea2e1df2197768f7fe439a2e9fc4e",
       "account_mapping_receipt": [
         {
-          "id": "5bcc0057-4c75-43b0-a72b-456315c7c7bc",
+          "id": "71f987c2-5e78-4792-85c8-a0f350bb8c1b",
           "contra": false,
           "parent_code": null,
           "source_group": null,
@@ -1302,7 +1306,7 @@
           "mapping_profile_id": null
         },
         {
-          "id": "65d91083-9fcf-47a1-89dc-56ada0acede5",
+          "id": "7976f107-0938-4998-be7b-8b97662b9b33",
           "contra": false,
           "parent_code": null,
           "source_group": null,
@@ -1312,7 +1316,7 @@
           "mapping_profile_id": null
         },
         {
-          "id": "a2b02874-ada3-4914-aa47-6ef905e17230",
+          "id": "92ab2c14-847d-4b5b-8870-63f745d300cc",
           "contra": false,
           "parent_code": null,
           "source_group": null,
@@ -1322,7 +1326,7 @@
           "mapping_profile_id": null
         },
         {
-          "id": "e22069b3-5b24-4b32-b29e-64d279771844",
+          "id": "a754e03d-faaa-434a-a71c-5d745946bda9",
           "contra": false,
           "parent_code": null,
           "source_group": null,
@@ -1335,18 +1339,19 @@
       "registrations_and_elections": {
         "sbr": null,
         "elections": [],
-        "profile_id": "6e9a8d48-f8fd-4609-b907-cfed7ebb2312",
-        "registration": null
+        "profile_id": "0a129ba1-1e8f-490f-8b33-748d6c2db1f3",
+        "registration": null,
+        "taxpayer_classification": null
       }
     },
     "annual_version": 1,
     "missing_sections": [],
     "software_test_data": true,
-    "financial_source_id": "c294c0ff-8c6f-4dff-8375-8f99c9058ca4",
+    "financial_source_id": "cf928a21-d968-43bd-af21-cbe63c33f5f4",
     "calculation_summaries": [
       {
         "kind": "matrix",
-        "run_id": "9f1251fa-b233-4ecd-9d23-99b681941173",
+        "run_id": "4728be13-cd4e-4cff-b944-aaa72314e339",
         "results": {
           "reconciled": true,
           "total_gross_values": "2800000.00000000"
@@ -1354,7 +1359,7 @@
       },
       {
         "kind": "study",
-        "run_id": "59896288-0bc4-4ef3-9045-b5dfac9177de",
+        "run_id": "8a856c62-8985-46d5-913a-50057385d3f4",
         "results": {
           "n": 5,
           "pli": "operating_margin",
@@ -1371,6 +1376,6 @@
         }
       }
     ],
-    "financial_reconciliation_run_id": "5361f161-7a01-4173-a92e-a24f2285d076"
+    "financial_reconciliation_run_id": "3ad8dcc4-73bb-4757-860b-d47162b2a4cf"
   }
 }
