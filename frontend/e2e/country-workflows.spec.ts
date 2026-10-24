@@ -634,7 +634,9 @@ test("original CSV and reviewed XLSX tables reach bank and payable reconciliatio
     fullPage: true,
   });
   await page.goto(`/intelligence/${eid}/country-workflow`);
-  await page.getByLabel("Workflow").selectOption("subledger-control");
+  await page
+    .getByLabel("Workflow", { exact: true })
+    .selectOption("subledger-control");
   const controlTitle = `SYNTHETIC bridged payable control ${suffix}`;
   await fill([
     ["Schedule title", controlTitle],

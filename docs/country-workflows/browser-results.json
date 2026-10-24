@@ -119,31 +119,31 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "failed",
-                  "duration": 7644,
+                  "duration": 28733,
                   "error": {
-                    "message": "Error: locator.selectOption: Error: strict mode violation: getByLabel('Reviewed supporting bank table') resolved to 2 elements:\n    1) <select>…</select> aka getByLabel('Source originRetained source')\n    2) <select>…</select> aka getByLabel('Reviewed supporting bank tableSelect reviewed table')\n\nCall log:\n\u001b[2m  - waiting for getByLabel('Reviewed supporting bank table')\u001b[22m\n",
-                    "stack": "Error: locator.selectOption: Error: strict mode violation: getByLabel('Reviewed supporting bank table') resolved to 2 elements:\n    1) <select>…</select> aka getByLabel('Source originRetained source')\n    2) <select>…</select> aka getByLabel('Reviewed supporting bank tableSelect reviewed table')\n\nCall log:\n\u001b[2m  - waiting for getByLabel('Reviewed supporting bank table')\u001b[22m\n\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts:545:6",
+                    "message": "Error: locator.selectOption: Error: strict mode violation: getByLabel('Workflow') resolved to 2 elements:\n    1) <nav class=\"toolbar\" aria-label=\"Country workflow navigation\">…</nav> aka getByRole('navigation', { name: 'Country workflow navigation' })\n    2) <select></select> aka getByLabel('Workflow', { exact: true })\n\nCall log:\n\u001b[2m  - waiting for getByLabel('Workflow')\u001b[22m\n",
+                    "stack": "Error: locator.selectOption: Error: strict mode violation: getByLabel('Workflow') resolved to 2 elements:\n    1) <nav class=\"toolbar\" aria-label=\"Country workflow navigation\">…</nav> aka getByRole('navigation', { name: 'Country workflow navigation' })\n    2) <select></select> aka getByLabel('Workflow', { exact: true })\n\nCall log:\n\u001b[2m  - waiting for getByLabel('Workflow')\u001b[22m\n\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts:637:37",
                     "location": {
                       "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts",
-                      "column": 6,
-                      "line": 545
+                      "column": 37,
+                      "line": 637
                     },
-                    "snippet": "  543 |   await page\n  544 |     .getByLabel(\"Reviewed supporting bank table\")\n> 545 |     .selectOption(fixture.reviewed_xlsx_bank);\n      |      ^\n  546 |   await fill([\n  547 |     [\"Schedule title\", bankTitle],\n  548 |     [\"Bank account identifier\", \"BANK-1\"],"
+                    "snippet": "  635 |   });\n  636 |   await page.goto(`/intelligence/${eid}/country-workflow`);\n> 637 |   await page.getByLabel(\"Workflow\").selectOption(\"subledger-control\");\n      |                                     ^\n  638 |   const controlTitle = `SYNTHETIC bridged payable control ${suffix}`;\n  639 |   await fill([\n  640 |     [\"Schedule title\", controlTitle],"
                   },
                   "errors": [
                     {
                       "location": {
                         "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts",
-                        "column": 6,
-                        "line": 545
+                        "column": 37,
+                        "line": 637
                       },
-                      "message": "Error: locator.selectOption: Error: strict mode violation: getByLabel('Reviewed supporting bank table') resolved to 2 elements:\n    1) <select>…</select> aka getByLabel('Source originRetained source')\n    2) <select>…</select> aka getByLabel('Reviewed supporting bank tableSelect reviewed table')\n\nCall log:\n\u001b[2m  - waiting for getByLabel('Reviewed supporting bank table')\u001b[22m\n\n\n  543 |   await page\n  544 |     .getByLabel(\"Reviewed supporting bank table\")\n> 545 |     .selectOption(fixture.reviewed_xlsx_bank);\n      |      ^\n  546 |   await fill([\n  547 |     [\"Schedule title\", bankTitle],\n  548 |     [\"Bank account identifier\", \"BANK-1\"],\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts:545:6"
+                      "message": "Error: locator.selectOption: Error: strict mode violation: getByLabel('Workflow') resolved to 2 elements:\n    1) <nav class=\"toolbar\" aria-label=\"Country workflow navigation\">…</nav> aka getByRole('navigation', { name: 'Country workflow navigation' })\n    2) <select></select> aka getByLabel('Workflow', { exact: true })\n\nCall log:\n\u001b[2m  - waiting for getByLabel('Workflow')\u001b[22m\n\n\n  635 |   });\n  636 |   await page.goto(`/intelligence/${eid}/country-workflow`);\n> 637 |   await page.getByLabel(\"Workflow\").selectOption(\"subledger-control\");\n      |                                     ^\n  638 |   const controlTitle = `SYNTHETIC bridged payable control ${suffix}`;\n  639 |   await fill([\n  640 |     [\"Schedule title\", controlTitle],\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts:637:37"
                     }
                   ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T21:04:58.777Z",
+                  "startTime": "2026-10-24T21:06:05.875Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -159,8 +159,8 @@
                   ],
                   "errorLocation": {
                     "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts",
-                    "column": 6,
-                    "line": 545
+                    "column": 37,
+                    "line": 637
                   }
                 }
               ],
@@ -177,8 +177,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-24T21:04:58.350Z",
-    "duration": 8263.804,
+    "startTime": "2026-10-24T21:06:05.466Z",
+    "duration": 29342.469999999998,
     "expected": 0,
     "skipped": 0,
     "unexpected": 1,

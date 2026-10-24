@@ -106,6 +106,7 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
   const scope = useScope();
   const query = useSearchParams();
   const [selected, setSelected] = useState(query.get("event") || "");
+  const [showAllJobs, setShowAllJobs] = useState(false);
   const [offset, setOffset] = useState(0);
   const [snapshot, setSnapshot] = useState("");
   const [evidence, setEvidence] = useState("");
@@ -703,8 +704,15 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
       </section>
       <section className="main-panel" style={{ padding: 20 }}>
         <h2>Execution queue</h2>
+        {(jobs.data?.items.length || 0) > 5 && (
+          <Button onClick={() => setShowAllJobs(!showAllJobs)}>
+            {showAllJobs
+              ? "Show latest five jobs"
+              : "Show full recent job history"}
+          </Button>
+        )}
         <ErrorState error={jobs.error} />
-        {jobs.data?.items.map((j) => (
+        {jobs.data?.items.slice(0, showAllJobs ? undefined : 5).map((j) => (
           <div className="toolbar" key={j.id}>
             <span>
               {j.operation} • attempt {j.attempts}
@@ -788,25 +796,25 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
           </Empty>
         ) : (
           <>
+            {body?.table_metadata != null &&
+              typeof body.table_metadata === "object" && (
+                <details>
+                  <summary>
+                    Supporting table layout and worksheet controls
+                  </summary>
+                  <dl>
+                    {Object.entries(
+                      body.table_metadata as Record<string, unknown>,
+                    ).map(([key, value]) => (
+                      <div key={key}>
+                        <dt>{key.replaceAll("_", " ")}</dt>
+                        <dd>{val(value)}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </details>
+              )}
             <div className="toolbar">
-              {body?.table_metadata != null &&
-                typeof body.table_metadata === "object" && (
-                  <details>
-                    <summary>
-                      Supporting table layout and worksheet controls
-                    </summary>
-                    <dl>
-                      {Object.entries(
-                        body.table_metadata as Record<string, unknown>,
-                      ).map(([key, value]) => (
-                        <div key={key}>
-                          <dt>{key.replaceAll("_", " ")}</dt>
-                          <dd>{val(value)}</dd>
-                        </div>
-                      ))}
-                    </dl>
-                  </details>
-                )}
               {detail.data.kind === "foundation-validation" && (
                 <Button
                   disabled={action.isPending}

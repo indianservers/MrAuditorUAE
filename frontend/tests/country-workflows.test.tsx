@@ -6,6 +6,12 @@ const state = vi.hoisted(() => ({
   mutate: vi.fn(),
   result: null as unknown,
   country: "AE",
+  jobs: [] as {
+    id: string;
+    operation: string;
+    status: string;
+    result_id: string;
+  }[],
 }));
 vi.mock("@/hooks/use-api", () => ({
   useCan: () => true,
@@ -108,124 +114,126 @@ vi.mock("@/hooks/use-api", () => ({
           }
         : path.includes("/events/result")
           ? state.result
-          : path.includes("/events?")
-            ? {
-                items: [
-                  {
-                    id: "supporting-items",
-                    kind: "source-table",
-                    table_kind: "open-items",
-                    label: "Reviewed payable population",
-                    evidence_version_id: "original-items",
-                    version: 2,
-                    freshness: "CURRENT",
-                    review_status: "REVIEWED",
-                  },
-                  {
-                    id: "supporting-bank",
-                    kind: "source-table",
-                    table_kind: "bank",
-                    label: "Reviewed supporting statement",
-                    evidence_version_id: "original-bank",
-                    version: 2,
-                    freshness: "CURRENT",
-                    review_status: "REVIEWED",
-                  },
-                  {
-                    id: "unreviewed-bank",
-                    kind: "source-table",
-                    table_kind: "bank",
-                    label: "Unreviewed supporting statement",
-                    evidence_version_id: "original-unreviewed",
-                    version: 1,
-                    freshness: "CURRENT",
-                    review_status: "UNVERIFIED",
-                  },
-                  ...[
+          : path.endsWith("/jobs")
+            ? { items: state.jobs }
+            : path.includes("/events?")
+              ? {
+                  items: [
                     {
-                      id: "wps",
-                      table_type: "obligations",
-                      label: "WPS instructions",
-                      native_format: "uae-wps-sif",
+                      id: "supporting-items",
+                      kind: "source-table",
+                      table_kind: "open-items",
+                      label: "Reviewed payable population",
+                      evidence_version_id: "original-items",
+                      version: 2,
+                      freshness: "CURRENT",
                       review_status: "REVIEWED",
                     },
                     {
-                      id: "ecr",
-                      table_type: "obligations",
-                      label: "Native ECR return",
-                      native_format: "india-epfo-ecr",
+                      id: "supporting-bank",
+                      kind: "source-table",
+                      table_kind: "bank",
+                      label: "Reviewed supporting statement",
+                      evidence_version_id: "original-bank",
+                      version: 2,
+                      freshness: "CURRENT",
                       review_status: "REVIEWED",
                     },
                     {
-                      id: "bases",
-                      table_type: "payroll-bases",
-                      label: "Payroll component bases",
-                      review_status: "REVIEWED",
-                    },
-                    {
-                      id: "rules",
-                      table_type: "payroll-rules",
-                      label: "Reviewed contribution rules",
-                      review_status: "REVIEWED",
-                    },
-                    {
-                      id: "unreviewed-rules",
-                      table_type: "payroll-rules",
-                      label: "Unreviewed contribution rules",
+                      id: "unreviewed-bank",
+                      kind: "source-table",
+                      table_kind: "bank",
+                      label: "Unreviewed supporting statement",
+                      evidence_version_id: "original-unreviewed",
+                      version: 1,
+                      freshness: "CURRENT",
                       review_status: "UNVERIFIED",
                     },
+                    ...[
+                      {
+                        id: "wps",
+                        table_type: "obligations",
+                        label: "WPS instructions",
+                        native_format: "uae-wps-sif",
+                        review_status: "REVIEWED",
+                      },
+                      {
+                        id: "ecr",
+                        table_type: "obligations",
+                        label: "Native ECR return",
+                        native_format: "india-epfo-ecr",
+                        review_status: "REVIEWED",
+                      },
+                      {
+                        id: "bases",
+                        table_type: "payroll-bases",
+                        label: "Payroll component bases",
+                        review_status: "REVIEWED",
+                      },
+                      {
+                        id: "rules",
+                        table_type: "payroll-rules",
+                        label: "Reviewed contribution rules",
+                        review_status: "REVIEWED",
+                      },
+                      {
+                        id: "unreviewed-rules",
+                        table_type: "payroll-rules",
+                        label: "Unreviewed contribution rules",
+                        review_status: "UNVERIFIED",
+                      },
+                      {
+                        id: "reported",
+                        table_type: "obligations",
+                        label: "Reported ECR",
+                        review_status: "UNVERIFIED",
+                      },
+                    ].map((source) => ({
+                      ...source,
+                      kind: "workflow-source",
+                      freshness: "CURRENT",
+                      version: 1,
+                    })),
                     {
-                      id: "reported",
-                      table_type: "obligations",
-                      label: "Reported ECR",
+                      id: "books",
+                      kind: "workflow-source",
+                      table_type: "transactions",
+                      label: "Books",
+                      freshness: "CURRENT",
+                      version: 1,
+                      review_status: "REVIEWED",
+                    },
+                    {
+                      id: "statement",
+                      kind: "workflow-source",
+                      table_type: "transactions",
+                      label: "Bank",
+                      freshness: "CURRENT",
+                      version: 1,
+                      review_status: "REVIEWED",
+                    },
+                    {
+                      id: "wrong",
+                      kind: "workflow-source",
+                      table_type: "tax-documents",
+                      label: "Wrong source type",
+                      freshness: "CURRENT",
+                      version: 1,
+                      review_status: "REVIEWED",
+                    },
+                    {
+                      id: "result",
+                      kind: "country-workflow",
+                      label: "Saved reconciliation",
+                      freshness: "CURRENT",
+                      version: 1,
                       review_status: "UNVERIFIED",
                     },
-                  ].map((source) => ({
-                    ...source,
-                    kind: "workflow-source",
-                    freshness: "CURRENT",
-                    version: 1,
-                  })),
-                  {
-                    id: "books",
-                    kind: "workflow-source",
-                    table_type: "transactions",
-                    label: "Books",
-                    freshness: "CURRENT",
-                    version: 1,
-                    review_status: "REVIEWED",
-                  },
-                  {
-                    id: "statement",
-                    kind: "workflow-source",
-                    table_type: "transactions",
-                    label: "Bank",
-                    freshness: "CURRENT",
-                    version: 1,
-                    review_status: "REVIEWED",
-                  },
-                  {
-                    id: "wrong",
-                    kind: "workflow-source",
-                    table_type: "tax-documents",
-                    label: "Wrong source type",
-                    freshness: "CURRENT",
-                    version: 1,
-                    review_status: "REVIEWED",
-                  },
-                  {
-                    id: "result",
-                    kind: "country-workflow",
-                    label: "Saved reconciliation",
-                    freshness: "CURRENT",
-                    version: 1,
-                    review_status: "UNVERIFIED",
-                  },
-                ],
-              }
-            : path.includes("/accounts?")
-              ? { items: [{ id: "cash", code: "100", name: "Bank GL" }] }
-              : { items: [] },
+                  ],
+                }
+              : path.includes("/accounts?")
+                ? { items: [{ id: "cash", code: "100", name: "Bank GL" }] }
+                : { items: [] },
     error: null,
   }),
   useAction: () => ({
@@ -243,12 +251,37 @@ vi.mock("@/features/shared", () => ({
 }));
 
 beforeEach(() => {
+  state.jobs = [];
   state.country = "AE";
   state.mutate.mockReset();
   state.mutate.mockResolvedValue({ id: "queued" });
   state.result = null;
 });
 describe("country workflows", () => {
+  it("keeps recent job results accessible without expanding the entire history", () => {
+    state.jobs = Array.from({ length: 7 }, (_, i) => ({
+      id: `job-${i}`,
+      operation: "workflow-source",
+      status: "completed",
+      result_id: `result-${i}`,
+    }));
+    render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+    expect(
+      screen.getAllByRole("button", { name: "Open result", exact: true }),
+    ).toHaveLength(5);
+    fireEvent.click(
+      screen.getByRole("button", { name: "Show full recent job history" }),
+    );
+    expect(
+      screen.getAllByRole("button", { name: "Open result", exact: true }),
+    ).toHaveLength(7);
+    fireEvent.click(
+      screen.getByRole("button", { name: "Show latest five jobs" }),
+    );
+    expect(
+      screen.getAllByRole("button", { name: "Open result", exact: true }),
+    ).toHaveLength(5);
+  });
   it("queues reviewed open items with explicit payable sign and reporting-date scope", async () => {
     render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
     fireEvent.change(screen.getByLabelText("Source origin"), {

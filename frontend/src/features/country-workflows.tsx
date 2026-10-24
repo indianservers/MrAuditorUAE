@@ -157,6 +157,7 @@ export function CountryWorkflows({
     }[];
   }>(`${prefix}/jobs`, true, true);
   const [selected, setSelected] = useState("");
+  const [showAllJobs, setShowAllJobs] = useState(false);
   const [offset, setOffset] = useState(0);
   const detail = useAPI<Result>(
     `${prefix}/events/${selected}?offset=${offset}&limit=100`,
@@ -668,7 +669,11 @@ export function CountryWorkflows({
                       ? "Reviewed supporting open-item table"
                       : "Reviewed supporting bank table"}
                     <select
-                      aria-label={sourceOrigin === "supporting-items" ? "Reviewed supporting open-item table" : "Reviewed supporting bank table"}
+                      aria-label={
+                        sourceOrigin === "supporting-items"
+                          ? "Reviewed supporting open-item table"
+                          : "Reviewed supporting bank table"
+                      }
                       value={supportingTable}
                       onChange={(event) =>
                         setSupportingTable(event.target.value)
@@ -1614,6 +1619,13 @@ export function CountryWorkflows({
       </section>
       <section className="main-panel" style={{ padding: 20, marginTop: 16 }}>
         <h2>Recent jobs</h2>
+        {(jobs.data?.items.length || 0) > 5 && (
+          <Button onClick={() => setShowAllJobs(!showAllJobs)}>
+            {showAllJobs
+              ? "Show latest five jobs"
+              : "Show full recent job history"}
+          </Button>
+        )}
         {jobs.data?.items
           .filter((j) =>
             [
@@ -1623,6 +1635,7 @@ export function CountryWorkflows({
               "country-workflow",
             ].includes(j.operation),
           )
+          .slice(0, showAllJobs ? undefined : 5)
           .map((j) => (
             <div className="toolbar" key={j.id}>
               <span>{j.operation}</span>
