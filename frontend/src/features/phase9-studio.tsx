@@ -279,6 +279,8 @@ function MLPanel({ eid, area }: { eid: string; area: string }) {
     status: string;
     epochs: ModelMetrics["history"];
     result: { resource_id?: string };
+    error_category?: string;
+    execution_mode?: string;
   }>(`ml/jobs/${job}`, !!job, true);
   const inference = rows.find(
     (x) => x.kind === "inference" && x.id === selected,
@@ -321,6 +323,11 @@ function MLPanel({ eid, area }: { eid: string; area: string }) {
       )}
       {events.error && <ErrorState error={events.error} />}{" "}
       {action.error && <ErrorState error={action.error} />}
+      {status.error && <ErrorState error={status.error} />}
+      {job && <p role="status">Job: {status.data?.status || "pending"}.
+        Execution mode: {status.data?.execution_mode || "unavailable"}.
+        {status.data?.error_category ? ` Failure: ${status.data.error_category}. No mock or baseline was substituted.` : ""}
+      </p>}
       <div className="source-strip">
         Experimental synthetic validation demonstrates software feasibility.
         Scores are review signals; they are not fraud or audited misstatement

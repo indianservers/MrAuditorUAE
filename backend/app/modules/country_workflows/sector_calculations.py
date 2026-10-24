@@ -1,9 +1,9 @@
 """Explainable operational comparisons; no invented market, tariff or statutory data."""
 
+import hashlib
 from collections import defaultdict
 from datetime import date
 from decimal import Decimal
-import hashlib
 
 from app.modules.country_workflows.audit_calculations import money, result
 from app.modules.ifrs.calculations import revenue

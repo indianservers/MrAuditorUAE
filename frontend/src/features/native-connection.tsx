@@ -75,8 +75,13 @@ export function NativeConnection({ connection }: { connection: RecordRow }) {
   const fields = [
     ...new Set([
       ...(spec?.config_fields || []),
-      ...(partner || edition === "finance-odata" ? spec?.partner_fields || [] : []),
-      "requests_per_minute", "requests_per_day", "concurrency", "oauth_grant_id",
+      ...(partner || edition === "finance-odata"
+        ? spec?.partner_fields || []
+        : []),
+      "requests_per_minute",
+      "requests_per_day",
+      "concurrency",
+      "oauth_grant_id",
     ]),
   ];
   const credentialFields = (spec?.credential_fields || []).filter(
@@ -153,12 +158,25 @@ export function NativeConnection({ connection }: { connection: RecordRow }) {
           )}
           <fieldset>
             <legend>Additional source evidence</legend>
-            {[["include_documents", "Fetch supporting document details"],
+            {[
+              ["include_documents", "Fetch supporting document details"],
               ["include_attachments", "Fetch available attachment evidence"],
               ["tax_details", "Preserve source tax components"],
-              ["metadata_preflight", "Verify deployed OData metadata"]].map(([key, label]) => (
-              <label key={key}><input type="checkbox" checked={Boolean(config[key])}
-                onChange={(event) => setConfig((value) => ({ ...value, [key]: event.target.checked }))} />{label}</label>
+              ["metadata_preflight", "Verify deployed OData metadata"],
+            ].map(([key, label]) => (
+              <label key={key}>
+                <input
+                  type="checkbox"
+                  checked={Boolean(config[key])}
+                  onChange={(event) =>
+                    setConfig((value) => ({
+                      ...value,
+                      [key]: event.target.checked,
+                    }))
+                  }
+                />
+                {label}
+              </label>
             ))}
           </fieldset>
           <details>
@@ -193,7 +211,8 @@ export function NativeConnection({ connection }: { connection: RecordRow }) {
               setError("");
               let mappings = config.mappings || {};
               try {
-                if (partner || edition === "finance-odata") mappings = JSON.parse(mappingText);
+                if (partner || edition === "finance-odata")
+                  mappings = JSON.parse(mappingText);
               } catch {
                 setError("Partner mappings must be a JSON object.");
                 return;
@@ -359,7 +378,9 @@ export function NativeConnection({ connection }: { connection: RecordRow }) {
                     "derived_import_batch_ids",
                     "functional_totals",
                     "source_control_reference",
-                    "resume_session", "checkpoint", "source_revision",
+                    "resume_session",
+                    "checkpoint",
+                    "source_revision",
                   ].includes(key),
                 ),
               ),

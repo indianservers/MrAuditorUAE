@@ -6,8 +6,8 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, Field, model_validator
 
-from app.modules.jurisdictions.profiles import Strict
 from app.modules.ifrs.schemas import Asset
+from app.modules.jurisdictions.profiles import Strict
 
 Money = Annotated[Decimal, Field(max_digits=28, decimal_places=8)]
 Identifier = Annotated[str, Field(min_length=1, max_length=120)]

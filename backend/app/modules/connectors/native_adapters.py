@@ -432,6 +432,12 @@ class NativeAdapter:
             await self.preserve("connections", raw)
         finally:
             await connections.close()
+        try:
+            first_journals = await self.read("Journals", "Journals", params={"offset": 0, "paymentsOnly": "false"})
+        except AuthorizationError:
+            raise ConnectorError("Xero Journals access denied; verify accounting.journals.read consent and the app's Journals entitlement before syncing") from None
+        if not isinstance(first_journals.get("Journals"), list):
+            raise ConnectorError("Xero Journals entitlement/response contract cannot be verified")
         accounts = await self.read("Accounts", "Accounts")
         if not isinstance(accounts.get("Accounts"), list):
             raise ConnectorError("Xero chart of accounts is missing")
@@ -447,7 +453,7 @@ class NativeAdapter:
             )
         offset = 0
         for _ in range(self.config.max_pages):
-            data = await self.read(
+            data = first_journals if offset == 0 else await self.read(
                 "Journals", "Journals", params={"offset": offset, "paymentsOnly": "false"}
             )
             journals = data.get("Journals")
@@ -494,6 +500,7 @@ class NativeAdapter:
             "company_id": self.config.company_id,
             "currency": currency,
             "coverage": "accrual_journals",
+            "journals_preflight": "authorized_source_response; not inferred subscription tier",
         }
 
     async def extract_dynamics(self, start, end, currency):
@@ -618,6 +625,13 @@ class NativeAdapter:
 
     async def extract_netsuite(self, start, end, currency):
         c = self.config
+        discovery = {}
+        if c.discover_scope:
+            subsidiaries = [r async for r in self.suiteql("SELECT id, name, currency FROM subsidiary ORDER BY id")]
+            books = [r async for r in self.suiteql("SELECT id, name FROM accountingbook ORDER BY id")]
+            if c.subsidiary_id not in {str(r.get("id")) for r in subsidiaries} or c.accounting_book not in {str(r.get("id")) for r in books}:
+                raise ConnectorError("Selected NetSuite subsidiary/book is not visible in the source discovery population")
+            discovery = {"subsidiaries": subsidiaries, "accounting_books": books, "consolidation": "separate_company_currency_extracts_required"}
         metadata = await self.read("record/v1/subsidiary/" + c.subsidiary_id, "subsidiary")
         if str(metadata.get("id")) != c.subsidiary_id:
             raise ConnectorError("NetSuite subsidiary mismatch")
@@ -676,6 +690,7 @@ class NativeAdapter:
             "accounting_book": c.accounting_book,
             "currency": currency,
             "coverage": "posting_accounting_lines",
+            "scope_discovery": discovery,
         }
 
     async def extract_quickbooks(self, start, end, currency):

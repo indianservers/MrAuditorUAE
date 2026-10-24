@@ -195,7 +195,7 @@ async def validate(db, ctx, eng, data):
                     f"Independent review required: {label}",
                     "Submit to an independent reviewer",
                     [str(identifier)],
-                    f"/intelligence/{eng.id}/{kind}?event={identifier}",
+                    f"/intelligence/{eng.id}/{'ocr' if kind == 'ocr' else 'foundation-validation'}?event={identifier}",
                 )
             if kind == "ocr" and not any(d.get("type") == "evidence" for d in obj.dependencies):
                 issue(

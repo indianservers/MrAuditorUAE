@@ -47,7 +47,7 @@ def upload_package(config, path: Path, kinds, source_system, service):
             reply = client.get(server + "/api/v1/accounting/uploads/" + identifier, headers=headers)
             reply.raise_for_status()
             state = reply.json()
-            received = set(state["received_chunks"])
+            received = set(state["received"])
             with path.open("rb") as stream:
                 index = 0
                 while block := stream.read(state["chunk_size"]):

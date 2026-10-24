@@ -7,8 +7,7 @@ from decimal import ROUND_HALF_UP, Decimal
 from babel.numbers import get_currency_precision
 
 from app.modules.country_workflows.audit_calculations import control_rows, money, result
-from app.modules.ifrs.calculations import ecl
-from app.modules.ifrs.calculations import fixed_assets
+from app.modules.ifrs.calculations import ecl, fixed_assets
 from app.modules.ifrs.schemas import ECL, Asset, FixedAssets
 
 

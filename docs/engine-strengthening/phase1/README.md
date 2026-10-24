@@ -54,6 +54,7 @@ After approval, existing working-paper generation creates a draft in the normal 
 4. `foundation-validation` is additive to existing job operation schemas. Deploy API and workers together. Existing result kinds retain their current shapes; the shared `foundation/1` contract applies to the new foundation path, not a forced rewrite of every old engine.
 5. Unknown dependency types now fail closed. An older worker/API encountering a future receipt schema must be upgraded; do not interpret it as fresh. Current existing receipts remain supported.
 6. Current entity-wide account mappings cannot be changed while any entity period is locked. Effective-dated mappings are a remaining prerequisite for more granular behavior. Identical evidence reuploads may now return the current version with `duplicate_detected: true` instead of creating unnecessary revisions.
+7. Mapping freshness receipts now include statement group, parent account and mapping-profile ID as well as version/classification. A different profile with the same local version number can therefore invalidate a result. Old persisted mapping receipts missing these fields fail comparison and require regeneration/review; their historical content is preserved.
 
 Configuration examples are in `configuration.env.example`. `DOCUMENT_MAX_PAGES` defaults to 20 (allowed 1–100); `DOCUMENT_MAX_BYTES` defaults to 25 MiB (allowed 1 KiB–100 MiB). Separate existing evidence/archive/pixel/timeout bounds still apply and may impose stricter limits. The language-model API key is unnecessary for this path.
 
@@ -77,6 +78,10 @@ From the repository root:
 From `backend`, run the unit suite with `.\.venv\Scripts\python.exe -m pytest tests/unit -q`. From `frontend`, run `npx vitest run tests/foundation-validation.test.tsx`, `npx tsc --noEmit` and targeted ESLint. Actual machine-readable results are retained in this directory, including `workflow-evidence.json` from the successful full workflow. Scanner/broker dispatch are explicit doubles; job processing, database, private object storage, PDF extraction and HTTP permission paths are real local implementations. No external communication or filing is performed.
 
 The UI interaction test validates the actual job operation payload, status separation and warning navigation. TypeScript/ESLint check the changed UI. This delivery does not claim a new full-browser visual regression run or production deployment.
+
+### Observed broader-suite blocker
+
+The broad 27-test integration run produced **26 passed, 1 failed**: `test_zoho_native_journal_and_chart_staging` returned a sync result without `derived_import_batch_id`. The existing synthetic organization stub lacks the base-currency identity now required by the in-progress connector implementation. A diagnostic rerun with that fixture currency supplied stalled in the synchronous checkpoint/storage path and was interrupted; the diagnostic fixture edit was then reverted. Code inspection identifies a lock-order problem: request entitlement admission holds the tenant storage advisory lock (namespace 12), while `ConnectorRuntime.persist_object` opens a second transaction and `put_private` attempts that same lock. The original broad failure is retained in `integration-broad-results.xml`; the foundation/regulatory/import set excluding that named connector test is recorded separately. No connector-control bypass or production change was introduced to hide this failure. Resolve the connector transaction ownership before relying on synchronous Zoho source acquisition in Phase 2. File imports and the demonstrated foundation workflow do not need this live connector.
 
 ## Precise Phase 2 prerequisites
 

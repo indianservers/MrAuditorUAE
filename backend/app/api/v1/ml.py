@@ -338,7 +338,8 @@ async def capabilities(eid: uuid.UUID, db: DB, ctx: Actor):
             continue
         current = await ml_current(db, ctx, deployment)
         families[family] = {"deployment_id": str(deployment.id), "sources_current": current,
-                            "execution_mode": "trained_model" if current else "unavailable",
+                            "configured_execution_mode": "trained_model",
+                            "execution_mode": "unavailable", "execution_state": "not_verified",
                             "runtime_inference_verified": False,
                             "production_validated": False}
     return {

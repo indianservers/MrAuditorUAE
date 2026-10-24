@@ -66,8 +66,8 @@ async def balance_controls(identifier: uuid.UUID, data: BalanceControls, db: DB,
     from app.modules.accounting.models import ImportBatch, ImportFile
     from app.modules.accounting.schemas import ImportOptions
     from app.modules.accounting.service import check_scope
-    from app.modules.lineage.storage import ObjectStore, hash_file
     from app.modules.ingestion.parser import normalize, rows
+    from app.modules.lineage.storage import ObjectStore, hash_file
 
     connection = await scoped(db, ctx, Connection, identifier)
     entity, period = await check_scope(db, ctx, connection)

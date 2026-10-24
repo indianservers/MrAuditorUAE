@@ -762,7 +762,10 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
                 </Button>
               )}
               <Badge>{detail.data.freshness}</Badge>
-              {detail.data.provenance_status === "legacy provenance incomplete" && <Badge>Legacy provenance incomplete</Badge>}
+              {detail.data.provenance_status ===
+                "legacy provenance incomplete" && (
+                <Badge>Legacy provenance incomplete</Badge>
+              )}
               <Status value={body?.review_status} />
               <span>Version {detail.data.version}</span>
               {["xlsx", "pdf", "docx"].map((f) => (

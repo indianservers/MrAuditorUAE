@@ -1,10 +1,13 @@
 """Read QuickBooks Desktop via its local COM SDK; no listening network service."""
 
 import argparse
+import getpass
 import json
 import sys
 from datetime import date
 from pathlib import Path
+
+import keyring
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "backend"))
 
@@ -55,9 +58,17 @@ def extract(config):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("config", type=Path)
-    parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--upload", action="store_true")
+    parser.add_argument("--set-refresh-token", action="store_true")
     args = parser.parse_args()
     config = json.loads(args.config.read_text(encoding="utf-8"))
+    if args.set_refresh_token:
+        identity = config["server_url"].rstrip("/") + ":" + config["tenant_id"]
+        keyring.set_password("AuditOS-QuickBooks-Desktop", identity, getpass.getpass("AuditOS refresh token: "))
+        return
+    if not args.output:
+        raise SystemExit("Choose a new --output evidence file")
     package = extract(config)
     options = ImportOptions(**{key: config[key] for key in ("client_id", "entity_id", "period_id")},
         source_system="quickbooks", currency=config["currency"])
@@ -65,6 +76,10 @@ def main():
     count = sum(1 for _ in package_rows(package, options))
     with args.output.open("x", encoding="utf-8") as stream:
         json.dump(package, stream)
+    if args.upload:
+        from upload_package import upload_package
+
+        print(json.dumps({"imports": upload_package(config, args.output, ["coa", "gl"], "quickbooks", "AuditOS-QuickBooks-Desktop")}))
     print(json.dumps({"status": "extracted_pending_review", "rows": count, "package": str(args.output.resolve())}))
 
 

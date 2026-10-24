@@ -171,7 +171,9 @@ async def current(db, ctx, obj, visited=None):
         return False
     visited = visited | {obj.id}
     for dependency in obj.dependencies:
-        kind = dependency["type"]
+        if not isinstance(dependency, dict):
+            return False
+        kind = dependency.get("type")
         if kind == "context":
             from app.db.models.platform import Engagement
 

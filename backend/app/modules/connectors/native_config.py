@@ -116,6 +116,7 @@ class NativeConfig(Input):
     tax_details: bool = False
     profile_id: str = Field(default="", max_length=128)
     metadata_preflight: bool = False
+    discover_scope: bool = False
     currency_aliases: dict[str, str] = Field(default_factory=dict, max_length=50)
     posting_date_field: str = Field(default="AccountingDate", pattern=r"^[A-Za-z_][A-Za-z0-9_]*$")
     finance_company_field: str = Field(default="dataAreaId", pattern=r"^[A-Za-z_][A-Za-z0-9_]*$")

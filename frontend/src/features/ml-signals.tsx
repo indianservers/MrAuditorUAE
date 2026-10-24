@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useAPI, useCan } from "@/hooks/use-api";
 import { useScope } from "@/stores/workspace";
 import type { Page, Engagement } from "@/types/models";
+import { ErrorState } from "@/components/ui/primitives";
 export function MLSignals() {
   const can = useCan("ml.read"),
     scope = useScope();
@@ -33,6 +34,7 @@ export function MLSignals() {
   return (
     <section className="p9-card">
       <h2>Review signals and execution mode</h2>
+      <ErrorState error={result.error || capabilities.error} />
       <p>
         {result.data?.items.length
           ? `${result.data.items[0].body.predictions.length} persisted signals. Execution mode: ${result.data.items[0].body.execution_mode || "unavailable (historical mode not recorded)"}. ${result.data.items[0].body.model_id ? `Model ${result.data.items[0].body.model_id.slice(0, 8)}.` : "No trained model used."}`

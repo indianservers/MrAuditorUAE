@@ -8,9 +8,9 @@ import pytest
 from tests.integration.test_platform import environment as environment
 from tests.phase4.test_workflows import actor, grant, setup
 from tests.qa_crud.test_country_workflows import decision, double_boundaries, execute, source
+from tests.unit.test_diligence_audit_workflows import subject
 from tests.unit.test_practice_audit_workflows import rate
 from tests.unit.test_shared_audit_workflows import control, item, settlement
-from tests.unit.test_diligence_audit_workflows import subject
 
 pytestmark = pytest.mark.skipif(
     os.getenv("INTEGRATION_TESTS") != "1", reason="Disposable migrated test database required"
@@ -48,6 +48,21 @@ async def test_real_shared_audit_approval_export_and_staleness(environment, monk
     approved = await decision(c, reviewer[0], eid, output)
     assert approved.status_code == 201, approved.text
     approved = approved.json()
+    from app.core.dependencies import Context
+    from app.core.security import decode_token
+    from app.db.session import Session, tenant_context
+    from app.modules.enterprise_ai.schemas import ToolInput
+    from app.modules.enterprise_ai.security import validate_dependencies
+    from app.modules.enterprise_ai.tools import invoke
+
+    ctx = Context(decode_token(h["Authorization"].split()[1]), uuid.UUID(h["X-Tenant-ID"]), frozenset())
+    async with Session() as db, db.begin():
+        await tenant_context(db, h["X-Tenant-ID"])
+        facts = await invoke(db, ctx, uuid.UUID(eid), "audit.get_shared_workflows", ToolInput())
+        assert facts.status == "COMPLETED"
+        assert facts.data["items"][0]["execution_mode"] == "deterministic_engine"
+        assert facts.data["items"][0]["rows_preview"][-1]["remaining_balance"] == "0"
+        await validate_dependencies(db, ctx, uuid.UUID(eid), facts.sources)
     path = f"/api/v1/intelligence/engagements/{eid}/events/{approved['id']}"
     exported = await c.get(path + "/export?format=xlsx", headers=h)
     assert exported.status_code == 200
