@@ -163,6 +163,21 @@ async def test_diligence_sources_require_professional_evidence_permission(enviro
     listing = await c.get(f"/api/v1/intelligence/engagements/{eid}/events", headers=ordinary[0])
     assert listing.status_code == 200
     assert obj["id"] not in [r["id"] for r in listing.json()["items"]]
+    admin_jobs = await c.get(f"/api/v1/intelligence/engagements/{eid}/jobs", headers=h)
+    restricted_job = next(j for j in admin_jobs.json()["items"] if j["result_id"] == obj["id"])
+    denied_job = await c.get(f"/api/v1/intelligence/engagements/{eid}/jobs/{restricted_job['id']}", headers=ordinary[0])
+    assert denied_job.status_code == 403
+    limited_jobs = await c.get(f"/api/v1/intelligence/engagements/{eid}/jobs", headers=ordinary[0])
+    assert restricted_job["id"] not in [j["id"] for j in limited_jobs.json()["items"]]
+    assert (await c.get(path + "/export?format=xlsx", headers=ordinary[0])).status_code == 403
+    reviewer = await actor(h, "Firm Administrator", "diligence-reviewer")
+    await grant(c, h, base, reviewer)
+    reviewed = await decision(c, reviewer[0], eid, obj)
+    assert reviewed.status_code == 201
+    paper = await c.post(f"/api/v1/intelligence/engagements/{eid}/events/{reviewed.json()['id']}/working-paper",
+                         headers=h, json={"reference": "KYC-TEST", "title": "SYNTHETIC KYC paper",
+                                          "objective": "Verify restricted source cannot leak into a generic paper"})
+    assert paper.status_code == 409 and "restricted" in paper.text
 
 
 async def test_gl_control_comes_from_committed_account_and_explicit_sign(environment, monkeypatch):

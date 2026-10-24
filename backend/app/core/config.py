@@ -19,6 +19,11 @@ class Settings(BaseSettings):
     max_upload_bytes: int = 64 * 1024 * 1024
     upload_chunk_bytes: int = 1024 * 1024
     source_storage_path: str = "../.private-source-objects"
+    ml_local_model_directory: str = "../.private-ml-models"
+    ml_worker_heap_mb: int = Field(default=1536, ge=256, le=8192)
+    ml_worker_timeout_seconds: int = Field(default=900, ge=10, le=3600)
+    ml_worker_concurrency: int = Field(default=2, ge=1, le=8)
+    ml_cpu_threads: int = Field(default=2, ge=1, le=32)
     source_s3_bucket: str = ""
     source_s3_region: str = "me-central-1"
     source_kms_key: str = ""

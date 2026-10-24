@@ -1,4 +1,5 @@
 import uuid
+from datetime import date
 from typing import Annotated, Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request
@@ -42,20 +43,161 @@ class Training(Strict):
     patience: int = Field(default=3, ge=1, le=20)
 
 
+class FoundationLabels(Strict):
+    task: Literal["journal-type", "account-mapping", "journal-anomaly", "review-ranking"]
+    labels: dict[str, str] = Field(min_length=1, max_length=1000)
+    train_end: date
+    validation_end: date
+    evidence_id: uuid.UUID
+    rationale: str = Field(min_length=20, max_length=4000)
+
+
+class FoundationTraining(Strict):
+    source_id: uuid.UUID
+    request_key: uuid.UUID = Field(default_factory=uuid.uuid4)
+    epochs: int = Field(default=12, ge=1, le=100)
+    batch_size: int = Field(default=64, ge=8, le=1024)
+    seed: int = Field(default=2026, ge=0, le=2147483647)
+    working_days: list[int] = Field(default=[1, 2, 3, 4, 5], min_length=1, max_length=7)
+
+
+class FoundationBaseline(Strict):
+    dataset_id: uuid.UUID
+    request_key: uuid.UUID = Field(default_factory=uuid.uuid4)
+    cutoff: date
+    weights: dict[str, float] = Field(
+        default={"amount": 1, "rare_pair": 1, "manual": 0.25, "outside_calendar": 0}
+    )
+    working_days: list[int] = Field(default=[1, 2, 3, 4, 5], min_length=1, max_length=7)
+
+
+@router.post("/foundation/baselines", status_code=202)
+async def foundation_baseline(data: FoundationBaseline, db: DB, ctx: Actor, request: Request):
+    source = await service.get(db, ctx, data.dataset_id, "dataset", "ml.score")
+    await require_ml_current(db, ctx, source)
+    from app.workers.accounting import submit
+
+    return await submit(
+        db,
+        ctx,
+        "ml.score",
+        {
+            **data.model_dump(mode="json", exclude={"dataset_id"}),
+            "operation": "baseline",
+            "source_id": str(source.id),
+            "mode": "contextual_baseline",
+        },
+        request.state.request_id,
+    )
+
+
+@router.post("/datasets/{identifier}/foundation-labels", status_code=201)
+async def foundation_labels(identifier: uuid.UUID, data: FoundationLabels, db: DB, ctx: Actor):
+    import json
+
+    from starlette.concurrency import run_in_threadpool
+
+    from app.modules.ml.foundation import prepare_reviewed
+
+    source = await service.get(db, ctx, identifier, "dataset", "ml.train")
+    await require_ml_current(db, ctx, source)
+    if source.body.get("synthetic"):
+        raise HTTPException(
+            422, "Reviewed real-source workflow requires an authorized ledger dataset"
+        )
+    previous = source.body.get("foundation_manifest")
+    if previous and (
+        previous["task"] != data.task
+        or previous["train_end"] != data.train_end.isoformat()
+        or previous["validation_end"] != data.validation_end.isoformat()
+    ):
+        raise HTTPException(
+            422, "Taxonomy and split boundaries are immutable; start from the original dataset"
+        )
+    evidence = await audit.get_record(db, ctx, source.engagement_id, data.evidence_id)
+    if evidence.status not in {"APPROVED", "LOCKED"}:
+        raise HTTPException(409, "Approved review evidence is required")
+    original = json.loads(await run_in_threadpool(service.read_object, source.body["object"]))
+    try:
+        population, manifest = await run_in_threadpool(
+            prepare_reviewed,
+            original["rows"],
+            data.task,
+            data.labels,
+            data.train_end,
+            data.validation_end,
+        )
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from None
+    await require_ml_current(db, ctx, source)
+    stored = await service.put_dataset(db, ctx, population)
+    return audit.serialize(
+        await service.event(
+            db,
+            ctx,
+            source.engagement_id,
+            "dataset",
+            {
+                **source.body,
+                "object": stored,
+                "foundation_manifest": manifest,
+                "training_eligible": manifest["training_eligible"],
+                "evidence_id": str(data.evidence_id),
+                "rationale": data.rationale,
+                "reviewer_id": str(ctx.user_id),
+                "labels": {"auditor_reviewed": manifest["label_count"]},
+            },
+            source.id,
+        )
+    )
+
+
+@router.post("/foundation/training-jobs", status_code=202)
+async def foundation_training(data: FoundationTraining, db: DB, ctx: Actor, request: Request):
+    source = await service.get(db, ctx, data.source_id, "dataset", "ml.train")
+    await require_ml_current(db, ctx, source)
+    manifest = source.body.get("foundation_manifest")
+    if not manifest or not source.body.get("training_eligible"):
+        raise HTTPException(409, "Versioned reviewed foundation dataset required")
+    if any(day < 0 or day > 6 for day in data.working_days):
+        raise HTTPException(422, "Working days must be 0 (Sunday) through 6 (Saturday)")
+    from app.workers.accounting import submit
+
+    return await submit(
+        db,
+        ctx,
+        "ml.train",
+        {
+            "operation": "train",
+            "source_id": str(source.id),
+            "request_key": str(data.request_key),
+            "config": {
+                **data.model_dump(exclude={"source_id", "request_key"}),
+                "pipeline_version": "local-foundation/2",
+                "task": manifest["task"],
+            },
+        },
+        request.state.request_id,
+    )
+
+
 class Decision(Strict):
     rationale: str = Field(min_length=20, max_length=4000)
     experimental_use_acknowledged: bool
 
 
 class Inference(Strict):
+    execution_mode: Literal["trained_model", "statistical_baseline"] = "trained_model"
     source_id: uuid.UUID
     dataset_id: uuid.UUID
+    request_key: uuid.UUID = Field(default_factory=uuid.uuid4)
     offset: int = Field(default=0, ge=0)
     limit: int = Field(default=1000, ge=1, le=10000)
 
 
 class BaselineInference(Strict):
     dataset_id: uuid.UUID
+    request_key: uuid.UUID = Field(default_factory=uuid.uuid4)
     mode: Literal["rules_baseline", "statistical_baseline", "diagnostic_mock"]
     offset: int = Field(default=0, ge=0)
     limit: int = Field(default=1000, ge=1, le=10000)
@@ -327,31 +469,55 @@ async def capabilities(eid: uuid.UUID, db: DB, ctx: Actor):
     import shutil
 
     eng = await audit.engagement(db, ctx, eid, "ml.read", lock=False)
-    deployments = (await db.scalars(select(MLEvent).where(
-        MLEvent.tenant_id == ctx.tenant_id, MLEvent.engagement_id == eid,
-        MLEvent.kind == "deployment",
-    ).order_by(MLEvent.created_at.desc(), MLEvent.id.desc()).limit(100))).all()
+    deployments = (
+        await db.scalars(
+            select(MLEvent)
+            .where(
+                MLEvent.tenant_id == ctx.tenant_id,
+                MLEvent.engagement_id == eid,
+                MLEvent.kind == "deployment",
+            )
+            .order_by(MLEvent.created_at.desc(), MLEvent.id.desc())
+            .limit(100)
+        )
+    ).all()
     families = {}
     for deployment in deployments:
         family = deployment.body.get("family")
         if family in families:
             continue
         current = await ml_current(db, ctx, deployment)
-        families[family] = {"deployment_id": str(deployment.id), "sources_current": current,
-                            "configured_execution_mode": "trained_model",
-                            "execution_mode": "unavailable", "execution_state": "not_verified",
-                            "runtime_inference_verified": False,
-                            "production_validated": False}
+        families[family] = {
+            "deployment_id": str(deployment.id),
+            "sources_current": current,
+            "configured_execution_mode": "trained_model",
+            "execution_mode": "unavailable",
+            "execution_state": "not_verified",
+            "runtime_inference_verified": False,
+            "production_validated": False,
+        }
     return {
-        "entity_id": str(eng.entity_id), "period_id": str(eng.period_id),
-        "local_runtime_present": bool(shutil.which("node") and
-                                      (service.ROOT / "ml-engine/dist/src/worker.js").is_file()),
-        "backend": "cpu", "language_model_dependency": False,
+        "entity_id": str(eng.entity_id),
+        "period_id": str(eng.period_id),
+        "local_runtime_present": bool(
+            shutil.which("node") and (service.ROOT / "ml-engine/dist/src/worker.js").is_file()
+        ),
+        "backend": "cpu",
+        "language_model_dependency": False,
         "explicit_baseline_modes": ["rules_baseline", "statistical_baseline", "diagnostic_mock"],
         "trained_deployments": families,
-        "execution_mode": "unavailable", "status": "not_executed",
+        "execution_mode": "unavailable",
+        "status": "not_executed",
         "state_meaning": "Deployment/source configuration only; actual inference must verify artifact hashes, schema and runtime",
-        "journal_type_classification": "unavailable; existing journal-classifier is a binary review classifier",
+        "journal_type_classification": "local-foundation/2 supports multiclass training; no trained tenant deployment is implied",
+        "foundation": {
+            "version": "local-foundation/2",
+            "tasks": ["journal-type", "account-mapping", "journal-anomaly", "review-ranking"],
+            "label_workflow": "/ml/datasets/{id}/foundation-labels",
+            "training_workflow": "/ml/foundation/training-jobs",
+            "legacy_journal_classifier": "binary exception review signal",
+            "real_client_quality_verified": False,
+        },
         "training_data_gap": "Reviewed labels and independent held-out evaluation are needed; synthetic pipeline evidence is not production accuracy",
     }
 
@@ -362,10 +528,20 @@ async def baseline(data: BaselineInference, db: DB, ctx: Actor, request: Request
     await require_ml_current(db, ctx, source)
     from app.workers.accounting import submit
 
-    return await submit(db, ctx, "ml.score", {
-        "operation": "baseline", "source_id": str(source.id),
-        "mode": data.mode, "offset": data.offset, "limit": data.limit,
-    }, request.state.request_id)
+    return await submit(
+        db,
+        ctx,
+        "ml.score",
+        {
+            "operation": "baseline",
+            "source_id": str(source.id),
+            "request_key": str(data.request_key),
+            "mode": data.mode,
+            "offset": data.offset,
+            "limit": data.limit,
+        },
+        request.state.request_id,
+    )
 
 
 @router.get("/events/{identifier}")
@@ -385,7 +561,10 @@ async def training(data: Training, db: DB, ctx: Actor, request: Request):
     source = await service.get(db, ctx, data.source_id, "dataset", "ml.train")
     await require_ml_current(db, ctx, source)
     if source.body.get("training_eligible") is False:
-        raise HTTPException(409, "Reviewed training labels are required; explicitly selected baselines remain available")
+        raise HTTPException(
+            409,
+            "Reviewed training labels are required; explicitly selected baselines remain available",
+        )
     from app.workers.accounting import submit
 
     return await submit(

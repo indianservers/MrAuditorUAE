@@ -5,7 +5,7 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Query, Request, Response
 from pydantic import Field
-from sqlalchemy import func, select
+from sqlalchemy import func, or_, select
 
 from app.core.dependencies import DB, Context, require
 from app.modules.audit_execution import service as audit
@@ -36,6 +36,7 @@ class JournalProposal(Strict):
     adjustment_date: date
     rationale: str = Field(min_length=1, max_length=4000)
     existing_allowance: Decimal = Field(default=Decimal(0), ge=0, max_digits=28, decimal_places=8)
+    component: str = Field(default="primary", pattern=r"^(primary|oci|current_tax)$")
 
 
 @router.post("/engagements/{eid}/runs/{rid}/propose-journal", status_code=201)
@@ -47,15 +48,77 @@ async def propose(
     if not await service.current_dependencies(db, ctx, eid, calc):
         raise HTTPException(409, "Calculation inputs changed; regenerate")
     profile = await service.record(db, ctx, eid, data.profile_id, "profile", True)
+    if calc.inputs.get("profile_id") and calc.inputs["profile_id"] != str(profile.id):
+        raise HTTPException(422, "Journal profile differs from approved calculation profile")
+    if any(issue.get("blocking") for issue in calc.results.get("issues", [])):
+        raise HTTPException(
+            409, "Resolve supporting schedule issues before proposing an adjustment"
+        )
+    if data.component != "primary" and not (
+        calc.kind == "deferred-tax" or calc.kind == "employee-benefits" and data.component == "oci"
+    ):
+        raise HTTPException(422, "This schedule does not support the selected journal component")
     if calc.kind == "lease":
+        if calc.inputs.get("previous_run_id"):
+            raise HTTPException(
+                409,
+                "Lease modifications require reviewed modification journals; initial-recognition proposal would duplicate the liability",
+            )
         value = Decimal(calc.results["initial_liability"])
         standard = "IFRS 16"
     elif calc.kind == "ecl":
         value = Decimal(calc.results["total_ecl"]) - data.existing_allowance
         standard = "IFRS 9"
+    elif calc.kind == "fixed-assets":
+        value, standard = Decimal(calc.results["total_depreciation"]), "IAS 16"
+    elif calc.kind == "inventory":
+        value, standard = Decimal(calc.results["write_down_movement"]), "IAS 2"
+    elif calc.kind == "impairment":
+        value = Decimal(calc.results["impairment_loss"]) - Decimal(
+            calc.results["permitted_reversal_excluding_goodwill"]
+        )
+        standard = "IAS 36"
+    elif calc.kind == "employee-benefits":
+        value = Decimal(
+            calc.results["oci_movement" if data.component == "oci" else "profit_loss_movement"]
+        )
+        standard = "IAS 19"
+    elif calc.kind == "deferred-tax":
+        if data.component == "current_tax":
+            if not calc.results.get("current_tax_bridge"):
+                raise HTTPException(409, "Current-tax proposal requires an approved E05 bridge")
+            value = Decimal(calc.results["current_tax_bridge"]["amount"])
+        else:
+            value = Decimal(
+                calc.results["movements"].get(
+                    "oci" if data.component == "oci" else "profit_loss", "0"
+                )
+            )
+        standard = "IAS 12"
     else:
+        raise HTTPException(422, "No supported journal movement for this calculation kind")
+    from app.modules.ifrs.contracts import currency_receipt
+
+    policy = await currency_receipt(db, ctx, profile.body["presentation_currency"])
+    value = value.quantize(Decimal(1).scaleb(-policy["precision"]), rounding=policy["rounding"])
+    existing = await db.scalar(
+        select(AuditRecord).where(
+            AuditRecord.tenant_id == ctx.tenant_id,
+            AuditRecord.engagement_id == eid,
+            AuditRecord.kind == "ifrs-adjustment",
+            or_(
+                AuditRecord.reference == data.reference,
+                AuditRecord.body["calculation_run_id"].astext.in_(
+                    service.equivalent_runs(ctx, eid, calc)
+                )
+                & (AuditRecord.body["calculation_component"].astext == data.component),
+            ),
+        )
+    )
+    if existing:
         raise HTTPException(
-            422, "Journal proposals support initial lease liability and ECL allowance movement"
+            409,
+            "Journal reference or calculation/component already exists; review the retained proposal instead of duplicating it",
         )
     if not value or data.debit_account == data.credit_account:
         raise HTTPException(422, "Nonzero movement and distinct human-selected accounts required")
@@ -79,6 +142,7 @@ async def propose(
                 "standard": standard,
                 "narration": data.rationale + "; source run " + str(rid),
                 "calculation_run_id": str(rid),
+                "calculation_component": data.component,
                 "legs": [
                     {"account_code": debit, "debit": str(abs(value))},
                     {"account_code": credit, "credit": str(abs(value))},
@@ -114,7 +178,8 @@ async def workspace(eid: uuid.UUID, db: DB, ctx: Actor):
         "schemas": {k: v.model_json_schema() for k, v in BODIES.items()},
         "kinds": list(BODIES),
         "ai_tasks": AI_TASKS,
-        "methodology_version": "auditos-ifrs/1.0",
+        "methodology_version": "auditos-accounting/3.1",
+        "accounting_contract_version": "accounting/1",
     }
 
 

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="7" failures="0" errors="0" time="0.3961325">
+    <testsuite name="tests/accounting-execution-notice.test.tsx" timestamp="2026-10-24T19:42:45.559Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.1090743">
+        <testcase classname="tests/accounting-execution-notice.test.tsx" name="accounting execution controls &gt; requires provenance regeneration for historical runs" time="0.0979829">
+        </testcase>
+        <testcase classname="tests/accounting-execution-notice.test.tsx" name="accounting execution controls &gt; shows draft posting state separately from reviewed inputs and unresolved issues" time="0.0084881">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/financial-components.test.tsx" timestamp="2026-10-24T19:42:45.561Z" hostname="DESKTOP-B3SR465" tests="3" failures="0" errors="0" skipped="0" time="0.2453532">
+        <testcase classname="tests/financial-components.test.tsx" name="sorts scientific zeros and large decimal amounts without floating point" time="0.0016781">
+        </testcase>
+        <testcase classname="tests/financial-components.test.tsx" name="shows a truthful empty chart without inventing data" time="0.0986795">
+        </testcase>
+        <testcase classname="tests/financial-components.test.tsx" name="provides usable financial grid controls and error state" time="0.1429412">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/tax-execution-notice.test.tsx" timestamp="2026-10-24T19:42:45.562Z" hostname="DESKTOP-B3SR465" tests="2" failures="0" errors="0" skipped="0" time="0.041705">
+        <testcase classname="tests/tax-execution-notice.test.tsx" name="tax execution state separation &gt; discloses legacy provenance without manufacturing a status" time="0.0261093">
+        </testcase>
+        <testcase classname="tests/tax-execution-notice.test.tsx" name="tax execution state separation &gt; keeps calculation, review, filing and payment states separate" time="0.0124694">
+        </testcase>
+    </testsuite>
+</testsuites>

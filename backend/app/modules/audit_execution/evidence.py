@@ -32,7 +32,7 @@ def validate_file(stream, filename):
     extension = Path(filename).suffix.lower()
     if extension not in TYPES:
         raise ValueError(
-            "Supported evidence: PDF, CSV, JSON, XML, MT940/STA, SIF, XLSX, DOCX, images and bounded document ZIP"
+            "Supported evidence: PDF, CSV, JSON, XML, UTF-8 TXT/ECR, MT940/STA, SIF, XLSX, DOCX, images and bounded document ZIP"
         )
     stream.seek(0)
     header = stream.read(1024)

@@ -1,0 +1,62 @@
+# Local ML foundation, version 2
+
+The existing Node/TypeScript + TensorFlow.js 4.22 stack is retained. The Python application still performs accounting arithmetic with Decimal, stores private versioned artifacts, enforces tenant/engagement access, and runs training through its job worker. The OpenAI-compatible language gateway remains separate. No use cases 51–100 were implemented.
+
+## Verified runtime and execution modes
+
+Windows x64, Node v24.15.0, TensorFlow.js 4.22.0: pure JavaScript CPU training and inference were executed without language-model credentials. Optional `@tensorflow/tfjs-node@4.22.0` installation was attempted in `.local-runtime/ml-native-probe`, outside application dependencies. The Windows CPU prebuilt download returned HTTP 404; the source-build fallback failed because its toolchain reported a missing Windows SDK. Native execution is **not verified on this host**. No GPU/CUDA dependencies were introduced.
+
+`initializeCPU` tries the optional native CPU binding, performs a scalar self-test, and otherwise explicitly initializes and verifies JavaScript CPU. `ML_CPU_BACKEND=javascript` selects JavaScript directly; `auto` and `native` attempt native with a reported fallback reason. Installed/configured does not mean operational: inference reports actual backend and mode.
+
+Modes remain distinct: `trained_model`, `statistical_baseline`, `rules_baseline`, `diagnostic_mock`, `unavailable`. Untrained output is never offered as a fallback. External language-model summaries do not establish or replace ML scores.
+
+## Capability audit
+
+- **Anomaly:** existing line autoencoder and deterministic/statistical baselines → actual CPU training/reload/inference verified → authorized ledger data exists but reliable real outcome labels are unproven → synthetic experimental models exist locally → new journal-level contextual autoencoder excludes explicitly labelled exceptions from training, derives a 95th-percentile threshold from normal validation observations, and compares review queues with a robust amount/rarity baseline. Remaining evidence: normal-population validity, contamination review, later-period/entity stability, reviewer outcomes and real-client false-positive burden.
+- **Journal type:** legacy `journal-classifier` is binary exception review, not journal type → new `journal-type` multiclass CPU pipeline verified → reviewed taxonomy labels must be collected through the governed label workflow → experimental synthetic model and train-fitted centroid baseline are available → confusion/per-class metrics, macro-F1, coverage, abstention and Brier are recorded. The neural model underperformed the simpler baseline at the measured settings. No client accuracy claim or suspicious/not-suspicious journal taxonomy is made.
+- **Account mapping:** legacy five-class hashed-name model → new Unicode account text plus debit/credit behavior model verified → reviewed account mapping labels required → experimental model and explicit centroid baseline available → canonical top-level classes are `Assets`, `Liabilities`, `Equity`, `Income`, `Expenses`, matching existing mapping workflows. Ambiguous suggestions abstain. No VAT, deductibility, related-party, legal, or automatic posting decisions.
+- **Risk ranking:** existing binary model can train only on trusted labels → new reviewed-outcome pipeline verified synthetically → adequate real reviewed labels have not been established → default useful path is explicit configurable rules/statistics, not a claimed trained client risk model → supervised fitting requires at least 50 reviewed training observations per class (an admission floor, not proof of statistical adequacy). Score, observed gross debit exposure, rules, auditor risk and final conclusion are separate. Held-out queue metrics remain unmeasured without outcomes.
+- **Language assistance:** separate configured OpenAI-compatible gateway → external live operation was not tested or needed → deterministic diagnostic mode remains a labelled mock. No external service was used to train, score or benchmark these models.
+
+## Data contracts and preprocessing
+
+`backend/app/modules/ml/contracts.py` defines versioned source population, journal header, journal line and account contracts. Optional operational/party/document/VAT fields remain optional. Decimal validation checks identity duplication, references, periods, nonnegative/single-sided lines, paired functional values, expected line counts and exact balance for explicitly complete journals. Incomplete journals are reported rather than asserted balanced. These contracts supplement the existing importer; they do not retroactively certify legacy source completeness.
+
+Ledger dataset export now preserves decimal amount strings until numeric ML/baseline conversion. `prepare_reviewed` creates immutable manifests with taxonomy, usage provenance inherited from the authorized source, reviewer/evidence reference, source receipts, hash, chronological boundaries and counts. Reversals and exact same-date duplicate journals stay connected; groups crossing a boundary move to their latest partition with an explicit chronological anchor. Unknown duplicate relationships cannot be guaranteed detected; near-duplicates require source relationships/review. Cross-tenant datasets cannot be combined through these routes.
+
+`contextual/2` fits median/IQR scaling and account/pair frequency dictionaries exclusively on training rows. It includes separate debit/credit/log magnitude, journal composition, rarity, period proximity, observed reversal timing, missing indicators, calendar context and normalized Unicode token hashing. Account codes are categorical identities, never numeric magnitudes. Future reversal dates do not become historical features. Transformations reuse frozen dictionaries/scales; batching does not rebuild historical frequencies. Working days are configurable; operating-hour/holiday rules are not inferred when source times/calendars are absent.
+
+Two explicitly synthetic corpora exist: Node pipeline fixtures for all four tasks, and Python Decimal contract fixtures for six UAE-style sectors with AED/USD, balance, recurring entries, Arabic/English text, reversals, period end and missing/incomplete records. Their deliberately easy labels are for mechanics and controlled experiments only.
+
+## Governed workflows
+
+1. Build the existing authorized engagement dataset with `POST /api/v1/ml/engagements/{eid}/datasets`.
+2. Create reviewed v2 data with `POST /api/v1/ml/datasets/{id}/foundation-labels`: task, labels keyed by journal/account ID, train/validation cutoff dates, approved audit evidence ID and rationale. Scope and source freshness are rechecked; invented labels/foreign source IDs are rejected. This records a reviewer assertion; evidence quality still needs professional review.
+
+   Submit up to 1,000 labels per request and continue from each returned dataset version. Previously reviewed labels are retained. Training stays disabled until the population is fully labelled. Taxonomy and chronological boundaries remain fixed while continuing a review, so reviewed test outcomes cannot migrate into training.
+3. Queue `POST /api/v1/ml/foundation/training-jobs`: dataset source ID, seed, epochs, batch size and entity working days. Training rejects unreviewed/mixed label provenance, empty/overlapping partitions, split journal/connected groups, unknown labels and inadequate class counts. Class weighting and validation early stopping are applied. Final test outcomes never set preprocessing or thresholds.
+4. Inspect model metrics and `selection`, which compares validation-only model/baseline usefulness. No automatic deployment occurs. Existing approval-request, independent approval and deployment routes remain mandatory. These are experimental approvals, not production certification.
+5. Use the existing `POST /api/v1/ml/inference` with approved deployment + dataset, optionally `execution_mode: statistical_baseline` for v2 journal/account centroid suggestions. Default remains explicit trained inference. V2 requires complete selected journal/account groups within the 10,000-line limit. Partial groups are rejected rather than silently scored.
+6. With insufficient labels, `POST /api/v1/ml/foundation/baselines` accepts dataset ID, earlier-reference cutoff, working days and weights (`amount`, `rare_pair`, `manual`, `outside_calendar`). It fits only earlier journals and scores later records. Calendar weight defaults to zero. It reports no accuracy without reviewed outcomes. Existing rules/statistical/diagnostic baseline routes are preserved.
+
+Review/override labels are retained as new dataset versions; predictions and source artifacts are not rewritten. No automatic retraining or audit conclusions are introduced.
+
+## Lifecycle and resource controls
+
+`ML_LOCAL_MODEL_DIRECTORY` defaults to `../.private-ml-models`. Verified private object receipts and artifact contents determine the local cache directory; separate private receipts remain separate even for identical model bytes. Application permissions and freshness are checked before use/publication. Local copies do not bypass access controls, and every use rechecks private object integrity and model/weight hashes. Only server-produced paths/topology enter the worker.
+
+Inference uses a persistent isolated Node process per Python application worker, a nonblocking admission lock, and bounded model caches (two legacy and two v2 instances). Models warm up once per load and reuse weights. V2 callers also have a serialized eight-waiter queue. Atomic response files prevent partial reads. Shutdown closes stdin, drains accepted work, disposes models and terminates on timeout. A failed worker is restarted on a later request; no mock is substituted.
+
+Training remains in a separate cancellable process. `ML_WORKER_CONCURRENCY` defaults to 2 per Python process; `ML_WORKER_HEAP_MB` to 1536; `ML_WORKER_TIMEOUT_SECONDS` to 900; `ML_CPU_THREADS` to 2. Limits are validated configuration, not request-controlled. Thread environment settings apply to native libraries; JavaScript CPU inference is single-threaded. V8 heap is not a hard whole-process RSS limit. Deployment/container process counts and OS quotas must provide any required aggregate CPU/RSS limit. Artifact limits are 8 MiB metadata/topology and 100 MiB weights; inference is capped at 10,000 source lines; training at 250,000 validated source lines in v2 preprocessing.
+
+Private object storage remains the authoritative registry; local model files are a verified persistent cache. Approval/deployment events support auditable version history and rollback. Disk-retention policy, encrypted filesystem provisioning, aggregate multiworker quotas and operational monitoring remain deployment responsibilities; this change does not claim an autonomous model-operations platform.
+
+## Reproduce and inspect evidence
+
+From `ml-engine`: `npm test`, then `node dist/src/foundation-benchmark.js`. Existing `benchmark.ts` remains unchanged for legacy large-population measurements. New measurements are in `benchmark.json` with actual timestamps, hardware/runtime, cold process initialization, model-load/batch timing, 20 warm batches, four serialized requests, training CPU time/RSS, reload deltas and tensor counts. They are small synthetic workloads, not throughput targets or million-record projections.
+
+Scoped Python tests cover exact decimal balance, source completeness, six sectors, chronological connections, governed reviewed labels, cross-tenant rejection, earlier-period baseline fitting, real persistent process reuse and corrupt artifact rejection. Existing PostgreSQL/Redis tests cover model approval/deployment, scoring, source invalidation, feedback, cancellation and execution modes. No language-model credentials are needed.
+
+The audit matrix and benchmark are engineering evidence. Real-client labels, independent temporal/held-out-entity evaluation, calibration, near-duplicate review and operating-environment qualification remain required before any production quality claim.
+
+Primary runtime references: [TensorFlow.js Node guide](https://www.tensorflow.org/js/guide/nodejs), [official native binding README](https://github.com/tensorflow/tfjs/blob/master/tfjs-node/README.md). The native installation limitation above is based on the actual local probe, not an assumption that all Windows/Node deployments are unsupported.

@@ -46,6 +46,10 @@ test('local CPU training/inference, cache, schema and artifact failures without 
   await writeFile(join(dir,'metadata.json'),JSON.stringify(m));
   await assert.rejects(infer(rows.slice(100),dir),/feature version/);
   await writeFile(join(dir,'metadata.json'),metadata);
+  const badPreprocessing=JSON.parse(metadata);badPreprocessing.preprocessing_version='unknown/99';
+  await writeFile(join(dir,'metadata.json'),JSON.stringify(badPreprocessing));
+  await assert.rejects(infer(rows.slice(100),dir),/preprocessing version/);
+  await writeFile(join(dir,'metadata.json'),metadata);
   await assert.rejects(infer([],dir),/population size/);
   await assert.rejects(infer(rows.slice(100),join(dir,'missing')),/ENOENT/);
  } finally {

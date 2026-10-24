@@ -1,0 +1,1610 @@
+{
+  "synthetic": true,
+  "unresolved_draft": {
+    "engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62",
+    "record_id": "f826f58f-01b9-4ab6-b9ca-bab4c8fe0946",
+    "kind": "consolidation",
+    "methodology_version": "auditos-accounting/3.1",
+    "inputs": {
+      "area": "",
+      "members": [
+        {
+          "power": true,
+          "ownership": "1",
+          "rate_date": "2026-12-31",
+          "rate_source": "Synthetic independent rate fixture, no market claims",
+          "average_rate": "1",
+          "closing_rate": "1",
+          "opening_rate": "1",
+          "consideration": "0",
+          "engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62",
+          "historical_rate": "1",
+          "acquisition_type": "parent",
+          "financial_run_id": "4c410fe8-42da-40a4-9150-49baaf55ae9a",
+          "variable_returns": true,
+          "accounting_policy": "Synthetic full aggregation",
+          "control_rationale": "Synthetic documented control assessment",
+          "hyperinflationary": false,
+          "nci_at_acquisition": "0",
+          "control_effective_to": null,
+          "control_effective_from": "2026-01-01",
+          "ability_to_affect_returns": true,
+          "net_assets_at_acquisition": "0",
+          "average_rate_representative": true
+        },
+        {
+          "power": true,
+          "ownership": "0.8",
+          "rate_date": "2026-12-31",
+          "rate_source": "Synthetic independent rate fixture, no market claims",
+          "average_rate": "1.5",
+          "closing_rate": "2",
+          "opening_rate": "1",
+          "consideration": "100",
+          "engagement_id": "0efd0ddf-6a75-4fa3-b3df-7292e617603d",
+          "historical_rate": "1",
+          "acquisition_type": "business_combination",
+          "financial_run_id": "db367f70-25ef-426b-a51c-30d320d13137",
+          "variable_returns": true,
+          "accounting_policy": "Synthetic full aggregation",
+          "control_rationale": "Synthetic documented control assessment",
+          "hyperinflationary": false,
+          "nci_at_acquisition": "20",
+          "control_effective_to": null,
+          "control_effective_from": "2026-01-01",
+          "ability_to_affect_returns": true,
+          "net_assets_at_acquisition": "100",
+          "average_rate_representative": true
+        }
+      ],
+      "sources": [],
+      "due_date": null,
+      "owner_id": null,
+      "narrative": "",
+      "assertions": [],
+      "eliminations": [],
+      "intercompany": [
+        {
+          "payable": "9",
+          "currency": "AED",
+          "evidence": "SYN reciprocal ledger confirmations",
+          "reference": "SYN-IC",
+          "debit_line": "400",
+          "receivable": "10",
+          "credit_line": "500",
+          "difference_type": "missing_entry",
+          "to_engagement_id": "0efd0ddf-6a75-4fa3-b3df-7292e617603d",
+          "from_engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62"
+        }
+      ],
+      "review_cycle": 1,
+      "review_stage": 1,
+      "review_approvers": [
+        "4a973176-f34d-4173-ad1c-01ccc5d21508"
+      ],
+      "unrealised_profit": "0",
+      "presentation_currency": "AED",
+      "unrealised_profit_source": "",
+      "unrealised_profit_expense_line": "",
+      "unrealised_profit_inventory_line": ""
+    },
+    "dependencies": [
+      {
+        "id": "f826f58f-01b9-4ab6-b9ca-bab4c8fe0946",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "41855bee-4eca-49ee-a4a4-01b1af981d20",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "be6d6684-3f8d-4d72-93da-61a3c57e83d0",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "5567a590-03c5-45c8-8c7b-776bb2bf388e",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "f7ac5bdd-44b3-4909-a192-12000df59bd4",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "73a80cae-1290-4d41-9bb1-b239ac1f184c",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "b340b9b2-5547-46c5-b32c-0ef268470ca8",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "03b55b44-e110-4776-96ba-d07098c47ab9",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "6928b565-46be-44fe-8402-6094a7cd754a",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "42124ede-3dfd-4cf0-80cf-ade38577a6cf",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "94bc3a67-6da6-4299-b08b-800dc68feca3",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "0c313d17-7098-46b5-af4a-c22c53173f41",
+        "status": "APPROVED",
+        "version": 4
+      },
+      {
+        "id": "1a414af5-f11b-4d06-9ee7-3f1681576d6e",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "817dfb5c-21b8-4df4-979d-688db0f89a51",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "96584eb5-4055-47af-8e95-ce34e169d23d",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "a6a55cdb-4767-4c30-8047-bb6e31a1dbf7",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "d08aabc5-298c-4684-9f4e-028a257ac20d",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "731a195e-6f51-40bb-9b43-b5f70c345bb8",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "8bedb0f3-0b02-4df0-9b63-16bf31bd8c9c",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "ef0fecd6-f1d3-4c9d-a325-1d83832caf69",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "60401655-a17d-490d-8d2a-25d83e66538c",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "8bc38506-f29f-4575-beb8-34ee12aeaf26",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "8bf06f45-9557-49bf-8ac0-20243a19c443",
+        "status": "APPROVED",
+        "version": 4
+      }
+    ],
+    "results": {
+      "lines": [
+        {
+          "note": "N1",
+          "label": "Cash",
+          "weight": "1",
+          "current": "390.00000000",
+          "is_cash": true,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "100",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "rate": "1",
+              "run_id": "4c410fe8-42da-40a4-9150-49baaf55ae9a",
+              "translated": "130.00000000",
+              "rate_source": "Synthetic independent rate fixture, no market claims",
+              "engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62",
+              "source_amount": "130.00000000"
+            },
+            {
+              "rate": "2",
+              "run_id": "db367f70-25ef-426b-a51c-30d320d13137",
+              "translated": "260.00000000",
+              "rate_source": "Synthetic independent rate fixture, no market claims",
+              "engagement_id": "0efd0ddf-6a75-4fa3-b3df-7292e617603d",
+              "source_amount": "130.00000000"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Capital",
+          "weight": "1",
+          "current": "-200.00000000",
+          "is_cash": false,
+          "opening": "0",
+          "section": "equity",
+          "category": "operating",
+          "line_code": "300",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "rate": "1",
+              "run_id": "4c410fe8-42da-40a4-9150-49baaf55ae9a",
+              "translated": "-100.00000000",
+              "rate_source": "Synthetic independent rate fixture, no market claims",
+              "engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62",
+              "source_amount": "-100.00000000"
+            },
+            {
+              "rate": "1",
+              "run_id": "db367f70-25ef-426b-a51c-30d320d13137",
+              "translated": "-100.00000000",
+              "rate_source": "Synthetic independent rate fixture, no market claims",
+              "engagement_id": "0efd0ddf-6a75-4fa3-b3df-7292e617603d",
+              "source_amount": "-100.00000000"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Revenue",
+          "weight": "1",
+          "current": "-125.000000000",
+          "is_cash": false,
+          "opening": "0",
+          "section": "income",
+          "category": "operating",
+          "line_code": "400",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "rate": "1",
+              "run_id": "4c410fe8-42da-40a4-9150-49baaf55ae9a",
+              "translated": "-50.00000000",
+              "rate_source": "Synthetic independent rate fixture, no market claims",
+              "engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62",
+              "source_amount": "-50.00000000"
+            },
+            {
+              "rate": "1.5",
+              "run_id": "db367f70-25ef-426b-a51c-30d320d13137",
+              "translated": "-75.000000000",
+              "rate_source": "Synthetic independent rate fixture, no market claims",
+              "engagement_id": "0efd0ddf-6a75-4fa3-b3df-7292e617603d",
+              "source_amount": "-50.00000000"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Expense",
+          "weight": "1",
+          "current": "50.000000000",
+          "is_cash": false,
+          "opening": "0",
+          "section": "expenses",
+          "category": "operating",
+          "line_code": "500",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "rate": "1",
+              "run_id": "4c410fe8-42da-40a4-9150-49baaf55ae9a",
+              "translated": "20.00000000",
+              "rate_source": "Synthetic independent rate fixture, no market claims",
+              "engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62",
+              "source_amount": "20.00000000"
+            },
+            {
+              "rate": "1.5",
+              "run_id": "db367f70-25ef-426b-a51c-30d320d13137",
+              "translated": "30.000000000",
+              "rate_source": "Synthetic independent rate fixture, no market claims",
+              "engagement_id": "0efd0ddf-6a75-4fa3-b3df-7292e617603d",
+              "source_amount": "20.00000000"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "translation",
+          "label": "Foreign operation translation reserve",
+          "current": "-115.000000000",
+          "opening": "0",
+          "section": "oci",
+          "category": "operating",
+          "line_code": "FX_TRANSLATION",
+          "comparative": "0",
+          "source_accounts": []
+        }
+      ],
+      "scope": "Full aggregation of approved controlled packages; explicit eliminations and rate translation. Draft only until group notes/cash-flow/acquisition and professional validation are complete",
+      "entity": "Consolidated group",
+      "issues": [
+        {
+          "code": "INTERCOMPANY_UNRESOLVED",
+          "blocking": true,
+          "reference": "SYN-IC",
+          "difference": "1",
+          "remediation": "Resolve timing/currency/missing-entry/classification/dispute and reapprove both packages"
+        }
+      ],
+      "totals": {
+        "nci": "52.000000000",
+        "oci": "115.000000000",
+        "assets": "390.00000000",
+        "equity": "390.000000000",
+        "profit": "75.000000000",
+        "liabilities": "0",
+        "parent_equity": "338.000000000"
+      },
+      "members": [
+        {
+          "ownership": "1",
+          "nci_closing": "0",
+          "engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62",
+          "source_currency": "AED",
+          "financial_run_id": "4c410fe8-42da-40a4-9150-49baaf55ae9a",
+          "disclosure_inputs": [
+            {
+              "id": "f7ac5bdd-44b3-4909-a192-12000df59bd4",
+              "text": "Synthetic disclosure for testing only. Basis and judgments independently reviewed.",
+              "lines": [
+                {
+                  "code": "100",
+                  "current": "130.00000000",
+                  "comparative": "0"
+                },
+                {
+                  "code": "300",
+                  "current": "-100.00000000",
+                  "comparative": "0"
+                },
+                {
+                  "code": "400",
+                  "current": "-50.00000000",
+                  "comparative": "0"
+                },
+                {
+                  "code": "500",
+                  "current": "20.00000000",
+                  "comparative": "0"
+                }
+              ],
+              "reference": "N1",
+              "ai_authored": false,
+              "supporting_schedules": []
+            }
+          ],
+          "control_effective_to": null,
+          "approved_group_policy": "Synthetic full aggregation",
+          "translated_net_assets": "130.00000000",
+          "control_effective_from": "2026-01-01",
+          "acquisition_goodwill_or_bargain_purchase": "0"
+        },
+        {
+          "ownership": "0.8",
+          "nci_closing": "52.000000000",
+          "engagement_id": "0efd0ddf-6a75-4fa3-b3df-7292e617603d",
+          "source_currency": "USD",
+          "financial_run_id": "db367f70-25ef-426b-a51c-30d320d13137",
+          "disclosure_inputs": [
+            {
+              "id": "a6a55cdb-4767-4c30-8047-bb6e31a1dbf7",
+              "text": "Synthetic disclosure for testing only. Basis and judgments independently reviewed.",
+              "lines": [
+                {
+                  "code": "100",
+                  "current": "130.00000000",
+                  "comparative": "0"
+                },
+                {
+                  "code": "300",
+                  "current": "-100.00000000",
+                  "comparative": "0"
+                },
+                {
+                  "code": "400",
+                  "current": "-50.00000000",
+                  "comparative": "0"
+                },
+                {
+                  "code": "500",
+                  "current": "20.00000000",
+                  "comparative": "0"
+                }
+              ],
+              "reference": "N1",
+              "ai_authored": false,
+              "supporting_schedules": []
+            }
+          ],
+          "control_effective_to": null,
+          "approved_group_policy": "Synthetic full aggregation",
+          "translated_net_assets": "260.00000000",
+          "control_effective_from": "2026-01-01",
+          "acquisition_goodwill_or_bargain_purchase": "20"
+        }
+      ],
+      "currency": "AED",
+      "cash_flow": {
+        "status": "BEFORE_GROUP_CASH_ELIMINATIONS",
+        "opening": "200.00000000",
+        "financing": "0.0",
+        "investing": "0.0",
+        "operating": "75.000000000",
+        "limitation": "Individual reconciled cash workings translated; group cash eliminations and acquisition/disposal flows still require review",
+        "source_closing": "390.00000000",
+        "member_packages": [
+          {
+            "basis": "Opening cash at evidenced opening rate; movements at approved representative average; closing cash at closing rate",
+            "run_id": "4c410fe8-42da-40a4-9150-49baaf55ae9a",
+            "opening": "100.00000000",
+            "financing": "0",
+            "investing": "0",
+            "operating": "30.00000000",
+            "engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62",
+            "source_closing": "130.00000000",
+            "local_exchange_effect": "0"
+          },
+          {
+            "basis": "Opening cash at evidenced opening rate; movements at approved representative average; closing cash at closing rate",
+            "run_id": "db367f70-25ef-426b-a51c-30d320d13137",
+            "opening": "100.00000000",
+            "financing": "0.0",
+            "investing": "0.0",
+            "operating": "45.000000000",
+            "engagement_id": "0efd0ddf-6a75-4fa3-b3df-7292e617603d",
+            "source_closing": "260.00000000",
+            "local_exchange_effect": "0.0"
+          }
+        ],
+        "local_exchange_effect": "0.0",
+        "presentation_translation_effect": "115.000000000"
+      },
+      "execution": {
+        "evidence": [
+          {
+            "id": "edf23f7f-ffac-495d-9e8e-814b0b83e6ee",
+            "kind": "snapshot"
+          },
+          {
+            "id": "35955d9d-bd94-4502-ba3f-a2b3ab992fbb",
+            "kind": "snapshot"
+          }
+        ],
+        "rounding": "Decimal precision 48; schedule HALF_UP to 8 decimal places; journals use currency minor units",
+        "entity_id": "6144a934-cacf-4cc8-8e6f-46e6d422aab3",
+        "framework": "full_ifrs",
+        "period_id": "db64a880-65c5-4fe7-b8a1-dc9d6c760682",
+        "tenant_id": "20961e9d-bd13-41d9-b285-c9825f2aef4a",
+        "period_end": "2026-12-31",
+        "period_start": "2026-01-01",
+        "engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62",
+        "journal_state": "NOT_POSTED",
+        "review_status": "DRAFT_REQUIRES_REVIEW",
+        "entity_version": 1,
+        "execution_mode": "deterministic_python_decimal",
+        "source_balance": "Retained ledger snapshot; original balances are never overwritten",
+        "chart_snapshots": [],
+        "currency_policy": {
+          "code": "AED",
+          "rounding": "ROUND_HALF_EVEN",
+          "precision": 2
+        },
+        "policy_versions": [
+          {
+            "id": "41855bee-4eca-49ee-a4a4-01b1af981d20",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3,
+            "framework": "full_ifrs",
+            "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+          },
+          {
+            "id": "1a414af5-f11b-4d06-9ee7-3f1681576d6e",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3,
+            "framework": "full_ifrs",
+            "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+          }
+        ],
+        "supporting_runs": [
+          {
+            "id": "db367f70-25ef-426b-a51c-30d320d13137",
+            "engagement_id": "0efd0ddf-6a75-4fa3-b3df-7292e617603d"
+          },
+          {
+            "id": "4c410fe8-42da-40a4-9150-49baaf55ae9a",
+            "engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62"
+          }
+        ],
+        "contract_version": "accounting/1",
+        "current_tax_runs": [],
+        "source_snapshots": [
+          {
+            "id": "edf23f7f-ffac-495d-9e8e-814b0b83e6ee",
+            "sha256": "a8d866092e7f6a38ea18046623d2266d717db93e6b6bf0b3a7dfaf9ca72fe428",
+            "source_complete": true
+          },
+          {
+            "id": "35955d9d-bd94-4502-ba3f-a2b3ab992fbb",
+            "sha256": "c32b70988fec1a0f29c506e427dcd6c6de79b1f73171fd0860d5c7771ba9edaa",
+            "source_complete": true
+          }
+        ],
+        "proposed_journals": [],
+        "unresolved_issues": [
+          {
+            "code": "INTERCOMPANY_UNRESOLVED",
+            "blocking": true,
+            "reference": "SYN-IC",
+            "difference": "1",
+            "remediation": "Resolve timing/currency/missing-entry/classification/dispute and reapprove both packages"
+          }
+        ],
+        "calculation_version": "auditos-accounting/3.1",
+        "functional_currency": "AED",
+        "source_completeness": "complete_for_declared_scope",
+        "approved_assumptions": [
+          {
+            "id": "f826f58f-01b9-4ab6-b9ca-bab4c8fe0946",
+            "kind": "ifrs-consolidation",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "41855bee-4eca-49ee-a4a4-01b1af981d20",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "be6d6684-3f8d-4d72-93da-61a3c57e83d0",
+            "kind": "ifrs-mapping",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "5567a590-03c5-45c8-8c7b-776bb2bf388e",
+            "kind": "ifrs-cash-flow",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "f7ac5bdd-44b3-4909-a192-12000df59bd4",
+            "kind": "ifrs-note",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "73a80cae-1290-4d41-9bb1-b239ac1f184c",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "b340b9b2-5547-46c5-b32c-0ef268470ca8",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "03b55b44-e110-4776-96ba-d07098c47ab9",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "6928b565-46be-44fe-8402-6094a7cd754a",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "42124ede-3dfd-4cf0-80cf-ade38577a6cf",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "94bc3a67-6da6-4299-b08b-800dc68feca3",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "0c313d17-7098-46b5-af4a-c22c53173f41",
+            "kind": "ifrs-financials",
+            "status": "APPROVED",
+            "version": 4
+          },
+          {
+            "id": "1a414af5-f11b-4d06-9ee7-3f1681576d6e",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "817dfb5c-21b8-4df4-979d-688db0f89a51",
+            "kind": "ifrs-mapping",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "96584eb5-4055-47af-8e95-ce34e169d23d",
+            "kind": "ifrs-cash-flow",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "a6a55cdb-4767-4c30-8047-bb6e31a1dbf7",
+            "kind": "ifrs-note",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "d08aabc5-298c-4684-9f4e-028a257ac20d",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "731a195e-6f51-40bb-9b43-b5f70c345bb8",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "8bedb0f3-0b02-4df0-9b63-16bf31bd8c9c",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "ef0fecd6-f1d3-4c9d-a325-1d83832caf69",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "60401655-a17d-490d-8d2a-25d83e66538c",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "8bc38506-f29f-4575-beb8-34ee12aeaf26",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "8bf06f45-9557-49bf-8ac0-20243a19c443",
+            "kind": "ifrs-financials",
+            "status": "APPROVED",
+            "version": 4
+          }
+        ],
+        "calculated_adjustment": "Calculation output; recognition and accounts require review",
+        "implementation_sha256": "a5710c08d3a39d021c9f590868259991d88feadbebd0c600015e0c26dd8e6001",
+        "presentation_currency": "AED"
+      },
+      "precision": 2,
+      "period_end": "2026-12-31",
+      "validation": {
+        "ready": false,
+        "checks": [
+          {
+            "code": "group_accounting_equation",
+            "passed": true,
+            "difference": "0.000000000"
+          }
+        ],
+        "ifrs_compliance_certified": false
+      },
+      "comparative": null,
+      "eliminations": [],
+      "period_start": "2026-01-01",
+      "presentation": "Group corporate presentation",
+      "changes_in_equity": {
+        "oci": "115.000000000",
+        "profit": "75.000000000",
+        "status": "SPECIALIST_GROUP_ROLLFORWARD_REQUIRED",
+        "closing": "390.000000000",
+        "opening": null
+      },
+      "comparative_status": "GROUP_COMPARATIVE_TRANSLATION_NOT_IMPLEMENTED",
+      "acquisition_schedule": {
+        "posting": "Acquisition journals must be explicitly supplied; schedule is not silently posted",
+        "goodwill_or_bargain_purchase_total": "20"
+      },
+      "nci_measurement_status": "PROVISIONAL_PERCENTAGE_OF_CLOSING_NET_ASSETS; acquisition-basis and ownership-event rollforward not validated",
+      "intercompany_reconciliation": [
+        {
+          "state": "UNRESOLVED",
+          "payable": "9",
+          "currency": "AED",
+          "evidence": "SYN reciprocal ledger confirmations",
+          "reference": "SYN-IC",
+          "debit_line": "400",
+          "difference": "1",
+          "receivable": "10",
+          "credit_line": "500",
+          "elimination": "BLOCKED",
+          "difference_type": "missing_entry",
+          "to_engagement_id": "0efd0ddf-6a75-4fa3-b3df-7292e617603d",
+          "from_engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62"
+        }
+      ]
+    },
+    "sha256": "f9f3eb4f98377904fb31041a159c3e34934ee9f379905d2a9fad4ac8fc3d30f8",
+    "tenant_id": "20961e9d-bd13-41d9-b285-c9825f2aef4a",
+    "created_by": "0a6033c9-f074-40e4-b569-e22097d12952",
+    "id": "d67921a0-c46b-4b5e-9fe3-8114ca16eb95",
+    "created_at": "2026-10-24T19:46:45.891778+00:00",
+    "updated_at": "2026-10-24T19:46:45.891778+00:00"
+  },
+  "matched_draft": {
+    "engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62",
+    "record_id": "94f60346-4f77-46a2-a3e2-1d02ec463388",
+    "kind": "consolidation",
+    "methodology_version": "auditos-accounting/3.1",
+    "inputs": {
+      "area": "",
+      "members": [
+        {
+          "power": true,
+          "ownership": "1",
+          "rate_date": "2026-12-31",
+          "rate_source": "Synthetic independent rate fixture, no market claims",
+          "average_rate": "1",
+          "closing_rate": "1",
+          "opening_rate": "1",
+          "consideration": "0",
+          "engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62",
+          "historical_rate": "1",
+          "acquisition_type": "parent",
+          "financial_run_id": "4c410fe8-42da-40a4-9150-49baaf55ae9a",
+          "variable_returns": true,
+          "accounting_policy": "Synthetic full aggregation",
+          "control_rationale": "Synthetic documented control assessment",
+          "hyperinflationary": false,
+          "nci_at_acquisition": "0",
+          "control_effective_to": null,
+          "control_effective_from": "2026-01-01",
+          "ability_to_affect_returns": true,
+          "net_assets_at_acquisition": "0",
+          "average_rate_representative": true
+        },
+        {
+          "power": true,
+          "ownership": "0.8",
+          "rate_date": "2026-12-31",
+          "rate_source": "Synthetic independent rate fixture, no market claims",
+          "average_rate": "1.5",
+          "closing_rate": "2",
+          "opening_rate": "1",
+          "consideration": "100",
+          "engagement_id": "0efd0ddf-6a75-4fa3-b3df-7292e617603d",
+          "historical_rate": "1",
+          "acquisition_type": "business_combination",
+          "financial_run_id": "db367f70-25ef-426b-a51c-30d320d13137",
+          "variable_returns": true,
+          "accounting_policy": "Synthetic full aggregation",
+          "control_rationale": "Synthetic documented control assessment",
+          "hyperinflationary": false,
+          "nci_at_acquisition": "20",
+          "control_effective_to": null,
+          "control_effective_from": "2026-01-01",
+          "ability_to_affect_returns": true,
+          "net_assets_at_acquisition": "100",
+          "average_rate_representative": true
+        }
+      ],
+      "sources": [],
+      "due_date": null,
+      "owner_id": null,
+      "narrative": "",
+      "assertions": [],
+      "eliminations": [
+        {
+          "amount": "10",
+          "reason": "Synthetic internal revenue/cost elimination",
+          "reference": "EL-1",
+          "debit_line": "400",
+          "credit_line": "500",
+          "source_record_ids": [
+            "f7ac5bdd-44b3-4909-a192-12000df59bd4",
+            "a6a55cdb-4767-4c30-8047-bb6e31a1dbf7"
+          ],
+          "intercompany_reference": ""
+        }
+      ],
+      "intercompany": [
+        {
+          "payable": "10",
+          "currency": "AED",
+          "evidence": "SYN reciprocal ledger confirmations",
+          "reference": "SYN-IC",
+          "debit_line": "400",
+          "receivable": "10",
+          "credit_line": "500",
+          "difference_type": "matched",
+          "to_engagement_id": "0efd0ddf-6a75-4fa3-b3df-7292e617603d",
+          "from_engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62"
+        }
+      ],
+      "review_cycle": 1,
+      "review_stage": 1,
+      "review_approvers": [
+        "4a973176-f34d-4173-ad1c-01ccc5d21508"
+      ],
+      "unrealised_profit": "0",
+      "presentation_currency": "AED",
+      "unrealised_profit_source": "",
+      "unrealised_profit_expense_line": "",
+      "unrealised_profit_inventory_line": ""
+    },
+    "dependencies": [
+      {
+        "id": "94f60346-4f77-46a2-a3e2-1d02ec463388",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "41855bee-4eca-49ee-a4a4-01b1af981d20",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "be6d6684-3f8d-4d72-93da-61a3c57e83d0",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "5567a590-03c5-45c8-8c7b-776bb2bf388e",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "f7ac5bdd-44b3-4909-a192-12000df59bd4",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "73a80cae-1290-4d41-9bb1-b239ac1f184c",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "b340b9b2-5547-46c5-b32c-0ef268470ca8",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "03b55b44-e110-4776-96ba-d07098c47ab9",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "6928b565-46be-44fe-8402-6094a7cd754a",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "42124ede-3dfd-4cf0-80cf-ade38577a6cf",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "94bc3a67-6da6-4299-b08b-800dc68feca3",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "0c313d17-7098-46b5-af4a-c22c53173f41",
+        "status": "APPROVED",
+        "version": 4
+      },
+      {
+        "id": "1a414af5-f11b-4d06-9ee7-3f1681576d6e",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "817dfb5c-21b8-4df4-979d-688db0f89a51",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "96584eb5-4055-47af-8e95-ce34e169d23d",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "a6a55cdb-4767-4c30-8047-bb6e31a1dbf7",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "d08aabc5-298c-4684-9f4e-028a257ac20d",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "731a195e-6f51-40bb-9b43-b5f70c345bb8",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "8bedb0f3-0b02-4df0-9b63-16bf31bd8c9c",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "ef0fecd6-f1d3-4c9d-a325-1d83832caf69",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "60401655-a17d-490d-8d2a-25d83e66538c",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "8bc38506-f29f-4575-beb8-34ee12aeaf26",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "8bf06f45-9557-49bf-8ac0-20243a19c443",
+        "status": "APPROVED",
+        "version": 4
+      },
+      {
+        "id": "f7ac5bdd-44b3-4909-a192-12000df59bd4",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "a6a55cdb-4767-4c30-8047-bb6e31a1dbf7",
+        "status": "APPROVED",
+        "version": 3
+      }
+    ],
+    "results": {
+      "lines": [
+        {
+          "note": "N1",
+          "label": "Cash",
+          "weight": "1",
+          "current": "390.00000000",
+          "is_cash": true,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "100",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "rate": "1",
+              "run_id": "4c410fe8-42da-40a4-9150-49baaf55ae9a",
+              "translated": "130.00000000",
+              "rate_source": "Synthetic independent rate fixture, no market claims",
+              "engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62",
+              "source_amount": "130.00000000"
+            },
+            {
+              "rate": "2",
+              "run_id": "db367f70-25ef-426b-a51c-30d320d13137",
+              "translated": "260.00000000",
+              "rate_source": "Synthetic independent rate fixture, no market claims",
+              "engagement_id": "0efd0ddf-6a75-4fa3-b3df-7292e617603d",
+              "source_amount": "130.00000000"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Capital",
+          "weight": "1",
+          "current": "-200.00000000",
+          "is_cash": false,
+          "opening": "0",
+          "section": "equity",
+          "category": "operating",
+          "line_code": "300",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "rate": "1",
+              "run_id": "4c410fe8-42da-40a4-9150-49baaf55ae9a",
+              "translated": "-100.00000000",
+              "rate_source": "Synthetic independent rate fixture, no market claims",
+              "engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62",
+              "source_amount": "-100.00000000"
+            },
+            {
+              "rate": "1",
+              "run_id": "db367f70-25ef-426b-a51c-30d320d13137",
+              "translated": "-100.00000000",
+              "rate_source": "Synthetic independent rate fixture, no market claims",
+              "engagement_id": "0efd0ddf-6a75-4fa3-b3df-7292e617603d",
+              "source_amount": "-100.00000000"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Revenue",
+          "weight": "1",
+          "current": "-115.000000000",
+          "is_cash": false,
+          "opening": "0",
+          "section": "income",
+          "category": "operating",
+          "line_code": "400",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "rate": "1",
+              "run_id": "4c410fe8-42da-40a4-9150-49baaf55ae9a",
+              "translated": "-50.00000000",
+              "rate_source": "Synthetic independent rate fixture, no market claims",
+              "engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62",
+              "source_amount": "-50.00000000"
+            },
+            {
+              "rate": "1.5",
+              "run_id": "db367f70-25ef-426b-a51c-30d320d13137",
+              "translated": "-75.000000000",
+              "rate_source": "Synthetic independent rate fixture, no market claims",
+              "engagement_id": "0efd0ddf-6a75-4fa3-b3df-7292e617603d",
+              "source_amount": "-50.00000000"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Expense",
+          "weight": "1",
+          "current": "40.000000000",
+          "is_cash": false,
+          "opening": "0",
+          "section": "expenses",
+          "category": "operating",
+          "line_code": "500",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "rate": "1",
+              "run_id": "4c410fe8-42da-40a4-9150-49baaf55ae9a",
+              "translated": "20.00000000",
+              "rate_source": "Synthetic independent rate fixture, no market claims",
+              "engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62",
+              "source_amount": "20.00000000"
+            },
+            {
+              "rate": "1.5",
+              "run_id": "db367f70-25ef-426b-a51c-30d320d13137",
+              "translated": "30.000000000",
+              "rate_source": "Synthetic independent rate fixture, no market claims",
+              "engagement_id": "0efd0ddf-6a75-4fa3-b3df-7292e617603d",
+              "source_amount": "20.00000000"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "translation",
+          "label": "Foreign operation translation reserve",
+          "current": "-115.000000000",
+          "opening": "0",
+          "section": "oci",
+          "category": "operating",
+          "line_code": "FX_TRANSLATION",
+          "comparative": "0",
+          "source_accounts": []
+        }
+      ],
+      "scope": "Full aggregation of approved controlled packages; explicit eliminations and rate translation. Draft only until group notes/cash-flow/acquisition and professional validation are complete",
+      "entity": "Consolidated group",
+      "issues": [],
+      "totals": {
+        "nci": "52.000000000",
+        "oci": "115.000000000",
+        "assets": "390.00000000",
+        "equity": "390.000000000",
+        "profit": "75.000000000",
+        "liabilities": "0",
+        "parent_equity": "338.000000000"
+      },
+      "members": [
+        {
+          "ownership": "1",
+          "nci_closing": "0",
+          "engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62",
+          "source_currency": "AED",
+          "financial_run_id": "4c410fe8-42da-40a4-9150-49baaf55ae9a",
+          "disclosure_inputs": [
+            {
+              "id": "f7ac5bdd-44b3-4909-a192-12000df59bd4",
+              "text": "Synthetic disclosure for testing only. Basis and judgments independently reviewed.",
+              "lines": [
+                {
+                  "code": "100",
+                  "current": "130.00000000",
+                  "comparative": "0"
+                },
+                {
+                  "code": "300",
+                  "current": "-100.00000000",
+                  "comparative": "0"
+                },
+                {
+                  "code": "400",
+                  "current": "-50.00000000",
+                  "comparative": "0"
+                },
+                {
+                  "code": "500",
+                  "current": "20.00000000",
+                  "comparative": "0"
+                }
+              ],
+              "reference": "N1",
+              "ai_authored": false,
+              "supporting_schedules": []
+            }
+          ],
+          "control_effective_to": null,
+          "approved_group_policy": "Synthetic full aggregation",
+          "translated_net_assets": "130.00000000",
+          "control_effective_from": "2026-01-01",
+          "acquisition_goodwill_or_bargain_purchase": "0"
+        },
+        {
+          "ownership": "0.8",
+          "nci_closing": "52.000000000",
+          "engagement_id": "0efd0ddf-6a75-4fa3-b3df-7292e617603d",
+          "source_currency": "USD",
+          "financial_run_id": "db367f70-25ef-426b-a51c-30d320d13137",
+          "disclosure_inputs": [
+            {
+              "id": "a6a55cdb-4767-4c30-8047-bb6e31a1dbf7",
+              "text": "Synthetic disclosure for testing only. Basis and judgments independently reviewed.",
+              "lines": [
+                {
+                  "code": "100",
+                  "current": "130.00000000",
+                  "comparative": "0"
+                },
+                {
+                  "code": "300",
+                  "current": "-100.00000000",
+                  "comparative": "0"
+                },
+                {
+                  "code": "400",
+                  "current": "-50.00000000",
+                  "comparative": "0"
+                },
+                {
+                  "code": "500",
+                  "current": "20.00000000",
+                  "comparative": "0"
+                }
+              ],
+              "reference": "N1",
+              "ai_authored": false,
+              "supporting_schedules": []
+            }
+          ],
+          "control_effective_to": null,
+          "approved_group_policy": "Synthetic full aggregation",
+          "translated_net_assets": "260.00000000",
+          "control_effective_from": "2026-01-01",
+          "acquisition_goodwill_or_bargain_purchase": "20"
+        }
+      ],
+      "currency": "AED",
+      "cash_flow": {
+        "status": "BEFORE_GROUP_CASH_ELIMINATIONS",
+        "opening": "200.00000000",
+        "financing": "0.0",
+        "investing": "0.0",
+        "operating": "75.000000000",
+        "limitation": "Individual reconciled cash workings translated; group cash eliminations and acquisition/disposal flows still require review",
+        "source_closing": "390.00000000",
+        "member_packages": [
+          {
+            "basis": "Opening cash at evidenced opening rate; movements at approved representative average; closing cash at closing rate",
+            "run_id": "4c410fe8-42da-40a4-9150-49baaf55ae9a",
+            "opening": "100.00000000",
+            "financing": "0",
+            "investing": "0",
+            "operating": "30.00000000",
+            "engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62",
+            "source_closing": "130.00000000",
+            "local_exchange_effect": "0"
+          },
+          {
+            "basis": "Opening cash at evidenced opening rate; movements at approved representative average; closing cash at closing rate",
+            "run_id": "db367f70-25ef-426b-a51c-30d320d13137",
+            "opening": "100.00000000",
+            "financing": "0.0",
+            "investing": "0.0",
+            "operating": "45.000000000",
+            "engagement_id": "0efd0ddf-6a75-4fa3-b3df-7292e617603d",
+            "source_closing": "260.00000000",
+            "local_exchange_effect": "0.0"
+          }
+        ],
+        "local_exchange_effect": "0.0",
+        "presentation_translation_effect": "115.000000000"
+      },
+      "execution": {
+        "evidence": [
+          {
+            "id": "edf23f7f-ffac-495d-9e8e-814b0b83e6ee",
+            "kind": "snapshot"
+          },
+          {
+            "id": "35955d9d-bd94-4502-ba3f-a2b3ab992fbb",
+            "kind": "snapshot"
+          }
+        ],
+        "rounding": "Decimal precision 48; schedule HALF_UP to 8 decimal places; journals use currency minor units",
+        "entity_id": "6144a934-cacf-4cc8-8e6f-46e6d422aab3",
+        "framework": "full_ifrs",
+        "period_id": "db64a880-65c5-4fe7-b8a1-dc9d6c760682",
+        "tenant_id": "20961e9d-bd13-41d9-b285-c9825f2aef4a",
+        "period_end": "2026-12-31",
+        "period_start": "2026-01-01",
+        "engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62",
+        "journal_state": "NOT_POSTED",
+        "review_status": "DRAFT_REQUIRES_REVIEW",
+        "entity_version": 1,
+        "execution_mode": "deterministic_python_decimal",
+        "source_balance": "Retained ledger snapshot; original balances are never overwritten",
+        "chart_snapshots": [],
+        "currency_policy": {
+          "code": "AED",
+          "rounding": "ROUND_HALF_EVEN",
+          "precision": 2
+        },
+        "policy_versions": [
+          {
+            "id": "41855bee-4eca-49ee-a4a4-01b1af981d20",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3,
+            "framework": "full_ifrs",
+            "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+          },
+          {
+            "id": "1a414af5-f11b-4d06-9ee7-3f1681576d6e",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3,
+            "framework": "full_ifrs",
+            "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+          }
+        ],
+        "supporting_runs": [
+          {
+            "id": "db367f70-25ef-426b-a51c-30d320d13137",
+            "engagement_id": "0efd0ddf-6a75-4fa3-b3df-7292e617603d"
+          },
+          {
+            "id": "4c410fe8-42da-40a4-9150-49baaf55ae9a",
+            "engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62"
+          }
+        ],
+        "contract_version": "accounting/1",
+        "current_tax_runs": [],
+        "source_snapshots": [
+          {
+            "id": "edf23f7f-ffac-495d-9e8e-814b0b83e6ee",
+            "sha256": "a8d866092e7f6a38ea18046623d2266d717db93e6b6bf0b3a7dfaf9ca72fe428",
+            "source_complete": true
+          },
+          {
+            "id": "35955d9d-bd94-4502-ba3f-a2b3ab992fbb",
+            "sha256": "c32b70988fec1a0f29c506e427dcd6c6de79b1f73171fd0860d5c7771ba9edaa",
+            "source_complete": true
+          }
+        ],
+        "proposed_journals": [],
+        "unresolved_issues": [],
+        "calculation_version": "auditos-accounting/3.1",
+        "functional_currency": "AED",
+        "source_completeness": "complete_for_declared_scope",
+        "approved_assumptions": [
+          {
+            "id": "94f60346-4f77-46a2-a3e2-1d02ec463388",
+            "kind": "ifrs-consolidation",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "41855bee-4eca-49ee-a4a4-01b1af981d20",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "be6d6684-3f8d-4d72-93da-61a3c57e83d0",
+            "kind": "ifrs-mapping",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "5567a590-03c5-45c8-8c7b-776bb2bf388e",
+            "kind": "ifrs-cash-flow",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "f7ac5bdd-44b3-4909-a192-12000df59bd4",
+            "kind": "ifrs-note",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "73a80cae-1290-4d41-9bb1-b239ac1f184c",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "b340b9b2-5547-46c5-b32c-0ef268470ca8",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "03b55b44-e110-4776-96ba-d07098c47ab9",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "6928b565-46be-44fe-8402-6094a7cd754a",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "42124ede-3dfd-4cf0-80cf-ade38577a6cf",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "94bc3a67-6da6-4299-b08b-800dc68feca3",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "0c313d17-7098-46b5-af4a-c22c53173f41",
+            "kind": "ifrs-financials",
+            "status": "APPROVED",
+            "version": 4
+          },
+          {
+            "id": "1a414af5-f11b-4d06-9ee7-3f1681576d6e",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "817dfb5c-21b8-4df4-979d-688db0f89a51",
+            "kind": "ifrs-mapping",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "96584eb5-4055-47af-8e95-ce34e169d23d",
+            "kind": "ifrs-cash-flow",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "a6a55cdb-4767-4c30-8047-bb6e31a1dbf7",
+            "kind": "ifrs-note",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "d08aabc5-298c-4684-9f4e-028a257ac20d",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "731a195e-6f51-40bb-9b43-b5f70c345bb8",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "8bedb0f3-0b02-4df0-9b63-16bf31bd8c9c",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "ef0fecd6-f1d3-4c9d-a325-1d83832caf69",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "60401655-a17d-490d-8d2a-25d83e66538c",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "8bc38506-f29f-4575-beb8-34ee12aeaf26",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "8bf06f45-9557-49bf-8ac0-20243a19c443",
+            "kind": "ifrs-financials",
+            "status": "APPROVED",
+            "version": 4
+          },
+          {
+            "id": "f7ac5bdd-44b3-4909-a192-12000df59bd4",
+            "kind": "ifrs-note",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "a6a55cdb-4767-4c30-8047-bb6e31a1dbf7",
+            "kind": "ifrs-note",
+            "status": "APPROVED",
+            "version": 3
+          }
+        ],
+        "calculated_adjustment": "Calculation output; recognition and accounts require review",
+        "implementation_sha256": "a5710c08d3a39d021c9f590868259991d88feadbebd0c600015e0c26dd8e6001",
+        "presentation_currency": "AED"
+      },
+      "precision": 2,
+      "period_end": "2026-12-31",
+      "validation": {
+        "ready": false,
+        "checks": [
+          {
+            "code": "group_accounting_equation",
+            "passed": true,
+            "difference": "0.000000000"
+          }
+        ],
+        "ifrs_compliance_certified": false
+      },
+      "comparative": null,
+      "eliminations": [
+        {
+          "amount": "10",
+          "reason": "Synthetic internal revenue/cost elimination",
+          "reference": "EL-1",
+          "debit_line": "400",
+          "credit_line": "500",
+          "source_record_ids": [
+            "f7ac5bdd-44b3-4909-a192-12000df59bd4",
+            "a6a55cdb-4767-4c30-8047-bb6e31a1dbf7"
+          ],
+          "intercompany_reference": ""
+        }
+      ],
+      "period_start": "2026-01-01",
+      "presentation": "Group corporate presentation",
+      "changes_in_equity": {
+        "oci": "115.000000000",
+        "profit": "75.000000000",
+        "status": "SPECIALIST_GROUP_ROLLFORWARD_REQUIRED",
+        "closing": "390.000000000",
+        "opening": null
+      },
+      "comparative_status": "GROUP_COMPARATIVE_TRANSLATION_NOT_IMPLEMENTED",
+      "acquisition_schedule": {
+        "posting": "Acquisition journals must be explicitly supplied; schedule is not silently posted",
+        "goodwill_or_bargain_purchase_total": "20"
+      },
+      "nci_measurement_status": "PROVISIONAL_PERCENTAGE_OF_CLOSING_NET_ASSETS; acquisition-basis and ownership-event rollforward not validated",
+      "intercompany_reconciliation": [
+        {
+          "state": "MATCHED",
+          "payable": "10",
+          "currency": "AED",
+          "evidence": "SYN reciprocal ledger confirmations",
+          "reference": "SYN-IC",
+          "debit_line": "400",
+          "difference": "0",
+          "receivable": "10",
+          "credit_line": "500",
+          "elimination": "PROPOSAL_REQUIRED",
+          "difference_type": "matched",
+          "to_engagement_id": "0efd0ddf-6a75-4fa3-b3df-7292e617603d",
+          "from_engagement_id": "b3796c94-4eaf-4e0e-8d2e-c6b86bebaf62"
+        }
+      ]
+    },
+    "sha256": "d2618365ba191e7029f7b70ddab48f61387a34008a340f731fb4aa63f16d70c4",
+    "tenant_id": "20961e9d-bd13-41d9-b285-c9825f2aef4a",
+    "created_by": "0a6033c9-f074-40e4-b569-e22097d12952",
+    "id": "f46c5f05-ad7e-46f4-a055-8417d7130755",
+    "created_at": "2026-10-24T19:46:46.515345+00:00",
+    "updated_at": "2026-10-24T19:46:46.515345+00:00"
+  },
+  "unmatched_elimination_http_status": 409
+}

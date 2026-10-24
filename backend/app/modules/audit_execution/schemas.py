@@ -138,6 +138,11 @@ class Evidence(Body):
 
 
 class Finding(Body):
+    condition: str = Field(default="", max_length=4000)
+    criteria: str = Field(default="", max_length=4000)
+    cause: str = Field(default="", max_length=4000)
+    effect: str = Field(default="", max_length=4000)
+    recommendation: str = Field(default="", max_length=4000)
     finding_type: Literal[
         "misstatement",
         "control_deficiency",

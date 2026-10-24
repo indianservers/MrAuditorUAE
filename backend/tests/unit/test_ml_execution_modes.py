@@ -61,14 +61,16 @@ def test_missing_model_never_silently_runs_a_baseline():
 
 
 def test_local_child_worker_admission_is_bounded():
-    from app.modules.ml.service import _NODE_SLOTS
+    from app.modules.ml.service import _node_slots, ml_settings
 
-    assert _NODE_SLOTS.acquire(blocking=False)
-    assert _NODE_SLOTS.acquire(blocking=False)
+    slots = _node_slots()
+    capacity = ml_settings().ml_worker_concurrency
+    for _ in range(capacity):
+        assert slots.acquire(blocking=False)
     try:
         with pytest.raises(HTTPException) as failure:
             node("infer", rows=[row()])
         assert failure.value.status_code == 429
     finally:
-        _NODE_SLOTS.release()
-        _NODE_SLOTS.release()
+        for _ in range(capacity):
+            slots.release()

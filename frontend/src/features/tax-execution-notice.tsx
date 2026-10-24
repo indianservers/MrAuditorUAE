@@ -37,11 +37,14 @@ export function TaxExecutionNotice({
         {value.input_completeness.replaceAll("_", " ")}.
       </p>
       <p>
-        Calculation-time review: draft requires review. Filing: not submitted by this calculation.
-        Authority assessment: not established. Payments: not reconciled by this
-        calculation.
+        Calculation-time review: draft requires review. Filing: not submitted by
+        this calculation. Authority assessment: not established. Payments: not
+        reconciled by this calculation.
       </p>
-      <p>Current professional approval is recorded separately in the linked workpapers and version history.</p>
+      <p>
+        Current professional approval is recorded separately in the linked
+        workpapers and version history.
+      </p>
       <p>
         {value.source_snapshots.length} retained source snapshots.{" "}
         {value.rounding}

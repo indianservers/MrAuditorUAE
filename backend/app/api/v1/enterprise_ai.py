@@ -9,6 +9,7 @@ from app.core.dependencies import DB, Context, require
 from app.db.models.platform import AIModelConfiguration, AIProviderConfig
 from app.modules.audit_execution.service import serialize
 from app.modules.enterprise_ai import documents, service
+from app.modules.enterprise_ai.business import Execute
 from app.modules.enterprise_ai.catalogue import RECIPES, TOOLS, agents
 from app.modules.enterprise_ai.models import Event, Extraction, Proposal, Schedule, Workflow
 from app.modules.enterprise_ai.schemas import (
@@ -31,6 +32,43 @@ router = APIRouter(prefix="/ai", tags=["Enterprise AI investigations"])
 Actor = Annotated[Context, Depends(require("ai.investigation.read"))]
 
 
+@router.get("/engagements/{eid}/use-cases")
+async def business_cases(eid: uuid.UUID, db: DB, ctx: Actor):
+    from app.modules.enterprise_ai.business import case_scope, module_url
+    from app.modules.jurisdictions.ae.use_cases import CASES, ENGINE_TOOLS
+
+    await case_scope(db, ctx, eid, 1)
+    return {
+        "country": "AE",
+        "version": "mr-auditor-uae/1",
+        "engine_connections": ENGINE_TOOLS,
+        "items": [
+            {**case.model_dump(), "module_url": module_url(case, eid)} for case in CASES.values()
+        ],
+    }
+
+
+@router.get("/engagements/{eid}/use-cases/{identifier}/inputs")
+async def business_inputs(eid: uuid.UUID, identifier: int, db: DB, ctx: Actor):
+    from app.modules.enterprise_ai.business import inputs
+
+    return await inputs(db, ctx, eid, identifier)
+
+
+@router.post("/engagements/{eid}/use-cases/{identifier}/actions", status_code=201)
+async def business_action(eid: uuid.UUID, identifier: int, data: Execute, db: DB, ctx: Actor):
+    from pydantic import ValidationError
+
+    from app.modules.enterprise_ai.business import execute
+
+    try:
+        return await execute(db, ctx, eid, identifier, data, "business:" + data.idempotency_key)
+    except ValidationError as exc:
+        raise HTTPException(422, exc.errors(include_context=False)) from None
+    except (ValueError, ArithmeticError) as exc:
+        raise HTTPException(422, str(exc)) from None
+
+
 @router.get("/agents")
 async def registry(ctx: Actor):
     return {
@@ -44,10 +82,16 @@ async def registry(ctx: Actor):
 @router.get("/tools")
 async def tools(ctx: Actor):
     return {
+        "controlled_actions": {
+            "schema": Execute.model_json_schema(),
+            "endpoint": "/ai/engagements/{engagement_id}/use-cases/{use_case_id}/actions",
+            "execution": "Explicit authorized requests only; same services and approval controls as specialist UI",
+            "consequential_actions": "Posting, sending, filing and bank changes are excluded",
+        },
         "items": [
             {"id": k, "agent": v[0], "permission": v[1], "read_only": True}
             for k, v in TOOLS.items()
-        ]
+        ],
     }
 
 

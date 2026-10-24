@@ -44,7 +44,7 @@ async def prepared(c, scope_data=None, suffix="", scale=1):
         "profile",
         {
             "snapshot_id": sid,
-            "presentation_currency": "AED",
+            "presentation_currency": opts.get("currency", "AED"),
             "technical_validation": "Synthetic corporate reporting basis verified by test reviewer",
         },
     )
@@ -277,8 +277,8 @@ async def test_group_translation_eliminations_and_nci(environment):
             "name": "SYNTHETIC subsidiary",
             "country": "AE",
             "jurisdiction": "Synthetic",
-            "functional_currency": "AED",
-            "presentation_currency": "AED",
+            "functional_currency": "USD",
+            "presentation_currency": "USD",
         },
     )
     period = await post(
@@ -300,6 +300,7 @@ async def test_group_translation_eliminations_and_nci(environment):
         "client_id": customer["id"],
         "entity_id": entity["id"],
         "period_id": period["id"],
+        "currency": "USD",
         "source_complete": True,
     }
     _, _, _, rev2, part2, p2, _, note2, ready2 = await prepared(c, (h, opts, eid2, base2), "-sub")
@@ -333,6 +334,8 @@ async def test_group_translation_eliminations_and_nci(environment):
                 "historical_rate": "1",
                 "rate_source": "Synthetic independent rate fixture, no market claims",
                 "rate_date": "2026-12-31",
+                "opening_rate": "1",
+                "control_effective_from": "2026-01-01",
                 "acquisition_type": "parent" if parent else "business_combination",
                 "accounting_policy": "Synthetic full aggregation",
                 "consideration": "100" if not parent else "0",
@@ -365,9 +368,70 @@ async def test_group_translation_eliminations_and_nci(environment):
     assert Decimal(result["acquisition_schedule"]["goodwill_or_bargain_purchase_total"]) == 20
     assert result["validation"]["checks"][0]["passed"]
     assert not result["validation"]["ready"]  # Group cash-flow/notes release remains unsupported.
+    assert result["cash_flow"]["status"] == "BEFORE_GROUP_CASH_ELIMINATIONS"
+    assert Decimal(result["cash_flow"]["presentation_translation_effect"]) == 115
+    if os.getenv("ACCOUNTING_ARTIFACT_DIR"):
+        import json
+
+        folder = Path(os.environ["ACCOUNTING_ARTIFACT_DIR"])
+        folder.mkdir(parents=True, exist_ok=True)
+        (folder / "group-workflow.json").write_text(
+            json.dumps({"synthetic": True, "run": run}, indent=2)
+        )
     assert (
         await c.get(f"/api/v1/ifrs/engagements/{eid}/runs/{run['id']}/export/pdf", headers=h)
     ).status_code == 200
+    # Phase 3: reciprocal differences remain visible, and cannot be eliminated.
+    from copy import deepcopy
+
+    group_body = {k: v for k, v in group["body"].items() if not k.startswith("review_")}
+    pair = {
+        "reference": "SYN-IC",
+        "from_engagement_id": eid,
+        "to_engagement_id": eid2,
+        "debit_line": "400",
+        "credit_line": "500",
+        "receivable": "10",
+        "payable": "9",
+        "currency": "AED",
+        "difference_type": "missing_entry",
+        "evidence": "SYN reciprocal ledger confirmations",
+    }
+    unmatched = await ready(
+        "consolidation", {**group_body, "intercompany": [pair], "eliminations": []}
+    )
+    draft = await post(f"ifrs/engagements/{eid}/consolidation/{unmatched['id']}", None)
+    assert draft["results"]["intercompany_reconciliation"][0]["state"] == "UNRESOLVED"
+    assert any(i["code"] == "INTERCOMPANY_UNRESOLVED" for i in draft["results"]["issues"])
+    blocked = await ready("consolidation", {**group_body, "intercompany": [pair]})
+    assert (
+        await c.post(f"/api/v1/ifrs/engagements/{eid}/consolidation/{blocked['id']}", headers=h)
+    ).status_code == 409
+    matched = await ready(
+        "consolidation",
+        {**group_body, "intercompany": [{**pair, "payable": "10", "difference_type": "matched"}]},
+    )
+    matched_run = await post(f"ifrs/engagements/{eid}/consolidation/{matched['id']}", None)
+    assert matched_run["results"]["intercompany_reconciliation"][0]["state"] == "MATCHED"
+    if os.getenv("ACCOUNTING_ARTIFACT_DIR"):
+        (Path(os.environ["ACCOUNTING_ARTIFACT_DIR"]) / "intercompany-workflow.json").write_text(
+            json.dumps(
+                {
+                    "synthetic": True,
+                    "unresolved_draft": draft,
+                    "matched_draft": matched_run,
+                    "unmatched_elimination_http_status": 409,
+                },
+                indent=2,
+            )
+        )
+    for field, value in [("hyperinflationary", True), ("control_effective_from", "2026-07-01")]:
+        unsupported = deepcopy(group_body)
+        unsupported["members"][1][field] = value
+        source = await ready("consolidation", unsupported)
+        assert (
+            await c.post(f"/api/v1/ifrs/engagements/{eid}/consolidation/{source['id']}", headers=h)
+        ).status_code == 422
 
 
 async def test_comparatives_opening_consistency_and_tenant_rls(environment):
@@ -446,6 +510,26 @@ async def test_comparatives_opening_consistency_and_tenant_rls(environment):
     )
     assert updated.status_code == 200, updated.text
     p = await approve(c, h, reviewer[0], base, updated.json())
+    # A changed reporting profile invalidates its retained policy/mapping/note inputs.
+    # Reassess them in dependency order instead of reusing old approvals.
+    for kind in ["mapping", "cash-flow", "note", "disclosure"]:
+        items = (
+            await c.get(f"/api/v1/ifrs/engagements/{eid}/records/{kind}?limit=100", headers=h)
+        ).json()["items"]
+        for item in items:
+            item = await action(c, reviewer[0], base, item, "reopen")
+            changed = await c.patch(
+                base + "/records/" + item["id"],
+                headers=h,
+                json={
+                    "version": item["version"],
+                    "reference": item["reference"],
+                    "title": item["title"],
+                    "body": {k: v for k, v in item["body"].items() if not k.startswith("review_")},
+                },
+            )
+            assert changed.status_code == 200, changed.text
+            await approve(c, h, reviewer[0], base, changed.json())
     api = f"/api/v1/ifrs/engagements/{eid}"
     report = await c.post(api + "/financial-statements/" + p["id"], headers=h)
     assert report.status_code == 201, report.text

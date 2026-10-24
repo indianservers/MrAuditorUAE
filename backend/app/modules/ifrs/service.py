@@ -6,10 +6,10 @@ from decimal import Decimal
 from typing import Any
 
 from fastapi import HTTPException
-from sqlalchemy import select
+from sqlalchemy import String, cast, select
 
 from app.db.models.platform import Engagement, FinancialPeriod, LegalEntity
-from app.modules.accounting.models import ImportBatch, ImportSnapshot
+from app.modules.accounting.models import Account, ImportBatch, ImportSnapshot, SourceRecord
 from app.modules.audit_execution import service as audit
 from app.modules.audit_execution.models import AuditRecord
 from app.modules.ifrs.calculations import calculate, serial
@@ -26,6 +26,15 @@ def dependency(obj):
     return {"id": str(obj.id), "version": obj.version, "status": obj.status}
 
 
+def equivalent_runs(ctx, eid, calculation):
+    """Rerunning identical approved inputs must not create another economic journal."""
+    return select(cast(CalculationRun.id, String)).where(
+        CalculationRun.tenant_id == ctx.tenant_id,
+        CalculationRun.engagement_id == eid,
+        CalculationRun.sha256 == calculation.sha256,
+    )
+
+
 async def record(db, ctx, eid, rid, kind=None, approved=False):
     obj = await audit.get_record(db, ctx, eid, rid, "ifrs.read")
     if kind and obj.kind != "ifrs-" + kind:
@@ -33,9 +42,9 @@ async def record(db, ctx, eid, rid, kind=None, approved=False):
     if approved and obj.status not in APPROVED:
         raise HTTPException(409, "Approved IFRS input required")
     if approved:
-        from app.modules.lineage.working_papers import require_context_current
+        from app.modules.lineage.working_papers import require_current
 
-        await require_context_current(db, ctx, obj)
+        await require_current(db, ctx, obj)
     return obj
 
 
@@ -51,6 +60,38 @@ async def run(db, ctx, eid, rid):
     if not result:
         raise HTTPException(404, "Calculation run not found")
     return result
+
+
+async def require_open_period(db, ctx, eid):
+    eng = await audit.engagement(db, ctx, eid, "ifrs.read", True)
+    period = await db.scalar(
+        select(FinancialPeriod)
+        .where(FinancialPeriod.id == eng.period_id, FinancialPeriod.tenant_id == ctx.tenant_id)
+        .with_for_update()
+        .execution_options(populate_existing=True)
+    )
+    if not period or period.lock_state != "OPEN":
+        raise HTTPException(
+            409, "Reporting period is locked; reopen through the authorized period workflow"
+        )
+
+
+async def current_tax_source(db, ctx, eid, rid):
+    from app.modules.tax import service as tax
+
+    source = await tax.run(db, ctx, eid, rid)
+    if source.kind != "corporate-tax" or not source.inputs.get("financial_run_id"):
+        raise HTTPException(
+            422,
+            "This E09 bridge supports ordinary E05 corporate-tax releases with an explicit financial base",
+        )
+    eng = await audit.engagement(db, ctx, eid, "tax.profile.read")
+    released = await tax.current_release(db, ctx, eng)
+    if not released or released.tax_run_id != source.id:
+        raise HTTPException(409, "E09 requires the current independently approved E05 release")
+    if not await tax.dependencies_current(db, ctx, eid, source):
+        raise HTTPException(409, "Approved E05 current-tax source is stale")
+    return source
 
 
 async def snapshot(db, ctx, eng, sid, comparative=False):
@@ -71,8 +112,59 @@ async def snapshot(db, ctx, eng, sid, comparative=False):
     return obj
 
 
+async def reporting_balance(db, ctx, sid):
+    """Extend source balances only with explicitly retained active COA zero accounts."""
+    tb = await balance(db, ctx, sid)
+    snap = await db.get(ImportSnapshot, sid)
+    codes = (
+        select(SourceRecord.canonical["account_code"].astext)
+        .join(ImportBatch, ImportBatch.id == SourceRecord.batch_id)
+        .where(
+            SourceRecord.tenant_id == ctx.tenant_id,
+            SourceRecord.entity_id == snap.entity_id,
+            SourceRecord.period_id == snap.period_id,
+            ImportBatch.kind == "coa",
+            ImportBatch.status == "active",
+        )
+    )
+    existing = {row["code"] for row in tb["lines"]}
+    accounts = (
+        await db.scalars(
+            select(Account).where(
+                Account.tenant_id == ctx.tenant_id,
+                Account.entity_id == snap.entity_id,
+                Account.code.in_(codes),
+            )
+        )
+    ).all()
+    for account in accounts:
+        if account.code not in existing:
+            tb["lines"].append(
+                {
+                    "code": account.code,
+                    "name": account.name,
+                    "opening": ZERO,
+                    "debit": ZERO,
+                    "credit": ZERO,
+                    "closing": ZERO,
+                    "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart",
+                }
+            )
+    return tb
+
+
 async def validate_body(db, ctx, eng, kind, data):
     kind = kind.removeprefix("ifrs-")
+    if kind in {"inventory", "fixed-assets"}:
+        period = await db.get(FinancialPeriod, eng.period_id)
+        if (
+            not period
+            or data.period_start != period.start_date
+            or data.period_end != period.end_date
+        ):
+            raise HTTPException(
+                422, "Accounting schedule period must match the engagement reporting period"
+            )
     if kind == "profile":
         await snapshot(db, ctx, eng, data.snapshot_id)
         if data.comparative_snapshot_id:
@@ -94,9 +186,9 @@ async def validate_body(db, ctx, eng, kind, data):
                 422,
                 "Single-entity reports use functional currency; use the explicit group translation engine for a different presentation currency",
             )
-    if hasattr(data, "profile_id"):
+    if getattr(data, "profile_id", None):
         profile = await record(db, ctx, eng.id, data.profile_id, "profile")
-        values = await balance(db, ctx, uuid.UUID(profile.body["snapshot_id"]))
+        values = await reporting_balance(db, ctx, uuid.UUID(profile.body["snapshot_id"]))
         codes = {r["code"] for r in values["lines"]}
         if kind == "mapping":
             if len({a.account_code for a in data.accounts}) != len(data.accounts):
@@ -113,6 +205,10 @@ async def validate_body(db, ctx, eng, kind, data):
                         allocation.category,
                         allocation.is_cash,
                         allocation.cash_flow_role,
+                        allocation.current_noncurrent,
+                        allocation.related_party_category,
+                        allocation.disaggregation,
+                        allocation.netting_rationale,
                     )
                     if (
                         allocation.line_code in definitions
@@ -123,6 +219,7 @@ async def validate_body(db, ctx, eng, kind, data):
                         )
                     definitions[allocation.line_code] = signature
         if kind == "adjustment":
+            await require_open_period(db, ctx, eng.id)
             from app.modules.ifrs.catalogue import STANDARDS
 
             if data.standard not in STANDARDS:
@@ -151,6 +248,8 @@ async def validate_body(db, ctx, eng, kind, data):
                 if not calc.record_id:
                     raise HTTPException(422, "Supporting calculation record required")
                 await record(db, ctx, eng.id, calc.record_id, approved=True)
+                if not await current_dependencies(db, ctx, eng.id, calc):
+                    raise HTTPException(409, "Supporting calculation is stale; regenerate")
             if data.reversal_of:
                 previous = await record(db, ctx, eng.id, data.reversal_of, "adjustment", True)
                 expected = sorted(
@@ -163,6 +262,16 @@ async def validate_body(db, ctx, eng, kind, data):
         if kind == "note":
             for identifier in data.schedule_run_ids:
                 await run(db, ctx, eng.id, identifier)
+        if kind == "accounting-policy" and data.note_id:
+            await record(db, ctx, eng.id, data.note_id, "note")
+        if kind == "accounting-policy":
+            from app.modules.ifrs.catalogue import STANDARDS
+
+            period = await db.get(FinancialPeriod, eng.period_id)
+            if data.standard not in STANDARDS or data.applicable_from > period.end_date:
+                raise HTTPException(
+                    422, "Known standard and policy effective by reporting date required"
+                )
         if kind == "disclosure":
             from app.modules.ifrs.catalogue import STANDARDS
 
@@ -196,7 +305,49 @@ async def validate_body(db, ctx, eng, kind, data):
     return data.model_dump(mode="json")
 
 
-async def current_dependencies(db, ctx, eid, calculation):
+async def current_dependencies(db, ctx, eid, calculation, _seen=None):
+    seen = set(_seen or ())
+    if calculation.id in seen:
+        return False
+    seen.add(calculation.id)
+    if isinstance(calculation, CalculationRun):
+        from app.modules.ifrs.contracts import chart_receipts, currency_receipt, receipt_current
+
+        if not receipt_current(ctx, eid, calculation):
+            return False
+        receipt = calculation.results["execution"]
+        scope = await db.get(Engagement, eid)
+        entity = await db.get(LegalEntity, scope.entity_id)
+        period = await db.get(FinancialPeriod, scope.period_id) if scope.period_id else None
+        if (
+            receipt.get("entity_id") != str(scope.entity_id)
+            or receipt.get("entity_version") != entity.version
+            or receipt.get("period_id") != (str(scope.period_id) if scope.period_id else None)
+            or receipt.get("functional_currency") != entity.functional_currency
+            or receipt.get("period_start") != (str(period.start_date) if period else None)
+            or receipt.get("period_end") != (str(period.end_date) if period else None)
+        ):
+            return False
+        if receipt.get("chart_snapshots") != await chart_receipts(db, ctx, eid):
+            return False
+        if receipt.get("currency_policy") != await currency_receipt(
+            db, ctx, receipt["functional_currency"]
+        ):
+            return False
+        for ref in receipt.get("supporting_runs", []):
+            linked_eid = uuid.UUID(ref["engagement_id"])
+            linked = await run(db, ctx, linked_eid, uuid.UUID(ref["id"]))
+            if not await current_dependencies(db, ctx, linked_eid, linked, seen):
+                return False
+        for ref in receipt.get("current_tax_runs", []):
+            try:
+                await current_tax_source(
+                    db, ctx, uuid.UUID(ref["engagement_id"]), uuid.UUID(ref["id"])
+                )
+            except HTTPException as exc:
+                if exc.status_code == 409:
+                    return False
+                raise
     if calculation.kind == "financials":
         expected = {item["id"] for item in calculation.dependencies}
         profile_id = calculation.inputs["profile_id"]
@@ -212,6 +363,7 @@ async def current_dependencies(db, ctx, eid, calculation):
                             "ifrs-cash-flow",
                             "ifrs-note",
                             "ifrs-disclosure",
+                            "ifrs-accounting-policy",
                         ]
                     ),
                     AuditRecord.status.in_(APPROVED),
@@ -229,6 +381,10 @@ async def current_dependencies(db, ctx, eid, calculation):
         )
         if not obj or obj.version != item["version"] or obj.status not in APPROVED:
             return False
+        from app.modules.lineage.working_papers import freshness
+
+        if await freshness(db, ctx, obj) != "CURRENT":
+            return False
         if obj.kind == "ifrs-profile":
             for field in ["snapshot_id", "comparative_snapshot_id"]:
                 sid = obj.body.get(field)
@@ -243,6 +399,38 @@ async def current_dependencies(db, ctx, eid, calculation):
 
 
 async def validate_action(db, ctx, eid, obj, action):
+    if action in {"submit", "approve", "lock"} and obj.kind == "ifrs-adjustment":
+        await require_open_period(db, ctx, eid)
+        if obj.body.get("calculation_component"):
+            identity = await run(db, ctx, eid, uuid.UUID(obj.body["calculation_run_id"]))
+            duplicate = await db.scalar(
+                select(AuditRecord.id).where(
+                    AuditRecord.tenant_id == ctx.tenant_id,
+                    AuditRecord.engagement_id == eid,
+                    AuditRecord.kind == "ifrs-adjustment",
+                    AuditRecord.id != obj.id,
+                    AuditRecord.status.in_(APPROVED),
+                    AuditRecord.body["profile_id"].astext == obj.body["profile_id"],
+                    AuditRecord.body["calculation_run_id"].astext.in_(
+                        equivalent_runs(ctx, eid, identity)
+                    ),
+                    AuditRecord.body["calculation_component"].astext
+                    == obj.body["calculation_component"],
+                )
+            )
+            if duplicate:
+                raise HTTPException(
+                    409,
+                    "This calculation/component already has an approved adjustment in this reporting profile",
+                )
+        if obj.body.get("calculation_run_id"):
+            supporting = await run(db, ctx, eid, uuid.UUID(obj.body["calculation_run_id"]))
+            if not await current_dependencies(db, ctx, eid, supporting):
+                raise HTTPException(409, "Adjustment supporting calculation is stale")
+            if any(issue.get("blocking") for issue in supporting.results.get("issues", [])):
+                raise HTTPException(
+                    409, "Resolve supporting schedule issues before approving adjustment"
+                )
     if action == "lock":
         from app.modules.audit_execution.access import engagement_permissions
 
@@ -263,6 +451,20 @@ async def validate_action(db, ctx, eid, obj, action):
 
 
 async def save_run(db, ctx, eid, kind, inputs, deps, results, record_id=None):
+    from app.modules.ifrs.contracts import attach
+
+    await attach(db, ctx, eid, inputs, deps, results)
+    if kind == "financials":
+        controls = results["validation"]["checks"]
+        controls.append(
+            {
+                "code": "accounting_execution_sources",
+                "passed": not any(
+                    issue.get("blocking") for issue in results["execution"]["unresolved_issues"]
+                ),
+            }
+        )
+        results["validation"]["ready"] = all(check["passed"] for check in controls)
     payload = serial({"inputs": inputs, "dependencies": deps, "results": results})
     digest = hashlib.sha256(
         json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str).encode()
@@ -273,7 +475,7 @@ async def save_run(db, ctx, eid, kind, inputs, deps, results, record_id=None):
         engagement_id=eid,
         record_id=record_id,
         kind=kind,
-        methodology_version="auditos-ifrs/1.1" if kind == "financials" else "auditos-ifrs/1.0",
+        methodology_version="auditos-accounting/3.1",
         inputs=payload["inputs"],
         dependencies=payload["dependencies"],
         results=payload["results"],
@@ -306,6 +508,26 @@ async def calculate_record(db, ctx, eid, rid):
     except (ValueError, ArithmeticError) as exc:
         raise HTTPException(422, str(exc)) from None
     deps = [dependency(obj)]
+    if body.get("profile_id"):
+        profile = await record(db, ctx, eid, uuid.UUID(body["profile_id"]), "profile", True)
+        deps.append(dependency(profile))
+    if kind == "deferred-tax" and body.get("current_tax_run_id"):
+        source = await current_tax_source(db, ctx, eid, uuid.UUID(body["current_tax_run_id"]))
+        if D(body["current_tax"]) != D(source.results["current_tax"]):
+            raise HTTPException(422, "Current-tax amount differs from approved E05 run")
+        # A second reporting profile is required to keep base financials -> E05 -> tax-adjusted report acyclic.
+        baseline = await run(db, ctx, eid, uuid.UUID(source.inputs["financial_run_id"]))
+        if body.get("profile_id") == baseline.inputs.get("profile_id"):
+            raise HTTPException(
+                422,
+                "Use a separate post-tax reporting profile; changing the E05 base profile creates a circular dependency",
+            )
+        results["current_tax_bridge"] = {
+            "run_id": str(source.id),
+            "sha256": source.sha256,
+            "amount": source.results["current_tax"],
+            "basis": "E05 current tax; IAS 12 deferred tax and E08 GloBE adjustments remain separate",
+        }
     if kind == "lease" and body.get("previous_run_id"):
         prior = await run(db, ctx, eid, uuid.UUID(body["previous_run_id"]))
         if not await current_dependencies(db, ctx, eid, prior):
@@ -335,7 +557,7 @@ async def calculate_record(db, ctx, eid, rid):
 
 
 async def approved_inputs(db, ctx, eid, kind, profile_id):
-    return (
+    rows = (
         await db.scalars(
             select(AuditRecord)
             .where(
@@ -348,6 +570,11 @@ async def approved_inputs(db, ctx, eid, kind, profile_id):
             .order_by(AuditRecord.created_at)
         )
     ).all()
+    from app.modules.lineage.working_papers import require_current
+
+    for row in rows:
+        await require_current(db, ctx, row)
+    return rows
 
 
 async def adjusted_balance(db, ctx, eid, profile_id, comparative=False):
@@ -360,7 +587,7 @@ async def adjusted_balance(db, ctx, eid, profile_id, comparative=False):
         raise HTTPException(409, "Comparative snapshot not supplied")
     eng = await audit.engagement(db, ctx, eid)
     await snapshot(db, ctx, eng, sid, comparative)
-    tb = await balance(db, ctx, sid)
+    tb = await reporting_balance(db, ctx, sid)
     values = {r["code"]: {**r, "original": r["closing"], "adjustment": ZERO} for r in tb["lines"]}
     adjustments = (
         [] if comparative else await approved_inputs(db, ctx, eid, "adjustment", profile.id)
@@ -474,6 +701,11 @@ async def financials(db, ctx, eid, profile_id):
         for a in previous_mapping[0].body["accounts"]:
             for allocation in a["allocations"]:
                 code = allocation["line_code"]
+                if code in lines and allocation["section"] != lines[code]["section"]:
+                    raise HTTPException(
+                        409,
+                        "Comparative/current line sections differ; review an explicit reclassification mapping",
+                    )
                 if code not in lines:
                     lines[code] = {
                         **allocation,
@@ -539,8 +771,11 @@ async def financials(db, ctx, eid, profile_id):
         }
     notes = await approved_inputs(db, ctx, eid, "note", profile.id)
     disclosures = await approved_inputs(db, ctx, eid, "disclosure", profile.id)
+    policies = await approved_inputs(db, ctx, eid, "accounting-policy", profile.id)
+    deps += [dependency(p) for p in policies]
     deps += [dependency(r) for r in notes + disclosures]
     note_rows = []
+    schedule_issues = []
     for note in notes:
         codes = note.body["linked_line_codes"]
         if any(code not in lines for code in codes):
@@ -550,6 +785,7 @@ async def financials(db, ctx, eid, profile_id):
             schedule = await run(db, ctx, eid, uuid.UUID(rid))
             if not await current_dependencies(db, ctx, eid, schedule):
                 raise HTTPException(409, "Supporting note schedule changed")
+            schedule_issues += [i for i in schedule.results.get("issues", []) if i.get("blocking")]
             schedules.append(
                 {"id": str(schedule.id), "kind": schedule.kind, "results": schedule.results}
             )
@@ -588,6 +824,20 @@ async def financials(db, ctx, eid, profile_id):
         )
     }
     checks = [
+        {
+            "code": "netting_assessed",
+            "passed": not any(
+                not row.get("netting_rationale")
+                and any(source["allocated"] > 0 for source in row["source_accounts"])
+                and any(source["allocated"] < 0 for source in row["source_accounts"])
+                for row in lines.values()
+            ),
+        },
+        {
+            "code": "supporting_schedule_issues",
+            "passed": not schedule_issues,
+            "issues": schedule_issues,
+        },
         {"code": "source_trial_balance", "passed": tb["balanced"]},
         {
             "code": "accounting_equation",
@@ -680,6 +930,9 @@ async def financials(db, ctx, eid, profile_id):
         },
         "cash_flow": cash_schedule,
         "notes": note_rows,
+        "accounting_policies_and_judgments": [
+            {"id": str(p.id), "version": p.version, **p.body} for p in policies
+        ],
         "comparative": comparative_meta,
         "validation": {
             "checks": checks,
@@ -711,6 +964,20 @@ async def consolidate(db, ctx, eid, rid):
     data = Consolidation.model_validate(
         {k: v for k, v in obj.body.items() if not k.startswith("review_")}
     )
+    from app.modules.ifrs.intercompany import reconcile
+
+    try:
+        intercompany, issues = reconcile(data)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from None
+    if not data.intercompany:
+        issues.append(
+            {
+                "code": "INTERCOMPANY_POPULATION_UNCONFIRMED",
+                "blocking": True,
+                "remediation": "Supply the approved reciprocal-balance population, including a separately evidenced nil assessment",
+            }
+        )
     if (
         len({m.engagement_id for m in data.members}) != len(data.members)
         or sum(m.acquisition_type == "parent" for m in data.members) != 1
@@ -722,6 +989,7 @@ async def consolidate(db, ctx, eid, rid):
     nci = ZERO
     goodwill = ZERO
     periods = set()
+    cash_packages: list[dict[str, Any]] = []
     for member in data.members:
         await audit.engagement(db, ctx, member.engagement_id, "ifrs.read")
         calc = await run(db, ctx, member.engagement_id, member.financial_run_id)
@@ -742,6 +1010,63 @@ async def consolidate(db, ctx, eid, rid):
         ).all()
         if not approvals:
             raise HTTPException(409, "Approved entity reporting package required")
+        if not calc.results.get("validation", {}).get("ready"):
+            raise HTTPException(409, "Member package reconciliation is incomplete")
+        start = date.fromisoformat(calc.results["period_start"])
+        end = date.fromisoformat(calc.results["period_end"])
+        if member.hyperinflationary:
+            raise HTTPException(
+                422,
+                "IAS 29 restatement is unsupported; supply a specialist-approved restated package",
+            )
+        if not member.average_rate_representative:
+            raise HTTPException(
+                422,
+                "Transaction-date translation schedule required when average rate is not representative",
+            )
+        if calc.results["currency"] == data.presentation_currency and any(
+            rate != 1
+            for rate in [
+                member.closing_rate,
+                member.average_rate,
+                member.historical_rate,
+                member.opening_rate if member.opening_rate is not None else D(1),
+            ]
+        ):
+            raise HTTPException(
+                422, "Identical functional/presentation currencies require unit translation rates"
+            )
+        if (member.control_effective_from and member.control_effective_from > start) or (
+            member.control_effective_to and member.control_effective_to < end
+        ):
+            raise HTTPException(
+                422,
+                "Mid-period control changes require separately validated acquisition/disposal packages",
+            )
+        if not member.control_effective_from:
+            issues.append(
+                {
+                    "code": "CONTROL_EFFECTIVE_DATE_MISSING",
+                    "blocking": True,
+                    "reference": str(member.engagement_id),
+                    "remediation": "Review the effective-dated control assessment",
+                }
+            )
+        if member.opening_rate is not None and calc.results.get("cash_flow"):
+            cf = calc.results["cash_flow"]
+            cash_packages.append(
+                {
+                    "engagement_id": str(member.engagement_id),
+                    "run_id": str(calc.id),
+                    "opening": D(cf["opening"]) * member.opening_rate,
+                    "operating": D(cf["operating"]) * member.average_rate,
+                    "investing": D(cf["investing"]) * member.average_rate,
+                    "financing": D(cf["financing"]) * member.average_rate,
+                    "source_closing": D(cf["source_cash"]) * member.closing_rate,
+                    "local_exchange_effect": D(cf["exchange_effect"]) * member.average_rate,
+                    "basis": "Opening cash at evidenced opening rate; movements at approved representative average; closing cash at closing rate",
+                }
+            )
         if member.acquisition_type not in {"parent", "business_combination"}:
             raise HTTPException(
                 422,
@@ -820,6 +1145,12 @@ async def consolidate(db, ctx, eid, rid):
         members.append(
             {
                 "engagement_id": str(member.engagement_id),
+                "financial_run_id": str(calc.id),
+                "source_currency": calc.results["currency"],
+                "control_effective_from": member.control_effective_from,
+                "control_effective_to": member.control_effective_to,
+                "approved_group_policy": member.accounting_policy,
+                "disclosure_inputs": calc.results["notes"],
                 "ownership": member.ownership,
                 "translated_net_assets": net_assets,
                 "nci_closing": share,
@@ -830,7 +1161,37 @@ async def consolidate(db, ctx, eid, rid):
         raise HTTPException(
             422, "Different reporting dates require approved date-alignment packages"
         )
+    if len({elimination.reference for elimination in data.eliminations}) != len(data.eliminations):
+        raise HTTPException(422, "Duplicate elimination reference")
+    eliminated = {}
     for elimination in data.eliminations:
+        candidates = [
+            pair
+            for pair in intercompany
+            if (
+                pair["reference"] == elimination.intercompany_reference
+                if elimination.intercompany_reference
+                else {elimination.debit_line, elimination.credit_line}
+                == {pair["debit_line"], pair["credit_line"]}
+            )
+        ]
+        if (intercompany or elimination.intercompany_reference) and len(candidates) != 1:
+            raise HTTPException(
+                409, "An elimination must identify exactly one declared reciprocal pair"
+            )
+        if candidates:
+            pair = candidates[0]
+            total = eliminated.get(pair["reference"], ZERO) + elimination.amount
+            if (
+                pair["state"] != "MATCHED"
+                or total > min(D(pair["receivable"]), D(pair["payable"]))
+                or elimination.debit_line != pair["debit_line"]
+                or elimination.credit_line != pair["credit_line"]
+            ):
+                raise HTTPException(
+                    409, "Unmatched/excess/reversed intercompany elimination is blocked"
+                )
+            eliminated[pair["reference"]] = total
         if elimination.debit_line not in lines or elimination.credit_line not in lines:
             raise HTTPException(422, "Elimination line not in group chart")
         for identifier in elimination.source_record_ids:
@@ -865,6 +1226,44 @@ async def consolidate(db, ctx, eid, rid):
     profit = -totals["income"] - totals["expenses"]
     equity = -totals["equity"] + profit - totals["oci"]
     difference = totals["assets"] + totals["liabilities"] - equity
+    group_cash = None
+    if len(cash_packages) == len(data.members):
+        group_cash = {
+            key: sum((p[key] for p in cash_packages), ZERO)
+            for key in [
+                "opening",
+                "operating",
+                "investing",
+                "financing",
+                "source_closing",
+                "local_exchange_effect",
+            ]
+        }
+        group_cash["presentation_translation_effect"] = sum(
+            (
+                p["source_closing"]
+                - p["opening"]
+                - p["operating"]
+                - p["investing"]
+                - p["financing"]
+                - p["local_exchange_effect"]
+                for p in cash_packages
+            ),
+            ZERO,
+        )
+        group_cash["member_packages"] = cash_packages
+        group_cash["status"] = "BEFORE_GROUP_CASH_ELIMINATIONS"
+        group_cash["limitation"] = (
+            "Individual reconciled cash workings translated; group cash eliminations and acquisition/disposal flows still require review"
+        )
+    else:
+        issues.append(
+            {
+                "code": "GROUP_CASH_INPUTS_MISSING",
+                "blocking": True,
+                "remediation": "Supply evidenced opening FX rate and reconciled cash workings for every member",
+            }
+        )
     results = {
         "entity": "Consolidated group",
         "period_start": next(iter(periods))[0],
@@ -874,6 +1273,19 @@ async def consolidate(db, ctx, eid, rid):
         "presentation": "Group corporate presentation",
         "lines": list(lines.values()),
         "members": members,
+        "intercompany_reconciliation": intercompany,
+        "issues": issues,
+        "cash_flow": group_cash,
+        "comparative": None,
+        "comparative_status": "GROUP_COMPARATIVE_TRANSLATION_NOT_IMPLEMENTED",
+        "changes_in_equity": {
+            "status": "SPECIALIST_GROUP_ROLLFORWARD_REQUIRED",
+            "opening": None,
+            "closing": equity,
+            "profit": profit,
+            "oci": -totals["oci"],
+        },
+        "nci_measurement_status": "PROVISIONAL_PERCENTAGE_OF_CLOSING_NET_ASSETS; acquisition-basis and ownership-event rollforward not validated",
         "eliminations": [e.model_dump(mode="json") for e in data.eliminations],
         "totals": {
             "assets": totals["assets"],

@@ -10,6 +10,7 @@ from typing import Any
 from app.modules.country_workflows.audit_calculations import AUDIT_CALCULATORS
 from app.modules.country_workflows.catalogue import WORKFLOWS, country_guidance
 from app.modules.country_workflows.diligence_calculations import DILIGENCE_CALCULATORS
+from app.modules.country_workflows.payroll_calculations import PAYROLL_CALCULATORS
 from app.modules.country_workflows.practice_calculations import PRACTICE_CALCULATORS
 from app.modules.country_workflows.sector_calculations import SECTOR_CALCULATORS
 from app.modules.intelligence.matching import reconcile_transactions
@@ -141,7 +142,59 @@ def tax_documents(data, tables):
                 raise ValueError("Tax document dated after reconciliation date")
             if r["period"] > data.as_of.strftime("%Y-%m"):
                 raise ValueError("Tax document reporting period is after reconciliation date")
-    books, portal = (unique(tables[role], key) for role in ["books", "return"])
+
+    def tax_population(population):
+        groups = defaultdict(list)
+        for row in population:
+            groups[key(row)].append(row)
+        resolved = {}
+        for domain_key, versions in groups.items():
+            if len(versions) == 1:
+                resolved[domain_key] = versions[0]
+                continue
+            if not any(row.get("source_review_reasons") for row in versions):
+                raise ValueError(
+                    "Duplicate domain key; select one corrected source version or aggregate explicitly"
+                )
+            # Keep every amount/version visible. Neither the first record nor a
+            # sum is treated as a resolved current invoice or a credit movement.
+            resolved[domain_key] = {
+                **versions[0],
+                "id": None,
+                "amounts_available": False,
+                "net_available": False,
+                "native_zero_component": False,
+                "source_review_reasons": sorted(
+                    {
+                        "MULTIPLE_SOURCE_VERSIONS_REQUIRE_RESOLUTION",
+                        *(
+                            reason
+                            for row in versions
+                            for reason in row.get("source_review_reasons", [])
+                        ),
+                    }
+                ),
+                "version_source_ids": [row["id"] for row in versions],
+                "source_versions": [
+                    {
+                        field: row.get(field)
+                        for field in (
+                            "id",
+                            "source_section",
+                            "date",
+                            "period",
+                            "net",
+                            "tax",
+                            "original_reference",
+                            "original_date",
+                        )
+                    }
+                    for row in versions
+                ],
+            }
+        return resolved
+
+    books, portal = (tax_population(tables[role]) for role in ["books", "return"])
     document_groups = []
     for population in (books, portal):
         grouped = defaultdict(list)
@@ -156,6 +209,8 @@ def tax_documents(data, tables):
             not record
             or record.get("native_zero_component") is not True
             or amount(record, "tax") != 0
+            or record.get("source_review_reasons")
+            or record.get("net_available") is False
         ):
             return False
         others = opposite.get(domain_key[:4] + domain_key[5:], [])
@@ -164,6 +219,8 @@ def tax_documents(data, tables):
             and record["status"] == "active"
             and all(
                 other["status"] == "active"
+                and not other.get("source_review_reasons")
+                and other.get("net_available") is not False
                 and other["date"] == record["date"]
                 and other["period"] == record["period"]
                 and abs(amount(other, "net") - amount(record, "net")) <= data.tolerance
@@ -175,14 +232,28 @@ def tax_documents(data, tables):
     for index, k in enumerate(sorted(books.keys() | portal.keys()), 1):
         left, right = books.get(k), portal.get(k)
         delta = amount(left, "tax") - amount(right, "tax") if left and right else None
+        if any(row and row.get("amounts_available") is False for row in (left, right)):
+            delta = None
         base_delta = amount(left, "net") - amount(right, "net") if left and right else None
+        if any(row and row.get("net_available") is False for row in (left, right)):
+            base_delta = None
+        source_reasons = sorted(
+            {
+                reason
+                for row in (left, right)
+                if row
+                for reason in row.get("source_review_reasons", [])
+            }
+        )
         explicit_zero = (not right and absent_native_zero(left, document_groups[1], k)) or (
             not left and absent_native_zero(right, document_groups[0], k)
         )
         if explicit_zero:
             delta = base_delta = Decimal(0)
         state = (
-            "MATCHED"
+            "SOURCE_DOCUMENT_REVIEW_REQUIRED"
+            if source_reasons
+            else "MATCHED"
             if explicit_zero
             else "BOOKS_ONLY"
             if not right
@@ -217,13 +288,28 @@ def tax_documents(data, tables):
                 "state": state,
                 "books_id": left["id"] if left else None,
                 "return_id": right["id"] if right else None,
-                "books_tax": left["tax"] if left else None,
-                "return_tax": right["tax"] if right else None,
+                "books_tax": left["tax"] if left and left.get("amounts_available", True) else None,
+                "return_tax": right["tax"]
+                if right and right.get("amounts_available", True)
+                else None,
+                "books_version_source_ids": left.get("version_source_ids", [left["id"]])
+                if left
+                else [],
+                "return_version_source_ids": right.get("version_source_ids", [right["id"]])
+                if right
+                else [],
+                "books_source_versions": left.get("source_versions") if left else None,
+                "return_source_versions": right.get("source_versions") if right else None,
                 "tax_difference": str(delta) if delta is not None else None,
                 "net_difference": str(base_delta) if base_delta is not None else None,
                 "books_period": left["period"] if left else None,
                 "return_period": right["period"] if right else None,
                 "legal_credit_eligibility": "NOT_DETERMINED",
+                "source_review_reasons": source_reasons,
+                "books_source_section": left.get("source_section") if left else None,
+                "return_source_section": right.get("source_section") if right else None,
+                "source_itc_availability": right.get("source_itc_availability") if right else None,
+                "source_ims_status": right.get("source_ims_status") if right else None,
                 "comparison_basis": "EXPLICIT_NATIVE_ZERO_COMPONENT_WITH_OPPOSITE_DOCUMENT_PRESENT"
                 if explicit_zero
                 else "DIRECT_COMPONENT_COMPARISON",
@@ -241,6 +327,7 @@ def tax_documents(data, tables):
         "totals": {
             k: {s: str(v) for s, v in values.items()} for k, values in sorted(totals.items())
         },
+        "totals_basis": "SOURCE_DOCUMENT_TAX_FIELDS_NOT_RESOLVED_CREDIT_OR_FILING_VALUES",
         "exception_count": sum(r["state"] != "MATCHED" for r in rows),
         "blocked": False,
         "limitations": [
@@ -624,7 +711,9 @@ def calculate(data, country, sources):
     tables = {role: source["rows"] for role, source in sources.items()}
     with localcontext() as arithmetic:
         arithmetic.prec = 80
-        if data.workflow in AUDIT_CALCULATORS:
+        if data.workflow in PAYROLL_CALCULATORS:
+            result = PAYROLL_CALCULATORS[data.workflow](data, tables)
+        elif data.workflow in AUDIT_CALCULATORS:
             result = AUDIT_CALCULATORS[data.workflow](data, tables)
         elif data.workflow in PRACTICE_CALCULATORS:
             result = PRACTICE_CALCULATORS[data.workflow](data, tables)
@@ -650,7 +739,13 @@ def calculate(data, country, sources):
         "workflow": data.workflow,
         "workflow_version": "audit-extensions-1"
         if data.workflow
-        in {*AUDIT_CALCULATORS, *PRACTICE_CALCULATORS, *SECTOR_CALCULATORS, *DILIGENCE_CALCULATORS}
+        in {
+            *AUDIT_CALCULATORS,
+            *PRACTICE_CALCULATORS,
+            *SECTOR_CALCULATORS,
+            *DILIGENCE_CALCULATORS,
+            *PAYROLL_CALCULATORS,
+        }
         else "country-workflows-1",
         "as_of": data.as_of.isoformat(),
         "rationale": data.rationale,

@@ -18,7 +18,7 @@ Canonical source contracts, date windows, row/currency controls, missing evidenc
 
 The workflow UI is `/intelligence/<engagement-id>/country-workflow`; source preparation is `/intelligence/<engagement-id>/workflow-source`. CSV field contracts are available there. Period-end GL balance controls can be generated directly from an authorised committed account, with an explicit receivable/payable sign convention. Source populations remain bounded; an uploaded-file control does not prove completeness of the originating system.
 
-Diligence source preparation and reads additionally require the existing `audit.evidence.review` professional permission. Ordinary accounting access does not expose those source bodies. This is a scoped evidence boundary; a dedicated restricted AML case-management subsystem remains unfinished.
+Diligence source preparation, job metadata, publication and reads additionally require the existing `audit.evidence.review` professional permission. Ordinary accounting access does not expose those parsed source bodies or direct exports. Automatic generic working-paper generation is blocked for these sources/results so their contents cannot be copied into a broader-access paper. Original uploaded files retain the existing engagement evidence permissions; full raw-file confidentiality classification and a restricted AML workpaper/case-management subsystem remain unfinished.
 
 ## AI and ML separation
 

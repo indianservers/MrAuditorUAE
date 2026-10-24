@@ -1,6 +1,6 @@
 # Connected UAE tax engines — Phase 2
 
-This delivery strengthens E04–E08 in the existing modular monolith. It preserves the Decimal accounting/import services, local TensorFlow.js CPU worker, separate language-model gateway, evidence repository, independent audit/tax review and immutable calculation history. No filing, authority contact, accounting posting or external communication was performed. Deterministic calculations require no language-model credentials.
+This delivery strengthens E04–E08 in the existing modular monolith. It preserves the Decimal accounting/import services, local TensorFlow.js CPU worker, separate language-model gateway, evidence repository, independent audit/tax review and immutable calculation history. No external filing, authority contact, live general-ledger posting or external communication was performed. Tests exercise approved tax-loss postings only inside the disposable test database. Deterministic calculations require no language-model credentials.
 
 ## Implemented changes
 
@@ -12,7 +12,7 @@ This delivery strengthens E04–E08 in the existing modular monolith. It preserv
 - DMTT incomplete revenue/MNE facts produce `INCOMPLETE_SCOPE`, with no invented zero liability. Pre-2025 fiscal starts are outside the applicable period. UAE investment entities no longer silently disappear from an ordinary-case calculation: special blending is unsupported and blocked. Calculation outputs distinguish a genuine computed zero from applied safe harbour and out-of-scope status. Unsupported computation work is preserved as a blocked immutable result with `uae_dmtt: null` and references to retained source schedules.
 - DMTT memo submission/approval now requires a selected immutable calculation, matching group, current sources and a determinate supported result. Calculation listings show freshness. Scope can be assessed separately through `/api/v1/dmtt/engagements/{eid}/scope-assessment`, even while the group information is incomplete.
 - Connected assessments at `/api/v1/tax/engagements/{eid}/connected-assessments` reference existing authoritative runs rather than copying calculations. They keep VAT, CT, pricing and UAE top-up bases separate, carry immutable dependencies, block stale selections and unresolved approval, and require an independent authorized tax approver. The CT workspace exposes run selection; existing VAT, CT/QFZP, TP and DMTT result screens show the shared execution/review notice.
-- A necessary Phase 1 repair permits explicit tax-group member references while rechecking record access in those member engagements. Other implicit cross-engagement links remain rejected. This restores controlled tax-group aggregation without opening tenant-wide source access.
+- Necessary Phase 1 repairs permit explicit tax-group member references and the named recipient/source links in the existing posted loss-transfer workflow, while rechecking access to the actual records. Other implicit cross-engagement links remain rejected. This restores controlled group aggregation and loss transfers without opening tenant-wide source access.
 
 ## Primary-source verification
 
@@ -88,12 +88,14 @@ Limitations: investment/PE/JV/minority/stateless blending, group entry/exit/rest
 
 All demonstrations are synthetic technical fixtures; no external filing or authority interaction occurs.
 
-- Trading/current-tax path: existing VAT workflow proves source→classification→control accounts→draft VAT201→review; the CT workflow proves approved ledger/financials→adjustments→110,250 AED draft CT→two-stage review. The new connected assessment test proves current CT selection, independent approval, tenant boundary, subsequent approved adjustment→stale prior assessment and blocked stale reuse. These use the same application source interfaces; **the final test set does not prove one single fixture combining VAT and CT approvals for the same entity**, so do not present that broader A workflow as fully demonstrated.
+- Trading/current-tax path: `test_connected_trading.py` uses one entity and retained ledger, explicit reviewed synthetic zero-rated export facts and retained zero-balance VAT control accounts. It runs VAT source/control reconciliation, the VAT return's two-stage review, the 110,250 AED CT adjustment computation and two-stage release, then independently approves the connected assessment. This demonstrates legitimate differences between VAT treatment and corporate tax without inferring either from account names. `trading-workflow.json` retains the executed identifiers. The separate connected assessment test also proves tenant boundary, subsequent approved adjustment→stale prior assessment and blocked stale reuse. These remain synthetic technical demonstrations, not real export evidence or filing acceptance.
 - Free-zone path: actual revenue segmentation→approved qualification assessment→blocked unreconciled profit bridge→reviewed correction→recalculated CT workpaper and release. The supported synthetic result is zero only under its reviewed facts, not a general free-zone exemption.
 - Related-party path: existing loan/authorized synthetic benchmark and CT adjustment workflows are exercised. Synthetic observations cannot establish a live arm's-length position; missing/restricted data remains blocked or explicitly provisional. The test set does not establish a universal financing→VAT→posted-entry workflow.
 - Multinational path: approved standalone financial package→reviewed group/entity inputs→ordinary UAE jurisdictional DMTT calculation. A separate missing-information test records unresolved scope; investment/special cases block instead of disappearing. The verified demonstration is not a UPE reporting-package import or all-Pillar-Two implementation.
 
-The scalar arithmetic/reconciliation schedules and their test references are in `calculation-schedules.json`. `connected-workflow.json` retains identifiers from the executed approval/invalidation case. Automated XML results and `verification.json` report actual outcomes; remaining scope is listed in `gap-matrix.json`.
+The scalar arithmetic/reconciliation schedules and their test references are in `calculation-schedules.json`. `connected-workflow.json` and `trading-workflow.json` retain identifiers from the executed cases. Automated XML results and `verification.json` report actual outcomes; remaining scope is listed in `gap-matrix.json`.
+
+The initial broader integration run exposed a Phase 1 loss-transfer lineage rejection; that run is preserved as `integration-initial-results.xml`. The repair was then verified against loss posting, tax-group aggregation and all new connected cases in `final-regression-results.xml`, followed by the final full selected integration run in `integration-results.xml`. Four tests skipped by the unit-only command are separate real-database connector-operation cases; the unit run does not claim to exercise those connector services.
 
 ## Migration, deployment and reproduction
 
@@ -106,6 +108,7 @@ Deploy API/workers/frontend together to use the new schemas. Legacy results are 
 ```powershell
 .\backend\.venv\Scripts\python.exe scripts/connected_tax_run.py prepare
 .\backend\.venv\Scripts\python.exe scripts/connected_tax_run.py .venv/Scripts/python.exe -m pytest tests/qa_crud/test_connected_tax.py tests/phase6/test_workflows.py tests/phase6/test_specialist_workflows.py tests/phase7/test_vat_workflows.py tests/phase7/test_regression_fixes.py tests/phase8/test_workflows.py tests/phase9/test_workflows.py::test_dmtt_actual_ifrs_approval_computation_and_ai -q
+.\backend\.venv\Scripts\python.exe scripts/connected_tax_run.py .venv/Scripts/python.exe -m pytest tests/qa_crud/test_connected_trading.py -q
 ```
 
 Source retrieval is a separate operator/research action, not a side effect of executing tax calculations. The retained PDF paths/hashes are in the source register. The PDF skill was used read-only for content inspection; no new legal source document was authored. The UI was typechecked and tested for state separation; this is not a claim of a full new browser visual-regression campaign.

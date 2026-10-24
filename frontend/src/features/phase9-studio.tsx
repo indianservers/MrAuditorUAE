@@ -649,7 +649,7 @@ function MLPanel({ eid, area }: { eid: string; area: string }) {
             </select>
           </label>
           <Button
-            disabled={!deployment || !dataset}
+            disabled={!deployment || !dataset || !canScore}
             onClick={async () => {
               const r = await action.mutateAsync({
                 path: "ml/inference/batches",

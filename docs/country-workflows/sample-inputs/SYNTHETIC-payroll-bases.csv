@@ -1,0 +1,4 @@
+id,registration,subject,period,component,currency,amount,rule_group,jurisdiction,eligible,eligibility_reference,assessment
+BASE-PF:EMPLOYEE,EPFO-SYNTHETIC,100000000001,2026-06,PF:EMPLOYEE,INR,20000,PF:EMPLOYEE,IN-CENTRAL,True,SYNTHETIC-MEMBERSHIP-1,Synthetic explicit coverage and wage basis; not legal advice
+BASE-PF:EPS,EPFO-SYNTHETIC,100000000001,2026-06,PF:EPS,INR,20000,PF:EPS,IN-CENTRAL,True,SYNTHETIC-MEMBERSHIP-1,Synthetic explicit coverage and wage basis; not legal advice
+BASE-PF:EMPLOYER,EPFO-SYNTHETIC,100000000001,2026-06,PF:EMPLOYER,INR,20000,PF:EMPLOYER,IN-CENTRAL,True,SYNTHETIC-MEMBERSHIP-1,Synthetic explicit coverage and wage basis; not legal advice

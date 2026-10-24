@@ -1,0 +1,1402 @@
+{
+  "measured_at": "2026-10-24T19:30:29.581Z",
+  "environment": {
+    "node": "v24.15.0",
+    "platform": "win32",
+    "architecture": "x64",
+    "tfjs": "4.22.0",
+    "cpu": {
+      "requested": "auto",
+      "backend": "cpu",
+      "native_verified": false,
+      "fallback_reason": "Native CPU binding unavailable or self-test failed; using verified JavaScript CPU"
+    },
+    "cpu_model": "12th Gen Intel(R) Core(TM) i5-12400F",
+    "logical_cpus": 12,
+    "total_memory_bytes": 34190524416
+  },
+  "cold_process_cpu_initialization_ms": 180.9517,
+  "experiments": [
+    {
+      "task": "journal-type",
+      "source": "synthetic_only",
+      "sectors": [
+        "trading",
+        "professional-services",
+        "construction",
+        "real-estate",
+        "free-zone",
+        "group"
+      ],
+      "rows": 400,
+      "test_lines": 80,
+      "reload_max_delta": 0,
+      "training": {
+        "duration_ms": 165.60219999999998,
+        "cpu_microseconds": {
+          "user": 265000,
+          "system": 93000
+        },
+        "rss_bytes": 111702016,
+        "backend": "cpu",
+        "node": "v24.15.0",
+        "tfjs": "4.22.0",
+        "history": {
+          "val_loss": [
+            3.858336925506592,
+            3.553740978240967,
+            3.2389309406280518,
+            2.928504705429077,
+            2.636899471282959,
+            2.372884511947632,
+            2.142930746078491,
+            1.9562714099884033,
+            1.8012659549713135,
+            1.6680511236190796,
+            1.5509939193725586,
+            1.4477448463439941
+          ],
+          "loss": [
+            3.6316275596618652,
+            3.2887258529663086,
+            2.976496934890747,
+            2.6878015995025635,
+            2.4094207286834717,
+            2.1584677696228027,
+            1.939921259880066,
+            1.7532529830932617,
+            1.5972968339920044,
+            1.4667189121246338,
+            1.35506272315979,
+            1.255677580833435
+          ]
+        }
+      },
+      "selection": {
+        "based_on": "validation_only",
+        "metric": "macro_f1_including_abstentions",
+        "model_value": 0.1657142857142857,
+        "baseline_value": 0.9127272727272728,
+        "model_preferred": false,
+        "preferred_execution_mode": "statistical_baseline",
+        "production_approval": false
+      },
+      "evaluation": {
+        "model": {
+          "confusion": [
+            [
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "per_class": [
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 0.75,
+              "f1": 0.8571428571428571
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 0.25,
+              "f1": 0.4
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 0.25,
+              "f1": 0.4
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            }
+          ],
+          "macro_f1": 0.1657142857142857,
+          "coverage": 0.125,
+          "abstention_rate": 0.875,
+          "multiclass_brier": 0.6563146190113779,
+          "probability_calibrated": false
+        },
+        "statistical_nearest_centroid": {
+          "confusion": [
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              4,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              4,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              3,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              4,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              4,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              4
+            ]
+          ],
+          "per_class": [
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 0.25,
+              "f1": 0.4
+            },
+            {
+              "support": 4,
+              "precision": 0.5714285714285714,
+              "recall": 1,
+              "f1": 0.7272727272727273
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            }
+          ],
+          "macro_f1": 0.9127272727272728,
+          "coverage": 1,
+          "abstention_rate": 0,
+          "multiclass_brier": 0.15,
+          "probability_calibrated": false
+        },
+        "majority_training_class": {
+          "confusion": [
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "per_class": [
+            {
+              "support": 4,
+              "precision": 0.1,
+              "recall": 1,
+              "f1": 0.18181818181818182
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            }
+          ],
+          "macro_f1": 0.01818181818181818,
+          "coverage": 1,
+          "abstention_rate": 0,
+          "multiclass_brier": 1.8,
+          "probability_calibrated": false
+        }
+      },
+      "cold_model_load_and_batch_ms": 6.375999999999976,
+      "warm_batch_ms": {
+        "min": 3.152900000000045,
+        "mean": 3.8196449999999884,
+        "max": 6.174500000000023,
+        "iterations": 20
+      },
+      "serialized_four_request_ms": 12.446199999999976,
+      "rss_before": 91238400,
+      "rss_after": 121675776,
+      "tensors_before": 0,
+      "tensors_cached": 4,
+      "tensors_after_disposal": 0
+    },
+    {
+      "task": "account-mapping",
+      "source": "synthetic_only",
+      "sectors": [
+        "trading",
+        "professional-services",
+        "construction",
+        "real-estate",
+        "free-zone",
+        "group"
+      ],
+      "rows": 400,
+      "test_lines": 80,
+      "reload_max_delta": 0,
+      "training": {
+        "duration_ms": 135.49509999999998,
+        "cpu_microseconds": {
+          "user": 203000,
+          "system": 79000
+        },
+        "rss_bytes": 131137536,
+        "backend": "cpu",
+        "node": "v24.15.0",
+        "tfjs": "4.22.0",
+        "history": {
+          "val_loss": [
+            1.5742284059524536,
+            1.5331881046295166,
+            1.4925636053085327,
+            1.451697826385498,
+            1.4113595485687256,
+            1.370789885520935,
+            1.329167366027832,
+            1.28640878200531,
+            1.2401481866836548,
+            1.1899316310882568,
+            1.1358534097671509,
+            1.078078269958496
+          ],
+          "loss": [
+            1.6047405004501343,
+            1.5623445510864258,
+            1.52129065990448,
+            1.4800915718078613,
+            1.4395818710327148,
+            1.3991330862045288,
+            1.3583128452301025,
+            1.316209077835083,
+            1.2724374532699585,
+            1.225056767463684,
+            1.1736763715744019,
+            1.1184463500976562
+          ]
+        }
+      },
+      "selection": {
+        "based_on": "validation_only",
+        "metric": "macro_f1_including_abstentions",
+        "model_value": 0,
+        "baseline_value": 1,
+        "model_preferred": false,
+        "preferred_execution_mode": "statistical_baseline",
+        "production_approval": false
+      },
+      "evaluation": {
+        "model": {
+          "confusion": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "per_class": [
+            {
+              "support": 16,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 16,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 16,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 16,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 16,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            }
+          ],
+          "macro_f1": 0,
+          "coverage": 0,
+          "abstention_rate": 1,
+          "multiclass_brier": 0.5442466257373251,
+          "probability_calibrated": false
+        },
+        "statistical_nearest_centroid": {
+          "confusion": [
+            [
+              16,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              16,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              16,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              16,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              16
+            ]
+          ],
+          "per_class": [
+            {
+              "support": 16,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 16,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 16,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 16,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 16,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            }
+          ],
+          "macro_f1": 1,
+          "coverage": 1,
+          "abstention_rate": 0,
+          "multiclass_brier": 0,
+          "probability_calibrated": false
+        },
+        "majority_training_class": {
+          "confusion": [
+            [
+              16,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              16,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              16,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              16,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              16,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "per_class": [
+            {
+              "support": 16,
+              "precision": 0.2,
+              "recall": 1,
+              "f1": 0.33333333333333337
+            },
+            {
+              "support": 16,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 16,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 16,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 16,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            }
+          ],
+          "macro_f1": 0.06666666666666668,
+          "coverage": 1,
+          "abstention_rate": 0,
+          "multiclass_brier": 1.6,
+          "probability_calibrated": false
+        }
+      },
+      "cold_model_load_and_batch_ms": 4.601299999999924,
+      "warm_batch_ms": {
+        "min": 3.6417999999999893,
+        "mean": 4.45607500000001,
+        "max": 6.440300000000093,
+        "iterations": 20
+      },
+      "serialized_four_request_ms": 16.97670000000005,
+      "rss_before": 121675776,
+      "rss_after": 131956736,
+      "tensors_before": 0,
+      "tensors_cached": 4,
+      "tensors_after_disposal": 0
+    },
+    {
+      "task": "journal-anomaly",
+      "source": "synthetic_only",
+      "sectors": [
+        "trading",
+        "professional-services",
+        "construction",
+        "real-estate",
+        "free-zone",
+        "group"
+      ],
+      "rows": 400,
+      "test_lines": 80,
+      "reload_max_delta": 0,
+      "training": {
+        "duration_ms": 83.11739999999998,
+        "cpu_microseconds": {
+          "user": 110000,
+          "system": 0
+        },
+        "rss_bytes": 134492160,
+        "backend": "cpu",
+        "node": "v24.15.0",
+        "tfjs": "4.22.0",
+        "history": {
+          "val_loss": [
+            3.4372429847717285,
+            3.348778247833252,
+            3.2728471755981445,
+            3.20732045173645,
+            3.14986252784729,
+            3.1000137329101562,
+            3.0560991764068604,
+            3.0167415142059326,
+            2.981757164001465,
+            2.9497294425964355,
+            2.9196295738220215,
+            2.8919267654418945
+          ],
+          "loss": [
+            1.2760977745056152,
+            1.217037320137024,
+            1.1670098304748535,
+            1.123908281326294,
+            1.0864088535308838,
+            1.0533409118652344,
+            1.023533821105957,
+            0.9962815046310425,
+            0.9709076881408691,
+            0.9468051791191101,
+            0.9234697818756104,
+            0.9006556272506714
+          ]
+        }
+      },
+      "selection": {
+        "based_on": "validation_only",
+        "metric": "precision_at_10_percent_review_capacity",
+        "model_value": 1,
+        "baseline_value": 1,
+        "model_preferred": false,
+        "preferred_execution_mode": "statistical_baseline",
+        "production_approval": false
+      },
+      "evaluation": {
+        "review_capacity": 4,
+        "precision_at_capacity": 1,
+        "recall_at_capacity": 1,
+        "false_positive_count": 5,
+        "baseline": "robust standardized amount and rarity",
+        "baseline_scores": [
+          10,
+          1.2320656998785686,
+          1.2076602014485884,
+          1.1834916533460482,
+          1.1595554987275218,
+          1.1358473109491096,
+          1.1123627886530554,
+          1.0890977510839819,
+          1.0660481336219647,
+          1.043209983520545,
+          10,
+          0.9981528095545709,
+          0.9759264038564502,
+          0.9538966945929055,
+          0.9320602308823215,
+          0.9104136518683814,
+          0.8889536836156434,
+          0.8676771361378023,
+          0.8465809005518676,
+          0.8256619463519184,
+          10,
+          0.7843441364037279,
+          0.7639395885496894,
+          0.7437009331636413,
+          0.7236254945167544,
+          0.7037106610990777,
+          0.6839538835807901,
+          0.6643526728537252,
+          0.6449045981493808,
+          0.6256072852299115,
+          10,
+          0.5874557200771119,
+          0.5685969866952266,
+          0.5498800496422502,
+          0.5313027925253784,
+          0.5128631459836231,
+          0.49455908630450085,
+          0.47638863409119225,
+          0.45834985297800984,
+          0.4404408483920555
+        ],
+        "test_scores": [
+          15.381293847487038,
+          2.4376326226980054,
+          2.2333542323735944,
+          2.4305427619849027,
+          2.5303138446273015,
+          2.251897074411303,
+          2.4447594788315965,
+          4.437241895066934,
+          3.916129032548796,
+          2.4136111486015386,
+          11.291212020452742,
+          4.640294966504675,
+          2.4605339059774813,
+          2.4034485230669604,
+          4.441500393732767,
+          2.4001360650026697,
+          3.8026697140799026,
+          2.20101589786502,
+          2.452597906571857,
+          2.410686889246248,
+          11.24452684405782,
+          4.477854582914119,
+          4.628499884033912,
+          2.19303247622586,
+          4.230896859645535,
+          2.381453400000527,
+          2.189912404654794,
+          2.381735242659271,
+          4.683266682417156,
+          2.212282143597677,
+          11.447661951346904,
+          2.3740550088497483,
+          3.8752448403134383,
+          4.594402803490882,
+          2.409098883440325,
+          4.375610775286463,
+          2.4423768647232347,
+          2.3873512714208287,
+          2.18239850136806,
+          2.372409509238492
+        ],
+        "model_review_queue": [
+          {
+            "fraction": 0.01,
+            "capacity": 1,
+            "precision": 1,
+            "recall": 0.25,
+            "false_positive_count": 0
+          },
+          {
+            "fraction": 0.05,
+            "capacity": 2,
+            "precision": 1,
+            "recall": 0.5,
+            "false_positive_count": 0
+          },
+          {
+            "fraction": 0.1,
+            "capacity": 4,
+            "precision": 1,
+            "recall": 1,
+            "false_positive_count": 0
+          }
+        ],
+        "baseline_review_queue": [
+          {
+            "fraction": 0.01,
+            "capacity": 1,
+            "precision": 1,
+            "recall": 0.25,
+            "false_positive_count": 0
+          },
+          {
+            "fraction": 0.05,
+            "capacity": 2,
+            "precision": 1,
+            "recall": 0.5,
+            "false_positive_count": 0
+          },
+          {
+            "fraction": 0.1,
+            "capacity": 4,
+            "precision": 1,
+            "recall": 1,
+            "false_positive_count": 0
+          }
+        ],
+        "population_assumption": "Only explicitly normal-labelled training journals; known relevant exceptions excluded",
+        "stability_across_entities_and_periods": null
+      },
+      "cold_model_load_and_batch_ms": 5.296700000000101,
+      "warm_batch_ms": {
+        "min": 3.150099999999952,
+        "mean": 3.731529999999998,
+        "max": 5.208500000000072,
+        "iterations": 20
+      },
+      "serialized_four_request_ms": 13.859299999999962,
+      "rss_before": 131956736,
+      "rss_after": 134959104,
+      "tensors_before": 0,
+      "tensors_cached": 4,
+      "tensors_after_disposal": 0
+    },
+    {
+      "task": "review-ranking",
+      "source": "synthetic_only",
+      "sectors": [
+        "trading",
+        "professional-services",
+        "construction",
+        "real-estate",
+        "free-zone",
+        "group"
+      ],
+      "rows": 400,
+      "test_lines": 80,
+      "reload_max_delta": 0,
+      "training": {
+        "duration_ms": 59.090400000000045,
+        "cpu_microseconds": {
+          "user": 47000,
+          "system": 0
+        },
+        "rss_bytes": 137269248,
+        "backend": "cpu",
+        "node": "v24.15.0",
+        "tfjs": "4.22.0",
+        "history": {
+          "val_loss": [
+            2.4171180725097656,
+            1.9169692993164062,
+            1.4841145277023315,
+            1.1257104873657227,
+            0.8409148454666138,
+            0.6182138323783875,
+            0.45087185502052307,
+            0.32601478695869446,
+            0.23622818291187286,
+            0.1730901598930359,
+            0.12910234928131104,
+            0.09768594801425934
+          ],
+          "loss": [
+            0.6708003282546997,
+            0.5463506579399109,
+            0.44680172204971313,
+            0.36898258328437805,
+            0.30890092253685,
+            0.2626478672027588,
+            0.22651951014995575,
+            0.19772042334079742,
+            0.17442546784877777,
+            0.15530088543891907,
+            0.1393473744392395,
+            0.12565119564533234
+          ]
+        }
+      },
+      "selection": {
+        "based_on": "validation_only",
+        "metric": "macro_f1_including_abstentions",
+        "model_value": 1,
+        "baseline_value": 1,
+        "model_preferred": false,
+        "preferred_execution_mode": "statistical_baseline",
+        "production_approval": false
+      },
+      "evaluation": {
+        "model": {
+          "confusion": [
+            [
+              36,
+              0
+            ],
+            [
+              0,
+              4
+            ]
+          ],
+          "per_class": [
+            {
+              "support": 36,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            }
+          ],
+          "macro_f1": 1,
+          "coverage": 1,
+          "abstention_rate": 0,
+          "multiclass_brier": 0.02037113692404493,
+          "probability_calibrated": false
+        },
+        "statistical_nearest_centroid": {
+          "confusion": [
+            [
+              36,
+              0
+            ],
+            [
+              0,
+              4
+            ]
+          ],
+          "per_class": [
+            {
+              "support": 36,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            }
+          ],
+          "macro_f1": 1,
+          "coverage": 1,
+          "abstention_rate": 0,
+          "multiclass_brier": 0,
+          "probability_calibrated": false
+        },
+        "majority_training_class": {
+          "confusion": [
+            [
+              36,
+              0
+            ],
+            [
+              4,
+              0
+            ]
+          ],
+          "per_class": [
+            {
+              "support": 36,
+              "precision": 0.9,
+              "recall": 1,
+              "f1": 0.9473684210526316
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            }
+          ],
+          "macro_f1": 0.4736842105263158,
+          "coverage": 1,
+          "abstention_rate": 0,
+          "multiclass_brier": 0.2,
+          "probability_calibrated": false
+        },
+        "review_queue": [
+          {
+            "fraction": 0.01,
+            "capacity": 1,
+            "precision": 1,
+            "recall": 0.25,
+            "false_positive_count": 0
+          },
+          {
+            "fraction": 0.05,
+            "capacity": 2,
+            "precision": 1,
+            "recall": 0.5,
+            "false_positive_count": 0
+          },
+          {
+            "fraction": 0.1,
+            "capacity": 4,
+            "precision": 1,
+            "recall": 1,
+            "false_positive_count": 0
+          }
+        ]
+      },
+      "cold_model_load_and_batch_ms": 3.835199999999986,
+      "warm_batch_ms": {
+        "min": 2.68119999999999,
+        "mean": 3.1740150000000087,
+        "max": 4.1568999999999505,
+        "iterations": 20
+      },
+      "serialized_four_request_ms": 11.020700000000033,
+      "rss_before": 135028736,
+      "rss_after": 136572928,
+      "tensors_before": 0,
+      "tensors_cached": 4,
+      "tensors_after_disposal": 0
+    }
+  ],
+  "limits": [
+    "Synthetic mechanics and controlled experiments only",
+    "Labels are deliberately easy; these scores do not establish real-client performance",
+    "No held-out-entity generalization claim",
+    "RSS includes allocator retention; TensorFlow.js reports CPU memory estimates as unreliable",
+    "Times include shared-machine load and filesystem integrity checks"
+  ]
+}

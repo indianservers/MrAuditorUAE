@@ -51,7 +51,9 @@ async def execute(c, h, eid, operation, payload, key=None, failed=None):
     return (await c.get(path + "/events/" + job["result_id"], headers=h)).json()
 
 
-async def source(c, h, eid, rows, label, table_type="transactions", totals=None, failed=None):
+async def source(
+    c, h, eid, rows, label, table_type="transactions", totals=None, failed=None, **source_options
+):
     base = f"/api/v1/engagements/{eid}/audit"
     evidence = await create(
         c, h, base, "evidence", {"category": "Other", "retain_until": "2036-12-31"}
@@ -73,6 +75,7 @@ async def source(c, h, eid, rows, label, table_type="transactions", totals=None,
             "label": label,
             "expected_rows": len(rows),
             "control_totals": totals if totals is not None else {"AED": "100"},
+            **source_options,
         },
         failed=failed,
     )

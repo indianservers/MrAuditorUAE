@@ -13,6 +13,10 @@ Nonnegative = Annotated[Money, Field(ge=0)]
 Rate = Annotated[Decimal, Field(ge=0, le=1, decimal_places=10, allow_inf_nan=False)]
 
 
+class AccountingInput(Body):
+    profile_id: uuid.UUID | None = None
+
+
 class ReportingProfile(Body):
     snapshot_id: uuid.UUID
     comparative_snapshot_id: uuid.UUID | None = None
@@ -54,6 +58,12 @@ class Allocation(Strict):
     category: Literal["operating", "investing", "financing", "tax", "discontinued"] = "operating"
     is_cash: bool = False
     cash_flow_role: Literal["none", "working_capital_asset", "working_capital_liability"] = "none"
+    current_noncurrent: Literal["current", "noncurrent", "equity", "not_applicable"] = (
+        "not_applicable"
+    )
+    related_party_category: str = Field(default="", max_length=200)
+    disaggregation: str = Field(default="", max_length=1000)
+    netting_rationale: str = Field(default="", max_length=4000)
 
 
 class AccountMapping(Strict):
@@ -101,10 +111,13 @@ class Adjustment(Body):
     narration: str = Field(min_length=1, max_length=4000)
     legs: list[JournalLeg] = Field(default_factory=list, max_length=200)
     calculation_run_id: uuid.UUID | None = None
+    calculation_component: Literal["primary", "oci", "current_tax"] | None = None
     reversal_of: uuid.UUID | None = None
 
     @model_validator(mode="after")
     def balanced(self):
+        if self.calculation_component and not self.calculation_run_id:
+            raise ValueError("A generated journal component requires its calculation run")
         with localcontext() as precision:
             precision.prec = 48
             imbalance = sum((leg.debit - leg.credit for leg in self.legs), Decimal(0))
@@ -121,7 +134,7 @@ class Payment(Strict):
     amount: Nonnegative
 
 
-class Lease(Body):
+class Lease(AccountingInput):
     commencement: date
     end_date: date
     annual_discount_rate: Rate
@@ -164,7 +177,7 @@ class Exposure(Strict):
     segment: str = Field(default="default", max_length=100)
 
 
-class ECL(Body):
+class ECL(AccountingInput):
     approach: Literal["general", "simplified", "provision_matrix"]
     exposures: list[Exposure] = Field(min_length=1, max_length=20000)
     scenarios: list[CreditScenario] = Field(min_length=1, max_length=20)
@@ -192,7 +205,7 @@ class ECL(Body):
         return self
 
 
-class Instrument(Body):
+class Instrument(AccountingInput):
     initial_amount: Positive
     initial_date: date
     cash_flows: list[Payment] = Field(min_length=1, max_length=1200)
@@ -210,7 +223,7 @@ class Obligation(Strict):
     over_time_justification: str = Field(default="", max_length=4000)
 
 
-class Revenue(Body):
+class Revenue(AccountingInput):
     contract_reference: str = Field(min_length=1, max_length=200)
     contract_assessment: str = Field(min_length=1, max_length=4000)
     reporting_date: date
@@ -237,20 +250,30 @@ class TaxDifference(Strict):
     exception_applied: bool = False
     exception_rationale: str = Field(default="", max_length=4000)
     allocation: Literal["profit_loss", "oci", "equity", "business_combination"] = "profit_loss"
+    expected_recovery_or_settlement: str = Field(default="", max_length=4000)
+    recoverability_evidence: str = Field(default="", max_length=1000)
 
 
-class DeferredTax(Body):
+class DeferredTax(AccountingInput):
     differences: list[TaxDifference] = Field(min_length=1, max_length=10000)
     current_tax: Nonnegative = Decimal(0)
     current_tax_source: str = Field(min_length=1, max_length=4000)
+    current_tax_run_id: uuid.UUID | None = None
 
 
 class Asset(Strict):
     reference: str = Field(min_length=1, max_length=100)
+    asset_class: Literal["ppe", "investment_property", "held_for_sale", "intangible"] = "ppe"
     component_of: str = Field(default="", max_length=100)
     cost: Nonnegative
     residual: Nonnegative
     capitalisation_date: date
+    available_for_use_date: date | None = None
+    available_for_use_evidence: str = Field(default="", max_length=1000)
+    construction_in_progress: bool = False
+    location: str = Field(default="", max_length=200)
+    ownership_evidence: str = Field(default="", max_length=1000)
+    physical_verification: Literal["not_verified", "verified", "exception"] = "not_verified"
     useful_life_years: Positive
     method: Literal["straight_line", "diminishing_balance"]
     diminishing_rate: Rate = Decimal(0)
@@ -260,15 +283,44 @@ class Asset(Strict):
     proceeds: Nonnegative = Decimal(0)
     revaluation_increment: Money = Decimal(0)
     revaluation_assessment: str = Field(default="", max_length=4000)
+    estimate_change_date: date | None = None
+    revised_remaining_life_years: Positive | None = None
+    revised_residual: Nonnegative | None = None
+    estimate_change_rationale: str = Field(default="", max_length=4000)
+
+    @model_validator(mode="after")
+    def asset_dates(self):
+        if self.available_for_use_date and self.available_for_use_date < self.capitalisation_date:
+            raise ValueError("Available-for-use date precedes acquisition/capitalisation")
+        if self.available_for_use_date and not self.available_for_use_evidence.strip():
+            raise ValueError("Available-for-use date requires evidence")
+        if self.disposal_date and self.disposal_date < self.capitalisation_date:
+            raise ValueError("Disposal precedes acquisition")
+        if self.method == "diminishing_balance" and not self.diminishing_rate:
+            raise ValueError("Diminishing-balance method requires an approved positive rate")
+        if self.estimate_change_date and (
+            self.method != "straight_line"
+            or not self.revised_remaining_life_years
+            or self.revised_residual is None
+            or not self.estimate_change_rationale.strip()
+        ):
+            raise ValueError(
+                "Estimate changes require straight-line remaining life, residual and rationale"
+            )
+        if not self.estimate_change_date and (
+            self.revised_remaining_life_years is not None or self.revised_residual is not None
+        ):
+            raise ValueError("Revised estimates require an effective date")
+        return self
 
 
-class FixedAssets(Body):
+class FixedAssets(AccountingInput):
     period_start: date
     period_end: date
     assets: list[Asset] = Field(min_length=1, max_length=20000)
 
 
-class Impairment(Body):
+class Impairment(AccountingInput):
     cgu: str = Field(min_length=1, max_length=200)
     carrying_amount: Nonnegative
     cash_flows: list[Money] = Field(min_length=1, max_length=100)
@@ -280,7 +332,7 @@ class Impairment(Body):
     reversal_cap_excluding_goodwill: Nonnegative = Decimal(0)
 
 
-class Provision(Body):
+class Provision(AccountingInput):
     recognition: Literal["provision", "contingent_liability", "contingent_asset"]
     obligation_assessment: str = Field(min_length=1, max_length=4000)
     probability_assessment: str = Field(min_length=1, max_length=4000)
@@ -325,6 +377,26 @@ class GroupMember(Strict):
         "parent", "business_combination", "common_control", "asset_acquisition", "equity_method"
     ]
     accounting_policy: str = Field(min_length=1, max_length=4000)
+    control_effective_from: date | None = None
+    control_effective_to: date | None = None
+    hyperinflationary: bool = False
+    average_rate_representative: bool = True
+    opening_rate: Positive | None = None
+
+
+class IntercompanyBalance(Strict):
+    reference: str = Field(min_length=1, max_length=100)
+    from_engagement_id: uuid.UUID
+    to_engagement_id: uuid.UUID
+    debit_line: str
+    credit_line: str
+    receivable: Nonnegative
+    payable: Nonnegative
+    currency: str = Field(pattern=r"^[A-Z]{3}$")
+    difference_type: Literal[
+        "matched", "timing", "currency", "missing_entry", "classification", "disputed"
+    ]
+    evidence: str = Field(min_length=1, max_length=4000)
 
 
 class Elimination(Strict):
@@ -334,6 +406,7 @@ class Elimination(Strict):
     amount: Positive
     reason: str = Field(min_length=1, max_length=4000)
     source_record_ids: list[uuid.UUID] = Field(min_length=1, max_length=20)
+    intercompany_reference: str = Field(default="", max_length=100)
 
 
 class Consolidation(Body):
@@ -344,6 +417,105 @@ class Consolidation(Body):
     unrealised_profit_inventory_line: str = Field(default="", max_length=100)
     unrealised_profit_expense_line: str = Field(default="", max_length=100)
     unrealised_profit_source: str = Field(default="", max_length=4000)
+    intercompany: list[IntercompanyBalance] = Field(default_factory=list, max_length=10000)
+
+
+class StockReceipt(Strict):
+    reference: str = Field(min_length=1, max_length=100)
+    date: date
+    sequence: int = Field(default=0, ge=0)
+    quantity: Positive
+    unit_cost: Nonnegative
+    landed_cost: Nonnegative = Decimal(0)
+    evidence: str = Field(min_length=1, max_length=1000)
+    transaction_type: Literal["purchase", "transfer_in"] = "purchase"
+    transfer_reference: str = Field(default="", max_length=100)
+
+
+class StockIssue(Strict):
+    reference: str = Field(min_length=1, max_length=100)
+    date: date
+    sequence: int = Field(default=0, ge=0)
+    quantity: Positive
+    evidence: str = Field(min_length=1, max_length=1000)
+    transaction_type: Literal["dispatch", "transfer_out"] = "dispatch"
+    transfer_reference: str = Field(default="", max_length=100)
+
+
+class InventoryItem(Strict):
+    reference: str = Field(min_length=1, max_length=100)
+    sku: str = Field(default="", max_length=100)
+    uom: str = Field(min_length=1, max_length=30)
+    location: str = Field(min_length=1, max_length=200)
+    ownership: Literal["owned", "custody_only"]
+    opening_quantity: Nonnegative
+    opening_unit_cost: Nonnegative
+    receipts: list[StockReceipt] = Field(default_factory=list, max_length=10000)
+    issues: list[StockIssue] = Field(default_factory=list, max_length=10000)
+    expected_closing_quantity: Nonnegative
+    selling_price: Nonnegative
+    completion_cost: Nonnegative = Decimal(0)
+    selling_cost: Nonnegative = Decimal(0)
+    nrv_evidence: str = Field(min_length=1, max_length=1000)
+    prior_write_down_remaining: Nonnegative = Decimal(0)
+
+
+class Inventory(Body):
+    profile_id: uuid.UUID
+    period_start: date
+    period_end: date
+    method: Literal["fifo", "weighted_average"]
+    policy_version: str = Field(min_length=1, max_length=200)
+    items: list[InventoryItem] = Field(min_length=1, max_length=10000)
+
+
+class EmployeeBenefits(Body):
+    """Aggregate accounting bridge; employee masters remain in restricted HR systems."""
+
+    profile_id: uuid.UUID
+    policy_version: str = Field(min_length=1, max_length=200)
+    employment_framework: Literal["uae_mainland", "difc", "adgm", "other"]
+    framework_assessment: str = Field(min_length=1, max_length=4000)
+    scheme: Literal["defined_benefit", "defined_contribution"]
+    measurement_source: str = Field(min_length=1, max_length=4000)
+    actuarial_report_reference: str = Field(default="", max_length=1000)
+    opening_obligation: Nonnegative
+    current_service_cost: Nonnegative
+    past_service_cost: Money = Decimal(0)
+    net_interest: Money
+    remeasurement_oci: Money
+    settlements: Nonnegative
+    closing_ledger_provision: Nonnegative
+    statutory_settlement_estimate: Nonnegative | None = None
+    payroll_expense: Nonnegative
+    opening_payroll_payable: Nonnegative
+    payroll_deductions: Nonnegative
+    confirmed_bank_payments: Nonnegative
+    closing_payroll_ledger_payable: Nonnegative
+    leave_bonus_accrual: Nonnegative = Decimal(0)
+
+
+class AccountingPolicy(Body):
+    profile_id: uuid.UUID
+    category: Literal[
+        "material_policy",
+        "judgment",
+        "estimation_uncertainty",
+        "policy_change",
+        "estimate_change",
+        "prior_period_error",
+        "subsequent_event",
+        "going_concern",
+        "related_party",
+        "commitment",
+        "contingency",
+    ]
+    standard: str = Field(min_length=1, max_length=100)
+    applicable_from: date
+    facts: str = Field(min_length=1, max_length=8000)
+    assessment: str = Field(min_length=1, max_length=8000)
+    evidence_reference: str = Field(min_length=1, max_length=1000)
+    note_id: uuid.UUID | None = None
 
 
 class Disclosure(Body):
@@ -380,6 +552,9 @@ BODIES: dict[str, type[Body]] = {
     "revenue": Revenue,
     "deferred-tax": DeferredTax,
     "fixed-assets": FixedAssets,
+    "inventory": Inventory,
+    "employee-benefits": EmployeeBenefits,
+    "accounting-policy": AccountingPolicy,
     "impairment": Impairment,
     "provision": Provision,
     "cash-flow": CashFlow,

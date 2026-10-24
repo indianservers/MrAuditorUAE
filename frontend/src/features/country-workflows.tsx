@@ -29,6 +29,10 @@ type Result = {
   freshness: string;
   collection_totals?: Record<string, number>;
   body: {
+    workflow?: string;
+    expected_total?: string;
+    reported_total?: string;
+    expected_total_complete?: boolean;
     title: string;
     review_status: string;
     execution_mode?: string;
@@ -49,6 +53,7 @@ type Result = {
 const text = (v: unknown) =>
   v == null ? "—" : typeof v === "object" ? JSON.stringify(v) : String(v);
 const moneyTables = [
+  "payroll-bases",
   "transactions",
   "tax-documents",
   "obligations",
@@ -140,6 +145,8 @@ export function CountryWorkflows({
   const [obligationDue, setObligationDue] = useState("");
   const [obligationPeriod, setObligationPeriod] = useState("");
   const [expectedMembers, setExpectedMembers] = useState("");
+  const [expectedDocuments, setExpectedDocuments] = useState("");
+  const [ruleDocument, setRuleDocument] = useState("");
   const [gstRegistration, setGSTRegistration] = useState("");
   const [gstDirection, setGSTDirection] = useState("purchase");
   const [gstPeriod, setGSTPeriod] = useState("");
@@ -170,6 +177,7 @@ export function CountryWorkflows({
   const [comments, setComments] = useState("");
   const [reason, setReason] = useState("");
   const [localError, setLocalError] = useState<Error | null>(null);
+  const [showRuleProvenance, setShowRuleProvenance] = useState(false);
   const action = useAction<{ id: string }>();
   const available = config.data?.items.filter((w) => w.available) || [];
   const chosen = available.find((w) => w.id === workflow);
@@ -178,9 +186,38 @@ export function CountryWorkflows({
   );
   const body = detail.data?.body;
   const rows = body?.rows || [];
-  const columns = [...new Set(rows.flatMap((row) => Object.keys(row)))].filter(
-    (k) => !["auditor", "auditor_at"].includes(k),
-  );
+  const allColumns = [
+    ...new Set(rows.flatMap((row) => Object.keys(row))),
+  ].filter((k) => !["auditor", "auditor_at"].includes(k));
+  const columns =
+    body?.workflow === "india-payroll-rules" && !showRuleProvenance
+      ? [
+          "subject",
+          "period",
+          "component",
+          "currency",
+          "assessed_base",
+          "expected_amount",
+          "reported_amount",
+          "difference",
+          "state",
+        ].filter((key) => allColumns.includes(key))
+      : ["india-gst", "uae-vat"].includes(body?.workflow || "") &&
+          !showRuleProvenance
+        ? [
+            "counterparty",
+            "reference",
+            "document_type",
+            "component",
+            "currency",
+            "books_tax",
+            "return_tax",
+            "tax_difference",
+            "net_difference",
+            "state",
+            "source_review_reasons",
+          ].filter((key) => allColumns.includes(key))
+        : allColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -231,11 +268,21 @@ export function CountryWorkflows({
         payload = {
           evidence_version_id: evidence,
           file_format: sourceFormat,
+          ...(tableType === "payroll-rules" && ruleDocument
+            ? { rule_document_version_id: ruleDocument }
+            : {}),
           ...(sourceFormat === "india-inv01-json"
             ? {
                 gst_registration: gstRegistration,
                 gst_direction: gstDirection,
                 gst_period: gstPeriod,
+              }
+            : {}),
+          ...(sourceFormat === "india-gstr2b-json"
+            ? {
+                gst_registration: gstRegistration,
+                gst_period: gstPeriod,
+                expected_documents: Number(expectedDocuments),
               }
             : {}),
           ...(sourceFormat !== "canonical-csv" && account
@@ -275,7 +322,13 @@ export function CountryWorkflows({
           as_of: asOf,
           title: label,
           rationale: reason,
-          currency,
+          currency: [
+            "india-payroll-rules",
+            "india-gst",
+            "india-withholding",
+          ].includes(workflow)
+            ? "INR"
+            : currency,
           ...([
             "subsequent-settlements",
             "balance-confirmations",
@@ -636,6 +689,43 @@ export function CountryWorkflows({
                       )}
                     </select>
                   </label>
+                  {tableType === "payroll-bases" && (
+                    <p>
+                      Payroll base controls sum assessed bases across component
+                      rows. They are not gross payroll totals. Record each
+                      membership or exemption decision and its evidence
+                      reference explicitly.
+                    </p>
+                  )}
+                  {tableType === "payroll-rules" && (
+                    <>
+                      <label>
+                        Payroll rule source document (optional shared document)
+                        <select
+                          value={ruleDocument}
+                          onChange={(e) => setRuleDocument(e.target.value)}
+                        >
+                          <option value="">
+                            Use document references from the CSV
+                          </option>
+                          {inputs.data?.evidence
+                            .filter((item) => item.scan_status === "CLEAN")
+                            .map((item) => (
+                              <option key={item.id} value={item.id}>
+                                {item.label}
+                              </option>
+                            ))}
+                        </select>
+                      </label>
+                      <p>
+                        Select a retained document to fill blank source-document
+                        references and hashes in the CSV. Conflicting references
+                        are rejected. Independently review this source before
+                        calculating contributions; rules must cover the whole
+                        wage month.
+                      </p>
+                    </>
+                  )}
                   {["camt053", "swift-mt940"].includes(sourceFormat) && (
                     <label>
                       Statement account identifier (optional selection)
@@ -714,6 +804,50 @@ export function CountryWorkflows({
                         signed tax across all components. This imports invoice
                         data; IRP authenticity, cancellation status and credit
                         eligibility require separate evidence.
+                      </p>
+                    </>
+                  )}
+                  {sourceFormat === "india-gstr2b-json" && (
+                    <>
+                      <label>
+                        Recipient GSTIN
+                        <input
+                          value={gstRegistration}
+                          onChange={(event) =>
+                            setGSTRegistration(event.target.value)
+                          }
+                        />
+                      </label>
+                      <label>
+                        GSTR-2B return month
+                        <input
+                          type="month"
+                          value={gstPeriod}
+                          onChange={(event) => setGSTPeriod(event.target.value)}
+                        />
+                      </label>
+                      <label>
+                        Independent GSTR-2B document count
+                        <input
+                          type="number"
+                          min={0}
+                          max={1250}
+                          value={expectedDocuments}
+                          onChange={(event) => {
+                            setExpectedDocuments(event.target.value);
+                            setExpectedRows(
+                              String(Number(event.target.value) * 4),
+                            );
+                          }}
+                        />
+                      </label>
+                      <p>
+                        Count each source document, including amendments and
+                        reversal records. Four tax-component rows are imported
+                        per document. INR controls sum signed document tax
+                        fields; they do not represent eligible credit. Paged
+                        downloads and unknown sections require a supported
+                        complete profile.
                       </p>
                     </>
                   )}
@@ -915,7 +1049,10 @@ export function CountryWorkflows({
                         (r) =>
                           r.kind === "workflow-source" &&
                           r.table_type === type &&
-                          r.freshness === "CURRENT",
+                          r.freshness === "CURRENT" &&
+                          (workflow !== "india-payroll-rules" ||
+                            role !== "rules" ||
+                            r.review_status === "REVIEWED"),
                       )
                       .map((r) => (
                         <option key={r.id} value={r.id}>
@@ -1106,10 +1243,44 @@ export function CountryWorkflows({
               evidence and regenerate.
             </p>
           )}
+          {body.workflow === "india-payroll-rules" && (
+            <>
+              <p>
+                {body.expected_total_complete === false
+                  ? "Partial expected total"
+                  : "Expected contributions"}
+                : INR {body.expected_total}. Reported contributions: INR{" "}
+                {body.reported_total}. Payment is not verified by this
+                comparison.
+              </p>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={showRuleProvenance}
+                  onChange={(event) =>
+                    setShowRuleProvenance(event.target.checked)
+                  }
+                />
+                Show rule provenance and source references
+              </label>
+            </>
+          )}
           <p>
             Population basis: {body.population_completeness}. Calculations do
             not determine a statutory compliance conclusion.
           </p>
+          {["india-gst", "uae-vat"].includes(body.workflow || "") && (
+            <label>
+              <input
+                type="checkbox"
+                checked={showRuleProvenance}
+                onChange={(event) =>
+                  setShowRuleProvenance(event.target.checked)
+                }
+              />
+              Show source versions and review details
+            </label>
+          )}
           {body.execution_mode && (
             <p>
               Execution: {body.execution_mode.replaceAll("_", " ")}.

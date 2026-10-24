@@ -78,7 +78,7 @@
       "capability": "Reliefs, tax groups and continuing balances",
       "observed_issue": "Existing bounded specialist modules need entity-specific conditions; shared group references hit Phase 1 guard",
       "financial_or_control_consequence": "Unsupported relief or rejected legitimate group sources",
-      "fix": "Retain conditions/elections/release controls; authorize explicit group member links; no automatic relief posting",
+      "fix": "Retain conditions/elections/release controls; authorize explicit tax-group members, loss-transfer recipient profile and posted recipient source links with actual record access checks; no generic cross-engagement access",
       "verification": "Specialist eligibility, credit/exemption, group and loss-transfer regressions",
       "status": "implemented_with_existing_scope_limits"
     },
@@ -183,12 +183,12 @@
     },
     {
       "engine": "shared",
-      "capability": "Complete requested demonstrations A-C",
-      "observed_issue": "Individual VAT/CT and financing modules have real tests, but not every requested same-entity end-to-end combination",
+      "capability": "Complete requested demonstrations and financing limits",
+      "observed_issue": "Same-entity VAT/CT trading workflow now demonstrated; financing still needs actual authorized market support and a separately reviewed VAT/posting bridge",
       "financial_or_control_consequence": "Overclaiming connected production readiness",
-      "fix": "Report exact exercised paths and missing combined-fixture/posting/market evidence",
-      "verification": "README workflow evidence and individual XML test cases",
-      "status": "partially_demonstrated"
+      "fix": "Retain same-entity trading approval evidence and exact financing limitations; no manufactured market observations or automatic postings",
+      "verification": "trading-results.xml, trading-workflow.json, TP financing/CT bridge regressions and README",
+      "status": "trading_demonstrated_financing_scope_remains_bounded"
     },
     {
       "engine": "E03 dependency",

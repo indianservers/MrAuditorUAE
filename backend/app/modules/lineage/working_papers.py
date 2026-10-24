@@ -67,8 +67,20 @@ async def capture(db, ctx, obj):
         if identifier in records:
             row = records[identifier]
             if row.engagement_id != obj.engagement_id:
-                members = {uuid.UUID(member["engagement_id"]) for member in obj.body.get("members", [])} if getattr(obj, "kind", None) == "tax-group" else set()
-                if row.engagement_id not in members:
+                members = {uuid.UUID(member["engagement_id"]) for member in obj.body.get("members", [])} if getattr(obj, "kind", None) in {"tax-group", "ifrs-consolidation"} else set()
+                comparative_link = (getattr(obj, "kind", None) == "ifrs-profile"
+                    and row.kind == "ifrs-profile"
+                    and str(row.id) == obj.body.get("comparative_profile_id")
+                    and str(row.engagement_id) == obj.body.get("comparative_engagement_id"))
+                recipient_link = (getattr(obj, "kind", None) == "tax-loss-transfer"
+                    and str(row.id) == obj.body.get("recipient_profile_id")
+                    and str(row.engagement_id) == obj.body.get("recipient_engagement_id"))
+                posted_transfer_link = (getattr(obj, "kind", None) == "tax-loss"
+                    and str(row.id) == obj.body.get("transfer_source_id")
+                    and row.kind == "tax-loss-transfer" and row.status in {"APPROVED", "LOCKED"}
+                    and row.body.get("recipient_engagement_id") == str(obj.engagement_id)
+                    and row.body.get("recipient_profile_id") == obj.body.get("profile_id"))
+                if row.engagement_id not in members and not comparative_link and not recipient_link and not posted_transfer_link:
                     raise HTTPException(422, "Cross-engagement working-paper source requires an authorized link")
                 # A tax group explicitly names its member engagements. Recheck access
                 # to the actual referenced record; a shared tenant is insufficient.

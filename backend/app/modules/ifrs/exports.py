@@ -34,8 +34,9 @@ def _rows_for(run, released, reviewers):
         ["Scope", data.get("scope", "Limited-scope deterministic calculation")],
     ]
     precision = data.get("precision", 2)
+
     def amount(value):
-        return presented(value, "assets", precision)
+        return "Not supplied" if value is None else presented(value, "assets", precision)
 
     for section in ["assets", "liabilities", "equity", "income", "expenses", "oci"]:
         lines = [r for r in presentation_lines(data) if r["section"] == section]
@@ -91,6 +92,8 @@ def _rows_for(run, released, reviewers):
         if not values:
             continue
         rows.append([section.replace("_", " ").upper(), "Current", "Comparative", "Basis"])
+        if values.get("status"):
+            rows.append(["Scope/status", values["status"]])
         for key in keys:
             if key in values:
                 rows.append(

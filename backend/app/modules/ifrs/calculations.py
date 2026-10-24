@@ -8,6 +8,8 @@ from typing import Any
 from uuid import UUID
 
 from app.modules.ifrs import schemas as s
+from app.modules.ifrs.employee_benefits import employee_benefits
+from app.modules.ifrs.inventory import inventory
 
 D = Decimal
 ZERO = D(0)
@@ -88,6 +90,10 @@ def lease(data: s.Lease):
         "current_liability": q(current),
         "noncurrent_liability": q(liability - current),
         "rou_daily_depreciation": q(rou / D((data.end_date - data.commencement).days)),
+        "rou_depreciation_after_last_payment": q(
+            rou * D((data.end_date - previous).days) / D((data.end_date - data.commencement).days)
+        ),
+        "rou_total_depreciation": q(rou),
         "schedule": rows,
         "interest_total": q(sum((r["interest"] for r in rows), ZERO)),
         "closing_liability": q(balance),
@@ -277,7 +283,12 @@ def revenue(data: s.Revenue):
 def deferred_tax(data: s.DeferredTax):
     rows: list[dict[str, Any]] = []
     allocations: dict[str, Decimal] = defaultdict(lambda: ZERO)
+    if len({item.reference for item in data.differences}) != len(data.differences):
+        raise ValueError("Duplicate deferred-tax difference reference")
+    issues = []
     for item in data.differences:
+        if item.item_type == "tax_loss" and item.tax_base < 0:
+            raise ValueError("Tax loss basis must be a nonnegative eligible carryforward")
         if item.exception_applied and not item.exception_rationale.strip():
             raise ValueError("Tax exception requires a documented rationale")
         difference = (
@@ -293,6 +304,19 @@ def deferred_tax(data: s.DeferredTax):
             if item.exception_applied or potential < 0 and not item.recognise_dta
             else potential
         )
+        if recognised < 0 and (
+            not item.recoverability_evidence.strip()
+            or not item.expected_recovery_or_settlement.strip()
+        ):
+            recognised = ZERO
+            issues.append(
+                {
+                    "code": "DTA_RECOVERABILITY_UNEVIDENCED",
+                    "reference": item.reference,
+                    "blocking": True,
+                    "remediation": "Supply assessed recovery timing and supporting taxable-profit forecasts/evidence",
+                }
+            )
         movement = recognised - item.previous_deferred_balance
         allocations[item.allocation] += movement
         rows.append(
@@ -305,6 +329,10 @@ def deferred_tax(data: s.DeferredTax):
                 "unrecognised_dta": -potential if potential < 0 and recognised == 0 else ZERO,
                 "movement": movement,
                 "allocation": item.allocation,
+                "rate_source": item.rate_source,
+                "rate_effective_date": item.rate_effective_date,
+                "expected_recovery_or_settlement": item.expected_recovery_or_settlement,
+                "recoverability_evidence": item.recoverability_evidence,
             }
         )
     return {
@@ -313,6 +341,8 @@ def deferred_tax(data: s.DeferredTax):
         "dta": sum((max(ZERO, -r["deferred_balance_dtl_positive"]) for r in rows), ZERO),
         "movements": dict(allocations),
         "current_tax": data.current_tax,
+        "issues": issues,
+        "tax_basis": "Ordinary IAS 12 differences only; no E08 GloBE/Pillar Two deferred-tax measurement",
         "method": "Item-specific tax-base differences and approved rates; DTA recognition and exceptions are human assessments; no statutory tax computation",
     }
 
@@ -324,21 +354,28 @@ def fixed_assets(data: s.FixedAssets):
     if len({a.reference for a in data.assets}) != len(data.assets):
         raise ValueError("Duplicate fixed asset reference")
     for a in data.assets:
+        if a.asset_class != "ppe":
+            raise ValueError(
+                "IAS 40, IFRS 5 and IAS 38 require separate specialist measurement; PPE depreciation is blocked"
+            )
         if a.disposal_date and a.disposal_date < data.period_start:
             raise ValueError("Previously disposed assets must be excluded from the active register")
         if a.capitalisation_date > data.period_end:
             raise ValueError(
                 "Future acquisitions must be excluded from the reporting-period register"
             )
-        if (
-            a.residual > a.cost
-            or a.opening_accumulated + a.impairment > a.cost + a.revaluation_increment
-        ):
+        if a.opening_accumulated + a.impairment > a.cost + a.revaluation_increment:
             raise ValueError("Invalid asset residual/accumulated depreciation/impairment")
         if a.revaluation_increment and not a.revaluation_assessment.strip():
             raise ValueError("Revaluation requires approved rationale")
-        end = min(data.period_end, a.disposal_date) if a.disposal_date else data.period_end
-        start = max(data.period_start, a.capitalisation_date)
+        # Derecognition ends depreciation; its date is excluded from the charge.
+        end = (
+            min(data.period_end, a.disposal_date - timedelta(days=1))
+            if a.disposal_date
+            else data.period_end
+        )
+        commencement = a.available_for_use_date or a.capitalisation_date
+        start = max(data.period_start, commencement)
         days = max(0, (end - start).days + 1)
         opening = a.cost + a.revaluation_increment - a.opening_accumulated - a.impairment
         capacity = max(ZERO, opening - a.residual)
@@ -347,14 +384,76 @@ def fixed_assets(data: s.FixedAssets):
             if a.method == "straight_line"
             else opening * a.diminishing_rate
         )
-        depreciation = min(capacity, annual * D(days) / 365)
+        depreciation = (
+            ZERO if a.construction_in_progress else min(capacity, max(ZERO, annual) * D(days) / 365)
+        )
+        estimate_bridge = None
+        if a.estimate_change_date:
+            if a.revised_residual is None or a.revised_remaining_life_years is None:
+                raise ValueError(
+                    "A dated estimate change requires revised residual and remaining life"
+                )
+            if not data.period_start <= a.estimate_change_date <= data.period_end:
+                raise ValueError(
+                    "Estimate change must fall in this period; revise opening estimates for earlier changes"
+                )
+            before_days = max(
+                0, (min(end + timedelta(days=1), a.estimate_change_date) - start).days
+            )
+            prior_charge = (
+                ZERO
+                if a.construction_in_progress
+                else min(capacity, max(ZERO, annual) * D(before_days) / 365)
+            )
+            carrying_at_change = opening - prior_charge
+            if a.revised_residual > carrying_at_change:
+                # IAS 16: residual above carrying gives a zero charge, not a negative expense.
+                new_capacity = ZERO
+            else:
+                new_capacity = carrying_at_change - a.revised_residual
+            after_days = max(0, (end - max(start, a.estimate_change_date)).days + 1)
+            revised_charge = (
+                ZERO
+                if a.construction_in_progress
+                else min(
+                    new_capacity,
+                    new_capacity / a.revised_remaining_life_years * D(after_days) / 365,
+                )
+            )
+            depreciation = prior_charge + revised_charge
+            estimate_bridge = {
+                "effective_date": a.estimate_change_date,
+                "prior_charge": q(prior_charge),
+                "carrying_at_change": q(carrying_at_change),
+                "revised_charge": q(revised_charge),
+                "treatment": "Prospective; no restatement of prior depreciation",
+            }
         before_disposal = opening - depreciation
         disposed = bool(a.disposal_date and data.period_start <= a.disposal_date <= data.period_end)
         rows.append(
             {
                 "reference": a.reference,
                 "component_of": a.component_of,
+                "available_for_use_date": a.available_for_use_date,
+                "commencement_verified": bool(
+                    a.available_for_use_date and a.available_for_use_evidence
+                ),
+                "construction_in_progress": a.construction_in_progress,
+                "estimate_change": estimate_bridge,
                 "cost": a.cost,
+                "cost_rollforward": {
+                    "opening": a.cost if a.capitalisation_date < data.period_start else ZERO,
+                    "additions": a.cost if a.capitalisation_date >= data.period_start else ZERO,
+                    "revaluation": a.revaluation_increment,
+                    "disposals": a.cost + a.revaluation_increment if disposed else ZERO,
+                    "closing": ZERO if disposed else a.cost + a.revaluation_increment,
+                },
+                "accumulated_depreciation_rollforward": {
+                    "opening": a.opening_accumulated,
+                    "charge": q(depreciation),
+                    "derecognised": q(a.opening_accumulated + depreciation) if disposed else ZERO,
+                    "closing": ZERO if disposed else q(a.opening_accumulated + depreciation),
+                },
                 "opening_carrying": q(opening),
                 "days": days,
                 "depreciation": q(depreciation),
@@ -369,6 +468,16 @@ def fixed_assets(data: s.FixedAssets):
         "total_depreciation": sum((r["depreciation"] for r in rows), ZERO),
         "closing_carrying": sum((r["closing_carrying"] for r in rows), ZERO),
         "method": "Daily actual/365 straight-line or stated annual diminishing rate; residual floor; separately documented components",
+        "issues": [
+            {
+                "code": "AVAILABLE_FOR_USE_UNVERIFIED",
+                "reference": a.reference,
+                "blocking": True,
+                "remediation": "Supply approved available-for-use date and evidence; legacy capitalisation-date calculation is provisional",
+            }
+            for a in data.assets
+            if not a.construction_in_progress and not a.available_for_use_date
+        ],
     }
 
 
@@ -442,6 +551,8 @@ ENGINES: dict[str, Callable[[Any], dict]] = {
     "fixed-assets": fixed_assets,
     "impairment": impairment,
     "provision": provision,
+    "inventory": inventory,
+    "employee-benefits": employee_benefits,
 }
 
 

@@ -7,13 +7,15 @@ from pydantic import Field, model_validator
 
 from app.modules.audit_execution.schemas import Body, Strict
 from app.modules.ifrs.schemas import Money, Nonnegative, Positive, Rate
+from app.modules.jurisdictions.ae.registration import RegistrationPolicy
 
 
 class Rule(Body):
+    registration_parameters: RegistrationPolicy | None = None
     rule_key: str = Field(min_length=1, max_length=100)
     rule_version: int = Field(ge=1)
     category: Literal[
-        "output", "input", "invoice", "return", "einvoice", "integrity", "employee", "adjustment"
+        "output", "input", "invoice", "return", "einvoice", "integrity", "employee", "adjustment", "registration"
     ]
     source_id: str
     article: str = Field(default="", max_length=100)

@@ -1,0 +1,5688 @@
+{
+  "synthetic": true,
+  "schedules": {
+    "fixed-assets": {
+      "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1",
+      "record_id": "23cc8dcc-0c69-4b08-8c0c-ea2f639bf729",
+      "kind": "fixed-assets",
+      "methodology_version": "auditos-accounting/3.1",
+      "inputs": {
+        "area": "",
+        "assets": [
+          {
+            "cost": "3650",
+            "method": "straight_line",
+            "location": "",
+            "proceeds": "0",
+            "residual": "0",
+            "reference": "SYN-A",
+            "impairment": "0",
+            "asset_class": "ppe",
+            "component_of": "",
+            "disposal_date": null,
+            "diminishing_rate": "0",
+            "revised_residual": null,
+            "useful_life_years": "10",
+            "ownership_evidence": "",
+            "capitalisation_date": "2026-01-01",
+            "opening_accumulated": "0",
+            "estimate_change_date": null,
+            "physical_verification": "not_verified",
+            "revaluation_increment": "0",
+            "available_for_use_date": "2026-01-01",
+            "revaluation_assessment": "",
+            "construction_in_progress": false,
+            "estimate_change_rationale": "",
+            "available_for_use_evidence": "Synthetic commissioning certificate",
+            "revised_remaining_life_years": null
+          }
+        ],
+        "sources": [],
+        "due_date": null,
+        "owner_id": null,
+        "narrative": "",
+        "assertions": [],
+        "period_end": "2026-12-31",
+        "profile_id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+        "period_start": "2026-01-01"
+      },
+      "dependencies": [
+        {
+          "id": "23cc8dcc-0c69-4b08-8c0c-ea2f639bf729",
+          "status": "APPROVED",
+          "version": 3
+        },
+        {
+          "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+          "status": "APPROVED",
+          "version": 3
+        }
+      ],
+      "results": {
+        "issues": [],
+        "method": "Daily actual/365 straight-line or stated annual diminishing rate; residual floor; separately documented components",
+        "schedule": [
+          {
+            "cost": "3650",
+            "days": 365,
+            "reference": "SYN-A",
+            "impairment": "0",
+            "component_of": "",
+            "depreciation": "365.00000000",
+            "estimate_change": null,
+            "closing_carrying": "3285.00000000",
+            "cost_rollforward": {
+              "closing": "3650",
+              "opening": "0",
+              "additions": "3650",
+              "disposals": "0",
+              "revaluation": "0"
+            },
+            "opening_carrying": "3650.00000000",
+            "disposal_carrying": "0",
+            "disposal_gain_loss": "0",
+            "commencement_verified": true,
+            "available_for_use_date": "2026-01-01",
+            "construction_in_progress": false,
+            "accumulated_depreciation_rollforward": {
+              "charge": "365.00000000",
+              "closing": "365.00000000",
+              "opening": "0",
+              "derecognised": "0"
+            }
+          }
+        ],
+        "execution": {
+          "evidence": [
+            {
+              "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+              "kind": "snapshot"
+            }
+          ],
+          "rounding": "Decimal precision 48; schedule HALF_UP to 8 decimal places; journals use currency minor units",
+          "entity_id": "14522cc1-4b93-4d4e-87f1-bca1dfa8df25",
+          "framework": "full_ifrs",
+          "period_id": "a594202d-1e60-443e-a4ca-796d99268bca",
+          "tenant_id": "f57a72e1-6319-4e68-9062-ba48aadd6911",
+          "period_end": "2026-12-31",
+          "period_start": "2026-01-01",
+          "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1",
+          "journal_state": "NOT_POSTED",
+          "review_status": "DRAFT_REQUIRES_REVIEW",
+          "entity_version": 1,
+          "execution_mode": "deterministic_python_decimal",
+          "source_balance": "Retained ledger snapshot; original balances are never overwritten",
+          "chart_snapshots": [
+            {
+              "id": "782b980c-59ce-49d0-8988-caca71e7a1ca",
+              "sha256": "d40475111aeb34820fb0eef3610267f8f59c4fdb749ef78253dcda078fca1001"
+            }
+          ],
+          "currency_policy": {
+            "code": "AED",
+            "rounding": "ROUND_HALF_EVEN",
+            "precision": 2
+          },
+          "policy_versions": [
+            {
+              "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+              "kind": "ifrs-profile",
+              "status": "APPROVED",
+              "version": 3,
+              "framework": "full_ifrs",
+              "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+            }
+          ],
+          "supporting_runs": [],
+          "contract_version": "accounting/1",
+          "current_tax_runs": [],
+          "source_snapshots": [
+            {
+              "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+              "sha256": "06a301f7c6723b5a03c614f8439d4b0fdda3c5488451a19f59eed71d4cdc3f5a",
+              "source_complete": true
+            }
+          ],
+          "proposed_journals": [],
+          "unresolved_issues": [],
+          "calculation_version": "auditos-accounting/3.1",
+          "functional_currency": "AED",
+          "source_completeness": "complete_for_declared_scope",
+          "approved_assumptions": [
+            {
+              "id": "23cc8dcc-0c69-4b08-8c0c-ea2f639bf729",
+              "kind": "ifrs-fixed-assets",
+              "status": "APPROVED",
+              "version": 3
+            },
+            {
+              "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+              "kind": "ifrs-profile",
+              "status": "APPROVED",
+              "version": 3
+            }
+          ],
+          "calculated_adjustment": "Calculation output; recognition and accounts require review",
+          "implementation_sha256": "a5710c08d3a39d021c9f590868259991d88feadbebd0c600015e0c26dd8e6001",
+          "presentation_currency": "AED"
+        },
+        "closing_carrying": "3285.00000000",
+        "total_depreciation": "365.00000000"
+      },
+      "sha256": "949d39f36bc212a8a96a4a51058eac79ae1cc2b6cb610806a30aa31db9bf7fb6",
+      "tenant_id": "f57a72e1-6319-4e68-9062-ba48aadd6911",
+      "created_by": "0dd37104-d59f-4344-943b-808aff4214d8",
+      "id": "77ec04d3-65c5-489e-b29a-0c9edc9ce6d5",
+      "created_at": "2026-10-24T19:45:56.291232+00:00",
+      "updated_at": "2026-10-24T19:45:56.291232+00:00"
+    },
+    "inventory": {
+      "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1",
+      "record_id": "fe4fd102-60ea-4c5b-8d73-e8e7258a4962",
+      "kind": "inventory",
+      "methodology_version": "auditos-accounting/3.1",
+      "inputs": {
+        "area": "",
+        "items": [
+          {
+            "sku": "",
+            "uom": "each",
+            "issues": [],
+            "location": "SYN-site",
+            "receipts": [
+              {
+                "date": "2026-02-01",
+                "evidence": "SYN invoice",
+                "quantity": "8",
+                "sequence": 0,
+                "reference": "SYN-R",
+                "unit_cost": "22",
+                "landed_cost": "0",
+                "transaction_type": "purchase",
+                "transfer_reference": ""
+              }
+            ],
+            "ownership": "owned",
+            "reference": "SYN-stock-site1",
+            "nrv_evidence": "SYN comparable price less completion and sale costs",
+            "selling_cost": "3",
+            "selling_price": "25",
+            "completion_cost": "2",
+            "opening_quantity": "0",
+            "opening_unit_cost": "0",
+            "expected_closing_quantity": "8",
+            "prior_write_down_remaining": "0"
+          }
+        ],
+        "method": "fifo",
+        "sources": [],
+        "due_date": null,
+        "owner_id": null,
+        "narrative": "",
+        "assertions": [],
+        "period_end": "2026-12-31",
+        "profile_id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+        "period_start": "2026-01-01",
+        "policy_version": "SYN-policy/1"
+      },
+      "dependencies": [
+        {
+          "id": "fe4fd102-60ea-4c5b-8d73-e8e7258a4962",
+          "status": "APPROVED",
+          "version": 3
+        },
+        {
+          "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+          "status": "APPROVED",
+          "version": 3
+        }
+      ],
+      "results": {
+        "issues": [],
+        "method": "fifo",
+        "schedule": [
+          {
+            "nrv": "160.00000000",
+            "uom": "each",
+            "location": "SYN-site",
+            "ownership": "owned",
+            "reference": "SYN-stock-site1",
+            "issue_cost": "0.00000000",
+            "closing_cost": "176.00000000",
+            "nrv_evidence": "SYN comparable price less completion and sale costs",
+            "opening_cost": "0.00000000",
+            "receipt_cost": "176.00000000",
+            "closing_quantity": "8",
+            "closing_write_down": "16.00000000",
+            "accounting_carrying": "160.00000000",
+            "prior_write_down_remaining": "0",
+            "cost_rollforward_difference": "0.00000000",
+            "recognised_expense_or_reversal": "16.00000000",
+            "write_down_expense_or_reversal": "16.00000000"
+          }
+        ],
+        "execution": {
+          "evidence": [
+            {
+              "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+              "kind": "snapshot"
+            }
+          ],
+          "rounding": "Decimal precision 48; schedule HALF_UP to 8 decimal places; journals use currency minor units",
+          "entity_id": "14522cc1-4b93-4d4e-87f1-bca1dfa8df25",
+          "framework": "full_ifrs",
+          "period_id": "a594202d-1e60-443e-a4ca-796d99268bca",
+          "tenant_id": "f57a72e1-6319-4e68-9062-ba48aadd6911",
+          "period_end": "2026-12-31",
+          "period_start": "2026-01-01",
+          "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1",
+          "journal_state": "NOT_POSTED",
+          "review_status": "DRAFT_REQUIRES_REVIEW",
+          "entity_version": 1,
+          "execution_mode": "deterministic_python_decimal",
+          "source_balance": "Retained ledger snapshot; original balances are never overwritten",
+          "chart_snapshots": [
+            {
+              "id": "782b980c-59ce-49d0-8988-caca71e7a1ca",
+              "sha256": "d40475111aeb34820fb0eef3610267f8f59c4fdb749ef78253dcda078fca1001"
+            }
+          ],
+          "currency_policy": {
+            "code": "AED",
+            "rounding": "ROUND_HALF_EVEN",
+            "precision": 2
+          },
+          "policy_versions": [
+            {
+              "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+              "kind": "ifrs-profile",
+              "status": "APPROVED",
+              "version": 3,
+              "framework": "full_ifrs",
+              "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+            }
+          ],
+          "supporting_runs": [],
+          "contract_version": "accounting/1",
+          "current_tax_runs": [],
+          "source_snapshots": [
+            {
+              "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+              "sha256": "06a301f7c6723b5a03c614f8439d4b0fdda3c5488451a19f59eed71d4cdc3f5a",
+              "source_complete": true
+            }
+          ],
+          "proposed_journals": [],
+          "unresolved_issues": [],
+          "calculation_version": "auditos-accounting/3.1",
+          "functional_currency": "AED",
+          "source_completeness": "complete_for_declared_scope",
+          "approved_assumptions": [
+            {
+              "id": "fe4fd102-60ea-4c5b-8d73-e8e7258a4962",
+              "kind": "ifrs-inventory",
+              "status": "APPROVED",
+              "version": 3
+            },
+            {
+              "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+              "kind": "ifrs-profile",
+              "status": "APPROVED",
+              "version": 3
+            }
+          ],
+          "calculated_adjustment": "Calculation output; recognition and accounts require review",
+          "implementation_sha256": "a5710c08d3a39d021c9f590868259991d88feadbebd0c600015e0c26dd8e6001",
+          "presentation_currency": "AED"
+        },
+        "movements": [
+          {
+            "cost": "176.00000000",
+            "date": "2026-02-01",
+            "item": "SYN-stock-site1",
+            "kind": "receipt",
+            "evidence": "SYN invoice",
+            "quantity": "8",
+            "reference": "SYN-R",
+            "closing_cost": "176.00000000",
+            "closing_quantity": "8",
+            "transaction_type": "purchase",
+            "transfer_reference": ""
+          }
+        ],
+        "transfers": [],
+        "limitations": [
+          "Purchased stock and matched location transfers only; production, returns and specific identification require specialist schedules",
+          "Prior write-down is the approved allocation to remaining units; custody-only goods are excluded from accounting assets",
+          "Ageing does not determine NRV; supplied comparable price and completion/selling costs require review"
+        ],
+        "closing_carrying": "160.00000000",
+        "write_down_movement": "16.00000000"
+      },
+      "sha256": "362975c6c748b99d23dac4f332cbee50a0c0eba86dd3cb10ffd9ec825af0fcbc",
+      "tenant_id": "f57a72e1-6319-4e68-9062-ba48aadd6911",
+      "created_by": "0dd37104-d59f-4344-943b-808aff4214d8",
+      "id": "a9fd5faf-1280-4336-aef6-fb703ac4cbfa",
+      "created_at": "2026-10-24T19:45:56.616751+00:00",
+      "updated_at": "2026-10-24T19:45:56.616751+00:00"
+    },
+    "employee-benefits": {
+      "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1",
+      "record_id": "ff404d43-84de-41cc-a5fc-0ed4e0213a05",
+      "kind": "employee-benefits",
+      "methodology_version": "auditos-accounting/3.1",
+      "inputs": {
+        "area": "",
+        "scheme": "defined_benefit",
+        "sources": [],
+        "due_date": null,
+        "owner_id": null,
+        "narrative": "",
+        "assertions": [],
+        "profile_id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+        "settlements": "0",
+        "net_interest": "0",
+        "policy_version": "SYN/1",
+        "payroll_expense": "0",
+        "past_service_cost": "0",
+        "remeasurement_oci": "0",
+        "measurement_source": "SYN supplied expert figures",
+        "opening_obligation": "0",
+        "payroll_deductions": "0",
+        "leave_bonus_accrual": "0",
+        "current_service_cost": "20",
+        "employment_framework": "uae_mainland",
+        "framework_assessment": "Synthetic contract/regime review",
+        "confirmed_bank_payments": "0",
+        "opening_payroll_payable": "0",
+        "closing_ledger_provision": "20",
+        "actuarial_report_reference": "SYN actuarial report",
+        "statutory_settlement_estimate": null,
+        "closing_payroll_ledger_payable": "0"
+      },
+      "dependencies": [
+        {
+          "id": "ff404d43-84de-41cc-a5fc-0ed4e0213a05",
+          "status": "APPROVED",
+          "version": 3
+        },
+        {
+          "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+          "status": "APPROVED",
+          "version": 3
+        }
+      ],
+      "results": {
+        "issues": [],
+        "scheme": "defined_benefit",
+        "execution": {
+          "evidence": [
+            {
+              "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+              "kind": "snapshot"
+            }
+          ],
+          "rounding": "Decimal precision 48; schedule HALF_UP to 8 decimal places; journals use currency minor units",
+          "entity_id": "14522cc1-4b93-4d4e-87f1-bca1dfa8df25",
+          "framework": "full_ifrs",
+          "period_id": "a594202d-1e60-443e-a4ca-796d99268bca",
+          "tenant_id": "f57a72e1-6319-4e68-9062-ba48aadd6911",
+          "period_end": "2026-12-31",
+          "period_start": "2026-01-01",
+          "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1",
+          "journal_state": "NOT_POSTED",
+          "review_status": "DRAFT_REQUIRES_REVIEW",
+          "entity_version": 1,
+          "execution_mode": "deterministic_python_decimal",
+          "source_balance": "Retained ledger snapshot; original balances are never overwritten",
+          "chart_snapshots": [
+            {
+              "id": "782b980c-59ce-49d0-8988-caca71e7a1ca",
+              "sha256": "d40475111aeb34820fb0eef3610267f8f59c4fdb749ef78253dcda078fca1001"
+            }
+          ],
+          "currency_policy": {
+            "code": "AED",
+            "rounding": "ROUND_HALF_EVEN",
+            "precision": 2
+          },
+          "policy_versions": [
+            {
+              "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+              "kind": "ifrs-profile",
+              "status": "APPROVED",
+              "version": 3,
+              "framework": "full_ifrs",
+              "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+            }
+          ],
+          "supporting_runs": [],
+          "contract_version": "accounting/1",
+          "current_tax_runs": [],
+          "source_snapshots": [
+            {
+              "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+              "sha256": "06a301f7c6723b5a03c614f8439d4b0fdda3c5488451a19f59eed71d4cdc3f5a",
+              "source_complete": true
+            }
+          ],
+          "proposed_journals": [],
+          "unresolved_issues": [],
+          "calculation_version": "auditos-accounting/3.1",
+          "functional_currency": "AED",
+          "source_completeness": "complete_for_declared_scope",
+          "approved_assumptions": [
+            {
+              "id": "ff404d43-84de-41cc-a5fc-0ed4e0213a05",
+              "kind": "ifrs-employee-benefits",
+              "status": "APPROVED",
+              "version": 3
+            },
+            {
+              "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+              "kind": "ifrs-profile",
+              "status": "APPROVED",
+              "version": 3
+            }
+          ],
+          "calculated_adjustment": "Calculation output; recognition and accounts require review",
+          "implementation_sha256": "a5710c08d3a39d021c9f590868259991d88feadbebd0c600015e0c26dd8e6001",
+          "presentation_currency": "AED"
+        },
+        "oci_movement": "0",
+        "payment_state": "NO_PAYMENT_INSTRUCTION_CREATED",
+        "payroll_bridge": {
+          "ledger": "0",
+          "closing": "0",
+          "expense": "0",
+          "opening": "0",
+          "deductions": "0",
+          "difference": "0",
+          "leave_bonus_accrual": "0",
+          "confirmed_bank_payments": "0"
+        },
+        "execution_scope": "Aggregate reconciliation from reviewed supplied values; no actuarial valuation, salary generation, payment instruction or bank verification",
+        "employment_framework": "uae_mainland",
+        "profit_loss_movement": "20",
+        "obligation_rollforward": {
+          "ledger": "20",
+          "closing": "20",
+          "opening": "0",
+          "difference": "0",
+          "settlements": "0",
+          "net_interest": "0",
+          "service_cost": "20",
+          "past_service_cost": "0",
+          "remeasurement_oci": "0"
+        },
+        "statutory_settlement_estimate": null
+      },
+      "sha256": "5ce6ab32d38934f4bfc3f2340f8f76e078ba2c8d7e45761639a633ea48c3957b",
+      "tenant_id": "f57a72e1-6319-4e68-9062-ba48aadd6911",
+      "created_by": "0dd37104-d59f-4344-943b-808aff4214d8",
+      "id": "789e59df-fd40-4a6f-ae33-d17ef68b6d6b",
+      "created_at": "2026-10-24T19:45:56.847576+00:00",
+      "updated_at": "2026-10-24T19:45:56.847576+00:00"
+    },
+    "lease": {
+      "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1",
+      "record_id": "2b030825-a015-45cf-886b-beb87baab105",
+      "kind": "lease",
+      "methodology_version": "auditos-accounting/3.1",
+      "inputs": {
+        "area": "",
+        "sources": [],
+        "due_date": null,
+        "end_date": "2027-12-31",
+        "owner_id": null,
+        "payments": [
+          {
+            "date": "2027-12-31",
+            "amount": "1100"
+          }
+        ],
+        "narrative": "",
+        "assertions": [],
+        "profile_id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+        "commencement": "2026-12-31",
+        "previous_run_id": null,
+        "incentive_received": "0",
+        "options_assessment": "SYN one-year approved accounting term",
+        "annual_discount_rate": "0.1",
+        "initial_direct_costs": "0",
+        "remeasurement_reason": "",
+        "recognition_assessment": "SYN approved lessee identification",
+        "restoration_obligation": "0",
+        "variable_payments_excluded": "0"
+      },
+      "dependencies": [
+        {
+          "id": "2b030825-a015-45cf-886b-beb87baab105",
+          "status": "APPROVED",
+          "version": 3
+        },
+        {
+          "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+          "status": "APPROVED",
+          "version": 3
+        }
+      ],
+      "results": {
+        "method": "Dated contractual payments; annual effective rate; actual/365; straight-line ROU to end date",
+        "schedule": [
+          {
+            "date": "2027-12-31",
+            "closing": "0.00000000",
+            "opening": "1000.00000000",
+            "payment": "1100",
+            "interest": "100.00000000",
+            "principal": "1000.00000000",
+            "rou_depreciation": "1000.00000000"
+          }
+        ],
+        "execution": {
+          "evidence": [
+            {
+              "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+              "kind": "snapshot"
+            }
+          ],
+          "rounding": "Decimal precision 48; schedule HALF_UP to 8 decimal places; journals use currency minor units",
+          "entity_id": "14522cc1-4b93-4d4e-87f1-bca1dfa8df25",
+          "framework": "full_ifrs",
+          "period_id": "a594202d-1e60-443e-a4ca-796d99268bca",
+          "tenant_id": "f57a72e1-6319-4e68-9062-ba48aadd6911",
+          "period_end": "2026-12-31",
+          "period_start": "2026-01-01",
+          "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1",
+          "journal_state": "NOT_POSTED",
+          "review_status": "DRAFT_REQUIRES_REVIEW",
+          "entity_version": 1,
+          "execution_mode": "deterministic_python_decimal",
+          "source_balance": "Retained ledger snapshot; original balances are never overwritten",
+          "chart_snapshots": [
+            {
+              "id": "782b980c-59ce-49d0-8988-caca71e7a1ca",
+              "sha256": "d40475111aeb34820fb0eef3610267f8f59c4fdb749ef78253dcda078fca1001"
+            }
+          ],
+          "currency_policy": {
+            "code": "AED",
+            "rounding": "ROUND_HALF_EVEN",
+            "precision": 2
+          },
+          "policy_versions": [
+            {
+              "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+              "kind": "ifrs-profile",
+              "status": "APPROVED",
+              "version": 3,
+              "framework": "full_ifrs",
+              "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+            }
+          ],
+          "supporting_runs": [],
+          "contract_version": "accounting/1",
+          "current_tax_runs": [],
+          "source_snapshots": [
+            {
+              "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+              "sha256": "06a301f7c6723b5a03c614f8439d4b0fdda3c5488451a19f59eed71d4cdc3f5a",
+              "source_complete": true
+            }
+          ],
+          "proposed_journals": [
+            {
+              "debit": "ROU asset",
+              "amount": "1000.00000000",
+              "credit": "Lease liability"
+            },
+            {
+              "debit": "ROU asset",
+              "amount": "0.00000000",
+              "credit": "Cash/prepayments/restoration allocation requires human accounts"
+            }
+          ],
+          "unresolved_issues": [],
+          "calculation_version": "auditos-accounting/3.1",
+          "functional_currency": "AED",
+          "source_completeness": "complete_for_declared_scope",
+          "approved_assumptions": [
+            {
+              "id": "2b030825-a015-45cf-886b-beb87baab105",
+              "kind": "ifrs-lease",
+              "status": "APPROVED",
+              "version": 3
+            },
+            {
+              "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+              "kind": "ifrs-profile",
+              "status": "APPROVED",
+              "version": 3
+            }
+          ],
+          "calculated_adjustment": "Calculation output; recognition and accounts require review",
+          "implementation_sha256": "a5710c08d3a39d021c9f590868259991d88feadbebd0c600015e0c26dd8e6001",
+          "presentation_currency": "AED"
+        },
+        "initial_rou": "1000.00000000",
+        "interest_total": "100.00000000",
+        "upfront_payments": "0",
+        "closing_liability": "0.00000000",
+        "current_liability": "1000.00000000",
+        "initial_liability": "1000.00000000",
+        "journal_proposals": [
+          {
+            "debit": "ROU asset",
+            "amount": "1000.00000000",
+            "credit": "Lease liability"
+          },
+          {
+            "debit": "ROU asset",
+            "amount": "0.00000000",
+            "credit": "Cash/prepayments/restoration allocation requires human accounts"
+          }
+        ],
+        "noncurrent_liability": "0.00000000",
+        "rou_daily_depreciation": "2.73972603",
+        "rou_total_depreciation": "1000.00000000",
+        "variable_payments_excluded": "0",
+        "rou_depreciation_after_last_payment": "0.00000000"
+      },
+      "sha256": "a2b5e29a6d0b2082353e20ee3f858f631bb2af7a13bd92cbf8c781e3f1366a61",
+      "tenant_id": "f57a72e1-6319-4e68-9062-ba48aadd6911",
+      "created_by": "0dd37104-d59f-4344-943b-808aff4214d8",
+      "id": "1369a709-00e7-448b-9fd2-201e513da33d",
+      "created_at": "2026-10-24T19:45:57.083126+00:00",
+      "updated_at": "2026-10-24T19:45:57.083126+00:00"
+    }
+  },
+  "before_tax_financials": {
+    "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1",
+    "record_id": null,
+    "kind": "financials",
+    "methodology_version": "auditos-accounting/3.1",
+    "inputs": {
+      "profile_id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+      "snapshot_id": "897b8e68-6bfc-47e4-852b-541bb019e0d6"
+    },
+    "dependencies": [
+      {
+        "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "0c466dd1-1383-44f3-b024-f2ba645891b2",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "91c41263-32c8-41be-aaba-511a39f856f9",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "b125b385-e605-437c-9060-a91064f773c6",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "b197b145-ea16-4db2-8cb7-cd416c2d0955",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "ca028827-bc74-4c2d-a353-be7a6236bd9c",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "10e9712d-9c8d-4ef8-98b7-c9f248294fb0",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "23cc8dcc-0c69-4b08-8c0c-ea2f639bf729",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "fe4fd102-60ea-4c5b-8d73-e8e7258a4962",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "ff404d43-84de-41cc-a5fc-0ed4e0213a05",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "2b030825-a015-45cf-886b-beb87baab105",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "e55444b7-ef75-4ef3-8c16-8bbb9d82326b",
+        "status": "APPROVED",
+        "version": 7
+      },
+      {
+        "id": "453682f5-200f-4ea7-8693-28c74ad6e0a7",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "49f8da82-1cbb-4340-9a3e-ccee794f402c",
+        "status": "APPROVED",
+        "version": 7
+      },
+      {
+        "id": "c33ab5e3-5cfd-47f3-98d6-801a34f9ad93",
+        "status": "APPROVED",
+        "version": 7
+      },
+      {
+        "id": "edf53217-a1f2-4f7d-8c7e-0aa42ca5ecee",
+        "status": "APPROVED",
+        "version": 7
+      },
+      {
+        "id": "f8d29100-688d-4a2a-94a6-e5c2a7d328ea",
+        "status": "APPROVED",
+        "version": 7
+      },
+      {
+        "id": "9ca8e66b-377e-4d65-8559-adf0a1290d93",
+        "status": "APPROVED",
+        "version": 7
+      },
+      {
+        "id": "95290f96-a725-486d-82dc-e5fba5f4026d",
+        "status": "APPROVED",
+        "version": 7
+      },
+      {
+        "id": "be87db43-351c-471e-8ea9-eef78fd9ed29",
+        "status": "APPROVED",
+        "version": 7
+      }
+    ],
+    "results": {
+      "lines": [
+        {
+          "note": "N1",
+          "label": "Cash",
+          "weight": "1",
+          "current": "5196174.00000000",
+          "is_cash": true,
+          "opening": "4000000.00000000",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "100",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "100",
+              "weight": "1",
+              "original": "5200000.00000000",
+              "allocated": "5196174.00000000",
+              "adjustment": "-3826"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Capital",
+          "weight": "1",
+          "current": "-4000000.00000000",
+          "is_cash": false,
+          "opening": "-4000000.00000000",
+          "section": "equity",
+          "category": "operating",
+          "line_code": "300",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "300",
+              "weight": "1",
+              "original": "-4000000.00000000",
+              "allocated": "-4000000.00000000",
+              "adjustment": "0"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Revenue",
+          "weight": "1",
+          "current": "-2000000.00000000",
+          "is_cash": false,
+          "opening": "0",
+          "section": "income",
+          "category": "operating",
+          "line_code": "400",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "400",
+              "weight": "1",
+              "original": "-2000000.00000000",
+              "allocated": "-2000000.00000000",
+              "adjustment": "0"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Expense",
+          "weight": "1",
+          "current": "800401.00000000",
+          "is_cash": false,
+          "opening": "0",
+          "section": "expenses",
+          "category": "operating",
+          "line_code": "500",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "500",
+              "weight": "1",
+              "original": "800000.00000000",
+              "allocated": "800401.00000000",
+              "adjustment": "401.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Inventory",
+          "weight": "1",
+          "current": "176",
+          "is_cash": false,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "140",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "140",
+              "weight": "1",
+              "original": "0",
+              "allocated": "176",
+              "adjustment": "176"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Inventory allowance",
+          "weight": "1",
+          "current": "-16.00",
+          "is_cash": false,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "149",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "149",
+              "weight": "1",
+              "original": "0",
+              "allocated": "-16.00",
+              "adjustment": "-16.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Equipment",
+          "weight": "1",
+          "current": "3650",
+          "is_cash": false,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "150",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "150",
+              "weight": "1",
+              "original": "0",
+              "allocated": "3650",
+              "adjustment": "3650"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Accumulated depreciation",
+          "weight": "1",
+          "current": "-365.00",
+          "is_cash": false,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "159",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "159",
+              "weight": "1",
+              "original": "0",
+              "allocated": "-365.00",
+              "adjustment": "-365.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "ROU",
+          "weight": "1",
+          "current": "1000.00",
+          "is_cash": false,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "160",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "160",
+              "weight": "1",
+              "original": "0",
+              "allocated": "1000.00",
+              "adjustment": "1000.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Lease liability",
+          "weight": "1",
+          "current": "-1000.00",
+          "is_cash": false,
+          "opening": "0",
+          "section": "liabilities",
+          "category": "operating",
+          "line_code": "210",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "210",
+              "weight": "1",
+              "original": "0",
+              "allocated": "-1000.00",
+              "adjustment": "-1000.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Benefit provision",
+          "weight": "1",
+          "current": "-20.00",
+          "is_cash": false,
+          "opening": "0",
+          "section": "liabilities",
+          "category": "operating",
+          "line_code": "220",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "220",
+              "weight": "1",
+              "original": "0",
+              "allocated": "-20.00",
+              "adjustment": "-20.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Current tax payable",
+          "weight": "1",
+          "current": "0",
+          "is_cash": false,
+          "opening": "0",
+          "section": "liabilities",
+          "category": "operating",
+          "line_code": "230",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "230",
+              "weight": "1",
+              "original": "0",
+              "allocated": "0",
+              "adjustment": "0"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Deferred tax liability",
+          "weight": "1",
+          "current": "0",
+          "is_cash": false,
+          "opening": "0",
+          "section": "liabilities",
+          "category": "operating",
+          "line_code": "240",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "240",
+              "weight": "1",
+              "original": "0",
+              "allocated": "0",
+              "adjustment": "0"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Tax expense",
+          "weight": "1",
+          "current": "0",
+          "is_cash": false,
+          "opening": "0",
+          "section": "expenses",
+          "category": "tax",
+          "line_code": "510",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "510",
+              "weight": "1",
+              "original": "0",
+              "allocated": "0",
+              "adjustment": "0"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        }
+      ],
+      "notes": [
+        {
+          "id": "49f8da82-1cbb-4340-9a3e-ccee794f402c",
+          "text": "Synthetic disclosure for testing only. Basis and judgments independently reviewed.",
+          "lines": [
+            {
+              "code": "100",
+              "current": "5196174.00000000",
+              "comparative": "0"
+            },
+            {
+              "code": "300",
+              "current": "-4000000.00000000",
+              "comparative": "0"
+            },
+            {
+              "code": "400",
+              "current": "-2000000.00000000",
+              "comparative": "0"
+            },
+            {
+              "code": "500",
+              "current": "800401.00000000",
+              "comparative": "0"
+            },
+            {
+              "code": "140",
+              "current": "176",
+              "comparative": "0"
+            },
+            {
+              "code": "149",
+              "current": "-16.00",
+              "comparative": "0"
+            },
+            {
+              "code": "150",
+              "current": "3650",
+              "comparative": "0"
+            },
+            {
+              "code": "159",
+              "current": "-365.00",
+              "comparative": "0"
+            },
+            {
+              "code": "160",
+              "current": "1000.00",
+              "comparative": "0"
+            },
+            {
+              "code": "210",
+              "current": "-1000.00",
+              "comparative": "0"
+            },
+            {
+              "code": "220",
+              "current": "-20.00",
+              "comparative": "0"
+            },
+            {
+              "code": "230",
+              "current": "0",
+              "comparative": "0"
+            },
+            {
+              "code": "240",
+              "current": "0",
+              "comparative": "0"
+            },
+            {
+              "code": "510",
+              "current": "0",
+              "comparative": "0"
+            }
+          ],
+          "reference": "N1",
+          "ai_authored": false,
+          "supporting_schedules": []
+        }
+      ],
+      "scope": "Mapped full-IFRS general corporate statements; human classification, elections, disclosures and professional review required",
+      "entity": "FICTIONAL synthetic entity",
+      "review": {
+        "ready": true,
+        "scope": "Structured financial statements only; external PDF/Word text is not inspected.",
+        "issues": [],
+        "casting": [
+          {
+            "column": "current",
+            "section": "assets",
+            "displayed_sum": "5200619.00",
+            "rounded_exact_total": "5200619.00",
+            "rounding_difference": "0.00"
+          },
+          {
+            "column": "current",
+            "section": "liabilities",
+            "displayed_sum": "1020.00",
+            "rounded_exact_total": "1020.00",
+            "rounding_difference": "0.00"
+          },
+          {
+            "column": "current",
+            "section": "equity",
+            "displayed_sum": "5199599.00",
+            "rounded_exact_total": "5199599.00",
+            "rounding_difference": "0.00"
+          },
+          {
+            "column": "current",
+            "section": "income",
+            "displayed_sum": "2000000.00",
+            "rounded_exact_total": "2000000.00",
+            "rounding_difference": "0.00"
+          },
+          {
+            "column": "current",
+            "section": "expenses",
+            "displayed_sum": "800401.00",
+            "rounded_exact_total": "800401.00",
+            "rounding_difference": "0.00"
+          }
+        ],
+        "changes": [],
+        "resolved_issue_keys": []
+      },
+      "totals": {
+        "oci": "0",
+        "cash": "5196174.00000000",
+        "assets": "5200619.00000000",
+        "equity": "5199599.00000000",
+        "profit": "1199599.00000000",
+        "liabilities": "1020.00",
+        "total_comprehensive_income": "1199599.00000000"
+      },
+      "currency": "AED",
+      "cash_flow": {
+        "method": "indirect",
+        "policy": "SYN depreciation365, stock allowance16 and benefit20 are noncash; acquisitions3826 are investing",
+        "profit": "1199599.00000000",
+        "closing": "5196174.00000000",
+        "opening": "4000000.00000000",
+        "financing": "0",
+        "investing": "-3826",
+        "operating": "1200000.00000000",
+        "difference": "0.00000000",
+        "source_cash": "5196174.00000000",
+        "exchange_effect": "0",
+        "working_capital": "0",
+        "noncash_adjustments": "401"
+      },
+      "entity_id": "14522cc1-4b93-4d4e-87f1-bca1dfa8df25",
+      "execution": {
+        "evidence": [
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "kind": "snapshot"
+          },
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "kind": "snapshot"
+          },
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "kind": "snapshot"
+          },
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "kind": "snapshot"
+          },
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "kind": "snapshot"
+          }
+        ],
+        "rounding": "Decimal precision 48; schedule HALF_UP to 8 decimal places; journals use currency minor units",
+        "entity_id": "14522cc1-4b93-4d4e-87f1-bca1dfa8df25",
+        "framework": "full_ifrs",
+        "period_id": "a594202d-1e60-443e-a4ca-796d99268bca",
+        "tenant_id": "f57a72e1-6319-4e68-9062-ba48aadd6911",
+        "period_end": "2026-12-31",
+        "period_start": "2026-01-01",
+        "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1",
+        "journal_state": "NOT_POSTED",
+        "review_status": "DRAFT_REQUIRES_REVIEW",
+        "entity_version": 1,
+        "execution_mode": "deterministic_python_decimal",
+        "source_balance": "Retained ledger snapshot; original balances are never overwritten",
+        "chart_snapshots": [
+          {
+            "id": "782b980c-59ce-49d0-8988-caca71e7a1ca",
+            "sha256": "d40475111aeb34820fb0eef3610267f8f59c4fdb749ef78253dcda078fca1001"
+          }
+        ],
+        "currency_policy": {
+          "code": "AED",
+          "rounding": "ROUND_HALF_EVEN",
+          "precision": 2
+        },
+        "policy_versions": [
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3,
+            "framework": "full_ifrs",
+            "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+          },
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3,
+            "framework": "full_ifrs",
+            "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+          },
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3,
+            "framework": "full_ifrs",
+            "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+          },
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3,
+            "framework": "full_ifrs",
+            "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+          },
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3,
+            "framework": "full_ifrs",
+            "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+          }
+        ],
+        "supporting_runs": [
+          {
+            "id": "1369a709-00e7-448b-9fd2-201e513da33d",
+            "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1"
+          },
+          {
+            "id": "77ec04d3-65c5-489e-b29a-0c9edc9ce6d5",
+            "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1"
+          },
+          {
+            "id": "789e59df-fd40-4a6f-ae33-d17ef68b6d6b",
+            "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1"
+          },
+          {
+            "id": "a9fd5faf-1280-4336-aef6-fb703ac4cbfa",
+            "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1"
+          }
+        ],
+        "contract_version": "accounting/1",
+        "current_tax_runs": [],
+        "source_snapshots": [
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "sha256": "06a301f7c6723b5a03c614f8439d4b0fdda3c5488451a19f59eed71d4cdc3f5a",
+            "source_complete": true
+          },
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "sha256": "06a301f7c6723b5a03c614f8439d4b0fdda3c5488451a19f59eed71d4cdc3f5a",
+            "source_complete": true
+          },
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "sha256": "06a301f7c6723b5a03c614f8439d4b0fdda3c5488451a19f59eed71d4cdc3f5a",
+            "source_complete": true
+          },
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "sha256": "06a301f7c6723b5a03c614f8439d4b0fdda3c5488451a19f59eed71d4cdc3f5a",
+            "source_complete": true
+          },
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "sha256": "06a301f7c6723b5a03c614f8439d4b0fdda3c5488451a19f59eed71d4cdc3f5a",
+            "source_complete": true
+          }
+        ],
+        "proposed_journals": [],
+        "unresolved_issues": [],
+        "calculation_version": "auditos-accounting/3.1",
+        "functional_currency": "AED",
+        "source_completeness": "complete_for_declared_scope",
+        "approved_assumptions": [
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "0c466dd1-1383-44f3-b024-f2ba645891b2",
+            "kind": "ifrs-adjustment",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "91c41263-32c8-41be-aaba-511a39f856f9",
+            "kind": "ifrs-adjustment",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "b125b385-e605-437c-9060-a91064f773c6",
+            "kind": "ifrs-adjustment",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "b197b145-ea16-4db2-8cb7-cd416c2d0955",
+            "kind": "ifrs-adjustment",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "ca028827-bc74-4c2d-a353-be7a6236bd9c",
+            "kind": "ifrs-adjustment",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "10e9712d-9c8d-4ef8-98b7-c9f248294fb0",
+            "kind": "ifrs-adjustment",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "23cc8dcc-0c69-4b08-8c0c-ea2f639bf729",
+            "kind": "ifrs-fixed-assets",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "fe4fd102-60ea-4c5b-8d73-e8e7258a4962",
+            "kind": "ifrs-inventory",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "ff404d43-84de-41cc-a5fc-0ed4e0213a05",
+            "kind": "ifrs-employee-benefits",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "2b030825-a015-45cf-886b-beb87baab105",
+            "kind": "ifrs-lease",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "e55444b7-ef75-4ef3-8c16-8bbb9d82326b",
+            "kind": "ifrs-mapping",
+            "status": "APPROVED",
+            "version": 7
+          },
+          {
+            "id": "453682f5-200f-4ea7-8693-28c74ad6e0a7",
+            "kind": "ifrs-cash-flow",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "49f8da82-1cbb-4340-9a3e-ccee794f402c",
+            "kind": "ifrs-note",
+            "status": "APPROVED",
+            "version": 7
+          },
+          {
+            "id": "c33ab5e3-5cfd-47f3-98d6-801a34f9ad93",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 7
+          },
+          {
+            "id": "edf53217-a1f2-4f7d-8c7e-0aa42ca5ecee",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 7
+          },
+          {
+            "id": "f8d29100-688d-4a2a-94a6-e5c2a7d328ea",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 7
+          },
+          {
+            "id": "9ca8e66b-377e-4d65-8559-adf0a1290d93",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 7
+          },
+          {
+            "id": "95290f96-a725-486d-82dc-e5fba5f4026d",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 7
+          },
+          {
+            "id": "be87db43-351c-471e-8ea9-eef78fd9ed29",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 7
+          }
+        ],
+        "calculated_adjustment": "Calculation output; recognition and accounts require review",
+        "implementation_sha256": "a5710c08d3a39d021c9f590868259991d88feadbebd0c600015e0c26dd8e6001",
+        "presentation_currency": "AED"
+      },
+      "precision": 2,
+      "period_end": "2026-12-31",
+      "validation": {
+        "ready": true,
+        "checks": [
+          {
+            "code": "netting_assessed",
+            "passed": true
+          },
+          {
+            "code": "supporting_schedule_issues",
+            "issues": [],
+            "passed": true
+          },
+          {
+            "code": "source_trial_balance",
+            "passed": true
+          },
+          {
+            "code": "accounting_equation",
+            "passed": true,
+            "difference": "0.00000000"
+          },
+          {
+            "code": "adjusted_trial_balance",
+            "passed": true
+          },
+          {
+            "code": "cash_flow_reconciliation",
+            "passed": true
+          },
+          {
+            "code": "notes_reconciled",
+            "passed": true,
+            "missing": []
+          },
+          {
+            "code": "disclosures_assessed",
+            "passed": true,
+            "missing": []
+          },
+          {
+            "code": "single_cash_flow_policy",
+            "passed": true
+          },
+          {
+            "code": "comparative_opening_consistency",
+            "passed": true
+          },
+          {
+            "code": "comparative_source",
+            "passed": true
+          },
+          {
+            "code": "statement_review",
+            "passed": true
+          },
+          {
+            "code": "accounting_execution_sources",
+            "passed": true
+          }
+        ],
+        "ifrs_compliance_certified": false
+      },
+      "comparative": null,
+      "period_start": "2026-01-01",
+      "presentation": "IAS 1",
+      "ifrs19_profile": "full-disclosure-original/1",
+      "changes_in_equity": {
+        "oci": "0",
+        "profit": "1199599.00000000",
+        "closing": "5199599.00000000",
+        "opening": "4000000.00000000",
+        "direct_equity_movements": "0.00000000"
+      },
+      "profit_categories": {
+        "tax": "0",
+        "financing": "0",
+        "investing": "0",
+        "operating": "1199599.00000000",
+        "discontinued": "0"
+      },
+      "presentation_lines": [
+        {
+          "note": "N1",
+          "label": "Cash",
+          "weight": "1",
+          "current": "5196174.00000000",
+          "is_cash": true,
+          "opening": "4000000.00000000",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "100",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "5196174.00",
+          "source_accounts": [
+            {
+              "code": "100",
+              "weight": "1",
+              "original": "5200000.00000000",
+              "allocated": "5196174.00000000",
+              "adjustment": "-3826"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Capital",
+          "weight": "1",
+          "current": "-4000000.00000000",
+          "is_cash": false,
+          "opening": "-4000000.00000000",
+          "section": "equity",
+          "category": "operating",
+          "line_code": "300",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "4000000.00",
+          "source_accounts": [
+            {
+              "code": "300",
+              "weight": "1",
+              "original": "-4000000.00000000",
+              "allocated": "-4000000.00000000",
+              "adjustment": "0"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Revenue",
+          "weight": "1",
+          "current": "-2000000.00000000",
+          "is_cash": false,
+          "opening": "0",
+          "section": "income",
+          "category": "operating",
+          "line_code": "400",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "2000000.00",
+          "source_accounts": [
+            {
+              "code": "400",
+              "weight": "1",
+              "original": "-2000000.00000000",
+              "allocated": "-2000000.00000000",
+              "adjustment": "0"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Expense",
+          "weight": "1",
+          "current": "800401.00000000",
+          "is_cash": false,
+          "opening": "0",
+          "section": "expenses",
+          "category": "operating",
+          "line_code": "500",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "800401.00",
+          "source_accounts": [
+            {
+              "code": "500",
+              "weight": "1",
+              "original": "800000.00000000",
+              "allocated": "800401.00000000",
+              "adjustment": "401.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Inventory",
+          "weight": "1",
+          "current": "176",
+          "is_cash": false,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "140",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "176.00",
+          "source_accounts": [
+            {
+              "code": "140",
+              "weight": "1",
+              "original": "0",
+              "allocated": "176",
+              "adjustment": "176"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Inventory allowance",
+          "weight": "1",
+          "current": "-16.00",
+          "is_cash": false,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "149",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "-16.00",
+          "source_accounts": [
+            {
+              "code": "149",
+              "weight": "1",
+              "original": "0",
+              "allocated": "-16.00",
+              "adjustment": "-16.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Equipment",
+          "weight": "1",
+          "current": "3650",
+          "is_cash": false,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "150",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "3650.00",
+          "source_accounts": [
+            {
+              "code": "150",
+              "weight": "1",
+              "original": "0",
+              "allocated": "3650",
+              "adjustment": "3650"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Accumulated depreciation",
+          "weight": "1",
+          "current": "-365.00",
+          "is_cash": false,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "159",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "-365.00",
+          "source_accounts": [
+            {
+              "code": "159",
+              "weight": "1",
+              "original": "0",
+              "allocated": "-365.00",
+              "adjustment": "-365.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "ROU",
+          "weight": "1",
+          "current": "1000.00",
+          "is_cash": false,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "160",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "1000.00",
+          "source_accounts": [
+            {
+              "code": "160",
+              "weight": "1",
+              "original": "0",
+              "allocated": "1000.00",
+              "adjustment": "1000.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Lease liability",
+          "weight": "1",
+          "current": "-1000.00",
+          "is_cash": false,
+          "opening": "0",
+          "section": "liabilities",
+          "category": "operating",
+          "line_code": "210",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "1000.00",
+          "source_accounts": [
+            {
+              "code": "210",
+              "weight": "1",
+              "original": "0",
+              "allocated": "-1000.00",
+              "adjustment": "-1000.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Benefit provision",
+          "weight": "1",
+          "current": "-20.00",
+          "is_cash": false,
+          "opening": "0",
+          "section": "liabilities",
+          "category": "operating",
+          "line_code": "220",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "20.00",
+          "source_accounts": [
+            {
+              "code": "220",
+              "weight": "1",
+              "original": "0",
+              "allocated": "-20.00",
+              "adjustment": "-20.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "",
+          "label": "Current period profit / loss",
+          "current": "-1199599.00000000",
+          "derived": true,
+          "section": "equity",
+          "line_code": "__period_profit__",
+          "comparative": "0",
+          "display_current": "1199599.00",
+          "source_accounts": [],
+          "display_comparative": null
+        }
+      ],
+      "presentation_settings": {
+        "precision": 2,
+        "materiality": "0",
+        "suppress_zero": true
+      },
+      "adjusted_trial_balance": [
+        {
+          "id": "7aa4b2a5-94e1-4c0a-9cb3-0e44cc029515",
+          "code": "100",
+          "name": "Cash",
+          "debit": "2000000.00000000",
+          "contra": false,
+          "credit": "800000.00000000",
+          "closing": "5200000.00000000",
+          "opening": "4000000.00000000",
+          "adjusted": "5196174.00000000",
+          "original": "5200000.00000000",
+          "adjustment": "-3826",
+          "parent_code": null,
+          "source_group": null,
+          "classification": null,
+          "display_closing": "5200000.00",
+          "statement_group": null
+        },
+        {
+          "id": "98581cee-c56a-49e0-b4df-873281b752c1",
+          "code": "300",
+          "name": "Equity",
+          "debit": "0",
+          "contra": false,
+          "credit": "0",
+          "closing": "-4000000.00000000",
+          "opening": "-4000000.00000000",
+          "adjusted": "-4000000.00000000",
+          "original": "-4000000.00000000",
+          "adjustment": "0",
+          "parent_code": null,
+          "source_group": null,
+          "classification": null,
+          "display_closing": "-4000000.00",
+          "statement_group": null
+        },
+        {
+          "id": "9dd59084-923b-4391-be29-53d38e52722e",
+          "code": "400",
+          "name": "Revenue",
+          "debit": "0.00000000",
+          "contra": false,
+          "credit": "2000000.00000000",
+          "closing": "-2000000.00000000",
+          "opening": "0",
+          "adjusted": "-2000000.00000000",
+          "original": "-2000000.00000000",
+          "adjustment": "0",
+          "parent_code": null,
+          "source_group": null,
+          "classification": null,
+          "display_closing": "-2000000.00",
+          "statement_group": null
+        },
+        {
+          "id": "58cce59e-3fd5-4b8b-9cb1-cc843d4c54a0",
+          "code": "500",
+          "name": "Expense",
+          "debit": "800000.00000000",
+          "contra": false,
+          "credit": "0.00000000",
+          "closing": "800000.00000000",
+          "opening": "0",
+          "adjusted": "800401.00000000",
+          "original": "800000.00000000",
+          "adjustment": "401.00",
+          "parent_code": null,
+          "source_group": null,
+          "classification": null,
+          "display_closing": "800000.00",
+          "statement_group": null
+        },
+        {
+          "code": "140",
+          "name": "Inventory",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "opening": "0",
+          "adjusted": "176",
+          "original": "0",
+          "adjustment": "176",
+          "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart"
+        },
+        {
+          "code": "149",
+          "name": "Inventory allowance",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "opening": "0",
+          "adjusted": "-16.00",
+          "original": "0",
+          "adjustment": "-16.00",
+          "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart"
+        },
+        {
+          "code": "150",
+          "name": "Equipment",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "opening": "0",
+          "adjusted": "3650",
+          "original": "0",
+          "adjustment": "3650",
+          "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart"
+        },
+        {
+          "code": "159",
+          "name": "Accumulated depreciation",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "opening": "0",
+          "adjusted": "-365.00",
+          "original": "0",
+          "adjustment": "-365.00",
+          "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart"
+        },
+        {
+          "code": "160",
+          "name": "ROU",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "opening": "0",
+          "adjusted": "1000.00",
+          "original": "0",
+          "adjustment": "1000.00",
+          "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart"
+        },
+        {
+          "code": "210",
+          "name": "Lease liability",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "opening": "0",
+          "adjusted": "-1000.00",
+          "original": "0",
+          "adjustment": "-1000.00",
+          "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart"
+        },
+        {
+          "code": "220",
+          "name": "Benefit provision",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "opening": "0",
+          "adjusted": "-20.00",
+          "original": "0",
+          "adjustment": "-20.00",
+          "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart"
+        },
+        {
+          "code": "230",
+          "name": "Current tax payable",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "opening": "0",
+          "adjusted": "0",
+          "original": "0",
+          "adjustment": "0",
+          "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart"
+        },
+        {
+          "code": "240",
+          "name": "Deferred tax liability",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "opening": "0",
+          "adjusted": "0",
+          "original": "0",
+          "adjustment": "0",
+          "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart"
+        },
+        {
+          "code": "510",
+          "name": "Tax expense",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "opening": "0",
+          "adjusted": "0",
+          "original": "0",
+          "adjustment": "0",
+          "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart"
+        }
+      ],
+      "accounting_policies_and_judgments": []
+    },
+    "sha256": "1c7a82313d61d0de1eaf71a92a729192ab8279b51048aa3fe72ee1c3d69433f1",
+    "tenant_id": "f57a72e1-6319-4e68-9062-ba48aadd6911",
+    "created_by": "0dd37104-d59f-4344-943b-808aff4214d8",
+    "id": "45c5d400-dcbe-4206-a02a-6de8b5397ea6",
+    "created_at": "2026-10-24T19:45:57.452312+00:00",
+    "updated_at": "2026-10-24T19:45:57.452312+00:00"
+  },
+  "e05": {
+    "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1",
+    "record_id": "851632fd-e085-4d11-a03d-ee6c209bf629",
+    "kind": "corporate-tax",
+    "methodology_version": "auditos-ct/1.0",
+    "inputs": {
+      "rules": {
+        "losses": {
+          "id": "b048f628-7841-4801-92fb-0e867d613d6c",
+          "body": {
+            "area": "",
+            "article": "37",
+            "sources": [],
+            "category": "losses",
+            "due_date": null,
+            "owner_id": null,
+            "rule_key": "SYN-losses",
+            "lifecycle": "ACTIVE",
+            "narrative": "",
+            "source_id": "CT-LAW",
+            "assertions": [],
+            "conditions": "SYN ordinary resident case",
+            "exceptions": "SYN no special relief",
+            "known_from": "2023-06-01",
+            "parameters": {
+              "filing_months": 9,
+              "standard_rate": "0.09",
+              "de_minimis_cap": "5000000",
+              "de_minimis_rate": "0.05",
+              "group_ownership": "0.95",
+              "loss_percentage": "0.75",
+              "revenue_threshold": "3000000",
+              "interest_threshold": "12000000",
+              "standard_threshold": "375000",
+              "interest_percentage": "0.3",
+              "sbr_last_period_end": "2026-12-31",
+              "interest_carry_periods": 10,
+              "disqualification_periods": 5,
+              "entertainment_disallowance": "0.5"
+            },
+            "effective_to": null,
+            "review_cycle": 1,
+            "review_stage": 1,
+            "rule_version": 1,
+            "source_sha256": "",
+            "effective_from": "2023-06-01",
+            "decision_number": "SYN reviewed reference",
+            "publication_date": null,
+            "review_approvers": [
+              "8d9f175e-50e6-4601-b2ff-3dda72ee46d6"
+            ],
+            "technical_review": "SYN independent rule review",
+            "publication_evidence_id": null,
+            "source_document_version": "SYN technical fixture only"
+          },
+          "source": {
+            "url": "https://tax.gov.ae/en/legislation/corporate.tax.aspx",
+            "title": "Federal Decree-Law47/2022, as amended; official legislation register",
+            "articles": [
+              "3",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24",
+              "26",
+              "27",
+              "28",
+              "29",
+              "30",
+              "31",
+              "33",
+              "34",
+              "35",
+              "36",
+              "37",
+              "38",
+              "39",
+              "40",
+              "41",
+              "42",
+              "44",
+              "45",
+              "47",
+              "48",
+              "53",
+              "54",
+              "61"
+            ],
+            "coverage": "Supported with manual professional input"
+          },
+          "version": 3
+        },
+        "deadline": {
+          "id": "0dd16220-924e-49c9-bd66-ad969f820499",
+          "body": {
+            "area": "",
+            "article": "53",
+            "sources": [],
+            "category": "deadline",
+            "due_date": null,
+            "owner_id": null,
+            "rule_key": "SYN-deadline",
+            "lifecycle": "ACTIVE",
+            "narrative": "",
+            "source_id": "CT-LAW",
+            "assertions": [],
+            "conditions": "SYN ordinary resident case",
+            "exceptions": "SYN no special relief",
+            "known_from": "2023-06-01",
+            "parameters": {
+              "filing_months": 9,
+              "standard_rate": "0.09",
+              "de_minimis_cap": "5000000",
+              "de_minimis_rate": "0.05",
+              "group_ownership": "0.95",
+              "loss_percentage": "0.75",
+              "revenue_threshold": "3000000",
+              "interest_threshold": "12000000",
+              "standard_threshold": "375000",
+              "interest_percentage": "0.3",
+              "sbr_last_period_end": "2026-12-31",
+              "interest_carry_periods": 10,
+              "disqualification_periods": 5,
+              "entertainment_disallowance": "0.5"
+            },
+            "effective_to": null,
+            "review_cycle": 1,
+            "review_stage": 1,
+            "rule_version": 1,
+            "source_sha256": "",
+            "effective_from": "2023-06-01",
+            "decision_number": "SYN reviewed reference",
+            "publication_date": null,
+            "review_approvers": [
+              "8d9f175e-50e6-4601-b2ff-3dda72ee46d6"
+            ],
+            "technical_review": "SYN independent rule review",
+            "publication_evidence_id": null,
+            "source_document_version": "SYN technical fixture only"
+          },
+          "source": {
+            "url": "https://tax.gov.ae/en/legislation/corporate.tax.aspx",
+            "title": "Federal Decree-Law47/2022, as amended; official legislation register",
+            "articles": [
+              "3",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24",
+              "26",
+              "27",
+              "28",
+              "29",
+              "30",
+              "31",
+              "33",
+              "34",
+              "35",
+              "36",
+              "37",
+              "38",
+              "39",
+              "40",
+              "41",
+              "42",
+              "44",
+              "45",
+              "47",
+              "48",
+              "53",
+              "54",
+              "61"
+            ],
+            "coverage": "Supported with manual professional input"
+          },
+          "version": 3
+        },
+        "standard": {
+          "id": "b388f939-db8c-4d06-acf7-730b46cdd4c2",
+          "body": {
+            "area": "",
+            "article": "",
+            "sources": [],
+            "category": "standard",
+            "due_date": null,
+            "owner_id": null,
+            "rule_key": "SYN-standard",
+            "lifecycle": "ACTIVE",
+            "narrative": "",
+            "source_id": "CT-RATES",
+            "assertions": [],
+            "conditions": "SYN ordinary resident case",
+            "exceptions": "SYN no special relief",
+            "known_from": "2023-06-01",
+            "parameters": {
+              "filing_months": 9,
+              "standard_rate": "0.09",
+              "de_minimis_cap": "5000000",
+              "de_minimis_rate": "0.05",
+              "group_ownership": "0.95",
+              "loss_percentage": "0.75",
+              "revenue_threshold": "3000000",
+              "interest_threshold": "12000000",
+              "standard_threshold": "375000",
+              "interest_percentage": "0.3",
+              "sbr_last_period_end": "2026-12-31",
+              "interest_carry_periods": 10,
+              "disqualification_periods": 5,
+              "entertainment_disallowance": "0.5"
+            },
+            "effective_to": null,
+            "review_cycle": 1,
+            "review_stage": 1,
+            "rule_version": 1,
+            "source_sha256": "",
+            "effective_from": "2023-06-01",
+            "decision_number": "SYN reviewed reference",
+            "publication_date": null,
+            "review_approvers": [
+              "8d9f175e-50e6-4601-b2ff-3dda72ee46d6"
+            ],
+            "technical_review": "SYN independent rule review",
+            "publication_evidence_id": null,
+            "source_document_version": "SYN technical fixture only"
+          },
+          "source": {
+            "url": "https://u.ae/en/information-and-services/finance-and-investment/taxation/corporate-tax",
+            "title": "Official UAE Corporate Tax rates",
+            "articles": [],
+            "coverage": "Fully calculated and tested"
+          },
+          "version": 3
+        },
+        "adjustments": {
+          "id": "f81a9cf4-89d1-41ff-8c25-355ebb391630",
+          "body": {
+            "area": "",
+            "article": "29",
+            "sources": [],
+            "category": "adjustments",
+            "due_date": null,
+            "owner_id": null,
+            "rule_key": "SYN-adjustments",
+            "lifecycle": "ACTIVE",
+            "narrative": "",
+            "source_id": "CT-LAW",
+            "assertions": [],
+            "conditions": "SYN ordinary resident case",
+            "exceptions": "SYN no special relief",
+            "known_from": "2023-06-01",
+            "parameters": {
+              "filing_months": 9,
+              "standard_rate": "0.09",
+              "de_minimis_cap": "5000000",
+              "de_minimis_rate": "0.05",
+              "group_ownership": "0.95",
+              "loss_percentage": "0.75",
+              "revenue_threshold": "3000000",
+              "interest_threshold": "12000000",
+              "standard_threshold": "375000",
+              "interest_percentage": "0.3",
+              "sbr_last_period_end": "2026-12-31",
+              "interest_carry_periods": 10,
+              "disqualification_periods": 5,
+              "entertainment_disallowance": "0.5"
+            },
+            "effective_to": null,
+            "review_cycle": 1,
+            "review_stage": 1,
+            "rule_version": 1,
+            "source_sha256": "",
+            "effective_from": "2023-06-01",
+            "decision_number": "SYN reviewed reference",
+            "publication_date": null,
+            "review_approvers": [
+              "8d9f175e-50e6-4601-b2ff-3dda72ee46d6"
+            ],
+            "technical_review": "SYN independent rule review",
+            "publication_evidence_id": null,
+            "source_document_version": "SYN technical fixture only"
+          },
+          "source": {
+            "url": "https://tax.gov.ae/en/legislation/corporate.tax.aspx",
+            "title": "Federal Decree-Law47/2022, as amended; official legislation register",
+            "articles": [
+              "3",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24",
+              "26",
+              "27",
+              "28",
+              "29",
+              "30",
+              "31",
+              "33",
+              "34",
+              "35",
+              "36",
+              "37",
+              "38",
+              "39",
+              "40",
+              "41",
+              "42",
+              "44",
+              "45",
+              "47",
+              "48",
+              "53",
+              "54",
+              "61"
+            ],
+            "coverage": "Supported with manual professional input"
+          },
+          "version": 3
+        }
+      },
+      "profile_id": "851632fd-e085-4d11-a03d-ee6c209bf629",
+      "financial_run_id": "45c5d400-dcbe-4206-a02a-6de8b5397ea6"
+    },
+    "dependencies": [
+      {
+        "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "0c466dd1-1383-44f3-b024-f2ba645891b2",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "91c41263-32c8-41be-aaba-511a39f856f9",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "b125b385-e605-437c-9060-a91064f773c6",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "b197b145-ea16-4db2-8cb7-cd416c2d0955",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "ca028827-bc74-4c2d-a353-be7a6236bd9c",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "10e9712d-9c8d-4ef8-98b7-c9f248294fb0",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "23cc8dcc-0c69-4b08-8c0c-ea2f639bf729",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "fe4fd102-60ea-4c5b-8d73-e8e7258a4962",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "ff404d43-84de-41cc-a5fc-0ed4e0213a05",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "2b030825-a015-45cf-886b-beb87baab105",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "e55444b7-ef75-4ef3-8c16-8bbb9d82326b",
+        "status": "APPROVED",
+        "version": 7
+      },
+      {
+        "id": "453682f5-200f-4ea7-8693-28c74ad6e0a7",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "49f8da82-1cbb-4340-9a3e-ccee794f402c",
+        "status": "APPROVED",
+        "version": 7
+      },
+      {
+        "id": "c33ab5e3-5cfd-47f3-98d6-801a34f9ad93",
+        "status": "APPROVED",
+        "version": 7
+      },
+      {
+        "id": "edf53217-a1f2-4f7d-8c7e-0aa42ca5ecee",
+        "status": "APPROVED",
+        "version": 7
+      },
+      {
+        "id": "f8d29100-688d-4a2a-94a6-e5c2a7d328ea",
+        "status": "APPROVED",
+        "version": 7
+      },
+      {
+        "id": "9ca8e66b-377e-4d65-8559-adf0a1290d93",
+        "status": "APPROVED",
+        "version": 7
+      },
+      {
+        "id": "95290f96-a725-486d-82dc-e5fba5f4026d",
+        "status": "APPROVED",
+        "version": 7
+      },
+      {
+        "id": "be87db43-351c-471e-8ea9-eef78fd9ed29",
+        "status": "APPROVED",
+        "version": 7
+      },
+      {
+        "id": "e9672a89-fb66-44c8-8ef0-f40f167eb322",
+        "status": "APPROVED",
+        "version": 4
+      },
+      {
+        "id": "851632fd-e085-4d11-a03d-ee6c209bf629",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "b048f628-7841-4801-92fb-0e867d613d6c",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "0dd16220-924e-49c9-bd66-ad969f820499",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "b388f939-db8c-4d06-acf7-730b46cdd4c2",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "f81a9cf4-89d1-41ff-8c25-355ebb391630",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "851632fd-e085-4d11-a03d-ee6c209bf629",
+        "status": "APPROVED",
+        "version": 3
+      }
+    ],
+    "results": {
+      "sbr": null,
+      "qfzp": null,
+      "lines": [],
+      "rules": {
+        "losses": {
+          "id": "b048f628-7841-4801-92fb-0e867d613d6c",
+          "body": {
+            "area": "",
+            "article": "37",
+            "sources": [],
+            "category": "losses",
+            "due_date": null,
+            "owner_id": null,
+            "rule_key": "SYN-losses",
+            "lifecycle": "ACTIVE",
+            "narrative": "",
+            "source_id": "CT-LAW",
+            "assertions": [],
+            "conditions": "SYN ordinary resident case",
+            "exceptions": "SYN no special relief",
+            "known_from": "2023-06-01",
+            "parameters": {
+              "filing_months": 9,
+              "standard_rate": "0.09",
+              "de_minimis_cap": "5000000",
+              "de_minimis_rate": "0.05",
+              "group_ownership": "0.95",
+              "loss_percentage": "0.75",
+              "revenue_threshold": "3000000",
+              "interest_threshold": "12000000",
+              "standard_threshold": "375000",
+              "interest_percentage": "0.3",
+              "sbr_last_period_end": "2026-12-31",
+              "interest_carry_periods": 10,
+              "disqualification_periods": 5,
+              "entertainment_disallowance": "0.5"
+            },
+            "effective_to": null,
+            "review_cycle": 1,
+            "review_stage": 1,
+            "rule_version": 1,
+            "source_sha256": "",
+            "effective_from": "2023-06-01",
+            "decision_number": "SYN reviewed reference",
+            "publication_date": null,
+            "review_approvers": [
+              "8d9f175e-50e6-4601-b2ff-3dda72ee46d6"
+            ],
+            "technical_review": "SYN independent rule review",
+            "publication_evidence_id": null,
+            "source_document_version": "SYN technical fixture only"
+          },
+          "source": {
+            "url": "https://tax.gov.ae/en/legislation/corporate.tax.aspx",
+            "title": "Federal Decree-Law47/2022, as amended; official legislation register",
+            "articles": [
+              "3",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24",
+              "26",
+              "27",
+              "28",
+              "29",
+              "30",
+              "31",
+              "33",
+              "34",
+              "35",
+              "36",
+              "37",
+              "38",
+              "39",
+              "40",
+              "41",
+              "42",
+              "44",
+              "45",
+              "47",
+              "48",
+              "53",
+              "54",
+              "61"
+            ],
+            "coverage": "Supported with manual professional input"
+          },
+          "version": 3
+        },
+        "deadline": {
+          "id": "0dd16220-924e-49c9-bd66-ad969f820499",
+          "body": {
+            "area": "",
+            "article": "53",
+            "sources": [],
+            "category": "deadline",
+            "due_date": null,
+            "owner_id": null,
+            "rule_key": "SYN-deadline",
+            "lifecycle": "ACTIVE",
+            "narrative": "",
+            "source_id": "CT-LAW",
+            "assertions": [],
+            "conditions": "SYN ordinary resident case",
+            "exceptions": "SYN no special relief",
+            "known_from": "2023-06-01",
+            "parameters": {
+              "filing_months": 9,
+              "standard_rate": "0.09",
+              "de_minimis_cap": "5000000",
+              "de_minimis_rate": "0.05",
+              "group_ownership": "0.95",
+              "loss_percentage": "0.75",
+              "revenue_threshold": "3000000",
+              "interest_threshold": "12000000",
+              "standard_threshold": "375000",
+              "interest_percentage": "0.3",
+              "sbr_last_period_end": "2026-12-31",
+              "interest_carry_periods": 10,
+              "disqualification_periods": 5,
+              "entertainment_disallowance": "0.5"
+            },
+            "effective_to": null,
+            "review_cycle": 1,
+            "review_stage": 1,
+            "rule_version": 1,
+            "source_sha256": "",
+            "effective_from": "2023-06-01",
+            "decision_number": "SYN reviewed reference",
+            "publication_date": null,
+            "review_approvers": [
+              "8d9f175e-50e6-4601-b2ff-3dda72ee46d6"
+            ],
+            "technical_review": "SYN independent rule review",
+            "publication_evidence_id": null,
+            "source_document_version": "SYN technical fixture only"
+          },
+          "source": {
+            "url": "https://tax.gov.ae/en/legislation/corporate.tax.aspx",
+            "title": "Federal Decree-Law47/2022, as amended; official legislation register",
+            "articles": [
+              "3",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24",
+              "26",
+              "27",
+              "28",
+              "29",
+              "30",
+              "31",
+              "33",
+              "34",
+              "35",
+              "36",
+              "37",
+              "38",
+              "39",
+              "40",
+              "41",
+              "42",
+              "44",
+              "45",
+              "47",
+              "48",
+              "53",
+              "54",
+              "61"
+            ],
+            "coverage": "Supported with manual professional input"
+          },
+          "version": 3
+        },
+        "standard": {
+          "id": "b388f939-db8c-4d06-acf7-730b46cdd4c2",
+          "body": {
+            "area": "",
+            "article": "",
+            "sources": [],
+            "category": "standard",
+            "due_date": null,
+            "owner_id": null,
+            "rule_key": "SYN-standard",
+            "lifecycle": "ACTIVE",
+            "narrative": "",
+            "source_id": "CT-RATES",
+            "assertions": [],
+            "conditions": "SYN ordinary resident case",
+            "exceptions": "SYN no special relief",
+            "known_from": "2023-06-01",
+            "parameters": {
+              "filing_months": 9,
+              "standard_rate": "0.09",
+              "de_minimis_cap": "5000000",
+              "de_minimis_rate": "0.05",
+              "group_ownership": "0.95",
+              "loss_percentage": "0.75",
+              "revenue_threshold": "3000000",
+              "interest_threshold": "12000000",
+              "standard_threshold": "375000",
+              "interest_percentage": "0.3",
+              "sbr_last_period_end": "2026-12-31",
+              "interest_carry_periods": 10,
+              "disqualification_periods": 5,
+              "entertainment_disallowance": "0.5"
+            },
+            "effective_to": null,
+            "review_cycle": 1,
+            "review_stage": 1,
+            "rule_version": 1,
+            "source_sha256": "",
+            "effective_from": "2023-06-01",
+            "decision_number": "SYN reviewed reference",
+            "publication_date": null,
+            "review_approvers": [
+              "8d9f175e-50e6-4601-b2ff-3dda72ee46d6"
+            ],
+            "technical_review": "SYN independent rule review",
+            "publication_evidence_id": null,
+            "source_document_version": "SYN technical fixture only"
+          },
+          "source": {
+            "url": "https://u.ae/en/information-and-services/finance-and-investment/taxation/corporate-tax",
+            "title": "Official UAE Corporate Tax rates",
+            "articles": [],
+            "coverage": "Fully calculated and tested"
+          },
+          "version": 3
+        },
+        "adjustments": {
+          "id": "f81a9cf4-89d1-41ff-8c25-355ebb391630",
+          "body": {
+            "area": "",
+            "article": "29",
+            "sources": [],
+            "category": "adjustments",
+            "due_date": null,
+            "owner_id": null,
+            "rule_key": "SYN-adjustments",
+            "lifecycle": "ACTIVE",
+            "narrative": "",
+            "source_id": "CT-LAW",
+            "assertions": [],
+            "conditions": "SYN ordinary resident case",
+            "exceptions": "SYN no special relief",
+            "known_from": "2023-06-01",
+            "parameters": {
+              "filing_months": 9,
+              "standard_rate": "0.09",
+              "de_minimis_cap": "5000000",
+              "de_minimis_rate": "0.05",
+              "group_ownership": "0.95",
+              "loss_percentage": "0.75",
+              "revenue_threshold": "3000000",
+              "interest_threshold": "12000000",
+              "standard_threshold": "375000",
+              "interest_percentage": "0.3",
+              "sbr_last_period_end": "2026-12-31",
+              "interest_carry_periods": 10,
+              "disqualification_periods": 5,
+              "entertainment_disallowance": "0.5"
+            },
+            "effective_to": null,
+            "review_cycle": 1,
+            "review_stage": 1,
+            "rule_version": 1,
+            "source_sha256": "",
+            "effective_from": "2023-06-01",
+            "decision_number": "SYN reviewed reference",
+            "publication_date": null,
+            "review_approvers": [
+              "8d9f175e-50e6-4601-b2ff-3dda72ee46d6"
+            ],
+            "technical_review": "SYN independent rule review",
+            "publication_evidence_id": null,
+            "source_document_version": "SYN technical fixture only"
+          },
+          "source": {
+            "url": "https://tax.gov.ae/en/legislation/corporate.tax.aspx",
+            "title": "Federal Decree-Law47/2022, as amended; official legislation register",
+            "articles": [
+              "3",
+              "18",
+              "19",
+              "20",
+              "21",
+              "22",
+              "23",
+              "24",
+              "26",
+              "27",
+              "28",
+              "29",
+              "30",
+              "31",
+              "33",
+              "34",
+              "35",
+              "36",
+              "37",
+              "38",
+              "39",
+              "40",
+              "41",
+              "42",
+              "44",
+              "45",
+              "47",
+              "48",
+              "53",
+              "54",
+              "61"
+            ],
+            "coverage": "Supported with manual professional input"
+          },
+          "version": 3
+        }
+      },
+      "scope": "Approved facts and sourced rule versions; preparation only, no FTA filing or legal certification",
+      "entity": "FICTIONAL synthetic entity",
+      "currency": "AED",
+      "interest": null,
+      "entity_id": "14522cc1-4b93-4d4e-87f1-bca1dfa8df25",
+      "gross_tax": "74213.91000000",
+      "exceptions": [],
+      "period_end": "2026-12-31",
+      "validation": {
+        "ready": true,
+        "checks": [
+          {
+            "code": "no_unresolved_tax_exceptions",
+            "passed": true
+          }
+        ]
+      },
+      "before_loss": "1199599.00000000",
+      "current_tax": "74213.91000000",
+      "period_start": "2026-01-01",
+      "loss_utilised": "0",
+      "tax_execution": {
+        "rounding": "VAT/DMTT: explicit nearest 0.01 HALF_UP; CT/TP internal schedules: 0.00000001 HALF_UP; filing rounding requires reviewed return mapping",
+        "tax_type": "CT",
+        "entity_id": "14522cc1-4b93-4d4e-87f1-bca1dfa8df25",
+        "period_id": "a594202d-1e60-443e-a4ca-796d99268bca",
+        "tenant_id": "f57a72e1-6319-4e68-9062-ba48aadd6911",
+        "period_end": "2026-12-31",
+        "assumptions": [
+          "Approved human classifications remain legal inputs; no AI eligibility determination"
+        ],
+        "execution_id": "6e464db1-4a33-4258-a8df-c86d687508c7",
+        "period_start": "2026-01-01",
+        "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1",
+        "filing_status": "NOT_SUBMITTED",
+        "rule_versions": {
+          "losses": {
+            "id": "b048f628-7841-4801-92fb-0e867d613d6c",
+            "body": {
+              "area": "",
+              "article": "37",
+              "sources": [],
+              "category": "losses",
+              "due_date": null,
+              "owner_id": null,
+              "rule_key": "SYN-losses",
+              "lifecycle": "ACTIVE",
+              "narrative": "",
+              "source_id": "CT-LAW",
+              "assertions": [],
+              "conditions": "SYN ordinary resident case",
+              "exceptions": "SYN no special relief",
+              "known_from": "2023-06-01",
+              "parameters": {
+                "filing_months": 9,
+                "standard_rate": "0.09",
+                "de_minimis_cap": "5000000",
+                "de_minimis_rate": "0.05",
+                "group_ownership": "0.95",
+                "loss_percentage": "0.75",
+                "revenue_threshold": "3000000",
+                "interest_threshold": "12000000",
+                "standard_threshold": "375000",
+                "interest_percentage": "0.3",
+                "sbr_last_period_end": "2026-12-31",
+                "interest_carry_periods": 10,
+                "disqualification_periods": 5,
+                "entertainment_disallowance": "0.5"
+              },
+              "effective_to": null,
+              "review_cycle": 1,
+              "review_stage": 1,
+              "rule_version": 1,
+              "source_sha256": "",
+              "effective_from": "2023-06-01",
+              "decision_number": "SYN reviewed reference",
+              "publication_date": null,
+              "review_approvers": [
+                "8d9f175e-50e6-4601-b2ff-3dda72ee46d6"
+              ],
+              "technical_review": "SYN independent rule review",
+              "publication_evidence_id": null,
+              "source_document_version": "SYN technical fixture only"
+            },
+            "source": {
+              "url": "https://tax.gov.ae/en/legislation/corporate.tax.aspx",
+              "title": "Federal Decree-Law47/2022, as amended; official legislation register",
+              "articles": [
+                "3",
+                "18",
+                "19",
+                "20",
+                "21",
+                "22",
+                "23",
+                "24",
+                "26",
+                "27",
+                "28",
+                "29",
+                "30",
+                "31",
+                "33",
+                "34",
+                "35",
+                "36",
+                "37",
+                "38",
+                "39",
+                "40",
+                "41",
+                "42",
+                "44",
+                "45",
+                "47",
+                "48",
+                "53",
+                "54",
+                "61"
+              ],
+              "coverage": "Supported with manual professional input"
+            },
+            "version": 3
+          },
+          "deadline": {
+            "id": "0dd16220-924e-49c9-bd66-ad969f820499",
+            "body": {
+              "area": "",
+              "article": "53",
+              "sources": [],
+              "category": "deadline",
+              "due_date": null,
+              "owner_id": null,
+              "rule_key": "SYN-deadline",
+              "lifecycle": "ACTIVE",
+              "narrative": "",
+              "source_id": "CT-LAW",
+              "assertions": [],
+              "conditions": "SYN ordinary resident case",
+              "exceptions": "SYN no special relief",
+              "known_from": "2023-06-01",
+              "parameters": {
+                "filing_months": 9,
+                "standard_rate": "0.09",
+                "de_minimis_cap": "5000000",
+                "de_minimis_rate": "0.05",
+                "group_ownership": "0.95",
+                "loss_percentage": "0.75",
+                "revenue_threshold": "3000000",
+                "interest_threshold": "12000000",
+                "standard_threshold": "375000",
+                "interest_percentage": "0.3",
+                "sbr_last_period_end": "2026-12-31",
+                "interest_carry_periods": 10,
+                "disqualification_periods": 5,
+                "entertainment_disallowance": "0.5"
+              },
+              "effective_to": null,
+              "review_cycle": 1,
+              "review_stage": 1,
+              "rule_version": 1,
+              "source_sha256": "",
+              "effective_from": "2023-06-01",
+              "decision_number": "SYN reviewed reference",
+              "publication_date": null,
+              "review_approvers": [
+                "8d9f175e-50e6-4601-b2ff-3dda72ee46d6"
+              ],
+              "technical_review": "SYN independent rule review",
+              "publication_evidence_id": null,
+              "source_document_version": "SYN technical fixture only"
+            },
+            "source": {
+              "url": "https://tax.gov.ae/en/legislation/corporate.tax.aspx",
+              "title": "Federal Decree-Law47/2022, as amended; official legislation register",
+              "articles": [
+                "3",
+                "18",
+                "19",
+                "20",
+                "21",
+                "22",
+                "23",
+                "24",
+                "26",
+                "27",
+                "28",
+                "29",
+                "30",
+                "31",
+                "33",
+                "34",
+                "35",
+                "36",
+                "37",
+                "38",
+                "39",
+                "40",
+                "41",
+                "42",
+                "44",
+                "45",
+                "47",
+                "48",
+                "53",
+                "54",
+                "61"
+              ],
+              "coverage": "Supported with manual professional input"
+            },
+            "version": 3
+          },
+          "standard": {
+            "id": "b388f939-db8c-4d06-acf7-730b46cdd4c2",
+            "body": {
+              "area": "",
+              "article": "",
+              "sources": [],
+              "category": "standard",
+              "due_date": null,
+              "owner_id": null,
+              "rule_key": "SYN-standard",
+              "lifecycle": "ACTIVE",
+              "narrative": "",
+              "source_id": "CT-RATES",
+              "assertions": [],
+              "conditions": "SYN ordinary resident case",
+              "exceptions": "SYN no special relief",
+              "known_from": "2023-06-01",
+              "parameters": {
+                "filing_months": 9,
+                "standard_rate": "0.09",
+                "de_minimis_cap": "5000000",
+                "de_minimis_rate": "0.05",
+                "group_ownership": "0.95",
+                "loss_percentage": "0.75",
+                "revenue_threshold": "3000000",
+                "interest_threshold": "12000000",
+                "standard_threshold": "375000",
+                "interest_percentage": "0.3",
+                "sbr_last_period_end": "2026-12-31",
+                "interest_carry_periods": 10,
+                "disqualification_periods": 5,
+                "entertainment_disallowance": "0.5"
+              },
+              "effective_to": null,
+              "review_cycle": 1,
+              "review_stage": 1,
+              "rule_version": 1,
+              "source_sha256": "",
+              "effective_from": "2023-06-01",
+              "decision_number": "SYN reviewed reference",
+              "publication_date": null,
+              "review_approvers": [
+                "8d9f175e-50e6-4601-b2ff-3dda72ee46d6"
+              ],
+              "technical_review": "SYN independent rule review",
+              "publication_evidence_id": null,
+              "source_document_version": "SYN technical fixture only"
+            },
+            "source": {
+              "url": "https://u.ae/en/information-and-services/finance-and-investment/taxation/corporate-tax",
+              "title": "Official UAE Corporate Tax rates",
+              "articles": [],
+              "coverage": "Fully calculated and tested"
+            },
+            "version": 3
+          },
+          "adjustments": {
+            "id": "f81a9cf4-89d1-41ff-8c25-355ebb391630",
+            "body": {
+              "area": "",
+              "article": "29",
+              "sources": [],
+              "category": "adjustments",
+              "due_date": null,
+              "owner_id": null,
+              "rule_key": "SYN-adjustments",
+              "lifecycle": "ACTIVE",
+              "narrative": "",
+              "source_id": "CT-LAW",
+              "assertions": [],
+              "conditions": "SYN ordinary resident case",
+              "exceptions": "SYN no special relief",
+              "known_from": "2023-06-01",
+              "parameters": {
+                "filing_months": 9,
+                "standard_rate": "0.09",
+                "de_minimis_cap": "5000000",
+                "de_minimis_rate": "0.05",
+                "group_ownership": "0.95",
+                "loss_percentage": "0.75",
+                "revenue_threshold": "3000000",
+                "interest_threshold": "12000000",
+                "standard_threshold": "375000",
+                "interest_percentage": "0.3",
+                "sbr_last_period_end": "2026-12-31",
+                "interest_carry_periods": 10,
+                "disqualification_periods": 5,
+                "entertainment_disallowance": "0.5"
+              },
+              "effective_to": null,
+              "review_cycle": 1,
+              "review_stage": 1,
+              "rule_version": 1,
+              "source_sha256": "",
+              "effective_from": "2023-06-01",
+              "decision_number": "SYN reviewed reference",
+              "publication_date": null,
+              "review_approvers": [
+                "8d9f175e-50e6-4601-b2ff-3dda72ee46d6"
+              ],
+              "technical_review": "SYN independent rule review",
+              "publication_evidence_id": null,
+              "source_document_version": "SYN technical fixture only"
+            },
+            "source": {
+              "url": "https://tax.gov.ae/en/legislation/corporate.tax.aspx",
+              "title": "Federal Decree-Law47/2022, as amended; official legislation register",
+              "articles": [
+                "3",
+                "18",
+                "19",
+                "20",
+                "21",
+                "22",
+                "23",
+                "24",
+                "26",
+                "27",
+                "28",
+                "29",
+                "30",
+                "31",
+                "33",
+                "34",
+                "35",
+                "36",
+                "37",
+                "38",
+                "39",
+                "40",
+                "41",
+                "42",
+                "44",
+                "45",
+                "47",
+                "48",
+                "53",
+                "54",
+                "61"
+              ],
+              "coverage": "Supported with manual professional input"
+            },
+            "version": 3
+          }
+        },
+        "execution_mode": "deterministic",
+        "payment_status": "NOT_RECONCILED",
+        "schema_version": "tax/1",
+        "source_snapshots": [
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "sha256": "06a301f7c6723b5a03c614f8439d4b0fdda3c5488451a19f59eed71d4cdc3f5a",
+            "source_complete": true
+          }
+        ],
+        "accounting_amount": "1199599.00000000",
+        "input_completeness": "complete_for_supported_case",
+        "calculation_version": "connected-ct/1",
+        "evidence_references": [
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "0c466dd1-1383-44f3-b024-f2ba645891b2",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "91c41263-32c8-41be-aaba-511a39f856f9",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "b125b385-e605-437c-9060-a91064f773c6",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "b197b145-ea16-4db2-8cb7-cd416c2d0955",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "ca028827-bc74-4c2d-a353-be7a6236bd9c",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "10e9712d-9c8d-4ef8-98b7-c9f248294fb0",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "23cc8dcc-0c69-4b08-8c0c-ea2f639bf729",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "fe4fd102-60ea-4c5b-8d73-e8e7258a4962",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "ff404d43-84de-41cc-a5fc-0ed4e0213a05",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "2b030825-a015-45cf-886b-beb87baab105",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "e55444b7-ef75-4ef3-8c16-8bbb9d82326b",
+            "status": "APPROVED",
+            "version": 7
+          },
+          {
+            "id": "453682f5-200f-4ea7-8693-28c74ad6e0a7",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "49f8da82-1cbb-4340-9a3e-ccee794f402c",
+            "status": "APPROVED",
+            "version": 7
+          },
+          {
+            "id": "c33ab5e3-5cfd-47f3-98d6-801a34f9ad93",
+            "status": "APPROVED",
+            "version": 7
+          },
+          {
+            "id": "edf53217-a1f2-4f7d-8c7e-0aa42ca5ecee",
+            "status": "APPROVED",
+            "version": 7
+          },
+          {
+            "id": "f8d29100-688d-4a2a-94a6-e5c2a7d328ea",
+            "status": "APPROVED",
+            "version": 7
+          },
+          {
+            "id": "9ca8e66b-377e-4d65-8559-adf0a1290d93",
+            "status": "APPROVED",
+            "version": 7
+          },
+          {
+            "id": "95290f96-a725-486d-82dc-e5fba5f4026d",
+            "status": "APPROVED",
+            "version": 7
+          },
+          {
+            "id": "be87db43-351c-471e-8ea9-eef78fd9ed29",
+            "status": "APPROVED",
+            "version": 7
+          },
+          {
+            "id": "e9672a89-fb66-44c8-8ef0-f40f167eb322",
+            "status": "APPROVED",
+            "version": 4
+          },
+          {
+            "id": "851632fd-e085-4d11-a03d-ee6c209bf629",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "b048f628-7841-4801-92fb-0e867d613d6c",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "0dd16220-924e-49c9-bd66-ad969f820499",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "b388f939-db8c-4d06-acf7-730b46cdd4c2",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "f81a9cf4-89d1-41ff-8c25-355ebb391630",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "851632fd-e085-4d11-a03d-ee6c209bf629",
+            "status": "APPROVED",
+            "version": 3
+          }
+        ],
+        "professional_review": "DRAFT_REQUIRES_REVIEW",
+        "authority_assessment": "NOT_ESTABLISHED",
+        "calculated_liability": "74213.91000000",
+        "unresolved_questions": [],
+        "implementation_sha256": "1e5935d17d1237882d4fc9b9420f51bad68b30a563330597b4cd904c8e37eac6",
+        "account_mapping_receipt": [
+          {
+            "id": "2208130b-dc0b-41de-94bc-78a93e459b1a",
+            "contra": false,
+            "parent_code": null,
+            "source_group": null,
+            "classification": null,
+            "mapping_version": 0,
+            "statement_group": null,
+            "mapping_profile_id": null
+          },
+          {
+            "id": "51f5ee1d-af02-4fb3-ab04-f8f0c316f154",
+            "contra": false,
+            "parent_code": null,
+            "source_group": null,
+            "classification": null,
+            "mapping_version": 0,
+            "statement_group": null,
+            "mapping_profile_id": null
+          },
+          {
+            "id": "54564518-4e47-4495-bbcb-6d61b1f8eca2",
+            "contra": false,
+            "parent_code": null,
+            "source_group": null,
+            "classification": null,
+            "mapping_version": 0,
+            "statement_group": null,
+            "mapping_profile_id": null
+          },
+          {
+            "id": "58cce59e-3fd5-4b8b-9cb1-cc843d4c54a0",
+            "contra": false,
+            "parent_code": null,
+            "source_group": null,
+            "classification": null,
+            "mapping_version": 0,
+            "statement_group": null,
+            "mapping_profile_id": null
+          },
+          {
+            "id": "5a19d7ce-3ee5-4487-9f6f-5c0384b24a9b",
+            "contra": false,
+            "parent_code": null,
+            "source_group": null,
+            "classification": null,
+            "mapping_version": 0,
+            "statement_group": null,
+            "mapping_profile_id": null
+          },
+          {
+            "id": "66c849a9-5ccd-4063-99db-fd7f56146e47",
+            "contra": false,
+            "parent_code": null,
+            "source_group": null,
+            "classification": null,
+            "mapping_version": 0,
+            "statement_group": null,
+            "mapping_profile_id": null
+          },
+          {
+            "id": "7aa4b2a5-94e1-4c0a-9cb3-0e44cc029515",
+            "contra": false,
+            "parent_code": null,
+            "source_group": null,
+            "classification": null,
+            "mapping_version": 0,
+            "statement_group": null,
+            "mapping_profile_id": null
+          },
+          {
+            "id": "98581cee-c56a-49e0-b4df-873281b752c1",
+            "contra": false,
+            "parent_code": null,
+            "source_group": null,
+            "classification": null,
+            "mapping_version": 0,
+            "statement_group": null,
+            "mapping_profile_id": null
+          },
+          {
+            "id": "9c04692c-62a4-4ef8-8ad9-546c6140a3f4",
+            "contra": false,
+            "parent_code": null,
+            "source_group": null,
+            "classification": null,
+            "mapping_version": 0,
+            "statement_group": null,
+            "mapping_profile_id": null
+          },
+          {
+            "id": "9d2fb75f-eea6-4c7d-a0ff-ff48ff79c675",
+            "contra": false,
+            "parent_code": null,
+            "source_group": null,
+            "classification": null,
+            "mapping_version": 0,
+            "statement_group": null,
+            "mapping_profile_id": null
+          },
+          {
+            "id": "9dd59084-923b-4391-be29-53d38e52722e",
+            "contra": false,
+            "parent_code": null,
+            "source_group": null,
+            "classification": null,
+            "mapping_version": 0,
+            "statement_group": null,
+            "mapping_profile_id": null
+          },
+          {
+            "id": "cc00fa73-06b0-42bd-9dd0-765a748fc371",
+            "contra": false,
+            "parent_code": null,
+            "source_group": null,
+            "classification": null,
+            "mapping_version": 0,
+            "statement_group": null,
+            "mapping_profile_id": null
+          },
+          {
+            "id": "da2857de-82e6-40b4-a62e-ab3e228a160d",
+            "contra": false,
+            "parent_code": null,
+            "source_group": null,
+            "classification": null,
+            "mapping_version": 0,
+            "statement_group": null,
+            "mapping_profile_id": null
+          },
+          {
+            "id": "e09a27f2-e0b4-4c9b-a750-0df6e9b7aed7",
+            "contra": false,
+            "parent_code": null,
+            "source_group": null,
+            "classification": null,
+            "mapping_version": 0,
+            "statement_group": null,
+            "mapping_profile_id": null
+          }
+        ],
+        "registrations_and_elections": {
+          "sbr": null,
+          "elections": [],
+          "profile_id": "851632fd-e085-4d11-a03d-ee6c209bf629",
+          "registration": "",
+          "taxpayer_classification": "resident_juridical"
+        }
+      },
+      "taxable_income": "1199599.00000000",
+      "filing_deadline": "2027-09-30",
+      "net_adjustments": "0",
+      "current_tax_loss": "0",
+      "financial_run_id": "45c5d400-dcbe-4206-a02a-6de8b5397ea6",
+      "financial_sha256": "1c7a82313d61d0de1eaf71a92a729192ab8279b51048aa3fe72ee1c3d69433f1",
+      "loss_allocations": [],
+      "payment_deadline": "2027-09-30",
+      "accounting_profit": "1199599.00000000",
+      "foreign_tax_credit": "0",
+      "unused_foreign_credit_no_carryforward": "0"
+    },
+    "accounting_profit": 1199599.0,
+    "taxable_income": 1199599.0,
+    "current_tax": 74213.91,
+    "sha256": "14173a11028d430030d8c399cf9431a797faf6465b1e3012925d0a1f5dd68c35",
+    "tenant_id": "f57a72e1-6319-4e68-9062-ba48aadd6911",
+    "created_by": "0dd37104-d59f-4344-943b-808aff4214d8",
+    "id": "261b59b8-4132-45fa-8f6f-b0110e340ab6",
+    "created_at": "2026-10-24T19:45:59.612574+00:00",
+    "updated_at": "2026-10-24T19:45:59.612574+00:00"
+  },
+  "e09_deferred_tax": {
+    "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1",
+    "record_id": "afd0fd23-633d-412e-869d-18602ec58872",
+    "kind": "deferred-tax",
+    "methodology_version": "auditos-accounting/3.1",
+    "inputs": {
+      "area": "",
+      "sources": [],
+      "due_date": null,
+      "owner_id": null,
+      "narrative": "",
+      "assertions": [],
+      "profile_id": "51f698ff-8b9c-4b99-9c93-ede7d1c4d277",
+      "current_tax": "74213.91",
+      "differences": [
+        {
+          "tax_base": "3000",
+          "tax_rate": "0.09",
+          "item_type": "asset",
+          "reference": "SYN-equipment",
+          "allocation": "profit_loss",
+          "rate_source": "SYN reviewed enacted ordinary rate; technical fixture only",
+          "jurisdiction": "AE",
+          "recognise_dta": false,
+          "carrying_amount": "3285",
+          "exception_applied": false,
+          "exception_rationale": "",
+          "rate_effective_date": "2026-01-01",
+          "recognition_rationale": "SYN taxable recovery",
+          "recoverability_evidence": "",
+          "previous_deferred_balance": "0",
+          "expected_recovery_or_settlement": "SYN use through remaining life"
+        }
+      ],
+      "current_tax_run_id": "261b59b8-4132-45fa-8f6f-b0110e340ab6",
+      "current_tax_source": "Approved E05 release"
+    },
+    "dependencies": [
+      {
+        "id": "afd0fd23-633d-412e-869d-18602ec58872",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "51f698ff-8b9c-4b99-9c93-ede7d1c4d277",
+        "status": "APPROVED",
+        "version": 3
+      }
+    ],
+    "results": {
+      "dta": "0",
+      "dtl": "25.65000000",
+      "issues": [],
+      "method": "Item-specific tax-base differences and approved rates; DTA recognition and exceptions are human assessments; no statutory tax computation",
+      "schedule": [
+        {
+          "movement": "25.65000000",
+          "tax_rate": "0.09",
+          "reference": "SYN-equipment",
+          "allocation": "profit_loss",
+          "rate_source": "SYN reviewed enacted ordinary rate; technical fixture only",
+          "jurisdiction": "AE",
+          "unrecognised_dta": "0",
+          "rate_effective_date": "2026-01-01",
+          "temporary_difference": "285",
+          "recoverability_evidence": "",
+          "deferred_balance_dtl_positive": "25.65000000",
+          "expected_recovery_or_settlement": "SYN use through remaining life"
+        }
+      ],
+      "execution": {
+        "evidence": [
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "kind": "snapshot"
+          }
+        ],
+        "rounding": "Decimal precision 48; schedule HALF_UP to 8 decimal places; journals use currency minor units",
+        "entity_id": "14522cc1-4b93-4d4e-87f1-bca1dfa8df25",
+        "framework": "full_ifrs",
+        "period_id": "a594202d-1e60-443e-a4ca-796d99268bca",
+        "tenant_id": "f57a72e1-6319-4e68-9062-ba48aadd6911",
+        "period_end": "2026-12-31",
+        "period_start": "2026-01-01",
+        "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1",
+        "journal_state": "NOT_POSTED",
+        "review_status": "DRAFT_REQUIRES_REVIEW",
+        "entity_version": 1,
+        "execution_mode": "deterministic_python_decimal",
+        "source_balance": "Retained ledger snapshot; original balances are never overwritten",
+        "chart_snapshots": [
+          {
+            "id": "782b980c-59ce-49d0-8988-caca71e7a1ca",
+            "sha256": "d40475111aeb34820fb0eef3610267f8f59c4fdb749ef78253dcda078fca1001"
+          }
+        ],
+        "currency_policy": {
+          "code": "AED",
+          "rounding": "ROUND_HALF_EVEN",
+          "precision": 2
+        },
+        "policy_versions": [
+          {
+            "id": "51f698ff-8b9c-4b99-9c93-ede7d1c4d277",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3,
+            "framework": "full_ifrs",
+            "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+          }
+        ],
+        "supporting_runs": [],
+        "contract_version": "accounting/1",
+        "current_tax_runs": [
+          {
+            "id": "261b59b8-4132-45fa-8f6f-b0110e340ab6",
+            "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1"
+          }
+        ],
+        "source_snapshots": [
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "sha256": "06a301f7c6723b5a03c614f8439d4b0fdda3c5488451a19f59eed71d4cdc3f5a",
+            "source_complete": true
+          }
+        ],
+        "proposed_journals": [],
+        "unresolved_issues": [],
+        "calculation_version": "auditos-accounting/3.1",
+        "functional_currency": "AED",
+        "source_completeness": "complete_for_declared_scope",
+        "approved_assumptions": [
+          {
+            "id": "afd0fd23-633d-412e-869d-18602ec58872",
+            "kind": "ifrs-deferred-tax",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "51f698ff-8b9c-4b99-9c93-ede7d1c4d277",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3
+          }
+        ],
+        "calculated_adjustment": "Calculation output; recognition and accounts require review",
+        "implementation_sha256": "a5710c08d3a39d021c9f590868259991d88feadbebd0c600015e0c26dd8e6001",
+        "presentation_currency": "AED"
+      },
+      "movements": {
+        "profit_loss": "25.65000000"
+      },
+      "tax_basis": "Ordinary IAS 12 differences only; no E08 GloBE/Pillar Two deferred-tax measurement",
+      "current_tax": "74213.91",
+      "current_tax_bridge": {
+        "basis": "E05 current tax; IAS 12 deferred tax and E08 GloBE adjustments remain separate",
+        "amount": "74213.91000000",
+        "run_id": "261b59b8-4132-45fa-8f6f-b0110e340ab6",
+        "sha256": "14173a11028d430030d8c399cf9431a797faf6465b1e3012925d0a1f5dd68c35"
+      }
+    },
+    "sha256": "0a2603bcdb20156c71ea43ba991fc107e583a509bf9d121b1095cd134b47b5ab",
+    "tenant_id": "f57a72e1-6319-4e68-9062-ba48aadd6911",
+    "created_by": "0dd37104-d59f-4344-943b-808aff4214d8",
+    "id": "264c53b1-1dd6-48a6-a2a2-d01ac8b0efb0",
+    "created_at": "2026-10-24T19:46:03.588507+00:00",
+    "updated_at": "2026-10-24T19:46:03.588507+00:00"
+  },
+  "approved_reporting_output": {
+    "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1",
+    "record_id": null,
+    "kind": "financials",
+    "methodology_version": "auditos-accounting/3.1",
+    "inputs": {
+      "profile_id": "51f698ff-8b9c-4b99-9c93-ede7d1c4d277",
+      "snapshot_id": "897b8e68-6bfc-47e4-852b-541bb019e0d6"
+    },
+    "dependencies": [
+      {
+        "id": "51f698ff-8b9c-4b99-9c93-ede7d1c4d277",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "49dbfa2d-cddf-4355-9832-58c7deb2a4f9",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "530184e4-d83c-4637-862c-43656a9e40b3",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "02c80ca2-d3d3-4089-bcee-ab9df4c9d5ef",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "283887f1-7262-40fe-a3c1-e635bacc2ab2",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "141cf8a7-7bc4-45a0-9811-2654004c1c16",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "604247d1-2890-4413-a224-5c4f1dea45c3",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "62f0b447-ecf2-42da-8423-dc09202d904b",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "ad63c9f0-dd82-46a5-b825-e0427f4137b9",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "23cc8dcc-0c69-4b08-8c0c-ea2f639bf729",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "fe4fd102-60ea-4c5b-8d73-e8e7258a4962",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "ff404d43-84de-41cc-a5fc-0ed4e0213a05",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "2b030825-a015-45cf-886b-beb87baab105",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "afd0fd23-633d-412e-869d-18602ec58872",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "51f698ff-8b9c-4b99-9c93-ede7d1c4d277",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "afd0fd23-633d-412e-869d-18602ec58872",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "51f698ff-8b9c-4b99-9c93-ede7d1c4d277",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "add43323-c501-4d59-827a-de724431a436",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "b86d9305-7088-4385-802c-f808188cba56",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "536acd7a-e900-4448-bcf1-b2fbb6ec30ad",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "8cc8f098-a8b4-4fba-85c5-11848c702199",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "9a0f442c-8d1b-4e19-858f-473ae12f0b90",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "a9b211a3-1919-4a78-9fd1-548321ca128d",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "6b3dbcfe-ca72-4168-a4f5-5aff02e06c32",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "dea65360-ab5f-4fd5-9587-9170ac7dd176",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "1b23ac04-2cd4-42ed-a570-d1698448530a",
+        "status": "APPROVED",
+        "version": 3
+      }
+    ],
+    "results": {
+      "lines": [
+        {
+          "note": "N1",
+          "label": "Cash",
+          "weight": "1",
+          "current": "5196174.00000000",
+          "is_cash": true,
+          "opening": "4000000.00000000",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "100",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "100",
+              "weight": "1",
+              "original": "5200000.00000000",
+              "allocated": "5196174.00000000",
+              "adjustment": "-3826"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Capital",
+          "weight": "1",
+          "current": "-4000000.00000000",
+          "is_cash": false,
+          "opening": "-4000000.00000000",
+          "section": "equity",
+          "category": "operating",
+          "line_code": "300",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "300",
+              "weight": "1",
+              "original": "-4000000.00000000",
+              "allocated": "-4000000.00000000",
+              "adjustment": "0"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Revenue",
+          "weight": "1",
+          "current": "-2000000.00000000",
+          "is_cash": false,
+          "opening": "0",
+          "section": "income",
+          "category": "operating",
+          "line_code": "400",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "400",
+              "weight": "1",
+              "original": "-2000000.00000000",
+              "allocated": "-2000000.00000000",
+              "adjustment": "0"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Expense",
+          "weight": "1",
+          "current": "800401.00000000",
+          "is_cash": false,
+          "opening": "0",
+          "section": "expenses",
+          "category": "operating",
+          "line_code": "500",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "500",
+              "weight": "1",
+              "original": "800000.00000000",
+              "allocated": "800401.00000000",
+              "adjustment": "401.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Inventory",
+          "weight": "1",
+          "current": "176",
+          "is_cash": false,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "140",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "140",
+              "weight": "1",
+              "original": "0",
+              "allocated": "176",
+              "adjustment": "176"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Inventory allowance",
+          "weight": "1",
+          "current": "-16.00",
+          "is_cash": false,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "149",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "149",
+              "weight": "1",
+              "original": "0",
+              "allocated": "-16.00",
+              "adjustment": "-16.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Equipment",
+          "weight": "1",
+          "current": "3650",
+          "is_cash": false,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "150",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "150",
+              "weight": "1",
+              "original": "0",
+              "allocated": "3650",
+              "adjustment": "3650"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Accumulated depreciation",
+          "weight": "1",
+          "current": "-365.00",
+          "is_cash": false,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "159",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "159",
+              "weight": "1",
+              "original": "0",
+              "allocated": "-365.00",
+              "adjustment": "-365.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "ROU",
+          "weight": "1",
+          "current": "1000.00",
+          "is_cash": false,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "160",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "160",
+              "weight": "1",
+              "original": "0",
+              "allocated": "1000.00",
+              "adjustment": "1000.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Lease liability",
+          "weight": "1",
+          "current": "-1000.00",
+          "is_cash": false,
+          "opening": "0",
+          "section": "liabilities",
+          "category": "operating",
+          "line_code": "210",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "210",
+              "weight": "1",
+              "original": "0",
+              "allocated": "-1000.00",
+              "adjustment": "-1000.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Benefit provision",
+          "weight": "1",
+          "current": "-20.00",
+          "is_cash": false,
+          "opening": "0",
+          "section": "liabilities",
+          "category": "operating",
+          "line_code": "220",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "220",
+              "weight": "1",
+              "original": "0",
+              "allocated": "-20.00",
+              "adjustment": "-20.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Current tax payable",
+          "weight": "1",
+          "current": "-74213.91",
+          "is_cash": false,
+          "opening": "0",
+          "section": "liabilities",
+          "category": "operating",
+          "line_code": "230",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "230",
+              "weight": "1",
+              "original": "0",
+              "allocated": "-74213.91",
+              "adjustment": "-74213.91"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Deferred tax liability",
+          "weight": "1",
+          "current": "-25.65",
+          "is_cash": false,
+          "opening": "0",
+          "section": "liabilities",
+          "category": "operating",
+          "line_code": "240",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "240",
+              "weight": "1",
+              "original": "0",
+              "allocated": "-25.65",
+              "adjustment": "-25.65"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Tax expense",
+          "weight": "1",
+          "current": "74239.56",
+          "is_cash": false,
+          "opening": "0",
+          "section": "expenses",
+          "category": "tax",
+          "line_code": "510",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "source_accounts": [
+            {
+              "code": "510",
+              "weight": "1",
+              "original": "0",
+              "allocated": "74239.56",
+              "adjustment": "74239.56"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "related_party_category": ""
+        }
+      ],
+      "notes": [
+        {
+          "id": "536acd7a-e900-4448-bcf1-b2fbb6ec30ad",
+          "text": "Synthetic disclosure for testing only. Basis and judgments independently reviewed.",
+          "lines": [
+            {
+              "code": "100",
+              "current": "5196174.00000000",
+              "comparative": "0"
+            },
+            {
+              "code": "300",
+              "current": "-4000000.00000000",
+              "comparative": "0"
+            },
+            {
+              "code": "400",
+              "current": "-2000000.00000000",
+              "comparative": "0"
+            },
+            {
+              "code": "500",
+              "current": "800401.00000000",
+              "comparative": "0"
+            },
+            {
+              "code": "140",
+              "current": "176",
+              "comparative": "0"
+            },
+            {
+              "code": "149",
+              "current": "-16.00",
+              "comparative": "0"
+            },
+            {
+              "code": "150",
+              "current": "3650",
+              "comparative": "0"
+            },
+            {
+              "code": "159",
+              "current": "-365.00",
+              "comparative": "0"
+            },
+            {
+              "code": "160",
+              "current": "1000.00",
+              "comparative": "0"
+            },
+            {
+              "code": "210",
+              "current": "-1000.00",
+              "comparative": "0"
+            },
+            {
+              "code": "220",
+              "current": "-20.00",
+              "comparative": "0"
+            },
+            {
+              "code": "230",
+              "current": "-74213.91",
+              "comparative": "0"
+            },
+            {
+              "code": "240",
+              "current": "-25.65",
+              "comparative": "0"
+            },
+            {
+              "code": "510",
+              "current": "74239.56",
+              "comparative": "0"
+            }
+          ],
+          "reference": "N1",
+          "ai_authored": false,
+          "supporting_schedules": []
+        }
+      ],
+      "scope": "Mapped full-IFRS general corporate statements; human classification, elections, disclosures and professional review required",
+      "entity": "FICTIONAL synthetic entity",
+      "review": {
+        "ready": true,
+        "scope": "Structured financial statements only; external PDF/Word text is not inspected.",
+        "issues": [],
+        "casting": [
+          {
+            "column": "current",
+            "section": "assets",
+            "displayed_sum": "5200619.00",
+            "rounded_exact_total": "5200619.00",
+            "rounding_difference": "0.00"
+          },
+          {
+            "column": "current",
+            "section": "liabilities",
+            "displayed_sum": "75259.56",
+            "rounded_exact_total": "75259.56",
+            "rounding_difference": "0.00"
+          },
+          {
+            "column": "current",
+            "section": "equity",
+            "displayed_sum": "5125359.44",
+            "rounded_exact_total": "5125359.44",
+            "rounding_difference": "0.00"
+          },
+          {
+            "column": "current",
+            "section": "income",
+            "displayed_sum": "2000000.00",
+            "rounded_exact_total": "2000000.00",
+            "rounding_difference": "0.00"
+          },
+          {
+            "column": "current",
+            "section": "expenses",
+            "displayed_sum": "874640.56",
+            "rounded_exact_total": "874640.56",
+            "rounding_difference": "0.00"
+          }
+        ],
+        "changes": [],
+        "resolved_issue_keys": []
+      },
+      "totals": {
+        "oci": "0",
+        "cash": "5196174.00000000",
+        "assets": "5200619.00000000",
+        "equity": "5125359.44000000",
+        "profit": "1125359.44000000",
+        "liabilities": "75259.56",
+        "total_comprehensive_income": "1125359.44000000"
+      },
+      "currency": "AED",
+      "cash_flow": {
+        "method": "indirect",
+        "policy": "SYN401 operating noncash plus unpaid current-tax74213.91 and deferred25.65; no tax paid",
+        "profit": "1125359.44000000",
+        "closing": "5196174.00000000",
+        "opening": "4000000.00000000",
+        "financing": "0",
+        "investing": "-3826",
+        "operating": "1200000.00000000",
+        "difference": "0.00000000",
+        "source_cash": "5196174.00000000",
+        "exchange_effect": "0",
+        "working_capital": "0",
+        "noncash_adjustments": "74640.56"
+      },
+      "entity_id": "14522cc1-4b93-4d4e-87f1-bca1dfa8df25",
+      "execution": {
+        "evidence": [
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "kind": "snapshot"
+          },
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "kind": "snapshot"
+          },
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "kind": "snapshot"
+          },
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "kind": "snapshot"
+          },
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "kind": "snapshot"
+          },
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "kind": "snapshot"
+          },
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "kind": "snapshot"
+          }
+        ],
+        "rounding": "Decimal precision 48; schedule HALF_UP to 8 decimal places; journals use currency minor units",
+        "entity_id": "14522cc1-4b93-4d4e-87f1-bca1dfa8df25",
+        "framework": "full_ifrs",
+        "period_id": "a594202d-1e60-443e-a4ca-796d99268bca",
+        "tenant_id": "f57a72e1-6319-4e68-9062-ba48aadd6911",
+        "period_end": "2026-12-31",
+        "period_start": "2026-01-01",
+        "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1",
+        "journal_state": "NOT_POSTED",
+        "review_status": "DRAFT_REQUIRES_REVIEW",
+        "entity_version": 1,
+        "execution_mode": "deterministic_python_decimal",
+        "source_balance": "Retained ledger snapshot; original balances are never overwritten",
+        "chart_snapshots": [
+          {
+            "id": "782b980c-59ce-49d0-8988-caca71e7a1ca",
+            "sha256": "d40475111aeb34820fb0eef3610267f8f59c4fdb749ef78253dcda078fca1001"
+          }
+        ],
+        "currency_policy": {
+          "code": "AED",
+          "rounding": "ROUND_HALF_EVEN",
+          "precision": 2
+        },
+        "policy_versions": [
+          {
+            "id": "51f698ff-8b9c-4b99-9c93-ede7d1c4d277",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3,
+            "framework": "full_ifrs",
+            "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+          },
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3,
+            "framework": "full_ifrs",
+            "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+          },
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3,
+            "framework": "full_ifrs",
+            "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+          },
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3,
+            "framework": "full_ifrs",
+            "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+          },
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3,
+            "framework": "full_ifrs",
+            "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+          },
+          {
+            "id": "51f698ff-8b9c-4b99-9c93-ede7d1c4d277",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3,
+            "framework": "full_ifrs",
+            "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+          },
+          {
+            "id": "51f698ff-8b9c-4b99-9c93-ede7d1c4d277",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3,
+            "framework": "full_ifrs",
+            "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+          }
+        ],
+        "supporting_runs": [
+          {
+            "id": "1369a709-00e7-448b-9fd2-201e513da33d",
+            "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1"
+          },
+          {
+            "id": "264c53b1-1dd6-48a6-a2a2-d01ac8b0efb0",
+            "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1"
+          },
+          {
+            "id": "77ec04d3-65c5-489e-b29a-0c9edc9ce6d5",
+            "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1"
+          },
+          {
+            "id": "789e59df-fd40-4a6f-ae33-d17ef68b6d6b",
+            "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1"
+          },
+          {
+            "id": "a9fd5faf-1280-4336-aef6-fb703ac4cbfa",
+            "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1"
+          }
+        ],
+        "contract_version": "accounting/1",
+        "current_tax_runs": [
+          {
+            "id": "261b59b8-4132-45fa-8f6f-b0110e340ab6",
+            "engagement_id": "254d681f-27ee-4005-a846-0323f434c5b1"
+          }
+        ],
+        "source_snapshots": [
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "sha256": "06a301f7c6723b5a03c614f8439d4b0fdda3c5488451a19f59eed71d4cdc3f5a",
+            "source_complete": true
+          },
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "sha256": "06a301f7c6723b5a03c614f8439d4b0fdda3c5488451a19f59eed71d4cdc3f5a",
+            "source_complete": true
+          },
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "sha256": "06a301f7c6723b5a03c614f8439d4b0fdda3c5488451a19f59eed71d4cdc3f5a",
+            "source_complete": true
+          },
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "sha256": "06a301f7c6723b5a03c614f8439d4b0fdda3c5488451a19f59eed71d4cdc3f5a",
+            "source_complete": true
+          },
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "sha256": "06a301f7c6723b5a03c614f8439d4b0fdda3c5488451a19f59eed71d4cdc3f5a",
+            "source_complete": true
+          },
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "sha256": "06a301f7c6723b5a03c614f8439d4b0fdda3c5488451a19f59eed71d4cdc3f5a",
+            "source_complete": true
+          },
+          {
+            "id": "897b8e68-6bfc-47e4-852b-541bb019e0d6",
+            "sha256": "06a301f7c6723b5a03c614f8439d4b0fdda3c5488451a19f59eed71d4cdc3f5a",
+            "source_complete": true
+          }
+        ],
+        "proposed_journals": [],
+        "unresolved_issues": [],
+        "calculation_version": "auditos-accounting/3.1",
+        "functional_currency": "AED",
+        "source_completeness": "complete_for_declared_scope",
+        "approved_assumptions": [
+          {
+            "id": "51f698ff-8b9c-4b99-9c93-ede7d1c4d277",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "49dbfa2d-cddf-4355-9832-58c7deb2a4f9",
+            "kind": "ifrs-adjustment",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "530184e4-d83c-4637-862c-43656a9e40b3",
+            "kind": "ifrs-adjustment",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "02c80ca2-d3d3-4089-bcee-ab9df4c9d5ef",
+            "kind": "ifrs-adjustment",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "283887f1-7262-40fe-a3c1-e635bacc2ab2",
+            "kind": "ifrs-adjustment",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "141cf8a7-7bc4-45a0-9811-2654004c1c16",
+            "kind": "ifrs-adjustment",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "604247d1-2890-4413-a224-5c4f1dea45c3",
+            "kind": "ifrs-adjustment",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "62f0b447-ecf2-42da-8423-dc09202d904b",
+            "kind": "ifrs-adjustment",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "ad63c9f0-dd82-46a5-b825-e0427f4137b9",
+            "kind": "ifrs-adjustment",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "23cc8dcc-0c69-4b08-8c0c-ea2f639bf729",
+            "kind": "ifrs-fixed-assets",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "fe4fd102-60ea-4c5b-8d73-e8e7258a4962",
+            "kind": "ifrs-inventory",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "ff404d43-84de-41cc-a5fc-0ed4e0213a05",
+            "kind": "ifrs-employee-benefits",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "2b030825-a015-45cf-886b-beb87baab105",
+            "kind": "ifrs-lease",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "1d9227a5-06db-4f77-964f-bd38c9a169b3",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "afd0fd23-633d-412e-869d-18602ec58872",
+            "kind": "ifrs-deferred-tax",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "51f698ff-8b9c-4b99-9c93-ede7d1c4d277",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "afd0fd23-633d-412e-869d-18602ec58872",
+            "kind": "ifrs-deferred-tax",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "51f698ff-8b9c-4b99-9c93-ede7d1c4d277",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "add43323-c501-4d59-827a-de724431a436",
+            "kind": "ifrs-mapping",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "b86d9305-7088-4385-802c-f808188cba56",
+            "kind": "ifrs-cash-flow",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "536acd7a-e900-4448-bcf1-b2fbb6ec30ad",
+            "kind": "ifrs-note",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "8cc8f098-a8b4-4fba-85c5-11848c702199",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "9a0f442c-8d1b-4e19-858f-473ae12f0b90",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "a9b211a3-1919-4a78-9fd1-548321ca128d",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "6b3dbcfe-ca72-4168-a4f5-5aff02e06c32",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "dea65360-ab5f-4fd5-9587-9170ac7dd176",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "1b23ac04-2cd4-42ed-a570-d1698448530a",
+            "kind": "ifrs-disclosure",
+            "status": "APPROVED",
+            "version": 3
+          }
+        ],
+        "calculated_adjustment": "Calculation output; recognition and accounts require review",
+        "implementation_sha256": "a5710c08d3a39d021c9f590868259991d88feadbebd0c600015e0c26dd8e6001",
+        "presentation_currency": "AED"
+      },
+      "precision": 2,
+      "period_end": "2026-12-31",
+      "validation": {
+        "ready": true,
+        "checks": [
+          {
+            "code": "netting_assessed",
+            "passed": true
+          },
+          {
+            "code": "supporting_schedule_issues",
+            "issues": [],
+            "passed": true
+          },
+          {
+            "code": "source_trial_balance",
+            "passed": true
+          },
+          {
+            "code": "accounting_equation",
+            "passed": true,
+            "difference": "0.00000000"
+          },
+          {
+            "code": "adjusted_trial_balance",
+            "passed": true
+          },
+          {
+            "code": "cash_flow_reconciliation",
+            "passed": true
+          },
+          {
+            "code": "notes_reconciled",
+            "passed": true,
+            "missing": []
+          },
+          {
+            "code": "disclosures_assessed",
+            "passed": true,
+            "missing": []
+          },
+          {
+            "code": "single_cash_flow_policy",
+            "passed": true
+          },
+          {
+            "code": "comparative_opening_consistency",
+            "passed": true
+          },
+          {
+            "code": "comparative_source",
+            "passed": true
+          },
+          {
+            "code": "statement_review",
+            "passed": true
+          },
+          {
+            "code": "accounting_execution_sources",
+            "passed": true
+          }
+        ],
+        "ifrs_compliance_certified": false
+      },
+      "comparative": null,
+      "period_start": "2026-01-01",
+      "presentation": "IAS 1",
+      "ifrs19_profile": "full-disclosure-original/1",
+      "changes_in_equity": {
+        "oci": "0",
+        "profit": "1125359.44000000",
+        "closing": "5125359.44000000",
+        "opening": "4000000.00000000",
+        "direct_equity_movements": "0.00000000"
+      },
+      "profit_categories": {
+        "tax": "-74239.56",
+        "financing": "0",
+        "investing": "0",
+        "operating": "1199599.00000000",
+        "discontinued": "0"
+      },
+      "presentation_lines": [
+        {
+          "note": "N1",
+          "label": "Cash",
+          "weight": "1",
+          "current": "5196174.00000000",
+          "is_cash": true,
+          "opening": "4000000.00000000",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "100",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "5196174.00",
+          "source_accounts": [
+            {
+              "code": "100",
+              "weight": "1",
+              "original": "5200000.00000000",
+              "allocated": "5196174.00000000",
+              "adjustment": "-3826"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Capital",
+          "weight": "1",
+          "current": "-4000000.00000000",
+          "is_cash": false,
+          "opening": "-4000000.00000000",
+          "section": "equity",
+          "category": "operating",
+          "line_code": "300",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "4000000.00",
+          "source_accounts": [
+            {
+              "code": "300",
+              "weight": "1",
+              "original": "-4000000.00000000",
+              "allocated": "-4000000.00000000",
+              "adjustment": "0"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Revenue",
+          "weight": "1",
+          "current": "-2000000.00000000",
+          "is_cash": false,
+          "opening": "0",
+          "section": "income",
+          "category": "operating",
+          "line_code": "400",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "2000000.00",
+          "source_accounts": [
+            {
+              "code": "400",
+              "weight": "1",
+              "original": "-2000000.00000000",
+              "allocated": "-2000000.00000000",
+              "adjustment": "0"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Expense",
+          "weight": "1",
+          "current": "800401.00000000",
+          "is_cash": false,
+          "opening": "0",
+          "section": "expenses",
+          "category": "operating",
+          "line_code": "500",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "800401.00",
+          "source_accounts": [
+            {
+              "code": "500",
+              "weight": "1",
+              "original": "800000.00000000",
+              "allocated": "800401.00000000",
+              "adjustment": "401.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Inventory",
+          "weight": "1",
+          "current": "176",
+          "is_cash": false,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "140",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "176.00",
+          "source_accounts": [
+            {
+              "code": "140",
+              "weight": "1",
+              "original": "0",
+              "allocated": "176",
+              "adjustment": "176"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Inventory allowance",
+          "weight": "1",
+          "current": "-16.00",
+          "is_cash": false,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "149",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "-16.00",
+          "source_accounts": [
+            {
+              "code": "149",
+              "weight": "1",
+              "original": "0",
+              "allocated": "-16.00",
+              "adjustment": "-16.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Equipment",
+          "weight": "1",
+          "current": "3650",
+          "is_cash": false,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "150",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "3650.00",
+          "source_accounts": [
+            {
+              "code": "150",
+              "weight": "1",
+              "original": "0",
+              "allocated": "3650",
+              "adjustment": "3650"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Accumulated depreciation",
+          "weight": "1",
+          "current": "-365.00",
+          "is_cash": false,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "159",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "-365.00",
+          "source_accounts": [
+            {
+              "code": "159",
+              "weight": "1",
+              "original": "0",
+              "allocated": "-365.00",
+              "adjustment": "-365.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "ROU",
+          "weight": "1",
+          "current": "1000.00",
+          "is_cash": false,
+          "opening": "0",
+          "section": "assets",
+          "category": "operating",
+          "line_code": "160",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "1000.00",
+          "source_accounts": [
+            {
+              "code": "160",
+              "weight": "1",
+              "original": "0",
+              "allocated": "1000.00",
+              "adjustment": "1000.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Lease liability",
+          "weight": "1",
+          "current": "-1000.00",
+          "is_cash": false,
+          "opening": "0",
+          "section": "liabilities",
+          "category": "operating",
+          "line_code": "210",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "1000.00",
+          "source_accounts": [
+            {
+              "code": "210",
+              "weight": "1",
+              "original": "0",
+              "allocated": "-1000.00",
+              "adjustment": "-1000.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Benefit provision",
+          "weight": "1",
+          "current": "-20.00",
+          "is_cash": false,
+          "opening": "0",
+          "section": "liabilities",
+          "category": "operating",
+          "line_code": "220",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "20.00",
+          "source_accounts": [
+            {
+              "code": "220",
+              "weight": "1",
+              "original": "0",
+              "allocated": "-20.00",
+              "adjustment": "-20.00"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Current tax payable",
+          "weight": "1",
+          "current": "-74213.91",
+          "is_cash": false,
+          "opening": "0",
+          "section": "liabilities",
+          "category": "operating",
+          "line_code": "230",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "74213.91",
+          "source_accounts": [
+            {
+              "code": "230",
+              "weight": "1",
+              "original": "0",
+              "allocated": "-74213.91",
+              "adjustment": "-74213.91"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Deferred tax liability",
+          "weight": "1",
+          "current": "-25.65",
+          "is_cash": false,
+          "opening": "0",
+          "section": "liabilities",
+          "category": "operating",
+          "line_code": "240",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "25.65",
+          "source_accounts": [
+            {
+              "code": "240",
+              "weight": "1",
+              "original": "0",
+              "allocated": "-25.65",
+              "adjustment": "-25.65"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "N1",
+          "label": "Tax expense",
+          "weight": "1",
+          "current": "74239.56",
+          "is_cash": false,
+          "opening": "0",
+          "section": "expenses",
+          "category": "tax",
+          "line_code": "510",
+          "comparative": "0",
+          "cash_flow_role": "none",
+          "disaggregation": "",
+          "display_current": "74239.56",
+          "source_accounts": [
+            {
+              "code": "510",
+              "weight": "1",
+              "original": "0",
+              "allocated": "74239.56",
+              "adjustment": "74239.56"
+            }
+          ],
+          "netting_rationale": "",
+          "current_noncurrent": "not_applicable",
+          "display_comparative": null,
+          "related_party_category": ""
+        },
+        {
+          "note": "",
+          "label": "Current period profit / loss",
+          "current": "-1125359.44000000",
+          "derived": true,
+          "section": "equity",
+          "line_code": "__period_profit__",
+          "comparative": "0",
+          "display_current": "1125359.44",
+          "source_accounts": [],
+          "display_comparative": null
+        }
+      ],
+      "presentation_settings": {
+        "precision": 2,
+        "materiality": "0",
+        "suppress_zero": true
+      },
+      "adjusted_trial_balance": [
+        {
+          "id": "7aa4b2a5-94e1-4c0a-9cb3-0e44cc029515",
+          "code": "100",
+          "name": "Cash",
+          "debit": "2000000.00000000",
+          "contra": false,
+          "credit": "800000.00000000",
+          "closing": "5200000.00000000",
+          "opening": "4000000.00000000",
+          "adjusted": "5196174.00000000",
+          "original": "5200000.00000000",
+          "adjustment": "-3826",
+          "parent_code": null,
+          "source_group": null,
+          "classification": null,
+          "display_closing": "5200000.00",
+          "statement_group": null
+        },
+        {
+          "id": "98581cee-c56a-49e0-b4df-873281b752c1",
+          "code": "300",
+          "name": "Equity",
+          "debit": "0",
+          "contra": false,
+          "credit": "0",
+          "closing": "-4000000.00000000",
+          "opening": "-4000000.00000000",
+          "adjusted": "-4000000.00000000",
+          "original": "-4000000.00000000",
+          "adjustment": "0",
+          "parent_code": null,
+          "source_group": null,
+          "classification": null,
+          "display_closing": "-4000000.00",
+          "statement_group": null
+        },
+        {
+          "id": "9dd59084-923b-4391-be29-53d38e52722e",
+          "code": "400",
+          "name": "Revenue",
+          "debit": "0.00000000",
+          "contra": false,
+          "credit": "2000000.00000000",
+          "closing": "-2000000.00000000",
+          "opening": "0",
+          "adjusted": "-2000000.00000000",
+          "original": "-2000000.00000000",
+          "adjustment": "0",
+          "parent_code": null,
+          "source_group": null,
+          "classification": null,
+          "display_closing": "-2000000.00",
+          "statement_group": null
+        },
+        {
+          "id": "58cce59e-3fd5-4b8b-9cb1-cc843d4c54a0",
+          "code": "500",
+          "name": "Expense",
+          "debit": "800000.00000000",
+          "contra": false,
+          "credit": "0.00000000",
+          "closing": "800000.00000000",
+          "opening": "0",
+          "adjusted": "800401.00000000",
+          "original": "800000.00000000",
+          "adjustment": "401.00",
+          "parent_code": null,
+          "source_group": null,
+          "classification": null,
+          "display_closing": "800000.00",
+          "statement_group": null
+        },
+        {
+          "code": "140",
+          "name": "Inventory",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "opening": "0",
+          "adjusted": "176",
+          "original": "0",
+          "adjustment": "176",
+          "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart"
+        },
+        {
+          "code": "149",
+          "name": "Inventory allowance",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "opening": "0",
+          "adjusted": "-16.00",
+          "original": "0",
+          "adjustment": "-16.00",
+          "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart"
+        },
+        {
+          "code": "150",
+          "name": "Equipment",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "opening": "0",
+          "adjusted": "3650",
+          "original": "0",
+          "adjustment": "3650",
+          "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart"
+        },
+        {
+          "code": "159",
+          "name": "Accumulated depreciation",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "opening": "0",
+          "adjusted": "-365.00",
+          "original": "0",
+          "adjustment": "-365.00",
+          "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart"
+        },
+        {
+          "code": "160",
+          "name": "ROU",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "opening": "0",
+          "adjusted": "1000.00",
+          "original": "0",
+          "adjustment": "1000.00",
+          "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart"
+        },
+        {
+          "code": "210",
+          "name": "Lease liability",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "opening": "0",
+          "adjusted": "-1000.00",
+          "original": "0",
+          "adjustment": "-1000.00",
+          "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart"
+        },
+        {
+          "code": "220",
+          "name": "Benefit provision",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "opening": "0",
+          "adjusted": "-20.00",
+          "original": "0",
+          "adjustment": "-20.00",
+          "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart"
+        },
+        {
+          "code": "230",
+          "name": "Current tax payable",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "opening": "0",
+          "adjusted": "-74213.91",
+          "original": "0",
+          "adjustment": "-74213.91",
+          "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart"
+        },
+        {
+          "code": "240",
+          "name": "Deferred tax liability",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "opening": "0",
+          "adjusted": "-25.65",
+          "original": "0",
+          "adjustment": "-25.65",
+          "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart"
+        },
+        {
+          "code": "510",
+          "name": "Tax expense",
+          "debit": "0",
+          "credit": "0",
+          "closing": "0",
+          "opening": "0",
+          "adjusted": "74239.56",
+          "original": "0",
+          "adjustment": "74239.56",
+          "balance_basis": "Zero in selected financial snapshot; account evidenced by active retained chart"
+        }
+      ],
+      "accounting_policies_and_judgments": []
+    },
+    "sha256": "5e5355216b428fe0370a4edd0f4d1c0c4aae34e2a6a69dbcaf5e66aad0011dd0",
+    "tenant_id": "f57a72e1-6319-4e68-9062-ba48aadd6911",
+    "created_by": "0dd37104-d59f-4344-943b-808aff4214d8",
+    "id": "d68c5d09-9d9e-4994-9494-6b748e07b577",
+    "created_at": "2026-10-24T19:46:08.645756+00:00",
+    "updated_at": "2026-10-24T19:46:08.645756+00:00"
+  },
+  "posting": "All adjustments are approved reporting overlays; no journal was posted to the source ledger"
+}

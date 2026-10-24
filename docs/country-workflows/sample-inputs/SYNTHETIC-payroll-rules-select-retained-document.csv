@@ -1,0 +1,4 @@
+id,rule_group,component,jurisdiction,effective_from,effective_to,formula,rate,salary_cap,rounding,source_url,source_version,evidence_reference,applicability_review
+RULE-PF:EMPLOYEE,PF:EMPLOYEE,PF:EMPLOYEE,IN-CENTRAL,2026-01-01,2026-12-31,rate,0.12,15000,nearest-rupee,https://synthetic.example/payroll/rule,Synthetic reviewed fixture 1,SYNTHETIC-RULE-EVIDENCE-1,"Synthetic independent expected rates, cohorts and conditions"
+RULE-PF:EPS,PF:EPS,PF:EPS,IN-CENTRAL,2026-01-01,2026-12-31,rate,0.0833,15000,nearest-rupee,https://synthetic.example/payroll/rule,Synthetic reviewed fixture 1,SYNTHETIC-RULE-EVIDENCE-1,"Synthetic independent expected rates, cohorts and conditions"
+RULE-PF:EMPLOYER,PF:EMPLOYER,PF:EMPLOYER,IN-CENTRAL,2026-01-01,2026-12-31,employer-minus-eps,0.12,15000,nearest-rupee,https://synthetic.example/payroll/rule,Synthetic reviewed fixture 1,SYNTHETIC-RULE-EVIDENCE-1,"Synthetic independent expected rates, cohorts and conditions"

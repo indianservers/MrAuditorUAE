@@ -1,0 +1,11 @@
+{
+  "fixture": "SYNTHETIC reviewed zero-rated export; no inference from account names",
+  "engagement_id": "c3ceac37-7432-4817-969c-1c23af64ee98",
+  "vat_run_id": "b983302c-ff5b-4dad-9104-667265777254",
+  "ct_run_id": "127ceebd-7027-4824-ab43-bec2f532e3da",
+  "approved_connected_assessment_id": "01021f02-4629-468c-aa54-632e808ccaab",
+  "draft_vat": "0",
+  "approved_vat_return_id": "6ebba7e7-9588-4695-be6e-5e17a0cb25cb",
+  "draft_ct": "110250",
+  "posting_or_filing_performed": false
+}

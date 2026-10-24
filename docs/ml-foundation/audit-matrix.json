@@ -1,0 +1,1151 @@
+{
+  "source": "Repository inspection plus actual local CPU experiments",
+  "measured_at": "2026-10-24T19:30:29.581Z",
+  "native_probe": {
+    "node": "v24.15.0",
+    "tfjs_node": "4.22.0",
+    "platform": "Windows x64",
+    "status": "failed",
+    "reasons": [
+      "Windows CPU prebuilt binary HTTP 404",
+      "Source-build fallback reported missing Windows SDK"
+    ],
+    "selected_backend": "verified JavaScript CPU"
+  },
+  "capabilities": [
+    {
+      "capability": "journal-type",
+      "existing": "Legacy binary exception classifier",
+      "actual_runtime": "Synthetic CPU train/reload/infer verified; no client deployment asserted",
+      "training_data": "Ten reviewed journal-type labels must be collected",
+      "model_availability": "Local synthetic experimental artifact; private governed production registry unchanged",
+      "quality_evidence": {
+        "model": {
+          "confusion": [
+            [
+              3,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "per_class": [
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 0.75,
+              "f1": 0.8571428571428571
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 0.25,
+              "f1": 0.4
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 0.25,
+              "f1": 0.4
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            }
+          ],
+          "macro_f1": 0.1657142857142857,
+          "coverage": 0.125,
+          "abstention_rate": 0.875,
+          "multiclass_brier": 0.6563146190113779,
+          "probability_calibrated": false
+        },
+        "statistical_nearest_centroid": {
+          "confusion": [
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              4,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              4,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              1,
+              3,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              4,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              4,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              4
+            ]
+          ],
+          "per_class": [
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 0.25,
+              "f1": 0.4
+            },
+            {
+              "support": 4,
+              "precision": 0.5714285714285714,
+              "recall": 1,
+              "f1": 0.7272727272727273
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            }
+          ],
+          "macro_f1": 0.9127272727272728,
+          "coverage": 1,
+          "abstention_rate": 0,
+          "multiclass_brier": 0.15,
+          "probability_calibrated": false
+        },
+        "majority_training_class": {
+          "confusion": [
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              4,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "per_class": [
+            {
+              "support": 4,
+              "precision": 0.1,
+              "recall": 1,
+              "f1": 0.18181818181818182
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            }
+          ],
+          "macro_f1": 0.01818181818181818,
+          "coverage": 1,
+          "abstention_rate": 0,
+          "multiclass_brier": 1.8,
+          "probability_calibrated": false
+        }
+      },
+      "selection": {
+        "based_on": "validation_only",
+        "metric": "macro_f1_including_abstentions",
+        "model_value": 0.1657142857142857,
+        "baseline_value": 0.9127272727272728,
+        "model_preferred": false,
+        "preferred_execution_mode": "statistical_baseline",
+        "production_approval": false
+      },
+      "fixes": "True multiclass taxonomy, class weighting, abstention, train-fitted centroid baseline",
+      "remaining_gap": "Neural model underperformed baseline at tested settings; real-client evaluation required"
+    },
+    {
+      "capability": "account-mapping",
+      "existing": "Legacy five-class hashed English name features",
+      "actual_runtime": "Synthetic CPU train/reload/infer verified; no client deployment asserted",
+      "training_data": "Canonical account-mapping labels must be reviewed",
+      "model_availability": "Local synthetic experimental artifact; private governed production registry unchanged",
+      "quality_evidence": {
+        "model": {
+          "confusion": [
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "per_class": [
+            {
+              "support": 16,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 16,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 16,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 16,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 16,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            }
+          ],
+          "macro_f1": 0,
+          "coverage": 0,
+          "abstention_rate": 1,
+          "multiclass_brier": 0.5442466257373251,
+          "probability_calibrated": false
+        },
+        "statistical_nearest_centroid": {
+          "confusion": [
+            [
+              16,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              16,
+              0,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              16,
+              0,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              16,
+              0
+            ],
+            [
+              0,
+              0,
+              0,
+              0,
+              16
+            ]
+          ],
+          "per_class": [
+            {
+              "support": 16,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 16,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 16,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 16,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 16,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            }
+          ],
+          "macro_f1": 1,
+          "coverage": 1,
+          "abstention_rate": 0,
+          "multiclass_brier": 0,
+          "probability_calibrated": false
+        },
+        "majority_training_class": {
+          "confusion": [
+            [
+              16,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              16,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              16,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              16,
+              0,
+              0,
+              0,
+              0
+            ],
+            [
+              16,
+              0,
+              0,
+              0,
+              0
+            ]
+          ],
+          "per_class": [
+            {
+              "support": 16,
+              "precision": 0.2,
+              "recall": 1,
+              "f1": 0.33333333333333337
+            },
+            {
+              "support": 16,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 16,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 16,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            },
+            {
+              "support": 16,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            }
+          ],
+          "macro_f1": 0.06666666666666668,
+          "coverage": 1,
+          "abstention_rate": 0,
+          "multiclass_brier": 1.6,
+          "probability_calibrated": false
+        }
+      },
+      "selection": {
+        "based_on": "validation_only",
+        "metric": "macro_f1_including_abstentions",
+        "model_value": 0,
+        "baseline_value": 1,
+        "model_preferred": false,
+        "preferred_execution_mode": "statistical_baseline",
+        "production_approval": false
+      },
+      "fixes": "Unicode names/descriptions plus ledger behavior; canonical taxonomy; ambiguity review",
+      "remaining_gap": "No legal/tax treatment inferred; real-client evaluation required"
+    },
+    {
+      "capability": "journal-anomaly",
+      "existing": "Legacy line autoencoder",
+      "actual_runtime": "Synthetic CPU train/reload/infer verified; no client deployment asserted",
+      "training_data": "Normal/relevant-exception review labels unproven on client records",
+      "model_availability": "Local synthetic experimental artifact; private governed production registry unchanged",
+      "quality_evidence": {
+        "review_capacity": 4,
+        "precision_at_capacity": 1,
+        "recall_at_capacity": 1,
+        "false_positive_count": 5,
+        "baseline": "robust standardized amount and rarity",
+        "baseline_scores": [
+          10,
+          1.2320656998785686,
+          1.2076602014485884,
+          1.1834916533460482,
+          1.1595554987275218,
+          1.1358473109491096,
+          1.1123627886530554,
+          1.0890977510839819,
+          1.0660481336219647,
+          1.043209983520545,
+          10,
+          0.9981528095545709,
+          0.9759264038564502,
+          0.9538966945929055,
+          0.9320602308823215,
+          0.9104136518683814,
+          0.8889536836156434,
+          0.8676771361378023,
+          0.8465809005518676,
+          0.8256619463519184,
+          10,
+          0.7843441364037279,
+          0.7639395885496894,
+          0.7437009331636413,
+          0.7236254945167544,
+          0.7037106610990777,
+          0.6839538835807901,
+          0.6643526728537252,
+          0.6449045981493808,
+          0.6256072852299115,
+          10,
+          0.5874557200771119,
+          0.5685969866952266,
+          0.5498800496422502,
+          0.5313027925253784,
+          0.5128631459836231,
+          0.49455908630450085,
+          0.47638863409119225,
+          0.45834985297800984,
+          0.4404408483920555
+        ],
+        "test_scores": [
+          15.381293847487038,
+          2.4376326226980054,
+          2.2333542323735944,
+          2.4305427619849027,
+          2.5303138446273015,
+          2.251897074411303,
+          2.4447594788315965,
+          4.437241895066934,
+          3.916129032548796,
+          2.4136111486015386,
+          11.291212020452742,
+          4.640294966504675,
+          2.4605339059774813,
+          2.4034485230669604,
+          4.441500393732767,
+          2.4001360650026697,
+          3.8026697140799026,
+          2.20101589786502,
+          2.452597906571857,
+          2.410686889246248,
+          11.24452684405782,
+          4.477854582914119,
+          4.628499884033912,
+          2.19303247622586,
+          4.230896859645535,
+          2.381453400000527,
+          2.189912404654794,
+          2.381735242659271,
+          4.683266682417156,
+          2.212282143597677,
+          11.447661951346904,
+          2.3740550088497483,
+          3.8752448403134383,
+          4.594402803490882,
+          2.409098883440325,
+          4.375610775286463,
+          2.4423768647232347,
+          2.3873512714208287,
+          2.18239850136806,
+          2.372409509238492
+        ],
+        "model_review_queue": [
+          {
+            "fraction": 0.01,
+            "capacity": 1,
+            "precision": 1,
+            "recall": 0.25,
+            "false_positive_count": 0
+          },
+          {
+            "fraction": 0.05,
+            "capacity": 2,
+            "precision": 1,
+            "recall": 0.5,
+            "false_positive_count": 0
+          },
+          {
+            "fraction": 0.1,
+            "capacity": 4,
+            "precision": 1,
+            "recall": 1,
+            "false_positive_count": 0
+          }
+        ],
+        "baseline_review_queue": [
+          {
+            "fraction": 0.01,
+            "capacity": 1,
+            "precision": 1,
+            "recall": 0.25,
+            "false_positive_count": 0
+          },
+          {
+            "fraction": 0.05,
+            "capacity": 2,
+            "precision": 1,
+            "recall": 0.5,
+            "false_positive_count": 0
+          },
+          {
+            "fraction": 0.1,
+            "capacity": 4,
+            "precision": 1,
+            "recall": 1,
+            "false_positive_count": 0
+          }
+        ],
+        "population_assumption": "Only explicitly normal-labelled training journals; known relevant exceptions excluded",
+        "stability_across_entities_and_periods": null
+      },
+      "selection": {
+        "based_on": "validation_only",
+        "metric": "precision_at_10_percent_review_capacity",
+        "model_value": 1,
+        "baseline_value": 1,
+        "model_preferred": false,
+        "preferred_execution_mode": "statistical_baseline",
+        "production_approval": false
+      },
+      "fixes": "Journal context, train-only robust features, validation threshold, baseline queue comparison",
+      "remaining_gap": "Real normal-population assumptions, contamination and entity/period stability remain unverified"
+    },
+    {
+      "capability": "review-ranking",
+      "existing": "Legacy binary review classifier and explicit baselines",
+      "actual_runtime": "Synthetic CPU train/reload/infer verified; no client deployment asserted",
+      "training_data": "Sufficient reviewed outcomes not established",
+      "model_availability": "Local synthetic experimental artifact; private governed production registry unchanged",
+      "quality_evidence": {
+        "model": {
+          "confusion": [
+            [
+              36,
+              0
+            ],
+            [
+              0,
+              4
+            ]
+          ],
+          "per_class": [
+            {
+              "support": 36,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            }
+          ],
+          "macro_f1": 1,
+          "coverage": 1,
+          "abstention_rate": 0,
+          "multiclass_brier": 0.02037113692404493,
+          "probability_calibrated": false
+        },
+        "statistical_nearest_centroid": {
+          "confusion": [
+            [
+              36,
+              0
+            ],
+            [
+              0,
+              4
+            ]
+          ],
+          "per_class": [
+            {
+              "support": 36,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            },
+            {
+              "support": 4,
+              "precision": 1,
+              "recall": 1,
+              "f1": 1
+            }
+          ],
+          "macro_f1": 1,
+          "coverage": 1,
+          "abstention_rate": 0,
+          "multiclass_brier": 0,
+          "probability_calibrated": false
+        },
+        "majority_training_class": {
+          "confusion": [
+            [
+              36,
+              0
+            ],
+            [
+              4,
+              0
+            ]
+          ],
+          "per_class": [
+            {
+              "support": 36,
+              "precision": 0.9,
+              "recall": 1,
+              "f1": 0.9473684210526316
+            },
+            {
+              "support": 4,
+              "precision": null,
+              "recall": 0,
+              "f1": 0
+            }
+          ],
+          "macro_f1": 0.4736842105263158,
+          "coverage": 1,
+          "abstention_rate": 0,
+          "multiclass_brier": 0.2,
+          "probability_calibrated": false
+        },
+        "review_queue": [
+          {
+            "fraction": 0.01,
+            "capacity": 1,
+            "precision": 1,
+            "recall": 0.25,
+            "false_positive_count": 0
+          },
+          {
+            "fraction": 0.05,
+            "capacity": 2,
+            "precision": 1,
+            "recall": 0.5,
+            "false_positive_count": 0
+          },
+          {
+            "fraction": 0.1,
+            "capacity": 4,
+            "precision": 1,
+            "recall": 1,
+            "false_positive_count": 0
+          }
+        ]
+      },
+      "selection": {
+        "based_on": "validation_only",
+        "metric": "macro_f1_including_abstentions",
+        "model_value": 1,
+        "baseline_value": 1,
+        "model_preferred": false,
+        "preferred_execution_mode": "statistical_baseline",
+        "production_approval": false
+      },
+      "fixes": "Configurable earlier-period rules/statistics baseline and label-gated supervised experiments",
+      "remaining_gap": "No client risk model or measured queue usefulness without outcomes"
+    }
+  ]
+}

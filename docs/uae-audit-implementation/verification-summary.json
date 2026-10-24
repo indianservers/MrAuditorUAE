@@ -25,6 +25,54 @@
     "skipped": 0,
     "skip_reasons": []
   },
+  "backend_latest_integration": {
+    "file": "post-fix-integration-retest.xml",
+    "tests": 29,
+    "passed": 29,
+    "failed": 0,
+    "skipped": 0,
+    "skip_reasons": []
+  },
+  "backend_intermediate_run": {
+    "file": "post-fix-integration-results.xml",
+    "tests": 29,
+    "passed": 26,
+    "failed": 3,
+    "skipped": 0,
+    "skip_reasons": []
+  },
+  "backend_final_ml_financial": {
+    "file": "ml-financial-final-results.xml",
+    "tests": 2,
+    "passed": 2,
+    "failed": 0,
+    "skipped": 0,
+    "skip_reasons": []
+  },
+  "backend_final_label_gate": {
+    "file": "final-label-gate-results.xml",
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "skip_reasons": []
+  },
+  "backend_final_extension_unit": {
+    "file": "final-extension-unit-results.xml",
+    "tests": 80,
+    "passed": 80,
+    "failed": 0,
+    "skipped": 0,
+    "skip_reasons": []
+  },
+  "backend_restricted_diligence": {
+    "file": "restricted-diligence-results.xml",
+    "tests": 1,
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "skip_reasons": []
+  },
   "counts_overlap": true,
   "integration_boundary_doubles": [
     "malware scanner",
@@ -39,12 +87,13 @@
   ],
   "new_browser_scenario": "Not executed; UI type/build/component checks and real backend workflow checks were executed",
   "production_qualified": false,
+  "intermediate_run_note": "Three intermediate setup rejections occurred while shared tax publication-attestation rules/fixtures changed. The strict source gate was retained. Consult backend_latest_integration for the subsequent retest; counts and intermediate failure receipts are preserved.",
   "frontend_unit": {
     "tests": 42,
     "passed": 42,
     "failed": 0
   },
-  "backend_types": "Success: no issues found in 260 source files",
+  "backend_types": "Success: no issues found in 264 source files",
   "frontend_build": "passed",
   "local_ml_runtime": {
     "receipt": "ml-runtime-tests.txt",

@@ -3,6 +3,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { AuditStudio } from "./audit-studio";
 import { FinancialReview } from "./financial-review";
+import { AccountingExecutionNotice } from "./accounting-execution-notice";
 import { money } from "@/lib/formatting/money";
 import { PageHeader } from "./shared";
 import { useAPI, useAction } from "@/hooks/use-api";
@@ -33,6 +34,13 @@ export const ifrsAreas = [
   ["leases", "IFRS 16 Lease Accounting Studio", "lease"],
   ["deferred-tax", "IAS 12 Deferred Tax Studio", "deferred-tax"],
   ["fixed-assets", "Fixed Asset & Depreciation Studio", "fixed-assets"],
+  ["inventory", "Inventory Costing & NRV", "inventory"],
+  [
+    "employee-benefits",
+    "Payroll & Benefit Accounting Bridge",
+    "employee-benefits",
+  ],
+  ["policies", "Accounting Policies & Judgments", "accounting-policy"],
   ["impairment", "Impairment & Provisions Studio", "impairment"],
   ["consolidation", "Group Consolidation Studio", "consolidation"],
   ["intercompany", "Intercompany Reconciliation", "consolidation"],
@@ -339,8 +347,29 @@ function ReportingRuns({
       )}
       {data && (
         <>
-          {["lease", "ecl"].includes(result.data?.kind || "") && (
-            <JournalProposer base={base} rid={rid} profile={profile} />
+          <AccountingExecutionNotice
+            receipt={
+              data.execution as Parameters<
+                typeof AccountingExecutionNotice
+              >[0]["receipt"]
+            }
+          />
+          {[
+            "lease",
+            "ecl",
+            "fixed-assets",
+            "inventory",
+            "impairment",
+            "employee-benefits",
+            "deferred-tax",
+          ].includes(result.data?.kind || "") && (
+            <JournalProposer
+              key={rid}
+              base={base}
+              rid={rid}
+              profile={profile}
+              kind={result.data?.kind || ""}
+            />
           )}
           <div className="toolbar">
             <strong>
@@ -474,10 +503,12 @@ function JournalProposer({
   base,
   rid,
   profile,
+  kind,
 }: {
   base: string;
   rid: string;
   profile: string;
+  kind: string;
 }) {
   const [debit, setDebit] = useState(""),
     [credit, setCredit] = useState(""),
@@ -485,6 +516,7 @@ function JournalProposer({
     [reason, setReason] = useState(""),
     [reference, setReference] = useState(""),
     [allowance, setAllowance] = useState("0");
+  const [component, setComponent] = useState("primary");
   const chart = useAPI<{ lines: RecordRow[] }>(
     `${base}/adjusted-trial-balance/${profile}`,
     !!profile,
@@ -506,6 +538,21 @@ function JournalProposer({
             onChange={(e) => setReference(e.target.value)}
           />
         </label>
+        {["deferred-tax", "employee-benefits"].includes(kind) && (
+          <label>
+            Journal movement
+            <select
+              value={component}
+              onChange={(e) => setComponent(e.target.value)}
+            >
+              <option value="primary">Profit or loss</option>
+              <option value="oci">Other comprehensive income</option>
+              {kind === "deferred-tax" && (
+                <option value="current_tax">Approved current tax</option>
+              )}
+            </select>
+          </label>
+        )}
         <label>
           Debit account
           <select value={debit} onChange={(e) => setDebit(e.target.value)}>
@@ -536,14 +583,16 @@ function JournalProposer({
             onChange={(e) => setDate(e.target.value)}
           />
         </label>
-        <label>
-          Existing ECL allowance
-          <input
-            value={allowance}
-            onChange={(e) => setAllowance(e.target.value)}
-            inputMode="decimal"
-          />
-        </label>
+        {kind === "ecl" && (
+          <label>
+            Existing ECL allowance
+            <input
+              value={allowance}
+              onChange={(e) => setAllowance(e.target.value)}
+              inputMode="decimal"
+            />
+          </label>
+        )}
         <label>
           Accounting rationale
           <input value={reason} onChange={(e) => setReason(e.target.value)} />
@@ -569,6 +618,7 @@ function JournalProposer({
                 adjustment_date: date,
                 rationale: reason,
                 existing_allowance: allowance,
+                component,
               },
             })
           }

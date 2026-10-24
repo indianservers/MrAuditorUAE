@@ -38,3 +38,4 @@ backend/test-evidence/
 frontend/.next-phase3/
 
 frontend/.next-ui-refresh/
+.private-ml-models/

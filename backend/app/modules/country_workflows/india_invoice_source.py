@@ -20,6 +20,16 @@ GSTIN = r"\d{2}[A-Z]{5}\d{4}[A-Z][A-Z0-9]Z[A-Z0-9]"
 def money(value):
     if isinstance(value, bool) or not isinstance(value, (str, int, Decimal)):
         raise ValueError("Invalid e-invoice monetary value")
+    if isinstance(value, Decimal):
+        exponent = value.as_tuple().exponent
+        if (
+            not value.is_finite()
+            or not isinstance(exponent, int)
+            or not -8 <= exponent <= 20
+            or value.copy_abs() >= Decimal("1e20")
+        ):
+            raise ValueError("Invalid e-invoice monetary value")
+        value = format(value, "f")
     if not re.fullmatch(r"-?\d{1,20}(?:\.\d{1,8})?", str(value)):
         raise ValueError("Invalid e-invoice monetary value")
     return Decimal(value)

@@ -1,0 +1,97 @@
+{
+  "generated_at": "2026-10-24T19:49:43.391649+00:00",
+  "baseline": {
+    "passed": 527,
+    "skipped": 4
+  },
+  "actual_results": {
+    "unit-results.xml": {
+      "tests": 657,
+      "passed": 653,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4,
+      "path": "C:\\Indian Servers\\TheAuditor\\docs\\engine-strengthening\\phase3\\unit-results.xml"
+    },
+    "integration-results.xml": {
+      "tests": 30,
+      "passed": 30,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "path": "C:\\Indian Servers\\TheAuditor\\docs\\engine-strengthening\\phase3\\integration-results.xml"
+    },
+    "frontend-results.xml": {
+      "tests": 7,
+      "passed": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "path": "C:\\Indian Servers\\TheAuditor\\docs\\engine-strengthening\\phase3\\frontend-results.xml"
+    }
+  },
+  "primary_sources_retrieved": 10,
+  "primary_source_total": 11,
+  "source_adoption": "NOT_ADOPTED_BY_RETRIEVAL",
+  "live_gl_posting": false,
+  "complete_five_engine_production_scope": false,
+  "ai_execution": "Disabled for deterministic verification",
+  "implementation_files": [
+    {
+      "path": "backend\\app\\modules\\ifrs\\__init__.py",
+      "sha256": "392a5b693ae7707a057f281135983483c29e17475cbd3574c550516cc67692e0"
+    },
+    {
+      "path": "backend\\app\\modules\\ifrs\\calculations.py",
+      "sha256": "859f7e1d4f7998dd78d1f4fed2db40d701ad9ee338b4d3d721978d78055cd5e9"
+    },
+    {
+      "path": "backend\\app\\modules\\ifrs\\catalogue.py",
+      "sha256": "f2717be8d3d774ccc54ea0fc61fab6965e9971f05475c178df8b6219e04c7a22"
+    },
+    {
+      "path": "backend\\app\\modules\\ifrs\\contracts.py",
+      "sha256": "8ac8b28805e501a68b5c86ba979d7fd246a04a5f5b76e698109e573b5e445e67"
+    },
+    {
+      "path": "backend\\app\\modules\\ifrs\\employee_benefits.py",
+      "sha256": "18c4addb207805d04af3ca0c9d6170a34f1a3012b1fb96fdcc73669606b403c1"
+    },
+    {
+      "path": "backend\\app\\modules\\ifrs\\exports.py",
+      "sha256": "356a62a204c1f9b4d1910aceb9a2635f3bb1c320e0077089ba0f01153c2b55af"
+    },
+    {
+      "path": "backend\\app\\modules\\ifrs\\fx.py",
+      "sha256": "2f40d162d7d704b44e4e3806058396c3eb06e5788a05a556c4ad257281c2986d"
+    },
+    {
+      "path": "backend\\app\\modules\\ifrs\\intercompany.py",
+      "sha256": "44e6ecc6c90ed43f6610d2b57a97f98383d38fcdb2d32c64d10e454b873f1441"
+    },
+    {
+      "path": "backend\\app\\modules\\ifrs\\inventory.py",
+      "sha256": "a7a18dccbf4087a40041860f4a19780c600c5289aa8e0505eabdf45b221fc5b9"
+    },
+    {
+      "path": "backend\\app\\modules\\ifrs\\models.py",
+      "sha256": "ce2e8cde657560bdb50ed4cac8da0355ae3c7284740274311641b2b9185a326d"
+    },
+    {
+      "path": "backend\\app\\modules\\ifrs\\review.py",
+      "sha256": "7dcff4ec87fdf312712df8382ec624fc6023af57fa0c1e46599d5a5accfbf520"
+    },
+    {
+      "path": "backend\\app\\modules\\ifrs\\schemas.py",
+      "sha256": "e4c4f6961487d6a2b59776a788ec065aedb3c32f6a658cc24c42088378a6f98c"
+    },
+    {
+      "path": "backend\\app\\modules\\ifrs\\service.py",
+      "sha256": "cb8994d20fe934a65a88b2f35827f68d99b4b79870b3a6ed862e50ace6ce05ae"
+    },
+    {
+      "path": "backend\\app\\api\\v1\\ifrs.py",
+      "sha256": "cc4a6e1e6179fca505419e02c1f602ef1ed912f2b870ea5a078b121492f8de4f"
+    }
+  ]
+}

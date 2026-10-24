@@ -69,6 +69,16 @@ async def scope(db, ctx, eid, operation=None, mutable=False):
     return eng
 
 
+async def restricted_permission(db, ctx, eid, body):
+    from app.modules.country_workflows.diligence_schemas import (
+        DILIGENCE_ROW_TYPES,
+        DILIGENCE_WORKFLOWS,
+    )
+
+    if body.get("table_type") in DILIGENCE_ROW_TYPES or body.get("workflow") in DILIGENCE_WORKFLOWS:
+        await engagement_permissions(db, ctx, eid, "audit.evidence.review")
+
+
 async def event(db, ctx, eid, identifier, require_current=False, auth_seen=None):
     auth_seen = set() if auth_seen is None else auth_seen
     if identifier in auth_seen or len(auth_seen) >= 100:
@@ -84,6 +94,12 @@ async def event(db, ctx, eid, identifier, require_current=False, auth_seen=None)
     )
     if not obj:
         raise HTTPException(404, "Intelligence result not found")
+    if obj.kind == "business-action":
+        from app.modules.enterprise_ai.business import case_scope
+        await case_scope(db, ctx, eid, obj.body["use_case_id"])
+        for dependency in obj.dependencies:
+            if dependency["type"] == "record":
+                await audit.get_record(db, ctx, eid, uuid.UUID(dependency["id"]), lock=False)
     if obj.kind == "tax-connected-assessment":
         from app.modules.regulatory.reporting import engines
 
@@ -92,16 +108,7 @@ async def event(db, ctx, eid, identifier, require_current=False, auth_seen=None)
                 await engagement_permissions(db, ctx, eid, engines()[dependency["module"]][1])
             elif dependency["type"] == "dmtt":
                 await engagement_permissions(db, ctx, eid, "dmtt.read")
-    from app.modules.country_workflows.diligence_schemas import (
-        DILIGENCE_ROW_TYPES,
-        DILIGENCE_WORKFLOWS,
-    )
-
-    if (
-        obj.body.get("table_type") in DILIGENCE_ROW_TYPES
-        or obj.body.get("workflow") in DILIGENCE_WORKFLOWS
-    ):
-        await engagement_permissions(db, ctx, eid, "audit.evidence.review")
+    await restricted_permission(db, ctx, eid, obj.body)
     if obj.kind not in {
         "ocr",
         "source-table",
@@ -311,6 +318,7 @@ async def current(db, ctx, obj, visited=None):
 
 
 async def append(db, ctx, eng, kind, body, dependencies, request_id, prior=None):
+    await restricted_permission(db, ctx, eng.id, body)
     identifier = uuid.uuid4()
     if prior:
         await db.execute(

@@ -50,6 +50,7 @@ def render(event, format):
         if k
         in {
             "totals",
+            "totals_basis",
             "totals_by_currency",
             "control_comparison",
             "source_totals",
@@ -78,6 +79,13 @@ def render(event, format):
             "native_format",
             "native_metadata",
             "native_controls_verified",
+            "expected_total",
+            "expected_total_complete",
+            "expected_total_basis",
+            "rule_document_binding",
+            "rule_document_version_id",
+            "reported_total",
+            "currency",
         }
     }
 

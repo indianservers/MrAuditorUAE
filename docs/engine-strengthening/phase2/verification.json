@@ -1,0 +1,72 @@
+{
+  "verified_date": "2026-10-25",
+  "source_retrieval_date": "2026-10-24",
+  "scope": "Verified improvements to E04-E08; bounded supported cases, not universal tax or production readiness",
+  "baseline_unit_tests_passed": 404,
+  "results": {
+    "unit": {
+      "tests": 549,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    "integration": {
+      "tests": 34,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "trading": {
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "final-regression": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "foundation-contract": {
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "frontend": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "distinct_selected_integration_cases_passed": 35,
+  "unit_skips": "Four isolated connector-operation DB/Redis cases; reasons retained in XML",
+  "typescript": "passed",
+  "targeted_eslint": "passed",
+  "targeted_ruff": "passed",
+  "scoped_git_diff_check": "passed; whole-tree check also reports generated PDF whitespace outside this source change",
+  "source_files": 8,
+  "source_content_check_scope": "Limited provisions in rule-source-register.json; no automatic adoption or legal certification",
+  "engine_implementation_hashes": {
+    "CT": "1e5935d17d1237882d4fc9b9420f51bad68b30a563330597b4cd904c8e37eac6",
+    "QFZP": "1e5935d17d1237882d4fc9b9420f51bad68b30a563330597b4cd904c8e37eac6",
+    "VAT": "52e30548af132474dac027af9a05c26162b579cfaa7372efc88e539b2f159f36",
+    "TP": "f0117e65088943ec8e367a4d1c7c49644aaea2e1df2197768f7fe439a2e9fc4e",
+    "DMTT": "42e0b152f5284b835efb0e537228c70d3dc20fdb772605f2bced9d6911f2acf3"
+  },
+  "workflow_A": "Same-entity reviewed synthetic export VAT plus CT, separate tax bases, two-stage returns/computation review, connected independent approval",
+  "workflow_B": "Approved FZ segmentation, blocked initial profit reconciliation, reviewed correction and CT release",
+  "workflow_C": "Existing supplied/synthetic financing analysis and reviewed CT bridge; real market support and universal VAT/posting workflow not established",
+  "workflow_D": "Approved standalone IFRS-based ordinary UAE DMTT; incomplete scope and unsupported cases explicitly blocked; UPE-package adapter not established",
+  "historical_failures": "Initial loss-transfer lineage failure and intermediate attempts retained; repaired and passed final regression plus complete selected suite",
+  "new_migration_required": false,
+  "minimum_foundation_migration": "0020",
+  "verified_database": "auditos_connected_tax_test",
+  "working_databases_migrated": false,
+  "deployed": false,
+  "external_filing_or_communications": false,
+  "existing_user_work_preserved": true,
+  "phase3_prerequisites": "See README.md and gap-matrix.json; includes legal adoption/commencement proof, real market data, advanced cases and automatic follow-up jobs"
+}

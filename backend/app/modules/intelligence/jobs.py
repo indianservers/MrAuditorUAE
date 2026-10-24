@@ -42,6 +42,7 @@ async def actor(db, tenant, user):
 
 async def submit(db, ctx, eid, data, key, request_id):
     await service.scope(db, ctx, eid, data.operation, True)
+    await service.restricted_permission(db, ctx, eid, data.payload)
     digest = fingerprint({"operation": data.operation, "payload": data.payload, "eid": str(eid)})
     await db.execute(
         text("SELECT pg_advisory_xact_lock(hashtextextended(:key,0))"),

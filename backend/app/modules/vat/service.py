@@ -359,6 +359,32 @@ async def invoice_result(db, ctx, eid, rid):
     )
 
 
+async def assess_record(db, ctx, eid, rid):
+    """Shared specialist UI / assistant readiness and recovery assessment service."""
+    await audit.engagement(db, ctx, eid, "vat.calculate", True)
+    obj = await record(db, ctx, eid, rid, approved=True)
+    _, p, selected = await profile_inputs(db, ctx, eid, uuid.UUID(obj.body["profile_id"]))
+    if obj.kind == "vat-einvoicing":
+        value = calc.readiness(s.EInvoicing.model_validate(clean(obj.body)), p.legal_as_of)
+    elif obj.kind == "vat-recovery":
+        data = s.Recovery.model_validate(clean(obj.body))
+        value = {
+            "recoverable": calc.money(data.total_input * data.approved_recovery_percentage),
+            "adjustment": calc.money(
+                data.total_input * data.approved_recovery_percentage - data.previously_recovered
+            ),
+            "state": "ASSESSED" if data.statutory_conditions_confirmed else "REVIEW_REQUIRED",
+            "scope": "Reviewed allocation/CAS methodology; separately approved return adjustment required",
+        }
+    else:
+        raise HTTPException(422, "No standalone assessment for this kind")
+    deps = [dep(obj)] + [dep(x) for x, _ in selected.values()]
+    for identifier in evidence_ids(obj.body):
+        deps.append(dep(await evidence(db, ctx, eid, identifier)))
+    saved = await save(db, ctx, eid, obj.kind, p, obj.body, deps, value, obj.id)
+    return {"id": str(saved.id), "results": saved.results}
+
+
 async def compute(db, ctx, eid, pid):
     eng = await audit.engagement(db, ctx, eid, "vat.calculate", True)
     profile_obj, p, selected = await profile_inputs(db, ctx, eid, pid)
@@ -410,24 +436,39 @@ async def compute(db, ctx, eid, pid):
             value = calc.transaction(inv, treatment_rule, selected["invoice"][1])
             issues = list(value["issues"])
             if inv.supply_stage == "final":
-                issues.append("Final invoice after an advance requires a separately reconciled advance-netting schedule; this unsupported bridge cannot be assumed")
+                issues.append(
+                    "Final invoice after an advance requires a separately reconciled advance-netting schedule; this unsupported bridge cannot be assumed"
+                )
             if inv.supply_reference:
                 previous = supplies.setdefault(inv.supply_reference, [])
-                if previous and (inv.supply_stage in {"advance", "final"} or any(x in {"advance", "final"} for x in previous)):
-                    issues.append("Advance/final invoices for the same supply need a reviewed netting bridge; overlapping consideration is not filing-ready")
+                if previous and (
+                    inv.supply_stage in {"advance", "final"}
+                    or any(x in {"advance", "final"} for x in previous)
+                ):
+                    issues.append(
+                        "Advance/final invoices for the same supply need a reviewed netting bridge; overlapping consideration is not filing-ready"
+                    )
                 previous.append(inv.supply_stage)
             if inv.document_type == "credit_note" and inv.original_invoice_id:
                 original = await record(db, ctx, eid, inv.original_invoice_id, "invoice", True)
                 prior = s.Invoice.model_validate(clean(original.body))
                 deps.append(dep(original))
-                if (prior.document_type == "credit_note" or prior.treatment != inv.treatment
-                    or prior.currency != inv.currency or prior.supplier_name != inv.supplier_name):
-                    issues.append("Credit note supply, currency or classification differs from original; technical review required")
+                if (
+                    prior.document_type == "credit_note"
+                    or prior.treatment != inv.treatment
+                    or prior.currency != inv.currency
+                    or prior.supplier_name != inv.supplier_name
+                ):
+                    issues.append(
+                        "Credit note supply, currency or classification differs from original; technical review required"
+                    )
                 totals = credit_totals.setdefault(str(original.id), [D(0), D(0)])
                 totals[0] += abs(value["net"])
                 totals[1] += abs(value["tax"])
                 if totals[0] > abs(prior.declared_net) or totals[1] > abs(prior.declared_tax):
-                    issues.append("Cumulative credit notes exceed original net or VAT; reversal duplication blocked")
+                    issues.append(
+                        "Cumulative credit notes exceed original net or VAT; reversal duplication blocked"
+                    )
             if (
                 inv.rule_id != p.rules["output" if inv.direction == "sale" else "input"]
                 or inv.invoice_rule_id != p.rules["invoice"]

@@ -14,9 +14,7 @@ pytestmark = pytest.mark.skipif(
 )
 
 
-async def test_ecr_original_source_and_three_way_statutory_reconciliation(environment, monkeypatch):
-    c = environment
-    double_boundaries(monkeypatch)
+async def india_context(c):
     h, existing = await scope(c)
     response = await c.post(
         "/api/v1/entities",
@@ -51,6 +49,13 @@ async def test_ecr_original_source_and_three_way_statutory_reconciliation(enviro
     assert response.status_code == 201, response.text
     eid = response.json()["id"]
     base = f"/api/v1/engagements/{eid}/audit"
+    return h, eid, base
+
+
+async def test_ecr_original_source_and_three_way_statutory_reconciliation(environment, monkeypatch):
+    c = environment
+    double_boundaries(monkeypatch)
+    h, eid, base = await india_context(c)
     evidence = await create(
         c, h, base, "evidence", {"category": "Other", "retain_until": "2036-12-31"}
     )

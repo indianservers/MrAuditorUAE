@@ -174,7 +174,22 @@ async def sampling(db: AsyncSession, ctx: Context, request: SamplingRequest):
         with path.open(newline="", encoding="utf-8") as file:
             engine = AnalyticsEngine(csv.DictReader(file))
         try:
-            count = engine.count
+            original_count = engine.count
+            exclusions = [str(item.line_id) for item in request.exclusions]
+            if len(set(exclusions)) != len(exclusions):
+                raise HTTPException(422, "Duplicate sampling exclusion")
+            if exclusions:
+                placeholders = ",".join("?" for _ in exclusions)
+                present = engine.db.execute("SELECT count(*) FROM p WHERE id IN (" + placeholders + ")", exclusions).fetchone()[0]
+                if present != len(exclusions):
+                    raise HTTPException(422, "Excluded item outside source population")
+                engine.db.execute("DELETE FROM p WHERE id IN (" + placeholders + ")", exclusions)
+            engine.db.execute("CREATE TABLE certainty AS SELECT id FROM p WHERE false")
+            if request.certainty_threshold is not None:
+                engine.db.execute("INSERT INTO certainty SELECT id FROM p WHERE amount>=?", [request.certainty_threshold])
+                engine.db.execute("DELETE FROM p WHERE id IN (SELECT id FROM certainty)")
+            certainty_count = engine.db.execute("SELECT count(*) FROM certainty").fetchone()[0]
+            count = engine.db.execute("SELECT count(*) FROM p").fetchone()[0]
             size = min(count, request.size)
             excluded_zero = excluded_negative = 0
             params: list[Any] = []
@@ -249,9 +264,14 @@ async def sampling(db: AsyncSession, ctx: Context, request: SamplingRequest):
                 query = "SELECT p.id,1 hits FROM p LEFT JOIN risks USING(id) ORDER BY coalesce(score,0) DESC,p.id LIMIT ?"
                 params = [size]
             result = {
-                "population": count,
+                "population": original_count,
+                "eligible_residual_population": count,
+                "certainty_selected": certainty_count,
+                "explicit_exclusions": [item.model_dump(mode="json") for item in request.exclusions],
                 "seed": request.seed,
-                "algorithm_version": "duckdb-exact-selection/2.0.0",
+                "algorithm_version": "duckdb-exact-selection/3.0.0",
+                "selection_class": "full_population" if request.method == "full" else "targeted" if request.method in {"risk", "high_value", "judgmental"} else "probability_selection_without_statistical_evaluation",
+                "projection_supported": False,
                 "excluded_zero": excluded_zero,
                 "excluded_negative": excluded_negative,
                 "assurance": "Professional sample-size decision; no ISA assurance claimed",
@@ -266,7 +286,7 @@ async def sampling(db: AsyncSession, ctx: Context, request: SamplingRequest):
             )
             db.add(run)
             await db.flush()
-            cursor = engine.db.execute(query, params)
+            cursor = engine.db.execute("SELECT * FROM (" + query + ") selected UNION ALL SELECT id,1 hits FROM certainty ORDER BY id", params)
             selected_count = 0
             while chunk := cursor.fetchmany(1000):
                 selected_count += len(chunk)
@@ -283,6 +303,8 @@ async def sampling(db: AsyncSession, ctx: Context, request: SamplingRequest):
                         for identifier, hits in chunk
                     ],
                 )
+            run.result = {**result, "selected_count": selected_count}
+            await db.flush()
             return {
                 "id": run.id,
                 "status": "completed",

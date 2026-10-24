@@ -102,6 +102,11 @@ class ReconcileRequest(SnapshotRequest):
     tolerance: Decimal = Field(default=Decimal("0"), ge=0, le=100)
 
 
+class SampleExclusion(Input):
+    line_id: uuid.UUID
+    reason: str = Field(min_length=10, max_length=2000)
+
+
 class SamplingRequest(SnapshotRequest):
     method: Literal["random", "systematic", "mus", "high_value", "risk", "full", "judgmental"]
     size: int = Field(default=10, ge=1, le=1000000)
@@ -110,6 +115,10 @@ class SamplingRequest(SnapshotRequest):
     analytics_run_id: uuid.UUID | None = None
     selected_line_ids: list[uuid.UUID] = Field(default_factory=list, max_length=1000)
     selection_rationale: str = Field(default="", max_length=4000)
+    objective: str = Field(default="", max_length=4000)
+    population_definition: str = Field(default="", max_length=4000)
+    exclusions: list[SampleExclusion] = Field(default_factory=list, max_length=1000)
+    certainty_threshold: Decimal | None = Field(default=None, gt=0, max_digits=28, decimal_places=8)
 
 
 class RunOut(BaseModel):

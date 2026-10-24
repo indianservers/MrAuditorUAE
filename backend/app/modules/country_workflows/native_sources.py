@@ -22,6 +22,14 @@ from app.modules.country_workflows.sources import MAX_BYTES
 
 FORMATS: list[dict[str, Any]] = [
     {
+        "id": "india-gstr2b-json",
+        "label": "India GSTR-2B v1.0 document JSON",
+        "countries": ["IN"],
+        "table_type": "tax-documents",
+        "description": "Explicit item/total profiles; four component rows per document; preserves notes, amendments, ISD, imports and reversals; credit eligibility is not determined",
+        "source": "https://developer.sandbox.co.in/api-reference/gst/compliance/endpoints/taxpayer/gstr-2b/document",
+    },
+    {
         "id": "india-epfo-ecr",
         "label": "India EPFO monthly ECR text",
         "countries": ["IN"],
@@ -529,6 +537,10 @@ def parse_native(content, data, country, filename):
                 from app.modules.country_workflows.india_ecr_source import parse_ecr
 
                 rows, metadata = parse_ecr(content, data)
+            elif data.file_format == "india-gstr2b-json":
+                from app.modules.country_workflows.india_gstr2b_source import parse_gstr2b
+
+                rows, metadata = parse_gstr2b(content, data)
             else:
                 rows, metadata = wps(content, data, filename)
         except ValidationError:
@@ -561,6 +573,8 @@ def parse_native(content, data, country, filename):
         if data.file_format == "india-inv01-json"
         else "ECR_DECLARED_MEMBER_AND_COMPONENT_CONTROLS"
         if data.file_format == "india-epfo-ecr"
+        else "GSTR2B_DECLARED_DOCUMENT_AND_COMPONENT_CONTROLS"
+        if data.file_format == "india-gstr2b-json"
         else "WPS_INSTRUCTION_FILE_CONTROLS",
         "review_status": "UNVERIFIED",
         "nil_reason": data.nil_reason,

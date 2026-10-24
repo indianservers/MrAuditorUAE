@@ -1,0 +1,400 @@
+{
+  "synthetic": true,
+  "original_run_read_after_revision": {
+    "engagement_id": "459323bd-e16e-4bed-9256-a5db078ca818",
+    "record_id": "384c4cb7-d70f-4a0d-8521-48ace4171c0d",
+    "kind": "fixed-assets",
+    "methodology_version": "auditos-accounting/3.1",
+    "inputs": {
+      "area": "",
+      "assets": [
+        {
+          "cost": "3650",
+          "method": "straight_line",
+          "location": "",
+          "proceeds": "0",
+          "residual": "0",
+          "reference": "SYN-A",
+          "impairment": "0",
+          "asset_class": "ppe",
+          "component_of": "",
+          "disposal_date": null,
+          "diminishing_rate": "0",
+          "revised_residual": null,
+          "useful_life_years": "10",
+          "ownership_evidence": "",
+          "capitalisation_date": "2026-01-01",
+          "opening_accumulated": "0",
+          "estimate_change_date": null,
+          "physical_verification": "not_verified",
+          "revaluation_increment": "0",
+          "available_for_use_date": "2026-01-01",
+          "revaluation_assessment": "",
+          "construction_in_progress": false,
+          "estimate_change_rationale": "",
+          "available_for_use_evidence": "Synthetic commissioning certificate",
+          "revised_remaining_life_years": null
+        }
+      ],
+      "sources": [],
+      "due_date": null,
+      "owner_id": null,
+      "narrative": "",
+      "assertions": [],
+      "period_end": "2026-12-31",
+      "profile_id": "30f03bc6-d0f4-471c-bb40-e65c2f79f990",
+      "period_start": "2026-01-01"
+    },
+    "dependencies": [
+      {
+        "id": "384c4cb7-d70f-4a0d-8521-48ace4171c0d",
+        "status": "APPROVED",
+        "version": 3
+      },
+      {
+        "id": "30f03bc6-d0f4-471c-bb40-e65c2f79f990",
+        "status": "APPROVED",
+        "version": 3
+      }
+    ],
+    "results": {
+      "issues": [],
+      "method": "Daily actual/365 straight-line or stated annual diminishing rate; residual floor; separately documented components",
+      "schedule": [
+        {
+          "cost": "3650",
+          "days": 365,
+          "reference": "SYN-A",
+          "impairment": "0",
+          "component_of": "",
+          "depreciation": "365.00000000",
+          "estimate_change": null,
+          "closing_carrying": "3285.00000000",
+          "cost_rollforward": {
+            "closing": "3650",
+            "opening": "0",
+            "additions": "3650",
+            "disposals": "0",
+            "revaluation": "0"
+          },
+          "opening_carrying": "3650.00000000",
+          "disposal_carrying": "0",
+          "disposal_gain_loss": "0",
+          "commencement_verified": true,
+          "available_for_use_date": "2026-01-01",
+          "construction_in_progress": false,
+          "accumulated_depreciation_rollforward": {
+            "charge": "365.00000000",
+            "closing": "365.00000000",
+            "opening": "0",
+            "derecognised": "0"
+          }
+        }
+      ],
+      "execution": {
+        "evidence": [
+          {
+            "id": "940e4b14-9b2e-4081-b18f-daf6a054b0b1",
+            "kind": "snapshot"
+          }
+        ],
+        "rounding": "Decimal precision 48; schedule HALF_UP to 8 decimal places; journals use currency minor units",
+        "entity_id": "8d549390-de23-411c-ab1b-b19976dd8560",
+        "framework": "full_ifrs",
+        "period_id": "3eff0ecb-568b-49f7-99f8-10f3906670ab",
+        "tenant_id": "42747d52-7827-47df-a109-6c03381e2dfa",
+        "period_end": "2026-12-31",
+        "period_start": "2026-01-01",
+        "engagement_id": "459323bd-e16e-4bed-9256-a5db078ca818",
+        "journal_state": "NOT_POSTED",
+        "review_status": "DRAFT_REQUIRES_REVIEW",
+        "entity_version": 1,
+        "execution_mode": "deterministic_python_decimal",
+        "source_balance": "Retained ledger snapshot; original balances are never overwritten",
+        "chart_snapshots": [],
+        "currency_policy": {
+          "code": "AED",
+          "rounding": "ROUND_HALF_EVEN",
+          "precision": 2
+        },
+        "policy_versions": [
+          {
+            "id": "30f03bc6-d0f4-471c-bb40-e65c2f79f990",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3,
+            "framework": "full_ifrs",
+            "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+          }
+        ],
+        "supporting_runs": [],
+        "contract_version": "accounting/1",
+        "current_tax_runs": [],
+        "source_snapshots": [
+          {
+            "id": "940e4b14-9b2e-4081-b18f-daf6a054b0b1",
+            "sha256": "a13f9af4d0872abc644aa71cdab43e73e7221067fdf9a446bba3f9646e6276ba",
+            "source_complete": true
+          }
+        ],
+        "proposed_journals": [],
+        "unresolved_issues": [],
+        "calculation_version": "auditos-accounting/3.1",
+        "functional_currency": "AED",
+        "source_completeness": "complete_for_declared_scope",
+        "approved_assumptions": [
+          {
+            "id": "384c4cb7-d70f-4a0d-8521-48ace4171c0d",
+            "kind": "ifrs-fixed-assets",
+            "status": "APPROVED",
+            "version": 3
+          },
+          {
+            "id": "30f03bc6-d0f4-471c-bb40-e65c2f79f990",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3
+          }
+        ],
+        "calculated_adjustment": "Calculation output; recognition and accounts require review",
+        "implementation_sha256": "a5710c08d3a39d021c9f590868259991d88feadbebd0c600015e0c26dd8e6001",
+        "presentation_currency": "AED"
+      },
+      "closing_carrying": "3285.00000000",
+      "total_depreciation": "365.00000000"
+    },
+    "sha256": "b720e6e0c5a110eed26fa20226c32dd62c1d46b49825d97d9879535b5a2b7e22",
+    "tenant_id": "42747d52-7827-47df-a109-6c03381e2dfa",
+    "created_by": "7e6858c7-13a6-48ca-9bd9-61c13d8ff0f1",
+    "id": "9fa5fe16-df96-465a-bcd1-c447440d6948",
+    "created_at": "2026-10-24T19:46:17.042715+00:00",
+    "updated_at": "2026-10-24T19:46:17.042715+00:00",
+    "dependencies_current": false
+  },
+  "recalculated_run": {
+    "engagement_id": "459323bd-e16e-4bed-9256-a5db078ca818",
+    "record_id": "384c4cb7-d70f-4a0d-8521-48ace4171c0d",
+    "kind": "fixed-assets",
+    "methodology_version": "auditos-accounting/3.1",
+    "inputs": {
+      "area": "",
+      "assets": [
+        {
+          "cost": "3650",
+          "method": "straight_line",
+          "location": "",
+          "proceeds": "0",
+          "residual": "0",
+          "reference": "SYN-A",
+          "impairment": "0",
+          "asset_class": "ppe",
+          "component_of": "",
+          "disposal_date": null,
+          "diminishing_rate": "0",
+          "revised_residual": null,
+          "useful_life_years": "5",
+          "ownership_evidence": "",
+          "capitalisation_date": "2026-01-01",
+          "opening_accumulated": "0",
+          "estimate_change_date": null,
+          "physical_verification": "not_verified",
+          "revaluation_increment": "0",
+          "available_for_use_date": "2026-01-01",
+          "revaluation_assessment": "",
+          "construction_in_progress": false,
+          "estimate_change_rationale": "",
+          "available_for_use_evidence": "Synthetic commissioning certificate",
+          "revised_remaining_life_years": null
+        }
+      ],
+      "sources": [],
+      "due_date": null,
+      "owner_id": null,
+      "narrative": "",
+      "assertions": [],
+      "period_end": "2026-12-31",
+      "profile_id": "30f03bc6-d0f4-471c-bb40-e65c2f79f990",
+      "period_start": "2026-01-01"
+    },
+    "dependencies": [
+      {
+        "id": "384c4cb7-d70f-4a0d-8521-48ace4171c0d",
+        "status": "APPROVED",
+        "version": 7
+      },
+      {
+        "id": "30f03bc6-d0f4-471c-bb40-e65c2f79f990",
+        "status": "APPROVED",
+        "version": 3
+      }
+    ],
+    "results": {
+      "issues": [],
+      "method": "Daily actual/365 straight-line or stated annual diminishing rate; residual floor; separately documented components",
+      "schedule": [
+        {
+          "cost": "3650",
+          "days": 365,
+          "reference": "SYN-A",
+          "impairment": "0",
+          "component_of": "",
+          "depreciation": "730.00000000",
+          "estimate_change": null,
+          "closing_carrying": "2920.00000000",
+          "cost_rollforward": {
+            "closing": "3650",
+            "opening": "0",
+            "additions": "3650",
+            "disposals": "0",
+            "revaluation": "0"
+          },
+          "opening_carrying": "3650.00000000",
+          "disposal_carrying": "0",
+          "disposal_gain_loss": "0",
+          "commencement_verified": true,
+          "available_for_use_date": "2026-01-01",
+          "construction_in_progress": false,
+          "accumulated_depreciation_rollforward": {
+            "charge": "730.00000000",
+            "closing": "730.00000000",
+            "opening": "0",
+            "derecognised": "0"
+          }
+        }
+      ],
+      "execution": {
+        "evidence": [
+          {
+            "id": "940e4b14-9b2e-4081-b18f-daf6a054b0b1",
+            "kind": "snapshot"
+          }
+        ],
+        "rounding": "Decimal precision 48; schedule HALF_UP to 8 decimal places; journals use currency minor units",
+        "entity_id": "8d549390-de23-411c-ab1b-b19976dd8560",
+        "framework": "full_ifrs",
+        "period_id": "3eff0ecb-568b-49f7-99f8-10f3906670ab",
+        "tenant_id": "42747d52-7827-47df-a109-6c03381e2dfa",
+        "period_end": "2026-12-31",
+        "period_start": "2026-01-01",
+        "engagement_id": "459323bd-e16e-4bed-9256-a5db078ca818",
+        "journal_state": "NOT_POSTED",
+        "review_status": "DRAFT_REQUIRES_REVIEW",
+        "entity_version": 1,
+        "execution_mode": "deterministic_python_decimal",
+        "source_balance": "Retained ledger snapshot; original balances are never overwritten",
+        "chart_snapshots": [],
+        "currency_policy": {
+          "code": "AED",
+          "rounding": "ROUND_HALF_EVEN",
+          "precision": 2
+        },
+        "policy_versions": [
+          {
+            "id": "30f03bc6-d0f4-471c-bb40-e65c2f79f990",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3,
+            "framework": "full_ifrs",
+            "technical_validation": "Synthetic corporate reporting basis verified by test reviewer"
+          }
+        ],
+        "supporting_runs": [],
+        "contract_version": "accounting/1",
+        "current_tax_runs": [],
+        "source_snapshots": [
+          {
+            "id": "940e4b14-9b2e-4081-b18f-daf6a054b0b1",
+            "sha256": "a13f9af4d0872abc644aa71cdab43e73e7221067fdf9a446bba3f9646e6276ba",
+            "source_complete": true
+          }
+        ],
+        "proposed_journals": [],
+        "unresolved_issues": [],
+        "calculation_version": "auditos-accounting/3.1",
+        "functional_currency": "AED",
+        "source_completeness": "complete_for_declared_scope",
+        "approved_assumptions": [
+          {
+            "id": "384c4cb7-d70f-4a0d-8521-48ace4171c0d",
+            "kind": "ifrs-fixed-assets",
+            "status": "APPROVED",
+            "version": 7
+          },
+          {
+            "id": "30f03bc6-d0f4-471c-bb40-e65c2f79f990",
+            "kind": "ifrs-profile",
+            "status": "APPROVED",
+            "version": 3
+          }
+        ],
+        "calculated_adjustment": "Calculation output; recognition and accounts require review",
+        "implementation_sha256": "a5710c08d3a39d021c9f590868259991d88feadbebd0c600015e0c26dd8e6001",
+        "presentation_currency": "AED"
+      },
+      "closing_carrying": "2920.00000000",
+      "total_depreciation": "730.00000000"
+    },
+    "sha256": "e9ffd5f043cd968a4424fce03513d4de176ffd92498651765033f59eda59c1c6",
+    "tenant_id": "42747d52-7827-47df-a109-6c03381e2dfa",
+    "created_by": "7e6858c7-13a6-48ca-9bd9-61c13d8ff0f1",
+    "id": "70f7bb15-0b58-44d5-bca5-47b71aafc411",
+    "created_at": "2026-10-24T19:46:17.564124+00:00",
+    "updated_at": "2026-10-24T19:46:17.564124+00:00"
+  },
+  "independently_reapproved_control_journal": {
+    "engagement_id": "459323bd-e16e-4bed-9256-a5db078ca818",
+    "kind": "ifrs-adjustment",
+    "reference": "SYN-lock-approval",
+    "title": "Proposed IAS 16 calculation journal",
+    "status": "APPROVED",
+    "body": {
+      "area": "",
+      "legs": [
+        {
+          "debit": "730.00",
+          "credit": "0",
+          "account_code": "500"
+        },
+        {
+          "debit": "0",
+          "credit": "730.00",
+          "account_code": "100"
+        }
+      ],
+      "sources": [],
+      "currency": "AED",
+      "due_date": null,
+      "owner_id": null,
+      "standard": "IAS 16",
+      "narration": "Technical approval controls test; not a compliant asset journal demonstration; source run 70f7bb15-0b58-44d5-bca5-47b71aafc411",
+      "narrative": "",
+      "assertions": [],
+      "profile_id": "30f03bc6-d0f4-471c-bb40-e65c2f79f990",
+      "reversal_of": null,
+      "review_cycle": 1,
+      "review_stage": 1,
+      "adjustment_date": "2026-12-31",
+      "adjustment_type": "journal",
+      "review_approvers": [
+        "3a01e939-46a9-4b2f-8aad-da4a19c92deb"
+      ],
+      "calculation_run_id": "70f7bb15-0b58-44d5-bca5-47b71aafc411",
+      "calculation_component": "primary"
+    },
+    "version": 3,
+    "prepared_by": "7e6858c7-13a6-48ca-9bd9-61c13d8ff0f1",
+    "tenant_id": "42747d52-7827-47df-a109-6c03381e2dfa",
+    "created_by": "7e6858c7-13a6-48ca-9bd9-61c13d8ff0f1",
+    "id": "bf4495bf-b16f-4571-82df-d5f6ea2054f9",
+    "created_at": "2026-10-24T19:46:17.606988+00:00",
+    "updated_at": "2026-10-24T19:46:17.767461+00:00"
+  },
+  "blocked": {
+    "duplicate_reference_or_component": 409,
+    "identical_input_rerun": 409,
+    "stale_calculation_approval": 409,
+    "locked_period_approval": 409,
+    "locked_period_creation": 409
+  },
+  "scope": "Technical approval/version/lock controls; no financial statements or compliant asset-account selection are asserted by this control-only fixture"
+}

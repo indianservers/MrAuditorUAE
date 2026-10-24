@@ -1,6 +1,10 @@
 """Reviewed recipes, not model-authored executable plans."""
 
+from app.modules.jurisdictions.ae.use_cases import CASES, recipe
+
 TOOLS = {
+    "uae.get_case_inputs": ("orchestrator", "ai.investigation.read", "case-inputs"),
+    "connections.get_health": ("financial", "accounting.read", "connection-health"),
     "financial.get_general_ledger": ("financial", "accounting.read", "ledger"),
     "financial.get_trial_balance": ("financial", "accounting.read", "balance"),
     "financial.get_reconciliation": ("financial", "analytics.read", "reconciliation"),
@@ -163,6 +167,9 @@ def agents():
         }
         for key, name in AGENT_NAMES.items()
     ]
+
+
+RECIPES.update({case.key: recipe(case) for case in CASES.values()})
 
 
 def plan(task: str | None, prompt: str):

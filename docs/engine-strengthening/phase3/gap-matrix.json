@@ -1,0 +1,196 @@
+{
+  "phase": 3,
+  "production_scope_complete": false,
+  "rows": [
+    {
+      "engine": "shared",
+      "capability": "Execution receipts and approved history",
+      "actual_status": "implemented",
+      "issue": "Earlier schedules lacked common provenance/version metadata",
+      "consequence": "Historical results could be reused without establishing current sources",
+      "implementation_or_required_fix": "accounting/1 inside existing immutable runs; code/source/chart/currency/policy/current-tax dependency checks",
+      "verification": "operating-company workflow and revision/lock integration tests"
+    },
+    {
+      "engine": "shared",
+      "capability": "Journal lifecycle, locks and duplicates",
+      "actual_status": "implemented_reporting_overlays_only",
+      "issue": "Calculated journal could be confused with posting; late stale inputs and period changes",
+      "consequence": "Unsupported/duplicate or stale reporting adjustments",
+      "implementation_or_required_fix": "Currency-rounded proposals, distinct review, locked-period rejection, serialized reference/component checks; no source-ledger posting",
+      "verification": "revision/duplicate/period-lock and independent approval tests"
+    },
+    {
+      "engine": "shared",
+      "capability": "Automatic recalculation and live ledger posting",
+      "actual_status": "not_implemented",
+      "issue": "No universal invalidation worker or verified posting connector",
+      "consequence": "Stale outputs require explicit recalculation/reapproval; reporting approval is not GL posting",
+      "implementation_or_required_fix": "Keep fail-closed checks; implement authorized connector with exact accounts/period/version/balance and idempotency before posting",
+      "verification": "No live posting or automatic background regeneration claimed"
+    },
+    {
+      "engine": "E09",
+      "capability": "Statements, comparative mapping, notes and cash flow",
+      "actual_status": "existing_strengthened_and_reverified",
+      "issue": "Source freshness and unsupported netting needed enforcement",
+      "consequence": "Apparently reconciled output could reference stale assumptions or hide opposing balances",
+      "implementation_or_required_fix": "Recheck all approved inputs; netting rationale; comparative section validation; current/noncurrent/RP/disaggregation attributes; original/adjusted views",
+      "verification": "phase5 reporting/workspace and connected company workflows"
+    },
+    {
+      "engine": "E09",
+      "capability": "Framework and policy/estimate/disclosure facts",
+      "actual_status": "bounded_implementation",
+      "issue": "Full licensed disclosure coverage and entity-specific legal applicability not established",
+      "consequence": "Framework label must not be read as compliance certification",
+      "implementation_or_required_fix": "full_ifrs-only profiles plus approved structured accounting-policy facts; missing facts/checks remain issues",
+      "verification": "schema/numeric/reporting tests; source-policy register; no comprehensive checklist certification"
+    },
+    {
+      "engine": "E09",
+      "capability": "E05 current tax and IAS12 deferred tax",
+      "actual_status": "implemented_for_ordinary_reviewed_case",
+      "issue": "No reviewed current-tax consumption; DTA could be recognized from a flag without recovery evidence",
+      "consequence": "Tax/accounting cycles or unsupported DTA recognition",
+      "implementation_or_required_fix": "Current E05 release/hash/access check; distinct post-tax profile; item-specific tax base/rate/locations; zero unevidenced DTA; GloBE separate",
+      "verification": "company profit1199599 -> current74213.91/deferred25.65 -> profit1125359.44, cash difference0; DTA negative fixture"
+    },
+    {
+      "engine": "E09",
+      "capability": "Complete tax/disclosure specialist cases",
+      "actual_status": "not_implemented",
+      "issue": "Complex exceptions, group packages, full Pillar Two accounting and complete current-licensed disclosure implementation",
+      "consequence": "No blanket IAS12/IFRS compliance claim",
+      "implementation_or_required_fix": "Specialist source review and independently verified schedules before consumption",
+      "verification": "Unsupported cases documented; E08 accounting bridge not claimed"
+    },
+    {
+      "engine": "E15",
+      "capability": "Available-for-use, components, CIP, disposal and estimate changes",
+      "actual_status": "implemented_bounded_ppe",
+      "issue": "Legacy capitalisation date was implicitly the depreciation start; no prospective estimate split",
+      "consequence": "Premature depreciation or altered prior estimates",
+      "implementation_or_required_fix": "Evidenced commencement/CIP; exclude derecognition date; residual floor; prospective split; gross/accumulated rollforwards",
+      "verification": "independent asset numeric tests and approved company depreciation365"
+    },
+    {
+      "engine": "E15",
+      "capability": "Capitalization, partial disposals and non-PPE measurement",
+      "actual_status": "partial_or_blocked",
+      "issue": "No complete borrowing-cost/inspection/capitalization workflow or IAS40/IFRS5/IAS38 measurement",
+      "consequence": "Incorrect asset-class treatment if a generic PPE formula were reused",
+      "implementation_or_required_fix": "Explicitly block non-PPE classes; use approved components/specialist schedules; complete policy/valuation evidence",
+      "verification": "non-PPE rejection and CIP tests; broader measurement not claimed"
+    },
+    {
+      "engine": "E15",
+      "capability": "Lease measurement and remeasurement comparison",
+      "actual_status": "existing_strengthened",
+      "issue": "Initial liability journal could duplicate a remeasured liability; ROU tail not explicit",
+      "consequence": "Overstatement or incomplete expense period",
+      "implementation_or_required_fix": "Preserve dated actual/365 kernel; disclose remaining ROU depreciation; block initial journal on modification runs",
+      "verification": "existing dated-payment/reassessment tests; company lease liability/ROU1000"
+    },
+    {
+      "engine": "E15",
+      "capability": "Complete lease modifications/lessor and full CGU allocation",
+      "actual_status": "not_implemented",
+      "issue": "No validated modification/termination/lessor treatment or per-asset impairment floors",
+      "consequence": "Draft computations cannot justify generic specialist journals",
+      "implementation_or_required_fix": "Obtain approved classification/expert inputs and implement appropriate specialist schedules; missing valuation fields fail",
+      "verification": "missing valuation rejection; existing impairment numeric sensitivities; limitations retained"
+    },
+    {
+      "engine": "E16",
+      "capability": "Payroll ledger/payment/provision accounting bridge",
+      "actual_status": "implemented_aggregate_reviewed_inputs",
+      "issue": "Accounting movement and statutory settlement estimate were not explicitly distinct",
+      "consequence": "Simple gratuity or payment-file totals could be misrepresented as IAS19/bank assurance",
+      "implementation_or_required_fix": "Aggregate payroll payable and benefit provision rollforwards; distinct P&L/OCI; actuarial reference required; no employee names/bank master",
+      "verification": "three regime labels, actuarial missing-input cases, company benefit20 and tax-source permission test"
+    },
+    {
+      "engine": "E16",
+      "capability": "Statutory settlement and payment-source reconciliation",
+      "actual_status": "existing_engine_retained",
+      "issue": "Legal and scheme cohort applicability depends on supplied reviewed evidence",
+      "consequence": "Mainland formula cannot be universally used for DIFC/ADGM/alternative schemes",
+      "implementation_or_required_fix": "Reuse country_workflows payroll-settlement and uae-benefit-review; no duplicated hardcoded gratuity rates",
+      "verification": "existing supplied-rule eligibility/cap/ambiguous/missing/alternative-scheme unit tests"
+    },
+    {
+      "engine": "E16",
+      "capability": "Employee masters and actual salary/proration/payroll generation",
+      "actual_status": "not_implemented_by_this_phase",
+      "issue": "Restricted HR master, joiner/leaver compensation, leave/overtime schemes and payroll controls absent",
+      "consequence": "Cannot operate real payroll or claim complete E16 coverage",
+      "implementation_or_required_fix": "Implement authorized salary-specific storage/access, effective compensation, verified rules, payroll uniqueness and bank confirmation before production",
+      "verification": "No salary-generation or payment-instruction workflow claimed"
+    },
+    {
+      "engine": "E17",
+      "capability": "FIFO/moving weighted-average purchased-stock valuation",
+      "actual_status": "implemented",
+      "issue": "Only a count/NRV audit comparison existed; reproducible costing missing",
+      "consequence": "Closing valuation could not be reconstructed from movements",
+      "implementation_or_required_fix": "Existing IFRS workpaper/calculation path now processes evidenced opening/receipts/landed-cost/issues, explicit ordering, negative/duplicate/cut-off checks",
+      "verification": "independent FIFO cost176 versus average128; sequence/negative/duplicate/backdated tests"
+    },
+    {
+      "engine": "E17",
+      "capability": "Transfers, ownership, NRV and counts",
+      "actual_status": "implemented_bounded_bridge",
+      "issue": "Custody, cost and count differences require separate treatment",
+      "consequence": "Unsupported recognition or transfer/NRV plug",
+      "implementation_or_required_fix": "Exclude custody; reciprocal same-SKU/UOM/ownership/quantity/cost transfers; net selling/completion costs; reversal ceiling; separate count issues",
+      "verification": "transfer cost100, mismatch33 retained; custody and quantity variance; NRV reversal cap; existing count bridge"
+    },
+    {
+      "engine": "E17",
+      "capability": "Returns, production, specific identification and closed-period recosting",
+      "actual_status": "not_implemented",
+      "issue": "No verified return layers/WIP/overhead/specific-identification or cross-period correction engine",
+      "consequence": "These cases must not be processed as ordinary receipts/issues without specialist work",
+      "implementation_or_required_fix": "Implement and independently reconcile necessary schedules; revise/reapprove input versions rather than altering approved history",
+      "verification": "Unsupported input fields rejected; no production/return golden workflow claimed"
+    },
+    {
+      "engine": "E18",
+      "capability": "Approved member packages and translation",
+      "actual_status": "implemented_draft_only",
+      "issue": "Control dates, special rate cases and source access needed explicit guards",
+      "consequence": "Unsupported member aggregation could appear releasable",
+      "implementation_or_required_fix": "Approved current packages; three-part control; effective dates; explicit closing/average/historical/opening rates; same-currency unit rates; block hyperinflation/midyear control",
+      "verification": "AED parent/USD-functional subsidiary fixture, translated assets390/profit75, FX cash effect115; blocked special cases"
+    },
+    {
+      "engine": "E18",
+      "capability": "Reciprocal differences and eliminations",
+      "actual_status": "implemented_bounded_pairs",
+      "issue": "No structured mismatch classification or cumulative limit",
+      "consequence": "Unmatched/excess balances could be eliminated",
+      "implementation_or_required_fix": "Declared counterparties/pair amounts, classifications, source evidence, exact pair reference, cumulative cap and duplicate checks",
+      "verification": "unmatched draft issue; elimination409; matched draft output"
+    },
+    {
+      "engine": "E18",
+      "capability": "Member cash workings and group disclosure inputs",
+      "actual_status": "implemented_pre_group_elimination_draft",
+      "issue": "Opening FX/cash workings were not available in group output",
+      "consequence": "No auditable cash bridge",
+      "implementation_or_required_fix": "Retain evidenced opening/closing/flow rates, member workings, presentation translation effect, member note inputs; missing data explicit",
+      "verification": "group-workflow/intercompany-workflow technical artifacts; draft export verified"
+    },
+    {
+      "engine": "E18",
+      "capability": "Final consolidated release, ownership events, acquisition/NCI/equity and comparatives",
+      "actual_status": "blocked_not_implemented",
+      "issue": "Acquisition journals/valuation, group equity/NCI rollforward, cash eliminations and group notes incomplete",
+      "consequence": "Cannot release statutory consolidated statements or treat provisional NCI as final",
+      "implementation_or_required_fix": "Keep ready=false and provisional statuses; complete specialist packages, comparatives, group CF/equity/disclosures before release",
+      "verification": "Group fixture explicitly asserts release blocked; no final consolidated package claimed"
+    }
+  ],
+  "migration": "No new schema; requires existing IFRS/tax migrations and 0020_foundation_periods"
+}

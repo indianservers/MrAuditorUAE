@@ -13,13 +13,13 @@ from app.modules.country_workflows.schemas import ROW_TYPES
 MAX_BYTES = 10 * 1024 * 1024
 
 
-def parse_csv(content, data):
+def parse_csv(content, data, defaults=None):
     with localcontext() as arithmetic:
         arithmetic.prec = 80
-        return _parse_csv(content, data)
+        return _parse_csv(content, data, defaults)
 
 
-def _parse_csv(content, data):
+def _parse_csv(content, data, defaults=None):
     if len(content) > MAX_BYTES:
         raise ValueError("Workflow CSV exceeds 10 MiB")
     reader = csv.DictReader(io.StringIO(content.decode("utf-8-sig"), newline=""))
@@ -42,6 +42,10 @@ def _parse_csv(content, data):
         ):
             raise ValueError(f"Invalid CSV row {index} or 5,000-row bound exceeded")
         values = {k: v.strip() for k, v in raw.items() if v.strip() != ""}
+        for key, selected_value in (defaults or {}).items():
+            if key in values and values[key] != selected_value:
+                raise ValueError("CSV rule document differs from the explicitly selected retained evidence")
+            values[key] = selected_value
         # Empty references are permitted for bank statements, not tax documents.
         if data.table_type == "transactions":
             values.setdefault("reference", "")
@@ -66,10 +70,25 @@ def _parse_csv(content, data):
             raise ValueError("A nil population cannot carry nonzero control totals")
         totals.update(data.control_totals)
     if data.table_type in {
-        "transactions", "tax-documents", "obligations", "return-boxes",
-        "audit-open-items", "settlements", "balance-controls", "confirmations", "cutoff-documents",
-        "purchase-lines", "expense-claims", "benefit-employees",
-        "trade-lines", "excise-movements", "excise-returns", "escrow-entries", "billing-lines", "accounting-controls",
+        "transactions",
+        "tax-documents",
+        "obligations",
+        "return-boxes",
+        "audit-open-items",
+        "settlements",
+        "balance-controls",
+        "confirmations",
+        "cutoff-documents",
+        "purchase-lines",
+        "expense-claims",
+        "benefit-employees",
+        "payroll-bases",
+        "trade-lines",
+        "excise-movements",
+        "excise-returns",
+        "escrow-entries",
+        "billing-lines",
+        "accounting-controls",
     }:
         if dict(totals) != data.control_totals:
             raise ValueError(

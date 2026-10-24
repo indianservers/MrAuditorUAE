@@ -12,7 +12,6 @@ from app.modules.audit_execution.models import AuditRecord, EvidenceVersion
 from app.modules.audit_execution.schemas import BODIES as AUDIT_BODIES
 from app.modules.audit_execution.schemas import RecordInput
 from app.modules.ifrs.calculations import serial
-from app.modules.vat import calculations as calc
 from app.modules.vat import schemas as s
 from app.modules.vat import service
 from app.modules.vat.adapters import SandboxASP
@@ -260,28 +259,7 @@ async def result(
 
 @router.post("/engagements/{eid}/assessments/{rid}", status_code=201)
 async def assess(eid: uuid.UUID, rid: uuid.UUID, db: DB, ctx: Actor):
-    await audit.engagement(db, ctx, eid, "vat.calculate", True)
-    obj = await service.record(db, ctx, eid, rid, approved=True)
-    _, p, selected = await service.profile_inputs(db, ctx, eid, uuid.UUID(obj.body["profile_id"]))
-    if obj.kind == "vat-einvoicing":
-        value = calc.readiness(s.EInvoicing.model_validate(service.clean(obj.body)), p.legal_as_of)
-    elif obj.kind == "vat-recovery":
-        data = s.Recovery.model_validate(service.clean(obj.body))
-        value = {
-            "recoverable": calc.money(data.total_input * data.approved_recovery_percentage),
-            "adjustment": calc.money(
-                data.total_input * data.approved_recovery_percentage - data.previously_recovered
-            ),
-            "state": "ASSESSED" if data.statutory_conditions_confirmed else "REVIEW_REQUIRED",
-            "scope": "Manual reviewed allocation/CAS methodology; separately approved adjustment required for return impact",
-        }
-    else:
-        raise HTTPException(422, "No standalone assessment for this kind")
-    deps = [service.dep(obj)] + [service.dep(x) for x, _ in selected.values()]
-    for evidence_id in service.evidence_ids(obj.body):
-        deps.append(service.dep(await service.evidence(db, ctx, eid, evidence_id)))
-    saved = await service.save(db, ctx, eid, obj.kind, p, obj.body, deps, value, obj.id)
-    return {"id": str(saved.id), "results": saved.results}
+    return await service.assess_record(db, ctx, eid, rid)
 
 
 @router.post("/engagements/{eid}/sandbox", status_code=201)

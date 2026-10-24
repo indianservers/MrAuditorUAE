@@ -1,6 +1,7 @@
 """Adapters reuse the existing authorization, object store, jobs and event receipts."""
 
 from decimal import Decimal, localcontext
+from uuid import UUID
 
 from fastapi import HTTPException
 from starlette.concurrency import run_in_threadpool
@@ -11,6 +12,52 @@ from app.modules.country_workflows.calculations import calculate
 from app.modules.country_workflows.sources import MAX_BYTES, parse_csv
 from app.modules.intelligence import service as intelligence
 from app.modules.lineage.storage import ObjectStore, hash_file
+
+
+async def payroll_rule_documents(db, ctx, eng, rows):
+    from sqlalchemy import func, select
+
+    from app.modules.audit_execution.models import EvidenceVersion
+
+    documents: dict[str, EvidenceVersion] = {}
+    receipts: list[dict] = []
+    for rule in rows:
+        identifier = rule["source_evidence_version_id"]
+        if identifier not in documents:
+            if len(documents) >= 50:
+                raise HTTPException(
+                    422, "Payroll rule evidence is limited to fifty retained documents"
+                )
+            document, receipt = await intelligence.evidence(db, ctx, eng, UUID(identifier))
+            latest = await db.scalar(
+                select(func.max(EvidenceVersion.number)).where(
+                    EvidenceVersion.tenant_id == ctx.tenant_id,
+                    EvidenceVersion.record_id == document.record_id,
+                )
+            )
+            if document.number != latest:
+                raise HTTPException(
+                    409, "Payroll rule document was superseded; prepare a current reviewed source"
+                )
+            documents[identifier] = document
+            receipts.append(receipt)
+        if documents[identifier].sha256 != rule["source_sha256"]:
+            raise HTTPException(
+                422, "Payroll rule document hash differs from its retained evidence"
+            )
+
+    def verify():
+        size = 0
+        for document in documents.values():
+            with ObjectStore().local(document.object_key, document.object_version) as path:
+                size += path.stat().st_size
+                if size > 100 * 1024 * 1024 or hash_file(path) != document.sha256:
+                    raise ValueError(
+                        "Payroll rule evidence exceeds its verification bound or failed original-file integrity"
+                    )
+
+    await run_in_threadpool(verify)
+    return receipts
 
 
 async def compute(db, ctx, eng, operation, data, package, dependencies):
@@ -147,21 +194,37 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "uae-wps-sif": {"text/csv"},
             "india-inv01-json": {"application/json"},
             "india-epfo-ecr": {"text/plain"},
+            "india-gstr2b-json": {"application/json"},
         }
         if evidence.media_type not in supported_media[data.file_format]:
             raise HTTPException(
                 422, "Retained evidence media type does not match the selected source format"
             )
+        defaults = None
+        if data.rule_document_version_id:
+            if data.table_type != "payroll-rules" or data.file_format != "canonical-csv":
+                raise HTTPException(
+                    422, "A rule source document can be selected only for canonical payroll rules"
+                )
+            rule_document, _ = await intelligence.evidence(
+                db, ctx, eng, data.rule_document_version_id
+            )
+            defaults = {
+                "source_evidence_version_id": str(rule_document.id),
+                "source_sha256": rule_document.sha256,
+            }
 
         def load():
             with ObjectStore().local(evidence.object_key, evidence.object_version) as path:
                 if path.stat().st_size > MAX_BYTES or hash_file(path) != evidence.sha256:
                     raise ValueError("Evidence exceeds size bound or hash verification failed")
                 if data.file_format == "canonical-csv":
-                    return parse_csv(path.read_bytes(), data)
+                    return parse_csv(path.read_bytes(), data, defaults)
                 return parse_native(path.read_bytes(), data, package.country, evidence.filename)
 
         result = await run_in_threadpool(load)
+        if data.table_type == "payroll-rules":
+            dependencies.extend(await payroll_rule_documents(db, ctx, eng, result["rows"]))
         return {
             **result,
             "evidence_version_id": str(evidence.id),
@@ -170,6 +233,14 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "source_identity": "evidence:" + str(evidence.id),
             "source_filename": evidence.filename,
             "contributors": [str(ctx.user_id)],
+            **(
+                {
+                    "rule_document_version_id": str(data.rule_document_version_id),
+                    "rule_document_binding": "SELECTED_RETAINED_DOCUMENT",
+                }
+                if defaults
+                else {}
+            ),
         }, [*dependencies, receipt]
     period = await db.get(FinancialPeriod, eng.period_id)
     if not period or not period.start_date <= data.as_of <= period.end_date:
@@ -186,6 +257,14 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         source = await intelligence.event(db, ctx, eng.id, identifier, True)
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
+        if (
+            data.workflow == "india-payroll-rules"
+            and role == "rules"
+            and source.body.get("review_status") != "REVIEWED"
+        ):
+            raise HTTPException(
+                409, "Independently review the payroll rule source before calculating expected dues"
+            )
         identity = (
             source.body.get("source_identity") or "evidence:" + source.body["evidence_version_id"]
         )
@@ -204,6 +283,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         sources[role] = source.body
         contributors.update(source.body.get("contributors", [str(source.created_by)]))
         dependencies.append(intelligence.event_receipt(source))
+    if data.workflow == "india-payroll-rules":
+        dependencies.extend(await payroll_rule_documents(db, ctx, eng, sources["rules"]["rows"]))
     if data.workflow == "bank-brs":
         book_range = sources.get("books", {}).get("source_range")
         if book_range and book_range["through"] != data.as_of.isoformat():

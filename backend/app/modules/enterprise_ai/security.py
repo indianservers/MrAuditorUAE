@@ -80,7 +80,28 @@ async def source(db, ctx, eid, rid):
 
 async def validate_dependencies(db, ctx, eid, deps):
     for item in deps:
-        if item.get("type", "record") == "record":
+        if item.get("type") == "jurisdiction":
+            from app.modules.jurisdictions.workspace import resolved
+
+            eng = await scope(db, ctx, eid)
+            package, context = await resolved(db, ctx, eng)
+            if (
+                str(eid) != item["id"]
+                or package.country != item["country"]
+                or context["version"] != item["version"]
+                or package.package_sha256 != item["sha256"]
+            ):
+                raise HTTPException(
+                    409, "Reporting jurisdiction/context changed; create a fresh investigation"
+                )
+        elif item.get("type") == "connector":
+            from app.modules.enterprise_ai.tools import invoke
+            from app.modules.enterprise_ai.schemas import ToolInput
+            status = await invoke(db, ctx, eid, "connections.get_health", ToolInput(limit=50))
+            current = next((r for r in status.sources if r["id"] == item["id"]), None)
+            if current is None or current["sha256"] != item["sha256"]:
+                raise HTTPException(409, "Connector status changed; refresh the investigation")
+        elif item.get("type", "record") == "record":
             obj = await source(db, ctx, eid, uuid.UUID(item["id"]))
             if obj.version != item["version"]:
                 raise HTTPException(409, "Source changed; create a fresh investigation")
@@ -109,6 +130,7 @@ async def validate_dependencies(db, ctx, eid, deps):
 
             obj = await get(db, ctx, uuid.UUID(item["id"]))
             from app.modules.lineage.freshness import require_ml_current
+
             await require_ml_current(db, ctx, obj)
             if obj.engagement_id != eid:
                 raise HTTPException(404, "Resource unavailable")

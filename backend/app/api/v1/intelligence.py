@@ -194,7 +194,16 @@ async def job_list(eid: uuid.UUID, db: DB, ctx: Actor, limit: int = Query(50, ge
             .limit(limit)
         )
     ).all()
-    return {"items": [audit.serialize(row) for row in rows], "limit": limit}
+    visible = []
+    for row in rows:
+        try:
+            await service.restricted_permission(db, ctx, eid, row.payload)
+        except HTTPException as exc:
+            if exc.status_code == 403:
+                continue
+            raise
+        visible.append(audit.serialize(row))
+    return {"items": visible, "limit": limit}
 
 
 @router.get("/engagements/{eid}/jobs/{jid}")
@@ -209,6 +218,7 @@ async def job_details(eid: uuid.UUID, jid: uuid.UUID, db: DB, ctx: Actor):
     )
     if not obj:
         raise HTTPException(404, "Job not found")
+    await service.restricted_permission(db, ctx, eid, obj.payload)
     return audit.serialize(obj)
 
 
@@ -235,6 +245,7 @@ async def job_action(
         raise HTTPException(404, "Job not found")
     if obj.created_by != ctx.user_id:
         raise HTTPException(403, "Only the submitting user may control this job")
+    await service.restricted_permission(db, ctx, eid, obj.payload)
     await service.scope(db, ctx, eid, obj.operation)
     if obj.version != data.version:
         raise HTTPException(409, "Job version conflict")
@@ -863,6 +874,13 @@ async def generate_paper(
 ):
     eng = await audit.engagement(db, ctx, eid, "workingpaper.create", True)
     obj = await service.event(db, ctx, eid, identifier, True)
+    from app.modules.country_workflows.diligence_schemas import (
+        DILIGENCE_ROW_TYPES,
+        DILIGENCE_WORKFLOWS,
+    )
+
+    if obj.body.get("table_type") in DILIGENCE_ROW_TYPES or obj.body.get("workflow") in DILIGENCE_WORKFLOWS:
+        raise HTTPException(409, "Diligence results require restricted workpaper handling; generic paper generation is unavailable")
     if obj.body.get("review_status") != "REVIEWED":
         raise HTTPException(
             409, "Independently reviewed source result required before working-paper generation"

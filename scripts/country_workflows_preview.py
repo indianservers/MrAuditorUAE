@@ -5,6 +5,7 @@ in-process test doubles during fixture preparation, never server configuration.
 """
 
 import asyncio
+import hashlib
 import json
 import os
 import sys
@@ -27,16 +28,20 @@ async def main():
         )
     import pytest
     from tests.integration.test_platform import environment
-    from tests.phase4.test_workflows import create, setup
+    from tests.phase4.test_workflows import actor, create, grant, setup
     from tests.qa_crud.test_country_workflows import (
         bank_payload,
+        decision,
         double_boundaries,
         execute,
         source,
     )
     from tests.unit.country_workflow_cases import document, return_box, transaction
     from tests.unit.native_source_examples import CAMT, SIF, SIF_FILENAME
+    from tests.unit.test_india_ecr_source import ECR
+    from tests.unit.test_india_gstr2b_source import payload as gstr2b_payload
     from tests.unit.test_india_invoice_source import invoice
+    from tests.unit.test_payroll_rule_workflow import pf_fixture
 
     fixture = environment.__wrapped__()
     client = await anext(fixture)
@@ -188,6 +193,91 @@ async def main():
             json.dumps(invoice()).encode(),
             "application/json",
         )
+        ecr_evidence = await native_file(
+            india, "SYNTHETIC-monthly-ecr.txt", ECR, "text/plain"
+        )
+        gstr2b_evidence = await native_file(
+            india,
+            "SYNTHETIC-gstr2b.json",
+            json.dumps(gstr2b_payload()).encode(),
+            "application/json",
+        )
+        gstr2b_books = await source(
+            client,
+            h,
+            india,
+            [
+                document(
+                    registration="27ABCDE5678G1Z8",
+                    counterparty="29ABCDE1234F1Z5",
+                    reference="SYNTHETIC-1",
+                    date="2026-06-15",
+                    currency="INR",
+                    component="IGST",
+                    tax="18",
+                )
+            ],
+            "SYNTHETIC GSTR-2B independent book register",
+            "tax-documents",
+            {"INR": "18"},
+        )
+        legal_bytes = b"%PDF-1.4\nSYNTHETIC PAYROLL RULE EVIDENCE ONLY\n%%EOF"
+        legal_id = await native_file(
+            india, "SYNTHETIC-payroll-rules.pdf", legal_bytes, "application/pdf"
+        )
+        bases, rules, _ = pf_fixture()
+        for rule in rules:
+            rule.update(
+                source_evidence_version_id=legal_id,
+                source_sha256=hashlib.sha256(legal_bytes).hexdigest(),
+            )
+        payroll_bases = await source(
+            client,
+            h,
+            india,
+            bases,
+            "SYNTHETIC assessed contribution bases",
+            "payroll-bases",
+            {"INR": "60000"},
+        )
+        payroll_rules = await source(
+            client,
+            h,
+            india,
+            rules,
+            "SYNTHETIC reviewed contribution rules",
+            "payroll-rules",
+            {},
+        )
+        rule_reviewer = await actor(
+            h, "Firm Administrator", "country-payroll-rule-reviewer"
+        )
+        await grant(client, h, f"/api/v1/engagements/{india}/audit", rule_reviewer)
+        reviewed_rules = await decision(client, rule_reviewer[0], india, payroll_rules)
+        assert reviewed_rules.status_code == 201, reviewed_rules.text
+        pf_evidence = await native_file(
+            india,
+            "SYNTHETIC-first-member-ecr.txt",
+            ECR.splitlines()[0] + b"\n",
+            "text/plain",
+        )
+        payroll_reported = await execute(
+            client,
+            h,
+            india,
+            "workflow-source",
+            {
+                "evidence_version_id": pf_evidence,
+                "file_format": "india-epfo-ecr",
+                "table_type": "obligations",
+                "employer_registration": "EPFO-SYNTHETIC",
+                "obligation_period": "2026-06",
+                "expected_members": 1,
+                "expected_rows": 3,
+                "control_totals": {"INR": "3600"},
+                "label": "SYNTHETIC reported PF contributions",
+            },
+        )
         dest = ROOT / ".local-runtime/country-workflows/fixture.json"
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(
@@ -206,6 +296,12 @@ async def main():
                     "camt_evidence": camt_evidence,
                     "wps_evidence": wps_evidence,
                     "india_invoice_evidence": india_evidence,
+                    "india_ecr_evidence": ecr_evidence,
+                    "india_gstr2b_evidence": gstr2b_evidence,
+                    "india_gstr2b_books": gstr2b_books["id"],
+                    "india_payroll_bases": payroll_bases["id"],
+                    "india_payroll_rules": reviewed_rules.json()["id"],
+                    "india_payroll_reported": payroll_reported["id"],
                     "tenant": h["X-Tenant-ID"],
                 },
                 indent=2,

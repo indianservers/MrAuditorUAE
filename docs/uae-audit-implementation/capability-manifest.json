@@ -470,9 +470,9 @@
     "ml_execution_mode": null,
     "ml_note": "ML is not required for this calculation/evidence workflow.",
     "language_model_dependency": "None for engines. Optional configured gateway for grounded explanations/drafts.",
-    "evidence_approval_status": "Versioned source evidence and review retained; new results start UNVERIFIED. Independent review required before controlled release.",
+    "evidence_approval_status": "Professional parsed-data/job permission and independent review; generic working-paper copies blocked. Original files retain existing engagement evidence permissions.",
     "actual_verification_results": "Dedicated deterministic procedure unit fixtures; shared persistence/approval/export tests apply to the infrastructure.",
-    "remaining_blockers": "Qualified identity/registry verification and a complete customer onboarding/refresh lifecycle; current checks assess evidence readiness."
+    "remaining_blockers": "Qualified identity/registry verification and a complete customer onboarding/refresh lifecycle; current checks assess evidence readiness. Full raw-file confidentiality classification and restricted AML workpaper/case handling remain unfinished."
   },
   {
     "id": 33,
@@ -485,9 +485,9 @@
     "ml_execution_mode": null,
     "ml_note": "ML is not required for this calculation/evidence workflow.",
     "language_model_dependency": "None for engines. Optional configured gateway for grounded explanations/drafts.",
-    "evidence_approval_status": "Versioned source evidence and review retained; new results start UNVERIFIED. Independent review required before controlled release.",
+    "evidence_approval_status": "Professional parsed-data/job permission and independent review; generic working-paper copies blocked. Original files retain existing engagement evidence permissions.",
     "actual_verification_results": "Dedicated deterministic procedure unit fixtures; shared persistence/approval/export tests apply to the infrastructure.",
-    "remaining_blockers": "Voting/control, nominees/trusts and authoritative registry checks; economic path multiplication is not a legal UBO conclusion."
+    "remaining_blockers": "Voting/control, nominees/trusts and authoritative registry checks; economic path multiplication is not a legal UBO conclusion. Full raw-file confidentiality classification and restricted AML workpaper/case handling remain unfinished."
   },
   {
     "id": 34,
@@ -500,9 +500,9 @@
     "ml_execution_mode": "rules_baseline",
     "ml_note": "Explicit uploaded-list name baseline; no automatic clearance.",
     "language_model_dependency": "None for engines. Optional configured gateway for grounded explanations/drafts.",
-    "evidence_approval_status": "Versioned source evidence and review retained; new results start UNVERIFIED. Independent review required before controlled release.",
+    "evidence_approval_status": "Professional parsed-data/job permission and independent review; generic working-paper copies blocked. Original files retain existing engagement evidence permissions.",
     "actual_verification_results": "Dedicated deterministic procedure unit fixtures; shared persistence/approval/export tests apply to the infrastructure.",
-    "remaining_blockers": "Qualified sanctions/PEP feeds, aliases/transliteration/identifier checks and live rescreening. Uploaded-list name similarity is not clearance."
+    "remaining_blockers": "Qualified sanctions/PEP feeds, aliases/transliteration/identifier checks and live rescreening. Uploaded-list name similarity is not clearance. Full raw-file confidentiality classification and restricted AML workpaper/case handling remain unfinished."
   },
   {
     "id": 35,
@@ -515,9 +515,9 @@
     "ml_execution_mode": null,
     "ml_note": "ML is not required for this calculation/evidence workflow.",
     "language_model_dependency": "None for engines. Optional configured gateway for grounded explanations/drafts.",
-    "evidence_approval_status": "Versioned source evidence and review retained; new results start UNVERIFIED. Independent review required before controlled release.",
+    "evidence_approval_status": "Professional parsed-data/job permission and independent review; generic working-paper copies blocked. Original files retain existing engagement evidence permissions.",
     "actual_verification_results": "Dedicated deterministic procedure unit fixtures; shared persistence/approval/export tests apply to the infrastructure.",
-    "remaining_blockers": "Qualified customer risk policy and full EDD lifecycle; risk/PEP flags are supplied professional facts."
+    "remaining_blockers": "Qualified customer risk policy and full EDD lifecycle; risk/PEP flags are supplied professional facts. Full raw-file confidentiality classification and restricted AML workpaper/case handling remain unfinished."
   },
   {
     "id": 36,

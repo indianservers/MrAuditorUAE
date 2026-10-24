@@ -155,6 +155,8 @@ def test_deferred_tax_assets_liabilities_losses():
         "item_type": "asset",
         "tax_rate": "0.2",
         "recognition_rationale": "Human assessment",
+        "expected_recovery_or_settlement": "Synthetic taxable recovery forecast during 2027",
+        "recoverability_evidence": "Synthetic approved forecast fixture",
     }
     result = calculate(
         "deferred-tax",

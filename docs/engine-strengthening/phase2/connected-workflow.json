@@ -1,7 +1,7 @@
 {
   "fixture": "SYNTHETIC",
-  "tax_run_id": "92402e54-cbfa-429e-9b36-6d57b485de75",
-  "approved_connected_assessment_id": "682df4c9-0a29-4e49-accc-bfd8553ced78",
+  "tax_run_id": "8cb0087d-a277-4ec3-9ddf-a747fcd377ad",
+  "approved_connected_assessment_id": "90a2d975-ce09-4575-b990-6c7fed1ead42",
   "source_change_stales_approved_output": true,
   "self_approval_blocked": true,
   "filing_submitted": false,

@@ -72,6 +72,14 @@ async def history(db, ctx, run, validate=True):
 
 
 async def create(db, ctx, data):
+    if data.task and data.task.startswith("uae-"):
+        from app.modules.enterprise_ai.business import case_scope
+        try:
+            identifier = int(data.task.removeprefix("uae-"))
+        except ValueError:
+            raise HTTPException(422, "Unknown UAE use case") from None
+        await case_scope(db, ctx, data.engagement_id, identifier, "ai.workflow.run")
+        data.inputs = data.inputs.model_copy(update={"use_case_id": identifier})
     eng = await scope(db, ctx, data.engagement_id, "ai.investigation.create")
     await scope(db, ctx, eng.id, "ai.workflow.run")
     if eng.status.upper() in {"CANCELLED", "ARCHIVED", "COMPLETED"}:

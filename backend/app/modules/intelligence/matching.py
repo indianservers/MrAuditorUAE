@@ -1,6 +1,6 @@
 """Explainable Decimal matching. Machine proposals never imply auditor approval."""
 
-import re
+import unicodedata
 from bisect import bisect_left, bisect_right
 from collections import defaultdict
 from datetime import date
@@ -8,7 +8,7 @@ from decimal import Decimal
 
 
 def normal(value):
-    return re.sub(r"[^a-z0-9]", "", str(value or "").casefold())
+    return "".join(c for c in unicodedata.normalize("NFKC", str(value or "")).casefold() if c.isalnum())
 
 
 def compare_voucher(transaction, document, amount_tolerance=Decimal(0), date_tolerance=0):
@@ -112,6 +112,8 @@ def compare_voucher(transaction, document, amount_tolerance=Decimal(0), date_tol
 
 
 def reconcile_transactions(left, right, tolerance=Decimal(0), date_tolerance=0, max_group_size=3):
+    if not tolerance.is_finite() or tolerance < 0 or not 0 <= date_tolerance <= 365 or not 1 <= max_group_size <= 6:
+        raise ValueError("Invalid bounded matching policy")
     if len(left) > 20000 or len(right) > 20000:
         raise ValueError("Transaction matching bound is 20,000 rows per side; partition the source")
     if len({r["id"] for r in left}) != len(left) or len({r["id"] for r in right}) != len(right):
@@ -154,6 +156,11 @@ def reconcile_transactions(left, right, tolerance=Decimal(0), date_tolerance=0, 
                 or not b.get("counterparty")
                 or normal(a["counterparty"]) == normal(b["counterparty"])
             )
+            and (
+                bool(normal(a.get("reference"))) and normal(a.get("reference")) == normal(b.get("reference"))
+                or bool(normal(a.get("counterparty"))) and normal(a.get("counterparty")) == normal(b.get("counterparty"))
+            )
+            and Decimal(a["amount"]) != 0
         )
 
     for row in left:
@@ -195,7 +202,7 @@ def reconcile_transactions(left, right, tolerance=Decimal(0), date_tolerance=0, 
                 {
                     "left_ids": [row["id"]],
                     "right_ids": [target["id"]],
-                    "rule": "REFERENCE_AMOUNT_DATE" if referenced else "AMOUNT_DATE_UNIQUE",
+                    "rule": "REFERENCE_AMOUNT_DATE" if referenced else "PARTY_AMOUNT_DATE_UNIQUE",
                     "variance": str(Decimal(row["amount"]) - Decimal(target["amount"])),
                     "auditor_status": "NOT_REVIEWED",
                 }
@@ -211,6 +218,9 @@ def reconcile_transactions(left, right, tolerance=Decimal(0), date_tolerance=0, 
     for key, source in left_groups.items():
         target = right_groups.get(key, [])
         if not target or len(source) > max_group_size or len(target) > max_group_size:
+            continue
+        if not (all(Decimal(row["amount"]) > 0 for row in source + target)
+                or all(Decimal(row["amount"]) < 0 for row in source + target)):
             continue
         if (
             max(date.fromisoformat(r["date"]) for r in source + target)

@@ -6,7 +6,9 @@ from typing import Annotated, Literal
 from pydantic import BaseModel, Field, model_validator
 
 from app.modules.country_workflows.audit_schemas import AUDIT_ROW_TYPES
+from app.modules.country_workflows.operations_schemas import OPERATION_ROW_TYPES
 from app.modules.country_workflows.diligence_schemas import DILIGENCE_ROW_TYPES
+from app.modules.country_workflows.payroll_schemas import PAYROLL_ROW_TYPES
 from app.modules.country_workflows.sector_schemas import SECTOR_ROW_TYPES
 from app.modules.jurisdictions.profiles import Strict
 
@@ -102,6 +104,7 @@ class Control(Strict):
 
 
 ROW_TYPES: dict[str, type[BaseModel]] = {
+    **PAYROLL_ROW_TYPES,
     **AUDIT_ROW_TYPES,
     **DILIGENCE_ROW_TYPES,
     **SECTOR_ROW_TYPES,
@@ -123,6 +126,7 @@ class SourceInput(Strict):
         "uae-wps-sif",
         "india-inv01-json",
         "india-epfo-ecr",
+        "india-gstr2b-json",
     ] = "canonical-csv"
     gst_registration: str | None = Field(
         default=None, pattern=r"^\d{2}[A-Z]{5}\d{4}[A-Z][A-Z0-9]Z[A-Z0-9]$"
@@ -135,7 +139,13 @@ class SourceInput(Strict):
     obligation_due_date: date | None = None
     obligation_period: str | None = Field(default=None, pattern=r"^\d{4}-(0[1-9]|1[0-2])$")
     expected_members: int | None = Field(default=None, ge=1, le=1666)
+    expected_documents: int | None = Field(default=None, ge=0, le=1250)
+    rule_document_version_id: uuid.UUID | None = None
     table_type: Literal[
+        "cash-payments",
+        "item-allocations",
+        "payroll-bases",
+        "payroll-rules",
         "transactions",
         "tax-documents",
         "obligations",
@@ -216,6 +226,7 @@ class VATSourceInput(Strict):
 
 class WorkflowInput(Strict):
     workflow: Literal[
+        "india-payroll-rules",
         "subledger-control",
         "subsequent-settlements",
         "balance-confirmations",

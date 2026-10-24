@@ -2,6 +2,7 @@ import * as tf from '@tensorflow/tfjs';
 import {createHash} from 'node:crypto';
 import {readFile, stat} from 'node:fs/promises';
 import {join} from 'node:path';
+import {createRequire} from 'node:module';
 import {accountSchema, accountVector, features, schema, transform, validateRows, type Scaling, type Row} from './features.js';
 import {drift} from './metrics.js';
 
@@ -9,10 +10,12 @@ type Hashes = {model_json: string; weights: string};
 type Loader = (dir: string, hashes: Hashes) => Promise<tf.LayersModel>;
 type Family = 'autoencoder'|'journal-classifier'|'risk-ranking'|'account-classifier';
 type Metadata = {
+  preprocessing_version?: string;
   config: {family: Family}; artifact_hashes: Hashes; feature_schema: typeof schema | typeof accountSchema;
   scaler: Scaling; calibration: {threshold: number}; baseline_sample: number[][]; synthetic: boolean;
 };
 let cpu: Promise<void> | undefined;
+export const cpuStatus={requested:process.env.ML_CPU_BACKEND??'auto',backend:'not_initialized',native_verified:false,fallback_reason:null as string|null};
 let active = 0;
 let waiting = 0;
 let queue: Promise<void> = Promise.resolve();
@@ -21,9 +24,20 @@ const hash = (b: string | Uint8Array) => createHash('sha256').update(b).digest('
 
 export async function initializeCPU() {
   cpu ??= (async () => {
+    if(!['auto','javascript','native'].includes(cpuStatus.requested))throw Error('Unsupported CPU backend setting');
+    if(cpuStatus.requested!=='javascript'){
+      try{
+        createRequire(import.meta.url)('@tensorflow/tfjs-node');
+        if(!await tf.setBackend('tensorflow'))throw Error('Native backend initialization failed');
+        await tf.ready();tf.tidy(()=>{if(tf.scalar(2).square().dataSync()[0]!==4)throw Error('Native CPU self-test failed');});
+        cpuStatus.backend=tf.getBackend();cpuStatus.native_verified=true;return;
+      }catch{cpuStatus.fallback_reason='Native CPU binding unavailable or self-test failed; using verified JavaScript CPU';}
+    }
     if (!await tf.setBackend('cpu')) throw Error('CPU backend unavailable');
     await tf.ready();
     if (tf.getBackend() !== 'cpu') throw Error('Unexpected TensorFlow backend');
+    tf.tidy(()=>{if(tf.scalar(2).square().dataSync()[0]!==4)throw Error('CPU self-test failed');});
+    cpuStatus.backend=tf.getBackend();
   })().catch(error => { cpu = undefined; throw error; });
   return cpu;
 }
@@ -49,6 +63,7 @@ async function run(input: Row[], dir: string, load: Loader) {
   if (!['autoencoder','journal-classifier','risk-ranking','account-classifier'].includes(family)) throw Error('Unknown model family');
   const account = family === 'account-classifier', ae = family === 'autoencoder';
   const expected = account ? accountSchema : schema;
+  if (m.preprocessing_version !== undefined && m.preprocessing_version !== 'train-scaler-clipped/1') throw Error('Model preprocessing version mismatch');
   if (m.feature_schema?.version !== expected.version ||
       (account ? (m.feature_schema as typeof accountSchema).dimensions !== accountSchema.dimensions :
       JSON.stringify((m.feature_schema as typeof schema).names) !== JSON.stringify(schema.names))) throw Error('Model feature version/schema mismatch');
@@ -78,6 +93,8 @@ async function run(input: Row[], dir: string, load: Loader) {
       loaded.dispose();
       throw Error('Incompatible model topology');
     }
+    try { tf.tidy(()=>{(loaded.predict(tf.zeros([1,n])) as tf.Tensor).dataSync();}); }
+    catch(error){loaded.dispose();throw error;}
     if (cache.size >= 2) {
       const oldest = cache.keys().next().value!;
       cache.get(oldest)!.dispose(); cache.delete(oldest);
@@ -104,8 +121,9 @@ async function run(input: Row[], dir: string, load: Loader) {
     };
   });
   return {
-    execution_mode:'trained_model', backend:tf.getBackend(), model_family:family, model_version:version,
+    execution_mode:'trained_model', backend:tf.getBackend(), cpu_runtime:cpuStatus, model_family:family, model_version:version,
     artifact_hashes:m.artifact_hashes, feature_version:expected.version, preprocessing_version:'train-scaler-clipped/1',
+    legacy_preprocessing_assumption:m.preprocessing_version===undefined,
     predictions, drift:drift(m.baseline_sample,x), calibrated_probability:false, production_validated:false,
     synthetic_training:m.synthetic,
     task_semantics:family==='journal-classifier'?'binary_exception_review_signal':family==='account-classifier'?'five_account_category_suggestions':family,

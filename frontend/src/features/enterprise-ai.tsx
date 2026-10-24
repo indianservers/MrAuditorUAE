@@ -8,8 +8,10 @@ import { Button, Empty, ErrorState } from "@/components/ui/primitives";
 import { PageHeader } from "./shared";
 import type { Engagement, Page } from "@/types/models";
 import { useScope } from "@/stores/workspace";
+import { UAEBusinessCases } from "./uae-business-cases";
 
 export const aiAreas = [
+  ["uae-use-cases", "UAE Business Workflows"],
   ["command-center", "AI Command Center"],
   ["agents", "Specialist Agent Library"],
   ["investigations", "Cross-Module Investigation Studio"],
@@ -225,6 +227,8 @@ export function EnterpriseAI({ area = "command-center" }: { area?: string }) {
         <main className="ai-main">
           {area === "providers" ? (
             <RemoteFacts path="ai/providers" title="Approved model inventory" />
+          ) : eid && area === "uae-use-cases" ? (
+            <UAEBusinessCases key={eid} eid={eid} />
           ) : eid ? (
             <Workspace
               key={`${eid}:${area}`}
