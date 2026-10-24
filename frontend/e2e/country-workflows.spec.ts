@@ -8,6 +8,253 @@ const fixture = JSON.parse(
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
 
+test("UAE and India credit applications preserve residuals through the real worker", async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill("admin@example.com");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("test-strong-password-123");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+  for (const [country, eid, currency] of [
+    ["AE", fixture.uae_engagement, "AED"],
+    ["IN", fixture.india_engagement, "INR"],
+  ]) {
+    await page.goto(`/intelligence/${eid}/country-workflow`);
+    await page
+      .getByLabel("Workflow", { exact: true })
+      .selectOption("credit-note-applications");
+    const title = `SYNTHETIC ${country} credit application ${Date.now()}`;
+    await page.getByLabel("Schedule title", { exact: true }).fill(title);
+    await page
+      .getByLabel("Reconciliation date", { exact: true })
+      .fill("2026-06-30");
+    await page
+      .getByLabel("Scope and source rationale")
+      .fill(
+        "Reviewed explicit credit applications against independent GL controls; no tax treatment inferred",
+      );
+    for (const [role, id] of Object.entries(
+      fixture.credit_application_sources[country],
+    ))
+      await page
+        .getByLabel(`${role} source`, { exact: true })
+        .selectOption(String(id));
+    await page
+      .getByRole("checkbox", {
+        name: /Balances are before the listed credit applications/,
+      })
+      .check();
+    const submitted = page.waitForResponse(
+      (response) =>
+        response.url().includes(`/engagements/${eid}/jobs`) &&
+        response.request().method() === "POST",
+    );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const response = await submitted;
+    expect(response.status()).toBe(202);
+    const job = await response.json();
+    let result = "";
+    await expect
+      .poll(
+        async () => {
+          const status = await page.request.get(
+            `/api/backend/intelligence/engagements/${eid}/jobs/${job.id}`,
+            { headers: { "X-Tenant-ID": fixture.tenant } },
+          );
+          expect(status.status()).toBe(200);
+          const body = await status.json();
+          if (body.status === "failed")
+            throw new Error(JSON.stringify(body.error_details));
+          result = body.result_id || "";
+          return body.status;
+        },
+        { timeout: 45000 },
+      )
+      .toBe("completed");
+    await expect(
+      page
+        .getByLabel("Saved source or result")
+        .locator(`option[value="${result}"]`),
+    ).toHaveCount(1);
+    await page.getByLabel("Saved source or result").selectOption(result);
+    const panel = page
+      .getByRole("heading", { name: title, exact: true })
+      .locator("..");
+    await expect(
+      panel.getByRole("cell", { name: "UNAPPLIED_CREDIT", exact: true }),
+    ).toBeVisible();
+    await expect(
+      panel.getByRole("cell", { name: "75", exact: true }),
+    ).toBeVisible();
+    await expect(
+      panel.getByRole("cell", { name: "-15", exact: true }),
+    ).toBeVisible();
+    await expect(
+      panel.getByRole("cell", { name: currency, exact: true }).first(),
+    ).toBeVisible();
+    await expect(page.getByText("1 exceptions", { exact: true })).toBeVisible();
+    await panel.scrollIntoViewIfNeeded();
+    await saveScreenshot(
+      `${shots}/${country.toLowerCase()}-credit-applications-worker.png`,
+      () => panel.screenshot(),
+    );
+  }
+  expect(errors).toEqual([]);
+});
+
+test("India withholding separates legal roles and excludes superseded observations through the worker", async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill("admin@example.com");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("test-strong-password-123");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+  await page.goto(`/intelligence/${fixture.uae_engagement}/country-workflow`);
+  for (const workflow of [
+    "india-withholding-liability",
+    "india-withholding-credit",
+    "india-withholding",
+  ])
+    await expect(
+      page
+        .getByLabel("Workflow", { exact: true })
+        .locator(`option[value="${workflow}"]`),
+    ).toHaveCount(0);
+  const eid = fixture.india_engagement;
+  for (const scope of ["deductor", "collectee", "collectee-cap"]) {
+    const legalRole = scope === "deductor" ? "deductor" : "collectee";
+    const workflow =
+      legalRole === "deductor"
+        ? "india-withholding-liability"
+        : "india-withholding-credit";
+    await page.goto(`/intelligence/${eid}/country-workflow`);
+    await page.getByLabel("Workflow", { exact: true }).selectOption(workflow);
+    await page
+      .getByLabel("Organization legal withholding role")
+      .selectOption(legalRole);
+    const title = `SYNTHETIC ${scope} withholding ${Date.now()}`;
+    await page.getByLabel("Schedule title", { exact: true }).fill(title);
+    await page
+      .getByLabel("Reconciliation date", { exact: true })
+      .fill("2026-06-30");
+    await page
+      .getByLabel("Scope and source rationale")
+      .fill(
+        "Independently assessed legal role and current source selection; no statutory rate or credit entitlement inferred",
+      );
+    for (const [role, identifier] of Object.entries(
+      fixture.withholding_sources[scope],
+    ))
+      await page
+        .getByLabel(`${role} source`, { exact: true })
+        .selectOption(String(identifier));
+    const submitted = page.waitForResponse(
+      (response) =>
+        response.url().includes(`/engagements/${eid}/jobs`) &&
+        response.request().method() === "POST",
+    );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const response = await submitted;
+    expect(response.status()).toBe(202);
+    const job = await response.json();
+    let result = "";
+    await expect
+      .poll(
+        async () => {
+          const status = await page.request.get(
+            `/api/backend/intelligence/engagements/${eid}/jobs/${job.id}`,
+            { headers: { "X-Tenant-ID": fixture.tenant } },
+          );
+          expect(status.status()).toBe(200);
+          const body = await status.json();
+          if (body.status === "failed")
+            throw new Error(JSON.stringify(body.error_details));
+          result = body.result_id || "";
+          return body.status;
+        },
+        { timeout: 45000 },
+      )
+      .toBe("completed");
+    await expect(
+      page
+        .getByLabel("Saved source or result")
+        .locator(`option[value="${result}"]`),
+    ).toHaveCount(1);
+    await page.getByLabel("Saved source or result").selectOption(result);
+    const panel = page
+      .getByRole("heading", { name: title, exact: true })
+      .locator("..");
+    await expect(
+      panel.getByRole("cell", { name: legalRole, exact: true }).first(),
+    ).toBeVisible();
+    await expect(
+      panel
+        .getByRole("cell", {
+          name:
+            scope === "collectee-cap"
+              ? "ASSESSMENT_NOT_SUPPORTED"
+              : legalRole === "deductor"
+                ? "VARIANCE"
+                : "MATCHED",
+          exact: true,
+        })
+        .first(),
+    ).toBeVisible();
+    if (scope === "collectee-cap") {
+      await expect(
+        panel
+          .getByText("certificate shared amount limit exceeded", {
+            exact: true,
+          })
+          .first(),
+      ).toBeVisible();
+      await expect(
+        panel.getByRole("button", {
+          name: "Independent approval",
+          exact: true,
+        }),
+      ).toBeDisabled();
+    }
+    if (legalRole === "deductor") {
+      await expect(
+        panel.getByRole("cell", { name: /reported: 90/ }),
+      ).toBeVisible();
+      await expect(
+        panel.getByRole("cell", { name: /reported: -10/ }),
+      ).toBeVisible();
+    }
+    await panel.scrollIntoViewIfNeeded();
+    await saveScreenshot(`${shots}/india-${scope}-withholding-worker.png`, () =>
+      panel.screenshot(),
+    );
+    await panel.getByLabel("Show source provenance and all columns").check();
+    await expect(
+      panel.getByRole("cell", { name: "NOT_DETERMINED", exact: true }).first(),
+    ).toBeVisible();
+    await expect(panel.getByRole("cell", { name: /superseded/ })).toBeVisible();
+    const download = page.waitForEvent("download");
+    await panel
+      .getByRole("button", { name: "Export XLSX", exact: true })
+      .click();
+    await expect((await download).suggestedFilename()).toMatch(/\.xlsx$/);
+  }
+  expect(errors).toEqual([]);
+});
+
 function implementationHash() {
   execFileSync(
     resolve("../backend/.venv/Scripts/python.exe"),

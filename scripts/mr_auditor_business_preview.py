@@ -39,10 +39,16 @@ async def main():
         proof=await approve(client,h,reviewer[0],base,proof)
         proof=await action(client,partner[0],base,proof,"approve")
         advanced_ids={}
-        for case_id in [52,91]:
-            schedule=schedule_fixture(case_id);schedule["policy"]["source_id"]=proof["id"]
+        for case_id in [52,91,112,121,167,188]:
+            schedule=(__import__("tests.unit.test_uae_assurance" if case_id>=151 else "tests.unit.test_uae_continuation",fromlist=["fixture"]).fixture(case_id) if case_id>=101 else schedule_fixture(case_id));schedule["policy"]["source_id"]=proof["id"]
             for row in schedule["rows"]:row["evidence_id"]=proof["id"]
             if case_id==52: schedule["rows"][0].update(direct_recoverable="100",direct_blocked="50",residual="200",numerator="3",denominator="4",previously_claimed="240")
+            if case_id==188: schedule["rows"][0].update(unit_price="10",unit_variable_cost="6",fixed_cost="100",target_profit="20",capacity_units="100")
+            if case_id in {112,167}:
+                import copy
+                first=schedule["rows"][0];first.update(contract_id="SYN-BUNDLE",consideration="100",standalone_price="1")
+                if case_id==112:first.update(recognition_fraction="1",previously_recognized="0")
+                schedule["rows"]=[{**copy.deepcopy(first),"reference":f"PROMISE-{n}"} for n in range(3)]
             paper=await create(client,h,base,"working-papers",{"folder":"SYNTHETIC", "sections":[{"heading":"Input","text":"SYNTHETIC approved schedule"}],"conclusion":"Synthetic input, not assurance", "sources":[{"kind":"record","id":proof["id"]}],"advanced_input":schedule})
             paper=await approve(client,h,reviewer[0],base,paper)
             paper=await action(client,partner[0],base,paper,"approve")

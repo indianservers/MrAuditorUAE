@@ -14,6 +14,7 @@ from app.modules.country_workflows.operations import OPERATION_CALCULATORS
 from app.modules.country_workflows.payroll_calculations import PAYROLL_CALCULATORS
 from app.modules.country_workflows.practice_calculations import PRACTICE_CALCULATORS
 from app.modules.country_workflows.sector_calculations import SECTOR_CALCULATORS
+from app.modules.country_workflows.withholding_calculations import withholding
 from app.modules.intelligence.matching import reconcile_transactions
 
 
@@ -462,8 +463,15 @@ def obligations(data, tables, country):
     return {
         "rows": rows,
         "exception_count": sum(r["state"] != "MATCHED" for r in rows),
-        "blocked": False,
+        "blocked": data.workflow == "india-withholding",
         "limitations": [
+            *(
+                [
+                    "Legacy aggregate withholding preview cannot be approved: regenerate using explicit deductor/collector liability or deductee/collectee credit records"
+                ]
+                if data.workflow == "india-withholding"
+                else []
+            ),
             "Declared expected amounts and due dates require independent professional validation",
             "This compares sources; it does not compute statutory contributions, salary tax or benefit entitlement",
             "Due dates must be the obligation due dates, not bank processing dates; no deadline is inferred",
@@ -723,7 +731,9 @@ def calculate(data, country, sources):
     tables = {role: source["rows"] for role, source in sources.items()}
     with localcontext() as arithmetic:
         arithmetic.prec = 80
-        if data.workflow in OPERATION_CALCULATORS:
+        if data.workflow in {"india-withholding-liability", "india-withholding-credit"}:
+            result = withholding(data, tables)
+        elif data.workflow in OPERATION_CALCULATORS:
             result = OPERATION_CALCULATORS[data.workflow](data, tables)
         elif data.workflow in PAYROLL_CALCULATORS:
             result = PAYROLL_CALCULATORS[data.workflow](data, tables)
@@ -751,7 +761,9 @@ def calculate(data, country, sources):
         **result,
         "title": data.title,
         "workflow": data.workflow,
-        "workflow_version": "audit-extensions-1"
+        "workflow_version": "withholding-evidence-1"
+        if data.workflow in {"india-withholding-liability", "india-withholding-credit"}
+        else "audit-extensions-1"
         if data.workflow
         in {
             *AUDIT_CALCULATORS,

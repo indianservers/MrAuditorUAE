@@ -15,6 +15,7 @@ export default defineConfig({
     ],
   ],
   use: {
+    actionTimeout:15000,
     baseURL: "http://127.0.0.1:3047",
     viewport: { width: 1500, height: 1100 },
     screenshot: "only-on-failure",

@@ -10,6 +10,7 @@ from uuid import UUID
 from app.modules.ifrs import schemas as s
 from app.modules.ifrs.employee_benefits import employee_benefits
 from app.modules.ifrs.inventory import inventory
+from app.modules.ifrs.schedule_math import relative_allocations, solve_monotonic_rate
 
 D = Decimal
 ZERO = D(0)
@@ -185,6 +186,8 @@ def ecl(data: s.ECL):
     }
 
 
+
+
 def instrument(data: s.Instrument):
     if data.classification != "amortised_cost":
         raise ValueError(
@@ -213,13 +216,7 @@ def instrument(data: s.Instrument):
     lo, hi = ZERO, D(10)
     if npv(hi) > 0:
         raise ValueError("EIR is outside the supported nonnegative 0–1000% interval")
-    for _ in range(180):
-        mid = (lo + hi) / 2
-        if npv(mid) > 0:
-            lo = mid
-        else:
-            hi = mid
-    rate = (lo + hi) / 2
+    rate, _ = solve_monotonic_rate(npv, lo, hi, 180)
     bal = data.initial_amount
     previous = data.initial_date
     rows: list[dict[str, Any]] = []
@@ -248,16 +245,10 @@ def revenue(data: s.Revenue):
     if len({o.reference for o in data.obligations}) != len(data.obligations):
         raise ValueError("Duplicate performance obligation")
     price = data.fixed_price + data.constrained_variable_consideration
-    total_ssp = sum((o.standalone_price for o in data.obligations), ZERO)
-    allocated = ZERO
+    allocations = relative_allocations(price, [o.standalone_price for o in data.obligations], q)
     rows: list[dict[str, Any]] = []
     for index, o in enumerate(data.obligations):
-        amount = (
-            price - allocated
-            if index == len(data.obligations) - 1
-            else q(price * o.standalone_price / total_ssp)
-        )
-        allocated += amount
+        amount = allocations[index]
         if o.recognition == "over_time":
             if not o.over_time_justification.strip():
                 raise ValueError("Over-time recognition requires human justification")

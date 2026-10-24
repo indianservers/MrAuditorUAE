@@ -1,0 +1,5135 @@
+{
+  "version": "uae-business-contracts/4",
+  "execution_modes": [
+    "trained_model",
+    "statistical_baseline",
+    "rules_baseline",
+    "diagnostic_mock",
+    "unavailable"
+  ],
+  "schedule_schema": {
+    "$defs": {
+      "Policy": {
+        "additionalProperties": false,
+        "properties": {
+          "source_id": {
+            "format": "uuid",
+            "title": "Source Id",
+            "type": "string"
+          },
+          "source_locator": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Source Locator",
+            "type": "string"
+          },
+          "version": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Version",
+            "type": "string"
+          },
+          "kind": {
+            "pattern": "^(legislation|official_guidance|accounting_requirement|firm_policy|contract)$",
+            "title": "Kind",
+            "type": "string"
+          },
+          "effective_from": {
+            "format": "date",
+            "title": "Effective From",
+            "type": "string"
+          },
+          "effective_to": {
+            "format": "date",
+            "title": "Effective To",
+            "type": "string"
+          },
+          "adoption_assessment": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Adoption Assessment",
+            "type": "string"
+          }
+        },
+        "required": [
+          "source_id",
+          "source_locator",
+          "version",
+          "kind",
+          "effective_from",
+          "effective_to",
+          "adoption_assessment"
+        ],
+        "title": "Policy",
+        "type": "object"
+      }
+    },
+    "additionalProperties": false,
+    "properties": {
+      "use_case_id": {
+        "maximum": 200,
+        "minimum": 51,
+        "title": "Use Case Id",
+        "type": "integer"
+      },
+      "jurisdiction_framework": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Jurisdiction Framework"
+      },
+      "jurisdiction_name": {
+        "anyOf": [
+          {
+            "maxLength": 200,
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Jurisdiction Name"
+      },
+      "rounding_precision": {
+        "anyOf": [
+          {
+            "maximum": 8,
+            "minimum": 0,
+            "type": "integer"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Rounding Precision"
+      },
+      "rounding_mode": {
+        "anyOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "null"
+          }
+        ],
+        "default": null,
+        "title": "Rounding Mode"
+      },
+      "period_start": {
+        "format": "date",
+        "title": "Period Start",
+        "type": "string"
+      },
+      "period_end": {
+        "format": "date",
+        "title": "Period End",
+        "type": "string"
+      },
+      "currency": {
+        "pattern": "^[A-Z]{3}$",
+        "title": "Currency",
+        "type": "string"
+      },
+      "policy": {
+        "$ref": "#/$defs/Policy"
+      },
+      "assumptions": {
+        "items": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "type": "string"
+        },
+        "maxItems": 30,
+        "minItems": 1,
+        "title": "Assumptions",
+        "type": "array"
+      },
+      "unresolved_questions": {
+        "items": {
+          "maxLength": 2000,
+          "minLength": 1,
+          "type": "string"
+        },
+        "maxItems": 30,
+        "title": "Unresolved Questions",
+        "type": "array"
+      },
+      "rows": {
+        "items": {
+          "additionalProperties": true,
+          "type": "object"
+        },
+        "maxItems": 500,
+        "minItems": 1,
+        "title": "Rows",
+        "type": "array"
+      }
+    },
+    "required": [
+      "use_case_id",
+      "period_start",
+      "period_end",
+      "currency",
+      "policy",
+      "assumptions",
+      "rows"
+    ],
+    "title": "Schedule",
+    "type": "object"
+  },
+  "items": [
+    {
+      "id": 151,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "old_source_id": {
+            "format": "uuid",
+            "title": "Old Source Id",
+            "type": "string"
+          },
+          "new_source_id": {
+            "format": "uuid",
+            "title": "New Source Id",
+            "type": "string"
+          },
+          "amendment_reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Amendment Reference",
+            "type": "string"
+          },
+          "effective_from": {
+            "format": "date",
+            "title": "Effective From",
+            "type": "string"
+          },
+          "affected_period_start": {
+            "format": "date",
+            "title": "Affected Period Start",
+            "type": "string"
+          },
+          "affected_period_end": {
+            "format": "date",
+            "title": "Affected Period End",
+            "type": "string"
+          },
+          "verified_change": {
+            "title": "Verified Change",
+            "type": "boolean"
+          },
+          "transition_reviewed": {
+            "title": "Transition Reviewed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "old_source_id",
+          "new_source_id",
+          "amendment_reference",
+          "effective_from",
+          "affected_period_start",
+          "affected_period_end",
+          "verified_change",
+          "transition_reviewed"
+        ],
+        "title": "UAE151Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Scoped supplied impact assessment; actual dependency scan is engagement-bounded, not an automatic firm-wide legal opinion."
+    },
+    {
+      "id": 152,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "position_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Position Id",
+            "type": "string"
+          },
+          "exposure": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Exposure"
+          },
+          "approved_probability": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Approved Probability"
+          },
+          "recorded_provision": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Recorded Provision"
+          },
+          "disclosure_reviewed": {
+            "title": "Disclosure Reviewed",
+            "type": "boolean"
+          },
+          "contrary_evidence_reviewed": {
+            "title": "Contrary Evidence Reviewed",
+            "type": "boolean"
+          },
+          "assessment_approved": {
+            "title": "Assessment Approved",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "position_id",
+          "exposure",
+          "approved_probability",
+          "recorded_provision",
+          "disclosure_reviewed",
+          "contrary_evidence_reviewed",
+          "assessment_approved"
+        ],
+        "title": "UAE152Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Reviewed expected-value scenario only; no automatic tax acceptance probability or IFRIC23 accounting method selection."
+    },
+    {
+      "id": 153,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "activity_code": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Activity Code",
+            "type": "string"
+          },
+          "licensed_activities": {
+            "items": {
+              "maxLength": 2000,
+              "minLength": 1,
+              "type": "string"
+            },
+            "maxItems": 50,
+            "title": "Licensed Activities",
+            "type": "array"
+          },
+          "revenue": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Revenue"
+          },
+          "contract_supported": {
+            "title": "Contract Supported",
+            "type": "boolean"
+          },
+          "licence_current": {
+            "title": "Licence Current",
+            "type": "boolean"
+          },
+          "classification_reviewed": {
+            "title": "Classification Reviewed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "activity_code",
+          "licensed_activities",
+          "revenue",
+          "contract_supported",
+          "licence_current",
+          "classification_reviewed"
+        ],
+        "title": "UAE153Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Exact supplied codes only; a mismatch is a specialist review indicator, never an unlawfulness conclusion."
+    },
+    {
+      "id": 154,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "start_date": {
+            "format": "date",
+            "title": "Start Date",
+            "type": "string"
+          },
+          "end_date": {
+            "format": "date",
+            "title": "End Date",
+            "type": "string"
+          },
+          "approved_change": {
+            "title": "Approved Change",
+            "type": "boolean"
+          },
+          "comparative_mapping": {
+            "title": "Comparative Mapping",
+            "type": "boolean"
+          },
+          "tax_approval_verified": {
+            "title": "Tax Approval Verified",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "start_date",
+          "end_date",
+          "approved_change",
+          "comparative_mapping",
+          "tax_approval_verified"
+        ],
+        "title": "UAE154Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Checks supplied period continuity/overlap and approvals; does not edit statutory calendars or infer authority permission."
+    },
+    {
+      "id": 155,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "election_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Election Id",
+            "type": "string"
+          },
+          "status": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Status",
+            "type": "string"
+          },
+          "effective_from": {
+            "format": "date",
+            "title": "Effective From",
+            "type": "string"
+          },
+          "effective_to": {
+            "format": "date",
+            "title": "Effective To",
+            "type": "string"
+          },
+          "as_of": {
+            "format": "date",
+            "title": "As Of",
+            "type": "string"
+          },
+          "continuing_conditions": {
+            "title": "Continuing Conditions",
+            "type": "boolean"
+          },
+          "revocation_reviewed": {
+            "title": "Revocation Reviewed",
+            "type": "boolean"
+          },
+          "submission_evidence": {
+            "title": "Submission Evidence",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "election_id",
+          "status",
+          "effective_from",
+          "effective_to",
+          "as_of",
+          "continuing_conditions",
+          "revocation_reviewed",
+          "submission_evidence"
+        ],
+        "title": "UAE155Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Status is supplied evidence, not government acceptance; no automatic election submission or revocation."
+    },
+    {
+      "id": 156,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "staff_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Staff Cost"
+          },
+          "premises_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Premises Cost"
+          },
+          "asset_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Asset Cost"
+          },
+          "outsourced_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Outsourced Cost"
+          },
+          "ledger_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Ledger Cost"
+          },
+          "staff_supported": {
+            "title": "Staff Supported",
+            "type": "boolean"
+          },
+          "premises_supported": {
+            "title": "Premises Supported",
+            "type": "boolean"
+          },
+          "outsourcing_supported": {
+            "title": "Outsourcing Supported",
+            "type": "boolean"
+          },
+          "substance_judgment_reviewed": {
+            "title": "Substance Judgment Reviewed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "staff_cost",
+          "premises_cost",
+          "asset_cost",
+          "outsourced_cost",
+          "ledger_cost",
+          "staff_supported",
+          "premises_supported",
+          "outsourcing_supported",
+          "substance_judgment_reviewed"
+        ],
+        "title": "UAE156Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Evidence/cost reconciliation only; no automatic adequate-substance or QFZP conclusion."
+    },
+    {
+      "id": 157,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "counterparty_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Counterparty Id",
+            "type": "string"
+          },
+          "evidence_date": {
+            "format": "date",
+            "title": "Evidence Date",
+            "type": "string"
+          },
+          "expires_on": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Expires On"
+          },
+          "transaction_date": {
+            "format": "date",
+            "title": "Transaction Date",
+            "type": "string"
+          },
+          "status_supported": {
+            "title": "Status Supported",
+            "type": "boolean"
+          },
+          "contrary_evidence": {
+            "title": "Contrary Evidence",
+            "type": "boolean"
+          },
+          "classification_reviewed": {
+            "title": "Classification Reviewed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "counterparty_id",
+          "evidence_date",
+          "expires_on",
+          "transaction_date",
+          "status_supported",
+          "contrary_evidence",
+          "classification_reviewed"
+        ],
+        "title": "UAE157Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "No registry lookup or automatic qualifying-income determination."
+    },
+    {
+      "id": 158,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "tax_type": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Tax Type",
+            "type": "string"
+          },
+          "tax_period": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Tax Period",
+            "type": "string"
+          },
+          "liability": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Liability"
+          },
+          "payment": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Payment"
+          },
+          "allocated": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Allocated"
+          },
+          "credit_applied": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Credit Applied"
+          },
+          "refund": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Refund"
+          },
+          "authority_balance": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Authority Balance"
+          },
+          "cross_tax_transfer_approved": {
+            "title": "Cross Tax Transfer Approved",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "tax_type",
+          "tax_period",
+          "liability",
+          "payment",
+          "allocated",
+          "credit_applied",
+          "refund",
+          "authority_balance",
+          "cross_tax_transfer_approved"
+        ],
+        "title": "UAE158Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Per-supplied tax bucket only; no assumption that credits transfer between taxes or authority utilization ledger."
+    },
+    {
+      "id": 159,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "request_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Request Id",
+            "type": "string"
+          },
+          "item_reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Item Reference",
+            "type": "string"
+          },
+          "supplied_version": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Supplied Version",
+            "type": "string"
+          },
+          "reviewer_approved": {
+            "title": "Reviewer Approved",
+            "type": "boolean"
+          },
+          "disclosure_authorized": {
+            "title": "Disclosure Authorized",
+            "type": "boolean"
+          },
+          "access_reviewed": {
+            "title": "Access Reviewed",
+            "type": "boolean"
+          },
+          "supplied": {
+            "title": "Supplied",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "request_id",
+          "item_reference",
+          "supplied_version",
+          "reviewer_approved",
+          "disclosure_authorized",
+          "access_reviewed",
+          "supplied"
+        ],
+        "title": "UAE159Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Creates a governed index/draft pack, not a new external sharing room or government disclosure."
+    },
+    {
+      "id": 160,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "transaction_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Transaction Id",
+            "type": "string"
+          },
+          "vat_base": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Vat Base"
+          },
+          "ct_base": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Ct Base"
+          },
+          "tp_base": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Tp Base"
+          },
+          "customs_base": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Customs Base"
+          },
+          "accounting_base": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Accounting Base"
+          },
+          "differences_explained": {
+            "title": "Differences Explained",
+            "type": "boolean"
+          },
+          "treatments_approved": {
+            "title": "Treatments Approved",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "transaction_id",
+          "vat_base",
+          "ct_base",
+          "tp_base",
+          "customs_base",
+          "accounting_base",
+          "differences_explained",
+          "treatments_approved"
+        ],
+        "title": "UAE160Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Differences are shown separately; equality is not presumed and no legal treatment is inferred."
+    },
+    {
+      "id": 161,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "capitalization_start": {
+            "format": "date",
+            "title": "Capitalization Start",
+            "type": "string"
+          },
+          "capitalization_end": {
+            "format": "date",
+            "title": "Capitalization End",
+            "type": "string"
+          },
+          "suspended_days": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Suspended Days"
+          },
+          "qualifying_expenditure": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Qualifying Expenditure"
+          },
+          "annual_rate": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Annual Rate"
+          },
+          "day_basis": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Day Basis"
+          },
+          "actual_finance_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Actual Finance Cost"
+          },
+          "recognition_approved": {
+            "title": "Recognition Approved",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "capitalization_start",
+          "capitalization_end",
+          "suspended_days",
+          "qualifying_expenditure",
+          "annual_rate",
+          "day_basis",
+          "actual_finance_cost",
+          "recognition_approved"
+        ],
+        "title": "UAE161Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "End date is exclusive. Reviewed weighted-expenditure inputs and simple day-count rate only; no automatic qualifying-asset judgment."
+    },
+    {
+      "id": 162,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "project_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Project Id",
+            "type": "string"
+          },
+          "cip_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Cip Cost"
+          },
+          "commissioned_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Commissioned Cost"
+          },
+          "transferred_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Transferred Cost"
+          },
+          "commissioning_date": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Commissioning Date"
+          },
+          "review_date": {
+            "format": "date",
+            "title": "Review Date",
+            "type": "string"
+          },
+          "ready_for_use_supported": {
+            "title": "Ready For Use Supported",
+            "type": "boolean"
+          },
+          "components_allocated": {
+            "title": "Components Allocated",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "project_id",
+          "cip_cost",
+          "commissioned_cost",
+          "transferred_cost",
+          "commissioning_date",
+          "review_date",
+          "ready_for_use_supported",
+          "components_allocated"
+        ],
+        "title": "UAE162Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Proposed transfer only; ready-for-use and depreciation dates require approved evidence."
+    },
+    {
+      "id": 163,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "component_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Component Id",
+            "type": "string"
+          },
+          "cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Cost"
+          },
+          "residual": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Residual"
+          },
+          "life_months": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Life Months"
+          },
+          "elapsed_months": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Elapsed Months"
+          },
+          "replaced_carrying": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Replaced Carrying"
+          },
+          "replacement_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Replacement Cost"
+          },
+          "inspection_cycle_reviewed": {
+            "title": "Inspection Cycle Reviewed",
+            "type": "boolean"
+          },
+          "derecognition_approved": {
+            "title": "Derecognition Approved",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "component_id",
+          "cost",
+          "residual",
+          "life_months",
+          "elapsed_months",
+          "replaced_carrying",
+          "replacement_cost",
+          "inspection_cycle_reviewed",
+          "derecognition_approved"
+        ],
+        "title": "UAE163Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Straight-line component model only; estimate revisions and replacement classification remain reviewed."
+    },
+    {
+      "id": 164,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "research": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Research"
+          },
+          "development": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Development"
+          },
+          "maintenance": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Maintenance"
+          },
+          "approved_eligible_fraction": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Approved Eligible Fraction"
+          },
+          "recorded_asset": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Recorded Asset"
+          },
+          "feasibility": {
+            "title": "Feasibility",
+            "type": "boolean"
+          },
+          "intent_and_resources": {
+            "title": "Intent And Resources",
+            "type": "boolean"
+          },
+          "future_benefits": {
+            "title": "Future Benefits",
+            "type": "boolean"
+          },
+          "measurement_supported": {
+            "title": "Measurement Supported",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "research",
+          "development",
+          "maintenance",
+          "approved_eligible_fraction",
+          "recorded_asset",
+          "feasibility",
+          "intent_and_resources",
+          "future_benefits",
+          "measurement_supported"
+        ],
+        "title": "UAE164Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Eligibility is an approved input, not inferred from project labels or developer time records."
+    },
+    {
+      "id": 165,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Cost"
+          },
+          "asset_fraction": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Asset Fraction"
+          },
+          "prepayment_fraction": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Prepayment Fraction"
+          },
+          "service_months": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Service Months"
+          },
+          "consumed_months": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Consumed Months"
+          },
+          "resource_control_supported": {
+            "title": "Resource Control Supported",
+            "type": "boolean"
+          },
+          "deliverables_reviewed": {
+            "title": "Deliverables Reviewed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "cost",
+          "asset_fraction",
+          "prepayment_fraction",
+          "service_months",
+          "consumed_months",
+          "resource_control_supported",
+          "deliverables_reviewed"
+        ],
+        "title": "UAE165Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Approved allocation fractions only; no automatic IAS38/cloud contract classification."
+    },
+    {
+      "id": 166,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "identified_asset": {
+            "title": "Identified Asset",
+            "type": "boolean"
+          },
+          "substitution_substantive": {
+            "title": "Substitution Substantive",
+            "type": "boolean"
+          },
+          "use_decisions": {
+            "title": "Use Decisions",
+            "type": "boolean"
+          },
+          "economic_benefits": {
+            "title": "Economic Benefits",
+            "type": "boolean"
+          },
+          "lease_judgment_approved": {
+            "title": "Lease Judgment Approved",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "identified_asset",
+          "substitution_substantive",
+          "use_decisions",
+          "economic_benefits",
+          "lease_judgment_approved"
+        ],
+        "title": "UAE166Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Condition indicators only; no lease schedule is produced before a separate approved identification judgment."
+    },
+    {
+      "id": 167,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "contract_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Contract Id",
+            "type": "string"
+          },
+          "consideration": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Consideration"
+          },
+          "standalone_price": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Standalone Price"
+          },
+          "lease_component": {
+            "title": "Lease Component",
+            "type": "boolean"
+          },
+          "allocation_policy_approved": {
+            "title": "Allocation Policy Approved",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "contract_id",
+          "consideration",
+          "standalone_price",
+          "lease_component",
+          "allocation_policy_approved"
+        ],
+        "title": "UAE167Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Relative-price allocation with conserved totals; practical expedients and component judgments are approved inputs."
+    },
+    {
+      "id": 168,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "carrying": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Carrying"
+          },
+          "fair_value": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Fair Value"
+          },
+          "proceeds": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Proceeds"
+          },
+          "lease_liability": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Lease Liability"
+          },
+          "sale_approved": {
+            "title": "Sale Approved",
+            "type": "boolean"
+          },
+          "market_terms_reviewed": {
+            "title": "Market Terms Reviewed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "carrying",
+          "fair_value",
+          "proceeds",
+          "lease_liability",
+          "sale_approved",
+          "market_terms_reviewed"
+        ],
+        "title": "UAE168Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "At-market retained-rights model only; off-market adjustments and full IFRS16 subsequent measurement require specialist extension."
+    },
+    {
+      "id": 169,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "opening_receivable": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Opening Receivable"
+          },
+          "cash_received": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Cash Received"
+          },
+          "periodic_rate": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Periodic Rate"
+          },
+          "rental_consideration": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Rental Consideration"
+          },
+          "service_periods": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Service Periods"
+          },
+          "earned_periods": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Earned Periods"
+          },
+          "recorded_closing": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Recorded Closing"
+          },
+          "finance_lease_approved": {
+            "title": "Finance Lease Approved",
+            "type": "boolean"
+          },
+          "classification_reviewed": {
+            "title": "Classification Reviewed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "opening_receivable",
+          "cash_received",
+          "periodic_rate",
+          "rental_consideration",
+          "service_periods",
+          "earned_periods",
+          "recorded_closing",
+          "finance_lease_approved",
+          "classification_reviewed"
+        ],
+        "title": "UAE169Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Simple approved periodic finance/operating alternatives; no manufacturer/dealer lessor model or implicit-rate valuation."
+    },
+    {
+      "id": 170,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "carrying": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Carrying"
+          },
+          "fair_value": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Fair Value"
+          },
+          "costs_to_sell": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Costs To Sell"
+          },
+          "recorded_amount": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Recorded Amount"
+          },
+          "available_for_sale": {
+            "title": "Available For Sale",
+            "type": "boolean"
+          },
+          "sale_highly_probable": {
+            "title": "Sale Highly Probable",
+            "type": "boolean"
+          },
+          "classification_approved": {
+            "title": "Classification Approved",
+            "type": "boolean"
+          },
+          "depreciation_stopped": {
+            "title": "Depreciation Stopped",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "carrying",
+          "fair_value",
+          "costs_to_sell",
+          "recorded_amount",
+          "available_for_sale",
+          "sale_highly_probable",
+          "classification_approved",
+          "depreciation_stopped"
+        ],
+        "title": "UAE170Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Lower-of measurement candidate only after supplied approved classification; no automatic eligibility determination."
+    },
+    {
+      "id": 171,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "shipment_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Shipment Id",
+            "type": "string"
+          },
+          "customer_charge": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Customer Charge"
+          },
+          "billed": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Billed"
+          },
+          "carrier_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Carrier Cost"
+          },
+          "other_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Other Cost"
+          },
+          "accrued_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Accrued Cost"
+          },
+          "advances": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Advances"
+          },
+          "completed": {
+            "title": "Completed",
+            "type": "boolean"
+          },
+          "cost_support_complete": {
+            "title": "Cost Support Complete",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "shipment_id",
+          "customer_charge",
+          "billed",
+          "carrier_cost",
+          "other_cost",
+          "accrued_cost",
+          "advances",
+          "completed",
+          "cost_support_complete"
+        ],
+        "title": "UAE171Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Reviewed matched shipments only; advances remain separate from revenue and costs."
+    },
+    {
+      "id": 172,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "booking_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Booking Id",
+            "type": "string"
+          },
+          "gross_bookings": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Gross Bookings"
+          },
+          "cancellations": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Cancellations"
+          },
+          "customer_refunds": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Customer Refunds"
+          },
+          "collections": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Collections"
+          },
+          "supplier_due": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Supplier Due"
+          },
+          "supplier_paid": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Supplier Paid"
+          },
+          "commission": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Commission"
+          },
+          "tickets_supported": {
+            "title": "Tickets Supported",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "booking_id",
+          "gross_bookings",
+          "cancellations",
+          "customer_refunds",
+          "collections",
+          "supplier_due",
+          "supplier_paid",
+          "commission",
+          "tickets_supported"
+        ],
+        "title": "UAE172Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Supplied booking joins only; no airline settlement connection or automatic gross/net revenue classification."
+    },
+    {
+      "id": 173,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "claim_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Claim Id",
+            "type": "string"
+          },
+          "submitted": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Submitted"
+          },
+          "contractual_deductions": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Contractual Deductions"
+          },
+          "rejected": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Rejected"
+          },
+          "receipts": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Receipts"
+          },
+          "ledger_receivable": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Ledger Receivable"
+          },
+          "resubmission_supported": {
+            "title": "Resubmission Supported",
+            "type": "boolean"
+          },
+          "deductions_supported": {
+            "title": "Deductions Supported",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "claim_id",
+          "submitted",
+          "contractual_deductions",
+          "rejected",
+          "receipts",
+          "ledger_receivable",
+          "resubmission_supported",
+          "deductions_supported"
+        ],
+        "title": "UAE173Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Rejections are separate follow-up items; no claim approval prediction or live insurer portal."
+    },
+    {
+      "id": 174,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "student_token": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Student Token",
+            "type": "string"
+          },
+          "fees": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Fees"
+          },
+          "scholarships": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Scholarships"
+          },
+          "discounts": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Discounts"
+          },
+          "withdrawal_credit": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Withdrawal Credit"
+          },
+          "deposit_applied": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Deposit Applied"
+          },
+          "collections": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Collections"
+          },
+          "ledger_balance": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Ledger Balance"
+          },
+          "enrolment_supported": {
+            "title": "Enrolment Supported",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "student_token",
+          "fees",
+          "scholarships",
+          "discounts",
+          "withdrawal_credit",
+          "deposit_applied",
+          "collections",
+          "ledger_balance",
+          "enrolment_supported"
+        ],
+        "title": "UAE174Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Authorized pseudonymous student control rows only; no student-system connection or automatic fee/tax policy."
+    },
+    {
+      "id": 175,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "ingredient_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Ingredient Id",
+            "type": "string"
+          },
+          "units_sold": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Units Sold"
+          },
+          "recipe_quantity": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Recipe Quantity"
+          },
+          "opening": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Opening"
+          },
+          "purchases": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Purchases"
+          },
+          "closing": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Closing"
+          },
+          "recorded_waste": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Recorded Waste"
+          },
+          "yield_policy_reviewed": {
+            "title": "Yield Policy Reviewed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "ingredient_id",
+          "units_sold",
+          "recipe_quantity",
+          "opening",
+          "purchases",
+          "closing",
+          "recorded_waste",
+          "yield_policy_reviewed"
+        ],
+        "title": "UAE175Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Recipe/stock arithmetic is rules_baseline, not trained anomaly inference; unsupplied stock movements remain a limitation."
+    },
+    {
+      "id": 176,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "batch_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Batch Id",
+            "type": "string"
+          },
+          "materials": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Materials"
+          },
+          "labor": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Labor"
+          },
+          "overhead": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Overhead"
+          },
+          "scrap_recovery": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Scrap Recovery"
+          },
+          "standard_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Standard Cost"
+          },
+          "finished_goods_recorded": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Finished Goods Recorded"
+          },
+          "allocation_approved": {
+            "title": "Allocation Approved",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "batch_id",
+          "materials",
+          "labor",
+          "overhead",
+          "scrap_recovery",
+          "standard_cost",
+          "finished_goods_recorded",
+          "allocation_approved"
+        ],
+        "title": "UAE176Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Reviewed batch costs only; no automatic ERP costing run or full equivalent-unit model."
+    },
+    {
+      "id": 177,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "shipment_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Shipment Id",
+            "type": "string"
+          },
+          "contracted_quantity": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Contracted Quantity"
+          },
+          "weighed_quantity": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Weighed Quantity"
+          },
+          "unit_price": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Unit Price"
+          },
+          "quality_deduction": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Quality Deduction"
+          },
+          "other_deduction": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Other Deduction"
+          },
+          "settlement": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Settlement"
+          },
+          "quality_supported": {
+            "title": "Quality Supported",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "shipment_id",
+          "contracted_quantity",
+          "weighed_quantity",
+          "unit_price",
+          "quality_deduction",
+          "other_deduction",
+          "settlement",
+          "quality_supported"
+        ],
+        "title": "UAE177Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Reviewed quantities and deductions only; no independent laboratory or weighbridge authentication."
+    },
+    {
+      "id": 178,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "vehicle_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Vehicle Id",
+            "type": "string"
+          },
+          "distance_km": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Distance Km"
+          },
+          "fuel_litres": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Fuel Litres"
+          },
+          "reviewed_litres_per_100km": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Reviewed Litres Per 100Km"
+          },
+          "fuel_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Fuel Cost"
+          },
+          "maintenance_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Maintenance Cost"
+          },
+          "context_reviewed": {
+            "title": "Context Reviewed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "vehicle_id",
+          "distance_km",
+          "fuel_litres",
+          "reviewed_litres_per_100km",
+          "fuel_cost",
+          "maintenance_cost",
+          "context_reviewed"
+        ],
+        "title": "UAE178Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Deterministic variance ranking against supplied contextual baselines; not a trained model or misconduct finding."
+    },
+    {
+      "id": 179,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "site_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Site Id",
+            "type": "string"
+          },
+          "billing": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Billing"
+          },
+          "labor": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Labor"
+          },
+          "materials": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Materials"
+          },
+          "subcontractors": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Subcontractors"
+          },
+          "mobilization_expense": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Mobilization Expense"
+          },
+          "deductions": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Deductions"
+          },
+          "prior_margin_fraction": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Prior Margin Fraction"
+          },
+          "deployment_supported": {
+            "title": "Deployment Supported",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "site_id",
+          "billing",
+          "labor",
+          "materials",
+          "subcontractors",
+          "mobilization_expense",
+          "deductions",
+          "prior_margin_fraction",
+          "deployment_supported"
+        ],
+        "title": "UAE179Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Reviewed attributable expenses; capitalization/deferral of mobilization requires a separate approved policy."
+    },
+    {
+      "id": 180,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "incident_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Incident Id",
+            "type": "string"
+          },
+          "repair_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Repair Cost"
+          },
+          "loss_expense": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Loss Expense"
+          },
+          "claimed": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Claimed"
+          },
+          "approved_recognition": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Approved Recognition"
+          },
+          "received": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Received"
+          },
+          "ledger_recovery": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Ledger Recovery"
+          },
+          "recognition_supported": {
+            "title": "Recognition Supported",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "incident_id",
+          "repair_cost",
+          "loss_expense",
+          "claimed",
+          "approved_recognition",
+          "received",
+          "ledger_recovery",
+          "recognition_supported"
+        ],
+        "title": "UAE180Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Separates losses from supplied approved recovery; no netting, insurer acceptance claim or autonomous contingent-asset judgment."
+    },
+    {
+      "id": 181,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "bucket": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Bucket",
+            "type": "string"
+          },
+          "opening_cash": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Opening Cash"
+          },
+          "forecast_receipts": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Forecast Receipts"
+          },
+          "forecast_payments": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Forecast Payments"
+          },
+          "financing": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Financing"
+          },
+          "actual_receipts": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Actual Receipts"
+          },
+          "actual_payments": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Actual Payments"
+          },
+          "actual_closing": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Actual Closing"
+          },
+          "assumptions_approved": {
+            "title": "Assumptions Approved",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "bucket",
+          "opening_cash",
+          "forecast_receipts",
+          "forecast_payments",
+          "financing",
+          "actual_receipts",
+          "actual_payments",
+          "actual_closing",
+          "assumptions_approved"
+        ],
+        "title": "UAE181Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Reviewed bucket forecast only; no guaranteed cash outcome or automatic collector/payment scheduling."
+    },
+    {
+      "id": 182,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "receivables": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Receivables"
+          },
+          "payables": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Payables"
+          },
+          "inventory": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Inventory"
+          },
+          "annual_sales": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Annual Sales"
+          },
+          "annual_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Annual Cost"
+          },
+          "period_days": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Period Days"
+          },
+          "disputed_balances": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Disputed Balances"
+          },
+          "definitions_consistent": {
+            "title": "Definitions Consistent",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "receivables",
+          "payables",
+          "inventory",
+          "annual_sales",
+          "annual_cost",
+          "period_days",
+          "disputed_balances",
+          "definitions_consistent"
+        ],
+        "title": "UAE182Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "No guaranteed cash savings; accounting estimates are kept separate from operational actions."
+    },
+    {
+      "id": 183,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "customer_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Customer Id",
+            "type": "string"
+          },
+          "approved_limit": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Approved Limit"
+          },
+          "exposure": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Exposure"
+          },
+          "proposed_order": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Proposed Order"
+          },
+          "overdue": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Overdue"
+          },
+          "dispute": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Dispute"
+          },
+          "enforceable_guarantee": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Enforceable Guarantee"
+          },
+          "independent_release_approved": {
+            "title": "Independent Release Approved",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "customer_id",
+          "approved_limit",
+          "exposure",
+          "proposed_order",
+          "overdue",
+          "dispute",
+          "enforceable_guarantee",
+          "independent_release_approved"
+        ],
+        "title": "UAE183Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Rule-based hold recommendation only; no actual order release and no substitution of ML scores for approval."
+    },
+    {
+      "id": 184,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "product_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Product Id",
+            "type": "string"
+          },
+          "budget_price": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Budget Price"
+          },
+          "actual_price": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Actual Price"
+          },
+          "budget_units": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Budget Units"
+          },
+          "actual_units": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Actual Units"
+          },
+          "budget_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Budget Cost"
+          },
+          "actual_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Actual Cost"
+          },
+          "driver_scope_reviewed": {
+            "title": "Driver Scope Reviewed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "product_id",
+          "budget_price",
+          "actual_price",
+          "budget_units",
+          "actual_units",
+          "budget_cost",
+          "actual_cost",
+          "driver_scope_reviewed"
+        ],
+        "title": "UAE184Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Two-factor price/volume bridge; unsupported mix/timing/labor attribution remains an explicit residual."
+    },
+    {
+      "id": 185,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "profit": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Profit"
+          },
+          "noncash": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Noncash"
+          },
+          "receivables_increase": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Receivables Increase"
+          },
+          "inventory_increase": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Inventory Increase"
+          },
+          "payables_increase": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Payables Increase"
+          },
+          "other_operating": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Other Operating"
+          },
+          "operating_cash": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Operating Cash"
+          },
+          "classifications_reviewed": {
+            "title": "Classifications Reviewed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "profit",
+          "noncash",
+          "receivables_increase",
+          "inventory_increase",
+          "payables_increase",
+          "other_operating",
+          "operating_cash",
+          "classifications_reviewed"
+        ],
+        "title": "UAE185Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Supplied movement bridge only; no automatic cashflow classification or profit-quality opinion."
+    },
+    {
+      "id": 186,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "segment_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Segment Id",
+            "type": "string"
+          },
+          "revenue": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Revenue"
+          },
+          "attributable_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Attributable Cost"
+          },
+          "shared_pool": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Shared Pool"
+          },
+          "allocation_fraction": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Allocation Fraction"
+          },
+          "alternative_fraction": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Alternative Fraction"
+          },
+          "source_complete": {
+            "title": "Source Complete",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "segment_id",
+          "revenue",
+          "attributable_cost",
+          "shared_pool",
+          "allocation_fraction",
+          "alternative_fraction",
+          "source_complete"
+        ],
+        "title": "UAE186Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Allocation-sensitive ranking only; no claim that allocated margins are independently verified segment results."
+    },
+    {
+      "id": 187,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "supplier_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Supplier Id",
+            "type": "string"
+          },
+          "specification": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Specification",
+            "type": "string"
+          },
+          "unit_price": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Unit Price"
+          },
+          "conversion_rate": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Conversion Rate"
+          },
+          "units": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Units"
+          },
+          "comparable_reference_price": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Comparable Reference Price"
+          },
+          "comparability_reviewed": {
+            "title": "Comparability Reviewed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "supplier_id",
+          "specification",
+          "unit_price",
+          "conversion_rate",
+          "units",
+          "comparable_reference_price",
+          "comparability_reviewed"
+        ],
+        "title": "UAE187Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Supplied normalized unit prices only; concentration and price indicators are rules, not trained inference."
+    },
+    {
+      "id": 188,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "scenario_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Scenario Id",
+            "type": "string"
+          },
+          "unit_price": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Unit Price"
+          },
+          "unit_variable_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Unit Variable Cost"
+          },
+          "fixed_cost": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Fixed Cost"
+          },
+          "target_profit": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Target Profit"
+          },
+          "capacity_units": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Capacity Units"
+          },
+          "assumptions_approved": {
+            "title": "Assumptions Approved",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "scenario_id",
+          "unit_price",
+          "unit_variable_cost",
+          "fixed_cost",
+          "target_profit",
+          "capacity_units",
+          "assumptions_approved"
+        ],
+        "title": "UAE188Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Transparent scenario arithmetic, not a forecast; nonpositive contribution is reported as no finite break-even."
+    },
+    {
+      "id": 189,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "deposit_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Deposit Id",
+            "type": "string"
+          },
+          "principal": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Principal"
+          },
+          "annual_rate": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Annual Rate"
+          },
+          "day_basis": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Day Basis"
+          },
+          "start_date": {
+            "format": "date",
+            "title": "Start Date",
+            "type": "string"
+          },
+          "maturity_date": {
+            "format": "date",
+            "title": "Maturity Date",
+            "type": "string"
+          },
+          "as_of": {
+            "format": "date",
+            "title": "As Of",
+            "type": "string"
+          },
+          "approved_counterparty": {
+            "title": "Approved Counterparty",
+            "type": "boolean"
+          },
+          "needed_liquidity": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Needed Liquidity"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "deposit_id",
+          "principal",
+          "annual_rate",
+          "day_basis",
+          "start_date",
+          "maturity_date",
+          "as_of",
+          "approved_counterparty",
+          "needed_liquidity"
+        ],
+        "title": "UAE189Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Simple contractual interest scenario only; no recommendation execution, reinvestment or bank instruction."
+    },
+    {
+      "id": 190,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "task_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Task Id",
+            "type": "string"
+          },
+          "dependencies": {
+            "items": {
+              "maxLength": 2000,
+              "minLength": 1,
+              "type": "string"
+            },
+            "maxItems": 50,
+            "title": "Dependencies",
+            "type": "array"
+          },
+          "required": {
+            "title": "Required",
+            "type": "boolean"
+          },
+          "completed": {
+            "title": "Completed",
+            "type": "boolean"
+          },
+          "owner_confirmed": {
+            "title": "Owner Confirmed",
+            "type": "boolean"
+          },
+          "reconciliation_supported": {
+            "title": "Reconciliation Supported",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "task_id",
+          "dependencies",
+          "required",
+          "completed",
+          "owner_confirmed",
+          "reconciliation_supported"
+        ],
+        "title": "UAE190Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Approved supplied DAG blocks actual completion; no discovery of unsupplied ERP close tasks."
+    },
+    {
+      "id": 191,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "arabic_name": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Arabic Name",
+            "type": "string"
+          },
+          "english_name": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "English Name",
+            "type": "string"
+          },
+          "approved_name_mapping": {
+            "title": "Approved Name Mapping",
+            "type": "boolean"
+          },
+          "arabic_amount": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Arabic Amount",
+            "type": "string"
+          },
+          "english_amount": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "English Amount",
+            "type": "string"
+          },
+          "arabic_date": {
+            "format": "date",
+            "title": "Arabic Date",
+            "type": "string"
+          },
+          "english_date": {
+            "format": "date",
+            "title": "English Date",
+            "type": "string"
+          },
+          "clause_equivalence_reviewed": {
+            "title": "Clause Equivalence Reviewed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "arabic_name",
+          "english_name",
+          "approved_name_mapping",
+          "arabic_amount",
+          "english_amount",
+          "arabic_date",
+          "english_date",
+          "clause_equivalence_reviewed"
+        ],
+        "title": "UAE191Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Numeric/date/name-mapping checks only; semantic legal translation requires a qualified reviewer."
+    },
+    {
+      "id": 192,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "document_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Document Id",
+            "type": "string"
+          },
+          "content_sha256": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Content Sha256",
+            "type": "string"
+          },
+          "observed_sha256": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Observed Sha256",
+            "type": "string"
+          },
+          "reference_text": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference Text",
+            "type": "string"
+          },
+          "metadata_reviewed": {
+            "title": "Metadata Reviewed",
+            "type": "boolean"
+          },
+          "source_history_complete": {
+            "title": "Source History Complete",
+            "type": "boolean"
+          },
+          "independent_verification": {
+            "title": "Independent Verification",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "document_id",
+          "content_sha256",
+          "observed_sha256",
+          "reference_text",
+          "metadata_reviewed",
+          "source_history_complete",
+          "independent_verification"
+        ],
+        "title": "UAE192Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Hash/reference indicators only; no definitive forgery/authenticity conclusion or forensic signature validation."
+    },
+    {
+      "id": 193,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "assertion_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Assertion Id",
+            "type": "string"
+          },
+          "conclusion_reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Conclusion Reference",
+            "type": "string"
+          },
+          "supporting_sources": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "maxItems": 50,
+            "title": "Supporting Sources",
+            "type": "array"
+          },
+          "contrary_sources": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "maxItems": 50,
+            "title": "Contrary Sources",
+            "type": "array"
+          },
+          "sufficiency_reviewed": {
+            "title": "Sufficiency Reviewed",
+            "type": "boolean"
+          },
+          "contradiction_resolved": {
+            "title": "Contradiction Resolved",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "assertion_id",
+          "conclusion_reference",
+          "supporting_sources",
+          "contrary_sources",
+          "sufficiency_reviewed",
+          "contradiction_resolved"
+        ],
+        "title": "UAE193Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Support counts never establish sufficiency; conclusion remains human judgment."
+    },
+    {
+      "id": 194,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "finding_reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Finding Reference",
+            "type": "string"
+          },
+          "management_claimed_complete": {
+            "title": "Management Claimed Complete",
+            "type": "boolean"
+          },
+          "agreed_step": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Agreed Step",
+            "type": "string"
+          },
+          "retest_performed": {
+            "title": "Retest Performed",
+            "type": "boolean"
+          },
+          "evidence_supported": {
+            "title": "Evidence Supported",
+            "type": "boolean"
+          },
+          "test_passed": {
+            "title": "Test Passed",
+            "type": "boolean"
+          },
+          "reviewer_approved": {
+            "title": "Reviewer Approved",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "finding_reference",
+          "management_claimed_complete",
+          "agreed_step",
+          "retest_performed",
+          "evidence_supported",
+          "test_passed",
+          "reviewer_approved"
+        ],
+        "title": "UAE194Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Management completion is not treated as verified remediation; no automatic closure of the original finding."
+    },
+    {
+      "id": 195,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "location_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Location Id",
+            "type": "string"
+          },
+          "risk_weight": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Risk Weight"
+          },
+          "required_procedures": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Required Procedures"
+          },
+          "performed_procedures": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Performed Procedures"
+          },
+          "exclusion_approved": {
+            "title": "Exclusion Approved",
+            "type": "boolean"
+          },
+          "exceptions_resolved": {
+            "title": "Exceptions Resolved",
+            "type": "boolean"
+          },
+          "coverage_reviewed": {
+            "title": "Coverage Reviewed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "location_id",
+          "risk_weight",
+          "required_procedures",
+          "performed_procedures",
+          "exclusion_approved",
+          "exceptions_resolved",
+          "coverage_reviewed"
+        ],
+        "title": "UAE195Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Provided coverage universe only; risk ordering is rules_baseline and never trained inference by default."
+    },
+    {
+      "id": 196,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "component_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Component Id",
+            "type": "string"
+          },
+          "instructions_approved": {
+            "title": "Instructions Approved",
+            "type": "boolean"
+          },
+          "package_received": {
+            "title": "Package Received",
+            "type": "boolean"
+          },
+          "findings_resolved": {
+            "title": "Findings Resolved",
+            "type": "boolean"
+          },
+          "completion_received": {
+            "title": "Completion Received",
+            "type": "boolean"
+          },
+          "reliance_reviewed": {
+            "title": "Reliance Reviewed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "component_id",
+          "instructions_approved",
+          "package_received",
+          "findings_resolved",
+          "completion_received",
+          "reliance_reviewed"
+        ],
+        "title": "UAE196Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Supplied coordination status only; no automatic professional reliance conclusion or external messaging."
+    },
+    {
+      "id": 197,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "expert_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Expert Id",
+            "type": "string"
+          },
+          "balance": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Balance"
+          },
+          "scope_supported": {
+            "title": "Scope Supported",
+            "type": "boolean"
+          },
+          "competence_reviewed": {
+            "title": "Competence Reviewed",
+            "type": "boolean"
+          },
+          "input_sources_reviewed": {
+            "title": "Input Sources Reviewed",
+            "type": "boolean"
+          },
+          "method_reviewed": {
+            "title": "Method Reviewed",
+            "type": "boolean"
+          },
+          "limitations_resolved": {
+            "title": "Limitations Resolved",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "expert_id",
+          "balance",
+          "scope_supported",
+          "competence_reviewed",
+          "input_sources_reviewed",
+          "method_reviewed",
+          "limitations_resolved"
+        ],
+        "title": "UAE197Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Auditor review workflow only; no independent competence certification or valuation assurance."
+    },
+    {
+      "id": 198,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "procedure_reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Procedure Reference",
+            "type": "string"
+          },
+          "approved_procedure": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Approved Procedure",
+            "type": "string"
+          },
+          "population": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Population",
+            "type": "string"
+          },
+          "observation": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Observation",
+            "type": "string"
+          },
+          "procedure_approved": {
+            "title": "Procedure Approved",
+            "type": "boolean"
+          },
+          "factual_finding_reviewed": {
+            "title": "Factual Finding Reviewed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "procedure_reference",
+          "approved_procedure",
+          "population",
+          "observation",
+          "procedure_approved",
+          "factual_finding_reviewed"
+        ],
+        "title": "UAE198Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Factual draft only; audit opinion and assurance conclusions are explicitly prohibited in the generated conclusion."
+    },
+    {
+      "id": 199,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "target_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Target Id",
+            "type": "string"
+          },
+          "reported_earnings": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Reported Earnings"
+          },
+          "approved_adjustments": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Approved Adjustments"
+          },
+          "cash": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Cash"
+          },
+          "debt": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Debt"
+          },
+          "debt_like": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Debt Like"
+          },
+          "receivables": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Receivables"
+          },
+          "inventory": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Inventory"
+          },
+          "payables": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Payables"
+          },
+          "other_working_capital": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Other Working Capital"
+          },
+          "definitions_approved": {
+            "title": "Definitions Approved",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "target_id",
+          "reported_earnings",
+          "approved_adjustments",
+          "cash",
+          "debt",
+          "debt_like",
+          "receivables",
+          "inventory",
+          "payables",
+          "other_working_capital",
+          "definitions_approved"
+        ],
+        "title": "UAE199Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Engagement-specific financial diligence definitions only; no investment recommendation or unsupported normalized-earnings assurance."
+    },
+    {
+      "id": 200,
+      "row_schema": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Reference",
+            "type": "string"
+          },
+          "evidence_id": {
+            "format": "uuid",
+            "title": "Evidence Id",
+            "type": "string"
+          },
+          "matter_id": {
+            "maxLength": 2000,
+            "minLength": 1,
+            "title": "Matter Id",
+            "type": "string"
+          },
+          "agreed_fee": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Agreed Fee"
+          },
+          "approved_variations": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Approved Variations"
+          },
+          "delivered_work_value": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Delivered Work Value"
+          },
+          "billed": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Billed"
+          },
+          "collected": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Collected"
+          },
+          "requested_change": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Requested Change"
+          },
+          "variation_approved": {
+            "title": "Variation Approved",
+            "type": "boolean"
+          },
+          "scope_evidence": {
+            "title": "Scope Evidence",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "reference",
+          "evidence_id",
+          "matter_id",
+          "agreed_fee",
+          "approved_variations",
+          "delivered_work_value",
+          "billed",
+          "collected",
+          "requested_change",
+          "variation_approved",
+          "scope_evidence"
+        ],
+        "title": "UAE200Row",
+        "type": "object"
+      },
+      "approved_input_action": "advanced-review",
+      "limitations": "Draft variation proposal and approval/billing reconciliation only; no client communication or automatic fee entitlement."
+    }
+  ]
+}

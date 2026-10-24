@@ -1,0 +1,45 @@
+{
+  "scope": "Incremental 101-150 implementation",
+  "items": [
+    {
+      "engines": "E01",
+      "gap_fixed": "Explicit named-framework, source-genre and effective-date guards",
+      "behavior": "No universal mainland/free-zone rule inference; operative adoption remains professional work"
+    },
+    {
+      "engines": "E09/E12/E14",
+      "gap_fixed": "Shared IFRS allocation and effective-rate kernels",
+      "behavior": "Specialist dated schedules retained; periodic cost-aware schedules and nonnegative conserving allocation added"
+    },
+    {
+      "engines": "E02/E20",
+      "gap_fixed": "Typed original-document and native-parameter source references",
+      "behavior": "Original UUID sources are protected, authorized and versioned; circular record/event links are rejected on edit"
+    },
+    {
+      "engines": "E03/E10",
+      "gap_fixed": "Native materiality and functional-currency binding",
+      "behavior": "Misstatement parameters must match the independently approved engagement record; unsupported projections rejected"
+    },
+    {
+      "engines": "E20/E21",
+      "gap_fixed": "Eligible draft recalculation and source-change alerts",
+      "behavior": "Immutable provisional previews on authorized draft creation/edit; approved versions preserved and stale sources require reassessment"
+    },
+    {
+      "engines": "E10/E20",
+      "gap_fixed": "Consultation-to-completion interface",
+      "behavior": "Unresolved required quality matters block actual completion even when input facts are approved"
+    },
+    {
+      "engines": "E13/E14/E16",
+      "gap_fixed": "Financial and HR read-scope enforcement",
+      "behavior": "New financial workstreams require accounting reads; HR-related outputs also require evidence-review permission"
+    },
+    {
+      "engines": "E21",
+      "gap_fixed": "Published typed contracts and bounded recipes",
+      "behavior": "150 case definitions, 165 total established/business recipes and per-case row schemas; no new microservice or SQL table required"
+    }
+  ]
+}

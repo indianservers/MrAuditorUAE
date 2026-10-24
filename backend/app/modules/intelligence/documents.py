@@ -6,11 +6,14 @@ import importlib.util
 import io
 import multiprocessing
 import re
+import threading
 import zipfile
 from datetime import datetime
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any
+
+_PDFIUM_PREVIEW_LOCK = threading.Lock()
 
 FIELDS = {
     "supplier": r"(?:Supplier|Vendor)\s*(?:Name)?\s*:\s*([^\n]+)",
@@ -406,7 +409,7 @@ def preview_page(path, media_type, page_number, member=None):
     if media_type == "application/pdf":
         import pypdfium2 as pdfium
 
-        with pdfium.PdfDocument(data) as document:
+        with _PDFIUM_PREVIEW_LOCK, pdfium.PdfDocument(data) as document:
             if len(document) > config.document_max_pages or page_number > len(document):
                 raise ValueError("PDF preview page out of bounds")
             page = document[page_number - 1]

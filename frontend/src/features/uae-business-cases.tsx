@@ -34,6 +34,7 @@ type Case = {
   legal_source_ids?: string[];
 };
 type RecordInput = {
+  draft_preview_id?: string;
   id: string;
   kind: string;
   title: string;
@@ -77,6 +78,15 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
   const alerts = useAPI<{
     items: { id: string; reason: string; changed_source_version: number }[];
   }>(`${base}/use-cases/${caseId}/alerts`, caseId >= 51, true);
+  const previewId =
+    caseId >= 101
+      ? records.data?.items.find((r) => r.draft_preview_id)?.draft_preview_id
+      : undefined;
+  const draftPreview = useAPI<Record<string, unknown> & { freshness: string }>(
+    `intelligence/engagements/${eid}/events/${previewId ?? ""}`,
+    !!previewId,
+    true,
+  );
   const run = useAPI<Run>(`${base}/investigations/${runId}`, !!runId);
   const action = useAction<Record<string, unknown>>();
   const hasRetainedAction =
@@ -273,6 +283,7 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
       <label>
         Business question
         <select
+          aria-label="Business question"
           value={caseId}
           onChange={(e) => {
             generation.current++;
@@ -371,6 +382,19 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
               ))}
             </aside>
           ) : null}
+          {previewId &&
+            draftPreview.data?.freshness === "CURRENT" &&
+            !draftPreview.error && (
+              <aside aria-label="Provisional draft recalculation">
+                <h3>Provisional draft recalculation</h3>
+                <p>
+                  Automatically recalculated from an eligible saved draft and
+                  current approved sources. Independent input and result review
+                  are outstanding.
+                </p>
+                <Facts data={draftPreview.data} />
+              </aside>
+            )}
           <h3>Available source records</h3>
           <Button
             onClick={() => {

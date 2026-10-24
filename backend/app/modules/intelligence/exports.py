@@ -95,6 +95,10 @@ def render(event, format):
             "rule_document_version_id",
             "reported_total",
             "currency",
+            "withholding_role",
+            "comparison_basis",
+            "selected_current_totals",
+            "assessment_contract_version",
         }
     }
 

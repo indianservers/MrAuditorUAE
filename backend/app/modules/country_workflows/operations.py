@@ -100,4 +100,116 @@ def allocations(data, tables):
     }
 
 
-OPERATION_CALCULATORS = {"open-item-allocations": allocations}
+def credit_applications(data, tables):
+    from app.modules.country_workflows.audit_calculations import control_rows, money, result
+
+    items = {row["id"]: row for row in tables["items"]}
+    document_keys = set()
+    for item in items.values():
+        identity = tuple(
+            item[k]
+            for k in (
+                "account",
+                "side",
+                "counterparty",
+                "currency",
+                "document_type",
+                "reference",
+                "document_date",
+            )
+        )
+        if identity in document_keys:
+            raise ValueError(
+                "Duplicate open-item document identity; aggregate or resolve source versions"
+            )
+        document_keys.add(identity)
+    applied: defaultdict[str, Decimal] = defaultdict(Decimal)
+    links = defaultdict(list)
+    seen = set()
+    rows = []
+    for application in tables["applications"]:
+        identity = (application["evidence_reference"], application["allocation_reference"])
+        if identity in seen:
+            raise ValueError("Duplicate credit application evidence/allocation reference")
+        seen.add(identity)
+        credit = items.get(application["credit_item_id"])
+        invoice = items.get(application["invoice_item_id"])
+        if not credit or not invoice:
+            raise ValueError("Credit application references a missing open item")
+        if credit["document_type"] != "credit-note" or money(credit) >= 0:
+            raise ValueError("Application requires a negative credit-note balance")
+        if invoice["document_type"] not in {"invoice", "debit-note"} or money(invoice) <= 0:
+            raise ValueError("Application requires a positive invoice/debit-note balance")
+        if any(credit[k] != invoice[k] for k in ("account", "side", "counterparty", "currency")):
+            raise ValueError("Credit application account/side/party/currency mismatch")
+        if application["currency"] != credit["currency"]:
+            raise ValueError("Credit application currency differs from open items")
+        when = date.fromisoformat(application["date"])
+        if when > data.as_of or any(
+            date.fromisoformat(item["document_date"]) > when for item in (credit, invoice)
+        ):
+            raise ValueError(
+                "Credit application date must follow both documents and precede cutoff"
+            )
+        amount = money(application)
+        applied[credit["id"]] += amount
+        applied[invoice["id"]] += amount
+        if applied[credit["id"]] > -money(credit) or applied[invoice["id"]] > money(invoice):
+            raise ValueError("Credit or invoice is overapplied; retain residual balances")
+        for item in (credit, invoice):
+            links[item["id"]].append(application["id"])
+        rows.append(
+            {
+                **application,
+                "id": "application:" + application["id"],
+                "application_id": application["id"],
+                "kind": "credit_application",
+                "state": "MATCHED",
+            }
+        )
+    derived = []
+    for item in items.values():
+        original = money(item)
+        remaining = (
+            original + applied[item["id"]] if original < 0 else original - applied[item["id"]]
+        )
+        derived.append({**item, "amount": str(remaining)})
+        rows.append(
+            {
+                "id": "item:" + item["id"],
+                "kind": "open_item",
+                "item_id": item["id"],
+                "account": item["account"],
+                "counterparty": item["counterparty"],
+                "side": item["side"],
+                "currency": item["currency"],
+                "document_type": item["document_type"],
+                "original_balance": str(original),
+                "applied": str(applied[item["id"]]),
+                "remaining_balance": str(remaining),
+                "application_ids": links[item["id"]],
+                "state": "UNAPPLIED_CREDIT" if remaining < 0 else "MATCHED",
+            }
+        )
+    controls = control_rows(data, {"items": derived, "controls": tables["controls"]})
+    rows += controls
+    return {
+        **result(
+            rows,
+            any(row["state"] != "MATCHED" for row in controls),
+            [
+                "Explicit pre-application balances and evidenced applications only; no automatic netting",
+                "Same account, subledger side, party and currency only; residual credits remain visible",
+                "Applications preserve total signed balances; independent GL controls remain required",
+                "This schedule does not determine VAT/GST adjustment eligibility or post journals",
+            ],
+        ),
+        "remaining_open_items": derived,
+        "execution_mode": "rules_baseline",
+    }
+
+
+OPERATION_CALCULATORS = {
+    "open-item-allocations": allocations,
+    "credit-note-applications": credit_applications,
+}

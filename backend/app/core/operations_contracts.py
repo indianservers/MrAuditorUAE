@@ -2,12 +2,58 @@
 
 import hashlib
 import uuid
+from importlib.metadata import version
 from pathlib import Path
 
 from sqlalchemy import select
 
 from app.db.models.platform import Engagement, FinancialPeriod, LegalEntity
 from app.modules.accounting.models import ImportBatch, ImportSnapshot
+
+SUPPORTING_TABLE_PATHS = (
+    "core/operations_contracts.py",
+    "modules/intelligence/service.py",
+    "modules/intelligence/schemas.py",
+    "modules/intelligence/supporting_tables.py",
+    "modules/intelligence/pdf_tables.py",
+    "modules/intelligence/documents.py",
+    "modules/ingestion/parser.py",
+    "modules/accounting/schemas.py",
+    "modules/lineage/storage.py",
+    "modules/lineage/freshness.py",
+    "modules/audit_execution/access.py",
+    "modules/audit_execution/service.py",
+    "modules/jurisdictions/workspace.py",
+    "modules/jurisdictions/packages.py",
+)
+
+
+def supporting_table_hash():
+    """Trusted reader scope; saved receipts cannot choose which files are checked."""
+    app = Path(__file__).resolve().parents[1]
+    digest = hashlib.sha256(b"supporting-table/1")
+    for name in SUPPORTING_TABLE_PATHS:
+        content = (app / name).read_bytes()
+        digest.update(name.encode() + b"\0" + hashlib.sha256(content).digest())
+    for dependency in ("openpyxl", "defusedxml", "pycountry", "pydantic", "pypdf", "pypdfium2"):
+        digest.update(dependency.encode() + b"\0" + version(dependency).encode() + b"\0")
+    return digest.hexdigest()
+
+
+def implementation_current(saved, kind):
+    contract = saved.get("contract_version")
+    if contract == "audit-operations/1":
+        expected = implementation_hash()
+    elif (
+        contract == "audit-operations/2"
+        and kind == "source-table"
+        and saved.get("kind") == kind
+        and saved.get("implementation_scope") == "supporting-table/1"
+    ):
+        expected = supporting_table_hash()
+    else:
+        return False
+    return saved.get("implementation_sha256") == expected
 
 
 def implementation_hash():
@@ -24,6 +70,9 @@ def implementation_hash():
         "modules/audit_execution/service.py",
         "modules/ifrs/calculations.py",
         "modules/ml/baselines.py",
+        "modules/country_workflows/withholding_calculations.py",
+        "modules/country_workflows/withholding_schemas.py",
+        "modules/country_workflows/service.py",
     ]
     digest = hashlib.sha256()
     for name in paths:
@@ -72,7 +121,10 @@ async def receipt(
     }:
         mode = "unavailable"
     return {
-        "contract_version": "audit-operations/1",
+        "contract_version": "audit-operations/2"
+        if kind == "source-table"
+        else "audit-operations/1",
+        "implementation_scope": "supporting-table/1" if kind == "source-table" else "legacy-global",
         "tenant_id": str(ctx.tenant_id),
         "entity_id": str(entity_id),
         "entity_version": entity.version,
@@ -92,7 +144,9 @@ async def receipt(
             "workflow_version",
             body.get("pipeline_version", body.get("algorithm_version", "audit-operations/1")),
         ),
-        "implementation_sha256": implementation_hash(),
+        "implementation_sha256": supporting_table_hash()
+        if kind == "source-table"
+        else implementation_hash(),
         "source_snapshots": sources,
         "population_completeness": body.get(
             "population_completeness",
@@ -122,7 +176,7 @@ async def current(db, ctx, obj):
     entity = await db.get(LegalEntity, eng.entity_id)
     period = await db.get(FinancialPeriod, eng.period_id) if eng.period_id else None
     return (
-        saved.get("implementation_sha256") == implementation_hash()
+        implementation_current(saved, obj.kind)
         and saved.get("tenant_id") == str(ctx.tenant_id)
         and saved.get("entity_id") == str(eng.entity_id)
         and saved.get("entity_version") == entity.version

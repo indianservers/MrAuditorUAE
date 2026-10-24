@@ -65,7 +65,7 @@ async def test_all_new_cases_have_real_approved_engine_actions_and_lineage(envir
     route = f"/api/v1/ai/engagements/{eid}/use-cases"
     listing = await c.get(route, headers=h)
     assert listing.status_code == 200
-    assert len(listing.json()["items"]) == 100
+    assert len(listing.json()["items"]) == 200
     receipts = []
     first = None
     payload = None

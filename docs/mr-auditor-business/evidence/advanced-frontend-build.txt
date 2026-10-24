@@ -1,23 +1,16 @@
 ▲ Next.js 16.4.2 (Turbopack)
-✓ Running next.config.ts took 25ms
+✓ Running next.config.ts took 26ms
 
   Creating an optimized production build ...
-✓ Compiled successfully in 8.4s
+✓ Compiled successfully in 5.1s
   Running TypeScript ...
-
-  We detected TypeScript in your project and reconfigured your tsconfig.json file for you.
-  The following suggested values were added to your tsconfig.json. These values can be changed to fit your project's needs:
-
-  	- include was updated to add '.next-mr-auditor-business-build/types/**/*.ts'
-  	- include was updated to add '.next-mr-auditor-business-build/dev/types/**/*.ts'
-
-  Finished TypeScript in 11.2s ...
+  Finished TypeScript in 8.8s ...
   Collecting page data using 11 workers ...
   Generating static pages using 11 workers (0/10) ...
   Generating static pages using 11 workers (2/10) 
   Generating static pages using 11 workers (4/10) 
   Generating static pages using 11 workers (7/10) 
-✓ Generating static pages using 11 workers (10/10) in 377ms
+✓ Generating static pages using 11 workers (10/10) in 346ms
   Finalizing page optimization ...
 
 Route (app)

@@ -38,10 +38,17 @@ export function UAEAdvancedInputs({
   const [rows, setRows] = useState<Record<string, string>[]>([{}]);
   const [policy, setPolicy] = useState<Record<string, string>>({
     kind:
-      caseId <= 61 || (caseId >= 63 && caseId <= 70) || caseId === 80
+      caseId <= 61 ||
+      (caseId >= 63 && caseId <= 70) ||
+      caseId === 80 ||
+      [101, 103, 104, 107, 108, 110].includes(caseId)
         ? "legislation"
         : "accounting_requirement",
   });
+  const [framework, setFramework] = useState("");
+  const [jurisdictionName, setJurisdictionName] = useState("");
+  const [roundingPrecision, setRoundingPrecision] = useState("2");
+  const [roundingMode, setRoundingMode] = useState("HALF_EVEN");
   const [start, setStart] = useState(""),
     [end, setEnd] = useState(""),
     [currency, setCurrency] = useState("AED"),
@@ -66,13 +73,34 @@ export function UAEAdvancedInputs({
           evidence_id: row.evidence_id,
         };
         for (const f of contract.fields) {
-          if (!row[f.name] && f.type !== "y") throw new Error(`Provide ${f.name} for each row`);
-          r[f.name] = f.type === "b" ? row[f.name] === "true" : f.type === "y" ? row[f.name] || null : row[f.name];
+          if (!row[f.name] && f.type !== "y")
+            throw new Error(`Provide ${f.name} for each row`);
+          r[f.name] =
+            f.type === "c" || f.type === "l" || f.type === "v"
+              ? JSON.parse(row[f.name])
+              : f.type === "b"
+                ? row[f.name] === "true"
+                : f.type === "y"
+                  ? row[f.name] || null
+                  : row[f.name];
         }
         return r;
       });
+      const linkedEvidence = parsed.flatMap((r) => [
+        ...((r.supporting_sources as string[]) || []),
+        ...((r.contrary_sources as string[]) || []),
+      ]);
       const ids = [
-        ...new Set([policy.source_id, ...rows.map((r) => r.evidence_id)]),
+        ...new Set([
+          policy.source_id,
+          ...linkedEvidence,
+          ...rows.map((r) => r.evidence_id),
+          ...rows.flatMap((r) =>
+            Object.entries(r)
+              .filter(([key]) => key.endsWith("_source_id"))
+              .map(([, value]) => value),
+          ),
+        ]),
       ];
       if (ids.some((i) => !i))
         throw new Error("Select policy and row evidence");
@@ -92,6 +120,14 @@ export function UAEAdvancedInputs({
               sources: ids.map((id) => ({ kind: "record", id })),
               advanced_input: {
                 use_case_id: caseId,
+                ...(caseId >= 101
+                  ? {
+                      jurisdiction_framework: framework,
+                      jurisdiction_name: jurisdictionName,
+                      rounding_precision: Number(roundingPrecision),
+                      rounding_mode: roundingMode,
+                    }
+                  : {}),
                 period_start: start,
                 period_end: end,
                 currency,
@@ -108,6 +144,42 @@ export function UAEAdvancedInputs({
       onSaved();
     } catch (e) {
       setError(e instanceof Error ? e : new Error("Schedule rejected"));
+    }
+  }
+  async function inspectProvenance() {
+    setError(undefined);
+    try {
+      onResult(
+        await action.mutateAsync({
+          path: `ai/engagements/${eid}/use-cases/192/actions`,
+          body: {
+            action: "inspect-provenance",
+            record_id: inputId,
+            idempotency_key: crypto.randomUUID(),
+          },
+        }),
+      );
+    } catch (e) {
+      setError(
+        e instanceof Error ? e : new Error("Provenance inspection failed"),
+      );
+    }
+  }
+  async function ruleImpact() {
+    setError(undefined);
+    try {
+      onResult(
+        await action.mutateAsync({
+          path: `ai/engagements/${eid}/use-cases/151/actions`,
+          body: {
+            action: "rule-impact",
+            record_id: inputId,
+            idempotency_key: crypto.randomUUID(),
+          },
+        }),
+      );
+    } catch (e) {
+      setError(e instanceof Error ? e : new Error("Impact scan failed"));
     }
   }
   async function fileReadiness() {
@@ -180,6 +252,38 @@ export function UAEAdvancedInputs({
           </p>
         </>
       )}
+      {caseId === 192 && (
+        <fieldset>
+          <legend>Original-file provenance</legend>
+          <label>
+            Approved original evidence
+            <select
+              aria-label="Approved original evidence"
+              value={inputId}
+              onChange={(e) => setInputId(e.target.value)}
+            >
+              <option value="">Select original evidence</option>
+              {approved
+                .filter((s) => s.kind === "evidence")
+                .map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.reference} · {s.title}
+                  </option>
+                ))}
+            </select>
+          </label>
+          <Button
+            disabled={!canRun || !inputId || action.isPending}
+            onClick={inspectProvenance}
+          >
+            Inspect original provenance
+          </Button>
+          <p>
+            Reports hashes, versions and authorized duplicate candidates. It
+            does not certify authenticity or forgery.
+          </p>
+        </fieldset>
+      )}
       {caseId === 97 && (
         <fieldset>
           <legend>Inspect original workbook</legend>
@@ -218,6 +322,62 @@ export function UAEAdvancedInputs({
         input paper, obtain independent approval, then execute its immutable
         inputs.
       </p>
+      {caseId >= 101 && (
+        <fieldset>
+          <legend>Framework and approved rounding</legend>
+          <label>
+            Applicable framework
+            <select
+              aria-label="Applicable framework"
+              value={framework}
+              onChange={(e) => setFramework(e.target.value)}
+            >
+              <option value="">Select explicitly</option>
+              {[
+                "AE_MAINLAND",
+                "DIFC",
+                "ADGM",
+                "FREE_ZONE_SPECIFIC",
+                "FOREIGN_FRAMEWORK",
+              ].map((v) => (
+                <option key={v}>{v}</option>
+              ))}
+            </select>
+          </label>
+          <label>
+            Named jurisdiction or free zone
+            <input
+              value={jurisdictionName}
+              onChange={(e) => setJurisdictionName(e.target.value)}
+            />
+          </label>
+          <label>
+            Monetary decimal places
+            <input
+              type="number"
+              min="0"
+              max="8"
+              value={roundingPrecision}
+              onChange={(e) => setRoundingPrecision(e.target.value)}
+            />
+          </label>
+          <label>
+            Approved rounding mode
+            <select
+              aria-label="Approved rounding mode"
+              value={roundingMode}
+              onChange={(e) => setRoundingMode(e.target.value)}
+            >
+              <option>HALF_EVEN</option>
+              <option>HALF_UP</option>
+            </select>
+          </label>
+          <p>
+            Framework selection records the reviewed scope. It does not verify
+            legal applicability or import rules from another jurisdiction.
+          </p>
+        </fieldset>
+      )}
       <label>
         Period start
         <input
@@ -334,6 +494,32 @@ export function UAEAdvancedInputs({
                   <option value="true">Yes, supported</option>
                   <option value="false">No</option>
                 </select>
+              ) : f.type === "c" || f.type === "l" || f.type === "v" ? (
+                <textarea
+                  aria-label={f.name.replaceAll("_", " ")}
+                  placeholder={
+                    f.type === "c"
+                      ? '[{"period":1,"amount":"105.00"}]'
+                      : f.type === "v"
+                        ? '["approved-source-uuid"]'
+                        : '["reviewed-reference"]'
+                  }
+                  value={row[f.name] || ""}
+                  onChange={(e) => setRow(index, f.name, e.target.value)}
+                />
+              ) : f.type === "u" ? (
+                <select
+                  aria-label={f.name.replaceAll("_", " ")}
+                  value={row[f.name] || ""}
+                  onChange={(e) => setRow(index, f.name, e.target.value)}
+                >
+                  <option value="">Select approved original schedule</option>
+                  {approved.map((s) => (
+                    <option key={s.id} value={s.id}>
+                      {s.reference} · {s.title}
+                    </option>
+                  ))}
+                </select>
               ) : (
                 <input
                   type={f.type === "x" || f.type === "y" ? "date" : "text"}
@@ -399,6 +585,14 @@ export function UAEAdvancedInputs({
       <Button disabled={!canRun || !inputId || action.isPending} onClick={run}>
         Run structured review
       </Button>
+      {caseId === 151 && (
+        <Button
+          disabled={!canRun || !inputId || action.isPending}
+          onClick={ruleImpact}
+        >
+          Assess verified rule dependencies
+        </Button>
+      )}
       {error && <ErrorState error={error} />}
     </section>
   );

@@ -1,4 +1,4 @@
-"""Build the 100-case matrix (original 01–50 plus incremental 51–100) from the runtime UAE manifest and real receipts."""
+"""Build the 200-case matrix with incremental contracts and verified scope from the runtime UAE manifest and real receipts."""
 
 import csv
 
@@ -83,6 +83,9 @@ engines = [{"id": key, "responsibility": title, "implementation": implementation
 
            for key, title, implementation in engine_definitions]
 
+for engine in engines:
+    engine["advanced_cases"] = [c["id"] for c in manifest["items"] if c["id"] >= 51 and engine["id"] in c["engines"]]
+    engine["incremental_adapter"] = "ifrs.schedule_math; jurisdictions.ae.continuation; jurisdictions.ae.continuation_preview; jurisdictions.ae.advanced; enterprise_ai.business; advanced_lineage; audit_analytics.workbooks" if engine["advanced_cases"] else None
 rows = []
 
 for case in manifest["items"]:
@@ -127,13 +130,19 @@ for case in manifest["items"]:
 
         if identifier in {52,91}:tests += ["frontend/e2e/uae-business-cases.spec.ts"]
 
+    if identifier>=101:
+        tests=["tests/unit/test_uae_continuation.py","tests/qa_crud/test_uae_continuation.py"]
+        if identifier in {112,121}:tests.append("frontend/e2e/uae-business-cases.spec.ts")
+    if identifier>=151:
+        tests=["tests/unit/test_uae_assurance.py","tests/qa_crud/test_uae_assurance.py"]
+        if identifier in {167,188}:tests.append("frontend/e2e/uae-business-cases.spec.ts")
     rows.append({**case,
 
                  "existing_capability": "; ".join(e["id"]+": "+e["implementation"] for e in engines if e["id"] in case["engines"]),
 
                  "incremental_work": (spec(identifier)["name"]+"; fields: "+", ".join(f["name"] for f in spec(identifier)["fields"])) if identifier>=51 else "Existing 01–50 connected adapter",
 
-                 "missing_work": case["limitations"], "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+                 "missing_work": (spec(identifier)["limitation"] if identifier>=151 else case["limitations"]), "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
 
                  "api": f"GET /ai/engagements/{{eid}}/use-cases/{identifier}/inputs; POST /ai/command task={case['key']}; POST /ai/engagements/{{eid}}/use-cases/{identifier}/actions",
 
@@ -147,7 +156,7 @@ for case in manifest["items"]:
 
                  "tests": tests,
 
-                 "test_scope": ("Typed contract, calculation/checklist, approved-input HTTP execution for this case, idempotency and source-change propagation; independent numerical expectations cover selected computations. Browser coverage is cases 52 and 91, not every sector/legal scenario." if identifier>=51 else "Original entries: scope/recipe/first read plus separately named specialist tests. Full specialist acceptance is not established."),
+                 "test_scope": ("Typed contract, calculation/checklist, approved-input HTTP execution for this case, idempotency and source-change propagation; independent numerical expectations cover selected computations. Browser coverage is cases 31, 52, 91, 112, 121, 167 and 188, not every sector/legal scenario." if identifier>=51 else "Original entries: scope/recipe/first read plus separately named specialist tests. Full specialist acceptance is not established."),
 
                  "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"})
 
@@ -169,7 +178,7 @@ if browser.exists():
 
     verification["browser"] = json.loads(browser.read_text(encoding="utf-8"))["stats"]
 
-(DOCS / "capability-matrix.json").write_text(json.dumps({"scope": "100 business cases: preserved 01–50 plus incremental 51–100", "release_status": "Partial specialist coverage; all cases have explicit limits", "items": rows}, indent=2))
+(DOCS / "capability-matrix.json").write_text(json.dumps({"scope": "200 business cases: preserved 01–150 plus incremental 151–200", "release_status": "Partial specialist coverage; all cases have explicit limits", "items": rows}, indent=2))
 
 (DOCS / "engine-connection-map.json").write_text(json.dumps({"engines": engines}, indent=2))
 
@@ -195,7 +204,7 @@ cells = [[f"{r['id']:02}. {r['title']}",r["completion_status"],r["ui"]+"; "+r["a
 
 body = ''.join('<tr>' + ''.join('<td>' + html.escape(str(value)) + '</td>' for value in row) + '</tr>' for row in cells)
 
-(DOCS / "capability-matrix.html").write_text('<!doctype html><html lang="en"><meta charset="utf-8"><title>Mr Auditor UAE business capability matrix</title><style>body{font:14px system-ui;margin:24px;color:#17212b}h1{font-size:24px}table{border-collapse:collapse;width:100%}td,th{padding:10px;border:1px solid #d7dce2;vertical-align:top;text-align:left}th{background:#edf2f6;position:sticky;top:0}</style><h1>Mr Auditor · 100 UAE business workstreams</h1><p>Connected bounded implementations and existing-engine improvements. Schedules and engine adapters do not establish full financial/legal acceptance.</p><p>Cases 46, 48 and 49 remain blocked for their full requested scope; every case retains explicit limitations. New cases 51–100 have real approved-schedule HTTP execution checks. Full legal/sector acceptance is not established.</p><table><thead><tr>'+''.join('<th>'+html.escape(h)+'</th>' for h in headings)+'</tr></thead><tbody>'+body+'</tbody></table></html>', encoding='utf-8')
+(DOCS / "capability-matrix.html").write_text('<!doctype html><html lang="en"><meta charset="utf-8"><title>Mr Auditor UAE business capability matrix</title><style>body{font:14px system-ui;margin:24px;color:#17212b}h1{font-size:24px}table{border-collapse:collapse;width:100%}td,th{padding:10px;border:1px solid #d7dce2;vertical-align:top;text-align:left}th{background:#edf2f6;position:sticky;top:0}</style><h1>Mr Auditor · 200 UAE business workstreams</h1><p>Connected bounded implementations and existing-engine improvements. Schedules and engine adapters do not establish full financial/legal acceptance.</p><p>Cases 46, 48 and 49 remain blocked for their full requested scope; every case retains explicit limitations. Cases 51–200 have real approved-schedule HTTP execution checks. Full legal/sector acceptance is not established.</p><table><thead><tr>'+''.join('<th>'+html.escape(h)+'</th>' for h in headings)+'</tr></thead><tbody>'+body+'</tbody></table></html>', encoding='utf-8')
 
 canvas = '''import {H1,H2,Text,Table,Stack,TextInput,useState} from 'cursor/canvas';
 
@@ -205,7 +214,7 @@ const engines=__ENGINES__;
 
 export default function UAECaseMatrix(){const [query,setQuery]=useState('');const visible=rows.filter(r=>r.join(' ').toLowerCase().includes(query.toLowerCase()));return <Stack style={{padding:24,gap:16}}>
 
-<H1>Mr Auditor: UAE business workstreams</H1><Text>100 connected case entries; existing calculation engines are reused. Full specialist acceptance is not established for all cases. Cases 46, 48 and 49 remain blocked for their full requested scope.</Text>
+<H1>Mr Auditor: UAE business workstreams</H1><Text>200 connected case entries; existing calculation engines are reused. Full specialist acceptance is not established for all cases. Cases 46, 48 and 49 remain blocked for their full requested scope.</Text>
 
 <Text tone="secondary" size="small">Source: current repository manifest and actual synthetic HTTP/browser receipts. Entry-path verification does not establish legal correctness or production readiness.</Text>
 
@@ -227,3 +236,8 @@ target.write_text(canvas, encoding="utf-8")
 
 print(json.dumps({"cases": len(rows), "engines": len(engines), "blocked_full_scope": [r['id'] for r in rows if r['completion_status']=='Blocked'], "canvas": str(target)}))
 
+
+from app.modules.jurisdictions.ae.advanced import Schedule, ROW_MODELS
+(DOCS / "engine-contracts-101-150.json").write_text(json.dumps({"version":"uae-business-contracts/3","transport":"Financial decimal strings; no binary floating-point inputs","schedule_schema":Schedule.model_json_schema(),"items":[{"id":i,"row_schema":ROW_MODELS[i].model_json_schema(),"approved_input_action":"advanced-review","draft_preview_mode":"deterministic_draft_preview; never approved","limitations":spec(i)["limitation"]} for i in range(101,151)]},indent=2),encoding="utf-8")
+
+(DOCS / "engine-contracts-151-200.json").write_text(json.dumps({"version":"uae-business-contracts/4","execution_modes":["trained_model","statistical_baseline","rules_baseline","diagnostic_mock","unavailable"],"schedule_schema":Schedule.model_json_schema(),"items":[{"id":i,"row_schema":ROW_MODELS[i].model_json_schema(),"approved_input_action":"advanced-review","limitations":spec(i)["limitation"]} for i in range(151,201)]},indent=2),encoding="utf-8")

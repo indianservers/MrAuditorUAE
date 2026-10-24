@@ -12,6 +12,7 @@ from app.modules.country_workflows.schemas import (
     WorkflowInput,
 )
 from app.modules.intelligence.foundations import ValidationInput
+from app.modules.intelligence.pdf_tables import PDFGrid
 from app.modules.jurisdictions.profiles import Strict
 
 SECTIONS = [
@@ -67,6 +68,13 @@ class LeadInput(Strict):
 class TableInput(OCRInput):
     table_kind: Literal["bank", "open-items"]
     worksheet: str | None = Field(default=None, min_length=1, max_length=128)
+    pdf_layout: PDFGrid | None = None
+
+    @model_validator(mode="after")
+    def pdf_scope(self):
+        if self.pdf_layout and (self.table_kind != "bank" or self.worksheet or self.force_image or self.zip_member):
+            raise ValueError("PDF text grids require a bank table without worksheet, image OCR or ZIP selection")
+        return self
 
 
 class AgeingInput(Strict):
@@ -201,7 +209,7 @@ class MappingDecision(Strict):
 class Review(Strict):
     expected_version: int = Field(ge=1)
     action: Literal["approve", "reject", "accept", "request-evidence", "finding", "note", "submit"]
-    item_id: str | None = Field(default=None, max_length=100)
+    item_id: str | None = Field(default=None, max_length=256)
     candidate_id: uuid.UUID | None = None
     comments: str = Field(min_length=10, max_length=6000)
     target_record_id: uuid.UUID | None = None

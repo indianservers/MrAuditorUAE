@@ -14,7 +14,7 @@ from app.modules.intelligence import service as intelligence
 from app.modules.lineage.storage import ObjectStore, hash_file
 
 
-async def payroll_rule_documents(db, ctx, eng, rows):
+async def payroll_rule_documents(db, ctx, eng, rows, *, label="Payroll rule", contributors=None):
     from sqlalchemy import func, select
 
     from app.modules.audit_execution.models import EvidenceVersion
@@ -25,9 +25,7 @@ async def payroll_rule_documents(db, ctx, eng, rows):
         identifier = rule["source_evidence_version_id"]
         if identifier not in documents:
             if len(documents) >= 50:
-                raise HTTPException(
-                    422, "Payroll rule evidence is limited to fifty retained documents"
-                )
+                raise HTTPException(422, f"{label} evidence is limited to fifty retained documents")
             document, receipt = await intelligence.evidence(db, ctx, eng, UUID(identifier))
             latest = await db.scalar(
                 select(func.max(EvidenceVersion.number)).where(
@@ -37,14 +35,14 @@ async def payroll_rule_documents(db, ctx, eng, rows):
             )
             if document.number != latest:
                 raise HTTPException(
-                    409, "Payroll rule document was superseded; prepare a current reviewed source"
+                    409, f"{label} document was superseded; prepare a current reviewed source"
                 )
             documents[identifier] = document
+            if contributors is not None and document.created_by is not None:
+                contributors.add(str(document.created_by))
             receipts.append(receipt)
         if documents[identifier].sha256 != rule["source_sha256"]:
-            raise HTTPException(
-                422, "Payroll rule document hash differs from its retained evidence"
-            )
+            raise HTTPException(422, f"{label} document hash differs from its retained evidence")
 
     def verify():
         size = 0
@@ -53,11 +51,25 @@ async def payroll_rule_documents(db, ctx, eng, rows):
                 size += path.stat().st_size
                 if size > 100 * 1024 * 1024 or hash_file(path) != document.sha256:
                     raise ValueError(
-                        "Payroll rule evidence exceeds its verification bound or failed original-file integrity"
+                        f"{label} evidence exceeds its verification bound or failed original-file integrity"
                     )
 
     await run_in_threadpool(verify)
     return receipts
+
+
+async def withholding_documents(db, ctx, eng, rows, *, contributors=None):
+    bindings = [
+        {
+            "source_evidence_version_id": row["assessment_evidence_version_id"],
+            "source_sha256": row["assessment_sha256"],
+        }
+        for row in rows
+        if row["record_status"] == "current" and row.get("assessment_evidence_version_id")
+    ]
+    return await payroll_rule_documents(
+        db, ctx, eng, bindings, label="Withholding assessment", contributors=contributors
+    )
 
 
 async def compute(db, ctx, eng, operation, data, package, dependencies):
@@ -187,6 +199,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         evidence, receipt = await intelligence.evidence(db, ctx, eng, data.evidence_version_id)
         supporting = None
         supporting_contributors = set()
+        if evidence.created_by is not None:
+            supporting_contributors.add(str(evidence.created_by))
         if data.supporting_table_id:
             supporting = await intelligence.event(db, ctx, eng.id, data.supporting_table_id, True)
             if (
@@ -210,6 +224,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "canonical-csv": {
                 "text/csv",
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                "application/pdf",
             }
             if supporting is not None
             else {"text/csv"},
@@ -234,12 +249,12 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(422, "CSV mappings and delimiters apply only to CSV sources")
         if data.rule_document_version_id:
             if (
-                data.table_type not in {"payroll-rules", "benefit-rules"}
+                data.table_type not in {"payroll-rules", "benefit-rules", "withholding-records"}
                 or data.file_format != "canonical-csv"
             ):
                 raise HTTPException(
                     422,
-                    "A rule source document can be selected only for canonical payroll/benefit rules",
+                    "A rule source document can be selected only for canonical payroll/benefit rules or withholding assessments",
                 )
             rule_document, _ = await intelligence.evidence(
                 db, ctx, eng, data.rule_document_version_id
@@ -248,6 +263,11 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 "source_evidence_version_id": str(rule_document.id),
                 "source_sha256": rule_document.sha256,
             }
+            if data.table_type == "withholding-records":
+                defaults = {
+                    "assessment_evidence_version_id": str(rule_document.id),
+                    "assessment_sha256": rule_document.sha256,
+                }
 
         def load():
             with ObjectStore().local(evidence.object_key, evidence.object_version) as path:
@@ -263,7 +283,17 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
 
         result = await run_in_threadpool(load)
         if data.table_type in {"payroll-rules", "benefit-rules"}:
-            dependencies.extend(await payroll_rule_documents(db, ctx, eng, result["rows"]))
+            dependencies.extend(
+                await payroll_rule_documents(
+                    db, ctx, eng, result["rows"], contributors=supporting_contributors
+                )
+            )
+        if data.table_type == "withholding-records":
+            dependencies.extend(
+                await withholding_documents(
+                    db, ctx, eng, result["rows"], contributors=supporting_contributors
+                )
+            )
         return {
             **result,
             "evidence_version_id": str(evidence.id),
@@ -329,7 +359,21 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         contributors.update(source.body.get("contributors", [str(source.created_by)]))
         dependencies.append(intelligence.event_receipt(source))
     if data.workflow in {"india-payroll-rules", "uae-benefit-review"}:
-        dependencies.extend(await payroll_rule_documents(db, ctx, eng, sources["rules"]["rows"]))
+        dependencies.extend(
+            await payroll_rule_documents(
+                db, ctx, eng, sources["rules"]["rows"], contributors=contributors
+            )
+        )
+    if data.workflow in {"india-withholding-liability", "india-withholding-credit"}:
+        dependencies.extend(
+            await withholding_documents(
+                db,
+                ctx,
+                eng,
+                [row for source in sources.values() for row in source["rows"]],
+                contributors=contributors,
+            )
+        )
     if data.workflow == "bank-brs":
         book_range = sources.get("books", {}).get("source_range")
         if book_range and book_range["through"] != data.as_of.isoformat():

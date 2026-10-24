@@ -102,3 +102,68 @@ describe("Advanced typed inputs", () => {
     ).toBeDisabled();
   });
 });
+
+describe("Continuation framework and structured cashflows", () => {
+  it("requires an explicit framework and offers typed cashflow and source editors", () => {
+    mocks.allowed = true;
+    render(
+      <UAEAdvancedInputs
+        eid="e"
+        caseId={121}
+        contract={{
+          name: "Financing",
+          fields: [
+            { name: "cashflows", type: "c" },
+            { name: "original_source_id", type: "u" },
+          ],
+          required_evidence: [],
+          limitation: "Approved inputs only",
+        }}
+        sources={sources}
+        onResult={vi.fn()}
+        onSaved={vi.fn()}
+      />,
+    );
+    expect(
+      screen.getByRole("combobox", { name: "Applicable framework" }),
+    ).toHaveValue("");
+    expect(screen.getByRole("textbox", { name: "cashflows" }).tagName).toBe(
+      "TEXTAREA",
+    );
+    expect(
+      screen.getByRole("combobox", { name: "original source id" }),
+    ).toBeVisible();
+    expect(
+      screen.getByRole("spinbutton", { name: "Monetary decimal places" }),
+    ).toHaveValue(2);
+  });
+});
+
+describe("Assurance source and dependency editors", () => {
+  it("exposes source lists without treating them as trained inference", () => {
+    render(
+      <UAEAdvancedInputs
+        eid="e"
+        caseId={193}
+        contract={{
+          name: "Contradictions",
+          fields: [
+            { name: "supporting_sources", type: "v" },
+            { name: "contrary_sources", type: "v" },
+          ],
+          required_evidence: [],
+          limitation: "Professional sufficiency is reviewed",
+        }}
+        sources={sources}
+        onResult={vi.fn()}
+        onSaved={vi.fn()}
+      />,
+    );
+    expect(
+      screen.getByRole("textbox", { name: "supporting sources" }).tagName,
+    ).toBe("TEXTAREA");
+    expect(
+      screen.getByRole("textbox", { name: "contrary sources" }),
+    ).toHaveAttribute("placeholder", '["approved-source-uuid"]');
+  });
+});

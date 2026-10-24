@@ -306,6 +306,13 @@ RAW = {
 }
 
 
+from .continuation_specs import RAW as CONTINUATION
+
+RAW.update(CONTINUATION)
+from .assurance_specs import RAW as ASSURANCE
+RAW.update(ASSURANCE)
+
+
 def spec(identifier):
     name, fields, evidence, limitation = RAW[identifier]
     return {

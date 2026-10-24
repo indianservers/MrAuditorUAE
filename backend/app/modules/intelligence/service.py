@@ -181,6 +181,18 @@ async def head(db, ctx, obj):
 async def current(db, ctx, obj, visited=None):
     if obj.tenant_id != ctx.tenant_id:
         return False
+    if (
+        getattr(obj, "kind", None) == "country-workflow"
+        and obj.body.get("workflow") in {"india-withholding-liability", "india-withholding-credit"}
+        and obj.body.get("assessment_contract_version") != "withholding-assessment/1"
+    ):
+        return False
+    if (
+        getattr(obj, "kind", None) == "country-workflow"
+        and obj.body.get("workflow") == "india-withholding"
+        and (obj.body.get("blocked") is not True or obj.body.get("review_status") == "REVIEWED")
+    ):
+        return False  # Retained role-unassessed approvals cannot feed new workpapers or actions.
     if getattr(obj, "kind", None) == "business-action":
         from app.modules.enterprise_ai.security import digest
         from app.modules.jurisdictions.ae.use_cases import MANIFEST
@@ -191,6 +203,12 @@ async def current(db, ctx, obj, visited=None):
             from app.modules.jurisdictions.ae.advanced import contract_sha256
             if obj.body.get("advanced_contract_sha256") != contract_sha256():
                 return False
+        if obj.body.get("action")=="inspect-provenance":
+            from app.modules.jurisdictions.ae.provenance import corpus
+            if digest(await corpus(db,ctx,obj.engagement_id))!=obj.body["output"]["population_sha256"]:return False
+        if obj.body.get("action")=="rule-impact":
+            from app.modules.jurisdictions.ae.rule_impact import fingerprint as impact_fingerprint
+            if await impact_fingerprint(db,ctx,obj.engagement_id)!=obj.body["output"]["population_sha256"]:return False
         if obj.body.get("action") == "file-readiness":
             rows = (await db.scalars(select(AuditRecord).where(AuditRecord.tenant_id == ctx.tenant_id, AuditRecord.engagement_id == obj.engagement_id).order_by(AuditRecord.id).limit(2001))).all()
             if digest([[str(r.id), r.version, r.status] for r in rows]) != obj.body["output"]["file_population_sha256"]:
@@ -462,17 +480,27 @@ async def evidence(db, ctx, eng, identifier):
     }
 
 
-def read_table(version, kind, separator, date_format, worksheet=None, metadata=None):
+def read_table(version, kind, separator, date_format, worksheet=None, metadata=None, pdf_layout=None):
     from app.modules.ingestion.parser import spreadsheet_rows
     from app.modules.intelligence.supporting_tables import headers, normalize
 
     metadata = {} if metadata is None else metadata
-    supported = {"text/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+    supported = {"text/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/pdf"}
     if version.media_type not in supported:
-        raise ValueError("Supporting bank/open-item tables require CSV or macro-free XLSX")
+        raise ValueError("Supporting tables require CSV, macro-free XLSX or explicitly mapped bank PDF text")
     with ObjectStore().local(version.object_key, version.object_version) as path:
         if path.stat().st_size > 10 * 1024 * 1024 or hash_file(path) != version.sha256:
             raise ValueError("Original evidence exceeds 10 MiB or failed hash verification")
+        if version.media_type == "application/pdf":
+            from app.modules.intelligence.pdf_tables import read_pdf_grid
+
+            if kind != "bank" or not pdf_layout or worksheet:
+                raise ValueError("PDF supporting tables require explicit bank row/column geometry")
+            extracted = read_pdf_grid(path, pdf_layout, separator, date_format, version.sha256)
+            metadata.update(extracted["metadata"])
+            return extracted["rows"]
+        if pdf_layout:
+            raise ValueError("PDF layout parameters apply only to PDF evidence")
         if version.media_type == "text/csv":
             if worksheet:
                 raise ValueError("Worksheet selection applies only to XLSX")
@@ -569,13 +597,14 @@ async def compute(db, ctx, eng, operation, payload):
                 data.date_format,
                 data.worksheet,
                 table_metadata,
+                data.pdf_layout,
             )
             return {
                 "evidence_version_id": str(version.id),
                 "table_kind": data.table_kind,
                 "table_metadata": table_metadata,
-                "table_reader_version": "supporting-table-2",
-                "contributors": [str(ctx.user_id)],
+                "table_reader_version": "pdf-text-grid/1" if data.pdf_layout else "supporting-table-2",
+                "contributors": sorted({str(ctx.user_id), *([str(version.created_by)] if version.created_by else [])}),
                 "rows": rows,
                 "row_count": len(rows),
                 "review_status": "UNVERIFIED",

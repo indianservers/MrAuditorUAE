@@ -35,11 +35,33 @@ class ItemAllocation(Strict):
     rationale: str = Field(min_length=10, max_length=2000)
 
 
+class CreditApplication(Strict):
+    id: ID
+    credit_item_id: ID
+    invoice_item_id: ID
+    date: date
+    currency: str = Field(pattern=r"^[A-Z]{3}$")
+    amount: Money = Field(gt=0)
+    evidence_reference: ID
+    allocation_reference: ID
+    rationale: str = Field(min_length=10, max_length=2000)
+
+
 OPERATION_ROW_TYPES: dict[str, type[BaseModel]] = {
+    "credit-applications": CreditApplication,
     "cash-payments": CashPayment,
     "item-allocations": ItemAllocation,
 }
 OPERATION_WORKFLOWS: dict[str, tuple[str, list[str], dict[str, str]]] = {
+    "credit-note-applications": (
+        "Credit-note applications and residual subledger controls",
+        [],
+        {
+            "items": "audit-open-items",
+            "controls": "balance-controls",
+            "applications": "credit-applications",
+        },
+    ),
     "open-item-allocations": (
         "Invoice / confirmed receipt-payment allocations / unapplied cash / control accounts",
         [],
@@ -49,5 +71,5 @@ OPERATION_WORKFLOWS: dict[str, tuple[str, list[str], dict[str, str]]] = {
             "payments": "cash-payments",
             "allocations": "item-allocations",
         },
-    )
+    ),
 }

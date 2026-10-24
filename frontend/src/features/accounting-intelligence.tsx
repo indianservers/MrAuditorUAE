@@ -17,6 +17,7 @@ import { ReactFlow, Background, Controls, MiniMap } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import type { Page, RecordRow } from "@/types/models";
 import { CountryWorkflows } from "./country-workflows";
+import { PDFGridEditor, buildPDFGrid, emptyPDFGrid } from "./pdf-grid-editor";
 
 type Choice = { id: string; label: string; scan_status?: string };
 type Result = {
@@ -130,6 +131,8 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
   const [zipMember, setZipMember] = useState("");
   const [tableKind, setTableKind] = useState("bank");
   const [worksheet, setWorksheet] = useState("");
+  const [pdfMode, setPDFMode] = useState(false);
+  const [pdfGrid, setPDFGrid] = useState(emptyPDFGrid);
   const [localError, setLocalError] = useState<Error | null>(null);
   const [downloadBusy, setDownloadBusy] = useState(false);
   const inputs = useAPI<{
@@ -181,6 +184,16 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
     setCorrections({});
   };
   async function run() {
+    setLocalError(null);
+    let pdfLayout;
+    if (area === "source-table" && pdfMode) {
+      try {
+        pdfLayout = buildPDFGrid(pdfGrid);
+      } catch (error) {
+        setLocalError(error as Error);
+        return;
+      }
+    }
     const payload: Record<string, unknown> = {};
     if (
       [
@@ -221,7 +234,14 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
         decimal_separator: decimalSeparator,
         ...(zipMember ? { zip_member: zipMember } : {}),
         ...(area === "source-table"
-          ? { table_kind: tableKind, ...(worksheet ? { worksheet } : {}) }
+          ? {
+              table_kind: tableKind,
+              ...(pdfMode
+                ? { pdf_layout: pdfLayout }
+                : worksheet
+                  ? { worksheet }
+                  : {}),
+            }
           : {}),
       });
     if (area === "ageing")
@@ -535,7 +555,10 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
                     Table type
                     <select
                       value={tableKind}
-                      onChange={(e) => setTableKind(e.target.value)}
+                      onChange={(e) => {
+                        setTableKind(e.target.value);
+                        setPDFMode(false);
+                      }}
                     >
                       <option value="bank">Bank transactions</option>
                       <option value="open-items">
@@ -552,22 +575,57 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
                       </small>
                     )}
                   </label>
-                  <label>
-                    Worksheet name (required for multi-sheet XLSX)
-                    <input
-                      value={worksheet}
-                      maxLength={128}
-                      onChange={(event) => setWorksheet(event.target.value)}
+                  {tableKind === "bank" && (
+                    <label
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        alignItems: "center",
+                        gap: 8,
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        style={{ width: 16, height: 16, minHeight: 0 }}
+                        checked={pdfMode}
+                        onChange={(event) => {
+                          setPDFMode(event.target.checked);
+                          setWorksheet("");
+                        }}
+                      />
+                      Map a PDF bank text grid
+                    </label>
+                  )}
+                  {!pdfMode && (
+                    <label>
+                      Worksheet name (required for multi-sheet XLSX)
+                      <input
+                        value={worksheet}
+                        maxLength={128}
+                        onChange={(event) => setWorksheet(event.target.value)}
+                      />
+                    </label>
+                  )}
+                  {!pdfMode && (
+                    <p>
+                      CSV or macro-free XLSX values only. All selected-sheet
+                      rows, including hidden rows, are included. Formula cells,
+                      macros and external links are rejected. Numeric amounts
+                      use original spreadsheet XML values; text dates and
+                      amounts follow the selected conventions. Keep identifiers
+                      requiring display formatting as text.
+                    </p>
+                  )}
+                  {pdfMode && (
+                    <PDFGridEditor
+                      key={evidence}
+                      draft={pdfGrid}
+                      onChange={setPDFGrid}
+                      eid={eid}
+                      evidence={evidence}
+                      tenant={scope.tenant}
                     />
-                  </label>
-                  <p>
-                    CSV or macro-free XLSX values only. All selected-sheet rows,
-                    including hidden rows, are included. Formula cells, macros
-                    and external links are rejected. Numeric amounts use
-                    original spreadsheet XML values; text dates and amounts
-                    follow the selected conventions. Keep identifiers requiring
-                    display formatting as text.
-                  </p>
+                  )}
                 </>
               )}
             </>
@@ -697,9 +755,9 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
         </Button>
         <p className="subtle">
           Quarantined evidence is unavailable until a functioning malware
-          scanner clears it. CSV/XLSX supporting tables require explicit columns
-          and conventions. Generated results never post entries or approve audit
-          work.
+          scanner clears it. CSV/XLSX supporting tables and mapped PDF bank
+          grids require explicit columns and conventions. Generated results
+          never post entries or approve audit work.
         </p>
       </section>
       <section className="main-panel" style={{ padding: 20 }}>

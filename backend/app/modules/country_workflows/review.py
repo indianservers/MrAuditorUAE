@@ -1,4 +1,6 @@
 def approval_error(body):
+    if body.get("workflow") == "india-withholding":
+        return "Legacy aggregate withholding requires a new role-scoped liability or credit assessment"
     if body.get("blocked"):
         return "Resolve missing evidence, expired checks or balance controls and regenerate before approval"
     for row in body["rows"]:

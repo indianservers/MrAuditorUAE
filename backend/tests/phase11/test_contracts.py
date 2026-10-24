@@ -9,7 +9,7 @@ from app.modules.enterprise_ai.schemas import Graph, ToolInput, validate_graph
 
 def test_registry_and_recipe_contracts():
     assert len(agents()) == 12
-    assert len(RECIPES) == 115  # 15 established investigations + 100 explicit UAE business recipes.
+    assert len(RECIPES) == 215  # 15 established investigations + 200 explicit UAE business recipes.
     assert all(len(steps) + 1 <= 12 and set(steps) <= set(TOOLS) for steps in RECIPES.values())
     assert plan(None, "Investigate unusual revenue")[0] == "revenue"
     with pytest.raises(ValueError):

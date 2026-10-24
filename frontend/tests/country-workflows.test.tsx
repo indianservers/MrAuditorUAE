@@ -51,6 +51,37 @@ vi.mock("@/hooks/use-api", () => ({
           ],
           items: [
             {
+              id: "india-withholding-liability",
+              title: "India withholding liability",
+              available: state.country === "IN",
+              roles: {
+                expected: "withholding-records",
+                withheld: "withholding-records",
+                reported: "withholding-records",
+                deposited: "withholding-records",
+              },
+            },
+            {
+              id: "india-withholding-credit",
+              title: "India withholding credit",
+              available: state.country === "IN",
+              roles: {
+                books: "withholding-records",
+                statement: "withholding-records",
+                certificate: "withholding-records",
+              },
+            },
+            {
+              id: "credit-note-applications",
+              title: "Credit-note applications",
+              available: true,
+              roles: {
+                items: "audit-open-items",
+                controls: "balance-controls",
+                applications: "credit-applications",
+              },
+            },
+            {
               id: "payroll-settlement",
               title: "Payroll settlement",
               available: true,
@@ -84,6 +115,7 @@ vi.mock("@/hooks/use-api", () => ({
             },
           ],
           source_contracts: {
+            "withholding-records": { id: { required: true, type: "str" } },
             "benefit-rules": { id: { required: true, type: "str" } },
             "payroll-rules": { id: { required: true, type: "str" } },
             obligations: {
@@ -258,6 +290,218 @@ beforeEach(() => {
   state.result = null;
 });
 describe("country workflows", () => {
+  it("binds a selected retained assessment document when preparing withholding records", async () => {
+    state.country = "IN";
+    render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+    fireEvent.change(screen.getByLabelText("Source table type"), {
+      target: { value: "withholding-records" },
+    });
+    fireEvent.change(
+      screen.getByLabelText(
+        "Withholding assessment document (optional shared document)",
+      ),
+      { target: { value: "clean" } },
+    );
+    fireEvent.change(screen.getByLabelText("Clean retained evidence"), {
+      target: { value: "clean" },
+    });
+    fireEvent.change(screen.getByLabelText("Schedule title"), {
+      target: { value: "Synthetic assessed withholding source" },
+    });
+    fireEvent.change(screen.getByLabelText("Independent totals by currency"), {
+      target: { value: "INR=100" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+      table_type: "withholding-records",
+      rule_document_version_id: "clean",
+      control_totals: { INR: "100" },
+    });
+  });
+  it("shows unsupported assessment scope even when the numerical comparison matches", () => {
+    state.result = {
+      id: "result",
+      kind: "country-workflow",
+      version: 1,
+      freshness: "CURRENT",
+      body: {
+        title: "Unsupported certificate scope",
+        workflow: "india-withholding-credit",
+        blocked: true,
+        rows: [
+          {
+            id: "withholding-1",
+            state: "ASSESSMENT_NOT_SUPPORTED",
+            comparison_state: "MATCHED",
+            assessment_issues: ["CERTIFICATE_SHARED_AMOUNT_LIMIT_EXCEEDED"],
+          },
+        ],
+      },
+    };
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), {
+      target: { value: "result" },
+    });
+    expect(
+      screen.getByText("certificate shared amount limit exceeded"),
+    ).toBeVisible();
+    expect(screen.getByRole("cell", { name: "MATCHED" })).toBeVisible();
+    expect(
+      screen.getByRole("button", { name: "Independent approval" }),
+    ).toBeDisabled();
+  });
+  it("renders withholding amounts as labelled values with readable differences", () => {
+    state.result = {
+      id: "result",
+      kind: "country-workflow",
+      version: 1,
+      freshness: "CURRENT",
+      body: {
+        title: "Withholding result",
+        workflow: "india-withholding-liability",
+        review_status: "UNVERIFIED",
+        rows: [
+          {
+            id: "withholding-1",
+            legal_role: "deductor",
+            amounts: {
+              expected: "100",
+              reported: "90",
+              withheld: "100",
+              deposited: "100",
+            },
+            differences_from_expected: {
+              reported: "-10",
+              withheld: "0",
+              deposited: "0",
+            },
+            state: "VARIANCE",
+          },
+        ],
+      },
+    };
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), {
+      target: { value: "result" },
+    });
+    expect(screen.getByText("expected: 100")).toBeVisible();
+    expect(screen.getByText("reported: 90")).toBeVisible();
+    expect(screen.getByText("reported: -10")).toBeVisible();
+  });
+  it("keeps liability and credit role choices separate and requires explicit assessment", async () => {
+    state.country = "IN";
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Workflow"), {
+      target: { value: "india-withholding-liability" },
+    });
+    const role = screen.getByLabelText("Organization legal withholding role");
+    expect(role).toHaveTextContent("TDS deductor");
+    expect(role).not.toHaveTextContent("TDS deductee");
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    expect(
+      await screen.findByText(
+        "Select the organization’s legal withholding role before comparing sources.",
+      ),
+    ).toBeVisible();
+    expect(state.mutate).not.toHaveBeenCalled();
+    fireEvent.change(role, { target: { value: "collector" } });
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+      workflow: "india-withholding-liability",
+      withholding_role: "collector",
+      currency: "INR",
+    });
+    fireEvent.change(screen.getByLabelText("Workflow"), {
+      target: { value: "india-withholding-credit" },
+    });
+    expect(
+      screen.getByLabelText("Organization legal withholding role"),
+    ).toHaveValue("");
+    expect(
+      screen.getByLabelText("Organization legal withholding role"),
+    ).toHaveTextContent("TCS collectee");
+    expect(
+      screen.getByLabelText("Organization legal withholding role"),
+    ).not.toHaveTextContent("TCS collector");
+  });
+  it("keeps credit residual balances visible before expanding application provenance", () => {
+    state.result = {
+      id: "result",
+      kind: "country-workflow",
+      version: 1,
+      freshness: "CURRENT",
+      body: {
+        title: "Credit application result",
+        workflow: "credit-note-applications",
+        review_status: "UNVERIFIED",
+        rows: [
+          {
+            id: "item:CN1",
+            kind: "open_item",
+            item_id: "CN1",
+            currency: "AED",
+            original_balance: "-40",
+            applied: "25",
+            remaining_balance: "-15",
+            state: "UNAPPLIED_CREDIT",
+            application_ids: ["A1"],
+          },
+        ],
+      },
+    };
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), {
+      target: { value: "result" },
+    });
+    expect(
+      screen.getByRole("columnheader", { name: "remaining balance" }),
+    ).toBeVisible();
+    expect(screen.getByRole("cell", { name: "-15" })).toBeVisible();
+    expect(
+      screen.queryByRole("columnheader", { name: "application ids" }),
+    ).not.toBeInTheDocument();
+    fireEvent.click(
+      screen.getByLabelText("Show source provenance and all columns"),
+    );
+    expect(
+      screen.getByRole("columnheader", { name: "application ids" }),
+    ).toBeVisible();
+  });
+  it("requires a pre-application balance confirmation for credit applications", async () => {
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Workflow"), {
+      target: { value: "credit-note-applications" },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    expect(
+      await screen.findByText(
+        "Confirm that balances are before the listed credit applications.",
+      ),
+    ).toBeVisible();
+    expect(state.mutate).not.toHaveBeenCalled();
+    fireEvent.click(
+      screen.getByLabelText(
+        "Balances are before the listed credit applications; these applications have not already been deducted.",
+      ),
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+      workflow: "credit-note-applications",
+      allocation_basis: "pre_application_balances",
+    });
+    fireEvent.change(screen.getByLabelText("Workflow"), {
+      target: { value: "bank-brs" },
+    });
+    fireEvent.change(screen.getByLabelText("Workflow"), {
+      target: { value: "credit-note-applications" },
+    });
+    expect(
+      screen.getByRole("checkbox", { name: /Balances are before/ }),
+    ).not.toBeChecked();
+  });
   it("shows open-item balances first while retaining every provenance column", () => {
     state.result = {
       id: "result",

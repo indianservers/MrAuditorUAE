@@ -1,5 +1,5 @@
 {
-  "version": "uae-business-source-review/1",
+  "version": "uae-business-source-review/4",
   "retrieved_on_local_date": "2026-10-25",
   "items": [
     {
@@ -179,6 +179,210 @@
       "limitations": [
         "Not a complete legal eligibility decision. Schedule must cite independently approved operative rule/version and cover the whole reporting interval."
       ]
+    },
+    {
+      "id": "IFRS9-SCHEDULE-CONTEXT",
+      "title": "IFRS 9 Financial Instruments",
+      "url": "https://www.ifrs.org/issued-standards/list-of-standards/ifrs-9-financial-instruments/",
+      "authority": "IFRS Foundation",
+      "source_type": "accounting_requirement",
+      "use_cases": [
+        121,
+        122,
+        123,
+        124,
+        125,
+        126,
+        127
+      ],
+      "provision": "Official standard overview; classification and measurement context. Full operative clauses and amendments require professional adoption.",
+      "publication_date": null,
+      "effective_from": null,
+      "retrieved_on": "2026-10-25",
+      "rule_version": "context-review-2026-10-25",
+      "reviewer_status": "CONTEXT_CONSULTED_OPERATIVE_ADOPTION_REQUIRED",
+      "limitations": [
+        "Not a blanket current legal/standard qualification. Confirm relevant operative clauses, amendments and named jurisdiction for the engagement."
+      ]
+    },
+    {
+      "id": "IFRS15-CONTRACT-CONTEXT",
+      "title": "IFRS 15 Revenue from Contracts with Customers",
+      "url": "https://www.ifrs.org/issued-standards/list-of-standards/ifrs-15-revenue-from-contracts-with-customers/",
+      "authority": "IFRS Foundation",
+      "source_type": "accounting_requirement",
+      "use_cases": [
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118
+      ],
+      "provision": "Official standard overview; contract revenue context, not automatic control/constraint judgments.",
+      "publication_date": null,
+      "effective_from": null,
+      "retrieved_on": "2026-10-25",
+      "rule_version": "context-review-2026-10-25",
+      "reviewer_status": "CONTEXT_CONSULTED_OPERATIVE_ADOPTION_REQUIRED",
+      "limitations": [
+        "Not a blanket current legal/standard qualification. Confirm relevant operative clauses, amendments and named jurisdiction for the engagement."
+      ]
+    },
+    {
+      "id": "AE-FTA-RECONSIDERATION",
+      "title": "Reconsideration request service",
+      "url": "https://tax.gov.ae/en/services/reconsideration.request.aspx",
+      "authority": "Federal Tax Authority",
+      "source_type": "official_guidance",
+      "use_cases": [
+        101,
+        104
+      ],
+      "provision": "Procedure/service context; no hardcoded deadline adopted.",
+      "publication_date": null,
+      "effective_from": null,
+      "retrieved_on": "2026-10-25",
+      "rule_version": "context-review-2026-10-25",
+      "reviewer_status": "CONTEXT_CONSULTED_OPERATIVE_ADOPTION_REQUIRED",
+      "limitations": [
+        "Not a blanket current legal/standard qualification. Confirm relevant operative clauses, amendments and named jurisdiction for the engagement."
+      ]
+    },
+    {
+      "id": "IAASB-ISA220-REVISED",
+      "title": "ISA 220 (Revised), Quality Management for an Audit of Financial Statements",
+      "url": "https://www.iaasb.org/publications/international-standard-auditing-220-revised-quality-management-audit-financial-statements",
+      "authority": "IAASB",
+      "source_type": "auditing_standard",
+      "use_cases": [
+        150
+      ],
+      "provision": "Engagement partner/team quality responsibilities; implementation requires applicable firm policy and qualified review.",
+      "publication_date": "2020-12-17",
+      "effective_from": "2022-12-15",
+      "retrieved_on": "2026-10-25",
+      "rule_version": "context-review-2026-10-25",
+      "reviewer_status": "CONTEXT_CONSULTED_OPERATIVE_ADOPTION_REQUIRED",
+      "limitations": [
+        "Not a blanket current legal/standard qualification. Confirm relevant operative clauses, amendments and named jurisdiction for the engagement."
+      ]
+    },
+    {
+      "id": "ADGM-LEGAL-FRAMEWORK",
+      "title": "ADGM regulations and rules index",
+      "url": "https://www.adgm.com/legal-framework/rules-and-regulations",
+      "authority": "ADGM",
+      "source_type": "official_source_index",
+      "use_cases": [
+        107,
+        138,
+        139,
+        140
+      ],
+      "provision": "Distinct legal framework index; not an adopted company/distribution/liquidation rule.",
+      "publication_date": null,
+      "effective_from": null,
+      "retrieved_on": "2026-10-25",
+      "rule_version": "context-review-2026-10-25",
+      "reviewer_status": "CONTEXT_CONSULTED_OPERATIVE_ADOPTION_REQUIRED",
+      "limitations": [
+        "Not a blanket current legal/standard qualification. Confirm relevant operative clauses, amendments and named jurisdiction for the engagement."
+      ]
+    },
+    {
+      "id": "IAS23-CONTEXT-151-200",
+      "title": "IAS 23 Borrowing Costs",
+      "authority": "IFRS Foundation",
+      "url": "https://www.ifrs.org/issued-standards/list-of-standards/ias-23-borrowing-costs/",
+      "source_type": "accounting_requirement",
+      "use_cases": [
+        161
+      ],
+      "provision": "Qualifying asset and directly attributable borrowing costs; supplied judgment and reviewed day-count assumptions required.",
+      "effective_from": null,
+      "retrieved_on": "2026-10-25",
+      "reviewer_status": "CONSULTED_NOT_AUTOMATICALLY_ADOPTED",
+      "rule_version": "review-2026-10-25",
+      "adoption_requirement": "Verify exact operative version and effective period with independently approved engagement source; named mainland/free-zone/DIFC/ADGM framework required."
+    },
+    {
+      "id": "IAS38-CLOUD-CONTEXT",
+      "title": "Configuration or Customisation Costs in a Cloud Computing Arrangement",
+      "authority": "IFRS Interpretations Committee",
+      "url": "https://www.ifrs.org/projects/completed-projects/2021/configuration-or-customisation-costs-in-a-cloud-computing-arrangement-ias-38/",
+      "source_type": "accounting_requirement",
+      "use_cases": [
+        164,
+        165
+      ],
+      "provision": "Resource control and deliverables assessment; agenda decision context, not automatic capitalization.",
+      "effective_from": null,
+      "retrieved_on": "2026-10-25",
+      "reviewer_status": "CONSULTED_NOT_AUTOMATICALLY_ADOPTED",
+      "rule_version": "review-2026-10-25",
+      "adoption_requirement": "Verify exact operative version and effective period with independently approved engagement source; named mainland/free-zone/DIFC/ADGM framework required."
+    },
+    {
+      "id": "ISRS4400-CONTEXT",
+      "title": "ISRS 4400 (Revised)",
+      "authority": "IAASB",
+      "url": "https://www.iaasb.org/publications/international-standard-related-services-isrs-4400-revised",
+      "source_type": "professional_standard",
+      "use_cases": [
+        198
+      ],
+      "provision": "Factual findings engagement; no audit opinion or assurance conclusion.",
+      "effective_from": null,
+      "retrieved_on": "2026-10-25",
+      "reviewer_status": "CONSULTED_NOT_AUTOMATICALLY_ADOPTED",
+      "rule_version": "review-2026-10-25",
+      "adoption_requirement": "Verify exact operative version and effective period with independently approved engagement source; named mainland/free-zone/DIFC/ADGM framework required."
+    },
+    {
+      "id": "FTA-FREEZONE-CONTEXT-151-200",
+      "title": "Free Zone Persons CTGFZP1",
+      "authority": "Federal Tax Authority",
+      "url": "https://www.tax.gov.ae/en/content/free.zone.persons.ctgfzp1.aspx",
+      "source_type": "official_guidance",
+      "use_cases": [
+        155,
+        156,
+        157
+      ],
+      "provision": "Dated activity/substance/counterparty evidence; current legislation and specified free-zone framework require adoption review.",
+      "effective_from": null,
+      "retrieved_on": "2026-10-25",
+      "reviewer_status": "CONSULTED_NOT_AUTOMATICALLY_ADOPTED",
+      "rule_version": "review-2026-10-25",
+      "adoption_requirement": "Verify exact operative version and effective period with independently approved engagement source; named mainland/free-zone/DIFC/ADGM framework required."
+    },
+    {
+      "id": "MOF-CT-OFFICIAL-CONTEXT",
+      "title": "Corporate Tax in the UAE",
+      "authority": "Ministry of Finance",
+      "url": "https://mof.gov.ae/en/public-finance/tax/corporate-tax/",
+      "source_type": "official_guidance",
+      "use_cases": [
+        151,
+        152,
+        153,
+        154,
+        155,
+        156,
+        157,
+        158,
+        159,
+        160
+      ],
+      "provision": "Official CT publications entry point only; no automatic legal-change interpretation or threshold adoption.",
+      "effective_from": null,
+      "retrieved_on": "2026-10-25",
+      "reviewer_status": "CONSULTED_NOT_AUTOMATICALLY_ADOPTED",
+      "rule_version": "review-2026-10-25",
+      "adoption_requirement": "Verify exact operative version and effective period with independently approved engagement source; named mainland/free-zone/DIFC/ADGM framework required."
     }
   ],
   "existing_registers": [

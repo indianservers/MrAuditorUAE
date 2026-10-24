@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-10-24T21:34:44.548852+00:00",
+  "generated_at": "2026-10-24T23:13:28.099040+00:00",
   "runs": [
     {
       "file": "advanced-engine-results.xml",
@@ -17,7 +17,7 @@
     },
     {
       "file": "advanced-integration-results.xml",
-      "tests": 23,
+      "tests": 24,
       "failures": 0,
       "errors": 0,
       "skipped": 0
@@ -25,6 +25,34 @@
     {
       "file": "advanced-unit-results.xml",
       "tests": 94,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "assurance-integration-results.xml",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "assurance-new-integration-results.xml",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "assurance-ui-results.xml",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "assurance-unit-results.xml",
+      "tests": 251,
       "failures": 0,
       "errors": 0,
       "skipped": 0
@@ -39,6 +67,34 @@
     {
       "file": "connector-health-results.xml",
       "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "continuation-integration-results.xml",
+      "tests": 32,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "continuation-parameter-gates.xml",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "continuation-ui-results.xml",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "continuation-unit-results.xml",
+      "tests": 199,
       "failures": 0,
       "errors": 0,
       "skipped": 0
@@ -67,11 +123,11 @@
   ],
   "overlap_warning": "Test runs overlap; counts must not be added as unique coverage",
   "browser": {
-    "startTime": "2026-10-24T21:34:34.760Z",
-    "duration": 8777.155999999999,
-    "expected": 0,
+    "startTime": "2026-10-24T23:09:36.910Z",
+    "duration": 36132.757999999994,
+    "expected": 4,
     "skipped": 0,
-    "unexpected": 2,
+    "unexpected": 0,
     "flaky": 0
   }
 }

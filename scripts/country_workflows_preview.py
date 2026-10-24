@@ -10,6 +10,7 @@ import io
 import json
 import os
 import sys
+from decimal import Decimal
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,10 +31,9 @@ async def main():
         or not settings().database_url.endswith("/auditos_country_workflows_test")
         or os.getenv("INTEGRATION_TESTS") != "1"
     ):
-        raise SystemExit(
-            "Only the owned disposable country workflow test database is allowed"
-        )
+        raise SystemExit("Only the owned disposable country workflow test database is allowed")
     import pytest
+
     from tests.integration.test_platform import environment
     from tests.phase4.test_workflows import actor, create, grant, setup
     from tests.qa_crud.test_country_workflows import (
@@ -190,13 +190,12 @@ async def main():
             assert uploaded.status_code == 201, uploaded.text
             return uploaded.json()["id"]
 
-        camt_evidence = await native_file(
-            eid, "SYNTHETIC-native-camt.xml", CAMT, "application/xml"
-        )
+        camt_evidence = await native_file(eid, "SYNTHETIC-native-camt.xml", CAMT, "application/xml")
         wps_evidence = await native_file(eid, SIF_FILENAME, SIF, "text/csv")
         from datetime import datetime
 
         from openpyxl import Workbook
+
         from tests.unit.test_workflow_csv_mapping import SPLIT
 
         mapped_evidence = await native_file(
@@ -213,9 +212,7 @@ async def main():
             sheet = workbook.active
             sheet.title = "Selected"
             if kind == "bank":
-                sheet.append(
-                    ["reference", "currency", "amount", "date", "account_code"]
-                )
+                sheet.append(["reference", "currency", "amount", "date", "account_code"])
                 sheet.append(["REF-1", "AED", 100.25, datetime(2026, 6, 30), "BANK-1"])
                 sheet.append(["REF-2", "AED", -5, datetime(2026, 6, 30), "BANK-1"])
             else:
@@ -284,12 +281,8 @@ async def main():
             h,
             eid,
             [
-                transaction(
-                    id="BOOK-1", reference="REF-1", amount="100.25", date="2026-06-30"
-                ),
-                transaction(
-                    id="BOOK-2", reference="REF-2", amount="-5", date="2026-06-30"
-                ),
+                transaction(id="BOOK-1", reference="REF-1", amount="100.25", date="2026-06-30"),
+                transaction(id="BOOK-2", reference="REF-2", amount="-5", date="2026-06-30"),
             ],
             "SYNTHETIC extended independent cashbook",
             totals={"AED": "95.25"},
@@ -318,9 +311,7 @@ async def main():
             json.dumps(invoice()).encode(),
             "application/json",
         )
-        ecr_evidence = await native_file(
-            india, "SYNTHETIC-monthly-ecr.txt", ECR, "text/plain"
-        )
+        ecr_evidence = await native_file(india, "SYNTHETIC-monthly-ecr.txt", ECR, "text/plain")
         gstr2b_evidence = await native_file(
             india,
             "SYNTHETIC-gstr2b.json",
@@ -374,9 +365,7 @@ async def main():
             "payroll-rules",
             {},
         )
-        rule_reviewer = await actor(
-            h, "Firm Administrator", "country-payroll-rule-reviewer"
-        )
+        rule_reviewer = await actor(h, "Firm Administrator", "country-payroll-rule-reviewer")
         await grant(client, h, f"/api/v1/engagements/{india}/audit", rule_reviewer)
         reviewed_rules = await decision(client, rule_reviewer[0], india, payroll_rules)
         assert reviewed_rules.status_code == 201, reviewed_rules.text
@@ -404,6 +393,83 @@ async def main():
             },
         )
         dest = ROOT / ".local-runtime/country-workflows/fixture.json"
+        from tests.unit.test_credit_applications import population as credit_population
+        from tests.unit.test_withholding_workflows import pooled_certificate_population
+        from tests.unit.test_withholding_workflows import population as withholding_population
+
+        await grant(client, h, f"/api/v1/engagements/{india}/audit", supporting_reviewer)
+        credit_sources = {}
+        for country, engagement, currency in (("AE", eid, "AED"), ("IN", india, "INR")):
+            credit_sources[country] = {}
+            for role, rows in credit_population().items():
+                for row in rows:
+                    row["currency"] = currency
+                kind = {
+                    "items": "audit-open-items",
+                    "controls": "balance-controls",
+                    "applications": "credit-applications",
+                }[role]
+                total = "25" if role == "applications" else "60"
+                prepared = await source(
+                    client,
+                    h,
+                    engagement,
+                    rows,
+                    f"SYNTHETIC {country} credit {role}",
+                    kind,
+                    {currency: total},
+                )
+                approved = await decision(client, supporting_reviewer[0], engagement, prepared)
+                assert approved.status_code == 201, approved.text
+                credit_sources[country][role] = approved.json()["id"]
+        withholding_sources = {}
+        for scope in ("deductor", "collectee", "collectee-cap"):
+            legal_role = "deductor" if scope == "deductor" else "collectee"
+            withholding_sources[scope] = {}
+            assessment_bytes = b"%PDF-1.4\nSYNTHETIC ASSESSMENT ONLY " + scope.encode() + b"\n%%EOF"
+            assessment_id = await native_file(
+                india, f"SYNTHETIC-{scope}-assessment.pdf", assessment_bytes, "application/pdf"
+            )
+            populations = (
+                pooled_certificate_population()
+                if scope == "collectee-cap"
+                else withholding_population(legal_role)
+            )
+            for role, rows in populations.items():
+                for row in rows:
+                    row.update(
+                        legal_role=legal_role, tax_kind="TDS" if legal_role == "deductor" else "TCS"
+                    )
+                    if row.get("assessment_evidence_version_id"):
+                        row.update(
+                            assessment_evidence_version_id=assessment_id,
+                            assessment_sha256=hashlib.sha256(assessment_bytes).hexdigest(),
+                        )
+                if role in {"reported", "statement"}:
+                    rows.append(
+                        {
+                            **rows[0],
+                            "id": "superseded",
+                            "source_version": "0",
+                            "record_status": "superseded",
+                            "amount": "150",
+                        }
+                    )
+                if legal_role == "deductor" and role == "reported":
+                    rows[0]["amount"] = "90"
+                total = str(sum(Decimal(row["amount"]) for row in rows))
+                prepared = await source(
+                    client,
+                    h,
+                    india,
+                    rows,
+                    f"SYNTHETIC {scope} {role}",
+                    "withholding-records",
+                    {"INR": total},
+                )
+                approved = await decision(client, supporting_reviewer[0], india, prepared)
+                assert approved.status_code == 201, approved.text
+                withholding_sources[scope][role] = approved.json()["id"]
         if implementation_hash() != implementation:
             raise RuntimeError(
                 "Backend implementation changed during fixture preparation; prepare fresh fixtures before browser verification"
@@ -413,6 +479,8 @@ async def main():
             json.dumps(
                 {
                     "synthetic": True,
+                    "credit_application_sources": credit_sources,
+                    "withholding_sources": withholding_sources,
                     "implementation_sha256": implementation,
                     "scanner_test_double": True,
                     "broker_test_double": True,

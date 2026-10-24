@@ -77,6 +77,9 @@ def from_supporting_table(body, data):
         output["supporting_source_row"] = original.get("source_row")
         if original.get("source_worksheet"):
             output["supporting_source_worksheet"] = original["source_worksheet"]
+        for key in ("source_page", "source_page_row", "source_pdf_bbox", "source_pdf_cells", "source_pdf_amount_basis"):
+            if key in original:
+                output["supporting_" + key] = original[key]
         if open_items:
             output["supporting_reported_open_amount"] = original["open_amount"]
             output["supporting_original_balance_date"] = original.get("balance_date")

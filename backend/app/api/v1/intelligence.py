@@ -33,12 +33,16 @@ async def remaining_open_items(
 
     eng = await service.scope(db, ctx, eid, "country-workflow", True)
     source = await service.event(db, ctx, eid, identifier, True)
-    if source.kind != "country-workflow" or source.body.get("workflow") != "open-item-allocations":
-        raise HTTPException(422, "Select an invoice/cash allocation assessment")
+    if source.kind != "country-workflow" or source.body.get("workflow") not in {
+        "open-item-allocations",
+        "credit-note-applications",
+    }:
+        raise HTTPException(422, "Select a cash allocation or credit application assessment")
     if source.body.get("review_status") != "REVIEWED" or source.body.get("blocked"):
         raise HTTPException(409, "Independently reviewed reconciled allocations required")
     # The existing ECL/count/source consumers use this same canonical source type.
     rows = source.body["remaining_open_items"]
+    credit_application = source.body.get("workflow") == "credit-note-applications"
     totals = defaultdict(Decimal)
     for row in rows:
         totals[row["currency"]] += Decimal(row["amount"])
@@ -47,10 +51,16 @@ async def remaining_open_items(
         "rows": rows,
         "row_count": len(rows),
         "control_totals": {c: str(v) for c, v in totals.items()},
-        "population_completeness": "DERIVED_FROM_REVIEWED_EXPLICIT_ALLOCATIONS",
+        "population_completeness": "DERIVED_FROM_REVIEWED_EXPLICIT_CREDIT_APPLICATIONS"
+        if credit_application
+        else "DERIVED_FROM_REVIEWED_EXPLICIT_ALLOCATIONS",
         "review_status": "UNVERIFIED",
-        "title": "Remaining open items after reviewed cash allocations",
-        "parser_version": "allocation-open-items/1",
+        "title": "Remaining open items after reviewed credit applications"
+        if credit_application
+        else "Remaining open items after reviewed cash allocations",
+        "parser_version": "credit-application-open-items/1"
+        if credit_application
+        else "allocation-open-items/1",
         "contributors": sorted({*source.body.get("contributors", []), str(ctx.user_id)}),
         "source_identity": "allocation:" + str(source.root_id),
         "source_sha256": source.sha256,
@@ -973,6 +983,11 @@ async def generate_paper(
             "review_status",
             "as_of",
             "rationale",
+            "withholding_role",
+            "comparison_basis",
+            "selected_current_totals",
+            "assessment_contract_version",
+            "limitations",
         }
     }
     tables = [

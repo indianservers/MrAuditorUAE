@@ -224,6 +224,9 @@ async def validate_body(db, ctx, eng, kind, body, record_id=None):
             "Invalid audit fields: "
             + "; ".join(".".join(map(str, e["loc"])) for e in exc.errors()),
         ) from None
+    if kind == "working-papers" and record_id:
+        from app.modules.lineage.source_links import acyclic_paper_links
+        await acyclic_paper_links(db, ctx, eng.id, record_id, data.sources)
     if data.owner_id:
         owner = await db.scalar(
             select(Membership.id)
@@ -430,6 +433,8 @@ async def revision(db, ctx, obj, request_id, action):
         {"engagement_id": str(obj.engagement_id), "kind": obj.kind, "version": obj.version},
     )
     await db.flush()
+    from app.modules.jurisdictions.ae.continuation_preview import refresh_draft
+    await refresh_draft(db, ctx, obj, request_id)
     if action != "created":
         from app.modules.jurisdictions.ae.advanced_lineage import source_changed
         await source_changed(db, ctx, obj, request_id)
@@ -458,6 +463,8 @@ async def create(db, ctx, eid, kind, data, request_id):
 
 async def update(db, ctx, eid, rid, data, request_id):
     obj = await get_record(db, ctx, eid, rid, mutable=True)
+    if obj.kind == "working-papers" and obj.body.get("factual_findings_only"):
+        data.body["factual_findings_only"] = True
     if obj.kind == "working-papers" and obj.body.get("advanced_input"):
         proposed_case = (data.body.get("advanced_input") or {}).get("use_case_id")
         if proposed_case != obj.body["advanced_input"]["use_case_id"]:
@@ -842,6 +849,19 @@ async def completion(db, ctx, eid):
     ).all()
     approved = {r.kind for r in rows if r.status in {"APPROVED", "LOCKED"}}
     checks = []
+    # Approved consultation inputs can still contain unresolved release blockers.
+    for paper in rows:
+        if (paper.body.get("advanced_input") or {}).get("use_case_id") not in {150,190} or paper.status == "ARCHIVED":
+            continue
+        from app.modules.jurisdictions.ae.advanced import Schedule, calculate
+        from app.modules.lineage.working_papers import freshness
+        current_input = await freshness(db, ctx, paper) == "CURRENT"
+        try:
+            assessment = calculate(Schedule.model_validate(paper.body["advanced_input"]))
+            blocked = any(row["metrics"]["release_blocked" if assessment["use_case_id"]==150 else "finalization_blocked"] for row in assessment["rows"])
+        except (ValueError, ArithmeticError):
+            blocked = True
+        checks.append({"code":"quality_consultation_"+str(paper.id),"passed":current_input and paper.status in {"APPROVED","LOCKED"} and not blocked,"description":"Current independently approved consultation with no outstanding required quality release blockers","record_ids":[str(paper.id)]})
     for kind in [
         "acceptance",
         "planning",

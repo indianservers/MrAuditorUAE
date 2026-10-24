@@ -57,6 +57,7 @@
         "testMatch": "uae-business-cases.spec.ts",
         "timeout": 180000,
         "use": {
+          "actionTimeout": 15000,
           "baseURL": "http://127.0.0.1:3047",
           "viewport": {
             "width": 1500,
@@ -117,12 +118,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 6938,
+                  "duration": 11239,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T21:35:15.838Z",
+                  "startTime": "2026-10-24T23:09:37.392Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -137,7 +138,7 @@
         },
         {
           "title": "advanced VAT allocation and procurement schedules use approved inputs and retained exact results",
-          "ok": false,
+          "ok": true,
           "tags": [],
           "tests": [
             {
@@ -150,50 +151,91 @@
                 {
                   "workerIndex": 0,
                   "parallelIndex": 0,
-                  "status": "timedOut",
-                  "duration": 180115,
-                  "error": {
-                    "message": "\u001b[31mTest timeout of 180000ms exceeded.\u001b[39m",
-                    "stack": "\u001b[31mTest timeout of 180000ms exceeded.\u001b[39m"
-                  },
-                  "errors": [
-                    {
-                      "message": "\u001b[31mTest timeout of 180000ms exceeded.\u001b[39m"
-                    },
-                    {
-                      "location": {
-                        "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\uae-business-cases.spec.ts",
-                        "column": 51,
-                        "line": 94
-                      },
-                      "message": "Error: locator.selectOption: Test timeout of 180000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('region', { name: 'Structured review schedule' }).getByLabel('source id', { exact: true })\u001b[22m\n\n\n  92 |  const scope=page.getByRole(\"region\",{name:\"Structured review schedule\"});\n  93 |  await scope.getByLabel(\"Period start\",{exact:true}).fill(\"2026-01-01\");await scope.getByLabel(\"Period end\",{exact:true}).fill(\"2026-12-31\");\n> 94 |  await scope.getByLabel(\"source id\",{exact:true}).selectOption(fixture.policy_source_id);\n     |                                                   ^\n  95 |  for(const [key,value] of Object.entries({\"source locator\":\"SYNTHETIC method section 1\",\"version\":\"SYN-2026\",\"effective from\":\"2026-01-01\",\"effective to\":\"2026-12-31\",\"adoption assessment\":\"SYNTHETIC reviewed allocation method and source attribution\"}))await scope.getByLabel(key,{exact:true}).fill(value);\n  96 |  await scope.getByLabel(\"Unique reference\",{exact:true}).fill(\"SYN-BROWSER-ALLOC\");await scope.getByLabel(\"Row evidence\",{exact:true}).selectOption(fixture.policy_source_id);\n  97 |  for(const [key,value] of Object.entries({\"direct recoverable\":\"100\",\"direct blocked\":\"50\",\"residual\":\"200\",\"numerator\":\"3\",\"denominator\":\"4\",\"previously claimed\":\"240\"}))await scope.getByLabel(key,{exact:true}).fill(value);\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\uae-business-cases.spec.ts:94:51"
-                    }
-                  ],
+                  "status": "passed",
+                  "duration": 7788,
+                  "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T21:35:22.881Z",
+                  "startTime": "2026-10-24T23:09:48.730Z",
                   "annotations": [],
-                  "attachments": [
-                    {
-                      "name": "screenshot",
-                      "contentType": "image/png",
-                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\uae-business-cases-advance-65a64--and-retained-exact-results\\test-failed-1.png"
-                    },
-                    {
-                      "name": "error-context",
-                      "contentType": "text/markdown",
-                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\uae-business-cases-advance-65a64--and-retained-exact-results\\error-context.md"
-                    }
-                  ]
+                  "attachments": []
                 }
               ],
-              "status": "unexpected"
+              "status": "expected"
             }
           ],
           "id": "6d54cedaddd130f85f49-2cad03dcc06af16a87c8",
           "file": "uae-business-cases.spec.ts",
-          "line": 84,
+          "line": 83,
+          "column": 1
+        },
+        {
+          "title": "150-case workspace prepares scoped financing drafts and reuses approved IFRS kernels",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10785,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T23:09:56.526Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6d54cedaddd130f85f49-cde6d16c2878090d4946",
+          "file": "uae-business-cases.spec.ts",
+          "line": 205,
+          "column": 1
+        },
+        {
+          "title": "new lease allocation and break-even use approved deterministic inputs",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5635,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T23:10:07.323Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6d54cedaddd130f85f49-151e783cbf986056e40d",
+          "file": "uae-business-cases.spec.ts",
+          "line": 349,
           "column": 1
         }
       ]
@@ -201,11 +243,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-24T21:35:15.376Z",
-    "duration": 187712.39800000002,
-    "expected": 1,
+    "startTime": "2026-10-24T23:09:36.910Z",
+    "duration": 36132.757999999994,
+    "expected": 4,
     "skipped": 0,
-    "unexpected": 1,
+    "unexpected": 0,
     "flaky": 0
   }
 }

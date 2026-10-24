@@ -1,0 +1,103 @@
+{
+  "catalogue_cases": 200,
+  "new_cases": [
+    151,
+    152,
+    153,
+    154,
+    155,
+    156,
+    157,
+    158,
+    159,
+    160,
+    161,
+    162,
+    163,
+    164,
+    165,
+    166,
+    167,
+    168,
+    169,
+    170,
+    171,
+    172,
+    173,
+    174,
+    175,
+    176,
+    177,
+    178,
+    179,
+    180,
+    181,
+    182,
+    183,
+    184,
+    185,
+    186,
+    187,
+    188,
+    189,
+    190,
+    191,
+    192,
+    193,
+    194,
+    195,
+    196,
+    197,
+    198,
+    199,
+    200
+  ],
+  "new_case_status": "Implemented with limitations",
+  "advanced_contract_sha256": "602121867fbba32020723ad2136c447002527070e8be204673bf8d83677c0b59",
+  "results": {
+    "assurance-unit-results.xml": {
+      "tests": 251,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "assurance-integration-results.xml": {
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "assurance-new-integration-results.xml": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "assurance-ui-results.xml": {
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "browser": {
+      "startTime": "2026-10-24T23:09:36.910Z",
+      "duration": 36132.757999999994,
+      "expected": 4,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "local_ml_tests": {
+    "tests": 7,
+    "passed": 7,
+    "receipt": "assurance-local-ml-tests.txt"
+  },
+  "static_checks": {
+    "mypy": "39 source files passed",
+    "canvas": "passed",
+    "frontend_production_build": "passed",
+    "new_engine_ruff": "passed"
+  },
+  "scope": "Synthetic workflow and numerical verification; full legal and sector acceptance remains limited per matrix. Test suites overlap."
+}

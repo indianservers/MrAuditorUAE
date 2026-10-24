@@ -37,11 +37,7 @@
     ".next-audit-gap-build/types/**/*.ts",
     ".next-audit-gap-build/dev/types/**/*.ts",
     ".next-country-workflows-build/types/**/*.ts",
-    ".next-country-workflows-build/dev/types/**/*.ts",
-    ".next-mr-auditor-business-build/types/**/*.ts",
-    ".next-mr-auditor-business-build/dev/types/**/*.ts",
-    ".next-mr-auditor-business/types/**/*.ts",
-    ".next-mr-auditor-business/dev/types/**/*.ts"
+    ".next-country-workflows-build/dev/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

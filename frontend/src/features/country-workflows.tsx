@@ -84,6 +84,8 @@ const text = (v: unknown) =>
 const moneyTables = [
   "cash-payments",
   "item-allocations",
+  "credit-applications",
+  "withholding-records",
   "payroll-bases",
   "transactions",
   "tax-documents",
@@ -165,6 +167,7 @@ export function CountryWorkflows({
   );
   const [workflow, setWorkflow] = useState("bank-brs");
   const [invoiceFaceAmounts, setInvoiceFaceAmounts] = useState(false);
+  const [withholdingRole, setWithholdingRole] = useState("");
   const [tableType, setTableType] = useState("transactions");
   const [sourceOrigin, setSourceOrigin] = useState("evidence");
   const [supportingTable, setSupportingTable] = useState("");
@@ -239,61 +242,102 @@ export function CountryWorkflows({
   const compactSource =
     detail.data?.kind === "workflow-source" &&
     ["transactions", "audit-open-items"].includes(body?.table_type || "");
+  const compactCredit = body?.workflow === "credit-note-applications";
+  const compactWithholding = [
+    "india-withholding-liability",
+    "india-withholding-credit",
+  ].includes(body?.workflow || "");
+  const assessmentAttention =
+    compactWithholding &&
+    rows.some(
+      (row) =>
+        Array.isArray(row.assessment_issues) &&
+        row.assessment_issues.length > 0,
+    );
   const columns =
-    compactSource && !showRuleProvenance
-      ? (body?.table_type === "transactions"
-          ? [
-              "reference",
-              "account",
-              "date",
-              "currency",
-              "amount",
-              "counterparty",
-              "source_debit",
-              "source_credit",
-            ]
-          : [
-              "reference",
-              "counterparty",
-              "account",
-              "side",
-              "currency",
-              "document_type",
-              "document_date",
-              "due_date",
-              "balance_date",
-              "amount",
-              "supporting_reported_open_amount",
-            ]
-        ).filter((key) => allColumns.includes(key))
-      : body?.workflow === "india-payroll-rules" && !showRuleProvenance
+    compactWithholding && !showRuleProvenance
+      ? [
+          "transaction_reference",
+          "counterparty",
+          "legal_role",
+          "tax_kind",
+          "period",
+          "currency",
+          "amounts",
+          ...(assessmentAttention
+            ? ["comparison_state", "assessment_issues"]
+            : []),
+          "differences_from_expected",
+          "differences_from_books",
+          "state",
+        ].filter((key) => allColumns.includes(key))
+      : compactCredit && !showRuleProvenance
         ? [
-            "subject",
-            "period",
-            "component",
+            "kind",
+            "item_id",
             "currency",
-            "assessed_base",
-            "expected_amount",
-            "reported_amount",
+            "amount",
+            "original_balance",
+            "applied",
+            "remaining_balance",
+            "control_amount",
             "difference",
             "state",
           ].filter((key) => allColumns.includes(key))
-        : ["india-gst", "uae-vat"].includes(body?.workflow || "") &&
-            !showRuleProvenance
-          ? [
-              "counterparty",
-              "reference",
-              "document_type",
-              "component",
-              "currency",
-              "books_tax",
-              "return_tax",
-              "tax_difference",
-              "net_difference",
-              "state",
-              "source_review_reasons",
-            ].filter((key) => allColumns.includes(key))
-          : allColumns;
+        : compactSource && !showRuleProvenance
+          ? (body?.table_type === "transactions"
+              ? [
+                  "reference",
+                  "account",
+                  "date",
+                  "currency",
+                  "amount",
+                  "counterparty",
+                  "source_debit",
+                  "source_credit",
+                ]
+              : [
+                  "reference",
+                  "counterparty",
+                  "account",
+                  "side",
+                  "currency",
+                  "document_type",
+                  "document_date",
+                  "due_date",
+                  "balance_date",
+                  "amount",
+                  "supporting_reported_open_amount",
+                ]
+            ).filter((key) => allColumns.includes(key))
+          : body?.workflow === "india-payroll-rules" && !showRuleProvenance
+            ? [
+                "subject",
+                "period",
+                "component",
+                "currency",
+                "assessed_base",
+                "expected_amount",
+                "reported_amount",
+                "difference",
+                "state",
+              ].filter((key) => allColumns.includes(key))
+            : ["india-gst", "uae-vat"].includes(body?.workflow || "") &&
+                !showRuleProvenance
+              ? [
+                  "counterparty",
+                  "reference",
+                  "document_type",
+                  "component",
+                  "currency",
+                  "books_tax",
+                  "return_tax",
+                  "tax_difference",
+                  "net_difference",
+                  "state",
+                  "source_review_reasons",
+                ].filter((key) => allColumns.includes(key))
+              : allColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -407,8 +451,11 @@ export function CountryWorkflows({
                       : {}),
                   }
                 : {}),
-              ...(["payroll-rules", "benefit-rules"].includes(tableType) &&
-              ruleDocument
+              ...([
+                "payroll-rules",
+                "benefit-rules",
+                "withholding-records",
+              ].includes(tableType) && ruleDocument
                 ? { rule_document_version_id: ruleDocument }
                 : {}),
               ...(sourceFormat === "india-inv01-json"
@@ -460,11 +507,32 @@ export function CountryWorkflows({
           throw new Error(
             "Confirm that invoices contain face amounts before cash allocation.",
           );
+        if (workflow === "credit-note-applications" && !invoiceFaceAmounts)
+          throw new Error(
+            "Confirm that balances are before the listed credit applications.",
+          );
+        if (
+          ["india-withholding-liability", "india-withholding-credit"].includes(
+            workflow,
+          ) &&
+          !withholdingRole
+        )
+          throw new Error(
+            "Select the organization’s legal withholding role before comparing sources.",
+          );
         payload = {
           workflow,
+          ...([
+            "india-withholding-liability",
+            "india-withholding-credit",
+          ].includes(workflow)
+            ? { withholding_role: withholdingRole }
+            : {}),
           ...(workflow === "open-item-allocations"
             ? { allocation_basis: "invoice_face_amounts" }
-            : {}),
+            : workflow === "credit-note-applications"
+              ? { allocation_basis: "pre_application_balances" }
+              : {}),
           source_ids: sources,
           as_of: asOf,
           title: label,
@@ -473,6 +541,8 @@ export function CountryWorkflows({
             "india-payroll-rules",
             "india-gst",
             "india-withholding",
+            "india-withholding-liability",
+            "india-withholding-credit",
           ].includes(workflow)
             ? "INR"
             : currency,
@@ -971,6 +1041,7 @@ export function CountryWorkflows({
                       value={tableType}
                       onChange={(e) => {
                         setTableType(e.target.value);
+                        setRuleDocument("");
                         setCSVColumns({});
                         setAmountDerivation("none");
                       }}
@@ -1135,11 +1206,16 @@ export function CountryWorkflows({
                       reference explicitly.
                     </p>
                   )}
-                  {["payroll-rules", "benefit-rules"].includes(tableType) && (
+                  {[
+                    "payroll-rules",
+                    "benefit-rules",
+                    "withholding-records",
+                  ].includes(tableType) && (
                     <>
                       <label>
-                        {tableType === "benefit-rules" ? "Benefit" : "Payroll"}{" "}
-                        rule source document (optional shared document)
+                        {tableType === "withholding-records"
+                          ? "Withholding assessment document (optional shared document)"
+                          : `${tableType === "benefit-rules" ? "Benefit" : "Payroll"} rule source document (optional shared document)`}
                         <select
                           value={ruleDocument}
                           onChange={(e) => setRuleDocument(e.target.value)}
@@ -1157,12 +1233,27 @@ export function CountryWorkflows({
                         </select>
                       </label>
                       <p>
-                        Select a retained document to fill blank source-document
-                        references and hashes in the CSV. Conflicting references
-                        are rejected. Independently review this source before
-                        calculating expected dues. Payroll rules must cover the
-                        whole wage month; benefit rules must cover the
-                        service-end date and assessed employment regime.
+                        {tableType === "withholding-records" ? (
+                          <>
+                            Select a retained assessment document to fill blank
+                            evidence IDs and hashes. Declare the assessment kind
+                            and coverage dates in the CSV; certificate
+                            assessments also require a shared amount cap.
+                            Expected liability and certificate-credit records
+                            need this support before approval. Selection does
+                            not establish legal applicability.
+                          </>
+                        ) : (
+                          <>
+                            Select a retained document to fill blank
+                            source-document references and hashes in the CSV.
+                            Conflicting references are rejected. Independently
+                            review this source before calculating expected dues.
+                            Payroll rules must cover the whole wage month;
+                            benefit rules must cover the service-end date and
+                            assessed employment regime.
+                          </>
+                        )}
                       </p>
                     </>
                   )}
@@ -1403,6 +1494,8 @@ export function CountryWorkflows({
                   value={workflow}
                   onChange={(e) => {
                     setWorkflow(e.target.value);
+                    setInvoiceFaceAmounts(false);
+                    setWithholdingRole("");
                     setSources({});
                     setRequiredChecks("");
                   }}
@@ -1604,15 +1697,46 @@ export function CountryWorkflows({
                   onChange={(e) => setReason(e.target.value)}
                 />
               </label>
-              {workflow === "open-item-allocations" && (
+              {[
+                "india-withholding-liability",
+                "india-withholding-credit",
+              ].includes(workflow) && (
+                <label>
+                  Organization legal withholding role
+                  <select
+                    value={withholdingRole}
+                    onChange={(event) => setWithholdingRole(event.target.value)}
+                  >
+                    <option value="">Select the assessed role</option>
+                    {(workflow === "india-withholding-liability"
+                      ? [
+                          ["deductor", "TDS deductor — liability"],
+                          ["collector", "TCS collector — liability"],
+                        ]
+                      : [
+                          ["deductee", "TDS deductee — credit evidence"],
+                          ["collectee", "TCS collectee — credit evidence"],
+                        ]
+                    ).map(([value, label]) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
+              {["open-item-allocations", "credit-note-applications"].includes(
+                workflow,
+              ) && (
                 <label>
                   <input
                     type="checkbox"
                     checked={invoiceFaceAmounts}
                     onChange={(e) => setInvoiceFaceAmounts(e.target.checked)}
                   />
-                  Invoice amounts are face amounts before cash allocations,
-                  rather than already-net balances.
+                  {workflow === "credit-note-applications"
+                    ? "Balances are before the listed credit applications; these applications have not already been deducted."
+                    : "Invoice amounts are face amounts before cash allocations, rather than already-net balances."}
                 </label>
               )}
             </>
@@ -1716,7 +1840,9 @@ export function CountryWorkflows({
               payments or journals are executed.
             </p>
           )}
-          {body.workflow === "open-item-allocations" &&
+          {["open-item-allocations", "credit-note-applications"].includes(
+            body.workflow ?? "",
+          ) &&
             body.review_status === "REVIEWED" &&
             !body.blocked && (
               <Button
@@ -1948,10 +2074,11 @@ export function CountryWorkflows({
             </Link>
           </div>
           <div style={{ overflowX: "auto" }}>
-            {compactSource && (
-              <label>
+            {(compactSource || compactCredit || compactWithholding) && (
+              <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <input
                   type="checkbox"
+                  style={{ width: 16, height: 16, minHeight: 0, margin: 0 }}
                   checked={showRuleProvenance}
                   onChange={(event) =>
                     setShowRuleProvenance(event.target.checked)
@@ -1981,7 +2108,39 @@ export function CountryWorkflows({
                 {rows.map((row, i) => (
                   <tr key={String(row.id || i)}>
                     {columns.map((k) => (
-                      <td key={k}>{text(row[k])}</td>
+                      <td key={k}>
+                        {compactWithholding &&
+                        k === "assessment_issues" &&
+                        Array.isArray(row[k]) ? (
+                          <ul>
+                            {(row[k] as unknown[]).map((issue) => (
+                              <li key={String(issue)}>
+                                {text(issue).replaceAll("_", " ").toLowerCase()}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : compactWithholding &&
+                          [
+                            "amounts",
+                            "differences_from_expected",
+                            "differences_from_books",
+                          ].includes(k) &&
+                          row[k] &&
+                          typeof row[k] === "object" &&
+                          !Array.isArray(row[k]) ? (
+                          <div style={{ display: "grid", gap: 4 }}>
+                            {Object.entries(
+                              row[k] as Record<string, unknown>,
+                            ).map(([role, value]) => (
+                              <span key={role}>
+                                {role}: {text(value)}
+                              </span>
+                            ))}
+                          </div>
+                        ) : (
+                          text(row[k])
+                        )}
+                      </td>
                     ))}
                     {detail.data?.kind === "country-workflow" && (
                       <td>

@@ -1,0 +1,2 @@
+id,credit_item_id,invoice_item_id,date,currency,amount,evidence_reference,allocation_reference,rationale
+A1,CN1,I1,2026-06-01,AED,25,SYN-reviewed-note,SYN-allocation-1,Synthetic independently assessed application to the invoice

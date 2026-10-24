@@ -142,9 +142,10 @@ async def business_cases(eid: uuid.UUID, db: DB, ctx: Actor):
 
         "country": "AE",
 
-        "version": "mr-auditor-uae/2",
+        "version": "mr-auditor-uae/4",
 
         "engine_connections": ENGINE_TOOLS,
+        "inference_modes":["trained_model","statistical_baseline","rules_baseline","diagnostic_mock","unavailable"],
 
         "items": [
 
@@ -176,7 +177,7 @@ async def business_advanced_contract(eid: uuid.UUID, identifier: int, db: DB, ct
 
     if identifier < 51:
 
-        raise HTTPException(422, "Advanced contracts belong to cases 51–100")
+        raise HTTPException(422, "Advanced contracts belong to cases 51–200")
 
     return {**spec(identifier), "schedule_schema":Schedule.model_json_schema(), "row_schema":ROW_MODELS[identifier].model_json_schema(), "execution_action":"advanced-review", "input_kind":"working-papers", "independent_approval_required":True}
 

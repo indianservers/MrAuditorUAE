@@ -1,5 +1,5 @@
 {
-  "version": "mr-auditor-uae/2",
+  "version": "mr-auditor-uae/4",
   "country": "AE",
   "items": [
     {
@@ -3401,6 +3401,3505 @@
       "limitations": [
         "Actual authorized file-population check reuses existing completion and misstatement services, adds stale-paper checks and invalidates when records/policies change. No automatic seal, retention execution or report signing.",
         "Structured count schedule remains available for external file-index observations."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 101,
+      "key": "uae-101",
+      "title": "Tax-authority notice intake and response management",
+      "description": "Extract the notice type, entity, reference, requests and relevant dates from supplied correspondence. Build an evidence checklist, response draft and reviewer workflow. Verify deadlines rather than inferring them.",
+      "prompt": "Turn this FTA notice into a response workstream with owners and evidence requests.",
+      "engines": [
+        "E01",
+        "E02",
+        "E19",
+        "E20"
+      ],
+      "required_information": [
+        "notice",
+        "authority-reference",
+        "deadline-rule",
+        "owner",
+        "correspondence"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 9,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Deadline verification and notice extraction are reviewed inputs; no authority dispatch or deadline inference.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "AE-FTA-RECONSIDERATION"
+      ]
+    },
+    {
+      "id": 102,
+      "key": "uae-102",
+      "title": "Tax assessment and penalty reconciliation",
+      "description": "Reconcile supplied assessments, penalties, payments and account statements to the ledger. Identify unexplained balances and draft accounting entries for approval.",
+      "prompt": "Explain the difference between our tax ledger and this authority statement.",
+      "engines": [
+        "E01",
+        "E03",
+        "E14",
+        "E19"
+      ],
+      "required_information": [
+        "assessment",
+        "penalty",
+        "payment",
+        "authority-statement",
+        "ledger"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 9,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "No authority account connection; signed movement convention is liabilities-positive.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 103,
+      "key": "uae-103",
+      "title": "Tax clarification request preparation",
+      "description": "Convert an unresolved factual tax issue into a structured clarification-request draft, including facts, questions, supporting documents and the firm’s reviewed analysis.",
+      "prompt": "Prepare a clarification-request pack for this unusual transaction.",
+      "engines": [
+        "E01",
+        "E02",
+        "E20",
+        "E21"
+      ],
+      "required_information": [
+        "facts",
+        "issue",
+        "legal-analysis",
+        "supporting-documents"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 9,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Draft only; scope/eligibility and current authority procedure require professional adoption.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 104,
+      "key": "uae-104",
+      "title": "Tax reconsideration case preparation",
+      "description": "Organize supplied decisions, notifications, dates, grounds and evidence into a reviewable case chronology. Verify applicable procedures and time limits; require professional approval.",
+      "prompt": "Build the evidence chronology for reviewing this tax decision.",
+      "engines": [
+        "E01",
+        "E02",
+        "E19",
+        "E20"
+      ],
+      "required_information": [
+        "decision",
+        "notification",
+        "chronology",
+        "grounds",
+        "deadline-rule"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 9,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "No legal grounds determination or submission; verified deadlines supplied, never guessed.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "AE-FTA-RECONSIDERATION"
+      ]
+    },
+    {
+      "id": 105,
+      "key": "uae-105",
+      "title": "Tax refund claim substantiation",
+      "description": "Reconcile the requested refund to returns, ledger balances, invoices and payment evidence. Track previously claimed amounts and missing support.",
+      "prompt": "Prepare the supporting schedule for this tax refund request.",
+      "engines": [
+        "E02",
+        "E04",
+        "E05",
+        "E14",
+        "E19"
+      ],
+      "required_information": [
+        "return",
+        "ledger",
+        "invoices",
+        "payments",
+        "prior-claims"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 9,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Per-claim approved population only; no authority refund entitlement or live utilization ledger.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 106,
+      "key": "uae-106",
+      "title": "Tax-agent authorization and access governance",
+      "description": "Maintain engagement scope, authorization evidence, permitted activities, expiry dates and revocations. Prevent actions outside the recorded mandate.",
+      "prompt": "Show which client tax authorizations need renewal before our next filing cycle.",
+      "engines": [
+        "E01",
+        "E19",
+        "E20",
+        "E22"
+      ],
+      "required_information": [
+        "mandate",
+        "permitted-activities",
+        "expiry",
+        "revocation"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 9,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Enforces this adapter's readiness only; global mandate enforcement across external filing/connector actions remains unavailable.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 107,
+      "key": "uae-107",
+      "title": "Tax-residency certificate readiness",
+      "description": "Collect applicant-specific facts and supporting documents using verified current requirements. Prepare a readiness assessment without predicting authority approval.",
+      "prompt": "Prepare the document checklist for this company’s tax-residency certificate application.",
+      "engines": [
+        "E01",
+        "E02",
+        "E19"
+      ],
+      "required_information": [
+        "applicant-specific",
+        "facts",
+        "documents",
+        "adopted-requirements"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 9,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "No residence decision or prediction of authority acceptance; applicant-specific requirements are reviewer supplied.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "ADGM-LEGAL-FRAMEWORK"
+      ]
+    },
+    {
+      "id": 108,
+      "key": "uae-108",
+      "title": "Treaty-relief and beneficial-ownership evidence review",
+      "description": "Analyze the relevant treaty, income type, residence evidence, contractual rights and supplied beneficial-ownership facts. Escalate interpretive uncertainty.",
+      "prompt": "Assess what evidence is needed to review treaty relief on this foreign-source payment.",
+      "engines": [
+        "E01",
+        "E02",
+        "E05",
+        "E07"
+      ],
+      "required_information": [
+        "treaty",
+        "residence",
+        "rights",
+        "beneficial-ownership",
+        "income"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 9,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "No treaty rate/beneficial-owner conclusion; treaty jurisdictions and current article must be adopted explicitly.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 109,
+      "key": "uae-109",
+      "title": "Customs valuation and landed-cost reconciliation",
+      "description": "Reconcile purchase price, freight, insurance, duty and other costs to customs documents and inventory records. Separate customs valuation from accounting capitalization.",
+      "prompt": "Explain landed-cost differences between customs declarations and inventory receipts.",
+      "engines": [
+        "E01",
+        "E02",
+        "E13",
+        "E17"
+      ],
+      "required_information": [
+        "invoice",
+        "freight",
+        "insurance",
+        "duty",
+        "customs",
+        "inventory",
+        "capitalization-policy"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 9,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Accounting capitalization and customs valuation remain distinct approved classifications; recoverable taxes excluded from supplied costs.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 110,
+      "key": "uae-110",
+      "title": "Temporary imports, re-exports and refundable deposits",
+      "description": "Track goods, declaration references, movements, deposits and supporting exit evidence. Identify unresolved items using applicable verified customs procedures.",
+      "prompt": "Find temporary imports with outstanding deposits or missing re-export evidence.",
+      "engines": [
+        "E01",
+        "E02",
+        "E14",
+        "E17",
+        "E19"
+      ],
+      "required_information": [
+        "declaration",
+        "goods",
+        "exit",
+        "deposit",
+        "customs-procedure"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 9,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "No customs guarantee cancellation or automatic deadline calculation.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 111,
+      "key": "uae-111",
+      "title": "Principal-versus-agent revenue assessment",
+      "description": "Review contractual responsibility, control, pricing and fulfillment facts. Produce an approved gross-versus-net accounting assessment with transaction-level effects.",
+      "prompt": "Assess whether our UAE distribution platform should recognize gross sales or commission income.",
+      "engines": [
+        "E02",
+        "E09",
+        "E12"
+      ],
+      "required_information": [
+        "contract",
+        "control",
+        "pricing",
+        "fulfillment",
+        "judgment"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 10,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Shows both alternatives and the approved input treatment; no autonomous IFRS15 principal-agent decision.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "IFRS15-CONTRACT-CONTEXT"
+      ]
+    },
+    {
+      "id": 112,
+      "key": "uae-112",
+      "title": "Bundled-contract allocation",
+      "description": "Identify distinct promised goods and services, collect approved standalone selling prices, and calculate allocations and recognition schedules.",
+      "prompt": "Allocate this equipment-and-maintenance contract across its deliverables.",
+      "engines": [
+        "E02",
+        "E09",
+        "E12"
+      ],
+      "required_information": [
+        "contract",
+        "obligations",
+        "standalone-prices",
+        "recognition-policy"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 10,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Relative SSP method per supplied contract only; legal distinctness and recognition progress must be approved.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "IFRS15-CONTRACT-CONTEXT"
+      ]
+    },
+    {
+      "id": 113,
+      "key": "uae-113",
+      "title": "Contract modification accounting",
+      "description": "Track changes in scope, price and performance obligations. Calculate the effect of the approved accounting treatment and preserve the original contract schedule.",
+      "prompt": "Recalculate revenue after this customer approved an additional service package.",
+      "engines": [
+        "E02",
+        "E09",
+        "E12"
+      ],
+      "required_information": [
+        "original-schedule",
+        "modification",
+        "approval",
+        "obligations"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 10,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Supports approved separate/prospective/cumulative alternatives; no automatic treatment election.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "IFRS15-CONTRACT-CONTEXT"
+      ]
+    },
+    {
+      "id": 114,
+      "key": "uae-114",
+      "title": "Variable consideration and sales incentives",
+      "description": "Model rebates, discounts, bonuses, penalties and returns using documented assumptions and approved accounting policies.",
+      "prompt": "Estimate the year-end rebate liability under these UAE distributor agreements.",
+      "engines": [
+        "E02",
+        "E09",
+        "E12"
+      ],
+      "required_information": [
+        "contract",
+        "rebate",
+        "forecasts",
+        "returns",
+        "constraint-policy"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 10,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Single reviewed expected-value scenario; no unbounded automatic forecasts or constraint judgment.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "IFRS15-CONTRACT-CONTEXT"
+      ]
+    },
+    {
+      "id": 115,
+      "key": "uae-115",
+      "title": "Gift cards, vouchers and loyalty obligations",
+      "description": "Track issuance, redemption, expiry and outstanding balances. Assess revenue, liability and VAT implications separately using verified rules.",
+      "prompt": "Reconcile outstanding gift cards and assess the accounting for unredeemed balances.",
+      "engines": [
+        "E01",
+        "E04",
+        "E09",
+        "E12"
+      ],
+      "required_information": [
+        "issuance",
+        "redemption",
+        "expiry",
+        "liability",
+        "VAT-assessment"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 10,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Approved breakage only; VAT point/classification remains a separate verified workstream.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "IFRS15-CONTRACT-CONTEXT"
+      ]
+    },
+    {
+      "id": 116,
+      "key": "uae-116",
+      "title": "Bill-and-hold and consignment review",
+      "description": "Assess control, delivery terms, inventory location and contract evidence. Flag sales recorded before the relevant recognition conditions are supported.",
+      "prompt": "Review goods invoiced before delivery and stock held on consignment.",
+      "engines": [
+        "E02",
+        "E09",
+        "E10",
+        "E12",
+        "E17"
+      ],
+      "required_information": [
+        "invoice",
+        "customer-request",
+        "control",
+        "delivery",
+        "inventory"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 10,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Flags proposed recognition exceptions; no delivery confirmation or automated legal control determination.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "IFRS15-CONTRACT-CONTEXT"
+      ]
+    },
+    {
+      "id": 117,
+      "key": "uae-117",
+      "title": "Warranty provision modeling",
+      "description": "Separate warranty types, analyze claims history and calculate approved provision models. Compare actual claims with previous estimates.",
+      "prompt": "Prepare a warranty provision for our electronics sales using historical claims.",
+      "engines": [
+        "E09",
+        "E12",
+        "E13",
+        "E17"
+      ],
+      "required_information": [
+        "sales",
+        "history",
+        "claims",
+        "warranty-type",
+        "approved-model"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 10,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Assurance warranty expected-value model only; separate service obligations need revenue allocation, not provision blending.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "IFRS15-CONTRACT-CONTEXT"
+      ]
+    },
+    {
+      "id": 118,
+      "key": "uae-118",
+      "title": "Subscription revenue and deferred-income waterfall",
+      "description": "Build contract-level recognition schedules covering renewals, pauses, cancellations and billing changes. Reconcile deferred income to the ledger.",
+      "prompt": "Prepare the deferred-revenue waterfall for our annual software subscriptions.",
+      "engines": [
+        "E02",
+        "E09",
+        "E12"
+      ],
+      "required_information": [
+        "contract",
+        "service-period",
+        "pauses",
+        "cancellation",
+        "billing",
+        "ledger"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 10,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Daily straight-line supplied service periods; complex modifications require separate case113 schedules.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "IFRS15-CONTRACT-CONTEXT"
+      ]
+    },
+    {
+      "id": 119,
+      "key": "uae-119",
+      "title": "Real-estate project escrow reconciliation",
+      "description": "Reconcile supplied escrow statements, customer receipts, authorized releases and project records. Apply project-specific and jurisdiction-specific requirements only after verification.",
+      "prompt": "Explain differences between project collections and the escrow account.",
+      "engines": [
+        "E01",
+        "E02",
+        "E12",
+        "E14",
+        "E20"
+      ],
+      "required_information": [
+        "project",
+        "escrow",
+        "bank",
+        "collections",
+        "release-approvals",
+        "project-rules"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 10,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "No universal emirate/project escrow rule or bank release instruction.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 120,
+      "key": "uae-120",
+      "title": "Owners’ association and property service-charge review",
+      "description": "Reconcile approved budgets, owner billings, collections, expenditure and reserve balances. Track allocation methods and supporting approvals.",
+      "prompt": "Review this building’s service-charge accounts and explain budget variances.",
+      "engines": [
+        "E01",
+        "E03",
+        "E12",
+        "E13",
+        "E14"
+      ],
+      "required_information": [
+        "budget",
+        "owner-billings",
+        "collections",
+        "expenses",
+        "reserve",
+        "allocation"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 10,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Reviewed allocation fractions only; project-specific legal requirements must be adopted.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 121,
+      "key": "uae-121",
+      "title": "Debt instrument amortized-cost schedules",
+      "description": "Calculate effective-interest schedules using validated contractual cash flows, transaction costs and approved accounting classifications.",
+      "prompt": "Prepare the amortized-cost schedule for this financing arrangement.",
+      "engines": [
+        "E02",
+        "E09",
+        "E14"
+      ],
+      "required_information": [
+        "contract",
+        "cashflows",
+        "transaction-costs",
+        "classification"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 11,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Solves a nonnegative periodic EIR for conventional positive cashflows only; no floating-rate, negative-yield or credit-impaired instrument model.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "IFRS9-SCHEDULE-CONTEXT"
+      ]
+    },
+    {
+      "id": 122,
+      "key": "uae-122",
+      "title": "Loan modification and derecognition assessment",
+      "description": "Compare original and revised contractual terms, calculate relevant quantitative measures, and document qualitative factors for professional review.",
+      "prompt": "Assess the accounting effect of this lender’s revised repayment terms.",
+      "engines": [
+        "E02",
+        "E09",
+        "E14"
+      ],
+      "required_information": [
+        "original-contract",
+        "revised-contract",
+        "original-EIR",
+        "fees",
+        "qualitative-factors"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 11,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "No automatic derecognition decision; quantitative threshold supplied under adopted accounting policy.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "IFRS9-SCHEDULE-CONTEXT"
+      ]
+    },
+    {
+      "id": 123,
+      "key": "uae-123",
+      "title": "Debt-versus-equity classification",
+      "description": "Analyze redemption rights, payment obligations, conversion terms and contractual substance. Prepare classification alternatives and required judgments.",
+      "prompt": "Review whether this shareholder funding instrument is debt, equity or a compound instrument.",
+      "engines": [
+        "E02",
+        "E09",
+        "E18"
+      ],
+      "required_information": [
+        "instrument",
+        "redemption",
+        "payment",
+        "conversion",
+        "judgment"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 11,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Component valuation is supplied; no autonomous debt/equity legal determination.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "IFRS9-SCHEDULE-CONTEXT"
+      ]
+    },
+    {
+      "id": 124,
+      "key": "uae-124",
+      "title": "Derivative valuation reconciliation",
+      "description": "Reconcile supplied bank valuations and model inputs to contracts and ledger entries. Independently verify calculations where supported; disclose unavailable market data.",
+      "prompt": "Reconcile our forward-exchange contracts to bank valuation statements.",
+      "engines": [
+        "E02",
+        "E09",
+        "E14",
+        "E22"
+      ],
+      "required_information": [
+        "contract",
+        "quote",
+        "discount",
+        "bank",
+        "valuation",
+        "ledger"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 11,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Simple supplied deliverable FX-forward model; no live market data, option valuation or credit adjustments.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "IFRS9-SCHEDULE-CONTEXT"
+      ]
+    },
+    {
+      "id": 125,
+      "key": "uae-125",
+      "title": "Hedge-accounting documentation review",
+      "description": "Track designation documents, hedged items, instruments, risk objectives and effectiveness evidence. Identify missing documentation and accounting consequences for review.",
+      "prompt": "Check whether this hedge-accounting file contains the required supporting documentation.",
+      "engines": [
+        "E02",
+        "E09",
+        "E14",
+        "E20"
+      ],
+      "required_information": [
+        "designation",
+        "item",
+        "instrument",
+        "risk",
+        "effectiveness"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 11,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Documentation exceptions only; no automatic hedge eligibility/effectiveness conclusion.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "IFRS9-SCHEDULE-CONTEXT"
+      ]
+    },
+    {
+      "id": 126,
+      "key": "uae-126",
+      "title": "Supplier-finance arrangement assessment",
+      "description": "Identify arrangements from contracts, payment flows and bank records. Review presentation, cash-flow classification and disclosure requirements.",
+      "prompt": "Assess the reporting implications of this supplier-finance facility.",
+      "engines": [
+        "E02",
+        "E09",
+        "E13",
+        "E14"
+      ],
+      "required_information": [
+        "facility",
+        "supplier",
+        "terms",
+        "bank",
+        "cashflows",
+        "disclosures"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 11,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Reconciles supplied balances; classification remains reviewed rather than inferred from payment alone.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "IFRS9-SCHEDULE-CONTEXT"
+      ]
+    },
+    {
+      "id": 127,
+      "key": "uae-127",
+      "title": "Receivables factoring and derecognition",
+      "description": "Analyze recourse, retained risks, control and settlement terms. Reconcile proceeds, fees and continuing obligations.",
+      "prompt": "Assess whether these factored receivables should remain on our balance sheet.",
+      "engines": [
+        "E02",
+        "E09",
+        "E12",
+        "E14"
+      ],
+      "required_information": [
+        "factoring",
+        "contract",
+        "recourse",
+        "risks",
+        "control",
+        "settlement"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 11,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "No automatic derecognition; approved accounting assessment drives proposed asset bridge.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "IFRS9-SCHEDULE-CONTEXT"
+      ]
+    },
+    {
+      "id": 128,
+      "key": "uae-128",
+      "title": "Share-based payment accounting",
+      "description": "Capture award terms, vesting conditions, modifications and supplied valuation inputs. Calculate approved expense schedules and disclosure support.",
+      "prompt": "Prepare the expense schedule for employee share awards granted by our parent company.",
+      "engines": [
+        "E02",
+        "E09",
+        "E16",
+        "E18"
+      ],
+      "required_information": [
+        "award",
+        "vesting",
+        "valuation",
+        "modifications",
+        "parent-agreement"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 11,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Valuations/vesting estimates supplied; no option-pricing or employee-by-employee forfeiture forecast.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 129,
+      "key": "uae-129",
+      "title": "Government grants and assistance",
+      "description": "Review award letters, conditions, related expenditure and repayment clauses. Prepare recognition schedules and evidence of compliance with conditions.",
+      "prompt": "Assess the accounting for this government-funded equipment grant.",
+      "engines": [
+        "E02",
+        "E09",
+        "E13",
+        "E15",
+        "E19"
+      ],
+      "required_information": [
+        "award",
+        "conditions",
+        "expenses",
+        "asset",
+        "repayment"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 11,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Approved cost-matching scenario only; no authority confirmation or autonomous reasonable-assurance judgment.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 130,
+      "key": "uae-130",
+      "title": "Decommissioning and restoration obligations",
+      "description": "Extract contractual restoration requirements, estimate approved cash flows and discounting assumptions, and prepare provision and asset movements.",
+      "prompt": "Calculate the restoration provision for this leased industrial facility.",
+      "engines": [
+        "E02",
+        "E09",
+        "E14",
+        "E15"
+      ],
+      "required_information": [
+        "lease",
+        "restoration",
+        "cash-estimate",
+        "discount",
+        "asset-register"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 11,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Annual constant-rate schedule and reviewed estimate movement only; no legal restoration assessment.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 131,
+      "key": "uae-131",
+      "title": "Control and consolidation-scope assessment",
+      "description": "Map voting rights, contractual arrangements and other relevant facts. Document control judgments and changes in consolidation scope.",
+      "prompt": "Assess whether this investment belongs within our consolidated financial statements.",
+      "engines": [
+        "E02",
+        "E09",
+        "E18"
+      ],
+      "required_information": [
+        "voting",
+        "agreements",
+        "returns",
+        "rights",
+        "control-memo"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 11,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Evidence-driven checklist; majority voting alone never determines control.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 132,
+      "key": "uae-132",
+      "title": "Associates and joint arrangements",
+      "description": "Assess classification using ownership and contractual facts. Prepare approved equity-accounting schedules and reconcile investor and investee records.",
+      "prompt": "Prepare the equity-accounting schedule for our joint investment.",
+      "engines": [
+        "E02",
+        "E09",
+        "E18"
+      ],
+      "required_information": [
+        "ownership",
+        "arrangement",
+        "investee",
+        "accounts",
+        "policy"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 11,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Approved equity-method inputs only; no automatic significant-influence/joint-control classification or unrecognized-loss model.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 133,
+      "key": "uae-133",
+      "title": "Non-controlling interests and ownership changes",
+      "description": "Calculate allocations and approved accounting effects of ownership changes, distinguishing transactions with and without loss of control.",
+      "prompt": "Calculate the consolidation effect of buying an additional stake in our subsidiary.",
+      "engines": [
+        "E09",
+        "E18"
+      ],
+      "required_information": [
+        "ownership",
+        "consideration",
+        "consolidation",
+        "NCI"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 11,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Without-loss-of-control equity bridge only; loss-of-control transactions are blocked for specialist case134 review.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 134,
+      "key": "uae-134",
+      "title": "Subsidiary disposals and discontinued operations",
+      "description": "Track disposal dates, consideration, retained interests and reporting criteria. Prepare approved accounting and disclosure schedules.",
+      "prompt": "Prepare the reporting analysis for the disposal of this business unit.",
+      "engines": [
+        "E02",
+        "E09",
+        "E18"
+      ],
+      "required_information": [
+        "disposal",
+        "control-date",
+        "consideration",
+        "retained-interest",
+        "classification"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 11,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Provisional reviewed disposal gain only; no independent valuation or automatic discontinued-operations decision.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 135,
+      "key": "uae-135",
+      "title": "Hyperinflationary subsidiary reporting",
+      "description": "Assess applicability using verified accounting requirements and appropriate evidence. Apply approved index data and restatement methodology before translation.",
+      "prompt": "Prepare a review workflow for this overseas subsidiary’s inflation-adjusted reporting.",
+      "engines": [
+        "E01",
+        "E09",
+        "E18",
+        "E22"
+      ],
+      "required_information": [
+        "accounting-requirement",
+        "official-index",
+        "acquisition-date",
+        "monetary-classification"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 11,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Nonmonetary index restatement only; full IAS29 net-monetary gain/loss, entire statements and translation remain unsupported.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 136,
+      "key": "uae-136",
+      "title": "Group reporting-package policy alignment",
+      "description": "Compare subsidiary accounting policies with group policies. Calculate approved alignment adjustments and track recurring differences.",
+      "prompt": "Identify policy differences that must be adjusted before consolidation.",
+      "engines": [
+        "E03",
+        "E09",
+        "E18"
+      ],
+      "required_information": [
+        "subsidiary-policy",
+        "group-policy",
+        "schedule",
+        "recurring-adjustment"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 11,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Reviewed adjustments only; no automated semantic policy comparison.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 137,
+      "key": "uae-137",
+      "title": "Consolidated cash-flow preparation",
+      "description": "Generate a traceable cash-flow working from consolidated movements, eliminating noncash items and separating acquisition, disposal and currency effects.",
+      "prompt": "Prepare the consolidated cash-flow working and explain unreconciled movements.",
+      "engines": [
+        "E03",
+        "E09",
+        "E14",
+        "E18"
+      ],
+      "required_information": [
+        "consolidated-movements",
+        "acquisitions",
+        "disposals",
+        "FX",
+        "noncash",
+        "eliminations"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 11,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Reviewed movement classifications only; does not derive a complete cashflow from unsupplied consolidated ledgers.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 138,
+      "key": "uae-138",
+      "title": "Dividend capacity and distribution documentation",
+      "description": "Assess proposed distributions against the applicable legal framework, constitutional documents, approved accounts and available reserves. Require legal/accounting review where necessary.",
+      "prompt": "Prepare the financial and document checks for this proposed dividend.",
+      "engines": [
+        "E01",
+        "E02",
+        "E09",
+        "E18",
+        "E20"
+      ],
+      "required_information": [
+        "accounts",
+        "reserves",
+        "constitution",
+        "legal-framework",
+        "distribution-approvals"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 11,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Financial candidate cap only; no legal solvency/distributability opinion or dividend release.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "ADGM-LEGAL-FRAMEWORK"
+      ]
+    },
+    {
+      "id": 139,
+      "key": "uae-139",
+      "title": "Capital contributions, reductions and shareholder settlements",
+      "description": "Reconcile approved corporate actions to legal documents, bank movements, shareholder balances and equity records.",
+      "prompt": "Reconcile this capital restructuring and identify missing approvals or accounting entries.",
+      "engines": [
+        "E01",
+        "E02",
+        "E09",
+        "E14",
+        "E18"
+      ],
+      "required_information": [
+        "corporate-action",
+        "bank",
+        "shareholder",
+        "equity",
+        "legal-documents"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 11,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Signed reviewed corporate-action bridge; no registry update or cash transfer.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "ADGM-LEGAL-FRAMEWORK"
+      ]
+    },
+    {
+      "id": 140,
+      "key": "uae-140",
+      "title": "Liquidation-basis and wind-down reporting",
+      "description": "Assess the approved reporting basis, asset realizations, settlement estimates and closure costs. Keep accounting conclusions distinct from legal liquidation procedures.",
+      "prompt": "Prepare a wind-down reporting pack with asset recoveries and settlement assumptions.",
+      "engines": [
+        "E01",
+        "E09",
+        "E12",
+        "E13",
+        "E15",
+        "E20"
+      ],
+      "required_information": [
+        "approved-basis",
+        "recoveries",
+        "liabilities",
+        "closure-estimates"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 11,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Reviewed realization/settlement assumptions only; no legal liquidation procedure or automatic reporting-basis decision.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "ADGM-LEGAL-FRAMEWORK"
+      ]
+    },
+    {
+      "id": 141,
+      "key": "uae-141",
+      "title": "Client-money and trust-account reconciliation",
+      "description": "Where relevant, segregate client funds from operating funds, reconcile individual client balances and investigate shortages or unauthorized transfers.",
+      "prompt": "Reconcile client-money balances to the designated bank accounts.",
+      "engines": [
+        "E01",
+        "E03",
+        "E14",
+        "E20"
+      ],
+      "required_information": [
+        "client-register",
+        "trust-bank",
+        "ledger",
+        "transfers",
+        "rule"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 12,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Reviewed client allocation only; no live trust-account safeguarding certification.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 142,
+      "key": "uae-142",
+      "title": "Payment-beneficiary change monitoring",
+      "description": "Compare approved vendor details with payment instructions and recent master-data changes. Require independent verification before releasing affected payments.",
+      "prompt": "Flag payments using newly changed supplier bank details.",
+      "engines": [
+        "E11",
+        "E13",
+        "E14",
+        "E20"
+      ],
+      "required_information": [
+        "approved-master",
+        "bank-instruction",
+        "change-log",
+        "independent-verification"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 12,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Produces an application hold recommendation; actual bank/payment release system must consume it to enforce external holds.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 143,
+      "key": "uae-143",
+      "title": "Tender and procurement conflict analytics",
+      "description": "Analyze supplied bid records, ownership data, approvers, pricing and award patterns. Present explainable indicators for investigation without alleging misconduct.",
+      "prompt": "Review these procurement awards for potential conflicts and unusual bidding patterns.",
+      "engines": [
+        "E02",
+        "E11",
+        "E13",
+        "E20"
+      ],
+      "required_information": [
+        "bids",
+        "ownership",
+        "approvers",
+        "award",
+        "pricing"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 12,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Exact supplied identities and bid comparisons only; explainable investigation indicators, never misconduct findings.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 144,
+      "key": "uae-144",
+      "title": "Expense-claim policy and receipt testing",
+      "description": "Check claims against approved firm or client policies, duplicate submissions, dates, receipts and authorization limits. Separate policy exceptions from tax adjustments.",
+      "prompt": "Review employee claims for policy exceptions and duplicate receipts.",
+      "engines": [
+        "E02",
+        "E11",
+        "E13",
+        "E16"
+      ],
+      "required_information": [
+        "claim",
+        "receipt",
+        "approved-policy",
+        "authorization"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 12,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Exact duplicate receipt matching only; no inferred VAT disallowance or external receipt authentication.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 145,
+      "key": "uae-145",
+      "title": "Ghost-employee and payroll-master analytics",
+      "description": "Analyze duplicate bank accounts, unusual employee records, access changes and payment patterns using authorized HR data.",
+      "prompt": "Identify payroll records requiring HR verification before the next payment run.",
+      "engines": [
+        "E11",
+        "E14",
+        "E16",
+        "E20"
+      ],
+      "required_information": [
+        "authorized-HR",
+        "master",
+        "payroll",
+        "bank-token",
+        "access-log"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 12,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Authorized tokenized HR imports only; duplicate accounts are indicators, not ghost-employee conclusions.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 146,
+      "key": "uae-146",
+      "title": "Data-migration financial assurance",
+      "description": "Reconcile opening balances, transaction counts, subledgers, tax codes and audit trails before and after ERP migration. Track unresolved conversion differences.",
+      "prompt": "Verify that our move from Tally to the new ERP preserved financial and tax data.",
+      "engines": [
+        "E03",
+        "E04",
+        "E10",
+        "E22"
+      ],
+      "required_information": [
+        "pre-migration",
+        "snapshot",
+        "post-migration",
+        "snapshot",
+        "subledger",
+        "tax-code",
+        "audit-trail"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 12,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Supplied signed control totals only; no live ERP migration execution or proof of omitted unsupplied populations.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 147,
+      "key": "uae-147",
+      "title": "Service-organization assurance review",
+      "description": "Analyze supplied assurance reports for scope, period, exceptions, subservice organizations and complementary user controls. Link findings to the engagement’s reliance assessment.",
+      "prompt": "Review our payroll provider’s assurance report and identify controls we must operate.",
+      "engines": [
+        "E02",
+        "E10",
+        "E20"
+      ],
+      "required_information": [
+        "assurance-report",
+        "scope",
+        "period",
+        "exceptions",
+        "subservice",
+        "user-controls"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 12,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Reviewer-supplied report facts; no authentication of assurance provider or automatic reliance conclusion.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 148,
+      "key": "uae-148",
+      "title": "Management representations and unresolved assertions",
+      "description": "Generate a draft representation checklist linked to engagement-specific matters. Track approved wording, authorized signatories and unresolved contradictions.",
+      "prompt": "Prepare representation-letter matters from this engagement’s reviewed findings.",
+      "engines": [
+        "E02",
+        "E10",
+        "E20",
+        "E21"
+      ],
+      "required_information": [
+        "reviewed-findings",
+        "assertions",
+        "approved-wording",
+        "signatory",
+        "contradictions"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 12,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Draft representation matters only; no sending, signing or automatic assertion sufficiency conclusion.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 149,
+      "key": "uae-149",
+      "title": "Audit misstatement evaluation",
+      "description": "Maintain corrected and uncorrected misstatements, projected errors, classification issues and qualitative factors. Evaluate aggregation using approved engagement parameters.",
+      "prompt": "Summarize uncorrected misstatements and their effect on the financial statements.",
+      "engines": [
+        "E03",
+        "E09",
+        "E10",
+        "E20"
+      ],
+      "required_information": [
+        "reviewed-errors",
+        "projection-basis",
+        "corrections",
+        "materiality",
+        "qualitative-factors"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence",
+        "materiality"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 12,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Gross and net amounts both retained; projections require documented support; no automatic audit opinion.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 150,
+      "key": "uae-150",
+      "title": "Engagement quality review and consultation tracking",
+      "description": "Identify matters requiring review under applicable firm policies and professional requirements. Manage consultations, reviewer independence, conclusions and release blockers.",
+      "prompt": "Show outstanding quality-review matters that prevent this audit report from being released.",
+      "engines": [
+        "E01",
+        "E10",
+        "E20",
+        "E21"
+      ],
+      "required_information": [
+        "firm-policy",
+        "quality-review",
+        "consultation",
+        "independent-reviewer",
+        "conclusions"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 12,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Release-blocker assessment only; existing qualified report-release controls remain authoritative.",
+        "Approved supplied inputs; automatic correspondence/contract extraction, completeness of external populations and live authority integration are not asserted."
+      ],
+      "legal_source_ids": [
+        "IAASB-ISA220-REVISED"
+      ]
+    },
+    {
+      "id": 151,
+      "key": "uae-151",
+      "title": "Legal-change impact analysis",
+      "description": "Compare verified new requirements with existing rule versions. Identify affected entities, periods, calculations and workpapers, then create reviewed implementation tasks.",
+      "prompt": "Show which clients and calculations are affected by this verified UAE tax amendment.",
+      "engines": [
+        "E01",
+        "E19",
+        "E20"
+      ],
+      "required_information": [
+        "old-rule",
+        "new-rule",
+        "affected-context",
+        "transition-source"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence",
+        "tax-rule",
+        "vat-rule",
+        "grc-policy"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 13,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Scoped supplied impact assessment; actual dependency scan is engagement-bounded, not an automatic firm-wide legal opinion.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": [
+        "MOF-CT-OFFICIAL-CONTEXT"
+      ]
+    },
+    {
+      "id": 152,
+      "key": "uae-152",
+      "title": "Tax-position register and uncertainty tracking",
+      "description": "Maintain material tax positions, factual assumptions, supporting sources, contrary evidence and review history. Connect approved accounting assessments to relevant provisions and disclosures.",
+      "prompt": "Prepare a register of unresolved tax positions and their financial reporting implications.",
+      "engines": [
+        "E01",
+        "E05",
+        "E09",
+        "E20"
+      ],
+      "required_information": [
+        "position",
+        "assumptions",
+        "supporting",
+        "contrary-evidence",
+        "provision",
+        "disclosure"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 13,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Reviewed expected-value scenario only; no automatic tax acceptance probability or IFRIC23 accounting method selection.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": [
+        "MOF-CT-OFFICIAL-CONTEXT"
+      ]
+    },
+    {
+      "id": 153,
+      "key": "uae-153",
+      "title": "Business-activity and licence consistency review",
+      "description": "Compare recorded revenue activities, contracts and entity information with supplied licence details. Flag inconsistencies for specialist review without declaring an activity unlawful.",
+      "prompt": "Identify business activities that need review against this entity’s licence.",
+      "engines": [
+        "E01",
+        "E02",
+        "E03",
+        "E19"
+      ],
+      "required_information": [
+        "licence",
+        "revenue",
+        "contracts",
+        "entity",
+        "activity-register"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 13,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Exact supplied codes only; a mismatch is a specialist review indicator, never an unlawfulness conclusion.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": [
+        "MOF-CT-OFFICIAL-CONTEXT"
+      ]
+    },
+    {
+      "id": 154,
+      "key": "uae-154",
+      "title": "Tax-period and financial-year change orchestration",
+      "description": "Model approved period changes across reporting calendars, comparative data, tax schedules and filing workstreams. Verify any required approvals and prevent gaps or overlapping periods.",
+      "prompt": "Prepare the accounting and tax transition plan for changing our financial year.",
+      "engines": [
+        "E01",
+        "E03",
+        "E05",
+        "E09",
+        "E19"
+      ],
+      "required_information": [
+        "old-periods",
+        "new-periods",
+        "comparatives",
+        "calendar",
+        "tax-approval"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 13,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Checks supplied period continuity/overlap and approvals; does not edit statutory calendars or infer authority permission.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": [
+        "MOF-CT-OFFICIAL-CONTEXT"
+      ]
+    },
+    {
+      "id": 155,
+      "key": "uae-155",
+      "title": "Tax elections and applications lifecycle",
+      "description": "Maintain an entity-level register of available, submitted and approved elections or applications. Track effective periods, supporting evidence, continuing conditions and revocation restrictions.",
+      "prompt": "Show elections affecting this year’s computation and conditions requiring follow-up.",
+      "engines": [
+        "E01",
+        "E05",
+        "E06",
+        "E19",
+        "E20"
+      ],
+      "required_information": [
+        "election",
+        "register",
+        "approval",
+        "effective-period",
+        "conditions"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 13,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Status is supplied evidence, not government acceptance; no automatic election submission or revocation.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": [
+        "FTA-FREEZONE-CONTEXT-151-200",
+        "MOF-CT-OFFICIAL-CONTEXT"
+      ]
+    },
+    {
+      "id": 156,
+      "key": "uae-156",
+      "title": "Free-zone substance evidence management",
+      "description": "Collect and reconcile staff, premises, assets, expenditure and outsourced activity evidence relevant to the applicable assessment. Link conclusions to the reporting period.",
+      "prompt": "Build the substance evidence pack for our free-zone tax review.",
+      "engines": [
+        "E01",
+        "E02",
+        "E06",
+        "E13",
+        "E15",
+        "E16"
+      ],
+      "required_information": [
+        "staff",
+        "premises",
+        "assets",
+        "expenditure",
+        "outsourcing",
+        "policy"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 13,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Evidence/cost reconciliation only; no automatic adequate-substance or QFZP conclusion.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": [
+        "FTA-FREEZONE-CONTEXT-151-200",
+        "MOF-CT-OFFICIAL-CONTEXT"
+      ]
+    },
+    {
+      "id": 157,
+      "key": "uae-157",
+      "title": "Free-zone counterparty-status evidence",
+      "description": "Maintain dated evidence of counterparty status and transaction facts used in qualifying-income analysis. Flag expired, contradictory or missing evidence.",
+      "prompt": "Which free-zone revenue classifications rely on missing counterparty evidence?",
+      "engines": [
+        "E01",
+        "E02",
+        "E06",
+        "E12"
+      ],
+      "required_information": [
+        "counterparty",
+        "dated-status",
+        "transaction",
+        "qualifying-income-policy"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 13,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "No registry lookup or automatic qualifying-income determination.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": [
+        "FTA-FREEZONE-CONTEXT-151-200",
+        "MOF-CT-OFFICIAL-CONTEXT"
+      ]
+    },
+    {
+      "id": 158,
+      "key": "uae-158",
+      "title": "Tax payment allocation and credit tracking",
+      "description": "Match payments and supplied authority records to liabilities by tax type and period. Track unallocated payments, credits and refunds without assuming amounts can be freely transferred.",
+      "prompt": "Explain unapplied tax payments and reconcile available credits.",
+      "engines": [
+        "E03",
+        "E04",
+        "E05",
+        "E14",
+        "E19"
+      ],
+      "required_information": [
+        "payment",
+        "authority-ledger",
+        "tax-type",
+        "period",
+        "allocation",
+        "approvals"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 13,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Per-supplied tax bucket only; no assumption that credits transfer between taxes or authority utilization ledger.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": [
+        "MOF-CT-OFFICIAL-CONTEXT"
+      ]
+    },
+    {
+      "id": 159,
+      "key": "uae-159",
+      "title": "Tax-audit evidence-room preparation",
+      "description": "Build a controlled, indexed evidence collection responding to an authorized audit request. Track supplied versions, reviewer approvals, access and disclosure history.",
+      "prompt": "Prepare an indexed evidence room for this tax-audit request.",
+      "engines": [
+        "E02",
+        "E19",
+        "E20"
+      ],
+      "required_information": [
+        "request",
+        "indexed-evidence",
+        "versions",
+        "reviewer",
+        "disclosure-log"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 13,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Creates a governed index/draft pack, not a new external sharing room or government disclosure.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": [
+        "MOF-CT-OFFICIAL-CONTEXT"
+      ]
+    },
+    {
+      "id": 160,
+      "key": "uae-160",
+      "title": "Cross-tax transaction consistency",
+      "description": "Compare the approved VAT, corporate tax, transfer-pricing, customs and accounting treatments of the same transaction. Identify unexplained differences without assuming all treatments must match.",
+      "prompt": "Review inconsistent treatment of these intercompany imports across our schedules.",
+      "engines": [
+        "E01",
+        "E04",
+        "E05",
+        "E07",
+        "E09",
+        "E17"
+      ],
+      "required_information": [
+        "same-transaction",
+        "VAT",
+        "CT",
+        "TP",
+        "customs",
+        "accounting",
+        "reviewed-rationale"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 13,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Differences are shown separately; equality is not presumed and no legal treatment is inferred.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": [
+        "MOF-CT-OFFICIAL-CONTEXT"
+      ]
+    },
+    {
+      "id": 161,
+      "key": "uae-161",
+      "title": "Borrowing-cost capitalization",
+      "description": "Identify qualifying expenditure, financing sources, commencement dates, interruptions and completion dates. Calculate capitalization using approved accounting judgments.",
+      "prompt": "Prepare the borrowing-cost capitalization schedule for this development.",
+      "engines": [
+        "E09",
+        "E14",
+        "E15"
+      ],
+      "required_information": [
+        "expenditure",
+        "financing",
+        "commencement",
+        "interruption",
+        "completion",
+        "judgment"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 14,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Reviewed weighted-expenditure inputs and simple day-count rate only; no automatic qualifying-asset judgment.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": [
+        "IAS23-CONTEXT-151-200"
+      ]
+    },
+    {
+      "id": 162,
+      "key": "uae-162",
+      "title": "Construction-in-progress commissioning",
+      "description": "Track project expenditure through commissioning, component allocation and depreciation commencement. Flag completed assets still held in construction-in-progress.",
+      "prompt": "Identify completed projects that should be transferred into operating assets.",
+      "engines": [
+        "E02",
+        "E09",
+        "E13",
+        "E15"
+      ],
+      "required_information": [
+        "project-cost",
+        "commissioning",
+        "components",
+        "asset-register"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 14,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Proposed transfer only; ready-for-use and depreciation dates require approved evidence.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 163,
+      "key": "uae-163",
+      "title": "Component accounting and major inspections",
+      "description": "Separate significant asset components and inspection cycles using approved estimates. Track replacements and derecognition of replaced components.",
+      "prompt": "Prepare component depreciation for this industrial equipment.",
+      "engines": [
+        "E09",
+        "E15"
+      ],
+      "required_information": [
+        "components",
+        "inspection",
+        "cycles",
+        "replacement",
+        "derecognition",
+        "estimates"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 14,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Straight-line component model only; estimate revisions and replacement classification remain reviewed.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 164,
+      "key": "uae-164",
+      "title": "Intangible development-cost recognition",
+      "description": "Assess project-stage evidence, approved recognition criteria, technical feasibility and directly attributable expenditure. Separate research, development and maintenance costs.",
+      "prompt": "Review which software-development costs may qualify for capitalization.",
+      "engines": [
+        "E02",
+        "E09",
+        "E13",
+        "E16"
+      ],
+      "required_information": [
+        "project-stage",
+        "criteria",
+        "feasibility",
+        "expenditure",
+        "approved-judgment"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 14,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Eligibility is an approved input, not inferred from project labels or developer time records.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": [
+        "IAS38-CLOUD-CONTEXT"
+      ]
+    },
+    {
+      "id": 165,
+      "key": "uae-165",
+      "title": "Cloud implementation and configuration costs",
+      "description": "Analyze cloud-service contracts, ownership of resources and implementation deliverables. Prepare approved expense, prepayment or asset schedules.",
+      "prompt": "Assess the accounting for our cloud ERP implementation costs.",
+      "engines": [
+        "E02",
+        "E09",
+        "E13",
+        "E15"
+      ],
+      "required_information": [
+        "cloud-contract",
+        "ownership",
+        "resources",
+        "deliverables",
+        "service-period"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 14,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Approved allocation fractions only; no automatic IAS38/cloud contract classification.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": [
+        "IAS38-CLOUD-CONTEXT"
+      ]
+    },
+    {
+      "id": 166,
+      "key": "uae-166",
+      "title": "Lease-versus-service identification",
+      "description": "Inspect agreements for identified assets, substitution rights and control of use. Document the assessment before generating lease schedules.",
+      "prompt": "Does this warehouse logistics agreement contain a lease?",
+      "engines": [
+        "E02",
+        "E09",
+        "E15"
+      ],
+      "required_information": [
+        "agreement",
+        "asset",
+        "substitution",
+        "use",
+        "rights",
+        "judgment"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 14,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Condition indicators only; no lease schedule is produced before a separate approved identification judgment.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 167,
+      "key": "uae-167",
+      "title": "Lease and non-lease component allocation",
+      "description": "Separate contractual components and apply approved allocation policies. Reconcile allocated consideration to the original contract.",
+      "prompt": "Separate office rent, maintenance and service components in this agreement.",
+      "engines": [
+        "E02",
+        "E09",
+        "E13",
+        "E15"
+      ],
+      "required_information": [
+        "contract",
+        "lease-services",
+        "standalone-prices",
+        "policy"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 14,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Relative-price allocation with conserved totals; practical expedients and component judgments are approved inputs.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 168,
+      "key": "uae-168",
+      "title": "Sale-and-leaseback accounting",
+      "description": "Assess the transfer and leaseback together, including sale qualification, pricing and retained rights. Calculate the approved accounting outcome.",
+      "prompt": "Prepare the accounting analysis for selling and leasing back this property.",
+      "engines": [
+        "E02",
+        "E09",
+        "E14",
+        "E15"
+      ],
+      "required_information": [
+        "sale",
+        "leaseback",
+        "valuation",
+        "rights",
+        "judgment"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 14,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "At-market retained-rights model only; off-market adjustments and full IFRS16 subsequent measurement require specialist extension.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 169,
+      "key": "uae-169",
+      "title": "Lessor accounting and rental schedules",
+      "description": "Assess lease classification from the lessor’s perspective. Prepare approved income schedules, receivable movements and supporting disclosures.",
+      "prompt": "Prepare the lessor accounting schedule for these equipment leases.",
+      "engines": [
+        "E02",
+        "E09",
+        "E12",
+        "E15"
+      ],
+      "required_information": [
+        "lessor",
+        "agreement",
+        "classification",
+        "rental",
+        "receivable",
+        "disclosures"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 14,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Simple approved periodic finance/operating alternatives; no manufacturer/dealer lessor model or implicit-rate valuation.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 170,
+      "key": "uae-170",
+      "title": "Held-for-sale asset monitoring",
+      "description": "Assess classification criteria, measurement, disposal plans and subsequent developments. Track required changes to depreciation, presentation and disclosures.",
+      "prompt": "Review whether this property should be classified as held for sale.",
+      "engines": [
+        "E02",
+        "E09",
+        "E15",
+        "E20"
+      ],
+      "required_information": [
+        "sale-plan",
+        "availability",
+        "valuation",
+        "classification",
+        "subsequent-events"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 14,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Lower-of measurement candidate only after supplied approved classification; no automatic eligibility determination.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 171,
+      "key": "uae-171",
+      "title": "Freight-forwarding shipment profitability",
+      "description": "Reconcile shipment-level customer charges, carrier invoices, advances and accruals. Flag unbilled shipments and missing shipment costs.",
+      "prompt": "Find completed shipments with incomplete billing or understated costs.",
+      "engines": [
+        "E02",
+        "E12",
+        "E13",
+        "E14"
+      ],
+      "required_information": [
+        "shipment",
+        "billing",
+        "carrier",
+        "invoices",
+        "advances",
+        "accruals"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 14,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Reviewed matched shipments only; advances remain separate from revenue and costs.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 172,
+      "key": "uae-172",
+      "title": "Travel-agency booking reconciliation",
+      "description": "Match bookings, ticket issuance, supplier statements, refunds, commissions and customer collections. Track cancellations and settlement differences.",
+      "prompt": "Reconcile airline bookings to supplier settlements and customer refunds.",
+      "engines": [
+        "E02",
+        "E12",
+        "E13",
+        "E14",
+        "E22"
+      ],
+      "required_information": [
+        "bookings",
+        "tickets",
+        "supplier",
+        "refunds",
+        "commission",
+        "settlements"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 14,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Supplied booking joins only; no airline settlement connection or automatic gross/net revenue classification.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 173,
+      "key": "uae-173",
+      "title": "Healthcare insurer receivables reconciliation",
+      "description": "Match submitted claims, remittance advice, rejections, resubmissions and receipts. Separate contractual deductions from accounting errors.",
+      "prompt": "Explain insurer deductions and identify claims needing follow-up.",
+      "engines": [
+        "E02",
+        "E12",
+        "E14",
+        "E22"
+      ],
+      "required_information": [
+        "claim",
+        "remittance",
+        "rejection",
+        "resubmission",
+        "receipts",
+        "contract"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 14,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Rejections are separate follow-up items; no claim approval prediction or live insurer portal.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 174,
+      "key": "uae-174",
+      "title": "School student-fee subledger reconciliation",
+      "description": "Reconcile enrolment records, fee schedules, scholarships, discounts, withdrawals, deposits and collections to the ledger.",
+      "prompt": "Explain differences between student balances and the general ledger.",
+      "engines": [
+        "E02",
+        "E03",
+        "E12",
+        "E14"
+      ],
+      "required_information": [
+        "enrolment",
+        "fees",
+        "scholarships",
+        "withdrawals",
+        "deposits",
+        "collections",
+        "ledger"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 14,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Authorized pseudonymous student control rows only; no student-system connection or automatic fee/tax policy.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 175,
+      "key": "uae-175",
+      "title": "Restaurant recipe and consumption variance",
+      "description": "Compare POS sales and approved recipes with ingredient consumption, purchases and stock movements. Investigate waste and yield variances.",
+      "prompt": "Identify unexplained ingredient consumption by outlet.",
+      "engines": [
+        "E11",
+        "E12",
+        "E13",
+        "E17",
+        "E22"
+      ],
+      "required_information": [
+        "POS",
+        "recipes",
+        "stock",
+        "purchases",
+        "waste",
+        "yield"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 14,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Recipe/stock arithmetic is rules_baseline, not trained anomaly inference; unsupplied stock movements remain a limitation.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 176,
+      "key": "uae-176",
+      "title": "Manufacturing production-cost reconciliation",
+      "description": "Reconcile bills of materials, production orders, labor, overhead allocation, scrap and finished goods. Surface unexplained standard-to-actual variances.",
+      "prompt": "Explain the production-cost variance for this manufacturing batch.",
+      "engines": [
+        "E03",
+        "E13",
+        "E16",
+        "E17"
+      ],
+      "required_information": [
+        "BOM",
+        "production",
+        "labor",
+        "overhead",
+        "scrap",
+        "finished-goods"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 14,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Reviewed batch costs only; no automatic ERP costing run or full equivalent-unit model.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 177,
+      "key": "uae-177",
+      "title": "Commodity quantity and quality settlement",
+      "description": "Reconcile contract quantities, weighbridge records, quality adjustments, deliveries and final settlements. Keep contractual deductions traceable.",
+      "prompt": "Explain quantity and quality deductions on these commodity shipments.",
+      "engines": [
+        "E02",
+        "E12",
+        "E13",
+        "E17"
+      ],
+      "required_information": [
+        "contract",
+        "weighbridge",
+        "quality",
+        "delivery",
+        "settlement"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 14,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Reviewed quantities and deductions only; no independent laboratory or weighbridge authentication.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 178,
+      "key": "uae-178",
+      "title": "Fleet fuel and operating-cost analytics",
+      "description": "Link vehicles, fuel records, mileage, maintenance and assigned drivers. Rank unusual consumption using contextual baselines and human review.",
+      "prompt": "Find fleet vehicles with unusual fuel consumption and show the supporting records.",
+      "engines": [
+        "E11",
+        "E13",
+        "E15",
+        "E22"
+      ],
+      "required_information": [
+        "fleet",
+        "fuel",
+        "mileage",
+        "maintenance",
+        "driver-context"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 14,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Deterministic variance ranking against supplied contextual baselines; not a trained model or misconduct finding.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 179,
+      "key": "uae-179",
+      "title": "Facilities-management contract profitability",
+      "description": "Reconcile site-level billing, labor deployment, materials and subcontractor costs. Track mobilization costs and contractual service deductions.",
+      "prompt": "Show facilities contracts with declining margins and explain the drivers.",
+      "engines": [
+        "E02",
+        "E12",
+        "E13",
+        "E16"
+      ],
+      "required_information": [
+        "site",
+        "invoices",
+        "deployment",
+        "materials",
+        "subcontractors",
+        "deductions"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 14,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Reviewed attributable expenses; capitalization/deferral of mobilization requires a separate approved policy.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 180,
+      "key": "uae-180",
+      "title": "Insurance recovery and business-interruption accounting",
+      "description": "Track insured events, claims, insurer correspondence, repair costs and settlements. Assess recovery recognition separately from related losses.",
+      "prompt": "Prepare the accounting schedule for this insured warehouse incident.",
+      "engines": [
+        "E02",
+        "E09",
+        "E12",
+        "E13",
+        "E15"
+      ],
+      "required_information": [
+        "incident",
+        "insurer",
+        "claim",
+        "repair",
+        "settlement",
+        "recognition-policy"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 14,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Separates losses from supplied approved recovery; no netting, insurer acceptance claim or autonomous contingent-asset judgment.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 181,
+      "key": "uae-181",
+      "title": "Rolling cash forecast with actualization",
+      "description": "Build forecasts from approved receivables, payables, payroll and financing assumptions. Compare prior forecasts with actual cash movements and explain errors.",
+      "prompt": "Update the rolling cash forecast and explain last month’s forecast misses.",
+      "engines": [
+        "E12",
+        "E13",
+        "E14",
+        "E16"
+      ],
+      "required_information": [
+        "AR",
+        "AP",
+        "payroll",
+        "financing",
+        "prior-forecast",
+        "actual-bank"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 15,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Reviewed bucket forecast only; no guaranteed cash outcome or automatic collector/payment scheduling.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 182,
+      "key": "uae-182",
+      "title": "Working-capital leakage analysis",
+      "description": "Analyze receivable, payable and inventory cycles using consistent definitions. Identify operational drivers and avoid presenting accounting estimates as guaranteed cash savings.",
+      "prompt": "Show where cash is tied up and which balances need operational action.",
+      "engines": [
+        "E12",
+        "E13",
+        "E14",
+        "E17"
+      ],
+      "required_information": [
+        "AR",
+        "AP",
+        "inventory",
+        "turnover",
+        "definitions",
+        "disputed-items"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 15,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "No guaranteed cash savings; accounting estimates are kept separate from operational actions.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 183,
+      "key": "uae-183",
+      "title": "Credit-limit and order-release controls",
+      "description": "Combine approved limits, overdue balances, disputes and guarantees to flag orders requiring review. Keep any ML ranking separate from the approved release decision.",
+      "prompt": "Which customer orders require credit approval before release?",
+      "engines": [
+        "E11",
+        "E12",
+        "E20"
+      ],
+      "required_information": [
+        "credit-limit",
+        "balances",
+        "disputes",
+        "guarantees",
+        "approved-release"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 15,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Rule-based hold recommendation only; no actual order release and no substitution of ML scores for approval.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 184,
+      "key": "uae-184",
+      "title": "Budget-to-actual driver analysis",
+      "description": "Explain variances through price, quantity, mix, timing and approved business drivers where data supports the decomposition.",
+      "prompt": "Explain the margin variance using sales mix, purchasing costs and labor.",
+      "engines": [
+        "E03",
+        "E12",
+        "E13",
+        "E16",
+        "E17"
+      ],
+      "required_information": [
+        "budget",
+        "actual",
+        "price",
+        "units",
+        "costs",
+        "scope"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 15,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Two-factor price/volume bridge; unsupported mix/timing/labor attribution remains an explicit residual.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 185,
+      "key": "uae-185",
+      "title": "Profit-to-cash bridge",
+      "description": "Reconcile accounting profit to operating cash movements through working capital, noncash items and classification differences.",
+      "prompt": "Explain why this profitable company’s operating cash balance declined.",
+      "engines": [
+        "E03",
+        "E09",
+        "E14"
+      ],
+      "required_information": [
+        "profit",
+        "noncash",
+        "working-capital",
+        "bank",
+        "classifications"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 15,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Supplied movement bridge only; no automatic cashflow classification or profit-quality opinion.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 186,
+      "key": "uae-186",
+      "title": "Customer and product profitability",
+      "description": "Allocate revenue and attributable costs using approved allocation methods. Show sensitivity to shared-cost allocations and incomplete source data.",
+      "prompt": "Rank customer profitability and explain the cost allocations.",
+      "engines": [
+        "E03",
+        "E12",
+        "E13",
+        "E17"
+      ],
+      "required_information": [
+        "customer",
+        "product",
+        "revenue",
+        "attributable-cost",
+        "allocation",
+        "policy"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 15,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Allocation-sensitive ranking only; no claim that allocated margins are independently verified segment results.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 187,
+      "key": "uae-187",
+      "title": "Purchase-price and supplier concentration analysis",
+      "description": "Compare normalized unit prices, contractual terms and supplier exposure. Account for currency, specifications, volumes and timing before flagging differences.",
+      "prompt": "Identify unexplained price increases and supplier concentration risks.",
+      "engines": [
+        "E11",
+        "E13",
+        "E17"
+      ],
+      "required_information": [
+        "supplier",
+        "contracts",
+        "specification",
+        "volume",
+        "dates",
+        "reviewed-FX"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 15,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Supplied normalized unit prices only; concentration and price indicators are rules, not trained inference.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 188,
+      "key": "uae-188",
+      "title": "Break-even and scenario modeling",
+      "description": "Calculate break-even outcomes using approved fixed/variable cost assumptions. Provide transparent sensitivity analysis rather than unsupported forecasts.",
+      "prompt": "Model the sales required to cover costs at different gross margins.",
+      "engines": [
+        "E03",
+        "E12",
+        "E13",
+        "E16"
+      ],
+      "required_information": [
+        "approved",
+        "fixed-variable",
+        "cost",
+        "price",
+        "capacity",
+        "scenario"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 15,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Transparent scenario arithmetic, not a forecast; nonpositive contribution is reported as no finite break-even.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 189,
+      "key": "uae-189",
+      "title": "Treasury deposit and maturity planning",
+      "description": "Maintain deposit terms, maturity dates, approved counterparties and liquidity requirements. Compare scenarios without executing investments.",
+      "prompt": "Show upcoming deposit maturities and their effect on liquidity.",
+      "engines": [
+        "E02",
+        "E14",
+        "E20"
+      ],
+      "required_information": [
+        "deposit",
+        "terms",
+        "maturity",
+        "approved-counterparty",
+        "liquidity"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 15,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Simple contractual interest scenario only; no recommendation execution, reinvestment or bank instruction.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 190,
+      "key": "uae-190",
+      "title": "Financial close dependency management",
+      "description": "Model close tasks, reconciliations, owners and dependencies. Block finalization where required upstream work remains unresolved.",
+      "prompt": "Show which unresolved reconciliations are delaying this month’s close.",
+      "engines": [
+        "E03",
+        "E09",
+        "E18",
+        "E20"
+      ],
+      "required_information": [
+        "close",
+        "plan",
+        "task-owners",
+        "dependency",
+        "reconciliations",
+        "signoffs"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 15,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Approved supplied DAG blocks actual completion; no discovery of unsupplied ERP close tasks.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 191,
+      "key": "uae-191",
+      "title": "Arabic-English financial document consistency",
+      "description": "Compare bilingual names, dates, monetary amounts and contractual clauses. Flag material translation discrepancies for qualified review.",
+      "prompt": "Identify inconsistencies between the Arabic and English versions of this agreement.",
+      "engines": [
+        "E02",
+        "E20",
+        "E21"
+      ],
+      "required_information": [
+        "both-originals",
+        "names",
+        "amounts",
+        "dates",
+        "qualified-translation"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 16,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Numeric/date/name-mapping checks only; semantic legal translation requires a qualified reviewer.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 192,
+      "key": "uae-192",
+      "title": "Document authenticity indicators and provenance",
+      "description": "Analyze duplicates, metadata, inconsistent fields and source history where technically supported. Report indicators, not definitive claims of forgery.",
+      "prompt": "Flag documents requiring independent verification and explain why.",
+      "engines": [
+        "E02",
+        "E11",
+        "E20"
+      ],
+      "required_information": [
+        "original",
+        "bytes",
+        "metadata",
+        "references",
+        "source-history"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 16,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Hash/reference indicators only; no definitive forgery/authenticity conclusion or forensic signature validation.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 193,
+      "key": "uae-193",
+      "title": "Audit evidence sufficiency and contradiction mapping",
+      "description": "Link evidence to assertions and findings. Identify unsupported conclusions and contradictory documents without treating document volume as evidence quality.",
+      "prompt": "Which audit conclusions lack support or conflict with other evidence?",
+      "engines": [
+        "E02",
+        "E10",
+        "E20"
+      ],
+      "required_information": [
+        "assertion",
+        "conclusion",
+        "supporting",
+        "contrary-evidence",
+        "review"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 16,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Support counts never establish sufficiency; conclusion remains human judgment.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 194,
+      "key": "uae-194",
+      "title": "Prior-year finding remediation testing",
+      "description": "Convert prior findings into agreed remediation steps, evidence requirements and retesting procedures. Distinguish management’s completion claim from verified remediation.",
+      "prompt": "Retest last year’s procurement findings and show unresolved issues.",
+      "engines": [
+        "E10",
+        "E20"
+      ],
+      "required_information": [
+        "prior-finding",
+        "agreed-action",
+        "evidence",
+        "retest",
+        "results"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 16,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Management completion is not treated as verified remediation; no automatic closure of the original finding.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 195,
+      "key": "uae-195",
+      "title": "Branch and location audit coverage",
+      "description": "Allocate procedures across branches, outlets and warehouses using approved risk criteria. Track coverage, exclusions and location-specific exceptions.",
+      "prompt": "Prepare location-level audit coverage for our UAE retail network.",
+      "engines": [
+        "E03",
+        "E10",
+        "E11",
+        "E20"
+      ],
+      "required_information": [
+        "locations",
+        "risk",
+        "criteria",
+        "procedure",
+        "results",
+        "exclusions"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 16,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Provided coverage universe only; risk ordering is rules_baseline and never trained inference by default.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 196,
+      "key": "uae-196",
+      "title": "Group-auditor and component-auditor coordination",
+      "description": "Manage instructions, reporting packages, communications, findings and completion status. Preserve professional judgments about scope and reliance.",
+      "prompt": "Show outstanding component-auditor deliverables blocking group completion.",
+      "engines": [
+        "E10",
+        "E18",
+        "E20"
+      ],
+      "required_information": [
+        "instructions",
+        "packages",
+        "communications",
+        "findings",
+        "reliance"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 16,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Supplied coordination status only; no automatic professional reliance conclusion or external messaging.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 197,
+      "key": "uae-197",
+      "title": "Specialist valuation and expert-work review",
+      "description": "Track expert scope, competence considerations, inputs, methods and conclusions. Link auditor review questions and unresolved limitations to affected balances.",
+      "prompt": "Prepare the review checklist for this external property valuation.",
+      "engines": [
+        "E02",
+        "E09",
+        "E10",
+        "E20"
+      ],
+      "required_information": [
+        "expert",
+        "scope",
+        "competence",
+        "inputs",
+        "method",
+        "conclusions",
+        "questions"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 16,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Auditor review workflow only; no independent competence certification or valuation assurance.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 198,
+      "key": "uae-198",
+      "title": "Agreed-upon procedures engagement workflow",
+      "description": "Define approved procedures, populations and factual findings. Prevent the system from adding an audit opinion or assurance conclusion to an AUP report.",
+      "prompt": "Prepare factual findings from the approved bank-reconciliation procedures.",
+      "engines": [
+        "E02",
+        "E10",
+        "E20",
+        "E21"
+      ],
+      "required_information": [
+        "approved",
+        "AUP",
+        "terms",
+        "procedures",
+        "population",
+        "evidence",
+        "factual-findings"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 16,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Factual draft only; audit opinion and assurance conclusions are explicitly prohibited in the generated conclusion.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": [
+        "ISRS4400-CONTEXT"
+      ]
+    },
+    {
+      "id": 199,
+      "key": "uae-199",
+      "title": "Financial due-diligence adjustments",
+      "description": "Build quality-of-earnings, net-debt and working-capital schedules using engagement-specific definitions. Preserve links to source records and reviewed adjustments.",
+      "prompt": "Prepare a draft earnings-adjustment bridge for this UAE acquisition target.",
+      "engines": [
+        "E03",
+        "E09",
+        "E12",
+        "E13",
+        "E14",
+        "E20"
+      ],
+      "required_information": [
+        "earnings",
+        "source",
+        "adjustment",
+        "net-debt",
+        "working-capital",
+        "definitions"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 16,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Engagement-specific financial diligence definitions only; no investment recommendation or unsupported normalized-earnings assurance.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
+      ],
+      "legal_source_ids": []
+    },
+    {
+      "id": 200,
+      "key": "uae-200",
+      "title": "Engagement scope, change orders and fee recovery",
+      "description": "Compare agreed scope with delivered work, time records, client requests and approved variations. Draft scope-change requests and reconcile billing to approvals.",
+      "prompt": "Identify out-of-scope work and prepare a reviewed additional-fee proposal.",
+      "engines": [
+        "E02",
+        "E12",
+        "E20",
+        "E21"
+      ],
+      "required_information": [
+        "engagement",
+        "scope",
+        "time",
+        "requests",
+        "variations",
+        "billing",
+        "receipts"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 16,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Draft variation proposal and approval/billing reconciliation only; no client communication or automatic fee entitlement.",
+        "Supplied reviewed sources only; external completeness, automatic extraction and fully qualified professional acceptance are not established."
       ],
       "legal_source_ids": []
     }

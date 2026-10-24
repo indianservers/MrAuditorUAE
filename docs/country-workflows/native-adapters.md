@@ -32,9 +32,9 @@ The results screen exposes original source controls and calculation basis. Avail
 
 ## Verification receipts
 
-Browser verification was refreshed after the CSV and supporting-table extensions. `browser-results.json` records two passing suites against the isolated API and real Redis/Celery worker. The original UAE/India suite covers country isolation, native imports, VAT/GST and reviewed payroll comparison. The added suite queues XLSX preparation, explicit debit/credit CSV mapping, reviewed XLSX bank reuse, two independent cashbook reconciliations and the payable sign/control-account bridge. Supporting-table approvals are prepared independently in the synthetic fixture; browser jobs themselves use the real broker and worker. Scanner qualification and client pilots remain outside this verification.
+Browser verification was refreshed after the CSV, supporting-table, credit-application and withholding extensions. `browser-results.json` records four passing suites against the isolated API and real Redis/Celery worker. The original UAE/India suite covers country isolation, native imports, VAT/GST and reviewed payroll comparison. The supporting-table suite queues XLSX preparation, explicit debit/credit CSV mapping, reviewed XLSX bank reuse, two independent cashbook reconciliations and the payable sign/control-account bridge. The credit suite queues applications for both UAE/AED and India/INR, checking visible invoice residuals, unapplied credits and independent GL controls. The withholding suite verifies domestic India isolation, explicit legal roles, assessed superseded observations, displayed differences, source provenance and export. Source approvals are prepared independently in the synthetic fixture; browser jobs themselves use the real broker and worker. Scanner qualification and client pilots remain outside this verification.
 
-Seven added screenshots in `screenshots/native-sources/` capture the relevant review panels: `xlsx-table-worker-review.png`, `mapped-debit-credit-worker-review.png`, `reviewed-xlsx-bank-source.png`, `mapped-bank-reconciliation-worker.png`, `xlsx-bank-reconciliation-worker.png`, `reviewed-xlsx-payable-sign-source.png` and `reviewed-xlsx-payable-control-worker.png`. Source and result panels are captured directly so result rows are not omitted below the viewport. If Windows locks an existing image, the writer retries only the file operation, then preserves a timestamped copy and attaches its actual path to the browser report. The full frontend suite records 71 passing tests; production build, frontend type checking and scoped lint pass at this checkpoint.
+Seven supporting-table screenshots in `screenshots/native-sources/` capture the relevant review panels: `xlsx-table-worker-review.png`, `mapped-debit-credit-worker-review.png`, `reviewed-xlsx-bank-source.png`, `mapped-bank-reconciliation-worker.png`, `xlsx-bank-reconciliation-worker.png`, `reviewed-xlsx-payable-sign-source.png` and `reviewed-xlsx-payable-control-worker.png`. Source and result panels are captured directly so result rows are not omitted below the viewport. If Windows locks an existing image, the writer retries only the file operation, then preserves a timestamped copy and attaches its actual path to the browser report. The current full frontend suite records 81 passing tests in `withholding-assessment-frontend-results.xml`; production build, frontend type checking and scoped lint pass at this checkpoint.
 
 Browser verification also fixed stale supporting-table result choices: the result picker now refreshes and requests the latest 100 events. Job histories show the latest five entries initially with an explicit expansion control. This changes presentation, not stored history, source review or calculation results. Supporting-table layout receipts occupy their own panel rather than competing with export/review actions in a horizontal toolbar.
 
@@ -73,6 +73,162 @@ Earlier checkpoint receipts:
 - `vat-bridge-integration-results.xml`: VAT workbench calculation → source event, calculation lineage, choice listing and invalidation after reopening an invoice.
 
 Integration tests use explicit scanner and broker doubles; they do not qualify a production scanner or prove a live bank integration. Synthetic examples are not consented client pilots.
+
+## Shared credit-note application bridge
+
+`credit-note-applications` reuses evidence upload, controlled CSV sources, immutable jobs,
+independent review, export and derived-open-item preparation. It is available in UAE, India
+and other engagement countries because its arithmetic does not infer local tax law.
+
+Prepare three independent source roles: `audit-open-items` (signed balances before the listed
+applications), `balance-controls` (independent GL controls), and `credit-applications`
+(positive application amounts with credit/invoice IDs, currency, date, evidence reference,
+allocation reference and rationale). Confirm the pre-application basis in the workspace.
+The generated CSV template lists the exact fields; a fictional application example is
+in `sample-inputs/SYNTHETIC-credit-applications.csv`.
+
+Applications require the same account, subledger side, party and currency, a negative credit
+note and positive invoice/debit note, dates no earlier than either document and no later
+than cutoff, and no overapplication or duplicate evidence/allocation reference. Duplicate
+document identities under different row IDs are rejected. Split and partial applications
+preserve total signed balances; unapplied credits remain exceptions and controls must agree.
+Document residual-credit dispositions before independent approval. A reviewed, unblocked
+result can prepare a new unreviewed `audit-open-items` source for subsequent procedures,
+retaining source dependencies and staleness propagation. This does not post journals or
+determine UAE VAT/Indian GST adjustment eligibility.
+
+Verification checkpoint: `credit-application-unit-results.xml` records 421 tests across
+the new bridge and existing country/audit/native-reader regressions;
+`credit-application-integration-results.xml` records three database/API cases, including
+independent approval, required exception disposition, export, derived source freshness,
+120-character source IDs, and supporting-table implementation-scope regression.
+`credit-application-frontend-results.xml` records 76 frontend tests. Production build,
+type checking, scoped lint and UTF-8 preflight pass. The browser receipt records three
+passing suites with zero skips or flaky results. Screenshots
+`screenshots/native-sources/ae-credit-applications-worker.png` and
+`screenshots/native-sources/in-credit-applications-worker.png` were visually inspected;
+compact columns keep original/applied/remaining balances and control differences visible,
+with all provenance available on expansion and export. This is synthetic workflow
+verification, not a client pilot or legal-rule qualification.
+
+## Role-scoped India withholding evidence
+
+Two typed workflows replace new selections of the aggregate `india-withholding` preview:
+`india-withholding-liability` requires an explicitly selected deductor or collector role
+and four source roles (`expected`, `withheld`, `reported`, `deposited`);
+`india-withholding-credit` requires a deductee or collectee role and three source roles
+(`books`, `statement`, `certificate`). Both use independently retained
+`withholding-records` CSV evidence, separate from generic payroll obligations. Domestic
+India workflows are unavailable under UAE or other country engagement packages. UAE
+foreign-tax evidence still needs its separately scoped rules and credit assessment.
+
+Each record carries the entity registration, counterparty, role, TDS/TCS scheme, assessed
+rule reference, explicit tax-year dates, month, transaction reference/date, INR amount,
+current/superseded/cancelled status and original source reference/version. The workspace
+requires a role selection; matching uses all these scope fields rather than aggregating
+by counterparty totals. Currency controls cover every retained CSV row, including old
+versions; `selected_current_totals` separately identifies amounts used in the comparison.
+See the generated template and `sample-inputs/SYNTHETIC-withholding-record.csv`.
+The sample dates and amounts are fictional test assessments. Prepare separate retained
+evidence for each role; copying a single file into multiple roles does not establish
+independent populations.
+
+Only one assessed current observation per logical transaction/source role is allowed.
+Amendments with multiple current observations, duplicate source versions and contradictory
+statuses fail closed; old/cancelled IDs remain in the result but never inflate current
+amounts. A source version is a retained identifier, not a sorting instruction or proof of
+portal authenticity. Missing current observations remain missing, never zero. Different
+legal roles, counterparties, registrations, rules, years or transaction identities cannot
+clear each other. Liability timing compares actual deposit dates with the supplied expected
+due date and rejects future or pre-transaction deposits. Credit matching never determines
+legal entitlement, recoverability or refund rights. Exports and generated source-linked
+workpapers retain role, comparison basis, selected totals and source-version references.
+
+The legacy aggregate preview remains readable and can produce a blocked comparison for
+older API clients; it cannot be approved, including older retained bodies that omitted
+the blocked flag. Earlier role-unassessed approvals are stale even without execution
+metadata and cannot feed new workpapers or actions. Regenerate with explicit role-scoped
+source records for review.
+
+This is controlled evidence comparison, not a native 26AS/AIS/TRACES/return parser or a
+qualified tax-rate, certificate-validity, threshold or current/legacy section crosswalk.
+Each current record is a normalized cumulative transaction observation. Raw challan
+allocation, partial deposits, FX and overlapping provider observations still need reviewed
+normalization; two current lines are not silently summed to approximate that normalization.
+
+Earlier role-separation checkpoint: `withholding-unit-results.xml` records 463 backend tests
+across withholding and the existing country/audit/native-reader regression;
+`withholding-integration-results.xml` records five database/API tests (two withholding,
+two credit-application and one supporting-table freshness case);
+`withholding-frontend-results.xml` records all 78 frontend tests. The new two Python modules
+pass scoped mypy; backend/frontend scoped lint, frontend type checking, production build
+and UTF-8 preflight pass. `browser-results.json` records four real-worker browser suites,
+with no skips, unexpected failures or flaky outcomes. The inspected screenshots
+`screenshots/native-sources/india-deductor-withholding-worker.png` and
+`screenshots/native-sources/india-collectee-withholding-worker.png` show labelled amounts
+and differences, with full source/version provenance available on expansion and export.
+These receipts overlap earlier checkpoints and must not be added together as independent
+scenario counts. They do not qualify live portals, native return formats or legal rules.
+
+## Retained withholding assessments and shared certificate limits
+
+Expected liability records now require a `rule` assessment, and certificate-credit
+records require a `certificate` assessment, before a result can be approved. Supply
+`assessment_evidence_version_id`, `assessment_sha256`, `assessment_kind`,
+`assessment_period_start` and `assessment_period_end`; certificate assessments also need
+`assessment_amount_limit` in INR tax amounts. The source workspace's optional shared
+assessment-document selector fills blank IDs and hashes from the selected retained
+document. It rejects conflicting CSV bindings. The sample CSV leaves these bindings
+blank deliberately: upload and select the actual assessed document rather than treating
+the fictional sample as supporting evidence.
+
+The existing bounded verifier checks current, clean, authorized retained document
+versions and original private-object hashes. Source and result dependencies carry the
+document receipts. Replacing an assessment document makes its source and result stale.
+Source preparation and calculation retain the document uploader as a contributor, so
+that uploader cannot independently approve a source prepared by another user. The same
+contributor handling is reused for existing payroll and UAE benefit rule documents.
+
+Numerical comparison and assessment support remain separate. Missing retained evidence,
+the wrong assessment kind or a transaction outside the declared coverage period blocks
+approval even when every amount matches. `comparison_state` retains the numerical/timing
+outcome; `assessment_issues` explains the support problem. A documented exception cannot
+override this block. Earlier results without the new assessment contract are stale and
+cannot feed new workpapers or actions.
+
+Certificate limits apply across selected current records sharing a retained assessment
+document and certificate `source_reference`, rather than separately to each line. The
+declared scope, party, registration, role, scheme, currency, version and cap must agree
+within that pool. Two records of 100 exceed a shared cap of 150 even though each line is
+below the cap. Superseded observations do not consume it. Provenance records both the
+cap and total amount used. These are checks of assessed input coverage and limits, not
+authentication of the certificate, extraction of its printed terms, legal tax computation
+or a reservation of credit across filings and separate runs. Those qualifications remain
+open; `credit_entitlement` remains `NOT_DETERMINED`.
+
+Current receipts: `withholding-assessment-unit-results.xml` records 481 backend tests;
+`withholding-assessment-integration-results.xml` records ten database/API cases covering
+withholding, shared certificates, document ownership/integrity/replacement, existing
+payroll/UAE benefit rules, credit applications and supporting-table freshness.
+`withholding-assessment-frontend-results.xml` records all 81 frontend tests. Scoped mypy
+passes for the two withholding modules and shared workflow service; scoped lint, frontend
+type checking, production build and UTF-8 preflight pass. The four real-worker browser
+suites in `browser-results.json` include the shared-certificate approval block.
+`screenshots/native-sources/india-collectee-cap-withholding-worker.png` was visually
+inspected: both rows show numerical `MATCHED` alongside unsupported assessment scope
+and disabled approval. Counts overlap earlier receipts and are not additive. Synthetic
+fixture uploads use scanner/broker doubles during preparation; browser jobs use the real
+Redis/Celery worker. No live portal or professional country qualification is claimed.
+
+## Supporting-table freshness
+
+Prepared supporting-table receipts now use `audit-operations/2` with a server-defined
+`supporting-table/1` implementation scope. Reader, normalization, storage, review/access,
+schema and relevant library-version changes invalidate these tables; unrelated IFRS
+calculation changes do not. Scope selection is not accepted from saved metadata. Older
+receipts and other result kinds retain their conservative global implementation guard.
+Evidence replacements and dependent-result freshness still propagate normally. This is
+file-level isolation for supporting tables, not complete dependency scoping for every engine.
 
 ## Remaining work
 

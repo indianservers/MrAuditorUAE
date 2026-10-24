@@ -117,6 +117,26 @@ async def test_reviewed_bank_table_bridge_retains_evidence_reviewers_controls_an
     )
     choice = next(item for item in listed.json()["items"] if item["id"] == approved.json()["id"])
     assert choice["table_kind"] == "bank" and choice["evidence_version_id"] == uploaded.json()["id"]
+    from app.core import operations_contracts
+
+    assert approved.json()["body"]["operations_execution"]["implementation_scope"] == (
+        "supporting-table/1"
+    )
+    with monkeypatch.context() as rollout:
+        rollout.setattr(
+            operations_contracts, "implementation_hash", lambda: "unrelated-engine-change"
+        )
+        detail = await c.get(
+            f"/api/v1/intelligence/engagements/{eid}/events/{approved.json()['id']}", headers=h
+        )
+        assert detail.status_code == 200 and detail.json()["freshness"] == "CURRENT"
+    with monkeypatch.context() as rollout:
+        rollout.setattr(operations_contracts, "supporting_table_hash", lambda: "reader-change")
+        for identifier in (approved.json()["id"], prepared["id"], reconciled["id"]):
+            detail = await c.get(
+                f"/api/v1/intelligence/engagements/{eid}/events/{identifier}", headers=h
+            )
+            assert detail.status_code == 200 and detail.json()["freshness"] == "STALE"
     for changes, error in [
         ({"expected_rows": 2}, "row-count"),
         ({"account_identifier": "ANOTHER"}, "selected scope"),

@@ -9,8 +9,10 @@ from app.modules.country_workflows.diligence_schemas import DILIGENCE_WORKFLOWS
 from app.modules.country_workflows.operations_schemas import OPERATION_WORKFLOWS
 from app.modules.country_workflows.payroll_schemas import PAYROLL_WORKFLOWS
 from app.modules.country_workflows.sector_schemas import SECTOR_WORKFLOWS
+from app.modules.country_workflows.withholding_schemas import WITHHOLDING_WORKFLOWS
 
 WORKFLOWS = {
+    **WITHHOLDING_WORKFLOWS,
     **OPERATION_WORKFLOWS,
     **PAYROLL_WORKFLOWS,
     **AUDIT_WORKFLOWS,
@@ -47,7 +49,7 @@ WORKFLOWS = {
         {"expected": "obligations", "return": "obligations", "payment": "obligations"},
     ),
     "india-withholding": (
-        "India withholding register reconciliation",
+        "Legacy aggregate withholding comparison (legal roles unassessed)",
         ["IN"],
         {"books": "obligations", "return": "obligations", "payment": "obligations"},
     ),
@@ -108,8 +110,10 @@ def catalogue(country=None):
             "title": title,
             "countries": countries,
             "roles": roles,
-            "available": not countries or country in countries,
-            "state": "EVIDENCE_WORKFLOW",
+            "available": key != "india-withholding" and (not countries or country in countries),
+            "state": "LEGACY_PREVIEW_REQUIRES_ROLE_SCOPED_REPLACEMENT"
+            if key == "india-withholding"
+            else "EVIDENCE_WORKFLOW",
             "statutory_calculation_qualified": False,
         }
         for key, (title, countries, roles) in WORKFLOWS.items()

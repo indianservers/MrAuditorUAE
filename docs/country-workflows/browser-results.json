@@ -102,6 +102,74 @@
       "line": 0,
       "specs": [
         {
+          "title": "UAE and India credit applications preserve residuals through the real worker",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11269,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T22:34:43.645Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-48fd0976effc478074aa",
+          "file": "country-workflows.spec.ts",
+          "line": 11,
+          "column": 1
+        },
+        {
+          "title": "India withholding separates legal roles and excludes superseded observations through the worker",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 17319,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T22:34:56.068Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-c3b66c811297d61b2a1b",
+          "file": "country-workflows.spec.ts",
+          "line": 112,
+          "column": 1
+        },
+        {
           "title": "UAE source controls, BRS exceptions, exports and India isolation",
           "ok": true,
           "tags": [],
@@ -117,12 +185,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 39909,
+                  "duration": 42002,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T21:29:32.821Z",
+                  "startTime": "2026-10-24T22:35:13.406Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -132,7 +200,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-4910f104b29236674674",
           "file": "country-workflows.spec.ts",
-          "line": 67,
+          "line": 314,
           "column": 1
         },
         {
@@ -151,12 +219,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 33653,
+                  "duration": 37558,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T21:30:14.624Z",
+                  "startTime": "2026-10-24T22:35:55.426Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -166,7 +234,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-21b42b359901fbf0cdc3",
           "file": "country-workflows.spec.ts",
-          "line": 475,
+          "line": 722,
           "column": 1
         }
       ]
@@ -174,9 +242,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-24T21:29:31.917Z",
-    "duration": 77472.018,
-    "expected": 2,
+    "startTime": "2026-10-24T22:34:43.143Z",
+    "duration": 111054.653,
+    "expected": 4,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

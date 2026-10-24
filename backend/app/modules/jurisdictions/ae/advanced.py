@@ -1,7 +1,7 @@
 """Bounded, independently approved schedules for cases 51–100. No legal decision/post/send."""
 
 import uuid
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal, localcontext
 from typing import Annotated, Any
 
@@ -15,14 +15,46 @@ from .advanced_specs import RAW, spec
 def contract_sha256():
     import hashlib
     from pathlib import Path
+
     here = Path(__file__).resolve()
-    paths = [here, here.with_name("advanced_specs.py"), here.parents[2] / "audit_analytics/workbooks.py"]
+    paths = [
+        here,
+        here.with_name("advanced_specs.py"),
+        here.with_name("continuation.py"),
+        here.with_name("continuation_specs.py"),
+        here.with_name("continuation_controls.py"),
+        here.with_name("assurance.py"),
+        here.with_name("assurance_specs.py"),
+        here.with_name("rule_impact.py"),
+        here.with_name("provenance.py"),
+        here.parents[2] / "ifrs/schedule_math.py",
+        here.parents[2] / "audit_analytics/workbooks.py",
+    ]
     return hashlib.sha256(b"\n".join(p.read_bytes() for p in paths)).hexdigest()
+
 
 Money = Annotated[Decimal, Field(max_digits=28, decimal_places=8, allow_inf_nan=False)]
 Positive = Annotated[Decimal, Field(ge=0, max_digits=28, decimal_places=8, allow_inf_nan=False)]
 Text = Annotated[str, Field(min_length=1, max_length=2000)]
-TYPES = {"n": Positive, "d": Money, "b": StrictBool, "t": Text, "x": date, "y": date | None}
+
+
+class CashFlow(Strict):
+    period: int = Field(ge=1, le=1200)
+    amount: Positive
+
+
+TYPES = {
+    "n": Positive,
+    "d": Money,
+    "b": StrictBool,
+    "t": Text,
+    "x": date,
+    "y": date | None,
+    "u": uuid.UUID,
+    "v": Annotated[list[uuid.UUID], Field(max_length=50)],
+    "l": Annotated[list[Text], Field(max_length=50)],
+    "c": Annotated[list[CashFlow], Field(min_length=1, max_length=120)],
+}
 
 
 def row_model(i):
@@ -56,7 +88,11 @@ class Policy(Strict):
 
 
 class Schedule(Strict):
-    use_case_id: int = Field(ge=51, le=100)
+    use_case_id: int = Field(ge=51, le=200)
+    jurisdiction_framework: str | None = None
+    jurisdiction_name: str | None = Field(default=None, max_length=200)
+    rounding_precision: int | None = Field(default=None, ge=0, le=8)
+    rounding_mode: str | None = None
     period_start: date
     period_end: date
     currency: str = Field(pattern="^[A-Z]{3}$")
@@ -102,23 +138,87 @@ class Schedule(Strict):
             raise ValueError(
                 "Adopted policy must cover the whole schedule period; split periods at rule changes"
             )
+        if self.use_case_id >= 101:
+            if (
+                self.jurisdiction_framework
+                not in {"AE_MAINLAND", "DIFC", "ADGM", "FREE_ZONE_SPECIFIC", "FOREIGN_FRAMEWORK"}
+                or not self.jurisdiction_name
+                or not self.jurisdiction_name.strip()
+            ):
+                raise ValueError(
+                    "An explicit legal/accounting framework and named jurisdiction are required"
+                )
+            if self.rounding_precision is None or self.rounding_mode not in {
+                "HALF_EVEN",
+                "HALF_UP",
+            }:
+                raise ValueError("Explicit rounding precision and mode required")
+        if self.use_case_id in {101, 103, 104, 107, 108, 110} and self.policy.kind not in {
+            "legislation",
+            "official_guidance",
+        }:
+            raise ValueError(
+                "Tax procedure/treaty workflows require an adopted primary legal or official-guidance source"
+            )
         parsed = [ROW_MODELS[self.use_case_id].model_validate(r) for r in self.rows]
         if len({r.reference for r in parsed}) != len(parsed):
             raise ValueError("Duplicate row reference")
         for row in parsed:
             values = row.model_dump()
-            if self.use_case_id in {64,91}:
-                key="foreign_currency" if self.use_case_id==64 else "order_currency"
-                currency=values[key]
-                if not pycountry.currencies.get(alpha_3=currency) or values["fx_rate"]<=0:
+            if (
+                self.use_case_id in {101, 104, 106, 110, 155}
+                and not self.policy.effective_from <= values["as_of"] <= self.policy.effective_to
+            ):
+                raise ValueError(
+                    "Policy must cover the procedure assessment date as well as the reporting period"
+                )
+            if self.use_case_id == 161 and not (
+                self.period_start <= values["capitalization_start"] <= values["capitalization_end"]
+                <= self.period_end + timedelta(days=1)
+            ):
+                raise ValueError("Capitalization interval must fit the reporting period; end date is exclusive")
+
+            if self.use_case_id == 124 and values["foreign_currency"] == self.currency:
+                raise ValueError("Forward currency pair must contain distinct ISO currencies")
+            if self.use_case_id in {64, 91}:
+                key = "foreign_currency" if self.use_case_id == 64 else "order_currency"
+                currency = values[key]
+                if not pycountry.currencies.get(alpha_3=currency) or values["fx_rate"] <= 0:
                     raise ValueError("Known source currency and positive conversion rate required")
-                if currency==self.currency and values["fx_rate"]!=1:
+                if currency == self.currency and values["fx_rate"] != 1:
                     raise ValueError("Same-currency conversion must use rate one")
-            if self.use_case_id in {81,83} and values.get("review_date",values["year_end"])<values["year_end"]:
+            if (
+                self.use_case_id in {81, 83}
+                and values.get("review_date", values["year_end"]) < values["year_end"]
+            ):
                 raise ValueError("Review date precedes year end")
-            count_fields={70:{"outstanding_returns"},97:{"broken_links","formula_inconsistencies","hidden_overrides","circular_references","hardcodes"},99:{"misstatements","evidence_limitations","disclosure_issues","going_concern_issues"},100:{"required_papers","approved_current_papers","unresolved_notes","missing_signoffs","broken_links","report_inconsistencies"}}
-            for key in count_fields.get(self.use_case_id,set()):
-                if values[key]!=values[key].to_integral_value():raise ValueError("Counts must be whole numbers")
+            count_fields = {
+                70: {"outstanding_returns"},
+                97: {
+                    "broken_links",
+                    "formula_inconsistencies",
+                    "hidden_overrides",
+                    "circular_references",
+                    "hardcodes",
+                },
+                99: {
+                    "misstatements",
+                    "evidence_limitations",
+                    "disclosure_issues",
+                    "going_concern_issues",
+                },
+                100: {
+                    "required_papers",
+                    "approved_current_papers",
+                    "unresolved_notes",
+                    "missing_signoffs",
+                    "broken_links",
+                    "report_inconsistencies",
+                },
+            }
+            for key in count_fields.get(self.use_case_id, set()):
+                if values[key] != values[key].to_integral_value():
+                    raise ValueError("Counts must be whole numbers")
 
             for key, value in values.items():
                 if isinstance(value, Decimal) and (
@@ -134,6 +234,13 @@ class Schedule(Strict):
                 ):
                     if not 0 <= value <= 1:
                         raise ValueError(f"{key} must be a fraction between zero and one")
+        if self.use_case_id>=151:
+            from .assurance import validate
+            validate(self.use_case_id,[r.model_dump() for r in parsed])
+        if self.use_case_id >= 101:
+            from .continuation import check_rows
+
+            check_rows(self.use_case_id, [r.model_dump() for r in parsed])
         self.rows = [r.model_dump(mode="json") for r in parsed]
         return self
 
@@ -169,10 +276,18 @@ def row_result(i, r):
         out["period_adjustment"] = out["recoverable"] - r["previously_claimed"]
     elif i == 53:
         eligible = all(r[k] for k in ("written_off", "notified", "conditions_met"))
-        if r["assessment_date"] < r["invoice_date"]: raise ValueError("Assessment precedes invoice")
-        eligible = eligible and r["assessment_date"] >= r["eligible_from"] and r["writeoff_date"] is not None and r["notification_date"] is not None
-        if r["writeoff_date"] is not None and r["writeoff_date"] > r["assessment_date"]:eligible=False
-        if r["notification_date"] is not None and r["notification_date"] > r["assessment_date"]:eligible=False
+        if r["assessment_date"] < r["invoice_date"]:
+            raise ValueError("Assessment precedes invoice")
+        eligible = (
+            eligible
+            and r["assessment_date"] >= r["eligible_from"]
+            and r["writeoff_date"] is not None
+            and r["notification_date"] is not None
+        )
+        if r["writeoff_date"] is not None and r["writeoff_date"] > r["assessment_date"]:
+            eligible = False
+        if r["notification_date"] is not None and r["notification_date"] > r["assessment_date"]:
+            eligible = False
         cap = r["invoice_tax"] * r["unpaid_fraction"]
         if r["prior_relief"] > r["invoice_tax"]:
             raise ValueError("Prior relief exceeds invoice tax")
@@ -268,7 +383,9 @@ def row_result(i, r):
             "expense_bridge_difference", r["recorded_tax_expense"] - out["expected_tax_expense"]
         )
         out["tax_at_reviewed_enacted_rate"] = r["accounting_profit"] * r["enacted_rate"]
-        out["tax_expense_reconciling_amount"] = r["recorded_tax_expense"] - out["tax_at_reviewed_enacted_rate"]
+        out["tax_expense_reconciling_amount"] = (
+            r["recorded_tax_expense"] - out["tax_at_reviewed_enacted_rate"]
+        )
         out["effective_rate"] = (
             r["recorded_tax_expense"] / r["accounting_profit"]
             if r["accounting_profit"] != z
@@ -358,7 +475,10 @@ def row_result(i, r):
             else out["ratio"] < r["contractual_limit"]
         )
         flag(out["breach"], "covenant_breach_for_classification_review")
-        flag(r["waiver_date"] is not None and r["waiver_date"] > r["measurement_date"], "waiver_after_measurement")
+        flag(
+            r["waiver_date"] is not None and r["waiver_date"] > r["measurement_date"],
+            "waiver_after_measurement",
+        )
     elif i == 86:
         out["net_identifiable_assets"] = r["identifiable_assets"] - r["liabilities"]
         out["provisional_goodwill"] = (
@@ -388,16 +508,23 @@ def row_result(i, r):
         )
         difference("valuation_difference", r["recorded_value"] - out["reviewed_model_value"])
         out["terminal_value"] = terminal
-        shift=r["sensitivity_shift"]
-        if shift<=z or r["discount_rate"]-shift<=max(z,r["terminal_growth"]):raise ValueError("Sensitivity shift must be positive and keep lower discount rate above zero and terminal growth")
-        sensitivity=[]
-        for rate in [r["discount_rate"]-shift,r["discount_rate"]+shift]:
-            cash=r["cash_flow"];v=z
-            for year in range(1,int(r["periods"])+1):
-                cash*=one+r["growth"];v+=cash/(one+rate)**year
-            v+=(cash*(one+r["terminal_growth"])/(rate-r["terminal_growth"]))/((one+rate)**int(r["periods"]))
-            sensitivity.append({"discount_rate":rate,"value":v})
-        out["discount_rate_sensitivity"]=sensitivity
+        shift = r["sensitivity_shift"]
+        if shift <= z or r["discount_rate"] - shift <= max(z, r["terminal_growth"]):
+            raise ValueError(
+                "Sensitivity shift must be positive and keep lower discount rate above zero and terminal growth"
+            )
+        sensitivity = []
+        for rate in [r["discount_rate"] - shift, r["discount_rate"] + shift]:
+            cash = r["cash_flow"]
+            v = z
+            for year in range(1, int(r["periods"]) + 1):
+                cash *= one + r["growth"]
+                v += cash / (one + rate) ** year
+            v += (cash * (one + r["terminal_growth"]) / (rate - r["terminal_growth"])) / (
+                (one + rate) ** int(r["periods"])
+            )
+            sensitivity.append({"discount_rate": rate, "value": v})
+        out["discount_rate_sensitivity"] = sensitivity
     elif i == 89:
         difference(
             "property_rollforward_difference",
@@ -539,14 +666,32 @@ def calculate(data: Schedule):
             and sum((r["allocation_fraction"] for r in rows), Decimal(0)) != 1
         ):
             raise ValueError("Segment allocation fractions must total one for a shared pool")
-        results = [row_result(data.use_case_id, r) for r in rows]
+        summary = {}
+        if data.use_case_id>=151:
+            from .assurance import evaluate as evaluate_assurance
+            results,summary=evaluate_assurance(data.use_case_id,rows,data.rounding_precision,data.rounding_mode)
+        elif data.use_case_id >= 101:
+            from .continuation import evaluate
+
+            results, summary = evaluate(
+                data.use_case_id, rows, data.rounding_precision, data.rounding_mode
+            )
+        else:
+            results = [row_result(data.use_case_id, r) for r in rows]
         return {
-            "engine_version": "uae-advanced-schedules/1",
+            "engine_version": "uae-advanced-schedules/2"
+            if data.use_case_id >= 101
+            else "uae-advanced-schedules/1",
             "use_case_id": data.use_case_id,
             "period_start": data.period_start.isoformat(),
             "period_end": data.period_end.isoformat(),
             "currency": data.currency,
             "rows": results,
+            "summary": summary,
+            "jurisdiction_framework": data.jurisdiction_framework,
+            "jurisdiction_name": data.jurisdiction_name,
+            "rounding_precision": data.rounding_precision,
+            "rounding_mode": data.rounding_mode,
             "exception_count": sum(len(r["exceptions"]) for r in results),
             "policy": data.policy.model_dump(mode="json"),
             "assumptions": data.assumptions,
