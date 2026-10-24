@@ -13,9 +13,11 @@ type Operation = {
 };
 
 export function ConnectorOperations({ connection }: { connection: RecordRow }) {
-  const health = useAPI<{ status: string; records: Operation[] }>(
-    `connectors/operations/${connection.id}`,
-  );
+  const health = useAPI<{
+    status: string;
+    records: Operation[];
+    operational_health?: Record<string, unknown>;
+  }>(`connectors/operations/${connection.id}`);
   const action = useAction<RecordRow>();
   const [session, setSession] = useState("");
   const [job, setJob] = useState("");
@@ -54,6 +56,7 @@ export function ConnectorOperations({ connection }: { connection: RecordRow }) {
       </p>
       <Facts
         data={{
+          ...health.data?.operational_health,
           status: health.data?.status || connection.status,
           pending_repairs: records.filter(
             (r) =>

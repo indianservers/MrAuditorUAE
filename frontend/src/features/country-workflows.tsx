@@ -15,6 +15,9 @@ type Choice = {
   freshness: string;
   review_status: string;
   table_type?: string;
+  native_format?: string;
+  table_kind?: string;
+  evidence_version_id?: string;
 };
 type Workflow = {
   id: string;
@@ -44,15 +47,43 @@ type Result = {
     limitations?: string[];
     control_comparison?: Record<string, string>;
     native_metadata?: Record<string, unknown>;
+    supporting_table_id?: string;
+    supporting_scope_assessment?: string;
+    supporting_side?: string;
+    supporting_balance_date?: string;
+    supporting_amount_sign?: string;
+    csv_mapping?: {
+      applied_columns: Record<string, string>;
+      ignored_columns: string[];
+      rationale: string;
+      amount_derivation?: string;
+      debit_column?: string | null;
+      credit_column?: string | null;
+    };
     country_guidance?: Record<string, unknown>;
     population_completeness: string;
     nil_population?: boolean;
     nil_declarations?: Record<string, string>;
+    operations_execution?: {
+      contract_version: string;
+      population_completeness: string;
+      execution_mode: string;
+    };
+    payment_proposals?: {
+      order_id: string;
+      vendor: string;
+      currency: string;
+      amount: string;
+      state: string;
+      holds: string[];
+    }[];
   };
 };
 const text = (v: unknown) =>
   v == null ? "—" : typeof v === "object" ? JSON.stringify(v) : String(v);
 const moneyTables = [
+  "cash-payments",
+  "item-allocations",
   "payroll-bases",
   "transactions",
   "tax-documents",
@@ -132,14 +163,29 @@ export function CountryWorkflows({
     !!selected,
   );
   const [workflow, setWorkflow] = useState("bank-brs");
+  const [invoiceFaceAmounts, setInvoiceFaceAmounts] = useState(false);
   const [tableType, setTableType] = useState("transactions");
   const [sourceOrigin, setSourceOrigin] = useState("evidence");
+  const [supportingTable, setSupportingTable] = useState("");
+  const [supportingScope, setSupportingScope] = useState("");
+  const [supportingSide, setSupportingSide] = useState("receivable");
+  const [supportingBalanceDate, setSupportingBalanceDate] = useState("");
+  const [supportingAmountSign, setSupportingAmountSign] =
+    useState("as-reported");
   const [vatRun, setVATRun] = useState("");
   const vatRuns = useAPI<{ items: { id: string; label: string }[] }>(
     `${prefix}/vat-sources`,
     sourceOrigin === "vat" && canUseVAT,
   );
   const [sourceFormat, setSourceFormat] = useState("canonical-csv");
+  const [customColumns, setCustomColumns] = useState(false);
+  const [csvColumns, setCSVColumns] = useState<Record<string, string>>({});
+  const [ignoredColumns, setIgnoredColumns] = useState("");
+  const [mappingRationale, setMappingRationale] = useState("");
+  const [csvDelimiter, setCSVDelimiter] = useState(",");
+  const [amountDerivation, setAmountDerivation] = useState("none");
+  const [debitColumn, setDebitColumn] = useState("");
+  const [creditColumn, setCreditColumn] = useState("");
   const [statementIdentifier, setStatementIdentifier] = useState("");
   const [employerRegistration, setEmployerRegistration] = useState("");
   const [obligationDue, setObligationDue] = useState("");
@@ -228,6 +274,17 @@ export function CountryWorkflows({
           : mode === "workflow-source" && sourceOrigin === "ledger"
             ? "workflow-ledger"
             : mode;
+      if (
+        operation === "workflow-source" &&
+        sourceFormat === "canonical-csv" &&
+        sourceOrigin === "evidence" &&
+        customColumns &&
+        mappingRationale.trim().length < 10
+      ) {
+        throw new Error(
+          "Record a column mapping and exclusion assessment of at least ten characters.",
+        );
+      }
       if (operation === "workflow-vat") {
         payload = { run_id: vatRun, label };
       } else if (operation === "workflow-ledger") {
@@ -265,59 +322,119 @@ export function CountryWorkflows({
             controls[code] = value;
           }
         }
-        payload = {
-          evidence_version_id: evidence,
-          file_format: sourceFormat,
-          ...(tableType === "payroll-rules" && ruleDocument
-            ? { rule_document_version_id: ruleDocument }
-            : {}),
-          ...(sourceFormat === "india-inv01-json"
-            ? {
-                gst_registration: gstRegistration,
-                gst_direction: gstDirection,
-                gst_period: gstPeriod,
-              }
-            : {}),
-          ...(sourceFormat === "india-gstr2b-json"
-            ? {
-                gst_registration: gstRegistration,
-                gst_period: gstPeriod,
-                expected_documents: Number(expectedDocuments),
-              }
-            : {}),
-          ...(sourceFormat !== "canonical-csv" && account
-            ? { account_identifier: account }
-            : {}),
-          ...(sourceFormat === "camt053" && statementIdentifier
-            ? { statement_identifier: statementIdentifier }
-            : {}),
-          ...(["uae-wps-sif", "india-epfo-ecr"].includes(sourceFormat) &&
-          employerRegistration
-            ? { employer_registration: employerRegistration }
-            : {}),
-          ...(["uae-wps-sif", "india-epfo-ecr"].includes(sourceFormat) &&
-          obligationDue
-            ? { obligation_due_date: obligationDue }
-            : {}),
-          ...(sourceFormat === "india-epfo-ecr"
-            ? {
-                obligation_period: obligationPeriod,
-                expected_members: Number(expectedMembers),
-              }
-            : {}),
-          table_type: tableType,
-          label,
-          expected_rows: Number(expectedRows),
-          ...(Number(expectedRows) === 0 ? { nil_reason: nilReason } : {}),
-          control_totals: controls,
-        };
+        payload = ["supporting", "supporting-items"].includes(sourceOrigin)
+          ? {
+              supporting_table_id: supportingTable,
+              evidence_version_id:
+                results.data?.items.find((item) => item.id === supportingTable)
+                  ?.evidence_version_id || "",
+              supporting_scope_assessment: supportingScope,
+              account_identifier: account,
+              table_type:
+                sourceOrigin === "supporting-items"
+                  ? "audit-open-items"
+                  : "transactions",
+              ...(sourceOrigin === "supporting-items"
+                ? {
+                    supporting_side: supportingSide,
+                    supporting_balance_date: supportingBalanceDate,
+                    supporting_amount_sign: supportingAmountSign,
+                  }
+                : {}),
+              file_format: "canonical-csv",
+              label,
+              expected_rows: Number(expectedRows),
+              control_totals: controls,
+            }
+          : {
+              evidence_version_id: evidence,
+              file_format: sourceFormat,
+              ...(sourceFormat === "canonical-csv" && customColumns
+                ? {
+                    column_mapping: Object.fromEntries(
+                      Object.entries(csvColumns).filter(
+                        ([field, value]) =>
+                          value !== "" &&
+                          !(
+                            tableType === "transactions" &&
+                            amountDerivation !== "none" &&
+                            field === "amount"
+                          ),
+                      ),
+                    ),
+                    ignored_columns: ignoredColumns
+                      .split("\n")
+                      .filter((value) => value !== ""),
+                    mapping_rationale: mappingRationale,
+                    delimiter: csvDelimiter,
+                    ...(tableType === "transactions" &&
+                    amountDerivation !== "none"
+                      ? {
+                          amount_derivation: amountDerivation,
+                          debit_column: debitColumn,
+                          credit_column: creditColumn,
+                        }
+                      : {}),
+                  }
+                : {}),
+              ...(["payroll-rules", "benefit-rules"].includes(tableType) &&
+              ruleDocument
+                ? { rule_document_version_id: ruleDocument }
+                : {}),
+              ...(sourceFormat === "india-inv01-json"
+                ? {
+                    gst_registration: gstRegistration,
+                    gst_direction: gstDirection,
+                    gst_period: gstPeriod,
+                  }
+                : {}),
+              ...(sourceFormat === "india-gstr2b-json"
+                ? {
+                    gst_registration: gstRegistration,
+                    gst_period: gstPeriod,
+                    expected_documents: Number(expectedDocuments),
+                  }
+                : {}),
+              ...(sourceFormat !== "canonical-csv" && account
+                ? { account_identifier: account }
+                : {}),
+              ...(sourceFormat === "camt053" && statementIdentifier
+                ? { statement_identifier: statementIdentifier }
+                : {}),
+              ...(["uae-wps-sif", "india-epfo-ecr"].includes(sourceFormat) &&
+              employerRegistration
+                ? { employer_registration: employerRegistration }
+                : {}),
+              ...(["uae-wps-sif", "india-epfo-ecr"].includes(sourceFormat) &&
+              obligationDue
+                ? { obligation_due_date: obligationDue }
+                : {}),
+              ...(sourceFormat === "india-epfo-ecr"
+                ? {
+                    obligation_period: obligationPeriod,
+                    expected_members: Number(expectedMembers),
+                  }
+                : {}),
+              table_type: tableType,
+              label,
+              expected_rows: Number(expectedRows),
+              ...(Number(expectedRows) === 0 ? { nil_reason: nilReason } : {}),
+              control_totals: controls,
+            };
       } else {
         if (!chosen)
           throw new Error(
             "Select an available workflow for the engagement country",
           );
+        if (workflow === "open-item-allocations" && !invoiceFaceAmounts)
+          throw new Error(
+            "Confirm that invoices contain face amounts before cash allocation.",
+          );
         payload = {
           workflow,
+          ...(workflow === "open-item-allocations"
+            ? { allocation_basis: "invoice_face_amounts" }
+            : {}),
           source_ids: sources,
           as_of: asOf,
           title: label,
@@ -497,14 +614,26 @@ export function CountryWorkflows({
               <label>
                 Source origin
                 <select
+                  aria-label="Source origin"
                   value={sourceOrigin}
                   onChange={(e) => {
                     setSourceOrigin(e.target.value);
-                    setTableType("transactions");
+                    setTableType(
+                      e.target.value === "supporting-items"
+                        ? "audit-open-items"
+                        : "transactions",
+                    );
+                    setSupportingTable("");
                   }}
                 >
                   <option value="evidence">Retained source file</option>
                   <option value="ledger">Committed ledger</option>
+                  <option value="supporting">
+                    Reviewed supporting bank table
+                  </option>
+                  <option value="supporting-items">
+                    Reviewed supporting open-item table
+                  </option>
                   {config.data?.country === "AE" && canUseVAT && (
                     <option value="vat">Reconciled UAE VAT calculation</option>
                   )}
@@ -530,6 +659,132 @@ export function CountryWorkflows({
                   <p>
                     Reuse the VAT workbench's current, source-reconciled boxes.
                     Import the filed return separately.
+                  </p>
+                </>
+              ) : ["supporting", "supporting-items"].includes(sourceOrigin) ? (
+                <>
+                  <label>
+                    {sourceOrigin === "supporting-items"
+                      ? "Reviewed supporting open-item table"
+                      : "Reviewed supporting bank table"}
+                    <select
+                      aria-label={sourceOrigin === "supporting-items" ? "Reviewed supporting open-item table" : "Reviewed supporting bank table"}
+                      value={supportingTable}
+                      onChange={(event) =>
+                        setSupportingTable(event.target.value)
+                      }
+                    >
+                      <option value="">Select reviewed table</option>
+                      {results.data?.items
+                        .filter(
+                          (item) =>
+                            item.kind === "source-table" &&
+                            item.table_kind ===
+                              (sourceOrigin === "supporting-items"
+                                ? "open-items"
+                                : "bank") &&
+                            item.review_status === "REVIEWED" &&
+                            item.freshness === "CURRENT" &&
+                            item.evidence_version_id,
+                        )
+                        .map((item) => (
+                          <option key={item.id} value={item.id}>
+                            {item.label} · v{item.version}
+                          </option>
+                        ))}
+                    </select>
+                  </label>
+                  <label>
+                    {sourceOrigin === "supporting-items"
+                      ? "Control account identifier"
+                      : "Bank account identifier"}
+                    <input
+                      value={account}
+                      onChange={(event) => setAccount(event.target.value)}
+                    />
+                  </label>
+                  <label>
+                    {sourceOrigin === "supporting-items"
+                      ? "Supporting open-item scope assessment"
+                      : "Supporting bank account scope assessment"}
+                    <textarea
+                      value={supportingScope}
+                      maxLength={2000}
+                      onChange={(event) =>
+                        setSupportingScope(event.target.value)
+                      }
+                    />
+                  </label>
+                  {sourceOrigin === "supporting-items" && (
+                    <>
+                      <label>
+                        Open-item subledger side
+                        <select
+                          value={supportingSide}
+                          onChange={(event) =>
+                            setSupportingSide(event.target.value)
+                          }
+                        >
+                          <option value="receivable">Receivable</option>
+                          <option value="payable">Payable</option>
+                        </select>
+                      </label>
+                      <label>
+                        Open-item balance date
+                        <input
+                          type="date"
+                          value={supportingBalanceDate}
+                          onChange={(event) =>
+                            setSupportingBalanceDate(event.target.value)
+                          }
+                        />
+                      </label>
+                      <label>
+                        Open-item source sign
+                        <select
+                          value={supportingAmountSign}
+                          onChange={(event) =>
+                            setSupportingAmountSign(event.target.value)
+                          }
+                        >
+                          <option value="as-reported">Use reported sign</option>
+                          <option value="reverse-sign">
+                            Reverse reported sign
+                          </option>
+                        </select>
+                      </label>
+                      <p>
+                        Amounts must use the subledger's normal sign:
+                        invoices/debit notes non-negative and credit notes
+                        non-positive. Explicit document types, counterparties,
+                        document dates and due dates are required in the
+                        reviewed table.
+                      </p>
+                    </>
+                  )}
+                  <label>
+                    Expected data rows
+                    <input
+                      type="number"
+                      min={1}
+                      max={5000}
+                      value={expectedRows}
+                      onChange={(event) => setExpectedRows(event.target.value)}
+                    />
+                  </label>
+                  <label>
+                    Independent totals by currency
+                    <input
+                      value={totals}
+                      onChange={(event) => setTotals(event.target.value)}
+                    />
+                  </label>
+                  <p>
+                    Reuse all reviewed normalized rows and their original
+                    evidence. Declare independent row/currency controls and
+                    verify the account scope; no account ownership, PDF
+                    extraction or value conversion is inferred. Open-item sign
+                    changes require the explicit selection above.
                   </p>
                 </>
               ) : sourceOrigin === "ledger" ? (
@@ -680,7 +935,11 @@ export function CountryWorkflows({
                     <select
                       disabled={sourceFormat !== "canonical-csv"}
                       value={tableType}
-                      onChange={(e) => setTableType(e.target.value)}
+                      onChange={(e) => {
+                        setTableType(e.target.value);
+                        setCSVColumns({});
+                        setAmountDerivation("none");
+                      }}
                     >
                       {Object.keys(config.data?.source_contracts || {}).map(
                         (k) => (
@@ -689,6 +948,151 @@ export function CountryWorkflows({
                       )}
                     </select>
                   </label>
+                  {sourceFormat === "canonical-csv" && (
+                    <>
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={customColumns}
+                          onChange={(event) =>
+                            setCustomColumns(event.target.checked)
+                          }
+                        />
+                        Map original CSV columns
+                      </label>
+                      {customColumns && (
+                        <fieldset>
+                          <legend>Original export columns</legend>
+                          <label>
+                            CSV separator
+                            <select
+                              value={csvDelimiter}
+                              onChange={(event) =>
+                                setCSVDelimiter(event.target.value)
+                              }
+                            >
+                              <option value=",">Comma</option>
+                              <option value=";">Semicolon</option>
+                              <option value={"\t"}>Tab</option>
+                            </select>
+                          </label>
+                          {tableType === "transactions" && (
+                            <>
+                              <label>
+                                Transaction amount columns
+                                <select
+                                  value={amountDerivation}
+                                  onChange={(event) =>
+                                    setAmountDerivation(event.target.value)
+                                  }
+                                >
+                                  <option value="none">
+                                    One signed amount column
+                                  </option>
+                                  <option value="debit-positive">
+                                    Debit minus credit
+                                  </option>
+                                  <option value="credit-positive">
+                                    Credit minus debit
+                                  </option>
+                                </select>
+                              </label>
+                              {amountDerivation !== "none" && (
+                                <>
+                                  <label>
+                                    Original debit column
+                                    <input
+                                      value={debitColumn}
+                                      maxLength={120}
+                                      onChange={(event) =>
+                                        setDebitColumn(event.target.value)
+                                      }
+                                    />
+                                  </label>
+                                  <label>
+                                    Original credit column
+                                    <input
+                                      value={creditColumn}
+                                      maxLength={120}
+                                      onChange={(event) =>
+                                        setCreditColumn(event.target.value)
+                                      }
+                                    />
+                                  </label>
+                                  <p>
+                                    Choose the sign convention supported by this
+                                    export. Values must be unsigned plain
+                                    decimals; both sides nonzero or both blank
+                                    are rejected. A blank side counts as zero
+                                    only when the other side has a value.
+                                  </p>
+                                </>
+                              )}
+                            </>
+                          )}
+                          {Object.entries(
+                            config.data?.source_contracts[tableType] || {},
+                          )
+                            .filter(
+                              ([field]) =>
+                                !(
+                                  field === "amount" &&
+                                  tableType === "transactions" &&
+                                  amountDerivation !== "none"
+                                ),
+                            )
+                            .map(([field, contract]) => (
+                              <label key={field}>
+                                CSV column for {field}
+                                {contract.required ? " (required)" : ""}
+                                <input
+                                  aria-label={`CSV column for ${field}`}
+                                  value={csvColumns[field] || ""}
+                                  placeholder={field}
+                                  maxLength={120}
+                                  onChange={(event) =>
+                                    setCSVColumns({
+                                      ...csvColumns,
+                                      [field]: event.target.value,
+                                    })
+                                  }
+                                />
+                              </label>
+                            ))}
+                          <label>
+                            Excluded CSV columns, one exact heading per line
+                            <textarea
+                              value={ignoredColumns}
+                              onChange={(event) =>
+                                setIgnoredColumns(event.target.value)
+                              }
+                            />
+                          </label>
+                          <label>
+                            Column mapping and exclusion assessment
+                            <textarea
+                              value={mappingRationale}
+                              maxLength={2000}
+                              onChange={(event) =>
+                                setMappingRationale(event.target.value)
+                              }
+                            />
+                          </label>
+                          <p>
+                            Enter exact original headings. A blank mapping uses
+                            the standard field name. Every extra column must be
+                            explicitly excluded and remains in the original
+                            evidence. Dates, signed amounts, identifiers and
+                            row/currency controls still use the displayed source
+                            contract. Only an explicitly selected debit/credit
+                            difference changes amount representation; dates and
+                            currencies are not converted, and no bank or
+                            government export is authenticated.
+                          </p>
+                        </fieldset>
+                      )}
+                    </>
+                  )}
                   {tableType === "payroll-bases" && (
                     <p>
                       Payroll base controls sum assessed bases across component
@@ -697,10 +1101,11 @@ export function CountryWorkflows({
                       reference explicitly.
                     </p>
                   )}
-                  {tableType === "payroll-rules" && (
+                  {["payroll-rules", "benefit-rules"].includes(tableType) && (
                     <>
                       <label>
-                        Payroll rule source document (optional shared document)
+                        {tableType === "benefit-rules" ? "Benefit" : "Payroll"}{" "}
+                        rule source document (optional shared document)
                         <select
                           value={ruleDocument}
                           onChange={(e) => setRuleDocument(e.target.value)}
@@ -721,8 +1126,9 @@ export function CountryWorkflows({
                         Select a retained document to fill blank source-document
                         references and hashes in the CSV. Conflicting references
                         are rejected. Independently review this source before
-                        calculating contributions; rules must cover the whole
-                        wage month.
+                        calculating expected dues. Payroll rules must cover the
+                        whole wage month; benefit rules must cover the
+                        service-end date and assessed employment regime.
                       </p>
                     </>
                   )}
@@ -1050,7 +1456,14 @@ export function CountryWorkflows({
                           r.kind === "workflow-source" &&
                           r.table_type === type &&
                           r.freshness === "CURRENT" &&
-                          (workflow !== "india-payroll-rules" ||
+                          (!["uae-wps-sif", "india-epfo-ecr"].includes(
+                            r.native_format || "",
+                          ) ||
+                            ["channel", "return", "reported"].includes(role)) &&
+                          (![
+                            "india-payroll-rules",
+                            "uae-benefit-review",
+                          ].includes(workflow) ||
                             role !== "rules" ||
                             r.review_status === "REVIEWED"),
                       )
@@ -1060,6 +1473,14 @@ export function CountryWorkflows({
                         </option>
                       ))}
                   </select>
+                  {type === "obligations" &&
+                    !["channel", "return", "reported"].includes(role) && (
+                      <small>
+                        Use independent payroll/dues or payment evidence. WPS
+                        and ECR files establish a return/channel population
+                        only.
+                      </small>
+                    )}
                 </label>
               ))}
               {workflow === "uae-vat-return" && (
@@ -1149,6 +1570,17 @@ export function CountryWorkflows({
                   onChange={(e) => setReason(e.target.value)}
                 />
               </label>
+              {workflow === "open-item-allocations" && (
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={invoiceFaceAmounts}
+                    onChange={(e) => setInvoiceFaceAmounts(e.target.checked)}
+                  />
+                  Invoice amounts are face amounts before cash allocations,
+                  rather than already-net balances.
+                </label>
+              )}
             </>
           )}
           <Button disabled={action.isPending} onClick={run}>
@@ -1231,6 +1663,50 @@ export function CountryWorkflows({
       {detail.data && body && (
         <section className="main-panel" style={{ padding: 20, marginTop: 16 }}>
           <h2>{body.title}</h2>
+          {body.operations_execution && (
+            <p>
+              Source scope:{" "}
+              {body.operations_execution.population_completeness.replaceAll(
+                "_",
+                " ",
+              )}
+              . Reviewed comparisons do not establish an audit opinion. No
+              payments or journals are executed.
+            </p>
+          )}
+          {body.workflow === "open-item-allocations" &&
+            body.review_status === "REVIEWED" &&
+            !body.blocked && (
+              <Button
+                onClick={async () => {
+                  const created = await action
+                    .mutateAsync({
+                      path: `${prefix}/events/${selected}/remaining-open-items`,
+                      body: {},
+                    })
+                    .catch(() => null);
+                  if (created) setSelected(created.id);
+                }}
+              >
+                Prepare remaining open items for ageing and ECL review
+              </Button>
+            )}
+          {!!body.payment_proposals?.length && (
+            <details>
+              <summary>Payment proposals — separate approval required</summary>
+              <ul>
+                {body.payment_proposals.map((proposal, index) => (
+                  <li key={`${proposal.order_id}-${index}`}>
+                    {proposal.vendor}: {proposal.currency} {proposal.amount} ·{" "}
+                    {proposal.state.replaceAll("_", " ")}
+                    {proposal.holds.length
+                      ? ` · ${proposal.holds.join(", ")}`
+                      : ""}
+                  </li>
+                ))}
+              </ul>
+            </details>
+          )}
           <div className="toolbar">
             <Status value={body.review_status} />
             <Status value={detail.data.freshness} />
@@ -1329,6 +1805,54 @@ export function CountryWorkflows({
                 ))}
               </dl>
             </details>
+          )}
+          {body.csv_mapping && (
+            <details>
+              <summary>Original CSV column mapping and exclusions</summary>
+              <dl>
+                {Object.entries(body.csv_mapping.applied_columns).map(
+                  ([field, heading]) => (
+                    <div key={field}>
+                      <dt>{field.replaceAll("_", " ")}</dt>
+                      <dd>{heading}</dd>
+                    </div>
+                  ),
+                )}
+              </dl>
+              <p>
+                Excluded columns:{" "}
+                {body.csv_mapping.ignored_columns.join(", ") || "None"}
+              </p>
+              <p>{body.csv_mapping.rationale}</p>
+              {body.csv_mapping.amount_derivation &&
+                body.csv_mapping.amount_derivation !== "none" && (
+                  <p>
+                    Amount basis: {body.csv_mapping.amount_derivation}; debit
+                    column: {body.csv_mapping.debit_column}; credit column:{" "}
+                    {body.csv_mapping.credit_column}.
+                  </p>
+                )}
+            </details>
+          )}
+          {body.supporting_table_id && (
+            <div>
+              <p>{body.supporting_scope_assessment}</p>
+              {body.supporting_side && (
+                <p>
+                  Subledger: {body.supporting_side}; balance date:{" "}
+                  {body.supporting_balance_date}; source sign:{" "}
+                  {body.supporting_amount_sign}.
+                </p>
+              )}
+              <Button
+                onClick={() => {
+                  setSelected(body.supporting_table_id!);
+                  setOffset(0);
+                }}
+              >
+                Open reviewed supporting table
+              </Button>
+            </div>
           )}
           {body.limitations && (
             <ul>

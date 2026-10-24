@@ -3,8 +3,9 @@
 from datetime import date
 from decimal import Decimal
 from typing import Annotated, Literal
+from uuid import UUID
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, HttpUrl, model_validator
 
 from app.modules.ifrs.schemas import Asset
 from app.modules.jurisdictions.profiles import Strict
@@ -26,6 +27,9 @@ class OpenItem(Strict):
     balance_date: date
     amount: Money
     document_type: Literal["invoice", "credit-note", "debit-note"] = "invoice"
+    segment: str = Field(default="", max_length=100)
+    specific_ecl: Money | None = Field(default=None, ge=0)
+    specific_assessment: str = Field(default="", max_length=4000)
 
     @model_validator(mode="after")
     def dates_and_sign(self):
@@ -113,9 +117,21 @@ class LossRate(Strict):
     effective_to: date
     evidence_reference: Identifier
     methodology: str = Field(min_length=10, max_length=2000)
+    segment: str = Field(default="", max_length=100)
+    historical_loss_rate: Decimal | None = Field(default=None, ge=0, le=1, decimal_places=10)
+    forward_adjustment: Decimal = Field(default=Decimal(0), ge=-1, le=1, decimal_places=10)
+    forward_evidence: str = Field(default="", max_length=1000)
 
     @model_validator(mode="after")
     def ordered(self):
+        if self.forward_adjustment and not self.forward_evidence.strip():
+            raise ValueError("Forward-looking rate adjustment requires evidence")
+        if self.historical_loss_rate is not None and self.weighted_loss_rate != min(
+            Decimal(1), max(Decimal(0), self.historical_loss_rate + self.forward_adjustment)
+        ):
+            raise ValueError(
+                "Weighted loss rate differs from approved historical and forward components"
+            )
         if self.max_overdue_days < self.min_overdue_days or self.effective_to < self.effective_from:
             raise ValueError("Loss-rate day and effective-date ranges must be ordered")
         return self
@@ -147,6 +163,11 @@ class PurchaseLine(Strict):
     unit_price: Money = Field(ge=0)
     amount: Money = Field(ge=0)
     evidence_reference: Identifier
+    approval_status: Literal["unverified", "approved", "rejected"] = "unverified"
+    payment_hold: bool = False
+    bank_change_verified: bool = False
+    prepared_by: str = Field(default="", max_length=120)
+    approved_by: str = Field(default="", max_length=120)
 
 
 class PartyMaster(Strict):
@@ -179,6 +200,13 @@ class ExpenseClaim(Strict):
 class BenefitEmployee(Strict):
     id: Identifier
     regime: Identifier
+    cohort: Identifier
+    work_model: Literal["full-time", "part-time", "other"]
+    work_model_assessment: str = Field(min_length=10, max_length=2000)
+    work_model_constant_for_service: bool
+    annual_contract_hours: Money | None = Field(default=None, gt=0, le=8784)
+    annual_full_time_hours: Money | None = Field(default=None, gt=0, le=8784)
+    full_time_monthly_basic_salary: Money | None = Field(default=None, ge=0)
     currency: Currency
     service_start: date
     service_end: date
@@ -194,12 +222,34 @@ class BenefitEmployee(Strict):
             raise ValueError("Service dates must be ordered")
         if self.excluded_service_days > (self.service_end - self.service_start).days + 1:
             raise ValueError("Excluded service exceeds employment span")
+        hours = (
+            self.annual_contract_hours,
+            self.annual_full_time_hours,
+            self.full_time_monthly_basic_salary,
+        )
+        if self.work_model == "part-time":
+            if (
+                self.annual_contract_hours is None
+                or self.annual_full_time_hours is None
+                or self.full_time_monthly_basic_salary is None
+            ):
+                raise ValueError(
+                    "Part-time benefits require annual contract/full-time hours and an assessed full-time salary basis"
+                )
+            if self.annual_contract_hours > self.annual_full_time_hours:
+                raise ValueError("Part-time contract hours cannot exceed the full-time comparator")
+        elif any(value is not None for value in hours):
+            raise ValueError(
+                "Contract-hour proration inputs apply only to the part-time work model"
+            )
         return self
 
 
 class BenefitRule(Strict):
     id: Identifier
     regime: Identifier
+    cohort: Identifier
+    work_model: Literal["full-time", "part-time", "other"]
     effective_from: date
     effective_to: date
     minimum_service_years: Money = Field(ge=0)
@@ -210,6 +260,11 @@ class BenefitRule(Strict):
     later_tier_days: Money = Field(ge=0)
     maximum_salary_months: Money = Field(gt=0)
     evidence_reference: Identifier
+    source_url: HttpUrl
+    source_version: Identifier
+    source_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
+    source_evidence_version_id: UUID
+    applicability_review: str = Field(min_length=10, max_length=2000)
 
     @model_validator(mode="after")
     def ordered(self):

@@ -365,7 +365,27 @@ async def assess_record(db, ctx, eid, rid):
     obj = await record(db, ctx, eid, rid, approved=True)
     _, p, selected = await profile_inputs(db, ctx, eid, uuid.UUID(obj.body["profile_id"]))
     if obj.kind == "vat-einvoicing":
-        value = calc.readiness(s.EInvoicing.model_validate(clean(obj.body)), p.legal_as_of)
+        assessed = s.EInvoicing.model_validate(clean(obj.body))
+        value = calc.readiness(assessed, p.legal_as_of)
+        amendment_reviewed = bool(
+            assessed.amendment_review_evidence_id and assessed.amendment_scope_assessment.strip()
+        )
+        value["source_maintenance"] = {
+            "notice": "MD197-2026 announced by MoF on 2026-10-19; original decision/effectivity needs reviewed adoption",
+            "url": "https://mof.gov.ae/en/news/ministry-of-finance-amends-electronic-invoicing-regulations-to-ease-the-burden-on-businesses/",
+            "status": "REVIEWED_EVIDENCE_LINKED"
+            if amendment_reviewed
+            else "AWAITING_PRIMARY_DECISION_REVIEW",
+            "review_evidence_id": str(assessed.amendment_review_evidence_id)
+            if amendment_reviewed
+            else None,
+        }
+        if not amendment_reviewed:
+            value["state"] = "REVIEW_REQUIRED"
+        value["scope_limitations"] = [
+            "Rollout dates do not establish transaction-specific applicability, storage, issuance or tax-group exclusions",
+            "No live ASP or authority filing connection is asserted",
+        ]
     elif obj.kind == "vat-recovery":
         data = s.Recovery.model_validate(clean(obj.body))
         value = {

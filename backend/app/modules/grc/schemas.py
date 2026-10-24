@@ -6,6 +6,8 @@ from typing import Annotated, Literal
 from pydantic import Field, model_validator
 
 from app.modules.audit_execution.schemas import Body, Strict
+from app.modules.grc.deadlines import DeadlineRule
+from app.modules.grc.deadlines import calculate as calculate_deadline
 
 Money = Annotated[Decimal, Field(max_digits=28, decimal_places=8)]
 Nonnegative = Annotated[Money, Field(ge=0)]
@@ -348,11 +350,55 @@ class Obligation(Body):
     source_url: str = Field(min_length=1, max_length=2000)
     jurisdiction: Text
     effective_from: date
-    deadline: date
+    deadline: date | None = None
+    deadline_kind: Literal["legal", "authority_extension", "client_agreed", "firm_internal", "unresolved"] = "unresolved"
+    deadline_rule: DeadlineRule | None = None
+    rule_evidence_id: uuid.UUID | None = None
+    extension_deadline: date | None = None
+    extension_evidence_id: uuid.UUID | None = None
+    entity_facts: dict[str, str] = Field(default_factory=dict, max_length=30)
+    fact_evidence_ids: Evidence = Field(default_factory=list)
+    reviewer_id: uuid.UUID | None = None
+    filing_stage: Literal["not_started", "preparing", "under_review", "approved_for_submission", "submitted", "acknowledged"] = "not_started"
+    readiness_evidence_ids: Evidence = Field(default_factory=list)
+    submission_evidence_id: uuid.UUID | None = None
+    acknowledgment_evidence_id: uuid.UUID | None = None
+    blockers: list[Text] = Field(default_factory=list, max_length=100)
+    reminder_days: list[int] = Field(default_factory=list, max_length=20)
+    notifications_enabled: bool = False
+    escalation_after_days: int | None = Field(default=None, ge=1, le=365)
     required_evidence: Text
     compliance_assessment: Literal["not_assessed", "pending", "exception", "supported"]
     evidence_ids: Evidence = Field(default_factory=list)
     statutory_record_id: uuid.UUID | None = None
+
+    @model_validator(mode="after")
+    def filing_contract(self):
+        if any(day < 0 or day > 365 for day in self.reminder_days) or len(set(self.reminder_days)) != len(self.reminder_days):
+            raise ValueError("Reminder offsets must be unique days from 0 through 365")
+        if self.deadline_rule:
+            if not self.rule_evidence_id:
+                raise ValueError("Verified rule evidence required for calculated deadline")
+            computed = calculate_deadline(self.deadline_rule)
+            if self.deadline is not None and self.deadline != computed:
+                raise ValueError("Declared deadline differs from versioned calculation")
+            self.deadline = computed
+        if self.extension_deadline and (not self.extension_evidence_id or not self.deadline or self.extension_deadline < self.deadline):
+            raise ValueError("Extension requires base deadline and separate authority evidence")
+        if self.deadline_kind == "authority_extension" and not self.extension_deadline:
+            raise ValueError("Authority extension evidence and date required")
+        if self.deadline_kind == "legal" and not self.rule_evidence_id:
+            raise ValueError("Legal deadline requires verified supporting rule evidence")
+        if self.filing_stage in {"approved_for_submission", "submitted", "acknowledged"}:
+            if self.blockers or not self.deadline or not self.reviewer_id or not self.readiness_evidence_ids:
+                raise ValueError("Resolved deadline, independent reviewer and readiness evidence without blockers required")
+        if self.filing_stage in {"submitted", "acknowledged"} and not self.submission_evidence_id:
+            raise ValueError("Actual submission evidence required; generated exports are not submissions")
+        if self.filing_stage == "acknowledged" and not self.acknowledgment_evidence_id:
+            raise ValueError("Separate acknowledgment evidence required")
+        if self.submission_evidence_id and self.submission_evidence_id == self.acknowledgment_evidence_id:
+            raise ValueError("Submission and acknowledgment must be separate evidence")
+        return self
 
 
 class Policy(Body):

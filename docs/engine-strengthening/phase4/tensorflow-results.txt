@@ -1,0 +1,31 @@
+
+> auditos-ml-engine@0.9.0 test
+> npm run build && node --test dist/tests/*.js
+
+
+> auditos-ml-engine@0.9.0 build
+> tsc
+
+✔ train-only preprocessing and unavailable fields (6.002ms)
+✔ independent confusion and budget fixtures (0.692ms)
+✔ features never use label or future records (13.0072ms)
+✔ train-only contextual preprocessing is batch invariant and supports Arabic/calendar (22.9954ms)
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+✔ four local pipelines train, reload, abstain, reject leakage and preserve tensors (579.3542ms)
+
+============================
+Hi, looks like you are running TensorFlow.js in Node.js. To speed things up dramatically, install our node backend, visit https://github.com/tensorflow/tfjs-node for more details. 
+============================
+✔ local CPU training/inference, cache, schema and artifact failures without language credentials (321.6316ms)
+✔ canonical dates, missing fields, finite features and reviewed dimensions (0.7945ms)
+ℹ tests 7
+ℹ suites 0
+ℹ pass 7
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 910.7999

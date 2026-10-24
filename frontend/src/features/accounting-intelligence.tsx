@@ -128,6 +128,7 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
   const [decimalSeparator, setDecimalSeparator] = useState(".");
   const [zipMember, setZipMember] = useState("");
   const [tableKind, setTableKind] = useState("bank");
+  const [worksheet, setWorksheet] = useState("");
   const [localError, setLocalError] = useState<Error | null>(null);
   const [downloadBusy, setDownloadBusy] = useState(false);
   const inputs = useAPI<{
@@ -138,7 +139,11 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
   const capabilities = useAPI<{ lead_sections: string[] }>(
     "intelligence/capabilities",
   );
-  const records = useAPI<{ items: Result[] }>(`${prefix}/events?limit=100`);
+  const records = useAPI<{ items: Result[] }>(
+    `${prefix}/events?limit=100&newest=true`,
+    true,
+    true,
+  );
   const jobs = useAPI<{ items: Job[] }>(`${prefix}/jobs`, true, true);
   const foundation = useAPI<{
     runtime: string;
@@ -214,7 +219,9 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
         date_format: dateFormat,
         decimal_separator: decimalSeparator,
         ...(zipMember ? { zip_member: zipMember } : {}),
-        ...(area === "source-table" ? { table_kind: tableKind } : {}),
+        ...(area === "source-table"
+          ? { table_kind: tableKind, ...(worksheet ? { worksheet } : {}) }
+          : {}),
       });
     if (area === "ageing")
       Object.assign(payload, {
@@ -522,16 +529,45 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
                 </label>
               )}
               {area === "source-table" && (
-                <label>
-                  Table type
-                  <select
-                    value={tableKind}
-                    onChange={(e) => setTableKind(e.target.value)}
-                  >
-                    <option value="bank">Bank transactions</option>
-                    <option value="open-items">Authoritative open items</option>
-                  </select>
-                </label>
+                <>
+                  <label>
+                    Table type
+                    <select
+                      value={tableKind}
+                      onChange={(e) => setTableKind(e.target.value)}
+                    >
+                      <option value="bank">Bank transactions</option>
+                      <option value="open-items">
+                        Authoritative open items
+                      </option>
+                    </select>
+                    {tableKind === "open-items" && (
+                      <small>
+                        To reuse this table in Country workflows, include
+                        explicit document_type (invoice, credit-note or
+                        debit-note), counterparty, document_date and due_date.
+                        Optional balance_date must agree to the reporting scope;
+                        segment is retained for ECL assessment.
+                      </small>
+                    )}
+                  </label>
+                  <label>
+                    Worksheet name (required for multi-sheet XLSX)
+                    <input
+                      value={worksheet}
+                      maxLength={128}
+                      onChange={(event) => setWorksheet(event.target.value)}
+                    />
+                  </label>
+                  <p>
+                    CSV or macro-free XLSX values only. All selected-sheet rows,
+                    including hidden rows, are included. Formula cells, macros
+                    and external links are rejected. Numeric amounts use
+                    original spreadsheet XML values; text dates and amounts
+                    follow the selected conventions. Keep identifiers requiring
+                    display formatting as text.
+                  </p>
+                </>
               )}
             </>
           )}
@@ -660,8 +696,8 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
         </Button>
         <p className="subtle">
           Quarantined evidence is unavailable until a functioning malware
-          scanner clears it. CSV supporting tables require explicit columns and
-          conventions. Generated results never post entries or approve audit
+          scanner clears it. CSV/XLSX supporting tables require explicit columns
+          and conventions. Generated results never post entries or approve audit
           work.
         </p>
       </section>
@@ -753,6 +789,24 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
         ) : (
           <>
             <div className="toolbar">
+              {body?.table_metadata != null &&
+                typeof body.table_metadata === "object" && (
+                  <details>
+                    <summary>
+                      Supporting table layout and worksheet controls
+                    </summary>
+                    <dl>
+                      {Object.entries(
+                        body.table_metadata as Record<string, unknown>,
+                      ).map(([key, value]) => (
+                        <div key={key}>
+                          <dt>{key.replaceAll("_", " ")}</dt>
+                          <dd>{val(value)}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </details>
+                )}
               {detail.data.kind === "foundation-validation" && (
                 <Button
                   disabled={action.isPending}

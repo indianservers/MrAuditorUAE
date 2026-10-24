@@ -32,18 +32,49 @@ router = APIRouter(prefix="/ai", tags=["Enterprise AI investigations"])
 Actor = Annotated[Context, Depends(require("ai.investigation.read"))]
 
 
+@router.get("/engagements/{eid}/runtime-status")
+async def runtime_status(eid: uuid.UUID, db: DB, ctx: Actor):
+    from app.core.config import settings
+    from app.db.models.platform import AIExecution
+    from app.modules.enterprise_ai.runtime_status import language_state
+
+    await scope(db, ctx, eid)
+    config = settings()
+    model = await db.scalar(select(AIModelConfiguration).where(AIModelConfiguration.name == config.ai_model))
+    provider = await db.get(AIProviderConfig, model.provider_id) if model else None
+    last = await db.scalar(select(AIExecution).where(
+        AIExecution.tenant_id == ctx.tenant_id,
+        AIExecution.model_id == model.id,
+    ).order_by(AIExecution.created_at.desc(), AIExecution.id.desc()).limit(1)) if model else None
+    return {
+        "language": language_state(adapter=provider.adapter if provider else None,
+            enabled=bool(model and model.enabled), credentials_present=bool(config.ai_api_key),
+            external_approved=config.audit_ai_external_approved, last=last),
+        "local_ml": {"runtime": "TensorFlow.js Node CPU", "state": "inspect_model_registry",
+            "readiness": "per-model deployment and artifact validation required",
+            "allowed_modes": ["trained_model", "statistical_baseline", "rules_baseline", "diagnostic_mock", "unavailable"]},
+    }
+
+
 @router.get("/engagements/{eid}/use-cases")
 async def business_cases(eid: uuid.UUID, db: DB, ctx: Actor):
+    import json
+    from pathlib import Path
+
     from app.modules.enterprise_ai.business import case_scope, module_url
     from app.modules.jurisdictions.ae.use_cases import CASES, ENGINE_TOOLS
 
     await case_scope(db, ctx, eid, 1)
+    sources = json.loads((Path(__file__).resolve().parents[2] / "modules/jurisdictions/ae/source_register.json").read_text())
     return {
+        "legal_source_register": sources,
         "country": "AE",
         "version": "mr-auditor-uae/1",
         "engine_connections": ENGINE_TOOLS,
         "items": [
-            {**case.model_dump(), "module_url": module_url(case, eid)} for case in CASES.values()
+            {**case.model_dump(), "module_url": module_url(case, eid),
+             "calculation_module_url": module_url(case.model_copy(update={"workflow": None}), eid) if case.calculation else None}
+            for case in CASES.values()
         ],
     }
 
@@ -69,6 +100,15 @@ async def business_action(eid: uuid.UUID, identifier: int, data: Execute, db: DB
         raise HTTPException(422, str(exc)) from None
 
 
+@router.get("/engagements/{eid}/use-cases/{identifier}/source-records/{record_id}")
+async def business_source_record(eid: uuid.UUID, identifier: int, record_id: uuid.UUID, db: DB, ctx: Actor):
+    from app.modules.audit_execution import service as audit
+    from app.modules.enterprise_ai.business import case_scope
+    await case_scope(db, ctx, eid, identifier)
+    record = await audit.get_record(db, ctx, eid, record_id, lock=False)
+    return audit.serialize(record)
+
+
 @router.get("/agents")
 async def registry(ctx: Actor):
     return {
@@ -81,6 +121,8 @@ async def registry(ctx: Actor):
 
 @router.get("/tools")
 async def tools(ctx: Actor):
+    from app.modules.enterprise_ai.schemas import ToolInput
+
     return {
         "controlled_actions": {
             "schema": Execute.model_json_schema(),
@@ -89,7 +131,9 @@ async def tools(ctx: Actor):
             "consequential_actions": "Posting, sending, filing and bank changes are excluded",
         },
         "items": [
-            {"id": k, "agent": v[0], "permission": v[1], "read_only": True}
+            {"id": k, "agent": v[0], "permission": v[1], "read_only": True,
+             "consequence": "read_only", "input_schema": ToolInput.model_json_schema(),
+             "scope": "server-authorized tenant/entity/engagement/period; caller cannot override tenant"}
             for k, v in TOOLS.items()
         ],
     }

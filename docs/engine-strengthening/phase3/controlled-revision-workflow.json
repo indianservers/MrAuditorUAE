@@ -1,8 +1,8 @@
 {
   "synthetic": true,
   "original_run_read_after_revision": {
-    "engagement_id": "459323bd-e16e-4bed-9256-a5db078ca818",
-    "record_id": "384c4cb7-d70f-4a0d-8521-48ace4171c0d",
+    "engagement_id": "ff31eb1a-7ecc-480b-9cb3-15d06a0a5d75",
+    "record_id": "3baad94d-2229-4244-b910-3cbee4389432",
     "kind": "fixed-assets",
     "methodology_version": "auditos-accounting/3.1",
     "inputs": {
@@ -42,17 +42,17 @@
       "narrative": "",
       "assertions": [],
       "period_end": "2026-12-31",
-      "profile_id": "30f03bc6-d0f4-471c-bb40-e65c2f79f990",
+      "profile_id": "d1e0b561-11e9-48d0-bc43-61b36fde2218",
       "period_start": "2026-01-01"
     },
     "dependencies": [
       {
-        "id": "384c4cb7-d70f-4a0d-8521-48ace4171c0d",
+        "id": "3baad94d-2229-4244-b910-3cbee4389432",
         "status": "APPROVED",
         "version": 3
       },
       {
-        "id": "30f03bc6-d0f4-471c-bb40-e65c2f79f990",
+        "id": "d1e0b561-11e9-48d0-bc43-61b36fde2218",
         "status": "APPROVED",
         "version": 3
       }
@@ -94,18 +94,18 @@
       "execution": {
         "evidence": [
           {
-            "id": "940e4b14-9b2e-4081-b18f-daf6a054b0b1",
+            "id": "2df361f8-e1b7-4282-8be7-e1260dd42406",
             "kind": "snapshot"
           }
         ],
         "rounding": "Decimal precision 48; schedule HALF_UP to 8 decimal places; journals use currency minor units",
-        "entity_id": "8d549390-de23-411c-ab1b-b19976dd8560",
+        "entity_id": "ad0e6086-2902-4b3b-be40-bd0e9c2e2a71",
         "framework": "full_ifrs",
-        "period_id": "3eff0ecb-568b-49f7-99f8-10f3906670ab",
-        "tenant_id": "42747d52-7827-47df-a109-6c03381e2dfa",
+        "period_id": "fe287cec-7747-45d2-bff9-81f99345a9e6",
+        "tenant_id": "9a577ac2-9d96-46f9-ae08-30bf76f7f7c3",
         "period_end": "2026-12-31",
         "period_start": "2026-01-01",
-        "engagement_id": "459323bd-e16e-4bed-9256-a5db078ca818",
+        "engagement_id": "ff31eb1a-7ecc-480b-9cb3-15d06a0a5d75",
         "journal_state": "NOT_POSTED",
         "review_status": "DRAFT_REQUIRES_REVIEW",
         "entity_version": 1,
@@ -119,7 +119,7 @@
         },
         "policy_versions": [
           {
-            "id": "30f03bc6-d0f4-471c-bb40-e65c2f79f990",
+            "id": "d1e0b561-11e9-48d0-bc43-61b36fde2218",
             "kind": "ifrs-profile",
             "status": "APPROVED",
             "version": 3,
@@ -132,8 +132,8 @@
         "current_tax_runs": [],
         "source_snapshots": [
           {
-            "id": "940e4b14-9b2e-4081-b18f-daf6a054b0b1",
-            "sha256": "a13f9af4d0872abc644aa71cdab43e73e7221067fdf9a446bba3f9646e6276ba",
+            "id": "2df361f8-e1b7-4282-8be7-e1260dd42406",
+            "sha256": "5d3c64f28bfd0e066296c5cb9f1b0eb6b8caccfe707ce43744c4bff4f5bf0ab8",
             "source_complete": true
           }
         ],
@@ -144,36 +144,36 @@
         "source_completeness": "complete_for_declared_scope",
         "approved_assumptions": [
           {
-            "id": "384c4cb7-d70f-4a0d-8521-48ace4171c0d",
+            "id": "3baad94d-2229-4244-b910-3cbee4389432",
             "kind": "ifrs-fixed-assets",
             "status": "APPROVED",
             "version": 3
           },
           {
-            "id": "30f03bc6-d0f4-471c-bb40-e65c2f79f990",
+            "id": "d1e0b561-11e9-48d0-bc43-61b36fde2218",
             "kind": "ifrs-profile",
             "status": "APPROVED",
             "version": 3
           }
         ],
         "calculated_adjustment": "Calculation output; recognition and accounts require review",
-        "implementation_sha256": "a5710c08d3a39d021c9f590868259991d88feadbebd0c600015e0c26dd8e6001",
+        "implementation_sha256": "cbb47fefe7e40c1ad2a3b4ea1612e22d67429c5041084c1944c71eae0d9ca1b5",
         "presentation_currency": "AED"
       },
       "closing_carrying": "3285.00000000",
       "total_depreciation": "365.00000000"
     },
-    "sha256": "b720e6e0c5a110eed26fa20226c32dd62c1d46b49825d97d9879535b5a2b7e22",
-    "tenant_id": "42747d52-7827-47df-a109-6c03381e2dfa",
-    "created_by": "7e6858c7-13a6-48ca-9bd9-61c13d8ff0f1",
-    "id": "9fa5fe16-df96-465a-bcd1-c447440d6948",
-    "created_at": "2026-10-24T19:46:17.042715+00:00",
-    "updated_at": "2026-10-24T19:46:17.042715+00:00",
+    "sha256": "a1d88f5e75418c254c4073926555ac926a5cc2e118df3eae98c62401ba9f66db",
+    "tenant_id": "9a577ac2-9d96-46f9-ae08-30bf76f7f7c3",
+    "created_by": "87b3a35f-d07b-4efc-918b-9c15843576a3",
+    "id": "fa51d7ce-0cdf-4e2f-8cbb-12c4b6501bfe",
+    "created_at": "2026-10-24T20:53:46.912552+00:00",
+    "updated_at": "2026-10-24T20:53:46.912552+00:00",
     "dependencies_current": false
   },
   "recalculated_run": {
-    "engagement_id": "459323bd-e16e-4bed-9256-a5db078ca818",
-    "record_id": "384c4cb7-d70f-4a0d-8521-48ace4171c0d",
+    "engagement_id": "ff31eb1a-7ecc-480b-9cb3-15d06a0a5d75",
+    "record_id": "3baad94d-2229-4244-b910-3cbee4389432",
     "kind": "fixed-assets",
     "methodology_version": "auditos-accounting/3.1",
     "inputs": {
@@ -213,17 +213,17 @@
       "narrative": "",
       "assertions": [],
       "period_end": "2026-12-31",
-      "profile_id": "30f03bc6-d0f4-471c-bb40-e65c2f79f990",
+      "profile_id": "d1e0b561-11e9-48d0-bc43-61b36fde2218",
       "period_start": "2026-01-01"
     },
     "dependencies": [
       {
-        "id": "384c4cb7-d70f-4a0d-8521-48ace4171c0d",
+        "id": "3baad94d-2229-4244-b910-3cbee4389432",
         "status": "APPROVED",
         "version": 7
       },
       {
-        "id": "30f03bc6-d0f4-471c-bb40-e65c2f79f990",
+        "id": "d1e0b561-11e9-48d0-bc43-61b36fde2218",
         "status": "APPROVED",
         "version": 3
       }
@@ -265,18 +265,18 @@
       "execution": {
         "evidence": [
           {
-            "id": "940e4b14-9b2e-4081-b18f-daf6a054b0b1",
+            "id": "2df361f8-e1b7-4282-8be7-e1260dd42406",
             "kind": "snapshot"
           }
         ],
         "rounding": "Decimal precision 48; schedule HALF_UP to 8 decimal places; journals use currency minor units",
-        "entity_id": "8d549390-de23-411c-ab1b-b19976dd8560",
+        "entity_id": "ad0e6086-2902-4b3b-be40-bd0e9c2e2a71",
         "framework": "full_ifrs",
-        "period_id": "3eff0ecb-568b-49f7-99f8-10f3906670ab",
-        "tenant_id": "42747d52-7827-47df-a109-6c03381e2dfa",
+        "period_id": "fe287cec-7747-45d2-bff9-81f99345a9e6",
+        "tenant_id": "9a577ac2-9d96-46f9-ae08-30bf76f7f7c3",
         "period_end": "2026-12-31",
         "period_start": "2026-01-01",
-        "engagement_id": "459323bd-e16e-4bed-9256-a5db078ca818",
+        "engagement_id": "ff31eb1a-7ecc-480b-9cb3-15d06a0a5d75",
         "journal_state": "NOT_POSTED",
         "review_status": "DRAFT_REQUIRES_REVIEW",
         "entity_version": 1,
@@ -290,7 +290,7 @@
         },
         "policy_versions": [
           {
-            "id": "30f03bc6-d0f4-471c-bb40-e65c2f79f990",
+            "id": "d1e0b561-11e9-48d0-bc43-61b36fde2218",
             "kind": "ifrs-profile",
             "status": "APPROVED",
             "version": 3,
@@ -303,8 +303,8 @@
         "current_tax_runs": [],
         "source_snapshots": [
           {
-            "id": "940e4b14-9b2e-4081-b18f-daf6a054b0b1",
-            "sha256": "a13f9af4d0872abc644aa71cdab43e73e7221067fdf9a446bba3f9646e6276ba",
+            "id": "2df361f8-e1b7-4282-8be7-e1260dd42406",
+            "sha256": "5d3c64f28bfd0e066296c5cb9f1b0eb6b8caccfe707ce43744c4bff4f5bf0ab8",
             "source_complete": true
           }
         ],
@@ -315,34 +315,34 @@
         "source_completeness": "complete_for_declared_scope",
         "approved_assumptions": [
           {
-            "id": "384c4cb7-d70f-4a0d-8521-48ace4171c0d",
+            "id": "3baad94d-2229-4244-b910-3cbee4389432",
             "kind": "ifrs-fixed-assets",
             "status": "APPROVED",
             "version": 7
           },
           {
-            "id": "30f03bc6-d0f4-471c-bb40-e65c2f79f990",
+            "id": "d1e0b561-11e9-48d0-bc43-61b36fde2218",
             "kind": "ifrs-profile",
             "status": "APPROVED",
             "version": 3
           }
         ],
         "calculated_adjustment": "Calculation output; recognition and accounts require review",
-        "implementation_sha256": "a5710c08d3a39d021c9f590868259991d88feadbebd0c600015e0c26dd8e6001",
+        "implementation_sha256": "cbb47fefe7e40c1ad2a3b4ea1612e22d67429c5041084c1944c71eae0d9ca1b5",
         "presentation_currency": "AED"
       },
       "closing_carrying": "2920.00000000",
       "total_depreciation": "730.00000000"
     },
-    "sha256": "e9ffd5f043cd968a4424fce03513d4de176ffd92498651765033f59eda59c1c6",
-    "tenant_id": "42747d52-7827-47df-a109-6c03381e2dfa",
-    "created_by": "7e6858c7-13a6-48ca-9bd9-61c13d8ff0f1",
-    "id": "70f7bb15-0b58-44d5-bca5-47b71aafc411",
-    "created_at": "2026-10-24T19:46:17.564124+00:00",
-    "updated_at": "2026-10-24T19:46:17.564124+00:00"
+    "sha256": "e87fc47a0959d04e3bb7a8695958a5441594651331a57b7070d3dd9409578e4f",
+    "tenant_id": "9a577ac2-9d96-46f9-ae08-30bf76f7f7c3",
+    "created_by": "87b3a35f-d07b-4efc-918b-9c15843576a3",
+    "id": "60675de4-3a3d-458b-85c9-c4dcc4f58237",
+    "created_at": "2026-10-24T20:53:47.433412+00:00",
+    "updated_at": "2026-10-24T20:53:47.433412+00:00"
   },
   "independently_reapproved_control_journal": {
-    "engagement_id": "459323bd-e16e-4bed-9256-a5db078ca818",
+    "engagement_id": "ff31eb1a-7ecc-480b-9cb3-15d06a0a5d75",
     "kind": "ifrs-adjustment",
     "reference": "SYN-lock-approval",
     "title": "Proposed IAS 16 calculation journal",
@@ -366,28 +366,28 @@
       "due_date": null,
       "owner_id": null,
       "standard": "IAS 16",
-      "narration": "Technical approval controls test; not a compliant asset journal demonstration; source run 70f7bb15-0b58-44d5-bca5-47b71aafc411",
+      "narration": "Technical approval controls test; not a compliant asset journal demonstration; source run 60675de4-3a3d-458b-85c9-c4dcc4f58237",
       "narrative": "",
       "assertions": [],
-      "profile_id": "30f03bc6-d0f4-471c-bb40-e65c2f79f990",
+      "profile_id": "d1e0b561-11e9-48d0-bc43-61b36fde2218",
       "reversal_of": null,
       "review_cycle": 1,
       "review_stage": 1,
       "adjustment_date": "2026-12-31",
       "adjustment_type": "journal",
       "review_approvers": [
-        "3a01e939-46a9-4b2f-8aad-da4a19c92deb"
+        "e58feaa4-1b3f-48e2-828e-798b531f3095"
       ],
-      "calculation_run_id": "70f7bb15-0b58-44d5-bca5-47b71aafc411",
+      "calculation_run_id": "60675de4-3a3d-458b-85c9-c4dcc4f58237",
       "calculation_component": "primary"
     },
     "version": 3,
-    "prepared_by": "7e6858c7-13a6-48ca-9bd9-61c13d8ff0f1",
-    "tenant_id": "42747d52-7827-47df-a109-6c03381e2dfa",
-    "created_by": "7e6858c7-13a6-48ca-9bd9-61c13d8ff0f1",
-    "id": "bf4495bf-b16f-4571-82df-d5f6ea2054f9",
-    "created_at": "2026-10-24T19:46:17.606988+00:00",
-    "updated_at": "2026-10-24T19:46:17.767461+00:00"
+    "prepared_by": "87b3a35f-d07b-4efc-918b-9c15843576a3",
+    "tenant_id": "9a577ac2-9d96-46f9-ae08-30bf76f7f7c3",
+    "created_by": "87b3a35f-d07b-4efc-918b-9c15843576a3",
+    "id": "3013991c-f072-4ddc-97df-f19ac66a72cc",
+    "created_at": "2026-10-24T20:53:47.487377+00:00",
+    "updated_at": "2026-10-24T20:53:47.701733+00:00"
   },
   "blocked": {
     "duplicate_reference_or_component": 409,

@@ -13,6 +13,7 @@ from app.api.v1.audit_execution import Actor
 from app.core.dependencies import DB
 from app.modules.audit_execution import service as audit
 from app.modules.audit_execution.access import engagement_permissions
+from app.modules.audit_execution.models import AuditRecord
 from app.modules.audit_execution.schemas import RecordInput, RecordPatch, Source
 from app.modules.audit_log.service import record
 from app.modules.intelligence import jobs, service
@@ -21,6 +22,49 @@ from app.modules.intelligence.foundations import PeriodAction
 from app.modules.intelligence.models import IntelligenceEvent, IntelligenceJob
 
 router = APIRouter(prefix="/intelligence", tags=["Accounting intelligence"])
+
+
+@router.post("/engagements/{eid}/events/{identifier}/remaining-open-items", status_code=201)
+async def remaining_open_items(
+    eid: uuid.UUID, identifier: uuid.UUID, db: DB, ctx: Actor, request: Request
+):
+    from collections import defaultdict
+    from decimal import Decimal
+
+    eng = await service.scope(db, ctx, eid, "country-workflow", True)
+    source = await service.event(db, ctx, eid, identifier, True)
+    if source.kind != "country-workflow" or source.body.get("workflow") != "open-item-allocations":
+        raise HTTPException(422, "Select an invoice/cash allocation assessment")
+    if source.body.get("review_status") != "REVIEWED" or source.body.get("blocked"):
+        raise HTTPException(409, "Independently reviewed reconciled allocations required")
+    # The existing ECL/count/source consumers use this same canonical source type.
+    rows = source.body["remaining_open_items"]
+    totals = defaultdict(Decimal)
+    for row in rows:
+        totals[row["currency"]] += Decimal(row["amount"])
+    body = {
+        "table_type": "audit-open-items",
+        "rows": rows,
+        "row_count": len(rows),
+        "control_totals": {c: str(v) for c, v in totals.items()},
+        "population_completeness": "DERIVED_FROM_REVIEWED_EXPLICIT_ALLOCATIONS",
+        "review_status": "UNVERIFIED",
+        "title": "Remaining open items after reviewed cash allocations",
+        "parser_version": "allocation-open-items/1",
+        "contributors": sorted({*source.body.get("contributors", []), str(ctx.user_id)}),
+        "source_identity": "allocation:" + str(source.root_id),
+        "source_sha256": source.sha256,
+    }
+    created = await service.append(
+        db,
+        ctx,
+        eng,
+        "workflow-source",
+        body,
+        [service.event_receipt(source)],
+        request.state.request_id,
+    )
+    return audit.serialize(created)
 
 
 @router.get("/engagements/{eid}/foundation-status")
@@ -326,6 +370,9 @@ async def events(
                 "root_id": str(row.root_id),
                 "kind": row.kind,
                 "table_type": row.body.get("table_type"),
+                "native_format": row.body.get("native_format"),
+                "evidence_version_id": row.body.get("evidence_version_id"),
+                "table_kind": row.body.get("table_kind"),
                 "version": row.version,
                 "sha256": row.sha256,
                 "created_at": row.created_at.isoformat(),
@@ -703,17 +750,36 @@ async def review(
                 "financial_impact": None,
                 "sources": source,
             }
-        created = await audit.create(
-            db,
-            ctx,
-            eid,
-            kind,
-            RecordInput(
-                reference=f"INT-{str(uuid.uuid4())[:8]}",
-                title="Documentary support: " + data.item_id[:8],
-                body=content,
-            ),
-            request.state.request_id,
+        import hashlib
+        import json
+
+        identity = json.dumps(
+            {"dependencies": obj.dependencies, "item": data.item_id, "kind": kind}, sort_keys=True
+        )
+        reference = "INT-" + hashlib.sha256(identity.encode()).hexdigest()[:24]
+        existing = await db.scalar(
+            select(AuditRecord).where(
+                AuditRecord.tenant_id == ctx.tenant_id,
+                AuditRecord.engagement_id == eid,
+                AuditRecord.kind == kind,
+                AuditRecord.reference == reference,
+            )
+        )
+        created = (
+            audit.serialize(existing)
+            if existing
+            else await audit.create(
+                db,
+                ctx,
+                eid,
+                kind,
+                RecordInput(
+                    reference=reference,
+                    title="Documentary support: " + data.item_id[:8],
+                    body=content,
+                ),
+                request.state.request_id,
+            )
         )
         if obj.kind == "reconciliation":
             body.update(
@@ -879,8 +945,14 @@ async def generate_paper(
         DILIGENCE_WORKFLOWS,
     )
 
-    if obj.body.get("table_type") in DILIGENCE_ROW_TYPES or obj.body.get("workflow") in DILIGENCE_WORKFLOWS:
-        raise HTTPException(409, "Diligence results require restricted workpaper handling; generic paper generation is unavailable")
+    if (
+        obj.body.get("table_type") in DILIGENCE_ROW_TYPES
+        or obj.body.get("workflow") in DILIGENCE_WORKFLOWS
+    ):
+        raise HTTPException(
+            409,
+            "Diligence results require restricted workpaper handling; generic paper generation is unavailable",
+        )
     if obj.body.get("review_status") != "REVIEWED":
         raise HTTPException(
             409, "Independently reviewed source result required before working-paper generation"

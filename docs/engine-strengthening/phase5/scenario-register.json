@@ -1,0 +1,62 @@
+{
+  "synthetic_only": true,
+  "scenarios": [
+    {
+      "id": "A",
+      "name": "UAE trading company",
+      "classification": "Implemented with limitations",
+      "evidence": [
+        "../phase2/trading-workflow.json",
+        "../phase3/operating-company-workflow.json",
+        "../phase4/revenue-cycle.json",
+        "backend-results.xml"
+      ],
+      "limitations": "Separate retained connected demonstrations, not a newly approved complete client reporting pack; all source and professional release guards remain applicable"
+    },
+    {
+      "id": "B",
+      "name": "Free-zone services",
+      "classification": "Implemented with limitations",
+      "evidence": [
+        "../phase2/connected-workflow.json",
+        "backend-results.xml"
+      ],
+      "limitations": "QFZP/CT/TP components require reconciled approved activity/substance facts; no new complete free-zone evidence-pack certification"
+    },
+    {
+      "id": "C",
+      "name": "Multi-entity group",
+      "classification": "Implemented with limitations",
+      "evidence": [
+        "../phase3/group-workflow.json",
+        "../phase3/intercompany-workflow.json",
+        "backend-results.xml"
+      ],
+      "limitations": "Draft consolidation and separate tax/DMTT scope; advanced group tax bridges and final group release remain incomplete"
+    },
+    {
+      "id": "D",
+      "name": "AI evidence to approved draft action",
+      "classification": "Implemented with limitations",
+      "evidence": [
+        "backend-results.xml",
+        "focused-integration-results.xml",
+        "configuration-status.json"
+      ],
+      "test": "tests.phase11.test_workflows::test_investigation_permissions_resume_proposal_and_stale_approval",
+      "limitations": "Actual authorized retrieval and draft execution; narrative uses explicitly diagnostic provider, no live gateway or professional conclusion"
+    },
+    {
+      "id": "E",
+      "name": "Source correction",
+      "classification": "Implemented with limitations",
+      "evidence": [
+        "../phase4/audit-source-revision.json",
+        "../phase4/procurement-bank-revision.json",
+        "filing-lifecycle.json",
+        "backend-results.xml"
+      ],
+      "limitations": "Stale guards and reviewed replacements; no global automatic recalculation of every draft"
+    }
+  ]
+}

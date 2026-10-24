@@ -13,7 +13,7 @@ class Strict(BaseModel):
 
 
 class Source(Strict):
-    kind: Literal["record", "finding", "journal", "snapshot", "sample", "intelligence"]
+    kind: Literal["record", "finding", "journal", "snapshot", "sample", "intelligence", "ml"]
     id: uuid.UUID
 
 
@@ -101,6 +101,21 @@ class Program(Body):
 class Procedure(Program):
     required_evidence: str = Field(min_length=1, max_length=4000)
     instructions: str = Field(min_length=1, max_length=4000)
+    procedure_type: Literal[
+        "details",
+        "controls",
+        "analytical",
+        "cutoff",
+        "confirmation",
+        "subsequent_settlement",
+        "unrecorded_liabilities",
+        "inventory_observation",
+        "subsequent_events",
+    ] = "details"
+    risk_ids: list[uuid.UUID] = Field(default_factory=list, max_length=100)
+    account_codes: list[str] = Field(default_factory=list, max_length=1000)
+    reliance_on_controls: str = Field(default="", max_length=4000)
+    scope_exclusions: str = Field(default="", max_length=4000)
 
 
 class TestItem(Strict):
@@ -118,6 +133,12 @@ class Testing(Body):
     results: list[TestItem] = Field(default_factory=list, max_length=1000)
     exceptions: str = Field(default="", max_length=4000)
     conclusion: str = Field(min_length=1, max_length=4000)
+    procedure_id: uuid.UUID | None = None
+    steps_performed: str = Field(default="", max_length=8000)
+    evaluation_basis: Literal["nonstatistical", "targeted", "full_population", "statistical"] = (
+        "nonstatistical"
+    )
+    projected_misstatement: Decimal | None = Field(default=None, max_digits=28, decimal_places=8)
 
 
 class Section(Strict):
@@ -126,6 +147,7 @@ class Section(Strict):
 
 
 class WorkingPaper(Body):
+    inherit_source_permissions: bool = False
     folder: str = Field(min_length=1, max_length=200)
     sections: list[Section] = Field(min_length=1, max_length=30)
     financial_tables: list[dict] = Field(default_factory=list, max_length=10)
@@ -157,6 +179,10 @@ class Finding(Body):
     severity: Literal["low", "medium", "high", "critical"]
     financial_impact: Decimal | None = Field(default=None, max_digits=28, decimal_places=8)
     management_response: str = Field(default="", max_length=4000)
+    correction_status: Literal["not_applicable", "uncorrected", "corrected"] = "not_applicable"
+    qualitative_considerations: str = Field(default="", max_length=4000)
+    follow_up: str = Field(default="", max_length=4000)
+    correction_evidence_id: uuid.UUID | None = None
 
 
 class ReviewNote(Body):

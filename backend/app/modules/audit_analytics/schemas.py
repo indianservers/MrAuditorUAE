@@ -2,7 +2,7 @@ from datetime import date
 from decimal import Decimal
 from zoneinfo import ZoneInfo
 
-from pydantic import Field, field_validator
+from pydantic import Field, field_validator, model_validator
 
 from app.modules.accounting.schemas import SnapshotRequest
 
@@ -28,7 +28,8 @@ class AnalyticsRequest(SnapshotRequest):
     year_end: date | None = None
     year_end_window: int = Field(default=7, ge=1, le=90)
     holidays: list[date] | None = None
-    weekend_days: list[int] = Field(default_factory=lambda: [5, 6])
+    weekend_days: list[int] = Field(default_factory=list)
+    calendar_rationale: str = Field(default="", max_length=4000)
     timezone: str | None = None
     business_hours: tuple[int, int] | None = None
     timestamps_reliable: bool = False
@@ -46,7 +47,15 @@ class AnalyticsRequest(SnapshotRequest):
     def days(cls, value):
         if any(i < 0 or i > 6 for i in value):
             raise ValueError("Invalid weekday")
-        return value
+        if len(set(value)) != len(value):
+            raise ValueError("Duplicate non-working weekday")
+        return sorted(value)
+
+    @model_validator(mode="after")
+    def assessed_calendar(self):
+        if self.weekend_days and len(self.calendar_rationale.strip()) < 10:
+            raise ValueError("Selected non-working weekdays require an operating-calendar assessment")
+        return self
 
     @field_validator("timezone")
     @classmethod

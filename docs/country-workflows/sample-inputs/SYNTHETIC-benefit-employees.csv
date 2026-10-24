@@ -1,0 +1,3 @@
+id,regime,cohort,work_model,work_model_assessment,work_model_constant_for_service,annual_contract_hours,annual_full_time_hours,full_time_monthly_basic_salary,currency,service_start,service_end,excluded_service_days,monthly_basic_salary,amount,scheme,contract_evidence
+E1,SYNTHETIC-REGIME,SYNTHETIC-COHORT,full-time,Synthetic assessed full-time contract and cohort,True,,,,AED,2025-07-01,2026-06-30,0,3000,2100,gratuity,CONTRACT-1
+E2,SYNTHETIC-REGIME,SYNTHETIC-COHORT,part-time,Synthetic assessed full-time contract and cohort,True,1040,2080,3000,AED,2025-07-01,2026-06-30,0,1500,1050,gratuity,CONTRACT-1

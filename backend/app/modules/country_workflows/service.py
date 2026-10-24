@@ -185,10 +185,34 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         }, [*dependencies, receipt]
     if operation == "workflow-source":
         evidence, receipt = await intelligence.evidence(db, ctx, eng, data.evidence_version_id)
+        supporting = None
+        supporting_contributors = set()
+        if data.supporting_table_id:
+            supporting = await intelligence.event(db, ctx, eng.id, data.supporting_table_id, True)
+            if (
+                supporting.kind != "source-table"
+                or supporting.body.get("review_status") != "REVIEWED"
+            ):
+                raise HTTPException(409, "Select an independently reviewed supporting table")
+            dependencies.append(intelligence.event_receipt(supporting))
+            root = await intelligence.event(db, ctx, eng.id, supporting.root_id)
+            supporting_contributors.update(
+                [
+                    str(root.created_by),
+                    str(supporting.created_by),
+                    *root.body.get("contributors", []),
+                    *supporting.body.get("contributors", []),
+                ]
+            )
         from app.modules.country_workflows.native_sources import parse_native
 
         supported_media = {
-            "canonical-csv": {"text/csv"},
+            "canonical-csv": {
+                "text/csv",
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            }
+            if supporting is not None
+            else {"text/csv"},
             "camt053": {"application/xml", "text/xml"},
             "swift-mt940": {"text/plain"},
             "uae-wps-sif": {"text/csv"},
@@ -201,10 +225,21 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 422, "Retained evidence media type does not match the selected source format"
             )
         defaults = None
+        if data.file_format != "canonical-csv" and (
+            data.column_mapping
+            or data.ignored_columns
+            or data.mapping_rationale
+            or data.delimiter != ","
+        ):
+            raise HTTPException(422, "CSV mappings and delimiters apply only to CSV sources")
         if data.rule_document_version_id:
-            if data.table_type != "payroll-rules" or data.file_format != "canonical-csv":
+            if (
+                data.table_type not in {"payroll-rules", "benefit-rules"}
+                or data.file_format != "canonical-csv"
+            ):
                 raise HTTPException(
-                    422, "A rule source document can be selected only for canonical payroll rules"
+                    422,
+                    "A rule source document can be selected only for canonical payroll/benefit rules",
                 )
             rule_document, _ = await intelligence.evidence(
                 db, ctx, eng, data.rule_document_version_id
@@ -218,12 +253,16 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             with ObjectStore().local(evidence.object_key, evidence.object_version) as path:
                 if path.stat().st_size > MAX_BYTES or hash_file(path) != evidence.sha256:
                     raise ValueError("Evidence exceeds size bound or hash verification failed")
+                if supporting is not None:
+                    from app.modules.country_workflows.table_source import from_supporting_table
+
+                    return from_supporting_table(supporting.body, data)
                 if data.file_format == "canonical-csv":
                     return parse_csv(path.read_bytes(), data, defaults)
                 return parse_native(path.read_bytes(), data, package.country, evidence.filename)
 
         result = await run_in_threadpool(load)
-        if data.table_type == "payroll-rules":
+        if data.table_type in {"payroll-rules", "benefit-rules"}:
             dependencies.extend(await payroll_rule_documents(db, ctx, eng, result["rows"]))
         return {
             **result,
@@ -232,7 +271,12 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "source_sha256": evidence.sha256,
             "source_identity": "evidence:" + str(evidence.id),
             "source_filename": evidence.filename,
-            "contributors": [str(ctx.user_id)],
+            "contributors": sorted(
+                {
+                    str(ctx.user_id),
+                    *supporting_contributors,
+                }
+            ),
             **(
                 {
                     "rule_document_version_id": str(data.rule_document_version_id),
@@ -258,12 +302,13 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
         if (
-            data.workflow == "india-payroll-rules"
+            data.workflow in {"india-payroll-rules", "uae-benefit-review"}
             and role == "rules"
             and source.body.get("review_status") != "REVIEWED"
         ):
             raise HTTPException(
-                409, "Independently review the payroll rule source before calculating expected dues"
+                409,
+                "Independently review the payroll/benefit rule source before calculating expected dues",
             )
         identity = (
             source.body.get("source_identity") or "evidence:" + source.body["evidence_version_id"]
@@ -283,7 +328,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         sources[role] = source.body
         contributors.update(source.body.get("contributors", [str(source.created_by)]))
         dependencies.append(intelligence.event_receipt(source))
-    if data.workflow == "india-payroll-rules":
+    if data.workflow in {"india-payroll-rules", "uae-benefit-review"}:
         dependencies.extend(await payroll_rule_documents(db, ctx, eng, sources["rules"]["rows"]))
     if data.workflow == "bank-brs":
         book_range = sources.get("books", {}).get("source_range")

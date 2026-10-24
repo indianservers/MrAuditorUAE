@@ -1,0 +1,463 @@
+{
+  "live_qualification_performed": false,
+  "items": [
+    {
+      "id": "tally",
+      "name": "TallyPrime",
+      "adapter": "local-agent-and-xml",
+      "status": "environment_qualification_pending",
+      "import_kinds": [
+        "gl",
+        "tb",
+        "coa",
+        "journals"
+      ],
+      "file_formats": [
+        "csv",
+        "xlsx"
+      ],
+      "report_set": "GL + opening/movement/closing TB + chart of accounts",
+      "live_qualified": false,
+      "classification": "Implemented with limitations",
+      "authorization_method": "authorized local read-only HTTP/XML agent and enrolled company fingerprint",
+      "supported_operations": [
+        "read extraction",
+        "controlled GL/TB/COA import"
+      ],
+      "write_scope": "no remote financial mutation or filing",
+      "data_freshness": "per-run health and checkpoints; not inferred from reachability",
+      "environment": "controlled synthetic tests; authorized live account not qualified",
+      "configuration_requirements": [
+        "TallyPrime version and test company",
+        "Local HTTP/XML enabled on loopback port 9000",
+        "Authorized AuditOS import identity",
+        "Financial period and source GL/TB reports"
+      ],
+      "editions": [],
+      "provider_reference": null,
+      "verification_evidence": [
+        "focused-integration-results.xml",
+        "backend-results.xml"
+      ],
+      "known_limitations": "mock transports test failure handling only; independent count/balance controls and real edition qualification remain required"
+    },
+    {
+      "id": "zoho",
+      "name": "Zoho Books",
+      "adapter": "oauth-api",
+      "status": "credentials_qualification_pending",
+      "import_kinds": [
+        "gl",
+        "tb",
+        "coa",
+        "journals"
+      ],
+      "file_formats": [
+        "csv",
+        "xlsx"
+      ],
+      "report_set": "GL + opening/movement/closing TB + chart of accounts",
+      "live_qualified": false,
+      "classification": "Implemented with limitations",
+      "authorization_method": "OAuth client/refresh-token flow, region and organization binding",
+      "supported_operations": [
+        "read extraction",
+        "controlled GL/TB/COA import"
+      ],
+      "write_scope": "no remote financial mutation or filing",
+      "data_freshness": "per-run health and checkpoints; not inferred from reachability",
+      "environment": "controlled synthetic tests; authorized live account not qualified",
+      "configuration_requirements": [
+        "Zoho Books region and organization ID",
+        "OAuth client ID/secret in secure configuration",
+        "Registered allowlisted callback URL and read-only consent",
+        "Source GL/TB reports"
+      ],
+      "editions": [],
+      "provider_reference": null,
+      "verification_evidence": [
+        "focused-integration-results.xml",
+        "backend-results.xml"
+      ],
+      "known_limitations": "mock transports test failure handling only; independent count/balance controls and real edition qualification remain required"
+    },
+    {
+      "id": "busy",
+      "name": "Busy Accounting",
+      "adapter": "configured-partner-api",
+      "status": "partner_contract_required",
+      "live_api_status": "partner_transport_implemented",
+      "import_kinds": [
+        "gl",
+        "tb",
+        "coa",
+        "journals"
+      ],
+      "file_formats": [
+        "csv",
+        "xlsx"
+      ],
+      "report_set": "GL + opening/movement/closing TB + chart of accounts",
+      "live_qualified": false,
+      "classification": "Implemented with limitations",
+      "authorization_method": "vendor-approved partner contract credentials",
+      "supported_operations": [
+        "read extraction",
+        "controlled GL/TB/COA import"
+      ],
+      "write_scope": "no remote financial mutation or filing",
+      "data_freshness": "per-run health and checkpoints; not inferred from reachability",
+      "environment": "controlled synthetic tests; authorized live account not qualified",
+      "configuration_requirements": [
+        "Busy edition/version and test company",
+        "Flat GL, TB and account-master exports",
+        "Vendor-approved partner API endpoints and response contract"
+      ],
+      "editions": [
+        "partner-api"
+      ],
+      "provider_reference": "https://busy.in/faqs/third-party-services/integration/10/",
+      "verification_evidence": [
+        "focused-integration-results.xml",
+        "backend-results.xml"
+      ],
+      "known_limitations": "mock transports test failure handling only; independent count/balance controls and real edition qualification remain required"
+    },
+    {
+      "id": "marg",
+      "name": "Marg ERP",
+      "adapter": "configured-partner-api",
+      "status": "partner_contract_required",
+      "live_api_status": "partner_transport_implemented",
+      "import_kinds": [
+        "gl",
+        "tb",
+        "coa",
+        "journals"
+      ],
+      "file_formats": [
+        "csv",
+        "xlsx"
+      ],
+      "report_set": "GL + opening/movement/closing TB + chart of accounts",
+      "live_qualified": false,
+      "classification": "Implemented with limitations",
+      "authorization_method": "vendor-approved partner contract credentials",
+      "supported_operations": [
+        "read extraction",
+        "controlled GL/TB/COA import"
+      ],
+      "write_scope": "no remote financial mutation or filing",
+      "data_freshness": "per-run health and checkpoints; not inferred from reachability",
+      "environment": "controlled synthetic tests; authorized live account not qualified",
+      "configuration_requirements": [
+        "Marg ERP edition/version and test company",
+        "Flat GL, TB and account-master exports",
+        "Licensed Marg Gateway URLs and response documentation"
+      ],
+      "editions": [
+        "partner-api"
+      ],
+      "provider_reference": "https://margcompusoft.com/Package/Packages.aspx",
+      "verification_evidence": [
+        "focused-integration-results.xml",
+        "backend-results.xml"
+      ],
+      "known_limitations": "mock transports test failure handling only; independent count/balance controls and real edition qualification remain required"
+    },
+    {
+      "id": "sap-b1",
+      "name": "SAP Business One",
+      "adapter": "direct-vendor-api",
+      "status": "credentials_qualification_pending",
+      "live_api_status": "adapter_implemented",
+      "import_kinds": [
+        "gl",
+        "tb",
+        "coa",
+        "journals"
+      ],
+      "file_formats": [
+        "csv",
+        "xlsx"
+      ],
+      "report_set": "GL + opening/movement/closing TB + chart of accounts",
+      "live_qualified": false,
+      "classification": "Implemented with limitations",
+      "authorization_method": "Service Layer session credentials",
+      "supported_operations": [
+        "read extraction",
+        "controlled GL/TB/COA import"
+      ],
+      "write_scope": "no remote financial mutation or filing",
+      "data_freshness": "per-run health and checkpoints; not inferred from reachability",
+      "environment": "controlled synthetic tests; authorized live account not qualified",
+      "configuration_requirements": [
+        "SAP Business One version and company database",
+        "GL/TB/account exports",
+        "Service Layer endpoint and read-only user for direct synchronization"
+      ],
+      "editions": [
+        "service-layer"
+      ],
+      "provider_reference": "https://help.sap.com/doc/056f69366b5345a386bb8149f1700c19/10.0/en-US/Service%20Layer%20API%20Reference.html",
+      "verification_evidence": [
+        "focused-integration-results.xml",
+        "backend-results.xml"
+      ],
+      "known_limitations": "mock transports test failure handling only; independent count/balance controls and real edition qualification remain required"
+    },
+    {
+      "id": "sap-s4",
+      "name": "SAP S/4HANA",
+      "adapter": "direct-vendor-api",
+      "status": "credentials_qualification_pending",
+      "live_api_status": "adapter_implemented",
+      "import_kinds": [
+        "gl",
+        "tb",
+        "coa",
+        "journals"
+      ],
+      "file_formats": [
+        "csv",
+        "xlsx"
+      ],
+      "report_set": "GL + opening/movement/closing TB + chart of accounts",
+      "live_qualified": false,
+      "classification": "Implemented with limitations",
+      "authorization_method": "approved basic/bearer credential and released endpoint",
+      "supported_operations": [
+        "read extraction",
+        "controlled GL/TB/COA import"
+      ],
+      "write_scope": "no remote financial mutation or filing",
+      "data_freshness": "per-run health and checkpoints; not inferred from reachability",
+      "environment": "controlled synthetic tests; authorized live account not qualified",
+      "configuration_requirements": [
+        "S/4HANA edition and company code/ledger",
+        "GL/TB/account exports",
+        "Approved released API and communication arrangement for direct synchronization"
+      ],
+      "editions": [
+        "ledger-odata",
+        "entry-view-odata"
+      ],
+      "provider_reference": "https://help.sap.com/docs/SAP_S4HANA_ON-PREMISE/3ab6e6fc510f4840a5508e126ef01e22/80214b5ede2f4e97b640137a4eca208a.html",
+      "verification_evidence": [
+        "focused-integration-results.xml",
+        "backend-results.xml"
+      ],
+      "known_limitations": "mock transports test failure handling only; independent count/balance controls and real edition qualification remain required"
+    },
+    {
+      "id": "netsuite",
+      "name": "Oracle NetSuite",
+      "adapter": "direct-vendor-api",
+      "status": "credentials_qualification_pending",
+      "live_api_status": "adapter_implemented",
+      "import_kinds": [
+        "gl",
+        "tb",
+        "coa",
+        "journals"
+      ],
+      "file_formats": [
+        "csv",
+        "xlsx"
+      ],
+      "report_set": "GL + opening/movement/closing TB + chart of accounts",
+      "live_qualified": false,
+      "classification": "Implemented with limitations",
+      "authorization_method": "edition-specific OAuth/token configuration",
+      "supported_operations": [
+        "read extraction",
+        "controlled GL/TB/COA import"
+      ],
+      "write_scope": "no remote financial mutation or filing",
+      "data_freshness": "per-run health and checkpoints; not inferred from reachability",
+      "environment": "controlled synthetic tests; authorized live account not qualified",
+      "configuration_requirements": [
+        "NetSuite account and subsidiary/accounting book",
+        "GL/TB/account exports",
+        "Read-only integration role and approved SuiteQL access for direct synchronization"
+      ],
+      "editions": [
+        "suiteql"
+      ],
+      "provider_reference": "https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_157909186990.html",
+      "verification_evidence": [
+        "focused-integration-results.xml",
+        "backend-results.xml"
+      ],
+      "known_limitations": "mock transports test failure handling only; independent count/balance controls and real edition qualification remain required"
+    },
+    {
+      "id": "quickbooks",
+      "name": "QuickBooks",
+      "adapter": "direct-vendor-api",
+      "status": "credentials_qualification_pending",
+      "live_api_status": "adapter_implemented",
+      "import_kinds": [
+        "gl",
+        "tb",
+        "coa",
+        "journals"
+      ],
+      "file_formats": [
+        "csv",
+        "xlsx"
+      ],
+      "report_set": "GL + opening/movement/closing TB + chart of accounts",
+      "live_qualified": false,
+      "classification": "Implemented with limitations",
+      "authorization_method": "Online OAuth; Desktop requires explicit partner SDK/API contract",
+      "supported_operations": [
+        "read extraction",
+        "controlled GL/TB/COA import"
+      ],
+      "write_scope": "no remote financial mutation or filing",
+      "data_freshness": "per-run health and checkpoints; not inferred from reachability",
+      "environment": "controlled synthetic tests; authorized live account not qualified",
+      "configuration_requirements": [
+        "QuickBooks Online or Desktop edition and company",
+        "GL/TB/account exports",
+        "Online OAuth app/realm or Desktop SDK access for direct synchronization"
+      ],
+      "editions": [
+        "online",
+        "desktop-partner-api"
+      ],
+      "provider_reference": "https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/generalledger",
+      "verification_evidence": [
+        "focused-integration-results.xml",
+        "backend-results.xml"
+      ],
+      "known_limitations": "mock transports test failure handling only; independent count/balance controls and real edition qualification remain required"
+    },
+    {
+      "id": "dynamics",
+      "name": "Microsoft Dynamics",
+      "adapter": "direct-vendor-api",
+      "status": "credentials_qualification_pending",
+      "live_api_status": "adapter_implemented",
+      "import_kinds": [
+        "gl",
+        "tb",
+        "coa",
+        "journals"
+      ],
+      "file_formats": [
+        "csv",
+        "xlsx"
+      ],
+      "report_set": "GL + opening/movement/closing TB + chart of accounts",
+      "live_qualified": false,
+      "classification": "Implemented with limitations",
+      "authorization_method": "Entra client credentials or explicit partner interface",
+      "supported_operations": [
+        "read extraction",
+        "controlled GL/TB/COA import"
+      ],
+      "write_scope": "no remote financial mutation or filing",
+      "data_freshness": "per-run health and checkpoints; not inferred from reachability",
+      "environment": "controlled synthetic tests; authorized live account not qualified",
+      "configuration_requirements": [
+        "Business Central or Finance edition and company",
+        "GL/TB/account exports",
+        "Entra app and approved API permissions for direct synchronization"
+      ],
+      "editions": [
+        "business-central",
+        "finance-odata",
+        "finance-partner-api"
+      ],
+      "provider_reference": "https://learn.microsoft.com/en-us/dynamics365/business-central/dev-itpro/api-reference/v2.0/resources/dynamics_generalledgerentry",
+      "verification_evidence": [
+        "focused-integration-results.xml",
+        "backend-results.xml"
+      ],
+      "known_limitations": "mock transports test failure handling only; independent count/balance controls and real edition qualification remain required"
+    },
+    {
+      "id": "xero",
+      "name": "Xero",
+      "adapter": "direct-vendor-api",
+      "status": "credentials_qualification_pending",
+      "live_api_status": "adapter_implemented",
+      "import_kinds": [
+        "gl",
+        "tb",
+        "coa",
+        "journals"
+      ],
+      "file_formats": [
+        "csv",
+        "xlsx"
+      ],
+      "report_set": "GL + opening/movement/closing TB + chart of accounts",
+      "live_qualified": false,
+      "classification": "Implemented with limitations",
+      "authorization_method": "OAuth read scopes and tenant binding",
+      "supported_operations": [
+        "read extraction",
+        "controlled GL/TB/COA import"
+      ],
+      "write_scope": "no remote financial mutation or filing",
+      "data_freshness": "per-run health and checkpoints; not inferred from reachability",
+      "environment": "controlled synthetic tests; authorized live account not qualified",
+      "configuration_requirements": [
+        "Xero test organization",
+        "GL/TB/account exports",
+        "OAuth app and journal/report access entitlement for direct synchronization"
+      ],
+      "editions": [
+        "cloud"
+      ],
+      "provider_reference": "https://developer.xero.com/documentation/api/accounting/journals/",
+      "verification_evidence": [
+        "focused-integration-results.xml",
+        "backend-results.xml"
+      ],
+      "known_limitations": "mock transports test failure handling only; independent count/balance controls and real edition qualification remain required"
+    },
+    {
+      "id": "file",
+      "name": "Excel / CSV",
+      "adapter": "file",
+      "status": "file_import_available",
+      "import_kinds": [
+        "gl",
+        "tb",
+        "coa",
+        "journals"
+      ],
+      "file_formats": [
+        "csv",
+        "xlsx"
+      ],
+      "report_set": "GL + opening/movement/closing TB + chart of accounts",
+      "live_qualified": false,
+      "classification": "Implemented with limitations",
+      "authorization_method": "authorized file upload, no provider credentials",
+      "supported_operations": [
+        "read extraction",
+        "controlled GL/TB/COA import"
+      ],
+      "write_scope": "no remote financial mutation or filing",
+      "data_freshness": "per-run health and checkpoints; not inferred from reachability",
+      "environment": "controlled synthetic tests; authorized live account not qualified",
+      "configuration_requirements": [
+        "Flat GL, TB and chart exports",
+        "Entity, financial period and functional currency"
+      ],
+      "editions": [],
+      "provider_reference": null,
+      "verification_evidence": [
+        "focused-integration-results.xml",
+        "backend-results.xml"
+      ],
+      "known_limitations": "mock transports test failure handling only; independent count/balance controls and real edition qualification remain required"
+    }
+  ]
+}

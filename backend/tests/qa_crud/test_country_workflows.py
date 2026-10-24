@@ -47,7 +47,7 @@ async def execute(c, h, eid, operation, payload, key=None, failed=None):
         assert job["status"] == "failed" and job["result_id"] is None, job
         assert failed in job["error_details"]["message"], job
         return job
-    assert job["status"] == "completed", job
+    assert job["status"] == "completed", job.get("error_details") or job
     return (await c.get(path + "/events/" + job["result_id"], headers=h)).json()
 
 

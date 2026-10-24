@@ -9,6 +9,7 @@ import { PageHeader } from "./shared";
 import type { Engagement, Page } from "@/types/models";
 import { useScope } from "@/stores/workspace";
 import { UAEBusinessCases } from "./uae-business-cases";
+import { AIRuntimeStatus } from "./ai-runtime-status";
 
 export const aiAreas = [
   ["uae-use-cases", "UAE Business Workflows"],
@@ -146,6 +147,7 @@ function ExportDraft({ base, id }: { base: string; id: string }) {
   );
 }
 export function EnterpriseAI({ area = "command-center" }: { area?: string }) {
+  const activeTenant=useScope(s=>s.tenant);
   const engagements = useAPI<Page<Engagement>>(
     "engagements?limit=100",
     area !== "providers",
@@ -217,18 +219,22 @@ export function EnterpriseAI({ area = "command-center" }: { area?: string }) {
               ))}
             </nav>
             <small>REVIEWED RECIPES</small>
-            {Object.keys(registry.data?.templates || {}).map((k) => (
-              <span className="ai-recipe" key={k}>
-                {label(k)}
-              </span>
-            ))}
+            <Link href="/ai/uae-use-cases">50 UAE business workflows</Link>
+            {Object.keys(registry.data?.templates || {})
+              .filter((k) => !k.startsWith("uae-"))
+              .map((k) => (
+                <span className="ai-recipe" key={k}>
+                  {label(k)}
+                </span>
+              ))}
           </aside>
         )}
         <main className="ai-main">
+          {eid && area === "command-center" && <AIRuntimeStatus eid={eid} />}
           {area === "providers" ? (
             <RemoteFacts path="ai/providers" title="Approved model inventory" />
           ) : eid && area === "uae-use-cases" ? (
-            <UAEBusinessCases key={eid} eid={eid} />
+            <UAEBusinessCases key={`${activeTenant}:${eid}`} eid={eid} />
           ) : eid ? (
             <Workspace
               key={`${eid}:${area}`}
@@ -270,7 +276,9 @@ export function EnterpriseAI({ area = "command-center" }: { area?: string }) {
               </dd>
               <dt>Retrieval</dt>
               <dd>
-                Keyword index. Semantic retrieval and OCR are not configured.
+                Keyword retrieval over authorized indexed sources. Prepare OCR
+                and review extracted fields in the document workspace before
+                use.
               </dd>
             </dl>
             <p className="ai-warning">

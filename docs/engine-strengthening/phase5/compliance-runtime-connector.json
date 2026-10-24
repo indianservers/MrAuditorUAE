@@ -1,0 +1,144 @@
+{
+  "synthetic": true,
+  "calendar": {
+    "items": [
+      {
+        "record_id": "2bbbe6fd-0c89-4b3a-b286-22db09b71477",
+        "version": 1,
+        "reference": "SYN-UNRESOLVED",
+        "deadline": null,
+        "extension_deadline": null,
+        "deadline_kind": "unresolved",
+        "filing_stage": "not_started",
+        "calendar_state": "UNRESOLVED",
+        "freshness": "CURRENT",
+        "reassessment_required": false,
+        "review_status": "IN_PROGRESS",
+        "owner_id": "a04a924d-9c74-42ec-9996-c9635dc60604",
+        "reviewer_id": "8f274022-4e3d-4ff0-9c9f-8ec7faaa6d57"
+      }
+    ],
+    "bounded_to": 200,
+    "external_submission_performed": false
+  },
+  "reviewed_obligation": {
+    "engagement_id": "3219297a-55d3-4b38-aa68-a63ac27c8fe3",
+    "kind": "grc-obligation",
+    "reference": "SYN-UNRESOLVED",
+    "title": "Synthetic unresolved deadline",
+    "status": "APPROVED",
+    "body": {
+      "area": "",
+      "module": "policy",
+      "sources": [],
+      "blockers": [],
+      "deadline": null,
+      "due_date": null,
+      "owner_id": "a04a924d-9c74-42ec-9996-c9635dc60604",
+      "entity_id": "465dd334-1c0a-459c-85b8-468317c3507a",
+      "narrative": "",
+      "assertions": [],
+      "source_url": "https://synthetic.invalid/internal-policy",
+      "reviewer_id": "8f274022-4e3d-4ff0-9c9f-8ec7faaa6d57",
+      "entity_facts": {},
+      "evidence_ids": [],
+      "filing_stage": "under_review",
+      "jurisdiction": "SYNTHETIC",
+      "review_cycle": 3,
+      "review_stage": 1,
+      "deadline_kind": "unresolved",
+      "deadline_rule": null,
+      "reminder_days": [],
+      "effective_from": "2026-01-01",
+      "review_approvers": [
+        "8f274022-4e3d-4ff0-9c9f-8ec7faaa6d57"
+      ],
+      "rule_evidence_id": null,
+      "fact_evidence_ids": [],
+      "required_evidence": "Independent source and computation review",
+      "extension_deadline": null,
+      "statutory_record_id": null,
+      "compliance_assessment": "not_assessed",
+      "escalation_after_days": null,
+      "extension_evidence_id": null,
+      "notifications_enabled": false,
+      "readiness_evidence_ids": [],
+      "submission_evidence_id": null,
+      "acknowledgment_evidence_id": null
+    },
+    "version": 5,
+    "prepared_by": "a04a924d-9c74-42ec-9996-c9635dc60604",
+    "tenant_id": "c8d96eaf-1358-4427-9794-849c9de596de",
+    "created_by": "a04a924d-9c74-42ec-9996-c9635dc60604",
+    "id": "2bbbe6fd-0c89-4b3a-b286-22db09b71477",
+    "created_at": "2026-10-24T21:00:48.713774+00:00",
+    "updated_at": "2026-10-24T21:00:49.002351+00:00"
+  },
+  "runtime": {
+    "language": {
+      "state": "not_configured",
+      "observation": "recent tenant execution, not a live probe",
+      "observed_at": null,
+      "error_category": null,
+      "reachability_ttl_seconds": 300,
+      "deterministic_engines_require_gateway": false,
+      "local_ml_requires_gateway": false,
+      "narrative_is_independent_verification": false
+    },
+    "local_ml": {
+      "runtime": "TensorFlow.js Node CPU",
+      "state": "inspect_model_registry",
+      "readiness": "per-model deployment and artifact validation required",
+      "allowed_modes": [
+        "trained_model",
+        "statistical_baseline",
+        "rules_baseline",
+        "diagnostic_mock",
+        "unavailable"
+      ]
+    }
+  },
+  "connector": {
+    "connection_id": "b93b0231-33b8-42d8-aa65-0e65d437d925",
+    "operational_health": {
+      "provider": "file",
+      "connection_type": "import_export_adapter",
+      "last_attempt_at": "2026-10-24T21:00:49.245754+00:00",
+      "last_success_at": null,
+      "success_lookup": "latest 100 attempts; older history may exist",
+      "lag_seconds": null,
+      "status": "failed",
+      "completeness": "insufficient_evidence",
+      "complete": false,
+      "error_category": "partial_page_failure",
+      "counts": {
+        "gl": 12
+      },
+      "count_semantics": "provider-extracted counts; committed/rejected import totals require the linked validation report",
+      "committed_import_records": null,
+      "rejected_import_records": null,
+      "checkpoint": {
+        "downloaded": 2
+      },
+      "execution_mode": "simulated",
+      "live_qualified": false,
+      "remediation": "Inspect rejected records and controls; renew authorization for auth errors; resume retained checkpoint or use controlled file import"
+    },
+    "status": "configured",
+    "live_qualified": false,
+    "records": [],
+    "actions": [
+      "resume_failed_session",
+      "renew_consent",
+      "run_source_controls",
+      "verify_vendor_contract"
+    ],
+    "credential_storage": "encrypted; never included in diagnostics",
+    "capabilities": {
+      "native_balance_controls": "independent opening/closing reports required; no undocumented report endpoint assumed",
+      "automatic_activation": false,
+      "signed_windows_release": "not_applicable"
+    }
+  },
+  "external_requests_performed": false
+}

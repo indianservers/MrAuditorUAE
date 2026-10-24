@@ -114,9 +114,14 @@ async def invoke(db, ctx, eid, name, data: ToolInput):
             sync = await db.scalar(select(accounting.SyncRun).where(
                 accounting.SyncRun.tenant_id == ctx.tenant_id, accounting.SyncRun.connection_id == connection.id,
             ).order_by(accounting.SyncRun.created_at.desc()).limit(1))
+            successful = await db.scalar(select(accounting.SyncRun).where(
+                accounting.SyncRun.tenant_id == ctx.tenant_id, accounting.SyncRun.connection_id == connection.id,
+                accounting.SyncRun.status == "completed",
+            ).order_by(accounting.SyncRun.created_at.desc()).limit(1))
             item = {"connection_id": str(connection.id), "provider": connection.provider,
                           "configured_status": connection.status, "last_sync_status": sync.status if sync else None,
                           "last_sync_at": sync.created_at.isoformat() if sync else None,
+                          "last_successful_sync_at": successful.created_at.isoformat() if successful else None,
                           "completeness": sync.completeness if sync else "not_verified",
                           "error_category": sync.error_category if sync else None,
                           "live_authority_connection": False}

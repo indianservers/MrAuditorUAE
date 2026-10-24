@@ -1,0 +1,11 @@
+{
+  "observation": "local configuration presence only; no live provider probe",
+  "language_gateway": {
+    "model_selected": false,
+    "credential_present": false,
+    "external_disclosure_approved": false
+  },
+  "connector_encryption_key_present": false,
+  "persistent_object_store_configured": false,
+  "environment_value_redacted": true
+}

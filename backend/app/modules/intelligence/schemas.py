@@ -66,6 +66,7 @@ class LeadInput(Strict):
 
 class TableInput(OCRInput):
     table_kind: Literal["bank", "open-items"]
+    worksheet: str | None = Field(default=None, min_length=1, max_length=128)
 
 
 class AgeingInput(Strict):

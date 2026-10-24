@@ -1,5 +1,7 @@
 # AuditOS UAE — Phases 1–3
 
+Current connected UAE business workstreams and their verified scope are documented in [Mr Auditor business implementation](docs/mr-auditor-business/README.md). The phase descriptions below are historical setup documentation, not the current capability inventory.
+
 Python 3.12 modular monolith for a tenant-isolated audit/compliance platform. Phase 1 provides authentication, membership, metadata CRUD, an AI gateway and jobs. Phase 2 adds deterministic accounting imports, trial balances, reconciliation, analytical indicators, sampling and reviewed AI suggestions. Phase 3 adds a Next.js enterprise frontend with ten reference-based workspaces, secure same-origin sessions and real API integration. Tax engines and full professional audit workflows remain future phases.
 
 ## Frontend

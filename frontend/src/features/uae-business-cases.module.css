@@ -1,0 +1,95 @@
+.panel {
+  display: grid;
+  gap: 16px;
+  padding: 24px;
+  min-width: 0;
+}
+.panel h2 {
+  margin: 0;
+  font-size: 20px;
+}
+.panel h3 {
+  margin: 16px 0 6px;
+  font-size: 16px;
+}
+.panel p {
+  margin: 0;
+  line-height: 1.6;
+}
+.panel label {
+  display: grid;
+  gap: 6px;
+  font-size: 13px;
+  margin: 10px 0;
+}
+.panel input:not([type="checkbox"]),
+.panel select,
+.panel textarea {
+  width: 100%;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 10px;
+  background: var(--surface);
+  color: inherit;
+  font: inherit;
+}
+.panel textarea {
+  min-height: 96px;
+  resize: vertical;
+}
+.panel select {
+  height: auto;
+  min-height: 44px;
+  line-height: 1.4;
+}
+.panel input[type="checkbox"] {
+  width: auto;
+}
+.panel button {
+  justify-self: start;
+}
+.panel table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.panel th,
+.panel td {
+  padding: 10px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--border);
+}
+.panel caption {
+  text-align: left;
+  color: var(--muted);
+  padding: 8px 0;
+}
+.panel section {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+}
+.panel details {
+  padding: 8px 0;
+  overflow-wrap: anywhere;
+}
+.panel aside {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--surface);
+}
+.panel dl {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 800px) {
+  .panel {
+    padding: 14px;
+  }
+  .panel table {
+    display: block;
+    overflow-x: auto;
+  }
+}

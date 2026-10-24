@@ -83,6 +83,10 @@ def predict(rows, mode):
                 "fraud_conclusion": False,
             }
         )
+    if mode != "diagnostic_mock":
+        predictions.sort(key=lambda row: (-row["score"], row["transaction_id"]))
+        for rank, prediction in enumerate(predictions, 1):
+            prediction["review_rank"] = rank
     return {
         "execution_mode": mode,
         "model_version": None,

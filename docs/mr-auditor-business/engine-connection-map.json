@@ -1,0 +1,158 @@
+{
+  "engines": [
+    {
+      "id": "E01",
+      "responsibility": "Jurisdiction, legal sources and effective rules",
+      "implementation": "jurisdictions; regulatory; approved tax/VAT/TP rule records",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E02",
+      "responsibility": "Ingestion, OCR and extraction",
+      "implementation": "intelligence.documents; enterprise_ai.documents; clean evidence versions",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E03",
+      "responsibility": "Ledger normalization and quality",
+      "implementation": "accounting; intelligence.foundations; approved mapping and source snapshots",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E04",
+      "responsibility": "VAT",
+      "implementation": "vat.service; jurisdictions.ae.registration; jurisdictions.ae.vat_errors",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E05",
+      "responsibility": "Corporate tax",
+      "implementation": "tax.service; tax.contracts; reviewed adjustment/loss/election records",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E06",
+      "responsibility": "Free-zone CT",
+      "implementation": "tax.calculations.qfzp and approved activity/substance classifications",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E07",
+      "responsibility": "Transfer pricing and relationships",
+      "implementation": "tp.service; supplied datasets; approved relationship/transaction records",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E08",
+      "responsibility": "DMTT",
+      "implementation": "dmtt.service; separate group/entity inputs and scope decisions",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E09",
+      "responsibility": "IFRS and disclosures",
+      "implementation": "ifrs.service; ifrs.contracts; ifrs.calculations; ifrs.fx",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E10",
+      "responsibility": "Audit planning and sampling",
+      "implementation": "audit_execution; audit_analytics; approved materiality policies",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E11",
+      "responsibility": "Journal analytics",
+      "implementation": "audit_analytics; explicit ML/rules/statistical execution modes",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E12",
+      "responsibility": "Receivables and revenue",
+      "implementation": "ifrs ECL/revenue; country_workflows settlement/ECL procedures",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E13",
+      "responsibility": "Payables and procurement",
+      "implementation": "country_workflows procurement, expenses and cutoff",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E14",
+      "responsibility": "Cash, bank and treasury",
+      "implementation": "country_workflows bank-brs; reconciliation; ifrs.fx",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E15",
+      "responsibility": "Assets, leases and impairment",
+      "implementation": "ifrs fixed-assets/lease/impairment engines",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E16",
+      "responsibility": "Payroll and benefits",
+      "implementation": "country_workflows payroll/benefit sources; ifrs employee-benefits",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E17",
+      "responsibility": "Inventory",
+      "implementation": "ifrs inventory/NRV; country_workflows count/movement bridge",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E18",
+      "responsibility": "Group reporting",
+      "implementation": "ifrs consolidation/intercompany; tax groups remain separate",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E19",
+      "responsibility": "Compliance readiness",
+      "implementation": "regulatory templates/checklists; tax-deadline records; supplied obligations",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E20",
+      "responsibility": "Engagement, approval and evidence",
+      "implementation": "audit_execution; lineage; immutable versions and source ACL inheritance",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E21",
+      "responsibility": "Controlled AI orchestration",
+      "implementation": "enterprise_ai.business; reviewed recipes; separate optional language gateway",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    },
+    {
+      "id": "E22",
+      "responsibility": "External integration health",
+      "implementation": "connectors; stored scoped connection/sync status; controlled file import",
+      "state": "Partial",
+      "meaning": "Existing bounded core plus connected adapters; not a standalone new microservice or blanket qualification"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "scope": "Phase 4 bounded implementation",
+  "production_complete": false,
+  "engines": [
+    {"id":"E10","supported":["linked risks/procedures/testing","independent review","source freshness","certainty and seeded residual selection","misstatement correction register"],"remaining":["statistical evaluation/projection","arbitrary strata and replacement policy","professional opinion and jurisdiction adoption"]},
+    {"id":"E11","supported":["explicit execution modes","local TensorFlow.js training/reload tests","ranked baseline review","feedback approval gates","idempotent audit workpaper adapter"],"remaining":["representative client validation and approved labels","production threshold approval","host resource quotas/native binding qualification"]},
+    {"id":"E12","supported":["confirmed explicit receipt allocation","unapplied cash segregation","controlled remaining-balance source","E09 ECL reuse and specific overrides"],"remaining":["advanced credit/advance/dispute/write-off lifecycle","foreign-currency allocations","production ECL assumptions approval"]},
+    {"id":"E13","supported":["procurement match exceptions","draft proposals and holds","no payment execution"],"remaining":["controlled supplier-master and bank-change workflow","actual payment approval/release","advanced returns/service/tax/FX cases"]},
+    {"id":"E14","supported":["identity-aware reconciliation","group-sign safeguards","source correction staleness and reapproval"],"remaining":["complete treasury instrument integrations","reviewed fees and FX bridges","production bank connectivity"]}
+  ]
+}

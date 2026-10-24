@@ -10,6 +10,7 @@ from typing import Any
 from app.modules.country_workflows.audit_calculations import AUDIT_CALCULATORS
 from app.modules.country_workflows.catalogue import WORKFLOWS, country_guidance
 from app.modules.country_workflows.diligence_calculations import DILIGENCE_CALCULATORS
+from app.modules.country_workflows.operations import OPERATION_CALCULATORS
 from app.modules.country_workflows.payroll_calculations import PAYROLL_CALCULATORS
 from app.modules.country_workflows.practice_calculations import PRACTICE_CALCULATORS
 from app.modules.country_workflows.sector_calculations import SECTOR_CALCULATORS
@@ -691,6 +692,17 @@ def calculate(data, country, sources):
     if set(sources) != set(roles):
         raise ValueError("Select every required source role exactly once")
     for role, table in sources.items():
+        # Instruction/return populations are not an independent payroll expectation
+        # or evidence that money was settled, even when their totals agree.
+        if table.get("native_format") in {"uae-wps-sif", "india-epfo-ecr"} and role not in {
+            "channel",
+            "return",
+            "reported",
+        }:
+            raise ValueError(
+                "Native WPS/ECR files may establish only a return/channel role; "
+                "select independent expected dues and confirmed payment evidence"
+            )
         if table["table_type"] != roles[role] or (
             not table["rows"] and not table.get("nil_reason")
         ):
@@ -711,7 +723,9 @@ def calculate(data, country, sources):
     tables = {role: source["rows"] for role, source in sources.items()}
     with localcontext() as arithmetic:
         arithmetic.prec = 80
-        if data.workflow in PAYROLL_CALCULATORS:
+        if data.workflow in OPERATION_CALCULATORS:
+            result = OPERATION_CALCULATORS[data.workflow](data, tables)
+        elif data.workflow in PAYROLL_CALCULATORS:
             result = PAYROLL_CALCULATORS[data.workflow](data, tables)
         elif data.workflow in AUDIT_CALCULATORS:
             result = AUDIT_CALCULATORS[data.workflow](data, tables)
@@ -741,6 +755,7 @@ def calculate(data, country, sources):
         if data.workflow
         in {
             *AUDIT_CALCULATORS,
+            *OPERATION_CALCULATORS,
             *PRACTICE_CALCULATORS,
             *SECTOR_CALCULATORS,
             *DILIGENCE_CALCULATORS,

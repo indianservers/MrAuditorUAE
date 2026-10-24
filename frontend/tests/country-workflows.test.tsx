@@ -45,6 +45,16 @@ vi.mock("@/hooks/use-api", () => ({
           ],
           items: [
             {
+              id: "payroll-settlement",
+              title: "Payroll settlement",
+              available: true,
+              roles: {
+                payroll: "obligations",
+                channel: "obligations",
+                bank: "obligations",
+              },
+            },
+            {
               id: "india-payroll-rules",
               title: "India payroll contribution rules review",
               available: state.country === "IN",
@@ -68,6 +78,7 @@ vi.mock("@/hooks/use-api", () => ({
             },
           ],
           source_contracts: {
+            "benefit-rules": { id: { required: true, type: "str" } },
             "payroll-rules": { id: { required: true, type: "str" } },
             obligations: {
               id: { required: true, type: "str" },
@@ -100,7 +111,51 @@ vi.mock("@/hooks/use-api", () => ({
           : path.includes("/events?")
             ? {
                 items: [
+                  {
+                    id: "supporting-items",
+                    kind: "source-table",
+                    table_kind: "open-items",
+                    label: "Reviewed payable population",
+                    evidence_version_id: "original-items",
+                    version: 2,
+                    freshness: "CURRENT",
+                    review_status: "REVIEWED",
+                  },
+                  {
+                    id: "supporting-bank",
+                    kind: "source-table",
+                    table_kind: "bank",
+                    label: "Reviewed supporting statement",
+                    evidence_version_id: "original-bank",
+                    version: 2,
+                    freshness: "CURRENT",
+                    review_status: "REVIEWED",
+                  },
+                  {
+                    id: "unreviewed-bank",
+                    kind: "source-table",
+                    table_kind: "bank",
+                    label: "Unreviewed supporting statement",
+                    evidence_version_id: "original-unreviewed",
+                    version: 1,
+                    freshness: "CURRENT",
+                    review_status: "UNVERIFIED",
+                  },
                   ...[
+                    {
+                      id: "wps",
+                      table_type: "obligations",
+                      label: "WPS instructions",
+                      native_format: "uae-wps-sif",
+                      review_status: "REVIEWED",
+                    },
+                    {
+                      id: "ecr",
+                      table_type: "obligations",
+                      label: "Native ECR return",
+                      native_format: "india-epfo-ecr",
+                      review_status: "REVIEWED",
+                    },
                     {
                       id: "bases",
                       table_type: "payroll-bases",
@@ -194,6 +249,123 @@ beforeEach(() => {
   state.result = null;
 });
 describe("country workflows", () => {
+  it("queues reviewed open items with explicit payable sign and reporting-date scope", async () => {
+    render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+    fireEvent.change(screen.getByLabelText("Source origin"), {
+      target: { value: "supporting-items" },
+    });
+    expect(
+      screen.getByLabelText("Reviewed supporting open-item table"),
+    ).not.toHaveTextContent("Reviewed supporting statement");
+    for (const [label, value] of [
+      ["Reviewed supporting open-item table", "supporting-items"],
+      ["Control account identifier", "AP-1"],
+      [
+        "Supporting open-item scope assessment",
+        "Reviewed supplier population and credit-negative source basis",
+      ],
+      ["Open-item subledger side", "payable"],
+      ["Open-item balance date", "2026-06-30"],
+      ["Open-item source sign", "reverse-sign"],
+      ["Expected data rows", "2"],
+      ["Independent totals by currency", "AED=80"],
+      ["Schedule title", "Reviewed payables"],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+      table_type: "audit-open-items",
+      supporting_table_id: "supporting-items",
+      evidence_version_id: "original-items",
+      supporting_side: "payable",
+      supporting_balance_date: "2026-06-30",
+      supporting_amount_sign: "reverse-sign",
+      control_totals: { AED: "80" },
+    });
+  });
+  it("queues reviewed bank-table reuse with its original evidence and independent controls", async () => {
+    render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+    fireEvent.change(screen.getByLabelText("Source origin"), {
+      target: { value: "supporting" },
+    });
+    expect(
+      screen.getByLabelText("Reviewed supporting bank table"),
+    ).not.toHaveTextContent("Unreviewed supporting statement");
+    for (const [label, value] of [
+      ["Reviewed supporting bank table", "supporting-bank"],
+      ["Bank account identifier", "BANK-1"],
+      [
+        "Supporting bank account scope assessment",
+        "Reviewed original bank population and account identity evidence",
+      ],
+      ["Expected data rows", "2"],
+      ["Independent totals by currency", "AED=95.25"],
+      ["Schedule title", "Reused bank population"],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+      supporting_table_id: "supporting-bank",
+      evidence_version_id: "original-bank",
+      account_identifier: "BANK-1",
+      expected_rows: 2,
+      control_totals: { AED: "95.25" },
+      table_type: "transactions",
+      file_format: "canonical-csv",
+    });
+  });
+  it("queues the explicitly selected bank debit/credit convention", async () => {
+    render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+    fireEvent.click(screen.getByLabelText("Map original CSV columns"));
+    for (const [label, value] of [
+      ["Transaction amount columns", "credit-positive"],
+      ["Original debit column", "Withdrawal"],
+      ["Original credit column", "Deposit"],
+      ["Clean retained evidence", "clean"],
+      ["Schedule title", "Mapped bank movements"],
+      [
+        "Column mapping and exclusion assessment",
+        "Reviewed bank credit means inflow in this export",
+      ],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    expect(
+      screen.queryByLabelText("CSV column for amount"),
+    ).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+      amount_derivation: "credit-positive",
+      debit_column: "Withdrawal",
+      credit_column: "Deposit",
+    });
+  });
+  it("submits explicit original CSV headings and exclusions without changing values", async () => {
+    render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+    fireEvent.click(screen.getByLabelText("Map original CSV columns"));
+    for (const [label, value] of [
+      ["CSV column for id", "Original row"],
+      ["CSV column for amount", "Signed amount"],
+      ["CSV separator", ";"],
+      ["Excluded CSV columns, one exact heading per line", "Memo"],
+      [
+        "Column mapping and exclusion assessment",
+        "Reviewed export columns and explicit memo exclusion",
+      ],
+      ["Clean retained evidence", "clean"],
+      ["Schedule title", "Original bank export"],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+      column_mapping: { id: "Original row", amount: "Signed amount" },
+      ignored_columns: ["Memo"],
+      delimiter: ";",
+    });
+  });
   it("queues GSTR-2B with the recipient, return month and separate document control", async () => {
     state.country = "IN";
     render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
@@ -265,31 +437,39 @@ describe("country workflows", () => {
       screen.getByRole("columnheader", { name: "rule document sha256" }),
     ).toBeVisible();
   });
-  it("binds payroll rule imports to a selected clean retained document", async () => {
-    state.country = "IN";
-    render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
-    fireEvent.change(screen.getByLabelText("Source table type"), {
-      target: { value: "payroll-rules" },
-    });
-    fireEvent.change(
-      screen.getByLabelText(
-        "Payroll rule source document (optional shared document)",
-      ),
-      { target: { value: "clean" } },
-    );
-    fireEvent.change(screen.getByLabelText("Clean retained evidence"), {
-      target: { value: "clean" },
-    });
-    fireEvent.change(screen.getByLabelText("Schedule title"), {
-      target: { value: "Source-bound rules" },
-    });
-    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
-    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
-    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
-      table_type: "payroll-rules",
-      rule_document_version_id: "clean",
-    });
-  });
+  it.each([
+    ["payroll-rules", "Payroll"],
+    ["benefit-rules", "Benefit"],
+  ])(
+    "binds %s imports to a selected clean retained document",
+    async (table, name) => {
+      state.country = "IN";
+      render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+      fireEvent.change(screen.getByLabelText("Source table type"), {
+        target: { value: table },
+      });
+      fireEvent.change(
+        screen.getByLabelText(
+          `${name} rule source document (optional shared document)`,
+        ),
+        { target: { value: "clean" } },
+      );
+      fireEvent.change(screen.getByLabelText("Clean retained evidence"), {
+        target: { value: "clean" },
+      });
+      fireEvent.change(screen.getByLabelText("Schedule title"), {
+        target: { value: "Source-bound rules" },
+      });
+      fireEvent.click(
+        screen.getByRole("button", { name: "Queue calculation" }),
+      );
+      await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+      expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+        table_type: table,
+        rule_document_version_id: "clean",
+      });
+    },
+  );
   it("queues INR payroll calculations using only independently reviewed rule sources", async () => {
     state.country = "IN";
     render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
@@ -446,6 +626,21 @@ describe("country workflows", () => {
     expect(screen.getByLabelText("books source")).not.toHaveTextContent(
       "Wrong source type",
     );
+  });
+  it("offers native instructions only for the channel role, keeping independent schedules selectable", () => {
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Workflow"), {
+      target: { value: "payroll-settlement" },
+    });
+    for (const role of ["payroll", "bank"]) {
+      const picker = screen.getByLabelText(`${role} source`);
+      expect(picker).not.toHaveTextContent("WPS instructions");
+      expect(picker).not.toHaveTextContent("Native ECR return");
+      expect(picker).toHaveTextContent("Reported ECR");
+    }
+    const channel = screen.getByLabelText("channel source");
+    expect(channel).toHaveTextContent("WPS instructions");
+    expect(channel).toHaveTextContent("Native ECR return");
   });
   it("queues the selected independent bank sources and exact balances", async () => {
     render(<CountryWorkflows eid="engagement" mode="country-workflow" />);

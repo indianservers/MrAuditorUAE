@@ -5,7 +5,14 @@ import uuid
 from fastapi import HTTPException
 from sqlalchemy import select
 
-from app.modules.accounting.models import ImportBatch, ImportSnapshot
+from app.modules.accounting.models import (
+    AnalyticsRun,
+    Finding,
+    ImportBatch,
+    ImportSnapshot,
+    JournalLine,
+    SamplingRun,
+)
 from app.modules.audit_execution.models import AuditRecord, AuditRevision
 from app.modules.intelligence.models import IntelligenceEvent
 
@@ -50,6 +57,52 @@ async def capture(db, ctx, obj):
         ).all()
     }
     receipts = []
+    population_sources = [
+        (s["kind"], uuid.UUID(s["id"]))
+        for s in obj.body.get("sources", [])
+        if s.get("kind") in {"sample", "journal", "finding"}
+    ]
+    if getattr(obj, "kind", None) == "testing" and obj.body.get("sample_id"):
+        population_sources.append(("sample", uuid.UUID(obj.body["sample_id"])))
+    for source_kind, source_id in set(population_sources):
+        source_model = {"sample": SamplingRun, "journal": JournalLine, "finding": Finding}[
+            source_kind
+        ]
+        source = await db.scalar(
+            select(source_model).where(
+                source_model.tenant_id == ctx.tenant_id, source_model.id == source_id
+            )
+        )
+        if not source:
+            raise HTTPException(422, "Missing scoped audit population source")
+        if source_kind == "finding":
+            source = await db.get(AnalyticsRun, source.run_id)
+        snap = await db.get(ImportSnapshot, source.snapshot_id)
+        receipts.append(
+            {
+                "type": "snapshot",
+                "id": str(snap.id),
+                "sha256": snap.sha256,
+                "path": "body.audit_population." + source_kind,
+            }
+        )
+    from app.modules.ml.models import MLEvent
+
+    ml_ids = {uuid.UUID(s["id"]) for s in obj.body.get("sources", []) if s.get("kind") == "ml"}
+    ml = (
+        {
+            r.id: r
+            for r in (
+                await db.scalars(
+                    select(MLEvent).where(
+                        MLEvent.tenant_id == ctx.tenant_id, MLEvent.id.in_(ml_ids)
+                    )
+                )
+            ).all()
+        }
+        if ml_ids
+        else {}
+    )
     intelligence = {
         r.id: r
         for r in (
@@ -62,26 +115,52 @@ async def capture(db, ctx, obj):
         ).all()
     }
     for path, identifier in refs:
+        if identifier in ml:
+            result = ml[identifier]
+            if result.engagement_id != obj.engagement_id:
+                raise HTTPException(422, "Cross-engagement ML evidence is not permitted")
+            receipts.append(
+                {"type": "ml", "id": str(identifier), "sha256": result.sha256, "path": path}
+            )
+            continue
         if identifier == obj.id:
             continue
         if identifier in records:
             row = records[identifier]
             if row.engagement_id != obj.engagement_id:
-                members = {uuid.UUID(member["engagement_id"]) for member in obj.body.get("members", [])} if getattr(obj, "kind", None) in {"tax-group", "ifrs-consolidation"} else set()
-                comparative_link = (getattr(obj, "kind", None) == "ifrs-profile"
+                members = (
+                    {uuid.UUID(member["engagement_id"]) for member in obj.body.get("members", [])}
+                    if getattr(obj, "kind", None) in {"tax-group", "ifrs-consolidation"}
+                    else set()
+                )
+                comparative_link = (
+                    getattr(obj, "kind", None) == "ifrs-profile"
                     and row.kind == "ifrs-profile"
                     and str(row.id) == obj.body.get("comparative_profile_id")
-                    and str(row.engagement_id) == obj.body.get("comparative_engagement_id"))
-                recipient_link = (getattr(obj, "kind", None) == "tax-loss-transfer"
+                    and str(row.engagement_id) == obj.body.get("comparative_engagement_id")
+                )
+                recipient_link = (
+                    getattr(obj, "kind", None) == "tax-loss-transfer"
                     and str(row.id) == obj.body.get("recipient_profile_id")
-                    and str(row.engagement_id) == obj.body.get("recipient_engagement_id"))
-                posted_transfer_link = (getattr(obj, "kind", None) == "tax-loss"
+                    and str(row.engagement_id) == obj.body.get("recipient_engagement_id")
+                )
+                posted_transfer_link = (
+                    getattr(obj, "kind", None) == "tax-loss"
                     and str(row.id) == obj.body.get("transfer_source_id")
-                    and row.kind == "tax-loss-transfer" and row.status in {"APPROVED", "LOCKED"}
+                    and row.kind == "tax-loss-transfer"
+                    and row.status in {"APPROVED", "LOCKED"}
                     and row.body.get("recipient_engagement_id") == str(obj.engagement_id)
-                    and row.body.get("recipient_profile_id") == obj.body.get("profile_id"))
-                if row.engagement_id not in members and not comparative_link and not recipient_link and not posted_transfer_link:
-                    raise HTTPException(422, "Cross-engagement working-paper source requires an authorized link")
+                    and row.body.get("recipient_profile_id") == obj.body.get("profile_id")
+                )
+                if (
+                    row.engagement_id not in members
+                    and not comparative_link
+                    and not recipient_link
+                    and not posted_transfer_link
+                ):
+                    raise HTTPException(
+                        422, "Cross-engagement working-paper source requires an authorized link"
+                    )
                 # A tax group explicitly names its member engagements. Recheck access
                 # to the actual referenced record; a shared tenant is insufficient.
                 from app.modules.audit_execution import service as audit
@@ -102,7 +181,9 @@ async def capture(db, ctx, obj):
         elif identifier in intelligence:
             intel_row = intelligence[identifier]
             if intel_row.engagement_id != obj.engagement_id:
-                raise HTTPException(422, "Cross-engagement intelligence source requires an authorized link")
+                raise HTTPException(
+                    422, "Cross-engagement intelligence source requires an authorized link"
+                )
             receipts.append(
                 {
                     "type": "intelligence",
@@ -117,6 +198,16 @@ async def capture(db, ctx, obj):
 
 async def check(db, ctx, receipt, visiting=None):
     identifier = uuid.UUID(receipt["id"])
+    if receipt["type"] == "ml":
+        from app.modules.lineage.freshness import ml_current
+        from app.modules.ml.service import get
+
+        result = await get(db, ctx, identifier)
+        return (
+            "CURRENT"
+            if result.sha256 == receipt["sha256"] and await ml_current(db, ctx, result)
+            else "STALE"
+        )
     if receipt["type"] == "intelligence":
         from app.modules.intelligence.service import current
 

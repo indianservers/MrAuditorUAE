@@ -1,0 +1,3211 @@
+{
+  "authoritative_catalogue_found": false,
+  "recognized_catalogues": [
+    "50-case UAE audit manifest",
+    "50-case UAE business manifest",
+    "165-module jurisdiction registry"
+  ],
+  "mapping_rule": "No assumption that different catalogues share IDs; definitions 001-200 must be supplied before authoritative reconciliation",
+  "items": [
+    {
+      "id": 1,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 2,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 3,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 4,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 5,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 6,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 7,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 8,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 9,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 10,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 11,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 12,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 13,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 14,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 15,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 16,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 17,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 18,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 19,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 20,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 21,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 22,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 23,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 24,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 25,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 26,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 27,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 28,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 29,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 30,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 31,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 32,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 33,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 34,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 35,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 36,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 37,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 38,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 39,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 40,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 41,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 42,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 43,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 44,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 45,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 46,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 47,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 48,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 49,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 50,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 51,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 52,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 53,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 54,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 55,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 56,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 57,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 58,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 59,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 60,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 61,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 62,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 63,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 64,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 65,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 66,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 67,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 68,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 69,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 70,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 71,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 72,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 73,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 74,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 75,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 76,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 77,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 78,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 79,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 80,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 81,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 82,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 83,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 84,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 85,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 86,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 87,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 88,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 89,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 90,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 91,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 92,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 93,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 94,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 95,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 96,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 97,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 98,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 99,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 100,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 101,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 102,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 103,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 104,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 105,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 106,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 107,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 108,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 109,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 110,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 111,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 112,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 113,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 114,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 115,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 116,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 117,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 118,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 119,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 120,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 121,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 122,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 123,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 124,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 125,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 126,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 127,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 128,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 129,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 130,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 131,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 132,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 133,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 134,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 135,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 136,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 137,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 138,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 139,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 140,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 141,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 142,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 143,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 144,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 145,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 146,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 147,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 148,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 149,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 150,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 151,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 152,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 153,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 154,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 155,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 156,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 157,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 158,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 159,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 160,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 161,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 162,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 163,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 164,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 165,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 166,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 167,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 168,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 169,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 170,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 171,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 172,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 173,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 174,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 175,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 176,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 177,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 178,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 179,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 180,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 181,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 182,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 183,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 184,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 185,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 186,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 187,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 188,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 189,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 190,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 191,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 192,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 193,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 194,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 195,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 196,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 197,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 198,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 199,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    },
+    {
+      "id": 200,
+      "classification": "Blocked",
+      "definition": null,
+      "relevant_engines": [],
+      "actual_implementation_status": "not assessable without authoritative definition",
+      "deterministic_calculation_availability": "unresolved",
+      "ml_execution_mode": "unavailable",
+      "language_model_dependency": "unresolved",
+      "connector_dependency": "unresolved",
+      "evidence_and_approval_controls": "not assessed for undefined case; shared engine controls do not establish case completion",
+      "verification_evidence": [],
+      "remaining_blockers": [
+        "Authoritative catalogue definition and mapping required"
+      ]
+    }
+  ]
+}

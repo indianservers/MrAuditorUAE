@@ -82,9 +82,8 @@ def test_return_text_cannot_satisfy_payment_timing_even_when_all_amounts_agree()
         title="Synthetic ECR is not payment",
         rationale="Return text cannot establish execution of any bank payment",
     )
-    result = calculate(data, "IN", populations)
-    assert result["exception_count"] == 7
-    assert all(row["state"] == "TIMING_NOT_VERIFIED" for row in result["rows"])
+    with pytest.raises(ValueError, match="independent expected dues"):
+        calculate(data, "IN", populations)
 
 
 def test_reader_does_not_invent_pension_ceiling_or_derive_contribution_rates():

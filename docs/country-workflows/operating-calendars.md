@@ -1,0 +1,11 @@
+# Operating calendars for global audit analytics
+
+Audit Risk Investigation now lets the reviewer select the population's non-working weekdays and record the operating-calendar assessment before running analytics. No UAE, India or other country weekend is assigned automatically. The same country can contain entities with different operating calendars, and historical periods can differ from current practice.
+
+Expand **Operating calendar for this population**, select the relevant weekdays, and enter the assessment. A selected calendar requires at least ten non-whitespace assessment characters in both the UI and API. Weekdays use Monday = 0 through Sunday = 6 in the API. Duplicate or out-of-range weekday values are rejected. Selecting no weekdays leaves rule J01 untested; it does not produce a clean weekend-posting conclusion. Use separate populations where operating calendars differ within the selected scope or change over the period. This change does not infer public holidays, time zones or reliable posting timestamps.
+
+The queued request carries `weekend_days` and `calendar_rationale`. The analytics run retains those parameters, and each rule result preserves the configuration used for its calculation. This is a shared audit capability: country/regime differences are reviewed population inputs rather than a global Saturday/Sunday assumption.
+
+Re-evaluating an in-memory population clears the previous evaluation's flags before applying the new configuration. Changing a calendar or removing a prerequisite therefore cannot retain obsolete findings or duplicate their counts. Retrieve flags and scores after the corresponding evaluation; they describe that evaluation.
+
+Verification includes UI submission with and without a calendar, assessment gating, schema boundary checks, alternative-calendar results, retained API parameters and re-evaluation isolation. `operating-calendar-results.xml` records the focused analytics tests; `combined-country-integration-results.xml` includes the real database/API calendar test alongside country workflow regressions. The full backend and frontend regression receipts are `full-backend-regression-results.xml` and `full-frontend-regression-results.xml`. Environment-dependent skipped tests in the full backend receipt are not counted as completed integration verification.

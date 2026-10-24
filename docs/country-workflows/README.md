@@ -1,6 +1,6 @@
 # Country workflows — first implementation increment
 
-Later additions, verification receipts and remaining native-format gaps are documented in [Native adapters](native-adapters.md). The original twelve-workflow/142-scenario and delivery receipts below describe the first increment, rather than all subsequent workspace changes.
+Later additions, verification receipts and remaining native-format gaps are documented in [Native adapters](native-adapters.md), including [GSTR-2B document import](gstr2b.md) and [reviewed payroll contribution rules](payroll-rules.md). The original twelve-workflow/142-scenario and delivery receipts below describe the first increment, rather than all subsequent workspace changes.
 
 UAE first, then India. This increment adds twelve operational workflows and 142 named synthetic reference scenarios. It does **not** complete the entire regulatory roadmap or qualify the application for production statutory reporting.
 
@@ -8,7 +8,7 @@ UAE first, then India. This increment adds twelve operational workflows and 142 
 
 - Account-level bank BRS: four opening/closing controls, an arithmetic bridge, bounded matching, unresolved amounts, candidate causes, aging and stale items. Arabic/Unicode counterparties retain distinct identities. Matching tolerance cannot hide a nonzero bridge residual.
 - UAE VAT: separate document reconciliation and a VAT201 return-box bridge. Taxable amounts, tax and adjustments compare independently by registration and assigned tax period; required-but-absent boxes remain missing. Book allocations are explicit canonical inputs, not a fabricated UAE supplier portal.
-- India GST: canonical invoice/credit-note/debit-note comparison, registration/component/currency separation, timing differences and rejected/pending source status. This is not yet a native GSTR/IMS adapter or an input-credit eligibility engine.
+- India GST: canonical invoice/credit-note/debit-note comparison, registration/component/currency separation, timing differences and rejected/pending source status. The first increment used canonical sources; subsequent work adds the bounded GSTR-2B profile linked above. Input-credit eligibility and IMS action execution remain open.
 - Payroll settlement, statutory dues and Indian withholding: separate expected/book, return/channel and payment/bank populations; partial settlement aggregation, missing employee/registration/month/component partitions, declared due dates and actual payment dates. A payment source cannot extend its own expected due date.
 - Inventory: item/site/UOM quantity differences, separately declared ownership and condition, count-date gaps, potential NRV write-downs and explicitly bounded monetary coverage.
 - Controls, vendor diligence, nonprofit diligence and tax close: explicit subject populations and requirement scope, missing/expired evidence, documented exceptions and justified non-applicability. Country starter checklists are scope prompts, not assertions that all local law is covered.

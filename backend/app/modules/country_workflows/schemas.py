@@ -6,8 +6,8 @@ from typing import Annotated, Literal
 from pydantic import BaseModel, Field, model_validator
 
 from app.modules.country_workflows.audit_schemas import AUDIT_ROW_TYPES
-from app.modules.country_workflows.operations_schemas import OPERATION_ROW_TYPES
 from app.modules.country_workflows.diligence_schemas import DILIGENCE_ROW_TYPES
+from app.modules.country_workflows.operations_schemas import OPERATION_ROW_TYPES
 from app.modules.country_workflows.payroll_schemas import PAYROLL_ROW_TYPES
 from app.modules.country_workflows.sector_schemas import SECTOR_ROW_TYPES
 from app.modules.jurisdictions.profiles import Strict
@@ -104,6 +104,7 @@ class Control(Strict):
 
 
 ROW_TYPES: dict[str, type[BaseModel]] = {
+    **OPERATION_ROW_TYPES,
     **PAYROLL_ROW_TYPES,
     **AUDIT_ROW_TYPES,
     **DILIGENCE_ROW_TYPES,
@@ -119,6 +120,18 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
 
 class SourceInput(Strict):
     evidence_version_id: uuid.UUID
+    supporting_table_id: uuid.UUID | None = None
+    supporting_scope_assessment: str = Field(default="", max_length=2000)
+    supporting_side: Literal["receivable", "payable"] | None = None
+    supporting_balance_date: date | None = None
+    supporting_amount_sign: Literal["as-reported", "reverse-sign"] = "as-reported"
+    column_mapping: dict[Identifier, Identifier] = Field(default_factory=dict, max_length=60)
+    ignored_columns: list[Identifier] = Field(default_factory=list, max_length=60)
+    mapping_rationale: str = Field(default="", max_length=2000)
+    delimiter: Literal[",", ";", "\t"] = ","
+    amount_derivation: Literal["none", "debit-positive", "credit-positive"] = "none"
+    debit_column: Identifier | None = None
+    credit_column: Identifier | None = None
     file_format: Literal[
         "canonical-csv",
         "camt053",
@@ -191,6 +204,59 @@ class SourceInput(Strict):
 
     @model_validator(mode="after")
     def declared_nil(self):
+        if self.supporting_table_id:
+            if (
+                self.file_format != "canonical-csv"
+                or self.table_type not in {"transactions", "audit-open-items"}
+                or not self.account_identifier
+                or len(self.supporting_scope_assessment.strip()) < 10
+                or self.column_mapping
+                or self.ignored_columns
+                or self.mapping_rationale
+                or self.delimiter != ","
+                or self.amount_derivation != "none"
+            ):
+                raise ValueError(
+                    "Supporting tables require an explicit account/scope and cannot use additional CSV transformations"
+                )
+            if self.table_type == "audit-open-items" and (
+                not self.supporting_side or not self.supporting_balance_date
+            ):
+                raise ValueError(
+                    "Supporting open items require an explicit receivable/payable side and balance date"
+                )
+            if self.table_type == "transactions" and (
+                self.supporting_side
+                or self.supporting_balance_date
+                or self.supporting_amount_sign != "as-reported"
+            ):
+                raise ValueError(
+                    "Open-item balance options cannot be applied to supporting bank tables"
+                )
+        elif (
+            self.supporting_scope_assessment
+            or self.supporting_side
+            or self.supporting_balance_date
+            or self.supporting_amount_sign != "as-reported"
+        ):
+            raise ValueError(
+                "Supporting scope and sign options require a supporting table selection"
+            )
+        if self.amount_derivation != "none":
+            if self.file_format != "canonical-csv" or self.table_type != "transactions":
+                raise ValueError("Debit/credit derivation applies only to transaction CSV sources")
+            if (
+                not self.debit_column
+                or not self.credit_column
+                or self.debit_column == self.credit_column
+            ):
+                raise ValueError("Select distinct debit and credit columns")
+            if len(self.mapping_rationale.strip()) < 10:
+                raise ValueError(
+                    "Debit/credit derivation requires an explicit sign-basis assessment"
+                )
+        elif self.debit_column or self.credit_column:
+            raise ValueError("Debit/credit columns require an explicit amount derivation")
         if (self.expected_rows == 0) != bool(self.nil_reason):
             raise ValueError(
                 "Zero-row sources require an explicit nil-population rationale; populated sources cannot be declared nil"
@@ -225,7 +291,9 @@ class VATSourceInput(Strict):
 
 
 class WorkflowInput(Strict):
+    allocation_basis: Literal["invoice_face_amounts"] | None = None
     workflow: Literal[
+        "open-item-allocations",
         "india-payroll-rules",
         "subledger-control",
         "subsequent-settlements",
@@ -285,6 +353,13 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
+        if (
+            self.workflow == "open-item-allocations"
+            and self.allocation_basis != "invoice_face_amounts"
+        ):
+            raise ValueError(
+                "Explicit invoice-face population basis required; do not deduct cash from already-net open balances"
+            )
         if self.workflow == "ownership-lookthrough" and not self.subjects:
             raise ValueError(
                 "Ownership look-through requires an explicit company subject population"

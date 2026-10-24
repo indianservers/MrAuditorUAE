@@ -7,8 +7,10 @@ from collections.abc import Iterator
 from datetime import date, datetime
 from decimal import Decimal, InvalidOperation, localcontext
 from pathlib import Path
+from xml.etree.ElementTree import ParseError
 
 import pycountry
+from defusedxml.common import DefusedXmlException
 from openpyxl import load_workbook
 
 from app.modules.accounting.schemas import ImportOptions
@@ -76,14 +78,188 @@ def safe_cell(value: object) -> str:
     return "'" + text if text.lstrip().startswith(("=", "+", "-", "@")) else text
 
 
+def spreadsheet_rows(
+    path,
+    sheet_name=None,
+    *,
+    validate_headers=None,
+    max_rows=None,
+    receipt=None,
+    exact_numbers=False,
+):
+    try:
+        with zipfile.ZipFile(path) as archive:
+            items = archive.infolist()
+            if len({item.filename for item in items}) != len(items):
+                raise ImportProblem("Duplicate workbook archive members are prohibited")
+            if len(items) > 5000 or sum(i.file_size for i in items) > 512 * 1024 * 1024:
+                raise ImportProblem("Excel archive exceeds decompression limit")
+            if any(
+                i.file_size > 1000000 and i.file_size / max(i.compress_size, 1) > 200 for i in items
+            ):
+                raise ImportProblem("Suspicious Excel compression ratio")
+            if any(
+                "vbaproject" in i.filename.lower() or "externallinks/" in i.filename.lower()
+                for i in items
+            ):
+                raise ImportProblem("Macros and external links are prohibited")
+        # Object-store keys deliberately have no file extension.
+        with path.open("rb") as workbook_source:
+            book = load_workbook(workbook_source, read_only=True, data_only=False, keep_links=False)
+            try:
+                if sheet_name is None and len(book.sheetnames) > 1:
+                    raise ImportProblem("Multiple worksheets: explicitly select a sheet")
+                if sheet_name and sheet_name not in book.sheetnames:
+                    raise ImportProblem("Worksheet not found")
+                sheet = book[sheet_name or book.sheetnames[0]]
+                if (sheet.max_column or 0) > 100:
+                    raise ImportProblem("Too many worksheet columns")
+                if max_rows is not None and (sheet.max_row or 0) > max_rows + 1:
+                    raise ImportProblem("Worksheet exceeds the physical row bound")
+                if receipt is not None:
+                    receipt.update(
+                        excel_epoch=book.epoch.isoformat(),
+                        available_worksheets=list(book.sheetnames),
+                        sheet=sheet.title,
+                        numeric_columns_by_row={},
+                        date_columns_by_row={},
+                    )
+                numeric = exact_spreadsheet_numbers(path, sheet) if exact_numbers else {}
+                iterator = sheet.iter_rows()
+                first = next(iterator, None)
+                if first is None:
+                    raise ImportProblem("Empty worksheet")
+                if any(c.data_type == "f" for c in first):
+                    raise ImportProblem("Formula headings are prohibited")
+                headers = [str(c.value or "").strip() for c in first]
+                if receipt is not None:
+                    receipt["raw_headers"] = [str(c.value or "") for c in first]
+                if len(headers) > 100:
+                    raise ImportProblem("Too many columns")
+                if validate_headers is not None:
+                    try:
+                        validate_headers(headers)
+                    except ValueError as exc:
+                        raise ImportProblem(str(exc)) from None
+                for index, cells in enumerate(iterator, 2):
+                    if max_rows is not None and index > max_rows + 1:
+                        raise ImportProblem("Worksheet exceeds the physical row bound")
+                    if any(c.data_type == "f" for c in cells):
+                        raise ImportProblem(f"Row {index}: formulas are prohibited; export values")
+                    values = [c.value for c in cells]
+                    if exact_numbers and any(c.data_type == "e" for c in cells):
+                        raise ImportProblem("Spreadsheet error cells require correction")
+                    if all(v is None for v in values):
+                        continue
+                    row = {
+                        h: (
+                            v.isoformat()
+                            if isinstance(v, (date, datetime))
+                            else str(v)
+                            if v is not None
+                            else ""
+                        )
+                        for h, v in zip(headers, values, strict=True)
+                    }
+                    if exact_numbers:
+                        selected_numeric = []
+                        for header, cell in zip(headers, cells, strict=True):
+                            if cell.data_type == "n" and cell.value is not None:
+                                if cell.coordinate not in numeric:
+                                    raise ImportProblem(
+                                        "Numeric cell has no verified original XML value"
+                                    )
+                                row[header] = numeric[cell.coordinate]
+                                selected_numeric.append(header)
+                        if receipt is not None:
+                            receipt["numeric_columns_by_row"][index] = selected_numeric
+                            receipt["date_columns_by_row"][index] = [
+                                header
+                                for header, cell in zip(headers, cells, strict=True)
+                                if cell.data_type == "d"
+                            ]
+                    if any(len(v) > 32000 for v in row.values()):
+                        raise ImportProblem(f"Row {index}: cell too long")
+                    yield index, row
+            finally:
+                book.close()
+    except ImportProblem:
+        raise
+    except (
+        zipfile.BadZipFile,
+        KeyError,
+        ValueError,
+        io.UnsupportedOperation,
+        DefusedXmlException,
+        ParseError,
+    ) as exc:
+        raise ImportProblem("Corrupted or unsupported Excel file") from exc
+
+
+def exact_spreadsheet_numbers(path, sheet):
+    """Read bounded original numeric lexemes; never round through Python float."""
+    from defusedxml.ElementTree import iterparse
+
+    # ReadOnlyWorksheet's path is verified against the archive before use. If the
+    # installed reader changes this contract, fail rather than guess a sheet path.
+    member = getattr(sheet, "_worksheet_path", None)
+    values: dict[str, str] = {}
+    seen: set[str] = set()
+    with zipfile.ZipFile(path) as archive:
+        if not isinstance(member, str) or member not in archive.namelist():
+            raise ImportProblem("Cannot establish the original selected worksheet path")
+        with archive.open(member) as source:
+            for _, node in iterparse(
+                source, events=("end",), forbid_dtd=True, forbid_entities=True, forbid_external=True
+            ):
+                tag = node.tag.rsplit("}", 1)[-1]
+                if tag == "c":
+                    coordinate = node.get("r")
+                    if not coordinate or coordinate in seen or len(seen) >= 200000:
+                        raise ImportProblem("Worksheet cell identity or 200,000-cell bound failed")
+                    seen.add(coordinate)
+                    if node.get("t", "n") == "n":
+                        number = next(
+                            (child.text for child in node if child.tag.rsplit("}", 1)[-1] == "v"),
+                            None,
+                        )
+                        if number is not None:
+                            if len(number) > 128:
+                                raise ImportProblem(
+                                    "Spreadsheet numeric value exceeds supported precision"
+                                )
+                            try:
+                                amount = Decimal(number)
+                            except InvalidOperation:
+                                raise ImportProblem("Invalid original spreadsheet number") from None
+                            exponent = amount.as_tuple().exponent
+                            if (
+                                not amount.is_finite()
+                                or not isinstance(exponent, int)
+                                or not -8 <= exponent <= 20
+                                or amount.adjusted() > 19
+                            ):
+                                raise ImportProblem(
+                                    "Spreadsheet numeric value exceeds supported precision; retain identifiers as text"
+                                )
+                            values[coordinate] = format(amount, "f")
+                    node.clear()
+                elif tag == "row":
+                    node.clear()
+    return values
+
+
 def rows(path: Path, filename: str, options: ImportOptions) -> Iterator[tuple[int, dict[str, str]]]:
     suffix = Path(filename).suffix.lower()
     if suffix == ".json" and options.source_system == "quickbooks":
         import json
+
         from app.modules.connectors.quickbooks_desktop import package_rows as desktop_rows
 
         if path.stat().st_size > 64 * 1024 * 1024:
-            raise ImportProblem("Desktop SDK package exceeds import limit; narrow the selected period")
+            raise ImportProblem(
+                "Desktop SDK package exceeds import limit; narrow the selected period"
+            )
         for index, row in enumerate(desktop_rows(json.loads(path.read_bytes()), options), 2):
             yield index, row
     elif suffix == ".ndjson" and options.source_system == "tally":
@@ -123,7 +299,13 @@ def rows(path: Path, filename: str, options: ImportOptions) -> Iterator[tuple[in
         else:
             content = path.read_bytes()
         # Period checks are repeated during canonical normalization.
-        result = parse_export(content, options.tally_company, date.min, date.max, expected_fingerprint=options.tally_company_fingerprint)
+        result = parse_export(
+            content,
+            options.tally_company,
+            date.min,
+            date.max,
+            expected_fingerprint=options.tally_company_fingerprint,
+        )
         selected = result["lines"]
         if options.kind == "coa":
             selected = [
@@ -160,67 +342,11 @@ def rows(path: Path, filename: str, options: ImportOptions) -> Iterator[tuple[in
         except UnicodeError as exc:
             raise ImportProblem("Invalid CSV encoding; select the source encoding") from exc
     elif suffix == ".xlsx":
-        try:
-            with zipfile.ZipFile(path) as archive:
-                items = archive.infolist()
-                if len(items) > 5000 or sum(i.file_size for i in items) > 512 * 1024 * 1024:
-                    raise ImportProblem("Excel archive exceeds decompression limit")
-                if any(
-                    i.file_size > 1000000 and i.file_size / max(i.compress_size, 1) > 200
-                    for i in items
-                ):
-                    raise ImportProblem("Suspicious Excel compression ratio")
-                if any(
-                    "vbaproject" in i.filename.lower() or "externallinks/" in i.filename.lower()
-                    for i in items
-                ):
-                    raise ImportProblem("Macros and external links are prohibited")
-            # Object-store keys deliberately have no file extension.
-            with path.open("rb") as workbook_source:
-                book = load_workbook(
-                    workbook_source, read_only=True, data_only=False, keep_links=False
-                )
-                try:
-                    if options.sheet is None and len(book.sheetnames) > 1:
-                        raise ImportProblem("Multiple worksheets: explicitly select a sheet")
-                    if options.sheet and options.sheet not in book.sheetnames:
-                        raise ImportProblem("Worksheet not found")
-                    sheet = book[options.sheet or book.sheetnames[0]]
-                    iterator = sheet.iter_rows()
-                    first = next(iterator, None)
-                    if first is None:
-                        raise ImportProblem("Empty worksheet")
-                    if any(c.data_type == "f" for c in first):
-                        raise ImportProblem("Formula headings are prohibited")
-                    headers = [str(c.value or "").strip() for c in first]
-                    if len(headers) > 100:
-                        raise ImportProblem("Too many columns")
-                    map_headers(headers, options.mapping)
-                    for index, cells in enumerate(iterator, 2):
-                        if any(c.data_type == "f" for c in cells):
-                            raise ImportProblem(
-                                f"Row {index}: formulas are prohibited; export values"
-                            )
-                        values = [c.value for c in cells]
-                        if all(v is None for v in values):
-                            continue
-                        row = {
-                            h: (
-                                v.isoformat()
-                                if isinstance(v, (date, datetime))
-                                else str(v)
-                                if v is not None
-                                else ""
-                            )
-                            for h, v in zip(headers, values, strict=True)
-                        }
-                        if any(len(v) > 32000 for v in row.values()):
-                            raise ImportProblem(f"Row {index}: cell too long")
-                        yield index, row
-                finally:
-                    book.close()
-        except (zipfile.BadZipFile, KeyError, ValueError, io.UnsupportedOperation) as exc:
-            raise ImportProblem("Corrupted or unsupported Excel file") from exc
+        yield from spreadsheet_rows(
+            path,
+            options.sheet,
+            validate_headers=lambda headers: map_headers(headers, options.mapping),
+        )
     else:
         raise ImportProblem("Only CSV and macro-free XLSX are accepted")
 

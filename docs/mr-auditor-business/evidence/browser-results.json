@@ -1,0 +1,150 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Indian Servers\\TheAuditor\\frontend\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.uae-business.config.ts"
+    ],
+    "configFile": "C:\\Indian Servers\\TheAuditor\\frontend\\playwright.uae-business.config.ts",
+    "rootDir": "C:/Indian Servers/TheAuditor/frontend/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Indian Servers/TheAuditor/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Indian Servers/TheAuditor/frontend/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "uae-business-cases.spec.ts"
+        ],
+        "timeout": 180000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e",
+        "snapshotDir": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e",
+        "testIgnore": [],
+        "testMatch": "uae-business-cases.spec.ts",
+        "timeout": 180000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3047",
+          "viewport": {
+            "width": 1500,
+            "height": 1100
+          },
+          "screenshot": "only-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/mr-auditor-business/evidence/browser-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "uae-business-cases.spec.ts",
+      "file": "uae-business-cases.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "real synthetic records to assistant collection, shared lease calculation, source inspection and unposted draft",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 16583,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T21:03:27.343Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6d54cedaddd130f85f49-df0395c864dde4f6a861",
+          "file": "uae-business-cases.spec.ts",
+          "line": 6,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-24T21:03:26.420Z",
+    "duration": 17882.420000000002,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

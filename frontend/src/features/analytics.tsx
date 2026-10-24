@@ -82,6 +82,8 @@ function AnalyticsBody() {
     [tab, setTab] = useState("Findings"),
     [chartView, setChartView] = useState("Transaction amounts");
   const can = useCan("analytics.run");
+  const [weekendDays, setWeekendDays] = useState<number[]>([]);
+  const [calendarRationale, setCalendarRationale] = useState("");
   const runs = useAPI<Page<RecordRow>>(
     "analytics/runs?" +
       qs({
@@ -193,13 +195,22 @@ function AnalyticsBody() {
         <Button
           primary
           disabled={
-            !can || !pop.snapshot || !Number(materiality) || action.isPending
+            !can ||
+            !pop.snapshot ||
+            !Number(materiality) ||
+            action.isPending ||
+            (weekendDays.length > 0 && calendarRationale.trim().length < 10)
           }
           onClick={() =>
             action.mutate(
               {
                 path: "analytics/runs?background=true",
-                body: { snapshot_id: pop.snapshot, materiality },
+                body: {
+                  snapshot_id: pop.snapshot,
+                  materiality,
+                  weekend_days: weekendDays,
+                  calendar_rationale: calendarRationale.trim(),
+                },
               },
               { onSuccess: (r) => setJob(r.id) },
             )
@@ -210,6 +221,51 @@ function AnalyticsBody() {
         {rule && (
           <Button onClick={() => setRule("")}>Clear chart filter</Button>
         )}
+        <details>
+          <summary>Operating calendar for this population</summary>
+          <fieldset>
+            <legend>Non-working weekdays</legend>
+            {[
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday",
+              "Saturday",
+              "Sunday",
+            ].map((day, index) => (
+              <label key={day}>
+                <input
+                  type="checkbox"
+                  aria-label={`${day} non-working`}
+                  checked={weekendDays.includes(index)}
+                  onChange={(event) =>
+                    setWeekendDays(
+                      event.target.checked
+                        ? [...weekendDays, index].sort((a, b) => a - b)
+                        : weekendDays.filter((value) => value !== index),
+                    )
+                  }
+                />
+                {day}
+              </label>
+            ))}
+          </fieldset>
+          <label>
+            Operating calendar assessment
+            <textarea
+              value={calendarRationale}
+              maxLength={4000}
+              onChange={(event) => setCalendarRationale(event.target.value)}
+            />
+          </label>
+          <p>
+            Use the entity operating calendar applicable to this population and
+            period. No weekdays selected leaves the weekend test untested. Mixed
+            or changing calendars require separate populations. No country
+            calendar is assumed.
+          </p>
+        </details>
       </div>
       <ErrorState error={action.error || runs.error || summary.error} />
       {job && <JobProgress id={job} onDone={() => runs.refetch()} />}

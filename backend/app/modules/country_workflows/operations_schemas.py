@@ -4,7 +4,7 @@ from datetime import date
 from decimal import Decimal
 from typing import Annotated, Literal
 
-from pydantic import Field
+from pydantic import BaseModel, Field
 
 from app.modules.jurisdictions.profiles import Strict
 
@@ -29,12 +29,25 @@ class ItemAllocation(Strict):
     id: ID
     payment_id: ID
     item_id: ID
+    currency: str = Field(pattern=r"^[A-Z]{3}$")
     amount: Money = Field(gt=0)
     evidence_reference: ID
     rationale: str = Field(min_length=10, max_length=2000)
 
 
-OPERATION_ROW_TYPES = {"cash-payments": CashPayment, "item-allocations": ItemAllocation}
-OPERATION_WORKFLOWS = {"open-item-allocations": (
-    "Invoice / confirmed receipt-payment allocations / unapplied cash / control accounts", [],
-    {"items": "audit-open-items", "controls": "balance-controls", "payments": "cash-payments", "allocations": "item-allocations"})}
+OPERATION_ROW_TYPES: dict[str, type[BaseModel]] = {
+    "cash-payments": CashPayment,
+    "item-allocations": ItemAllocation,
+}
+OPERATION_WORKFLOWS: dict[str, tuple[str, list[str], dict[str, str]]] = {
+    "open-item-allocations": (
+        "Invoice / confirmed receipt-payment allocations / unapplied cash / control accounts",
+        [],
+        {
+            "items": "audit-open-items",
+            "controls": "balance-controls",
+            "payments": "cash-payments",
+            "allocations": "item-allocations",
+        },
+    )
+}

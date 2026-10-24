@@ -15,7 +15,15 @@ class Rule(Body):
     rule_key: str = Field(min_length=1, max_length=100)
     rule_version: int = Field(ge=1)
     category: Literal[
-        "output", "input", "invoice", "return", "einvoice", "integrity", "employee", "adjustment", "registration"
+        "output",
+        "input",
+        "invoice",
+        "return",
+        "einvoice",
+        "integrity",
+        "employee",
+        "adjustment",
+        "registration",
     ]
     source_id: str
     article: str = Field(default="", max_length=100)
@@ -59,7 +67,22 @@ class Profile(Body):
         return self
 
 
+class PropertyFacts(Strict):
+    property_type: Literal[
+        "residential", "commercial", "bare_land", "mixed", "serviced_accommodation", "other"
+    ]
+    transaction_nature: Literal["sale", "lease", "other"]
+    location: str = Field(min_length=1, max_length=1000)
+    completion_date: date | None = None
+    first_supply_date: date | None = None
+    contractual_facts: str = Field(min_length=10, max_length=4000)
+    legal_conditions_assessment: str = Field(min_length=10, max_length=4000)
+    unresolved_facts: list[str] = Field(default_factory=list, max_length=30)
+
+
 class Invoice(Body):
+    supply_context: Literal["ordinary", "property"] = "ordinary"
+    property_facts: PropertyFacts | None = None
     profile_id: uuid.UUID
     rule_id: uuid.UUID
     invoice_rule_id: uuid.UUID
@@ -136,6 +159,22 @@ class Invoice(Body):
     )
     ocr_evidence_id: uuid.UUID | None = None
 
+    @model_validator(mode="after")
+    def property_context(self):
+        if self.supply_context == "property" and self.property_facts is None:
+            raise ValueError(
+                "Property VAT review requires property type, nature, location and contractual/condition facts"
+            )
+        if (
+            self.property_facts
+            and self.property_facts.unresolved_facts
+            and self.treatment_facts_complete
+        ):
+            raise ValueError(
+                "Unresolved property facts cannot be marked complete for VAT treatment"
+            )
+        return self
+
 
 class Adjustment(Body):
     profile_id: uuid.UUID
@@ -165,6 +204,8 @@ class Recovery(Body):
 
 
 class EInvoicing(Body):
+    amendment_review_evidence_id: uuid.UUID | None = None
+    amendment_scope_assessment: str = Field(default="", max_length=4000)
     profile_id: uuid.UUID
     rule_id: uuid.UUID
     annual_revenue: Nonnegative

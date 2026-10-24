@@ -12,6 +12,7 @@ import {
 import type { Engagement, Page, RecordRow } from "@/types/models";
 import { PageHeader } from "./shared";
 import { PaperEditor, label, type Paper, type Schema } from "./grc-forms";
+import { ComplianceFiling } from "./compliance-filing";
 
 export const grcAreas = [
   ["command", "Internal Audit Command Center", ""],
@@ -359,6 +360,14 @@ function Panel({
                   {detail.status} · v{detail.version}
                 </span>
                 <Narrative value={detail.body} />
+                {area === "obligations" &&
+                  (permissions.includes("compliance.manage") || permissions.includes("compliance.approve")) && (
+                    <ComplianceFiling
+                      key={`${detail.id}:${detail.version}`}
+                      base={base}
+                      paper={detail}
+                    />
+                  )}
                 {area === "engagement" && (
                   <StageTimeline
                     base={base}
@@ -777,10 +786,18 @@ function Calendar({ rows }: { rows: Paper[] }) {
         )
         .map((x) => (
           <li key={x.id}>
-            <time>{String(x.body.deadline)}</time>
+            <time>
+              {String(
+                x.body.extension_deadline ||
+                  x.body.deadline ||
+                  "Unresolved deadline",
+              )}
+            </time>
             <strong>{x.title}</strong>
             <span>{label(String(x.body.module))}</span>
             <span>{label(String(x.body.compliance_assessment))}</span>
+            <span>{label(String(x.body.filing_stage || "not_started"))}</span>
+            <span>{label(String(x.body.deadline_kind || "unresolved"))}</span>
           </li>
         ))}
     </ol>

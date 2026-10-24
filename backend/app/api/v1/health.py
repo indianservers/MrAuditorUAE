@@ -7,6 +7,7 @@ from app.core.config import settings
 from app.db.session import Session
 
 router = APIRouter(tags=["Health"])
+EXPECTED_MIGRATION = "0020"
 
 
 class Health(BaseModel):
@@ -33,7 +34,7 @@ async def ready():
             if unsafe_role:
                 raise RuntimeError("Unsafe database role")
             revision = await db.scalar(text("SELECT version_num FROM alembic_version"))
-            if revision != "0018":
+            if revision != EXPECTED_MIGRATION:
                 raise RuntimeError("Database migration does not match release")
             if settings().environment == "production":
                 synthetic = await db.scalar(

@@ -5,7 +5,7 @@ This engine does not decide residence, exceptions, taxable classification or fil
 
 from calendar import monthrange
 from datetime import date, timedelta
-from decimal import Decimal
+from decimal import Decimal, localcontext
 
 from pydantic import Field, model_validator
 
@@ -46,6 +46,12 @@ def subtract_months(day: date, months: int) -> date:
 
 
 def calculate(data: Exposure, policy: RegistrationPolicy):
+    with localcontext() as context:
+        context.prec = 64
+        return _calculate(data, policy)
+
+
+def _calculate(data: Exposure, policy: RegistrationPolicy):
     start = subtract_months(data.as_of, policy.historical_months) + timedelta(days=1)
     horizon = data.as_of + timedelta(days=policy.forecast_days)
     if any(not start <= r.date <= data.as_of for r in data.historical):

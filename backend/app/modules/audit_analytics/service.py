@@ -101,6 +101,23 @@ async def analytics(
                 "account_mapping_snapshot": [list(row) for row in mapping_evidence],
             }
             results = engine.evaluate(request)
+            from app.core.operations_contracts import receipt
+
+            run.parameters = {
+                **run.parameters,
+                "operations_execution": await receipt(
+                    db,
+                    ctx,
+                    kind="journal-analytics",
+                    body={
+                        "execution_mode": "rules_baseline",
+                        "algorithm_version": VERSION,
+                        "parameters": request.model_dump(mode="json"),
+                        "population_completeness": "NONOPENING_LINES_OF_DECLARED_SNAPSHOT",
+                    },
+                    snapshot=snapshot,
+                ),
+            }
             for r in results:
                 db.add(
                     RuleResult(
@@ -155,7 +172,7 @@ async def analytics(
             engine.close()
 
 
-async def sampling(db: AsyncSession, ctx: Context, request: SamplingRequest):
+async def sampling(db: AsyncSession, ctx: Context, request: SamplingRequest, engagement_id=None):
     import csv
     import random
     import tempfile
@@ -180,13 +197,18 @@ async def sampling(db: AsyncSession, ctx: Context, request: SamplingRequest):
                 raise HTTPException(422, "Duplicate sampling exclusion")
             if exclusions:
                 placeholders = ",".join("?" for _ in exclusions)
-                present = engine.db.execute("SELECT count(*) FROM p WHERE id IN (" + placeholders + ")", exclusions).fetchone()[0]
+                present = engine.db.execute(
+                    "SELECT count(*) FROM p WHERE id IN (" + placeholders + ")", exclusions
+                ).fetchone()[0]
                 if present != len(exclusions):
                     raise HTTPException(422, "Excluded item outside source population")
                 engine.db.execute("DELETE FROM p WHERE id IN (" + placeholders + ")", exclusions)
             engine.db.execute("CREATE TABLE certainty AS SELECT id FROM p WHERE false")
             if request.certainty_threshold is not None:
-                engine.db.execute("INSERT INTO certainty SELECT id FROM p WHERE amount>=?", [request.certainty_threshold])
+                engine.db.execute(
+                    "INSERT INTO certainty SELECT id FROM p WHERE amount>=?",
+                    [request.certainty_threshold],
+                )
                 engine.db.execute("DELETE FROM p WHERE id IN (SELECT id FROM certainty)")
             certainty_count = engine.db.execute("SELECT count(*) FROM certainty").fetchone()[0]
             count = engine.db.execute("SELECT count(*) FROM p").fetchone()[0]
@@ -232,11 +254,13 @@ async def sampling(db: AsyncSession, ctx: Context, request: SamplingRequest):
                     "CREATE TABLE monetary AS SELECT id,cast((debit-credit)*100000000 AS HUGEINT) units FROM p WHERE debit-credit>0"
                 )
                 total = engine.db.execute("SELECT sum(units) FROM monetary").fetchone()[0]
-                if not total:
+                if not total and not certainty_count:
                     raise HTTPException(
                         422,
                         "MUS requires positive monetary values; negative and zero lines excluded explicitly",
                     )
+                draws = request.size if total else 0
+                total = total or 1
                 start = random.Random(request.seed).randrange(int(total))
                 engine.db.execute(
                     "CREATE TABLE cumulative AS SELECT id,sum(units) OVER(ORDER BY id)*? upper_bound FROM monetary",
@@ -244,7 +268,7 @@ async def sampling(db: AsyncSession, ctx: Context, request: SamplingRequest):
                 )
                 # Exact rational systematic PPS points, ASOF chooses next cumulative boundary.
                 query = "SELECT id,count(*) hits FROM (SELECT ?::HUGEINT+range*?::HUGEINT point FROM range(?)) targets ASOF JOIN cumulative ON targets.point<cumulative.upper_bound GROUP BY id ORDER BY id"
-                params = [start, int(total), request.size]
+                params = [start, int(total), draws]
             else:
                 if not request.analytics_run_id:
                     raise HTTPException(422, "Risk sampling requires an analytics run")
@@ -267,10 +291,16 @@ async def sampling(db: AsyncSession, ctx: Context, request: SamplingRequest):
                 "population": original_count,
                 "eligible_residual_population": count,
                 "certainty_selected": certainty_count,
-                "explicit_exclusions": [item.model_dump(mode="json") for item in request.exclusions],
+                "explicit_exclusions": [
+                    item.model_dump(mode="json") for item in request.exclusions
+                ],
                 "seed": request.seed,
                 "algorithm_version": "duckdb-exact-selection/3.0.0",
-                "selection_class": "full_population" if request.method == "full" else "targeted" if request.method in {"risk", "high_value", "judgmental"} else "probability_selection_without_statistical_evaluation",
+                "selection_class": "full_population"
+                if request.method == "full"
+                else "targeted"
+                if request.method in {"risk", "high_value", "judgmental"}
+                else "probability_selection_without_statistical_evaluation",
                 "projection_supported": False,
                 "excluded_zero": excluded_zero,
                 "excluded_negative": excluded_negative,
@@ -286,7 +316,12 @@ async def sampling(db: AsyncSession, ctx: Context, request: SamplingRequest):
             )
             db.add(run)
             await db.flush()
-            cursor = engine.db.execute("SELECT * FROM (" + query + ") selected UNION ALL SELECT id,1 hits FROM certainty ORDER BY id", params)
+            cursor = engine.db.execute(
+                "SELECT * FROM ("
+                + query
+                + ") selected UNION ALL SELECT id,1 hits FROM certainty ORDER BY id",
+                params,
+            )
             selected_count = 0
             while chunk := cursor.fetchmany(1000):
                 selected_count += len(chunk)
@@ -304,11 +339,23 @@ async def sampling(db: AsyncSession, ctx: Context, request: SamplingRequest):
                     ],
                 )
             run.result = {**result, "selected_count": selected_count}
+            from app.core.operations_contracts import receipt
+            from app.db.models.platform import Engagement
+
+            eng = await db.get(Engagement, engagement_id) if engagement_id else None
+            run.result["operations_execution"] = await receipt(
+                db,
+                ctx,
+                kind="sampling",
+                body={**run.result, "parameters": run.parameters},
+                eng=eng,
+                snapshot=snapshot,
+            )
             await db.flush()
             return {
                 "id": run.id,
                 "status": "completed",
-                "result": {**result, "selected_count": selected_count},
+                "result": run.result,
             }
         finally:
             engine.close()

@@ -30,7 +30,12 @@ def provision_matrix(data, tables):
     exposures = defaultdict(list)
     for item in tables["items"]:
         days = max(0, (data.as_of - date.fromisoformat(item["due_date"])).days)
-        selected = [r for r in rates if r["min_overdue_days"] <= days <= r["max_overdue_days"]]
+        selected = [
+            r
+            for r in rates
+            if r["min_overdue_days"] <= days <= r["max_overdue_days"]
+            and r.get("segment", "") in {"", item.get("segment", "")}
+        ]
         state = (
             "PAYABLE_NOT_ELIGIBLE"
             if item["side"] != "receivable"
@@ -61,7 +66,14 @@ def provision_matrix(data, tables):
                 "default_definition": "Independently reviewed matrix assumptions",
                 "write_off_policy": "No automatic write-offs",
                 "exposures": [
-                    {"reference": i["id"], "amount": i["amount"], "stage": 2, "segment": rate["id"]}
+                    {
+                        "reference": i["id"],
+                        "amount": i["amount"],
+                        "stage": 2,
+                        "segment": rate["id"],
+                        "override_loss": i.get("specific_ecl"),
+                        "override_reason": i.get("specific_assessment", ""),
+                    }
                     for i, rate, _ in group
                 ],
                 "segment_loss_rates": {
@@ -187,6 +199,7 @@ def procurement(data, tables):
             k = (row["order_id"], row["line_reference"], row["vendor"], row["currency"])
             grouped[k][role].append(row)
     rows = []
+    proposals = []
     blocked = False
     for index, (k, group) in enumerate(sorted(grouped.items()), 1):
         exceptions = []
@@ -215,6 +228,35 @@ def procurement(data, tables):
             exceptions.append("PRICE_DIFFERENCE")
         if abs(amounts["invoices"] - amounts["payments"]) > data.tolerance:
             exceptions.append("PAYMENT_DIFFERENCE")
+        outstanding = max(Decimal(0), amounts["invoices"] - amounts["payments"])
+        if outstanding:
+            holds = []
+            if any(code not in {"PAYMENT_DIFFERENCE", "MISSING_PAYMENTS"} for code in exceptions):
+                holds.append("MATCHING_EXCEPTION")
+            for document in [*group["orders"], *group["invoices"]]:
+                if document.get("approval_status") != "approved":
+                    holds.append("DOCUMENT_APPROVAL_REQUIRED")
+                if document.get("payment_hold"):
+                    holds.append("SOURCE_PAYMENT_HOLD")
+                if not document.get("bank_change_verified"):
+                    holds.append("INDEPENDENT_BANK_DETAILS_VERIFICATION_REQUIRED")
+                if not document.get("approved_by") or document.get("approved_by") == document.get(
+                    "prepared_by"
+                ):
+                    holds.append("SEGREGATION_OF_DUTIES_NOT_ESTABLISHED")
+            proposals.append(
+                {
+                    "order_id": k[0],
+                    "line_reference": k[1],
+                    "vendor": k[2],
+                    "currency": k[3],
+                    "amount": str(outstanding),
+                    "state": "HOLD" if holds else "DRAFT_REQUIRES_PAYMENT_APPROVAL",
+                    "holds": sorted(set(holds)),
+                    "payment_instruction_created": False,
+                    "source_invoice_ids": [r["id"] for r in group["invoices"]],
+                }
+            )
         rows.append(
             {
                 "id": f"purchase-{index}",
@@ -229,14 +271,17 @@ def procurement(data, tables):
                 "state": "EXCEPTIONS" if exceptions else "MATCHED",
             }
         )
-    return result(
-        rows,
-        blocked,
-        [
-            "Bounded positive-quantity purchase lines; returns, tax-inclusive pricing and service acceptance need separate assessment",
-            "Partial receipts and unpaid invoices may be legitimate; exception dispositions require evidence",
-        ],
-    )
+    return {
+        **result(
+            rows,
+            blocked,
+            [
+                "Bounded positive-quantity purchase lines; returns, tax-inclusive pricing and service acceptance need separate assessment",
+                "Partial receipts and unpaid invoices may be legitimate; exception dispositions require evidence",
+            ],
+        ),
+        "payment_proposals": proposals,
+    }
 
 
 def vendor_conflicts(data, tables):
@@ -320,6 +365,8 @@ def benefits(data, tables):
             r
             for r in tables["rules"]
             if r["regime"] == employee["regime"]
+            and r["cohort"] == employee["cohort"]
+            and r["work_model"] == employee["work_model"]
             and date.fromisoformat(r["effective_from"])
             <= end
             <= date.fromisoformat(r["effective_to"])
@@ -327,12 +374,24 @@ def benefits(data, tables):
         state = (
             "ALTERNATIVE_SCHEME_REQUIRES_ASSESSMENT"
             if employee["scheme"] != "gratuity"
+            else "WORK_MODEL_CHANGE_REQUIRES_SEGMENTED_ASSESSMENT"
+            if not employee["work_model_constant_for_service"]
+            else "WORK_MODEL_REQUIRES_ASSESSMENT"
+            if employee["work_model"] == "other"
             else (
                 "RULE_MISSING" if not rules else "AMBIGUOUS_RULE" if len(rules) != 1 else "MATCHED"
             )
         )
         if state != "MATCHED":
-            rows.append({"id": employee["id"], "state": state})
+            rows.append(
+                {
+                    "id": employee["id"],
+                    "regime": employee["regime"],
+                    "cohort": employee["cohort"],
+                    "work_model": employee["work_model"],
+                    "state": state,
+                }
+            )
             blocked = True
             continue
         rule = rules[0]
@@ -344,7 +403,15 @@ def benefits(data, tables):
         years = Decimal(days) / money(rule, "year_days")
         first = min(years, money(rule, "first_tier_years"))
         later = max(Decimal(0), years - first)
-        salary = money(employee, "monthly_basic_salary")
+        part_time = employee["work_model"] == "part-time"
+        salary = money(
+            employee, "full_time_monthly_basic_salary" if part_time else "monthly_basic_salary"
+        )
+        proportion = (
+            money(employee, "annual_contract_hours") / money(employee, "annual_full_time_hours")
+            if part_time
+            else Decimal(1)
+        )
         expected = (
             salary
             / money(rule, "salary_divisor")
@@ -352,17 +419,31 @@ def benefits(data, tables):
         )
         if years < money(rule, "minimum_service_years"):
             expected = Decimal(0)
-        expected = rounded(
-            min(expected, salary * money(rule, "maximum_salary_months")), employee["currency"]
-        )
+        full_time_equivalent = min(expected, salary * money(rule, "maximum_salary_months"))
+        expected = rounded(full_time_equivalent * proportion, employee["currency"])
         difference = money(employee) - expected
         rows.append(
             {
                 "id": employee["id"],
                 "currency": employee["currency"],
+                "regime": employee["regime"],
+                "cohort": employee["cohort"],
+                "work_model": employee["work_model"],
+                "work_model_assessment": employee["work_model_assessment"],
+                "work_model_constant_for_service": employee["work_model_constant_for_service"],
+                "annual_contract_hours": employee["annual_contract_hours"],
+                "annual_full_time_hours": employee["annual_full_time_hours"],
+                "benefit_proportion": str(proportion),
+                "full_time_salary_basis": str(salary),
+                "full_time_equivalent_benefit": str(full_time_equivalent),
                 "eligible_service_days": days,
                 "service_years": str(years),
                 "rule_source_id": rule["id"],
+                "rule_document_version_id": rule["source_evidence_version_id"],
+                "rule_document_sha256": rule["source_sha256"],
+                "rule_version": rule["source_version"],
+                "rule_url": rule["source_url"],
+                "applicability_review": rule["applicability_review"],
                 "expected_benefit": str(expected),
                 "paid_benefit": employee["amount"],
                 "difference": str(difference),
@@ -376,6 +457,7 @@ def benefits(data, tables):
             "No UAE statutory rates are hardcoded; every regime, tier, divisor, eligibility and cap is supplied evidence",
             "Inclusive eligible days divided by the supplied year basis; rule applicability must be professionally validated",
             "Alternative schemes and unsupported transitional/contractual treatment block this bounded computation",
+            "Part-time calculations use explicitly assessed full-time salary and annual contract-hour comparators; no work model, pension cohort or statutory applicability is inferred",
         ],
     )
 

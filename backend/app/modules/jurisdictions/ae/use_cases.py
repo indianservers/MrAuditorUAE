@@ -27,6 +27,7 @@ class UseCase(Strict):
     scope_status: str
     completion_status: str
     limitations: list[str]
+    legal_source_ids: list[str] = Field(default_factory=list)
 
 
 MANIFEST = json.loads(Path(__file__).with_name("use_cases.json").read_text())
@@ -59,6 +60,20 @@ ENGINE_TOOLS = {
 
 
 def recipe(case: UseCase):
+    if case.id == 50:
+        return [
+            "uae.get_case_inputs",
+            "financial.get_trial_balance",
+            "vat.get_reconciliation",
+            "tax.get_ct_computation",
+            "ifrs.get_financial_statements",
+            "audit.get_risks",
+            "audit.get_shared_workflows",
+            "tp.get_related_party_transactions",
+            "dmtt.get_scope_assessment",
+            "documents.search",
+            "connections.get_health",
+        ]
     # A bounded reviewed collection graph, never executable text from a document/model.
     tools = list(dict.fromkeys(["uae.get_case_inputs", *(ENGINE_TOOLS[e] for e in case.engines)]))
-    return tools[:11]  # Existing orchestrator appends its quality/source validation step.
+    return tools  # Existing orchestrator appends its quality/source validation step.

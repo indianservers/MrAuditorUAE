@@ -1,0 +1,1065 @@
+{
+  "synthetic": true,
+  "procurement": {
+    "engagement_id": "c268d131-b26c-47ba-845a-2f9cb54c17b6",
+    "root_id": "df6ed3cc-7bb5-45c7-8515-7129658f8f29",
+    "version": 1,
+    "kind": "country-workflow",
+    "body": {
+      "rows": [
+        {
+          "id": "purchase-1",
+          "state": "MATCHED",
+          "vendor": "V1",
+          "amounts": {
+            "orders": "100",
+            "invoices": "100",
+            "payments": "100",
+            "receipts": "100"
+          },
+          "currency": "AED",
+          "order_id": "PO-1",
+          "exceptions": [],
+          "quantities": {
+            "orders": "2",
+            "invoices": "2",
+            "payments": "2",
+            "receipts": "2"
+          },
+          "source_ids": {
+            "orders": [
+              "order"
+            ],
+            "invoices": [
+              "invoice"
+            ],
+            "payments": [
+              "payment"
+            ],
+            "receipts": [
+              "receipt"
+            ]
+          },
+          "line_reference": "LINE-1"
+        }
+      ],
+      "as_of": "2026-06-30",
+      "title": "SYN order receipt invoice payment",
+      "job_id": "f7e07d2e-07ec-4ee6-9583-e33623ff209a",
+      "blocked": false,
+      "country": "AE",
+      "workflow": "procurement-match",
+      "rationale": "SYN independent order receipt invoice and paid-cash sources",
+      "parameters": {
+        "as_of": "2026-06-30",
+        "title": "SYN order receipt invoice payment",
+        "account": null,
+        "currency": "AED",
+        "subjects": [],
+        "workflow": "procurement-match",
+        "rationale": "SYN independent order receipt invoice and paid-cash sources",
+        "tolerance": "0",
+        "source_ids": {
+          "orders": "02781e2a-29bb-4b48-83b0-488fcdf0c91e",
+          "invoices": "348ee661-498b-4c1d-a7e0-87a5afd819dd",
+          "payments": "a0f60ad6-7fce-4da6-a5dd-da3626affcd5",
+          "receipts": "948286d8-d411-4cd1-b6f7-13c431493dc7"
+        },
+        "stale_days": 90,
+        "book_closing": null,
+        "book_opening": null,
+        "period_start": null,
+        "date_tolerance": 0,
+        "required_boxes": [],
+        "review_through": null,
+        "tax_year_start": null,
+        "required_checks": [],
+        "allocation_basis": null,
+        "statement_closing": null,
+        "statement_opening": null
+      },
+      "limitations": [
+        "Bounded positive-quantity purchase lines; returns, tax-inclusive pricing and service acceptance need separate assessment",
+        "Partial receipts and unpaid invoices may be legitimate; exception dispositions require evidence"
+      ],
+      "contributors": [
+        "d7f67f8d-e634-4f03-b440-c4d101208f5c"
+      ],
+      "source_roles": {
+        "orders": {
+          "row_count": 1,
+          "source_range": null,
+          "control_totals": {
+            "AED": "100"
+          },
+          "source_snapshot_id": null
+        },
+        "invoices": {
+          "row_count": 1,
+          "source_range": null,
+          "control_totals": {
+            "AED": "100"
+          },
+          "source_snapshot_id": null
+        },
+        "payments": {
+          "row_count": 1,
+          "source_range": null,
+          "control_totals": {
+            "AED": "100"
+          },
+          "source_snapshot_id": null
+        },
+        "receipts": {
+          "row_count": 1,
+          "source_range": null,
+          "control_totals": {
+            "AED": "100"
+          },
+          "source_snapshot_id": null
+        }
+      },
+      "review_status": "UNVERIFIED",
+      "engine_version": "accounting-intelligence-1",
+      "execution_mode": "deterministic_engine",
+      "nil_population": false,
+      "context_version": 0,
+      "exception_count": 0,
+      "package_version": "AE-foundation-2026.10.1",
+      "country_guidance": {
+        "payroll": "Assess MOHRE/WPS applicability, exclusions, employment regime and pension cohort",
+        "sources": {
+          "uae-vat": "https://tax.gov.ae/-/media/Files/EN/PDF/Guides/VAT-Returns-User-Guide.pdf",
+          "uae-wps": "https://u.ae/en/information-and-services/jobs/employment-in-the-private-sector/payment-of-wages"
+        },
+        "legal_status": "SOURCE_GUIDANCE_REQUIRES_ENGAGEMENT_ASSESSMENT",
+        "tax_reporting": "UAE CT/VAT workbenches; Indian tax-audit forms not applicable",
+        "wps_reference": "Resolution 340/2026: confirm operative effective date and scope",
+        "excluded_domestic_components": [
+          "PF",
+          "ESI",
+          "PT",
+          "TDS",
+          "TCS"
+        ]
+      },
+      "nil_declarations": {},
+      "workflow_version": "audit-extensions-1",
+      "ml_execution_mode": null,
+      "payment_proposals": [],
+      "reporting_framework": "UNCONFIGURED \u2014 professional selection required",
+      "operations_execution": {
+        "kind": "country-workflow",
+        "actions": "NO_JOURNALS_PAYMENTS_OR_MESSAGES_EXECUTED",
+        "version": "audit-extensions-1",
+        "entity_id": "f3ec083e-c1ed-44aa-bdb5-8b9d0391a3b7",
+        "period_id": "039181de-bbf9-4346-9d64-c3913b4b2f66",
+        "tenant_id": "bbb25bf7-e79e-49f3-af6c-d2302b5455e9",
+        "exceptions": [],
+        "parameters": {
+          "as_of": "2026-06-30",
+          "title": "SYN order receipt invoice payment",
+          "account": null,
+          "currency": "AED",
+          "subjects": [],
+          "workflow": "procurement-match",
+          "rationale": "SYN independent order receipt invoice and paid-cash sources",
+          "tolerance": "0",
+          "source_ids": {
+            "orders": "02781e2a-29bb-4b48-83b0-488fcdf0c91e",
+            "invoices": "348ee661-498b-4c1d-a7e0-87a5afd819dd",
+            "payments": "a0f60ad6-7fce-4da6-a5dd-da3626affcd5",
+            "receipts": "948286d8-d411-4cd1-b6f7-13c431493dc7"
+          },
+          "stale_days": 90,
+          "book_closing": null,
+          "book_opening": null,
+          "period_start": null,
+          "date_tolerance": 0,
+          "required_boxes": [],
+          "review_through": null,
+          "tax_year_start": null,
+          "required_checks": [],
+          "allocation_basis": null,
+          "statement_closing": null,
+          "statement_opening": null
+        },
+        "period_end": "2026-12-31",
+        "period_start": "2026-01-01",
+        "engagement_id": "c268d131-b26c-47ba-845a-2f9cb54c17b6",
+        "entity_version": 1,
+        "execution_mode": "rules_baseline",
+        "contract_version": "audit-operations/1",
+        "execution_status": "COMPLETED",
+        "source_snapshots": [],
+        "evidence_receipts": [
+          {
+            "type": "context",
+            "sha256": "cc5d2678be94b3c28ab6a58099f64ac424a48f85100a759568048e52affb9bab",
+            "version": 0
+          },
+          {
+            "id": "02781e2a-29bb-4b48-83b0-488fcdf0c91e",
+            "type": "event",
+            "sha256": "d197a03f2d14459d9e7620d2db5f20b634ea3c53571ec3dafd7b36c0d88c6753",
+            "root_id": "13e2e3af-f286-4974-909b-8f1d56e70064",
+            "version": 2
+          },
+          {
+            "id": "348ee661-498b-4c1d-a7e0-87a5afd819dd",
+            "type": "event",
+            "sha256": "9d087384cf3fc0fb52eac543dfa92d4330d8acc5c05b7b1b42660bfa44b94fa6",
+            "root_id": "017bafc3-4895-448f-80f9-dfa92f95a725",
+            "version": 2
+          },
+          {
+            "id": "a0f60ad6-7fce-4da6-a5dd-da3626affcd5",
+            "type": "event",
+            "sha256": "f5af9dbee4f48c1a9d1fc507545d7f97815f2777a4e3e95524db14eb17fc7aa3",
+            "root_id": "980a3bb8-ff90-47c9-8b31-33511ac70e6b",
+            "version": 2
+          },
+          {
+            "id": "948286d8-d411-4cd1-b6f7-13c431493dc7",
+            "type": "event",
+            "sha256": "849e7f790a1437772978e5c579a8192cfa645f8746e8b9e9b6b20fec3044f6d8",
+            "root_id": "b16ea025-4b78-4729-bac8-83d7d87e11ae",
+            "version": 2
+          }
+        ],
+        "functional_currency": "AED",
+        "implementation_sha256": "53e904871b34bd8e633478f854f4a7dfd84d58fcc9db2bde4c85ba48ad2f454e",
+        "population_completeness": "UPLOADED_FILE_CONTROLS_ONLY",
+        "professional_conclusion": "NOT_DETERMINED",
+        "review_status_at_execution": "UNVERIFIED"
+      },
+      "population_completeness": "UPLOADED_FILE_CONTROLS_ONLY",
+      "professional_conclusion": "NOT_DETERMINED",
+      "language_model_dependency": false,
+      "processing_duration_seconds": 0.063,
+      "requires_professional_review": true,
+      "statutory_calculation_qualified": false
+    },
+    "dependencies": [
+      {
+        "type": "context",
+        "sha256": "cc5d2678be94b3c28ab6a58099f64ac424a48f85100a759568048e52affb9bab",
+        "version": 0
+      },
+      {
+        "id": "02781e2a-29bb-4b48-83b0-488fcdf0c91e",
+        "type": "event",
+        "sha256": "d197a03f2d14459d9e7620d2db5f20b634ea3c53571ec3dafd7b36c0d88c6753",
+        "root_id": "13e2e3af-f286-4974-909b-8f1d56e70064",
+        "version": 2
+      },
+      {
+        "id": "348ee661-498b-4c1d-a7e0-87a5afd819dd",
+        "type": "event",
+        "sha256": "9d087384cf3fc0fb52eac543dfa92d4330d8acc5c05b7b1b42660bfa44b94fa6",
+        "root_id": "017bafc3-4895-448f-80f9-dfa92f95a725",
+        "version": 2
+      },
+      {
+        "id": "a0f60ad6-7fce-4da6-a5dd-da3626affcd5",
+        "type": "event",
+        "sha256": "f5af9dbee4f48c1a9d1fc507545d7f97815f2777a4e3e95524db14eb17fc7aa3",
+        "root_id": "980a3bb8-ff90-47c9-8b31-33511ac70e6b",
+        "version": 2
+      },
+      {
+        "id": "948286d8-d411-4cd1-b6f7-13c431493dc7",
+        "type": "event",
+        "sha256": "849e7f790a1437772978e5c579a8192cfa645f8746e8b9e9b6b20fec3044f6d8",
+        "root_id": "b16ea025-4b78-4729-bac8-83d7d87e11ae",
+        "version": 2
+      }
+    ],
+    "sha256": "48ccf23e88c721714565e0d85e036c0ed445a63d851afd9c8c10141776c5f795",
+    "tenant_id": "bbb25bf7-e79e-49f3-af6c-d2302b5455e9",
+    "created_by": "d7f67f8d-e634-4f03-b440-c4d101208f5c",
+    "id": "df6ed3cc-7bb5-45c7-8515-7129658f8f29",
+    "created_at": "2026-10-24T20:54:00.746771+00:00",
+    "updated_at": "2026-10-24T20:54:00.746771+00:00",
+    "collection_totals": {
+      "rows": 1
+    },
+    "offset": 0,
+    "limit": 100,
+    "freshness": "CURRENT",
+    "latest_version": 1,
+    "provenance_status": "receipts_retained"
+  },
+  "draft_payment_proposal": {
+    "engagement_id": "c268d131-b26c-47ba-845a-2f9cb54c17b6",
+    "root_id": "9d6d4cd8-ad2f-424e-908c-10ae24bd817a",
+    "version": 1,
+    "kind": "country-workflow",
+    "body": {
+      "rows": [
+        {
+          "id": "purchase-1",
+          "state": "EXCEPTIONS",
+          "vendor": "V1",
+          "amounts": {
+            "orders": "100",
+            "invoices": "100",
+            "payments": "0",
+            "receipts": "100"
+          },
+          "currency": "AED",
+          "order_id": "PO-1",
+          "exceptions": [
+            "MISSING_PAYMENTS",
+            "PAYMENT_DIFFERENCE"
+          ],
+          "quantities": {
+            "orders": "2",
+            "invoices": "2",
+            "payments": "0",
+            "receipts": "2"
+          },
+          "source_ids": {
+            "orders": [
+              "order"
+            ],
+            "invoices": [
+              "invoice"
+            ],
+            "payments": [],
+            "receipts": [
+              "receipt"
+            ]
+          },
+          "line_reference": "LINE-1"
+        }
+      ],
+      "as_of": "2026-06-30",
+      "title": "SYN pre-settlement proposal stage",
+      "job_id": "3841d0d7-567a-4815-8976-b8fc02cfffb9",
+      "blocked": false,
+      "country": "AE",
+      "workflow": "procurement-match",
+      "rationale": "SYN matching yields a draft; subsequent banking evidence is separately supplied",
+      "parameters": {
+        "as_of": "2026-06-30",
+        "title": "SYN pre-settlement proposal stage",
+        "account": null,
+        "currency": "AED",
+        "subjects": [],
+        "workflow": "procurement-match",
+        "rationale": "SYN matching yields a draft; subsequent banking evidence is separately supplied",
+        "tolerance": "0",
+        "source_ids": {
+          "orders": "02781e2a-29bb-4b48-83b0-488fcdf0c91e",
+          "invoices": "348ee661-498b-4c1d-a7e0-87a5afd819dd",
+          "payments": "fd00bb07-928d-44b0-9fee-3bfcef36b5cf",
+          "receipts": "948286d8-d411-4cd1-b6f7-13c431493dc7"
+        },
+        "stale_days": 90,
+        "book_closing": null,
+        "book_opening": null,
+        "period_start": null,
+        "date_tolerance": 0,
+        "required_boxes": [],
+        "review_through": null,
+        "tax_year_start": null,
+        "required_checks": [],
+        "allocation_basis": null,
+        "statement_closing": null,
+        "statement_opening": null
+      },
+      "limitations": [
+        "Bounded positive-quantity purchase lines; returns, tax-inclusive pricing and service acceptance need separate assessment",
+        "Partial receipts and unpaid invoices may be legitimate; exception dispositions require evidence"
+      ],
+      "contributors": [
+        "d7f67f8d-e634-4f03-b440-c4d101208f5c"
+      ],
+      "source_roles": {
+        "orders": {
+          "row_count": 1,
+          "source_range": null,
+          "control_totals": {
+            "AED": "100"
+          },
+          "source_snapshot_id": null
+        },
+        "invoices": {
+          "row_count": 1,
+          "source_range": null,
+          "control_totals": {
+            "AED": "100"
+          },
+          "source_snapshot_id": null
+        },
+        "payments": {
+          "row_count": 0,
+          "source_range": null,
+          "control_totals": {
+            "AED": "0"
+          },
+          "source_snapshot_id": null
+        },
+        "receipts": {
+          "row_count": 1,
+          "source_range": null,
+          "control_totals": {
+            "AED": "100"
+          },
+          "source_snapshot_id": null
+        }
+      },
+      "review_status": "UNVERIFIED",
+      "engine_version": "accounting-intelligence-1",
+      "execution_mode": "deterministic_engine",
+      "nil_population": false,
+      "context_version": 0,
+      "exception_count": 1,
+      "package_version": "AE-foundation-2026.10.1",
+      "country_guidance": {
+        "payroll": "Assess MOHRE/WPS applicability, exclusions, employment regime and pension cohort",
+        "sources": {
+          "uae-vat": "https://tax.gov.ae/-/media/Files/EN/PDF/Guides/VAT-Returns-User-Guide.pdf",
+          "uae-wps": "https://u.ae/en/information-and-services/jobs/employment-in-the-private-sector/payment-of-wages"
+        },
+        "legal_status": "SOURCE_GUIDANCE_REQUIRES_ENGAGEMENT_ASSESSMENT",
+        "tax_reporting": "UAE CT/VAT workbenches; Indian tax-audit forms not applicable",
+        "wps_reference": "Resolution 340/2026: confirm operative effective date and scope",
+        "excluded_domestic_components": [
+          "PF",
+          "ESI",
+          "PT",
+          "TDS",
+          "TCS"
+        ]
+      },
+      "nil_declarations": {
+        "payments": "SYN proposal-stage supplied payments are nil; not a claim about complete bank activity"
+      },
+      "workflow_version": "audit-extensions-1",
+      "ml_execution_mode": null,
+      "payment_proposals": [
+        {
+          "holds": [],
+          "state": "DRAFT_REQUIRES_PAYMENT_APPROVAL",
+          "amount": "100",
+          "vendor": "V1",
+          "currency": "AED",
+          "order_id": "PO-1",
+          "line_reference": "LINE-1",
+          "source_invoice_ids": [
+            "invoice"
+          ],
+          "payment_instruction_created": false
+        }
+      ],
+      "reporting_framework": "UNCONFIGURED \u2014 professional selection required",
+      "operations_execution": {
+        "kind": "country-workflow",
+        "actions": "NO_JOURNALS_PAYMENTS_OR_MESSAGES_EXECUTED",
+        "version": "audit-extensions-1",
+        "entity_id": "f3ec083e-c1ed-44aa-bdb5-8b9d0391a3b7",
+        "period_id": "039181de-bbf9-4346-9d64-c3913b4b2f66",
+        "tenant_id": "bbb25bf7-e79e-49f3-af6c-d2302b5455e9",
+        "exceptions": [
+          {
+            "id": "purchase-1",
+            "state": "EXCEPTIONS"
+          }
+        ],
+        "parameters": {
+          "as_of": "2026-06-30",
+          "title": "SYN pre-settlement proposal stage",
+          "account": null,
+          "currency": "AED",
+          "subjects": [],
+          "workflow": "procurement-match",
+          "rationale": "SYN matching yields a draft; subsequent banking evidence is separately supplied",
+          "tolerance": "0",
+          "source_ids": {
+            "orders": "02781e2a-29bb-4b48-83b0-488fcdf0c91e",
+            "invoices": "348ee661-498b-4c1d-a7e0-87a5afd819dd",
+            "payments": "fd00bb07-928d-44b0-9fee-3bfcef36b5cf",
+            "receipts": "948286d8-d411-4cd1-b6f7-13c431493dc7"
+          },
+          "stale_days": 90,
+          "book_closing": null,
+          "book_opening": null,
+          "period_start": null,
+          "date_tolerance": 0,
+          "required_boxes": [],
+          "review_through": null,
+          "tax_year_start": null,
+          "required_checks": [],
+          "allocation_basis": null,
+          "statement_closing": null,
+          "statement_opening": null
+        },
+        "period_end": "2026-12-31",
+        "period_start": "2026-01-01",
+        "engagement_id": "c268d131-b26c-47ba-845a-2f9cb54c17b6",
+        "entity_version": 1,
+        "execution_mode": "rules_baseline",
+        "contract_version": "audit-operations/1",
+        "execution_status": "COMPLETED",
+        "source_snapshots": [],
+        "evidence_receipts": [
+          {
+            "type": "context",
+            "sha256": "cc5d2678be94b3c28ab6a58099f64ac424a48f85100a759568048e52affb9bab",
+            "version": 0
+          },
+          {
+            "id": "02781e2a-29bb-4b48-83b0-488fcdf0c91e",
+            "type": "event",
+            "sha256": "d197a03f2d14459d9e7620d2db5f20b634ea3c53571ec3dafd7b36c0d88c6753",
+            "root_id": "13e2e3af-f286-4974-909b-8f1d56e70064",
+            "version": 2
+          },
+          {
+            "id": "348ee661-498b-4c1d-a7e0-87a5afd819dd",
+            "type": "event",
+            "sha256": "9d087384cf3fc0fb52eac543dfa92d4330d8acc5c05b7b1b42660bfa44b94fa6",
+            "root_id": "017bafc3-4895-448f-80f9-dfa92f95a725",
+            "version": 2
+          },
+          {
+            "id": "fd00bb07-928d-44b0-9fee-3bfcef36b5cf",
+            "type": "event",
+            "sha256": "998c7b6c5f6dadf51b62ed5c9633aa00be094e265a6176efc083ec59c94908e0",
+            "root_id": "fe983c48-f0c7-4478-9c00-53bbbea8d72f",
+            "version": 2
+          },
+          {
+            "id": "948286d8-d411-4cd1-b6f7-13c431493dc7",
+            "type": "event",
+            "sha256": "849e7f790a1437772978e5c579a8192cfa645f8746e8b9e9b6b20fec3044f6d8",
+            "root_id": "b16ea025-4b78-4729-bac8-83d7d87e11ae",
+            "version": 2
+          }
+        ],
+        "functional_currency": "AED",
+        "implementation_sha256": "53e904871b34bd8e633478f854f4a7dfd84d58fcc9db2bde4c85ba48ad2f454e",
+        "population_completeness": "UPLOADED_FILE_CONTROLS_ONLY",
+        "professional_conclusion": "NOT_DETERMINED",
+        "review_status_at_execution": "UNVERIFIED"
+      },
+      "population_completeness": "UPLOADED_FILE_CONTROLS_ONLY",
+      "professional_conclusion": "NOT_DETERMINED",
+      "language_model_dependency": false,
+      "processing_duration_seconds": 0.062,
+      "requires_professional_review": true,
+      "statutory_calculation_qualified": false
+    },
+    "dependencies": [
+      {
+        "type": "context",
+        "sha256": "cc5d2678be94b3c28ab6a58099f64ac424a48f85100a759568048e52affb9bab",
+        "version": 0
+      },
+      {
+        "id": "02781e2a-29bb-4b48-83b0-488fcdf0c91e",
+        "type": "event",
+        "sha256": "d197a03f2d14459d9e7620d2db5f20b634ea3c53571ec3dafd7b36c0d88c6753",
+        "root_id": "13e2e3af-f286-4974-909b-8f1d56e70064",
+        "version": 2
+      },
+      {
+        "id": "348ee661-498b-4c1d-a7e0-87a5afd819dd",
+        "type": "event",
+        "sha256": "9d087384cf3fc0fb52eac543dfa92d4330d8acc5c05b7b1b42660bfa44b94fa6",
+        "root_id": "017bafc3-4895-448f-80f9-dfa92f95a725",
+        "version": 2
+      },
+      {
+        "id": "fd00bb07-928d-44b0-9fee-3bfcef36b5cf",
+        "type": "event",
+        "sha256": "998c7b6c5f6dadf51b62ed5c9633aa00be094e265a6176efc083ec59c94908e0",
+        "root_id": "fe983c48-f0c7-4478-9c00-53bbbea8d72f",
+        "version": 2
+      },
+      {
+        "id": "948286d8-d411-4cd1-b6f7-13c431493dc7",
+        "type": "event",
+        "sha256": "849e7f790a1437772978e5c579a8192cfa645f8746e8b9e9b6b20fec3044f6d8",
+        "root_id": "b16ea025-4b78-4729-bac8-83d7d87e11ae",
+        "version": 2
+      }
+    ],
+    "sha256": "0cc682efb332db6dacd03d38700cb802e2bfb9c759fe668e28342545b8ab7adf",
+    "tenant_id": "bbb25bf7-e79e-49f3-af6c-d2302b5455e9",
+    "created_by": "d7f67f8d-e634-4f03-b440-c4d101208f5c",
+    "id": "9d6d4cd8-ad2f-424e-908c-10ae24bd817a",
+    "created_at": "2026-10-24T20:54:01.366902+00:00",
+    "updated_at": "2026-10-24T20:54:01.366902+00:00",
+    "collection_totals": {
+      "rows": 1
+    },
+    "offset": 0,
+    "limit": 100,
+    "freshness": "CURRENT",
+    "latest_version": 1,
+    "provenance_status": "receipts_retained"
+  },
+  "historical_reconciliation": {
+    "engagement_id": "c268d131-b26c-47ba-845a-2f9cb54c17b6",
+    "root_id": "c8f19681-9aca-4059-9d85-8e07f83a74d2",
+    "version": 2,
+    "kind": "country-workflow",
+    "body": {
+      "rows": [],
+      "as_of": "2026-06-30",
+      "title": "SYNTHETIC account reconciliation",
+      "job_id": "80bc23d9-96e0-4917-91fe-3f998395acd2",
+      "blocked": false,
+      "country": "AE",
+      "matches": [
+        {
+          "rule": "REFERENCE_AMOUNT_DATE",
+          "left_ids": [
+            "1"
+          ],
+          "variance": "0",
+          "right_ids": [
+            "BANK1"
+          ],
+          "auditor_status": "NOT_REVIEWED"
+        }
+      ],
+      "reviewer": "86938336-620d-42af-a12a-399043f960c0",
+      "workflow": "bank-brs",
+      "ambiguous": [],
+      "rationale": "Controlled independent synthetic book and bank populations",
+      "parameters": {
+        "as_of": "2026-06-30",
+        "title": "SYNTHETIC account reconciliation",
+        "account": "BANK-1",
+        "currency": "AED",
+        "subjects": [],
+        "workflow": "bank-brs",
+        "rationale": "Controlled independent synthetic book and bank populations",
+        "tolerance": "0",
+        "source_ids": {
+          "books": "bb67ecbc-6b57-47bb-90be-842d3e9ea08e",
+          "statement": "3a4b4d54-84b9-4007-98e4-7b23172b9ac0"
+        },
+        "stale_days": 90,
+        "book_closing": "100",
+        "book_opening": "200",
+        "period_start": null,
+        "date_tolerance": 0,
+        "required_boxes": [],
+        "review_through": null,
+        "tax_year_start": null,
+        "required_checks": [],
+        "allocation_basis": null,
+        "statement_closing": "100",
+        "statement_opening": "200"
+      },
+      "limitations": [
+        "Bridge explains arithmetic differences only; proposed causes need supporting evidence",
+        "Declared opening/closing controls require independent source review"
+      ],
+      "reviewed_at": "2026-10-24T20:54:02.399583+00:00",
+      "contributors": [
+        "d7f67f8d-e634-4f03-b440-c4d101208f5c"
+      ],
+      "source_roles": {
+        "books": {
+          "row_count": 1,
+          "source_range": null,
+          "control_totals": {
+            "AED": "-100"
+          },
+          "source_snapshot_id": null
+        },
+        "statement": {
+          "row_count": 1,
+          "source_range": null,
+          "control_totals": {
+            "AED": "-100"
+          },
+          "source_snapshot_id": null
+        }
+      },
+      "review_status": "REVIEWED",
+      "engine_version": "accounting-intelligence-1",
+      "execution_mode": "deterministic_engine",
+      "nil_population": false,
+      "context_version": 0,
+      "exception_count": 0,
+      "package_version": "AE-foundation-2026.10.1",
+      "review_comments": "Synthetic independently documented evidence assessment",
+      "country_guidance": {
+        "payroll": "Assess MOHRE/WPS applicability, exclusions, employment regime and pension cohort",
+        "sources": {
+          "uae-vat": "https://tax.gov.ae/-/media/Files/EN/PDF/Guides/VAT-Returns-User-Guide.pdf",
+          "uae-wps": "https://u.ae/en/information-and-services/jobs/employment-in-the-private-sector/payment-of-wages"
+        },
+        "legal_status": "SOURCE_GUIDANCE_REQUIRES_ENGAGEMENT_ASSESSMENT",
+        "tax_reporting": "UAE CT/VAT workbenches; Indian tax-audit forms not applicable",
+        "wps_reference": "Resolution 340/2026: confirm operative effective date and scope",
+        "excluded_domestic_components": [
+          "PF",
+          "ESI",
+          "PT",
+          "TDS",
+          "TCS"
+        ]
+      },
+      "nil_declarations": {},
+      "workflow_version": "country-workflows-1",
+      "ml_execution_mode": null,
+      "control_comparison": {
+        "book_balance_control": "0",
+        "statement_balance_control": "0",
+        "opening_balance_difference": "0",
+        "unexplained_bridge_residual": "0"
+      },
+      "reporting_framework": "UNCONFIGURED \u2014 professional selection required",
+      "operations_execution": {
+        "kind": "country-workflow",
+        "actions": "NO_JOURNALS_PAYMENTS_OR_MESSAGES_EXECUTED",
+        "version": "country-workflows-1",
+        "entity_id": "f3ec083e-c1ed-44aa-bdb5-8b9d0391a3b7",
+        "period_id": "039181de-bbf9-4346-9d64-c3913b4b2f66",
+        "tenant_id": "bbb25bf7-e79e-49f3-af6c-d2302b5455e9",
+        "exceptions": [],
+        "parameters": {
+          "as_of": "2026-06-30",
+          "title": "SYNTHETIC account reconciliation",
+          "account": "BANK-1",
+          "currency": "AED",
+          "subjects": [],
+          "workflow": "bank-brs",
+          "rationale": "Controlled independent synthetic book and bank populations",
+          "tolerance": "0",
+          "source_ids": {
+            "books": "bb67ecbc-6b57-47bb-90be-842d3e9ea08e",
+            "statement": "3a4b4d54-84b9-4007-98e4-7b23172b9ac0"
+          },
+          "stale_days": 90,
+          "book_closing": "100",
+          "book_opening": "200",
+          "period_start": null,
+          "date_tolerance": 0,
+          "required_boxes": [],
+          "review_through": null,
+          "tax_year_start": null,
+          "required_checks": [],
+          "allocation_basis": null,
+          "statement_closing": "100",
+          "statement_opening": "200"
+        },
+        "period_end": "2026-12-31",
+        "period_start": "2026-01-01",
+        "engagement_id": "c268d131-b26c-47ba-845a-2f9cb54c17b6",
+        "entity_version": 1,
+        "execution_mode": "rules_baseline",
+        "contract_version": "audit-operations/1",
+        "execution_status": "COMPLETED",
+        "source_snapshots": [],
+        "evidence_receipts": [
+          {
+            "type": "context",
+            "sha256": "cc5d2678be94b3c28ab6a58099f64ac424a48f85100a759568048e52affb9bab",
+            "version": 0
+          },
+          {
+            "id": "bb67ecbc-6b57-47bb-90be-842d3e9ea08e",
+            "type": "event",
+            "sha256": "934dce8ad79a01bd5da08a53ab0e9ae862797108bee143ab0c8a64e6fa167da6",
+            "root_id": "574f1071-d399-4bf6-90e0-31864b671aae",
+            "version": 2
+          },
+          {
+            "id": "3a4b4d54-84b9-4007-98e4-7b23172b9ac0",
+            "type": "event",
+            "sha256": "c429149668c2f932fcfadba06ae34207c91cbcc0bfea31e6832ffe846b5010fb",
+            "root_id": "4cc81454-af6b-4b06-a761-cb059d610c4c",
+            "version": 2
+          }
+        ],
+        "functional_currency": "AED",
+        "implementation_sha256": "53e904871b34bd8e633478f854f4a7dfd84d58fcc9db2bde4c85ba48ad2f454e",
+        "population_completeness": "UPLOADED_FILE_CONTROLS_ONLY",
+        "professional_conclusion": "NOT_DETERMINED",
+        "review_status_at_execution": "REVIEWED"
+      },
+      "adjusted_book_balance": "100",
+      "population_completeness": "UPLOADED_FILE_CONTROLS_ONLY",
+      "professional_conclusion": "NOT_DETERMINED",
+      "language_model_dependency": false,
+      "processing_duration_seconds": 0.047,
+      "requires_professional_review": true,
+      "statutory_calculation_qualified": false
+    },
+    "dependencies": [
+      {
+        "type": "context",
+        "sha256": "cc5d2678be94b3c28ab6a58099f64ac424a48f85100a759568048e52affb9bab",
+        "version": 0
+      },
+      {
+        "id": "bb67ecbc-6b57-47bb-90be-842d3e9ea08e",
+        "type": "event",
+        "sha256": "934dce8ad79a01bd5da08a53ab0e9ae862797108bee143ab0c8a64e6fa167da6",
+        "root_id": "574f1071-d399-4bf6-90e0-31864b671aae",
+        "version": 2
+      },
+      {
+        "id": "3a4b4d54-84b9-4007-98e4-7b23172b9ac0",
+        "type": "event",
+        "sha256": "c429149668c2f932fcfadba06ae34207c91cbcc0bfea31e6832ffe846b5010fb",
+        "root_id": "4cc81454-af6b-4b06-a761-cb059d610c4c",
+        "version": 2
+      }
+    ],
+    "sha256": "df7032e60dd36fc9723acee45f953da05126ff68c5cbfa65bbb37a6af28c2c15",
+    "tenant_id": "bbb25bf7-e79e-49f3-af6c-d2302b5455e9",
+    "created_by": "86938336-620d-42af-a12a-399043f960c0",
+    "id": "fefe1f08-0cf9-44c4-86ac-b6e694cb9092",
+    "created_at": "2026-10-24T20:54:02.329054+00:00",
+    "updated_at": "2026-10-24T20:54:02.329054+00:00",
+    "collection_totals": {
+      "rows": 0,
+      "matches": 1
+    },
+    "offset": 0,
+    "limit": 100,
+    "freshness": "STALE",
+    "latest_version": 2,
+    "provenance_status": "receipts_retained"
+  },
+  "reapproved_reconciliation": {
+    "engagement_id": "c268d131-b26c-47ba-845a-2f9cb54c17b6",
+    "root_id": "3a4572a9-772f-4d18-83a8-cfa00fa52dd7",
+    "version": 2,
+    "kind": "country-workflow",
+    "body": {
+      "rows": [],
+      "as_of": "2026-06-30",
+      "title": "SYNTHETIC account reconciliation",
+      "job_id": "5f64b691-779d-4bd8-9b4e-487b8322cbf1",
+      "blocked": false,
+      "country": "AE",
+      "matches": [
+        {
+          "rule": "REFERENCE_AMOUNT_DATE",
+          "left_ids": [
+            "1"
+          ],
+          "variance": "0",
+          "right_ids": [
+            "BANK-NEW"
+          ],
+          "auditor_status": "NOT_REVIEWED"
+        }
+      ],
+      "reviewer": "86938336-620d-42af-a12a-399043f960c0",
+      "workflow": "bank-brs",
+      "ambiguous": [],
+      "rationale": "Controlled independent synthetic book and bank populations",
+      "parameters": {
+        "as_of": "2026-06-30",
+        "title": "SYNTHETIC account reconciliation",
+        "account": "BANK-1",
+        "currency": "AED",
+        "subjects": [],
+        "workflow": "bank-brs",
+        "rationale": "Controlled independent synthetic book and bank populations",
+        "tolerance": "0",
+        "source_ids": {
+          "books": "bb67ecbc-6b57-47bb-90be-842d3e9ea08e",
+          "statement": "39e6c778-7da9-47b8-aa7d-5f1afbe2a64f"
+        },
+        "stale_days": 90,
+        "book_closing": "100",
+        "book_opening": "200",
+        "period_start": null,
+        "date_tolerance": 0,
+        "required_boxes": [],
+        "review_through": null,
+        "tax_year_start": null,
+        "required_checks": [],
+        "allocation_basis": null,
+        "statement_closing": "100",
+        "statement_opening": "200"
+      },
+      "limitations": [
+        "Bridge explains arithmetic differences only; proposed causes need supporting evidence",
+        "Declared opening/closing controls require independent source review"
+      ],
+      "reviewed_at": "2026-10-24T20:54:03.069624+00:00",
+      "contributors": [
+        "d7f67f8d-e634-4f03-b440-c4d101208f5c"
+      ],
+      "source_roles": {
+        "books": {
+          "row_count": 1,
+          "source_range": null,
+          "control_totals": {
+            "AED": "-100"
+          },
+          "source_snapshot_id": null
+        },
+        "statement": {
+          "row_count": 1,
+          "source_range": null,
+          "control_totals": {
+            "AED": "-100"
+          },
+          "source_snapshot_id": null
+        }
+      },
+      "review_status": "REVIEWED",
+      "engine_version": "accounting-intelligence-1",
+      "execution_mode": "deterministic_engine",
+      "nil_population": false,
+      "context_version": 0,
+      "exception_count": 0,
+      "package_version": "AE-foundation-2026.10.1",
+      "review_comments": "Synthetic independently documented evidence assessment",
+      "country_guidance": {
+        "payroll": "Assess MOHRE/WPS applicability, exclusions, employment regime and pension cohort",
+        "sources": {
+          "uae-vat": "https://tax.gov.ae/-/media/Files/EN/PDF/Guides/VAT-Returns-User-Guide.pdf",
+          "uae-wps": "https://u.ae/en/information-and-services/jobs/employment-in-the-private-sector/payment-of-wages"
+        },
+        "legal_status": "SOURCE_GUIDANCE_REQUIRES_ENGAGEMENT_ASSESSMENT",
+        "tax_reporting": "UAE CT/VAT workbenches; Indian tax-audit forms not applicable",
+        "wps_reference": "Resolution 340/2026: confirm operative effective date and scope",
+        "excluded_domestic_components": [
+          "PF",
+          "ESI",
+          "PT",
+          "TDS",
+          "TCS"
+        ]
+      },
+      "nil_declarations": {},
+      "workflow_version": "country-workflows-1",
+      "ml_execution_mode": null,
+      "control_comparison": {
+        "book_balance_control": "0",
+        "statement_balance_control": "0",
+        "opening_balance_difference": "0",
+        "unexplained_bridge_residual": "0"
+      },
+      "reporting_framework": "UNCONFIGURED \u2014 professional selection required",
+      "operations_execution": {
+        "kind": "country-workflow",
+        "actions": "NO_JOURNALS_PAYMENTS_OR_MESSAGES_EXECUTED",
+        "version": "country-workflows-1",
+        "entity_id": "f3ec083e-c1ed-44aa-bdb5-8b9d0391a3b7",
+        "period_id": "039181de-bbf9-4346-9d64-c3913b4b2f66",
+        "tenant_id": "bbb25bf7-e79e-49f3-af6c-d2302b5455e9",
+        "exceptions": [],
+        "parameters": {
+          "as_of": "2026-06-30",
+          "title": "SYNTHETIC account reconciliation",
+          "account": "BANK-1",
+          "currency": "AED",
+          "subjects": [],
+          "workflow": "bank-brs",
+          "rationale": "Controlled independent synthetic book and bank populations",
+          "tolerance": "0",
+          "source_ids": {
+            "books": "bb67ecbc-6b57-47bb-90be-842d3e9ea08e",
+            "statement": "39e6c778-7da9-47b8-aa7d-5f1afbe2a64f"
+          },
+          "stale_days": 90,
+          "book_closing": "100",
+          "book_opening": "200",
+          "period_start": null,
+          "date_tolerance": 0,
+          "required_boxes": [],
+          "review_through": null,
+          "tax_year_start": null,
+          "required_checks": [],
+          "allocation_basis": null,
+          "statement_closing": "100",
+          "statement_opening": "200"
+        },
+        "period_end": "2026-12-31",
+        "period_start": "2026-01-01",
+        "engagement_id": "c268d131-b26c-47ba-845a-2f9cb54c17b6",
+        "entity_version": 1,
+        "execution_mode": "rules_baseline",
+        "contract_version": "audit-operations/1",
+        "execution_status": "COMPLETED",
+        "source_snapshots": [],
+        "evidence_receipts": [
+          {
+            "type": "context",
+            "sha256": "cc5d2678be94b3c28ab6a58099f64ac424a48f85100a759568048e52affb9bab",
+            "version": 0
+          },
+          {
+            "id": "bb67ecbc-6b57-47bb-90be-842d3e9ea08e",
+            "type": "event",
+            "sha256": "934dce8ad79a01bd5da08a53ab0e9ae862797108bee143ab0c8a64e6fa167da6",
+            "root_id": "574f1071-d399-4bf6-90e0-31864b671aae",
+            "version": 2
+          },
+          {
+            "id": "39e6c778-7da9-47b8-aa7d-5f1afbe2a64f",
+            "type": "event",
+            "sha256": "5782275c7351634e5243a025dd110863b65dd2d326d84745c49fde9681cf65a3",
+            "root_id": "8813c657-b105-4f32-b600-2fb5dcbd8d6c",
+            "version": 2
+          }
+        ],
+        "functional_currency": "AED",
+        "implementation_sha256": "53e904871b34bd8e633478f854f4a7dfd84d58fcc9db2bde4c85ba48ad2f454e",
+        "population_completeness": "UPLOADED_FILE_CONTROLS_ONLY",
+        "professional_conclusion": "NOT_DETERMINED",
+        "review_status_at_execution": "REVIEWED"
+      },
+      "adjusted_book_balance": "100",
+      "population_completeness": "UPLOADED_FILE_CONTROLS_ONLY",
+      "professional_conclusion": "NOT_DETERMINED",
+      "language_model_dependency": false,
+      "processing_duration_seconds": 0.047,
+      "requires_professional_review": true,
+      "statutory_calculation_qualified": false
+    },
+    "dependencies": [
+      {
+        "type": "context",
+        "sha256": "cc5d2678be94b3c28ab6a58099f64ac424a48f85100a759568048e52affb9bab",
+        "version": 0
+      },
+      {
+        "id": "bb67ecbc-6b57-47bb-90be-842d3e9ea08e",
+        "type": "event",
+        "sha256": "934dce8ad79a01bd5da08a53ab0e9ae862797108bee143ab0c8a64e6fa167da6",
+        "root_id": "574f1071-d399-4bf6-90e0-31864b671aae",
+        "version": 2
+      },
+      {
+        "id": "39e6c778-7da9-47b8-aa7d-5f1afbe2a64f",
+        "type": "event",
+        "sha256": "5782275c7351634e5243a025dd110863b65dd2d326d84745c49fde9681cf65a3",
+        "root_id": "8813c657-b105-4f32-b600-2fb5dcbd8d6c",
+        "version": 2
+      }
+    ],
+    "sha256": "bde78d2faefa611eec698498ef07f9f1eeac75be831565493ce9e1c819983d9c",
+    "tenant_id": "bbb25bf7-e79e-49f3-af6c-d2302b5455e9",
+    "created_by": "86938336-620d-42af-a12a-399043f960c0",
+    "id": "a747836e-7832-4fa2-bbeb-08e188d58aa6",
+    "created_at": "2026-10-24T20:54:03.003147+00:00",
+    "updated_at": "2026-10-24T20:54:03.003147+00:00",
+    "collection_totals": {
+      "rows": 0,
+      "matches": 1
+    },
+    "offset": 0,
+    "limit": 100,
+    "freshness": "CURRENT",
+    "latest_version": 2,
+    "provenance_status": "receipts_retained"
+  }
+}

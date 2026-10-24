@@ -87,6 +87,14 @@ async def test_ecr_original_source_and_three_way_statutory_reconciliation(enviro
     assert native["body"]["native_metadata"]["payment_execution"] == "NOT_EVIDENCED_BY_RETURN_TEXT"
     assert all(row["payment_date"] is None for row in native["body"]["rows"])
     assert native["body"]["review_status"] == "UNVERIFIED"
+    listed = await c.get(
+        f"/api/v1/intelligence/engagements/{eid}/events?kind=workflow-source&newest=true",
+        headers=h,
+    )
+    assert listed.status_code == 200, listed.text
+    assert next(row for row in listed.json()["items"] if row["id"] == native["id"])[
+        "native_format"
+    ] == "india-epfo-ecr"
     original = await c.get(
         base + "/evidence-files/" + evidence["id"] + "/" + uploaded.json()["id"] + "/download",
         headers=h,
@@ -124,6 +132,14 @@ async def test_ecr_original_source_and_three_way_statutory_reconciliation(enviro
     reconciled = await execute(c, h, eid, "country-workflow", payload)
     assert reconciled["body"]["exception_count"] == 0
     assert not reconciled["body"]["statutory_calculation_qualified"]
+    for wrong_role in ("expected", "payment"):
+        swapped = dict(payload["source_ids"])
+        swapped["return"], swapped[wrong_role] = swapped[wrong_role], swapped["return"]
+        await execute(
+            c, h, eid, "country-workflow",
+            {**payload, "title": "Synthetic rejected ECR " + wrong_role, "source_ids": swapped},
+            failed="return/channel role",
+        )
     metadata = await c.get(f"/api/v1/intelligence/engagements/{eid}/country-workflows", headers=h)
     assert next(
         item for item in metadata.json()["source_formats"] if item["id"] == "india-epfo-ecr"

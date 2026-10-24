@@ -6,10 +6,12 @@ from pathlib import Path
 
 from app.modules.country_workflows.audit_schemas import AUDIT_WORKFLOWS
 from app.modules.country_workflows.diligence_schemas import DILIGENCE_WORKFLOWS
+from app.modules.country_workflows.operations_schemas import OPERATION_WORKFLOWS
 from app.modules.country_workflows.payroll_schemas import PAYROLL_WORKFLOWS
 from app.modules.country_workflows.sector_schemas import SECTOR_WORKFLOWS
 
 WORKFLOWS = {
+    **OPERATION_WORKFLOWS,
     **PAYROLL_WORKFLOWS,
     **AUDIT_WORKFLOWS,
     **DILIGENCE_WORKFLOWS,

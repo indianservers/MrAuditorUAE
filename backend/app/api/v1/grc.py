@@ -27,6 +27,52 @@ router = APIRouter(prefix="/grc", tags=["Internal audit ERM and controls"])
 Actor = Annotated[Context, Depends(require("grc.read"))]
 
 
+class FilingTransition(Strict):
+    version: int = Field(ge=1)
+    stage: str = Field(pattern="^(not_started|preparing|under_review|approved_for_submission|submitted|acknowledged)$")
+    submission_evidence_id: uuid.UUID | None = None
+    acknowledgment_evidence_id: uuid.UUID | None = None
+
+
+@router.post("/engagements/{eid}/compliance-reminders")
+async def compliance_reminders(eid: uuid.UUID, db: DB, ctx: Actor):
+    from app.modules.grc.notifications import compliance_reminders as record_reminders
+
+    await audit.engagement(db, ctx, eid, "compliance.manage", True)
+    return await record_reminders(db, ctx, eid, date.today())
+
+
+@router.post("/engagements/{eid}/obligations/{rid}/filing-stage")
+async def filing_stage(eid: uuid.UUID, rid: uuid.UUID, data: FilingTransition, db: DB, ctx: Actor, request: Request):
+    from app.modules.grc.filing import transition
+
+    return await transition(db, ctx, eid, rid, data, request.state.request_id)
+
+
+@router.get("/engagements/{eid}/compliance-calendar")
+async def compliance_calendar(eid: uuid.UUID, db: DB, ctx: Actor):
+    from app.modules.grc.deadlines import local_today, state
+    from app.modules.lineage.working_papers import freshness
+
+    await audit.engagement(db, ctx, eid, "grc.read")
+    rows = (await db.scalars(select(AuditRecord).where(
+        AuditRecord.tenant_id == ctx.tenant_id, AuditRecord.engagement_id == eid,
+        AuditRecord.kind == "grc-obligation",
+    ).order_by(AuditRecord.created_at.desc(), AuditRecord.id).limit(200))).all()
+    items = []
+    for obj in rows:
+        await service.authorize_record(db, ctx, obj)
+        current = await freshness(db, ctx, obj)
+        items.append({"record_id": str(obj.id), "version": obj.version, "reference": obj.reference,
+            "deadline": obj.body.get("deadline"), "extension_deadline": obj.body.get("extension_deadline"),
+            "deadline_kind": obj.body.get("deadline_kind", "unresolved"),
+            "filing_stage": obj.body.get("filing_stage", "not_started"),
+            "calendar_state": state(obj.body, local_today(obj.body)), "freshness": current,
+            "reassessment_required": current != "CURRENT", "review_status": obj.status,
+            "owner_id": obj.body["owner_id"], "reviewer_id": obj.body.get("reviewer_id")})
+    return {"items": items, "bounded_to": 200, "external_submission_performed": False}
+
+
 @router.get("/frameworks")
 async def frameworks(ctx: Actor):
     return {
@@ -404,7 +450,18 @@ async def notifications(eid: uuid.UUID, db: DB, ctx: Actor):
             .limit(100)
         )
     ).all()
-    return {"items": [audit.serialize(x) for x in rows]}
+    visible = []
+    for row in rows:
+        if not row.record_id:
+            continue
+        try:
+            await service.record(db, ctx, eid, row.record_id, approved=False)
+        except HTTPException as exc:
+            if exc.status_code in {403, 404}:
+                continue
+            raise
+        visible.append(audit.serialize(row))
+    return {"items": visible}
 
 
 @router.post("/engagements/{eid}/board/{rid}/publish", status_code=201)

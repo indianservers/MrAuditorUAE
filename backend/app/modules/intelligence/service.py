@@ -94,8 +94,9 @@ async def event(db, ctx, eid, identifier, require_current=False, auth_seen=None)
     )
     if not obj:
         raise HTTPException(404, "Intelligence result not found")
-    if obj.kind == "business-action":
+    if getattr(obj, "kind", None) == "business-action":
         from app.modules.enterprise_ai.business import case_scope
+
         await case_scope(db, ctx, eid, obj.body["use_case_id"])
         for dependency in obj.dependencies:
             if dependency["type"] == "record":
@@ -179,6 +180,16 @@ async def head(db, ctx, obj):
 
 async def current(db, ctx, obj, visited=None):
     if obj.tenant_id != ctx.tenant_id:
+        return False
+    if getattr(obj, "kind", None) == "business-action":
+        from app.modules.enterprise_ai.security import digest
+        from app.modules.jurisdictions.ae.use_cases import MANIFEST
+
+        if obj.body.get("case_catalogue_sha256") != digest(MANIFEST):
+            return False
+    from app.core.operations_contracts import current as operations_current
+
+    if not await operations_current(db, ctx, obj):
         return False
     visited = set() if visited is None else visited
     if obj.id in visited or len(visited) > 100:
@@ -269,8 +280,12 @@ async def current(db, ctx, obj, visited=None):
 
             await engagement_permissions(db, ctx, obj.engagement_id, "dmtt.read")
             item = await db.get(MLEvent, uuid.UUID(dependency["id"]))
-            if (not item or item.engagement_id != obj.engagement_id
-                or item.sha256 != dependency["sha256"] or not await dmtt.current(db, ctx, obj.engagement_id, item)):
+            if (
+                not item
+                or item.engagement_id != obj.engagement_id
+                or item.sha256 != dependency["sha256"]
+                or not await dmtt.current(db, ctx, obj.engagement_id, item)
+            ):
                 return False
         elif kind == "event":
             parent = await db.get(IntelligenceEvent, uuid.UUID(dependency["id"]))
@@ -342,6 +357,11 @@ async def append(db, ctx, eng, kind, body, dependencies, request_id, prior=None)
         "engine_version": "accounting-intelligence-1",
         "requires_professional_review": True,
     }
+    from app.core.operations_contracts import receipt
+
+    payload["operations_execution"] = await receipt(
+        db, ctx, kind=kind, body=body, dependencies=dependencies, eng=eng
+    )
     obj = IntelligenceEvent(
         id=identifier,
         tenant_id=ctx.tenant_id,
@@ -432,64 +452,39 @@ async def evidence(db, ctx, eng, identifier):
     }
 
 
-def read_table(version, kind, separator, date_format):
-    from datetime import datetime
+def read_table(version, kind, separator, date_format, worksheet=None, metadata=None):
+    from app.modules.ingestion.parser import spreadsheet_rows
+    from app.modules.intelligence.supporting_tables import headers, normalize
 
-    from app.modules.intelligence.documents import money
-
-    if version.media_type != "text/csv":
-        raise ValueError(
-            "Supporting bank/open-item tables currently require CSV; generic GL imports remain separate"
-        )
-    rows = []
+    metadata = {} if metadata is None else metadata
+    supported = {"text/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
+    if version.media_type not in supported:
+        raise ValueError("Supporting bank/open-item tables require CSV or macro-free XLSX")
     with ObjectStore().local(version.object_key, version.object_version) as path:
-        if hash_file(path) != version.sha256:
-            raise ValueError("Original evidence hash mismatch")
-        with path.open(encoding="utf-8-sig", newline="") as file:
-            reader = csv.DictReader(file)
-            required = (
-                {"reference", "currency", "amount", "date"}
-                if kind == "bank"
-                else {"reference", "currency", "open_amount"}
-            )
-            if not required <= set(reader.fieldnames or []):
-                raise ValueError(
-                    "Required supporting-table columns: " + ", ".join(sorted(required))
-                )
-            for number, row in enumerate(reader, 2):
-                if number > 20001:
-                    raise ValueError("Supporting table exceeds 20,000 rows; partition the source")
-                if any(len(str(v or "")) > 4000 for v in row.values()) or None in row:
-                    raise ValueError(f"Invalid row {number}: size/column count")
-                item: dict[str, Any] = {
-                    "id": f"row-{number}",
-                    "source_row": number,
-                    "reference": row["reference"],
-                    "currency": row["currency"].upper(),
-                    "counterparty": row.get("counterparty") or None,
-                    "account_code": row.get("account_code") or None,
-                }
-                import pycountry
-
-                if pycountry.currencies.get(alpha_3=item["currency"]) is None:
-                    raise ValueError(f"Invalid currency at row {number}")
-                for key in ["date", "due_date", "document_date"]:
-                    item[key] = (
-                        datetime.strptime(
-                            row[key],
-                            {"iso": "%Y-%m-%d", "dmy": "%d/%m/%Y", "mdy": "%m/%d/%Y"}[date_format],
-                        )
-                        .date()
-                        .isoformat()
-                        if row.get(key)
-                        else None
-                    )
-                field = "amount" if kind == "bank" else "open_amount"
-                item[field] = money(row[field], separator)
-                rows.append(item)
-    if not rows:
-        raise ValueError("Supporting source is empty")
-    return rows
+        if path.stat().st_size > 10 * 1024 * 1024 or hash_file(path) != version.sha256:
+            raise ValueError("Original evidence exceeds 10 MiB or failed hash verification")
+        if version.media_type == "text/csv":
+            if worksheet:
+                raise ValueError("Worksheet selection applies only to XLSX")
+            metadata.update(source_format="CSV", worksheet=None)
+            with path.open(encoding="utf-8-sig", newline="") as file:
+                reader = csv.DictReader(file)
+                headers(reader.fieldnames or [], kind, metadata)
+                return normalize(enumerate(reader, 2), kind, separator, date_format, metadata)
+        metadata.update(source_format="XLSX")
+        receipt: dict[str, Any] = {}
+        records = spreadsheet_rows(
+            path,
+            worksheet,
+            validate_headers=lambda fields: headers(fields, kind, metadata),
+            max_rows=20000,
+            receipt=receipt,
+            exact_numbers=True,
+        )
+        try:
+            return normalize(records, kind, separator, date_format, metadata, receipt)
+        finally:
+            records.close()
 
 
 async def ledger(db, ctx, eng, source, account_ids, as_of=None, from_date=None):
@@ -555,12 +550,22 @@ async def compute(db, ctx, eng, operation, payload):
         version, receipt = await evidence(db, ctx, eng, data.evidence_version_id)
         deps.append(receipt)
         if operation == "source-table":
+            table_metadata: dict[str, Any] = {}
             rows = await run_in_threadpool(
-                read_table, version, data.table_kind, data.decimal_separator, data.date_format
+                read_table,
+                version,
+                data.table_kind,
+                data.decimal_separator,
+                data.date_format,
+                data.worksheet,
+                table_metadata,
             )
             return {
                 "evidence_version_id": str(version.id),
                 "table_kind": data.table_kind,
+                "table_metadata": table_metadata,
+                "table_reader_version": "supporting-table-2",
+                "contributors": [str(ctx.user_id)],
                 "rows": rows,
                 "row_count": len(rows),
                 "review_status": "UNVERIFIED",

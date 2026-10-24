@@ -87,6 +87,8 @@ def test_monetary_fx_is_not_realized_or_presentation_fx():
         [
             MonetaryBalance(
                 reference="SYNTHETIC-USD-receivable",
+                foreign_currency="USD",
+                functional_currency="AED",
                 foreign_units="100",
                 carrying_functional="360",
                 closing_rate="3.6725",
@@ -103,6 +105,8 @@ def test_monetary_fx_is_not_realized_or_presentation_fx():
             [
                 MonetaryBalance(
                     reference="land",
+                    foreign_currency="USD",
+                    functional_currency="AED",
                     foreign_units=100,
                     carrying_functional=100,
                     closing_rate=1,

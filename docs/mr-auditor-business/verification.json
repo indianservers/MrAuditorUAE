@@ -1,0 +1,49 @@
+{
+  "generated_at": "2026-10-24T21:04:00.739959+00:00",
+  "runs": [
+    {
+      "file": "case-security-results.xml",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "connector-health-results.xml",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "frontend-results.xml",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "integration-results.xml",
+      "tests": 29,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "file": "unit-results.xml",
+      "tests": 61,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "overlap_warning": "Test runs overlap; counts must not be added as unique coverage",
+  "browser": {
+    "startTime": "2026-10-24T21:03:26.420Z",
+    "duration": 17882.420000000002,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

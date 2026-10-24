@@ -9,9 +9,11 @@ vi.mock("@/features/shared", () => ({
 }));
 import { EnterpriseAI, aiAreas } from "@/features/enterprise-ai";
 describe("enterprise investigation entry", () => {
-  it("exposes sixteen distinct workspaces and requires engagement selection", () => {
-    expect(aiAreas).toHaveLength(16);
-    expect(new Set(aiAreas.map((a) => a[0])).size).toBe(16);
+  it("includes the UAE workflows alongside distinct investigation workspaces and requires engagement selection", () => {
+    expect(aiAreas).toContainEqual(["uae-use-cases", "UAE Business Workflows"]);
+    expect(aiAreas).toContainEqual(["command-center", "AI Command Center"]);
+    expect(aiAreas).toContainEqual(["approvals", "Human Approval Inbox"]);
+    expect(new Set(aiAreas.map((a) => a[0])).size).toBe(aiAreas.length);
     render(<EnterpriseAI />);
     expect(
       screen.getByRole("heading", { name: "AI Command Center" }),

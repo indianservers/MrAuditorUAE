@@ -113,6 +113,10 @@ def lease(data: s.Lease):
 def ecl(data: s.ECL):
     rows: list[dict[str, Any]] = []
     for exposure in data.exposures:
+        if exposure.override_loss is not None and (
+            exposure.override_loss > exposure.amount or not exposure.override_reason.strip()
+        ):
+            raise ValueError("ECL override requires evidence/rationale and cannot exceed exposure")
         scenarios = []
         for scenario in data.scenarios:
             if data.approach == "provision_matrix":
@@ -157,7 +161,14 @@ def ecl(data: s.ECL):
                 "exposure": exposure.amount,
                 "stage": exposure.stage,
                 "segment": exposure.segment,
-                "ecl": q(sum((r["weighted_loss"] for r in scenarios), ZERO)),
+                "baseline_ecl": q(sum((r["weighted_loss"] for r in scenarios), ZERO)),
+                "ecl": q(
+                    exposure.override_loss
+                    if exposure.override_loss is not None
+                    else sum((r["weighted_loss"] for r in scenarios), ZERO)
+                ),
+                "override_reason": exposure.override_reason,
+                "overridden": exposure.override_loss is not None,
                 "scenarios": scenarios,
             }
         )

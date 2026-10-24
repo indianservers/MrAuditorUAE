@@ -1,0 +1,3 @@
+id,regime,cohort,work_model,effective_from,effective_to,minimum_service_years,year_days,salary_divisor,first_tier_years,first_tier_days,later_tier_days,maximum_salary_months,evidence_reference,source_url,source_version,source_sha256,source_evidence_version_id,applicability_review
+RULE-1,SYNTHETIC-REGIME,SYNTHETIC-COHORT,full-time,2026-01-01,2026-12-31,1,365,30,5,21,30,24,REVIEWED-SYNTHETIC-RULE,https://example.com/synthetic-benefit-rule,SYNTHETIC-1,,,Synthetic regime and cohort assessed for this unit fixture only
+PART-TIME-RULE,SYNTHETIC-REGIME,SYNTHETIC-COHORT,part-time,2026-01-01,2026-12-31,1,365,30,5,21,30,24,REVIEWED-SYNTHETIC-RULE,https://example.com/synthetic-benefit-rule,SYNTHETIC-1,,,Synthetic regime and cohort assessed for this unit fixture only

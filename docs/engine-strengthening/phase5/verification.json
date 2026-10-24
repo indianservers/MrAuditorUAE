@@ -1,0 +1,104 @@
+{
+  "reports": {
+    "backend-results.xml": {
+      "total": 1262,
+      "passed": 1250,
+      "failed": 4,
+      "skipped": 8,
+      "failures": [
+        "tests.integration.test_platform::test_ready_health_and_resource_updates",
+        "tests.phase12.test_entrypoints::test_readiness_rejects_renamed_known_demo_tenant",
+        "tests.phase2.test_pipeline::test_synthetic_fixture_demonstration",
+        "tests.qa_crud.test_connected_trading::test_one_entity_vat_reconciliation_to_current_tax_and_connected_review"
+      ]
+    },
+    "focused-integration-results.xml": {
+      "total": 7,
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    "unit-results.xml": {
+      "total": 773,
+      "passed": 769,
+      "failed": 0,
+      "skipped": 4,
+      "failures": []
+    },
+    "filing-integration-results.xml": {
+      "total": 5,
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    "final-integration-results.xml": {
+      "total": 41,
+      "passed": 41,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    "connector-database-results.xml": {
+      "total": 4,
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    },
+    "frontend-results.xml": {
+      "total": 69,
+      "passed": 69,
+      "failed": 0,
+      "skipped": 0,
+      "failures": []
+    }
+  },
+  "consolidated_backend_results": {
+    "passed": 1273,
+    "failed": 0,
+    "skipped": 4,
+    "method": "Latest result per test, full initial run plus post-fix reruns; see test-verification.json"
+  },
+  "tensorflow_report": "tensorflow-results.txt",
+  "restore_report": "restore-results.json",
+  "production_readiness": false,
+  "sha256": {
+    "backend-initial-results.xml": "75b1caa899b9d3498dcaba46f9236f523a2008821075f5d1899603719725243b",
+    "backend-results.xml": "75b1caa899b9d3498dcaba46f9236f523a2008821075f5d1899603719725243b",
+    "collected-tests.txt": "f498f06050289db3ba15f61b80d81a965a0ecfeb82a5890b48489711ccb84fa8",
+    "compliance-runtime-connector.json": "9400e75719bfcd5973b3278c35ee46d02557427fb8be5db4666fc5905167dedc",
+    "configuration-status.json": "fc905befd5dc8cb4c5cf87eda1bc03114e38ba9fd35223437a6011019f907177",
+    "connector-database-results.txt": "7ca8872c16b50369181863a1346db277100b13836474204a6cba82e0948184f9",
+    "connector-database-results.xml": "9749d305b1fcde42566177d61b9e9cbf15fd0918e27008bfc1cab45613f2305c",
+    "connector-register.json": "bd714783df1fa25a3d4c53d07090b594037fa361494db8db735731ac62d865aa",
+    "engine-readiness.json": "63c050cd6fa30d917b8f11d226f6c4c3ce3e899f6b74c88fa19f8d406149d81f",
+    "filing-integration-results.xml": "94852aabfe067b4faaadfcb2b8b444b4ac833c0a6fd7bf7ffefa81af548b2396",
+    "filing-lifecycle.json": "b52238b6664829670694eff86199b0a739bc78a303ff52e3c0f3607fea6e468e",
+    "final-integration-results.xml": "38458f2ff40da255859fdf762007660ecacf03ccdadad78257fc0f5d4f5ff558",
+    "focused-integration-results.xml": "cae1dea6e7fc8f988e416138b4821dd3a7a4493226162d02620c4416232c3224",
+    "frontend-results.xml": "74d19d363f71ff65f6b5809cb0427303b4bd63ad4e13b204b2c6a36d82161da2",
+    "operations.md": "76db64a65a9569ac74289685bd80c81fabe1e574e5641188e6336abae2da56f9",
+    "README.md": "0cb913a5e6265c64a03bf67e7ff53265125c5cf56b56a782948800ae6ecc63f6",
+    "recognized-50-case-assessment.json": "cf66e246885eab784898831ff4392fdd8cfea8e1e1bd1cd1104ce8b30318c37b",
+    "remaining-blockers.json": "5d62e8ce3b6298aa363f507db572f92b9d2fdeff4b15f989f8de15ce8305722b",
+    "rerun-evidence\\docs\\engine-strengthening\\phase1\\workflow-evidence.json": "11290484d9207a9e36a451c02012214d3d8216460ccd4272615fe9644b1b3078",
+    "rerun-evidence\\docs\\engine-strengthening\\phase2\\connected-workflow.json": "54473ca55846695dca1521e580211835ffa96e6d81cbebcba203f16dec59d24f",
+    "rerun-evidence\\docs\\engine-strengthening\\phase2\\trading-workflow.json": "8793544d7f08c1900cca361a55a71a86bce7ef2f6c5878fec388e3781f3bddb2",
+    "rerun-evidence\\docs\\evidence\\phase-2-demonstration.json": "d5edacf3727ecc57e513e78c1583ced1cf8711c06af1d85e1b09d20b8424fac1",
+    "rerun-evidence\\docs\\evidence\\phase-2-pipeline.json": "667bc5c5dd0c6729bba67afbb172ed8913ed2c382f02535519916160dbd65a0c",
+    "rerun-evidence\\docs\\phase-8\\export-evidence\\synthetic-localfile.docx": "c398fa2fe7ab9f50ae9b282957a554832df902b33c15fa18b231440d46eba9fe",
+    "rerun-evidence\\docs\\phase-8\\export-evidence\\synthetic-localfile.json": "82e19dadbe79a2101a53cfa52aad77b1766669e4acb1d08b5b7833896b23822d",
+    "rerun-evidence\\docs\\phase-8\\export-evidence\\synthetic-localfile.pdf": "5a9ee22faf0436ccaf9aec2acf2f83ba7ace92e8195f753a24c0dd57f512320b",
+    "rerun-evidence\\docs\\phase-8\\export-evidence\\synthetic-localfile.xlsx": "6f401d070ef8e41c26772a74a673daf3c5293b27c400643037303ca493260749",
+    "restore-results.json": "17a3416510dd059cca92746b065aa0369a343f8b86d0cc89208a465cdba55c98",
+    "scenario-register.json": "f03b7e45c05a0baa7bce9fc0117a389137aab6ea25ae0efda56a2e56b77ee592",
+    "source-policy-model-register.json": "19a3082904fee2a9b54a1bd114cbef3d4bc76cba1f999917b4fd5b1e5316e217",
+    "tensorflow-results.txt": "81e07123f9298ded42178185a23aaa8797c656e64492c568974a41e3fe61ad28",
+    "test-verification.json": "8be64fc9a3b868dfbb8a4c3b3698b6d124943349856d0186332ae0be21a3e6f8",
+    "unit-results.xml": "7795bf842479665531dfb81569bfdeb590270424409b3069e7bfe6b74f309a56",
+    "use-cases-001-200.json": "515567d47b1a7dafc107819d9669b0434a2de384982504b08cc340bddc1ad8e0",
+    "worker-recovery.json": "9ea60a7c58e9ab0849a5acde4245946e66f30dfa3429b6f18d1917a23f9e46c5"
+  }
+}

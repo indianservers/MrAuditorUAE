@@ -1,0 +1,53 @@
+{
+  "scope": "labeled synthetic Phase 4 verification; no production validation claim",
+  "reports": {
+    "unit-results.xml": {
+      "total": 730,
+      "passed": 726,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    "integration-results.xml": {
+      "total": 38,
+      "passed": 38,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "frontend-results.xml": {
+      "total": 17,
+      "passed": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "tensorflow": {
+    "report": "tensorflow-results.txt",
+    "passed": 7,
+    "backend": "TensorFlow.js JavaScript CPU",
+    "native_node_binding_installed": false,
+    "language_credentials_required": false
+  },
+  "other_checks": [
+    "frontend tsc --noEmit",
+    "frontend country-workflows eslint",
+    "scoped backend ruff",
+    "git diff --check"
+  ],
+  "sha256": {
+    "audit-source-revision.json": "2cf095c08bdfbff67f604913d39b52dd75917a88889b1493bdb4aa67d9c57a0a",
+    "frontend-results.xml": "f649cfa49eff6ae42d83ec216c48e0a7223c781a2f2b43cdd00340e52ce30404",
+    "gap-matrix.json": "96b70c68fd235da09c9524c6f3457f5ef1f53722d136a3075fe421b47c38e0de",
+    "integration-initial-results.xml": "a05fa70c55078efd41879d78da5ae1b27f18df46fe7761d21ae0d420db103d74",
+    "integration-results.xml": "52a69018ec38ce4ae4867e37b0f99b2251ab972038c55afe0d063fa2fd989b73",
+    "journal-review.json": "fe11febc9076c6ca9fc7f50405ee39c4659030ac2597aa5aa0614f992274bd85",
+    "procurement-bank-revision.json": "60c4806798d9ba162c2ff431df959f246c7b1656380574200db417440062820d",
+    "README.md": "afc24296492abc616c3b1c59fc2989f6818ac578903a0b43868a33b467e62ab3",
+    "revenue-cycle.json": "ae741f79945cc24fe1ee6b48050819aafd924e2aa17d3afb2e50eebd9efa1c87",
+    "source-policy-register.json": "ca97200fc8bdaecc0882f5aad7070ffba3fac324d72e4f1dab73a237ce311d3d",
+    "tensorflow-results.txt": "cec4f808a6ebadb98ddfa4d30fa3f00a79f6adc2af08006762b6db6eb4cb0e7b",
+    "unit-results.xml": "f8d64b4526536b56adf9df0a1f894a309140846eb73274e239a9fbb3846ea8ae"
+  }
+}

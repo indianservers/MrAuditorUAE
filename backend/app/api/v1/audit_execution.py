@@ -35,6 +35,77 @@ router = APIRouter(prefix="/engagements/{eid}/audit", tags=["Audit execution"])
 Actor = Annotated[Context, Depends(require(""))]
 
 
+@router.post("/ml-feedback/{identifier}/working-paper", status_code=201)
+async def ml_review_workpaper(
+    eid: uuid.UUID, identifier: uuid.UUID, db: DB, ctx: Actor, request: Request
+):
+    import hashlib
+
+    from app.modules.lineage.freshness import require_ml_current
+    from app.modules.ml import service as ml
+
+    await s.engagement(db, ctx, eid, "workingpaper.create", True)
+    feedback = await ml.get(db, ctx, identifier, "feedback")
+    if feedback.engagement_id != eid or not feedback.parent_id:
+        raise HTTPException(422, "Scoped prediction feedback required")
+    await require_ml_current(db, ctx, feedback)
+    prediction = await ml.get(db, ctx, feedback.parent_id, "inference")
+    evidence = await s.get_record(db, ctx, eid, uuid.UUID(feedback.body["evidence_id"]))
+    if evidence.status not in {"APPROVED", "LOCKED"}:
+        raise HTTPException(409, "Current reviewed supporting audit evidence required")
+    from app.modules.lineage.working_papers import require_current
+
+    await require_current(db, ctx, evidence)
+    key = ":".join(
+        str(v)
+        for v in [
+            prediction.body.get("model_id", "explicit-baseline"),
+            prediction.body.get("dataset_id", prediction.parent_id),
+            feedback.body["transaction_id"],
+        ]
+    )
+    reference = "MLR-" + hashlib.sha256(key.encode()).hexdigest()[:24]
+    existing = await db.scalar(
+        select(AuditRecord).where(
+            AuditRecord.tenant_id == ctx.tenant_id,
+            AuditRecord.engagement_id == eid,
+            AuditRecord.kind == "working-papers",
+            AuditRecord.reference == reference,
+        )
+    )
+    if existing:
+        return s.serialize(existing)
+    return await s.create(
+        db,
+        ctx,
+        eid,
+        "working-papers",
+        RecordInput(
+            reference=reference,
+            title="Journal analytics review: " + feedback.body["transaction_id"][:100],
+            body={
+                "folder": "Journal analytics",
+                "sections": [
+                    {
+                        "heading": "Original prediction",
+                        "text": f"Mode {prediction.body.get('execution_mode', 'unavailable')}; score {feedback.body.get('original_score')}. Indicator only; not a fraud probability or confirmed finding.",
+                    },
+                    {
+                        "heading": "Retained human disposition",
+                        "text": feedback.body["label"] + ": " + feedback.body["rationale"],
+                    },
+                ],
+                "conclusion": feedback.body["rationale"],
+                "sources": [
+                    {"kind": "ml", "id": str(feedback.id)},
+                    {"kind": "record", "id": str(evidence.id)},
+                ],
+            },
+        ),
+        request.state.request_id,
+    )
+
+
 @router.get("/records/{rid}")
 async def record_detail(eid: uuid.UUID, rid: uuid.UUID, db: DB, ctx: Actor):
     return s.serialize(await s.get_record(db, ctx, eid, rid))
@@ -373,7 +444,7 @@ async def select_sample(eid: uuid.UUID, data: SamplingRequest, db: DB, ctx: Acto
 
     eng = await s.engagement(db, ctx, eid, "audit.testing.execute", True)
     await s.source_record(db, ctx, eng, Source(kind="snapshot", id=data.snapshot_id))
-    return await sampling(db, ctx, data)
+    return await sampling(db, ctx, data, engagement_id=eid)
 
 
 @router.get("/review-queue")

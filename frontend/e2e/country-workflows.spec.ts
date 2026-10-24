@@ -416,3 +416,246 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
   });
   expect(errors).toEqual([]);
 });
+
+test("original CSV and reviewed XLSX tables reach bank and payable reconciliations", async ({
+  page,
+}) => {
+  const suffix = Date.now().toString();
+  const eid = fixture.uae_engagement;
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  async function fill(values: [string, string][]) {
+    for (const [label, value] of values)
+      await page.getByLabel(label, { exact: true }).fill(value);
+  }
+  async function queue(
+    button = "Queue calculation",
+    picker = "Saved source or result",
+  ) {
+    const submitted = page.waitForResponse(
+      (response) =>
+        response.url().includes(`/engagements/${eid}/jobs`) &&
+        response.request().method() === "POST",
+    );
+    await page.getByRole("button", { name: button, exact: true }).click();
+    const response = await submitted;
+    expect(response.status()).toBe(202);
+    const job = await response.json();
+    let result = "";
+    await expect
+      .poll(
+        async () => {
+          const status = await page.request.get(
+            `/api/backend/intelligence/engagements/${eid}/jobs/${job.id}`,
+            { headers: { "X-Tenant-ID": fixture.tenant } },
+          );
+          expect(status.status()).toBe(200);
+          const body = await status.json();
+          if (body.status === "failed")
+            throw new Error(JSON.stringify(body.error_details));
+          result = body.result_id || "";
+          return body.status;
+        },
+        { timeout: 45000 },
+      )
+      .toBe("completed");
+    await expect(
+      page.getByLabel(picker).locator(`option[value="${result}"]`),
+    ).toHaveCount(1);
+    await page.getByLabel(picker).selectOption(result);
+    return result;
+  }
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill("admin@example.com");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("test-strong-password-123");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+
+  await page.goto(`/intelligence/${eid}/source-table`);
+  await page
+    .getByLabel("Evidence version")
+    .selectOption(fixture.xlsx_bank_evidence);
+  await page
+    .getByLabel("Worksheet name (required for multi-sheet XLSX)")
+    .fill("Selected");
+  await queue("Queue supporting tables", "Result version");
+  await page
+    .getByText("Supporting table layout and worksheet controls", {
+      exact: true,
+    })
+    .click();
+  await expect(
+    page.getByText("ORIGINAL_XML_DECIMALS_NOT_FLOAT_ROUNDTRIP", {
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page.screenshot({
+    path: `${shots}/xlsx-table-worker-review.png`,
+    fullPage: true,
+  });
+
+  await page.goto(`/intelligence/${eid}/workflow-source`);
+  const mappedTitle = `SYNTHETIC mapped bank browser ${suffix}`;
+  await page.getByLabel("Map original CSV columns").check();
+  await page.getByLabel("CSV separator").selectOption(";");
+  await page
+    .getByLabel("Transaction amount columns")
+    .selectOption("debit-positive");
+  await fill([
+    ["Schedule title", mappedTitle],
+    ["CSV column for id", "رقم"],
+    ["CSV column for account", "Account"],
+    ["CSV column for date", "Date"],
+    ["CSV column for currency", "CCY"],
+    ["Original debit column", "Debit"],
+    ["Original credit column", "Credit"],
+    ["Excluded CSV columns, one exact heading per line", "Description"],
+    [
+      "Column mapping and exclusion assessment",
+      "Reviewed synthetic source headings and debit-minus-credit basis; memo retained in original evidence",
+    ],
+    ["Expected data rows", "2"],
+    ["Independent totals by currency", "AED=95.25"],
+  ]);
+  await page
+    .getByLabel("Clean retained evidence")
+    .selectOption(fixture.mapped_bank_evidence);
+  const mapped = await queue();
+  await expect(
+    page.getByRole("heading", { name: mappedTitle, exact: true }),
+  ).toBeVisible();
+  await page
+    .getByText("Original CSV column mapping and exclusions", { exact: true })
+    .click();
+  await expect(
+    page.getByText("Excluded columns: Description", { exact: true }),
+  ).toBeVisible();
+  await page.screenshot({
+    path: `${shots}/mapped-debit-credit-worker-review.png`,
+    fullPage: true,
+  });
+
+  await page.goto(`/intelligence/${eid}/workflow-source`);
+  const bankTitle = `SYNTHETIC reviewed XLSX bank browser ${suffix}`;
+  await page.getByLabel("Source origin").selectOption("supporting");
+  await page
+    .getByLabel("Reviewed supporting bank table")
+    .selectOption(fixture.reviewed_xlsx_bank);
+  await fill([
+    ["Schedule title", bankTitle],
+    ["Bank account identifier", "BANK-1"],
+    [
+      "Supporting bank account scope assessment",
+      "Reviewed complete Selected worksheet bank population and original account evidence",
+    ],
+    ["Expected data rows", "2"],
+    ["Independent totals by currency", "AED=95.25"],
+  ]);
+  const bank = await queue();
+  await expect(
+    page.getByRole("heading", { name: bankTitle, exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", {
+      name: "Open reviewed supporting table",
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page.screenshot({
+    path: `${shots}/reviewed-xlsx-bank-source.png`,
+    fullPage: true,
+  });
+  for (const [kind, statement] of [
+    ["mapped", mapped],
+    ["xlsx", bank],
+  ]) {
+    await page.goto(`/intelligence/${eid}/country-workflow`);
+    const title = `SYNTHETIC ${kind} bank reconciliation ${suffix}`;
+    await fill([
+      ["Schedule title", title],
+      ["Reconciliation date", "2026-06-30"],
+      ["Bank account identifier", "BANK-1"],
+      ["book opening", "0"],
+      ["book closing", "95.25"],
+      ["statement opening", "0"],
+      ["statement closing", "95.25"],
+      [
+        "Scope and source rationale",
+        "Independent cashbook compared to retained original source through the real worker",
+      ],
+    ]);
+    await page
+      .getByLabel("books source", { exact: true })
+      .selectOption(fixture.extended_book_source);
+    await page
+      .getByLabel("statement source", { exact: true })
+      .selectOption(statement);
+    await queue();
+    await expect(
+      page.getByRole("heading", { name: title, exact: true }),
+    ).toBeVisible();
+    await expect(page.getByText("0 exceptions", { exact: true })).toBeVisible();
+    await page.screenshot({
+      path: `${shots}/${kind}-bank-reconciliation-worker.png`,
+      fullPage: true,
+    });
+  }
+
+  await page.goto(`/intelligence/${eid}/workflow-source`);
+  const itemsTitle = `SYNTHETIC reviewed XLSX payables ${suffix}`;
+  await page.getByLabel("Source origin").selectOption("supporting-items");
+  await page
+    .getByLabel("Reviewed supporting open-item table")
+    .selectOption(fixture.reviewed_xlsx_open_items);
+  await page.getByLabel("Open-item subledger side").selectOption("payable");
+  await page.getByLabel("Open-item source sign").selectOption("reverse-sign");
+  await fill([
+    ["Schedule title", itemsTitle],
+    ["Control account identifier", "AP-1"],
+    ["Open-item balance date", "2026-06-30"],
+    [
+      "Supporting open-item scope assessment",
+      "Reviewed complete Selected worksheet payable population and credit-negative source convention",
+    ],
+    ["Expected data rows", "2"],
+    ["Independent totals by currency", "AED=80"],
+  ]);
+  const items = await queue();
+  await expect(
+    page.getByRole("heading", { name: itemsTitle, exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("cell", { name: "credit-note", exact: true }),
+  ).toBeVisible();
+  await page.screenshot({
+    path: `${shots}/reviewed-xlsx-payable-sign-source.png`,
+    fullPage: true,
+  });
+  await page.goto(`/intelligence/${eid}/country-workflow`);
+  await page.getByLabel("Workflow").selectOption("subledger-control");
+  const controlTitle = `SYNTHETIC bridged payable control ${suffix}`;
+  await fill([
+    ["Schedule title", controlTitle],
+    ["Reconciliation date", "2026-06-30"],
+    [
+      "Scope and source rationale",
+      "Independent payable control account compared to reviewed original XLSX open items",
+    ],
+  ]);
+  await page.getByLabel("items source", { exact: true }).selectOption(items);
+  await page
+    .getByLabel("controls source", { exact: true })
+    .selectOption(fixture.payable_controls);
+  await queue();
+  await expect(
+    page.getByRole("heading", { name: controlTitle, exact: true }),
+  ).toBeVisible();
+  await expect(page.getByText("0 exceptions", { exact: true })).toBeVisible();
+  await page.screenshot({
+    path: `${shots}/reviewed-xlsx-payable-control-worker.png`,
+    fullPage: true,
+  });
+  expect(errors).toEqual([]);
+});

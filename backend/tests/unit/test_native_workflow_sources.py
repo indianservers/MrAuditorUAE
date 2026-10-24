@@ -174,6 +174,40 @@ def test_wps_embedded_employee_controls_and_no_invented_payment_execution():
     assert validate_file(io.BytesIO(SIF), SIF_FILENAME) == "text/csv"
 
 
+@pytest.mark.parametrize("native_role", ["payroll", "bank", "channel"])
+def test_wps_instruction_cannot_establish_payroll_expectation_or_bank_settlement(native_role):
+    native = parse_native(
+        SIF, options("uae-wps-sif", obligation_due_date="2026-07-01"), "AE", SIF_FILENAME
+    )
+    # Separate synthetic schedules isolate the role restriction from amount matching.
+    schedules = {
+        role: {
+            "table_type": "obligations",
+            "control_totals": {"AED": "1500"},
+            "rows": [
+                {**row, "id": role + ":" + row["id"], "payment_date": "2026-07-01"}
+                for row in native["rows"]
+            ],
+        }
+        for role in ("payroll", "channel", "bank")
+    }
+    schedules[native_role] = native
+    request = WorkflowInput(
+        workflow="payroll-settlement",
+        source_ids={role: uuid.uuid4() for role in schedules},
+        as_of="2026-07-31",
+        currency="AED",
+        title="Synthetic WPS source-role separation",
+        rationale="An instruction is neither independent payroll nor executed bank settlement",
+    )
+    if native_role != "channel":
+        with pytest.raises(ValueError, match="return/channel role"):
+            calculate(request, "AE", schedules)
+    else:
+        result = calculate(request, "AE", schedules)
+        assert result["exception_count"] == 0
+
+
 @pytest.mark.parametrize(
     "old,new,error",
     [

@@ -17,7 +17,7 @@ from app.db.session import Session, tenant_context
 from app.modules.accounting.models import Account, JournalLine
 from tests.integration.test_platform import environment as environment
 from tests.phase2.test_pipeline import committed
-from tests.phase4.test_workflows import action, approve, create
+from tests.phase4.test_workflows import action, approve, create, setup
 from tests.phase6.test_workflows import compute, prepared, release
 from tests.phase7.test_vat_calculations import invoice, rule
 
@@ -28,19 +28,7 @@ pytestmark = pytest.mark.skipif(
 
 async def test_one_entity_vat_reconciliation_to_current_tax_and_connected_review(environment):
     c = environment
-    (
-        h,
-        eid,
-        base,
-        manager,
-        partner,
-        tax_profile,
-        adj,
-        evidence,
-        tax_rules,
-        ready,
-        financial,
-    ) = await prepared(c)
+    h, options, eid, base = await setup(c)
     eng = (await c.get("/api/v1/engagements/" + eid, headers=h)).json()
     entity = (await c.get("/api/v1/entities/" + eng["entity_id"], headers=h)).json()
     # Retained chart data establishes genuine zero-balance VAT controls, not a balancing entry.
@@ -59,6 +47,11 @@ async def test_one_entity_vat_reconciliation_to_current_tax_and_connected_review
         },
         b"Account Code,Account Name,Source ID\n240,VAT Output,SYNTHETIC-VAT-OUT\n180,VAT Input,SYNTHETIC-VAT-IN\n",
     )
+    # Establish the chart before preparing/reviewing IFRS and tax inputs. A later
+    # chart change correctly invalidates the earlier approved financial package.
+    (
+        h, eid, base, manager, partner, tax_profile, adj, evidence, tax_rules, ready, financial,
+    ) = await prepared(c, scope_data=(h, options, eid, base))
     async with Session() as db, db.begin():
         await tenant_context(db, h["X-Tenant-ID"])
         line = await db.scalar(

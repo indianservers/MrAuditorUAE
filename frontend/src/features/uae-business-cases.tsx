@@ -1,8 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useAPI, useAction, useCan } from "@/hooks/use-api";
-import { Button, ErrorState, Facts } from "@/components/ui/primitives";
+import { Button, ErrorState } from "@/components/ui/primitives";
+import { BusinessEvidenceFacts as Facts } from "./business-evidence-facts";
+import { UAECalculationInputs } from "./uae-calculation-inputs";
+import { ConnectedTaxReview } from "./connected-tax-review";
+import { UAEVATErrorInputs } from "./uae-vat-error-inputs";
+import styles from "./uae-business-cases.module.css";
 
 type Case = {
   id: number;
@@ -13,9 +18,13 @@ type Case = {
   engines: string[];
   required_information: string[];
   module_url: string;
+  calculation_module_url?:string|null;
   workflow: string | null;
   calculation: { family: string; kind: string; operation: string } | null;
   limitations: string[];
+  scope_status?: string;
+  completion_status?: string;
+  legal_source_ids?: string[];
 };
 type RecordInput = {
   id: string;
@@ -35,7 +44,17 @@ type Run = {
 
 export function UAEBusinessCases({ eid }: { eid: string }) {
   const base = `ai/engagements/${eid}`;
-  const catalogue = useAPI<{ items: Case[] }>(`${base}/use-cases`);
+  const catalogue = useAPI<{
+    items: Case[];
+    legal_source_register?: {
+      items: {
+        id: string;
+        title: string;
+        url: string;
+        reviewer_status: string;
+      }[];
+    };
+  }>(`${base}/use-cases`);
   const [caseId, setCaseId] = useState(1),
     [filter, setFilter] = useState(""),
     [question, setQuestion] = useState(""),
@@ -50,6 +69,29 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
   }>(`${base}/use-cases/${caseId}/inputs`, !!chosen);
   const run = useAPI<Run>(`${base}/investigations/${runId}`, !!runId);
   const action = useAction<Record<string, unknown>>();
+  const hasRetainedAction =
+    actionResult?.kind === "business-action" &&
+    typeof actionResult.id === "string";
+  const retained = useAPI<Record<string, unknown> & { freshness: string }>(
+    `intelligence/engagements/${eid}/events/${String(actionResult?.id ?? "")}`,
+    hasRetainedAction,
+    true,
+  );
+  const [sourceId, setSourceId] = useState("");
+  const source = useAPI<{
+    title: string;
+    kind: string;
+    version: number;
+    body: Record<string, unknown>;
+  }>(`${base}/use-cases/${caseId}/source-records/${sourceId}`, !!sourceId);
+  const [collecting, setCollecting] = useState(false);
+  const generation = useRef(0);
+  useEffect(
+    () => () => {
+      generation.current++;
+    },
+    [],
+  );
   const [draftNotes, setDraftNotes] = useState("");
   const canDraft = useCan("workingpaper.create");
   const canRun = useCan("ai.workflow.run"),
@@ -57,6 +99,8 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
   async function start() {
     if (!chosen) return;
     setError(undefined);
+    const token = ++generation.current;
+    setCollecting(true);
     try {
       const r = await action.mutateAsync({
         path: "ai/command",
@@ -68,13 +112,60 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
           inputs: { use_case_id: caseId },
         },
       });
+      if(token!==generation.current){
+        await action.mutateAsync({path:`${base}/investigations/${String(r.id)}/control`,body:{version:r.version,action:"pause"}});
+        return;
+      }
       setRunId(String(r.id));
+      for (const _ of (Array.isArray(r.plan) ? r.plan : []).slice(0, 12)) {
+        if (token !== generation.current) break;
+        const progress = await action.mutateAsync({
+          path: `${base}/investigations/${String(r.id)}/step`,
+        });
+        if (token !== generation.current) {
+          if (
+            ![
+              "COMPLETED",
+              "PARTIALLY_COMPLETED",
+              "FAILED",
+              "CANCELLED",
+            ].includes(String(progress.state))
+          ) {
+            await action.mutateAsync({
+              path: `${base}/investigations/${String(r.id)}/control`,
+              body: { version: progress.version, action: "pause" },
+            });
+          }
+          break;
+        }
+        if (
+          [
+            "COMPLETED",
+            "PARTIALLY_COMPLETED",
+            "FAILED",
+            "CANCELLED",
+            "PAUSED",
+            "WAITING_FOR_APPROVAL",
+          ].includes(String(progress.state))
+        )
+          break;
+      }
     } catch (e) {
       setError(e instanceof Error ? e : new Error("Analysis could not start"));
+    } finally {
+      setCollecting(false);
     }
   }
   async function next() {
     try {
+      if (run.data?.state === "PAUSED")
+        await action.mutateAsync({
+          path: `${base}/investigations/${runId}/control`,
+          body: {
+            version: (run.data as Run & { version: number }).version,
+            action: "resume",
+          },
+        });
       await action.mutateAsync({
         path: `${base}/investigations/${runId}/step`,
       });
@@ -122,9 +213,15 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
             title: chosen.title,
             body: {
               folder: "UAE business workstreams",
-              sources: (records.data?.items ?? [])
-                .slice(0, 20)
-                .map((r) => ({ kind: "record", id: r.id })),
+              sources: [
+                ...(records.data?.items ?? [])
+                  .slice(0, 20)
+                  .map((r) => ({ kind: "record", id: r.id })),
+                ...(actionResult?.kind === "business-action" &&
+                typeof actionResult.id === "string"
+                  ? [{ kind: "intelligence", id: actionResult.id }]
+                  : []),
+              ],
               sections: [
                 { heading: "Reviewer preparation notes", text: draftNotes },
               ],
@@ -146,7 +243,10 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
       (c.title + " " + c.id).toLowerCase().includes(filter.toLowerCase()),
     ) ?? [];
   return (
-    <section aria-label="UAE business use cases" className="ai-compose">
+    <section
+      aria-label="UAE business use cases"
+      className={`${styles.panel} ai-compose`}
+    >
       <h2>Mr Auditor · UAE business workflows</h2>
       <p>
         Choose a question, inspect current evidence, then run the appropriate
@@ -162,11 +262,14 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
         <select
           value={caseId}
           onChange={(e) => {
+            generation.current++;
             setCaseId(Number(e.target.value));
+            setSourceId("");
             setRunId("");
             setRecordId("");
             setQuestion("");
             setActionResult(undefined);
+            setDraftNotes("");
             setError(undefined);
           }}
         >
@@ -182,6 +285,10 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
       {chosen && (
         <>
           <h3>{chosen.title}</h3>
+          <p>
+            Implementation: {chosen.completion_status ?? "Verification pending"}
+            . This describes the scoped workflow, not client compliance.
+          </p>
           <p>{chosen.description}</p>
           <p>Connected responsibilities: {chosen.engines.join(", ")}</p>
           <details>
@@ -206,19 +313,59 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
             />
           </label>
           <Button
-            disabled={!canRun || !canCreate || action.isPending}
+            disabled={!canRun || !canCreate || action.isPending || collecting}
             onClick={start}
           >
             Start source-linked analysis
           </Button>
+          {collecting && (
+            <>
+              <p role="status">
+                Collecting authorized engine results. Each step rechecks source
+                access and freshness.
+              </p>
+              <Button
+                onClick={() => {
+                  generation.current++;
+                }}
+              >
+                Pause after current step
+              </Button>
+            </>
+          )}
           <Link href={chosen.module_url}>
             Open specialist inputs, evidence and approvals
           </Link>
+          {chosen.calculation_module_url&&chosen.calculation_module_url!==chosen.module_url&&<Link href={chosen.calculation_module_url}>Prepare specialist calculation inputs</Link>}
           <p>
             Source collection uses approved application tools. Optional
             language-model explanations remain in the investigation workspace.
           </p>
           <h3>Available source records</h3>
+          <Button
+            onClick={() => {
+              void records.refetch();
+              if (runId) void run.refetch();
+              if (hasRetainedAction) void retained.refetch();
+            }}
+          >
+            Refresh sources and result status
+          </Button>
+          {caseId === 8 && (
+            <UAEVATErrorInputs
+              key={eid}
+              eid={eid}
+              sources={records.data?.items ?? []}
+              onResult={setActionResult}
+            />
+          )}
+          <UAECalculationInputs
+            key={`${eid}:${caseId}`}
+            eid={eid}
+            caseId={caseId}
+            sources={records.data?.items ?? []}
+            onResult={setActionResult}
+          />
           <table>
             <caption>
               Authorized records for this case; draft inputs cannot be
@@ -230,6 +377,7 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
                 <th>Type</th>
                 <th>Status</th>
                 <th>Version</th>
+                <th>Evidence</th>
               </tr>
             </thead>
             <tbody>
@@ -241,10 +389,33 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
                   <td>{r.kind}</td>
                   <td>{r.status}</td>
                   <td>{r.version}</td>
+                  <td>
+                    <Button onClick={() => setSourceId(r.id)}>
+                      Inspect source
+                    </Button>
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          {sourceId && (
+            <aside aria-label="Source evidence">
+              <h3>Source evidence</h3>
+              <Button onClick={() => setSourceId("")}>Close source</Button>
+              {source.error && <ErrorState error={source.error} />}{" "}
+              {source.data && !source.error && (
+                <>
+                  <p>
+                    {source.data.title} · version {source.data.version}
+                  </p>
+                  <Facts data={source.data.body} />
+                  <Link href={`/engagements/${eid}/evidence`}>
+                    Open original evidence versions and review history
+                  </Link>
+                </>
+              )}
+            </aside>
+          )}
           {chosen.calculation && (
             <>
               <label>
@@ -283,6 +454,7 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
               review, export and source-freshness controls apply.
             </p>
           )}
+          {caseId === 50 && <ConnectedTaxReview eid={eid} />}
           <label>
             Workpaper preparation notes
             <textarea
@@ -295,6 +467,11 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
             disabled={
               !canRun ||
               !canDraft ||
+              caseId === 48 ||
+              (hasRetainedAction &&
+                (retained.data?.freshness === "STALE" ||
+                  !!retained.error ||
+                  retained.isLoading)) ||
               action.isPending ||
               draftNotes.trim().length < 10
             }
@@ -305,9 +482,31 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
           {chosen.limitations.map((l) => (
             <p key={l}>{l}</p>
           ))}
+          {!!chosen.legal_source_ids?.length && (
+            <details>
+              <summary>Primary-source references and adoption status</summary>
+              <ul>
+                {catalogue.data?.legal_source_register?.items
+                  .filter((s) => chosen.legal_source_ids?.includes(s.id))
+                  .map((s) => (
+                    <li key={s.id}>
+                      <a href={s.url} target="_blank" rel="noreferrer">
+                        {s.title}
+                      </a>{" "}
+                      · {s.reviewer_status.replaceAll("_", " ")}
+                    </li>
+                  ))}
+              </ul>
+              <p>
+                A source locator does not replace the engagement’s approved
+                effective rule and applicability assessment.
+              </p>
+            </details>
+          )}
         </>
       )}
-      {run.data && (
+      {run.error && <ErrorState error={run.error} />}
+      {run.data && !run.error && (
         <section aria-label="Analysis progress">
           <h3>Analysis · {run.data.state}</h3>
           <ol>
@@ -345,7 +544,21 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
       {actionResult && (
         <section>
           <h3>Retained engine result</h3>
-          <Facts data={actionResult} />
+          {hasRetainedAction && (
+            <p role="status">
+              Source state: {retained.data?.freshness ?? "CHECKING"}. Retained
+              results refresh while this view is open.
+            </p>
+          )}
+          {retained.error && <ErrorState error={retained.error} />}
+          {retained.data?.freshness === "STALE" ? (
+            <p role="alert">
+              Source records, rules or context changed. Recalculate from
+              reviewed current inputs before preparing or approving a workpaper.
+            </p>
+          ) : (
+            !retained.error && <Facts data={retained.data ?? actionResult} />
+          )}
           <p>No journal was posted, message sent or filing submitted.</p>
         </section>
       )}

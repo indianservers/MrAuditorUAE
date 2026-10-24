@@ -35,6 +35,19 @@ def _node_slots():
 
 
 async def event(db, ctx, eid, kind, body, parent=None):
+    from app.core.operations_contracts import receipt
+    from app.db.models.platform import Engagement
+
+    eng = await db.get(Engagement, eid)
+    mode = body.get("execution_mode") or body.get("metrics", {}).get(
+        "execution_mode", "unavailable"
+    )
+    body = {
+        **body,
+        "operations_execution": await receipt(
+            db, ctx, kind=kind, body=body, eng=eng, mode=mode, metadata_only=kind != "inference"
+        ),
+    }
     payload = json.dumps(body, sort_keys=True, separators=(",", ":"))
     obj = MLEvent(
         tenant_id=ctx.tenant_id,
@@ -522,4 +535,10 @@ async def execute_job(db, ctx, payload, job_id=None):
             },
             source.id,
         )
-    return {"id": str(obj.id), "status": "completed", "execution_mode": "trained_model"}
+    return {
+        "id": str(obj.id),
+        "status": "completed",
+        "execution_mode": obj.body.get(
+            "execution_mode", "trained_model" if payload["operation"] == "train" else "unavailable"
+        ),
+    }

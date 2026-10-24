@@ -1,0 +1,2327 @@
+{
+  "scope": "Exact 50 business cases in the latest attachment",
+  "release_status": "Partial; not 50 newly implemented and fully accepted specialist capabilities",
+  "items": [
+    {
+      "id": 1,
+      "key": "uae-01",
+      "title": "VAT registration exposure review",
+      "description": "Analyze historical and forecast transactions, entity details and relevant registration rules. Identify potential registration exposure, missing information and dates requiring professional review.",
+      "prompt": "Assess whether this UAE entity may need VAT registration and show the supporting transactions.",
+      "engines": [
+        "E01",
+        "E03",
+        "E04",
+        "E19",
+        "E21"
+      ],
+      "required_information": [
+        "residence",
+        "historic taxable supplies/imports",
+        "forecast",
+        "exceptions"
+      ],
+      "input_kinds": [
+        "vat-rule"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Reviewed AED ledger-net lines only; no residence/exception decision, complete rolling exposure-date reconstruction or registration filing."
+      ],
+      "legal_source_ids": [
+        "AE-VAT-REGISTRATION-PAGE",
+        "AE-VAT-ER-CONSOLIDATED-2026"
+      ],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/1/inputs; POST /ai/command task=uae-01; POST /ai/engagements/{eid}/use-cases/1/actions",
+      "engine": "E01, E03, E04, E19, E21",
+      "data_source": "vat-rule; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step",
+        "tests/unit/test_uae_business_cases.py::test_registration_arithmetic_is_policy_driven_decimal_and_not_a_legal_determination"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 2,
+      "key": "uae-02",
+      "title": "Input VAT recovery review",
+      "description": "Analyze purchase documents, expense purpose, supplier details and recovery restrictions. Separate recoverable, potentially blocked and unresolved amounts with reasons.",
+      "prompt": "Review input VAT on employee, vehicle, entertainment and business expenses.",
+      "engines": [
+        "E01",
+        "E02",
+        "E04",
+        "E13",
+        "E21"
+      ],
+      "required_information": [
+        "expense purpose",
+        "supplier",
+        "recovery basis"
+      ],
+      "input_kinds": [
+        "vat-profile"
+      ],
+      "calculation": {
+        "family": "vat",
+        "kind": "profile",
+        "operation": "compute"
+      },
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Recovery facts and restrictions require approved invoice/rule judgments; document purpose is not inferred from names."
+      ],
+      "legal_source_ids": [
+        "AE-VAT-ER-CONSOLIDATED-2026"
+      ],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/2/inputs; POST /ai/command task=uae-02; POST /ai/engagements/{eid}/use-cases/2/actions",
+      "engine": "E01, E02, E04, E13, E21",
+      "data_source": "vat-profile; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 3,
+      "key": "uae-03",
+      "title": "Import and reverse-charge reconciliation",
+      "description": "Reconcile available customs/import records, overseas supplier invoices, ledger entries and VAT treatment. Distinguish imported goods from imported services.",
+      "prompt": "Find imports and overseas services that may require reverse-charge review.",
+      "engines": [
+        "E02",
+        "E03",
+        "E04",
+        "E13",
+        "E22"
+      ],
+      "required_information": [
+        "customs",
+        "goods/services",
+        "ledger"
+      ],
+      "input_kinds": [
+        "vat-profile"
+      ],
+      "calculation": {
+        "family": "vat",
+        "kind": "profile",
+        "operation": "compute"
+      },
+      "workflow": "customs-reconciliation",
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Customs reconciliation and VAT engine remain separate; imported services need their own reviewed reverse-charge classification."
+      ],
+      "legal_source_ids": [
+        "AE-VAT-ER-CONSOLIDATED-2026"
+      ],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/3/inputs; POST /ai/command task=uae-03; POST /ai/engagements/{eid}/use-cases/3/actions",
+      "engine": "E02, E03, E04, E13, E22",
+      "data_source": "vat-profile; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 4,
+      "key": "uae-04",
+      "title": "Export and zero-rating evidence review",
+      "description": "Connect zero-rated transactions to the required supporting documents and applicable conditions. Flag missing or inconsistent evidence.",
+      "prompt": "Which export transactions lack sufficient support for their VAT treatment?",
+      "engines": [
+        "E01",
+        "E02",
+        "E04",
+        "E12",
+        "E20"
+      ],
+      "required_information": [
+        "transport",
+        "export evidence",
+        "conditions"
+      ],
+      "input_kinds": [
+        "vat-profile"
+      ],
+      "calculation": {
+        "family": "vat",
+        "kind": "profile",
+        "operation": "compute"
+      },
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Evidence presence and consistency do not authenticate exports or establish all zero-rating conditions."
+      ],
+      "legal_source_ids": [
+        "AE-VAT-ER-CONSOLIDATED-2026"
+      ],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/4/inputs; POST /ai/command task=uae-04; POST /ai/engagements/{eid}/use-cases/4/actions",
+      "engine": "E01, E02, E04, E12, E20",
+      "data_source": "vat-profile; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 5,
+      "key": "uae-05",
+      "title": "Tax invoice and credit note validation",
+      "description": "Validate document fields and tax calculations against the applicable requirements. Check duplicates, document dates, customer/supplier details and links to original invoices.",
+      "prompt": "Review these UAE tax invoices and list documents needing correction.",
+      "engines": [
+        "E01",
+        "E02",
+        "E04",
+        "E12",
+        "E13"
+      ],
+      "required_information": [
+        "document identity",
+        "tax point",
+        "original invoice"
+      ],
+      "input_kinds": [
+        "vat-invoice"
+      ],
+      "calculation": {
+        "family": "vat",
+        "kind": "invoice",
+        "operation": "invoice"
+      },
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Field/arithmetic validation is bounded; OCR output requires human verification and document authenticity is not established."
+      ],
+      "legal_source_ids": [
+        "AE-VAT-ER-CONSOLIDATED-2026"
+      ],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/5/inputs; POST /ai/command task=uae-05; POST /ai/engagements/{eid}/use-cases/5/actions",
+      "engine": "E01, E02, E04, E12, E13",
+      "data_source": "vat-invoice; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 6,
+      "key": "uae-06",
+      "title": "VAT return-to-ledger reconciliation",
+      "description": "Prepare a bridge between tax-coded transactions, VAT control accounts and return categories. Explain differences and prevent double counting.",
+      "prompt": "Explain why the VAT return totals differ from the trial balance.",
+      "engines": [
+        "E03",
+        "E04",
+        "E14",
+        "E20"
+      ],
+      "required_information": [
+        "period",
+        "controls",
+        "return categories"
+      ],
+      "input_kinds": [
+        "vat-profile"
+      ],
+      "calculation": {
+        "family": "vat",
+        "kind": "profile",
+        "operation": "compute"
+      },
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Bridge operates on approved source controls and mappings; external return acceptance is not verified."
+      ],
+      "legal_source_ids": [
+        "AE-VAT-ER-CONSOLIDATED-2026"
+      ],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/6/inputs; POST /ai/command task=uae-06; POST /ai/engagements/{eid}/use-cases/6/actions",
+      "engine": "E03, E04, E14, E20",
+      "data_source": "vat-profile; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 7,
+      "key": "uae-07",
+      "title": "Real-estate VAT classification review",
+      "description": "Collect property type, transaction nature, dates, location and contractual facts before proposing treatment. Route incomplete or complex cases for review.",
+      "prompt": "Review the VAT classification of these property sales and leases.",
+      "engines": [
+        "E01",
+        "E02",
+        "E04",
+        "E09"
+      ],
+      "required_information": [
+        "property type",
+        "supply dates",
+        "transaction nature",
+        "location"
+      ],
+      "input_kinds": [
+        "vat-profile",
+        "vat-invoice"
+      ],
+      "calculation": {
+        "family": "vat",
+        "kind": "profile",
+        "operation": "compute"
+      },
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Typed property facts and unresolved-fact guard added; treatment remains an approved professional input, not an automated property-law decision."
+      ],
+      "legal_source_ids": [
+        "AE-VAT-ER-CONSOLIDATED-2026"
+      ],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/7/inputs; POST /ai/command task=uae-07; POST /ai/engagements/{eid}/use-cases/7/actions",
+      "engine": "E01, E02, E04, E09",
+      "data_source": "vat-profile, vat-invoice; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step",
+        "tests/unit/test_uae_property_facts.py"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 8,
+      "key": "uae-08",
+      "title": "Historical VAT error and correction assessment",
+      "description": "Compare historical filings with corrected transaction data. Quantify differences by period and identify the applicable correction workflow for professional approval.",
+      "prompt": "Assess these historical VAT errors and prepare a correction review pack.",
+      "engines": [
+        "E01",
+        "E03",
+        "E04",
+        "E19",
+        "E20"
+      ],
+      "required_information": [
+        "original filing",
+        "corrected transactions",
+        "period"
+      ],
+      "input_kinds": [
+        "vat-return",
+        "evidence",
+        "working-papers"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Supplied reviewed period totals are quantified separately; correction thresholds, discovery deadlines and legally permitted route remain professional review."
+      ],
+      "legal_source_ids": [
+        "AE-VAT-ER-CONSOLIDATED-2026"
+      ],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/8/inputs; POST /ai/command task=uae-08; POST /ai/engagements/{eid}/use-cases/8/actions",
+      "engine": "E01, E03, E04, E19, E20",
+      "data_source": "vat-return, evidence, working-papers; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step",
+        "tests/unit/test_uae_vat_errors.py"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 9,
+      "key": "uae-09",
+      "title": "Corporate tax computation from trial balance",
+      "description": "Map accounting profit to a transparent tax computation, including adjustments, elections, reliefs and unresolved classifications.",
+      "prompt": "Prepare a draft UAE corporate tax computation from this trial balance.",
+      "engines": [
+        "E01",
+        "E03",
+        "E05",
+        "E09"
+      ],
+      "required_information": [
+        "accounting profit",
+        "adjustments",
+        "elections"
+      ],
+      "input_kinds": [
+        "tax-profile"
+      ],
+      "calculation": {
+        "family": "tax",
+        "kind": "profile",
+        "operation": "compute"
+      },
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Uses approved financial run and tax rules; missing elections/classifications block complete computation."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/9/inputs; POST /ai/command task=uae-09; POST /ai/engagements/{eid}/use-cases/9/actions",
+      "engine": "E01, E03, E05, E09",
+      "data_source": "tax-profile; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 10,
+      "key": "uae-10",
+      "title": "Deductibility review",
+      "description": "Review expenditure using transaction purpose, documentation, parties and applicable rules. Explain each proposed adjustment.",
+      "prompt": "Identify expenses requiring corporate tax deductibility review.",
+      "engines": [
+        "E01",
+        "E02",
+        "E05",
+        "E13"
+      ],
+      "required_information": [
+        "purpose",
+        "documents",
+        "party"
+      ],
+      "input_kinds": [
+        "tax-profile"
+      ],
+      "calculation": {
+        "family": "tax",
+        "kind": "profile",
+        "operation": "compute"
+      },
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Purpose, documentation and legal exclusions are reviewed inputs; no legal deduction is inferred from account names."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/10/inputs; POST /ai/command task=uae-10; POST /ai/engagements/{eid}/use-cases/10/actions",
+      "engine": "E01, E02, E05, E13",
+      "data_source": "tax-profile; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 11,
+      "key": "uae-11",
+      "title": "Interest deduction assessment",
+      "description": "Analyze financing balances, finance costs, related-party funding and applicable limitations. Show calculation steps and information gaps.",
+      "prompt": "Assess the deductibility of this company\u2019s interest expense.",
+      "engines": [
+        "E01",
+        "E05",
+        "E07",
+        "E14"
+      ],
+      "required_information": [
+        "financing",
+        "finance costs",
+        "related funding"
+      ],
+      "input_kinds": [
+        "tax-interest"
+      ],
+      "calculation": {
+        "family": "tax",
+        "kind": "interest",
+        "operation": "calculate"
+      },
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Supported approved financing schedule only; special arrangements and supplied related-party facts need review."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/11/inputs; POST /ai/command task=uae-11; POST /ai/engagements/{eid}/use-cases/11/actions",
+      "engine": "E01, E05, E07, E14",
+      "data_source": "tax-interest; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 12,
+      "key": "uae-12",
+      "title": "Tax-loss tracking and utilization",
+      "description": "Maintain loss balances by period, utilization history, relevant restrictions and supporting schedules. Prevent repeated use of the same losses.",
+      "prompt": "Show available tax losses and assess their utilization this year.",
+      "engines": [
+        "E01",
+        "E05",
+        "E18"
+      ],
+      "required_information": [
+        "loss lots",
+        "prior utilization",
+        "restrictions"
+      ],
+      "input_kinds": [
+        "tax-profile"
+      ],
+      "calculation": {
+        "family": "tax",
+        "kind": "profile",
+        "operation": "compute"
+      },
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Existing loss-lot utilization controls retained; unsupported ownership/continuity facts remain unresolved."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/12/inputs; POST /ai/command task=uae-12; POST /ai/engagements/{eid}/use-cases/12/actions",
+      "engine": "E01, E05, E18",
+      "data_source": "tax-profile; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 13,
+      "key": "uae-13",
+      "title": "Small Business Relief assessment",
+      "description": "Evaluate eligibility using the applicable period, revenue data, conditions, exclusions and election status. Show the effect of alternative eligible treatments.",
+      "prompt": "Assess Small Business Relief eligibility and document the conclusion.",
+      "engines": [
+        "E01",
+        "E03",
+        "E05",
+        "E19"
+      ],
+      "required_information": [
+        "revenue history",
+        "exclusions",
+        "election"
+      ],
+      "input_kinds": [
+        "tax-sbr"
+      ],
+      "calculation": {
+        "family": "tax",
+        "kind": "sbr",
+        "operation": "calculate"
+      },
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Current/prior revenue and exclusions require applicable approved rule/election; eligibility is not assumed from turnover alone."
+      ],
+      "legal_source_ids": [
+        "AE-CT-TOPICS-SBR"
+      ],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/13/inputs; POST /ai/command task=uae-13; POST /ai/engagements/{eid}/use-cases/13/actions",
+      "engine": "E01, E03, E05, E19",
+      "data_source": "tax-sbr; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 14,
+      "key": "uae-14",
+      "title": "Participation exemption assessment",
+      "description": "Collect ownership, holding periods, investee information and other required conditions before assessing investment income and gains.",
+      "prompt": "Review whether this dividend or investment disposal may qualify for exemption.",
+      "engines": [
+        "E01",
+        "E02",
+        "E05",
+        "E09"
+      ],
+      "required_information": [
+        "ownership",
+        "holding period",
+        "investee facts"
+      ],
+      "input_kinds": [
+        "tax-profile"
+      ],
+      "calculation": {
+        "family": "tax",
+        "kind": "profile",
+        "operation": "compute"
+      },
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Participation conditions remain documented professional judgments; dividend amounts alone do not establish exemption."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/14/inputs; POST /ai/command task=uae-14; POST /ai/engagements/{eid}/use-cases/14/actions",
+      "engine": "E01, E02, E05, E09",
+      "data_source": "tax-profile; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 15,
+      "key": "uae-15",
+      "title": "Corporate tax group eligibility and readiness",
+      "description": "Assess proposed members, ownership structure, accounting periods, accounting policies and applicable conditions. Produce a missing-information checklist.",
+      "prompt": "Assess whether these UAE entities can form a corporate tax group.",
+      "engines": [
+        "E01",
+        "E05",
+        "E18",
+        "E19"
+      ],
+      "required_information": [
+        "ownership chain",
+        "periods",
+        "policies"
+      ],
+      "input_kinds": [
+        "tax-group"
+      ],
+      "calculation": {
+        "family": "tax",
+        "kind": "group",
+        "operation": "calculate"
+      },
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Approved member/ownership/period/policy data required; complex changes and pending elections remain unresolved."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/15/inputs; POST /ai/command task=uae-15; POST /ai/engagements/{eid}/use-cases/15/actions",
+      "engine": "E01, E05, E18, E19",
+      "data_source": "tax-group; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 16,
+      "key": "uae-16",
+      "title": "Relief for transfers and business restructuring",
+      "description": "Review transaction structure, consideration, ownership, asset details, elections and subsequent events. Track continuing conditions and possible clawback triggers.",
+      "prompt": "Assess relief options for this proposed group restructuring.",
+      "engines": [
+        "E01",
+        "E05",
+        "E09",
+        "E18"
+      ],
+      "required_information": [
+        "transaction structure",
+        "consideration",
+        "continuing conditions"
+      ],
+      "input_kinds": [
+        "tax-restructuring"
+      ],
+      "calculation": {
+        "family": "tax",
+        "kind": "restructuring",
+        "operation": "calculate"
+      },
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Supported relief conditions only; no autonomous restructuring advice or continuing-condition certification."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/16/inputs; POST /ai/command task=uae-16; POST /ai/engagements/{eid}/use-cases/16/actions",
+      "engine": "E01, E05, E09, E18",
+      "data_source": "tax-restructuring; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 17,
+      "key": "uae-17",
+      "title": "Qualifying Free Zone Person assessment",
+      "description": "Assess all relevant conditions, income streams, activities, substance evidence, financial reporting and compliance requirements.",
+      "prompt": "Review this free-zone company\u2019s QFZP position and explain unresolved risks.",
+      "engines": [
+        "E01",
+        "E05",
+        "E06",
+        "E20"
+      ],
+      "required_information": [
+        "activities",
+        "substance",
+        "income streams"
+      ],
+      "input_kinds": [
+        "tax-qfzp"
+      ],
+      "calculation": {
+        "family": "tax",
+        "kind": "qfzp",
+        "operation": "calculate"
+      },
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "QFZP is conditional on approved activity/substance/reporting evidence; no status certificate is issued."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/17/inputs; POST /ai/command task=uae-17; POST /ai/engagements/{eid}/use-cases/17/actions",
+      "engine": "E01, E05, E06, E20",
+      "data_source": "tax-qfzp; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 18,
+      "key": "uae-18",
+      "title": "Qualifying-income segmentation",
+      "description": "Classify revenue using activity, counterparty, location and transaction facts. Keep accounting segmentation separate from the legal conclusion.",
+      "prompt": "Segment revenue for the free-zone corporate tax assessment.",
+      "engines": [
+        "E01",
+        "E03",
+        "E06",
+        "E12"
+      ],
+      "required_information": [
+        "activity",
+        "counterparty",
+        "location"
+      ],
+      "input_kinds": [
+        "tax-qfzp"
+      ],
+      "calculation": {
+        "family": "tax",
+        "kind": "qfzp",
+        "operation": "calculate"
+      },
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Accounting segments and legal qualifying-income judgments remain distinct; disputed classifications require review."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/18/inputs; POST /ai/command task=uae-18; POST /ai/engagements/{eid}/use-cases/18/actions",
+      "engine": "E01, E03, E06, E12",
+      "data_source": "tax-qfzp; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 19,
+      "key": "uae-19",
+      "title": "Free-zone de minimis monitoring",
+      "description": "Calculate the applicable test using validated revenue classifications and effective rules. Show sensitivity to disputed transactions.",
+      "prompt": "Show whether additional non-qualifying revenue could affect our free-zone status.",
+      "engines": [
+        "E01",
+        "E06",
+        "E12",
+        "E19"
+      ],
+      "required_information": [
+        "classified revenue",
+        "disputed transactions",
+        "period"
+      ],
+      "input_kinds": [
+        "tax-qfzp"
+      ],
+      "calculation": {
+        "family": "tax",
+        "kind": "qfzp",
+        "operation": "calculate"
+      },
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Base de-minimis calculation supported; no automatic sensitivity optimization over every disputed transaction."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/19/inputs; POST /ai/command task=uae-19; POST /ai/engagements/{eid}/use-cases/19/actions",
+      "engine": "E01, E06, E12, E19",
+      "data_source": "tax-qfzp; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 20,
+      "key": "uae-20",
+      "title": "Related-party and connected-person mapping",
+      "description": "Build an explainable relationship register from ownership records, declarations, contracts and ledger data. Require review of inferred relationships.",
+      "prompt": "Identify possible related parties and reconcile them to management\u2019s declaration.",
+      "engines": [
+        "E02",
+        "E03",
+        "E07",
+        "E18"
+      ],
+      "required_information": [
+        "ownership",
+        "declaration",
+        "counterparties"
+      ],
+      "input_kinds": [
+        "tp-party",
+        "tp-relationship",
+        "tp-transaction"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Declared/approved relationship registers are collected; inferred relationships require review and do not become legal related parties automatically."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/20/inputs; POST /ai/command task=uae-20; POST /ai/engagements/{eid}/use-cases/20/actions",
+      "engine": "E02, E03, E07, E18",
+      "data_source": "tp-party, tp-relationship, tp-transaction; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 21,
+      "key": "uae-21",
+      "title": "Management remuneration and connected-person payments",
+      "description": "Link payments to contracts, roles, services, approvals and available market support. Produce a review schedule without inventing market benchmarks.",
+      "prompt": "Review director remuneration and connected-person payments.",
+      "engines": [
+        "E01",
+        "E05",
+        "E07",
+        "E16"
+      ],
+      "required_information": [
+        "contract",
+        "roles",
+        "market support"
+      ],
+      "input_kinds": [
+        "tax-profile"
+      ],
+      "calculation": {
+        "family": "tax",
+        "kind": "profile",
+        "operation": "compute"
+      },
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Supplied contracts, role evidence and market support only; no invented market salary benchmark."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/21/inputs; POST /ai/command task=uae-21; POST /ai/engagements/{eid}/use-cases/21/actions",
+      "engine": "E01, E05, E07, E16",
+      "data_source": "tax-profile; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 22,
+      "key": "uae-22",
+      "title": "Intercompany loan benchmarking workflow",
+      "description": "Capture currency, term, security, seniority, credit characteristics and loan purpose. Use licensed or supplied comparables and disclose data limitations.",
+      "prompt": "Prepare an arm\u2019s-length review of this shareholder loan.",
+      "engines": [
+        "E01",
+        "E07",
+        "E14",
+        "E22"
+      ],
+      "required_information": [
+        "currency",
+        "term",
+        "security",
+        "credit",
+        "licensed comparables"
+      ],
+      "input_kinds": [
+        "tp-loan"
+      ],
+      "calculation": {
+        "family": "tp",
+        "kind": "loan",
+        "operation": "calculate"
+      },
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "No live licensed market feed is configured; use authorized supplied comparables and disclose coverage."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/22/inputs; POST /ai/command task=uae-22; POST /ai/engagements/{eid}/use-cases/22/actions",
+      "engine": "E01, E07, E14, E22",
+      "data_source": "tp-loan; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 23,
+      "key": "uae-23",
+      "title": "Transfer pricing documentation readiness",
+      "description": "Assess applicable documentation obligations and reconcile related-party transactions to financial records. Build a local/master file evidence checklist.",
+      "prompt": "Check transfer pricing documentation readiness for this UAE group.",
+      "engines": [
+        "E01",
+        "E03",
+        "E07",
+        "E19",
+        "E20"
+      ],
+      "required_information": [
+        "group facts",
+        "transactions",
+        "obligations"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": "tax-close",
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Documentation workstream/source reconciliation connected; completeness and applicable thresholds require specialist review."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/23/inputs; POST /ai/command task=uae-23; POST /ai/engagements/{eid}/use-cases/23/actions",
+      "engine": "E01, E03, E07, E19, E20",
+      "data_source": "working-papers, evidence; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 24,
+      "key": "uae-24",
+      "title": "UAE DMTT scope and calculation readiness",
+      "description": "Assess group scope, reporting periods, entity classification, safe-harbour information and required calculation inputs. Keep DMTT and domestic corporate tax computations distinct.",
+      "prompt": "Assess whether this group needs a UAE DMTT workstream and identify missing inputs.",
+      "engines": [
+        "E01",
+        "E05",
+        "E08",
+        "E18"
+      ],
+      "required_information": [
+        "group history",
+        "classification",
+        "safe harbour inputs"
+      ],
+      "input_kinds": [
+        "dmtt-group"
+      ],
+      "calculation": {
+        "family": "dmtt",
+        "kind": "group",
+        "operation": "compute"
+      },
+      "workflow": null,
+      "phase": 2,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Existing DMTT scope/inputs and supported calculation retained; safe harbours and special cases remain explicitly bounded."
+      ],
+      "legal_source_ids": [
+        "AE-DMTT-PORTAL"
+      ],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/24/inputs; POST /ai/command task=uae-24; POST /ai/engagements/{eid}/use-cases/24/actions",
+      "engine": "E01, E05, E08, E18",
+      "data_source": "dmtt-group; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 25,
+      "key": "uae-25",
+      "title": "Risk-based audit planning",
+      "description": "Use financial data, prior findings, business changes and qualitative factors to propose risks and procedures for auditor approval.",
+      "prompt": "Prepare a draft audit risk assessment for this UAE trading company.",
+      "engines": [
+        "E03",
+        "E10",
+        "E11",
+        "E20"
+      ],
+      "required_information": [
+        "prior findings",
+        "changes",
+        "qualitative risks"
+      ],
+      "input_kinds": [
+        "risks",
+        "planning",
+        "findings"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 3,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Collected financial/prior-risk evidence supports a draft; audit risks and procedures require auditor approval."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/25/inputs; POST /ai/command task=uae-25; POST /ai/engagements/{eid}/use-cases/25/actions",
+      "engine": "E03, E10, E11, E20",
+      "data_source": "risks, planning, findings; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 26,
+      "key": "uae-26",
+      "title": "Materiality and sampling",
+      "description": "Calculate materiality using engagement-approved policies. Generate reproducible samples linked to population completeness and the audit objective.",
+      "prompt": "Propose materiality and select a reproducible expense sample.",
+      "engines": [
+        "E03",
+        "E10",
+        "E20"
+      ],
+      "required_information": [
+        "approved policy",
+        "complete population",
+        "objective"
+      ],
+      "input_kinds": [
+        "materiality",
+        "procedures"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 3,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Existing approved policy and reproducible sampling retained; objective and source population completeness are not inferred."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/26/inputs; POST /ai/command task=uae-26; POST /ai/engagements/{eid}/use-cases/26/actions",
+      "engine": "E03, E10, E20",
+      "data_source": "materiality, procedures; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 27,
+      "key": "uae-27",
+      "title": "Journal-entry testing",
+      "description": "Analyze unusual timings, privileged-user entries, reversals, descriptions, account combinations and manual postings. Explain each flag.",
+      "prompt": "Find journals that warrant management-override testing.",
+      "engines": [
+        "E03",
+        "E10",
+        "E11"
+      ],
+      "required_information": [
+        "posting metadata",
+        "privileged users",
+        "reversals",
+        "manual flags"
+      ],
+      "input_kinds": [
+        "testing",
+        "risks"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 3,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Existing deterministic analytics/local ML signals remain separate; absent user/timing metadata is not fabricated and no fraud conclusion is made."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/27/inputs; POST /ai/command task=uae-27; POST /ai/engagements/{eid}/use-cases/27/actions",
+      "engine": "E03, E10, E11",
+      "data_source": "testing, risks; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 28,
+      "key": "uae-28",
+      "title": "Revenue recognition and cut-off",
+      "description": "Match contracts, invoices, delivery records, service evidence, returns and subsequent credit notes. Propose exceptions by assertion.",
+      "prompt": "Test year-end revenue cut-off and flag unsupported recognition.",
+      "engines": [
+        "E02",
+        "E09",
+        "E10",
+        "E12"
+      ],
+      "required_information": [
+        "contracts",
+        "delivery",
+        "subsequent credit notes"
+      ],
+      "input_kinds": [
+        "ifrs-revenue"
+      ],
+      "calculation": {
+        "family": "ifrs",
+        "kind": "revenue",
+        "operation": "calculate"
+      },
+      "workflow": null,
+      "phase": 3,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Supported IFRS revenue schedule only; full automated contract/delivery/return cut-off matching across every contract type remains incomplete."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/28/inputs; POST /ai/command task=uae-28; POST /ai/engagements/{eid}/use-cases/28/actions",
+      "engine": "E02, E09, E10, E12",
+      "data_source": "ifrs-revenue; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 29,
+      "key": "uae-29",
+      "title": "Receivables impairment and ECL",
+      "description": "Build ageing and approved provision models using customer history, disputes, subsequent receipts and supportable assumptions.",
+      "prompt": "Prepare an ECL review with assumptions and customer-level explanations.",
+      "engines": [
+        "E09",
+        "E10",
+        "E12",
+        "E14"
+      ],
+      "required_information": [
+        "ageing",
+        "receipts",
+        "approved assumptions"
+      ],
+      "input_kinds": [
+        "ifrs-ecl"
+      ],
+      "calculation": {
+        "family": "ifrs",
+        "kind": "ecl",
+        "operation": "calculate"
+      },
+      "workflow": "receivables-ecl",
+      "phase": 3,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Approved ageing/loss assumptions and supported ECL models only; no unsupported actuarial or collection forecast is invented."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/29/inputs; POST /ai/command task=uae-29; POST /ai/engagements/{eid}/use-cases/29/actions",
+      "engine": "E09, E10, E12, E14",
+      "data_source": "ifrs-ecl; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 30,
+      "key": "uae-30",
+      "title": "Going-concern assessment",
+      "description": "Analyze cash-flow forecasts, financing, covenant information, collections, liabilities and scenarios. Produce an evidence-based assessment for professional review.",
+      "prompt": "Stress-test the next 12 months of cash flows and identify going-concern concerns.",
+      "engines": [
+        "E09",
+        "E10",
+        "E12",
+        "E14"
+      ],
+      "required_information": [
+        "forecast horizon",
+        "financing",
+        "covenants",
+        "scenarios"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": "going-concern-cash",
+      "phase": 3,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Supported supplied forecast/funding scenarios; covenant completeness and final going-concern assessment require professional review."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/30/inputs; POST /ai/command task=uae-30; POST /ai/engagements/{eid}/use-cases/30/actions",
+      "engine": "E09, E10, E12, E14",
+      "data_source": "working-papers, evidence; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 31,
+      "key": "uae-31",
+      "title": "IFRS lease accounting",
+      "description": "Extract contract terms and calculate lease schedules using approved inputs and policies. Support modifications, reassessments and proposed entries.",
+      "prompt": "Prepare the lease liability and right-of-use asset schedule for this office lease.",
+      "engines": [
+        "E02",
+        "E09",
+        "E15"
+      ],
+      "required_information": [
+        "terms",
+        "approved discount rate",
+        "modifications"
+      ],
+      "input_kinds": [
+        "ifrs-lease"
+      ],
+      "calculation": {
+        "family": "ifrs",
+        "kind": "lease",
+        "operation": "calculate"
+      },
+      "workflow": null,
+      "phase": 3,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Shared approved lease engine; browser/source/calculation/draft path verified on a simple lease, not every modification/option scenario."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/31/inputs; POST /ai/command task=uae-31; POST /ai/engagements/{eid}/use-cases/31/actions",
+      "engine": "E02, E09, E15",
+      "data_source": "ifrs-lease; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step",
+        "tests/qa_crud/test_uae_business_cases.py::test_assistant_lease_action_matches_specialist_engine_and_rechecks_source",
+        "frontend/e2e/uae-business-cases.spec.ts"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 32,
+      "key": "uae-32",
+      "title": "Employee end-of-service benefit review",
+      "description": "Determine the applicable employment framework and contract facts before calculating benefits. Distinguish statutory settlement estimates from IFRS measurement requirements.",
+      "prompt": "Review employee benefit provisions and identify missing employment information.",
+      "engines": [
+        "E01",
+        "E09",
+        "E16"
+      ],
+      "required_information": [
+        "framework",
+        "service dates",
+        "salary",
+        "IFRS assumptions"
+      ],
+      "input_kinds": [
+        "ifrs-employee-benefits"
+      ],
+      "calculation": {
+        "family": "ifrs",
+        "kind": "employee-benefits",
+        "operation": "calculate"
+      },
+      "workflow": "uae-benefit-review",
+      "phase": 3,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Employment regime and IFRS versus settlement basis must be supplied; alternative schemes and actuarial measurements remain bounded."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/32/inputs; POST /ai/command task=uae-32; POST /ai/engagements/{eid}/use-cases/32/actions",
+      "engine": "E01, E09, E16",
+      "data_source": "ifrs-employee-benefits; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 33,
+      "key": "uae-33",
+      "title": "Inventory valuation and NRV",
+      "description": "Reconcile inventory movements and costing. Analyze slow-moving items, selling prices, completion costs and subsequent sales.",
+      "prompt": "Identify inventory items requiring an NRV or obsolescence review.",
+      "engines": [
+        "E03",
+        "E09",
+        "E10",
+        "E17"
+      ],
+      "required_information": [
+        "costing",
+        "selling prices",
+        "completion",
+        "subsequent sales"
+      ],
+      "input_kinds": [
+        "ifrs-inventory"
+      ],
+      "calculation": {
+        "family": "ifrs",
+        "kind": "inventory",
+        "operation": "calculate"
+      },
+      "workflow": "inventory-count-bridge",
+      "phase": 3,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Existing costing/NRV/count bridge uses approved populations; source-system and physical inventory completeness are not established."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/33/inputs; POST /ai/command task=uae-33; POST /ai/engagements/{eid}/use-cases/33/actions",
+      "engine": "E03, E09, E10, E17",
+      "data_source": "ifrs-inventory; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 34,
+      "key": "uae-34",
+      "title": "Fixed-asset register and impairment review",
+      "description": "Reconcile additions, disposals, depreciation and physical-verification evidence. Flag impairment indicators and unsupported capitalization.",
+      "prompt": "Reconcile the fixed-asset register and identify potential audit adjustments.",
+      "engines": [
+        "E02",
+        "E09",
+        "E10",
+        "E15"
+      ],
+      "required_information": [
+        "register",
+        "GL",
+        "physical verification",
+        "impairment"
+      ],
+      "input_kinds": [
+        "ifrs-fixed-assets"
+      ],
+      "calculation": {
+        "family": "ifrs",
+        "kind": "fixed-assets",
+        "operation": "calculate"
+      },
+      "workflow": "asset-register-review",
+      "phase": 3,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Register/depreciation controls supported; physical existence and all impairment assumptions remain reviewed evidence."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/34/inputs; POST /ai/command task=uae-34; POST /ai/engagements/{eid}/use-cases/34/actions",
+      "engine": "E02, E09, E10, E15",
+      "data_source": "ifrs-fixed-assets; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 35,
+      "key": "uae-35",
+      "title": "Related-party disclosures",
+      "description": "Reconcile approved related-party relationships, transactions, balances and commitments to draft disclosure schedules.",
+      "prompt": "Prepare the related-party disclosure schedule and highlight missing information.",
+      "engines": [
+        "E07",
+        "E09",
+        "E18",
+        "E20"
+      ],
+      "required_information": [
+        "approved relationships",
+        "balances",
+        "commitments"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": "subledger-control",
+      "phase": 3,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Approved relationships and disclosure schedules are collected; full automated narrative/commitment completeness is not guaranteed."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/35/inputs; POST /ai/command task=uae-35; POST /ai/engagements/{eid}/use-cases/35/actions",
+      "engine": "E07, E09, E18, E20",
+      "data_source": "working-papers, evidence; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 36,
+      "key": "uae-36",
+      "title": "Consolidation and intercompany elimination",
+      "description": "Support group structures, reporting packages, currency translation, reconciliations and controlled elimination entries.",
+      "prompt": "Consolidate these entities and explain unresolved intercompany differences.",
+      "engines": [
+        "E03",
+        "E09",
+        "E18"
+      ],
+      "required_information": [
+        "group",
+        "packages",
+        "rates",
+        "intercompany"
+      ],
+      "input_kinds": [
+        "ifrs-consolidation"
+      ],
+      "calculation": {
+        "family": "ifrs",
+        "kind": "consolidation",
+        "operation": "consolidate"
+      },
+      "workflow": null,
+      "phase": 3,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Existing supported consolidation/intercompany engine retained; complex acquisitions/control/translation scenarios remain bounded."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/36/inputs; POST /ai/command task=uae-36; POST /ai/engagements/{eid}/use-cases/36/actions",
+      "engine": "E03, E09, E18",
+      "data_source": "ifrs-consolidation; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 37,
+      "key": "uae-37",
+      "title": "Financial-statement consistency review",
+      "description": "Cross-check statements, notes, accounting policies, comparatives, totals and cross-references. Link every issue to the source figures.",
+      "prompt": "Review these draft financial statements for numerical and disclosure inconsistencies.",
+      "engines": [
+        "E02",
+        "E03",
+        "E09",
+        "E20"
+      ],
+      "required_information": [
+        "statements",
+        "notes",
+        "comparatives",
+        "references"
+      ],
+      "input_kinds": [
+        "ifrs-profile"
+      ],
+      "calculation": {
+        "family": "ifrs",
+        "kind": "profile",
+        "operation": "financials"
+      },
+      "workflow": null,
+      "phase": 3,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Existing numeric statement controls supported; a complete semantic disclosure/standard-compliance opinion is not provided."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/37/inputs; POST /ai/command task=uae-37; POST /ai/engagements/{eid}/use-cases/37/actions",
+      "engine": "E02, E03, E09, E20",
+      "data_source": "ifrs-profile; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 38,
+      "key": "uae-38",
+      "title": "Audit findings and management-letter workflow",
+      "description": "Convert reviewed exceptions into findings with condition, criteria, cause, effect, recommendation, owner and management response.",
+      "prompt": "Draft management-letter points from the approved audit exceptions.",
+      "engines": [
+        "E10",
+        "E11",
+        "E20",
+        "E21"
+      ],
+      "required_information": [
+        "condition",
+        "criteria",
+        "cause",
+        "effect",
+        "recommendation",
+        "response"
+      ],
+      "input_kinds": [
+        "findings",
+        "review-notes"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 3,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Structured findings and reviewed-source gate added; criteria, cause, effect and recommendations remain reviewer assertions."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/38/inputs; POST /ai/command task=uae-38; POST /ai/engagements/{eid}/use-cases/38/actions",
+      "engine": "E10, E11, E20, E21",
+      "data_source": "findings, review-notes; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 39,
+      "key": "uae-39",
+      "title": "Bank reconciliation and unusual movements",
+      "description": "Match bank statements to ledger transactions, identify outstanding items and investigate unusual transfers.",
+      "prompt": "Reconcile this UAE bank account and explain unmatched transactions.",
+      "engines": [
+        "E02",
+        "E03",
+        "E11",
+        "E14"
+      ],
+      "required_information": [
+        "statement",
+        "ledger",
+        "outstanding items"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": "bank-brs",
+      "phase": 4,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Existing controlled bank/file reconciliation; no unconfigured live bank connection or authentication is claimed."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/39/inputs; POST /ai/command task=uae-39; POST /ai/engagements/{eid}/use-cases/39/actions",
+      "engine": "E02, E03, E11, E14",
+      "data_source": "working-papers, evidence; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 40,
+      "key": "uae-40",
+      "title": "Duplicate invoices and payment risks",
+      "description": "Detect exact and near duplicates across invoices, vendors, bank details and payment batches. Flag possible risks for review without declaring fraud.",
+      "prompt": "Check this payment batch for duplicate invoices and suspicious changes.",
+      "engines": [
+        "E02",
+        "E11",
+        "E13",
+        "E14"
+      ],
+      "required_information": [
+        "invoices",
+        "vendors",
+        "bank changes",
+        "payments"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": "procurement-match",
+      "phase": 4,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Existing duplicate/procurement/analytics flags require review; changes to bank details are not performed."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/40/inputs; POST /ai/command task=uae-40; POST /ai/engagements/{eid}/use-cases/40/actions",
+      "engine": "E02, E11, E13, E14",
+      "data_source": "working-papers, evidence; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 41,
+      "key": "uae-41",
+      "title": "Supplier onboarding and master-data review",
+      "description": "Validate available supplier identity, registration details, tax data, bank-change approvals and duplicate records. Record the source and verification status.",
+      "prompt": "Review these suppliers before we approve their first payments.",
+      "engines": [
+        "E02",
+        "E13",
+        "E20",
+        "E22"
+      ],
+      "required_information": [
+        "identity",
+        "registrations",
+        "bank approval"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": "vendor-diligence",
+      "phase": 4,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Supplied identity/tax/bank-change evidence only; no live identity, tax authority or bank verification is claimed."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/41/inputs; POST /ai/command task=uae-41; POST /ai/engagements/{eid}/use-cases/41/actions",
+      "engine": "E02, E13, E20, E22",
+      "data_source": "working-papers, evidence; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 42,
+      "key": "uae-42",
+      "title": "UAE payroll and WPS reconciliation",
+      "description": "Reconcile payroll records, employment details, available WPS/payment files and bank movements. Apply the relevant employment framework.",
+      "prompt": "Explain differences between payroll, WPS records and bank payments.",
+      "engines": [
+        "E01",
+        "E03",
+        "E14",
+        "E16"
+      ],
+      "required_information": [
+        "framework",
+        "payroll",
+        "WPS",
+        "bank"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": "payroll-settlement",
+      "phase": 4,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Existing payroll/WPS/bank file bridge; regime-specific legal correctness and source completeness need review."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/42/inputs; POST /ai/command task=uae-42; POST /ai/engagements/{eid}/use-cases/42/actions",
+      "engine": "E01, E03, E14, E16",
+      "data_source": "working-papers, evidence; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 43,
+      "key": "uae-43",
+      "title": "Customer advances and contract liabilities",
+      "description": "Identify receipts recorded as revenue before supporting performance evidence. Reconcile advances to contracts, invoices and subsequent delivery.",
+      "prompt": "Review customer advances and identify potential revenue adjustments.",
+      "engines": [
+        "E04",
+        "E09",
+        "E12",
+        "E14"
+      ],
+      "required_information": [
+        "contracts",
+        "receipts",
+        "performance"
+      ],
+      "input_kinds": [
+        "vat-profile"
+      ],
+      "calculation": {
+        "family": "vat",
+        "kind": "profile",
+        "operation": "compute"
+      },
+      "workflow": null,
+      "phase": 4,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Advance/receipt/performance evidence and VAT/IFRS treatment remain separately reviewed; receipt alone is not proof of earned revenue."
+      ],
+      "legal_source_ids": [
+        "AE-VAT-ER-CONSOLIDATED-2026"
+      ],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/43/inputs; POST /ai/command task=uae-43; POST /ai/engagements/{eid}/use-cases/43/actions",
+      "engine": "E04, E09, E12, E14",
+      "data_source": "vat-profile; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 44,
+      "key": "uae-44",
+      "title": "Construction and project accounting",
+      "description": "Analyze approved budgets, costs, variations, certifications, retentions and performance measures. Support documented revenue and margin assessments.",
+      "prompt": "Review revenue, costs and retentions for these UAE construction projects.",
+      "engines": [
+        "E02",
+        "E09",
+        "E12",
+        "E13"
+      ],
+      "required_information": [
+        "budgets",
+        "costs",
+        "variations",
+        "certifications",
+        "retentions"
+      ],
+      "input_kinds": [
+        "ifrs-revenue"
+      ],
+      "calculation": {
+        "family": "ifrs",
+        "kind": "revenue",
+        "operation": "calculate"
+      },
+      "workflow": "construction-contracts",
+      "phase": 4,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Supported single-obligation project calculation; complex variations and multiple obligations require separate methodology."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/44/inputs; POST /ai/command task=uae-44; POST /ai/engagements/{eid}/use-cases/44/actions",
+      "engine": "E02, E09, E12, E13",
+      "data_source": "ifrs-revenue; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 45,
+      "key": "uae-45",
+      "title": "Multi-currency and foreign-exchange review",
+      "description": "Reconcile transaction, functional and presentation currencies. Use approved rate sources and distinguish realized and unrealized differences.",
+      "prompt": "Recalculate year-end foreign-currency balances and explain exchange differences.",
+      "engines": [
+        "E03",
+        "E09",
+        "E14",
+        "E18"
+      ],
+      "required_information": [
+        "transaction/functional/presentation currency",
+        "approved rates"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 4,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "New monetary closing-rate arithmetic on supplied reviewed balances; automatic GL tie-out, realized FX and group presentation/CTA are outside this adapter."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/45/inputs; POST /ai/command task=uae-45; POST /ai/engagements/{eid}/use-cases/45/actions",
+      "engine": "E03, E09, E14, E18",
+      "data_source": "working-papers, evidence; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step",
+        "tests/unit/test_uae_business_cases.py::test_monetary_fx_is_not_realized_or_presentation_fx"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 46,
+      "key": "uae-46",
+      "title": "Compliance calendar and evidence tracking",
+      "description": "Build entity-specific obligations from verified registrations, jurisdiction, licence details and reporting periods. Track owners, due dates, evidence and completion.",
+      "prompt": "Show upcoming UAE compliance obligations and overdue evidence requests.",
+      "engines": [
+        "E01",
+        "E19",
+        "E20"
+      ],
+      "required_information": [
+        "registrations",
+        "licence",
+        "periods",
+        "owners"
+      ],
+      "input_kinds": [
+        "tax-deadline",
+        "requests"
+      ],
+      "calculation": null,
+      "workflow": "statutory-dues",
+      "phase": 4,
+      "scope_status": "Blocked",
+      "completion_status": "Blocked",
+      "limitations": [
+        "Existing dues/deadline/source workflows connected; unified entity-obligation inference and preference-based notification delivery are not implemented."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/46/inputs; POST /ai/command task=uae-46; POST /ai/engagements/{eid}/use-cases/46/actions",
+      "engine": "E01, E19, E20",
+      "data_source": "tax-deadline, requests; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 47,
+      "key": "uae-47",
+      "title": "Ownership and UBO record consistency",
+      "description": "Compare corporate documents, ownership registers and supplied declarations. Identify inconsistencies and missing records without claiming official filing verification.",
+      "prompt": "Check whether the ownership and UBO records are consistent.",
+      "engines": [
+        "E01",
+        "E02",
+        "E19",
+        "E20"
+      ],
+      "required_information": [
+        "documents",
+        "register",
+        "declarations"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": "ownership-lookthrough",
+      "phase": 4,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Economic ownership look-through is supported; full legal control/UBO determination and official filing verification are not provided."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/47/inputs; POST /ai/command task=uae-47; POST /ai/engagements/{eid}/use-cases/47/actions",
+      "engine": "E01, E02, E19, E20",
+      "data_source": "working-papers, evidence; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 48,
+      "key": "uae-48",
+      "title": "AML engagement onboarding assistance",
+      "description": "Where relevant to the firm\u2019s activities and applicable rules, collect client due-diligence evidence, beneficial ownership and approved screening results. Route decisions to the designated reviewer.",
+      "prompt": "Prepare this client\u2019s onboarding due-diligence checklist and flag missing evidence.",
+      "engines": [
+        "E01",
+        "E02",
+        "E19",
+        "E20",
+        "E22"
+      ],
+      "required_information": [
+        "applicability",
+        "CDD",
+        "approved screening",
+        "reviewer"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": "kyc-edd-review",
+      "phase": 4,
+      "scope_status": "Blocked",
+      "completion_status": "Blocked",
+      "limitations": [
+        "Restricted reviewer permission is required; generic workpaper copying is blocked until a restricted AML case/document subsystem is qualified."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/48/inputs; POST /ai/command task=uae-48; POST /ai/engagements/{eid}/use-cases/48/actions",
+      "engine": "E01, E02, E19, E20, E22",
+      "data_source": "working-papers, evidence; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 49,
+      "key": "uae-49",
+      "title": "UAE e-invoicing readiness assessment",
+      "description": "Use verified current requirements and applicable implementation dates. Assess invoice data, identifiers, system capabilities, document flows and integration gaps.",
+      "prompt": "Assess our UAE e-invoicing readiness and generate a prioritized remediation plan.",
+      "engines": [
+        "E01",
+        "E02",
+        "E04",
+        "E12",
+        "E13",
+        "E22"
+      ],
+      "required_information": [
+        "identifiers",
+        "fields",
+        "systems",
+        "verified dates"
+      ],
+      "input_kinds": [
+        "vat-einvoicing"
+      ],
+      "calculation": {
+        "family": "vat",
+        "kind": "einvoicing",
+        "operation": "assessment"
+      },
+      "workflow": null,
+      "phase": 4,
+      "scope_status": "Blocked",
+      "completion_status": "Blocked",
+      "limitations": [
+        "Official MD197/2026 notice found; original decision/effectivity adoption and complete current scope review remain pending. No certified/live ASP connection."
+      ],
+      "legal_source_ids": [
+        "AE-EINVOICE-PORTAL",
+        "AE-MD197-2026-NOTICE"
+      ],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/49/inputs; POST /ai/command task=uae-49; POST /ai/engagements/{eid}/use-cases/49/actions",
+      "engine": "E01, E02, E04, E12, E13, E22",
+      "data_source": "vat-einvoicing; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step",
+        "tests/phase7/test_vat_workflows.py"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    },
+    {
+      "id": 50,
+      "key": "uae-50",
+      "title": "AI-powered engagement command centre",
+      "description": "Allow an authorized user to request a coordinated workflow spanning accounting, audit and tax engines. Show progress, dependencies, exceptions and approval steps.",
+      "prompt": "Review this client\u2019s year-end records, prepare the audit and tax readiness pack, and assign unresolved items to the engagement team.",
+      "engines": [
+        "E01",
+        "E02",
+        "E03",
+        "E04",
+        "E05",
+        "E06",
+        "E07",
+        "E08",
+        "E09",
+        "E10",
+        "E11",
+        "E12",
+        "E13",
+        "E14",
+        "E15",
+        "E16",
+        "E17",
+        "E18",
+        "E19",
+        "E20",
+        "E21",
+        "E22"
+      ],
+      "required_information": [
+        "entity/period",
+        "sources",
+        "owners",
+        "dependencies"
+      ],
+      "input_kinds": [
+        "working-papers",
+        "evidence"
+      ],
+      "calculation": null,
+      "workflow": null,
+      "phase": 4,
+      "scope_status": "Partial",
+      "completion_status": "Implemented with limitations",
+      "limitations": [
+        "Bounded read-only overview plus explicit governed actions/readiness pack; no autonomous postings, filings, messages or all-engine source-change reruns."
+      ],
+      "legal_source_ids": [],
+      "ui": "/ai/uae-use-cases (authorized engagement/entity/period context)",
+      "api": "GET /ai/engagements/{eid}/use-cases/50/inputs; POST /ai/command task=uae-50; POST /ai/engagements/{eid}/use-cases/50/actions",
+      "engine": "E01, E02, E03, E04, E05, E06, E07, E08, E09, E10, E11, E12, E13, E14, E15, E16, E17, E18, E19, E20, E21, E22",
+      "data_source": "working-papers, evidence; current scoped snapshots/clean evidence and specialist runs as selected",
+      "approval": "Underlying specialist input approval; independent source/result review; consequential posting/sending/filing actions excluded",
+      "evidence": "Versioned source receipts, hashes, context/catalogue receipts, retained engine ID; generated papers inherit source permissions",
+      "tests": [
+        "tests/unit/test_uae_business_cases.py::test_fifty_distinct_cases_have_bounded_approved_engine_graphs",
+        "tests/qa_crud/test_uae_business_cases.py::test_all_fifty_case_entries_validate_real_scope_and_first_collection_step"
+      ],
+      "test_scope": "All entries: scope/recipe/first read only. Numeric/full workflow acceptance is limited to the separately named specialist tests; not 50 complete acceptance tests.",
+      "new_capability_claim": "Connected business adapter/control improvement; existing numeric engines are reused, not counted as new engines"
+    }
+  ]
+}

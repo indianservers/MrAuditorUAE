@@ -1,0 +1,63 @@
+{
+  "automatic_legal_policy_adoption": false,
+  "primary_references": [
+    {
+      "url": "https://mof.gov.ae/en/public-finance/tax/corporate-tax/",
+      "purpose": "CT deadline reference, no automatic entity applicability or extension inference"
+    },
+    {
+      "url": "https://tax.gov.ae/en/faq.aspx?keyword=When+are+registered+businesses+required+to+file+VAT+returns%3F",
+      "purpose": "VAT deadline reference; authority-assigned periods and extensions require retained evidence"
+    },
+    {
+      "url": "https://www.tensorflow.org/js/guide/platform_environment",
+      "purpose": "JavaScript CPU/native runtime distinction"
+    }
+  ],
+  "retained_phase_registers": [
+    "../phase1/README.md",
+    "../phase2/rule-source-register.json",
+    "../phase3/source-policy-register.json",
+    "../phase4/source-policy-register.json"
+  ],
+  "deadline_policy": "No hardcoded new legal deadline; approved evidence, explicit trigger, validity, timezone, convention and rule version required for calculated obligations",
+  "models": [
+    {
+      "task": "journal-type",
+      "runtime": "TensorFlow.js Node JavaScript CPU",
+      "test_evidence": "tensorflow-results.txt",
+      "training_data": "labeled synthetic fixtures in verification only",
+      "client_validation": "not established",
+      "deployment": "per-model independent approval required; no automatic activation",
+      "language_dependency": false
+    },
+    {
+      "task": "account-mapping",
+      "runtime": "TensorFlow.js Node JavaScript CPU",
+      "test_evidence": "tensorflow-results.txt",
+      "training_data": "labeled synthetic fixtures in verification only",
+      "client_validation": "not established",
+      "deployment": "per-model independent approval required; no automatic activation",
+      "language_dependency": false
+    },
+    {
+      "task": "journal-anomaly",
+      "runtime": "TensorFlow.js Node JavaScript CPU",
+      "test_evidence": "tensorflow-results.txt",
+      "training_data": "labeled synthetic fixtures in verification only",
+      "client_validation": "not established",
+      "deployment": "per-model independent approval required; no automatic activation",
+      "language_dependency": false
+    },
+    {
+      "task": "review-ranking",
+      "runtime": "TensorFlow.js Node JavaScript CPU",
+      "test_evidence": "tensorflow-results.txt",
+      "training_data": "labeled synthetic fixtures in verification only",
+      "client_validation": "not established",
+      "deployment": "per-model independent approval required; no automatic activation",
+      "language_dependency": false
+    }
+  ],
+  "language_model": "separate OpenAI-compatible gateway; local presence-only configuration is in configuration-status.json; diagnostic output is not verification"
+}

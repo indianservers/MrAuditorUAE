@@ -526,6 +526,8 @@ async def test_synthetic_fixture_demonstration(environment):
             "snapshot_id": snapshot,
             "year_end": "2026-12-31",
             "holidays": ["2026-12-26"],
+            "weekend_days": [5, 6],
+            "calendar_rationale": "Synthetic fixture explicitly uses a Monday to Friday operating calendar",
             "materiality": "100000",
             "voucher_sequential": True,
         },

@@ -75,6 +75,9 @@ async def source(db, ctx, eid, rid):
         for dependency in graph:
             if dependency.kind == "tp-dataset":
                 await tp.licensed_dataset(db, ctx, eid, dependency.id, pid, ai=True)
+    from app.modules.lineage.working_papers import require_current
+
+    await require_current(db, ctx, obj)
     return obj
 
 
@@ -85,6 +88,10 @@ async def validate_dependencies(db, ctx, eid, deps):
 
             eng = await scope(db, ctx, eid)
             package, context = await resolved(db, ctx, eng)
+            if item.get("case_catalogue_sha256"):
+                from app.modules.jurisdictions.ae.use_cases import MANIFEST
+                if item["case_catalogue_sha256"] != digest(MANIFEST):
+                    raise HTTPException(409, "Case contracts changed; create a fresh investigation")
             if (
                 str(eid) != item["id"]
                 or package.country != item["country"]
@@ -95,8 +102,8 @@ async def validate_dependencies(db, ctx, eid, deps):
                     409, "Reporting jurisdiction/context changed; create a fresh investigation"
                 )
         elif item.get("type") == "connector":
-            from app.modules.enterprise_ai.tools import invoke
             from app.modules.enterprise_ai.schemas import ToolInput
+            from app.modules.enterprise_ai.tools import invoke
             status = await invoke(db, ctx, eid, "connections.get_health", ToolInput(limit=50))
             current = next((r for r in status.sources if r["id"] == item["id"]), None)
             if current is None or current["sha256"] != item["sha256"]:

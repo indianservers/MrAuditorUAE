@@ -1,0 +1,33 @@
+flowchart LR
+  U[Authorized business question] --> E21[E21 reviewed orchestration and typed actions]
+  E01[E01 jurisdiction, effective rules and source adoption] --> E21
+  E22[E22 authorized connectors / controlled files] --> E02[E02 clean ingestion, OCR and reviewed extraction]
+  E02 --> E03[E03 scoped ledger, COA and quality]
+  E03 --> E04[E04 VAT]
+  E03 --> E05[E05 corporate tax]
+  E03 --> E09[E09 IFRS reporting]
+  E21 --> E04
+  E21 --> E05
+  E21 --> E09
+  E21 --> E10[E10 audit planning, materiality and sampling]
+  E21 --> E11[E11 analytics and explicitly labelled ML/baselines]
+  E05 --> E06[E06 QFZP and income segmentation]
+  E21 --> E07[E07 TP, relationships and supplied comparables]
+  E21 --> E08[E08 separate DMTT scope and inputs]
+  E09 --> E12[E12 receivables, ECL and revenue]
+  E09 --> E15[E15 leases, assets and impairment]
+  E09 --> E17[E17 inventory and NRV]
+  E09 --> E18[E18 consolidation and intercompany]
+  E21 --> E13[E13 payables and procurement]
+  E21 --> E14[E14 cash, bank and reviewed FX]
+  E21 --> E16[E16 payroll and benefits]
+  E21 --> E19[E19 supplied obligations and filing readiness]
+  E04 --> E20[E20 immutable evidence, inherited permissions and independent review]
+  E05 --> E20
+  E09 --> E20
+  E08 --> E20
+  E10 --> E20
+  E11 --> E20
+  E19 --> E20
+  E20 --> D[Visible reversible drafts and reviewed export authorization]
+  D --> H[Separate explicit professional approval; no autonomous posting, sending or filing]

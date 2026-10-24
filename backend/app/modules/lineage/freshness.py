@@ -55,6 +55,10 @@ async def mapping_receipt(db, tenant, entity):
 
 
 async def ml_current(db, ctx, obj, visited=None):
+    from app.core.operations_contracts import current as operations_current
+
+    if not await operations_current(db, ctx, obj):
+        return False
     from app.db.models.platform import Engagement
     from app.modules.ml.models import MLEvent
 

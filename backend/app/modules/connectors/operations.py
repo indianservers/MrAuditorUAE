@@ -210,6 +210,11 @@ async def balance_controls(identifier: uuid.UUID, data: BalanceControls, db: DB,
 @router.get("/connectors/operations/{identifier}", response_model=dict)
 async def health(identifier: uuid.UUID, db: DB, ctx: Manage):
     connection = await scoped(db, ctx, Connection, identifier)
+    from app.modules.connectors.health import summary
+
+    runs = (await db.scalars(select(SyncRun).where(
+        SyncRun.tenant_id == ctx.tenant_id, SyncRun.connection_id == identifier,
+    ).order_by(SyncRun.created_at.desc(), SyncRun.id.desc()).limit(100))).all()
     states = (
         await db.scalars(
             select(ConnectorState)
@@ -226,6 +231,7 @@ async def health(identifier: uuid.UUID, db: DB, ctx: Manage):
     ).all()
     return {
         "connection_id": str(identifier),
+        "operational_health": summary(connection, runs),
         "status": connection.status,
         "live_qualified": False,
         "records": [serialize(s) for s in states],

@@ -5,7 +5,9 @@
       "C:\\Indian Servers\\TheAuditor\\frontend\\node_modules\\@playwright\\test\\cli.js",
       "test",
       "--config",
-      "playwright.country-workflows.config.ts"
+      "playwright.country-workflows.config.ts",
+      "--grep",
+      "original CSV"
     ],
     "configFile": "C:\\Indian Servers\\TheAuditor\\frontend\\playwright.country-workflows.config.ts",
     "rootDir": "C:/Indian Servers/TheAuditor/frontend/e2e",
@@ -102,8 +104,8 @@
       "line": 0,
       "specs": [
         {
-          "title": "UAE source controls, BRS exceptions, exports and India isolation",
-          "ok": true,
+          "title": "original CSV and reviewed XLSX tables reach bank and payable reconciliations",
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -116,23 +118,58 @@
                 {
                   "workerIndex": 0,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 36820,
-                  "errors": [],
+                  "status": "failed",
+                  "duration": 7644,
+                  "error": {
+                    "message": "Error: locator.selectOption: Error: strict mode violation: getByLabel('Reviewed supporting bank table') resolved to 2 elements:\n    1) <select>…</select> aka getByLabel('Source originRetained source')\n    2) <select>…</select> aka getByLabel('Reviewed supporting bank tableSelect reviewed table')\n\nCall log:\n\u001b[2m  - waiting for getByLabel('Reviewed supporting bank table')\u001b[22m\n",
+                    "stack": "Error: locator.selectOption: Error: strict mode violation: getByLabel('Reviewed supporting bank table') resolved to 2 elements:\n    1) <select>…</select> aka getByLabel('Source originRetained source')\n    2) <select>…</select> aka getByLabel('Reviewed supporting bank tableSelect reviewed table')\n\nCall log:\n\u001b[2m  - waiting for getByLabel('Reviewed supporting bank table')\u001b[22m\n\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts:545:6",
+                    "location": {
+                      "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts",
+                      "column": 6,
+                      "line": 545
+                    },
+                    "snippet": "  543 |   await page\n  544 |     .getByLabel(\"Reviewed supporting bank table\")\n> 545 |     .selectOption(fixture.reviewed_xlsx_bank);\n      |      ^\n  546 |   await fill([\n  547 |     [\"Schedule title\", bankTitle],\n  548 |     [\"Bank account identifier\", \"BANK-1\"],"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts",
+                        "column": 6,
+                        "line": 545
+                      },
+                      "message": "Error: locator.selectOption: Error: strict mode violation: getByLabel('Reviewed supporting bank table') resolved to 2 elements:\n    1) <select>…</select> aka getByLabel('Source originRetained source')\n    2) <select>…</select> aka getByLabel('Reviewed supporting bank tableSelect reviewed table')\n\nCall log:\n\u001b[2m  - waiting for getByLabel('Reviewed supporting bank table')\u001b[22m\n\n\n  543 |   await page\n  544 |     .getByLabel(\"Reviewed supporting bank table\")\n> 545 |     .selectOption(fixture.reviewed_xlsx_bank);\n      |      ^\n  546 |   await fill([\n  547 |     [\"Schedule title\", bankTitle],\n  548 |     [\"Bank account identifier\", \"BANK-1\"],\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts:545:6"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T19:49:10.285Z",
+                  "startTime": "2026-10-24T21:04:58.777Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\country-workflows-original-dab3e-and-payable-reconciliations\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\country-workflows-original-dab3e-and-payable-reconciliations\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts",
+                    "column": 6,
+                    "line": 545
+                  }
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
-          "id": "e30b0a06ea3b0c92c29c-4910f104b29236674674",
+          "id": "e30b0a06ea3b0c92c29c-21b42b359901fbf0cdc3",
           "file": "country-workflows.spec.ts",
-          "line": 9,
+          "line": 420,
           "column": 1
         }
       ]
@@ -140,11 +177,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-24T19:49:09.792Z",
-    "duration": 37554.233,
-    "expected": 1,
+    "startTime": "2026-10-24T21:04:58.350Z",
+    "duration": 8263.804,
+    "expected": 0,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 1,
     "flaky": 0
   }
 }

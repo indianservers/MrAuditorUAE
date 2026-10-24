@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="17" failures="0" errors="0" time="1.118231">
+    <testsuite name="tests/country-workflows.test.tsx" timestamp="2026-10-24T20:30:27.808Z" hostname="DESKTOP-B3SR465" tests="17" failures="0" errors="0" skipped="0" time="1.118231">
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues reviewed bank-table reuse with its original evidence and independent controls" time="0.1867178">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues the explicitly selected bank debit/credit convention" time="0.0923676">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; submits explicit original CSV headings and exclusions without changing values" time="0.0913344">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues GSTR-2B with the recipient, return month and separate document control" time="0.0705185">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows payroll amounts first and reveals rule references on request" time="0.071537">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; binds payroll-rules imports to a selected clean retained document" time="0.0434477">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; binds benefit-rules imports to a selected clean retained document" time="0.0459261">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues INR payroll calculations using only independently reviewed rule sources" time="0.0619768">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; prepares ECR with declared establishment, wage month, members and amounts" time="0.0715761">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues an India invoice with explicit GSTIN, direction, month and component controls" time="0.0645363">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues a credit-normal payable GL control without a movement date" time="0.0650935">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues a committed account selection without asking for an exported copy" time="0.0555994">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; filters unavailable country workflows and wrong source types" time="0.0252745">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; offers native instructions only for the channel role, keeping independent schedules selectable" time="0.0176756">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues the selected independent bank sources and exact balances" time="0.0720789">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; keeps quarantined evidence disabled and rejects malformed currency controls" time="0.0555113">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows missing evidence as a blocker and disables approval" time="0.0236952">
+        </testcase>
+    </testsuite>
+</testsuites>

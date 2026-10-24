@@ -175,6 +175,8 @@ class Exposure(Strict):
     stage: Literal[1, 2, 3]
     years_to_shortfall: Nonnegative = Decimal(1)
     segment: str = Field(default="default", max_length=100)
+    override_loss: Nonnegative | None = None
+    override_reason: str = Field(default="", max_length=4000)
 
 
 class ECL(AccountingInput):

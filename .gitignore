@@ -39,3 +39,7 @@ frontend/.next-phase3/
 
 frontend/.next-ui-refresh/
 .private-ml-models/
+.next-mr-auditor-business/
+frontend/.next-mr-auditor-business/
+node_modules/
+frontend/.next-mr-auditor-business-build/

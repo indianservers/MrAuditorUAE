@@ -1,0 +1,611 @@
+{
+  "production_ready": false,
+  "engines": [
+    {
+      "id": "E01",
+      "name": "Jurisdiction, legal sources and effective rules",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "jurisdictions; regulatory; approved tax/VAT/TP rule records",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase1/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Primary-source retention, professional applicability and effective-date approval remain mandatory; no blanket legal certification.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "regulatory",
+          "jurisdiction",
+          "foundation"
+        ],
+        "passed": 56,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E02",
+      "name": "Ingestion, OCR and extraction",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "intelligence.documents; enterprise_ai.documents; clean evidence versions",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase1/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Qualified OCR/templates and completeness of real client documents; corrupt/quarantined evidence is not usable.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "document",
+          "evidence",
+          "native_workflow_sources"
+        ],
+        "passed": 261,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E03",
+      "name": "Ledger normalization and quality",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "accounting; intelligence.foundations; approved mapping and source snapshots",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase1/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Client population completeness and account mappings need independent controls; imports are not live sync.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "pipeline",
+          "foundation",
+          "accounting_connectors"
+        ],
+        "passed": 87,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E04",
+      "name": "VAT",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "vat.service; jurisdictions.ae.registration; jurisdictions.ae.vat_errors",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase2/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Advanced supply/advance cases remain bounded; no live authority filing or acceptance.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "vat",
+          "phase7"
+        ],
+        "passed": 75,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E05",
+      "name": "Corporate tax",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "tax.service; tax.contracts; reviewed adjustment/loss/election records",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase2/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Client adjustments, elections, tax basis and actual rule adoption require professional review.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "phase6",
+          "tax_"
+        ],
+        "passed": 51,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E06",
+      "name": "Free-zone CT",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "tax.calculations.qfzp and approved activity/substance classifications",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase2/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Unresolved activity/counterparty/substance facts block qualification; no automatic eligibility conclusion.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "qfzp",
+          "phase6"
+        ],
+        "passed": 33,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E07",
+      "name": "Transfer pricing and relationships",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "tp.service; supplied datasets; approved relationship/transaction records",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase2/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Licensed comparable data and qualified economic judgments; no inferred market research.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "phase8",
+          "relationship"
+        ],
+        "passed": 44,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E08",
+      "name": "DMTT",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "dmtt.service; separate group/entity inputs and scope decisions",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase2/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Unsupported special blending and incomplete MNE facts remain blocked; no invented zero tax.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "dmtt",
+          "phase9"
+        ],
+        "passed": 18,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E09",
+      "name": "IFRS and disclosures",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "ifrs.service; ifrs.contracts; ifrs.calculations; ifrs.fx",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase3/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Complete disclosure checklist, client mappings/policies, unsupported accounting cases and final release qualification.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "phase5",
+          "accounting_strengthening"
+        ],
+        "passed": 50,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E10",
+      "name": "Audit planning and sampling",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "audit_execution; audit_analytics; approved materiality policies",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase4/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Statistical projection/evaluation, arbitrary strata/replacements and professional audit opinion are not delivered.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "phase4",
+          "audit_operations"
+        ],
+        "passed": 68,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E11",
+      "name": "Journal analytics",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "audit_analytics; explicit ML/rules/statistical execution modes",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase4/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Client-trained quality, independent labels and approved thresholds remain unqualified despite synthetic CPU tests.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "analytics",
+          "ml_",
+          "foundation"
+        ],
+        "passed": 108,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E12",
+      "name": "Receivables and revenue",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "ifrs ECL/revenue; country_workflows settlement/ECL procedures",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase4/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Advanced FX, credit, advance, dispute and write-off lifecycle remains incomplete.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "audit_operations",
+          "shared_audit",
+          "practice_audit"
+        ],
+        "passed": 91,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E13",
+      "name": "Payables and procurement",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "country_workflows procurement, expenses and cutoff",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase4/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Supplier-master/bank ownership verification and actual payment-release workflow remain incomplete.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "audit_operations",
+          "practice_audit"
+        ],
+        "passed": 56,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E14",
+      "name": "Cash, bank and treasury",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "country_workflows bank-brs; reconciliation; ifrs.fx",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase4/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Full treasury-to-accounting/tax bridges and live bank connectivity; explicit fees/FX bridges require review.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "audit_operations",
+          "country_workflows",
+          "supporting_bank"
+        ],
+        "passed": 207,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E15",
+      "name": "Assets, leases and impairment",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "ifrs fixed-assets/lease/impairment engines",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase3/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Advanced asset/lease/impairment cases and client assumptions need separate qualification.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "accounting_strengthening",
+          "phase5"
+        ],
+        "passed": 50,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E16",
+      "name": "Payroll and benefits",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "country_workflows payroll/benefit sources; ifrs employee-benefits",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase3/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Jurisdiction-specific payroll/pension rules and payroll runs remain bounded; not a complete payroll product.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "payroll",
+          "benefit",
+          "phase5"
+        ],
+        "passed": 76,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E17",
+      "name": "Inventory",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "ifrs inventory/NRV; country_workflows count/movement bridge",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase3/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Advanced inventory costing/production and complete client stock populations remain dependencies.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "inventory",
+          "accounting_strengthening"
+        ],
+        "passed": 30,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E18",
+      "name": "Group reporting",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "ifrs consolidation/intercompany; tax groups remain separate",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase3/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Final group release, advanced ownership/FX/consolidation cases and group tax bridges remain bounded.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "consolidation",
+          "intercompany",
+          "group"
+        ],
+        "passed": 9,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E19",
+      "name": "Compliance readiness",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "regulatory templates/checklists; tax-deadline records; supplied obligations",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase5/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Obligations require explicitly reviewed rules/facts; automatic discovery of all statutory obligations is not implemented. Reminders are in-app only; no authority submission.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "final_foundations",
+          "phase10"
+        ],
+        "passed": 32,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E20",
+      "name": "Engagement, approval and evidence",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "audit_execution; lineage; immutable versions and source ACL inheritance",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase1/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Production role assignments, record retention, scanner deployment, recovery and professional quality gates require operational approval.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "phase4",
+          "foundation",
+          "tenant_isolation"
+        ],
+        "passed": 91,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E21",
+      "name": "Controlled AI orchestration",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "enterprise_ai.business; reviewed recipes; separate optional language gateway",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase5/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "Local gateway is not configured; diagnostic narratives are not independent verification. Unrestricted execution and self-approval are excluded.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "phase11",
+          "final_foundations"
+        ],
+        "passed": 35,
+        "failed": 0,
+        "skipped": 0,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    },
+    {
+      "id": "E22",
+      "name": "External integration health",
+      "classification": "Implemented with limitations",
+      "runtime_status": "bounded implementation; see actual test reports, not an uptime certification",
+      "supported_capabilities": "connectors; stored scoped connection/sync status; controlled file import",
+      "data_readiness": "synthetic verification; client data completeness not qualified",
+      "rule_model_verification": "explicit reviewed inputs; see source-policy-model-register.json",
+      "evidence_approval_controls": "tenant/engagement permissions, versioned evidence, separate preparer/reviewer and stale-source guards; operation-specific limits in phase report",
+      "verification_evidence": [
+        "../phase5/README.md",
+        "backend-results.xml",
+        "focused-integration-results.xml"
+      ],
+      "remaining_limitations": "No live provider is qualified here. Tenant consent, provider edition, scopes, source totals and sandbox/live qualification remain prerequisites.",
+      "actual_verification": {
+        "index": "test-verification.json",
+        "selectors": [
+          "connector",
+          "native_workflow_sources",
+          "final_foundations"
+        ],
+        "passed": 183,
+        "failed": 0,
+        "skipped": 3,
+        "meaning": "Keyword-indexed technical tests, not complete engine acceptance or client-data qualification"
+      }
+    }
+  ],
+  "dependency_map": "E01/E02/E03 inputs -> E04-E08 tax and E09/E15-E18 accounting -> E10-E14 audit/operations -> E19 obligations/E20 review; E21 authorized orchestration and E22 controlled external inputs",
+  "cycle_prevention": "E09 pre-tax profile -> E05 -> separate E09 post-tax profile; lineage traversal detects cycles and stale references. Not every execution calls every engine."
+}

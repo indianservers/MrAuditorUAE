@@ -1,4 +1,5 @@
 import uuid
+from contextvars import ContextVar
 from datetime import date
 from decimal import ROUND_HALF_UP, Decimal
 from typing import Any
@@ -67,7 +68,7 @@ async def policy(db, ctx, eid):
     return p
 
 
-async def get_record(db, ctx, eid, rid, permission="audit.read", mutable=False, *, lock=True):
+async def _get_record(db, ctx, eid, rid, permission="audit.read", mutable=False, *, lock=True):
     if permission == "audit.read" and "audit.read" not in ctx.permissions:
         scoped_kind = await db.scalar(
             select(AuditRecord.kind).where(
@@ -104,6 +105,36 @@ async def get_record(db, ctx, eid, rid, permission="audit.read", mutable=False, 
     return obj
 
 
+_source_access_path: ContextVar[frozenset] = ContextVar(
+    "audit_source_access_path", default=frozenset()
+)
+
+
+async def get_record(db, ctx, eid, rid, permission="audit.read", mutable=False, *, lock=True):
+    """Generated source-linked papers retain specialist permissions on every read."""
+    key = (ctx.tenant_id, eid, rid)
+    path = _source_access_path.get()
+    if key in path or len(path) >= 100:
+        raise HTTPException(409, "Source authorization cycle/depth limit")
+    token = _source_access_path.set(path | {key})
+    try:
+        obj = await _get_record(db, ctx, eid, rid, permission, mutable, lock=lock)
+        if obj.kind == "working-papers" and obj.body.get("inherit_source_permissions"):
+            for reference in obj.body.get("sources", []):
+                identifier = uuid.UUID(str(reference["id"]))
+                if reference["kind"] in {"record", "finding"}:
+                    await get_record(db, ctx, eid, identifier, lock=False)
+                elif reference["kind"] == "intelligence":
+                    from app.modules.intelligence.service import event
+
+                    await event(db, ctx, eid, identifier)
+                elif reference["kind"] in {"journal", "snapshot", "sample"}:
+                    await engagement_permissions(db, ctx, eid, "accounting.read")
+        return obj
+    finally:
+        _source_access_path.reset(token)
+
+
 def materiality(data: Materiality):
     overall = (data.benchmark_amount * data.selected_percentage / 100).quantize(
         Decimal("0.01"), rounding=ROUND_HALF_UP
@@ -127,9 +158,19 @@ def materiality(data: Materiality):
 
 
 async def source_record(db, ctx, eng, source):
-    if source.kind=="intelligence":
+    if source.kind == "ml":
+        from app.modules.lineage.freshness import require_ml_current
+        from app.modules.ml.service import get
+
+        obj = await get(db, ctx, source.id)
+        if obj.engagement_id != eng.id or obj.kind not in {"inference", "feedback"}:
+            raise HTTPException(422, "Scoped ML prediction or reviewed feedback required")
+        await require_ml_current(db, ctx, obj)
+        return obj
+    if source.kind == "intelligence":
         from app.modules.intelligence.service import event
-        return await event(db,ctx,eng.id,source.id,True)
+
+        return await event(db, ctx, eng.id, source.id, True)
     models: dict[str, Any] = {
         "record": AuditRecord,
         "finding": Finding,
@@ -238,6 +279,29 @@ async def validate_body(db, ctx, eng, kind, body, record_id=None):
         from app.modules.audit_execution.schemas import Source
 
         sample = await source_record(db, ctx, eng, Source(kind="sample", id=data.sample_id))
+        if data.evaluation_basis == "statistical" or data.projected_misstatement is not None:
+            raise HTTPException(
+                422,
+                "Statistical projection/evaluation is not implemented; do not project a targeted or unevaluated selection",
+            )
+        if data.procedure_id:
+            procedure = await get_record(db, ctx, eng.id, data.procedure_id)
+            if procedure.kind != "procedures" or procedure.status not in {"APPROVED", "LOCKED"}:
+                raise HTTPException(409, "Approved scoped audit procedure required")
+            if not data.steps_performed.strip():
+                raise HTTPException(422, "Record the steps actually performed")
+    if kind == "procedures":
+        for identifier in data.risk_ids:
+            risk = await get_record(db, ctx, eng.id, identifier)
+            if risk.kind != "risks":
+                raise HTTPException(422, "Procedure risk link must reference an engagement risk")
+    if kind == "findings" and data.correction_status == "corrected":
+        if not data.correction_evidence_id:
+            raise HTTPException(422, "Corrected misstatement requires correction evidence")
+        correction = await get_record(db, ctx, eng.id, data.correction_evidence_id)
+        if correction.status not in {"APPROVED", "LOCKED"}:
+            raise HTTPException(409, "Correction evidence must be independently reviewed")
+    if kind == "testing":
         selected = {
             str(i)
             for i in (
@@ -329,6 +393,21 @@ async def revision(db, ctx, obj, request_id, action):
     }
     if receipts is not None:
         snapshot["dependency_receipts"] = receipts
+    from app.core.operations_contracts import receipt as execution_receipt
+
+    snapshot["operations_execution"] = await execution_receipt(
+        db,
+        ctx,
+        kind=obj.kind,
+        eng=eng,
+        dependencies=receipts or (),
+        body={
+            "parameters": {"record_id": str(obj.id), "record_version": obj.version},
+            "review_status": obj.status,
+        },
+        mode="unavailable",
+        metadata_only=True,
+    )
     db.add(
         AuditRevision(
             tenant_id=ctx.tenant_id,
@@ -372,6 +451,15 @@ async def create(db, ctx, eid, kind, data, request_id):
 
 async def update(db, ctx, eid, rid, data, request_id):
     obj = await get_record(db, ctx, eid, rid, mutable=True)
+    if obj.kind == "working-papers" and obj.body.get("inherit_source_permissions"):
+        previous = {(s["kind"], str(s["id"])) for s in obj.body.get("sources", [])}
+        proposed = {(s["kind"], str(s["id"])) for s in data.body.get("sources", [])}
+        if not previous <= proposed:
+            raise HTTPException(
+                409,
+                "Generated workpaper source links cannot be removed through a generic edit; prepare a separately reviewed replacement",
+            )
+        data.body["inherit_source_permissions"] = True
     if obj.kind == "tp-ai":
         raise HTTPException(409, "TP AI suggestions are immutable; use the TP decision workflow")
     eng = await engagement(db, ctx, eid, PREPARE[obj.kind], True)
@@ -552,6 +640,17 @@ async def action(db, ctx, eid, rid, data, request_id):
         from app.modules.lineage.working_papers import require_current
 
         await require_current(db, ctx, obj)
+        if obj.kind == "procedures":
+            for identifier in obj.body.get("risk_ids", []):
+                risk = await get_record(db, ctx, eid, uuid.UUID(identifier))
+                if risk.status not in {"APPROVED", "LOCKED"}:
+                    raise HTTPException(
+                        409, "Approve linked risks before approving their response procedure"
+                    )
+        if obj.kind == "testing" and obj.body.get("procedure_id"):
+            procedure = await get_record(db, ctx, eid, uuid.UUID(obj.body["procedure_id"]))
+            if procedure.status not in {"APPROVED", "LOCKED"}:
+                raise HTTPException(409, "Linked procedure is no longer approved")
     if data.action == "submit":
         if obj.status not in {"IN_PROGRESS", "REVISED", "REVIEW_NOTES"}:
             raise HTTPException(409, "Only prepared work can be submitted")
@@ -819,6 +918,42 @@ async def completion(db, ctx, eid):
     return {
         "checks": checks,
         "ready": all(c["passed"] for c in checks),
+        "misstatement_register": {
+            "corrected_gross": str(
+                sum(
+                    (
+                        abs(Decimal(str(r.body["financial_impact"])))
+                        for r in rows
+                        if r.kind == "findings"
+                        and r.body.get("finding_type") == "misstatement"
+                        and r.body.get("correction_status") == "corrected"
+                        and r.body.get("financial_impact") is not None
+                    ),
+                    Decimal(0),
+                )
+            ),
+            "uncorrected_gross": str(
+                sum(
+                    (
+                        abs(Decimal(str(r.body["financial_impact"])))
+                        for r in rows
+                        if r.kind == "findings"
+                        and r.body.get("finding_type") == "misstatement"
+                        and r.body.get("correction_status") != "corrected"
+                        and r.body.get("financial_impact") is not None
+                    ),
+                    Decimal(0),
+                )
+            ),
+            "unquantified_ids": [
+                str(r.id)
+                for r in rows
+                if r.kind == "findings"
+                and r.body.get("finding_type") == "misstatement"
+                and r.body.get("financial_impact") is None
+            ],
+            "qualitative_review": "Amounts do not determine reporting implications; qualified assessment required",
+        },
         "audit_opinion": "Human professional judgment required; no opinion generated",
     }
 

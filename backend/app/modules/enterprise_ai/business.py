@@ -11,7 +11,7 @@ from app.modules.audit_execution import service as audit
 from app.modules.audit_execution.models import AuditRecord
 from app.modules.audit_execution.schemas import RecordInput, Strict
 from app.modules.enterprise_ai.security import digest, scope, serial
-from app.modules.jurisdictions.ae.use_cases import CASES
+from app.modules.jurisdictions.ae.use_cases import CASES, MANIFEST
 from app.modules.jurisdictions.workspace import resolved
 
 
@@ -19,7 +19,10 @@ class Execute(Strict):
     action: Literal[
         "calculate",
         "registration-exposure",
+        "historical-vat-errors",
         "fx-review",
+        "prepare-readiness-pack",
+        "request-approved-export",
         "workflow",
         "draft-workpaper",
         "draft-finding",
@@ -88,6 +91,7 @@ async def inputs(db, ctx, eid, identifier, limit=20):
         "items": rows,
         "context_version": context["version"],
         "context_receipt": {
+            "case_catalogue_sha256": digest(MANIFEST),
             "type": "jurisdiction",
             "id": str(eid),
             "country": "AE",
@@ -143,6 +147,14 @@ def module_url(case, eid):
 
 async def execute(db, ctx, eid, identifier, data: Execute, request_id):
     eng, case, _ = await case_scope(db, ctx, eid, identifier, "ai.workflow.run")
+    await audit.engagement(db, ctx, eid, "ai.workflow.run", True)
+    if identifier == 48 and (
+        data.action.startswith("draft-") or data.action == "propose-adjustment"
+    ):
+        raise HTTPException(
+            409,
+            "Restricted AML case-workpaper storage is required; generic drafts cannot copy this workstream into broader-access records",
+        )
     from app.modules.enterprise_ai.service import locked
     from app.modules.intelligence import service as intelligence
     from app.modules.intelligence.models import IntelligenceEvent
@@ -189,7 +201,62 @@ async def execute(db, ctx, eid, identifier, data: Execute, request_id):
             "status": job.status,
             "execution_mode": "queued_deterministic_engine",
         }
-    if data.action == "fx-review":
+    if data.action == "historical-vat-errors":
+        if identifier != 8 or not data.record_id:
+            raise HTTPException(
+                422, "Select historical VAT errors and approved original/corrected-period evidence"
+            )
+        from app.modules.audit_execution.access import engagement_permissions
+        from app.modules.jurisdictions.ae.vat_errors import ErrorSchedule
+        from app.modules.jurisdictions.ae.vat_errors import calculate as calculate_errors
+
+        await engagement_permissions(db, ctx, eid, "vat.calculate")
+        proof = await audit.get_record(db, ctx, eid, data.record_id, lock=False)
+        if proof.kind not in {"vat-return", "evidence", "working-papers"}:
+            raise HTTPException(
+                422, "Choose an original filing/corrected-data evidence pack or VAT return record"
+            )
+        if proof.status not in {"APPROVED", "LOCKED"}:
+            raise HTTPException(
+                409, "Approved historical filing and corrected-data evidence required"
+            )
+        schedule = ErrorSchedule.model_validate(data.payload)
+        output = {"engine": "vat-error-schedule", "results": calculate_errors(schedule)}
+        dependencies.append({"type": "record", "id": str(proof.id), "version": proof.version})
+    elif data.action == "prepare-readiness-pack":
+        from app.modules.tax.connected import ConnectedInput, assess
+
+        await audit.engagement(db, ctx, eid, "tax.computation.prepare", True)
+        pack = await assess(db, ctx, eng, ConnectedInput.model_validate(data.payload), request_id)
+        dependencies.append(intelligence.event_receipt(pack))
+        output = {
+            "id": str(pack.id),
+            "kind": pack.kind,
+            "completeness": pack.body["completeness"],
+            "issues": pack.body["issues"],
+            "filing_status": "NOT_SUBMITTED",
+            "authority_assessment": "NOT_ESTABLISHED",
+        }
+    elif data.action == "request-approved-export":
+        if not data.record_id:
+            raise HTTPException(422, "Select an independently reviewed report or schedule")
+        from app.modules.audit_execution.access import engagement_permissions
+
+        await engagement_permissions(db, ctx, eid, "audit.export")
+        export = await intelligence.event(db, ctx, eid, data.record_id, True)
+        if export.body.get("review_status") != "REVIEWED":
+            raise HTTPException(
+                409,
+                "Only independently reviewed current results may use this approved-export action",
+            )
+        dependencies.append(intelligence.event_receipt(export))
+        output = {
+            "id": str(export.id),
+            "authorized_download_endpoint": f"/intelligence/engagements/{eid}/events/{export.id}/export",
+            "meaning": "Download authorization only; the export endpoint rechecks permissions and produces the artifact",
+            "accepted_filing": False,
+        }
+    elif data.action == "fx-review":
         if identifier != 45 or not data.record_id:
             raise HTTPException(422, "Select FX review and approved classification/rate evidence")
         from app.modules.audit_execution.access import engagement_permissions
@@ -214,7 +281,8 @@ async def execute(db, ctx, eid, identifier, data: Execute, request_id):
         if identifier != 1 or not data.record_id:
             raise HTTPException(422, "Select VAT registration and an approved effective rule")
         from app.modules.audit_execution.access import engagement_permissions
-        from app.modules.jurisdictions.ae.registration import Exposure, calculate
+        from app.modules.jurisdictions.ae.registration import Exposure
+        from app.modules.jurisdictions.ae.registration import calculate as calculate_registration
         from app.modules.vat import service as vat
         from app.modules.vat.schemas import Rule
 
@@ -230,8 +298,20 @@ async def execute(db, ctx, eid, identifier, data: Execute, request_id):
         # Each amount is tied to an authorized journal line or approved forecast evidence record.
         from app.modules.enterprise_ai.tools import journal_source
 
+        seen_journals = set()
         for row in population.historical:
             line = await journal_source(db, ctx, eid, uuid.UUID(row.id))
+            if line.functional_currency != "AED":
+                raise HTTPException(
+                    422,
+                    "Registration exposure requires reviewed AED source values; other functional currencies need an approved conversion workstream",
+                )
+            if line.journal_id in seen_journals:
+                raise HTTPException(
+                    422,
+                    "Select one reviewed net source line per journal to prevent debit/credit or tax-line double counting",
+                )
+            seen_journals.add(line.journal_id)
             if (
                 line.posting_date != row.date
                 or line.base_debit + line.base_credit != row.amount_aed
@@ -248,7 +328,7 @@ async def execute(db, ctx, eid, identifier, data: Execute, request_id):
         dependencies.append({"type": "record", "id": str(rule.id), "version": rule.version})
         output = {
             "engine": "vat-registration",
-            "results": calculate(population, body.registration_parameters),
+            "results": calculate_registration(population, body.registration_parameters),
             "rule_id": str(rule.id),
             "rule_version": rule.version,
         }
@@ -347,25 +427,50 @@ async def execute(db, ctx, eid, identifier, data: Execute, request_id):
         if kind is None:
             raise HTTPException(422, "Unsupported action")
         draft = RecordInput.model_validate(data.payload)
+        if kind == "working-papers":
+            draft.body["inherit_source_permissions"] = True
+            for reference in draft.body.get("sources", []):
+                if reference["kind"] == "intelligence":
+                    src = await intelligence.event(
+                        db, ctx, eid, uuid.UUID(str(reference["id"])), True
+                    )
+                    dependencies.append(intelligence.event_receipt(src))
+                elif reference["kind"] in {"record", "finding"}:
+                    src = await audit.get_record(
+                        db, ctx, eid, uuid.UUID(str(reference["id"])), lock=False
+                    )
+                    dependencies.append(
+                        {"type": "record", "id": str(src.id), "version": src.version}
+                    )
         if data.action == "draft-finding":
             if identifier != 38 or not draft.body.get("sources"):
                 raise HTTPException(422, "Finding workflow requires reviewed source exceptions")
             for field in ("condition", "criteria", "cause", "effect", "recommendation"):
                 if not str(draft.body.get(field, "")).strip():
-                    raise HTTPException(422, f"Finding needs {field}; record unknown facts explicitly")
+                    raise HTTPException(
+                        422, f"Finding needs {field}; record unknown facts explicitly"
+                    )
             for reference in draft.body["sources"]:
                 if reference["kind"] == "intelligence":
-                    source = await intelligence.event(db, ctx, eid, uuid.UUID(reference["id"]), True)
+                    source = await intelligence.event(
+                        db, ctx, eid, uuid.UUID(reference["id"]), True
+                    )
                     if source.body.get("review_status") != "REVIEWED":
                         raise HTTPException(409, "Independently reviewed source exception required")
                     dependencies.append(intelligence.event_receipt(source))
                 elif reference["kind"] == "record":
-                    source = await audit.get_record(db, ctx, eid, uuid.UUID(reference["id"]), lock=False)
+                    source = await audit.get_record(
+                        db, ctx, eid, uuid.UUID(reference["id"]), lock=False
+                    )
                     if source.status not in {"APPROVED", "LOCKED"}:
                         raise HTTPException(409, "Approved source exception required")
-                    dependencies.append({"type": "record", "id": str(source.id), "version": source.version})
+                    dependencies.append(
+                        {"type": "record", "id": str(source.id), "version": source.version}
+                    )
                 else:
-                    raise HTTPException(422, "Findings must cite reviewed records or reviewed engine exceptions")
+                    raise HTTPException(
+                        422, "Findings must cite reviewed records or reviewed engine exceptions"
+                    )
         # Uploaded narrative cannot turn a draft into an approved journal or a sent message.
         result = await audit.create(db, ctx, eid, kind, draft, request_id)
         output = {
@@ -386,8 +491,11 @@ async def execute(db, ctx, eid, identifier, data: Execute, request_id):
             "action": data.action,
             "idempotency_key": data.idempotency_key,
             "request_sha256": fingerprint,
+            "case_catalogue_sha256": digest(MANIFEST),
             "output": serial(output),
-            "execution_mode": "deterministic_engine",
+            "execution_mode": "governed_draft_creation"
+            if data.action.startswith("draft-") or data.action == "propose-adjustment"
+            else "deterministic_engine",
             "review_status": "UNVERIFIED",
             "professional_conclusion": None,
         },

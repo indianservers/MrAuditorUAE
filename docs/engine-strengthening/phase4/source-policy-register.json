@@ -1,0 +1,10 @@
+{
+  "status": "reference_only_requires_applicability_and_reviewer_approval",
+  "sources": [
+    {"publisher":"IAASB","title":"2025 Handbook","url":"https://www.iaasb.org/publications/2025-handbook-international-quality-management-auditing-review-other-assurance-and-related-services","purpose":"Audit framework reference; included not-yet-effective standards must not be adopted automatically"},
+    {"publisher":"IAASB","title":"2022 Handbook Volume 1","url":"https://ifacweb.blob.core.windows.net/publicfiles/2023-10/IAASB-2022-Handbook-Volume-1.pdf","purpose":"ISA 500/530 evidence and sampling reference; current applicable edition remains reviewer dependency"},
+    {"publisher":"IFRS Foundation","title":"IFRS 9","url":"https://www.ifrs.org/issued-standards/list-of-standards/ifrs-9-financial-instruments/","purpose":"Financial instruments and expected credit loss reference; entity policy, licensed applicable text and assumptions require approval"}
+  ],
+  "automatic_policy_adoption": false,
+  "compliance_claim": false
+}

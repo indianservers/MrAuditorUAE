@@ -268,7 +268,9 @@ async def workpaper_checks(db, ctx, eng, rule):
             x
             for x in rows
             if x.kind == "grc-obligation"
-            and x.body["deadline"] < str(today)
+            and (x.body.get("extension_deadline") or x.body.get("deadline"))
+            and (x.body.get("extension_deadline") or x.body["deadline"]) < str(today)
+            and x.body.get("filing_stage") not in {"submitted", "acknowledged"}
             and x.body["compliance_assessment"] != "supported"
             and (
                 rule.rule_code != "overdue_reconciliations" or x.body["module"] == "reconciliation"

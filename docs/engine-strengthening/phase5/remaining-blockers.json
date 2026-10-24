@@ -1,0 +1,245 @@
+{
+  "production_release_blocked": true,
+  "items": [
+    {
+      "id": "scope-E01",
+      "affected_engines": [
+        "E01"
+      ],
+      "affected_workflows": "Jurisdiction, legal sources and effective rules",
+      "blocker": "Primary-source retention, professional applicability and effective-date approval remain mandatory; no blanket legal certification.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E02",
+      "affected_engines": [
+        "E02"
+      ],
+      "affected_workflows": "Ingestion, OCR and extraction",
+      "blocker": "Qualified OCR/templates and completeness of real client documents; corrupt/quarantined evidence is not usable.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E03",
+      "affected_engines": [
+        "E03"
+      ],
+      "affected_workflows": "Ledger normalization and quality",
+      "blocker": "Client population completeness and account mappings need independent controls; imports are not live sync.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E04",
+      "affected_engines": [
+        "E04"
+      ],
+      "affected_workflows": "VAT",
+      "blocker": "Advanced supply/advance cases remain bounded; no live authority filing or acceptance.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E05",
+      "affected_engines": [
+        "E05"
+      ],
+      "affected_workflows": "Corporate tax",
+      "blocker": "Client adjustments, elections, tax basis and actual rule adoption require professional review.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E06",
+      "affected_engines": [
+        "E06"
+      ],
+      "affected_workflows": "Free-zone CT",
+      "blocker": "Unresolved activity/counterparty/substance facts block qualification; no automatic eligibility conclusion.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E07",
+      "affected_engines": [
+        "E07"
+      ],
+      "affected_workflows": "Transfer pricing and relationships",
+      "blocker": "Licensed comparable data and qualified economic judgments; no inferred market research.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E08",
+      "affected_engines": [
+        "E08"
+      ],
+      "affected_workflows": "DMTT",
+      "blocker": "Unsupported special blending and incomplete MNE facts remain blocked; no invented zero tax.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E09",
+      "affected_engines": [
+        "E09"
+      ],
+      "affected_workflows": "IFRS and disclosures",
+      "blocker": "Complete disclosure checklist, client mappings/policies, unsupported accounting cases and final release qualification.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E10",
+      "affected_engines": [
+        "E10"
+      ],
+      "affected_workflows": "Audit planning and sampling",
+      "blocker": "Statistical projection/evaluation, arbitrary strata/replacements and professional audit opinion are not delivered.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E11",
+      "affected_engines": [
+        "E11"
+      ],
+      "affected_workflows": "Journal analytics",
+      "blocker": "Client-trained quality, independent labels and approved thresholds remain unqualified despite synthetic CPU tests.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E12",
+      "affected_engines": [
+        "E12"
+      ],
+      "affected_workflows": "Receivables and revenue",
+      "blocker": "Advanced FX, credit, advance, dispute and write-off lifecycle remains incomplete.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E13",
+      "affected_engines": [
+        "E13"
+      ],
+      "affected_workflows": "Payables and procurement",
+      "blocker": "Supplier-master/bank ownership verification and actual payment-release workflow remain incomplete.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E14",
+      "affected_engines": [
+        "E14"
+      ],
+      "affected_workflows": "Cash, bank and treasury",
+      "blocker": "Full treasury-to-accounting/tax bridges and live bank connectivity; explicit fees/FX bridges require review.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E15",
+      "affected_engines": [
+        "E15"
+      ],
+      "affected_workflows": "Assets, leases and impairment",
+      "blocker": "Advanced asset/lease/impairment cases and client assumptions need separate qualification.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E16",
+      "affected_engines": [
+        "E16"
+      ],
+      "affected_workflows": "Payroll and benefits",
+      "blocker": "Jurisdiction-specific payroll/pension rules and payroll runs remain bounded; not a complete payroll product.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E17",
+      "affected_engines": [
+        "E17"
+      ],
+      "affected_workflows": "Inventory",
+      "blocker": "Advanced inventory costing/production and complete client stock populations remain dependencies.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E18",
+      "affected_engines": [
+        "E18"
+      ],
+      "affected_workflows": "Group reporting",
+      "blocker": "Final group release, advanced ownership/FX/consolidation cases and group tax bridges remain bounded.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E19",
+      "affected_engines": [
+        "E19"
+      ],
+      "affected_workflows": "Compliance readiness",
+      "blocker": "Obligations require explicitly reviewed rules/facts; automatic discovery of all statutory obligations is not implemented. Reminders are in-app only; no authority submission.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E20",
+      "affected_engines": [
+        "E20"
+      ],
+      "affected_workflows": "Engagement, approval and evidence",
+      "blocker": "Production role assignments, record retention, scanner deployment, recovery and professional quality gates require operational approval.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E21",
+      "affected_engines": [
+        "E21"
+      ],
+      "affected_workflows": "Controlled AI orchestration",
+      "blocker": "Local gateway is not configured; diagnostic narratives are not independent verification. Unrestricted execution and self-approval are excluded.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "scope-E22",
+      "affected_engines": [
+        "E22"
+      ],
+      "affected_workflows": "External integration health",
+      "blocker": "No live provider is qualified here. Tenant consent, provider edition, scopes, source totals and sandbox/live qualification remain prerequisites.",
+      "required_resolution": "Approve bounded production scope and supply the missing evidence/implementation/qualification described here and in the linked phase report"
+    },
+    {
+      "id": "catalogue-200",
+      "affected_engines": [
+        "E01",
+        "E02",
+        "E03",
+        "E04",
+        "E05",
+        "E06",
+        "E07",
+        "E08",
+        "E09",
+        "E10",
+        "E11",
+        "E12",
+        "E13",
+        "E14",
+        "E15",
+        "E16",
+        "E17",
+        "E18",
+        "E19",
+        "E20",
+        "E21",
+        "E22"
+      ],
+      "affected_workflows": "Authoritative use cases 001-200",
+      "blocker": "Definitions and authoritative ID mapping were not supplied/found",
+      "required_resolution": "Provide the exact 200-case catalogue, then reconcile and verify each defined workflow"
+    },
+    {
+      "id": "operations",
+      "affected_engines": [
+        "E02",
+        "E20",
+        "E21",
+        "E22"
+      ],
+      "affected_workflows": "Production storage, credentials, scanning, recovery and live integrations",
+      "blocker": "Local synthetic verification does not qualify deployment or live providers",
+      "required_resolution": "Complete operations.md and existing release gates with the final release artifacts"
+    }
+  ]
+}

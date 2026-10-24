@@ -3,7 +3,7 @@ from decimal import Decimal
 
 import pytest
 
-from app.modules.audit_analytics.engine import RULES, AnalyticsEngine, risk_score
+from app.modules.audit_analytics.engine import RULES, VERSION, AnalyticsEngine, risk_score
 from app.modules.audit_analytics.schemas import AnalyticsRequest
 
 
@@ -77,6 +77,8 @@ def configured():
         materiality=Decimal(10),
         high_value=Decimal(10),
         holidays=["2026-12-31"],
+        weekend_days=[5, 6],
+        calendar_rationale="Synthetic Saturday/Sunday operating calendar for this test engagement",
         year_end="2026-12-31",
         timezone="Asia/Dubai",
         business_hours=(9, 17),
@@ -95,15 +97,45 @@ def configured():
 def test_each_rule_reproducible_positive(engine, configured, rule):
     result = {r["rule_id"]: r for r in engine.evaluate(configured)}[rule]
     assert result["flagged_count"] > 0, (rule, result)
-    assert result["rule_version"] == "2.0.0" and result["calculation_evidence"]
+    assert result["rule_version"] == VERSION and result["calculation_evidence"]
 
 
-@pytest.mark.parametrize("rule", ["J02", "J03", "J10", "J11", "J14", "J15", "J18", "J19", "S21"])
+@pytest.mark.parametrize(
+    "rule", ["J01", "J02", "J03", "J10", "J11", "J14", "J15", "J18", "J19", "S21"]
+)
 def test_missing_prerequisites(engine, rule):
     result = {r["rule_id"]: r for r in engine.evaluate(AnalyticsRequest(snapshot_id=uuid.uuid4()))}[
         rule
     ]
     assert result["status"] == "not_testable" and result["tested_population"] == 0
+
+
+def test_weekend_rule_uses_the_assessed_calendar_instead_of_a_country_default(engine, configured):
+    saturday = {r["rule_id"]: r for r in engine.evaluate(configured)}["J01"]
+    friday = {
+        r["rule_id"]: r
+        for r in engine.evaluate(configured.model_copy(update={"weekend_days": [4]}))
+    }["J01"]
+    assert saturday["flagged_count"] == 2
+    assert friday["flagged_count"] == 0 and friday["status"] == "passed"
+    assert all(code != "J01" for chunk in engine.flags() for code, _, _ in chunk)
+    unassessed = {
+        r["rule_id"]: r for r in engine.evaluate(AnalyticsRequest(snapshot_id=uuid.uuid4()))
+    }["J01"]
+    assert unassessed["status"] == "not_testable" and unassessed["flagged_count"] == 0
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"weekend_days": [5], "calendar_rationale": ""},
+        {"weekend_days": [5, 5], "calendar_rationale": "Reviewed calendar"},
+        {"weekend_days": [7], "calendar_rationale": "Reviewed calendar"},
+    ],
+)
+def test_invalid_or_unassessed_calendar_is_rejected(changes):
+    with pytest.raises(ValueError):
+        AnalyticsRequest(snapshot_id=uuid.uuid4(), **changes)
 
 
 def test_risk_and_boundary():

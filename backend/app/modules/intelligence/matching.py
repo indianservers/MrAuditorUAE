@@ -8,7 +8,9 @@ from decimal import Decimal
 
 
 def normal(value):
-    return "".join(c for c in unicodedata.normalize("NFKC", str(value or "")).casefold() if c.isalnum())
+    return "".join(
+        c for c in unicodedata.normalize("NFKC", str(value or "")).casefold() if c.isalnum()
+    )
 
 
 def compare_voucher(transaction, document, amount_tolerance=Decimal(0), date_tolerance=0):
@@ -112,7 +114,12 @@ def compare_voucher(transaction, document, amount_tolerance=Decimal(0), date_tol
 
 
 def reconcile_transactions(left, right, tolerance=Decimal(0), date_tolerance=0, max_group_size=3):
-    if not tolerance.is_finite() or tolerance < 0 or not 0 <= date_tolerance <= 365 or not 1 <= max_group_size <= 6:
+    if (
+        not tolerance.is_finite()
+        or tolerance < 0
+        or not 0 <= date_tolerance <= 365
+        or not 1 <= max_group_size <= 6
+    ):
         raise ValueError("Invalid bounded matching policy")
     if len(left) > 20000 or len(right) > 20000:
         raise ValueError("Transaction matching bound is 20,000 rows per side; partition the source")
@@ -157,8 +164,10 @@ def reconcile_transactions(left, right, tolerance=Decimal(0), date_tolerance=0, 
                 or normal(a["counterparty"]) == normal(b["counterparty"])
             )
             and (
-                bool(normal(a.get("reference"))) and normal(a.get("reference")) == normal(b.get("reference"))
-                or bool(normal(a.get("counterparty"))) and normal(a.get("counterparty")) == normal(b.get("counterparty"))
+                bool(normal(a.get("reference")))
+                and normal(a.get("reference")) == normal(b.get("reference"))
+                or bool(normal(a.get("counterparty")))
+                and normal(a.get("counterparty")) == normal(b.get("counterparty"))
             )
             and Decimal(a["amount"]) != 0
         )
@@ -219,8 +228,10 @@ def reconcile_transactions(left, right, tolerance=Decimal(0), date_tolerance=0, 
         target = right_groups.get(key, [])
         if not target or len(source) > max_group_size or len(target) > max_group_size:
             continue
-        if not (all(Decimal(row["amount"]) > 0 for row in source + target)
-                or all(Decimal(row["amount"]) < 0 for row in source + target)):
+        if not (
+            all(Decimal(row["amount"]) > 0 for row in source + target)
+            or all(Decimal(row["amount"]) < 0 for row in source + target)
+        ):
             continue
         if (
             max(date.fromisoformat(r["date"]) for r in source + target)

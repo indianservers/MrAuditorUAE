@@ -1,0 +1,39 @@
+{
+  "gstin": "27ABCDE5678G1Z8",
+  "rtnprd": "062026",
+  "version": "1.0",
+  "gendt": "14-07-2026",
+  "docdata": {
+    "b2b": [
+      {
+        "ctin": "29ABCDE1234F1Z5",
+        "supprd": "062026",
+        "inv": [
+          {
+            "inum": "SYNTHETIC-1",
+            "typ": "R",
+            "dt": "15-06-2026",
+            "val": 118,
+            "txval": 100,
+            "igst": 18,
+            "cgst": 0,
+            "sgst": 0,
+            "cess": 0,
+            "itcavl": "Y",
+            "rev": "N",
+            "imsStatus": "N"
+          }
+        ]
+      }
+    ]
+  },
+  "cpsumm": {
+    "b2b": [
+      {
+        "ctin": "29ABCDE1234F1Z5",
+        "supprd": "062026",
+        "ttldocs": 1
+      }
+    ]
+  }
+}

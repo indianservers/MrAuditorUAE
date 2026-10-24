@@ -1,0 +1,355 @@
+{
+  "synthetic": true,
+  "cases": [
+    {
+      "use_case_id": 1,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 2,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 3,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 4,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 5,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 6,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 7,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 8,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 9,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 10,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 11,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 12,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 13,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 14,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 15,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 16,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 17,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 18,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 19,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 20,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 21,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 22,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 23,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 24,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 25,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 26,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 27,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 28,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 29,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 30,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 31,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 32,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 33,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 34,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 35,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 36,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 37,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 38,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 39,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 40,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 41,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 42,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 43,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 44,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 45,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 46,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 47,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 48,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 49,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    },
+    {
+      "use_case_id": 50,
+      "input_http": 200,
+      "analysis_http": 201,
+      "step_http": 200,
+      "scope": "Entry, authorization, typed recipe and first source-collection step; not full specialist-case acceptance"
+    }
+  ]
+}

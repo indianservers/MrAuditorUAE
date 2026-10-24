@@ -70,6 +70,9 @@ async def evidence(db, ctx, eid, rid):
     obj = await audit.get_record(db, ctx, eid, rid, "grc.read")
     if obj.status not in APPROVED:
         raise HTTPException(409, "Independently approved evidence required")
+    from app.modules.lineage.working_papers import require_current
+
+    await require_current(db, ctx, obj)
     if obj.kind == "evidence":
         version = await db.scalar(
             select(EvidenceVersion)
@@ -143,6 +146,8 @@ async def validate_body(db, ctx, eng, kind, data, record_id=None):
     for field, value in body.items():
         if field.endswith("evidence_id") and value:
             evidences.add(value)
+        if field.endswith("evidence_ids") and value:
+            evidences.update(value)
     evidences.update(body.get("evidence_ids", []))
     for rid in evidences:
         await evidence(db, ctx, eng.id, uuid.UUID(rid))
@@ -309,6 +314,10 @@ async def validate_body(db, ctx, eng, kind, data, record_id=None):
         raise HTTPException(422, "Calendar completion is not evidence of compliance")
     if key == "obligation" and data.statutory_record_id:
         await evidence(db, ctx, eng.id, data.statutory_record_id)
+    if key == "obligation":
+        from app.modules.grc.filing import validate_transition
+
+        await validate_transition(db, ctx, eng, data, record_id)
     if key == "policy" and data.supersedes_id:
         old = await record(db, ctx, eng.id, data.supersedes_id, "policy")
         if data.version_number <= old.body["version_number"]:

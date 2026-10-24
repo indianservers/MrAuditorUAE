@@ -6,6 +6,7 @@ in-process test doubles during fixture preparation, never server configuration.
 
 import asyncio
 import hashlib
+import io
 import json
 import os
 import sys
@@ -187,6 +188,124 @@ async def main():
             eid, "SYNTHETIC-native-camt.xml", CAMT, "application/xml"
         )
         wps_evidence = await native_file(eid, SIF_FILENAME, SIF, "text/csv")
+        from datetime import datetime
+
+        from openpyxl import Workbook
+        from tests.unit.test_workflow_csv_mapping import SPLIT
+
+        mapped_evidence = await native_file(
+            eid, "SYNTHETIC-browser-split-bank.csv", SPLIT, "text/csv"
+        )
+        supporting_reviewer = await actor(
+            h, "Firm Administrator", "browser-supporting-table-reviewer"
+        )
+        await grant(client, h, f"/api/v1/engagements/{eid}/audit", supporting_reviewer)
+        supporting_ids = {}
+        xlsx_ids = {}
+        for kind in ("bank", "open-items"):
+            workbook = Workbook()
+            sheet = workbook.active
+            sheet.title = "Selected"
+            if kind == "bank":
+                sheet.append(
+                    ["reference", "currency", "amount", "date", "account_code"]
+                )
+                sheet.append(["REF-1", "AED", 100.25, datetime(2026, 6, 30), "BANK-1"])
+                sheet.append(["REF-2", "AED", -5, datetime(2026, 6, 30), "BANK-1"])
+            else:
+                sheet.append(
+                    [
+                        "reference",
+                        "currency",
+                        "open_amount",
+                        "counterparty",
+                        "document_type",
+                        "document_date",
+                        "due_date",
+                        "account_code",
+                    ]
+                )
+                sheet.append(
+                    [
+                        "INV-1",
+                        "AED",
+                        -100,
+                        "SYNTHETIC-SUPPLIER",
+                        "invoice",
+                        datetime(2026, 6, 1),
+                        datetime(2026, 6, 30),
+                        "AP-1",
+                    ]
+                )
+                sheet.append(
+                    [
+                        "CN-1",
+                        "AED",
+                        20,
+                        "SYNTHETIC-SUPPLIER",
+                        "credit-note",
+                        datetime(2026, 6, 5),
+                        datetime(2026, 6, 30),
+                        "AP-1",
+                    ]
+                )
+            workbook.create_sheet("Other")
+            buffer = io.BytesIO()
+            workbook.save(buffer)
+            workbook.close()
+            xlsx_ids[kind] = await native_file(
+                eid,
+                f"SYNTHETIC-browser-{kind}.xlsx",
+                buffer.getvalue(),
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            )
+            prepared = await execute(
+                client,
+                h,
+                eid,
+                "source-table",
+                {
+                    "evidence_version_id": xlsx_ids[kind],
+                    "table_kind": kind,
+                    "worksheet": "Selected",
+                },
+            )
+            approved = await decision(client, supporting_reviewer[0], eid, prepared)
+            assert approved.status_code == 201, approved.text
+            supporting_ids[kind] = approved.json()["id"]
+        extended_books = await source(
+            client,
+            h,
+            eid,
+            [
+                transaction(
+                    id="BOOK-1", reference="REF-1", amount="100.25", date="2026-06-30"
+                ),
+                transaction(
+                    id="BOOK-2", reference="REF-2", amount="-5", date="2026-06-30"
+                ),
+            ],
+            "SYNTHETIC extended independent cashbook",
+            totals={"AED": "95.25"},
+        )
+        payable_controls = await source(
+            client,
+            h,
+            eid,
+            [
+                {
+                    "id": "AP-CONTROL",
+                    "account": "AP-1",
+                    "side": "payable",
+                    "currency": "AED",
+                    "as_of": "2026-06-30",
+                    "amount": "80",
+                }
+            ],
+            "SYNTHETIC independent payable control",
+            "balance-controls",
+            {"AED": "80"},
+        )
         india_evidence = await native_file(
             india,
             "SYNTHETIC-native-inv01.json",
@@ -295,6 +414,13 @@ async def main():
                     "india_result": gst["id"],
                     "camt_evidence": camt_evidence,
                     "wps_evidence": wps_evidence,
+                    "mapped_bank_evidence": mapped_evidence,
+                    "xlsx_bank_evidence": xlsx_ids["bank"],
+                    "xlsx_open_items_evidence": xlsx_ids["open-items"],
+                    "reviewed_xlsx_bank": supporting_ids["bank"],
+                    "reviewed_xlsx_open_items": supporting_ids["open-items"],
+                    "extended_book_source": extended_books["id"],
+                    "payable_controls": payable_controls["id"],
                     "india_invoice_evidence": india_evidence,
                     "india_ecr_evidence": ecr_evidence,
                     "india_gstr2b_evidence": gstr2b_evidence,

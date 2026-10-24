@@ -41,7 +41,7 @@ RULES = [
     ("S24", "Unusual daily velocity", "posting_date"),
     ("S25", "Counterparty/user concentration", "counterparty or user"),
 ]
-VERSION = "2.0.0"
+VERSION = "2.1.0"
 COLUMNS = [
     "id",
     "account_code",
@@ -132,6 +132,9 @@ class AnalyticsEngine:
         self.directory.cleanup()
 
     def evaluate(self, config: AnalyticsRequest) -> list[dict]:
+        # Findings belong to this configuration. Re-evaluation must not retain
+        # flags from a previous calendar, threshold or prerequisite assessment.
+        self.db.execute("DELETE FROM flags")
         p = config
         end = quote(p.year_end) if p.year_end else "NULL"
         window = p.year_end_window
@@ -208,6 +211,7 @@ class AnalyticsEngine:
             ]
 
         missing = {
+            "J01": not p.weekend_days,
             "J02": p.holidays is None,
             "J03": not (
                 p.timestamps_reliable
@@ -247,6 +251,9 @@ class AnalyticsEngine:
             if not self.count or missing.get(code, False):
                 status = "not_testable"
                 tested = 0
+                evidence = {
+                    "reason": "Required population, operating calendar or source fields unavailable; no clean conclusion inferred"
+                }
             elif code == "S21":
                 n, distinct, low, high = self.db.execute(
                     "SELECT count(*),count(DISTINCT amount),min(amount),max(amount) FROM p WHERE amount>0"

@@ -200,6 +200,13 @@ def benefit_employee(**changes):
     return {
         "id": "E1",
         "regime": "SYNTHETIC-REGIME",
+        "cohort": "SYNTHETIC-COHORT",
+        "work_model": "full-time",
+        "work_model_assessment": "Synthetic assessed full-time contract and cohort",
+        "work_model_constant_for_service": True,
+        "annual_contract_hours": None,
+        "annual_full_time_hours": None,
+        "full_time_monthly_basic_salary": None,
         "currency": "AED",
         "service_start": "2025-07-01",
         "service_end": "2026-06-30",
@@ -216,6 +223,8 @@ def benefit_rule(**changes):
     return {
         "id": "RULE-1",
         "regime": "SYNTHETIC-REGIME",
+        "cohort": "SYNTHETIC-COHORT",
+        "work_model": "full-time",
         "effective_from": "2026-01-01",
         "effective_to": "2026-12-31",
         "minimum_service_years": "1",
@@ -226,8 +235,124 @@ def benefit_rule(**changes):
         "later_tier_days": "30",
         "maximum_salary_months": "24",
         "evidence_reference": "REVIEWED-SYNTHETIC-RULE",
+        "source_url": "https://example.com/synthetic-benefit-rule",
+        "source_version": "SYNTHETIC-1",
+        "source_sha256": "a" * 64,
+        "source_evidence_version_id": "00000000-0000-4000-8000-000000000001",
+        "applicability_review": "Synthetic regime and cohort assessed for this unit fixture only",
         **changes,
     }
+
+
+@pytest.mark.parametrize(
+    "field",
+    [
+        "source_url",
+        "source_version",
+        "source_sha256",
+        "source_evidence_version_id",
+        "applicability_review",
+    ],
+)
+def test_benefit_rule_requires_retained_document_provenance(field):
+    from app.modules.country_workflows.audit_schemas import BenefitRule
+
+    rule = benefit_rule()
+    del rule[field]
+    with pytest.raises(ValueError):
+        BenefitRule.model_validate(rule)
+
+
+def part_time_employee(**changes):
+    return benefit_employee(
+        **{
+            "work_model": "part-time",
+            "monthly_basic_salary": "1500",
+            "annual_contract_hours": "1040",
+            "annual_full_time_hours": "2080",
+            "full_time_monthly_basic_salary": "3000",
+            "amount": "1050",
+            **changes,
+        }
+    )
+
+
+@pytest.mark.parametrize("cap,expected", [("24", "1050.00"), ("0.1", "150.00")])
+def test_part_time_benefit_uses_assessed_full_time_basis_then_contract_hour_proportion(
+    cap, expected
+):
+    output = run(
+        "uae-benefit-review",
+        {
+            "employees": [part_time_employee(amount=expected)],
+            "rules": [benefit_rule(work_model="part-time", maximum_salary_months=cap)],
+        },
+    )
+    row = output["rows"][0]
+    assert row["expected_benefit"] == expected and row["benefit_proportion"] == "0.5"
+    assert row["full_time_salary_basis"] == "3000"
+    assert row["state"] == "MATCHED"
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"cohort": "DIFFERENT-COHORT"},
+        {"work_model": "full-time"},
+    ],
+)
+def test_part_time_benefit_never_selects_another_cohort_or_work_model(changes):
+    output = run(
+        "uae-benefit-review",
+        {
+            "employees": [part_time_employee()],
+            "rules": [benefit_rule(work_model="part-time", **changes)]
+            if "work_model" not in changes
+            else [benefit_rule(**changes)],
+        },
+    )
+    assert output["blocked"] and output["rows"][0]["state"] == "RULE_MISSING"
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"annual_contract_hours": None},
+        {"annual_full_time_hours": None},
+        {"full_time_monthly_basic_salary": None},
+        {"annual_full_time_hours": "0"},
+        {"annual_contract_hours": "2081"},
+    ],
+)
+def test_part_time_benefit_rejects_missing_or_invalid_hour_comparators(changes):
+    from app.modules.country_workflows.audit_schemas import BenefitEmployee
+
+    with pytest.raises(ValueError):
+        BenefitEmployee.model_validate(part_time_employee(**changes))
+
+
+def test_unassessed_other_work_model_blocks_benefit_even_with_a_matching_rule():
+    output = run(
+        "uae-benefit-review",
+        {
+            "employees": [benefit_employee(work_model="other")],
+            "rules": [benefit_rule(work_model="other")],
+        },
+    )
+    assert output["blocked"]
+    assert output["rows"][0]["state"] == "WORK_MODEL_REQUIRES_ASSESSMENT"
+
+
+def test_work_model_changes_cannot_be_calculated_as_one_uniform_service_span():
+    output = run(
+        "uae-benefit-review",
+        {
+            "employees": [part_time_employee(work_model_constant_for_service=False)],
+            "rules": [benefit_rule(work_model="part-time")],
+        },
+    )
+    assert output["blocked"]
+    assert output["rows"][0]["state"] == "WORK_MODEL_CHANGE_REQUIRES_SEGMENTED_ASSESSMENT"
 
 
 def test_benefits_are_computed_from_reviewed_parameters_not_a_hardcoded_law():

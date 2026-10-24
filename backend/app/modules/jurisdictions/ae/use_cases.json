@@ -30,7 +30,11 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
+        "Reviewed AED ledger-net lines only; no residence/exception decision, complete rolling exposure-date reconstruction or registration filing."
+      ],
+      "legal_source_ids": [
+        "AE-VAT-REGISTRATION-PAGE",
+        "AE-VAT-ER-CONSOLIDATED-2026"
       ]
     },
     {
@@ -64,7 +68,10 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
+        "Recovery facts and restrictions require approved invoice/rule judgments; document purpose is not inferred from names."
+      ],
+      "legal_source_ids": [
+        "AE-VAT-ER-CONSOLIDATED-2026"
       ]
     },
     {
@@ -98,7 +105,10 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
+        "Customs reconciliation and VAT engine remain separate; imported services need their own reviewed reverse-charge classification."
+      ],
+      "legal_source_ids": [
+        "AE-VAT-ER-CONSOLIDATED-2026"
       ]
     },
     {
@@ -132,7 +142,10 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
+        "Evidence presence and consistency do not authenticate exports or establish all zero-rating conditions."
+      ],
+      "legal_source_ids": [
+        "AE-VAT-ER-CONSOLIDATED-2026"
       ]
     },
     {
@@ -166,7 +179,10 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
+        "Field/arithmetic validation is bounded; OCR output requires human verification and document authenticity is not established."
+      ],
+      "legal_source_ids": [
+        "AE-VAT-ER-CONSOLIDATED-2026"
       ]
     },
     {
@@ -199,7 +215,10 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
+        "Bridge operates on approved source controls and mappings; external return acceptance is not verified."
+      ],
+      "legal_source_ids": [
+        "AE-VAT-ER-CONSOLIDATED-2026"
       ]
     },
     {
@@ -221,7 +240,8 @@
         "location"
       ],
       "input_kinds": [
-        "vat-profile"
+        "vat-profile",
+        "vat-invoice"
       ],
       "calculation": {
         "family": "vat",
@@ -233,7 +253,10 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
+        "Typed property facts and unresolved-fact guard added; treatment remains an approved professional input, not an automated property-law decision."
+      ],
+      "legal_source_ids": [
+        "AE-VAT-ER-CONSOLIDATED-2026"
       ]
     },
     {
@@ -255,19 +278,20 @@
         "period"
       ],
       "input_kinds": [
-        "vat-profile"
+        "vat-return",
+        "evidence",
+        "working-papers"
       ],
-      "calculation": {
-        "family": "vat",
-        "kind": "profile",
-        "operation": "compute"
-      },
+      "calculation": null,
       "workflow": null,
       "phase": 2,
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
+        "Supplied reviewed period totals are quantified separately; correction thresholds, discovery deadlines and legally permitted route remain professional review."
+      ],
+      "legal_source_ids": [
+        "AE-VAT-ER-CONSOLIDATED-2026"
       ]
     },
     {
@@ -300,8 +324,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Uses approved financial run and tax rules; missing elections/classifications block complete computation."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 10,
@@ -333,8 +358,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Purpose, documentation and legal exclusions are reviewed inputs; no legal deduction is inferred from account names."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 11,
@@ -366,8 +392,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Supported approved financing schedule only; special arrangements and supplied related-party facts need review."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 12,
@@ -398,8 +425,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Existing loss-lot utilization controls retained; unsupported ownership/continuity facts remain unresolved."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 13,
@@ -431,7 +459,10 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
+        "Current/prior revenue and exclusions require applicable approved rule/election; eligibility is not assumed from turnover alone."
+      ],
+      "legal_source_ids": [
+        "AE-CT-TOPICS-SBR"
       ]
     },
     {
@@ -464,8 +495,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Participation conditions remain documented professional judgments; dividend amounts alone do not establish exemption."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 15,
@@ -497,8 +529,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Approved member/ownership/period/policy data required; complex changes and pending elections remain unresolved."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 16,
@@ -530,8 +563,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Supported relief conditions only; no autonomous restructuring advice or continuing-condition certification."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 17,
@@ -563,8 +597,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "QFZP is conditional on approved activity/substance/reporting evidence; no status certificate is issued."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 18,
@@ -596,8 +631,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Accounting segments and legal qualifying-income judgments remain distinct; disputed classifications require review."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 19,
@@ -629,8 +665,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Base de-minimis calculation supported; no automatic sensitivity optimization over every disputed transaction."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 20,
@@ -660,8 +697,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Declared/approved relationship registers are collected; inferred relationships require review and do not become legal related parties automatically."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 21,
@@ -693,8 +731,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Supplied contracts, role evidence and market support only; no invented market salary benchmark."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 22,
@@ -728,8 +767,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "No live licensed market feed is configured; use authorized supplied comparables and disclose coverage."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 23,
@@ -759,8 +799,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Documentation workstream/source reconciliation connected; completeness and applicable thresholds require specialist review."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 24,
@@ -792,7 +833,10 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
+        "Existing DMTT scope/inputs and supported calculation retained; safe harbours and special cases remain explicitly bounded."
+      ],
+      "legal_source_ids": [
+        "AE-DMTT-PORTAL"
       ]
     },
     {
@@ -823,8 +867,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Collected financial/prior-risk evidence supports a draft; audit risks and procedures require auditor approval."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 26,
@@ -852,8 +897,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Existing approved policy and reproducible sampling retained; objective and source population completeness are not inferred."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 27,
@@ -882,8 +928,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Existing deterministic analytics/local ML signals remain separate; absent user/timing metadata is not fabricated and no fraud conclusion is made."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 28,
@@ -915,8 +962,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Supported IFRS revenue schedule only; full automated contract/delivery/return cut-off matching across every contract type remains incomplete."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 29,
@@ -943,13 +991,14 @@
         "kind": "ecl",
         "operation": "calculate"
       },
-      "workflow": null,
+      "workflow": "receivables-ecl",
       "phase": 3,
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Approved ageing/loss assumptions and supported ECL models only; no unsupported actuarial or collection forecast is invented."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 30,
@@ -979,8 +1028,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Supported supplied forecast/funding scenarios; covenant completeness and final going-concern assessment require professional review."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 31,
@@ -1011,8 +1061,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Shared approved lease engine; browser/source/calculation/draft path verified on a simple lease, not every modification/option scenario."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 32,
@@ -1039,13 +1090,14 @@
         "kind": "employee-benefits",
         "operation": "calculate"
       },
-      "workflow": null,
+      "workflow": "uae-benefit-review",
       "phase": 3,
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Employment regime and IFRS versus settlement basis must be supplied; alternative schemes and actuarial measurements remain bounded."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 33,
@@ -1073,13 +1125,14 @@
         "kind": "inventory",
         "operation": "calculate"
       },
-      "workflow": null,
+      "workflow": "inventory-count-bridge",
       "phase": 3,
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Existing costing/NRV/count bridge uses approved populations; source-system and physical inventory completeness are not established."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 34,
@@ -1107,13 +1160,14 @@
         "kind": "fixed-assets",
         "operation": "calculate"
       },
-      "workflow": null,
+      "workflow": "asset-register-review",
       "phase": 3,
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Register/depreciation controls supported; physical existence and all impairment assumptions remain reviewed evidence."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 35,
@@ -1142,8 +1196,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Approved relationships and disclosure schedules are collected; full automated narrative/commitment completeness is not guaranteed."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 36,
@@ -1175,8 +1230,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Existing supported consolidation/intercompany engine retained; complex acquisitions/control/translation scenarios remain bounded."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 37,
@@ -1209,8 +1265,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Existing numeric statement controls supported; a complete semantic disclosure/standard-compliance opinion is not provided."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 38,
@@ -1242,8 +1299,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Structured findings and reviewed-source gate added; criteria, cause, effect and recommendations remain reviewer assertions."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 39,
@@ -1272,8 +1330,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Existing controlled bank/file reconciliation; no unconfigured live bank connection or authentication is claimed."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 40,
@@ -1303,8 +1362,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Existing duplicate/procurement/analytics flags require review; changes to bank details are not performed."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 41,
@@ -1333,8 +1393,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Supplied identity/tax/bank-change evidence only; no live identity, tax authority or bank verification is claimed."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 42,
@@ -1364,8 +1425,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Existing payroll/WPS/bank file bridge; regime-specific legal correctness and source completeness need review."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 43,
@@ -1397,7 +1459,10 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
+        "Advance/receipt/performance evidence and VAT/IFRS treatment remain separately reviewed; receipt alone is not proof of earned revenue."
+      ],
+      "legal_source_ids": [
+        "AE-VAT-ER-CONSOLIDATED-2026"
       ]
     },
     {
@@ -1432,8 +1497,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Supported single-obligation project calculation; complex variations and multiple obligations require separate methodology."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 45,
@@ -1461,8 +1527,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "New monetary closing-rate arithmetic on supplied reviewed balances; automatic GL tie-out, realized FX and group presentation/CTA are outside this adapter."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 46,
@@ -1488,11 +1555,12 @@
       "calculation": null,
       "workflow": "statutory-dues",
       "phase": 4,
-      "scope_status": "Partial",
-      "completion_status": "Implemented with limitations",
+      "scope_status": "Blocked",
+      "completion_status": "Blocked",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Existing dues/deadline/source workflows connected; unified entity-obligation inference and preference-based notification delivery are not implemented."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 47,
@@ -1521,8 +1589,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Economic ownership look-through is supported; full legal control/UBO determination and official filing verification are not provided."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 48,
@@ -1550,11 +1619,12 @@
       "calculation": null,
       "workflow": "kyc-edd-review",
       "phase": 4,
-      "scope_status": "Partial",
-      "completion_status": "Implemented with limitations",
+      "scope_status": "Blocked",
+      "completion_status": "Blocked",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Restricted reviewer permission is required; generic workpaper copying is blocked until a restricted AML case/document subsystem is qualified."
+      ],
+      "legal_source_ids": []
     },
     {
       "id": 49,
@@ -1586,10 +1656,14 @@
       },
       "workflow": null,
       "phase": 4,
-      "scope_status": "Partial",
-      "completion_status": "Implemented with limitations",
+      "scope_status": "Blocked",
+      "completion_status": "Blocked",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
+        "Official MD197/2026 notice found; original decision/effectivity adoption and complete current scope review remain pending. No certified/live ASP connection."
+      ],
+      "legal_source_ids": [
+        "AE-EINVOICE-PORTAL",
+        "AE-MD197-2026-NOTICE"
       ]
     },
     {
@@ -1638,8 +1712,9 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Case-specific engine coverage and professional rule/evidence review must be verified; source collection is not a compliance conclusion"
-      ]
+        "Bounded read-only overview plus explicit governed actions/readiness pack; no autonomous postings, filings, messages or all-engine source-change reruns."
+      ],
+      "legal_source_ids": []
     }
   ]
 }
