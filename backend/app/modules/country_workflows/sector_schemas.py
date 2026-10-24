@@ -40,7 +40,10 @@ class PriceBand(Strict):
 
     @model_validator(mode="after")
     def ordered(self):
-        if self.effective_to < self.effective_from or self.maximum_unit_price < self.minimum_unit_price:
+        if (
+            self.effective_to < self.effective_from
+            or self.maximum_unit_price < self.minimum_unit_price
+        ):
             raise ValueError("Price band dates and prices must be ordered")
         return self
 
@@ -52,7 +55,9 @@ class ExciseMovement(Strict):
     currency: Currency
     uom: Identifier
     date: date
-    kind: Literal["opening", "receipt", "taxable-release", "transfer-in", "transfer-out", "loss", "closing"]
+    kind: Literal[
+        "opening", "receipt", "taxable-release", "transfer-in", "transfer-out", "loss", "closing"
+    ]
     quantity: Money = Field(ge=0)
     amount: Money = Field(ge=0)
     evidence_reference: Identifier
@@ -168,26 +173,65 @@ class ConstructionProject(Strict):
 
 
 SECTOR_ROW_TYPES: dict[str, type[Strict]] = {
-    "trade-lines": TradeLine, "price-bands": PriceBand,
-    "excise-movements": ExciseMovement, "excise-rules": ExciseRule, "excise-returns": ExciseReturn,
-    "metal-lines": MetalLine, "escrow-entries": EscrowEntry, "escrow-authorisations": EscrowAuthorisation,
-    "billing-lines": BillingLine, "construction-projects": ConstructionProject,
+    "trade-lines": TradeLine,
+    "price-bands": PriceBand,
+    "excise-movements": ExciseMovement,
+    "excise-rules": ExciseRule,
+    "excise-returns": ExciseReturn,
+    "metal-lines": MetalLine,
+    "escrow-entries": EscrowEntry,
+    "escrow-authorisations": EscrowAuthorisation,
+    "billing-lines": BillingLine,
+    "construction-projects": ConstructionProject,
 }
 SECTOR_WORKFLOWS: dict[str, tuple[str, list[str], dict[str, str]]] = {
-    "customs-reconciliation": ("Customs / invoice / goods receipt reconciliation", ["AE"],
-        {"declarations": "trade-lines", "invoices": "trade-lines", "receipts": "trade-lines"}),
-    "trade-document-review": ("Trade shipment / invoice / payment and sourced price review", [],
-        {"invoices": "trade-lines", "shipments": "trade-lines", "payments": "trade-lines", "prices": "price-bands"}),
-    "excise-reconciliation": ("Excise stock conservation and reviewed tax/return comparison", ["AE"],
-        {"movements": "excise-movements", "rules": "excise-rules", "returns": "excise-returns"}),
-    "gold-reconciliation": ("Gold gross/fine gram movement to count comparison", [],
-        {"books": "metal-lines", "counts": "metal-lines"}),
-    "escrow-disbursements": ("Project escrow bank matching and authorised payment limits", ["AE"],
-        {"books": "escrow-entries", "bank": "escrow-entries", "authorisations": "escrow-authorisations"}),
-    "hospitality-revenue": ("Hospitality service / invoice / net settlement bridge", [],
-        {"services": "billing-lines", "invoices": "billing-lines", "settlements": "billing-lines"}),
-    "healthcare-billing": ("Healthcare service / tariff / invoice / remittance bridge", [],
-        {"services": "billing-lines", "invoices": "billing-lines", "settlements": "billing-lines"}),
-    "construction-contracts": ("Construction cost-to-cost revenue and retention review", [],
-        {"projects": "construction-projects"}),
+    "customs-reconciliation": (
+        "Customs / invoice / goods receipt reconciliation",
+        ["AE"],
+        {"declarations": "trade-lines", "invoices": "trade-lines", "receipts": "trade-lines"},
+    ),
+    "trade-document-review": (
+        "Trade shipment / invoice / payment and sourced price review",
+        [],
+        {
+            "invoices": "trade-lines",
+            "shipments": "trade-lines",
+            "payments": "trade-lines",
+            "prices": "price-bands",
+        },
+    ),
+    "excise-reconciliation": (
+        "Excise stock conservation and reviewed tax/return comparison",
+        ["AE"],
+        {"movements": "excise-movements", "rules": "excise-rules", "returns": "excise-returns"},
+    ),
+    "gold-reconciliation": (
+        "Gold gross/fine gram movement to count comparison",
+        [],
+        {"books": "metal-lines", "counts": "metal-lines"},
+    ),
+    "escrow-disbursements": (
+        "Project escrow bank matching and authorised payment limits",
+        ["AE"],
+        {
+            "books": "escrow-entries",
+            "bank": "escrow-entries",
+            "authorisations": "escrow-authorisations",
+        },
+    ),
+    "hospitality-revenue": (
+        "Hospitality service / invoice / net settlement bridge",
+        [],
+        {"services": "billing-lines", "invoices": "billing-lines", "settlements": "billing-lines"},
+    ),
+    "healthcare-billing": (
+        "Healthcare service / tariff / invoice / remittance bridge",
+        [],
+        {"services": "billing-lines", "invoices": "billing-lines", "settlements": "billing-lines"},
+    ),
+    "construction-contracts": (
+        "Construction cost-to-cost revenue and retention review",
+        [],
+        {"projects": "construction-projects"},
+    ),
 }

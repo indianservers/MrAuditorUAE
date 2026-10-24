@@ -76,9 +76,7 @@ class Confirmation(Strict):
 
     @model_validator(mode="after")
     def chronology(self):
-        if self.responded_on and (
-            not self.requested_on or self.responded_on < self.requested_on
-        ):
+        if self.responded_on and (not self.requested_on or self.responded_on < self.requested_on):
             raise ValueError("Response date must follow request date")
         if self.status in {"received", "disputed"} and (
             self.response_amount is None or not self.responded_on
@@ -270,11 +268,13 @@ AUDIT_ROW_TYPES: dict[str, type[BaseModel]] = {
 AUDIT_WORKFLOWS: dict[str, tuple[str, list[str], dict[str, str]]] = {
     "asset-register-review": (
         "Asset register / depreciation / GL and verification evidence",
-        [], {"register": "asset-register", "controls": "accounting-controls"},
+        [],
+        {"register": "asset-register", "controls": "accounting-controls"},
     ),
     "inventory-count-bridge": (
         "Inventory count-date movement bridge to reporting-date books",
-        [], {"books": "stock", "counts": "stock", "movements": "stock-movements"},
+        [],
+        {"books": "stock", "counts": "stock", "movements": "stock-movements"},
     ),
     "receivables-ecl": (
         "Reporting-date open items to reviewed IFRS 9 provision matrix",
@@ -283,24 +283,33 @@ AUDIT_WORKFLOWS: dict[str, tuple[str, list[str], dict[str, str]]] = {
     ),
     "going-concern-cash": (
         "Cash forecast funding gaps and covenant thresholds",
-        [], {"forecast": "cash-forecasts"},
+        [],
+        {"forecast": "cash-forecasts"},
     ),
     "procurement-match": (
         "Order / receipt / invoice / payment matching",
-        [], {"orders": "purchase-lines", "receipts": "purchase-lines",
-             "invoices": "purchase-lines", "payments": "purchase-lines"},
+        [],
+        {
+            "orders": "purchase-lines",
+            "receipts": "purchase-lines",
+            "invoices": "purchase-lines",
+            "payments": "purchase-lines",
+        },
     ),
     "vendor-employee-conflicts": (
         "Shared bank-account evidence across vendor and employee masters",
-        [], {"vendors": "party-masters", "employees": "party-masters"},
+        [],
+        {"vendors": "party-masters", "employees": "party-masters"},
     ),
     "employee-expenses": (
         "Expense policy, approval and reused receipt checks",
-        [], {"claims": "expense-claims"},
+        [],
+        {"claims": "expense-claims"},
     ),
     "uae-benefit-review": (
         "End-of-service comparison against explicitly supplied regime rules",
-        ["AE"], {"employees": "benefit-employees", "rules": "benefit-rules"},
+        ["AE"],
+        {"employees": "benefit-employees", "rules": "benefit-rules"},
     ),
     "subledger-control": (
         "Receivable/payable open items to GL control",

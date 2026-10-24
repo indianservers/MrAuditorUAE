@@ -243,6 +243,10 @@ async def run(db, ctx, eid, rid):
 
 
 async def current(db, ctx, eid, obj):
+    from app.modules.tax.contracts import current as tax_current
+
+    if not await tax_current(db, ctx, eid, obj.results):
+        return False
     if obj.kind == "vat201":
         profile_id = obj.inputs["profile_id"]
         for kind, key in [("invoice", "invoice_ids"), ("adjustment", "adjustment_ids")]:
@@ -291,6 +295,9 @@ async def current(db, ctx, eid, obj):
 
 
 async def save(db, ctx, eid, kind, profile, inputs, dependencies, results, rid=None, key=None):
+    from app.modules.tax.contracts import attach
+
+    results = await attach(db, ctx, eid, "VAT", results, inputs, dependencies, profile)
     dependencies = list({x["id"]: x for x in dependencies}.values())
     value = serial({"inputs": inputs, "dependencies": dependencies, "results": results})
     digest = hashlib.sha256(
@@ -391,6 +398,8 @@ async def compute(db, ctx, eid, pid):
     sequence = set()
     evidence_set = set()
     emirates: dict[str, dict[str, Decimal]] = {}
+    credit_totals = {}
+    supplies = {}
     with localcontext() as precision:
         precision.prec = 64
         for obj in invoices:
@@ -400,6 +409,23 @@ async def compute(db, ctx, eid, pid):
             applicable(selected["invoice"][1], inv.tax_point)
             value = calc.transaction(inv, treatment_rule, selected["invoice"][1])
             issues = list(value["issues"])
+            if inv.supply_reference:
+                previous = supplies.setdefault(inv.supply_reference, [])
+                if previous and (inv.supply_stage in {"advance", "final"} or any(x in {"advance", "final"} for x in previous)):
+                    issues.append("Advance/final invoices for the same supply need a reviewed netting bridge; overlapping consideration is not filing-ready")
+                previous.append(inv.supply_stage)
+            if inv.document_type == "credit_note" and inv.original_invoice_id:
+                original = await record(db, ctx, eid, inv.original_invoice_id, "invoice", True)
+                prior = s.Invoice.model_validate(clean(original.body))
+                deps.append(dep(original))
+                if (prior.document_type == "credit_note" or prior.treatment != inv.treatment
+                    or prior.currency != inv.currency or prior.supplier_name != inv.supplier_name):
+                    issues.append("Credit note supply, currency or classification differs from original; technical review required")
+                totals = credit_totals.setdefault(str(original.id), [D(0), D(0)])
+                totals[0] += abs(value["net"])
+                totals[1] += abs(value["tax"])
+                if totals[0] > abs(prior.declared_net) or totals[1] > abs(prior.declared_tax):
+                    issues.append("Cumulative credit notes exceed original net or VAT; reversal duplication blocked")
             if (
                 inv.rule_id != p.rules["output" if inv.direction == "sale" else "input"]
                 or inv.invoice_rule_id != p.rules["invoice"]

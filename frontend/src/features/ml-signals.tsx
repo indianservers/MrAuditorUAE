@@ -27,9 +27,10 @@ export function MLSignals() {
     `ml/events?eid=${engagement?.id}&kind=inference&limit=1`,
     can && !!engagement,
   );
-  const capabilities = useAPI<{ local_runtime_present: boolean; training_data_gap: string }>(
-    `ml/engagements/${engagement?.id}/capabilities`, can && !!engagement,
-  );
+  const capabilities = useAPI<{
+    local_runtime_present: boolean;
+    training_data_gap: string;
+  }>(`ml/engagements/${engagement?.id}/capabilities`, can && !!engagement);
   if (!can) return null;
   return (
     <section className="p9-card">
@@ -42,8 +43,16 @@ export function MLSignals() {
         Deterministic audit findings remain independent. An anomaly signal does
         not establish fraud.
       </p>
-      <p>Local CPU runtime: {capabilities.data ? (capabilities.data.local_runtime_present ? "installed; inference requires qualified artifacts" : "unavailable") : "not verified"}.
-        Deterministic workflows and explicitly selected baselines do not require language-model credentials.</p>
+      <p>
+        Local CPU runtime:{" "}
+        {capabilities.data
+          ? capabilities.data.local_runtime_present
+            ? "installed; inference requires qualified artifacts"
+            : "unavailable"
+          : "not verified"}
+        . Deterministic workflows and explicitly selected baselines do not
+        require language-model credentials.
+      </p>
       <Link href="/ai-lab/investigator">
         Inspect model signals and source transactions
       </Link>

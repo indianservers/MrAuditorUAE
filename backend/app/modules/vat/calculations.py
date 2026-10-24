@@ -104,6 +104,12 @@ def transaction(data: Invoice, rule: Rule, invoice_rule: Rule):
             "formula": "AED net=round((consideration-discount)/(1+rate if inclusive else1)*FX,2); VAT=round(unrounded AED net*rate,2); credit note reverses amounts",
             "document_processing": data.ocr_state,
             "legal_qualification_automated": False,
+            "execution_mode": "deterministic",
+            "classification_reasons": {"treatment": data.treatment,
+                "place_of_supply": data.place_of_supply_assessment,
+                "rule_key": rule.rule_key, "rule_version": rule.rule_version,
+                "facts_reviewed": data.treatment_facts_complete,
+                "supply_type": data.supply_type},
         }
 
 

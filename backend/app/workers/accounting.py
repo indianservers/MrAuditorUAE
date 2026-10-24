@@ -122,6 +122,7 @@ async def process(job_id: str, tenant_id: str, user_id: str):
             )
             if not job or job.status in {"completed", "failed", "cancelled"}:
                 return
+            connector_task = job.job_type in {"connector.sync", "connector.repair", "zoho.sync"}
             job.status = "running"
             job.started_at = datetime.now(UTC)
             job.progress = 10
@@ -132,10 +133,11 @@ async def process(job_id: str, tenant_id: str, user_id: str):
                 # engagement locks. Cancellation deliberately bypasses this lock.
                 from sqlalchemy import text
 
-                await db.execute(
-                    text("SELECT pg_advisory_xact_lock(hashtextextended(:key, 12))"),
-                    {"key": tenant_id},
-                )
+                if not connector_task:
+                    await db.execute(
+                        text("SELECT pg_advisory_xact_lock(hashtextextended(:key, 12))"),
+                        {"key": tenant_id},
+                    )
                 job = await db.scalar(
                     select(BackgroundJob)
                     .where(BackgroundJob.tenant_id == tenant, BackgroundJob.id == identifier)

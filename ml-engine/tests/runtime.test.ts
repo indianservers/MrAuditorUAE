@@ -12,6 +12,7 @@ const row = (i=0) => ({id:'r'+i,journal:'j'+i,client:'tenant-synthetic-client',d
 
 test('local CPU training/inference, cache, schema and artifact failures without language credentials', async()=>{
  const dir=await mkdtemp(join(tmpdir(),'auditos-test-model-'));
+ const initialTensors=tf.memory().numTensors;
  const prior=process.env.AI_API_KEY; const openai=process.env.OPENAI_API_KEY;
  delete process.env.AI_API_KEY; delete process.env.OPENAI_API_KEY;
  try {
@@ -29,6 +30,9 @@ test('local CPU training/inference, cache, schema and artifact failures without 
   assert.equal(tf.memory().numTensors,tensorCount,'Repeated inference must not leak tensors');
   const parallel=await Promise.all([infer(rows.slice(100),dir),infer(rows.slice(100),dir)]);
   assert.deepEqual(parallel[0].predictions,parallel[1].predictions);
+  const burst=await Promise.allSettled(Array.from({length:12},()=>infer(rows.slice(100),dir)));
+  assert.ok(burst.some(r=>r.status==='rejected'&&/queue capacity/.test(String(r.reason))));
+  assert.equal(tf.memory().numTensors,tensorCount);
   const weights=await readFile(join(dir,'weights.bin'));
   const changed=Buffer.from(weights);changed[0]^=1;
   await writeFile(join(dir,'weights.bin'),changed);
@@ -43,6 +47,7 @@ test('local CPU training/inference, cache, schema and artifact failures without 
   await assert.rejects(infer(rows.slice(100),join(dir,'missing')),/ENOENT/);
  } finally {
   clearInferenceCache();
+  assert.equal(tf.memory().numTensors,initialTensors,'Training plus cached inference must release all owned tensors');
   if(prior===undefined)delete process.env.AI_API_KEY;else process.env.AI_API_KEY=prior;
   if(openai===undefined)delete process.env.OPENAI_API_KEY;else process.env.OPENAI_API_KEY=openai;
   if(dirname(resolve(dir))!==resolve(tmpdir()) || !basename(dir).startsWith('auditos-test-model-')) throw Error('Unexpected test directory');

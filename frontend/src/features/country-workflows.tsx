@@ -31,6 +31,8 @@ type Result = {
   body: {
     title: string;
     review_status: string;
+    execution_mode?: string;
+    language_model_dependency?: boolean;
     blocked?: boolean;
     exception_count?: number;
     table_type?: string;
@@ -1004,6 +1006,14 @@ export function CountryWorkflows({
             Population basis: {body.population_completeness}. Calculations do
             not determine a statutory compliance conclusion.
           </p>
+          {body.execution_mode && (
+            <p>
+              Execution: {body.execution_mode.replaceAll("_", " ")}.
+              {body.language_model_dependency === false
+                ? " No language-model credentials required."
+                : ""}
+            </p>
+          )}
           {body.nil_population && (
             <p>
               Declared nil population: independently review the source

@@ -167,6 +167,7 @@ async def direct_sync(
                 "resume_session": str(resume_session) if resume_session else None,
                 "request_key": request.headers.get("Idempotency-Key") or str(uuid.uuid4())}, request.state.request_id
         )
+    await db.commit()  # Release admission lock before independent checkpoint transactions.
     return await execute(db, ctx, identifier, str(resume_session) if resume_session else None)
 
 
@@ -463,6 +464,7 @@ async def sync(
                 "resume_session": str(resume_session) if resume_session else None,
                 "request_key": request.headers.get("Idempotency-Key") or str(uuid.uuid4())}, request.state.request_id
         )
+    await db.commit()  # Release admission lock before independent checkpoint transactions.
     return await zoho_sync(db, ctx, identifier, str(resume_session) if resume_session else None)
 
 

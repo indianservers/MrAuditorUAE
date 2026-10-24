@@ -1,16 +1,24 @@
 import base64
-import hashlib
 import hmac
 import json
 from datetime import UTC, date, datetime, timedelta
-from decimal import Decimal
 from types import SimpleNamespace
 
 import httpx
 import pytest
 
-from app.modules.connectors.controls import SourceControl, qualify, reconcile_balances, revision_summary
-from app.modules.connectors.enrichment import foreign_provenance, match_qbo_posting, odata_metadata, tax_evidence
+from app.modules.connectors.controls import (
+    SourceControl,
+    qualify,
+    reconcile_balances,
+    revision_summary,
+)
+from app.modules.connectors.enrichment import (
+    foreign_provenance,
+    match_qbo_posting,
+    odata_metadata,
+    tax_evidence,
+)
 from app.modules.connectors.native_http import NativeHTTP
 from app.modules.connectors.quickbooks_desktop import package_rows, request
 from app.modules.connectors.tally import date_windows, parse_export
@@ -161,7 +169,8 @@ def test_tally_window_packages_reject_missing_period_coverage(tmp_path):
 
 
 def test_desktop_sdk_permits_only_query_requests_and_keeps_native_accounts():
-    with pytest.raises(ConnectorError): request("InvoiceAdd", date(2026,1,1),date(2026,12,31))
+    with pytest.raises(ConnectorError):
+        request("InvoiceAdd", date(2026,1,1),date(2026,12,31))
     assert "GeneralDetailReportQueryRq" in request("gl",date(2026,1,1),date(2026,12,31))
     def envelope(body): return '<QBXML><QBXMLMsgsRs><QueryRs statusCode="0">' + body + '</QueryRs></QBXMLMsgsRs></QBXML>'
     package = {"format":"quickbooks-desktop-sdk/1", "expected_company":"Test", "company_xml":envelope('<CompanyRet><CompanyName>Test</CompanyName></CompanyRet>'),

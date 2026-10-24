@@ -48,6 +48,7 @@ class BalanceControls(Input):
 
 
 class ZohoPreferences(Input):
+    incremental_documents: bool = False
     include_documents: bool = False
     include_attachments: bool = False
 

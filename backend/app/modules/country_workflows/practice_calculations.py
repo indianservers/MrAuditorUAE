@@ -12,22 +12,37 @@ from app.modules.ifrs.schemas import ECL, Asset, FixedAssets
 
 
 def rounded(value, currency):
-    return value.quantize(Decimal(1).scaleb(-get_currency_precision(currency)), rounding=ROUND_HALF_UP)
+    return value.quantize(
+        Decimal(1).scaleb(-get_currency_precision(currency)), rounding=ROUND_HALF_UP
+    )
 
 
 def provision_matrix(data, tables):
     rows = control_rows(data, tables)
     blocked = any(r["state"] != "MATCHED" for r in rows)
-    rates = [r for r in tables["rates"] if
-             date.fromisoformat(r["effective_from"]) <= data.as_of <=
-             date.fromisoformat(r["effective_to"])]
+    rates = [
+        r
+        for r in tables["rates"]
+        if date.fromisoformat(r["effective_from"])
+        <= data.as_of
+        <= date.fromisoformat(r["effective_to"])
+    ]
     exposures = defaultdict(list)
     for item in tables["items"]:
         days = max(0, (data.as_of - date.fromisoformat(item["due_date"])).days)
         selected = [r for r in rates if r["min_overdue_days"] <= days <= r["max_overdue_days"]]
-        state = "PAYABLE_NOT_ELIGIBLE" if item["side"] != "receivable" else (
-            "CREDIT_ALLOCATION_REQUIRED" if money(item) < 0 else
-            "RATE_MISSING" if not selected else "AMBIGUOUS_RATE" if len(selected) != 1 else "MATCHED"
+        state = (
+            "PAYABLE_NOT_ELIGIBLE"
+            if item["side"] != "receivable"
+            else (
+                "CREDIT_ALLOCATION_REQUIRED"
+                if money(item) < 0
+                else "RATE_MISSING"
+                if not selected
+                else "AMBIGUOUS_RATE"
+                if len(selected) != 1
+                else "MATCHED"
+            )
         )
         if state != "MATCHED":
             blocked = True
@@ -37,38 +52,71 @@ def provision_matrix(data, tables):
     totals = {}
     for currency, group in exposures.items():
         # Stage is unused by the existing provision-matrix branch; no SICR inference is made.
-        request = ECL.model_validate({
-            "approach": "provision_matrix", "effective_interest_rate": "0",
-            "historical_data_source": "Reviewed retained loss-rate evidence",
-            "sicr_methodology": "Not inferred; provision-matrix calculation only",
-            "default_definition": "Independently reviewed matrix assumptions",
-            "write_off_policy": "No automatic write-offs",
-            "exposures": [{"reference": i["id"], "amount": i["amount"], "stage": 2,
-                           "segment": rate["id"]} for i, rate, _ in group],
-            "segment_loss_rates": {rate["id"]: rate["weighted_loss_rate"] for _, rate, _ in group},
-            "scenarios": [{"name": "Reviewed weighted matrix", "probability": "1",
-                           "pd_12_month": "0", "pd_lifetime": "0", "lgd": "0"}],
-        })
+        request = ECL.model_validate(
+            {
+                "approach": "provision_matrix",
+                "effective_interest_rate": "0",
+                "historical_data_source": "Reviewed retained loss-rate evidence",
+                "sicr_methodology": "Not inferred; provision-matrix calculation only",
+                "default_definition": "Independently reviewed matrix assumptions",
+                "write_off_policy": "No automatic write-offs",
+                "exposures": [
+                    {"reference": i["id"], "amount": i["amount"], "stage": 2, "segment": rate["id"]}
+                    for i, rate, _ in group
+                ],
+                "segment_loss_rates": {
+                    rate["id"]: rate["weighted_loss_rate"] for _, rate, _ in group
+                },
+                "scenarios": [
+                    {
+                        "name": "Reviewed weighted matrix",
+                        "probability": "1",
+                        "pd_12_month": "0",
+                        "pd_lifetime": "0",
+                        "lgd": "0",
+                    }
+                ],
+            }
+        )
         calculated = ecl(request)
         totals[currency] = str(calculated["total_ecl"])
         by_ref = {r["reference"]: r for r in calculated["schedule"]}
         for item, rate, days in group:
-            rows.append({"id": "exposure:" + item["id"], "item_id": item["id"],
-                         "currency": currency, "balance": item["amount"], "overdue_days": days,
-                         "loss_rate_source_id": rate["id"], "weighted_loss_rate": rate["weighted_loss_rate"],
-                         "ecl": str(by_ref[item["id"]]["ecl"]), "state": "MATCHED"})
-    return {**result(rows, blocked, [
-        "Uses the existing IFRS 9 provision-matrix engine with professionally supplied weighted loss rates",
-        "No loss rates, credit-note allocations, SICR judgments or postings are inferred or approved",
-        "Per-currency totals remain separate; unsupported items block approval rather than disappear",
-    ]), "total_ecl_by_currency": totals, "calculation_engine": "ifrs.ecl/provision_matrix"}
+            rows.append(
+                {
+                    "id": "exposure:" + item["id"],
+                    "item_id": item["id"],
+                    "currency": currency,
+                    "balance": item["amount"],
+                    "overdue_days": days,
+                    "loss_rate_source_id": rate["id"],
+                    "weighted_loss_rate": rate["weighted_loss_rate"],
+                    "ecl": str(by_ref[item["id"]]["ecl"]),
+                    "state": "MATCHED",
+                }
+            )
+    return {
+        **result(
+            rows,
+            blocked,
+            [
+                "Uses the existing IFRS 9 provision-matrix engine with professionally supplied weighted loss rates",
+                "No loss rates, credit-note allocations, SICR judgments or postings are inferred or approved",
+                "Per-currency totals remain separate; unsupported items block approval rather than disappear",
+            ],
+        ),
+        "total_ecl_by_currency": totals,
+        "calculation_engine": "ifrs.ecl/provision_matrix",
+    }
 
 
 def cash_forecast(data, tables):
     groups = defaultdict(list)
     for row in tables["forecast"]:
         if not data.as_of < date.fromisoformat(row["date"]) <= data.review_through:
-            raise ValueError("Forecast dates must fall after reporting and within the review horizon")
+            raise ValueError(
+                "Forecast dates must fall after reporting and within the review horizon"
+            )
         groups[(row["scenario"], row["currency"])].append(row)
     rows = []
     blocked = False
@@ -93,22 +141,36 @@ def cash_forecast(data, tables):
             gap = max(Decimal(0), money(row, "minimum_cash") - closing)
             if gap:
                 exceptions.append("MINIMUM_CASH_BREACH")
-            rows.append({"id": row["id"], "scenario": scenario, "currency": currency,
-                         "date": row["date"], "recalculated_closing": str(closing),
-                         "funding_gap": str(gap), "exceptions": exceptions,
-                         "state": "EXCEPTIONS" if exceptions else "MATCHED"})
+            rows.append(
+                {
+                    "id": row["id"],
+                    "scenario": scenario,
+                    "currency": currency,
+                    "date": row["date"],
+                    "recalculated_closing": str(closing),
+                    "funding_gap": str(gap),
+                    "exceptions": exceptions,
+                    "state": "EXCEPTIONS" if exceptions else "MATCHED",
+                }
+            )
             previous = closing
         if date.fromisoformat(group[-1]["date"]) != data.review_through:
-            rows.append({"id": f"horizon:{scenario}:{currency}", "state": "FORECAST_HORIZON_MISSING"})
+            rows.append(
+                {"id": f"horizon:{scenario}:{currency}", "state": "FORECAST_HORIZON_MISSING"}
+            )
             blocked = True
     if not groups:
         blocked = True
         rows.append({"id": "forecast-population", "state": "FORECAST_MISSING"})
-    return result(rows, blocked, [
-        "Scenarios, minimum cash and funding commitments are supplied assumptions requiring review",
-        "Forecast interval completeness and the appropriate going-concern horizon need professional assessment",
-        "A positive forecast does not establish a going-concern conclusion",
-    ])
+    return result(
+        rows,
+        blocked,
+        [
+            "Scenarios, minimum cash and funding commitments are supplied assumptions requiring review",
+            "Forecast interval completeness and the appropriate going-concern horizon need professional assessment",
+            "A positive forecast does not establish a going-concern conclusion",
+        ],
+    )
 
 
 def procurement(data, tables):
@@ -134,12 +196,13 @@ def procurement(data, tables):
         for role in ("receipts", "invoices", "payments"):
             if not group[role]:
                 exceptions.append("MISSING_" + role.upper())
-        qty = {role: sum((money(r, "quantity") for r in group[role]), Decimal(0))
-               for role in types}
+        qty = {role: sum((money(r, "quantity") for r in group[role]), Decimal(0)) for role in types}
         amounts = {role: sum((money(r) for r in group[role]), Decimal(0)) for role in types}
         for role in ("orders", "receipts", "invoices"):
-            if any(abs(money(r) - money(r, "quantity") * money(r, "unit_price")) > data.tolerance
-                   for r in group[role]):
+            if any(
+                abs(money(r) - money(r, "quantity") * money(r, "unit_price")) > data.tolerance
+                for r in group[role]
+            ):
                 exceptions.append("EXTENSION_DIFFERENCE_" + role.upper())
         if qty["receipts"] > qty["orders"]:
             exceptions.append("RECEIPT_EXCEEDS_ORDER")
@@ -152,15 +215,28 @@ def procurement(data, tables):
             exceptions.append("PRICE_DIFFERENCE")
         if abs(amounts["invoices"] - amounts["payments"]) > data.tolerance:
             exceptions.append("PAYMENT_DIFFERENCE")
-        rows.append({"id": f"purchase-{index}", "order_id": k[0], "line_reference": k[1],
-                     "vendor": k[2], "currency": k[3], "quantities": {r: str(v) for r, v in qty.items()},
-                     "amounts": {r: str(v) for r, v in amounts.items()}, "exceptions": exceptions,
-                     "source_ids": {role: [r["id"] for r in group[role]] for role in types},
-                     "state": "EXCEPTIONS" if exceptions else "MATCHED"})
-    return result(rows, blocked, [
-        "Bounded positive-quantity purchase lines; returns, tax-inclusive pricing and service acceptance need separate assessment",
-        "Partial receipts and unpaid invoices may be legitimate; exception dispositions require evidence",
-    ])
+        rows.append(
+            {
+                "id": f"purchase-{index}",
+                "order_id": k[0],
+                "line_reference": k[1],
+                "vendor": k[2],
+                "currency": k[3],
+                "quantities": {r: str(v) for r, v in qty.items()},
+                "amounts": {r: str(v) for r, v in amounts.items()},
+                "exceptions": exceptions,
+                "source_ids": {role: [r["id"] for r in group[role]] for role in types},
+                "state": "EXCEPTIONS" if exceptions else "MATCHED",
+            }
+        )
+    return result(
+        rows,
+        blocked,
+        [
+            "Bounded positive-quantity purchase lines; returns, tax-inclusive pricing and service acceptance need separate assessment",
+            "Partial receipts and unpaid invoices may be legitimate; exception dispositions require evidence",
+        ],
+    )
 
 
 def vendor_conflicts(data, tables):
@@ -180,12 +256,21 @@ def vendor_conflicts(data, tables):
         ):
             continue
         shared = employees.get(vendor["bank_account_hash"], [])
-        rows.append({"id": vendor["id"], "vendor_id": vendor["id"],
-                     "employee_ids": shared, "state": "SHARED_BANK_ACCOUNT" if shared else "MATCHED"})
-    return result(rows, limitations=[
-        "Bank identifiers must use the same independently validated normalization/hash scheme",
-        "A shared bank account is an investigation signal, not evidence of fraud or beneficial ownership",
-    ])
+        rows.append(
+            {
+                "id": vendor["id"],
+                "vendor_id": vendor["id"],
+                "employee_ids": shared,
+                "state": "SHARED_BANK_ACCOUNT" if shared else "MATCHED",
+            }
+        )
+    return result(
+        rows,
+        limitations=[
+            "Bank identifiers must use the same independently validated normalization/hash scheme",
+            "A shared bank account is an investigation signal, not evidence of fraud or beneficial ownership",
+        ],
+    )
 
 
 def expenses(data, tables):
@@ -204,14 +289,24 @@ def expenses(data, tables):
         reused = hashes[claim["receipt_sha256"]]
         if len(reused) > 1:
             exceptions.append("REUSED_RECEIPT")
-        rows.append({"id": claim["id"], "employee": claim["employee"],
-                     "currency": claim["currency"], "amount": claim["amount"],
-                     "related_claim_ids": [i for i in reused if i != claim["id"]],
-                     "exceptions": exceptions, "state": "EXCEPTIONS" if exceptions else "MATCHED"})
-    return result(rows, limitations=[
-        "Policy limits and approval status are reviewed source inputs; personal-use classification is not inferred",
-        "Receipt reuse may represent a valid split claim and requires investigation",
-    ])
+        rows.append(
+            {
+                "id": claim["id"],
+                "employee": claim["employee"],
+                "currency": claim["currency"],
+                "amount": claim["amount"],
+                "related_claim_ids": [i for i in reused if i != claim["id"]],
+                "exceptions": exceptions,
+                "state": "EXCEPTIONS" if exceptions else "MATCHED",
+            }
+        )
+    return result(
+        rows,
+        limitations=[
+            "Policy limits and approval status are reviewed source inputs; personal-use classification is not inferred",
+            "Receipt reuse may represent a valid split claim and requires investigation",
+        ],
+    )
 
 
 def benefits(data, tables):
@@ -221,38 +316,68 @@ def benefits(data, tables):
         end = date.fromisoformat(employee["service_end"])
         if end > data.as_of:
             raise ValueError("Service end is after the audit date")
-        rules = [r for r in tables["rules"] if r["regime"] == employee["regime"] and
-                 date.fromisoformat(r["effective_from"]) <= end <= date.fromisoformat(r["effective_to"])]
-        state = "ALTERNATIVE_SCHEME_REQUIRES_ASSESSMENT" if employee["scheme"] != "gratuity" else (
-            "RULE_MISSING" if not rules else "AMBIGUOUS_RULE" if len(rules) != 1 else "MATCHED"
+        rules = [
+            r
+            for r in tables["rules"]
+            if r["regime"] == employee["regime"]
+            and date.fromisoformat(r["effective_from"])
+            <= end
+            <= date.fromisoformat(r["effective_to"])
+        ]
+        state = (
+            "ALTERNATIVE_SCHEME_REQUIRES_ASSESSMENT"
+            if employee["scheme"] != "gratuity"
+            else (
+                "RULE_MISSING" if not rules else "AMBIGUOUS_RULE" if len(rules) != 1 else "MATCHED"
+            )
         )
         if state != "MATCHED":
             rows.append({"id": employee["id"], "state": state})
             blocked = True
             continue
         rule = rules[0]
-        days = ((end - date.fromisoformat(employee["service_start"])).days + 1
-                - employee["excluded_service_days"])
+        days = (
+            (end - date.fromisoformat(employee["service_start"])).days
+            + 1
+            - employee["excluded_service_days"]
+        )
         years = Decimal(days) / money(rule, "year_days")
         first = min(years, money(rule, "first_tier_years"))
         later = max(Decimal(0), years - first)
         salary = money(employee, "monthly_basic_salary")
-        expected = (salary / money(rule, "salary_divisor") *
-                    (first * money(rule, "first_tier_days") + later * money(rule, "later_tier_days")))
+        expected = (
+            salary
+            / money(rule, "salary_divisor")
+            * (first * money(rule, "first_tier_days") + later * money(rule, "later_tier_days"))
+        )
         if years < money(rule, "minimum_service_years"):
             expected = Decimal(0)
-        expected = rounded(min(expected, salary * money(rule, "maximum_salary_months")), employee["currency"])
+        expected = rounded(
+            min(expected, salary * money(rule, "maximum_salary_months")), employee["currency"]
+        )
         difference = money(employee) - expected
-        rows.append({"id": employee["id"], "currency": employee["currency"],
-                     "eligible_service_days": days, "service_years": str(years),
-                     "rule_source_id": rule["id"], "expected_benefit": str(expected),
-                     "paid_benefit": employee["amount"], "difference": str(difference),
-                     "state": "BENEFIT_DIFFERENCE" if abs(difference) > data.tolerance else "MATCHED"})
-    return result(rows, blocked, [
-        "No UAE statutory rates are hardcoded; every regime, tier, divisor, eligibility and cap is supplied evidence",
-        "Inclusive eligible days divided by the supplied year basis; rule applicability must be professionally validated",
-        "Alternative schemes and unsupported transitional/contractual treatment block this bounded computation",
-    ])
+        rows.append(
+            {
+                "id": employee["id"],
+                "currency": employee["currency"],
+                "eligible_service_days": days,
+                "service_years": str(years),
+                "rule_source_id": rule["id"],
+                "expected_benefit": str(expected),
+                "paid_benefit": employee["amount"],
+                "difference": str(difference),
+                "state": "BENEFIT_DIFFERENCE" if abs(difference) > data.tolerance else "MATCHED",
+            }
+        )
+    return result(
+        rows,
+        blocked,
+        [
+            "No UAE statutory rates are hardcoded; every regime, tier, divisor, eligibility and cap is supplied evidence",
+            "Inclusive eligible days divided by the supplied year basis; rule applicability must be professionally validated",
+            "Alternative schemes and unsupported transitional/contractual treatment block this bounded computation",
+        ],
+    )
 
 
 def assets(data, tables):
@@ -276,41 +401,83 @@ def assets(data, tables):
         control = controls.get(key)
         carrying = sum((money(a, "recorded_carrying") for a in group), Decimal(0))
         delta = carrying - money(control) if control else None
-        state = "GL_CONTROL_MISSING" if not control else (
-            "GL_CONTROL_DIFFERENCE" if delta is not None and abs(delta) > data.tolerance else "MATCHED"
+        state = (
+            "GL_CONTROL_MISSING"
+            if not control
+            else (
+                "GL_CONTROL_DIFFERENCE"
+                if delta is not None and abs(delta) > data.tolerance
+                else "MATCHED"
+            )
         )
         blocked |= state != "MATCHED"
-        rows.append({"id": f"asset-control-{index}", "account": key[0], "currency": key[1],
-                     "register_carrying": str(carrying), "difference": str(delta) if delta is not None else None,
-                     "state": state})
+        rows.append(
+            {
+                "id": f"asset-control-{index}",
+                "account": key[0],
+                "currency": key[1],
+                "register_carrying": str(carrying),
+                "difference": str(delta) if delta is not None else None,
+                "state": state,
+            }
+        )
         if not group:
             continue
-        calculation = fixed_assets(FixedAssets.model_validate({
-            "period_start": data.period_start, "period_end": data.as_of,
-            "assets": [{k: v for k, v in a.items() if k in Asset.model_fields} for a in group],
-        }))
+        calculation = fixed_assets(
+            FixedAssets.model_validate(
+                {
+                    "period_start": data.period_start,
+                    "period_end": data.as_of,
+                    "assets": [
+                        {k: v for k, v in a.items() if k in Asset.model_fields} for a in group
+                    ],
+                }
+            )
+        )
         by_reference = {r["reference"]: r for r in calculation["schedule"]}
         for asset in group:
             computed = by_reference[asset["reference"]]
             exceptions = []
-            disposed = asset.get("disposal_date") and asset["disposal_date"] <= data.as_of.isoformat()
+            disposed = (
+                asset.get("disposal_date") and asset["disposal_date"] <= data.as_of.isoformat()
+            )
             if not asset["ownership_evidence"]:
                 exceptions.append("OWNERSHIP_EVIDENCE_MISSING")
             if not disposed and not asset["physical_evidence"]:
                 exceptions.append("PHYSICAL_EVIDENCE_MISSING")
             blocked |= bool(exceptions)
-            if abs(money(asset, "recorded_depreciation") - computed["depreciation"]) > data.tolerance:
+            if (
+                abs(money(asset, "recorded_depreciation") - computed["depreciation"])
+                > data.tolerance
+            ):
                 exceptions.append("DEPRECIATION_DIFFERENCE")
-            if abs(money(asset, "recorded_carrying") - computed["closing_carrying"]) > data.tolerance:
+            if (
+                abs(money(asset, "recorded_carrying") - computed["closing_carrying"])
+                > data.tolerance
+            ):
                 exceptions.append("CARRYING_DIFFERENCE")
-            rows.append({"id": asset["id"], "reference": asset["reference"], "currency": key[1],
-                         "expected_depreciation": str(computed["depreciation"]),
-                         "expected_carrying": str(computed["closing_carrying"]),
-                         "exceptions": exceptions, "state": "EXCEPTIONS" if exceptions else "MATCHED"})
-    return {**result(rows, blocked, [
-        "Reuses IFRS fixed-assets calculations; lives, residuals, impairment and ownership remain reviewed source assumptions",
-        "Physical evidence is a reference, not automatic attendance or verification; no approved ledger is changed",
-    ]), "calculation_engine": "ifrs.fixed_assets"}
+            rows.append(
+                {
+                    "id": asset["id"],
+                    "reference": asset["reference"],
+                    "currency": key[1],
+                    "expected_depreciation": str(computed["depreciation"]),
+                    "expected_carrying": str(computed["closing_carrying"]),
+                    "exceptions": exceptions,
+                    "state": "EXCEPTIONS" if exceptions else "MATCHED",
+                }
+            )
+    return {
+        **result(
+            rows,
+            blocked,
+            [
+                "Reuses IFRS fixed-assets calculations; lives, residuals, impairment and ownership remain reviewed source assumptions",
+                "Physical evidence is a reference, not automatic attendance or verification; no approved ledger is changed",
+            ],
+        ),
+        "calculation_engine": "ifrs.fixed_assets",
+    }
 
 
 def stock_bridge(data, tables):
@@ -330,21 +497,40 @@ def stock_bridge(data, tables):
     for movement in tables["movements"]:
         count = counts.get(key(movement))
         if not count or not count["count_date"] < movement["date"] <= data.as_of.isoformat():
-            raise ValueError("Stock movement has no count or lies outside its count-to-reporting bridge")
+            raise ValueError(
+                "Stock movement has no count or lies outside its count-to-reporting bridge"
+            )
         movements[key(movement)].append(movement)
     derived = []
     bridges = []
     for k, count in counts.items():
         delta = sum((money(r, "quantity") for r in movements[k]), Decimal(0))
-        derived.append({**count, "quantity": str(money(count, "quantity") + delta),
-                        "count_date": data.as_of.isoformat()})
-        bridges.append({"count_source_id": count["id"], "original_count_date": count["count_date"],
-                        "movement_source_ids": [r["id"] for r in movements[k]], "movement_quantity": str(delta)})
+        derived.append(
+            {
+                **count,
+                "quantity": str(money(count, "quantity") + delta),
+                "count_date": data.as_of.isoformat(),
+            }
+        )
+        bridges.append(
+            {
+                "count_source_id": count["id"],
+                "original_count_date": count["count_date"],
+                "movement_source_ids": [r["id"] for r in movements[k]],
+                "movement_quantity": str(delta),
+            }
+        )
     computed = inventory(data, {"books": tables["books"], "count": derived})
-    return {**computed, "count_bridges": bridges, "calculation_engine": "country_workflows.inventory",
-            "limitations": [*computed["limitations"],
-                             "Reporting-date counts are calculated from uploaded counts and movements; no reporting-date physical attendance is inferred",
-                             "Movement and count population completeness require independent control evidence"]}
+    return {
+        **computed,
+        "count_bridges": bridges,
+        "calculation_engine": "country_workflows.inventory",
+        "limitations": [
+            *computed["limitations"],
+            "Reporting-date counts are calculated from uploaded counts and movements; no reporting-date physical attendance is inferred",
+            "Movement and count population completeness require independent control evidence",
+        ],
+    }
 
 
 PRACTICE_CALCULATORS = {

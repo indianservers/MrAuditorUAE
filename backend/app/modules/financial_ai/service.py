@@ -150,6 +150,8 @@ async def suggest(
         "suggestion_id": str(suggestion.id),
         "execution_id": str(result["execution_id"]),
         "model": request.model,
+        "execution_mode": result["execution_mode"],
+        "provider_adapter": result["provider_adapter"],
         "prompt_version": template.version if template else None,
         "review_status": "pending_review",
         "output": output.model_dump(mode="json"),

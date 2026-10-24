@@ -14,15 +14,30 @@ def predict(rows, mode):
     seen = set()
     amounts = []
     for row in rows:
-        if any(not isinstance(row.get(k), str) or not row[k].strip()
-               for k in ("id", "client", "journal", "account", "date", "currency", "functional_currency")):
+        if any(
+            not isinstance(row.get(k), str) or not row[k].strip()
+            for k in (
+                "id",
+                "client",
+                "journal",
+                "account",
+                "date",
+                "currency",
+                "functional_currency",
+            )
+        ):
             raise ValueError("Baseline source identity fields are required")
         if row["id"] in seen:
             raise ValueError("Duplicate baseline source row ID")
         seen.add(row["id"])
         date.fromisoformat(row["date"])
-        if any(isinstance(row.get(k), bool) or not isinstance(row.get(k), (int, float))
-               or not math.isfinite(row[k]) or row[k] < 0 for k in ("debit", "credit")):
+        if any(
+            isinstance(row.get(k), bool)
+            or not isinstance(row.get(k), (int, float))
+            or not math.isfinite(row[k])
+            or row[k] < 0
+            for k in ("debit", "credit")
+        ):
             raise ValueError("Invalid baseline debit/credit")
         amount = row["debit"] + row["credit"]
         if not math.isfinite(amount):
@@ -39,24 +54,48 @@ def predict(rows, mode):
             "calendar_year_end": posting_date.month == 12 and posting_date.day >= 25,
         }
         deviation = abs(log_amount - center) / (1.4826 * mad) if mad else None
-        score = None if mode == "diagnostic_mock" else (
-            min(1.0, deviation / 6) if mode == "statistical_baseline" and deviation is not None
-            else 0.0 if mode == "statistical_baseline" else sum(indicators.values()) / 2
+        score = (
+            None
+            if mode == "diagnostic_mock"
+            else (
+                min(1.0, deviation / 6)
+                if mode == "statistical_baseline" and deviation is not None
+                else 0.0
+                if mode == "statistical_baseline"
+                else sum(indicators.values()) / 2
+            )
         )
-        predictions.append({
-            "transaction_id": row["id"], "execution_mode": mode,
-            "score": score, "supporting_indicators": indicators,
-            "robust_log_amount_deviation": deviation if mode == "statistical_baseline" else None,
-            "signal_category": "diagnostic_only" if mode == "diagnostic_mock" else
-            "review_signal" if score else "no_baseline_signal",
-            "review_status": "UNREVIEWED", "fraud_conclusion": False,
-        })
+        predictions.append(
+            {
+                "transaction_id": row["id"],
+                "execution_mode": mode,
+                "score": score,
+                "supporting_indicators": indicators,
+                "robust_log_amount_deviation": deviation
+                if mode == "statistical_baseline"
+                else None,
+                "signal_category": "diagnostic_only"
+                if mode == "diagnostic_mock"
+                else "review_signal"
+                if score
+                else "no_baseline_signal",
+                "review_status": "UNREVIEWED",
+                "fraud_conclusion": False,
+            }
+        )
     return {
-        "execution_mode": mode, "model_version": None, "feature_version": VERSION,
-        "preprocessing_version": VERSION, "model_family": None,
-        "predictions": predictions, "calibrated_probability": False, "production_validated": False,
-        "score_meaning": "No inference; explicit diagnostic fixture" if mode == "diagnostic_mock" else
-        "Batch-relative robust log-amount deviation, scaled for review ordering" if mode == "statistical_baseline"
+        "execution_mode": mode,
+        "model_version": None,
+        "feature_version": VERSION,
+        "preprocessing_version": VERSION,
+        "model_family": None,
+        "predictions": predictions,
+        "calibrated_probability": False,
+        "production_validated": False,
+        "score_meaning": "No inference; explicit diagnostic fixture"
+        if mode == "diagnostic_mock"
+        else "Batch-relative robust log-amount deviation, scaled for review ordering"
+        if mode == "statistical_baseline"
         else "Fraction of two triggered calendar/round-amount review heuristics",
         "limitations": [
             "No trained model or external language model was used",

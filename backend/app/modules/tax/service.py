@@ -447,6 +447,19 @@ async def approved(db, ctx, eid, kind, profile_id):
 
 
 async def dependencies_current(db, ctx, eid, result):
+    from app.modules.tax.contracts import current
+
+    if not await current(db, ctx, eid, result.results):
+        return False
+    for dependency in result.dependencies:
+        source = await db.scalar(select(AuditRecord).where(
+            AuditRecord.tenant_id == ctx.tenant_id, AuditRecord.id == dependency["id"]))
+        if source and source.kind == "tp-judgment":
+            from app.modules.tp import service as tp
+
+            linked = await tp.get_run(db, ctx, source.engagement_id, uuid.UUID(source.body["run_id"]))
+            if not await tp.current(db, ctx, source.engagement_id, linked):
+                return False
     if result.kind == "corporate-tax":
         financial = await ifrs.run(db, ctx, eid, uuid.UUID(result.inputs["financial_run_id"]))
         if not await ifrs.current_dependencies(db, ctx, eid, financial):
@@ -479,6 +492,9 @@ async def dependencies_current(db, ctx, eid, result):
 
 
 async def save_run(db, ctx, eid, kind, inputs, deps, results, record_id=None):
+    from app.modules.tax.contracts import attach
+
+    results = await attach(db, ctx, eid, "QFZP" if kind == "qfzp" else "CT", results, inputs, deps)
     values = serial({"inputs": inputs, "dependencies": deps, "results": results})
     digest = hashlib.sha256(
         json.dumps(values, sort_keys=True, separators=(",", ":"), default=str).encode()

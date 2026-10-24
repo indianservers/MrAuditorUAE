@@ -72,6 +72,9 @@ class Invoice(Body):
     invoice_type: Literal["full", "simplified"] = "full"
     document_label: str = Field(default="Tax Invoice", max_length=100)
     original_invoice_id: uuid.UUID | None = None
+    supply_reference: str | None = Field(default=None, max_length=200)
+    supply_stage: Literal["ordinary", "advance", "final", "cancellation"] = "ordinary"
+    supply_type: Literal["goods", "services", "mixed"] | None = None
     supplier_name: str = Field(min_length=1, max_length=300)
     supplier_address: str = Field(default="", max_length=1000)
     supplier_trn: str = Field(default="", pattern=r"^(\d{15})?$")

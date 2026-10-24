@@ -12,7 +12,7 @@ from app.modules.connectors.native_service import direct_sync
 
 
 async def repair_connection(db, ctx, connection_id):
-    connection = await scoped(db, ctx, Connection, connection_id, True)
+    connection = await scoped(db, ctx, Connection, connection_id)
     if connection.provider != "quickbooks" or connection.config.get("edition", "online") != "online":
         raise HTTPException(422, "Repair requires QuickBooks Online")
     events = (await db.scalars(select(ConnectorState).where(

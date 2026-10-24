@@ -738,6 +738,10 @@ async def record_graph(db, ctx, eid, refs, pid, parent=None, as_of=None, memo=No
 
 
 async def current(db, ctx, eid, run, _memo=None):
+    from app.modules.tax.contracts import current as tax_current
+
+    if not await tax_current(db, ctx, eid, run.results):
+        return False
     memo: dict[str, Any] = {} if _memo is None else _memo
     seen = memo.setdefault("runs", {})
     if run.id in seen:
@@ -801,6 +805,9 @@ async def current(db, ctx, eid, run, _memo=None):
 
 
 async def save(db, ctx, eid, kind, p, inputs, deps, result, rid=None):
+    from app.modules.tax.contracts import attach
+
+    result = await attach(db, ctx, eid, "TP", result, inputs, deps, p)
     value = serial({"inputs": inputs, "dependencies": deps, "results": result})
     digest = hashlib.sha256(
         json.dumps(value, sort_keys=True, separators=(",", ":")).encode()

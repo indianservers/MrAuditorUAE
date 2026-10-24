@@ -25,6 +25,10 @@ ASSETS = {
 
 
 def scope(group):
+    expected = set(range(group.fiscal_start.year - 4, group.fiscal_start.year))
+    if group.multinational is None or len(group.preceding_revenues) != 4 or {x.year for x in group.preceding_revenues} != expected:
+        return {"in_scope": None, "qualifying_years": None, "rule": "CD142/1.1",
+                "status": "INCOMPLETE_SCOPE", "missing_inputs": ["four distinct preceding revenue years"]}
     hits = sum(x.eur >= D(750000000) * D(x.months) / 12 for x in group.preceding_revenues)
     return {
         "in_scope": group.multinational and hits >= 2,
@@ -65,6 +69,8 @@ def calculate(group, entities, elections=()):
     with localcontext() as ctx:
         ctx.prec = 50
         assessed = scope(group)
+        if assessed["in_scope"] is None:
+            return {**assessed, "uae_dmtt": None}
         if group.special_cases:
             raise ValueError(
                 "Special group entry/exit, initial international phase and restructuring require a separate technical calculation"
@@ -73,11 +79,11 @@ def calculate(group, entities, elections=()):
             return {**assessed, "uae_dmtt": D(0), "status": "OUT_OF_SCOPE"}
         rows = []
         for e, profit in entities:
-            if e.jurisdiction != "AE" or e.classification in {"excluded", "investment"}:
+            if e.jurisdiction != "AE" or e.classification == "excluded":
                 continue
             if e.classification != "ordinary":
                 raise ValueError(
-                    "Separate PE/JV/minority/stateless blending is not implemented; computation blocked"
+                    "Separate investment/PE/JV/minority/stateless blending is not implemented; computation blocked"
                 )
             ds = [deferred(x, group.fiscal_start.year) for x in e.deferred]
             if any(x["recapture_assessment_required"] for x in ds):
@@ -188,6 +194,7 @@ def calculate(group, entities, elections=()):
         return {
             **assessed,
             "status": "DRAFT_TECHNICAL_REVIEW",
+            "outcome": "SAFE_HARBOUR_APPLIED" if relief else "NO_TOPUP_CALCULATED" if rounded == 0 else "TOPUP_CALCULATED",
             "currency": group.calculation_currency,
             "net_globe_income": income,
             "covered_taxes": tax,

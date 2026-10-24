@@ -45,7 +45,9 @@ class OwnershipEdge(Strict):
         if self.effective_to and self.effective_to < self.effective_from:
             raise ValueError("Ownership effective dates must be ordered")
         if self.company == self.owner:
-            raise ValueError("Direct self-ownership needs a separately assessed treasury-share model")
+            raise ValueError(
+                "Direct self-ownership needs a separately assessed treasury-share model"
+            )
         return self
 
 
@@ -83,16 +85,31 @@ class ScreeningPolicy(Strict):
 
 
 DILIGENCE_ROW_TYPES: dict[str, type[Strict]] = {
-    "diligence-subjects": DiligenceSubject, "ownership-edges": OwnershipEdge,
-    "ownership-policies": OwnershipPolicy, "screening-subjects": ScreeningSubject,
-    "sanctions-entries": SanctionsEntry, "screening-policies": ScreeningPolicy,
+    "diligence-subjects": DiligenceSubject,
+    "ownership-edges": OwnershipEdge,
+    "ownership-policies": OwnershipPolicy,
+    "screening-subjects": ScreeningSubject,
+    "sanctions-entries": SanctionsEntry,
+    "screening-policies": ScreeningPolicy,
 }
 DILIGENCE_WORKFLOWS: dict[str, tuple[str, list[str], dict[str, str]]] = {
-    "kyc-edd-review": ("KYC periodic review and enhanced-diligence evidence", [],
-                       {"subjects": "diligence-subjects"}),
-    "ownership-lookthrough": ("Economic ownership look-through with reviewed threshold", [],
-                              {"ownership": "ownership-edges", "policy": "ownership-policies"}),
-    "sanctions-name-review": ("Uploaded sanctions-list name baseline; independent adjudication required", [],
-                              {"subjects": "screening-subjects", "list": "sanctions-entries",
-                               "policy": "screening-policies"}),
+    "kyc-edd-review": (
+        "KYC periodic review and enhanced-diligence evidence",
+        [],
+        {"subjects": "diligence-subjects"},
+    ),
+    "ownership-lookthrough": (
+        "Economic ownership look-through with reviewed threshold",
+        [],
+        {"ownership": "ownership-edges", "policy": "ownership-policies"},
+    ),
+    "sanctions-name-review": (
+        "Uploaded sanctions-list name baseline; independent adjudication required",
+        [],
+        {
+            "subjects": "screening-subjects",
+            "list": "sanctions-entries",
+            "policy": "screening-policies",
+        },
+    ),
 }

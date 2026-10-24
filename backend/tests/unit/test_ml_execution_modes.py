@@ -1,13 +1,23 @@
 import pytest
+from fastapi import HTTPException
 
 from app.modules.ml.baselines import predict
 from app.modules.ml.service import node
 
 
 def row(**changes):
-    return {"id": "R1", "journal": "J1", "client": "C1", "account": "A1",
-            "date": "2026-12-30", "currency": "AED", "functional_currency": "AED",
-            "debit": 1000.0, "credit": 0.0, **changes}
+    return {
+        "id": "R1",
+        "journal": "J1",
+        "client": "C1",
+        "account": "A1",
+        "date": "2026-12-30",
+        "currency": "AED",
+        "functional_currency": "AED",
+        "debit": 1000.0,
+        "credit": 0.0,
+        **changes,
+    }
 
 
 def test_explicit_rules_and_diagnostic_modes_never_claim_trained_inference(monkeypatch):
@@ -30,8 +40,16 @@ def test_constant_statistical_population_is_not_a_fraud_probability():
     assert "zero is not clearance" in " ".join(output["limitations"])
 
 
-@pytest.mark.parametrize("changes", [{"debit": float("nan")}, {"debit": -1},
-                                      {"credit": True}, {"date": "2026-02-30"}, {"account": ""}])
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"debit": float("nan")},
+        {"debit": -1},
+        {"credit": True},
+        {"date": "2026-02-30"},
+        {"account": ""},
+    ],
+)
 def test_baseline_input_failures_are_explicit(changes):
     with pytest.raises(ValueError):
         predict([row(**changes)], "rules_baseline")
@@ -40,3 +58,17 @@ def test_baseline_input_failures_are_explicit(changes):
 def test_missing_model_never_silently_runs_a_baseline():
     with pytest.raises(ValueError, match="ML_MODEL_UNAVAILABLE"):
         node("infer", rows=[row()])
+
+
+def test_local_child_worker_admission_is_bounded():
+    from app.modules.ml.service import _NODE_SLOTS
+
+    assert _NODE_SLOTS.acquire(blocking=False)
+    assert _NODE_SLOTS.acquire(blocking=False)
+    try:
+        with pytest.raises(HTTPException) as failure:
+            node("infer", rows=[row()])
+        assert failure.value.status_code == 429
+    finally:
+        _NODE_SLOTS.release()
+        _NODE_SLOTS.release()

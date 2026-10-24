@@ -113,6 +113,39 @@ beforeEach(() => {
   state.result = null;
 });
 describe("country workflows", () => {
+  it("queues a credit-normal payable GL control without a movement date", async () => {
+    render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+    fireEvent.change(screen.getByLabelText("Source origin"), {
+      target: { value: "ledger" },
+    });
+    fireEvent.change(screen.getByLabelText("Ledger source type"), {
+      target: { value: "balance-controls" },
+    });
+    fireEvent.change(screen.getByLabelText("Subledger side"), {
+      target: { value: "payable" },
+    });
+    for (const [label, value] of [
+      ["Schedule title", "Payable control"],
+      ["Committed ledger snapshot", "snapshot"],
+      ["Bank ledger account", "cash"],
+      ["Bank account identifier", "AP"],
+      ["Ledger through date", "2026-12-31"],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    expect(
+      screen.queryByLabelText("Ledger from date (optional)"),
+    ).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+      source_kind: "balance-controls",
+      balance_side: "payable",
+      bank_account: "AP",
+    });
+    expect(state.mutate.mock.calls[0][0].body.payload).not.toHaveProperty(
+      "from_date",
+    );
+  });
   it("queues a committed account selection without asking for an exported copy", async () => {
     render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
     fireEvent.change(screen.getByLabelText("Source origin"), {

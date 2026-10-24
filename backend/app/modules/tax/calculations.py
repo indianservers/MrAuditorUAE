@@ -248,6 +248,7 @@ def qfzp(data: QFZP, profile, parameters: RuleParameters):
             unresolved.append("revenue_reconciliation")
         denominator = ZERO
         numerator = ZERO
+        uncertain_revenue = ZERO
         qual_profit = ZERO
         special_profit = ZERO
         for segment in data.segments:
@@ -272,6 +273,8 @@ def qfzp(data: QFZP, profile, parameters: RuleParameters):
                     )
             else:
                 denominator += segment.revenue
+                if segment.classification == "unresolved" or segment.counterparty_type == "unknown":
+                    uncertain_revenue += segment.revenue
                 if segment.classification in {"nonqualifying", "excluded", "other_ip"}:
                     numerator += segment.revenue
             if segment.classification in {"qualifying", "nonqualifying", "excluded"}:
@@ -302,6 +305,14 @@ def qfzp(data: QFZP, profile, parameters: RuleParameters):
                 "nonqualifying_revenue": numerator,
                 "threshold": q(limit),
                 "de_minimis_passed": de_minimis,
+                "classification_sensitivity": {
+                    "confirmed_nonqualifying": numerator,
+                    "unresolved_revenue": uncertain_revenue,
+                    "maximum_nonqualifying": min(denominator, numerator + uncertain_revenue),
+                    "all_unresolved_nonqualifying_passes": min(denominator, numerator + uncertain_revenue) <= limit,
+                    "all_unresolved_qualifying_passes": numerator <= limit,
+                    "conclusion": "UNRESOLVED" if uncertain_revenue else "CLASSIFIED_INPUTS_ONLY",
+                },
                 "qualifying_profit_if_qualified": qual_profit,
                 "special_nonqualifying_profit": special_profit,
                 "qfzp_tax_if_qualified": q(max(ZERO, special_profit) * parameters.standard_rate)
@@ -322,6 +333,10 @@ def qfzp(data: QFZP, profile, parameters: RuleParameters):
 def loss_allocation(taxable, percentage, lots):
     with localcontext() as ctx:
         ctx.prec = 64
+        if len({str(lot["id"]) for lot in lots}) != len(lots):
+            raise ValueError("Duplicate loss lot would duplicate utilization")
+        if not ZERO <= percentage <= 1 or any(D(lot["available"]) < 0 for lot in lots):
+            raise ValueError("Invalid loss cap or carryforward balance")
         remaining = max(ZERO, D(taxable)) * percentage
         allocations = []
         for lot in lots:

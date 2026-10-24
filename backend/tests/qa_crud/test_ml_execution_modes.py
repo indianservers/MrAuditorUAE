@@ -39,8 +39,11 @@ async def test_explicit_baselines_real_jobs_tools_and_source_staleness(environme
         dataset_id = built["id"]
     modes = []
     for mode in ["rules_baseline", "statistical_baseline", "diagnostic_mock"]:
-        queued = await c.post("/api/v1/ml/inference/baselines", headers=h,
-                              json={"dataset_id": dataset_id, "mode": mode})
+        queued = await c.post(
+            "/api/v1/ml/inference/baselines",
+            headers=h,
+            json={"dataset_id": dataset_id, "mode": mode},
+        )
         assert queued.status_code == 202, queued.text
         await process(queued.json()["id"], str(tenant), str(uid))
         status = (await c.get("/api/v1/ml/jobs/" + queued.json()["id"], headers=h)).json()
@@ -55,11 +58,15 @@ async def test_explicit_baselines_real_jobs_tools_and_source_staleness(environme
         assert details["body"]["predictions"][0]["review_status"] == "UNREVIEWED"
         if mode == "diagnostic_mock":
             assert details["body"]["predictions"][0]["score"] is None
-    invalid = await c.post("/api/v1/ml/inference/baselines", headers=h,
-                           json={"dataset_id": dataset_id, "mode": "trained_model"})
+    invalid = await c.post(
+        "/api/v1/ml/inference/baselines",
+        headers=h,
+        json={"dataset_id": dataset_id, "mode": "trained_model"},
+    )
     assert invalid.status_code == 422
-    denied = await c.get("/api/v1/ml/events/" + modes[0][0],
-                         headers={**h, "X-Tenant-ID": str(uuid.uuid4())})
+    denied = await c.get(
+        "/api/v1/ml/events/" + modes[0][0], headers={**h, "X-Tenant-ID": str(uuid.uuid4())}
+    )
     assert denied.status_code in {403, 404}
     capabilities = await c.get(f"/api/v1/ml/engagements/{eid}/capabilities", headers=h)
     assert capabilities.status_code == 200
@@ -69,7 +76,9 @@ async def test_explicit_baselines_real_jobs_tools_and_source_staleness(environme
         facts = await invoke(db, ctx, uuid.UUID(eid), "ml.get_predictions", ToolInput())
         assert facts.status == "COMPLETED"
         assert {item["facts"]["execution_mode"] for item in facts.data["items"]} == {
-            "rules_baseline", "statistical_baseline", "diagnostic_mock"
+            "rules_baseline",
+            "statistical_baseline",
+            "diagnostic_mock",
         }
         dataset = await db.get(MLEvent, uuid.UUID(dataset_id))
         snap = await db.get(ImportSnapshot, uuid.UUID(dataset.body["source_snapshots"][0]["id"]))

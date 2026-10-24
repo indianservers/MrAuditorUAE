@@ -4,6 +4,7 @@ import json
 import tempfile
 import uuid
 from decimal import Decimal
+from datetime import UTC, datetime
 
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -23,7 +24,14 @@ from app.modules.saas.storage import put_private
 
 
 async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, resume_session: str | None = None):
-    connection = await scoped(db, ctx, Connection, connection_id, True)
+    runtime = ConnectorRuntime.for_session(db, ctx, connection_id)
+    if runtime:
+        from app.modules.connectors.locking import begin_sync
+
+        await begin_sync(db, ctx, connection_id)
+    connection = await scoped(db, ctx, Connection, connection_id)
+    if runtime:
+        await db.refresh(connection)
     if connection.provider != "zoho" or not connection.organization_id:
         raise HTTPException(422, "Zoho organization selection required")
     period = await scoped(db, ctx, FinancialPeriod, connection.period_id)
@@ -38,9 +46,9 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, re
         credentials["client_secret"],
         credentials.get("refresh_token", ""),
     )
-    runtime = ConnectorRuntime.for_session(db, ctx, connection_id)
+    initial_config, initial_credentials = digest(config), connection.encrypted_credentials
     session_id = resume_session or str(uuid.uuid4())
-    cache_scope = digest([str(connection.id), str(connection.period_id), connection.region, connection.organization_id, session_id])
+    cache_scope = digest([str(connection.id), str(connection.period_id), connection.region, connection.organization_id, config, session_id])
     quota_client = None
     if runtime:
         from redis.asyncio import Redis
@@ -69,6 +77,8 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, re
         return await put_private(db, ctx, io.BytesIO(raw))
 
     document_controls = []
+    started = datetime.now(UTC)
+    delta_resources = set()
     run = SyncRun(**scope_values(connection), connection_id=connection.id)
     db.add(run)
     await db.flush()
@@ -122,6 +132,13 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, re
             resources.update(customerpayments="customerpayments", vendorpayments="vendorpayments")
         for resource in resources:
             extra = {"filter_by": "AccountType.All"} if resource == "chartofaccounts" else None
+            if runtime and config.get("incremental_documents"):
+                from app.modules.connectors.incremental import ZOHO_MODIFIED, modified_filter
+
+                if resource in ZOHO_MODIFIED:
+                    watermark = await runtime.get("watermark", digest([str(connection.id), resource]))
+                    extra = modified_filter(resource, watermark.get("last_completed_start") if watermark else None)
+                    delta_resources.add(resource)
             async for page in adapter.pages(resource, connection.organization_id, extra):
                 data = adapter.last_raw or json.dumps(page, sort_keys=True, default=str).encode()
                 stored = await preserve(data)
@@ -218,8 +235,17 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, re
         error = "partial_extraction"
     if quota_client:
         await quota_client.aclose()
+    changed = False
+    if runtime:
+        from app.modules.connectors.locking import finish_sync
+
+        connection = await finish_sync(db, ctx, connection_id)
+        changed = not connection or digest(connection.config) != initial_config or connection.encrypted_credentials != initial_credentials
+        if changed:
+            status, error = "failed", "configuration_changed_during_extraction"
     credentials.update(access_token=adapter.access_token, refresh_token=adapter.refresh_token)
-    connection.encrypted_credentials = encrypt(credentials)
+    if not changed:
+        connection.encrypted_credentials = encrypt(credentials)
     run.status = status
     run.error_category = error
     run.manifest = {
@@ -242,8 +268,12 @@ async def zoho_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, re
         "requires_validation": True,
         "period_start": str(period.start_date),
         "period_end": str(period.end_date),
-        "incremental_support": "Only use resource-documented filters; this release performs complete resource pagination",
+        "incremental_support": {"document_resources": sorted(delta_resources), "gl": "full_account_transaction_pagination", "deletions": "full_population_comparison_required"},
     }
+    if status == "completed" and runtime and delta_resources:
+        from app.modules.connectors.incremental import commit_watermarks
+
+        await commit_watermarks(db, ctx, connection.id, delta_resources, started, run.id)
     if status == "completed" and extracted_lines:
         normalized.seek(0)
         # The derived CSV has lineage to every original API page/detail via the sync run.

@@ -85,17 +85,52 @@ def tax_evidence(document: dict, provider: str):
 def odata_metadata(xml: bytes, entity_set: str, required_fields: set[str]):
     if len(xml) > 8 * 1024 * 1024:
         raise ConnectorError("OData metadata exceeds 8 MiB")
-    root = fromstring(xml)
-    sets = {n.get("Name"): n.get("EntityType", "").split(".")[-1]
-            for n in root.iter() if n.tag.split("}")[-1] == "EntitySet"}
+    try:
+        root = fromstring(xml)
+    except Exception:
+        raise ConnectorError("Invalid or unsafe OData metadata XML") from None
+    schemas = [n for n in root.iter() if n.tag.split("}")[-1] == "Schema"]
+    aliases = {n.get("Alias"): n.get("Namespace") for n in schemas if n.get("Alias")}
+    types = {}
+    sets = {}
+    def qualified(name):
+        prefix, _, suffix = name.rpartition(".")
+        return (aliases.get(prefix) or prefix) + "." + suffix if prefix else name
+    for schema in schemas:
+        namespace = schema.get("Namespace", "")
+        for node in schema:
+            if node.tag.split("}")[-1] == "EntityType":
+                name = namespace + "." + node.get("Name", "") if namespace else node.get("Name", "")
+                if name in types:
+                    raise ConnectorError("Ambiguous OData entity type")
+                types[name] = node
+        for node in schema.iter():
+            if node.tag.split("}")[-1] == "EntitySet":
+                name = node.get("Name", "")
+                if name in sets:
+                    raise ConnectorError("Ambiguous OData entity set")
+                sets[name] = qualified(node.get("EntityType", ""))
     type_name = sets.get(entity_set)
     if not type_name:
         raise ConnectorError("Configured OData entity is not published by the source")
-    fields: set[str] = set()
-    for entity in root.iter():
-        if entity.tag.split("}")[-1] == "EntityType" and entity.get("Name") == type_name:
-            fields.update(n.get("Name", "") for n in entity if n.tag.split("}")[-1] == "Property")
-    missing = required_fields - fields
+    fields: dict[str, str] = {}
+    seen = set()
+    while type_name:
+        if type_name in seen:
+            raise ConnectorError("Cyclic OData entity inheritance")
+        seen.add(type_name)
+        entity = types.get(type_name)
+        if entity is None:
+            # Some test/legacy metadata omits the Schema namespace. Accept only
+            # an unambiguous unqualified type, never combine namespaces.
+            entity = types.get(type_name.rsplit(".", 1)[-1])
+        if entity is None:
+            raise ConnectorError("OData entity type definition is unavailable")
+        for node in entity:
+            if node.tag.split("}")[-1] == "Property":
+                fields.setdefault(node.get("Name", ""), node.get("Type", ""))
+        type_name = qualified(entity.get("BaseType", "")) if entity.get("BaseType") else ""
+    missing = required_fields - fields.keys()
     if missing:
         raise ConnectorError("Deployed OData contract is missing fields: " + ", ".join(sorted(missing)))
-    return {"entity_set": entity_set, "fields_verified": sorted(required_fields)}
+    return {"entity_set": entity_set, "fields_verified": sorted(required_fields), "property_types": fields}

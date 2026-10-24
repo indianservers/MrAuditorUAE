@@ -46,6 +46,12 @@ class Group(Body):
         return self
 
 
+class ScopeInput(Strict):
+    fiscal_start: date
+    multinational: bool | None = None
+    preceding_revenues: list[Revenue] = Field(default_factory=list, max_length=4)
+
+
 class Adjustment(Strict):
     category: Literal[
         "net_tax",
@@ -119,6 +125,7 @@ class Election(Body):
 
 class Memo(Body):
     group_id: uuid.UUID
+    calculation_id: uuid.UUID | None = None
     technical_evidence_id: uuid.UUID
     conclusion: str = Field(min_length=20, max_length=12000)
 

@@ -21,6 +21,7 @@ export function ConnectorOperations({ connection }: { connection: RecordRow }) {
   const [job, setJob] = useState("");
   const [documents, setDocuments] = useState(false);
   const [attachments, setAttachments] = useState(false);
+  const [incremental, setIncremental] = useState(false);
   const native = connection.provider !== "tally";
   const records = health.data?.records || [];
   const resume = (id: string) =>
@@ -54,6 +55,7 @@ export function ConnectorOperations({ connection }: { connection: RecordRow }) {
       {connection.provider === "zoho" && (
         <fieldset>
           <legend>Supporting evidence</legend>
+          <label><input type="checkbox" checked={incremental} onChange={(event) => setIncremental(event.target.checked)} />Use documented document deltas; refresh the full ledger</label>
           <label>
             <input
               type="checkbox"
@@ -79,6 +81,7 @@ export function ConnectorOperations({ connection }: { connection: RecordRow }) {
                 body: {
                   include_documents: documents,
                   include_attachments: attachments,
+            incremental_documents: incremental,
                 },
               })
             }

@@ -54,14 +54,22 @@ COLUMNS = [
 
 
 async def direct_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, resume_session: str | None = None, *, repair_since: str | None = None):
-    connection = await scoped(db, ctx, Connection, connection_id, True)
+    runtime = ConnectorRuntime.for_session(db, ctx, connection_id)
+    if runtime:
+        from app.modules.connectors.locking import begin_sync
+
+        await begin_sync(db, ctx, connection_id)
+    connection = await scoped(db, ctx, Connection, connection_id)
+    if runtime:
+        await db.refresh(connection)
     if connection.provider not in NATIVE_PROVIDERS:
         raise HTTPException(422, "This connection does not use a direct vendor API")
     entity, period = await check_scope(db, ctx, connection)
     if not connection.encrypted_credentials:
         raise HTTPException(422, "Configure secure credentials before direct synchronization")
     credentials = decrypt(connection.encrypted_credentials)
-    runtime = ConnectorRuntime.for_session(db, ctx, connection_id)
+    initial_config = digest(connection.config)
+    initial_credentials = connection.encrypted_credentials
     session_id = resume_session or str(uuid.uuid4())
     cache_scope = digest([str(connection.id), str(connection.tenant_id), str(connection.period_id), connection.config, session_id])
     run = SyncRun(**scope_values(connection), connection_id=connection.id)
@@ -272,9 +280,17 @@ async def direct_sync(db: AsyncSession, ctx: Context, connection_id: uuid.UUID, 
                 await adapter.close()
                 if quota_client:
                     await quota_client.aclose()
-                connection.encrypted_credentials = encrypt(adapter.credentials)
+
             for stream in streams.values():
                 stream.flush()
+        if runtime:
+            from app.modules.connectors.locking import finish_sync
+
+            connection = await finish_sync(db, ctx, connection_id)
+            if not connection or digest(connection.config) != initial_config or connection.encrypted_credentials != initial_credentials:
+                failure = "Connection configuration or credentials changed during extraction; start a new session"
+        if connection and not (runtime and failure and failure.startswith("Connection configuration")):
+            connection.encrypted_credentials = encrypt(adapter.credentials)
         run.status = "failed" if failure else "completed"
         run.error_category = "extraction_or_validation_failed" if failure else None
         run.completeness = "insufficient_evidence"

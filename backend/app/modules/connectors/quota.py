@@ -28,7 +28,7 @@ class QuotaDeferred(ConnectorError):
 class OrganizationQuota:
     def __init__(self, redis, provider, company, client_id, per_minute=60, per_day=10000, concurrency=2):
         self.redis = redis
-        self.key = "connector-quota:" + digest([provider, company, client_id])
+        self.key = "connector-quota:" + digest([provider, company])
         self.limits = per_minute, per_day, concurrency
 
     async def acquire(self):

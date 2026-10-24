@@ -574,6 +574,7 @@ class NativeAdapter:
             if kind == "gl":
                 fields.update([c.posting_date_field, c.finance_company_field])
             checks[kind] = odata_metadata(raw, path, fields)
+        checks["company"] = odata_metadata(raw, c.company_path, {c.company_id_field, c.currency_field})
         company_rows = [row async for row in self.odata(c.company_path)]
         company = next((row for row in company_rows if str(field(row, c.company_id_field)) == c.company_id), None)
         if not company or field(company, c.currency_field) != currency:
@@ -582,9 +583,22 @@ class NativeAdapter:
             filters = None
             if kind == "gl":
                 company_id = c.company_id.replace("'", "''")
-                filters = {"$filter": f"{c.finance_company_field} eq '{company_id}' and {c.posting_date_field} ge {start} and {c.posting_date_field} le {end}"}
+                source_type = checks["gl"]["property_types"].get(c.posting_date_field)
+                if source_type == "Edm.Date":
+                    date_filter = f"{c.posting_date_field} ge {start} and {c.posting_date_field} le {end}"
+                elif source_type == "Edm.DateTimeOffset":
+                    from datetime import timedelta
+
+                    stop = end + timedelta(days=1)
+                    date_filter = f"{c.posting_date_field} ge {start}T00:00:00Z and {c.posting_date_field} lt {stop}T00:00:00Z"
+                else:
+                    raise ConnectorError("Finance posting-date metadata must declare Edm.Date or Edm.DateTimeOffset")
+                filters = {"$filter": f"{c.finance_company_field} eq '{company_id}' and " + date_filter}
+            elif c.finance_company_field in checks["coa"]["property_types"]:
+                company_id = c.company_id.replace("'", "''")
+                filters = {"$filter": f"{c.finance_company_field} eq '{company_id}'"}
             async for source in self.odata(path, filters):
-                if kind == "gl" and str(field(source, c.finance_company_field)) != c.company_id:
+                if c.finance_company_field in checks[kind]["property_types"] and str(field(source, c.finance_company_field)) != c.company_id:
                     raise ConnectorError("Dynamics Finance legal-entity mismatch")
                 row = {key: str(field(source, value)) for key, value in c.mappings[kind].items()}
                 row.setdefault("currency", currency)

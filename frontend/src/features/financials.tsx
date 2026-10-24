@@ -399,7 +399,7 @@ function TrialBalanceBody() {
   );
 }
 function SparkleLabel() {
-  return <strong className="ai-label">✦ AI Insight</strong>;
+  return <strong className="ai-label">Deterministic account review</strong>;
 }
 export function Ledger({ journals = false }: { journals?: boolean }) {
   return (
