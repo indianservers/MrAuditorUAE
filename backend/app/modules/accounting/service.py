@@ -84,7 +84,7 @@ async def upload(
         ):
             raise HTTPException(422, "Source sync scope mismatch")
     if Path(filename).suffix.lower() not in (
-        {".csv", ".xlsx", ".xml", ".json", ".ndjson"} if data.source_system == "tally" else {".csv", ".xlsx"}
+        {".csv", ".xlsx", ".xml", ".json", ".ndjson"} if data.source_system == "tally" else {".csv", ".xlsx", ".json"} if data.source_system == "quickbooks" else {".csv", ".xlsx"}
     ):
         raise HTTPException(422, "Only CSV/XLSX accepted")
     if data.profile_id:

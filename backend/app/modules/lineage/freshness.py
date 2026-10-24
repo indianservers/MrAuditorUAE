@@ -38,6 +38,9 @@ async def mapping_receipt(db, tenant, entity):
             "id": str(row.id),
             "mapping_version": row.mapping_version,
             "classification": row.classification,
+            "statement_group": row.statement_group,
+            "parent_code": row.parent_code,
+            "mapping_profile_id": str(row.mapping_profile_id) if row.mapping_profile_id else None,
             "source_group": row.source_group,
             "contra": row.contra,
         }

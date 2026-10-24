@@ -38,6 +38,7 @@ import { useSearchParams } from "next/navigation";
 import { useRef, useState } from "react";
 import { ContextGate, JobProgress, PageHeader } from "./shared";
 import { ReportPackageWizard } from "./report-import";
+import { ConnectorOperations } from "./connector-operations";
 import { NativeConnection } from "./native-connection";
 type Preview = {
   sheets: string[];
@@ -116,7 +117,9 @@ export function Integrations() {
               const connection = connections.data?.items.find(
                 (c) =>
                   c.provider === provider &&
-                  (!scope.entity || c.entity_id === scope.entity),
+                  (!scope.entity || c.entity_id === scope.entity) &&
+                  (!scope.client || c.client_id === scope.client) &&
+                  (!scope.period || c.period_id === scope.period),
               );
               return (
                 <section className="card connector" key={name}>
@@ -949,6 +952,7 @@ function ConnectionDetail({ connection: initial }: { connection: RecordRow }) {
           organization_id: connection.organization_id,
         }}
       />
+      <ConnectorOperations connection={connection} />
       {connection.provider === "tally" ? (
         <>
           <Badge tone="warning">Agent connectivity not probed</Badge>

@@ -3,6 +3,7 @@
 from collections import defaultdict
 from datetime import date
 from decimal import Decimal
+import hashlib
 
 from app.modules.country_workflows.audit_calculations import money, result
 from app.modules.ifrs.calculations import revenue
@@ -222,7 +223,12 @@ def escrow(data, tables):
             rows.append({"id": "limit:" + auth_id, "used": str(amount), "state": "AUTHORISATION_LIMIT_EXCEEDED"})
             blocked = True
     for index, (key, group) in enumerate(sorted(groups.items()), 1):
-        matched = reconcile_transactions(group["books"], group["bank"], data.tolerance, data.date_tolerance, 3)
+        def matching_rows(entries):
+            return [{**r, "counterparty": hashlib.sha256(r["counterparty"].encode()).hexdigest()}
+                    for r in entries]
+
+        matched = reconcile_transactions(matching_rows(group["books"]), matching_rows(group["bank"]),
+                                         data.tolerance, data.date_tolerance, 3)
         ambiguous = bool(matched.get("ambiguous"))
         left_ids = {i for m in matched["matches"] for i in m["left_ids"]}
         right_ids = {i for m in matched["matches"] for i in m["right_ids"]}

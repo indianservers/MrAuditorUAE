@@ -47,6 +47,20 @@ class BalanceControls(Input):
     closing: list[Balance] = Field(min_length=1, max_length=10000)
 
 
+class ZohoPreferences(Input):
+    include_documents: bool = False
+    include_attachments: bool = False
+
+
+@router.patch("/connectors/operations/{identifier}/preferences", response_model=dict)
+async def preferences(identifier: uuid.UUID, data: ZohoPreferences, db: DB, ctx: Manage):
+    connection = await scoped(db, ctx, Connection, identifier, True)
+    if connection.provider != "zoho":
+        raise HTTPException(422, "These preferences apply to Zoho Books")
+    connection.config = {**connection.config, **data.model_dump()}
+    return {"status": "preferences_saved", "preferences": data.model_dump()}
+
+
 @router.post("/connectors/operations/{identifier}/balance-controls", response_model=dict)
 async def balance_controls(identifier: uuid.UUID, data: BalanceControls, db: DB, ctx: Manage):
     from app.modules.accounting.models import ImportBatch, ImportFile

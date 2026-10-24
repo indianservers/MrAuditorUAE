@@ -78,7 +78,15 @@ def safe_cell(value: object) -> str:
 
 def rows(path: Path, filename: str, options: ImportOptions) -> Iterator[tuple[int, dict[str, str]]]:
     suffix = Path(filename).suffix.lower()
-    if suffix == ".ndjson" and options.source_system == "tally":
+    if suffix == ".json" and options.source_system == "quickbooks":
+        import json
+        from app.modules.connectors.quickbooks_desktop import package_rows as desktop_rows
+
+        if path.stat().st_size > 64 * 1024 * 1024:
+            raise ImportProblem("Desktop SDK package exceeds import limit; narrow the selected period")
+        for index, row in enumerate(desktop_rows(json.loads(path.read_bytes()), options), 2):
+            yield index, row
+    elif suffix == ".ndjson" and options.source_system == "tally":
         from app.modules.connectors.tally_windows import package_rows
 
         if not options.tally_company:

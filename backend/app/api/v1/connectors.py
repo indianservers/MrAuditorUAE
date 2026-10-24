@@ -59,7 +59,7 @@ class ConnectionCreate(ScopeInput):
     region: str = "ae"
     organization_id: str | None = None
     credentials: dict[str, str] = Field(default_factory=dict, max_length=10)
-    config: dict = Field(default_factory=dict, max_length=50)
+    config: dict = Field(default_factory=dict, max_length=100)
 
 
 @router.post("/accounting/connections", response_model=dict, status_code=201)
@@ -112,7 +112,7 @@ async def create(data: ConnectionCreate, db: DB, ctx: Manage):
 
 
 class DirectConfiguration(Input):
-    config: dict | None = Field(default=None, max_length=50)
+    config: dict | None = Field(default=None, max_length=100)
     credentials: dict[str, str] | None = Field(default=None, max_length=10)
     replace_credentials: bool = False
 

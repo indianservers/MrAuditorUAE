@@ -607,7 +607,9 @@ def calculate(data, country, sources):
         **result,
         "title": data.title,
         "workflow": data.workflow,
-        "workflow_version": "country-workflows-1",
+        "workflow_version": "audit-extensions-1" if data.workflow in {
+            *AUDIT_CALCULATORS, *PRACTICE_CALCULATORS, *SECTOR_CALCULATORS, *DILIGENCE_CALCULATORS
+        } else "country-workflows-1",
         "as_of": data.as_of.isoformat(),
         "rationale": data.rationale,
         "review_status": "UNVERIFIED",

@@ -107,7 +107,7 @@ async def validate(db, ctx, eng, data):
                 f"Independent import control not satisfied: {name}",
                 "Supply source totals/count and validate the import",
                 [str(batch.id)],
-                "/financials/imports",
+                "/integrations",
             )
     accounts = (
         await db.scalars(
@@ -281,6 +281,8 @@ async def diagnostics(db, ctx, eng):
         )
     ).all()
     period = await db.get(FinancialPeriod, eng.period_id)
+    if not period:
+        raise HTTPException(409, {"code": "invalid_input", "message": "Select an engagement reporting period before foundation diagnostics"})
     last = await db.scalar(
         select(IntelligenceJob)
         .where(

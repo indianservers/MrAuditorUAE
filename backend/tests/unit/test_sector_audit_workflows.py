@@ -131,6 +131,13 @@ def test_escrow_wrong_project_cannot_use_another_projects_authorisation():
     assert output["blocked"] and output["rows"][0]["state"] == "AUTHORISATION_MISSING_OR_OUT_OF_SCOPE"
 
 
+def test_escrow_distinct_arabic_counterparties_do_not_collapse_to_empty_ascii_names():
+    output = run("escrow-disbursements", {"books": [escrow_entry(counterparty="شركة ألف")],
+                 "bank": [escrow_entry(id="S1", counterparty="شركة باء")],
+                 "authorisations": [authorisation(beneficiary="شركة ألف")]})
+    assert output["rows"][-1]["state"] == "BANK_ITEMS_UNRESOLVED"
+
+
 def billing_line(kind, amount="100", **changes):
     return {"id": kind, "case_id": "CASE-1", "line_reference": "SERVICE-1", "party": "PAYER-1",
             "currency": "AED", "date": "2026-06-01", "kind": kind, "quantity": "2", "amount": amount,

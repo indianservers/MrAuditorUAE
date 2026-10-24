@@ -152,7 +152,7 @@ async def test_complete_foundation_path_and_blocked_release(environment, monkeyp
         headers=h,
         json={
             **{key: options[key] for key in ["client_id", "entity_id", "period_id"]},
-            "name": "SYNTHETIC foundation mapping",
+            "name": "SYNTHETIC alternative foundation mapping",
             "approved": True,
             "mapping": {
                 "accounts": {
