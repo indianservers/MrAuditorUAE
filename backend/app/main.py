@@ -30,7 +30,9 @@ from app.api.v1 import (
     entities,
     health,
     ifrs,
+    intelligence,
     jobs,
+    jurisdictions,
     periods,
     tenants,
     workspace,
@@ -218,6 +220,8 @@ for router in [
     jobs.router,
 ]:
     app.include_router(router, prefix="/api/v1")
+app.include_router(jurisdictions.router, prefix="/api/v1")
+app.include_router(intelligence.router, prefix="/api/v1")
 app.include_router(health.router)
 
 from app.api.v1.ifrs_ai import router as ifrs_ai_router  # noqa: E402

@@ -154,6 +154,9 @@ async def test_ml_dataset_excludes_superseded_lines_and_marks_old_features_stale
     assert (await c.get("/api/v1/ml/events/" + new["id"], headers=h)).json()["freshness"][
         "status"
     ] == "STALE"
+    graph = (await c.get(base + "/graph", headers=h)).json()
+    assert next(n for n in graph["nodes"] if n["id"] == new["id"])["freshness"] == "STALE"
+    assert any(e["target"] == new["id"] for e in graph["edges"])
 
 
 async def test_archived_client_hidden_from_active_list_and_blocks_new_children(environment):

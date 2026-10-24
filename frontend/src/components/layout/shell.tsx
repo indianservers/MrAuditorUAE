@@ -1,4 +1,5 @@
 "use client";
+import { CountryContext } from "@/features/country-settings";
 import { navigation } from "@/components/navigation/routes";
 import {
   Empty,
@@ -24,6 +25,7 @@ import {
   PanelLeftClose,
   Search,
   Sparkles,
+  Layers as LayersIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -86,6 +88,21 @@ export function Shell({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("keydown", key);
   }, []);
   const [sections, setSections] = useState<Record<string, boolean>>({});
+  const [specialists, setSpecialists] = useState(false);
+  const mainRoutes = [
+    "/dashboard",
+    "/clients",
+    "/engagements",
+    "/intelligence",
+    "/modules",
+    "/working-papers",
+    "/findings",
+    "/groups",
+    "/reports",
+    "/ai-copilot",
+    "/admin/users",
+    "/settings",
+  ];
   const permitted = navigation.filter((n) =>
     access.data?.permissions.includes(n.permission),
   );
@@ -110,11 +127,12 @@ export function Shell({ children }: { children: React.ReactNode }) {
         (ui.dark ? " dark-sidebar" : "")
       }
     >
+      <CountryContext />
       <header className="topbar">
         <Link href="/dashboard" className="brand">
           <span className="brand-mark">A</span>
           <span>
-            AuditOS <small>UAE</small>
+            Mr Auditor <small>{scope.country}</small>
           </span>
         </Link>
         <button className="command-search" onClick={() => setCommand(true)}>
@@ -123,6 +141,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <kbd>⌘ K</kbd>
         </button>
         <div className="context-selects">
+          <EngagementSwitcher />
           <label>
             <Building2 size={15} />
             <select
@@ -198,6 +217,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
                 </Dropdown.Item>
               ))}
               <Dropdown.Separator />
+              <Dropdown.Item onSelect={() => router.push("/settings")}>
+                Country & regional settings ({scope.country})
+              </Dropdown.Item>
               <Dropdown.Item onSelect={() => ui.toggleTheme()}>
                 Toggle sidebar appearance
               </Dropdown.Item>
@@ -238,58 +260,75 @@ export function Shell({ children }: { children: React.ReactNode }) {
           )}
         </button>
         <nav aria-label="Main navigation">
-          {permitted.map((n) => {
-            const active =
-              path === n.href ||
-              (!!n.children && path.startsWith(n.href + "/"));
-            const opened = sections[n.href] ?? active;
-            return (
-              <div key={n.href} className="nav-group">
-                <Tip label={n.label}>
-                  {n.children ? (
-                    <button
-                      className={"nav-link" + (active ? " selected" : "")}
-                      aria-expanded={opened}
-                      onClick={() => {
-                        if (ui.collapsed) router.push(n.children![0][1]);
-                        else setSections((s) => ({ ...s, [n.href]: !opened }));
-                      }}
-                    >
-                      <n.icon size={19} />
-                      <span>{n.label}</span>
-                      <ChevronDown
-                        size={13}
-                        className={opened ? "rotate" : ""}
-                      />
-                    </button>
-                  ) : (
-                    <Link
-                      className={"nav-link" + (active ? " selected" : "")}
-                      href={n.href}
-                      aria-current={active ? "page" : undefined}
-                    >
-                      <n.icon size={19} />
-                      <span>{n.label}</span>
-                    </Link>
-                  )}
-                </Tip>
-                {n.children && opened && !ui.collapsed && (
-                  <div className="nav-children">
-                    {n.children.map(([label, href]) => (
-                      <Link
-                        key={href}
-                        href={href}
-                        className={path === href ? "active" : ""}
-                        aria-current={path === href ? "page" : undefined}
+          {permitted
+            .filter(
+              (n) =>
+                mainRoutes.includes(n.href) ||
+                specialists ||
+                path.startsWith(n.href),
+            )
+            .map((n) => {
+              const active =
+                path === n.href ||
+                (!!n.children && path.startsWith(n.href + "/"));
+              const opened = sections[n.href] ?? active;
+              return (
+                <div key={n.href} className="nav-group">
+                  <Tip label={n.label}>
+                    {n.children ? (
+                      <button
+                        className={"nav-link" + (active ? " selected" : "")}
+                        aria-expanded={opened}
+                        onClick={() => {
+                          if (ui.collapsed) router.push(n.children![0][1]);
+                          else
+                            setSections((s) => ({ ...s, [n.href]: !opened }));
+                        }}
                       >
-                        {label}
+                        <n.icon size={19} />
+                        <span>{n.label}</span>
+                        <ChevronDown
+                          size={13}
+                          className={opened ? "rotate" : ""}
+                        />
+                      </button>
+                    ) : (
+                      <Link
+                        className={"nav-link" + (active ? " selected" : "")}
+                        href={n.href}
+                        aria-current={active ? "page" : undefined}
+                      >
+                        <n.icon size={19} />
+                        <span>{n.label}</span>
                       </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
+                    )}
+                  </Tip>
+                  {n.children && opened && !ui.collapsed && (
+                    <div className="nav-children">
+                      {n.children.map(([label, href]) => (
+                        <Link
+                          key={href}
+                          href={href}
+                          className={path === href ? "active" : ""}
+                          aria-current={path === href ? "page" : undefined}
+                        >
+                          {label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          <button
+            className="nav-link"
+            onClick={() => setSpecialists(!specialists)}
+            aria-expanded={specialists}
+          >
+            <LayersIcon size={19} />
+            <span>Specialist workspaces</span>
+            <ChevronDown size={13} />
+          </button>
         </nav>
         <div className="sidebar-footer">
           <Link href="/ai-copilot" className="assistant-callout">
@@ -298,7 +337,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <span>Investigate your financial data.</span>
             <kbd>Context aware</kbd>
           </Link>
-          <small>AuditOS Precision · v0.3</small>
+          <small>Mr Auditor · Global audit platform</small>
         </div>
       </aside>
       <main id="main-content" className="workspace">
@@ -339,6 +378,35 @@ export function Shell({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
+function EngagementSwitcher() {
+  const access = useAccess(),
+    router = useRouter(),
+    path = usePathname();
+  const q = useAPI<Page<RecordRow>>(
+    "engagements?limit=100",
+    !!access.data?.permissions.includes("engagements.read"),
+  );
+  return (
+    <label>
+      <select
+        aria-label="Select engagement"
+        value={path.startsWith("/engagements/") ? path.split("/")[2] : ""}
+        onChange={(e) => {
+          if (e.target.value)
+            router.push(`/engagements/${e.target.value}/workspace`);
+        }}
+      >
+        <option value="">Select engagement</option>
+        {q.data?.items.map((e) => (
+          <option key={String(e.id)} value={String(e.id)}>
+            {String(e.name)}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
 function CommandPalette({
   open,
   onOpenChange,
@@ -366,6 +434,13 @@ function CommandPalette({
     router.push(href);
     onOpenChange(false);
   };
+  const universal = useAPI<{
+    items: { id: string; category: string; label: string; url: string }[];
+    truncated: boolean;
+  }>(
+    `jurisdictions/search?${qs({ q: value, country: scope.country })}`,
+    open && !!value,
+  );
   return (
     <Modal
       title="Search your workspace"
@@ -379,9 +454,43 @@ function CommandPalette({
           placeholder="Search pages, clients, accounts, engagements…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "ArrowDown") {
+              e.preventDefault();
+              document
+                .querySelector<HTMLButtonElement>(".command-results button")
+                ?.focus();
+            }
+          }}
         />
       </div>
-      <div className="command-results">
+      <div
+        className="command-results"
+        role="toolbar"
+        aria-label="Search results"
+        tabIndex={-1}
+        onKeyDown={(e) => {
+          if (["ArrowDown", "ArrowUp"].includes(e.key)) {
+            e.preventDefault();
+            const buttons = Array.from(
+              e.currentTarget.querySelectorAll("button"),
+            );
+            const index = buttons.indexOf(
+              document.activeElement as HTMLButtonElement,
+            );
+            buttons[
+              (index + (e.key === "ArrowDown" ? 1 : -1) + buttons.length) %
+                buttons.length
+            ]?.focus();
+          }
+        }}
+      >
+        {universal.data?.items.map((r) => (
+          <button key={r.category + r.id} onClick={() => navigate(r.url)}>
+            {r.label}
+            <kbd>{r.category}</kbd>
+          </button>
+        ))}
         {navigation
           .filter((n) => access.data?.permissions.includes(n.permission))
           .flatMap((n) =>

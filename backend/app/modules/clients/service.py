@@ -38,8 +38,23 @@ class ResourceService:
         status: str | None,
         search: str | None,
         sort: str,
+        country: str | None = None,
     ):
         conditions = [self.model.tenant_id == ctx.tenant_id]
+        if country:
+            from app.modules.jurisdictions.packages import package
+
+            package(country)
+            if self.model is LegalEntity:
+                conditions.append(LegalEntity.country == country)
+            elif self.model is Engagement:
+                conditions.append(
+                    Engagement.entity_id.in_(
+                        select(LegalEntity.id).where(
+                            LegalEntity.tenant_id == ctx.tenant_id, LegalEntity.country == country
+                        )
+                    )
+                )
         if not status and self.model in {Client, LegalEntity}:
             conditions.append(self.model.status != "archived")
         if self.model is Engagement:
@@ -133,6 +148,10 @@ class ResourceService:
         db.add(obj)
         await db.flush()
         await db.refresh(obj)
+        if self.model is Engagement:
+            from app.modules.jurisdictions.service import pin
+
+            await pin(db, ctx, obj)
         record(db, ctx, self.model.__tablename__ + ".created", obj.id, request_id)
         return obj
 

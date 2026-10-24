@@ -72,6 +72,10 @@ async def record(db, ctx, eid, rid, kind, approved=True):
         raise HTTPException(422, "DMTT source kind mismatch")
     if approved and obj.status not in {"APPROVED", "LOCKED"}:
         raise HTTPException(409, "Independently approved DMTT source required")
+    if approved:
+        from app.modules.lineage.working_papers import require_context_current
+
+        await require_context_current(db, ctx, obj)
     return obj
 
 

@@ -25,10 +25,16 @@ export function useCan(permission: string) {
 }
 export function useAPI<T>(path: string, enabled = true, poll = false) {
   const tenant = useScope((s) => s.tenant);
+  const country = useScope((s) => s.country);
+  const requestPath = /^(entities|engagements|workspace\/directory)(\?|$)/.test(
+    path,
+  )
+    ? path + (path.includes("?") ? "&" : "?") + qs({ country })
+    : path;
   return useQuery({
-    queryKey: ["api", tenant, path],
+    queryKey: ["api", tenant, requestPath],
     enabled: !!tenant && enabled,
-    queryFn: ({ signal }) => api<T>(path, { signal }, tenant),
+    queryFn: ({ signal }) => api<T>(requestPath, { signal }, tenant),
     refetchInterval: poll
       ? (query) => {
           const status = String(
@@ -55,15 +61,18 @@ export function useAction<T = RecordRow>() {
       path,
       body,
       method = "POST",
+      headers,
     }: {
       path: string;
       body?: unknown;
       method?: string;
+      headers?: Record<string, string>;
     }) =>
       api<T>(
         path,
         {
           method,
+          headers,
           body:
             body instanceof FormData
               ? body
@@ -112,7 +121,7 @@ async function metadata<T>(path: string, tenant: string, signal: AbortSignal) {
   }
 }
 export function useDirectory() {
-  const { tenant, client, entity } = useScope();
+  const { tenant, client, entity, country } = useScope();
   const access = useAccess();
   const allowed = access.data?.permissions || [];
   const clients = useQuery({
@@ -121,21 +130,22 @@ export function useDirectory() {
     queryFn: ({ signal }) => metadata<Client>("clients", tenant, signal),
   });
   const entities = useQuery({
-    queryKey: ["api", tenant, "directory-entities", client],
+    queryKey: ["api", tenant, "directory-entities", client, country],
     enabled: !!tenant && !!client && allowed.includes("entities.read"),
     queryFn: ({ signal }) =>
       metadata<Entity>(
-        "workspace/directory?" + qs({ client_id: client }),
+        "workspace/directory?" + qs({ client_id: client, country }),
         tenant,
         signal,
       ),
   });
   const periods = useQuery({
-    queryKey: ["api", tenant, "directory-periods", client, entity],
+    queryKey: ["api", tenant, "directory-periods", client, entity, country],
     enabled: !!entity && allowed.includes("entities.read"),
     queryFn: ({ signal }) =>
       metadata<Period>(
-        "workspace/directory?" + qs({ client_id: client, entity_id: entity }),
+        "workspace/directory?" +
+          qs({ client_id: client, entity_id: entity, country }),
         tenant,
         signal,
       ),

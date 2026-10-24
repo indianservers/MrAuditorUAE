@@ -1,0 +1,13 @@
+# Source lineage and review controls
+
+Migration 0016 adds tenant-RLS intelligence jobs and append-only intelligence events. Result roots have unique versions; a database trigger rejects event updates/deletes. Migration backup is private under `.local-runtime/global-platform/before-0016.dump`. Before/after history digests in `evidence/` are identical for existing audit records/revisions/review decisions, IFRS runs, entities and engagements.
+
+Dependencies capture reporting-context/package SHA, committed snapshot/batch SHA, exact account mapping receipts, evidence SHA/file number, audit-record versions and upstream immutable results. Approval, correction and paper generation reject stale/current-head conflicts. Changing sources leaves approved historical bytes readable and makes affected outputs stale. This does not mutate prior approvals or calculated values.
+
+The existing dependency graph includes actual intelligence results, original snapshots, evidence versions, documented samples and selected journal lines. Working-paper references capture immutable intelligence receipts. A changed parent propagates currentness failure to downstream papers. Graph output and journal expansion are bounded; truncation is explicit. Transaction investigation uses actual account-to-journal debit/credit edges, separate from legal ownership. Its first 100 visible nodes/current edge page are interactive, with a source-reference list.
+
+Jobs commit before broker dispatch; payload hashes and actor-scoped idempotency keys reject conflicting retries. Workers recheck current membership/permissions at execution and publication, and check sources again before publishing. Cancellation prevents publication; bounded extraction may finish internally. Pending outbox jobs can be redispatched by the recovery beat task; expired running claims become failed/manual-retry candidates. Production must run the intelligence queue and beat scheduler. Progress 10/100 are state milestones rather than estimated percent completion.
+
+AI grounding reuses the existing source gateway, disclosure configuration, human review and prompt injection boundaries. Intelligence is an authorized source kind. No agent can approve records, determine evidence sufficiency, issue an audit opinion or post accounting entries automatically.
+
+Remaining qualification includes every new permission/action across the complete enterprise role matrix, multi-user load/recovery drills, calibrated OCR quality, broad multilingual documents, and provider/antivirus environments. Tests with generated fixtures or scanner test doubles do not certify those integrations.

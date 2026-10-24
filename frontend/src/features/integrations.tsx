@@ -50,6 +50,9 @@ export function Integrations() {
     [tab, setTab] = useState("All connectors"),
     [offset, setOffset] = useState(0);
   const scope = useScope();
+  const catalogue = useAPI<{
+    items: { id: string; name: string; status: string }[];
+  }>("connectors/catalogue");
   const canManage = useCan("connectors.manage"),
     canImport = useCan("accounting.import");
   const connections = useAPI<Page<RecordRow>>(
@@ -94,79 +97,90 @@ export function Integrations() {
           value={tab}
           onChange={setTab}
         />
-        <ErrorState error={connections.error} />
+        <ErrorState error={connections.error || catalogue.error} />
         <div className="connector-grid">
-          {(tab === "File import"
-            ? ["Excel / CSV"]
-            : tab === "Accounting"
-              ? ["Zoho Books", "TallyPrime", "QuickBooks", "Xero"]
-              : [
-                  "Zoho Books",
-                  "TallyPrime",
-                  "Excel / CSV",
-                  "QuickBooks",
-                  "Xero",
-                ]
-          ).map((name, i) => {
-            const provider = name === "Zoho Books" ? "zoho" : "tally";
-            const connection = connections.data?.items.find(
-              (c) =>
-                c.provider === provider &&
-                (!scope.entity || c.entity_id === scope.entity),
-            );
-            return (
-              <section className="card connector" key={name}>
-                <div className="connector-title">
-                  <span className={"provider-logo p" + i}>
-                    {name === "Zoho Books"
-                      ? "Z"
-                      : name === "TallyPrime"
-                        ? "▦"
+          {(catalogue.data?.items || [])
+            .filter((p) =>
+              tab === "File import"
+                ? p.id === "file"
+                : tab === "Accounting"
+                  ? p.id !== "file"
+                  : true,
+            )
+            .map(({ name, id: provider, status: qualification }, i) => {
+              const implemented = ["zoho", "tally", "file"].includes(provider);
+              const connection = connections.data?.items.find(
+                (c) =>
+                  c.provider === provider &&
+                  (!scope.entity || c.entity_id === scope.entity),
+              );
+              return (
+                <section className="card connector" key={name}>
+                  <div className="connector-title">
+                    <span className={"provider-logo p" + i}>
+                      {name === "Zoho Books"
+                        ? "Z"
+                        : name === "TallyPrime"
+                          ? "▦"
+                          : name === "Excel / CSV"
+                            ? "X"
+                            : name === "QuickBooks"
+                              ? "qb"
+                              : "xero"}
+                    </span>
+                    <strong>{name}</strong>
+                  </div>
+                  <Status
+                    value={
+                      !implemented
+                        ? qualification
                         : name === "Excel / CSV"
-                          ? "X"
-                          : name === "QuickBooks"
-                            ? "qb"
-                            : "xero"}
-                  </span>
-                  <strong>{name}</strong>
-                </div>
-                <Status
-                  value={
-                    ["QuickBooks", "Xero"].includes(name)
-                      ? "future_integration"
-                      : name === "Excel / CSV"
-                        ? "File import available"
-                        : connection?.status || "not_configured"
-                  }
-                />
-                <small>
-                  {name === "TallyPrime"
-                    ? "Local agent connectivity: not probed"
-                    : name === "Zoho Books"
-                      ? "Published journals + source evidence"
-                      : name === "Excel / CSV"
-                        ? "CSV · XLSX · Tally export"
-                        : "Connector unavailable"}
-                </small>
-                {["QuickBooks", "Xero"].includes(name) ? (
-                  <p className="subtle">Future integration</p>
-                ) : name === "Excel / CSV" ? (
-                  <Button disabled={!canImport} onClick={() => setUpload(true)}>
-                    Upload file
-                  </Button>
-                ) : (
-                  <Button
-                    disabled={!canManage}
-                    onClick={() =>
-                      connection ? setSelected(connection) : setConnect(true)
+                          ? "File import available"
+                          : connection?.status || qualification
                     }
-                  >
-                    {connection ? "Connection details" : "Configure"}
-                  </Button>
-                )}
-              </section>
-            );
-          })}
+                  />
+                  <small>
+                    {name === "TallyPrime"
+                      ? "Local agent connectivity: not probed"
+                      : name === "Zoho Books"
+                        ? "Published journals + source evidence"
+                        : name === "Excel / CSV"
+                          ? "CSV · XLSX · Tally export"
+                          : "Connector unavailable"}
+                  </small>
+                  {!implemented ? (
+                    <>
+                      <p className="subtle">
+                        Live API adapter is not implemented. A normalized export
+                        can use file import.
+                      </p>
+                      <Button
+                        disabled={!canImport}
+                        onClick={() => setUpload(true)}
+                      >
+                        Import normalized export
+                      </Button>
+                    </>
+                  ) : name === "Excel / CSV" ? (
+                    <Button
+                      disabled={!canImport}
+                      onClick={() => setUpload(true)}
+                    >
+                      Upload file
+                    </Button>
+                  ) : (
+                    <Button
+                      disabled={!canManage}
+                      onClick={() =>
+                        connection ? setSelected(connection) : setConnect(true)
+                      }
+                    >
+                      {connection ? "Connection details" : "Configure"}
+                    </Button>
+                  )}
+                </section>
+              );
+            })}
         </div>
         <section className="card pipeline-card">
           <h3>Data Import & Validation Pipeline</h3>

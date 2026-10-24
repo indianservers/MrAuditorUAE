@@ -27,6 +27,17 @@ Read = Annotated[Context, Depends(require("accounting.read"))]
 Write = Annotated[Context, Depends(require("accounting.import"))]
 
 
+@router.get("/connectors/catalogue")
+async def catalogue(ctx: Read):
+    from app.modules.connectors.catalogue import PROVIDERS
+
+    return {
+        "items": PROVIDERS,
+        "live_provider_qualification": False,
+        "file_contract": "Normalize exports to the import schema, preview, map, validate and explicitly commit",
+    }
+
+
 class ConnectionCreate(ScopeInput):
     provider: Literal["zoho", "tally"]
     name: str = Field(min_length=1, max_length=100)

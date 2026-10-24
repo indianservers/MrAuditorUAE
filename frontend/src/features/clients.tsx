@@ -306,6 +306,7 @@ export function ResourceForm({
     name: string;
     label: string;
     options?: string[];
+    choices?: { value: string; label: string }[];
     type?: string;
     value?: string;
     optional?: boolean;
@@ -316,7 +317,10 @@ export function ResourceForm({
   const action = useAction();
   const { register, handleSubmit } = useForm<Record<string, string>>({
     defaultValues: Object.fromEntries(
-      fields.map((f) => [f.name, f.value || f.options?.[0] || ""]),
+      fields.map((f) => [
+        f.name,
+        f.value || f.choices?.[0]?.value || f.options?.[0] || "",
+      ]),
     ),
   });
   return (
@@ -340,9 +344,14 @@ export function ResourceForm({
       {fields.map((f) => (
         <label key={f.name}>
           {f.label}
-          {f.options ? (
+          {f.options || f.choices ? (
             <select {...register(f.name)}>
-              {f.options.map((o) => (
+              {f.choices?.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+              {f.options?.map((o) => (
                 <option key={o}>{o}</option>
               ))}
             </select>
@@ -364,6 +373,11 @@ export function ResourceForm({
   );
 }
 function ClientRelations({ client }: { client: Client }) {
+  const regional = useAPI<{
+    country: string;
+    package: { name: string; currency_default: string | null };
+    profile?: { currencies: string[] };
+  }>("jurisdictions/settings");
   const entities = useAPI<Page<Entity>>(
     "workspace/directory?" + qs({ client_id: client.id }),
   );
@@ -405,25 +419,36 @@ function ClientRelations({ client }: { client: Client }) {
       </p>
       <Modal open={form} onOpenChange={setForm} title="Add legal entity">
         <ResourceForm
+          key={regional.data?.country}
           path="entities"
           base={{ client_id: client.id }}
           fields={[
             { name: "name", label: "Legal name" },
-            { name: "country", label: "ISO country", value: "AE" },
+            {
+              name: "country",
+              label: "ISO country",
+              value: regional.data?.country || "AE",
+            },
             {
               name: "jurisdiction",
               label: "Jurisdiction",
-              value: "United Arab Emirates",
+              value: regional.data?.package.name || "United Arab Emirates",
             },
             {
               name: "functional_currency",
               label: "Functional currency",
-              value: "AED",
+              value:
+                regional.data?.package.currency_default ||
+                regional.data?.profile?.currencies[0] ||
+                "",
             },
             {
               name: "presentation_currency",
               label: "Presentation currency",
-              value: "AED",
+              value:
+                regional.data?.package.currency_default ||
+                regional.data?.profile?.currencies[0] ||
+                "",
             },
           ]}
           onDone={() => setForm(false)}
@@ -453,7 +478,12 @@ function EntityRelations({ entity }: { entity: Entity }) {
           </Button>
         )}
         {engagementWrite && (
-          <Button onClick={() => setForm("engagement")}>Add engagement</Button>
+          <Button
+            disabled={!periods.data?.items.length}
+            onClick={() => setForm("engagement")}
+          >
+            Add engagement
+          </Button>
         )}
       </div>
       <h4>Financial periods</h4>
@@ -490,6 +520,14 @@ function EntityRelations({ entity }: { entity: Entity }) {
                   { name: "end_date", label: "End date", type: "date" },
                 ]
               : [
+                  {
+                    name: "period_id",
+                    label: "Financial period",
+                    choices: (periods.data?.items || []).map((p) => ({
+                      value: p.id,
+                      label: `${p.start_date} — ${p.end_date}`,
+                    })),
+                  },
                   { name: "name", label: "Engagement name" },
                   {
                     name: "engagement_type",

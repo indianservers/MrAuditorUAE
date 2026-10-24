@@ -1,0 +1,995 @@
+{
+  "scope": "Uncommitted workspace includes Phase 1 foundation and Phase 2 implementation. This inventory is a review receipt, not a commit.",
+  "files": [
+    {
+      "path": "backend/alembic/env.py",
+      "status": " M",
+      "bytes": 1876,
+      "sha256": "48413ae369196db92bfc497cc50bf8bb19e83d67fc23ff864387a310f2ae71a8"
+    },
+    {
+      "path": "backend/app/api/v1/audit_execution.py",
+      "status": " M",
+      "bytes": 18344,
+      "sha256": "c508e7f0ef3b51530daf57d11ddbfd4d58b833cc001a17e9db60cd535a1d6cbd"
+    },
+    {
+      "path": "backend/app/api/v1/connectors.py",
+      "status": " M",
+      "bytes": 12412,
+      "sha256": "77c51ad04bfad37193f58f4a5a181db87019d05fda993a7a21198636b31487e8"
+    },
+    {
+      "path": "backend/app/api/v1/engagements.py",
+      "status": " M",
+      "bytes": 1728,
+      "sha256": "d122877b7fe364b12ece1ae7ebaf186ad8e4a3cd84e3360cbc293191f2f78fab"
+    },
+    {
+      "path": "backend/app/api/v1/entities.py",
+      "status": " M",
+      "bytes": 1682,
+      "sha256": "10ad2621124ca2868ad1a475fb3e22539a4c076570ebb8371417a1f44158c56b"
+    },
+    {
+      "path": "backend/app/api/v1/health.py",
+      "status": " M",
+      "bytes": 1953,
+      "sha256": "439ed6b64d9ca08afd954bff784f260c5bd040721af32f59ca8ad6593f6c7baa"
+    },
+    {
+      "path": "backend/app/api/v1/workspace.py",
+      "status": " M",
+      "bytes": 19561,
+      "sha256": "71dcf39bcdd0910f1dbb7290d38bef33a47263e5f9006ddf3984a08f8641fd79"
+    },
+    {
+      "path": "backend/app/main.py",
+      "status": " M",
+      "bytes": 9409,
+      "sha256": "9c413dfa5397e3e8d24ee7fccd76d492a2d1fd8022860a09eb25d61bb8310b79"
+    },
+    {
+      "path": "backend/app/modules/audit_execution/evidence.py",
+      "status": " M",
+      "bytes": 4165,
+      "sha256": "3fe0067ddc454594251f57e53f4de49c74f93fe6d2bfa6be83d5bebb7473cfe2"
+    },
+    {
+      "path": "backend/app/modules/audit_execution/schemas.py",
+      "status": " M",
+      "bytes": 7588,
+      "sha256": "830f80030518d936c8588c4ac1e4a3c9246996cedbf573638ae357677521b307"
+    },
+    {
+      "path": "backend/app/modules/audit_execution/service.py",
+      "status": " M",
+      "bytes": 35458,
+      "sha256": "3e3c81cfbd899b3bd690ba64a199d321474fdf54cb64b1a72d52156530ffce02"
+    },
+    {
+      "path": "backend/app/modules/clients/service.py",
+      "status": " M",
+      "bytes": 10148,
+      "sha256": "8e03b48571aff1bb8772d8e29d748d80482298b586f4ce627ec2e9cf40ccfaf5"
+    },
+    {
+      "path": "backend/app/modules/dmtt/service.py",
+      "status": " M",
+      "bytes": 9207,
+      "sha256": "d15d3bcb8653c30c2ed2f61aaacb0a0b5401410904a5bb6cfde8519a52036a1c"
+    },
+    {
+      "path": "backend/app/modules/ifrs/service.py",
+      "status": " M",
+      "bytes": 39496,
+      "sha256": "0de8bd8bedd7f2272e65f4e8f2c9a9a019429577096265baaf61dd85971381c8"
+    },
+    {
+      "path": "backend/app/modules/tax/service.py",
+      "status": " M",
+      "bytes": 61181,
+      "sha256": "db98a7948bf1014aa032a7921182c69542e1883b1f70f0152feef9cab9cd7b0e"
+    },
+    {
+      "path": "backend/app/modules/tp/service.py",
+      "status": " M",
+      "bytes": 68667,
+      "sha256": "1dd7809f0f59774d11001978e7ab644a8f1aa62c73a5b90c907303cc73059d97"
+    },
+    {
+      "path": "backend/app/modules/vat/service.py",
+      "status": " M",
+      "bytes": 27161,
+      "sha256": "0755bfaf9f19b94e547897d398f76cd26fa4e0856a2d359b4138279ef37f611b"
+    },
+    {
+      "path": "backend/app/workers/celery_app.py",
+      "status": " M",
+      "bytes": 1841,
+      "sha256": "965c5539be928f2e9d0acbea20f39577eacec77297006df8b4c4ac0ddcb3d91a"
+    },
+    {
+      "path": "backend/pyproject.toml",
+      "status": " M",
+      "bytes": 1370,
+      "sha256": "37b139e3e6bba80fc908a7cc0e40084e96bd6df8b9e4c8b92a8c29f52de26763"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_source_changes.py",
+      "status": " M",
+      "bytes": 8436,
+      "sha256": "5b71f26225e7f3c62eb21cc3423f9385023956f2a53bd036317c2a61e17d6c8d"
+    },
+    {
+      "path": "backend/uv.lock",
+      "status": " M",
+      "bytes": 626512,
+      "sha256": "e23190234368f24f9b43594e53262ab0380a455c8d5309b37d59b847b83f8336"
+    },
+    {
+      "path": "docs/evidence/phase-2-demonstration.json",
+      "status": " M",
+      "bytes": 67996,
+      "sha256": "248b86c0c909c2af87e2b389fcb70a46fc1a8a99eb1f7bb658ee1619996571f4"
+    },
+    {
+      "path": "docs/evidence/phase-2-pipeline.json",
+      "status": " M",
+      "bytes": 61566,
+      "sha256": "285f0b2e0d396c85973fbc81a9ae3a02b28e99896b0d1e58de7195789193529d"
+    },
+    {
+      "path": "docs/phase-8/export-evidence/synthetic-localfile.json",
+      "status": " M",
+      "bytes": 24471,
+      "sha256": "4182e5a0825cae2719c786a74ade2448ef957af379a1e4c5f01e6b17b8d0a05d"
+    },
+    {
+      "path": "docs/phase-8/export-evidence/synthetic-localfile.pdf",
+      "status": " M",
+      "bytes": 8091,
+      "sha256": "5fd102400357fd7380ba2ffff7432e066c8eb9e452570f1ef764184a8d763469"
+    },
+    {
+      "path": "frontend/next-env.d.ts",
+      "status": " M",
+      "bytes": 295,
+      "sha256": "1b59d4c6b83807db275d43f3cf2cc8e9323f465fab764eea091cc5becd5bad37"
+    },
+    {
+      "path": "frontend/src/app/api/backend/[...path]/route.ts",
+      "status": " M",
+      "bytes": 3339,
+      "sha256": "a4a3679443b1b0e9a763dcae4a6bb7c6f73e9e7bd1cd8e544e02ceeced525d8e"
+    },
+    {
+      "path": "frontend/src/app/layout.tsx",
+      "status": " M",
+      "bytes": 475,
+      "sha256": "7200e980a9387ac0537cc4580e95f8d453ceb8754e38b0ffede9752f2526446d"
+    },
+    {
+      "path": "frontend/src/components/layout/shell.tsx",
+      "status": " M",
+      "bytes": 17911,
+      "sha256": "ec2f5e2625ef581d3873bfc0b4c82bd7b57b720bcd313060f7855a51887b1d70"
+    },
+    {
+      "path": "frontend/src/components/navigation/routes.ts",
+      "status": " M",
+      "bytes": 4557,
+      "sha256": "6f17a36575f865f0defe68bfecbd5bb81370fce20f648f8c308c1793050a6f93"
+    },
+    {
+      "path": "frontend/src/features/audit-administration.tsx",
+      "status": " M",
+      "bytes": 19882,
+      "sha256": "ecdbc12c0baa25fbc9ee2eb9149b01befa1ab2baa67d816f74fb6172002d9849"
+    },
+    {
+      "path": "frontend/src/features/audit-studio.tsx",
+      "status": " M",
+      "bytes": 43873,
+      "sha256": "34e35696f86135bf2144e040d73717beeaf264f7a4a126390c4a9cd61a84f663"
+    },
+    {
+      "path": "frontend/src/features/clients.tsx",
+      "status": " M",
+      "bytes": 16060,
+      "sha256": "ca7c532affa89c60cb3da0fae930ac42cd3fad7b9c732f207364c3f0b997ded6"
+    },
+    {
+      "path": "frontend/src/features/engagements.tsx",
+      "status": " M",
+      "bytes": 10196,
+      "sha256": "23c75c5395d15a5d574e5b9bb5ad61b26ccbed1c6ccc755f318881436c9f970a"
+    },
+    {
+      "path": "frontend/src/features/integrations.tsx",
+      "status": " M",
+      "bytes": 34427,
+      "sha256": "077d1d0a5033099f03ab82b8de0ac55647ba99bf444e175d71bef29d88183407"
+    },
+    {
+      "path": "frontend/src/features/workbench.tsx",
+      "status": " M",
+      "bytes": 7027,
+      "sha256": "460c80572bbd4e04d962e754399a29a05041f8457175e9e26894cdbd72250ed4"
+    },
+    {
+      "path": "frontend/src/hooks/use-api.ts",
+      "status": " M",
+      "bytes": 6028,
+      "sha256": "adcb25dd121bcc14e1d1d95ad64d850cb31561c2d0f4271d0af6c9b7c6ff84d7"
+    },
+    {
+      "path": "frontend/src/stores/workspace.ts",
+      "status": " M",
+      "bytes": 1847,
+      "sha256": "79d288b8ca3aae07ff2df973013e1d9c02ad097885ca61d64e78b9682af600e4"
+    },
+    {
+      "path": "frontend/src/styles/globals.css",
+      "status": " M",
+      "bytes": 87137,
+      "sha256": "1b119e1eed627f805a3a19ee8fbb4540993120101aacd82f335de9fd8b575c23"
+    },
+    {
+      "path": "frontend/tests/audit-studio.test.tsx",
+      "status": " M",
+      "bytes": 3959,
+      "sha256": "e1f6de69cb6e2a0ae8b8d49ca1ed92f84d897cd92e2b3f620f8dbdd241d93e8a"
+    },
+    {
+      "path": "frontend/tsconfig.json",
+      "status": " M",
+      "bytes": 478,
+      "sha256": "35f6af5406f82a08b5371eb7a79fc72e7b1851d98b7a105c5897bc82953b4d30"
+    },
+    {
+      "path": "backend/alembic/data/0014-country-packages.json",
+      "status": "??",
+      "bytes": 155773,
+      "sha256": "b3f740281b2b2018b41398d712125528f3fd51ce609b77673348c0556780077e"
+    },
+    {
+      "path": "backend/alembic/versions/0014_country_packages.py",
+      "status": "??",
+      "bytes": 3603,
+      "sha256": "40c5dc10557b52028545c07941ca4403117f886533ea42f348423c973146d863"
+    },
+    {
+      "path": "backend/alembic/versions/0015_global_workspace.py",
+      "status": "??",
+      "bytes": 2158,
+      "sha256": "6ed82b4a3fc90d752f3d4babcb60e2e807e053801447fe9d48db86d852828254"
+    },
+    {
+      "path": "backend/alembic/versions/0016_accounting_intelligence.py",
+      "status": "??",
+      "bytes": 2112,
+      "sha256": "d860d7f9649c6c17ebaf3e96a36b6449da4df98d110386ea9c2c6341de8dd10b"
+    },
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "status": "??",
+      "bytes": 33322,
+      "sha256": "48c0cc080e57d891e0c88711bb3b50e518f1ac5deb6b1c4058b2f94d49549386"
+    },
+    {
+      "path": "backend/app/api/v1/jurisdictions.py",
+      "status": "??",
+      "bytes": 26843,
+      "sha256": "9d01bfc2e54fa16083f9a22c7f284aa0e85fdfb388b0e34cde0424d783d8894c"
+    },
+    {
+      "path": "backend/app/modules/connectors/catalogue.py",
+      "status": "??",
+      "bytes": 965,
+      "sha256": "2788aec91ac43bd8c323afccf0d94747311b0cba062d0ef24498558debdd1e0b"
+    },
+    {
+      "path": "backend/app/modules/intelligence/__init__.py",
+      "status": "??",
+      "bytes": 95,
+      "sha256": "feea99486d3eb72bfbb8b5821701097b469916552808ab214c63a8df6c94844b"
+    },
+    {
+      "path": "backend/app/modules/intelligence/documents.py",
+      "status": "??",
+      "bytes": 17327,
+      "sha256": "8a090cff645e0b2474cf28cb94787e6129df069b2d17b2881eebb9cca1ffb5f4"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "status": "??",
+      "bytes": 5103,
+      "sha256": "bea965c3c41e662c885c4f05b707ddca8c9e395bfbd0fc26eef6b4b8b0de9960"
+    },
+    {
+      "path": "backend/app/modules/intelligence/jobs.py",
+      "status": "??",
+      "bytes": 10040,
+      "sha256": "00ebfee9710a4087cdf6007e31365ae0f924215cce15283c764b25b364f1b634"
+    },
+    {
+      "path": "backend/app/modules/intelligence/matching.py",
+      "status": "??",
+      "bytes": 11575,
+      "sha256": "34e6157d043b24d9545e685bd1322170973cc52f905c626268dbf5e86de4f596"
+    },
+    {
+      "path": "backend/app/modules/intelligence/models.py",
+      "status": "??",
+      "bytes": 1966,
+      "sha256": "bef13c48b0a358c56fe30c817c8f362db08d52067ee2726fdff28ebbac1103fd"
+    },
+    {
+      "path": "backend/app/modules/intelligence/projection.py",
+      "status": "??",
+      "bytes": 9047,
+      "sha256": "f8227d553b9b2c58b431d653d4187eacf8a56bbbfc1c45a2f6e7e999af3f13cd"
+    },
+    {
+      "path": "backend/app/modules/intelligence/schemas.py",
+      "status": "??",
+      "bytes": 6456,
+      "sha256": "14656193522cbfd7ffcac5e2dd97e0fc364aabaf777ec57ecf1ee54bc1374743"
+    },
+    {
+      "path": "backend/app/modules/intelligence/service.py",
+      "status": "??",
+      "bytes": 32752,
+      "sha256": "59b22631bb38b4873c3b1d09d93d57b81eea11efd73a1882a5f43f4810caddad"
+    },
+    {
+      "path": "backend/app/modules/jurisdictions/__init__.py",
+      "status": "??",
+      "bytes": 64,
+      "sha256": "f321f60f42268100e376c7bdb45603aa9676ebdd24494e19d9a06f0dd9a772ae"
+    },
+    {
+      "path": "backend/app/modules/jurisdictions/models.py",
+      "status": "??",
+      "bytes": 2888,
+      "sha256": "fe0423e12c3341684b0eed797477866536cc206cbd64159ce009135a3146467e"
+    },
+    {
+      "path": "backend/app/modules/jurisdictions/module_registry.json",
+      "status": "??",
+      "bytes": 60601,
+      "sha256": "0f504db17f34d4d3529e9664eac42358e8c3de33b4330c84d3ddc3390ab25445"
+    },
+    {
+      "path": "backend/app/modules/jurisdictions/packages.py",
+      "status": "??",
+      "bytes": 662,
+      "sha256": "0fd8a9a82065db6b298ea50d1c6f2d66370cbcc06f5349045ff14bd8734471cf"
+    },
+    {
+      "path": "backend/app/modules/jurisdictions/profiles.py",
+      "status": "??",
+      "bytes": 8206,
+      "sha256": "c2b740af7e533f59ed3d236f1e3bad092018e7c2f1bd0999651ff5785b1f0f48"
+    },
+    {
+      "path": "backend/app/modules/jurisdictions/releases/2026.10.1.json",
+      "status": "??",
+      "bytes": 155773,
+      "sha256": "b3f740281b2b2018b41398d712125528f3fd51ce609b77673348c0556780077e"
+    },
+    {
+      "path": "backend/app/modules/jurisdictions/service.py",
+      "status": "??",
+      "bytes": 2073,
+      "sha256": "90a9b85c95b550ffd7ee77f9a23e0c6301a8e3d193024101baeb7fa48432859f"
+    },
+    {
+      "path": "backend/app/modules/jurisdictions/workspace.py",
+      "status": "??",
+      "bytes": 12654,
+      "sha256": "3412b3a4d5861b9caf4fee4182f7831e39aa3e0dffcacaed19653f6ed508635d"
+    },
+    {
+      "path": "backend/app/modules/lineage/working_papers.py",
+      "status": "??",
+      "bytes": 15068,
+      "sha256": "fed4f73e99749bc3d1b28d8ae918cd8dd6ce3bce3cceef5e68b82a38a7e6637e"
+    },
+    {
+      "path": "backend/app/workers/intelligence.py",
+      "status": "??",
+      "bytes": 579,
+      "sha256": "0c82f9454592d0b3d234eba265b87ed2e58df3a6289e97128372acf803956620"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_accounting_intelligence.py",
+      "status": "??",
+      "bytes": 12026,
+      "sha256": "11be4211692de9ebc433ff39e1f5b66e82bd73073d430915c35ca567ad8b45bf"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_global_platform.py",
+      "status": "??",
+      "bytes": 6130,
+      "sha256": "82a744d738e0abd5ca230ffa109db6c006762ef3c4a51c80a2dac734340451fb"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_mr_auditor_phase1.py",
+      "status": "??",
+      "bytes": 12471,
+      "sha256": "d0d087e8435dd163ede9bbd4f629a00c3784d4bb622ed100d71b06a456d110db"
+    },
+    {
+      "path": "backend/tests/unit/test_intelligence_algorithms.py",
+      "status": "??",
+      "bytes": 3350,
+      "sha256": "e32b15e0b9420994a3aeb34d699514ce3a82a412cd695899d2fb3931aa951e71"
+    },
+    {
+      "path": "backend/tests/unit/test_intelligence_exports.py",
+      "status": "??",
+      "bytes": 1144,
+      "sha256": "17626b990d6e1dca22639f29b6046f66f405f4b23146bec20df78ed5c96df68a"
+    },
+    {
+      "path": "backend/tests/unit/test_jurisdiction_profile.py",
+      "status": "??",
+      "bytes": 1515,
+      "sha256": "e47be300c05802047230d562741f289e2a0dbbf6cdd3b379b6810392ea075528"
+    },
+    {
+      "path": "backend/tests/unit/test_local_document_extraction.py",
+      "status": "??",
+      "bytes": 2649,
+      "sha256": "b458ad52b2e1e1eba93c491aa9ff53678f5acc9daddd05ff43dd28635efd8633"
+    },
+    {
+      "path": "docs/architecture/audit-dependency-graph.md",
+      "status": "??",
+      "bytes": 3804,
+      "sha256": "a285c229deb3516fa4fb83e7decb0fb27aead2976fd9eff9891b58d66ce8f3d7"
+    },
+    {
+      "path": "docs/architecture/audit-module-registry.md",
+      "status": "??",
+      "bytes": 2443,
+      "sha256": "f4df7b1518b10283f584b5ae52cf0337078417e3f99e459ca276421323a6daae"
+    },
+    {
+      "path": "docs/architecture/global-jurisdiction-engine.md",
+      "status": "??",
+      "bytes": 5136,
+      "sha256": "1329baa0e767b0f43cb12490f92953926c3861d864e185e64cf53e32a731d7af"
+    },
+    {
+      "path": "docs/architecture/mr-auditor-phase1-inventory.md",
+      "status": "??",
+      "bytes": 25908,
+      "sha256": "4e961be423746383d093d8b2de320d8ca8ed3387bfcf5a7395f54e16845f13d4"
+    },
+    {
+      "path": "docs/global-platform/README.md",
+      "status": "??",
+      "bytes": 4612,
+      "sha256": "fc2e49c52bf95a370488dee391d7c43a888091988db8b338e9f90e1b85fa5cd9"
+    },
+    {
+      "path": "docs/global-platform/backend-tests.txt",
+      "status": "??",
+      "bytes": 611,
+      "sha256": "d16326785217dccb267570c3aa1d49d15f898ca09d062293b78b9c0392ac9ab9"
+    },
+    {
+      "path": "docs/global-platform/browser-tests-final.txt",
+      "status": "??",
+      "bytes": 343,
+      "sha256": "cd87973c674449b6d8ba9a2f0ad57a200f465104e15ada4fbc944fd1e8a727cc"
+    },
+    {
+      "path": "docs/global-platform/focused-tests-final.txt",
+      "status": "??",
+      "bytes": 102,
+      "sha256": "d50a3a2249ab75b1fcc0f5beafc8e556e7814c85c29b30c350846dd191cb0c8f"
+    },
+    {
+      "path": "docs/global-platform/frontend-build-final.txt",
+      "status": "??",
+      "bytes": 981,
+      "sha256": "b1f3f5148c228b2821b33cf2b3d1e0573977a9661ddbf33c60db9e6fa3064430"
+    },
+    {
+      "path": "docs/global-platform/frontend-lint.txt",
+      "status": "??",
+      "bytes": 47,
+      "sha256": "065f136b357f8051c6124b6762798f7158c29816a626f883f696aa0dbe2f69a1"
+    },
+    {
+      "path": "docs/global-platform/frontend-tests.txt",
+      "status": "??",
+      "bytes": 285,
+      "sha256": "a1ae3c99a877a95a1b4ed8fd8a9c66f99a087f4b3bc3c90d02caefa0d47ccfbb"
+    },
+    {
+      "path": "docs/global-platform/history-after.json",
+      "status": "??",
+      "bytes": 1022,
+      "sha256": "beddd2df135ee95629823c6ee6345a12dc796b4ef4e7a4b4452b86e7302688c5"
+    },
+    {
+      "path": "docs/global-platform/history-before.json",
+      "status": "??",
+      "bytes": 1022,
+      "sha256": "beddd2df135ee95629823c6ee6345a12dc796b4ef4e7a4b4452b86e7302688c5"
+    },
+    {
+      "path": "docs/global-platform/mypy-final.txt",
+      "status": "??",
+      "bytes": 46,
+      "sha256": "81a98f969835ac23af3a068a598d068393978ff7d328b2d34f8d03233d52dadd"
+    },
+    {
+      "path": "docs/global-platform/ruff-final.txt",
+      "status": "??",
+      "bytes": 20,
+      "sha256": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0"
+    },
+    {
+      "path": "docs/global-platform/verification.md",
+      "status": "??",
+      "bytes": 2546,
+      "sha256": "49c00578d84ea50d075a0c9d6aa81c6b8aaa1fe5f1625473e6a7eb6f31ed5f36"
+    },
+    {
+      "path": "docs/global-platform/working-paper-graph.png",
+      "status": "??",
+      "bytes": 128562,
+      "sha256": "c59d6d7b82919fc8c864a7478281987f56b270166719bf8525c4ca37bb744dc9"
+    },
+    {
+      "path": "docs/phase2/accounting-intelligence-gap-analysis.md",
+      "status": "??",
+      "bytes": 2984,
+      "sha256": "6c026ccc11788d5dd29ce4cdfc2cd9841dbe02c00ced9ec32b3a323f64d1033e"
+    },
+    {
+      "path": "docs/phase2/erp-ingestion-architecture.md",
+      "status": "??",
+      "bytes": 1984,
+      "sha256": "183c6a1643652a02bb6521b36e357757fcbd253b14b7f02f312e782d31d06b15"
+    },
+    {
+      "path": "docs/phase2/evidence/after-0016.json",
+      "status": "??",
+      "bytes": 1022,
+      "sha256": "6d5f8805fc947f7d2dcd764c85ad1a9997a8ebc310a112fb461512090ddb09ed"
+    },
+    {
+      "path": "docs/phase2/evidence/backend-tests.txt",
+      "status": "??",
+      "bytes": 692,
+      "sha256": "5ee89f5e7a9496be42252112439fd64730c71c9e25ec71ed2bed12a84cb12e5d"
+    },
+    {
+      "path": "docs/phase2/evidence/before-0016.json",
+      "status": "??",
+      "bytes": 1022,
+      "sha256": "6d5f8805fc947f7d2dcd764c85ad1a9997a8ebc310a112fb461512090ddb09ed"
+    },
+    {
+      "path": "docs/phase2/evidence/browser-results.json",
+      "status": "??",
+      "bytes": 3941,
+      "sha256": "a96d527952911a42606bdf7741916f4eac89803402691ecfb01a5942ccaa8c7e"
+    },
+    {
+      "path": "docs/phase2/evidence/final-focused-tests.txt",
+      "status": "??",
+      "bytes": 112,
+      "sha256": "d5c484ed4c12acbd3ce994e418e7130235a03f23c226558d96619f202e330c37"
+    },
+    {
+      "path": "docs/phase2/evidence/focused-tests.txt",
+      "status": "??",
+      "bytes": 101,
+      "sha256": "9dae56f7e22e55dc4a248905c8e0259ccc3a17d05592a2f777b447b0304d6c14"
+    },
+    {
+      "path": "docs/phase2/evidence/frontend-build.txt",
+      "status": "??",
+      "bytes": 981,
+      "sha256": "3605dc926ab0ced36388dcbe4ab7fe8866e3a154feaba842afa69c59daf75eb9"
+    },
+    {
+      "path": "docs/phase2/evidence/lead-workbench.png",
+      "status": "??",
+      "bytes": 169437,
+      "sha256": "f930760be6aa40c793a1742fb69e9efbcf380df1b0cdbcbec27a7d0425e1b082"
+    },
+    {
+      "path": "docs/phase2/evidence/performance.json",
+      "status": "??",
+      "bytes": 1796,
+      "sha256": "b9175c2ab934826a2da0c6cf4170fcf4bb294b2c95d148bd720f309e01a5c8c0"
+    },
+    {
+      "path": "docs/phase2/evidence/reconciliation-tests.txt",
+      "status": "??",
+      "bytes": 101,
+      "sha256": "7d76cd2f77680f8baea34f2d25f5f857a3ac6d68c41f76adff169478c1856913"
+    },
+    {
+      "path": "docs/phase2/ocr-vouching-design.md",
+      "status": "??",
+      "bytes": 2462,
+      "sha256": "5165c6ff5471e916ef3840dca1d878e4e016f0b4210b4f9be91cc782992a5ac9"
+    },
+    {
+      "path": "docs/phase2/qa-results.md",
+      "status": "??",
+      "bytes": 5851,
+      "sha256": "67d5874e07f59645d774b65fc90511250bcdb2e800675e67ca5b6c85a185829c"
+    },
+    {
+      "path": "docs/phase2/reconciliation-rule-catalogue.md",
+      "status": "??",
+      "bytes": 2487,
+      "sha256": "0bc18bfd1fc84fd431329fefd8e4cee0e2108286faa237763ca28bfdead9cc64"
+    },
+    {
+      "path": "docs/phase2/scrutiny-rule-catalogue.md",
+      "status": "??",
+      "bytes": 2859,
+      "sha256": "24cad436ac835862587529be7fabd85283d575a4fa3db67f1ecdfbc66ffe41d6"
+    },
+    {
+      "path": "docs/phase2/source-lineage-and-review-controls.md",
+      "status": "??",
+      "bytes": 2627,
+      "sha256": "e59e5734f3cba0469b263d217cb05e198f2d2850375c0c036941a4edbc50d3e6"
+    },
+    {
+      "path": "docs/phase2/working-paper-templates.md",
+      "status": "??",
+      "bytes": 2068,
+      "sha256": "0e6d88b601a8d6b2ded13b151acde3da4c4538088af88b3175368abde36aa47a"
+    },
+    {
+      "path": "docs/phase3/implementation-handoff.md",
+      "status": "??",
+      "bytes": 1682,
+      "sha256": "3f1f98ec4fd683a8399538b4978c487d2e48256ce33fb46b5887097ac008776e"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1-report.md",
+      "status": "??",
+      "bytes": 7929,
+      "sha256": "7aee1d50307ac8d7749c6621d27ffab4648a2da3e09ff15938b163d40f663331"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/browser-results.json",
+      "status": "??",
+      "bytes": 5044,
+      "sha256": "ce64bc8df363717dda1f6153f4b21b0033b6f6dfd43f719ab001e3c48dffdb62"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/browser-setup-receipts.json",
+      "status": "??",
+      "bytes": 296,
+      "sha256": "34c31ce2ab327191bd419efca04e3d42e26fcfefef3bdb33938d1bf330006e58"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/country-settings.png",
+      "status": "??",
+      "bytes": 239533,
+      "sha256": "e6ef55eda303d1ba32e7bf69ebc3f1fe622fc2d000fc276257378fd31dfa9e81"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/file-manifest.json",
+      "status": "??",
+      "bytes": 6359,
+      "sha256": "08e5809398546e70cf4ad1e9ec9fb513cfddae46715ecfb268d1ce6381cc9df9"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/group-structure.png",
+      "status": "??",
+      "bytes": 185340,
+      "sha256": "47d9c0dd15cecd2f88a712d77cd894a34e8a7301025691dfe28db36220cdb051"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/history-after-0015.json",
+      "status": "??",
+      "bytes": 1022,
+      "sha256": "70c2dbd4955da45b0f2e029169ba9b0f650ba910b94ab672bbbdfa63a422433b"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/history-before-0015.json",
+      "status": "??",
+      "bytes": 1022,
+      "sha256": "70c2dbd4955da45b0f2e029169ba9b0f650ba910b94ab672bbbdfa63a422433b"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/lifecycle-AE.png",
+      "status": "??",
+      "bytes": 209749,
+      "sha256": "855e38f5b966367dd9d28d7b7bc2db07eccdb35917cceeeab52ac28c35bf34b3"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/lifecycle-IN.png",
+      "status": "??",
+      "bytes": 209203,
+      "sha256": "0f4400784ba1725c8473ba6a75e15df4394450a60c740e389ed4ab405224318f"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/phase1-alembic-check.txt",
+      "status": "??",
+      "bytes": 37,
+      "sha256": "adfdf8c417ef31380a4dd8a695b7d2707cdf16a67225a06157898f271b6421e1"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/phase1-backend-tests.txt",
+      "status": "??",
+      "bytes": 611,
+      "sha256": "7905d96c37a5168928891586eef65b226fef3254b108959f73e286a138bc1be2"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/phase1-browser-regression.txt",
+      "status": "??",
+      "bytes": 652,
+      "sha256": "c41b7a3196e190ded7f23001091d67f395833e9a473b1cd5d3c531c7b95dfcbb"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/phase1-browser.txt",
+      "status": "??",
+      "bytes": 484,
+      "sha256": "1ebdf0c34a9c2cb6c3e33b5667783b48da9318fb30f9cb31feee6e426cea6d3f"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/phase1-build.txt",
+      "status": "??",
+      "bytes": 981,
+      "sha256": "100a452903c647394bc53a9bbe1d4635f460ab49b4098dca1d0288185b3982c2"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/phase1-final-focused.txt",
+      "status": "??",
+      "bytes": 102,
+      "sha256": "3f2cced915ed704cd6f20fe6a5b554353501357f7b2c3e9cc9969d809acbed5d"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/phase1-final-rules.txt",
+      "status": "??",
+      "bytes": 102,
+      "sha256": "34e0ca04a333b6080156d093c0ce39c3b133cdb8ca6ef14a27f48858ac5128d8"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/phase1-frontend-tests.txt",
+      "status": "??",
+      "bytes": 284,
+      "sha256": "d9c04e46a1aff6d43fb2a5bcc32a8aa8db7085522d88f4cc342729ac59aa10a5"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/phase1-lint.txt",
+      "status": "??",
+      "bytes": 47,
+      "sha256": "065f136b357f8051c6124b6762798f7158c29816a626f883f696aa0dbe2f69a1"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/phase1-mypy.txt",
+      "status": "??",
+      "bytes": 46,
+      "sha256": "870cdf697fc2e99f85335c1683182eb1c953262947a71e1c6d0c85d63931f4e6"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/phase1-ruff.txt",
+      "status": "??",
+      "bytes": 20,
+      "sha256": "a4443afdcfb6d7363adb285762515ccf7cf50473b1a05c20c1a50f6bed4d26b0"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/phase1-typescript.txt",
+      "status": "??",
+      "bytes": 56,
+      "sha256": "c151e0b1902406a353729c40bd3b68807d9209ac14823595186778297670fad0"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/regression-evidence/browser-client-receipt.json",
+      "status": "??",
+      "bytes": 148,
+      "sha256": "c2c20066c4ffcff0fbd43b97476f3fabd7e1747f389a77c69e8911f12297029a"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/regression-evidence/screenshots/client-active.png",
+      "status": "??",
+      "bytes": 151547,
+      "sha256": "1b8fa20d65cd05a532f5b820446cdfab6af013e47e89255521eaff17dd42bf31"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/regression-evidence/screenshots/client-archived.png",
+      "status": "??",
+      "bytes": 151698,
+      "sha256": "eeff77ec003807afdf09fbc05beb4784e2e08a2a7b97be2764ecc6b5a99d519c"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/regression-evidence/screenshots/client-created.png",
+      "status": "??",
+      "bytes": 290159,
+      "sha256": "a7602c294c1f752f964427cefe4a808a8adf4139cfcd5c981b3cfaa4dce18f5a"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/regression-evidence/screenshots/concurrent-edit-conflict.png",
+      "status": "??",
+      "bytes": 185677,
+      "sha256": "6d07f22f1933bc355ed7f14575d3a13476cfd900ceac5b436e3422ac2f0eda77"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/regression-evidence/screenshots/role-0.png",
+      "status": "??",
+      "bytes": 56724,
+      "sha256": "43ebe40e8b0ca0ef32541cf023900979fe8d34e5bcca65a5acd85340ead66282"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/regression-evidence/screenshots/role-1.png",
+      "status": "??",
+      "bytes": 56617,
+      "sha256": "3f3c2104b1ae54a443dc38bce266179bd228f8b7c7b275278c9003af7d62e688"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/regression-evidence/screenshots/role-10.png",
+      "status": "??",
+      "bytes": 56855,
+      "sha256": "83964d151de28301d645713c555665bf0867696334acb356f3e6f583bd9600d3"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/regression-evidence/screenshots/role-11.png",
+      "status": "??",
+      "bytes": 56705,
+      "sha256": "c9bb6a8f09ba999604ffc85a6697dfe905a7843e0f4e7111de301b977b7014d2"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/regression-evidence/screenshots/role-12.png",
+      "status": "??",
+      "bytes": 56720,
+      "sha256": "b198a6760639d8234a1f1c2997143714e8e27dd6335c6c92aa44220267ac6f0b"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/regression-evidence/screenshots/role-2.png",
+      "status": "??",
+      "bytes": 56773,
+      "sha256": "1a56f1a555d52b5bb26ad47b0915ba114a5df5d61cc2c5e7f15dbb1f3afe8f4f"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/regression-evidence/screenshots/role-3.png",
+      "status": "??",
+      "bytes": 56852,
+      "sha256": "5d117c1e656cd548bc9ee02c02e0a9d049eb36973f3ed3d6db28720aea8ddb8e"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/regression-evidence/screenshots/role-4.png",
+      "status": "??",
+      "bytes": 262241,
+      "sha256": "f7272fa16070f5a767ed1242360594b2cbf9514584a6c1ed1b6151fa93282232"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/regression-evidence/screenshots/role-5.png",
+      "status": "??",
+      "bytes": 56854,
+      "sha256": "e011af00e698998750c16d579d17a9f932fb3b15301f66c142b8d3b90946886e"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/regression-evidence/screenshots/role-6.png",
+      "status": "??",
+      "bytes": 56792,
+      "sha256": "f8eabeb0ac5917e30590bf0b5ad1b5c0d427920c9faef5bcf42a803ec6391adc"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/regression-evidence/screenshots/role-7.png",
+      "status": "??",
+      "bytes": 56721,
+      "sha256": "58060d73056a646b57ab245b19fbfbfbdf31a3bb2f70f270c0113239a8e6097c"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/regression-evidence/screenshots/role-8.png",
+      "status": "??",
+      "bytes": 56590,
+      "sha256": "6475aee581fe3e94a7e6a1c137b16bc7e954a4d62f371fdffd264b6639d91ab2"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/regression-evidence/screenshots/role-9.png",
+      "status": "??",
+      "bytes": 56628,
+      "sha256": "8e0da2379234e54cd446ae794f214d7034da889e5d8f95a793f741c3320db9a1"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/regression-evidence/screenshots/working-paper-created.png",
+      "status": "??",
+      "bytes": 166783,
+      "sha256": "7c202bd9497dcb012ec4119423abcba031a7274bf854fedacfcc9d899085d727"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/workspace-AE.png",
+      "status": "??",
+      "bytes": 219924,
+      "sha256": "24feab595df1cf0cfad46d0506a5bd37962fe9159ccaf0ff890ce11974d05072"
+    },
+    {
+      "path": "docs/qa/mr-auditor-phase1/workspace-IN.png",
+      "status": "??",
+      "bytes": 217601,
+      "sha256": "7b2b51e3dd602a8e0af279e11ab2ebc7bd02362a5e0c4b7c5129622984a342ad"
+    },
+    {
+      "path": "docs/roadmap/mr-auditor-phase2-handoff.md",
+      "status": "??",
+      "bytes": 2471,
+      "sha256": "d98a1b3bbc0be632fbc49a9b8e03d76ae2a8191ab84d763f5995d906d1e08d73"
+    },
+    {
+      "path": "frontend/e2e/accounting-intelligence.spec.ts",
+      "status": "??",
+      "bytes": 4177,
+      "sha256": "a5248b03512c0f6c2bc75061eb8ad29f9e0020b12edd06f2da5e4b16b4c1efcc"
+    },
+    {
+      "path": "frontend/e2e/global-platform.spec.ts",
+      "status": "??",
+      "bytes": 3826,
+      "sha256": "45533fdefcafd10e7be141b45abb01bfd8ff573c889cfafb0204aafacd526200"
+    },
+    {
+      "path": "frontend/e2e/mr-auditor-phase1.spec.ts",
+      "status": "??",
+      "bytes": 13038,
+      "sha256": "1836f0995397f3e1adbfe81d7cf81e5ad74b48b1ac4572c66a192bfea59b4c7f"
+    },
+    {
+      "path": "frontend/playwright.global.config.ts",
+      "status": "??",
+      "bytes": 358,
+      "sha256": "dbed4d088081666eedcbcd07c6e0831fd3d4adedb0cad0c75b5ae0c616d227bd"
+    },
+    {
+      "path": "frontend/playwright.intelligence.config.ts",
+      "status": "??",
+      "bytes": 457,
+      "sha256": "a202251a44e04532ddfac443709996eadfecd9b76343d3fac124df3eb4f51efe"
+    },
+    {
+      "path": "frontend/playwright.mr-auditor.config.ts",
+      "status": "??",
+      "bytes": 531,
+      "sha256": "2bf4a4c0827b5624d3fe262e2bc3789b1fb897e8a8a5446c0ad21e31cc087918"
+    },
+    {
+      "path": "frontend/src/components/ui/country-flag.tsx",
+      "status": "??",
+      "bytes": 3610,
+      "sha256": "6598d9833494ef4b5fca0bc2de40a56bad198ad3130ec7d12ac1a0d0ac08b0cd"
+    },
+    {
+      "path": "frontend/src/features/accounting-intelligence.tsx",
+      "status": "??",
+      "bytes": 37446,
+      "sha256": "47645ac731dcb79e329cb6ca967fe112ba0f57cedaa65018efb5274e88a427d0"
+    },
+    {
+      "path": "frontend/src/features/country-settings.tsx",
+      "status": "??",
+      "bytes": 9220,
+      "sha256": "591bdd5e0f142bb8d80ab7ab8afa46c243809b82d7df107c776948afb8556ac1"
+    },
+    {
+      "path": "frontend/src/features/global-workspace.tsx",
+      "status": "??",
+      "bytes": 28083,
+      "sha256": "9ffd22ce6fc7303f024ca33a7b1549e4aa413455c75724f2eb1af0ee68da4446"
+    },
+    {
+      "path": "frontend/src/features/working-paper-graph.tsx",
+      "status": "??",
+      "bytes": 18448,
+      "sha256": "1e0cee6c7eadfb943210de0a3c958a4a9d9699cc24f7e8f2dbe1d647eb8b1e67"
+    }
+  ]
+}

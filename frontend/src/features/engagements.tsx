@@ -63,7 +63,9 @@ function EngagementList() {
           columns={[
             column("name", "Engagement", 350, {
               cellRenderer: (p: { data: Engagement; value: string }) => (
-                <Link href={"/engagements/" + p.data.id}>{p.value}</Link>
+                <Link href={"/engagements/" + p.data.id + "/workspace"}>
+                  {p.value}
+                </Link>
               ),
             }),
             column("engagement_type", "Type", 170),

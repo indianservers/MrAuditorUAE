@@ -11,8 +11,10 @@ import {
   ShieldCheck,
   Sparkles,
   Users,
+  Flag as FlagIcon,
+  Building2 as BuildingIcon,
 } from "lucide-react";
-export const navigation = [
+const existingNavigation = [
   {
     label: "AI Providers",
     href: "/ai/providers",
@@ -172,3 +174,49 @@ export const navigation = [
     permission: "clients.read",
   },
 ];
+const order = [
+  "/dashboard",
+  "/clients",
+  "/engagements",
+  "/intelligence",
+  "/modules",
+  "/working-papers",
+  "/findings",
+  "/groups",
+  "/reports",
+  "/ai-copilot",
+  "/admin/users",
+  "/settings",
+];
+export const navigation = [
+  ...existingNavigation,
+  { label: "Accounting Intelligence", href: "/intelligence", icon: ScanLine, permission: "accounting.read" },
+  {
+    label: "Audit Modules",
+    href: "/modules",
+    icon: Files,
+    permission: "audit.read",
+  },
+  {
+    label: "Working Papers",
+    href: "/working-papers",
+    icon: Files,
+    permission: "audit.read",
+  },
+  {
+    label: "Findings",
+    href: "/findings",
+    icon: FlagIcon,
+    permission: "audit.read",
+  },
+  {
+    label: "Group Structure",
+    href: "/groups",
+    icon: BuildingIcon,
+    permission: "entities.read",
+  },
+].sort(
+  (a, b) =>
+    (order.indexOf(a.href) < 0 ? 99 : order.indexOf(a.href)) -
+    (order.indexOf(b.href) < 0 ? 99 : order.indexOf(b.href)),
+);

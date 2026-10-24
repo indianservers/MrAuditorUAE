@@ -1,0 +1,50 @@
+{
+  "synthetic": true,
+  "results": [
+    {
+      "operation": "SQL ledger aggregate over actual synthetic database rows",
+      "requested_rows": 10000,
+      "actual_rows": 10000,
+      "debit": "24772674.03000000",
+      "credit": "25131340.40000000",
+      "seconds": 0.1349,
+      "client_rss_mib": 69.25,
+      "note": "Client RSS excludes PostgreSQL memory; aggregate only, not end-to-end import or scrutiny benchmark"
+    },
+    {
+      "operation": "SQL ledger aggregate over actual synthetic database rows",
+      "requested_rows": 100000,
+      "actual_rows": 100000,
+      "debit": "255033316.30000000",
+      "credit": "250376348.29000000",
+      "seconds": 0.8379,
+      "client_rss_mib": 69.26,
+      "note": "Client RSS excludes PostgreSQL memory; aggregate only, not end-to-end import or scrutiny benchmark"
+    },
+    {
+      "operation": "SQL ledger aggregate over actual synthetic database rows",
+      "requested_rows": 1000000,
+      "actual_rows": 1000000,
+      "debit": "2594855033.95000000",
+      "credit": "2594955446.21000000",
+      "seconds": 1.195,
+      "client_rss_mib": 69.26,
+      "note": "Client RSS excludes PostgreSQL memory; aggregate only, not end-to-end import or scrutiny benchmark"
+    },
+    {
+      "operation": "Unique reference exact Decimal transaction matching",
+      "rows_per_side": 10000,
+      "matches": 10000,
+      "seconds": 0.1859,
+      "process_rss_mib": 82.98
+    },
+    {
+      "operation": "Unique reference exact Decimal transaction matching",
+      "rows_per_side": 20000,
+      "matches": 20000,
+      "seconds": 0.4014,
+      "process_rss_mib": 97.83
+    }
+  ],
+  "limits": "Matching bound is 20,000 per side; OCR qualification is fixture-only; no million-row vouching claim"
+}

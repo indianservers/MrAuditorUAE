@@ -27,6 +27,8 @@ export const useUI = create<UI>()(
 );
 // Only non-sensitive layout preferences persist. Business selection lives in memory.
 type Scope = {
+  country: string;
+  setCountry: (v: string) => void;
   tenant: string;
   client: string;
   entity: string;
@@ -39,13 +41,23 @@ type Scope = {
   setSnapshot: (v: string) => void;
 };
 export const useScope = create<Scope>((set) => ({
+  country: "AE",
+  setCountry: (country) =>
+    set({ country, client: "", entity: "", period: "", snapshot: "" }),
   tenant: "",
   client: "",
   entity: "",
   period: "",
   snapshot: "",
   setTenant: (tenant) =>
-    set({ tenant, client: "", entity: "", period: "", snapshot: "" }),
+    set({
+      tenant,
+      country: "AE",
+      client: "",
+      entity: "",
+      period: "",
+      snapshot: "",
+    }),
   setClient: (client) => set({ client, entity: "", period: "", snapshot: "" }),
   setEntity: (entity) => set({ entity, period: "", snapshot: "" }),
   setPeriod: (period) => set({ period, snapshot: "" }),

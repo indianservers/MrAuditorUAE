@@ -1,0 +1,4986 @@
+{
+  "AW": {
+    "country": "AW",
+    "name": "Aruba",
+    "version": "AW-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "AF": {
+    "country": "AF",
+    "name": "Afghanistan",
+    "version": "AF-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "AO": {
+    "country": "AO",
+    "name": "Angola",
+    "version": "AO-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "AI": {
+    "country": "AI",
+    "name": "Anguilla",
+    "version": "AI-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "AX": {
+    "country": "AX",
+    "name": "\u00c5land Islands",
+    "version": "AX-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "AL": {
+    "country": "AL",
+    "name": "Albania",
+    "version": "AL-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "AD": {
+    "country": "AD",
+    "name": "Andorra",
+    "version": "AD-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "AE": {
+    "country": "AE",
+    "name": "United Arab Emirates",
+    "version": "AE-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "SCOPED_UAE",
+    "currency_default": "AED",
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc",
+      "uae-corporate-tax",
+      "uae-vat",
+      "uae-tp",
+      "uae-dmtt"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Existing UAE engines retain their reviewed rule versions and release limits.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "AR": {
+    "country": "AR",
+    "name": "Argentina",
+    "version": "AR-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "AM": {
+    "country": "AM",
+    "name": "Armenia",
+    "version": "AM-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "AS": {
+    "country": "AS",
+    "name": "American Samoa",
+    "version": "AS-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "AQ": {
+    "country": "AQ",
+    "name": "Antarctica",
+    "version": "AQ-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "TF": {
+    "country": "TF",
+    "name": "French Southern Territories",
+    "version": "TF-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "AG": {
+    "country": "AG",
+    "name": "Antigua and Barbuda",
+    "version": "AG-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "AU": {
+    "country": "AU",
+    "name": "Australia",
+    "version": "AU-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": "AUD",
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "AT": {
+    "country": "AT",
+    "name": "Austria",
+    "version": "AT-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "AZ": {
+    "country": "AZ",
+    "name": "Azerbaijan",
+    "version": "AZ-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BI": {
+    "country": "BI",
+    "name": "Burundi",
+    "version": "BI-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BE": {
+    "country": "BE",
+    "name": "Belgium",
+    "version": "BE-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BJ": {
+    "country": "BJ",
+    "name": "Benin",
+    "version": "BJ-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BQ": {
+    "country": "BQ",
+    "name": "Bonaire, Sint Eustatius and Saba",
+    "version": "BQ-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BF": {
+    "country": "BF",
+    "name": "Burkina Faso",
+    "version": "BF-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BD": {
+    "country": "BD",
+    "name": "Bangladesh",
+    "version": "BD-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BG": {
+    "country": "BG",
+    "name": "Bulgaria",
+    "version": "BG-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BH": {
+    "country": "BH",
+    "name": "Bahrain",
+    "version": "BH-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BS": {
+    "country": "BS",
+    "name": "Bahamas",
+    "version": "BS-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BA": {
+    "country": "BA",
+    "name": "Bosnia and Herzegovina",
+    "version": "BA-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BL": {
+    "country": "BL",
+    "name": "Saint Barth\u00e9lemy",
+    "version": "BL-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BY": {
+    "country": "BY",
+    "name": "Belarus",
+    "version": "BY-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BZ": {
+    "country": "BZ",
+    "name": "Belize",
+    "version": "BZ-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BM": {
+    "country": "BM",
+    "name": "Bermuda",
+    "version": "BM-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BO": {
+    "country": "BO",
+    "name": "Bolivia, Plurinational State of",
+    "version": "BO-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BR": {
+    "country": "BR",
+    "name": "Brazil",
+    "version": "BR-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BB": {
+    "country": "BB",
+    "name": "Barbados",
+    "version": "BB-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BN": {
+    "country": "BN",
+    "name": "Brunei Darussalam",
+    "version": "BN-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BT": {
+    "country": "BT",
+    "name": "Bhutan",
+    "version": "BT-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BV": {
+    "country": "BV",
+    "name": "Bouvet Island",
+    "version": "BV-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "BW": {
+    "country": "BW",
+    "name": "Botswana",
+    "version": "BW-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "CF": {
+    "country": "CF",
+    "name": "Central African Republic",
+    "version": "CF-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "CA": {
+    "country": "CA",
+    "name": "Canada",
+    "version": "CA-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "CC": {
+    "country": "CC",
+    "name": "Cocos (Keeling) Islands",
+    "version": "CC-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "CH": {
+    "country": "CH",
+    "name": "Switzerland",
+    "version": "CH-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "CL": {
+    "country": "CL",
+    "name": "Chile",
+    "version": "CL-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "CN": {
+    "country": "CN",
+    "name": "China",
+    "version": "CN-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "CI": {
+    "country": "CI",
+    "name": "C\u00f4te d'Ivoire",
+    "version": "CI-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "CM": {
+    "country": "CM",
+    "name": "Cameroon",
+    "version": "CM-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "CD": {
+    "country": "CD",
+    "name": "Congo, The Democratic Republic of the",
+    "version": "CD-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "CG": {
+    "country": "CG",
+    "name": "Congo",
+    "version": "CG-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "CK": {
+    "country": "CK",
+    "name": "Cook Islands",
+    "version": "CK-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "CO": {
+    "country": "CO",
+    "name": "Colombia",
+    "version": "CO-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "KM": {
+    "country": "KM",
+    "name": "Comoros",
+    "version": "KM-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "CV": {
+    "country": "CV",
+    "name": "Cabo Verde",
+    "version": "CV-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "CR": {
+    "country": "CR",
+    "name": "Costa Rica",
+    "version": "CR-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "CU": {
+    "country": "CU",
+    "name": "Cuba",
+    "version": "CU-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "CW": {
+    "country": "CW",
+    "name": "Cura\u00e7ao",
+    "version": "CW-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "CX": {
+    "country": "CX",
+    "name": "Christmas Island",
+    "version": "CX-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "KY": {
+    "country": "KY",
+    "name": "Cayman Islands",
+    "version": "KY-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "CY": {
+    "country": "CY",
+    "name": "Cyprus",
+    "version": "CY-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "CZ": {
+    "country": "CZ",
+    "name": "Czechia",
+    "version": "CZ-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "DE": {
+    "country": "DE",
+    "name": "Germany",
+    "version": "DE-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "DJ": {
+    "country": "DJ",
+    "name": "Djibouti",
+    "version": "DJ-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "DM": {
+    "country": "DM",
+    "name": "Dominica",
+    "version": "DM-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "DK": {
+    "country": "DK",
+    "name": "Denmark",
+    "version": "DK-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "DO": {
+    "country": "DO",
+    "name": "Dominican Republic",
+    "version": "DO-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "DZ": {
+    "country": "DZ",
+    "name": "Algeria",
+    "version": "DZ-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "EC": {
+    "country": "EC",
+    "name": "Ecuador",
+    "version": "EC-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "EG": {
+    "country": "EG",
+    "name": "Egypt",
+    "version": "EG-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "ER": {
+    "country": "ER",
+    "name": "Eritrea",
+    "version": "ER-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "EH": {
+    "country": "EH",
+    "name": "Western Sahara",
+    "version": "EH-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "ES": {
+    "country": "ES",
+    "name": "Spain",
+    "version": "ES-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "EE": {
+    "country": "EE",
+    "name": "Estonia",
+    "version": "EE-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "ET": {
+    "country": "ET",
+    "name": "Ethiopia",
+    "version": "ET-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "FI": {
+    "country": "FI",
+    "name": "Finland",
+    "version": "FI-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "FJ": {
+    "country": "FJ",
+    "name": "Fiji",
+    "version": "FJ-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "FK": {
+    "country": "FK",
+    "name": "Falkland Islands (Malvinas)",
+    "version": "FK-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "FR": {
+    "country": "FR",
+    "name": "France",
+    "version": "FR-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "FO": {
+    "country": "FO",
+    "name": "Faroe Islands",
+    "version": "FO-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "FM": {
+    "country": "FM",
+    "name": "Micronesia, Federated States of",
+    "version": "FM-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "GA": {
+    "country": "GA",
+    "name": "Gabon",
+    "version": "GA-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "GB": {
+    "country": "GB",
+    "name": "United Kingdom",
+    "version": "GB-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "GE": {
+    "country": "GE",
+    "name": "Georgia",
+    "version": "GE-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "GG": {
+    "country": "GG",
+    "name": "Guernsey",
+    "version": "GG-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "GH": {
+    "country": "GH",
+    "name": "Ghana",
+    "version": "GH-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "GI": {
+    "country": "GI",
+    "name": "Gibraltar",
+    "version": "GI-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "GN": {
+    "country": "GN",
+    "name": "Guinea",
+    "version": "GN-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "GP": {
+    "country": "GP",
+    "name": "Guadeloupe",
+    "version": "GP-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "GM": {
+    "country": "GM",
+    "name": "Gambia",
+    "version": "GM-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "GW": {
+    "country": "GW",
+    "name": "Guinea-Bissau",
+    "version": "GW-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "GQ": {
+    "country": "GQ",
+    "name": "Equatorial Guinea",
+    "version": "GQ-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "GR": {
+    "country": "GR",
+    "name": "Greece",
+    "version": "GR-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "GD": {
+    "country": "GD",
+    "name": "Grenada",
+    "version": "GD-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "GL": {
+    "country": "GL",
+    "name": "Greenland",
+    "version": "GL-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "GT": {
+    "country": "GT",
+    "name": "Guatemala",
+    "version": "GT-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "GF": {
+    "country": "GF",
+    "name": "French Guiana",
+    "version": "GF-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "GU": {
+    "country": "GU",
+    "name": "Guam",
+    "version": "GU-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "GY": {
+    "country": "GY",
+    "name": "Guyana",
+    "version": "GY-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "HK": {
+    "country": "HK",
+    "name": "Hong Kong",
+    "version": "HK-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "HM": {
+    "country": "HM",
+    "name": "Heard Island and McDonald Islands",
+    "version": "HM-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "HN": {
+    "country": "HN",
+    "name": "Honduras",
+    "version": "HN-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "HR": {
+    "country": "HR",
+    "name": "Croatia",
+    "version": "HR-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "HT": {
+    "country": "HT",
+    "name": "Haiti",
+    "version": "HT-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "HU": {
+    "country": "HU",
+    "name": "Hungary",
+    "version": "HU-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "ID": {
+    "country": "ID",
+    "name": "Indonesia",
+    "version": "ID-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "IM": {
+    "country": "IM",
+    "name": "Isle of Man",
+    "version": "IM-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "IN": {
+    "country": "IN",
+    "name": "India",
+    "version": "IN-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": "INR",
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "IO": {
+    "country": "IO",
+    "name": "British Indian Ocean Territory",
+    "version": "IO-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "IE": {
+    "country": "IE",
+    "name": "Ireland",
+    "version": "IE-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "IR": {
+    "country": "IR",
+    "name": "Iran, Islamic Republic of",
+    "version": "IR-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "IQ": {
+    "country": "IQ",
+    "name": "Iraq",
+    "version": "IQ-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "IS": {
+    "country": "IS",
+    "name": "Iceland",
+    "version": "IS-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "IL": {
+    "country": "IL",
+    "name": "Israel",
+    "version": "IL-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "IT": {
+    "country": "IT",
+    "name": "Italy",
+    "version": "IT-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "JM": {
+    "country": "JM",
+    "name": "Jamaica",
+    "version": "JM-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "JE": {
+    "country": "JE",
+    "name": "Jersey",
+    "version": "JE-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "JO": {
+    "country": "JO",
+    "name": "Jordan",
+    "version": "JO-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "JP": {
+    "country": "JP",
+    "name": "Japan",
+    "version": "JP-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "KZ": {
+    "country": "KZ",
+    "name": "Kazakhstan",
+    "version": "KZ-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "KE": {
+    "country": "KE",
+    "name": "Kenya",
+    "version": "KE-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "KG": {
+    "country": "KG",
+    "name": "Kyrgyzstan",
+    "version": "KG-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "KH": {
+    "country": "KH",
+    "name": "Cambodia",
+    "version": "KH-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "KI": {
+    "country": "KI",
+    "name": "Kiribati",
+    "version": "KI-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "KN": {
+    "country": "KN",
+    "name": "Saint Kitts and Nevis",
+    "version": "KN-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "KR": {
+    "country": "KR",
+    "name": "Korea, Republic of",
+    "version": "KR-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "KW": {
+    "country": "KW",
+    "name": "Kuwait",
+    "version": "KW-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "LA": {
+    "country": "LA",
+    "name": "Lao People's Democratic Republic",
+    "version": "LA-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "LB": {
+    "country": "LB",
+    "name": "Lebanon",
+    "version": "LB-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "LR": {
+    "country": "LR",
+    "name": "Liberia",
+    "version": "LR-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "LY": {
+    "country": "LY",
+    "name": "Libya",
+    "version": "LY-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "LC": {
+    "country": "LC",
+    "name": "Saint Lucia",
+    "version": "LC-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "LI": {
+    "country": "LI",
+    "name": "Liechtenstein",
+    "version": "LI-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "LK": {
+    "country": "LK",
+    "name": "Sri Lanka",
+    "version": "LK-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "LS": {
+    "country": "LS",
+    "name": "Lesotho",
+    "version": "LS-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "LT": {
+    "country": "LT",
+    "name": "Lithuania",
+    "version": "LT-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "LU": {
+    "country": "LU",
+    "name": "Luxembourg",
+    "version": "LU-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "LV": {
+    "country": "LV",
+    "name": "Latvia",
+    "version": "LV-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MO": {
+    "country": "MO",
+    "name": "Macao",
+    "version": "MO-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MF": {
+    "country": "MF",
+    "name": "Saint Martin (French part)",
+    "version": "MF-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MA": {
+    "country": "MA",
+    "name": "Morocco",
+    "version": "MA-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MC": {
+    "country": "MC",
+    "name": "Monaco",
+    "version": "MC-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MD": {
+    "country": "MD",
+    "name": "Moldova, Republic of",
+    "version": "MD-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MG": {
+    "country": "MG",
+    "name": "Madagascar",
+    "version": "MG-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MV": {
+    "country": "MV",
+    "name": "Maldives",
+    "version": "MV-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MX": {
+    "country": "MX",
+    "name": "Mexico",
+    "version": "MX-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MH": {
+    "country": "MH",
+    "name": "Marshall Islands",
+    "version": "MH-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MK": {
+    "country": "MK",
+    "name": "North Macedonia",
+    "version": "MK-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "ML": {
+    "country": "ML",
+    "name": "Mali",
+    "version": "ML-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MT": {
+    "country": "MT",
+    "name": "Malta",
+    "version": "MT-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MM": {
+    "country": "MM",
+    "name": "Myanmar",
+    "version": "MM-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "ME": {
+    "country": "ME",
+    "name": "Montenegro",
+    "version": "ME-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MN": {
+    "country": "MN",
+    "name": "Mongolia",
+    "version": "MN-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MP": {
+    "country": "MP",
+    "name": "Northern Mariana Islands",
+    "version": "MP-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MZ": {
+    "country": "MZ",
+    "name": "Mozambique",
+    "version": "MZ-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MR": {
+    "country": "MR",
+    "name": "Mauritania",
+    "version": "MR-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MS": {
+    "country": "MS",
+    "name": "Montserrat",
+    "version": "MS-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MQ": {
+    "country": "MQ",
+    "name": "Martinique",
+    "version": "MQ-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MU": {
+    "country": "MU",
+    "name": "Mauritius",
+    "version": "MU-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MW": {
+    "country": "MW",
+    "name": "Malawi",
+    "version": "MW-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "MY": {
+    "country": "MY",
+    "name": "Malaysia",
+    "version": "MY-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "YT": {
+    "country": "YT",
+    "name": "Mayotte",
+    "version": "YT-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "NA": {
+    "country": "NA",
+    "name": "Namibia",
+    "version": "NA-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "NC": {
+    "country": "NC",
+    "name": "New Caledonia",
+    "version": "NC-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "NE": {
+    "country": "NE",
+    "name": "Niger",
+    "version": "NE-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "NF": {
+    "country": "NF",
+    "name": "Norfolk Island",
+    "version": "NF-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "NG": {
+    "country": "NG",
+    "name": "Nigeria",
+    "version": "NG-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "NI": {
+    "country": "NI",
+    "name": "Nicaragua",
+    "version": "NI-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "NU": {
+    "country": "NU",
+    "name": "Niue",
+    "version": "NU-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "NL": {
+    "country": "NL",
+    "name": "Netherlands",
+    "version": "NL-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "NO": {
+    "country": "NO",
+    "name": "Norway",
+    "version": "NO-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "NP": {
+    "country": "NP",
+    "name": "Nepal",
+    "version": "NP-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "NR": {
+    "country": "NR",
+    "name": "Nauru",
+    "version": "NR-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "NZ": {
+    "country": "NZ",
+    "name": "New Zealand",
+    "version": "NZ-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "OM": {
+    "country": "OM",
+    "name": "Oman",
+    "version": "OM-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "PK": {
+    "country": "PK",
+    "name": "Pakistan",
+    "version": "PK-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "PA": {
+    "country": "PA",
+    "name": "Panama",
+    "version": "PA-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "PN": {
+    "country": "PN",
+    "name": "Pitcairn",
+    "version": "PN-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "PE": {
+    "country": "PE",
+    "name": "Peru",
+    "version": "PE-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "PH": {
+    "country": "PH",
+    "name": "Philippines",
+    "version": "PH-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "PW": {
+    "country": "PW",
+    "name": "Palau",
+    "version": "PW-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "PG": {
+    "country": "PG",
+    "name": "Papua New Guinea",
+    "version": "PG-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "PL": {
+    "country": "PL",
+    "name": "Poland",
+    "version": "PL-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "PR": {
+    "country": "PR",
+    "name": "Puerto Rico",
+    "version": "PR-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "KP": {
+    "country": "KP",
+    "name": "Korea, Democratic People's Republic of",
+    "version": "KP-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "PT": {
+    "country": "PT",
+    "name": "Portugal",
+    "version": "PT-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "PY": {
+    "country": "PY",
+    "name": "Paraguay",
+    "version": "PY-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "PS": {
+    "country": "PS",
+    "name": "Palestine, State of",
+    "version": "PS-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "PF": {
+    "country": "PF",
+    "name": "French Polynesia",
+    "version": "PF-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "QA": {
+    "country": "QA",
+    "name": "Qatar",
+    "version": "QA-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "RE": {
+    "country": "RE",
+    "name": "R\u00e9union",
+    "version": "RE-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "RO": {
+    "country": "RO",
+    "name": "Romania",
+    "version": "RO-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "RU": {
+    "country": "RU",
+    "name": "Russian Federation",
+    "version": "RU-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "RW": {
+    "country": "RW",
+    "name": "Rwanda",
+    "version": "RW-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "SA": {
+    "country": "SA",
+    "name": "Saudi Arabia",
+    "version": "SA-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "SD": {
+    "country": "SD",
+    "name": "Sudan",
+    "version": "SD-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "SN": {
+    "country": "SN",
+    "name": "Senegal",
+    "version": "SN-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "SG": {
+    "country": "SG",
+    "name": "Singapore",
+    "version": "SG-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "GS": {
+    "country": "GS",
+    "name": "South Georgia and the South Sandwich Islands",
+    "version": "GS-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "SH": {
+    "country": "SH",
+    "name": "Saint Helena, Ascension and Tristan da Cunha",
+    "version": "SH-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "SJ": {
+    "country": "SJ",
+    "name": "Svalbard and Jan Mayen",
+    "version": "SJ-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "SB": {
+    "country": "SB",
+    "name": "Solomon Islands",
+    "version": "SB-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "SL": {
+    "country": "SL",
+    "name": "Sierra Leone",
+    "version": "SL-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "SV": {
+    "country": "SV",
+    "name": "El Salvador",
+    "version": "SV-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "SM": {
+    "country": "SM",
+    "name": "San Marino",
+    "version": "SM-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "SO": {
+    "country": "SO",
+    "name": "Somalia",
+    "version": "SO-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "PM": {
+    "country": "PM",
+    "name": "Saint Pierre and Miquelon",
+    "version": "PM-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "RS": {
+    "country": "RS",
+    "name": "Serbia",
+    "version": "RS-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "SS": {
+    "country": "SS",
+    "name": "South Sudan",
+    "version": "SS-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "ST": {
+    "country": "ST",
+    "name": "Sao Tome and Principe",
+    "version": "ST-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "SR": {
+    "country": "SR",
+    "name": "Suriname",
+    "version": "SR-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "SK": {
+    "country": "SK",
+    "name": "Slovakia",
+    "version": "SK-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "SI": {
+    "country": "SI",
+    "name": "Slovenia",
+    "version": "SI-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "SE": {
+    "country": "SE",
+    "name": "Sweden",
+    "version": "SE-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "SZ": {
+    "country": "SZ",
+    "name": "Eswatini",
+    "version": "SZ-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "SX": {
+    "country": "SX",
+    "name": "Sint Maarten (Dutch part)",
+    "version": "SX-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "SC": {
+    "country": "SC",
+    "name": "Seychelles",
+    "version": "SC-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "SY": {
+    "country": "SY",
+    "name": "Syrian Arab Republic",
+    "version": "SY-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "TC": {
+    "country": "TC",
+    "name": "Turks and Caicos Islands",
+    "version": "TC-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "TD": {
+    "country": "TD",
+    "name": "Chad",
+    "version": "TD-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "TG": {
+    "country": "TG",
+    "name": "Togo",
+    "version": "TG-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "TH": {
+    "country": "TH",
+    "name": "Thailand",
+    "version": "TH-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "TJ": {
+    "country": "TJ",
+    "name": "Tajikistan",
+    "version": "TJ-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "TK": {
+    "country": "TK",
+    "name": "Tokelau",
+    "version": "TK-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "TM": {
+    "country": "TM",
+    "name": "Turkmenistan",
+    "version": "TM-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "TL": {
+    "country": "TL",
+    "name": "Timor-Leste",
+    "version": "TL-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "TO": {
+    "country": "TO",
+    "name": "Tonga",
+    "version": "TO-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "TT": {
+    "country": "TT",
+    "name": "Trinidad and Tobago",
+    "version": "TT-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "TN": {
+    "country": "TN",
+    "name": "Tunisia",
+    "version": "TN-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "TR": {
+    "country": "TR",
+    "name": "T\u00fcrkiye",
+    "version": "TR-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "TV": {
+    "country": "TV",
+    "name": "Tuvalu",
+    "version": "TV-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "TW": {
+    "country": "TW",
+    "name": "Taiwan, Province of China",
+    "version": "TW-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "TZ": {
+    "country": "TZ",
+    "name": "Tanzania, United Republic of",
+    "version": "TZ-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "UG": {
+    "country": "UG",
+    "name": "Uganda",
+    "version": "UG-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "UA": {
+    "country": "UA",
+    "name": "Ukraine",
+    "version": "UA-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "UM": {
+    "country": "UM",
+    "name": "United States Minor Outlying Islands",
+    "version": "UM-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "UY": {
+    "country": "UY",
+    "name": "Uruguay",
+    "version": "UY-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "US": {
+    "country": "US",
+    "name": "United States",
+    "version": "US-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": "USD",
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "UZ": {
+    "country": "UZ",
+    "name": "Uzbekistan",
+    "version": "UZ-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "VA": {
+    "country": "VA",
+    "name": "Holy See (Vatican City State)",
+    "version": "VA-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "VC": {
+    "country": "VC",
+    "name": "Saint Vincent and the Grenadines",
+    "version": "VC-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "VE": {
+    "country": "VE",
+    "name": "Venezuela, Bolivarian Republic of",
+    "version": "VE-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "VG": {
+    "country": "VG",
+    "name": "Virgin Islands, British",
+    "version": "VG-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "VI": {
+    "country": "VI",
+    "name": "Virgin Islands, U.S.",
+    "version": "VI-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "VN": {
+    "country": "VN",
+    "name": "Viet Nam",
+    "version": "VN-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "VU": {
+    "country": "VU",
+    "name": "Vanuatu",
+    "version": "VU-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "WF": {
+    "country": "WF",
+    "name": "Wallis and Futuna",
+    "version": "WF-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "WS": {
+    "country": "WS",
+    "name": "Samoa",
+    "version": "WS-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "YE": {
+    "country": "YE",
+    "name": "Yemen",
+    "version": "YE-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "ZA": {
+    "country": "ZA",
+    "name": "South Africa",
+    "version": "ZA-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "ZM": {
+    "country": "ZM",
+    "name": "Zambia",
+    "version": "ZM-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  },
+  "ZW": {
+    "country": "ZW",
+    "name": "Zimbabwe",
+    "version": "ZW-foundation-2026.10.1",
+    "core_version": "global-audit-1",
+    "status": "CORE_ONLY",
+    "currency_default": null,
+    "capabilities": [
+      "accounting",
+      "audit",
+      "evidence",
+      "working-papers",
+      "analytics",
+      "review",
+      "grc"
+    ],
+    "regulatory_qualified": false,
+    "limitations": "Shared audit workflows only. Country tax, statutory forms and filing integrations are not implemented.",
+    "reporting_basis": "Explicit reviewed profile; never inferred from country or currency"
+  }
+}

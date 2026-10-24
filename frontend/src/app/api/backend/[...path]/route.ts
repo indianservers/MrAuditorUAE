@@ -9,7 +9,7 @@ async function proxy(
 ) {
   const path = (await context.params).path.join("/");
   if (
-    (!allowed.test(path) && !/^(?:tp|ml|dmtt|grc|governance|platform|subscriptions)(?:\/[a-zA-Z0-9/-]+)?$/.test(path) && !/^auth\/mfa(?:\/(?:enroll|confirm))?$/.test(path)) ||
+    (!allowed.test(path) && !/^(?:jurisdictions|intelligence)\/[a-zA-Z0-9/-]+$/.test(path) && !/^(?:tp|ml|dmtt|grc|governance|platform|subscriptions)(?:\/[a-zA-Z0-9/-]+)?$/.test(path) && !/^auth\/mfa(?:\/(?:enroll|confirm))?$/.test(path)) ||
     path.includes("..") ||
     path.includes("%")
   )

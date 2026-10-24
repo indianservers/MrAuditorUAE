@@ -1,4 +1,5 @@
 "use client";
+import { CountrySettings } from "./country-settings";
 import { useState } from "react";
 import { TPClientDocuments } from "./tp-client-documents";
 import Link from "next/link";
@@ -19,7 +20,10 @@ import { PageHeader } from "./shared";
 
 export function AuditAdministration({ area }: { area: string }) {
   return area === "firm-settings" ? (
-    <MethodologyStudio />
+    <>
+      <CountrySettings />
+      <MethodologyStudio />
+    </>
   ) : (
     <FirmAdministration area={area} />
   );

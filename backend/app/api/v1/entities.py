@@ -23,8 +23,9 @@ async def listing(
     status: str | None = Query(None, max_length=30),
     search: str | None = Query(None, max_length=200),
     sort: str = "-created_at",
+    country: str | None = Query(None, pattern=r"^[A-Z]{2}$"),
 ):
-    return await service.listing(db, ctx, offset, limit, status, search, sort)
+    return await service.listing(db, ctx, offset, limit, status, search, sort, country)
 
 
 @router.post("", response_model=EntityOut, status_code=201)

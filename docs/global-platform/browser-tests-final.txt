@@ -1,0 +1,8 @@
+
+Running 1 test using 1 worker
+
+(node:32256) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 e2e\global-platform.spec.ts:10:1 › country Settings persist and working-paper graph opens saved records (3.9s)
+
+  1 passed (4.4s)

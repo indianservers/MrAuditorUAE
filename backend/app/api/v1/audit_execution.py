@@ -53,6 +53,15 @@ async def dependencies(
     return await registry(db, ctx, eid, offset, limit)
 
 
+@router.get("/graph")
+async def relationship_graph(
+    eid: uuid.UUID, db: DB, ctx: Actor, limit: int = Query(300, ge=1, le=1000)
+):
+    from app.modules.lineage.working_papers import graph
+
+    return await graph(db, ctx, eid, limit)
+
+
 @router.get("/workspace")
 async def workspace(eid: uuid.UUID, db: DB, ctx: Actor):
     eng = await s.engagement(db, ctx, eid)

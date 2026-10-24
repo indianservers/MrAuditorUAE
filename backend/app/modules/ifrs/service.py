@@ -32,6 +32,10 @@ async def record(db, ctx, eid, rid, kind=None, approved=False):
         raise HTTPException(422, "Unexpected IFRS source record kind")
     if approved and obj.status not in APPROVED:
         raise HTTPException(409, "Approved IFRS input required")
+    if approved:
+        from app.modules.lineage.working_papers import require_context_current
+
+        await require_context_current(db, ctx, obj)
     return obj
 
 

@@ -45,6 +45,10 @@ async def engagement(db, ctx, identifier, permission="audit.read", mutable=False
     if not obj:
         raise HTTPException(404, "Engagement not found")
     await engagement_permissions(db, ctx, identifier, permission)
+    from app.modules.jurisdictions.service import require_capability
+
+    if mutable:
+        await require_capability(db, ctx, obj, permission)
     if mutable and obj.status.upper() in {"COMPLETED", "ARCHIVED", "CANCELLED"}:
         raise HTTPException(409, "Engagement is read-only")
     return obj
@@ -63,7 +67,7 @@ async def policy(db, ctx, eid):
     return p
 
 
-async def get_record(db, ctx, eid, rid, permission="audit.read", mutable=False):
+async def get_record(db, ctx, eid, rid, permission="audit.read", mutable=False, *, lock=True):
     if permission == "audit.read" and "audit.read" not in ctx.permissions:
         scoped_kind = await db.scalar(
             select(AuditRecord.kind).where(
@@ -74,16 +78,13 @@ async def get_record(db, ctx, eid, rid, permission="audit.read", mutable=False):
         )
         if scoped_kind and scoped_kind.startswith("grc-"):
             permission = "grc.read"
-    await engagement(db, ctx, eid, permission, mutable)
-    obj = await db.scalar(
-        select(AuditRecord)
-        .where(
-            AuditRecord.tenant_id == ctx.tenant_id,
-            AuditRecord.engagement_id == eid,
-            AuditRecord.id == rid,
-        )
-        .with_for_update()
+    await engagement(db, ctx, eid, permission, mutable, lock=lock)
+    statement = select(AuditRecord).where(
+        AuditRecord.tenant_id == ctx.tenant_id,
+        AuditRecord.engagement_id == eid,
+        AuditRecord.id == rid,
     )
+    obj = await db.scalar(statement.with_for_update() if lock or mutable else statement)
     if not obj:
         raise HTTPException(404, "Audit record not found")
     if obj.kind.startswith("ifrs-"):
@@ -126,6 +127,9 @@ def materiality(data: Materiality):
 
 
 async def source_record(db, ctx, eng, source):
+    if source.kind=="intelligence":
+        from app.modules.intelligence.service import event
+        return await event(db,ctx,eng.id,source.id,True)
     models: dict[str, Any] = {
         "record": AuditRecord,
         "finding": Finding,
@@ -289,13 +293,49 @@ async def revision(db, ctx, obj, request_id, action):
     if p and p.methodology.get("quality_review_decision"):
         p.methodology = {k: v for k, v in p.methodology.items() if k != "quality_review_decision"}
         record(db, ctx, "audit.quality.invalidated", obj.engagement_id, request_id)
+    from app.modules.lineage.working_papers import capture
+
+    previous = await db.scalar(
+        select(AuditRevision)
+        .where(
+            AuditRevision.tenant_id == ctx.tenant_id,
+            AuditRevision.record_id == obj.id,
+            AuditRevision.version < obj.version,
+        )
+        .order_by(AuditRevision.version.desc())
+        .limit(1)
+    )
+    receipts = (
+        await capture(db, ctx, obj)
+        if action in {"created", "updated", "restored"} or previous is None
+        else previous.snapshot.get("dependency_receipts")
+    )
+    snapshot = {**serialize(obj), "country_package": None}
+    from app.modules.jurisdictions.service import binding
+
+    eng = await db.get(Engagement, obj.engagement_id)
+    country = await binding(db, ctx, eng)
+    from app.modules.jurisdictions.workspace import resolved
+
+    _, reporting_context = await resolved(db, ctx, eng)
+    snapshot["reporting_context"] = {
+        key: reporting_context[key]
+        for key in ["version", "country", "framework", "as_of", "entity_type"]
+    }
+    snapshot["country_package"] = {
+        "country": country.country,
+        "version": country.package_version,
+        "sha256": country.package_sha256,
+    }
+    if receipts is not None:
+        snapshot["dependency_receipts"] = receipts
     db.add(
         AuditRevision(
             tenant_id=ctx.tenant_id,
             created_by=ctx.user_id,
             record_id=obj.id,
             version=obj.version,
-            snapshot=serialize(obj),
+            snapshot=snapshot,
         )
     )
     record(
@@ -508,6 +548,10 @@ async def action(db, ctx, eid, rid, data, request_id):
     _, roles = await engagement_permissions(db, ctx, eid, needed)
     if review:
         await reviewer_separation(db, ctx, obj)
+    if data.action in {"approve", "lock"}:
+        from app.modules.lineage.working_papers import require_current
+
+        await require_current(db, ctx, obj)
     if data.action == "submit":
         if obj.status not in {"IN_PROGRESS", "REVISED", "REVIEW_NOTES"}:
             raise HTTPException(409, "Only prepared work can be submitted")

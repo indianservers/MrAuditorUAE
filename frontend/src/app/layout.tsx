@@ -2,7 +2,7 @@ import { Providers } from "@/components/providers";
 import "@/styles/globals.css";
 import type { Metadata } from "next";
 export const metadata: Metadata = {
-  title: "AuditOS UAE | Financial Intelligence",
+  title: "Mr Auditor | Global Audit Intelligence",
   description: "Secure audit and accounting workbench",
 };
 export default function RootLayout({

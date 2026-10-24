@@ -15,13 +15,18 @@ TYPES = {
     ".png": "image/png",
     ".jpg": "image/jpeg",
     ".jpeg": "image/jpeg",
+    ".tif": "image/tiff",
+    ".tiff": "image/tiff",
+    ".zip": "application/zip",
 }
 
 
 def validate_file(stream, filename):
     extension = Path(filename).suffix.lower()
     if extension not in TYPES:
-        raise ValueError("Supported evidence: PDF, CSV, XLSX, DOCX, PNG and JPEG")
+        raise ValueError(
+            "Supported evidence: PDF, CSV, XLSX, DOCX, PNG, JPEG, TIFF and bounded document ZIP"
+        )
     stream.seek(0)
     header = stream.read(1024)
     if not header:
@@ -34,6 +39,29 @@ def validate_file(stream, filename):
     }
     if extension in signatures and not header.startswith(signatures[extension]):
         raise ValueError("Evidence signature differs from filename")
+    if extension in {".tif", ".tiff"} and not header.startswith((b"II*\x00", b"MM\x00*")):
+        raise ValueError("Evidence signature differs from filename")
+    if extension == ".zip":
+        stream.seek(0)
+        with zipfile.ZipFile(stream) as archive:
+            entries = [e for e in archive.infolist() if not e.is_dir()]
+            if (
+                not entries
+                or len(entries) > 20
+                or sum(e.file_size for e in entries) > 100 * 1024 * 1024
+            ):
+                raise ValueError("Document ZIP limits exceeded")
+            for entry in entries:
+                name = entry.filename.replace("\\", "/")
+                if (
+                    ".." in name.split("/")
+                    or name.startswith("/")
+                    or ":" in name
+                    or Path(name).suffix.lower()
+                    not in {".pdf", ".png", ".jpg", ".jpeg", ".tif", ".tiff"}
+                    or entry.file_size / max(1, entry.compress_size) > 200
+                ):
+                    raise ValueError("Unsafe document ZIP")
     if extension == ".csv" and (b"\x00" in header or header.lstrip().startswith((b"<", b"MZ"))):
         raise ValueError("Invalid CSV evidence")
     if extension in {".xlsx", ".docx"}:

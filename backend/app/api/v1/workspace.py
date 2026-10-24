@@ -108,15 +108,22 @@ async def directory(
     ctx: Read,
     client_id: uuid.UUID | None = None,
     entity_id: uuid.UUID | None = None,
+    country: str | None = Query(None, pattern=r"^[A-Z]{2}$"),
     offset: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=100),
 ):
     if "entities.read" not in ctx.permissions:
         raise HTTPException(403, "Permission denied")
+    if country:
+        from app.modules.jurisdictions.packages import package
+
+        package(country)
     if client_id:
         await scoped(db, ctx, Client, client_id)
     if entity_id:
         entity = await scoped(db, ctx, LegalEntity, entity_id)
+        if country and entity.country != country:
+            raise HTTPException(409, "Entity belongs to another working country")
         if client_id and entity.client_id != client_id:
             raise HTTPException(422, "Entity does not belong to selected client")
         model: Any = FinancialPeriod
@@ -124,6 +131,8 @@ async def directory(
     else:
         model = LegalEntity
         conditions = [model.tenant_id == ctx.tenant_id]
+        if country:
+            conditions.append(LegalEntity.country == country)
         if client_id:
             conditions.append(model.client_id == client_id)
     total = await db.scalar(select(func.count()).select_from(model).where(*conditions))

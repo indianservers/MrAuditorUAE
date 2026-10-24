@@ -11,16 +11,20 @@ celery_app = Celery(
         "app.workers.accounting",
         "app.workers.grc",
         "app.workers.enterprise_ai",
+        "app.workers.intelligence",
     ],
 )
 celery_app.conf.update(
     beat_schedule={
         "grc-due-schedules": {"task": "auditos.grc.tick", "schedule": 60.0},
         "ai-due-schedules": {"task": "auditos.enterprise_ai.tick", "schedule": 60.0},
+        "intelligence-recovery": {"task": "auditos.intelligence.recover", "schedule": 60.0},
     },
     task_routes={
         "auditos.grc.tick": {"queue": "grc"},
         "auditos.enterprise_ai.tick": {"queue": "enterprise-ai"},
+        "auditos.intelligence.recover": {"queue": "intelligence"},
+        "auditos.intelligence.run": {"queue": "intelligence"},
     },
     task_serializer="json",
     accept_content=["json"],

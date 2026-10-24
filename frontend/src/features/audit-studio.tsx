@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import {
   FileCheck2,
   GitBranch,
@@ -136,6 +137,7 @@ export function AuditStudio({
   children?: React.ReactNode;
   defaults?: Record<string, unknown>;
 }) {
+  const requestedRecord = useSearchParams().get("record");
   const base = `engagements/${id}/audit`;
   const workspace = useAPI<Workspace>(base + "/workspace", true, true);
   const [search, setSearch] = useState("");
@@ -150,9 +152,14 @@ export function AuditStudio({
   const [selected, setSelected] = useState<AuditRecord | null>(null);
   const [creating, setCreating] = useState(false);
   const [history, setHistory] = useState(false);
+  useEffect(() => {
+    setSelected(null);
+    setCreating(false);
+    setHistory(false);
+  }, [requestedRecord]);
   const detail = useAPI<AuditRecord>(
-    `${base}/records/${selected?.id}`,
-    !!selected,
+    `${base}/records/${selected?.id || requestedRecord}`,
+    !!(selected?.id || requestedRecord),
   );
   const current =
     detail.data ||
@@ -204,6 +211,16 @@ export function AuditStudio({
           </>
         }
       />
+      <p>
+        <Link href={`/engagements/${id}/workspace`}>Engagement workspace</Link>
+        {" · "}
+        <Link href={`/engagements/${id}/lifecycle`}>Audit lifecycle</Link>
+        {" · "}
+        <Link href={`/engagements/${id}/graph`}>
+          Open working-paper dependency graph
+        </Link>
+      </p>
+      <ErrorState error={detail.error} />
       {!ifrs && (
         <nav className="audit-tabs" aria-label="Engagement workspaces">
           {auditAreas.map(([key, name]) => (

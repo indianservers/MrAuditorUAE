@@ -28,6 +28,10 @@ dependencies = [
     "reportlab>=5.0.1",
     "python-docx>=1.2.0",
     "pypdf>=6,<7",
+    "rapidocr>=3,<4",
+    "onnxruntime>=1.20,<2",
+    "pypdfium2>=4.30,<6",
+    "pillow>=11,<13",
 ]
 [dependency-groups]
 dev = ["pytest>=8", "pytest-asyncio>=0.25", "pytest-cov>=6", "ruff>=0.9", "mypy>=1.14", "pre-commit>=4"]

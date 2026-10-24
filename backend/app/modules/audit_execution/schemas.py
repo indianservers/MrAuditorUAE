@@ -13,7 +13,7 @@ class Strict(BaseModel):
 
 
 class Source(Strict):
-    kind: Literal["record", "finding", "journal", "snapshot", "sample"]
+    kind: Literal["record", "finding", "journal", "snapshot", "sample", "intelligence"]
     id: uuid.UUID
 
 

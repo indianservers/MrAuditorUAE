@@ -20,6 +20,15 @@ import { GRCStudio, BoardPortal } from "./grc-studio";
 import { EnterpriseAI } from "./enterprise-ai";
 import { Phase9Studio } from "./phase9-studio";
 import { IFRSStudio } from "./ifrs-studio";
+import { CountrySettings } from "./country-settings";
+import {
+  ModuleDirectory,
+  EngagementWorkspace,
+  GroupWorkspace,
+  RecordHub,
+} from "./global-workspace";
+import { WorkingPaperGraph } from "./working-paper-graph";
+import { AccountingIntelligence } from "./accounting-intelligence";
 import { AuditStudio } from "./audit-studio";
 import { AuditAdministration, ClientPortal } from "./audit-administration";
 export function Workbench({ route }: { route: string }) {
@@ -38,6 +47,22 @@ export function Workbench({ route }: { route: string }) {
     );
   let page: React.ReactNode;
   switch (route) {
+    case "/settings":
+    case "/settings/countries":
+      page = <CountrySettings />;
+      break;
+    case "/modules":
+      page = <ModuleDirectory />;
+      break;
+    case "/groups":
+      page = <GroupWorkspace />;
+      break;
+    case "/working-papers":
+      page = <RecordHub kind="working-papers" />;
+      break;
+    case "/findings":
+      page = <RecordHub kind="findings" />;
+      break;
     case "/dashboard":
       page = <Dashboard />;
       break;
@@ -95,7 +120,9 @@ export function Workbench({ route }: { route: string }) {
       break;
     default:
       page =
-        route === "/board" ? (
+        route === "/intelligence" || route.startsWith("/intelligence/") ? (
+          <AccountingIntelligence eid={route.split("/")[2]} area={route.split("/")[3]} />
+        ) : route === "/board" ? (
           <BoardPortal />
         ) : route === "/grc" || route.startsWith("/grc/") ? (
           <GRCStudio eid={route.split("/")[2]} area={route.split("/")[3]} />
@@ -133,8 +160,21 @@ export function Workbench({ route }: { route: string }) {
           <AuditAdministration area={route.split("/")[2]} />
         ) : route === "/client-portal" ? (
           <ClientPortal />
+        ) : route.startsWith("/engagements/") &&
+          route.split("/")[3] === "workspace" ? (
+          <EngagementWorkspace eid={route.split("/")[2]} />
+        ) : route.startsWith("/engagements/") &&
+          route.split("/")[3] === "lifecycle" ? (
+          <WorkingPaperGraph eid={route.split("/")[2]} lifecycle />
+        ) : route.startsWith("/engagements/") &&
+          route.split("/")[3] === "graph" ? (
+          <WorkingPaperGraph eid={route.split("/")[2]} />
         ) : route.startsWith("/engagements/") && route.split("/").length > 3 ? (
-          <AuditStudio id={route.split("/")[2]} area={route.split("/")[3]} />
+          <AuditStudio
+            key={route}
+            id={route.split("/")[2]}
+            area={route.split("/")[3]}
+          />
         ) : route.startsWith("/engagements/") ? (
           <Engagements id={route.split("/")[2]} />
         ) : (

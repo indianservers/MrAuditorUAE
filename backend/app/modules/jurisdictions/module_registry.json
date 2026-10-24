@@ -1,0 +1,1918 @@
+{
+  "version": "mr-auditor-phase1-2026.10.24",
+  "categories": [
+    {
+      "id": "01",
+      "name": "Engagement Setup"
+    },
+    {
+      "id": "02",
+      "name": "Scrutiny & Forensics"
+    },
+    {
+      "id": "03",
+      "name": "Reconciliation"
+    },
+    {
+      "id": "04",
+      "name": "Balance Sheet & P&L"
+    },
+    {
+      "id": "05",
+      "name": "Planning & Risk"
+    },
+    {
+      "id": "06",
+      "name": "Findings & Controls"
+    },
+    {
+      "id": "07",
+      "name": "Tax Practice"
+    },
+    {
+      "id": "08",
+      "name": "Group & Multi-Entity"
+    },
+    {
+      "id": "09",
+      "name": "Reporting"
+    },
+    {
+      "id": "10",
+      "name": "Client Collaboration"
+    },
+    {
+      "id": "11",
+      "name": "Report Studio"
+    },
+    {
+      "id": "12",
+      "name": "AI & Automation"
+    },
+    {
+      "id": "13",
+      "name": "Administration"
+    }
+  ],
+  "items": [
+    {
+      "id": "01-client-management",
+      "category": "01",
+      "name": "Client Management",
+      "countries": [],
+      "route": "/clients",
+      "kind": null,
+      "permission": "clients.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "01-legal-entities",
+      "category": "01",
+      "name": "Legal Entities",
+      "countries": [],
+      "route": "/clients",
+      "kind": null,
+      "permission": "entities.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "01-engagement-creation",
+      "category": "01",
+      "name": "Engagement Creation",
+      "countries": [],
+      "route": "/engagements",
+      "kind": null,
+      "permission": "engagements.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "01-financial-periods",
+      "category": "01",
+      "name": "Financial Periods",
+      "countries": [],
+      "route": "/clients",
+      "kind": null,
+      "permission": "entities.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "01-engagement-checklist",
+      "category": "01",
+      "name": "Engagement Checklist",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "01-client-onboarding",
+      "category": "01",
+      "name": "Client Onboarding",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "01-erp-connections",
+      "category": "01",
+      "name": "ERP Connections",
+      "countries": [],
+      "route": "/integrations",
+      "kind": null,
+      "permission": "accounting.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "01-accounting-imports",
+      "category": "01",
+      "name": "Accounting Imports",
+      "countries": [],
+      "route": "/integrations",
+      "kind": null,
+      "permission": "accounting.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "01-ledger-mapping",
+      "category": "01",
+      "name": "Ledger Mapping",
+      "countries": [],
+      "route": "/financials/mapping",
+      "kind": null,
+      "permission": "accounting.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "01-opening-balances",
+      "category": "01",
+      "name": "Opening Balances",
+      "countries": [],
+      "route": "/financials/trial-balance",
+      "kind": null,
+      "permission": "accounting.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "01-prior-year-comparatives",
+      "category": "01",
+      "name": "Prior-Year Comparatives",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "01-engagement-team",
+      "category": "01",
+      "name": "Engagement Team",
+      "countries": [],
+      "route": "/engagements/{eid}/team",
+      "kind": null,
+      "permission": "audit.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "01-engagement-documents",
+      "category": "01",
+      "name": "Engagement Documents",
+      "countries": [],
+      "route": "/engagements/{eid}/evidence",
+      "kind": "evidence",
+      "permission": "audit.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "02-transaction-scrutiny",
+      "category": "02",
+      "name": "Transaction Scrutiny",
+      "countries": [],
+      "route": "/audit/analytics",
+      "kind": null,
+      "permission": "analytics.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "02-journal-entry-testing",
+      "category": "02",
+      "name": "Journal Entry Testing",
+      "countries": [],
+      "route": "/audit/journal-testing",
+      "kind": null,
+      "permission": "analytics.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "02-ledger-scrutiny",
+      "category": "02",
+      "name": "Ledger Scrutiny",
+      "countries": [],
+      "route": "/financials/general-ledger",
+      "kind": null,
+      "permission": "accounting.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "02-duplicate-transactions",
+      "category": "02",
+      "name": "Duplicate Transactions",
+      "countries": [],
+      "route": "/audit/analytics",
+      "kind": null,
+      "permission": "analytics.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "02-suspicious-payments",
+      "category": "02",
+      "name": "Suspicious Payments",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "02-unusual-journal-entries",
+      "category": "02",
+      "name": "Unusual Journal Entries",
+      "countries": [],
+      "route": "/audit/analytics",
+      "kind": null,
+      "permission": "analytics.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "02-related-party-transactions",
+      "category": "02",
+      "name": "Related-Party Transactions",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "02-counterparty-relationships",
+      "category": "02",
+      "name": "Counterparty Relationships",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "02-financial-flow-intelligence",
+      "category": "02",
+      "name": "Financial Flow Intelligence",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "02-anomaly-investigations",
+      "category": "02",
+      "name": "Anomaly Investigations",
+      "countries": [],
+      "route": "/ai/command-center",
+      "kind": null,
+      "permission": "ai.investigation.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "02-fraud-risk-indicators",
+      "category": "02",
+      "name": "Fraud Risk Indicators",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "02-continuous-monitoring",
+      "category": "02",
+      "name": "Continuous Monitoring",
+      "countries": [],
+      "route": "/engagements/{eid}/grc-monitor-rule",
+      "kind": "grc-monitor-rule",
+      "permission": "grc.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "03-bank-reconciliation",
+      "category": "03",
+      "name": "Bank Reconciliation",
+      "countries": [],
+      "route": "/financials/reconciliation",
+      "kind": null,
+      "permission": "accounting.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "03-cash-reconciliation",
+      "category": "03",
+      "name": "Cash Reconciliation",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "03-customer-reconciliation",
+      "category": "03",
+      "name": "Customer Reconciliation",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "03-vendor-reconciliation",
+      "category": "03",
+      "name": "Vendor Reconciliation",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "03-intercompany-reconciliation",
+      "category": "03",
+      "name": "Intercompany Reconciliation",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "03-gst-reconciliation",
+      "category": "03",
+      "name": "GST Reconciliation",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "03-vat-reconciliation",
+      "category": "03",
+      "name": "VAT Reconciliation",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "03-tds-tcs-reconciliation",
+      "category": "03",
+      "name": "TDS/TCS Reconciliation",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "03-payroll-reconciliation",
+      "category": "03",
+      "name": "Payroll Reconciliation",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "03-external-confirmations",
+      "category": "03",
+      "name": "External Confirmations",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "03-ocr-vouching",
+      "category": "03",
+      "name": "OCR & Vouching",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "03-supporting-document-matching",
+      "category": "03",
+      "name": "Supporting Document Matching",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "04-lead-schedules",
+      "category": "04",
+      "name": "Lead Schedules",
+      "countries": [],
+      "route": "/financials/trial-balance",
+      "kind": null,
+      "permission": "accounting.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "04-cash-bank",
+      "category": "04",
+      "name": "Cash & Bank",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "04-trade-receivables",
+      "category": "04",
+      "name": "Trade Receivables",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "04-trade-payables",
+      "category": "04",
+      "name": "Trade Payables",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "04-inventories",
+      "category": "04",
+      "name": "Inventories",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "04-investments",
+      "category": "04",
+      "name": "Investments",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "04-property-plant-equipment",
+      "category": "04",
+      "name": "Property, Plant & Equipment",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "04-intangible-assets",
+      "category": "04",
+      "name": "Intangible Assets",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "04-borrowings",
+      "category": "04",
+      "name": "Borrowings",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "04-loans-advances",
+      "category": "04",
+      "name": "Loans & Advances",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "04-capital-reserves",
+      "category": "04",
+      "name": "Capital & Reserves",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "04-revenue",
+      "category": "04",
+      "name": "Revenue",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "04-cost-of-sales",
+      "category": "04",
+      "name": "Cost of Sales",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "04-employee-expenses",
+      "category": "04",
+      "name": "Employee Expenses",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "04-finance-costs",
+      "category": "04",
+      "name": "Finance Costs",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "04-other-expenses",
+      "category": "04",
+      "name": "Other Expenses",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "04-cash-flow",
+      "category": "04",
+      "name": "Cash Flow",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "04-analytical-review",
+      "category": "04",
+      "name": "Analytical Review",
+      "countries": [],
+      "route": "/audit/analytics",
+      "kind": null,
+      "permission": "analytics.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "04-ageing-analysis",
+      "category": "04",
+      "name": "Ageing Analysis",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "05-audit-strategy",
+      "category": "05",
+      "name": "Audit Strategy",
+      "countries": [],
+      "route": "/engagements/{eid}/planning",
+      "kind": "planning",
+      "permission": "audit.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "05-materiality",
+      "category": "05",
+      "name": "Materiality",
+      "countries": [],
+      "route": "/engagements/{eid}/materiality",
+      "kind": "materiality",
+      "permission": "audit.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "05-performance-materiality",
+      "category": "05",
+      "name": "Performance Materiality",
+      "countries": [],
+      "route": "/engagements/{eid}/materiality",
+      "kind": "materiality",
+      "permission": "audit.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "05-risk-assessment",
+      "category": "05",
+      "name": "Risk Assessment",
+      "countries": [],
+      "route": "/engagements/{eid}/risks",
+      "kind": "risks",
+      "permission": "audit.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "05-audit-programs",
+      "category": "05",
+      "name": "Audit Programs",
+      "countries": [],
+      "route": "/engagements/{eid}/programs",
+      "kind": "programs",
+      "permission": "audit.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "05-sampling",
+      "category": "05",
+      "name": "Sampling",
+      "countries": [],
+      "route": "/audit/sampling",
+      "kind": null,
+      "permission": "sampling.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "05-going-concern",
+      "category": "05",
+      "name": "Going Concern",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "05-fraud-risk",
+      "category": "05",
+      "name": "Fraud Risk",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "05-opening-balances",
+      "category": "05",
+      "name": "Opening Balances",
+      "countries": [],
+      "route": "/financials/trial-balance",
+      "kind": null,
+      "permission": "accounting.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "05-significant-estimates",
+      "category": "05",
+      "name": "Significant Estimates",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "05-engagement-quality-review",
+      "category": "05",
+      "name": "Engagement Quality Review",
+      "countries": [],
+      "route": "/engagements/{eid}/completion",
+      "kind": "completion",
+      "permission": "audit.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "06-findings-inbox",
+      "category": "06",
+      "name": "Findings Inbox",
+      "countries": [],
+      "route": "/engagements/{eid}/findings",
+      "kind": "findings",
+      "permission": "audit.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "06-exceptions-register",
+      "category": "06",
+      "name": "Exceptions Register",
+      "countries": [],
+      "route": "/engagements/{eid}/findings",
+      "kind": "findings",
+      "permission": "audit.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "06-misstatements-summary",
+      "category": "06",
+      "name": "Misstatements Summary",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "06-internal-controls",
+      "category": "06",
+      "name": "Internal Controls",
+      "countries": [],
+      "route": "/engagements/{eid}/grc-control",
+      "kind": "grc-control",
+      "permission": "grc.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "06-risk-control-matrix",
+      "category": "06",
+      "name": "Risk-Control Matrix",
+      "countries": [],
+      "route": "/engagements/{eid}/grc-link",
+      "kind": "grc-link",
+      "permission": "grc.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "06-client-queries",
+      "category": "06",
+      "name": "Client Queries",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "06-evidence-requests",
+      "category": "06",
+      "name": "Evidence Requests",
+      "countries": [],
+      "route": "/engagements/{eid}/requests",
+      "kind": "requests",
+      "permission": "audit.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "06-review-notes",
+      "category": "06",
+      "name": "Review Notes",
+      "countries": [],
+      "route": "/engagements/{eid}/review-notes",
+      "kind": "review-notes",
+      "permission": "audit.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "06-remediation-actions",
+      "category": "06",
+      "name": "Remediation Actions",
+      "countries": [],
+      "route": "/engagements/{eid}/grc-remediation",
+      "kind": "grc-remediation",
+      "permission": "grc.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "06-quality-review",
+      "category": "06",
+      "name": "Quality Review",
+      "countries": [],
+      "route": "/engagements/{eid}/completion",
+      "kind": "completion",
+      "permission": "audit.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "06-management-letter",
+      "category": "06",
+      "name": "Management Letter",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "06-audit-conclusion-tracker",
+      "category": "06",
+      "name": "Audit Conclusion Tracker",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "07-tax-profiles",
+      "category": "07",
+      "name": "Tax Profiles",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "07-tax-calculations",
+      "category": "07",
+      "name": "Tax Calculations",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "07-tax-adjustments",
+      "category": "07",
+      "name": "Tax Adjustments",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "07-tax-reconciliation",
+      "category": "07",
+      "name": "Tax Reconciliation",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "07-return-preparation",
+      "category": "07",
+      "name": "Return Preparation",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "07-review-and-approval",
+      "category": "07",
+      "name": "Review and Approval",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "07-gst-in",
+      "category": "07",
+      "name": "GST",
+      "countries": [
+        "IN"
+      ],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "07-tds-in",
+      "category": "07",
+      "name": "TDS",
+      "countries": [
+        "IN"
+      ],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "07-tcs-in",
+      "category": "07",
+      "name": "TCS",
+      "countries": [
+        "IN"
+      ],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "07-income-tax-in",
+      "category": "07",
+      "name": "Income Tax",
+      "countries": [
+        "IN"
+      ],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "07-tax-audit-in",
+      "category": "07",
+      "name": "Tax Audit",
+      "countries": [
+        "IN"
+      ],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "07-form-3cd-in",
+      "category": "07",
+      "name": "Form 3CD",
+      "countries": [
+        "IN"
+      ],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "07-deferred-tax-in",
+      "category": "07",
+      "name": "Deferred Tax",
+      "countries": [
+        "IN"
+      ],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "07-statutory-tax-disclosures-in",
+      "category": "07",
+      "name": "Statutory Tax Disclosures",
+      "countries": [
+        "IN"
+      ],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "07-corporate-tax-ae",
+      "category": "07",
+      "name": "Corporate Tax",
+      "countries": [
+        "AE"
+      ],
+      "route": "/engagements/{eid}/tax-profile",
+      "kind": "tax-profile",
+      "permission": "tax.profile.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "07-vat-ae",
+      "category": "07",
+      "name": "VAT",
+      "countries": [
+        "AE"
+      ],
+      "route": "/engagements/{eid}/vat-profile",
+      "kind": "vat-profile",
+      "permission": "vat.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "07-transfer-pricing-ae",
+      "category": "07",
+      "name": "Transfer Pricing",
+      "countries": [
+        "AE"
+      ],
+      "route": "/engagements/{eid}/tp-profile",
+      "kind": "tp-profile",
+      "permission": "tp.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "07-related-party-disclosures-ae",
+      "category": "07",
+      "name": "Related-Party Disclosures",
+      "countries": [
+        "AE"
+      ],
+      "route": "/engagements/{eid}/tp-disclosure",
+      "kind": "tp-disclosure",
+      "permission": "tp.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "07-qfzp-assessment-ae",
+      "category": "07",
+      "name": "QFZP Assessment",
+      "countries": [
+        "AE"
+      ],
+      "route": "/engagements/{eid}/tax-qfzp",
+      "kind": "tax-qfzp",
+      "permission": "tax.profile.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "07-interest-benchmarking-ae",
+      "category": "07",
+      "name": "Interest Benchmarking",
+      "countries": [
+        "AE"
+      ],
+      "route": "/engagements/{eid}/tp-study",
+      "kind": "tp-study",
+      "permission": "tp.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "07-intercompany-loans-ae",
+      "category": "07",
+      "name": "Intercompany Loans",
+      "countries": [
+        "AE"
+      ],
+      "route": "/engagements/{eid}/tp-loan",
+      "kind": "tp-loan",
+      "permission": "tp.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "07-dmtt-pillar-two-ae",
+      "category": "07",
+      "name": "DMTT / Pillar Two",
+      "countries": [
+        "AE"
+      ],
+      "route": "/engagements/{eid}/dmtt-group",
+      "kind": "dmtt-group",
+      "permission": "dmtt.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "07-deferred-tax-ae",
+      "category": "07",
+      "name": "Deferred Tax",
+      "countries": [
+        "AE"
+      ],
+      "route": "/engagements/{eid}/ifrs-deferred-tax",
+      "kind": "ifrs-deferred-tax",
+      "permission": "ifrs.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "07-tax-grouping-ae",
+      "category": "07",
+      "name": "Tax Grouping",
+      "countries": [
+        "AE"
+      ],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "08-corporate-group-structure",
+      "category": "08",
+      "name": "Corporate Group Structure",
+      "countries": [],
+      "route": "/groups",
+      "kind": null,
+      "permission": "entities.read",
+      "state": "PHASE1",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "08-ownership-relationships",
+      "category": "08",
+      "name": "Ownership Relationships",
+      "countries": [],
+      "route": "/groups",
+      "kind": null,
+      "permission": "entities.read",
+      "state": "PHASE1",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "08-subsidiaries-and-associates",
+      "category": "08",
+      "name": "Subsidiaries and Associates",
+      "countries": [],
+      "route": "/groups",
+      "kind": null,
+      "permission": "entities.read",
+      "state": "PHASE1",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "08-consolidation",
+      "category": "08",
+      "name": "Consolidation",
+      "countries": [],
+      "route": "/engagements/{eid}/ifrs-consolidation",
+      "kind": "ifrs-consolidation",
+      "permission": "ifrs.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "08-intercompany-balances",
+      "category": "08",
+      "name": "Intercompany Balances",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "08-intercompany-transactions",
+      "category": "08",
+      "name": "Intercompany Transactions",
+      "countries": [
+        "AE"
+      ],
+      "route": "/engagements/{eid}/tp-transaction",
+      "kind": "tp-transaction",
+      "permission": "tp.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "08-eliminations",
+      "category": "08",
+      "name": "Eliminations",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "08-related-party-register",
+      "category": "08",
+      "name": "Related-Party Register",
+      "countries": [
+        "AE"
+      ],
+      "route": "/engagements/{eid}/tp-party",
+      "kind": "tp-party",
+      "permission": "tp.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "08-foreign-currency-translation",
+      "category": "08",
+      "name": "Foreign Currency Translation",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "08-group-reporting",
+      "category": "08",
+      "name": "Group Reporting",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "08-component-audit-coordination",
+      "category": "08",
+      "name": "Component Audit Coordination",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "09-financial-statements",
+      "category": "09",
+      "name": "Financial Statements",
+      "countries": [],
+      "route": "/engagements/{eid}/ifrs-financials",
+      "kind": "ifrs-financials",
+      "permission": "ifrs.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "09-notes-to-accounts",
+      "category": "09",
+      "name": "Notes to Accounts",
+      "countries": [],
+      "route": "/engagements/{eid}/ifrs-note",
+      "kind": "ifrs-note",
+      "permission": "ifrs.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "09-audit-planning-summary",
+      "category": "09",
+      "name": "Audit Planning Summary",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "09-disclosure-checklist",
+      "category": "09",
+      "name": "Disclosure Checklist",
+      "countries": [],
+      "route": "/engagements/{eid}/ifrs-disclosure",
+      "kind": "ifrs-disclosure",
+      "permission": "ifrs.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "09-statutory-reporting",
+      "category": "09",
+      "name": "Statutory Reporting",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "09-audit-opinion",
+      "category": "09",
+      "name": "Audit Opinion",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "09-auditor-s-report",
+      "category": "09",
+      "name": "Auditor's Report",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "09-management-representation",
+      "category": "09",
+      "name": "Management Representation",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "09-audit-completion-checklist",
+      "category": "09",
+      "name": "Audit Completion Checklist",
+      "countries": [],
+      "route": "/engagements/{eid}/completion",
+      "kind": "completion",
+      "permission": "audit.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "09-caro-reporting",
+      "category": "09",
+      "name": "CARO Reporting",
+      "countries": [
+        "IN"
+      ],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "09-schedule-iii-reporting",
+      "category": "09",
+      "name": "Schedule III Reporting",
+      "countries": [
+        "IN"
+      ],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "09-ifrs-reporting",
+      "category": "09",
+      "name": "IFRS Reporting",
+      "countries": [],
+      "route": "/ifrs",
+      "kind": null,
+      "permission": "ifrs.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "09-consolidated-reporting",
+      "category": "09",
+      "name": "Consolidated Reporting",
+      "countries": [],
+      "route": "/engagements/{eid}/ifrs-consolidation",
+      "kind": "ifrs-consolidation",
+      "permission": "ifrs.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "10-client-portal",
+      "category": "10",
+      "name": "Client Portal",
+      "countries": [],
+      "route": "/client-portal",
+      "kind": null,
+      "permission": "portal.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "10-document-requests",
+      "category": "10",
+      "name": "Document Requests",
+      "countries": [],
+      "route": "/engagements/{eid}/requests",
+      "kind": "requests",
+      "permission": "audit.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "10-secure-uploads",
+      "category": "10",
+      "name": "Secure Uploads",
+      "countries": [],
+      "route": "/client-portal",
+      "kind": null,
+      "permission": "portal.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "10-client-questionnaires",
+      "category": "10",
+      "name": "Client Questionnaires",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "10-findings-responses",
+      "category": "10",
+      "name": "Findings Responses",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "10-external-confirmations",
+      "category": "10",
+      "name": "External Confirmations",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "10-evidence-status",
+      "category": "10",
+      "name": "Evidence Status",
+      "countries": [],
+      "route": "/engagements/{eid}/evidence",
+      "kind": "evidence",
+      "permission": "audit.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "10-approvals-and-communication-history",
+      "category": "10",
+      "name": "Approvals and Communication History",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "11-report-builder",
+      "category": "11",
+      "name": "Report Builder",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "11-dashboard-builder",
+      "category": "11",
+      "name": "Dashboard Builder",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "11-template-library",
+      "category": "11",
+      "name": "Template Library",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "11-verification-blocks",
+      "category": "11",
+      "name": "Verification Blocks",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "11-analytical-blocks",
+      "category": "11",
+      "name": "Analytical Blocks",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "11-visualisation-blocks",
+      "category": "11",
+      "name": "Visualisation Blocks",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "11-custom-data-tables",
+      "category": "11",
+      "name": "Custom Data Tables",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "11-working-paper-exports",
+      "category": "11",
+      "name": "Working Paper Exports",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "11-pdf-excel-word-reports",
+      "category": "11",
+      "name": "PDF / Excel / Word Reports",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "12-ai-audit-assistant",
+      "category": "12",
+      "name": "AI Audit Assistant",
+      "countries": [],
+      "route": "/ai-copilot",
+      "kind": null,
+      "permission": "ai.audit.execute",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "12-investigation-assistant",
+      "category": "12",
+      "name": "Investigation Assistant",
+      "countries": [],
+      "route": "/ai/command-center",
+      "kind": null,
+      "permission": "ai.investigation.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "12-anomaly-detection",
+      "category": "12",
+      "name": "Anomaly Detection",
+      "countries": [],
+      "route": "/ai-lab",
+      "kind": null,
+      "permission": "ml.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "12-document-intelligence",
+      "category": "12",
+      "name": "Document Intelligence",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "12-audit-workflow-builder",
+      "category": "12",
+      "name": "Audit Workflow Builder",
+      "countries": [],
+      "route": "/ai/command-center",
+      "kind": null,
+      "permission": "ai.workflow.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "12-ai-recommendations",
+      "category": "12",
+      "name": "AI Recommendations",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "12-prediction-registry",
+      "category": "12",
+      "name": "Prediction Registry",
+      "countries": [],
+      "route": "/ai-lab",
+      "kind": null,
+      "permission": "ml.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "12-model-management",
+      "category": "12",
+      "name": "Model Management",
+      "countries": [],
+      "route": "/ai-lab",
+      "kind": null,
+      "permission": "ml.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "12-review-and-approval",
+      "category": "12",
+      "name": "Review and Approval",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "12-explainability-source-tracking",
+      "category": "12",
+      "name": "Explainability & Source Tracking",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "13-countries-jurisdictions",
+      "category": "13",
+      "name": "Countries & Jurisdictions",
+      "countries": [],
+      "route": "/settings",
+      "kind": null,
+      "permission": "audit.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "13-organization-settings",
+      "category": "13",
+      "name": "Organization Settings",
+      "countries": [],
+      "route": "/settings",
+      "kind": null,
+      "permission": "tenant.manage",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "13-users-teams",
+      "category": "13",
+      "name": "Users & Teams",
+      "countries": [],
+      "route": "/admin/users",
+      "kind": null,
+      "permission": "users.assign_roles",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "13-roles-permissions",
+      "category": "13",
+      "name": "Roles & Permissions",
+      "countries": [],
+      "route": "/admin/roles",
+      "kind": null,
+      "permission": "users.assign_roles",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "13-integrations",
+      "category": "13",
+      "name": "Integrations",
+      "countries": [],
+      "route": "/integrations",
+      "kind": null,
+      "permission": "accounting.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "13-regulatory-rule-library",
+      "category": "13",
+      "name": "Regulatory Rule Library",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "13-firm-templates",
+      "category": "13",
+      "name": "Firm Templates",
+      "countries": [],
+      "route": "/admin/firm-settings",
+      "kind": null,
+      "permission": "methodology.manage",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "13-subscription-management",
+      "category": "13",
+      "name": "Subscription Management",
+      "countries": [],
+      "route": "/subscriptions",
+      "kind": null,
+      "permission": "subscription.read",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "13-audit-logs",
+      "category": "13",
+      "name": "Audit Logs",
+      "countries": [],
+      "route": "/admin/activity",
+      "kind": null,
+      "permission": "users.assign_roles",
+      "state": "AVAILABLE_SCOPED",
+      "description": "Existing scoped workflow; specialist validation and prior QA release gates still apply."
+    },
+    {
+      "id": "13-data-retention",
+      "category": "13",
+      "name": "Data Retention",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    },
+    {
+      "id": "13-notifications",
+      "category": "13",
+      "name": "Notifications",
+      "countries": [],
+      "route": null,
+      "kind": null,
+      "permission": "audit.read",
+      "state": "PLANNED",
+      "description": "Registered for a future phase; no operational engine is claimed."
+    }
+  ]
+}
