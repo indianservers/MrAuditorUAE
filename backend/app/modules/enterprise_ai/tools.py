@@ -99,7 +99,8 @@ async def invoke(db, ctx, eid, name, data: ToolInput):
         if data.use_case_id is None:
             raise HTTPException(422, "Select a UAE use case before collecting inputs")
         result.data = await inputs(db, ctx, eid, data.use_case_id, min(data.limit, 49))
-        result.sources = [{"id": row["id"], "type": "record", "version": row["version"]} for row in result.data["items"]]
+        result.sources = [{"id": row["id"], "type": "record", "version": row["version"]} for row in result.data["items"] if row["status"] in {"APPROVED", "LOCKED"}]
+        result.data["draft_metadata_count"] = sum(row["status"] not in {"APPROVED", "LOCKED"} for row in result.data["items"])
         if not result.sources:
             result.status = "MISSING"
         result.uncertainty.append("Required facts and approved specialist inputs must be verified; metadata collection is not calculation or legal advice")

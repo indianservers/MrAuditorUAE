@@ -236,35 +236,64 @@ export function CountryWorkflows({
   const allColumns = [
     ...new Set(rows.flatMap((row) => Object.keys(row))),
   ].filter((k) => !["auditor", "auditor_at"].includes(k));
+  const compactSource =
+    detail.data?.kind === "workflow-source" &&
+    ["transactions", "audit-open-items"].includes(body?.table_type || "");
   const columns =
-    body?.workflow === "india-payroll-rules" && !showRuleProvenance
-      ? [
-          "subject",
-          "period",
-          "component",
-          "currency",
-          "assessed_base",
-          "expected_amount",
-          "reported_amount",
-          "difference",
-          "state",
-        ].filter((key) => allColumns.includes(key))
-      : ["india-gst", "uae-vat"].includes(body?.workflow || "") &&
-          !showRuleProvenance
+    compactSource && !showRuleProvenance
+      ? (body?.table_type === "transactions"
+          ? [
+              "reference",
+              "account",
+              "date",
+              "currency",
+              "amount",
+              "counterparty",
+              "source_debit",
+              "source_credit",
+            ]
+          : [
+              "reference",
+              "counterparty",
+              "account",
+              "side",
+              "currency",
+              "document_type",
+              "document_date",
+              "due_date",
+              "balance_date",
+              "amount",
+              "supporting_reported_open_amount",
+            ]
+        ).filter((key) => allColumns.includes(key))
+      : body?.workflow === "india-payroll-rules" && !showRuleProvenance
         ? [
-            "counterparty",
-            "reference",
-            "document_type",
+            "subject",
+            "period",
             "component",
             "currency",
-            "books_tax",
-            "return_tax",
-            "tax_difference",
-            "net_difference",
+            "assessed_base",
+            "expected_amount",
+            "reported_amount",
+            "difference",
             "state",
-            "source_review_reasons",
           ].filter((key) => allColumns.includes(key))
-        : allColumns;
+        : ["india-gst", "uae-vat"].includes(body?.workflow || "") &&
+            !showRuleProvenance
+          ? [
+              "counterparty",
+              "reference",
+              "document_type",
+              "component",
+              "currency",
+              "books_tax",
+              "return_tax",
+              "tax_difference",
+              "net_difference",
+              "state",
+              "source_review_reasons",
+            ].filter((key) => allColumns.includes(key))
+          : allColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -535,7 +564,7 @@ export function CountryWorkflows({
     }
   }
   return (
-    <div>
+    <div className="intelligence-workspace">
       <PageHeader
         eyebrow={`${config.data?.country || "Engagement"} · Country workflows`}
         title={
@@ -1919,6 +1948,18 @@ export function CountryWorkflows({
             </Link>
           </div>
           <div style={{ overflowX: "auto" }}>
+            {compactSource && (
+              <label>
+                <input
+                  type="checkbox"
+                  checked={showRuleProvenance}
+                  onChange={(event) =>
+                    setShowRuleProvenance(event.target.checked)
+                  }
+                />
+                Show source provenance and all columns
+              </label>
+            )}
             <table>
               <caption>
                 Source-linked schedule · rows {offset + 1}–

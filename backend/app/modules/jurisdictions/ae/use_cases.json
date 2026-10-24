@@ -367,7 +367,7 @@
       "key": "uae-11",
       "title": "Interest deduction assessment",
       "description": "Analyze financing balances, finance costs, related-party funding and applicable limitations. Show calculation steps and information gaps.",
-      "prompt": "Assess the deductibility of this company’s interest expense.",
+      "prompt": "Assess the deductibility of this companyÃ¢â‚¬â„¢s interest expense.",
       "engines": [
         "E01",
         "E05",
@@ -572,7 +572,7 @@
       "key": "uae-17",
       "title": "Qualifying Free Zone Person assessment",
       "description": "Assess all relevant conditions, income streams, activities, substance evidence, financial reporting and compliance requirements.",
-      "prompt": "Review this free-zone company’s QFZP position and explain unresolved risks.",
+      "prompt": "Review this free-zone companyÃ¢â‚¬â„¢s QFZP position and explain unresolved risks.",
       "engines": [
         "E01",
         "E05",
@@ -674,7 +674,7 @@
       "key": "uae-20",
       "title": "Related-party and connected-person mapping",
       "description": "Build an explainable relationship register from ownership records, declarations, contracts and ledger data. Require review of inferred relationships.",
-      "prompt": "Identify possible related parties and reconcile them to management’s declaration.",
+      "prompt": "Identify possible related parties and reconcile them to managementÃ¢â‚¬â„¢s declaration.",
       "engines": [
         "E02",
         "E03",
@@ -740,7 +740,7 @@
       "key": "uae-22",
       "title": "Intercompany loan benchmarking workflow",
       "description": "Capture currency, term, security, seniority, credit characteristics and loan purpose. Use licensed or supplied comparables and disclose data limitations.",
-      "prompt": "Prepare an arm’s-length review of this shareholder loan.",
+      "prompt": "Prepare an armÃ¢â‚¬â„¢s-length review of this shareholder loan.",
       "engines": [
         "E01",
         "E07",
@@ -1597,8 +1597,8 @@
       "id": 48,
       "key": "uae-48",
       "title": "AML engagement onboarding assistance",
-      "description": "Where relevant to the firm’s activities and applicable rules, collect client due-diligence evidence, beneficial ownership and approved screening results. Route decisions to the designated reviewer.",
-      "prompt": "Prepare this client’s onboarding due-diligence checklist and flag missing evidence.",
+      "description": "Where relevant to the firmÃ¢â‚¬â„¢s activities and applicable rules, collect client due-diligence evidence, beneficial ownership and approved screening results. Route decisions to the designated reviewer.",
+      "prompt": "Prepare this clientÃ¢â‚¬â„¢s onboarding due-diligence checklist and flag missing evidence.",
       "engines": [
         "E01",
         "E02",
@@ -1671,7 +1671,7 @@
       "key": "uae-50",
       "title": "AI-powered engagement command centre",
       "description": "Allow an authorized user to request a coordinated workflow spanning accounting, audit and tax engines. Show progress, dependencies, exceptions and approval steps.",
-      "prompt": "Review this client’s year-end records, prepare the audit and tax readiness pack, and assign unresolved items to the engagement team.",
+      "prompt": "Review this clientÃ¢â‚¬â„¢s year-end records, prepare the audit and tax readiness pack, and assign unresolved items to the engagement team.",
       "engines": [
         "E01",
         "E02",
@@ -1747,7 +1747,9 @@
         "Document facts support only a candidate disbursement; legal classification requires adopted rules.",
         "Approved manually prepared source-linked schedule; full source extraction and automatic specialist downstream recomputation are not established."
       ],
-      "legal_source_ids": []
+      "legal_source_ids": [
+        "AE-VATP013"
+      ]
     },
     {
       "id": 52,
@@ -1778,7 +1780,10 @@
         "Approved method inputs supplied by reviewer; annual method eligibility is not inferred.",
         "Approved manually prepared source-linked schedule; full source extraction and automatic specialist downstream recomputation are not established."
       ],
-      "legal_source_ids": []
+      "legal_source_ids": [
+        "AE-VATGIT1-2025",
+        "AE-VAT-ER-CONSOLIDATED-2026"
+      ]
     },
     {
       "id": 53,
@@ -2078,7 +2083,9 @@
         "Bounded per-unit schedule only; price-based excise and official product registration not implemented.",
         "Approved manually prepared source-linked schedule; full source extraction and automatic specialist downstream recomputation are not established."
       ],
-      "legal_source_ids": []
+      "legal_source_ids": [
+        "AE-EXCISE-TIERS-2026"
+      ]
     },
     {
       "id": 62,
@@ -2224,7 +2231,7 @@
       "key": "uae-66",
       "title": "Realization-basis election tracking",
       "description": "Track election status and asset-level unrealized movements. Reconcile subsequent realizations and prevent duplicate adjustments.",
-      "prompt": "Prepare the tax bridge for unrealized gains and this year’s disposals.",
+      "prompt": "Prepare the tax bridge for unrealized gains and this yearÃ¢â‚¬â„¢s disposals.",
       "engines": [
         "E01",
         "E05",
@@ -2258,7 +2265,7 @@
       "key": "uae-67",
       "title": "Family-foundation tax-transparency assessment",
       "description": "Collect constitutional documents, activities, beneficiaries, ownership chains and application status. Assess relevant conditions and continuing monitoring requirements.",
-      "prompt": "Assess this UAE family foundation’s tax-transparency position and missing evidence.",
+      "prompt": "Assess this UAE family foundationÃ¢â‚¬â„¢s tax-transparency position and missing evidence.",
       "engines": [
         "E01",
         "E02",
@@ -2292,7 +2299,7 @@
       "key": "uae-68",
       "title": "Natural-person business tax assessment",
       "description": "Separate business activities from other income categories using verified rules. Assess relevant registration and reporting exposure from documented facts.",
-      "prompt": "Assess the UAE corporate tax position of this individual’s business activities.",
+      "prompt": "Assess the UAE corporate tax position of this individualÃ¢â‚¬â„¢s business activities.",
       "engines": [
         "E01",
         "E03",
@@ -2932,7 +2939,7 @@
       "key": "uae-87",
       "title": "Common-control restructuring accounting",
       "description": "Document the transaction, ownership continuity, selected accounting policy, reporting periods and intercompany effects. Apply the approved policy consistently.",
-      "prompt": "Prepare accounting schedules for this group’s common-control transfer.",
+      "prompt": "Prepare accounting schedules for this groupÃ¢â‚¬â„¢s common-control transfer.",
       "engines": [
         "E02",
         "E09",
@@ -3291,10 +3298,10 @@
       "workflow": null,
       "phase": 8,
       "scope_status": "Partial",
-      "completion_status": "Blocked",
+      "completion_status": "Implemented with limitations",
       "limitations": [
-        "Manual inspection findings evaluator only; automatic uploaded-workbook formula/dependency scanner remains blocked.",
-        "Approved manually prepared source-linked schedule; full source extraction and automatic specialist downstream recomputation are not established."
+        "Read-only XLSX static scanner detects broken references, formula differences, hidden numeric inputs, hardcode candidates and traversable cycles. No Excel evaluation, macro execution or complete dynamic/named/structured-reference traversal.",
+        "Manual inspection schedule remains available for reviewed findings; original evidence is preserved."
       ],
       "legal_source_ids": []
     },
@@ -3302,7 +3309,7 @@
       "id": 98,
       "key": "uae-98",
       "title": "Engagement independence and conflict checks",
-      "description": "Compare prospective engagements with the firm’s authorized client, relationship and service records. Apply approved firm policies and route potential conflicts for review.",
+      "description": "Compare prospective engagements with the firmÃ¢â‚¬â„¢s authorized client, relationship and service records. Apply approved firm policies and route potential conflicts for review.",
       "prompt": "Check this proposed audit engagement for potential independence conflicts.",
       "engines": [
         "E01",
@@ -3359,8 +3366,7 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Produces unresolved-issues memo only; no audit opinion selection/signing.",
-        "Approved manually prepared source-linked schedule; full source extraction and automatic specialist downstream recomputation are not established."
+        "Actual file and misstatement checklist plus supplied reporting-issue schedule; no automatic opinion selection, qualified professional signing or completeness assurance over unsupplied legal/disclosure evidence."
       ],
       "legal_source_ids": []
     },
@@ -3393,8 +3399,8 @@
       "scope_status": "Partial",
       "completion_status": "Implemented with limitations",
       "limitations": [
-        "Checks supplied file index only; full controlled assembly/retention execution requires existing archive workflow.",
-        "Approved manually prepared source-linked schedule; full source extraction and automatic specialist downstream recomputation are not established."
+        "Actual authorized file-population check reuses existing completion and misstatement services, adds stale-paper checks and invalidates when records/policies change. No automatic seal, retention execution or report signing.",
+        "Structured count schedule remains available for external file-index observations."
       ],
       "legal_source_ids": []
     }

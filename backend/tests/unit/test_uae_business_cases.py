@@ -12,7 +12,7 @@ from app.modules.jurisdictions.ae.use_cases import CASES
 
 
 def test_fifty_distinct_cases_have_bounded_approved_engine_graphs():
-    assert set(CASES) == set(range(1, 51))
+    assert set(CASES) == set(range(1, 101))
     assert len({c.title for c in CASES.values()}) == 100
     assert set().union(*(set(c.engines) for c in CASES.values())) == {
         f"E{i:02}" for i in range(1, 23)

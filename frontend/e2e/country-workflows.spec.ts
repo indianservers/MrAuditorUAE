@@ -1,10 +1,68 @@
 import { test, expect } from "@playwright/test";
-import { readFileSync, mkdirSync } from "node:fs";
+import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { resolve } from "node:path";
 const fixture = JSON.parse(
   readFileSync("../.local-runtime/country-workflows/fixture.json", "utf8"),
 );
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
+
+function implementationHash() {
+  execFileSync(
+    resolve("../backend/.venv/Scripts/python.exe"),
+    [resolve("../scripts/check_utf8_sources.py")],
+    { cwd: resolve(".."), encoding: "utf8" },
+  );
+  return execFileSync(
+    resolve("../backend/.venv/Scripts/python.exe"),
+    [
+      resolve("../scripts/country_workflows_run.py"),
+      ".venv/Scripts/python.exe",
+      "-c",
+      "from app.core.operations_contracts import implementation_hash; print(implementation_hash())",
+    ],
+    { cwd: resolve(".."), encoding: "utf8" },
+  ).trim();
+}
+test.beforeAll(() =>
+  expect(
+    implementationHash(),
+    "Prepare fresh browser fixtures for the current backend implementation",
+  ).toBe(fixture.implementation_sha256),
+);
+test.afterAll(() =>
+  expect(
+    implementationHash(),
+    "Backend changed during browser verification; results require a fresh fixture run",
+  ).toBe(fixture.implementation_sha256),
+);
+
+async function saveScreenshot(path: string, capture: () => Promise<Buffer>) {
+  const content = await capture();
+  for (let attempt = 0; attempt < 5; attempt++) {
+    try {
+      writeFileSync(path, content);
+      return;
+    } catch (error) {
+      if (
+        !["UNKNOWN", "EBUSY", "EPERM"].includes(
+          (error as NodeJS.ErrnoException).code || "",
+        )
+      )
+        throw error;
+      await new Promise((resolve) => setTimeout(resolve, 150 * (attempt + 1)));
+    }
+  }
+  const alternate = path.replace(/\.png$/, `-${Date.now()}.png`);
+  writeFileSync(alternate, content);
+  await test
+    .info()
+    .attach("Screenshot retained at alternate path after Windows file lock", {
+      path: alternate,
+      contentType: "image/png",
+    });
+}
 
 test("UAE source controls, BRS exceptions, exports and India isolation", async ({
   page,
@@ -49,10 +107,9 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
   await expect(
     page.getByRole("cell", { name: "UNBOOKED_BANK_ITEM", exact: true }),
   ).toBeVisible();
-  await page.screenshot({
-    path: `${shots}/uae-bank-review.png`,
-    fullPage: true,
-  });
+  await saveScreenshot(`${shots}/uae-bank-review.png`, () =>
+    page.screenshot({ fullPage: true }),
+  );
   const download = page.waitForEvent("download");
   await page.getByRole("button", { name: "Export XLSX", exact: true }).click();
   await expect((await download).suggestedFilename()).toMatch(/\.xlsx$/);
@@ -66,10 +123,9 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
   await expect(
     page.getByText("amount · required", { exact: true }),
   ).toBeVisible();
-  await page.screenshot({
-    path: `${shots}/controlled-source-import.png`,
-    fullPage: true,
-  });
+  await saveScreenshot(`${shots}/controlled-source-import.png`, () =>
+    page.screenshot({ fullPage: true }),
+  );
   await page.goto(`/intelligence/${fixture.india_engagement}/country-workflow`);
   await expect(
     page
@@ -93,10 +149,9 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
   await expect(
     page.getByText("Form 26 under 2025 Act / 2026 Rules", { exact: true }),
   ).toBeVisible();
-  await page.screenshot({
-    path: `${shots}/india-gst-review.png`,
-    fullPage: true,
-  });
+  await saveScreenshot(`${shots}/india-gst-review.png`, () =>
+    page.screenshot({ fullPage: true }),
+  );
   await page.goto(`/intelligence/${fixture.uae_engagement}/country-workflow`);
   await page
     .getByLabel("Saved source or result")
@@ -110,10 +165,9 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
   await expect(
     page.getByRole("cell", { name: "1:DXB", exact: true }),
   ).toBeVisible();
-  await page.screenshot({
-    path: `${shots}/uae-vat201-bridge.png`,
-    fullPage: true,
-  });
+  await saveScreenshot(`${shots}/uae-vat201-bridge.png`, () =>
+    page.screenshot({ fullPage: true }),
+  );
   for (const [label, value] of [
     ["Schedule title", queuedBRSTitle],
     ["Reconciliation date", "2026-06-30"],
@@ -164,10 +218,9 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
       exact: true,
     }),
   ).toBeVisible();
-  await page.screenshot({
-    path: `${shots}/real-worker-result.png`,
-    fullPage: true,
-  });
+  await saveScreenshot(`${shots}/real-worker-result.png`, () =>
+    page.screenshot({ fullPage: true }),
+  );
   expect(errors).toEqual([]);
   for (const source of [
     {
@@ -300,10 +353,9 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
         ),
       ).toBeVisible();
     }
-    await page.screenshot({
-      path: `${shots}/${source.format}-native-review.png`,
-      fullPage: true,
-    });
+    await saveScreenshot(`${shots}/${source.format}-native-review.png`, () =>
+      page.screenshot({ fullPage: true }),
+    );
   }
   await page.goto(`/intelligence/${fixture.india_engagement}/country-workflow`);
   await page.getByLabel("Workflow", { exact: true }).selectOption("india-gst");
@@ -345,10 +397,12 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
     page.getByRole("heading", { name: gstTitle, exact: true }),
   ).toBeVisible();
   await expect(page.getByText("0 exceptions", { exact: true })).toBeVisible();
-  await page
-    .getByRole("heading", { name: gstTitle, exact: true })
-    .locator("..")
-    .screenshot({ path: `${shots}/india-native-gstr2b-reconciliation.png` });
+  await saveScreenshot(`${shots}/india-native-gstr2b-reconciliation.png`, () =>
+    page
+      .getByRole("heading", { name: gstTitle, exact: true })
+      .locator("..")
+      .screenshot(),
+  );
   await page.goto(`/intelligence/${fixture.india_engagement}/country-workflow`);
   await page
     .getByLabel("Workflow", { exact: true })
@@ -396,10 +450,12 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
     }),
   ).toBeVisible();
   await expect(page.getByText("0 exceptions", { exact: true })).toBeVisible();
-  await page
-    .getByRole("heading", { name: payrollTitle, exact: true })
-    .locator("..")
-    .screenshot({ path: `${shots}/india-payroll-contribution-summary.png` });
+  await saveScreenshot(`${shots}/india-payroll-contribution-summary.png`, () =>
+    page
+      .getByRole("heading", { name: payrollTitle, exact: true })
+      .locator("..")
+      .screenshot(),
+  );
   await page.getByLabel("Show rule provenance and source references").check();
   await expect(
     page.getByRole("cell", { name: "employer-minus-eps", exact: true }),
@@ -410,10 +466,9 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
       exact: true,
     }),
   ).toHaveCount(3);
-  await page.screenshot({
-    path: `${shots}/india-payroll-rule-review.png`,
-    fullPage: true,
-  });
+  await saveScreenshot(`${shots}/india-payroll-rule-review.png`, () =>
+    page.screenshot({ fullPage: true }),
+  );
   expect(errors).toEqual([]);
 });
 
@@ -427,6 +482,13 @@ test("original CSV and reviewed XLSX tables reach bank and payable reconciliatio
   async function fill(values: [string, string][]) {
     for (const [label, value] of values)
       await page.getByLabel(label, { exact: true }).fill(value);
+  }
+  async function captureResult(title: string, filename: string) {
+    const panel = page
+      .getByRole("heading", { name: title, exact: true })
+      .locator("..");
+    await panel.scrollIntoViewIfNeeded();
+    await saveScreenshot(`${shots}/${filename}`, () => panel.screenshot());
   }
   async function queue(
     button = "Queue calculation",
@@ -491,10 +553,10 @@ test("original CSV and reviewed XLSX tables reach bank and payable reconciliatio
       exact: true,
     }),
   ).toBeVisible();
-  await page.screenshot({
-    path: `${shots}/xlsx-table-worker-review.png`,
-    fullPage: true,
-  });
+  await captureResult(
+    "Results and preserved history",
+    "xlsx-table-worker-review.png",
+  );
 
   await page.goto(`/intelligence/${eid}/workflow-source`);
   const mappedTitle = `SYNTHETIC mapped bank browser ${suffix}`;
@@ -532,10 +594,7 @@ test("original CSV and reviewed XLSX tables reach bank and payable reconciliatio
   await expect(
     page.getByText("Excluded columns: Description", { exact: true }),
   ).toBeVisible();
-  await page.screenshot({
-    path: `${shots}/mapped-debit-credit-worker-review.png`,
-    fullPage: true,
-  });
+  await captureResult(mappedTitle, "mapped-debit-credit-worker-review.png");
 
   await page.goto(`/intelligence/${eid}/workflow-source`);
   const bankTitle = `SYNTHETIC reviewed XLSX bank browser ${suffix}`;
@@ -563,10 +622,7 @@ test("original CSV and reviewed XLSX tables reach bank and payable reconciliatio
       exact: true,
     }),
   ).toBeVisible();
-  await page.screenshot({
-    path: `${shots}/reviewed-xlsx-bank-source.png`,
-    fullPage: true,
-  });
+  await captureResult(bankTitle, "reviewed-xlsx-bank-source.png");
   for (const [kind, statement] of [
     ["mapped", mapped],
     ["xlsx", bank],
@@ -597,10 +653,7 @@ test("original CSV and reviewed XLSX tables reach bank and payable reconciliatio
       page.getByRole("heading", { name: title, exact: true }),
     ).toBeVisible();
     await expect(page.getByText("0 exceptions", { exact: true })).toBeVisible();
-    await page.screenshot({
-      path: `${shots}/${kind}-bank-reconciliation-worker.png`,
-      fullPage: true,
-    });
+    await captureResult(title, `${kind}-bank-reconciliation-worker.png`);
   }
 
   await page.goto(`/intelligence/${eid}/workflow-source`);
@@ -629,10 +682,7 @@ test("original CSV and reviewed XLSX tables reach bank and payable reconciliatio
   await expect(
     page.getByRole("cell", { name: "credit-note", exact: true }),
   ).toBeVisible();
-  await page.screenshot({
-    path: `${shots}/reviewed-xlsx-payable-sign-source.png`,
-    fullPage: true,
-  });
+  await captureResult(itemsTitle, "reviewed-xlsx-payable-sign-source.png");
   await page.goto(`/intelligence/${eid}/country-workflow`);
   await page
     .getByLabel("Workflow", { exact: true })
@@ -655,9 +705,6 @@ test("original CSV and reviewed XLSX tables reach bank and payable reconciliatio
     page.getByRole("heading", { name: controlTitle, exact: true }),
   ).toBeVisible();
   await expect(page.getByText("0 exceptions", { exact: true })).toBeVisible();
-  await page.screenshot({
-    path: `${shots}/reviewed-xlsx-payable-control-worker.png`,
-    fullPage: true,
-  });
+  await captureResult(controlTitle, "reviewed-xlsx-payable-control-worker.png");
   expect(errors).toEqual([]);
 });

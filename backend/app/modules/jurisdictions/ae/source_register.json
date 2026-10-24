@@ -15,7 +15,9 @@
       "retrieved_on": "2026-10-25",
       "reviewer_status": "CONSULTED_NOT_AUTOMATICALLY_ADOPTED",
       "rule_version": "review-2026-10-25",
-      "use_cases": [1]
+      "use_cases": [
+        1
+      ]
     },
     {
       "id": "AE-VAT-ER-CONSOLIDATED-2026",
@@ -31,9 +33,26 @@
       "retrieved_on": "2026-10-25",
       "reviewer_status": "CONSULTED_PROFESSIONAL_ADOPTION_REQUIRED",
       "rule_version": "consolidated-2026-09",
-      "candidate_registration_parameters": {"threshold_aed": "375000", "historical_months": 12, "forecast_days": 30},
-      "limitations": ["Candidate parameters are not an approved rule or a conclusion about residence, exclusions or filing dates", "Authoritative Arabic text and applicable historical amendments require professional review"],
-      "use_cases": [1,2,3,4,5,6,7,8,43]
+      "candidate_registration_parameters": {
+        "threshold_aed": "375000",
+        "historical_months": 12,
+        "forecast_days": 30
+      },
+      "limitations": [
+        "Candidate parameters are not an approved rule or a conclusion about residence, exclusions or filing dates",
+        "Authoritative Arabic text and applicable historical amendments require professional review"
+      ],
+      "use_cases": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        43
+      ]
     },
     {
       "id": "AE-CT-TOPICS-SBR",
@@ -48,7 +67,9 @@
       "retrieved_on": "2026-10-25",
       "reviewer_status": "CONSULTED_CURRENT_PERIOD_ADOPTION_REQUIRED",
       "rule_version": "review-2026-10-25",
-      "use_cases": [13]
+      "use_cases": [
+        13
+      ]
     },
     {
       "id": "AE-DMTT-PORTAL",
@@ -62,7 +83,9 @@
       "retrieved_on": "2026-10-25",
       "reviewer_status": "CONSULTED_NOT_A_COMPLETE_CALCULATION_RULE",
       "rule_version": "review-2026-10-25",
-      "use_cases": [24]
+      "use_cases": [
+        24
+      ]
     },
     {
       "id": "AE-EINVOICE-PORTAL",
@@ -76,7 +99,9 @@
       "retrieved_on": "2026-10-25",
       "reviewer_status": "CONSULTED_DECISIONS_NEED_SEPARATE_EFFECTIVITY_REVIEW",
       "rule_version": "review-2026-10-25",
-      "use_cases": [49]
+      "use_cases": [
+        49
+      ]
     },
     {
       "id": "AE-MD197-2026-NOTICE",
@@ -90,15 +115,97 @@
       "retrieved_on": "2026-10-25",
       "reviewer_status": "AWAITING_PRIMARY_DECISION_AND_EFFECTIVITY_ADOPTION",
       "rule_version": "notice-197-2026",
-      "limitations": ["Attempt to open the identified Arabic decision PDF through the research tool failed", "News publication date is not substituted for legal effective date"],
-      "use_cases": [49]
+      "limitations": [
+        "Attempt to open the identified Arabic decision PDF through the research tool failed",
+        "News publication date is not substituted for legal effective date"
+      ],
+      "use_cases": [
+        49
+      ]
+    },
+    {
+      "id": "AE-VATP013",
+      "title": "VATP013 Disbursements and Reimbursements",
+      "url": "https://tax.gov.ae/DataFolder/Files/Pdf/AR/VATP013%20-%20Disbursements%20and%20Reimbursements.pdf",
+      "authority": "Federal Tax Authority",
+      "source_type": "official_guidance",
+      "provision": "Pages 1–3 principal/agent and reimbursement/disbursement discussion",
+      "publication_date": null,
+      "effective_from": null,
+      "retrieved_on": "2026-10-25",
+      "reviewer_status": "CONSULTED_NOT_AUTOMATICALLY_ADOPTED",
+      "rule_version": "research-2026-10-25",
+      "use_cases": [
+        51
+      ],
+      "limitations": [
+        "Not a complete legal eligibility decision. Schedule must cite independently approved operative rule/version and cover the whole reporting interval."
+      ]
+    },
+    {
+      "id": "AE-VATGIT1-2025",
+      "title": "VATGIT1 Input Tax Apportionment, September 2025",
+      "url": "https://tax.gov.ae/DownloadOpenTextFile?fileUrl=en/VAT_VAT_Guides/Input_Tax_Apportionment_Special_Methods/Input+Tax+Apportionment+Guide+EN+-+30+09+2025.pdf",
+      "authority": "Federal Tax Authority",
+      "source_type": "official_guidance",
+      "provision": "Contents sections 3–5; methods, annual adjustments, specified recovery percentage; later amendments must be separately reconciled",
+      "publication_date": null,
+      "effective_from": null,
+      "retrieved_on": "2026-10-25",
+      "reviewer_status": "CONSULTED_NOT_AUTOMATICALLY_ADOPTED",
+      "rule_version": "research-2026-10-25",
+      "use_cases": [
+        52
+      ],
+      "limitations": [
+        "Not a complete legal eligibility decision. Schedule must cite independently approved operative rule/version and cover the whole reporting interval."
+      ]
+    },
+    {
+      "id": "AE-EXCISE-TIERS-2026",
+      "title": "FTA sweetened-drinks tiered-volumetric model",
+      "url": "https://tax.gov.ae/en/excise.tax/excise.tax.topics/calculating.excise.tax.according.aspx",
+      "authority": "Federal Tax Authority",
+      "source_type": "official_guidance",
+      "provision": "Model overview; legal/product/laboratory scope needs adopted operative decision",
+      "publication_date": null,
+      "effective_from": null,
+      "retrieved_on": "2026-10-25",
+      "reviewer_status": "CONSULTED_NOT_AUTOMATICALLY_ADOPTED",
+      "rule_version": "research-2026-10-25",
+      "use_cases": [
+        61
+      ],
+      "limitations": [
+        "Not a complete legal eligibility decision. Schedule must cite independently approved operative rule/version and cover the whole reporting interval."
+      ]
     }
   ],
   "existing_registers": [
-    {"module": "vat", "path": "backend/app/modules/vat/catalogue.py", "status": "Existing source metadata retained; only specifically listed sources above were consulted in this review"},
-    {"module": "tax", "path": "backend/app/modules/tax/catalogue.py", "status": "Existing approved-rule workflows retained; not blanket reverified"},
-    {"module": "tp", "path": "backend/app/modules/tp/catalogue.py", "status": "Existing source/adoption workflow retained; not blanket reverified"},
-    {"module": "dmtt", "path": "backend/app/modules/dmtt/catalogue.py", "status": "Existing specialist rules retained; not blanket reverified"},
-    {"module": "ifrs", "path": "backend/app/modules/ifrs/catalogue.py", "status": "Accounting standards and firm policies remain distinct from UAE tax legislation"}
+    {
+      "module": "vat",
+      "path": "backend/app/modules/vat/catalogue.py",
+      "status": "Existing source metadata retained; only specifically listed sources above were consulted in this review"
+    },
+    {
+      "module": "tax",
+      "path": "backend/app/modules/tax/catalogue.py",
+      "status": "Existing approved-rule workflows retained; not blanket reverified"
+    },
+    {
+      "module": "tp",
+      "path": "backend/app/modules/tp/catalogue.py",
+      "status": "Existing source/adoption workflow retained; not blanket reverified"
+    },
+    {
+      "module": "dmtt",
+      "path": "backend/app/modules/dmtt/catalogue.py",
+      "status": "Existing specialist rules retained; not blanket reverified"
+    },
+    {
+      "module": "ifrs",
+      "path": "backend/app/modules/ifrs/catalogue.py",
+      "status": "Accounting standards and firm policies remain distinct from UAE tax legislation"
+    }
   ]
 }

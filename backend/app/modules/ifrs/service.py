@@ -1163,7 +1163,7 @@ async def consolidate(db, ctx, eid, rid):
         )
     if len({elimination.reference for elimination in data.eliminations}) != len(data.eliminations):
         raise HTTPException(422, "Duplicate elimination reference")
-    eliminated = {}
+    eliminated: dict[str, Decimal] = {}
     for elimination in data.eliminations:
         candidates = [
             pair

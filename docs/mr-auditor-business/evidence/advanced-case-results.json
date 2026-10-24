@@ -1,0 +1,407 @@
+{
+  "synthetic": true,
+  "cases": [
+    {
+      "use_case_id": 51,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 52,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 53,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 54,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 55,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 56,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 57,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 58,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 59,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 60,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 61,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 62,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 63,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 64,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 65,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 66,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 67,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 68,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 69,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 70,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 71,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 72,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 73,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 74,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 75,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 76,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 77,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 78,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 79,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 80,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 81,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 82,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 83,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 84,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 85,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 86,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 87,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 88,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 89,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 90,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 91,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 92,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 93,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 94,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 95,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 96,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 97,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 98,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 99,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    },
+    {
+      "use_case_id": 100,
+      "unapproved": 409,
+      "self_approval": 403,
+      "engine_http": 201,
+      "exact_result_match": true,
+      "idempotent": true
+    }
+  ],
+  "source_reopen_invalidates": true,
+  "tenant_isolation": true
+}

@@ -65,9 +65,8 @@ async def capture(db, ctx, obj):
     if getattr(obj, "kind", None) == "testing" and obj.body.get("sample_id"):
         population_sources.append(("sample", uuid.UUID(obj.body["sample_id"])))
     for source_kind, source_id in set(population_sources):
-        source_model = {"sample": SamplingRun, "journal": JournalLine, "finding": Finding}[
-            source_kind
-        ]
+        source_models: dict[str, type[SamplingRun] | type[JournalLine] | type[Finding]] = {"sample": SamplingRun, "journal": JournalLine, "finding": Finding}
+        source_model = source_models[source_kind]
         source = await db.scalar(
             select(source_model).where(
                 source_model.tenant_id == ctx.tenant_id, source_model.id == source_id

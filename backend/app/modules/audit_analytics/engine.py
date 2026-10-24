@@ -235,7 +235,7 @@ class AnalyticsEngine:
         results = []
         for code, name, requires in RULES:
             start = time.perf_counter()
-            evidence = {}
+            evidence: dict[str, Any] = {}
             status = "passed"
             tested = self.count
             eligible_fields = {

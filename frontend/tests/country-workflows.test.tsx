@@ -258,6 +258,47 @@ beforeEach(() => {
   state.result = null;
 });
 describe("country workflows", () => {
+  it("shows open-item balances first while retaining every provenance column", () => {
+    state.result = {
+      id: "result",
+      kind: "workflow-source",
+      version: 1,
+      freshness: "CURRENT",
+      body: {
+        title: "Reviewed payable schedule",
+        table_type: "audit-open-items",
+        review_status: "UNVERIFIED",
+        population_completeness:
+          "REVIEWED_SUPPORTING_TABLE_WITH_INDEPENDENT_CONTROLS",
+        rows: [
+          {
+            id: "row-2",
+            reference: "INV-1",
+            side: "payable",
+            currency: "AED",
+            amount: "100",
+            supporting_source_worksheet: "Selected",
+          },
+        ],
+      },
+    };
+    render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), {
+      target: { value: "result" },
+    });
+    expect(screen.getByRole("cell", { name: "INV-1" })).toBeVisible();
+    expect(
+      screen.queryByRole("columnheader", {
+        name: "supporting source worksheet",
+      }),
+    ).not.toBeInTheDocument();
+    fireEvent.click(
+      screen.getByLabelText("Show source provenance and all columns"),
+    );
+    expect(
+      screen.getByRole("columnheader", { name: "supporting source worksheet" }),
+    ).toBeVisible();
+  });
   it("keeps recent job results accessible without expanding the entire history", () => {
     state.jobs = Array.from({ length: 7 }, (_, i) => ({
       id: `job-${i}`,
@@ -267,19 +308,19 @@ describe("country workflows", () => {
     }));
     render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
     expect(
-      screen.getAllByRole("button", { name: "Open result", exact: true }),
+      screen.getAllByRole("button", { name: /^Open result$/ }),
     ).toHaveLength(5);
     fireEvent.click(
       screen.getByRole("button", { name: "Show full recent job history" }),
     );
     expect(
-      screen.getAllByRole("button", { name: "Open result", exact: true }),
+      screen.getAllByRole("button", { name: /^Open result$/ }),
     ).toHaveLength(7);
     fireEvent.click(
       screen.getByRole("button", { name: "Show latest five jobs" }),
     );
     expect(
-      screen.getAllByRole("button", { name: "Open result", exact: true }),
+      screen.getAllByRole("button", { name: /^Open result$/ }),
     ).toHaveLength(5);
   });
   it("queues reviewed open items with explicit payable sign and reporting-date scope", async () => {

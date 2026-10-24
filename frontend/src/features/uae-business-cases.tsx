@@ -6,11 +6,18 @@ import { Button, ErrorState } from "@/components/ui/primitives";
 import { BusinessEvidenceFacts as Facts } from "./business-evidence-facts";
 import { UAECalculationInputs } from "./uae-calculation-inputs";
 import { ConnectedTaxReview } from "./connected-tax-review";
+import { UAEAdvancedInputs } from "./uae-advanced-inputs";
 import { UAEVATErrorInputs } from "./uae-vat-error-inputs";
 import styles from "./uae-business-cases.module.css";
 
 type Case = {
   id: number;
+  advanced_contract?: {
+    name: string;
+    fields: { name: string; type: string }[];
+    required_evidence: string[];
+    limitation: string;
+  } | null;
   key: string;
   title: string;
   prompt: string;
@@ -18,7 +25,7 @@ type Case = {
   engines: string[];
   required_information: string[];
   module_url: string;
-  calculation_module_url?:string|null;
+  calculation_module_url?: string | null;
   workflow: string | null;
   calculation: { family: string; kind: string; operation: string } | null;
   limitations: string[];
@@ -67,6 +74,9 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
     items: RecordInput[];
     missing_information: string[];
   }>(`${base}/use-cases/${caseId}/inputs`, !!chosen);
+  const alerts = useAPI<{
+    items: { id: string; reason: string; changed_source_version: number }[];
+  }>(`${base}/use-cases/${caseId}/alerts`, caseId >= 51, true);
   const run = useAPI<Run>(`${base}/investigations/${runId}`, !!runId);
   const action = useAction<Record<string, unknown>>();
   const hasRetainedAction =
@@ -112,8 +122,11 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
           inputs: { use_case_id: caseId },
         },
       });
-      if(token!==generation.current){
-        await action.mutateAsync({path:`${base}/investigations/${String(r.id)}/control`,body:{version:r.version,action:"pause"}});
+      if (token !== generation.current) {
+        await action.mutateAsync({
+          path: `${base}/investigations/${String(r.id)}/control`,
+          body: { version: r.version, action: "pause" },
+        });
         return;
       }
       setRunId(String(r.id));
@@ -336,11 +349,28 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
           <Link href={chosen.module_url}>
             Open specialist inputs, evidence and approvals
           </Link>
-          {chosen.calculation_module_url&&chosen.calculation_module_url!==chosen.module_url&&<Link href={chosen.calculation_module_url}>Prepare specialist calculation inputs</Link>}
+          {chosen.calculation_module_url &&
+            chosen.calculation_module_url !== chosen.module_url && (
+              <Link href={chosen.calculation_module_url}>
+                Prepare specialist calculation inputs
+              </Link>
+            )}
           <p>
             Source collection uses approved application tools. Optional
             language-model explanations remain in the investigation workspace.
           </p>
+          {alerts.data?.items.length ? (
+            <aside aria-label="Source change inbox">
+              <h3>Source changes requiring reassessment</h3>
+              {alerts.data.items.map((a) => (
+                <p key={a.id}>
+                  {a.reason} · source version {a.changed_source_version}. The
+                  prior approved version is preserved; revise and reapprove the
+                  input before rerunning.
+                </p>
+              ))}
+            </aside>
+          ) : null}
           <h3>Available source records</h3>
           <Button
             onClick={() => {
@@ -359,8 +389,21 @@ export function UAEBusinessCases({ eid }: { eid: string }) {
               onResult={setActionResult}
             />
           )}
+          {chosen.advanced_contract && (
+            <UAEAdvancedInputs
+              key={`advanced:${eid}:${caseId}`}
+              eid={eid}
+              caseId={caseId}
+              contract={chosen.advanced_contract}
+              sources={records.data?.items ?? []}
+              onResult={setActionResult}
+              onSaved={() => {
+                void records.refetch();
+              }}
+            />
+          )}
           <UAECalculationInputs
-            key={`${eid}:${caseId}`}
+            key={`calculation:${eid}:${caseId}`}
             eid={eid}
             caseId={caseId}
             sources={records.data?.items ?? []}

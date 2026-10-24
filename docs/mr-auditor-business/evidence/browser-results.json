@@ -117,12 +117,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 16583,
+                  "duration": 6938,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T21:03:27.343Z",
+                  "startTime": "2026-10-24T21:35:15.838Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -134,17 +134,78 @@
           "file": "uae-business-cases.spec.ts",
           "line": 6,
           "column": 1
+        },
+        {
+          "title": "advanced VAT allocation and procurement schedules use approved inputs and retained exact results",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 180115,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 180000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 180000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 180000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\uae-business-cases.spec.ts",
+                        "column": 51,
+                        "line": 94
+                      },
+                      "message": "Error: locator.selectOption: Test timeout of 180000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('region', { name: 'Structured review schedule' }).getByLabel('source id', { exact: true })\u001b[22m\n\n\n  92 |  const scope=page.getByRole(\"region\",{name:\"Structured review schedule\"});\n  93 |  await scope.getByLabel(\"Period start\",{exact:true}).fill(\"2026-01-01\");await scope.getByLabel(\"Period end\",{exact:true}).fill(\"2026-12-31\");\n> 94 |  await scope.getByLabel(\"source id\",{exact:true}).selectOption(fixture.policy_source_id);\n     |                                                   ^\n  95 |  for(const [key,value] of Object.entries({\"source locator\":\"SYNTHETIC method section 1\",\"version\":\"SYN-2026\",\"effective from\":\"2026-01-01\",\"effective to\":\"2026-12-31\",\"adoption assessment\":\"SYNTHETIC reviewed allocation method and source attribution\"}))await scope.getByLabel(key,{exact:true}).fill(value);\n  96 |  await scope.getByLabel(\"Unique reference\",{exact:true}).fill(\"SYN-BROWSER-ALLOC\");await scope.getByLabel(\"Row evidence\",{exact:true}).selectOption(fixture.policy_source_id);\n  97 |  for(const [key,value] of Object.entries({\"direct recoverable\":\"100\",\"direct blocked\":\"50\",\"residual\":\"200\",\"numerator\":\"3\",\"denominator\":\"4\",\"previously claimed\":\"240\"}))await scope.getByLabel(key,{exact:true}).fill(value);\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\uae-business-cases.spec.ts:94:51"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T21:35:22.881Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\uae-business-cases-advance-65a64--and-retained-exact-results\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\uae-business-cases-advance-65a64--and-retained-exact-results\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6d54cedaddd130f85f49-2cad03dcc06af16a87c8",
+          "file": "uae-business-cases.spec.ts",
+          "line": 84,
+          "column": 1
         }
       ]
     }
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-24T21:03:26.420Z",
-    "duration": 17882.420000000002,
+    "startTime": "2026-10-24T21:35:15.376Z",
+    "duration": 187712.39800000002,
     "expected": 1,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 1,
     "flaky": 0
   }
 }

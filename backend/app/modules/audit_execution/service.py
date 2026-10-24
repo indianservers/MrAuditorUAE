@@ -119,6 +119,10 @@ async def get_record(db, ctx, eid, rid, permission="audit.read", mutable=False, 
     token = _source_access_path.set(path | {key})
     try:
         obj = await _get_record(db, ctx, eid, rid, permission, mutable, lock=lock)
+        if obj.kind == "working-papers" and obj.body.get("advanced_input"):
+            from app.modules.enterprise_ai.business import advanced_read_permissions
+            from app.modules.jurisdictions.ae.use_cases import CASES
+            await advanced_read_permissions(db, ctx, eid, CASES[obj.body["advanced_input"]["use_case_id"]])
         if obj.kind == "working-papers" and obj.body.get("inherit_source_permissions"):
             for reference in obj.body.get("sources", []):
                 identifier = uuid.UUID(str(reference["id"]))
@@ -426,6 +430,9 @@ async def revision(db, ctx, obj, request_id, action):
         {"engagement_id": str(obj.engagement_id), "kind": obj.kind, "version": obj.version},
     )
     await db.flush()
+    if action != "created":
+        from app.modules.jurisdictions.ae.advanced_lineage import source_changed
+        await source_changed(db, ctx, obj, request_id)
 
 
 async def create(db, ctx, eid, kind, data, request_id):
@@ -451,6 +458,10 @@ async def create(db, ctx, eid, kind, data, request_id):
 
 async def update(db, ctx, eid, rid, data, request_id):
     obj = await get_record(db, ctx, eid, rid, mutable=True)
+    if obj.kind == "working-papers" and obj.body.get("advanced_input"):
+        proposed_case = (data.body.get("advanced_input") or {}).get("use_case_id")
+        if proposed_case != obj.body["advanced_input"]["use_case_id"]:
+            raise HTTPException(409, "Structured schedule classification cannot be removed or reassigned; prepare a new reviewed paper")
     if obj.kind == "working-papers" and obj.body.get("inherit_source_permissions"):
         previous = {(s["kind"], str(s["id"])) for s in obj.body.get("sources", [])}
         proposed = {(s["kind"], str(s["id"])) for s in data.body.get("sources", [])}

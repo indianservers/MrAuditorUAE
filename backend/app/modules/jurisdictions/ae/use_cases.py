@@ -30,7 +30,7 @@ class UseCase(Strict):
     legal_source_ids: list[str] = Field(default_factory=list)
 
 
-MANIFEST = json.loads(Path(__file__).with_name("use_cases.json").read_text())
+MANIFEST = json.loads(Path(__file__).with_name("use_cases.json").read_text(encoding="utf-8"))
 CASES = {row["id"]: UseCase.model_validate(row) for row in MANIFEST["items"]}
 
 ENGINE_TOOLS = {

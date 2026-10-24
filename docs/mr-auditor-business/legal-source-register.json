@@ -122,6 +122,63 @@
       "use_cases": [
         49
       ]
+    },
+    {
+      "id": "AE-VATP013",
+      "title": "VATP013 Disbursements and Reimbursements",
+      "url": "https://tax.gov.ae/DataFolder/Files/Pdf/AR/VATP013%20-%20Disbursements%20and%20Reimbursements.pdf",
+      "authority": "Federal Tax Authority",
+      "source_type": "official_guidance",
+      "provision": "Pages 1\u20133 principal/agent and reimbursement/disbursement discussion",
+      "publication_date": null,
+      "effective_from": null,
+      "retrieved_on": "2026-10-25",
+      "reviewer_status": "CONSULTED_NOT_AUTOMATICALLY_ADOPTED",
+      "rule_version": "research-2026-10-25",
+      "use_cases": [
+        51
+      ],
+      "limitations": [
+        "Not a complete legal eligibility decision. Schedule must cite independently approved operative rule/version and cover the whole reporting interval."
+      ]
+    },
+    {
+      "id": "AE-VATGIT1-2025",
+      "title": "VATGIT1 Input Tax Apportionment, September 2025",
+      "url": "https://tax.gov.ae/DownloadOpenTextFile?fileUrl=en/VAT_VAT_Guides/Input_Tax_Apportionment_Special_Methods/Input+Tax+Apportionment+Guide+EN+-+30+09+2025.pdf",
+      "authority": "Federal Tax Authority",
+      "source_type": "official_guidance",
+      "provision": "Contents sections 3\u20135; methods, annual adjustments, specified recovery percentage; later amendments must be separately reconciled",
+      "publication_date": null,
+      "effective_from": null,
+      "retrieved_on": "2026-10-25",
+      "reviewer_status": "CONSULTED_NOT_AUTOMATICALLY_ADOPTED",
+      "rule_version": "research-2026-10-25",
+      "use_cases": [
+        52
+      ],
+      "limitations": [
+        "Not a complete legal eligibility decision. Schedule must cite independently approved operative rule/version and cover the whole reporting interval."
+      ]
+    },
+    {
+      "id": "AE-EXCISE-TIERS-2026",
+      "title": "FTA sweetened-drinks tiered-volumetric model",
+      "url": "https://tax.gov.ae/en/excise.tax/excise.tax.topics/calculating.excise.tax.according.aspx",
+      "authority": "Federal Tax Authority",
+      "source_type": "official_guidance",
+      "provision": "Model overview; legal/product/laboratory scope needs adopted operative decision",
+      "publication_date": null,
+      "effective_from": null,
+      "retrieved_on": "2026-10-25",
+      "reviewer_status": "CONSULTED_NOT_AUTOMATICALLY_ADOPTED",
+      "rule_version": "research-2026-10-25",
+      "use_cases": [
+        61
+      ],
+      "limitations": [
+        "Not a complete legal eligibility decision. Schedule must cite independently approved operative rule/version and cover the whole reporting interval."
+      ]
     }
   ],
   "existing_registers": [

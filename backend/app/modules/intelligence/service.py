@@ -187,6 +187,16 @@ async def current(db, ctx, obj, visited=None):
 
         if obj.body.get("case_catalogue_sha256") != digest(MANIFEST):
             return False
+        if obj.body.get("use_case_id", 0) >= 51:
+            from app.modules.jurisdictions.ae.advanced import contract_sha256
+            if obj.body.get("advanced_contract_sha256") != contract_sha256():
+                return False
+        if obj.body.get("action") == "file-readiness":
+            rows = (await db.scalars(select(AuditRecord).where(AuditRecord.tenant_id == ctx.tenant_id, AuditRecord.engagement_id == obj.engagement_id).order_by(AuditRecord.id).limit(2001))).all()
+            if digest([[str(r.id), r.version, r.status] for r in rows]) != obj.body["output"]["file_population_sha256"]:
+                return False
+            if digest(await audit.completion(db, ctx, obj.engagement_id)) != obj.body["output"]["completion_sha256"]:
+                return False
     from app.core.operations_contracts import current as operations_current
 
     if not await operations_current(db, ctx, obj):
@@ -307,7 +317,7 @@ async def current(db, ctx, obj, visited=None):
                 or row.status == "ARCHIVED"
             ):
                 return False
-            if row.kind == "working-papers":
+            if row.kind == "working-papers" and obj.body.get("action") != "file-readiness":
                 from app.modules.lineage.working_papers import freshness
 
                 if await freshness(db, ctx, row, visiting=visited) != "CURRENT":

@@ -5,9 +5,7 @@
       "C:\\Indian Servers\\TheAuditor\\frontend\\node_modules\\@playwright\\test\\cli.js",
       "test",
       "--config",
-      "playwright.country-workflows.config.ts",
-      "--grep",
-      "original CSV"
+      "playwright.country-workflows.config.ts"
     ],
     "configFile": "C:\\Indian Servers\\TheAuditor\\frontend\\playwright.country-workflows.config.ts",
     "rootDir": "C:/Indian Servers/TheAuditor/frontend/e2e",
@@ -104,8 +102,8 @@
       "line": 0,
       "specs": [
         {
-          "title": "original CSV and reviewed XLSX tables reach bank and payable reconciliations",
-          "ok": false,
+          "title": "UAE source controls, BRS exceptions, exports and India isolation",
+          "ok": true,
           "tags": [],
           "tests": [
             {
@@ -118,58 +116,57 @@
                 {
                   "workerIndex": 0,
                   "parallelIndex": 0,
-                  "status": "failed",
-                  "duration": 28733,
-                  "error": {
-                    "message": "Error: locator.selectOption: Error: strict mode violation: getByLabel('Workflow') resolved to 2 elements:\n    1) <nav class=\"toolbar\" aria-label=\"Country workflow navigation\">…</nav> aka getByRole('navigation', { name: 'Country workflow navigation' })\n    2) <select></select> aka getByLabel('Workflow', { exact: true })\n\nCall log:\n\u001b[2m  - waiting for getByLabel('Workflow')\u001b[22m\n",
-                    "stack": "Error: locator.selectOption: Error: strict mode violation: getByLabel('Workflow') resolved to 2 elements:\n    1) <nav class=\"toolbar\" aria-label=\"Country workflow navigation\">…</nav> aka getByRole('navigation', { name: 'Country workflow navigation' })\n    2) <select></select> aka getByLabel('Workflow', { exact: true })\n\nCall log:\n\u001b[2m  - waiting for getByLabel('Workflow')\u001b[22m\n\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts:637:37",
-                    "location": {
-                      "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts",
-                      "column": 37,
-                      "line": 637
-                    },
-                    "snippet": "  635 |   });\n  636 |   await page.goto(`/intelligence/${eid}/country-workflow`);\n> 637 |   await page.getByLabel(\"Workflow\").selectOption(\"subledger-control\");\n      |                                     ^\n  638 |   const controlTitle = `SYNTHETIC bridged payable control ${suffix}`;\n  639 |   await fill([\n  640 |     [\"Schedule title\", controlTitle],"
-                  },
-                  "errors": [
-                    {
-                      "location": {
-                        "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts",
-                        "column": 37,
-                        "line": 637
-                      },
-                      "message": "Error: locator.selectOption: Error: strict mode violation: getByLabel('Workflow') resolved to 2 elements:\n    1) <nav class=\"toolbar\" aria-label=\"Country workflow navigation\">…</nav> aka getByRole('navigation', { name: 'Country workflow navigation' })\n    2) <select></select> aka getByLabel('Workflow', { exact: true })\n\nCall log:\n\u001b[2m  - waiting for getByLabel('Workflow')\u001b[22m\n\n\n  635 |   });\n  636 |   await page.goto(`/intelligence/${eid}/country-workflow`);\n> 637 |   await page.getByLabel(\"Workflow\").selectOption(\"subledger-control\");\n      |                                     ^\n  638 |   const controlTitle = `SYNTHETIC bridged payable control ${suffix}`;\n  639 |   await fill([\n  640 |     [\"Schedule title\", controlTitle],\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts:637:37"
-                    }
-                  ],
+                  "status": "passed",
+                  "duration": 39909,
+                  "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T21:06:05.875Z",
+                  "startTime": "2026-10-24T21:29:32.821Z",
                   "annotations": [],
-                  "attachments": [
-                    {
-                      "name": "screenshot",
-                      "contentType": "image/png",
-                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\country-workflows-original-dab3e-and-payable-reconciliations\\test-failed-1.png"
-                    },
-                    {
-                      "name": "error-context",
-                      "contentType": "text/markdown",
-                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\country-workflows-original-dab3e-and-payable-reconciliations\\error-context.md"
-                    }
-                  ],
-                  "errorLocation": {
-                    "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts",
-                    "column": 37,
-                    "line": 637
-                  }
+                  "attachments": []
                 }
               ],
-              "status": "unexpected"
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-4910f104b29236674674",
+          "file": "country-workflows.spec.ts",
+          "line": 67,
+          "column": 1
+        },
+        {
+          "title": "original CSV and reviewed XLSX tables reach bank and payable reconciliations",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 33653,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-24T21:30:14.624Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
             }
           ],
           "id": "e30b0a06ea3b0c92c29c-21b42b359901fbf0cdc3",
           "file": "country-workflows.spec.ts",
-          "line": 420,
+          "line": 475,
           "column": 1
         }
       ]
@@ -177,11 +174,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-24T21:06:05.466Z",
-    "duration": 29342.469999999998,
-    "expected": 0,
+    "startTime": "2026-10-24T21:29:31.917Z",
+    "duration": 77472.018,
+    "expected": 2,
     "skipped": 0,
-    "unexpected": 1,
+    "unexpected": 0,
     "flaky": 0
   }
 }

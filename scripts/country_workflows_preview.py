@@ -17,7 +17,13 @@ sys.path.insert(0, str(ROOT / "backend"))
 
 
 async def main():
+    from check_utf8_sources import ensure_utf8
+
+    ensure_utf8()
     from app.core.config import settings
+    from app.core.operations_contracts import implementation_hash
+
+    implementation = implementation_hash()
 
     if (
         settings().environment != "test"
@@ -398,11 +404,16 @@ async def main():
             },
         )
         dest = ROOT / ".local-runtime/country-workflows/fixture.json"
+        if implementation_hash() != implementation:
+            raise RuntimeError(
+                "Backend implementation changed during fixture preparation; prepare fresh fixtures before browser verification"
+            )
         dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_text(
             json.dumps(
                 {
                     "synthetic": True,
+                    "implementation_sha256": implementation,
                     "scanner_test_double": True,
                     "broker_test_double": True,
                     "uae_engagement": eid,
