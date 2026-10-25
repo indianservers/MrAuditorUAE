@@ -7,6 +7,7 @@ import { useEventHistory } from "@/hooks/use-event-history";
 import { useScope } from "@/stores/workspace";
 import { Button, ErrorState, Status } from "@/components/ui/primitives";
 import { PageHeader } from "./shared";
+import { BankCarryforwardSource } from "./bank-carryforward-source";
 import { ContributionObligationSource } from "./contribution-obligation-source";
 import { InventoryEvidenceTable } from "./inventory-evidence-table";
 import { VATCompositionSource } from "./vat-composition-source";
@@ -468,7 +469,9 @@ export function CountryWorkflows({
     body?.native_metadata?.profile === "emirates-islamic-edr-evp-scr/1";
   const compactSource =
     detail.data?.kind === "workflow-source" &&
-    (["transactions", "audit-open-items"].includes(body?.table_type || "") ||
+    (["transactions", "audit-open-items", "bank-outstanding"].includes(
+      body?.table_type || "",
+    ) ||
       compactWPS ||
       compactArrear);
   const compactCredit = body?.workflow === "credit-note-applications";
@@ -651,38 +654,48 @@ export function CountryWorkflows({
                           ].filter((key) => allColumns.includes(key))
                         : allColumns;
   const columns =
-    compactArrear && !showRuleProvenance
+    body?.table_type === "bank-outstanding" && !showRuleProvenance
       ? [
-          "subject",
-          "period",
-          "population",
-          "component",
+          "reference",
+          "date",
+          "balance_date",
           "currency",
           "amount",
-          "source_row",
+          "previous_outstanding_amount",
+          "cleared_in_previous_window",
         ].filter((key) => allColumns.includes(key))
-      : compactArrearResult && !showRuleProvenance
+      : compactArrear && !showRuleProvenance
         ? [
             "subject",
             "period",
+            "population",
             "component",
             "currency",
-            "expected_amount",
-            "return_amount",
-            "payment_amount",
-            "state",
+            "amount",
+            "source_row",
           ].filter((key) => allColumns.includes(key))
-        : compactWPS && !showRuleProvenance
+        : compactArrearResult && !showRuleProvenance
           ? [
               "subject",
               "period",
+              "component",
               "currency",
-              "fixed_income",
-              "variable_income",
-              "amount",
-              "unpaid_days",
+              "expected_amount",
+              "return_amount",
+              "payment_amount",
+              "state",
             ].filter((key) => allColumns.includes(key))
-          : defaultColumns;
+          : compactWPS && !showRuleProvenance
+            ? [
+                "subject",
+                "period",
+                "currency",
+                "fixed_income",
+                "variable_income",
+                "amount",
+                "unpaid_days",
+              ].filter((key) => allColumns.includes(key))
+            : defaultColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -3078,6 +3091,20 @@ export function CountryWorkflows({
                   Prepare outstanding source
                 </Button>
               </details>
+            )}
+          {compactBankClearance &&
+            body.review_status === "REVIEWED" &&
+            !body.blocked &&
+            detail.data.freshness === "CURRENT" && (
+              <BankCarryforwardSource
+                key={selected}
+                prefix={prefix}
+                selected={selected}
+                onCreated={(id) => {
+                  setSelected(id);
+                  setOffset(0);
+                }}
+              />
             )}
           {compactImport &&
             body.review_status === "REVIEWED" &&

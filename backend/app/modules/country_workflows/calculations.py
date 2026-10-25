@@ -790,6 +790,8 @@ def calculate(data, country, sources):
     if set(sources) != set(roles):
         raise ValueError("Select every required source role exactly once")
     for role, table in sources.items():
+        if table.get("parser_version") == "bank-clearance-carryforward/1" and (data.workflow != "bank-subsequent-clearance" or role != "outstanding"):
+            raise ValueError("Carried bank residuals can establish only the outstanding role of subsequent clearance")
         has_arrears = table.get("native_format") == "india-epfo-arrear-ecr-v2" or (table.get("table_type") == "obligations" and any(row.get("population") == "arrears" for row in table["rows"]))
         if has_arrears and not data.arrear_only:
             raise ValueError("Select explicit arrear-only comparison scope; arrears cannot stand in for a complete monthly return")

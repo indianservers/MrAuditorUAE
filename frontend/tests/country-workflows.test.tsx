@@ -2183,3 +2183,86 @@ it("keeps regular payments out of an explicitly arrear-only comparison", async (
     },
   });
 });
+
+describe("reviewed bank residual carry-forward", () => {
+  function result(review = "REVIEWED", freshness = "CURRENT") {
+    return {
+      id: "result",
+      kind: "country-workflow",
+      version: 1,
+      freshness,
+      body: {
+        title: "Partial bank clearance",
+        workflow: "bank-subsequent-clearance",
+        review_status: review,
+        rows: [
+          {
+            id: "outstanding:O1",
+            kind: "outstanding",
+            remaining_after_review: "-60",
+            state: "PARTIALLY_CLEARED",
+          },
+        ],
+      },
+    };
+  }
+  it("requires independent directional controls before carrying the full residual population", async () => {
+    state.result = result();
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), {
+      target: { value: "result" },
+    });
+    fireEvent.click(
+      screen.getByText(
+        "Carry reviewed bank residuals into the next clearance window",
+      ),
+    );
+    const prepare = screen.getByRole("button", {
+      name: "Prepare carried bank residuals",
+    });
+    expect(prepare).toBeDisabled();
+    expect(screen.getByLabelText("Independent residual row count")).toHaveValue(
+      null,
+    );
+    expect(
+      screen.getByLabelText("Independent negative residual total"),
+    ).toHaveValue("");
+    for (const [label, value] of [
+      ["Carry-forward source title", "Reviewed carried cheque"],
+      ["Independent residual row count", "1"],
+      ["Independent positive residual total", "0"],
+      ["Independent negative residual total", "-60"],
+      [
+        "Carry-forward window and reversal assessment",
+        "Retained bank window and unresolved reversal evidence assessed",
+      ],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    fireEvent.click(prepare);
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0]).toMatchObject({
+      path: "intelligence/engagements/engagement/events/result/bank-carryforward-source",
+      body: {
+        expected_rows: 1,
+        positive_total: "0",
+        negative_total: "-60",
+        label: "Reviewed carried cheque",
+      },
+    });
+  });
+  it.each([
+    ["UNVERIFIED", "CURRENT"],
+    ["REVIEWED", "STALE"],
+  ])("hides carry-forward for %s / %s", (review, freshness) => {
+    state.result = result(review, freshness);
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), {
+      target: { value: "result" },
+    });
+    expect(
+      screen.queryByText(
+        "Carry reviewed bank residuals into the next clearance window",
+      ),
+    ).not.toBeInTheDocument();
+  });
+});

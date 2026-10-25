@@ -377,6 +377,11 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         source = await intelligence.event(db, ctx, eng.id, identifier, True)
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
+        if source.body.get("parser_version") == "bank-clearance-carryforward/1":
+            if data.workflow != "bank-subsequent-clearance" or role != "outstanding":
+                raise HTTPException(422, "Carried bank residuals can establish only the outstanding role of subsequent clearance")
+            if source.body.get("review_status") != "REVIEWED":
+                raise HTTPException(409, "Independently review carried bank residuals before the next clearance window")
         if source.body.get("native_format") == "india-epfo-arrear-ecr-v2" and source.body.get("review_status") != "REVIEWED":
             raise HTTPException(409, "Independently review the arrear month attribution and retained context before comparison")
         if data.workflow == "inventory-count-bridge" and data.stock_bridge_mode == "bidirectional-controlled" and source.body.get("review_status") != "REVIEWED":

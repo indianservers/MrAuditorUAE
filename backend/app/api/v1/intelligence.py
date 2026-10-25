@@ -16,6 +16,7 @@ from app.modules.audit_execution.access import engagement_permissions
 from app.modules.audit_execution.models import AuditRecord
 from app.modules.audit_execution.schemas import RecordInput, RecordPatch, Source
 from app.modules.audit_log.service import record
+from app.modules.country_workflows.bank_carryforward import CarryforwardInput
 from app.modules.country_workflows.bank_outstanding_source import BankOutstandingSourceInput
 from app.modules.country_workflows.benefit_source import BenefitSourceInput
 from app.modules.country_workflows.contribution_source import ContributionSourceInput
@@ -74,6 +75,18 @@ async def benefit_rule_source(
 
     eng = await service.scope(db, ctx, eid, "country-workflow", True)
     return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))
+
+
+@router.post("/engagements/{eid}/events/{identifier}/bank-carryforward-source", status_code=201)
+async def bank_carryforward_source(
+    eid: uuid.UUID, identifier: uuid.UUID, data: CarryforwardInput,
+    db: DB, ctx: Actor, request: Request,
+):
+    from app.modules.country_workflows.bank_carryforward import prepare
+
+    eng = await service.scope(db, ctx, eid, "country-workflow", True)
+    parent = await service.event(db, ctx, eid, identifier, True)
+    return audit.serialize(await prepare(db, ctx, eng, parent, data, request.state.request_id))
 
 
 @router.post("/engagements/{eid}/events/{identifier}/bank-outstanding-source", status_code=201)

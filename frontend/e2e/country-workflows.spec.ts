@@ -4168,3 +4168,77 @@ test("India eight-field arrears retain month context and cannot replace regular 
     await context.close();
   }
 });
+
+
+test("reviewed bank residuals carry to the next window for UAE then India", async ({ page, browser }) => {
+  const context = await browser.newContext({ baseURL: "http://127.0.0.1:3010", viewport: { width: 1600, height: 1100 } });
+  const reviewer = await context.newPage();
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_final_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    for (const country of ["AE", "IN"] as const) {
+      const input = fixture.bank_carryforward[country];
+      const eid = input.engagement;
+      const title = `SYNTHETIC ${country} carried bank residuals ${Date.now()}`;
+      await page.goto(`/intelligence/${eid}/country-workflow`);
+      await page.getByLabel("Saved source or result").selectOption(input.parent);
+      const summary = page.getByText("Carry reviewed bank residuals into the next clearance window", { exact: true });
+      await summary.click();
+      const controls = summary.locator("..");
+      await controls.getByLabel("Carry-forward source title").fill(title);
+      await controls.getByLabel("Independent residual row count").fill("1");
+      await controls.getByLabel("Independent positive residual total").fill("0");
+      await controls.getByLabel("Independent negative residual total").fill("-60");
+      await controls.getByLabel("Carry-forward window and reversal assessment").fill("Independent retained statement-window completeness, continuing cheque validity and unresolved reversal context assessed");
+      await saveScreenshot(`${shots}/${country.toLowerCase()}-bank-carryforward-controls.png`, () => controls.screenshot());
+      const preparing = page.waitForResponse((r) => r.url().includes(`/events/${input.parent}/bank-carryforward-source`) && r.request().method() === "POST");
+      await controls.getByRole("button", { name: "Prepare carried bank residuals", exact: true }).click();
+      const response = await preparing;
+      expect(response.status(), await response.text()).toBe(201);
+      const source = await response.json();
+      await expect(page.getByRole("heading", { name: title, exact: true })).toBeVisible();
+      const sourcePanel = page.getByRole("heading", { name: title, exact: true }).locator("..");
+      await expect(sourcePanel.getByRole("cell", { name: "2026-06-20", exact: true })).toBeVisible();
+      await expect(sourcePanel.getByRole("cell", { name: "2026-07-31", exact: true })).toBeVisible();
+      await expect(sourcePanel.getByRole("cell", { name: "-60", exact: true })).toBeVisible();
+      for (const notice of await page.getByRole("button", { name: "Dismiss notification", exact: true }).all()) await notice.click();
+      await saveScreenshot(`${shots}/${country.toLowerCase()}-bank-carried-original-date.png`, () => sourcePanel.screenshot());
+      await reviewer.goto(`/intelligence/${eid}/country-workflow`);
+      await reviewer.getByLabel("Saved source or result").selectOption(source.id);
+      await reviewer.getByLabel("Review / exception rationale").fill("Independent complete residual count and signed direction controls checked; original item date and retained July clearance window preserved");
+      const approving = reviewer.waitForResponse((r) => r.url().includes(`/events/${source.id}/review`) && r.request().method() === "POST");
+      await reviewer.getByRole("button", { name: "Independent approval", exact: true }).click();
+      const approval = await approving;
+      expect(approval.status(), await approval.text()).toBe(201);
+      const approved = await approval.json();
+      await page.goto(`/intelligence/${eid}/country-workflow`);
+      await page.getByLabel("Workflow", { exact: true }).selectOption("bank-subsequent-clearance");
+      const resultTitle = title + " August comparison";
+      await page.getByLabel("Schedule title", { exact: true }).fill(resultTitle);
+      await page.getByLabel("Reconciliation date", { exact: true }).fill("2026-07-31");
+      await page.getByLabel("Review through date", { exact: true }).fill("2026-08-31");
+      await page.getByLabel("Bank account identifier", { exact: true }).fill("BANK-1");
+      await page.getByLabel("Account currency", { exact: true }).fill(country === "AE" ? "AED" : "INR");
+      for (const [role, id] of Object.entries({ outstanding: approved.id, statement: input.statement, allocations: input.allocations }))
+        await page.getByLabel(`${role} source`, { exact: true }).selectOption(id as string);
+      await page.getByLabel("Scope and source rationale", { exact: true }).fill("Independent August bank evidence clears only the carried remaining cheque amount; original item age remains June-based");
+      await page.getByRole("button", { name: "Queue calculation", exact: true }).click();
+      const saved = page.getByLabel("Saved source or result").locator("option").filter({ hasText: resultTitle });
+      await expect(saved).toHaveCount(1, { timeout: 120000 });
+      await page.getByLabel("Saved source or result").selectOption((await saved.getAttribute("value"))!);
+      const resultPanel = page.getByRole("heading", { name: resultTitle, exact: true }).locator("..");
+      await expect(resultPanel.getByText("0 exceptions", { exact: true })).toBeVisible();
+      await expect(resultPanel.getByRole("cell", { name: "MATCHED", exact: true })).toHaveCount(2);
+      for (const notice of await page.getByRole("button", { name: "Dismiss notification", exact: true }).all()) await notice.click();
+      await saveScreenshot(`${shots}/${country.toLowerCase()}-bank-carried-next-window.png`, () => resultPanel.screenshot());
+    }
+  } finally { await context.close(); }
+});

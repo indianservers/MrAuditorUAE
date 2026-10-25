@@ -1,0 +1,4 @@
+Command: npx playwright test --config playwright.country-workflows.config.ts --grep "reviewed bank residuals carry" --reporter=list
+Result: 1 passed (1.1m).
+Scope: UAE followed by India; preparation from reviewed retained partial clearance, independent directional controls, preserved original item date, independent source approval and next-window bank allocation.
+Boundary: owned auditos_country_workflows_test database; fictional documents, explicit fixture-preparation scanner/broker doubles. API, Celery worker and browser UI exercised at runtime. No provider or client qualification claimed.
