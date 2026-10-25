@@ -97,6 +97,13 @@ def country_tree(tmp_path, monkeypatch):
     return app
 
 
+def test_shared_benefit_parameters_participate_in_country_freshness(tmp_path, monkeypatch):
+    app = country_tree(tmp_path, monkeypatch)
+    original = contracts.country_workflow_hash()
+    (app / "modules/regulatory/benefit_profiles.py").write_bytes(b"changed profile contract")
+    assert contracts.country_workflow_hash() != original
+
+
 @pytest.mark.parametrize(
     "module",
     [

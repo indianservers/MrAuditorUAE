@@ -8,18 +8,10 @@ from typing import Annotated, Literal
 from pydantic import BaseModel, Field, HttpUrl, model_validator
 
 from app.modules.jurisdictions.profiles import Strict
+from app.modules.regulatory.payroll_profiles import Component, PayrollParameters
 
 Money = Annotated[Decimal, Field(max_digits=28, decimal_places=8)]
 Identifier = Annotated[str, Field(min_length=1, max_length=120)]
-Component = Literal[
-    "PF:EMPLOYEE",
-    "PF:EPS",
-    "PF:EMPLOYER",
-    "PF:ADVANCE_REFUND",
-    "ESI:EMPLOYEE",
-    "ESI:EMPLOYER",
-    "PT",
-]
 
 
 class PayrollBasis(Strict):
@@ -39,20 +31,10 @@ class PayrollBasis(Strict):
     assessment: str = Field(min_length=10, max_length=2000)
 
 
-class PayrollRule(Strict):
+class PayrollRule(PayrollParameters):
     id: Identifier
-    rule_group: Identifier
-    component: Component
-    jurisdiction: Identifier
     effective_from: date
     effective_to: date
-    threshold_from: Money = Field(default=Decimal(0), ge=0)
-    threshold_to: Money | None = Field(default=None, gt=0)
-    salary_cap: Money | None = Field(default=None, gt=0)
-    formula: Literal["rate", "fixed", "employer-minus-eps"]
-    rate: Decimal | None = Field(default=None, ge=0, le=1, max_digits=18, decimal_places=12)
-    fixed_amount: Money | None = Field(default=None, ge=0)
-    rounding: Literal["nearest-rupee", "next-rupee", "floor-rupee", "paise"]
     source_url: HttpUrl
     source_sha256: str = Field(pattern=r"^[a-f0-9]{64}$")
     source_evidence_version_id: uuid.UUID
@@ -62,19 +44,8 @@ class PayrollRule(Strict):
 
     @model_validator(mode="after")
     def consistent(self):
-        if self.effective_to < self.effective_from or (
-            self.threshold_to is not None and self.threshold_to <= self.threshold_from
-        ):
-            raise ValueError("Rule dates and half-open threshold bands must be ordered")
-        if self.formula == "fixed":
-            if self.fixed_amount is None or self.rate is not None or self.salary_cap is not None:
-                raise ValueError(
-                    "A fixed slab requires a fixed amount without a rate or salary cap"
-                )
-        elif self.rate is None or self.fixed_amount is not None:
-            raise ValueError("A rate formula requires a rate without a fixed amount")
-        if self.formula == "employer-minus-eps" and self.component != "PF:EMPLOYER":
-            raise ValueError("Employer-minus-EPS applies only to the employer PF component")
+        if self.effective_to < self.effective_from:
+            raise ValueError("Rule dates must be ordered")
         return self
 
 

@@ -198,4 +198,34 @@ async def prepare(c, h, client_id, reviewer):
             "source_currency": currency,
             "rule_reference_copy": retained_rule_source["id"],
         }
+        if country == "AE":
+            from tests.qa_crud.test_published_benefit_source import publish
+            from tests.unit.test_practice_audit_workflows import benefit_employee, part_time_employee
+
+            full, _, _ = await publish(c, h, reviewer[0], rule_key="AE-SYNTHETIC-FULL-BROWSER")
+            from tests.unit.test_benefit_profiles import profile as benefit_profile
+            from app.modules.regulatory.benefit_profiles import BenefitParameters
+            from tests.unit.test_practice_audit_workflows import benefit_rule
+
+            part_parameters = {key: value for key, value in benefit_rule(work_model="part-time").items() if key in BenefitParameters.model_fields}
+            part = benefit_profile(rule_key="AE-SYNTHETIC-PART-BROWSER", benefit_parameters=part_parameters,
+                validation_status="VALIDATED", professional_review_status="REVIEWED", last_reviewed="2026-10-24").model_dump(mode="json")
+            await retain(c, h, part)
+            part_created = await c.post("/api/v1/regulatory/rules", headers=h, json=part)
+            assert part_created.status_code == 201, part_created.text
+            for action, person, sequence in (("approve", reviewer[0], 1), ("publish", h, 2)):
+                published = await c.post(f"/api/v1/regulatory/rules/{part_created.json()['id']}/decisions", headers=person,
+                    json={"action": action, "expected_sequence": sequence,
+                          "comments": "Synthetic part-time profile for browser control verification only"})
+                assert published.status_code == 201, published.text
+            employees = await source(c, h, eid, [benefit_employee(), part_time_employee(id="E2")],
+                "SYNTHETIC published-profile employees", "benefit-employees", {"AED": "3150"})
+            employee_review = await decision(c, reviewer[0], eid, employees)
+            assert employee_review.status_code == 201, employee_review.text
+            output[country]["benefits"] = {"employees": employee_review.json()["id"],
+                "full_profile": full, "part_profile": part_created.json()["id"]}
+        if country == "IN":
+            from country_payroll_fixture import prepare as prepare_payroll
+
+            output[country]["payroll"] = await prepare_payroll(c, h, eid, reviewer)
     return output

@@ -53,6 +53,9 @@ def payroll_rules(data, tables):
             rule
             for rule in rule_groups[(row["rule_group"], row["component"], row["jurisdiction"])]
             if date.fromisoformat(rule["effective_from"]) <= first
+            and (
+                "selected_wage_months" not in rule or row["period"] in rule["selected_wage_months"]
+            )
             and date.fromisoformat(rule["effective_to"]) >= last
             and Decimal(rule["threshold_from"]) <= base
             and (rule["threshold_to"] is None or base < Decimal(rule["threshold_to"]))
@@ -131,6 +134,16 @@ def payroll_rules(data, tables):
                 "rule_source_id": rule["id"] if rule else None,
                 "rule_version": rule["source_version"] if rule else None,
                 "rule_document_sha256": rule["source_sha256"] if rule else None,
+                **(
+                    {
+                        "rule_source_document_id": rule["source_document_id"],
+                        "published_rule_version_id": rule["published_rule_version_id"],
+                        "published_rule_sha256": rule["published_rule_sha256"],
+                        "rule_source_copies": rule["source_copies"],
+                    }
+                    if rule and rule.get("published_rule_version_id")
+                    else {}
+                ),
                 "rule_url": rule["source_url"] if rule else None,
                 "formula": rule["formula"] if rule else None,
                 "rate": rule["rate"] if rule else None,

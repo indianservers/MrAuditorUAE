@@ -16,7 +16,14 @@ type Rule = {
   sha256: string;
   body: Record<string, unknown>;
   current_sequence: number;
-  state: string | { state: string };
+  state:
+    | string
+    | {
+        state: string;
+        body?: { comments?: string };
+        created_by?: string;
+        created_at?: string;
+      };
   validation_blockers?: string[];
 };
 
@@ -48,6 +55,12 @@ export function RegulatoryLibrary() {
       review_status: string;
     }[];
   }>(`regulatory/rules/${id}/impact`, !!id);
+  const currentState =
+    typeof detail.data?.state === "string"
+      ? detail.data.state
+      : detail.data?.state.state;
+  const currentDecision =
+    typeof detail.data?.state === "object" ? detail.data.state : null;
   const action = useAction<Rule>();
   function proposal(revert = false) {
     if (!detail.data) return;
@@ -164,6 +177,122 @@ export function RegulatoryLibrary() {
         >
           Propose new rule
         </Button>
+        {country === "AE" && (
+          <Button
+            onClick={() =>
+              setEditor(
+                JSON.stringify(
+                  {
+                    rule_key: "AE-",
+                    country: "AE",
+                    title: "",
+                    description: "",
+                    framework: "IFRS",
+                    period_basis: "transaction_date",
+                    effective_from: "",
+                    effective_to: null,
+                    citations: [
+                      {
+                        authority: "",
+                        legislation: "",
+                        url: "",
+                        paragraph: "",
+                        retrieval_status: "AWAITING_VALIDATION",
+                        source_document_id: null,
+                        document_sha256: null,
+                        retrieved_on: null,
+                      },
+                    ],
+                    input_requirements: ["reviewed_employee_population"],
+                    output_requirements: ["employee_benefit"],
+                    applicability: [],
+                    exceptions_and_elections: [],
+                    method: "benefit_profile",
+                    benefit_parameters: {
+                      regime: "",
+                      cohort: "",
+                      work_model: "full-time",
+                      minimum_service_years: null,
+                      year_days: null,
+                      salary_divisor: null,
+                      first_tier_years: null,
+                      first_tier_days: null,
+                      later_tier_days: null,
+                      maximum_salary_months: null,
+                    },
+                    validation_status: "AWAITING_VALIDATION",
+                    professional_review_status: "PENDING",
+                    last_reviewed: null,
+                    amendment_reason: "",
+                    expected_sequence: 0,
+                  },
+                  null,
+                  2,
+                ),
+              )
+            }
+          >
+            Propose UAE benefit profile
+          </Button>
+        )}
+        {country === "IN" && (
+          <Button
+            onClick={() =>
+              setEditor(
+                JSON.stringify(
+                  {
+                    rule_key: "IN-",
+                    country: "IN",
+                    title: "",
+                    description: "",
+                    framework: "Ind AS",
+                    period_basis: "transaction_date",
+                    effective_from: "",
+                    effective_to: null,
+                    citations: [
+                      {
+                        authority: "",
+                        legislation: "",
+                        url: "",
+                        paragraph: "",
+                        retrieval_status: "AWAITING_VALIDATION",
+                        source_document_id: null,
+                        document_sha256: null,
+                        retrieved_on: null,
+                      },
+                    ],
+                    input_requirements: ["reviewed_assessed_wage_bases"],
+                    output_requirements: ["payroll_contributions"],
+                    applicability: [],
+                    exceptions_and_elections: [],
+                    method: "payroll_profile",
+                    payroll_parameters: {
+                      rule_group: "",
+                      component: "",
+                      jurisdiction: "",
+                      threshold_from: null,
+                      threshold_to: null,
+                      salary_cap: null,
+                      formula: "rate",
+                      rate: null,
+                      fixed_amount: null,
+                      rounding: "",
+                    },
+                    validation_status: "AWAITING_VALIDATION",
+                    professional_review_status: "PENDING",
+                    last_reviewed: null,
+                    amendment_reason: "",
+                    expected_sequence: 0,
+                  },
+                  null,
+                  2,
+                ),
+              )
+            }
+          >
+            Propose India payroll profile
+          </Button>
+        )}
       </div>
       <ErrorState
         error={
@@ -291,33 +420,76 @@ export function RegulatoryLibrary() {
             />
           </label>
           <div className="toolbar">
-            {["approve", "reject", "publish"].map((value) => (
+            {["approve", "reject", "publish"]
+              .filter((value) =>
+                value === "publish"
+                  ? currentState === "APPROVED"
+                  : currentState === "DRAFT",
+              )
+              .map((value) => (
+                <Button
+                  key={value}
+                  disabled={action.isPending}
+                  onClick={() =>
+                    action.mutate({
+                      path: `regulatory/rules/${id}/decisions`,
+                      body: {
+                        action: value,
+                        expected_sequence: detail.data!.current_sequence,
+                        comments,
+                      },
+                    })
+                  }
+                >
+                  {value === "publish"
+                    ? "Publish approved version"
+                    : value === "approve"
+                      ? "Record independent approval"
+                      : "Reject proposal"}
+                </Button>
+              ))}
+            <Button onClick={() => proposal()}>Propose amendment</Button>
+            {currentState === "PUBLISHED" && (
               <Button
-                key={value}
-                disabled={action.isPending}
+                disabled={action.isPending || comments.trim().length < 10}
                 onClick={() =>
                   action.mutate({
                     path: `regulatory/rules/${id}/decisions`,
                     body: {
-                      action: value,
+                      action: "withdraw",
                       expected_sequence: detail.data!.current_sequence,
                       comments,
                     },
                   })
                 }
               >
-                {value === "publish"
-                  ? "Publish approved version"
-                  : value === "approve"
-                    ? "Record independent approval"
-                    : "Reject proposal"}
+                Withdraw published version
               </Button>
-            ))}
-            <Button onClick={() => proposal()}>Propose amendment</Button>
+            )}
             <Button onClick={() => proposal(true)}>
               Propose controlled revert
             </Button>
           </div>
+          {currentState === "WITHDRAWN" && (
+            <section aria-label="Recorded rule withdrawal">
+              <p>
+                This version is withdrawn. Existing work remains available for
+                history and shows stale where affected. Prepare an amendment or
+                controlled revert, then obtain independent approval and publish
+                a replacement before reuse.
+              </p>
+              <dl>
+                <dt>Recorded withdrawal reason</dt>
+                <dd>
+                  {currentDecision?.body?.comments || "Reason unavailable"}
+                </dd>
+                <dt>Recorded by</dt>
+                <dd>{currentDecision?.created_by || "Actor unavailable"}</dd>
+                <dt>Recorded at</dt>
+                <dd>{currentDecision?.created_at || "Time unavailable"}</dd>
+              </dl>
+            </section>
+          )}
           <label>
             Compare with version
             <select

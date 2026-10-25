@@ -37,6 +37,12 @@ COUNTRY_WORKFLOW_PATHS = (
     "modules/jurisdictions/profiles.py",
     "modules/reconciliation/service.py",
     "modules/regulatory/conversion.py",
+    "modules/regulatory/benefit_profiles.py",
+    "modules/regulatory/payroll_profiles.py",
+    "modules/regulatory/rule_spans.py",
+    "modules/regulatory/schemas.py",
+    "modules/regulatory/service.py",
+    "modules/regulatory/source_documents.py",
 )
 
 
@@ -144,6 +150,9 @@ def implementation_hash():
         "modules/regulatory/schemas.py",
         "modules/regulatory/conversion.py",
         "modules/regulatory/source_documents.py",
+        "modules/regulatory/benefit_profiles.py",
+        "modules/regulatory/payroll_profiles.py",
+        "modules/regulatory/rule_spans.py",
     ]
     digest = hashlib.sha256()
     for name in paths:

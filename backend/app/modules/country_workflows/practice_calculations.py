@@ -367,6 +367,10 @@ def benefits(data, tables):
             if r["regime"] == employee["regime"]
             and r["cohort"] == employee["cohort"]
             and r["work_model"] == employee["work_model"]
+            and (
+                "selected_service_end_dates" not in r
+                or employee["service_end"] in r["selected_service_end_dates"]
+            )
             and date.fromisoformat(r["effective_from"])
             <= end
             <= date.fromisoformat(r["effective_to"])
@@ -440,6 +444,16 @@ def benefits(data, tables):
                 "service_years": str(years),
                 "rule_source_id": rule["id"],
                 "rule_document_version_id": rule["source_evidence_version_id"],
+                **(
+                    {
+                        "rule_source_document_id": rule["source_document_id"],
+                        "published_rule_version_id": rule["published_rule_version_id"],
+                        "published_rule_sha256": rule["published_rule_sha256"],
+                        "rule_source_copies": rule["source_copies"],
+                    }
+                    if rule.get("published_rule_version_id")
+                    else {}
+                ),
                 "rule_document_sha256": rule["source_sha256"],
                 "rule_version": rule["source_version"],
                 "rule_url": rule["source_url"],

@@ -2,13 +2,177 @@
 
 Implementation checkpoint: 25 October 2026. These additions extend the existing evidence, intelligence job, immutable event, review and lineage infrastructure.
 
+## Controlled rule withdrawal and explicit restoration
+
+UAE and India rules now accept an append-only `withdraw` decision. This requires
+`tax.rules.approve`, the Firm Administrator role, the current action sequence and
+a meaningful recorded reason. Only a published version can be withdrawn. A newer
+draft does not prevent withdrawing an earlier active published version. Source
+bytes do not need to be readable or intact to stop using a suspect rule.
+
+Selection stops with `withdrawn_rule` when the highest published version covering
+the assessed date has been withdrawn; it does not silently revive an older
+version. An older date outside that version's effective range remains separately
+selectable. Existing affected result bodies/hashes remain immutable and readable
+with stale freshness, and independent approval refuses those stale results.
+The existing impact view shows directly dependent results within the caller's
+accessible engagements. This is an on-read freshness control, not a background
+recalculation or bulk rewrite of existing work.
+
+Restoration requires a new amendment or controlled-revert proposal, fresh
+independent approval and publication. The withdrawn version itself cannot be
+republished. Controlled reverts now normalize historical optional schema defaults
+before comparing content, without rewriting the original stored version or hash.
+Source-copy verification and all publication gates still apply to replacements.
+
+The rule screen offers actions for the current lifecycle state and retains a
+read-only withdrawal reason, actor and time after reopening the page. Withdrawn
+versions retain amendment/revert actions and show affected stale work. The
+focused UAE/India browser flow passed in 15.2 seconds; both withdrawal-history
+screenshots were visually inspected. Its setup request includes the actual
+same-origin header required by the proxy; an earlier missing-header attempt was
+rejected rather than weakening that policy.
+
+`regulatory-withdrawal-integration-results.xml` records **14 passing API tests**,
+including both country withdrawal cases, role and sequence conflicts, withdrawal
+with corrupted source bytes, blocked fallback and stale review, explicit reviewed
+restoration, the legacy rule path and published India/UAE profile bridges. Scanner
+and broker are explicit doubles; database, original storage and API processing are
+real in the owned test environment. The current unit receipt records **1,281
+passes and four opt-in connector skips**; frontend tests record **121 passes**.
+Production build and scoped lint/type checks pass. This closes a rule-lifecycle
+gap; source authenticity, legal qualification and the remaining release gates
+are separate requirements.
+
+The workflow selector also now has an explicit accessible label. A combined run
+had 13 passes and one timeout locating that visible control; after the label
+change, the focused India/UAE profile flows both passed in 28.8 seconds with the
+existing timeouts. `workflow-label-browser-results.txt` retains that focused
+receipt. This intermediate run is superseded by the current combined receipt
+below rather than being counted as an additional passing campaign.
+
+## Published India payroll profiles and complete wage months
+
+The library now supports `method: payroll_profile` and typed `payroll_parameters`
+shared with the existing India contribution engine. Parameters retain the rule
+group, component, jurisdiction, half-open wage slab, optional salary cap, formula,
+exact rate/fixed amount and explicit rounding. PF employee/EPS/employer and refund,
+ESI employee/employer and PT remain distinct components. Each stable rule key must
+identify its particular component/cohort/slab; amendments retain that identity.
+No statutory rates, thresholds or membership decisions are installed by this change.
+
+`POST /intelligence/engagements/{eid}/payroll-rule-source` binds selected published
+versions to a current independently reviewed `payroll-bases` population and an
+independent row-count control. Every basis needs one matching profile over the
+**entire** wage month and its assessed wage slab. Selection checks all published
+effective-date and expiry boundaries within that month, including amendments not
+selected by the preparer. A short-lived June 10–20 amendment therefore invalidates
+the month even if June 1 and June 30 select the same older version. The workflow
+requires separate supported assessment of split months; it does not invent daily
+proration. Saved regulatory dependencies retain the complete interval and repeat
+this check when determining freshness.
+
+The UI reuses the UAE profile-preparation component with India-specific profile,
+basis, row-count and endpoint bindings. Select **payroll-rules** in the source
+screen; the rule library provides an India proposal template with no supplied
+rate, salary cap or threshold. Generic tax assessments disable payroll profiles.
+The generated source requires independent review, and the normal worker re-derives
+its rows against the original assessed wage population and retained source copies
+before using them. A different population cannot reuse the source. The calculation
+retains published version IDs/hashes and original firm source-copy receipts in
+rows and XLSX; it never treats those copies as engagement evidence versions.
+Legacy engagement-document payroll rules continue to work.
+
+Bounds are 20 explicit profiles, 5,000 basis rows and 100 wage months per prepared
+population, with at most 1,000 overlapping published versions per rule interval.
+Missing, ambiguous or split-month selection blocks preparation. Employer PF still
+depends on separately resolved EPS for the same registration, employee, month
+and jurisdiction. Wage eligibility, pension continuity, exemptions and wage bases
+remain reviewed inputs. EDLI/admin fees, interest, damages, due dates, payment and
+filing are not established by the contribution comparison.
+
+`published-payroll-source-integration-results.xml` records **11 passing API tests**,
+covering the new May/June profile bridge, interior amendment staleness, independent
+review, retained-source publication, legacy India payroll and the UAE benefit
+bridge. Scanner and broker are explicit doubles; actual storage, database, API
+and job processing are exercised. The focused real-worker browser receipt records
+two passes in 24.9 seconds, for India PF/EPS/employer and UAE full-/part-time
+benefits. The India preparation and calculation screenshots were visually checked.
+At the India bridge checkpoint, the backend receipt recorded **1,277 passes and four opt-in connector
+skips**; frontend tests record **121 passes**. Production build and scoped lint/type
+checks also pass. A regression also verifies that an older shadowed checklist
+with a different period basis does not block a current typed profile under the
+same stable key. These remain synthetic workflow proofs; qualified legal packs
+and representative provider exports remain open.
+
+## Published UAE benefit profiles and employee calculations
+
+The rule library now accepts `method: benefit_profile` with explicit
+`benefit_parameters`. These parameters share their definition with the existing
+employee benefit engine: regime, cohort, work model, minimum service, year basis,
+salary divisor, tier durations/rates and salary-month cap. No legal defaults are
+inserted. Publication retains the normal source-copy, integrity, technical review
+and independent content-approval requirements. UAE scope and selection by employee
+service-end date are required; unsupported work models and flat-rate or fixed
+currency attributes are rejected. Generic assessments reject these profiles and
+direct callers to the employee-level workflow rather than returning a benefit
+amount without employee evidence.
+
+`POST /intelligence/engagements/{eid}/benefit-rule-source` now prepares a derived
+rule source from explicitly selected published profile versions and a current,
+independently reviewed employee source. Every supported employee must have exactly
+one current published profile matching regime, cohort and work model at their
+service-end date. A source may contain different published versions of the same
+rule key: explicit service-end selections prevent an older overlapping version
+from producing false ambiguity. Unused profiles, missing coverage, conflicting
+rule keys and a mismatched independent employee count are rejected. Generic
+applicability predicates are rejected for benefit profiles; cohort selection and
+its documented professional assessment remain explicit.
+
+In the source screen, select **benefit-rules** to prepare published profiles.
+The library also provides a benefit-profile proposal template with no numeric
+defaults. Profiles can be selected across library pages; employee source history
+retains the existing controls for loading older versions. The generated source
+needs independent review before the normal worker calculates benefits. At
+consumption, the server re-derives and compares its rows, checks the exact original
+employee source and verifies published rules and every retained source copy.
+Its contributors include employee preparers, profile proposers and source-copy
+uploaders. Original rule IDs, hashes, source-copy IDs and dated rule dependencies
+remain in results and exports; global source copies are not presented as
+engagement evidence versions. Publishing a later effective amendment makes
+affected saved sources/results stale while their original hashes remain intact.
+
+Bounds are 20 explicit profile versions, 5,000 employee rows and 100 distinct
+service-end dates per prepared population. Unsupported schemes and work-model
+changes still block the employee calculation; no service segmentation, pension
+eligibility or legal applicability is inferred. Existing engagement-document rule
+sources remain supported. No qualified legal pack has been published by this change.
+
+`benefit-profile-integration-results.xml` records six passing retained-source API
+cases, including publication of a fictional typed profile and rejection of a
+generic assessment. The scanner is explicitly doubled; storage, tenant permissions,
+publication actions and API processing use the owned database and original bytes.
+`published-benefit-source-integration-results.xml` records eight passing API cases,
+including the legacy engagement-document workflow and the new mixed May/June
+version selection, independent review, original-population binding, XLSX export
+and amendment staleness. Its scanner and broker are explicit boundary doubles;
+the job processor runs against the owned database and retained objects. The
+frontend receipt at that checkpoint recorded 120 passing tests; the backend receipt recorded 1,265
+passes and four opt-in connector skips. A focused real-worker browser flow passed
+in 14.7 seconds, covering full-time and part-time employee calculations and the
+source-copy/profile fields. Screenshots are retained as
+`uae-published-benefit-preparation.png` and `uae-published-benefit-calculation.png`.
+These are synthetic control proofs, not legal or provider qualification.
+
 ## Current combined regression
 
-The current combined receipt now records **12 passing browser tests in 7.8
-minutes**, after fresh guarded fixture preparation. It includes retained-source
+The current combined receipt now records **14 passing browser tests in 8.2
+minutes**, after fresh guarded fixture preparation. It includes the published
+India payroll and UAE benefit-profile bridges, controlled rule withdrawal and retained-source
 publication in both countries, obligation/bank allocations, currency conversion,
 subsequent clearance, import VAT/VAT201, history, PDF, credit applications,
-withholding, native sources and CSV/XLSX bridges. This supersedes the intermediate
+withholding, native sources and CSV/XLSX bridges. This supersedes the prior
+13- and 12-pass checkpoints and intermediate
 11-pass/one-picker-timeout run. The picker now has an explicit accessible name;
 the focused publication flow also passed before the clean combined rerun.
 Use fresh fixture preparation for each full campaign rather than accumulating

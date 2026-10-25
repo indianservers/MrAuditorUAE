@@ -173,6 +173,69 @@ async def test_source_binding_mismatches_and_source_uploader_independence(enviro
     assert (await decide(c, reviewer[0], identifier)).status_code == 403
 
 
+async def test_benefit_profile_publishes_with_retained_copy_but_requires_employee_workflow(
+    environment, monkeypatch
+):
+    from tests.unit.test_benefit_profiles import profile
+
+    c = environment
+    double_boundaries(monkeypatch)
+    h, _, eid, base = await setup(c)
+    reviewer = await actor(h, "Firm Administrator", "benefit-profile-reviewer")
+    await grant(c, h, base, reviewer)
+    payload = profile(
+        validation_status="VALIDATED",
+        professional_review_status="REVIEWED",
+        last_reviewed="2026-10-24",
+    ).model_dump(mode="json")
+    document = await retain(c, h, payload)
+    identifier = await propose(c, h, payload)
+    assert (await decide(c, h, identifier)).status_code == 403
+    assert (await decide(c, reviewer[0], identifier)).status_code == 201
+    published = await decide(c, h, identifier, action="publish", sequence=2)
+    assert published.status_code == 201, published.text
+    assert published.json()["body"]["verified_source_copies"][0]["sha256"] == document["sha256"]
+    detail = await c.get(f"/api/v1/regulatory/rules/{identifier}", headers=h)
+    assert detail.status_code == 200, detail.text
+    assert detail.json()["body"]["benefit_parameters"] == payload["benefit_parameters"]
+    path = f"/api/v1/jurisdictions/engagements/{eid}/context"
+    context = await c.post(
+        path,
+        headers=h,
+        json={
+            "country": "AE",
+            "framework": "IFRS",
+            "entity_type": "company",
+            "as_of": "2026-12-31",
+            "base_version": 0,
+            "reason": "Synthetic benefit profile reporting context assessment",
+        },
+    )
+    assert context.status_code == 201, context.text
+    reviewed = await c.post(
+        path + "/decision",
+        headers=reviewer[0],
+        json={
+            "request_id": context.json()["id"],
+            "approve": True,
+            "comments": "Independent synthetic reporting context review",
+        },
+    )
+    assert reviewed.status_code == 201, reviewed.text
+    assessment = await c.post(
+        f"/api/v1/regulatory/engagements/{eid}/assessments",
+        headers=h,
+        json={
+            "rule_ids": [identifier],
+            "facts": {},
+            "transaction_date": "2026-06-30",
+            "rationale": "Synthetic check that benefit profiles require employee evidence",
+        },
+    )
+    assert assessment.status_code == 422, assessment.text
+    assert "employee-level UAE benefit" in assessment.text
+
+
 @pytest.mark.parametrize("status,expected", [("QUARANTINED", 409), ("REJECTED", 422)])
 async def test_uncleared_sources_do_not_create_usable_copies(
     environment, monkeypatch, status, expected

@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field, HttpUrl, model_validator
 
 from app.modules.ifrs.schemas import Asset
 from app.modules.jurisdictions.profiles import Strict
+from app.modules.regulatory.benefit_profiles import BenefitParameters
 
 Money = Annotated[Decimal, Field(max_digits=28, decimal_places=8)]
 Identifier = Annotated[str, Field(min_length=1, max_length=120)]
@@ -245,20 +246,10 @@ class BenefitEmployee(Strict):
         return self
 
 
-class BenefitRule(Strict):
+class BenefitRule(BenefitParameters):
     id: Identifier
-    regime: Identifier
-    cohort: Identifier
-    work_model: Literal["full-time", "part-time", "other"]
     effective_from: date
     effective_to: date
-    minimum_service_years: Money = Field(ge=0)
-    year_days: Money = Field(gt=0, le=366)
-    salary_divisor: Money = Field(gt=0, le=31)
-    first_tier_years: Money = Field(ge=0)
-    first_tier_days: Money = Field(ge=0)
-    later_tier_days: Money = Field(ge=0)
-    maximum_salary_months: Money = Field(gt=0)
     evidence_reference: Identifier
     source_url: HttpUrl
     source_version: Identifier

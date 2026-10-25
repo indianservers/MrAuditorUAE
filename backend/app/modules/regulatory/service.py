@@ -113,8 +113,11 @@ async def action(db, ctx, obj, status, comments, request_id, source_receipts=Non
         version_id=obj.id,
         sequence=(await sequence(db, ctx, obj.rule_key)) + 1,
         state=status,
-        body={"comments": comments, "version_sha256": obj.sha256,
-              **({"verified_source_copies": source_receipts} if source_receipts is not None else {})},
+        body={
+            "comments": comments,
+            "version_sha256": obj.sha256,
+            **({"verified_source_copies": source_receipts} if source_receipts is not None else {}),
+        },
     )
     db.add(item)
     await db.flush()
@@ -139,11 +142,10 @@ async def propose(db, ctx, data, request_id):
         body = data.model_dump(
             mode="json", exclude={"expected_sequence", "amendment_reason", "reverts_version_id"}
         )
-        if prior.rule_key != data.rule_key or body != {
-            k: v
-            for k, v in prior.body.items()
-            if k not in {"expected_sequence", "amendment_reason", "reverts_version_id"}
-        }:
+        historical = Rule.model_validate(prior.body).model_dump(
+            mode="json", exclude={"expected_sequence", "amendment_reason", "reverts_version_id"}
+        )
+        if prior.rule_key != data.rule_key or body != historical:
             raise HTTPException(
                 422, "Revert must copy the selected historical rule content exactly"
             )
@@ -207,10 +209,18 @@ async def decide(db, ctx, obj, data, request_id):
             RuleVersion.tenant_id == ctx.tenant_id, RuleVersion.rule_key == obj.rule_key
         )
     )
-    if latest != obj.version:
+    if latest != obj.version and data.action != "withdraw":
         raise HTTPException(409, "Only the latest proposal may be reviewed or published")
     previous = await state(db, ctx, obj)
-    if data.action == "publish":
+    if data.action == "withdraw":
+        if not any(r.name == "Firm Administrator" for r in roles):
+            raise HTTPException(
+                403, "Only an authorized firm regulatory administrator may withdraw"
+            )
+        if not previous or previous.state != "PUBLISHED":
+            raise HTTPException(409, "Only a published rule version can be withdrawn")
+        status = "WITHDRAWN"
+    elif data.action == "publish":
         if not any(r.name == "Firm Administrator" for r in roles):
             raise HTTPException(403, "Only an authorized firm regulatory administrator may publish")
         if not previous or previous.state != "APPROVED":
@@ -230,8 +240,12 @@ async def decide(db, ctx, obj, data, request_id):
         from app.modules.regulatory.source_documents import verify_rule_sources
 
         source_receipts = await verify_rule_sources(db, ctx, Rule.model_validate(obj.body))
-        if status == "APPROVED" and str(ctx.user_id) in {source["created_by"] for source in source_receipts}:
-            raise HTTPException(403, "A source uploader cannot independently approve a rule using that source")
+        if status == "APPROVED" and str(ctx.user_id) in {
+            source["created_by"] for source in source_receipts
+        }:
+            raise HTTPException(
+                403, "A source uploader cannot independently approve a rule using that source"
+            )
     return await action(db, ctx, obj, status, data.comments, request_id, source_receipts)
 
 
@@ -260,6 +274,17 @@ async def selection(db, ctx, key, period_start, period_end, transaction_date=Non
             and rule.effective_from <= selected
             and (not rule.effective_to or selected <= rule.effective_to)
         ):
+            latest_action = await state(db, ctx, obj)
+            if latest_action is None or latest_action.state != "PUBLISHED":
+                raise HTTPException(
+                    409,
+                    {
+                        "code": "withdrawn_rule",
+                        "rule_id": str(obj.id),
+                        "rule_key": obj.rule_key,
+                        "message": "The selected published rule was withdrawn; publish an independently reviewed replacement before reuse",
+                    },
+                )
             blockers = validation_blockers(rule)
             if blockers:
                 raise HTTPException(
@@ -325,6 +350,14 @@ async def assess(db, ctx, eng, data, request_id):
     for identifier in data.rule_ids:
         obj = await get(db, ctx, identifier)
         rule = Rule.model_validate(obj.body)
+        if rule.method == "benefit_profile":
+            raise HTTPException(
+                422, "Use the employee-level UAE benefit workflow for a benefit profile"
+            )
+        if rule.method == "payroll_profile":
+            raise HTTPException(
+                422, "Use the India payroll contribution workflow for a payroll profile"
+            )
         if rule.country != binding.country or rule.framework != context["framework"]:
             raise HTTPException(
                 422, "Rule country/framework does not match the approved reporting context"

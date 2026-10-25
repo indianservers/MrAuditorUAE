@@ -102,7 +102,75 @@
       "line": 0,
       "specs": [
         {
-          "title": "UAE and India rule publication binds retained source copies and independent review",
+          "title": "published India payroll profiles feed reviewed PF and EPS calculations",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9367,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T06:35:47.849Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-041cc2263972db4afba4",
+          "file": "country-workflows.spec.ts",
+          "line": 11,
+          "column": 1
+        },
+        {
+          "title": "published UAE benefit profiles feed independently reviewed employee calculations",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9663,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T06:35:58.416Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-2e565f60e4719992c245",
+          "file": "country-workflows.spec.ts",
+          "line": 170,
+          "column": 1
+        },
+        {
+          "title": "UAE and India rules retain sources, publish independently and withdraw safely",
           "ok": true,
           "tags": [],
           "tests": [
@@ -117,12 +185,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 11169,
+                  "duration": 13994,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T04:47:37.579Z",
+                  "startTime": "2026-10-25T06:36:08.087Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -130,9 +198,9 @@
               "status": "expected"
             }
           ],
-          "id": "e30b0a06ea3b0c92c29c-31ac1a7452cb5c06838e",
+          "id": "e30b0a06ea3b0c92c29c-282719d09d06aebc2178",
           "file": "country-workflows.spec.ts",
-          "line": 11,
+          "line": 340,
           "column": 1
         },
         {
@@ -151,12 +219,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 32895,
+                  "duration": 32309,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T04:47:49.970Z",
+                  "startTime": "2026-10-25T06:36:22.091Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -166,7 +234,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-287903a1e39b0df134c1",
           "file": "country-workflows.spec.ts",
-          "line": 194,
+          "line": 596,
           "column": 1
         },
         {
@@ -185,12 +253,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 19108,
+                  "duration": 22718,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T04:48:22.874Z",
+                  "startTime": "2026-10-25T06:36:54.411Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -200,7 +268,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-7bdc3a90ad8fc5ca1e03",
           "file": "country-workflows.spec.ts",
-          "line": 353,
+          "line": 755,
           "column": 1
         },
         {
@@ -219,12 +287,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 51029,
+                  "duration": 52187,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T04:48:41.992Z",
+                  "startTime": "2026-10-25T06:37:17.139Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -234,7 +302,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-fb02b458bd93670350d5",
           "file": "country-workflows.spec.ts",
-          "line": 572,
+          "line": 974,
           "column": 1
         },
         {
@@ -253,12 +321,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 31225,
+                  "duration": 30670,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T04:49:33.030Z",
+                  "startTime": "2026-10-25T06:38:09.336Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -268,7 +336,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-5ef39276706f99c6f310",
           "file": "country-workflows.spec.ts",
-          "line": 740,
+          "line": 1142,
           "column": 1
         },
         {
@@ -287,12 +355,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 19472,
+                  "duration": 20744,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T04:50:04.266Z",
+                  "startTime": "2026-10-25T06:38:40.015Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -302,7 +370,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-79e7fad08458ff4fe1b6",
           "file": "country-workflows.spec.ts",
-          "line": 943,
+          "line": 1345,
           "column": 1
         },
         {
@@ -321,12 +389,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 2770,
+                  "duration": 2751,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T04:50:23.745Z",
+                  "startTime": "2026-10-25T06:39:00.771Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -336,7 +404,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-a130813f867235ec5e96",
           "file": "country-workflows.spec.ts",
-          "line": 1102,
+          "line": 1504,
           "column": 1
         },
         {
@@ -355,12 +423,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 88027,
+                  "duration": 93325,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T04:50:26.525Z",
+                  "startTime": "2026-10-25T06:39:03.530Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -370,7 +438,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-9492b1ba84ae537836ad",
           "file": "country-workflows.spec.ts",
-          "line": 1150,
+          "line": 1552,
           "column": 1
         },
         {
@@ -389,12 +457,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 21977,
+                  "duration": 19138,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T04:51:54.568Z",
+                  "startTime": "2026-10-25T06:40:36.867Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -404,7 +472,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-48fd0976effc478074aa",
           "file": "country-workflows.spec.ts",
-          "line": 1448,
+          "line": 1850,
           "column": 1
         },
         {
@@ -423,12 +491,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 30639,
+                  "duration": 27113,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T04:52:16.555Z",
+                  "startTime": "2026-10-25T06:40:56.016Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -438,7 +506,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-c3b66c811297d61b2a1b",
           "file": "country-workflows.spec.ts",
-          "line": 1549,
+          "line": 1951,
           "column": 1
         },
         {
@@ -457,12 +525,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 91608,
+                  "duration": 86800,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T04:52:47.205Z",
+                  "startTime": "2026-10-25T06:41:23.136Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -472,7 +540,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-4910f104b29236674674",
           "file": "country-workflows.spec.ts",
-          "line": 1751,
+          "line": 2153,
           "column": 1
         },
         {
@@ -491,12 +559,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 67798,
+                  "duration": 67059,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T04:54:18.825Z",
+                  "startTime": "2026-10-25T06:42:49.950Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -506,7 +574,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-21b42b359901fbf0cdc3",
           "file": "country-workflows.spec.ts",
-          "line": 2212,
+          "line": 2614,
           "column": 1
         }
       ]
@@ -514,9 +582,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-25T04:47:37.165Z",
-    "duration": 470573.076,
-    "expected": 12,
+    "startTime": "2026-10-25T06:35:47.430Z",
+    "duration": 490716.188,
+    "expected": 14,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

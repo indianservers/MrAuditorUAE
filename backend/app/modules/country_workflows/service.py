@@ -334,6 +334,14 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         source = await intelligence.event(db, ctx, eng.id, identifier, True)
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
+        if source.body.get("parser_version") == "published-payroll-profiles/1" and (
+            data.workflow != "india-payroll-rules" or role != "rules"
+        ):
+            raise HTTPException(422, "Published payroll profiles can feed only the India payroll rules role")
+        if source.body.get("parser_version") == "published-benefit-profiles/1" and (
+            data.workflow != "uae-benefit-review" or role != "rules"
+        ):
+            raise HTTPException(422, "Published benefit profiles can feed only the UAE benefit rules role")
         if data.workflow == "obligation-bank-allocations" and source.body.get("review_status") != "REVIEWED":
             raise HTTPException(409, "Independently review all obligation, reported, bank and allocation sources before settlement review")
         if source.body.get("parser_version") == "import-vat-box-bridge/1" and (data.workflow != "uae-vat-return" or role != "books"):
@@ -365,7 +373,15 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         sources[role] = source.body
         contributors.update(source.body.get("contributors", [str(source.created_by)]))
         dependencies.append(intelligence.event_receipt(source))
-    if data.workflow in {"india-payroll-rules", "uae-benefit-review"}:
+    if data.workflow == "uae-benefit-review" and sources["rules"].get("parser_version") == "published-benefit-profiles/1":
+        from app.modules.country_workflows.benefit_source import verify
+
+        dependencies.extend(await verify(db, ctx, eng, sources, data, contributors))
+    elif data.workflow == "india-payroll-rules" and sources["rules"].get("parser_version") == "published-payroll-profiles/1":
+        from app.modules.country_workflows.payroll_source import verify as verify_payroll
+
+        dependencies.extend(await verify_payroll(db, ctx, eng, sources, data, contributors))
+    elif data.workflow in {"india-payroll-rules", "uae-benefit-review"}:
         dependencies.extend(
             await payroll_rule_documents(
                 db, ctx, eng, sources["rules"]["rows"], contributors=contributors

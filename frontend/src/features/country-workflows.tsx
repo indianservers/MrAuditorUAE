@@ -7,6 +7,10 @@ import { useEventHistory } from "@/hooks/use-event-history";
 import { useScope } from "@/stores/workspace";
 import { Button, ErrorState, Status } from "@/components/ui/primitives";
 import { PageHeader } from "./shared";
+import {
+  PublishedBenefitSource,
+  PublishedPayrollSource,
+} from "./published-benefit-source";
 
 function ExcludedVATBoxes({
   prefix,
@@ -395,6 +399,9 @@ export function CountryWorkflows({
   const compactBankClearance = body?.workflow === "bank-subsequent-clearance";
   const compactDues = body?.workflow === "obligation-bank-allocations";
   const compactImport = body?.workflow === "uae-import-vat";
+  const compactBenefit =
+    body?.workflow === "uae-benefit-review" ||
+    body?.table_type === "benefit-rules";
   const compactWithholding = [
     "india-withholding-liability",
     "india-withholding-credit",
@@ -407,127 +414,149 @@ export function CountryWorkflows({
         row.assessment_issues.length > 0,
     );
   const columns =
-    compactDues && !showRuleProvenance
-      ? [
-          "kind",
-          "subject",
-          "period",
-          "component",
-          "currency",
-          "source_amount",
-          "settled_or_allocated",
-          "remaining",
-          "state",
-        ].filter((key) => allColumns.includes(key))
-      : compactImport && !showRuleProvenance
+    compactBenefit && !showRuleProvenance
+      ? (body?.table_type === "benefit-rules"
+          ? [
+              "regime",
+              "cohort",
+              "work_model",
+              "source_version",
+              "selected_service_end_dates",
+              "first_tier_days",
+              "later_tier_days",
+            ]
+          : [
+              "id",
+              "work_model",
+              "currency",
+              "service_years",
+              "expected_benefit",
+              "paid_benefit",
+              "difference",
+              "state",
+            ]
+        ).filter((key) => allColumns.includes(key))
+      : compactDues && !showRuleProvenance
         ? [
-            "declaration",
-            "line_reference",
-            "entry_kind",
-            "adjustment_reference",
-            "vat201_box",
-            "amounts",
-            "differences",
-            "exceptions",
+            "kind",
+            "subject",
+            "period",
+            "component",
+            "currency",
+            "source_amount",
+            "settled_or_allocated",
+            "remaining",
             "state",
           ].filter((key) => allColumns.includes(key))
-        : compactWithholding && !showRuleProvenance
+        : compactImport && !showRuleProvenance
           ? [
-              "transaction_reference",
-              "counterparty",
-              "legal_role",
-              "tax_kind",
-              "period",
-              "currency",
+              "declaration",
+              "line_reference",
+              "entry_kind",
+              "adjustment_reference",
+              "vat201_box",
               "amounts",
-              ...(assessmentAttention
-                ? ["comparison_state", "assessment_issues"]
-                : []),
-              "differences_from_expected",
-              "differences_from_books",
+              "differences",
+              "exceptions",
               "state",
             ].filter((key) => allColumns.includes(key))
-          : compactBankClearance && !showRuleProvenance
+          : compactWithholding && !showRuleProvenance
             ? [
-                "kind",
-                "reference",
+                "transaction_reference",
+                "counterparty",
+                "legal_role",
+                "tax_kind",
+                "period",
                 "currency",
-                "reporting_date_amount",
-                "subsequently_cleared",
-                "remaining_after_review",
-                "statement_amount",
-                "allocated",
-                "unallocated_amount",
+                "amounts",
+                ...(assessmentAttention
+                  ? ["comparison_state", "assessment_issues"]
+                  : []),
+                "differences_from_expected",
+                "differences_from_books",
                 "state",
               ].filter((key) => allColumns.includes(key))
-            : compactCredit && !showRuleProvenance
+            : compactBankClearance && !showRuleProvenance
               ? [
                   "kind",
-                  "item_id",
+                  "reference",
                   "currency",
-                  "amount",
-                  "original_balance",
-                  "applied",
-                  "remaining_balance",
-                  "control_amount",
-                  "difference",
+                  "reporting_date_amount",
+                  "subsequently_cleared",
+                  "remaining_after_review",
+                  "statement_amount",
+                  "allocated",
+                  "unallocated_amount",
                   "state",
                 ].filter((key) => allColumns.includes(key))
-              : compactSource && !showRuleProvenance
-                ? (body?.table_type === "transactions"
-                    ? [
-                        "reference",
-                        "account",
-                        "date",
-                        "currency",
-                        "amount",
-                        "counterparty",
-                        "source_debit",
-                        "source_credit",
-                      ]
-                    : [
-                        "reference",
-                        "counterparty",
-                        "account",
-                        "side",
-                        "currency",
-                        "document_type",
-                        "document_date",
-                        "due_date",
-                        "balance_date",
-                        "amount",
-                        "supporting_reported_open_amount",
-                      ]
-                  ).filter((key) => allColumns.includes(key))
-                : body?.workflow === "india-payroll-rules" &&
-                    !showRuleProvenance
-                  ? [
-                      "subject",
-                      "period",
-                      "component",
-                      "currency",
-                      "assessed_base",
-                      "expected_amount",
-                      "reported_amount",
-                      "difference",
-                      "state",
-                    ].filter((key) => allColumns.includes(key))
-                  : ["india-gst", "uae-vat"].includes(body?.workflow || "") &&
+              : compactCredit && !showRuleProvenance
+                ? [
+                    "kind",
+                    "item_id",
+                    "currency",
+                    "amount",
+                    "original_balance",
+                    "applied",
+                    "remaining_balance",
+                    "control_amount",
+                    "difference",
+                    "state",
+                  ].filter((key) => allColumns.includes(key))
+                : compactSource && !showRuleProvenance
+                  ? (body?.table_type === "transactions"
+                      ? [
+                          "reference",
+                          "account",
+                          "date",
+                          "currency",
+                          "amount",
+                          "counterparty",
+                          "source_debit",
+                          "source_credit",
+                        ]
+                      : [
+                          "reference",
+                          "counterparty",
+                          "account",
+                          "side",
+                          "currency",
+                          "document_type",
+                          "document_date",
+                          "due_date",
+                          "balance_date",
+                          "amount",
+                          "supporting_reported_open_amount",
+                        ]
+                    ).filter((key) => allColumns.includes(key))
+                  : body?.workflow === "india-payroll-rules" &&
                       !showRuleProvenance
                     ? [
-                        "counterparty",
-                        "reference",
-                        "document_type",
+                        "subject",
+                        "period",
                         "component",
                         "currency",
-                        "books_tax",
-                        "return_tax",
-                        "tax_difference",
-                        "net_difference",
+                        "assessed_base",
+                        "expected_amount",
+                        "reported_amount",
+                        "difference",
                         "state",
-                        "source_review_reasons",
                       ].filter((key) => allColumns.includes(key))
-                    : allColumns;
+                    : ["india-gst", "uae-vat"].includes(body?.workflow || "") &&
+                        !showRuleProvenance
+                      ? [
+                          "counterparty",
+                          "reference",
+                          "document_type",
+                          "component",
+                          "currency",
+                          "books_tax",
+                          "return_tax",
+                          "tax_difference",
+                          "net_difference",
+                          "state",
+                          "source_review_reasons",
+                        ].filter((key) => allColumns.includes(key))
+                      : allColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -1746,6 +1775,7 @@ export function CountryWorkflows({
               <label>
                 Workflow
                 <select
+                  aria-label="Workflow"
                   value={workflow}
                   onChange={(e) => {
                     setWorkflow(e.target.value);
@@ -2152,6 +2182,26 @@ export function CountryWorkflows({
             </details>
           )}
       </section>
+      {mode === "workflow-source" &&
+        config.data?.country === "AE" &&
+        tableType === "benefit-rules" && (
+          <PublishedBenefitSource
+            key={`${tenant}:${eid}`}
+            eid={eid}
+            employees={results.data?.items || []}
+            onCreated={setSelected}
+          />
+        )}
+      {mode === "workflow-source" &&
+        config.data?.country === "IN" &&
+        tableType === "payroll-rules" && (
+          <PublishedPayrollSource
+            key={`${tenant}:${eid}`}
+            eid={eid}
+            employees={results.data?.items || []}
+            onCreated={setSelected}
+          />
+        )}
       <section className="main-panel" style={{ padding: 20, marginTop: 16 }}>
         <h2>Recent jobs</h2>
         {(jobs.data?.items.length || 0) > 5 && (
@@ -2943,6 +2993,7 @@ export function CountryWorkflows({
           </div>
           <div style={{ overflowX: "auto" }}>
             {(compactSource ||
+              compactBenefit ||
               compactBankClearance ||
               compactDues ||
               compactCredit ||

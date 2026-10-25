@@ -258,10 +258,17 @@ async def current(db, ctx, obj, visited=None):
             eng = await db.get(Engagement, obj.engagement_id)
             period = await db.get(FinancialPeriod, eng.period_id)
             try:
-                chosen = await selection(
-                    db, ctx, dependency["rule_key"], period.start_date, period.end_date,
-                    date.fromisoformat(dependency["transaction_date"]) if dependency.get("transaction_date") else None,
-                )
+                if dependency.get("span_start") and dependency.get("span_end"):
+                    from app.modules.regulatory.rule_spans import selection_over_span
+
+                    chosen = await selection_over_span(db, ctx, dependency["rule_key"],
+                        period.start_date, period.end_date, date.fromisoformat(dependency["span_start"]),
+                        date.fromisoformat(dependency["span_end"]))
+                else:
+                    chosen = await selection(
+                        db, ctx, dependency["rule_key"], period.start_date, period.end_date,
+                        date.fromisoformat(dependency["transaction_date"]) if dependency.get("transaction_date") else None,
+                    )
             except HTTPException as error:
                 if error.status_code == 409:
                     return False  # Preserve readable history when its rule/source can no longer be qualified.

@@ -110,7 +110,11 @@ export function RegulatoryAssessmentPanel({ eid }: { eid: string }) {
                 key={r.id}
                 value={r.id}
                 disabled={
-                  r.body.method === "flat_rate" && !r.body.calculation_currency
+                  ["benefit_profile", "payroll_profile"].includes(
+                    r.body.method,
+                  ) ||
+                  (r.body.method === "flat_rate" &&
+                    !r.body.calculation_currency)
                 }
               >
                 {r.rule_key} • v{r.version} • {r.body.framework} •{" "}
@@ -118,11 +122,29 @@ export function RegulatoryAssessmentPanel({ eid }: { eid: string }) {
                 {r.body.method}
                 {r.body.method === "flat_rate"
                   ? ` • ${r.body.calculation_currency || "currency review required"}`
-                  : ""}
+                  : r.body.method === "benefit_profile"
+                    ? " • use employee benefit review"
+                    : r.body.method === "payroll_profile"
+                      ? " • use payroll contribution review"
+                      : ""}
               </option>
             ))}
         </select>
       </label>
+      {country === "AE" && (
+        <p>
+          <Link href={`/intelligence/${eid}/workflow-source`}>
+            Prepare published benefit profiles for employee review
+          </Link>
+        </p>
+      )}
+      {country === "IN" && (
+        <p>
+          <Link href={`/intelligence/${eid}/workflow-source`}>
+            Prepare published profiles for payroll contribution review
+          </Link>
+        </p>
+      )}
       <label>
         Reviewed currency conversion (optional)
         <select

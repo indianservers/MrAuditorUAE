@@ -6,6 +6,8 @@ from typing import Annotated, Literal
 from pydantic import Field, HttpUrl, model_validator
 
 from app.modules.jurisdictions.profiles import Strict
+from app.modules.regulatory.benefit_profiles import BenefitParameters
+from app.modules.regulatory.payroll_profiles import PayrollParameters
 
 Fact = Annotated[str, Field(max_length=4000)] | bool | int | None
 
@@ -87,7 +89,9 @@ class Rule(Strict):
     input_requirements: list[str] = Field(min_length=1, max_length=50)
     output_requirements: list[str] = Field(min_length=1, max_length=50)
     exceptions_and_elections: list[str] = Field(default_factory=list, max_length=50)
-    method: Literal["checklist", "flat_rate"] = "checklist"
+    method: Literal["checklist", "flat_rate", "benefit_profile", "payroll_profile"] = "checklist"
+    benefit_parameters: BenefitParameters | None = None
+    payroll_parameters: PayrollParameters | None = None
     rate: Decimal | None = Field(default=None, ge=0, le=1, max_digits=18, decimal_places=12)
     calculation_currency: str | None = Field(default=None, pattern=r"^[A-Z]{3}$")
     validation_status: Literal["AWAITING_VALIDATION", "VALIDATED"] = "AWAITING_VALIDATION"
@@ -112,13 +116,43 @@ class Rule(Strict):
             raise ValueError("A flat-rate method requires an explicit reviewed rate only")
         if self.method == "flat_rate" and "tax_base" not in self.input_requirements:
             raise ValueError("A flat-rate calculation requires tax_base")
+        if (self.method == "benefit_profile") != (self.benefit_parameters is not None):
+            raise ValueError("Benefit parameters require the benefit-profile method only")
+        if (self.method == "payroll_profile") != (self.payroll_parameters is not None):
+            raise ValueError("Payroll parameters require the payroll-profile method only")
+        if self.method == "payroll_profile":
+            if self.country != "IN" or self.period_basis != "transaction_date":
+                raise ValueError("India payroll profiles require wage-month date selection")
+            if self.calculation_currency is not None or self.applicability:
+                raise ValueError(
+                    "Payroll profiles use INR and explicit rule-group, component and jurisdiction scope"
+                )
+        if self.method == "benefit_profile":
+            if self.benefit_parameters is None:
+                raise ValueError("Benefit profiles require explicit reviewed parameters")
+            if self.applicability:
+                raise ValueError(
+                    "Benefit profiles use explicit regime, cohort and work-model scope; generic predicates are unsupported"
+                )
+            if self.country != "AE" or self.period_basis != "transaction_date":
+                raise ValueError("UAE benefit profiles are selected by employee service-end date")
+            if self.calculation_currency is not None:
+                raise ValueError("Benefit currency is established by the employee source")
+            if self.benefit_parameters.work_model == "other":
+                raise ValueError("A published benefit profile requires a supported work model")
         return self
 
 
 class Decision(Strict):
-    action: Literal["approve", "reject", "publish"]
+    action: Literal["approve", "reject", "publish", "withdraw"]
     expected_sequence: int = Field(ge=1)
     comments: str = Field(min_length=10, max_length=4000)
+
+    @model_validator(mode="after")
+    def withdrawal_reason(self):
+        if self.action == "withdraw" and len(self.comments.strip()) < 10:
+            raise ValueError("Document a meaningful reason for withdrawing the published rule")
+        return self
 
 
 class FactSource(Strict):

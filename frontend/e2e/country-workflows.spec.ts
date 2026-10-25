@@ -8,7 +8,336 @@ const fixture = JSON.parse(
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
 
-test("UAE and India rule publication binds retained source copies and independent review", async ({
+test("published India payroll profiles feed reviewed PF and EPS calculations", async ({
+  page,
+  browser,
+}) => {
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+    viewport: { width: 1600, height: 1100 },
+  });
+  const reviewer = await context.newPage();
+  const input = fixture.regulatory_conversions.IN;
+  const eid = input.engagement;
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_final_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    await page.goto(`/intelligence/${eid}/workflow-source`);
+    await page
+      .getByLabel("Source table type", { exact: true })
+      .selectOption("payroll-rules");
+    const preparation = page.getByRole("region", {
+      name: "Published India payroll profiles",
+      exact: true,
+    });
+    await preparation
+      .getByLabel("Reviewed payroll basis source", { exact: true })
+      .selectOption(input.payroll.bases);
+    for (const component of ["EMPLOYEE", "EPS", "EMPLOYER"])
+      await preparation
+        .getByRole("checkbox", {
+          name: new RegExp(`IN-SYNTHETIC-PF-${component}-BROWSER`),
+        })
+        .check();
+    await preparation
+      .getByLabel("Independent wage-basis row count", { exact: true })
+      .fill("3");
+    await preparation
+      .getByLabel("Published payroll source title", { exact: true })
+      .fill("SYNTHETIC published India payroll rules");
+    await preparation
+      .getByLabel("Payroll profile applicability assessment", { exact: true })
+      .fill(
+        "Synthetic membership, assessed component wage bases and whole-month jurisdiction assessed",
+      );
+    await saveScreenshot(
+      `${shots}/india-published-payroll-preparation.png`,
+      () => preparation.screenshot(),
+    );
+    const prepared = page.waitForResponse(
+      (response) =>
+        response.url().endsWith(`/engagements/${eid}/payroll-rule-source`) &&
+        response.request().method() === "POST",
+    );
+    await preparation
+      .getByRole("button", {
+        name: "Prepare published payroll rule source",
+        exact: true,
+      })
+      .click();
+    const response = await prepared;
+    expect(response.status(), await response.text()).toBe(201);
+    const source = await response.json();
+    await reviewer.goto(`/intelligence/${eid}/workflow-source`);
+    await reviewer
+      .getByLabel("Saved source or result", { exact: true })
+      .selectOption(source.id);
+    await reviewer
+      .getByLabel("Review / exception rationale", { exact: true })
+      .fill(
+        "Independent synthetic membership, profile parameters and source-copy integrity checked",
+      );
+    const approval = reviewer.waitForResponse(
+      (response) =>
+        response.url().endsWith(`/events/${source.id}/review`) &&
+        response.request().method() === "POST",
+    );
+    await reviewer
+      .getByRole("button", { name: "Independent approval", exact: true })
+      .click();
+    const approvedResponse = await approval;
+    expect(approvedResponse.status(), await approvedResponse.text()).toBe(201);
+    const approved = await approvedResponse.json();
+    await page.goto(`/intelligence/${eid}/country-workflow`);
+    await page
+      .getByLabel("Workflow", { exact: true })
+      .selectOption("india-payroll-rules");
+    const title = `SYNTHETIC published India payroll ${Date.now()}`;
+    await page.getByLabel("Schedule title", { exact: true }).fill(title);
+    await page
+      .getByLabel("Reconciliation date", { exact: true })
+      .fill("2026-06-30");
+    for (const [role, value] of [
+      ["bases", input.payroll.bases],
+      ["rules", approved.id],
+      ["reported", input.payroll.reported],
+    ])
+      await page
+        .getByLabel(`${role} source`, { exact: true })
+        .selectOption(value);
+    await page
+      .getByLabel("Scope and source rationale", { exact: true })
+      .fill(
+        "Synthetic expected and reported contributions use independently published complete-month profiles",
+      );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const option = page
+      .getByLabel("Saved source or result")
+      .getByRole("option", { name: new RegExp(title) });
+    await expect(option).toHaveCount(1);
+    await page
+      .getByLabel("Saved source or result")
+      .selectOption((await option.getAttribute("value"))!);
+    const panel = page
+      .getByRole("heading", { name: title, exact: true })
+      .locator("..");
+    await expect(
+      panel.getByText("0 exceptions", { exact: true }),
+    ).toBeVisible();
+    const table = panel.getByRole("table");
+    for (const component of ["PF:EMPLOYEE", "PF:EPS", "PF:EMPLOYER"])
+      await expect(
+        table.getByRole("cell", { name: component, exact: true }),
+      ).toHaveCount(1);
+    await expect(
+      table.getByRole("cell", { name: "MATCHED", exact: true }),
+    ).toHaveCount(3);
+    await expect(
+      table.getByRole("cell", { name: "1250", exact: true }),
+    ).toHaveCount(2);
+    for (const notice of await page
+      .getByRole("button", { name: "Dismiss notification", exact: true })
+      .all())
+      await notice.click();
+    await saveScreenshot(
+      `${shots}/india-published-payroll-calculation.png`,
+      () => table.screenshot(),
+    );
+    await panel
+      .getByLabel("Show rule provenance and source references")
+      .check();
+    await expect(
+      table.getByRole("columnheader", {
+        name: "published rule version id",
+        exact: true,
+      }),
+    ).toBeVisible();
+  } finally {
+    await context.close();
+  }
+});
+
+test("published UAE benefit profiles feed independently reviewed employee calculations", async ({
+  page,
+  browser,
+}) => {
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+    viewport: { width: 1600, height: 1100 },
+  });
+  const reviewer = await context.newPage();
+  const input = fixture.regulatory_conversions.AE;
+  const eid = input.engagement;
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_final_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    await page.goto(`/intelligence/${eid}/workflow-source`);
+    await page
+      .getByLabel("Source table type", { exact: true })
+      .selectOption("benefit-rules");
+    const preparation = page.getByRole("region", {
+      name: "Published UAE benefit profiles",
+      exact: true,
+    });
+    await preparation
+      .getByLabel("Reviewed benefit employee source", { exact: true })
+      .selectOption(input.benefits.employees);
+    await preparation
+      .getByRole("checkbox", { name: /AE-SYNTHETIC-FULL-BROWSER/ })
+      .check();
+    await preparation
+      .getByRole("checkbox", { name: /AE-SYNTHETIC-PART-BROWSER/ })
+      .check();
+    await preparation
+      .getByLabel("Independent employee row count", { exact: true })
+      .fill("2");
+    await preparation
+      .getByLabel("Published benefit source title", { exact: true })
+      .fill("SYNTHETIC published benefit rules");
+    await preparation
+      .getByLabel("Benefit profile applicability assessment", { exact: true })
+      .fill(
+        "Synthetic full-time and part-time cohort, salary comparators and service ends independently assessed",
+      );
+    for (const notice of await page
+      .getByRole("button", { name: "Dismiss notification", exact: true })
+      .all())
+      await notice.click();
+    await saveScreenshot(`${shots}/uae-published-benefit-preparation.png`, () =>
+      preparation.screenshot(),
+    );
+    const prepared = page.waitForResponse(
+      (response) =>
+        response.url().endsWith(`/engagements/${eid}/benefit-rule-source`) &&
+        response.request().method() === "POST",
+    );
+    await preparation
+      .getByRole("button", {
+        name: "Prepare published benefit rule source",
+        exact: true,
+      })
+      .click();
+    const response = await prepared;
+    expect(response.status(), await response.text()).toBe(201);
+    const source = await response.json();
+    await reviewer.goto(`/intelligence/${eid}/workflow-source`);
+    await reviewer
+      .getByLabel("Saved source or result", { exact: true })
+      .selectOption(source.id);
+    await reviewer
+      .getByLabel("Review / exception rationale", { exact: true })
+      .fill(
+        "Independent synthetic published profiles, original source copies and employee selection verified",
+      );
+    const approval = reviewer.waitForResponse(
+      (response) =>
+        response.url().endsWith(`/events/${source.id}/review`) &&
+        response.request().method() === "POST",
+    );
+    await reviewer
+      .getByRole("button", { name: "Independent approval", exact: true })
+      .click();
+    const approvedResponse = await approval;
+    expect(approvedResponse.status(), await approvedResponse.text()).toBe(201);
+    const approved = await approvedResponse.json();
+    await page.goto(`/intelligence/${eid}/country-workflow`);
+    await page
+      .getByLabel("Workflow", { exact: true })
+      .selectOption("uae-benefit-review");
+    const title = `SYNTHETIC published employee benefits ${Date.now()}`;
+    await page.getByLabel("Schedule title", { exact: true }).fill(title);
+    await page
+      .getByLabel("Reconciliation date", { exact: true })
+      .fill("2026-06-30");
+    await page
+      .getByLabel("employees source", { exact: true })
+      .selectOption(input.benefits.employees);
+    await page
+      .getByLabel("rules source", { exact: true })
+      .selectOption(approved.id);
+    await page
+      .getByLabel("Scope and source rationale", { exact: true })
+      .fill(
+        "Synthetic employee-level salary and hours compared to the current published profiles",
+      );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const option = page
+      .getByLabel("Saved source or result")
+      .getByRole("option", { name: new RegExp(title) });
+    await expect(option).toHaveCount(1);
+    await page
+      .getByLabel("Saved source or result")
+      .selectOption((await option.getAttribute("value"))!);
+    const panel = page
+      .getByRole("heading", { name: title, exact: true })
+      .locator("..");
+    await expect(
+      panel.getByText("0 exceptions", { exact: true }),
+    ).toBeVisible();
+    const table = panel.getByRole("table");
+    await expect(
+      table.getByRole("cell", { name: "2100.00", exact: true }),
+    ).toHaveCount(1);
+    await expect(
+      table.getByRole("cell", { name: "1050.00", exact: true }),
+    ).toHaveCount(1);
+    await expect(
+      table.getByRole("cell", { name: "MATCHED", exact: true }),
+    ).toHaveCount(2);
+    for (const notice of await page
+      .getByRole("button", { name: "Dismiss notification", exact: true })
+      .all())
+      await notice.click();
+    await expect
+      .poll(() =>
+        table.evaluate(
+          (element) =>
+            element.scrollWidth <= element.parentElement!.clientWidth,
+        ),
+      )
+      .toBe(true);
+    await saveScreenshot(`${shots}/uae-published-benefit-calculation.png`, () =>
+      table.screenshot(),
+    );
+    await panel.getByLabel("Show source provenance and all columns").check();
+    await expect(
+      table.getByRole("columnheader", {
+        name: "published rule version id",
+        exact: true,
+      }),
+    ).toBeVisible();
+    await expect(
+      table.getByRole("cell", {
+        name: input.benefits.part_profile,
+        exact: true,
+      }),
+    ).toHaveCount(2);
+  } finally {
+    await context.close();
+  }
+});
+
+test("UAE and India rules retain sources, publish independently and withdraw safely", async ({
   page,
   browser,
 }) => {
@@ -181,6 +510,79 @@ test("UAE and India rule publication binds retained source copies and independen
         .locator("..");
       await saveScreenshot(
         `${shots}/${country.toLowerCase()}-retained-source-rule-publication.png`,
+        () => panel.screenshot(),
+      );
+      const eid = fixture.regulatory_conversions[country].engagement;
+      const assessed = await page.request.post(
+        `/api/backend/regulatory/engagements/${eid}/assessments`,
+        {
+          headers: {
+            "X-Tenant-ID": fixture.tenant,
+            Origin: "http://127.0.0.1:3010",
+          },
+          data: {
+            rule_ids: [rule.id],
+            facts: { entity_type: "company" },
+            rationale:
+              "Synthetic current rule assessment before controlled withdrawal",
+          },
+        },
+      );
+      expect(assessed.status(), await assessed.text()).toBe(201);
+      const saved = await assessed.json();
+      await page
+        .getByLabel("Decision rationale")
+        .fill(
+          "Synthetic withdrawal due to reviewed source concern; replacement requires independent approval.",
+        );
+      const withdrawnResponse = page.waitForResponse(
+        (response) =>
+          response.url().endsWith(`/rules/${rule.id}/decisions`) &&
+          response.request().method() === "POST",
+      );
+      await page
+        .getByRole("button", {
+          name: "Withdraw published version",
+          exact: true,
+        })
+        .click();
+      const withdrawn = await withdrawnResponse;
+      expect(withdrawn.status(), await withdrawn.text()).toBe(201);
+      expect((await withdrawn.json()).state).toBe("WITHDRAWN");
+      await page.goto(`/settings/regulatory-rules?rule=${rule.id}`);
+      await expect(panel.getByText("WITHDRAWN", { exact: true })).toBeVisible();
+      await expect(
+        panel
+          .getByRole("region", {
+            name: "Recorded rule withdrawal",
+            exact: true,
+          })
+          .getByText(
+            "Synthetic withdrawal due to reviewed source concern; replacement requires independent approval.",
+            { exact: true },
+          ),
+      ).toBeVisible();
+      await expect(panel.getByRole("link", { name: /STALE/ })).toBeVisible();
+      await expect(
+        panel.getByRole("button", {
+          name: "Withdraw published version",
+          exact: true,
+        }),
+      ).toHaveCount(0);
+      const history = await page.request.get(
+        `/api/backend/intelligence/engagements/${eid}/events/${saved.id}`,
+        { headers: { "X-Tenant-ID": fixture.tenant } },
+      );
+      expect(history.status()).toBe(200);
+      const original = await history.json();
+      expect(original.freshness).toBe("STALE");
+      expect(original.sha256).toBe(saved.sha256);
+      for (const notice of await page
+        .getByRole("button", { name: "Dismiss notification", exact: true })
+        .all())
+        await notice.click();
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-withdrawn-rule-history.png`,
         () => panel.screenshot(),
       );
     }
