@@ -672,6 +672,7 @@ def parse_native(content, data, country, filename):
         "parser_version": data.file_format
         + ("-2" if data.file_format in {"swift-mt940", "camt053"} else "-1"),
         "native_format": data.file_format,
+        **({"allowed_source_roles": ["return"]} if data.file_format == "india-gstr2b-json" else {}),
         "native_metadata": metadata,
         "native_controls_verified": True,
         "statutory_calculation_qualified": False,

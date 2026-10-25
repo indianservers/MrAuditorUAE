@@ -1,12 +1,13 @@
 import uuid
 from datetime import date
-from decimal import Decimal
+from decimal import Decimal, localcontext
 from typing import Annotated, Literal
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
 from app.modules.country_workflows.audit_schemas import AUDIT_ROW_TYPES
 from app.modules.country_workflows.diligence_schemas import DILIGENCE_ROW_TYPES
+from app.modules.country_workflows.gstr2b_part_schemas import GSTR2BPart
 from app.modules.country_workflows.operations_schemas import OPERATION_ROW_TYPES
 from app.modules.country_workflows.payroll_schemas import PAYROLL_ROW_TYPES
 from app.modules.country_workflows.pension_schemas import PENSION_ROW_TYPES
@@ -146,6 +147,9 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
 
 class SourceInput(Strict):
     evidence_version_id: uuid.UUID
+    gstr2b_parts: list[GSTR2BPart] = Field(default_factory=list, max_length=100)
+    gstr2b_expected_files: int | None = Field(default=None, ge=1, le=100, strict=True)
+    gstr2b_retrieval_assessment: str = Field(default="", max_length=2000)
     supporting_table_id: uuid.UUID | None = None
     supporting_scope_assessment: str = Field(default="", max_length=2000)
     supporting_side: Literal["receivable", "payable"] | None = None
@@ -241,6 +245,23 @@ class SourceInput(Strict):
 
     @model_validator(mode="after")
     def declared_nil(self):
+        if self.gstr2b_parts:
+            numbers = [part.file_number for part in self.gstr2b_parts]
+            identifiers = [part.evidence_version_id for part in self.gstr2b_parts]
+            with localcontext() as arithmetic:
+                arithmetic.prec = 80
+                part_total = sum((part.tax_total for part in self.gstr2b_parts), Decimal(0))
+            if (self.file_format != "india-gstr2b-json" or self.table_type != "tax-documents"
+                or self.supporting_table_id or self.gstr2b_expected_files != len(numbers)
+                or sorted(numbers) != list(range(1, len(numbers) + 1))
+                or len(set(identifiers)) != len(identifiers) or self.evidence_version_id in identifiers
+                or len(self.gstr2b_retrieval_assessment.strip()) < 10
+                or self.expected_documents != sum(part.expected_documents for part in self.gstr2b_parts)
+                or self.expected_rows != 4 * sum(part.expected_documents for part in self.gstr2b_parts)
+                or self.control_totals != {"INR": part_total}):
+                raise ValueError("GSTR-2B assembly requires distinct original files numbered 1..count, independent per-part and whole-source controls, and a retrieval assessment")
+        elif self.gstr2b_expected_files is not None or self.gstr2b_retrieval_assessment:
+            raise ValueError("GSTR-2B assembly controls require numbered original response parts")
         if self.table_type == "import-vat-lines":
             if self.import_taxable_base_control is None:
                 raise ValueError(

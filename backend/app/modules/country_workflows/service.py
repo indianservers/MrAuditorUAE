@@ -11,10 +11,11 @@ from app.modules.accounting.models import ImportBatch
 from app.modules.country_workflows.calculations import calculate
 from app.modules.country_workflows.sources import MAX_BYTES, parse_csv
 from app.modules.intelligence import service as intelligence
+from app.modules.jurisdictions.packages import fingerprint
 from app.modules.lineage.storage import ObjectStore, hash_file
 
 
-async def payroll_rule_documents(db, ctx, eng, rows, *, label="Payroll rule", contributors=None):
+async def payroll_rule_documents(db, ctx, eng, rows, *, label="Payroll rule", contributors=None, max_documents=50):
     from sqlalchemy import func, select
 
     from app.modules.audit_execution.models import EvidenceVersion
@@ -24,8 +25,8 @@ async def payroll_rule_documents(db, ctx, eng, rows, *, label="Payroll rule", co
     for rule in rows:
         identifier = rule["source_evidence_version_id"]
         if identifier not in documents:
-            if len(documents) >= 50:
-                raise HTTPException(422, f"{label} evidence is limited to fifty retained documents")
+            if len(documents) >= max_documents:
+                raise HTTPException(422, f"{label} evidence exceeds its {max_documents}-document verification bound")
             document, receipt = await intelligence.evidence(db, ctx, eng, UUID(identifier))
             latest = await db.scalar(
                 select(func.max(EvidenceVersion.number)).where(
@@ -199,10 +200,26 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         if data.table_type.startswith("pension-") and package.country != "AE":
             raise HTTPException(422, "Pension sources require a UAE engagement")
         evidence, receipt = await intelligence.evidence(db, ctx, eng, data.evidence_version_id)
+        part_documents = {}
+        if data.gstr2b_parts:
+            if package.country != "IN":
+                raise HTTPException(422, "GSTR-2B response-part assembly requires an India engagement")
+            part_documents[str(evidence.id)] = evidence
+            for part in data.gstr2b_parts:
+                original, _ = await intelligence.evidence(db, ctx, eng, part.evidence_version_id)
+                part_documents[str(original.id)] = original
+            if any(document.media_type != "application/json" for document in part_documents.values()):
+                raise HTTPException(422, "GSTR-2B manifests and numbered responses must be original JSON evidence")
         supporting = None
         supporting_contributors = set()
         if evidence.created_by is not None:
             supporting_contributors.add(str(evidence.created_by))
+        if part_documents:
+            dependencies.extend(await payroll_rule_documents(
+                db, ctx, eng,
+                [{"source_evidence_version_id": identifier, "source_sha256": document.sha256} for identifier, document in part_documents.items()],
+                label="GSTR-2B original files", contributors=supporting_contributors, max_documents=101,
+            ))
         if data.supporting_table_id:
             supporting = await intelligence.event(db, ctx, eng.id, data.supporting_table_id, True)
             if (
@@ -274,6 +291,16 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 }
 
         def load():
+            if part_documents:
+                from app.modules.country_workflows.gstr2b_parts import assemble
+
+                content = {}
+                for identifier, original in part_documents.items():
+                    with ObjectStore().local(original.object_key, original.object_version) as original_path:
+                        if original_path.stat().st_size > MAX_BYTES or hash_file(original_path) != original.sha256:
+                            raise ValueError("Original GSTR-2B file exceeds its size bound or failed integrity verification")
+                        content[identifier] = original_path.read_bytes()
+                return assemble(content[str(evidence.id)], content, data)
             with ObjectStore().local(evidence.object_key, evidence.object_version) as path:
                 if path.stat().st_size > MAX_BYTES or hash_file(path) != evidence.sha256:
                     raise ValueError("Evidence exceeds size bound or hash verification failed")
@@ -303,8 +330,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             **result,
             "evidence_version_id": str(evidence.id),
             "evidence_sha256": evidence.sha256,
-            "source_sha256": evidence.sha256,
-            "source_identity": "evidence:" + str(evidence.id),
+            "source_sha256": fingerprint({key: value.sha256 for key, value in part_documents.items()}) if part_documents else evidence.sha256,
+            "source_identity": ("gstr2b-parts:" if part_documents else "evidence:") + str(evidence.id),
             "source_filename": evidence.filename,
             "contributors": sorted(
                 {
@@ -336,6 +363,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         source = await intelligence.event(db, ctx, eng.id, identifier, True)
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
+        if source.body.get("parser_version") == "india-gstr2b-json-parts-1" and source.body.get("review_status") != "REVIEWED":
+            raise HTTPException(409, "Independently review the assembled GSTR-2B retrieval batch before matching")
         if source.body.get("parser_version") == "contribution-obligations/1":
             if data.workflow not in {"statutory-dues", "obligation-bank-allocations"} or role != "expected":
                 raise HTTPException(422, "Derived contribution obligations can establish only expected remittances, not returns or payments")

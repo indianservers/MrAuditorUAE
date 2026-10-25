@@ -1295,6 +1295,50 @@ describe("country workflows", () => {
     );
   });
 
+  it("queues original numbered GSTR-2B files with independent per-file controls", async () => {
+    state.country = "IN";
+    render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+    fireEvent.change(screen.getByLabelText("Source file format"), {
+      target: { value: "india-gstr2b-json" },
+    });
+    fireEvent.click(screen.getByLabelText("Assemble numbered GSTR-2B files"));
+    const parts = [1, 2].map((file_number) => ({
+      file_number,
+      evidence_version_id: `part-${file_number}`,
+      expected_documents: 1,
+      tax_total: file_number === 1 ? "18" : "9",
+      request_reference: `REQUEST-${file_number}`,
+    }));
+    for (const [label, value] of [
+      ["Schedule title", "Complete split GSTR-2B"],
+      ["Clean retained evidence", "clean"],
+      ["Recipient GSTIN", "27ABCDE5678G1Z8"],
+      ["GSTR-2B return month", "2026-06"],
+      ["Independent GSTR-2B document count", "2"],
+      ["Independent totals by currency", "INR=27"],
+      ["Independent GSTR-2B file count", "2"],
+      [
+        "Original response parts and independent controls (JSON)",
+        JSON.stringify(parts),
+      ],
+      [
+        "GSTR-2B retrieval batch assessment",
+        "Independent original numbered requests and generation manifest reviewed",
+      ],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+      file_format: "india-gstr2b-json",
+      expected_documents: 2,
+      expected_rows: 8,
+      control_totals: { INR: "27" },
+      gstr2b_expected_files: 2,
+      gstr2b_parts: parts,
+    });
+  });
+
   it("queues INR payroll calculations using only independently reviewed rule sources", async () => {
     state.country = "IN";
     render(<CountryWorkflows eid="engagement" mode="country-workflow" />);

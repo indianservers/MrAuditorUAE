@@ -789,6 +789,8 @@ def calculate(data, country, sources):
     if set(sources) != set(roles):
         raise ValueError("Select every required source role exactly once")
     for role, table in sources.items():
+        if table.get("native_format") == "india-gstr2b-json" and (data.workflow != "india-gst" or role != "return"):
+            raise ValueError("Native GSTR-2B can establish only the India GST return role, not independent books")
         if table.get("parser_version") == "contribution-obligations/1" and (
             data.workflow not in {"statutory-dues", "obligation-bank-allocations"} or role != "expected"
         ):

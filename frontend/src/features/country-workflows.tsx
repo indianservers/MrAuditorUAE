@@ -319,6 +319,10 @@ export function CountryWorkflows({
   const [gstRegistration, setGSTRegistration] = useState("");
   const [gstDirection, setGSTDirection] = useState("purchase");
   const [gstPeriod, setGSTPeriod] = useState("");
+  const [gstrBundle, setGSTRBundle] = useState(false);
+  const [gstrFiles, setGSTRFiles] = useState("");
+  const [gstrParts, setGSTRParts] = useState("[]");
+  const [gstrAssessment, setGSTAssessment] = useState("");
   const [ledgerSnapshot, setLedgerSnapshot] = useState("");
   const [ledgerAccount, setLedgerAccount] = useState("");
   const [ledgerFrom, setLedgerFrom] = useState("");
@@ -701,6 +705,13 @@ export function CountryWorkflows({
                     gst_registration: gstRegistration,
                     gst_period: gstPeriod,
                     expected_documents: Number(expectedDocuments),
+                    ...(gstrBundle
+                      ? {
+                          gstr2b_parts: JSON.parse(gstrParts),
+                          gstr2b_expected_files: Number(gstrFiles),
+                          gstr2b_retrieval_assessment: gstrAssessment,
+                        }
+                      : {}),
                   }
                 : {}),
               ...(sourceFormat !== "canonical-csv" && account
@@ -1655,11 +1666,110 @@ export function CountryWorkflows({
                         Count each source document, including amendments and
                         reversal records. Four tax-component rows are imported
                         per document. INR controls sum signed document tax
-                        fields; they do not represent eligible credit. Paged
-                        downloads and unknown sections require a supported
-                        complete profile.
+                        fields; they do not represent eligible credit. For
+                        numbered downloads, select the original pagination
+                        manifest as the clean retained evidence and declare
+                        every original response below. Unknown sections and
+                        token pagination remain unsupported.
                       </p>
                     </>
+                  )}
+                  {sourceFormat === "india-gstr2b-json" && (
+                    <fieldset>
+                      <legend>Numbered GSTR-2B response files</legend>
+                      <label>
+                        <input
+                          type="checkbox"
+                          checked={gstrBundle}
+                          onChange={(event) =>
+                            setGSTRBundle(event.target.checked)
+                          }
+                        />
+                        Assemble numbered GSTR-2B files
+                      </label>
+                      {gstrBundle && (
+                        <>
+                          <p>
+                            The main retained file must be the original manifest
+                            containing fc. File numbers refer to original
+                            retrieval requests. Missing response dates rely on
+                            manifest and batch assessment; independent source
+                            review is required.
+                          </p>
+                          <label>
+                            Independent GSTR-2B file count
+                            <input
+                              type="number"
+                              min={1}
+                              max={100}
+                              value={gstrFiles}
+                              onChange={(event) =>
+                                setGSTRFiles(event.target.value)
+                              }
+                            />
+                          </label>
+                          <label>
+                            Original response parts and independent controls
+                            (JSON)
+                            <textarea
+                              value={gstrParts}
+                              style={{
+                                height: Math.min(
+                                  640,
+                                  Math.max(
+                                    320,
+                                    (gstrParts.split("\n").length + 1) * 18,
+                                  ),
+                                ),
+                              }}
+                              onChange={(event) =>
+                                setGSTRParts(event.target.value)
+                              }
+                              spellCheck={false}
+                            />
+                          </label>
+                          <Button
+                            onClick={() =>
+                              setGSTRParts(
+                                JSON.stringify(
+                                  [
+                                    {
+                                      file_number: null,
+                                      evidence_version_id: "",
+                                      expected_documents: null,
+                                      tax_total: null,
+                                      request_reference: "",
+                                    },
+                                  ],
+                                  null,
+                                  2,
+                                ),
+                              )
+                            }
+                          >
+                            Insert numbered-response format
+                          </Button>
+                          <label>
+                            GSTR-2B retrieval batch assessment
+                            <textarea
+                              style={{ height: 80 }}
+                              value={gstrAssessment}
+                              onChange={(event) =>
+                                setGSTAssessment(event.target.value)
+                              }
+                            />
+                          </label>
+                          <p>
+                            Supply all files 1..count, distinct clean evidence
+                            versions, per-file document counts and signed INR
+                            tax controls. Repeated bytes, missing files and
+                            conflicting scope fail preparation. File hashes
+                            preserve retained bytes; they do not authenticate
+                            GSTN or establish ITC entitlement.
+                          </p>
+                        </>
+                      )}
+                    </fieldset>
                   )}
                   {sourceFormat === "india-epfo-ecr" && (
                     <>
