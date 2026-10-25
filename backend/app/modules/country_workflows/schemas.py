@@ -15,6 +15,7 @@ from app.modules.country_workflows.payroll_ledger_schemas import PAYROLL_LEDGER_
 from app.modules.country_workflows.payroll_schemas import PAYROLL_ROW_TYPES
 from app.modules.country_workflows.pension_schemas import PENSION_ROW_TYPES
 from app.modules.country_workflows.sector_schemas import SECTOR_ROW_TYPES
+from app.modules.country_workflows.vat201_layouts import LAYOUTS, VAT201Layout
 from app.modules.country_workflows.withholding_schemas import WithholdingRecord, WithholdingRole
 from app.modules.jurisdictions.profiles import Strict
 from app.modules.regulatory.conversion import ExchangeRate
@@ -475,6 +476,7 @@ class WorkflowInput(Strict):
     date_tolerance: int = Field(default=0, ge=0, le=90)
     stale_days: int = Field(default=90, ge=1, le=3650)
     required_checks: list[Identifier] = Field(default_factory=list, max_length=100)
+    vat201_layout: VAT201Layout | Literal["custom"] = "custom"
     required_boxes: list[Identifier] = Field(default_factory=list, max_length=50)
     restrict_to_required_boxes: bool = False
     box_scope_assessment: str = Field(default="", max_length=2000)
@@ -482,6 +484,9 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
+        if self.vat201_layout != "custom":
+            if self.workflow != "uae-vat-return" or self.restrict_to_required_boxes or set(self.required_boxes) != set(LAYOUTS[self.vat201_layout]["boxes"]):
+                raise ValueError("A selected VAT201 layout requires all its explicit boxes without selected-box exclusion")
         if self.workflow == "payroll-ledger-rollforward" and (self.period_start is None or self.period_start <= date.min or self.period_start > self.as_of):
             raise ValueError("Payroll ledger bridge requires an ordered accounting period and prior-day opening balance")
         if self.arrear_only and self.workflow not in {"statutory-dues", "india-payroll-rules", "obligation-bank-allocations"}:

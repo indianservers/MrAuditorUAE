@@ -1,0 +1,49 @@
+{
+  "dataset_kind": "SYNTHETIC_ENGINE_FIXTURE",
+  "real_client_data": false,
+  "professional_validation": "NOT_ESTABLISHED",
+  "source_fixture": "backend/tests/unit/country_workflow_cases.py",
+  "source_fixture_sha256": "f9a81c636f59c87c17034981b3626a8b2dc8fea3cb4085a8679c0ed39694f2d3",
+  "case": {
+    "id": "RW-141",
+    "title": "UAE VAT201 different assigned tax periods stay separate",
+    "workflow": "uae-vat-return",
+    "country": "AE",
+    "sources": {
+      "books": [
+        {
+          "id": "1",
+          "registration": "TRN-1",
+          "period_start": "2026-04-01",
+          "period_end": "2026-06-30",
+          "box": "1:DXB",
+          "currency": "AED",
+          "taxable_amount": "100",
+          "tax": "5",
+          "adjustment": "0"
+        }
+      ],
+      "return": [
+        {
+          "id": "R1",
+          "registration": "TRN-1",
+          "period_start": "2026-01-01",
+          "period_end": "2026-03-31",
+          "box": "1:DXB",
+          "currency": "AED",
+          "taxable_amount": "100",
+          "tax": "5",
+          "adjustment": "0"
+        }
+      ]
+    },
+    "expected": {
+      "exceptions": 2
+    },
+    "parameters": {
+      "required_boxes": [
+        "1:DXB"
+      ]
+    }
+  }
+}

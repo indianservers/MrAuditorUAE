@@ -485,6 +485,10 @@ def obligations(data, tables, country):
 
 
 def vat_return(data, tables):
+    from app.modules.country_workflows.vat201_layouts import EMIRATES, LAYOUTS, validate_comparison
+
+    validate_comparison(data, tables)
+
     def key(r):
         return (
             r["registration"].upper(),
@@ -581,7 +585,12 @@ def vat_return(data, tables):
     keys.update(books)
     keys.update(filed)
     rows = []
-    for index, k in enumerate(sorted(keys), 1):
+    if data.vat201_layout == "custom":
+        ordered_keys = sorted(keys)
+    else:
+        order = {box: index for index, box in enumerate(LAYOUTS[data.vat201_layout]["boxes"])}
+        ordered_keys = sorted(keys, key=lambda k: k[:3] + (order[k[3]], k[4]))
+    for index, k in enumerate(ordered_keys, 1):
         b, r = books.get(k), filed.get(k)
         deltas = {
             field: str(b[field] - amount(r, field)) if b and r else None
@@ -605,6 +614,7 @@ def vat_return(data, tables):
                 "period_start": k[1],
                 "period_end": k[2],
                 "box": k[3],
+                **({"emirate": EMIRATES[k[3]]} if k[3] in EMIRATES else {}),
                 "currency": k[4],
                 "state": state,
                 "differences": deltas,
@@ -615,7 +625,8 @@ def vat_return(data, tables):
     return {
         "rows": rows,
         "exception_count": sum(r["state"] != "MATCHED" for r in rows),
-        "blocked": any(r["state"] == "MISSING_BOX_EVIDENCE" for r in rows),
+        "blocked": any(r["state"] == "MISSING_BOX_EVIDENCE" or (data.vat201_layout != "custom" and r["state"] in {"BOOKS_ONLY", "RETURN_ONLY"}) for r in rows),
+        "vat201_layout": data.vat201_layout,
         "box_comparison_scope": {
             "mode": "SELECTED_REQUIRED_BOXES"
             if data.restrict_to_required_boxes
@@ -807,6 +818,8 @@ def calculate(data, country, sources):
             if table.get("inventory_controls_verified") is not True or table.get("inventory_quantity_controls") is None:
                 raise ValueError("Controlled inventory bridging requires independent partition quantity controls for every source")
             verify_quantity_controls(table["rows"], table["inventory_quantity_controls"])
+        if table.get("parser_version") == "uae-vat201-composition/1" and table.get("native_metadata", {}).get("layout") == "emirate-20" and data.vat201_layout != "emirate-20":
+            raise ValueError("Select the explicit twenty-row emirate VAT201 layout for this composed source")
         if table.get("parser_version") == "uae-vat201-composition/1" and (data.workflow != "uae-vat-return" or role != "books"):
             raise ValueError("Composed VAT201 sources can establish only books, not filed-return evidence")
         if table.get("native_format") == "india-gstr2b-json" and (data.workflow != "india-gst" or role != "return"):

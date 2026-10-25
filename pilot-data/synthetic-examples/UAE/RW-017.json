@@ -1,0 +1,51 @@
+{
+  "dataset_kind": "SYNTHETIC_ENGINE_FIXTURE",
+  "real_client_data": false,
+  "professional_validation": "NOT_ESTABLISHED",
+  "source_fixture": "backend/tests/unit/country_workflow_cases.py",
+  "source_fixture_sha256": "f9a81c636f59c87c17034981b3626a8b2dc8fea3cb4085a8679c0ed39694f2d3",
+  "case": {
+    "id": "RW-017",
+    "title": "AE invoice independently agrees",
+    "workflow": "uae-vat",
+    "country": "AE",
+    "sources": {
+      "books": [
+        {
+          "id": "1",
+          "registration": "REG-1",
+          "counterparty": "SUP-1",
+          "reference": "INV-1",
+          "period": "2026-06",
+          "date": "2026-06-01",
+          "currency": "AED",
+          "document_type": "invoice",
+          "net": "100",
+          "tax": "5",
+          "component": "VAT",
+          "status": "active"
+        }
+      ],
+      "return": [
+        {
+          "id": "R1",
+          "registration": "REG-1",
+          "counterparty": "SUP-1",
+          "reference": "INV-1",
+          "period": "2026-06",
+          "date": "2026-06-01",
+          "currency": "AED",
+          "document_type": "invoice",
+          "net": "100",
+          "tax": "5",
+          "component": "VAT",
+          "status": "active"
+        }
+      ]
+    },
+    "expected": {
+      "state": "MATCHED"
+    },
+    "parameters": {}
+  }
+}

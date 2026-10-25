@@ -1,0 +1,16 @@
+{
+  "dataset_kind": "REAL_CLIENT_PILOT_TEMPLATE",
+  "country": "AE",
+  "status": "AWAITING_REDACTED_CLIENT_INPUT_AND_INDEPENDENT_EXPECTATIONS",
+  "client_reference": null,
+  "workflow": null,
+  "period_start": null,
+  "period_end": null,
+  "input_files": [],
+  "input_sha256": {},
+  "expected_result_file": null,
+  "expected_prepared_by": null,
+  "independent_reviewer": null,
+  "review_status": "NOT_REVIEWED",
+  "consent_or_authorized_use_reference": null
+}

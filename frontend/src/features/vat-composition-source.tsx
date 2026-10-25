@@ -17,11 +17,19 @@ export function VATCompositionSource({
   eid,
   sources,
   onCreated,
+  layouts = {
+    "aggregate-14": {
+      label: "Aggregate Box 1 - fourteen rows",
+      boxes: Array.from({ length: 14 }, (_, index) => String(index + 1)),
+    },
+  },
 }: {
+  layouts?: Record<string, { label: string; boxes: string[] }>;
   eid: string;
   sources: Source[];
   onCreated: (id: string) => void;
 }) {
+  const [layout, setLayout] = useState("aggregate-14");
   const [selected, setSelected] = useState<string[]>([]);
   const [label, setLabel] = useState("");
   const [base, setBase] = useState("");
@@ -33,12 +41,33 @@ export function VATCompositionSource({
     <details className="main-panel" style={{ padding: 20, marginBottom: 16 }}>
       <summary>Compose reviewed VAT201 book schedules</summary>
       <p>
-        Combine disjoint reviewed schedules covering all fourteen explicit boxes
-        for one TRN and period. Missing boxes are not nil. Totals include
-        summary boxes and are not net tax payable. Independently review the
-        composed source; retain filed-return evidence separately.
+        Combine disjoint reviewed schedules covering every explicit row of the
+        selected layout for one TRN and period. Missing boxes are not nil.
+        Totals include summary boxes and are not net tax payable. Independently
+        review the composed source; retain filed-return evidence separately.
       </p>
       <ErrorState error={action.error} />
+      <label>
+        VAT201 composition layout
+        <select
+          value={layout}
+          onChange={(event) => setLayout(event.target.value)}
+        >
+          {Object.entries(layouts).map(([value, item]) => (
+            <option key={value} value={value}>
+              {item.label}
+            </option>
+          ))}
+        </select>
+      </label>
+      {layout === "emirate-20" && (
+        <p>
+          Retain all seven assessed Box 1a-1g allocations and Boxes 2-14.
+          Aggregate Box 1 cannot be spread automatically. This compares emirate
+          totals; e-commerce/other breakdowns and legal allocation remain
+          separately assessed.
+        </p>
+      )}
       <label>
         Composed VAT201 source title
         <input value={label} onChange={(e) => setLabel(e.target.value)} />
@@ -72,8 +101,9 @@ export function VATCompositionSource({
         </select>
       </label>
       <p>
-        Select two to fourteen schedules. Every selected row is included;
-        overlapping boxes are rejected rather than summed.
+        Select two to {layouts[layout]?.boxes.length || 14} schedules. Every
+        selected row is included; overlapping boxes are rejected rather than
+        summed.
       </p>
       <label>
         Independent composed taxable amount
@@ -111,6 +141,7 @@ export function VATCompositionSource({
         disabled={
           action.isPending ||
           selected.length < 2 ||
+          selected.length > (layouts[layout]?.boxes.length || 14) ||
           !label ||
           !base ||
           !tax ||
@@ -123,6 +154,7 @@ export function VATCompositionSource({
               path: `intelligence/engagements/${eid}/vat201-composition-source`,
               body: {
                 source_ids: selected,
+                layout,
                 label,
                 taxable_amount: base,
                 tax,

@@ -1,0 +1,4 @@
+Command: npx playwright test --config playwright.country-workflows.config.ts --grep "UAE VAT201 retains seven emirates" --reporter=list
+Result: 1 passed (44.5s).
+Scope: twenty-row book composition from retained reviewed components, independent source approval, full comparison layout, two offsetting geographic variances, eighteen matches, and India exclusion.
+Boundary: owned disposable country-workflow database; fictional source files and explicit seed-time scanner/broker doubles. Runtime API, Celery and browser exercised. No authentic filing, portal acceptance or client/professional qualification claimed.

@@ -1,0 +1,38 @@
+{
+  "dataset_kind": "SYNTHETIC_ENGINE_FIXTURE",
+  "real_client_data": false,
+  "professional_validation": "NOT_ESTABLISHED",
+  "source_fixture": "backend/tests/unit/country_workflow_cases.py",
+  "source_fixture_sha256": "f9a81c636f59c87c17034981b3626a8b2dc8fea3cb4085a8679c0ed39694f2d3",
+  "case": {
+    "id": "RW-115",
+    "title": "fundraising-permit: documented exception requires disposition",
+    "workflow": "nonprofit-diligence",
+    "country": "AE",
+    "sources": {
+      "checks": [
+        {
+          "id": "1",
+          "subject": "ENTITY-1",
+          "requirement": "fundraising-permit",
+          "state": "exception",
+          "evidence_reference": "retained-document-1",
+          "expires_on": "2026-12-31",
+          "rationale": "Reviewed source scope"
+        }
+      ]
+    },
+    "expected": {
+      "state": "EXCEPTION",
+      "exceptions": 1
+    },
+    "parameters": {
+      "required_checks": [
+        "fundraising-permit"
+      ],
+      "subjects": [
+        "ENTITY-1"
+      ]
+    }
+  }
+}

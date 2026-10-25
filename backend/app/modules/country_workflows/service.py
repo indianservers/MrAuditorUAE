@@ -380,6 +380,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         source = await intelligence.event(db, ctx, eng.id, identifier, True)
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
+        if data.workflow == "uae-vat-return" and data.vat201_layout == "emirate-20" and source.body.get("review_status") != "REVIEWED":
+            raise HTTPException(409, "Independently review emirate allocation and filed VAT201 sources before comparison")
         if data.workflow == "payroll-ledger-rollforward" and source.body.get("review_status") != "REVIEWED":
             raise HTTPException(409, "Independently review payroll accounting allocations and both GL balances before comparison")
         if source.body.get("parser_version") == "bank-clearance-carryforward/1":

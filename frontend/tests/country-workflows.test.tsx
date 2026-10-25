@@ -23,6 +23,27 @@ vi.mock("@/hooks/use-api", () => ({
       : path.endsWith("country-workflows")
         ? {
             country: state.country,
+            vat201_layouts:
+              state.country === "AE"
+                ? {
+                    "aggregate-14": {
+                      label: "Aggregate Box 1 - fourteen rows",
+                      boxes: Array.from({ length: 14 }, (_, index) =>
+                        String(index + 1),
+                      ),
+                    },
+                    "emirate-20": {
+                      label: "Box 1a-1g by emirate - twenty rows",
+                      boxes: [..."abcdefg"]
+                        .map((letter) => "1" + letter)
+                        .concat(
+                          Array.from({ length: 13 }, (_, index) =>
+                            String(index + 2),
+                          ),
+                        ),
+                    },
+                  }
+                : {},
             source_formats: [
               {
                 id: "india-epfo-arrear-ecr-v2",
@@ -2419,4 +2440,40 @@ describe("payroll accounting bridge", () => {
       screen.getByRole("button", { name: "Next posting links" }),
     ).toBeDisabled();
   });
+});
+
+it("requires all twenty explicit VAT201 boxes after selecting the emirate layout", async () => {
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Workflow"), {
+    target: { value: "uae-vat-return" },
+  });
+  fireEvent.change(screen.getByLabelText("VAT201 comparison layout"), {
+    target: { value: "emirate-20" },
+  });
+  expect(
+    screen.getByLabelText("Required VAT201 boxes, comma separated"),
+  ).toBeDisabled();
+  expect(
+    screen.getByLabelText("Required VAT201 boxes, comma separated"),
+  ).toHaveValue("1a,1b,1c,1d,1e,1f,1g,2,3,4,5,6,7,8,9,10,11,12,13,14");
+  expect(
+    screen.getByLabelText("Compare only the required VAT201 boxes"),
+  ).toBeDisabled();
+  for (const [label, value] of [
+    ["Schedule title", "Emirate comparison"],
+    ["Reconciliation date", "2026-06-30"],
+    [
+      "Scope and source rationale",
+      "All seven geographic allocations independently assessed",
+    ],
+    ["books source", "vat-books"],
+    ["return source", "vat-filed"],
+  ])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  const payload = state.mutate.mock.calls[0][0].body.payload;
+  expect(payload.vat201_layout).toBe("emirate-20");
+  expect(payload.required_boxes).toHaveLength(20);
+  expect(payload.restrict_to_required_boxes).toBeUndefined();
 });

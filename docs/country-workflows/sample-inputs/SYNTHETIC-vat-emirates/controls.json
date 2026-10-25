@@ -1,0 +1,39 @@
+{
+  "synthetic": true,
+  "layout": "emirate-20",
+  "composition": {
+    "taxable_amount": "2400",
+    "tax": "230",
+    "adjustment": "0"
+  },
+  "sources": {
+    "books-emirates": {
+      "filename": "books-emirates.csv",
+      "expected_rows": 7,
+      "control_totals": {
+        "AED": "10"
+      }
+    },
+    "books-other": {
+      "filename": "books-other.csv",
+      "expected_rows": 13,
+      "control_totals": {
+        "AED": "220"
+      }
+    },
+    "filed-matching": {
+      "filename": "filed-matching.csv",
+      "expected_rows": 20,
+      "control_totals": {
+        "AED": "230"
+      }
+    },
+    "filed-offsetting": {
+      "filename": "filed-offsetting.csv",
+      "expected_rows": 20,
+      "control_totals": {
+        "AED": "230"
+      }
+    }
+  }
+}

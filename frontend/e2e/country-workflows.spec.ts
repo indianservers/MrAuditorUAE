@@ -4455,3 +4455,177 @@ test("payroll accounts reconcile gross net deductions and employer contributions
     );
   }
 });
+
+test("UAE VAT201 retains seven emirates and exposes offsetting geographic differences", async ({
+  page,
+  browser,
+}) => {
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+    viewport: { width: 1600, height: 1500 },
+  });
+  const reviewer = await context.newPage();
+  await page.setViewportSize({ width: 1600, height: 1500 });
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_final_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    const eid = fixture.uae_engagement;
+    const title = `SYNTHETIC UAE emirate books ${Date.now()}`;
+    await page.goto(`/intelligence/${eid}/workflow-source`);
+    const summary = page.getByText("Compose reviewed VAT201 book schedules", {
+      exact: true,
+    });
+    await summary.click();
+    const compose = summary.locator("..");
+    await compose
+      .getByLabel("VAT201 composition layout")
+      .selectOption("emirate-20");
+    await compose.getByLabel("Composed VAT201 source title").fill(title);
+    await compose
+      .getByLabel("Reviewed VAT201 component schedules")
+      .selectOption(fixture.emirate_vat.components);
+    await compose
+      .getByLabel("Independent composed taxable amount")
+      .fill("2400");
+    await compose.getByLabel("Independent composed tax total").fill("230");
+    await compose.getByLabel("Independent composed adjustment total").fill("0");
+    await compose
+      .getByLabel("VAT201 composition scope assessment")
+      .fill(
+        "Independent geographic allocation support for all seven emirates and explicit zero rows; thirteen other disjoint boxes retained; no legal allocation inferred from an address",
+      );
+    await saveScreenshot(
+      `${shots}/uae-vat201-emirate-composition-controls.png`,
+      () => compose.screenshot(),
+    );
+    const preparing = page.waitForResponse(
+      (r) =>
+        r.url().includes(`/engagements/${eid}/vat201-composition-source`) &&
+        r.request().method() === "POST",
+    );
+    await compose
+      .getByRole("button", {
+        name: "Prepare composed VAT201 books",
+        exact: true,
+      })
+      .click();
+    const response = await preparing;
+    expect(response.status(), await response.text()).toBe(201);
+    const source = await response.json();
+    await expect(
+      page.getByRole("heading", { name: title, exact: true }),
+    ).toBeVisible();
+    await reviewer.goto(`/intelligence/${eid}/country-workflow`);
+    await reviewer.getByLabel("Saved source or result").selectOption(source.id);
+    await reviewer
+      .getByLabel("Review / exception rationale")
+      .fill(
+        "Independent geographic support and zero-valued emirates reviewed alongside disjoint source controls; summary values do not determine legal allocation or e-commerce applicability",
+      );
+    const approving = reviewer.waitForResponse(
+      (r) =>
+        r.url().includes(`/events/${source.id}/review`) &&
+        r.request().method() === "POST",
+    );
+    await reviewer
+      .getByRole("button", { name: "Independent approval", exact: true })
+      .click();
+    const approval = await approving;
+    expect(approval.status(), await approval.text()).toBe(201);
+    const approved = await approval.json();
+    await page.goto(`/intelligence/${eid}/country-workflow`);
+    await page
+      .getByLabel("Workflow", { exact: true })
+      .selectOption("uae-vat-return");
+    await page
+      .getByLabel("VAT201 comparison layout")
+      .selectOption("emirate-20");
+    await expect(
+      page.getByLabel("Required VAT201 boxes, comma separated"),
+    ).toBeDisabled();
+    await expect(
+      page.getByLabel("Compare only the required VAT201 boxes"),
+    ).toBeDisabled();
+    const resultTitle = title + " geographic differences";
+    await page.getByLabel("Schedule title", { exact: true }).fill(resultTitle);
+    await page
+      .getByLabel("Reconciliation date", { exact: true })
+      .fill("2026-06-30");
+    await page
+      .getByLabel("books source", { exact: true })
+      .selectOption(approved.id);
+    await page
+      .getByLabel("return source", { exact: true })
+      .selectOption(fixture.emirate_vat.filed);
+    await page
+      .getByLabel("Scope and source rationale", { exact: true })
+      .fill(
+        "All twenty explicit rows compared by emirate against independent retained filed evidence; aggregate Box 1 agrees but two geographic allocations differ",
+      );
+    await saveScreenshot(
+      `${shots}/uae-vat201-emirate-comparison-scope.png`,
+      () =>
+        page
+          .getByLabel("VAT201 comparison layout")
+          .locator("..")
+          .locator("..")
+          .screenshot(),
+    );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const saved = page
+      .getByLabel("Saved source or result")
+      .locator("option")
+      .filter({ hasText: resultTitle });
+    await expect(saved).toHaveCount(1, { timeout: 120000 });
+    await page
+      .getByLabel("Saved source or result")
+      .selectOption((await saved.getAttribute("value"))!);
+    const panel = page
+      .getByRole("heading", { name: resultTitle, exact: true })
+      .locator("..");
+    await expect(
+      panel.getByText("2 exceptions", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      panel.getByRole("cell", { name: "VARIANCE", exact: true }),
+    ).toHaveCount(2);
+    await expect(
+      panel.getByRole("cell", { name: "MATCHED", exact: true }),
+    ).toHaveCount(18);
+    await expect(
+      panel.getByRole("cell", { name: "Abu Dhabi", exact: true }),
+    ).toBeVisible();
+    await expect(
+      panel.getByRole("cell", { name: "Dubai", exact: true }),
+    ).toBeVisible();
+    await expect(
+      panel.getByRole("cell", { name: "Fujairah", exact: true }),
+    ).toBeVisible();
+    for (const notice of await page
+      .getByRole("button", { name: "Dismiss notification", exact: true })
+      .all())
+      await notice.click();
+    await saveScreenshot(
+      `${shots}/uae-vat201-emirate-offsetting-differences.png`,
+      () => panel.locator("table").last().screenshot(),
+    );
+    await page.goto(
+      `/intelligence/${fixture.india_engagement}/workflow-source`,
+    );
+    await expect(
+      page.getByText("Compose reviewed VAT201 book schedules", { exact: true }),
+    ).toHaveCount(0);
+  } finally {
+    await context.close();
+  }
+});

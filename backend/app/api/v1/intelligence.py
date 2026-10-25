@@ -349,6 +349,7 @@ async def capabilities(ctx: Actor):
 async def country_workflows(eid: uuid.UUID, db: DB, ctx: Actor):
     from app.modules.country_workflows.catalogue import catalogue, check_templates, scenarios
     from app.modules.country_workflows.schemas import ROW_TYPES
+    from app.modules.country_workflows.vat201_layouts import EMIRATES, LAYOUTS
     from app.modules.jurisdictions.workspace import resolved
 
     eng = await service.scope(db, ctx, eid)
@@ -358,6 +359,8 @@ async def country_workflows(eid: uuid.UUID, db: DB, ctx: Actor):
 
     return {
         "source_formats": formats(package.country),
+        "vat201_layouts": LAYOUTS if package.country == "AE" else {},
+        "vat201_emirates": EMIRATES if package.country == "AE" else {},
         "check_templates": check_templates(package.country),
         "scenarios": scenarios(),
         "country": package.country,

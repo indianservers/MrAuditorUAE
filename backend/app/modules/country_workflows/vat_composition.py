@@ -7,6 +7,7 @@ from fastapi import HTTPException
 from pydantic import Field, field_validator, model_validator
 
 from app.modules.country_workflows.schemas import Money, ReturnBox
+from app.modules.country_workflows.vat201_layouts import EMIRATES, LAYOUTS, VAT201Layout
 from app.modules.jurisdictions.packages import fingerprint
 from app.modules.jurisdictions.profiles import Strict
 
@@ -14,7 +15,8 @@ CONTRACT = "uae-vat201-composition/1"
 
 
 class VATCompositionInput(Strict):
-    source_ids: list[uuid.UUID] = Field(min_length=2, max_length=14)
+    source_ids: list[uuid.UUID] = Field(min_length=2, max_length=20)
+    layout: VAT201Layout = "aggregate-14"
     taxable_amount: Money
     tax: Money
     adjustment: Money
@@ -30,6 +32,8 @@ class VATCompositionInput(Strict):
 
     @model_validator(mode="after")
     def distinct(self):
+        if len(self.source_ids) > len(LAYOUTS[self.layout]["boxes"]):
+            raise ValueError("Too many component schedules for the selected VAT201 layout")
         if len(set(self.source_ids)) != len(self.source_ids):
             raise ValueError("Select distinct reviewed VAT201 source versions")
         return self
@@ -37,6 +41,8 @@ class VATCompositionInput(Strict):
 
 def source_rows(sources, data):
     rows, seen, scopes, identities = [], set(), set(), set()
+    required = LAYOUTS[data.layout]["boxes"]
+    word = "fourteen" if data.layout == "aggregate-14" else "twenty"
     with localcontext() as arithmetic:
         arithmetic.prec = 80
         totals = {field: Decimal(0) for field in ("taxable_amount", "tax", "adjustment")}
@@ -44,8 +50,8 @@ def source_rows(sources, data):
             body = sources[str(identifier)]
             if body.get("table_type") != "return-boxes" or not body.get("rows"):
                 raise ValueError("Every component must contain explicit return-box rows")
-            if len(body["rows"]) > 14:
-                raise ValueError("A component may contain at most fourteen distinct boxes")
+            if len(body["rows"]) > len(required):
+                raise ValueError(f"A component may contain at most {word} distinct boxes")
             identity = body.get("source_identity") or body.get("evidence_version_id")
             if not identity or identity in identities:
                 raise ValueError(
@@ -57,9 +63,11 @@ def source_rows(sources, data):
                     {k: original[k] for k in ReturnBox.model_fields}
                 ).model_dump(mode="json")
                 box = row["box"]
-                if box not in {str(i) for i in range(1, 15)} or box in seen:
+                if data.layout == "emirate-20" and any(Decimal(row[field]) != Decimal(row[field]).quantize(Decimal("0.01")) for field in ("taxable_amount", "tax", "adjustment")):
+                    raise ValueError("Emirate VAT201 row amounts must be stated to the nearest fils")
+                if box not in required or box in seen:
                     raise ValueError(
-                        "VAT201 composition requires disjoint boxes 1 through 14; overlap is not additive"
+                        "VAT201 composition requires disjoint boxes from the selected layout; overlap is not additive"
                     )
                 if (
                     row["currency"] != "AED"
@@ -76,13 +84,14 @@ def source_rows(sources, data):
                     {
                         **row,
                         "id": "composed-box-" + box,
+                        **({"emirate": EMIRATES[box]} if box in EMIRATES else {}),
                         "source_component_event_id": str(identifier),
                         "source_component_row_id": original["id"],
                     }
                 )
-        if seen != {str(i) for i in range(1, 15)}:
+        if seen != set(required):
             raise ValueError(
-                "Retain all fourteen explicit boxes; absent boxes cannot be inferred as nil"
+                f"Retain all {word} explicit boxes; absent boxes cannot be inferred as nil"
             )
         if len(scopes) != 1:
             raise ValueError("All composed VAT201 boxes must share one TRN and return period")
@@ -90,7 +99,7 @@ def source_rows(sources, data):
             raise ValueError(
                 "Independent whole-schedule taxable, tax and adjustment controls do not agree"
             )
-    return sorted(rows, key=lambda row: int(row["box"])), {"AED": str(totals["tax"])}
+    return sorted(rows, key=lambda row: required.index(row["box"])), {"AED": str(totals["tax"])}
 
 
 async def derive(db, ctx, eng, data):
@@ -149,10 +158,10 @@ async def prepare(db, ctx, eng, data, request_id):
             "source_sha256": fingerprint({"rows": rows}),
             "contributors": sorted(contributors | {str(ctx.user_id)}),
             "native_metadata": data.model_dump(mode="json"),
-            "population_completeness": "DECLARED_DISJOINT_FOURTEEN_BOX_BOOK_SCHEDULES",
+            "population_completeness": "DECLARED_DISJOINT_TWENTY_BOX_EMIRATE_BOOK_SCHEDULES" if data.layout == "emirate-20" else "DECLARED_DISJOINT_FOURTEEN_BOX_BOOK_SCHEDULES",
             "statutory_calculation_qualified": False,
             "limitations": [
-                "All fourteen explicit assessed book boxes are retained; composition does not establish whole-return legal completeness",
+                f"All {len(LAYOUTS[data.layout]['boxes'])} explicit assessed book boxes are retained; composition does not establish whole-return legal completeness",
                 "No missing box, tax rate, summary equation, recovery eligibility or filed-return evidence is inferred",
                 "Taxable, tax and adjustment controls sum every canonical box including summaries; they are not net tax payable",
                 "Separately retained filed evidence and independent review of this composed source are required",

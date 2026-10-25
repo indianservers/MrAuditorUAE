@@ -118,6 +118,7 @@ def render(event, format):
             "selected_current_totals",
             "assessment_contract_version",
             "box_comparison_scope",
+            "vat201_layout",
             "excluded_box_controls",
             "included_box_controls",
         }

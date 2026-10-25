@@ -141,6 +141,7 @@ type Result = {
   collection_totals?: Record<string, number>;
   body: {
     workflow?: string;
+    vat201_layout?: string;
     currency?: string;
     expected_total?: string;
     reported_total?: string;
@@ -265,6 +266,7 @@ export function CountryWorkflows({
   const config = useAPI<{
     country: string;
     items: Workflow[];
+    vat201_layouts?: Record<string, { label: string; boxes: string[] }>;
     source_formats?: {
       id: string;
       label: string;
@@ -396,6 +398,7 @@ export function CountryWorkflows({
   const [taxYear, setTaxYear] = useState("");
   const [requiredChecks, setRequiredChecks] = useState("");
   const [requiredBoxes, setRequiredBoxes] = useState("");
+  const [vatLayout, setVATLayout] = useState("custom");
   const [restrictBoxes, setRestrictBoxes] = useState(false);
   const [boxScopeAssessment, setBoxScopeAssessment] = useState("");
   const [subjects, setSubjects] = useState("");
@@ -501,6 +504,7 @@ export function CountryWorkflows({
     compactVAT && !showRuleProvenance
       ? [
           "box",
+          "emirate",
           "registration",
           "period_start",
           "period_end",
@@ -1049,6 +1053,9 @@ export function CountryWorkflows({
             .split(",")
             .map((s) => s.trim())
             .filter(Boolean),
+          ...(workflow === "uae-vat-return"
+            ? { vat201_layout: vatLayout }
+            : {}),
           required_boxes: requiredBoxes
             .split(",")
             .map((s) => s.trim())
@@ -1182,6 +1189,7 @@ export function CountryWorkflows({
         <VATCompositionSource
           eid={eid}
           sources={results.data?.items || []}
+          layouts={config.data?.vat201_layouts}
           onCreated={setSelected}
         />
       )}
@@ -2354,6 +2362,7 @@ export function CountryWorkflows({
                     setInvoiceFaceAmounts(false);
                     setWithholdingRole("");
                     setArrearsOnly(false);
+                    setVATLayout("custom");
                     setSources({});
                     setRequiredChecks("");
                   }}
@@ -2543,6 +2552,9 @@ export function CountryWorkflows({
                           r.kind === "workflow-source" &&
                           r.table_type === type &&
                           r.freshness === "CURRENT" &&
+                          (workflow !== "uae-vat-return" ||
+                            vatLayout !== "emirate-20" ||
+                            r.review_status === "REVIEWED") &&
                           (!arrearsOnly ||
                             r.table_type !== "obligations" ||
                             (r.obligation_populations?.length === 1 &&
@@ -2593,9 +2605,47 @@ export function CountryWorkflows({
               {workflow === "uae-vat-return" && (
                 <>
                   <label>
+                    VAT201 comparison layout
+                    <select
+                      value={vatLayout}
+                      onChange={(event) => {
+                        const next = event.target.value;
+                        setVATLayout(next);
+                        setRestrictBoxes(false);
+                        setBoxScopeAssessment("");
+                        setSources({});
+                        if (next !== "custom")
+                          setRequiredBoxes(
+                            config.data?.vat201_layouts?.[next]?.boxes.join(
+                              ",",
+                            ) || "",
+                          );
+                      }}
+                    >
+                      <option value="custom">Custom assessed box scope</option>
+                      {Object.entries(config.data?.vat201_layouts || {}).map(
+                        ([value, item]) => (
+                          <option key={value} value={value}>
+                            {item.label}
+                          </option>
+                        ),
+                      )}
+                    </select>
+                  </label>
+                  {vatLayout === "emirate-20" && (
+                    <p>
+                      Compare all twenty explicit rows for one TRN and period in
+                      AED, including zero-valued emirates. Independently review
+                      both source populations. Missing emirate evidence blocks
+                      approval; aggregate Box 1 cannot substitute for assessed
+                      geographic allocations.
+                    </p>
+                  )}
+                  <label>
                     Required VAT201 boxes, comma separated
                     <input
                       value={requiredBoxes}
+                      disabled={vatLayout !== "custom"}
                       onChange={(e) => setRequiredBoxes(e.target.value)}
                     />
                   </label>
@@ -2603,6 +2653,7 @@ export function CountryWorkflows({
                     <input
                       type="checkbox"
                       checked={restrictBoxes}
+                      disabled={vatLayout !== "custom"}
                       onChange={(event) =>
                         setRestrictBoxes(event.target.checked)
                       }
