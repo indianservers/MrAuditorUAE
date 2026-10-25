@@ -64,7 +64,7 @@ async def test_retained_multipart_statement_review_reconciliation_and_export(
             "statement_identifier": "SYN-PAGE-1",
         },
     )
-    assert native["body"]["parser_version"] == "swift-mt940-2"
+    assert native["body"]["parser_version"] == "swift-mt940-3"
     assert native["body"]["native_metadata"]["message_count"] == 3
     assert [r["source_message_sequence"] for r in native["body"]["rows"]] == [1, 3]
     original = await c.get(

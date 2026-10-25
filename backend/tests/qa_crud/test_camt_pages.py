@@ -64,7 +64,7 @@ async def test_retained_multipart_statement_review_reconciliation_and_export(
             "statement_identifier": "SYNTHETIC-STMT",
         },
     )
-    assert native["body"]["parser_version"] == "camt053-2"
+    assert native["body"]["parser_version"] == "camt053-3"
     assert native["body"]["native_metadata"]["page_count"] == 3
     assert [r["source_statement_page"] for r in native["body"]["rows"]] == [1, 3]
     original = await c.get(

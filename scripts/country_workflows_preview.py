@@ -790,6 +790,21 @@ async def main():
             approved = await decision(client, supporting_reviewer[0], india, prepared)
             assert approved.status_code == 201, approved.text
             arrear_source_ids[role] = approved.json()["id"]
+        bank_dates = {}
+        for code, engagement, currency in [("AE", eid, "AED"), ("IN", india, "INR")]:
+            date_rows = [{"id": f"B-{index}", "account": "BANK-1", "reference": f"SYN-DATE-{index}", "date": "2026-06-01", "currency": currency, "amount": "1", "bank_booking_date": "2026-06-01", "bank_value_date": "2026-06-30", "bank_date_basis": "BOOKING_DATE"} for index in range(101)]
+            date_results = {}
+            date_book = await source(client, h, engagement, date_rows, "SYNTHETIC independently assessed booking-date books", totals={currency: "101"})
+            book_approval = await decision(client, pdf_final_reviewer[0], engagement, date_book)
+            assert book_approval.status_code == 201, book_approval.text
+            for mode in ("fallback", "explicit"):
+                statement_rows = [{**row, "id": "S-" + row["id"], **({"bank_booking_date": "", "bank_value_date": "2026-06-01", "bank_date_basis": "VALUE_DATE_FALLBACK"} if mode == "fallback" else {})} for row in date_rows]
+                date_statement = await source(client, h, engagement, statement_rows, "SYNTHETIC " + mode + " statement date evidence", totals={currency: "101"})
+                statement_approval = await decision(client, pdf_final_reviewer[0], engagement, date_statement)
+                assert statement_approval.status_code == 201, statement_approval.text
+                date_result = await execute(client, h, engagement, "country-workflow", bank_payload(book_approval.json(), statement_approval.json(), currency=currency, book_closing="101", statement_closing="101", title="SYNTHETIC " + code + " " + mode + " bank dates"))
+                date_results[mode] = date_result["id"]
+            bank_dates[code] = {"engagement": engagement, **date_results}
         if implementation_hash() != implementation:
             raise RuntimeError(
                 "Backend implementation changed during fixture preparation; prepare fresh fixtures before browser verification"
@@ -799,6 +814,7 @@ async def main():
             json.dumps(
                 {
                     "synthetic": True,
+                    "bank_dates": bank_dates,
                     "regulatory_conversions": regulatory_conversions,
                     "pension_sources": pension_sources,
                     "published_pension": published_pension,

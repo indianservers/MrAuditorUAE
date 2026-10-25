@@ -5132,3 +5132,133 @@ test("India outward GSTR-1 documents retain request context and match reviewed s
     await context.close();
   }
 });
+
+for (const country of ["AE", "IN"] as const) {
+  test(`${country} bank booking/value dates remain separate across paging and independent approval`, async ({
+    page,
+  }) => {
+    const input = fixture.bank_dates[country];
+    await page.goto("/login");
+    await page
+      .getByLabel("Email address")
+      .fill(fixture.pdf_final_reviewer_email);
+    await page
+      .getByLabel("Password", { exact: true })
+      .fill("synthetic-password-123");
+    await page.getByRole("button", { name: "Sign in", exact: true }).click();
+    await page.waitForURL("**/dashboard");
+    await page.goto(`/intelligence/${input.engagement}/country-workflow`);
+    await page
+      .getByLabel("Saved source or result")
+      .selectOption(input.fallback);
+    await expect(
+      page
+        .getByRole("alert")
+        .filter({ hasText: "101 bank rows use a value-date fallback" }),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: "Independent approval", exact: true }),
+    ).toBeDisabled();
+    const datePanel = page.locator("details").filter({
+      has: page.locator("summary", {
+        hasText: "Bank transaction dates · 202 entries",
+      }),
+    });
+    await datePanel.locator("summary").click();
+    await expect(
+      datePanel.getByRole("table", { name: "Bank transaction dates" }),
+    ).toBeVisible();
+    await datePanel.getByRole("button", { name: "Next bank dates" }).click();
+    await expect(
+      datePanel.getByText("Rows 101-200 of 202", { exact: true }),
+    ).toBeVisible();
+    await datePanel.getByRole("button", { name: "Next bank dates" }).click();
+    await expect(
+      datePanel.getByText("Rows 201-202 of 202", { exact: true }),
+    ).toBeVisible();
+    await expect(datePanel.getByRole("row")).toHaveCount(3);
+    await expect(
+      datePanel.getByText("VALUE_DATE_FALLBACK", { exact: true }),
+    ).toHaveCount(2);
+    await expect(
+      datePanel.getByRole("button", { name: "Next bank dates" }),
+    ).toBeDisabled();
+    await saveScreenshot(
+      `${shots}/${country.toLowerCase()}-bank-date-fallback-page.png`,
+      () => datePanel.screenshot(),
+    );
+    await page
+      .getByLabel("Saved source or result")
+      .selectOption(input.explicit);
+    await page
+      .getByLabel("Review / exception rationale")
+      .fill(
+        "Independent synthetic bank booking dates, separate value dates and full population controls checked",
+      );
+    const approval = page.waitForResponse(
+      (response) =>
+        response.url().includes(`/events/${input.explicit}/review`) &&
+        response.request().method() === "POST",
+    );
+    await page
+      .getByRole("button", { name: "Independent approval", exact: true })
+      .click();
+    const response = await approval;
+    expect(response.status(), await response.text()).toBe(201);
+    const approved = await response.json();
+    expect(approved.body.review_status).toBe("REVIEWED");
+    expect(approved.body.booking_date_review_count).toBe(0);
+    await page.getByLabel("Saved source or result").selectOption(approved.id);
+    await expect(
+      page
+        .getByRole("alert")
+        .filter({ hasText: "bank rows use a value-date fallback" }),
+    ).toHaveCount(0);
+    await saveScreenshot(
+      `${shots}/${country.toLowerCase()}-bank-dates-approved.png`,
+      () => page.screenshot(),
+    );
+  });
+}
+
+test("bank matched schedules show a clear empty caption for UAE and India", async ({
+  page,
+}) => {
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill(fixture.pdf_final_reviewer_email);
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("synthetic-password-123");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+  for (const country of ["AE", "IN"] as const) {
+    const input = fixture.bank_dates[country];
+    await page.goto(`/intelligence/${input.engagement}/country-workflow`);
+    const select = page.getByLabel("Saved source or result");
+    const option = select.locator("option").filter({
+      hasText: `SYNTHETIC ${country} explicit bank dates · v2 · CURRENT`,
+    });
+    await expect(option).toHaveCount(1);
+    await select.selectOption((await option.getAttribute("value")) as string);
+    await expect(
+      page.getByText(
+        "No schedule rows on this page; XLSX contains the full result",
+        { exact: true },
+      ),
+    ).toBeVisible();
+    await expect(
+      page.getByRole("columnheader", { name: "Disposition", exact: true }),
+    ).toHaveCount(0);
+    await saveScreenshot(
+      `${shots}/${country.toLowerCase()}-bank-dates-approved.png`,
+      () =>
+        page
+          .getByRole("heading", {
+            name: `SYNTHETIC ${country} explicit bank dates`,
+            exact: true,
+          })
+          .locator("..")
+          .screenshot(),
+    );
+  }
+});

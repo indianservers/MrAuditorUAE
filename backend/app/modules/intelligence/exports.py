@@ -68,6 +68,7 @@ def render(event, format):
             "totals_basis",
             "totals_by_currency",
             "control_comparison",
+            "booking_date_review_count",
             "allocation_controls",
             "payment_scope",
             "source_totals",
@@ -131,6 +132,8 @@ def render(event, format):
     if isinstance(body.get("inventory_quantity_controls"), list):
         summary["inventory_quantity_controls"] = f"{len(body['inventory_quantity_controls'])} controlled partitions; complete row and directional quantity controls are retained in the XLSX Inventory quantity controls sheet"
 
+    if isinstance(body.get("transaction_dates"), list):
+        summary["transaction_dates"] = f"{len(body['transaction_dates'])} retained transaction date records; complete detail is retained in the XLSX Bank transaction dates sheet"
     if isinstance(body.get("payroll_posting_links"), list):
         summary["payroll_posting_links"] = f"{len(body['payroll_posting_links'])} individual source posting links; complete detail is retained in the XLSX Payroll posting links sheet"
 
@@ -190,6 +193,12 @@ def render(event, format):
         append(source, keys)
         for row in rows:
             append(source, [row.get(key) for key in keys])
+        if body.get("transaction_dates") is not None:
+            dates = workbook.create_sheet("Bank transaction dates")
+            date_fields = ["source_role", "source_row_id", "transaction_date", "bank_booking_date", "bank_value_date", "bank_date_basis", "booking_date_review_required"]
+            append(dates, date_fields)
+            for record in body["transaction_dates"]:
+                append(dates, [record.get(key) for key in date_fields])
         if body.get("payroll_posting_links") is not None:
             posting_links = workbook.create_sheet("Payroll posting links")
             posting_fields = list(dict.fromkeys(key for row in body["payroll_posting_links"] for key in row))

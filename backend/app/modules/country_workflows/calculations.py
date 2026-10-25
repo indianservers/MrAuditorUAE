@@ -48,7 +48,11 @@ def unique(rows, key):
 
 
 def bank(data, tables):
+    from app.modules.country_workflows.bank_dates import date_details
+
     left, right = tables["books"], tables["statement"]
+    transaction_dates = [{"source_role": role, "source_row_id": row["id"], **date_details(row)} for role in ("books", "statement") for row in tables[role]]
+    uncertain_dates = sum(row["booking_date_review_required"] for row in transaction_dates)
     for row in [*left, *right]:
         if row["account"] != data.account or row["currency"] != data.currency:
             raise ValueError("Bank BRS requires a single selected account and currency")
@@ -97,6 +101,7 @@ def bank(data, tables):
                 {
                     "id": side + ":" + r["id"],
                     "source_id": r["id"],
+                    **date_details(r),
                     "side": side,
                     "reference": r["reference"],
                     "amount": r["amount"],
@@ -118,11 +123,14 @@ def bank(data, tables):
         "ambiguous": matches["ambiguous"],
         "control_comparison": {k: str(v) for k, v in controls.items()},
         "adjusted_book_balance": str(adjusted),
-        "blocked": any(v != 0 for v in controls.values()),
-        "exception_count": len(rows),
+        "transaction_dates": transaction_dates,
+        "booking_date_review_count": uncertain_dates,
+        "blocked": any(v != 0 for v in controls.values()) or bool(uncertain_dates),
+        "exception_count": len(rows) + uncertain_dates,
         "limitations": [
             "Bridge explains arithmetic differences only; proposed causes need supporting evidence",
             "Declared opening/closing controls require independent source review",
+            "Value dates are retained separately; fallback dates require booking-date evidence before approval",
         ],
     }
 

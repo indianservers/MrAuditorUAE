@@ -2768,3 +2768,49 @@ it("keeps inward GSTR-2B and outward GSTR-1 native responses in their own workfl
     }),
   ).not.toBeInTheDocument();
 });
+
+it("shows the bank date blocker and avoids an inverted range on an empty exception schedule", () => {
+  state.result = {
+    id: "result",
+    kind: "country-workflow",
+    version: 1,
+    freshness: "CURRENT",
+    body: {
+      title: "Synthetic bank date fallback",
+      workflow: "bank-brs",
+      review_status: "UNVERIFIED",
+      rows: [],
+      blocked: true,
+      booking_date_review_count: 1,
+      transaction_dates: [
+        {
+          source_role: "statement",
+          source_row_id: "S1",
+          transaction_date: "2026-06-30",
+          bank_value_date: "2026-06-30",
+          bank_date_basis: "VALUE_DATE_FALLBACK",
+          booking_date_review_required: true,
+        },
+      ],
+    },
+  };
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Saved source or result"), {
+    target: { value: "result" },
+  });
+  expect(
+    screen.getByText(
+      "No schedule rows on this page; XLSX contains the full result",
+    ),
+  ).toBeVisible();
+  expect(screen.getByRole("alert")).toHaveTextContent(
+    "1 bank row uses a value-date fallback",
+  );
+  expect(
+    screen.getByRole("button", { name: "Independent approval" }),
+  ).toBeDisabled();
+  expect(
+    screen.queryByRole("columnheader", { name: "Disposition" }),
+  ).not.toBeInTheDocument();
+  expect(screen.getByText("Bank transaction dates · 1 entry")).toBeVisible();
+});

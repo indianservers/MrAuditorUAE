@@ -9,6 +9,7 @@ import { Button, ErrorState, Status } from "@/components/ui/primitives";
 import { PageHeader } from "./shared";
 import { BankCarryforwardSource } from "./bank-carryforward-source";
 import { ContributionObligationSource } from "./contribution-obligation-source";
+import { BankTransactionDates } from "./bank-transaction-dates";
 import { PayrollPostingLinks } from "./payroll-posting-links";
 import { InventoryEvidenceTable } from "./inventory-evidence-table";
 import { VATCompositionSource } from "./vat-composition-source";
@@ -167,11 +168,13 @@ type Result = {
     execution_mode?: string;
     language_model_dependency?: boolean;
     blocked?: boolean;
+    booking_date_review_count?: number;
     exception_count?: number;
     table_type?: string;
     rows: Record<string, unknown>[];
     count_bridges?: Record<string, unknown>[];
     payroll_posting_links?: Record<string, unknown>[];
+    transaction_dates?: Record<string, unknown>[];
     inventory_quantity_controls?: Record<string, unknown>[];
     limitations?: string[];
     control_comparison?: Record<string, string>;
@@ -3680,8 +3683,9 @@ export function CountryWorkflows({
           </div>
           {body.blocked && (
             <p role="alert">
-              Approval blocked: correct source controls or missing/expired
-              evidence and regenerate.
+              {body.booking_date_review_count
+                ? `Approval blocked: ${body.booking_date_review_count} bank ${body.booking_date_review_count === 1 ? "row uses" : "rows use"} a value-date fallback. Retain explicit booking-date evidence and regenerate.`
+                : "Approval blocked: correct source controls or missing/expired evidence and regenerate."}
             </p>
           )}
           {compactImport && body.role_totals && (
@@ -3875,6 +3879,18 @@ export function CountryWorkflows({
                 </option>
               </select>
             </label>
+          )}
+          {body.transaction_dates && (
+            <BankTransactionDates
+              key={selected + ":bank-dates"}
+              prefix={prefix}
+              selected={selected}
+              initial={body.transaction_dates}
+              total={
+                detail.data.collection_totals?.transaction_dates ??
+                body.transaction_dates.length
+              }
+            />
           )}
           {body.payroll_posting_links && (
             <PayrollPostingLinks
@@ -4244,8 +4260,9 @@ export function CountryWorkflows({
             )}
             <table>
               <caption>
-                Source-linked schedule · rows {offset + 1}–
-                {offset + rows.length}; XLSX contains the full result
+                {rows.length
+                  ? `Source-linked schedule · rows ${offset + 1}–${offset + rows.length}; XLSX contains the full result`
+                  : "No schedule rows on this page; XLSX contains the full result"}
               </caption>
               <thead>
                 <tr>
@@ -4256,9 +4273,8 @@ export function CountryWorkflows({
                         : k.replaceAll("_", " ")}
                     </th>
                   ))}
-                  {detail.data.kind === "country-workflow" && (
-                    <th scope="col">Disposition</th>
-                  )}
+                  {detail.data.kind === "country-workflow" &&
+                    rows.length > 0 && <th scope="col">Disposition</th>}
                 </tr>
               </thead>
               <tbody>

@@ -151,6 +151,15 @@ def _camt_single(content, data, *, booking_window=None, allow_interim=False):
         node = find(element, path)
         return node.text.strip() if node is not None and node.text else default
 
+    def entry_date(element, path):
+        parents = all_(element, path)
+        if not parents:
+            return None
+        choices = [*all_(element, path + "/Dt"), *all_(element, path + "/DtTm")]
+        if len(parents) != 1 or len(choices) != 1 or len(parents[0]) != 1 or not choices[0].text:
+            raise ValueError("CAMT entry requires one unambiguous booking/value date choice")
+        return iso_date(choices[0].text.strip())
+
     for pagination in all_(root, "BkToCstmrStmt/GrpHdr/MsgPgntn"):
         if (
             value(pagination, "LastPgInd") not in {None, "true", "1"}
@@ -221,7 +230,8 @@ def _camt_single(content, data, *, booking_window=None, allow_interim=False):
             raise ValueError("Unsupported CAMT reversal indicator; assess the original bank entry")
         amt = find(entry, "Amt")
         direction = value(entry, "CdtDbtInd")
-        when = value(entry, "BookgDt/Dt") or value(entry, "BookgDt/DtTm")
+        when = entry_date(entry, "BookgDt")
+        valued = entry_date(entry, "ValDt")
         if (
             amt is None
             or amt.attrib.get("Ccy") != currency
@@ -231,7 +241,7 @@ def _camt_single(content, data, *, booking_window=None, allow_interim=False):
             raise ValueError(
                 f"Invalid amount, currency, direction or booking date in CAMT entry {index}"
             )
-        booked = iso_date(when)
+        booked = when
         window_start, window_end = booking_window or (start, end)
         if not window_start <= booked <= window_end:
             raise ValueError("CAMT booking date lies outside the statement balance dates")
@@ -255,6 +265,9 @@ def _camt_single(content, data, *, booking_window=None, allow_interim=False):
             account=account,
             reference=reference,
             date=booked,
+            bank_booking_date=booked,
+            bank_value_date=valued,
+            bank_date_basis="BOOKING_DATE",
             currency=currency,
             amount=number(amt.text) * (1 if direction == "CRDT" else -1),
             counterparty=party,
@@ -264,7 +277,6 @@ def _camt_single(content, data, *, booking_window=None, allow_interim=False):
             source_credit_debit_indicator=direction,
             is_reversal=reversal in {"true", "1"},
             detail_count=len(details),
-            bank_value_date=value(entry, "ValDt/Dt") or value(entry, "ValDt/DtTm"),
         )
         rows.append(row)
     count = value(statement, "TxsSummry/TtlNtries/NbOfNtries")
@@ -461,13 +473,15 @@ def _mt940_page(content, data, *, intermediate=False):
             account=account,
             reference=reference,
             date=booked,
+            bank_booking_date=booked if m[2] else None,
+            bank_value_date=value_date,
+            bank_date_basis="ENTRY_DATE_INFERRED_YEAR" if m[2] else "VALUE_DATE_FALLBACK",
             currency=currency,
             amount=number(m[5], comma=True) * (1 if m[3] in {"C", "RD"} else -1),
             counterparty="",
         ).model_dump(mode="json")
         row.update(
             source_row=index + 1,
-            bank_value_date=value_date.isoformat(),
             is_reversal=m[3].startswith("R"),
             source_mt940_entry=value,
         )
@@ -709,7 +723,7 @@ def parse_native(content, data, country, filename):
         "nil_reason": data.nil_reason,
         "title": data.label,
         "parser_version": data.file_format
-        + ("-2" if data.file_format in {"swift-mt940", "camt053"} else "-1"),
+        + ("-3" if data.file_format in {"swift-mt940", "camt053"} else "-1"),
         "native_format": data.file_format,
         **({"allowed_source_roles": ["return"]} if data.file_format == "india-gstr1-documents-json" else {}),
         **({"allowed_source_roles": ["return"], "metric_controls": metadata["metric_controls"]} if data.file_format == "india-gstr1-summary-json" else {}),

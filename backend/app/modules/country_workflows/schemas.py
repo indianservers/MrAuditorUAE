@@ -44,6 +44,19 @@ class Transaction(Strict):
     amount: Money
     counterparty: str = Field(default="", max_length=120)
     is_reversal: bool = False
+    bank_booking_date: date | None = Field(default=None, exclude_if=lambda value: value is None)
+    bank_value_date: date | None = Field(default=None, exclude_if=lambda value: value is None)
+    bank_date_basis: Literal["BOOKING_DATE", "ENTRY_DATE_INFERRED_YEAR", "VALUE_DATE_FALLBACK"] | None = Field(default=None, exclude_if=lambda value: value is None)
+
+    @model_validator(mode="after")
+    def bank_dates(self):
+        if self.bank_booking_date is not None and self.bank_booking_date != self.date:
+            raise ValueError("Transaction date must equal the separately retained booking date")
+        if self.bank_date_basis in {"BOOKING_DATE", "ENTRY_DATE_INFERRED_YEAR"} and self.bank_booking_date is None:
+            raise ValueError("Booking-date basis requires an explicit booking date")
+        if self.bank_date_basis == "VALUE_DATE_FALLBACK" and (self.bank_value_date != self.date or self.bank_booking_date is not None):
+            raise ValueError("Value-date fallback requires the value date and cannot assert a booking date")
+        return self
 
 
 class TaxDocument(Strict):

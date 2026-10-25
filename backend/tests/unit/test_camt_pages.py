@@ -70,7 +70,7 @@ def read(content, currency="AED", country="AE"):
 @pytest.mark.parametrize("middle", [False, True])
 def test_complete_statement_pages_preserve_totals_and_positions(country, currency, middle):
     result = read(packet(currency, middle=middle), currency, country)
-    assert result["parser_version"] == "camt053-2"
+    assert result["parser_version"] == "camt053-3"
     assert [Decimal(row["amount"]) for row in result["rows"]] == [Decimal("100"), Decimal("-5")]
     pages = 3 if middle else 2
     assert [row["source_statement_page"] for row in result["rows"]] == [1, pages]

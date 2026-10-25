@@ -5,6 +5,7 @@ from datetime import date
 from decimal import Decimal
 
 from app.modules.country_workflows.audit_calculations import result
+from app.modules.country_workflows.bank_dates import date_details
 from app.modules.country_workflows.obligation_scope import scope_key
 
 
@@ -86,6 +87,8 @@ def allocate(data, tables, country):
             raise ValueError(
                 "Allocation crosses registration, subject, component, month or currency; pension scope must also agree"
             )
+        if date_details(b)["booking_date_review_required"]:
+            raise ValueError("A value-date fallback cannot establish dated obligation settlement; retain explicit booking-date evidence")
         amount = Decimal(allocation["amount"])
         outflow = Decimal(b["amount"]) * sign
         if amount <= 0 or outflow <= 0 or b.get("is_reversal"):
@@ -108,6 +111,7 @@ def allocate(data, tables, country):
                 "transaction_id": b_id,
                 "amount": str(amount),
                 "payment_date": b["date"],
+                **date_details(b),
                 "bank_reference": b["reference"],
                 "evidence_reference": allocation["evidence_reference"],
                 "rationale": allocation["rationale"],

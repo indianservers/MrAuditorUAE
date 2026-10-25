@@ -4,6 +4,8 @@ from collections import defaultdict
 from datetime import date
 from decimal import Decimal
 
+from app.modules.country_workflows.bank_dates import date_details
+
 
 def clearances(data, tables):
     from app.modules.country_workflows.audit_calculations import result
@@ -53,6 +55,8 @@ def clearances(data, tables):
             raise ValueError(
                 "Clearance allocation references a missing outstanding or statement row"
             )
+        if date_details(transaction)["booking_date_review_required"]:
+            raise ValueError("A value-date fallback cannot establish subsequent booking clearance; retain explicit booking-date evidence")
         if transaction.get("is_reversal"):
             raise ValueError("A reversal bank movement cannot establish subsequent clearance")
         original, settled = Decimal(item["amount"]), Decimal(transaction["amount"])
@@ -72,6 +76,7 @@ def clearances(data, tables):
                 "allocation_id": allocation["id"],
                 "transaction_id": transaction["id"],
                 "cleared_on": transaction["date"],
+                **date_details(transaction),
                 "amount": str(amount),
                 "evidence_reference": allocation["evidence_reference"],
                 "rationale": allocation["rationale"],

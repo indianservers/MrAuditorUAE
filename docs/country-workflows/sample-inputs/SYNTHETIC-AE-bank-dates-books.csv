@@ -1,0 +1,2 @@
+id,account,reference,date,currency,amount,bank_booking_date,bank_value_date,bank_date_basis
+books-1,SYNTHETIC-BANK-1,SYNTHETIC-PAY-1,2026-06-30,AED,100,2026-06-30,2026-07-02,BOOKING_DATE
