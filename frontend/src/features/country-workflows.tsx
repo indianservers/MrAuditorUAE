@@ -279,9 +279,11 @@ const moneyTables = [
 export function CountryWorkflows({
   eid,
   mode,
+  initialEvent = "",
 }: {
   eid: string;
   mode: "workflow-source" | "country-workflow";
+  initialEvent?: string;
 }) {
   const prefix = `intelligence/engagements/${eid}`;
   const tenant = useScope((s) => s.tenant);
@@ -329,7 +331,7 @@ export function CountryWorkflows({
       error_details?: { message: string };
     }[];
   }>(`${prefix}/jobs`, true, true);
-  const [selected, setSelected] = useState("");
+  const [selected, setSelected] = useState(initialEvent);
   const [showAllJobs, setShowAllJobs] = useState(false);
   const [offset, setOffset] = useState(0);
   const [payrollView, setPayrollView] = useState("accounts");
@@ -3614,6 +3616,13 @@ export function CountryWorkflows({
           }}
         >
           <option value="">Select result</option>
+          {selected &&
+            detail.data &&
+            !results.data?.items.some((r) => r.id === selected) && (
+              <option value={selected}>
+                Linked source or result · {selected}
+              </option>
+            )}
           {results.data?.items
             .filter((r) =>
               ["workflow-source", "country-workflow"].includes(r.kind),

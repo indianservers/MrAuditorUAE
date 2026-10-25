@@ -94,3 +94,30 @@ it("does not show a successful capacity check when the request fails", () => {
   expect(screen.getByText("Evidence is inaccessible")).toBeVisible();
   expect(screen.queryByText(/Cash claim:/)).toBeNull();
 });
+
+it("links authorized peer reviews to their own engagement and selected event", () => {
+  state.data = {
+    state: "UNRESERVED",
+    claim_count: 2,
+    approval_error: null,
+    related_reviews: [
+      {
+        id: "peer",
+        root_id: "root",
+        engagement_id: "other",
+        title: "Tax settlement",
+      },
+    ],
+  };
+  render(
+    <BankCashReview
+      eid="eng"
+      eventId="candidate"
+      version={1}
+      onSelected={vi.fn()}
+    />,
+  );
+  expect(
+    screen.getByRole("link", { name: /Open related engagement allocation/ }),
+  ).toHaveAttribute("href", "/intelligence/other/country-workflow?event=peer");
+});

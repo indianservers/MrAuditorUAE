@@ -891,6 +891,36 @@ async def main():
         for legal_role in ("deductor", "collector"):
             parents, _bridges, assessment, args = await prepare_withholding_settlement(client, h, india, f"/api/v1/engagements/{india}/audit", supporting_reviewer, legal_role)
             withholding_split[legal_role] = {"parents": {key: value["id"] for key, value in parents.items()}, "sources": args["source_ids"], "assessment_record": assessment["id"]}
+        # Separate synthetic legal entities keep the cross-engagement cash
+        # scenarios independent from other preview examples in this database.
+        from tests.qa_crud.test_bank_consumption import prepare_cash
+
+        entity_cash = {}
+        for country, currency in (("AE", "AED"), ("IN", "INR")):
+            entity_response = await client.post("/api/v1/entities", headers=h, json={
+                "client_id": opts["client_id"], "name": f"SYNTHETIC {country} shared cash owner",
+                "country": country, "jurisdiction": "Synthetic",
+                "functional_currency": currency, "presentation_currency": currency})
+            assert entity_response.status_code == 201, entity_response.text
+            entity_id = entity_response.json()["id"]
+            period_response = await client.post("/api/v1/financial-periods", headers=h, json={
+                "entity_id": entity_id, "start_date": "2026-04-01" if country == "IN" else "2026-01-01",
+                "end_date": "2027-03-31" if country == "IN" else "2026-12-31"})
+            assert period_response.status_code == 201, period_response.text
+            entries = []
+            for index in (1, 2):
+                engagement_response = await client.post("/api/v1/engagements", headers=h, json={
+                    "entity_id": entity_id, "period_id": period_response.json()["id"],
+                    "name": f"SYNTHETIC {country} shared cash engagement {index}",
+                    "engagement_type": "External Audit"})
+                assert engagement_response.status_code == 201, engagement_response.text
+                cash_eid = engagement_response.json()["id"]
+                await grant(client, h, f"/api/v1/engagements/{cash_eid}/audit", pdf_final_reviewer)
+                cash_args = await prepare_cash(client, h, cash_eid, pdf_final_reviewer, currency)
+                cash_result = await execute(client, h, cash_eid, "country-workflow", cash_args)
+                entries.append({"engagement": cash_eid, "result": cash_result["id"]})
+            entity_cash[country] = entries
+
         if implementation_hash() != implementation:
             raise RuntimeError(
                 "Backend implementation changed during fixture preparation; prepare fresh fixtures before browser verification"
@@ -910,6 +940,7 @@ async def main():
                     "bank_clearance": clearance_fixtures,
                     "obligation_allocations": dues_fixtures,
                     "withholding_split": withholding_split,
+                    "entity_cash": entity_cash,
                     "document_series": document_series,
                     "import_nil": nil_import,
                     "import_vat_sources": import_vat_sources,

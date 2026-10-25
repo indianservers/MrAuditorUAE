@@ -8,6 +8,134 @@ const fixture = JSON.parse(
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
 
+test("UAE then India bank cash approvals share capacity across entity engagements", async ({
+  page,
+  browser,
+}) => {
+  test.setTimeout(180000);
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+    viewport: { width: 1600, height: 1100 },
+  });
+  const reviewer = await context.newPage();
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_final_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    for (const country of ["AE", "IN"] as const) {
+      const [first, second] = fixture.entity_cash[country];
+      await reviewer.goto(
+        `/intelligence/${first.engagement}/country-workflow?event=${first.result}`,
+      );
+      await expect(reviewer.getByLabel("Saved source or result")).toHaveValue(
+        first.result,
+      );
+      await reviewer
+        .getByLabel("Review / exception rationale")
+        .fill(
+          "Synthetic bank cash and independent obligation controls reviewed across entity engagements",
+        );
+      const approval = reviewer.waitForResponse(
+        (r) =>
+          r.url().endsWith(`/events/${first.result}/review`) &&
+          r.request().method() === "POST",
+      );
+      await reviewer
+        .getByRole("button", { name: "Independent approval", exact: true })
+        .click();
+      const approved = await approval;
+      expect(approved.status(), await approved.text()).toBe(201);
+      const approvedId = (await approved.json()).id;
+      await page.goto(
+        `/intelligence/${second.engagement}/country-workflow?event=${second.result}`,
+      );
+      const conflict = page.getByRole("region", {
+        name: "Shared bank cash approval controls",
+      });
+      await expect(conflict).toContainText("OVERALLOCATED");
+      const related = conflict.getByRole("link", {
+        name: /Open related engagement allocation/,
+      });
+      await expect(related).toHaveAttribute(
+        "href",
+        `/intelligence/${first.engagement}/country-workflow?event=${approvedId}`,
+      );
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-entity-bank-cash-conflict.png`,
+        () => conflict.screenshot(),
+      );
+      await related.click();
+      await expect(page.getByLabel("Saved source or result")).toHaveValue(
+        approvedId,
+      );
+      await expect(
+        page.getByRole("region", {
+          name: "Shared bank cash approval controls",
+        }),
+      ).toContainText("ACTIVE_APPROVED_ALLOCATION");
+      const cash = reviewer.getByRole("region", {
+        name: "Shared bank cash approval controls",
+      });
+      await cash
+        .getByLabel("Bank cash withdrawal reason")
+        .fill(
+          "Synthetic alternative engagement replaces this approved cash claim",
+        );
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-entity-bank-cash-withdrawal-controls.png`,
+        () => cash.screenshot(),
+      );
+      const withdrawal = reviewer.waitForResponse(
+        (r) =>
+          r.url().endsWith("/withdraw-bank-cash") &&
+          r.request().method() === "POST",
+      );
+      await cash
+        .getByRole("button", { name: "Withdraw bank cash claim" })
+        .click();
+      expect((await withdrawal).status()).toBe(201);
+      await expect(cash).toContainText("WITHDRAWN");
+      await reviewer.goto(
+        `/intelligence/${second.engagement}/country-workflow?event=${second.result}`,
+      );
+      const available = reviewer.getByRole("region", {
+        name: "Shared bank cash approval controls",
+      });
+      await expect(available).toContainText("UNRESERVED");
+      await expect(available.getByRole("alert")).toHaveCount(0);
+      await reviewer
+        .getByLabel("Review / exception rationale")
+        .fill(
+          "Synthetic prior engagement claim withdrawn; replacement allocation independently reviewed",
+        );
+      const replacement = reviewer.waitForResponse(
+        (r) =>
+          r.url().endsWith(`/events/${second.result}/review`) &&
+          r.request().method() === "POST",
+      );
+      await reviewer
+        .getByRole("button", { name: "Independent approval", exact: true })
+        .click();
+      const replaced = await replacement;
+      expect(replaced.status(), await replaced.text()).toBe(201);
+      await expect(
+        reviewer.getByRole("region", {
+          name: "Shared bank cash approval controls",
+        }),
+      ).toContainText("ACTIVE_APPROVED_ALLOCATION");
+    }
+  } finally {
+    await context.close();
+  }
+});
+
 test("reviewed UAE and India contributions become controlled expected bank remittances", async ({
   page,
   browser,
@@ -6026,8 +6154,8 @@ test("India TDS and TCS withholding sources support pooled and split bank alloca
     }
     const eid = fixture.india_engagement;
     async function approve(id: string, mode: string) {
-      await reviewer.goto(`/intelligence/${eid}/${mode}`);
-      await reviewer.getByLabel("Saved source or result").selectOption(id);
+      await reviewer.goto(`/intelligence/${eid}/${mode}?event=${id}`);
+      await expect(reviewer.getByLabel("Saved source or result")).toHaveValue(id);
       await reviewer
         .getByLabel("Review / exception rationale")
         .fill(

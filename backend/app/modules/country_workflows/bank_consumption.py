@@ -1,6 +1,6 @@
-"""Approval-time cash capacity across obligation reviews in one engagement.
+"""Approval-time cash capacity across obligation reviews for one legal entity.
 
-The review/withdraw routes hold the engagement write lock through append/commit.
+Review/release routes hold engagement and entity transaction locks through commit.
 An immutable approval claim survives source staleness until explicit withdrawal.
 """
 
@@ -10,10 +10,11 @@ from decimal import Decimal, DecimalException, localcontext
 from typing import Any
 
 from fastapi import HTTPException
-from sqlalchemy import or_, select
+from sqlalchemy import or_, select, text
 from sqlalchemy.dialects.postgresql import array
 from sqlalchemy.orm import aliased
 
+from app.db.models.platform import Engagement
 from app.modules.country_workflows.bank_accounts import identifier
 from app.modules.country_workflows.schemas import WorkflowInput
 from app.modules.intelligence.models import IntelligenceEvent
@@ -25,6 +26,29 @@ ACTIVE = "ACTIVE_APPROVED_ALLOCATION"
 WITHDRAWN = "WITHDRAWN"
 MAX_PEERS = 1000
 MAX_CLAIMS = 50000
+APPROVAL_SCOPE = "OBLIGATION_APPROVALS_WITHIN_ONE_TENANT_LEGAL_ENTITY"
+
+
+async def entity_scope(db, ctx, eid, *, lock=False):
+    """Callers authorize the selected engagement before requesting its scope.
+
+    All approval/release routes take their own engagement lock first, then this
+    entity lock; peer inspection never takes another engagement write lock.
+    """
+    entity_id = await db.scalar(
+        select(Engagement.entity_id).where(
+            Engagement.tenant_id == ctx.tenant_id,
+            Engagement.id == eid,
+        )
+    )
+    if entity_id is None:
+        raise HTTPException(404, "Engagement not found")
+    if lock:
+        await db.execute(
+            text("SELECT pg_advisory_xact_lock(hashtextextended(:key,0))"),
+            {"key": f"bank-cash-entity:{ctx.tenant_id}:{entity_id}"},
+        )
+    return entity_id
 
 
 def manifest(data, source, body):
@@ -188,15 +212,24 @@ def capacity_error(manifests):
     return None
 
 
-def decisions(ctx, eid):
+def decisions(ctx, eid=None, *, entity_id=None):
     event = IntelligenceEvent
     marker = event.body["bank_consumption_review"]["status"].astext
     # Old PREPARED notes do not silently release an earlier approval.
+    statement = select(event)
+    if entity_id is not None:
+        statement = statement.join(
+            Engagement,
+            (Engagement.id == event.engagement_id) & (Engagement.tenant_id == event.tenant_id),
+        )
+        statement = statement.where(Engagement.entity_id == entity_id)
+    else:
+        if eid is None:
+            raise ValueError("An authorized engagement or legal entity scope is required")
+        statement = statement.where(event.engagement_id == eid)
     return (
-        select(event)
-        .where(
+        statement.where(
             event.tenant_id == ctx.tenant_id,
-            event.engagement_id == eid,
             event.kind == "country-workflow",
             event.body["workflow"].astext == WORKFLOW,
             or_(
@@ -240,13 +273,14 @@ async def assess(db, ctx, obj, *, current=False):
     from app.modules.intelligence import service
 
     candidate = await event_manifest(db, ctx, obj, current=current)
+    entity_id = await entity_scope(db, ctx, obj.engagement_id)
     checked, manifests = [], [candidate]
     if candidate["rows"]:
-        latest = aliased(IntelligenceEvent, decisions(ctx, obj.engagement_id))
+        latest = aliased(IntelligenceEvent, decisions(ctx, entity_id=entity_id))
         status = latest.body["bank_consumption_review"]["status"].astext
         contract = latest.body["bank_consumption_manifest"]["contract"].astext
         statement = (
-            select(latest.id)
+            select(latest.id, latest.engagement_id)
             .where(
                 latest.root_id != obj.root_id,
                 or_(
@@ -267,15 +301,23 @@ async def assess(db, ctx, obj, *, current=False):
             )
             .limit(MAX_PEERS + 1)
         )
-        identifiers = list((await db.scalars(statement)).all())
+        identifiers = list((await db.execute(statement)).all())
         if len(identifiers) > MAX_PEERS:
             raise HTTPException(
                 409,
                 "Too many historical bank allocation claims; withdraw superseded reviews or qualify their manifests",
             )
         claim_count = len(candidate["rows"])
-        for identifier_value in identifiers:
-            peer = await service.event(db, ctx, obj.engagement_id, identifier_value, False)
+        for identifier_value, peer_engagement in identifiers:
+            try:
+                peer = await service.event(db, ctx, peer_engagement, identifier_value, False)
+            except HTTPException as failure:
+                if failure.status_code not in (403, 404):
+                    raise
+                raise HTTPException(
+                    409,
+                    "Bank cash capacity needs an authorized reviewer across this entity's engagements",
+                ) from failure
             prior = peer.body.get("bank_consumption_manifest")
             if not isinstance(prior, dict) or prior.get("contract") != CONTRACT:
                 prior = await event_manifest(db, ctx, peer)
@@ -289,6 +331,7 @@ async def assess(db, ctx, obj, *, current=False):
                 {
                     "id": str(peer.id),
                     "root_id": str(peer.root_id),
+                    "engagement_id": str(peer.engagement_id),
                     "title": peer.body.get("title", "Reviewed allocation"),
                 }
             )
@@ -300,6 +343,7 @@ async def assess(db, ctx, obj, *, current=False):
 
 
 async def approve(db, ctx, obj):
+    entity_id = await entity_scope(db, ctx, obj.engagement_id, lock=True)
     candidate, checked, error = await assess(db, ctx, obj, current=True)
     if error:
         raise HTTPException(
@@ -311,6 +355,8 @@ async def approve(db, ctx, obj):
         "checked_at": datetime.now(UTC).isoformat(),
         "checked_peer_count": len(checked),
         "manifest_sha256": fingerprint(candidate),
+        "approval_scope": APPROVAL_SCOPE,
+        "entity_id": str(entity_id),
     }
 
 
@@ -334,5 +380,5 @@ async def status(db, ctx, obj):
         "approval_error": error,
         "related_reviews": checked,
         "checked_at": datetime.now(UTC).isoformat(),
-        "scope": "OBLIGATION_APPROVALS_WITHIN_ONE_ENGAGEMENT",
+        "scope": APPROVAL_SCOPE,
     }

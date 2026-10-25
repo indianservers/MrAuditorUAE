@@ -48,6 +48,7 @@ async def withdraw_bank_cash(eid: uuid.UUID, identifier: uuid.UUID, data: s.Revi
         WITHDRAWN,
         WORKFLOW,
         current_decision,
+        entity_scope,
         is_active,
     )
 
@@ -62,6 +63,7 @@ async def withdraw_bank_cash(eid: uuid.UUID, identifier: uuid.UUID, data: s.Revi
         raise HTTPException(403, "Independent reviewer required")
     if len(data.comments.strip()) < 10:
         raise HTTPException(422, "Document why the approved bank cash claim is being withdrawn")
+    await entity_scope(db, ctx, eid, lock=True)
     prior_decision = await current_decision(db, ctx, eid, obj.root_id)
     if prior_decision is None or not is_active(prior_decision.body):
         raise HTTPException(409, "No active approved bank cash claim to withdraw")
@@ -1225,12 +1227,17 @@ async def review(
                         409, "Accepted supporting extraction needs independent field review"
                     )
         if obj.kind == "country-workflow" and obj.body.get("workflow") == "obligation-bank-allocations":
-            from app.modules.country_workflows.bank_consumption import WITHDRAWN, approve
+            from app.modules.country_workflows.bank_consumption import (
+                WITHDRAWN,
+                approve,
+                entity_scope,
+            )
 
             if data.action == "approve":
                 cash_manifest, cash_review = await approve(db, ctx, obj)
                 body.update(bank_consumption_manifest=cash_manifest, bank_consumption_review=cash_review)
             else:
+                await entity_scope(db, ctx, eid, lock=True)
                 body["bank_consumption_review"] = {"status": WITHDRAWN, "withdrawn_at": datetime.now(UTC).isoformat(), "withdrawn_by": str(ctx.user_id), "reason": data.comments}
         body.update(
             review_status="REVIEWED" if data.action == "approve" else "REJECTED",

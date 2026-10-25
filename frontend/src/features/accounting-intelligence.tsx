@@ -93,12 +93,32 @@ export function AccountingIntelligence({
       </>
     );
   if (area === "workflow-source" || area === "country-workflow")
-    return <CountryWorkflows key={`${eid}:${area}`} eid={eid} mode={area} />;
+    return (
+      <CountryWorkflowEntry key={`${eid}:${area}`} eid={eid} mode={area} />
+    );
   return (
     <IntelligenceBody
       key={`${eid}:${selectedArea}`}
       eid={eid}
       area={selectedArea}
+    />
+  );
+}
+
+function CountryWorkflowEntry({
+  eid,
+  mode,
+}: {
+  eid: string;
+  mode: "workflow-source" | "country-workflow";
+}) {
+  const query = useSearchParams();
+  return (
+    <CountryWorkflows
+      key={`${eid}:${mode}:${query.get("event") || ""}`}
+      eid={eid}
+      mode={mode}
+      initialEvent={query.get("event") || ""}
     />
   );
 }

@@ -728,6 +728,15 @@ beforeEach(() => {
   state.result = null;
 });
 describe("country workflows", () => {
+  it("opens a linked retained review even outside the first source-history page", () => {
+    state.result = { id: "result-older", kind: "country-workflow", version: 2,
+      freshness: "CURRENT", body: { title: "Retained older review", workflow: "bank-brs",
+        review_status: "REVIEWED", rows: [] } };
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" initialEvent="result-older" />);
+    expect(screen.getByLabelText("Saved source or result")).toHaveValue("result-older");
+    expect(screen.getByRole("option", { name: "Linked source or result · result-older" })).toBeInTheDocument();
+    expect(screen.getByText("Retained older review")).toBeVisible();
+  });
   it("keeps obligation, reported and bank amounts readable without changing retained provenance", () => {
     const retained = {
       id: "result",
