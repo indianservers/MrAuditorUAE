@@ -1,0 +1,262 @@
+{
+  "b2b": [
+    {
+      "ctin": "29ABCDE1234F1Z5",
+      "cfs": "N",
+      "inv": [
+        {
+          "inum": "SYN-REG1",
+          "idt": "15-06-2026",
+          "val": 118,
+          "chksum": "SYNTHETIC-not-authenticated",
+          "inv_typ": "R",
+          "rchrg": "N",
+          "pos": "07",
+          "updby": "S",
+          "cflag": "N",
+          "itms": [
+            {
+              "num": 1,
+              "itm_det": {
+                "rt": 18,
+                "txval": 100,
+                "iamt": 18
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "b2ba": [
+    {
+      "ctin": "29ABCDE1234F1Z5",
+      "inv": [
+        {
+          "inum": "SYN-REG1",
+          "idt": "15-06-2026",
+          "val": 141.6,
+          "chksum": "SYNTHETIC-not-authenticated",
+          "inv_typ": "R",
+          "rchrg": "N",
+          "pos": "07",
+          "updby": "S",
+          "cflag": "N",
+          "itms": [
+            {
+              "num": 1,
+              "itm_det": {
+                "rt": 18,
+                "txval": 120,
+                "iamt": 21.6
+              }
+            }
+          ],
+          "oinum": "SYN-REG1",
+          "oidt": "15-05-2026"
+        }
+      ]
+    }
+  ],
+  "b2cl": [
+    {
+      "pos": "07",
+      "inv": [
+        {
+          "inum": "B2CL-1",
+          "idt": "15-06-2026",
+          "val": 118,
+          "chksum": "SYNTHETIC-not-authenticated",
+          "itms": [
+            {
+              "num": 1,
+              "itm_det": {
+                "rt": 18,
+                "txval": 100,
+                "iamt": 18
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "b2cla": [
+    {
+      "pos": "07",
+      "inv": [
+        {
+          "inum": "B2CLA-1",
+          "idt": "15-06-2026",
+          "val": 141.6,
+          "chksum": "SYNTHETIC-not-authenticated",
+          "itms": [
+            {
+              "num": 1,
+              "itm_det": {
+                "rt": 18,
+                "txval": 120,
+                "iamt": 21.6
+              }
+            }
+          ],
+          "oinum": "SYN-REG1",
+          "oidt": "15-05-2026",
+          "flag": "N"
+        }
+      ]
+    }
+  ],
+  "cdnr": [
+    {
+      "ctin": "29ABCDE1234F1Z5",
+      "nt": [
+        {
+          "val": 59,
+          "chksum": "SYNTHETIC-not-authenticated",
+          "inv_typ": "R",
+          "rchrg": "N",
+          "pos": "07",
+          "updby": "S",
+          "cflag": "N",
+          "itms": [
+            {
+              "num": 1,
+              "itm_det": {
+                "rt": 18,
+                "txval": 50,
+                "iamt": 9
+              }
+            }
+          ],
+          "nt_num": "CREDIT-1",
+          "nt_dt": "15-06-2026",
+          "ntty": "C",
+          "flag": "N"
+        }
+      ]
+    }
+  ],
+  "cdnra": [
+    {
+      "ctin": "29ABCDE1234F1Z5",
+      "nt": [
+        {
+          "val": 47.2,
+          "chksum": "SYNTHETIC-not-authenticated",
+          "inv_typ": "R",
+          "rchrg": "N",
+          "pos": "07",
+          "updby": "S",
+          "cflag": "N",
+          "itms": [
+            {
+              "num": 1,
+              "itm_det": {
+                "rt": 18,
+                "txval": 40,
+                "iamt": 7.2
+              }
+            }
+          ],
+          "nt_num": "DEBIT-1",
+          "nt_dt": "15-06-2026",
+          "ntty": "D",
+          "flag": "N",
+          "ont_num": "OLD-NOTE",
+          "ont_dt": "15-05-2026"
+        }
+      ]
+    }
+  ],
+  "cdnur": [
+    {
+      "val": 23.6,
+      "chksum": "SYNTHETIC-not-authenticated",
+      "pos": "07",
+      "itms": [
+        {
+          "num": 1,
+          "itm_det": {
+            "rt": 18,
+            "txval": 20,
+            "iamt": 3.6
+          }
+        }
+      ],
+      "nt_num": "UR-CREDIT",
+      "nt_dt": "15-06-2026",
+      "ntty": "C",
+      "flag": "N",
+      "typ": "B2CL"
+    }
+  ],
+  "cdnura": [
+    {
+      "val": 35.4,
+      "chksum": "SYNTHETIC-not-authenticated",
+      "pos": "07",
+      "itms": [
+        {
+          "num": 1,
+          "itm_det": {
+            "rt": 18,
+            "txval": 30,
+            "iamt": 5.4
+          }
+        }
+      ],
+      "nt_num": "UR-DEBIT",
+      "nt_dt": "15-06-2026",
+      "ntty": "D",
+      "flag": "N",
+      "ont_num": "OLD-NOTE",
+      "ont_dt": "15-05-2026",
+      "typ": "EXPWP"
+    }
+  ],
+  "exp": [
+    {
+      "exp_typ": "WPAY",
+      "inv": [
+        {
+          "inum": "EXPORT-1",
+          "idt": "15-06-2026",
+          "val": 118,
+          "chksum": "SYNTHETIC-not-authenticated",
+          "itms": [
+            {
+              "rt": 18,
+              "txval": 100,
+              "iamt": 18
+            }
+          ],
+          "flag": "N"
+        }
+      ]
+    }
+  ],
+  "expa": [
+    {
+      "exp_typ": "WOPAY",
+      "inv": [
+        {
+          "inum": "EXPORT-OLD",
+          "idt": "15-06-2026",
+          "val": 100,
+          "chksum": "SYNTHETIC-not-authenticated",
+          "itms": [
+            {
+              "rt": 18,
+              "txval": 100,
+              "iamt": 0
+            }
+          ],
+          "oinum": "SYN-REG1",
+          "oidt": "15-05-2026",
+          "flag": "N"
+        }
+      ]
+    }
+  ]
+}

@@ -9,6 +9,7 @@ from app.modules.country_workflows.audit_schemas import AUDIT_ROW_TYPES
 from app.modules.country_workflows.diligence_schemas import DILIGENCE_ROW_TYPES
 from app.modules.country_workflows.ecr_arrear_schemas import ECRArrearControls
 from app.modules.country_workflows.gst_summary import METRICS, GSTSummaryMetric
+from app.modules.country_workflows.gstr1_schemas import GSTR1SectionControl
 from app.modules.country_workflows.gstr2b_part_schemas import GSTR2BPart
 from app.modules.country_workflows.inventory_controls import InventoryQuantityControl
 from app.modules.country_workflows.operations_schemas import OPERATION_ROW_TYPES
@@ -198,7 +199,11 @@ class SourceInput(Strict):
         "india-epfo-arrear-ecr-v2",
         "india-gstr2b-json",
         "india-gstr1-summary-json",
+        "india-gstr1-documents-json",
     ] = "canonical-csv"
+    gstr1_section_controls: list[GSTR1SectionControl] = Field(default_factory=list, max_length=10)
+    gstr1_context_evidence_version_id: uuid.UUID | None = None
+    gstr1_retrieval_assessment: str = Field(default="", max_length=2000)
     gst_summary_metric_controls: dict[str, Money] = Field(default_factory=dict, max_length=19)
     gst_registration: str | None = Field(
         default=None, pattern=r"^\d{2}[A-Z]{5}\d{4}[A-Z][A-Z0-9]Z[A-Z0-9]$"
@@ -277,6 +282,16 @@ class SourceInput(Strict):
 
     @model_validator(mode="after")
     def declared_nil(self):
+        if self.file_format == "india-gstr1-documents-json":
+            controls = self.gstr1_section_controls
+            sections = [c.section for c in controls]
+            with localcontext() as arithmetic:
+                arithmetic.prec = 80
+                tax = sum((c.igst + c.cgst + c.sgst + c.cess for c in controls), Decimal(0))
+            if not controls or len(set(sections)) != len(sections) or not self.gstr1_context_evidence_version_id or self.gstr1_context_evidence_version_id == self.evidence_version_id or len(self.gstr1_retrieval_assessment.strip()) < 10 or not self.gst_registration or not self.gst_period or self.table_type != "tax-documents" or self.expected_documents != sum(c.document_count for c in controls) or self.expected_rows != 4 * sum(c.document_count for c in controls) or self.control_totals != {"INR": tax}:
+                raise ValueError("GSTR-1 documents require distinct retained request context, assessed retrieval scope, unique section counts/base/component controls and agreeing whole-source controls")
+        elif self.gstr1_section_controls or self.gstr1_context_evidence_version_id is not None or self.gstr1_retrieval_assessment:
+            raise ValueError("GSTR-1 document controls/context apply only to the explicit invoice/note profile")
         if self.table_type == "gst-summary-metrics":
             if not self.gst_summary_metric_controls or set(self.gst_summary_metric_controls) - METRICS or self.control_totals or self.expected_rows < 1:
                 raise ValueError("GST summary sources require explicit rows and every independent metric control; do not use mixed currency totals")
@@ -455,6 +470,7 @@ class WorkflowInput(Strict):
         "india-gst",
         "india-invoice-register",
         "india-gstr1-summary",
+        "india-gstr1-documents",
         "payroll-settlement",
         "statutory-dues",
         "india-withholding",

@@ -1,0 +1,23 @@
+{
+  "classification": "SYNTHETIC_ENGINE_FIXTURE_NOT_LEGAL_OR_CLIENT_QUALIFICATION",
+  "gst_registration": "27ABCDE5678G1Z8",
+  "gst_period": "2026-06",
+  "expected_documents": 1,
+  "expected_rows": 4,
+  "control_totals": {
+    "INR": "18"
+  },
+  "gstr1_section_controls": [
+    {
+      "section": "b2b",
+      "document_count": 1,
+      "taxable_base": "100",
+      "igst": "18",
+      "cgst": "0",
+      "sgst": "0",
+      "cess": "0"
+    }
+  ],
+  "context_instruction": "Upload the separate assessed request context and select its actual clean evidence version; no evidence ID or filing approval is invented",
+  "expected_behavior": "Independent B2B book rows match four native components with zero exceptions"
+}

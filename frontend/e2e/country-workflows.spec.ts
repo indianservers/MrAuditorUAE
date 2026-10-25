@@ -4953,3 +4953,182 @@ test("India GSTR-1 summary import preserves hierarchy and offsetting differences
     await context.close();
   }
 });
+
+test("India outward GSTR-1 documents retain request context and match reviewed sales without implying filing", async ({
+  page,
+  browser,
+}) => {
+  test.setTimeout(180000);
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+    viewport: { width: 1600, height: 1100 },
+  });
+  const reviewer = await context.newPage();
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_final_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    const eid = fixture.india_engagement,
+      input = fixture.gstr1_documents;
+    await page.goto(`/intelligence/${eid}/workflow-source`);
+    await page
+      .getByLabel("Source file format")
+      .selectOption("india-gstr1-documents-json");
+    const sourceTitle = `SYNTHETIC outward GSTR1 source ${Date.now()}`;
+    for (const [label, value] of [
+      ["Schedule title", sourceTitle],
+      ["Supplier GSTIN", input.gstin],
+      ["GSTR-1 document reporting month", "2026-06"],
+      ["Independent GSTR-1 document count", "1"],
+      ["Expected data rows", "4"],
+      ["Independent totals by currency", "INR=18"],
+      [
+        "Independent GSTR-1 section controls (JSON)",
+        JSON.stringify(input.controls, null, 2),
+      ],
+      [
+        "GSTR-1 retrieval scope assessment",
+        "Independent request GSTIN, period, B2B-only retained population and filters/pagination assessed; no filing status inferred",
+      ],
+    ])
+      await page.getByLabel(label).fill(value);
+    await page
+      .getByLabel("Clean retained evidence")
+      .selectOption(input.original);
+    await page
+      .getByLabel("Retained GSTR-1 request context", { exact: true })
+      .selectOption(input.context);
+    await saveScreenshot(
+      `${shots}/india-gstr1-outward-import-controls.png`,
+      () =>
+        page
+          .getByRole("group", {
+            name: "Outward invoice/note request scope and independent controls",
+          })
+          .screenshot(),
+    );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const saved = page
+      .getByLabel("Saved source or result")
+      .locator("option")
+      .filter({ hasText: sourceTitle });
+    await expect(saved).toHaveCount(1, { timeout: 120000 });
+    const unreviewed = (await saved.getAttribute("value"))!;
+    await reviewer.goto(`/intelligence/${eid}/country-workflow`);
+    await reviewer
+      .getByLabel("Saved source or result")
+      .selectOption(unreviewed);
+    await reviewer
+      .getByLabel("Review / exception rationale")
+      .fill(
+        "Independent original response, separate request context and section head/base/count controls assessed; retained population only",
+      );
+    const approval = reviewer.waitForResponse(
+      (r) =>
+        r.url().includes(`/events/${unreviewed}/review`) &&
+        r.request().method() === "POST",
+    );
+    await reviewer
+      .getByRole("button", { name: "Independent approval", exact: true })
+      .click();
+    const response = await approval;
+    expect(response.status(), await response.text()).toBe(201);
+    const approved = await response.json();
+    await page.goto(`/intelligence/${eid}/country-workflow`);
+    await page
+      .getByLabel("Workflow", { exact: true })
+      .selectOption("india-gstr1-documents");
+    await expect(
+      page
+        .getByLabel("books source", { exact: true })
+        .locator(`option[value="${approved.id}"]`),
+    ).toHaveCount(0);
+    await page
+      .getByLabel("books source", { exact: true })
+      .selectOption(input.books);
+    await page
+      .getByLabel("return source", { exact: true })
+      .selectOption(approved.id);
+    const title = `SYNTHETIC outward GSTR1 reconciliation ${Date.now()}`;
+    await page.getByLabel("Schedule title", { exact: true }).fill(title);
+    await page
+      .getByLabel("Reconciliation date", { exact: true })
+      .fill("2026-06-30");
+    await page
+      .getByLabel("Scope and source rationale")
+      .fill(
+        "Independently reviewed original sales register and retained outward B2B section response; no full-return or filing claim",
+      );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const result = page
+      .getByLabel("Saved source or result")
+      .locator("option")
+      .filter({ hasText: title });
+    await expect(result).toHaveCount(1, { timeout: 120000 });
+    await page
+      .getByLabel("Saved source or result")
+      .selectOption((await result.getAttribute("value"))!);
+    const panel = page
+      .getByRole("heading", { name: title, exact: true })
+      .locator("..");
+    await expect(
+      panel.getByText("0 exceptions", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      panel.getByRole("cell", { name: "MATCHED", exact: true }),
+    ).toHaveCount(4);
+    await expect(panel.getByRole("note")).toContainText(
+      "matching does not establish filing",
+    );
+    for (const notice of await page
+      .getByRole("button", { name: "Dismiss notification", exact: true })
+      .all())
+      await notice.click();
+    await saveScreenshot(
+      `${shots}/india-gstr1-outward-sales-comparison.png`,
+      () => panel.screenshot(),
+    );
+    await panel
+      .getByText("Assessed outward source scope", { exact: true })
+      .click();
+    await expect(
+      panel.getByText(/NOT_ESTABLISHED_BY_DOCUMENT_COMPARISON/),
+    ).toBeVisible();
+    await saveScreenshot(
+      `${shots}/india-gstr1-outward-retained-scope.png`,
+      () =>
+        panel
+          .locator("details")
+          .filter({
+            has: page.getByText("Assessed outward source scope", {
+              exact: true,
+            }),
+          })
+          .screenshot(),
+    );
+    const download = page.waitForEvent("download");
+    await panel
+      .getByRole("button", { name: "Export XLSX", exact: true })
+      .click();
+    expect((await download).suggestedFilename()).toMatch(/\.xlsx$/);
+    await page.goto(`/intelligence/${fixture.uae_engagement}/country-workflow`);
+    await expect(
+      page
+        .getByLabel("Workflow", { exact: true })
+        .locator('option[value="india-gstr1-documents"]'),
+    ).toHaveCount(0);
+  } finally {
+    await context.close();
+  }
+});

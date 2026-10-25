@@ -162,6 +162,7 @@ type Result = {
     title: string;
     review_status: string;
     obligation_population_scope?: string;
+    outward_gst_scope?: Record<string, unknown>;
     invoice_evidence_scope?: { direction: string; filing_status: string };
     execution_mode?: string;
     language_model_dependency?: boolean;
@@ -350,6 +351,9 @@ export function CountryWorkflows({
   const [expectedMembers, setExpectedMembers] = useState("");
   const [expectedDocuments, setExpectedDocuments] = useState("");
   const [ruleDocument, setRuleDocument] = useState("");
+  const [gstr1Controls, setGSTR1Controls] = useState("[]");
+  const [gstr1Context, setGSTR1Context] = useState("");
+  const [gstr1Assessment, setGSTR1Assessment] = useState("");
   const [gstSummaryControls, setGSTSummaryControls] = useState("{}");
   const [gstRegistration, setGSTRegistration] = useState("");
   const [gstDirection, setGSTDirection] = useState("purchase");
@@ -652,6 +656,7 @@ export function CountryWorkflows({
                         ].filter((key) => allColumns.includes(key))
                       : [
                             "india-gst",
+                            "india-gstr1-documents",
                             "uae-vat",
                             "india-invoice-register",
                           ].includes(body?.workflow || "") &&
@@ -892,6 +897,16 @@ export function CountryWorkflows({
                     gst_summary_metric_controls: JSON.parse(gstSummaryControls),
                   }
                 : {}),
+              ...(sourceFormat === "india-gstr1-documents-json"
+                ? {
+                    gst_registration: gstRegistration,
+                    gst_period: gstPeriod,
+                    expected_documents: Number(expectedDocuments),
+                    gstr1_section_controls: JSON.parse(gstr1Controls),
+                    gstr1_context_evidence_version_id: gstr1Context,
+                    gstr1_retrieval_assessment: gstr1Assessment,
+                  }
+                : {}),
               ...(sourceFormat === "india-gstr1-summary-json"
                 ? { gst_registration: gstRegistration, gst_period: gstPeriod }
                 : {}),
@@ -1046,6 +1061,7 @@ export function CountryWorkflows({
           title: label,
           rationale: reason,
           currency: [
+            "india-gstr1-documents",
             "india-gstr1-summary",
             "india-payroll-rules",
             "india-gst",
@@ -2008,6 +2024,107 @@ export function CountryWorkflows({
                       </p>
                     </fieldset>
                   )}
+                  {sourceFormat === "india-gstr1-documents-json" && (
+                    <fieldset style={{ gridColumn: "1 / -1", minWidth: 0 }}>
+                      <legend>
+                        Outward invoice/note request scope and independent
+                        controls
+                      </legend>
+                      <label>
+                        Supplier GSTIN
+                        <input
+                          value={gstRegistration}
+                          onChange={(event) =>
+                            setGSTRegistration(event.target.value)
+                          }
+                        />
+                      </label>
+                      <label>
+                        GSTR-1 document reporting month
+                        <input
+                          type="month"
+                          value={gstPeriod}
+                          onChange={(event) => setGSTPeriod(event.target.value)}
+                        />
+                      </label>
+                      <label>
+                        Independent GSTR-1 document count
+                        <input
+                          type="number"
+                          min={0}
+                          max={1250}
+                          value={expectedDocuments}
+                          onChange={(event) =>
+                            setExpectedDocuments(event.target.value)
+                          }
+                        />
+                      </label>
+                      <label>
+                        Retained GSTR-1 request context
+                        <select
+                          aria-label="Retained GSTR-1 request context"
+                          value={gstr1Context}
+                          onChange={(event) =>
+                            setGSTR1Context(event.target.value)
+                          }
+                        >
+                          <option value="">
+                            Select distinct clean request-context evidence
+                          </option>
+                          {inputs.data?.evidence
+                            .filter((item) => item.id !== evidence)
+                            .map((item) => (
+                              <option
+                                key={item.id}
+                                value={item.id}
+                                disabled={item.scan_status !== "CLEAN"}
+                              >
+                                {item.label} · {item.scan_status}
+                              </option>
+                            ))}
+                        </select>
+                      </label>
+                      <label style={{ display: "block" }}>
+                        Independent GSTR-1 section controls (JSON)
+                        <textarea
+                          aria-label="Independent GSTR-1 section controls (JSON)"
+                          style={{
+                            height: 220,
+                            width: "100%",
+                            display: "block",
+                          }}
+                          value={gstr1Controls}
+                          onChange={(event) =>
+                            setGSTR1Controls(event.target.value)
+                          }
+                        />
+                      </label>
+                      <label style={{ display: "block" }}>
+                        GSTR-1 retrieval scope assessment
+                        <textarea
+                          style={{
+                            height: 100,
+                            width: "100%",
+                            display: "block",
+                          }}
+                          value={gstr1Assessment}
+                          onChange={(event) =>
+                            setGSTR1Assessment(event.target.value)
+                          }
+                        />
+                      </label>
+                      <p>
+                        Declare every retained section, document count, signed
+                        taxable_base and igst/cgst/sgst/cess totals. Four
+                        component rows are prepared per document. Retain the
+                        request GSTIN, month, sections and assessed
+                        filters/pagination separately. These sources do not
+                        establish filing or a complete outward return.
+                        Amendments and source status/de-link flags remain
+                        unresolved.
+                      </p>
+                    </fieldset>
+                  )}
                   {tableType === "gst-summary-metrics" && (
                     <fieldset style={{ gridColumn: "1 / -1", minWidth: 0 }}>
                       <legend>
@@ -2641,11 +2758,17 @@ export function CountryWorkflows({
                           r.kind === "workflow-source" &&
                           r.table_type === type &&
                           r.freshness === "CURRENT" &&
+                          (r.native_format !== "india-gstr1-documents-json" ||
+                            workflow === "india-gstr1-documents") &&
+                          (r.native_format !== "india-gstr2b-json" ||
+                            workflow === "india-gst") &&
                           (r.native_format !== "india-inv01-json" ||
                             (workflow === "india-invoice-register"
                               ? role === "invoices"
-                              : workflow === "india-gst" &&
-                                role === "books")) &&
+                              : role === "books" &&
+                                (workflow === "india-gst" ||
+                                  (workflow === "india-gstr1-documents" &&
+                                    r.invoice_direction === "sale")))) &&
                           (workflow !== "uae-vat-return" ||
                             vatLayout !== "emirate-20" ||
                             r.review_status === "REVIEWED") &&
@@ -2670,6 +2793,8 @@ export function CountryWorkflows({
                           (![
                             "obligation-bank-allocations",
                             "payroll-ledger-rollforward",
+                            "india-gstr1-documents",
+                            "india-gstr1-summary",
                             "india-invoice-register",
                             "uae-pension-review",
                           ].includes(workflow) ||
@@ -3158,6 +3283,20 @@ export function CountryWorkflows({
       {detail.data && body && (
         <section className="main-panel" style={{ padding: 20, marginTop: 16 }}>
           <h2>{body.title}</h2>
+          {body.outward_gst_scope && (
+            <details>
+              <summary>Assessed outward source scope</summary>
+              <pre>{JSON.stringify(body.outward_gst_scope, null, 2)}</pre>
+            </details>
+          )}
+          {body.workflow === "india-gstr1-documents" && (
+            <p role="note">
+              Outward invoice/note comparison for the declared retained
+              sections. Request context is assessed evidence; matching does not
+              establish filing, complete GSTR-1 coverage or customer identity
+              for unregistered/export category keys.
+            </p>
+          )}
           {body.workflow === "india-gstr1-summary" && (
             <p role="note">
               GSTR-1 summary metrics compared at their original hierarchy level.
@@ -4082,6 +4221,7 @@ export function CountryWorkflows({
               compactArrearResult ||
               compactBenefit ||
               body.workflow === "payroll-ledger-rollforward" ||
+              body.workflow === "india-gstr1-documents" ||
               body.workflow === "india-invoice-register" ||
               body.workflow === "india-gstr1-summary" ||
               body.table_type === "gst-summary-metrics" ||

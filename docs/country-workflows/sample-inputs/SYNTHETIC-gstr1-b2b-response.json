@@ -1,0 +1,31 @@
+{
+  "b2b": [
+    {
+      "ctin": "29ABCDE1234F1Z5",
+      "cfs": "N",
+      "inv": [
+        {
+          "inum": "SYN-REG1",
+          "idt": "15-06-2026",
+          "val": 118,
+          "chksum": "SYNTHETIC-not-authenticated",
+          "inv_typ": "R",
+          "rchrg": "N",
+          "pos": "07",
+          "updby": "S",
+          "cflag": "N",
+          "itms": [
+            {
+              "num": 1,
+              "itm_det": {
+                "rt": 18,
+                "txval": 100,
+                "iamt": 18
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

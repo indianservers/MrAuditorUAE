@@ -1,0 +1,104 @@
+{
+  "classification": "SYNTHETIC_ENGINE_FIXTURE_NOT_LEGAL_OR_CLIENT_QUALIFICATION",
+  "gst_registration": "27ABCDE5678G1Z8",
+  "gst_period": "2026-06",
+  "expected_documents": 10,
+  "expected_rows": 40,
+  "control_totals": {
+    "INR": "97.2"
+  },
+  "gstr1_section_controls": [
+    {
+      "section": "b2b",
+      "document_count": 1,
+      "taxable_base": "100",
+      "igst": "18",
+      "cgst": "0",
+      "sgst": "0",
+      "cess": "0"
+    },
+    {
+      "section": "b2ba",
+      "document_count": 1,
+      "taxable_base": "120",
+      "igst": "21.6",
+      "cgst": "0",
+      "sgst": "0",
+      "cess": "0"
+    },
+    {
+      "section": "b2cl",
+      "document_count": 1,
+      "taxable_base": "100",
+      "igst": "18",
+      "cgst": "0",
+      "sgst": "0",
+      "cess": "0"
+    },
+    {
+      "section": "b2cla",
+      "document_count": 1,
+      "taxable_base": "120",
+      "igst": "21.6",
+      "cgst": "0",
+      "sgst": "0",
+      "cess": "0"
+    },
+    {
+      "section": "cdnr",
+      "document_count": 1,
+      "taxable_base": "-50",
+      "igst": "-9",
+      "cgst": "0",
+      "sgst": "0",
+      "cess": "0"
+    },
+    {
+      "section": "cdnra",
+      "document_count": 1,
+      "taxable_base": "40",
+      "igst": "7.2",
+      "cgst": "0",
+      "sgst": "0",
+      "cess": "0"
+    },
+    {
+      "section": "cdnur",
+      "document_count": 1,
+      "taxable_base": "-20",
+      "igst": "-3.6",
+      "cgst": "0",
+      "sgst": "0",
+      "cess": "0"
+    },
+    {
+      "section": "cdnura",
+      "document_count": 1,
+      "taxable_base": "30",
+      "igst": "5.4",
+      "cgst": "0",
+      "sgst": "0",
+      "cess": "0"
+    },
+    {
+      "section": "exp",
+      "document_count": 1,
+      "taxable_base": "100",
+      "igst": "18",
+      "cgst": "0",
+      "sgst": "0",
+      "cess": "0"
+    },
+    {
+      "section": "expa",
+      "document_count": 1,
+      "taxable_base": "100",
+      "igst": "0",
+      "cgst": "0",
+      "sgst": "0",
+      "cess": "0"
+    }
+  ],
+  "context_instruction": "Upload the separate assessed request context and select its actual clean evidence version; no evidence ID or filing approval is invented",
+  "expected_behavior": "Amendments remain unresolved and approval blocked"
+}

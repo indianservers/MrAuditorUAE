@@ -4,7 +4,7 @@ from datetime import date
 from decimal import Decimal
 from typing import Annotated, Literal
 
-from pydantic import Field, field_validator, model_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 from app.modules.jurisdictions.profiles import Strict
 
@@ -53,7 +53,7 @@ class PayrollLedgerLine(PayrollAccount):
         return self
 
 
-PAYROLL_LEDGER_ROW_TYPES = {
+PAYROLL_LEDGER_ROW_TYPES: dict[str, type[BaseModel]] = {
     "payroll-account-balances": PayrollAccountBalance,
     "payroll-ledger-lines": PayrollLedgerLine,
 }

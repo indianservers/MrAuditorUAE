@@ -1,4 +1,10 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { CountryWorkflows } from "@/features/country-workflows";
 
@@ -45,6 +51,12 @@ vi.mock("@/hooks/use-api", () => ({
                   }
                 : {},
             source_formats: [
+              {
+                id: "india-gstr1-documents-json",
+                label: "India GSTR-1 outward invoices",
+                available: state.country === "IN",
+                table_type: "tax-documents",
+              },
               {
                 id: "india-gstr1-summary-json",
                 label: "India GSTR-1 summary JSON",
@@ -93,6 +105,12 @@ vi.mock("@/hooks/use-api", () => ({
               { id: "RW-001", title: "Bank receipt", workflow: "bank-brs" },
             ],
             items: [
+              {
+                id: "india-gstr1-documents",
+                title: "India outward invoices and notes",
+                available: state.country === "IN",
+                roles: { books: "tax-documents", return: "tax-documents" },
+              },
               {
                 id: "india-gstr1-summary",
                 title: "India GSTR-1 summary reconciliation",
@@ -326,6 +344,20 @@ vi.mock("@/hooks/use-api", () => ({
               : path.includes("/events?")
                 ? {
                     items: [
+                      ...["gstr1", "gstr2b"].map((format) => ({
+                        id: format + "-native",
+                        label: format + " retained return",
+                        kind: "workflow-source",
+                        table_type: "tax-documents",
+                        freshness: "CURRENT",
+                        review_status: "REVIEWED",
+                        version: 1,
+                        native_format:
+                          format === "gstr1"
+                            ? "india-gstr1-documents-json"
+                            : "india-gstr2b-json",
+                        allowed_source_roles: ["return"],
+                      })),
                       {
                         id: "invoice-register",
                         label: "Reviewed purchase register",
@@ -2651,4 +2683,88 @@ it("shows original summary metrics and count units without inventing liability t
       /matching does not establish filing or invoice completeness/,
     ),
   ).toBeVisible();
+});
+
+it("queues outward invoice sections with distinct request context and independent section controls", async () => {
+  state.country = "IN";
+  render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+  fireEvent.change(screen.getByLabelText("Source file format"), {
+    target: { value: "india-gstr1-documents-json" },
+  });
+  const controls = [
+    {
+      section: "b2b",
+      document_count: 1,
+      taxable_base: "100",
+      igst: "18",
+      cgst: "0",
+      sgst: "0",
+      cess: "0",
+    },
+  ];
+  for (const [label, value] of [
+    ["Schedule title", "Outward sales source"],
+    ["Supplier GSTIN", "27ABCDE5678G1Z8"],
+    ["GSTR-1 document reporting month", "2026-06"],
+    ["Independent GSTR-1 document count", "1"],
+    ["Clean retained evidence", "clean"],
+    ["Retained GSTR-1 request context", "context-clean"],
+    ["Expected data rows", "4"],
+    ["Independent totals by currency", "INR=18"],
+    ["Independent GSTR-1 section controls (JSON)", JSON.stringify(controls)],
+    [
+      "GSTR-1 retrieval scope assessment",
+      "Original request GSTIN and period, filtered section population and retrieval assessed",
+    ],
+  ])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+    file_format: "india-gstr1-documents-json",
+    table_type: "tax-documents",
+    gst_registration: "27ABCDE5678G1Z8",
+    gst_period: "2026-06",
+    expected_documents: 1,
+    expected_rows: 4,
+    gstr1_context_evidence_version_id: "context-clean",
+    gstr1_section_controls: controls,
+    control_totals: { INR: "18" },
+  });
+});
+
+it("keeps inward GSTR-2B and outward GSTR-1 native responses in their own workflow return pickers", () => {
+  state.country = "IN";
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Workflow", { exact: true }), {
+    target: { value: "india-gstr1-documents" },
+  });
+  expect(
+    within(screen.getByLabelText("return source")).getByRole("option", {
+      name: /gstr1 retained return/,
+    }),
+  ).toBeInTheDocument();
+  expect(
+    within(screen.getByLabelText("return source")).queryByRole("option", {
+      name: /gstr2b retained return/,
+    }),
+  ).not.toBeInTheDocument();
+  expect(
+    within(screen.getByLabelText("books source")).queryByRole("option", {
+      name: /gstr1 retained return/,
+    }),
+  ).not.toBeInTheDocument();
+  fireEvent.change(screen.getByLabelText("Workflow", { exact: true }), {
+    target: { value: "india-gst" },
+  });
+  expect(
+    within(screen.getByLabelText("return source")).getByRole("option", {
+      name: /gstr2b retained return/,
+    }),
+  ).toBeInTheDocument();
+  expect(
+    within(screen.getByLabelText("return source")).queryByRole("option", {
+      name: /gstr1 retained return/,
+    }),
+  ).not.toBeInTheDocument();
 });

@@ -120,6 +120,7 @@ def render(event, format):
             "box_comparison_scope",
             "vat201_layout",
             "invoice_evidence_scope",
+        "outward_gst_scope",
             "excluded_box_controls",
             "included_box_controls",
         }

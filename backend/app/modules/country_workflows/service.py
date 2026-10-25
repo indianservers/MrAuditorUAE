@@ -216,6 +216,14 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         supporting_contributors = set()
         if evidence.created_by is not None:
             supporting_contributors.add(str(evidence.created_by))
+        gstr1_context = None
+        if data.file_format == "india-gstr1-documents-json":
+            if package.country != "IN":
+                raise HTTPException(422, "GSTR-1 invoice/note sources require an India engagement")
+            gstr1_context, _ = await intelligence.evidence(db, ctx, eng, data.gstr1_context_evidence_version_id)
+            if gstr1_context.sha256 == evidence.sha256:
+                raise HTTPException(422, "Retain GSTR-1 request context separately from the document response")
+            dependencies.extend(await payroll_rule_documents(db, ctx, eng, [{"source_evidence_version_id": str(gstr1_context.id), "source_sha256": gstr1_context.sha256}], label="GSTR-1 request context", contributors=supporting_contributors))
         arrear_context = None
         if data.file_format == "india-epfo-arrear-ecr-v2":
             if package.country != "IN":
@@ -266,6 +274,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "india-inv01-json": {"application/json"},
             "india-epfo-ecr": {"text/plain"},
             "india-epfo-arrear-ecr-v2": {"text/plain"},
+            "india-gstr1-documents-json": {"application/json"},
             "india-gstr1-summary-json": {"application/json"},
             "india-gstr2b-json": {"application/json"},
         }
@@ -328,6 +337,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 return parse_native(path.read_bytes(), data, package.country, evidence.filename)
 
         result = await run_in_threadpool(load)
+        if gstr1_context is not None:
+            result["native_metadata"].update(context_sha256=gstr1_context.sha256, context_filename=gstr1_context.filename, context_basis="INDEPENDENTLY_ASSESSED_RETAINED_REQUEST_SCOPE_NOT_MACHINE_AUTHENTICATED")
         if arrear_context is not None:
             result["native_metadata"].update(arrear_context_sha256=arrear_context.sha256, arrear_context_filename=arrear_context.filename)
         if data.table_type in {"payroll-rules", "pension-rules", "benefit-rules", "fx-rates"}:
@@ -383,8 +394,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         source = await intelligence.event(db, ctx, eng.id, identifier, True)
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
-        if data.workflow in {"india-invoice-register", "india-gstr1-summary"} and source.body.get("review_status") != "REVIEWED":
-            raise HTTPException(409, "Independently review both source populations before invoice/register or GST summary comparison")
+        if data.workflow in {"india-invoice-register", "india-gstr1-summary", "india-gstr1-documents"} and source.body.get("review_status") != "REVIEWED":
+            raise HTTPException(409, "Independently review both source populations before invoice/register, outward GST or summary comparison")
         if data.workflow == "uae-vat-return" and data.vat201_layout == "emirate-20" and source.body.get("review_status") != "REVIEWED":
             raise HTTPException(409, "Independently review emirate allocation and filed VAT201 sources before comparison")
         if data.workflow == "payroll-ledger-rollforward" and source.body.get("review_status") != "REVIEWED":

@@ -1,0 +1,18 @@
+{
+  "classification": "SYNTHETIC_ASSESSED_CONTEXT_NOT_AUTHENTICATED_GSTN_REQUEST",
+  "gstin": "27ABCDE5678G1Z8",
+  "reporting_month": "2026-06",
+  "sections": [
+    "b2b",
+    "b2ba",
+    "b2cl",
+    "b2cla",
+    "cdnr",
+    "cdnra",
+    "cdnur",
+    "cdnura",
+    "exp",
+    "expa"
+  ],
+  "retrieval_assessment": "Synthetic selected section responses; request filters and pagination require independent assessment. No full-return or filing claim."
+}

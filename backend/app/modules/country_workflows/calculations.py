@@ -804,11 +804,15 @@ def calculate(data, country, sources):
     for role, table in sources.items():
         if table.get("parser_version") == "bank-clearance-carryforward/1" and (data.workflow != "bank-subsequent-clearance" or role != "outstanding"):
             raise ValueError("Carried bank residuals can establish only the outstanding role of subsequent clearance")
+        if table.get("native_format") == "india-gstr1-documents-json" and (data.workflow != "india-gstr1-documents" or role != "return"):
+            raise ValueError("Native GSTR-1 invoices/notes may supply only the outward reconciliation return role")
         if table.get("native_format") == "india-gstr1-summary-json" and (data.workflow != "india-gstr1-summary" or role != "return"):
             raise ValueError("Native GSTR-1 summary can supply only the return role of summary reconciliation")
         if table.get("native_format") == "india-inv01-json":
-            if (data.workflow, role) not in {("india-gst", "books"), ("india-invoice-register", "invoices")}:
+            if (data.workflow, role) not in {("india-gst", "books"), ("india-invoice-register", "invoices"), ("india-gstr1-documents", "books")}:
                 raise ValueError("INV-01 supplies invoice evidence, not a filed GST return; use invoices in the register comparison or invoice-supported books against independent return evidence")
+            if data.workflow == "india-gstr1-documents" and table.get("native_metadata", {}).get("direction") != "sale":
+                raise ValueError("Outward GSTR-1 books require sales invoice evidence, not purchases")
             if data.workflow == "india-invoice-register" and table.get("native_metadata", {}).get("direction") != data.invoice_direction:
                 raise ValueError("Native invoice direction differs from the declared purchase/sale comparison")
         has_arrears = table.get("native_format") == "india-epfo-arrear-ecr-v2" or (table.get("table_type") == "obligations" and any(row.get("population") == "arrears" for row in table["rows"]))
@@ -903,8 +907,21 @@ def calculate(data, country, sources):
             result = compare_summary(data, tables)
         elif data.workflow == "india-invoice-register":
             result = tax_documents(data, tables, "invoices")
-        elif data.workflow in {"uae-vat", "india-gst"}:
+        elif data.workflow in {"uae-vat", "india-gst", "india-gstr1-documents"}:
+            if data.workflow == "india-gstr1-documents" and data.currency != "INR":
+                raise ValueError("Outward GSTR-1 reconciliation requires INR")
             result = tax_documents(data, tables)
+            if data.workflow == "india-gstr1-documents":
+                from app.modules.country_workflows.india_gstr1_source import month_end
+
+                if any(month_end(row["period"]) > data.as_of for population in tables.values() for row in population):
+                    raise ValueError("Outward GSTR-1 reporting month extends beyond the reconciliation date")
+                result["blocked"] = any(row["source_review_reasons"] for row in result["rows"])
+                native = sources["return"].get("native_metadata", {})
+                result["outward_gst_scope"] = {key: native.get(key) for key in ("supplier_gstin", "return_period", "declared_section_controls", "context_evidence_version_id", "context_sha256", "retrieval_scope_assessment", "source_population_scope")}
+                result["outward_gst_scope"]["filing_status"] = "NOT_ESTABLISHED_BY_DOCUMENT_COMPARISON"
+                result["limitations"] = ["Declared outward invoice/note sections only; aggregated B2CS, advances, HSN and full-return completeness require separate evidence", "Amendments, source status/de-link flags and unexplained invoice-value differences require corrected source populations before approval", "Unregistered/export category keys represent declared reporting categories, not verified customer identities", "Retained request context is independently assessed, not machine-authenticated GSTIN, period, provider, IRP or filing proof"]
+
         elif data.workflow == "uae-vat-return":
             result = vat_return(data, tables)
         elif data.workflow in {"payroll-settlement", "statutory-dues", "india-withholding"}:
