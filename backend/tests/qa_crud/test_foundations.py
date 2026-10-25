@@ -17,6 +17,7 @@ from tests.integration.test_platform import environment as environment
 from tests.phase2.test_pipeline import committed, upload
 from tests.phase4.test_workflows import action as paper_action
 from tests.phase4.test_workflows import actor, create, grant, setup
+from tests.qa_crud.regulatory_source_fixtures import retain
 from tests.qa_crud.test_country_workflows import decision, double_boundaries, execute
 from tests.unit.test_regulatory_evaluation import fixture
 
@@ -61,7 +62,8 @@ async def reviewed_assessment(c, h, reviewer, eid):
         document_sha256="a" * 64,
         retrieved_on=date.today().isoformat(),
     )
-    # Attestation is synthetic: this is never a verified real UAE legal rule.
+    await retain(c, h, rule)
+    # The copy and attestation are synthetic, not verified UAE legal content.
     response = await c.post("/api/v1/regulatory/rules", headers=h, json=rule)
     assert response.status_code == 201, response.text
     rid = response.json()["id"]

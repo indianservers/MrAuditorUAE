@@ -143,6 +143,8 @@ type Result = {
     rows: Record<string, unknown>[];
     limitations?: string[];
     control_comparison?: Record<string, string>;
+    allocation_controls?: Record<string, string>;
+    payment_scope?: Record<string, string>;
     box_comparison_scope?: {
       mode: string;
       required_boxes: string[];
@@ -189,6 +191,7 @@ type Result = {
 const text = (v: unknown) =>
   v == null ? "—" : typeof v === "object" ? JSON.stringify(v) : String(v);
 const moneyTables = [
+  "obligation-allocations",
   "cash-payments",
   "item-allocations",
   "credit-applications",
@@ -336,6 +339,10 @@ export function CountryWorkflows({
   const [sources, setSources] = useState<Record<string, string>>({});
   const [asOf, setAsOf] = useState("");
   const [reviewThrough, setReviewThrough] = useState("");
+  const [obligationMonthStart, setObligationMonthStart] = useState("");
+  const [obligationMonthEnd, setObligationMonthEnd] = useState("");
+  const [settlementStart, setSettlementStart] = useState("");
+  const [bankPaymentSign, setBankPaymentSign] = useState("");
   const [periodStart, setPeriodStart] = useState("");
   const [taxYear, setTaxYear] = useState("");
   const [requiredChecks, setRequiredChecks] = useState("");
@@ -364,7 +371,20 @@ export function CountryWorkflows({
     (f) => f.id === sourceFormat,
   );
   const body = detail.data?.body;
-  const rows = body?.rows || [];
+  const rows: Record<string, unknown>[] =
+    body?.workflow === "obligation-bank-allocations" && !showRuleProvenance
+      ? (body.rows || []).map((row) => ({
+          ...row,
+          subject: row.subject ?? row.reference,
+          source_amount:
+            row.expected_amount ?? row.reported_amount ?? row.bank_amount,
+          settled_or_allocated: row.bank_settled ?? row.allocated,
+          remaining:
+            row.outstanding_amount ??
+            row.unsettled_reported_amount ??
+            row.unallocated_bank_amount,
+        }))
+      : body?.rows || [];
   const allColumns = [
     ...new Set(rows.flatMap((row) => Object.keys(row))),
   ].filter((k) => !["auditor", "auditor_at"].includes(k));
@@ -373,6 +393,7 @@ export function CountryWorkflows({
     ["transactions", "audit-open-items"].includes(body?.table_type || "");
   const compactCredit = body?.workflow === "credit-note-applications";
   const compactBankClearance = body?.workflow === "bank-subsequent-clearance";
+  const compactDues = body?.workflow === "obligation-bank-allocations";
   const compactImport = body?.workflow === "uae-import-vat";
   const compactWithholding = [
     "india-withholding-liability",
@@ -386,114 +407,127 @@ export function CountryWorkflows({
         row.assessment_issues.length > 0,
     );
   const columns =
-    compactImport && !showRuleProvenance
+    compactDues && !showRuleProvenance
       ? [
-          "declaration",
-          "line_reference",
-          "entry_kind",
-          "adjustment_reference",
-          "vat201_box",
-          "amounts",
-          "differences",
-          "exceptions",
+          "kind",
+          "subject",
+          "period",
+          "component",
+          "currency",
+          "source_amount",
+          "settled_or_allocated",
+          "remaining",
           "state",
         ].filter((key) => allColumns.includes(key))
-      : compactWithholding && !showRuleProvenance
+      : compactImport && !showRuleProvenance
         ? [
-            "transaction_reference",
-            "counterparty",
-            "legal_role",
-            "tax_kind",
-            "period",
-            "currency",
+            "declaration",
+            "line_reference",
+            "entry_kind",
+            "adjustment_reference",
+            "vat201_box",
             "amounts",
-            ...(assessmentAttention
-              ? ["comparison_state", "assessment_issues"]
-              : []),
-            "differences_from_expected",
-            "differences_from_books",
+            "differences",
+            "exceptions",
             "state",
           ].filter((key) => allColumns.includes(key))
-        : compactBankClearance && !showRuleProvenance
+        : compactWithholding && !showRuleProvenance
           ? [
-              "kind",
-              "reference",
+              "transaction_reference",
+              "counterparty",
+              "legal_role",
+              "tax_kind",
+              "period",
               "currency",
-              "reporting_date_amount",
-              "subsequently_cleared",
-              "remaining_after_review",
-              "statement_amount",
-              "allocated",
-              "unallocated_amount",
+              "amounts",
+              ...(assessmentAttention
+                ? ["comparison_state", "assessment_issues"]
+                : []),
+              "differences_from_expected",
+              "differences_from_books",
               "state",
             ].filter((key) => allColumns.includes(key))
-          : compactCredit && !showRuleProvenance
+          : compactBankClearance && !showRuleProvenance
             ? [
                 "kind",
-                "item_id",
+                "reference",
                 "currency",
-                "amount",
-                "original_balance",
-                "applied",
-                "remaining_balance",
-                "control_amount",
-                "difference",
+                "reporting_date_amount",
+                "subsequently_cleared",
+                "remaining_after_review",
+                "statement_amount",
+                "allocated",
+                "unallocated_amount",
                 "state",
               ].filter((key) => allColumns.includes(key))
-            : compactSource && !showRuleProvenance
-              ? (body?.table_type === "transactions"
-                  ? [
-                      "reference",
-                      "account",
-                      "date",
-                      "currency",
-                      "amount",
-                      "counterparty",
-                      "source_debit",
-                      "source_credit",
-                    ]
-                  : [
-                      "reference",
-                      "counterparty",
-                      "account",
-                      "side",
-                      "currency",
-                      "document_type",
-                      "document_date",
-                      "due_date",
-                      "balance_date",
-                      "amount",
-                      "supporting_reported_open_amount",
-                    ]
-                ).filter((key) => allColumns.includes(key))
-              : body?.workflow === "india-payroll-rules" && !showRuleProvenance
-                ? [
-                    "subject",
-                    "period",
-                    "component",
-                    "currency",
-                    "assessed_base",
-                    "expected_amount",
-                    "reported_amount",
-                    "difference",
-                    "state",
-                  ].filter((key) => allColumns.includes(key))
-                : ["india-gst", "uae-vat"].includes(body?.workflow || "") &&
+            : compactCredit && !showRuleProvenance
+              ? [
+                  "kind",
+                  "item_id",
+                  "currency",
+                  "amount",
+                  "original_balance",
+                  "applied",
+                  "remaining_balance",
+                  "control_amount",
+                  "difference",
+                  "state",
+                ].filter((key) => allColumns.includes(key))
+              : compactSource && !showRuleProvenance
+                ? (body?.table_type === "transactions"
+                    ? [
+                        "reference",
+                        "account",
+                        "date",
+                        "currency",
+                        "amount",
+                        "counterparty",
+                        "source_debit",
+                        "source_credit",
+                      ]
+                    : [
+                        "reference",
+                        "counterparty",
+                        "account",
+                        "side",
+                        "currency",
+                        "document_type",
+                        "document_date",
+                        "due_date",
+                        "balance_date",
+                        "amount",
+                        "supporting_reported_open_amount",
+                      ]
+                  ).filter((key) => allColumns.includes(key))
+                : body?.workflow === "india-payroll-rules" &&
                     !showRuleProvenance
                   ? [
-                      "counterparty",
-                      "reference",
-                      "document_type",
+                      "subject",
+                      "period",
                       "component",
                       "currency",
-                      "books_tax",
-                      "return_tax",
-                      "tax_difference",
-                      "net_difference",
+                      "assessed_base",
+                      "expected_amount",
+                      "reported_amount",
+                      "difference",
                       "state",
-                      "source_review_reasons",
                     ].filter((key) => allColumns.includes(key))
-                  : allColumns;
+                  : ["india-gst", "uae-vat"].includes(body?.workflow || "") &&
+                      !showRuleProvenance
+                    ? [
+                        "counterparty",
+                        "reference",
+                        "document_type",
+                        "component",
+                        "currency",
+                        "books_tax",
+                        "return_tax",
+                        "tax_difference",
+                        "net_difference",
+                        "state",
+                        "source_review_reasons",
+                      ].filter((key) => allColumns.includes(key))
+                    : allColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -664,6 +698,17 @@ export function CountryWorkflows({
           throw new Error(
             "Select an available workflow for the engagement country",
           );
+        if (
+          workflow === "obligation-bank-allocations" &&
+          (!bankPaymentSign ||
+            !obligationMonthStart ||
+            !obligationMonthEnd ||
+            !settlementStart ||
+            !account.trim())
+        )
+          throw new Error(
+            "Declare obligation months, bank account, settlement window and payment sign before allocating.",
+          );
         if (workflow === "open-item-allocations" && !invoiceFaceAmounts)
           throw new Error(
             "Confirm that invoices contain face amounts before cash allocation.",
@@ -727,6 +772,15 @@ export function CountryWorkflows({
           ...(taxYear ? { tax_year_start: taxYear } : {}),
           ...(workflow === "bank-brs" ? { account, ...balances } : {}),
           ...(workflow === "bank-subsequent-clearance" ? { account } : {}),
+          ...(workflow === "obligation-bank-allocations"
+            ? {
+                account,
+                obligation_month_start: obligationMonthStart,
+                obligation_month_end: obligationMonthEnd,
+                settlement_start: settlementStart,
+                bank_payment_sign: bankPaymentSign,
+              }
+            : {}),
           required_checks: requiredChecks
             .split(",")
             .map((s) => s.trim())
@@ -1785,6 +1839,8 @@ export function CountryWorkflows({
                           r.kind === "workflow-source" &&
                           r.table_type === type &&
                           r.freshness === "CURRENT" &&
+                          (workflow !== "obligation-bank-allocations" ||
+                            r.review_status === "REVIEWED") &&
                           (!["uae-wps-sif", "india-epfo-ecr"].includes(
                             r.native_format || "",
                           ) ||
@@ -1848,6 +1904,75 @@ export function CountryWorkflows({
                       </small>
                     </label>
                   )}
+                </>
+              )}
+              {workflow === "obligation-bank-allocations" && (
+                <>
+                  <label>
+                    First obligation month
+                    <input
+                      type="month"
+                      value={obligationMonthStart}
+                      onChange={(e) => setObligationMonthStart(e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    Last obligation month
+                    <input
+                      type="month"
+                      value={obligationMonthEnd}
+                      onChange={(e) => setObligationMonthEnd(e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    Bank settlement window starts
+                    <input
+                      type="date"
+                      value={settlementStart}
+                      max={asOf}
+                      onChange={(e) => setSettlementStart(e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    Bank account identifier
+                    <input
+                      value={account}
+                      onChange={(e) => setAccount(e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    Account currency
+                    <input
+                      value={currency}
+                      onChange={(e) =>
+                        setCurrency(e.target.value.toUpperCase())
+                      }
+                    />
+                  </label>
+                  <label>
+                    Bank payment sign
+                    <select
+                      value={bankPaymentSign}
+                      onChange={(e) => setBankPaymentSign(e.target.value)}
+                    >
+                      <option value="">
+                        Select the source sign convention
+                      </option>
+                      <option value="debit-negative">
+                        Payments are negative (native bank statements)
+                      </option>
+                      <option value="debit-positive">
+                        Payments are positive (explicit mapped source)
+                      </option>
+                    </select>
+                  </label>
+                  <p>
+                    Select independently reviewed expected obligations, reported
+                    instructions/returns, bank movements and allocations. One
+                    bank movement may settle several obligations; partial
+                    payments and unallocated movements remain visible. Due dates
+                    come from the assessed expected source.
+                  </p>
                 </>
               )}
               {workflow === "bank-subsequent-clearance" && (
@@ -2542,6 +2667,40 @@ export function CountryWorkflows({
               )}
             </dl>
           )}
+          {body.allocation_controls && (
+            <section aria-label="Obligation allocation controls">
+              <h3>Obligation and bank allocation controls</h3>
+              <dl
+                style={{
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+                  gap: 12,
+                }}
+              >
+                {Object.entries(body.allocation_controls).map(
+                  ([key, value]) => (
+                    <div key={key}>
+                      <dt>{key.replaceAll("_", " ")}</dt>
+                      <dd>{value}</dd>
+                    </div>
+                  ),
+                )}
+              </dl>
+              <details>
+                <summary>Declared payment scope</summary>
+                <dl>
+                  {Object.entries(body.payment_scope || {}).map(
+                    ([key, value]) => (
+                      <div key={key}>
+                        <dt>{key.replaceAll("_", " ")}</dt>
+                        <dd>{value}</dd>
+                      </div>
+                    ),
+                  )}
+                </dl>
+              </details>
+            </section>
+          )}
           {body.control_comparison && (
             <dl>
               {Object.entries(body.control_comparison).map(([k, v]) => (
@@ -2559,8 +2718,8 @@ export function CountryWorkflows({
                 {Object.entries(body.native_metadata)
                   .filter(
                     ([key]) =>
-                      key !== "message_controls" ||
-                      !Array.isArray(body.native_metadata?.message_controls),
+                      !["message_controls", "page_controls"].includes(key) ||
+                      !Array.isArray(body.native_metadata?.[key]),
                   )
                   .map(([key, value]) => (
                     <div key={key}>
@@ -2569,6 +2728,65 @@ export function CountryWorkflows({
                     </div>
                   ))}
               </dl>
+              {Array.isArray(body.native_metadata.page_controls) && (
+                <div className="table-wrap">
+                  <table aria-label="CAMT statement page controls">
+                    <thead>
+                      <tr>
+                        {[
+                          "Page",
+                          "Original statement position",
+                          "Sequence",
+                          "Currency",
+                          "Opening",
+                          "Closing",
+                          "Entries",
+                          "Entry total",
+                          "Final page",
+                        ].map((label) => (
+                          <th key={label}>{label}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(
+                        body.native_metadata.page_controls as Record<
+                          string,
+                          unknown
+                        >[]
+                      ).map((page, index) => (
+                        <tr key={index}>
+                          {[
+                            "page_number",
+                            "source_statement_position",
+                            "electronic_sequence",
+                            "currency",
+                            "opening",
+                            "closing",
+                            "entry_count",
+                            "entry_total",
+                            "last_page",
+                          ].map((key) => (
+                            <td key={key}>{text(page[key])}</td>
+                          ))}
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <details>
+                    <summary>
+                      All retained statement page control fields
+                    </summary>
+                    <pre>
+                      {JSON.stringify(
+                        body.native_metadata.page_controls,
+                        null,
+                        2,
+                      )}
+                    </pre>
+                  </details>
+                </div>
+              )}
               {Array.isArray(body.native_metadata.message_controls) && (
                 <div className="table-wrap">
                   <table aria-label="MT940 message controls">
@@ -2726,6 +2944,7 @@ export function CountryWorkflows({
           <div style={{ overflowX: "auto" }}>
             {(compactSource ||
               compactBankClearance ||
+              compactDues ||
               compactCredit ||
               compactWithholding ||
               compactImport) && (
@@ -2750,7 +2969,9 @@ export function CountryWorkflows({
                 <tr>
                   {columns.map((k) => (
                     <th key={k} scope="col">
-                      {k.replaceAll("_", " ")}
+                      {compactDues && k === "settled_or_allocated"
+                        ? "allocated"
+                        : k.replaceAll("_", " ")}
                     </th>
                   ))}
                   {detail.data.kind === "country-workflow" && (

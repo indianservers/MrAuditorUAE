@@ -143,6 +143,7 @@ def implementation_hash():
         "modules/regulatory/evaluation.py",
         "modules/regulatory/schemas.py",
         "modules/regulatory/conversion.py",
+        "modules/regulatory/source_documents.py",
     ]
     digest = hashlib.sha256()
     for name in paths:

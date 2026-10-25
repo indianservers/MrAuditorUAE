@@ -8,6 +8,348 @@ const fixture = JSON.parse(
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
 
+test("UAE and India rule publication binds retained source copies and independent review", async ({
+  page,
+  browser,
+}) => {
+  test.setTimeout(180000);
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+    viewport: { width: 1600, height: 1100 },
+  });
+  const reviewer = await context.newPage();
+  async function workingCountry(actor: Page, country: string) {
+    await actor.goto("/settings/countries");
+    const picker = actor.getByLabel("Working country", { exact: true });
+    await expect(picker).toBeEnabled();
+    if ((await picker.inputValue()) !== country) {
+      const changed = actor.waitForResponse(
+        (response) =>
+          response.url().endsWith("/jurisdictions/settings") &&
+          response.request().method() === "PATCH",
+      );
+      await picker.selectOption(country);
+      expect((await changed).status()).toBe(200);
+    }
+  }
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_final_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    for (const country of ["AE", "IN"] as const) {
+      await workingCountry(page, country);
+      await workingCountry(reviewer, country);
+      await page.goto("/settings/regulatory-rules");
+      await page
+        .getByRole("button", { name: "Propose new rule", exact: true })
+        .click();
+      const body = {
+        rule_key: `${country}-SYNTHETIC-SOURCE-${Date.now()}`,
+        country,
+        title: "SYNTHETIC retained-source workflow, not legislation",
+        description:
+          "Synthetic publication controls only; no legal rate or applicability qualification",
+        framework: country === "AE" ? "IFRS" : "Ind AS",
+        period_basis: "period_start",
+        effective_from: "2026-01-01",
+        effective_to: "2027-12-31",
+        citations: [
+          {
+            authority: "SYNTHETIC reference",
+            legislation: "SYNTHETIC copy only",
+            url: "https://mof.gov.ae/",
+            paragraph: "TEST",
+          },
+        ],
+        input_requirements: ["entity_type"],
+        output_requirements: ["reviewed_conclusion"],
+        applicability: [],
+        method: "checklist",
+        validation_status: "VALIDATED",
+        professional_review_status: "REVIEWED",
+        last_reviewed: "2026-10-24",
+        amendment_reason:
+          "Synthetic mechanics only; no country legal-content release",
+        expected_sequence: 0,
+      };
+      await page
+        .getByLabel("Versioned rule configuration")
+        .fill(JSON.stringify(body, null, 2));
+      await page
+        .getByText("Firm regulatory reference copies", { exact: true })
+        .click();
+      const sourcePicker = page.getByLabel("Retained regulatory source", {
+        exact: true,
+      });
+      await expect(sourcePicker).toBeVisible();
+      await expect(
+        sourcePicker.locator(
+          `option[value="${fixture.regulatory_conversions[country].rule_reference_copy}"]`,
+        ),
+      ).toHaveCount(1);
+      await sourcePicker.selectOption(
+        fixture.regulatory_conversions[country].rule_reference_copy,
+      );
+      await page
+        .getByRole("button", {
+          name: "Attach source to proposal citation",
+          exact: true,
+        })
+        .click();
+      const attached = JSON.parse(
+        await page.getByLabel("Versioned rule configuration").inputValue(),
+      );
+      expect(attached.citations[0].source_document_id).toBe(
+        fixture.regulatory_conversions[country].rule_reference_copy,
+      );
+      expect(attached.citations[0].document_sha256).toMatch(/^[a-f0-9]{64}$/);
+      const createdResponse = page.waitForResponse(
+        (response) =>
+          response.url().endsWith("/regulatory/rules") &&
+          response.request().method() === "POST",
+      );
+      await page
+        .getByRole("button", { name: "Save immutable proposal", exact: true })
+        .click();
+      const created = await createdResponse;
+      expect(created.status()).toBe(201);
+      const rule = await created.json();
+      await page
+        .getByLabel("Decision rationale")
+        .fill(
+          "Synthetic preparer cannot independently approve their own rule or source.",
+        );
+      const denied = page.waitForResponse((response) =>
+        response.url().endsWith(`/rules/${rule.id}/decisions`),
+      );
+      await page
+        .getByRole("button", {
+          name: "Record independent approval",
+          exact: true,
+        })
+        .click();
+      expect((await denied).status()).toBe(403);
+      await reviewer.goto(`/settings/regulatory-rules?rule=${rule.id}`);
+      await reviewer
+        .getByLabel("Decision rationale")
+        .fill(
+          "Independent synthetic source-copy, citation binding and content mechanics checked.",
+        );
+      const approved = reviewer.waitForResponse((response) =>
+        response.url().endsWith(`/rules/${rule.id}/decisions`),
+      );
+      await reviewer
+        .getByRole("button", {
+          name: "Record independent approval",
+          exact: true,
+        })
+        .click();
+      expect((await approved).status()).toBe(201);
+      await page.goto(`/settings/regulatory-rules?rule=${rule.id}`);
+      await page
+        .getByLabel("Decision rationale")
+        .fill(
+          "Synthetic controlled publication following independent review of the retained reference copy.",
+        );
+      const published = page.waitForResponse((response) =>
+        response.url().endsWith(`/rules/${rule.id}/decisions`),
+      );
+      await page
+        .getByRole("button", { name: "Publish approved version", exact: true })
+        .click();
+      const result = await published;
+      expect(result.status()).toBe(201);
+      expect((await result.json()).body.verified_source_copies[0].id).toBe(
+        attached.citations[0].source_document_id,
+      );
+      await expect(
+        page.getByText("PUBLISHED", { exact: true }).first(),
+      ).toBeVisible();
+      for (const notice of await page
+        .getByRole("button", { name: "Dismiss notification", exact: true })
+        .all())
+        await notice.click();
+      const panel = page
+        .getByRole("heading", { name: `${body.rule_key} • v1`, exact: true })
+        .locator("..");
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-retained-source-rule-publication.png`,
+        () => panel.screenshot(),
+      );
+    }
+    await workingCountry(page, "AE");
+    await workingCountry(reviewer, "AE");
+  } finally {
+    await context.close();
+  }
+});
+
+test("reviewed obligations allocate pooled bank payments for UAE and India", async ({
+  page,
+  browser,
+}) => {
+  test.setTimeout(150000);
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+    viewport: { width: 1600, height: 1100 },
+  });
+  const reviewer = await context.newPage();
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_final_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    for (const [country, eid, currency] of [
+      ["AE", fixture.uae_engagement, "AED"],
+      ["IN", fixture.india_engagement, "INR"],
+    ] as const) {
+      const title = `SYNTHETIC ${country} pooled obligation bank review ${Date.now()}`;
+      await page.goto(`/intelligence/${eid}/country-workflow`);
+      await page
+        .getByLabel("Workflow", { exact: true })
+        .selectOption("obligation-bank-allocations");
+      await expect(page.getByLabel("Bank payment sign")).toHaveValue("");
+      for (const [label, value] of [
+        ["Schedule title", title],
+        ["Reconciliation date", "2026-06-30"],
+        ["First obligation month", "2026-05"],
+        ["Last obligation month", "2026-06"],
+        ["Bank settlement window starts", "2026-06-01"],
+        ["Bank account identifier", "BANK-1"],
+        ["Account currency", currency],
+        [
+          "Scope and source rationale",
+          "Reviewed fictional pooled payment scope with separately retained expected, reported and bank evidence",
+        ],
+      ])
+        await page.getByLabel(label, { exact: true }).fill(value);
+      await page.getByLabel("Bank payment sign").selectOption("debit-negative");
+      for (const [role, id] of Object.entries(
+        fixture.obligation_allocations[country],
+      ))
+        await page
+          .getByLabel(`${role} source`, { exact: true })
+          .selectOption(String(id));
+      const queued = page.waitForResponse(
+        (response) =>
+          response.url().includes(`/engagements/${eid}/jobs`) &&
+          response.request().method() === "POST",
+      );
+      await page
+        .getByRole("button", { name: "Queue calculation", exact: true })
+        .click();
+      expect((await queued).status()).toBe(202);
+      const option = page
+        .getByLabel("Saved source or result")
+        .getByRole("option", { name: new RegExp(title) });
+      await expect(option).toHaveCount(1);
+      await page
+        .getByLabel("Saved source or result")
+        .selectOption((await option.getAttribute("value"))!);
+      const panel = page
+        .getByRole("heading", { name: title, exact: true })
+        .locator("..");
+      await expect(
+        panel.getByRole("region", { name: "Obligation allocation controls" }),
+      ).toContainText("allocated amount180");
+      const late = panel.getByRole("row").filter({
+        has: page.getByRole("cell", { name: "LATE_PAYMENT", exact: true }),
+      });
+      await expect(late).toHaveCount(1);
+      await panel
+        .getByLabel("Review / exception rationale")
+        .fill(
+          "Synthetic late residual payment of 30 retained and documented; no legal due date is inferred.",
+        );
+      const disposition = page.waitForResponse(
+        (response) =>
+          response.url().endsWith("/review") &&
+          response.request().method() === "POST",
+      );
+      await late
+        .getByRole("button", { name: "Document exception", exact: true })
+        .click();
+      const response = await disposition;
+      expect(response.status()).toBe(201);
+      const prepared = await response.json();
+      await reviewer.goto(`/intelligence/${eid}/country-workflow`);
+      await reviewer
+        .getByLabel("Saved source or result")
+        .selectOption(prepared.id);
+      await reviewer
+        .getByLabel("Review / exception rationale")
+        .fill(
+          "Independent source, pooled allocation, residual controls and documented late payment checked.",
+        );
+      const approval = reviewer.waitForResponse(
+        (response) =>
+          response.url().endsWith(`/events/${prepared.id}/review`) &&
+          response.request().method() === "POST",
+      );
+      await reviewer
+        .getByRole("button", { name: "Independent approval", exact: true })
+        .click();
+      const approved = await approval;
+      expect(approved.status()).toBe(201);
+      await expect(
+        reviewer.getByText("REVIEWED", { exact: true }),
+      ).toBeVisible();
+      const reviewedPanel = reviewer
+        .getByRole("heading", { name: title, exact: true })
+        .locator("..");
+      for (const notice of await reviewer
+        .getByRole("button", { name: "Dismiss notification", exact: true })
+        .all())
+        await notice.click();
+      const reviewedTable = reviewedPanel.getByRole("table");
+      await expect
+        .poll(() =>
+          reviewedTable.evaluate(
+            (table) => table.scrollWidth <= table.parentElement!.clientWidth,
+          ),
+        )
+        .toBe(true);
+      await reviewedTable.scrollIntoViewIfNeeded();
+      await reviewedTable.evaluate((table) => {
+        table.parentElement!.scrollLeft = 0;
+      });
+      await expect(
+        reviewedTable.getByRole("columnheader", { name: "kind", exact: true }),
+      ).toBeInViewport({ ratio: 1 });
+      await expect(
+        reviewedTable.getByRole("cell", { name: "LATE_PAYMENT", exact: true }),
+      ).toBeVisible();
+      await expect(reviewedTable.getByRole("row")).toHaveCount(7);
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-obligation-bank-allocations.png`,
+        () => reviewedTable.screenshot(),
+      );
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-obligation-allocation-controls.png`,
+        () =>
+          reviewedPanel
+            .getByRole("region", { name: "Obligation allocation controls" })
+            .screenshot(),
+      );
+    }
+  } finally {
+    await context.close();
+  }
+});
+
 test("reviewed currency conversions feed scoped UAE and India rule assessments", async ({
   page,
   browser,
@@ -1691,6 +2033,18 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
       await expect(
         page.getByText("NOT_EVIDENCED_BY_INSTRUCTION_FILE", { exact: true }),
       ).toBeVisible();
+    if (source.format === "camt053") {
+      const pages = page.getByRole("table", {
+        name: "CAMT statement page controls",
+        exact: true,
+      });
+      await expect(pages.getByRole("row")).toHaveCount(4);
+      await expect(pages.getByRole("row").nth(2)).toContainText("100.00");
+      await expect(pages.getByRole("row").nth(3)).toContainText("95.00");
+      await saveScreenshot(`${shots}/camt053-statement-page-controls.png`, () =>
+        pages.screenshot(),
+      );
+    }
     if (source.format === "swift-mt940") {
       const messages = page.getByRole("table", {
         name: "MT940 message controls",

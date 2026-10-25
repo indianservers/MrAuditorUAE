@@ -1,19 +1,101 @@
 import uuid
 from datetime import date
+from typing import Annotated
 
-from fastapi import APIRouter, Query, Request
+from fastapi import APIRouter, File, Form, HTTPException, Query, Request, UploadFile
+from fastapi.responses import Response
+from pydantic import ValidationError
 from sqlalchemy import or_, select
+from starlette.concurrency import run_in_threadpool
 
 from app.api.v1.audit_execution import Actor
 from app.core.dependencies import DB
 from app.modules.audit_execution import service as audit
 from app.modules.intelligence import service as intelligence
 from app.modules.regulatory import schemas as s
-from app.modules.regulatory import service
+from app.modules.regulatory import service, source_documents
 from app.modules.regulatory.conversion import ConversionInput
-from app.modules.regulatory.models import RuleVersion
+from app.modules.regulatory.models import RuleSourceDocument, RuleVersion
 
 router = APIRouter(prefix="/regulatory", tags=["Regulatory rule library"])
+
+
+@router.post("/sources", status_code=201)
+async def retain_source(
+    db: DB,
+    ctx: Actor,
+    request: Request,
+    file: Annotated[UploadFile, File()],
+    metadata: Annotated[str, Form(max_length=10000)],
+):
+    await service.authorize(db, ctx, "tax.rules.manage")
+    try:
+        selected = s.SourceDocumentMetadata.model_validate_json(metadata)
+    except ValidationError:
+        raise HTTPException(422, "Invalid regulatory source metadata") from None
+    return source_documents.info(
+        await source_documents.upload(db, ctx, file, selected, request.state.request_id)
+    )
+
+
+@router.get("/sources")
+async def source_library(
+    db: DB,
+    ctx: Actor,
+    country: str | None = Query(None, pattern="^[A-Z]{2}$"),
+    offset: int = Query(0, ge=0),
+    limit: int = Query(50, ge=1, le=100),
+):
+    await service.authorize_read(db, ctx)
+    query = select(RuleSourceDocument).where(RuleSourceDocument.tenant_id == ctx.tenant_id)
+    if country:
+        query = query.where(RuleSourceDocument.country.in_([country, "GLOBAL"]))
+    documents = (
+        await db.scalars(
+            query.order_by(RuleSourceDocument.created_at.desc(), RuleSourceDocument.id.desc())
+            .offset(offset)
+            .limit(limit)
+        )
+    ).all()
+    return {
+        "items": [source_documents.info(document) for document in documents],
+        "offset": offset,
+        "limit": limit,
+    }
+
+
+@router.get("/sources/{identifier}/download")
+async def download_source(identifier: uuid.UUID, db: DB, ctx: Actor, request: Request):
+    from urllib.parse import quote
+
+    await service.authorize_read(db, ctx)
+    document = await source_documents.get(db, ctx, identifier)
+    try:
+        content = await run_in_threadpool(source_documents.read, document, download=True)
+    except (ValueError, OSError):
+        raise HTTPException(
+            409, "Retained regulatory source failed original-file integrity"
+        ) from None
+    record_metadata = {"sha256": document.sha256}
+    from app.modules.audit_log.service import record
+
+    record(
+        db,
+        ctx,
+        "regulatory.source_downloaded",
+        document.id,
+        request.state.request_id,
+        record_metadata,
+    )
+    return Response(
+        content,
+        media_type="application/octet-stream",
+        headers={
+            "Content-Disposition": "attachment; filename*=UTF-8''" + quote(document.filename),
+            "Content-Security-Policy": "sandbox; default-src 'none'",
+            "X-Content-Type-Options": "nosniff",
+        },
+    )
 
 
 @router.post("/engagements/{eid}/conversions", status_code=201)

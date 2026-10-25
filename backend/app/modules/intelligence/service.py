@@ -257,16 +257,15 @@ async def current(db, ctx, obj, visited=None):
 
             eng = await db.get(Engagement, obj.engagement_id)
             period = await db.get(FinancialPeriod, eng.period_id)
-            chosen = await selection(
-                db,
-                ctx,
-                dependency["rule_key"],
-                period.start_date,
-                period.end_date,
-                date.fromisoformat(dependency["transaction_date"])
-                if dependency.get("transaction_date")
-                else None,
-            )
+            try:
+                chosen = await selection(
+                    db, ctx, dependency["rule_key"], period.start_date, period.end_date,
+                    date.fromisoformat(dependency["transaction_date"]) if dependency.get("transaction_date") else None,
+                )
+            except HTTPException as error:
+                if error.status_code == 409:
+                    return False  # Preserve readable history when its rule/source can no longer be qualified.
+                raise
             if (
                 not chosen
                 or str(chosen.id) != dependency["id"]

@@ -12,7 +12,11 @@ from tests.unit.test_regulatory_evaluation import fixture
 pytestmark = pytest.mark.skipif(os.getenv("INTEGRATION_TESTS") != "1", reason="Disposable database")
 
 
-async def test_india_reviewed_mapping_reporting_template_and_historical_sources(environment):
+async def test_india_reviewed_mapping_reporting_template_and_historical_sources(environment, monkeypatch):
+    from tests.qa_crud.regulatory_source_fixtures import retain
+    from tests.qa_crud.test_country_workflows import double_boundaries
+
+    double_boundaries(monkeypatch)
     c = environment
     h, options, eid, _ = await setup(c)
     reviewer = await actor(h, "Firm Administrator", "india-report-reviewer")
@@ -53,6 +57,7 @@ async def test_india_reviewed_mapping_reporting_template_and_historical_sources(
     rule["citations"][0].update(
         retrieval_status="RETRIEVED", document_sha256="b" * 64, retrieved_on="2026-10-24"
     )
+    await retain(c, h, rule)
     created = await c.post("/api/v1/regulatory/rules", headers=h, json=rule)
     assert created.status_code == 201, created.text
     rule_id = created.json()["id"]

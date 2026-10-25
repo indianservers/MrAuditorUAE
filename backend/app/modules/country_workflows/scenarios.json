@@ -1319,5 +1319,59 @@
     "expected": {
       "error": "beyond the reconciliation date"
     }
+  },
+  {
+    "id": "RW-143",
+    "title": "UAE pooled bank debit settles two employee obligations",
+    "workflow": "obligation-bank-allocations",
+    "country": "AE",
+    "expected": {
+      "exceptions": 0
+    }
+  },
+  {
+    "id": "RW-144",
+    "title": "UAE partially settled salary remains outstanding and overdue",
+    "workflow": "obligation-bank-allocations",
+    "country": "AE",
+    "expected": {
+      "exceptions": 2
+    }
+  },
+  {
+    "id": "RW-145",
+    "title": "UAE salary settlement never nets an unallocated bank credit",
+    "workflow": "obligation-bank-allocations",
+    "country": "AE",
+    "expected": {
+      "exceptions": 1
+    }
+  },
+  {
+    "id": "RW-146",
+    "title": "UAE missing payroll month remains missing rather than zero",
+    "workflow": "obligation-bank-allocations",
+    "country": "AE",
+    "expected": {
+      "exceptions": 1
+    }
+  },
+  {
+    "id": "RW-147",
+    "title": "India pooled bank debit explicitly allocates employee PF dues",
+    "workflow": "obligation-bank-allocations",
+    "country": "IN",
+    "expected": {
+      "exceptions": 0
+    }
+  },
+  {
+    "id": "RW-148",
+    "title": "India obligation or challan allocation cannot reuse excess cash",
+    "workflow": "obligation-bank-allocations",
+    "country": "IN",
+    "expected": {
+      "error": "overallocated"
+    }
   }
 ]

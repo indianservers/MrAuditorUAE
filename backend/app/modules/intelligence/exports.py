@@ -63,6 +63,8 @@ def render(event, format):
             "totals_basis",
             "totals_by_currency",
             "control_comparison",
+            "allocation_controls",
+            "payment_scope",
             "source_totals",
             "destination_totals",
             "section",
@@ -135,6 +137,16 @@ def render(event, format):
             **body["native_metadata"],
             "message_controls": f"{len(message_controls)} message control records retained in the source result and full XLSX MT940 message controls sheet",
         }
+    page_controls = (
+        native_metadata.get("page_controls", [])
+        if body.get("native_format") == "camt053" and isinstance(native_metadata, dict)
+        else []
+    )
+    if page_controls:
+        summary["native_metadata"] = {
+            **body["native_metadata"],
+            "page_controls": f"{len(page_controls)} page control records retained in the source result and full XLSX CAMT page controls sheet",
+        }
 
     buffer = io.BytesIO()
     if format == "xlsx":
@@ -177,6 +189,12 @@ def render(event, format):
             append(messages, message_keys)
             for message in message_controls:
                 append(messages, [message.get(key) for key in message_keys])
+        if page_controls:
+            pages = workbook.create_sheet("CAMT page controls")
+            page_keys = list(dict.fromkeys(key for page in page_controls for key in page))
+            append(pages, page_keys)
+            for page in page_controls:
+                append(pages, [page.get(key) for key in page_keys])
         receipts = workbook.create_sheet("Dependency receipts")
         for dep in event["dependencies"]:
             append(receipts, [dep["type"], dep])

@@ -334,6 +334,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         source = await intelligence.event(db, ctx, eng.id, identifier, True)
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
+        if data.workflow == "obligation-bank-allocations" and source.body.get("review_status") != "REVIEWED":
+            raise HTTPException(409, "Independently review all obligation, reported, bank and allocation sources before settlement review")
         if source.body.get("parser_version") == "import-vat-box-bridge/1" and (data.workflow != "uae-vat-return" or role != "books"):
             raise HTTPException(422, "Derived import boxes can feed only the books role of VAT201 comparison, not filed return evidence")
         if (

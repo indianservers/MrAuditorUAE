@@ -105,7 +105,7 @@ async def state(db, ctx, obj):
     )
 
 
-async def action(db, ctx, obj, status, comments, request_id):
+async def action(db, ctx, obj, status, comments, request_id, source_receipts=None):
     item = RuleAction(
         tenant_id=ctx.tenant_id,
         created_by=ctx.user_id,
@@ -113,7 +113,8 @@ async def action(db, ctx, obj, status, comments, request_id):
         version_id=obj.id,
         sequence=(await sequence(db, ctx, obj.rule_key)) + 1,
         state=status,
-        body={"comments": comments, "version_sha256": obj.sha256},
+        body={"comments": comments, "version_sha256": obj.sha256,
+              **({"verified_source_copies": source_receipts} if source_receipts is not None else {})},
     )
     db.add(item)
     await db.flush()
@@ -179,6 +180,8 @@ def validation_blockers(rule):
     if not rule.last_reviewed or rule.last_reviewed > date.today():
         blockers.append("A valid content review date is required")
     for citation in rule.citations:
+        if citation.source_document_id is None:
+            blockers.append("A retained regulatory source copy is required for every citation")
         if citation.url.scheme != "https":
             blockers.append("Published citations require HTTPS official sources")
         host = citation.url.host or ""
@@ -219,11 +222,17 @@ async def decide(db, ctx, obj, data, request_id):
         if not previous or previous.state != "DRAFT":
             raise HTTPException(409, "Only a draft proposal can be reviewed")
         status = "APPROVED" if data.action == "approve" else "REJECTED"
+    source_receipts = None
     if status in {"APPROVED", "PUBLISHED"}:
         blockers = validation_blockers(Rule.model_validate(obj.body))
         if blockers:
             raise HTTPException(409, {"regulatory_validation_blockers": blockers})
-    return await action(db, ctx, obj, status, data.comments, request_id)
+        from app.modules.regulatory.source_documents import verify_rule_sources
+
+        source_receipts = await verify_rule_sources(db, ctx, Rule.model_validate(obj.body))
+        if status == "APPROVED" and str(ctx.user_id) in {source["created_by"] for source in source_receipts}:
+            raise HTTPException(403, "A source uploader cannot independently approve a rule using that source")
+    return await action(db, ctx, obj, status, data.comments, request_id, source_receipts)
 
 
 async def selection(db, ctx, key, period_start, period_end, transaction_date=None):
@@ -261,6 +270,9 @@ async def selection(db, ctx, key, period_start, period_end, transaction_date=Non
                         "blocking_issues": blockers,
                     },
                 )
+            from app.modules.regulatory.source_documents import verify_rule_sources
+
+            await verify_rule_sources(db, ctx, rule)
             return obj
     return None
 

@@ -2,7 +2,203 @@
 
 Implementation checkpoint: 25 October 2026. These additions extend the existing evidence, intelligence job, immutable event, review and lineage infrastructure.
 
+## Current combined regression
+
+The current combined receipt now records **12 passing browser tests in 7.8
+minutes**, after fresh guarded fixture preparation. It includes retained-source
+publication in both countries, obligation/bank allocations, currency conversion,
+subsequent clearance, import VAT/VAT201, history, PDF, credit applications,
+withholding, native sources and CSV/XLSX bridges. This supersedes the intermediate
+11-pass/one-picker-timeout run. The picker now has an explicit accessible name;
+the focused publication flow also passed before the clean combined rerun.
+Use fresh fixture preparation for each full campaign rather than accumulating
+results across repeated campaigns; the dedicated history test separately retains
+its deliberate population beyond 100 events. Earlier checkpoints below are
+historical and their counts must not be summed.
+
+After refreshing the isolated API and intelligence worker and preparing fresh guarded
+fixtures, `browser-results.json` records **10 passing browser tests in 6.1 minutes**.
+This supersedes the earlier eight-pass/two-timeout run. Existing test timeouts were
+unchanged. The combined run exercises reviewed UAE/India currency conversions and
+rule assessments, subsequent bank clearance, the selected VAT201 import bridge,
+import-VAT version decisions, history beyond 100 events, PDF bank extraction,
+credit applications, India withholding roles, native-source controls and exports,
+and CSV/XLSX bank and payable bridges through the real worker.
+
+Country implementation hashing now takes one snapshot per active database
+transaction. Each new transaction recomputes it; sessions without an active
+transaction do not cache it. This avoids repeatedly reading the same implementation
+files while checking a history page. Entity, period, currency, source version,
+document integrity and dependency freshness checks still run. The API regression
+in `history-freshness-integration-results.xml` proves that a subsequent request
+recomputes the fingerprint and detects a simulated rollout; its six passing cases
+also include bank-clearance and supporting-bank lineage regressions.
+
+The pre-CAMT checkpoint recorded **1,176 passing backend unit tests and four
+skips** for opt-in connector database tests. Those four connector cases passed
+separately against their disposable database and Redis namespace. The retained
+frontend receipt records 111 passes. These checks verify the exercised synthetic
+workflows, not representative provider exports, live government integrations,
+qualified legal packs or completion of the full original roadmap. Older counts
+below describe their historical checkpoints and must not be added together.
+
+## Single-file CAMT statement pagination
+
+`camt053-2` now accepts complete statement-page chains within one retained XML
+document. The profile follows [SWIFT CGI-MP v1.6, pages 49–55](https://www.swift.com/swift-resource/252088/download).
+Selection uses the statement ID and account; different statements remain distinct.
+Pages must be ordered from one, share their electronic/legal sequence and currency,
+and mark only the final page as last. Opening and closing interim subtypes and
+amount/date carry-forward are checked. Each page balances independently, including
+empty intermediate pages; aggregate opening plus entries must equal final closing.
+The first-page count controls the whole statement. Reported gross, net and
+credit/debit summary controls are checked against all entries. Repeated summary
+groups on later pages and duplicate control fields are rejected.
+
+Rows preserve physical statement position, logical page, original page row and
+global row. Page receipts retain both balances, dates, subtypes and entry totals;
+the review screen exposes a compact table and all fields. XLSX exports retain
+every page in a separate **CAMT page controls** sheet. Booked entry amounts remain
+the transaction grain; detail amounts are not added again. The original XML is
+retained unchanged. Complete single-page imports remain supported.
+
+The fictional [three-page sample](sample-inputs/SYNTHETIC-camt-statement-pages.xml)
+uses account `BANK-1`, statement `SYNTHETIC-STMT`, two booked entries and an
+independent control of `AED=95`. Its middle page is intentionally empty and still
+participates in balance carry-forward. It is an arithmetic example, not bank evidence.
+
+`camt-pages-unit-results.xml` records 111 overlapping targeted passing tests,
+including three currencies, broken chains, controls, explicit statement selection,
+the 100-page bound, XLSX, existing native readers and implementation guards.
+`camt-pages-integration-results.xml` records four passing UAE/India CAMT and MT940
+API cases: original-file download, maker/checker separation, independently reviewed
+cashbook reconciliation, XLSX controls and source-replacement staleness. Scanner
+and broker boundaries are explicit test doubles in those API cases.
+`camt-pages-frontend-results.xml` records 112 passing frontend tests. The updated
+full backend receipt records 1,210 passes and four opt-in connector skips. Scoped
+Python typing, lint, frontend type checks and UTF-8 preflight pass.
+
+This adds single-file statement-page assembly. Separate XML files, message-level
+pagination, provider export qualification and bank identity authentication remain
+open. The earlier ten-test browser receipt predates this CAMT addition.
+The updated native-source browser test passes in one minute against the refreshed
+API and real Redis/Celery worker (`camt-pages-browser-results.txt`). It imports the
+three-page sample through the source form and asserts all three page controls.
+The captured `screenshots/native-sources/camt053-statement-page-controls.png` was
+visually inspected: all columns and the empty middle page's carry-forward are readable.
+This focused run also retains the native bank, payroll, tax, export and country
+isolation assertions; it does not replace the earlier full ten-test checkpoint.
+
 ## Supported profiles
+
+- **Retained regulatory reference copies:** the firm rule library now keeps its
+  public reference material separately from client evidence. `POST /regulatory/sources`
+  accepts a bounded PDF/UTF-8 text copy and explicit title, country or GLOBAL,
+  source HTTPS URL and retrieval date. It reuses private versioned object storage,
+  quotas, structural validation, malware scanning, firm permissions and audit logs.
+  A source copy is usable only after a CLEAN scan; scanner failures/rejections do
+  not create usable copies. Source records are immutable and tenant-isolated.
+  List/download responses omit private object-store keys; download verifies the
+  retained bytes and uses attachment/sandbox headers.
+
+  Every citation needs `source_document_id` before independent approval or
+  publication. The retained copy's jurisdiction, URL, retrieval date and SHA-256
+  must agree with the citation; an entered hash alone no longer qualifies a rule.
+  Copies scoped GLOBAL may support several country rules. The proposer and any
+  cited source uploader cannot independently approve the rule. Publication remains
+  an authorized firm-administrator action after independent approval. Approval and
+  publication retain the verified-copy receipts in their append-only actions.
+  Binding a copy does not set technical validation or professional review flags.
+
+  Rule selection rechecks retained-file integrity. A damaged/missing source blocks
+  new assessments and makes dependent historical assessments stale while preserving
+  their original result and checksum. Successful verification is cached only for
+  the active database transaction; a new transaction rechecks the bytes. Individual
+  copies are limited to 10 MiB and verification to 100 MiB per transaction; limits
+  fail explicitly rather than omitting sources. Uploaded bytes do not authenticate
+  an official URL or establish correct legal interpretation/applicability.
+
+  Migration `0021` adds the source table, RLS and immutable-history trigger; the
+  readiness contract now requires that migration. The existing-environment upgrade
+  was applied only to the owned disposable country-workflow database. Existing published
+  rules without retained copies remain historical records and require an amended
+  proposal with source bindings before new qualified use. No legal rule content is
+  silently rewritten or auto-published.
+
+  `regulatory-sources-integration-results.xml` records 14 passing database/API cases
+  covering source integrity, citation mismatches, tenant isolation, immutable history,
+  source-uploader separation, failed scans, downstream staleness, currency conversion,
+  rule versioning, specialist reporting and the foundation workflow. Scanner/queue
+  boundaries are explicit doubles where used; copied text/rates are synthetic.
+  The latest full unit receipt records 1,247 passes and four opt-in connector skips.
+  A separate disposable-database run passed those four connector cases through the
+  new migration. `regulatory-sources-frontend-results.xml` records 118 passes,
+  including upload metadata, bounded source pagination and attaching a specific
+  citation without granting content approval. Scoped typing, lint and UTF-8 checks
+  and the production frontend build pass. `browser-results.json` records the
+  complete 12-test passing campaign.
+  `regulatory-sources-browser-results.txt` preserves the focused publication run;
+  `ae-retained-source-rule-publication.png` and
+  `in-retained-source-rule-publication.png` were visually inspected. The legacy
+  regulatory browser fixture now retains a scanned copy instead
+  of supplying a fictitious hash; running that separate environment requires its
+  migration and operational scanner rather than bypassing either gate.
+
+- **Obligation / reported amount / bank allocations:** the shared
+  `obligation-bank-allocations` workflow is enabled for UAE and India. It compares
+  independently reviewed expected obligations and reported instructions/returns
+  with retained bank transaction rows through an independently reviewed allocation
+  source. A single bank debit can cover several employees, months and components;
+  an obligation can have several partial payments. Each link must name the exact
+  expected, reported and bank row, currency, amount and evidence assessment.
+  Registration, subject, month and component must agree. Allocations cannot exceed
+  any obligation, reported amount or bank movement. Repeated links and overlapping
+  corrected obligation identities are rejected. Inflows are retained separately and
+  cannot net against salary/dues payments; reversals need assessed restatement.
+
+  The user declares an obligation-month range, bank account/currency, settlement
+  window and payment sign. Native CAMT/MT940 outflows use debit-negative amounts.
+  Missing expected months remain missing, rather than being treated as zero.
+  Expected-source due dates drive the timing comparison; absent/conflicting due
+  dates, late settlements and overdue residuals remain visible. Due dates and
+  liabilities are not legally inferred. WPS/ECR imports can establish the reported
+  role only. UAE domestic PF/ESI/PT/TDS/TCS components remain excluded; historical
+  India 206C(1H) cannot create new obligations from April 2025. A current payment
+  against a valid historical obligation remains a separate matter.
+
+  The review screen has compact source/settled/remaining columns, aggregate residual
+  controls and an explicit provenance expansion. Exact original fields and allocation
+  details remain in the saved result and XLSX. Late-payment exceptions must be
+  documented before independent approval; documenting an exception does not remove
+  the late amount or establish legal compliance. This does not reconcile the GL,
+  prove beneficiary/bank ownership, determine employment-register completeness,
+  qualify legal rates/deadlines or authenticate a government filing/challan.
+
+  `dues-allocation-integration-results.xml` records seven passing database/API cases:
+  native UAE SIF and India monthly ECR with separate expected registers and bank
+  movements, mandatory source review, pooled/partial settlement, documented late
+  payments, maker/checker separation, export and source-replacement staleness,
+  plus existing monthly ECR and bank-clearance regressions. Scanner and broker
+  boundaries are explicit doubles; API, object storage, DB and processor are real.
+  The due dates in these examples are fictional, not legal deadlines.
+  The latest full unit receipt records 1,242 passes and four opt-in connector skips;
+  `dues-allocation-frontend-results.xml` records all 114 frontend tests passing.
+  The executable catalogue now has 148 synthetic operational cases, including six
+  added allocation scenarios. These counts overlap and are not client qualifications.
+  The export regression checks the exact late amount, allocation IDs and residual
+  controls in the XLSX, rather than only its HTTP status.
+
+  `dues-allocation-browser-results.txt` records the real-worker browser flow for
+  both countries: reviewed-only source selection, explicit scope/sign, pooled bank
+  allocations, a documented late-payment exception and a separate final approver.
+  It also asserts that the compact table fits its container and the first column
+  is fully visible. The four `ae/in-obligation-bank-allocations.png` and
+  `ae/in-obligation-allocation-controls.png` screenshots were inspected; all rows,
+  columns and residual controls are readable. Notifications are dismissed through
+  their normal UI button. The native-source browser regression also passed in the
+  preceding combined run. The earlier ten-test full browser receipt remains a
+  historical checkpoint. Production frontend build, type checks, scoped lint and
+  UTF-8 preflight pass for this increment.
 
 - Explicit regulatory-base currency conversion now reuses a current independently reviewed lead and a separately reviewed `fx-rates` source. Rate rows declare a recognized direct currency pair, positive decimal rate, closing/period-average/assessed method, rate date and coverage, retained quote version/hash/URL and an applicability assessment. The source-import document picker can bind blank quote IDs/hashes; conflicting references, superseded documents and failed file integrity are rejected, and quote uploaders remain contributors for independent review. Rate rows use independent row counts and document provenance, not a money-total control. Closing quotes must identify the reporting date exactly; other methods must cover the whole reporting period.
 

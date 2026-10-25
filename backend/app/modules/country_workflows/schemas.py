@@ -159,6 +159,7 @@ class SourceInput(Strict):
     expected_documents: int | None = Field(default=None, ge=0, le=1250)
     rule_document_version_id: uuid.UUID | None = None
     table_type: Literal[
+        "obligation-allocations",
         "fx-rates",
         "bank-outstanding",
         "bank-clearances",
@@ -312,6 +313,7 @@ class WorkflowInput(Strict):
     withholding_role: WithholdingRole | None = None
     allocation_basis: Literal["invoice_face_amounts", "pre_application_balances"] | None = None
     workflow: Literal[
+        "obligation-bank-allocations",
         "bank-subsequent-clearance",
         "india-withholding-liability",
         "india-withholding-credit",
@@ -357,6 +359,10 @@ class WorkflowInput(Strict):
     ]
     source_ids: dict[str, uuid.UUID] = Field(min_length=1, max_length=4)
     as_of: date
+    obligation_month_start: str | None = Field(default=None, pattern=r"^\d{4}-(0[1-9]|1[0-2])$")
+    obligation_month_end: str | None = Field(default=None, pattern=r"^\d{4}-(0[1-9]|1[0-2])$")
+    settlement_start: date | None = None
+    bank_payment_sign: Literal["debit-negative", "debit-positive"] | None = None
     review_through: date | None = None
     period_start: date | None = None
     tax_year_start: date | None = None
@@ -379,6 +385,33 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
+        if self.workflow == "obligation-bank-allocations":
+            if (
+                not self.account
+                or not self.account.strip()
+                or self.account != self.account.strip()
+                or not self.obligation_month_start
+                or not self.obligation_month_end
+                or self.settlement_start is None
+                or self.settlement_start > self.as_of
+                or self.bank_payment_sign is None
+            ):
+                raise ValueError(
+                    "Obligation bank allocations require account, month range, payment sign and settlement window"
+                )
+            if (
+                not self.obligation_month_start
+                <= self.obligation_month_end
+                <= self.as_of.strftime("%Y-%m")
+            ):
+                raise ValueError(
+                    "Obligation months must be ordered and no later than the reporting date"
+                )
+            first, last = self.obligation_month_start, self.obligation_month_end
+            date.fromisoformat(first + "-01")
+            date.fromisoformat(last + "-01")
+            if (int(last[:4]) - int(first[:4])) * 12 + int(last[5:]) - int(first[5:]) >= 120:
+                raise ValueError("Obligation allocation scope is limited to 120 months")
         if self.restrict_to_required_boxes:
             if self.workflow != "uae-vat-return" or len(self.box_scope_assessment.strip()) < 10:
                 raise ValueError(

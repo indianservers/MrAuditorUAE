@@ -3,6 +3,7 @@
 from tests.phase2.test_pipeline import CSV, committed
 from tests.phase4.test_workflows import create, grant
 from tests.qa_crud.test_country_workflows import decision, execute, source
+from tests.qa_crud.regulatory_source_fixtures import retain
 from tests.unit.test_regulatory_conversion import quote
 from tests.unit.test_regulatory_evaluation import fixture
 
@@ -172,6 +173,7 @@ async def prepare(c, h, client_id, reviewer):
             document_sha256="a" * 64,
             retrieved_on="2026-10-24",
         )
+        retained_rule_source = await retain(c, h, rule)
         proposed = await c.post("/api/v1/regulatory/rules", headers=h, json=rule)
         assert proposed.status_code == 201, proposed.text
         for action, person, sequence in (
@@ -194,5 +196,6 @@ async def prepare(c, h, client_id, reviewer):
             "rates": reviewed_rates.json()["id"],
             "rule": proposed.json()["id"],
             "source_currency": currency,
+            "rule_reference_copy": retained_rule_source["id"],
         }
     return output

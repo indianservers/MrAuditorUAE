@@ -1,0 +1,18 @@
+<ns0:Document xmlns:ns0="urn:iso:std:iso:20022:tech:xsd:camt.053.001.08"><ns0:BkToCstmrStmt>
+<ns0:GrpHdr><ns0:MsgId>SYNTHETIC-MSG</ns0:MsgId></ns0:GrpHdr><ns0:Stmt><ns0:Id>SYNTHETIC-STMT</ns0:Id>
+<ns0:Acct><ns0:Id><ns0:Othr><ns0:Id>BANK-1</ns0:Id></ns0:Othr></ns0:Id><ns0:Ccy>AED</ns0:Ccy></ns0:Acct>
+<ns0:Bal><ns0:Tp><ns0:CdOrPrtry><ns0:Cd>OPBD</ns0:Cd></ns0:CdOrPrtry></ns0:Tp><ns0:Amt Ccy="AED">0.00</ns0:Amt><ns0:CdtDbtInd>CRDT</ns0:CdtDbtInd><ns0:Dt><ns0:Dt>2026-06-01</ns0:Dt></ns0:Dt></ns0:Bal>
+<ns0:Bal><ns0:Tp><ns0:CdOrPrtry><ns0:Cd>CLBD</ns0:Cd></ns0:CdOrPrtry><ns0:SubTp><ns0:Cd>INTM</ns0:Cd></ns0:SubTp></ns0:Tp><ns0:Amt Ccy="AED">100.00</ns0:Amt><ns0:CdtDbtInd>CRDT</ns0:CdtDbtInd><ns0:Dt><ns0:Dt>2026-06-30</ns0:Dt></ns0:Dt></ns0:Bal>
+<ns0:TxsSummry><ns0:TtlNtries><ns0:NbOfNtries>2</ns0:NbOfNtries><ns0:Sum>105.00</ns0:Sum><ns0:TtlNetNtryAmt>95.00</ns0:TtlNetNtryAmt><ns0:CdtDbtInd>CRDT</ns0:CdtDbtInd></ns0:TtlNtries><ns0:TtlCdtNtries><ns0:NbOfNtries>1</ns0:NbOfNtries><ns0:Sum>100.00</ns0:Sum></ns0:TtlCdtNtries><ns0:TtlDbtNtries><ns0:NbOfNtries>1</ns0:NbOfNtries><ns0:Sum>5.00</ns0:Sum></ns0:TtlDbtNtries></ns0:TxsSummry>
+<ns0:ElctrncSeqNb>27</ns0:ElctrncSeqNb><ns0:StmtPgntn><ns0:PgNb>1</ns0:PgNb><ns0:LastPgInd>false</ns0:LastPgInd></ns0:StmtPgntn><ns0:Ntry><ns0:NtryRef>R1</ns0:NtryRef><ns0:Amt Ccy="AED">100.00</ns0:Amt><ns0:CdtDbtInd>CRDT</ns0:CdtDbtInd><ns0:Sts><ns0:Cd>BOOK</ns0:Cd></ns0:Sts><ns0:BookgDt><ns0:Dt>2026-06-01</ns0:Dt></ns0:BookgDt>
+<ns0:NtryDtls><ns0:TxDtls><ns0:Refs><ns0:EndToEndId>PAY-1</ns0:EndToEndId></ns0:Refs><ns0:Amt Ccy="AED">100.00</ns0:Amt><ns0:RltdPties><ns0:Dbtr><ns0:Pty><ns0:Nm>Customer</ns0:Nm></ns0:Pty></ns0:Dbtr></ns0:RltdPties></ns0:TxDtls></ns0:NtryDtls></ns0:Ntry>
+</ns0:Stmt><ns0:Stmt><ns0:Id>SYNTHETIC-STMT</ns0:Id>
+<ns0:Acct><ns0:Id><ns0:Othr><ns0:Id>BANK-1</ns0:Id></ns0:Othr></ns0:Id><ns0:Ccy>AED</ns0:Ccy></ns0:Acct>
+<ns0:Bal><ns0:Tp><ns0:CdOrPrtry><ns0:Cd>OPBD</ns0:Cd></ns0:CdOrPrtry><ns0:SubTp><ns0:Cd>INTM</ns0:Cd></ns0:SubTp></ns0:Tp><ns0:Amt Ccy="AED">100.00</ns0:Amt><ns0:CdtDbtInd>CRDT</ns0:CdtDbtInd><ns0:Dt><ns0:Dt>2026-06-30</ns0:Dt></ns0:Dt></ns0:Bal>
+<ns0:Bal><ns0:Tp><ns0:CdOrPrtry><ns0:Cd>CLBD</ns0:Cd></ns0:CdOrPrtry><ns0:SubTp><ns0:Cd>INTM</ns0:Cd></ns0:SubTp></ns0:Tp><ns0:Amt Ccy="AED">100.00</ns0:Amt><ns0:CdtDbtInd>CRDT</ns0:CdtDbtInd><ns0:Dt><ns0:Dt>2026-06-30</ns0:Dt></ns0:Dt></ns0:Bal>
+<ns0:ElctrncSeqNb>27</ns0:ElctrncSeqNb><ns0:StmtPgntn><ns0:PgNb>2</ns0:PgNb><ns0:LastPgInd>false</ns0:LastPgInd></ns0:StmtPgntn></ns0:Stmt><ns0:Stmt><ns0:Id>SYNTHETIC-STMT</ns0:Id>
+<ns0:Acct><ns0:Id><ns0:Othr><ns0:Id>BANK-1</ns0:Id></ns0:Othr></ns0:Id><ns0:Ccy>AED</ns0:Ccy></ns0:Acct>
+<ns0:Bal><ns0:Tp><ns0:CdOrPrtry><ns0:Cd>OPBD</ns0:Cd></ns0:CdOrPrtry><ns0:SubTp><ns0:Cd>INTM</ns0:Cd></ns0:SubTp></ns0:Tp><ns0:Amt Ccy="AED">100.00</ns0:Amt><ns0:CdtDbtInd>CRDT</ns0:CdtDbtInd><ns0:Dt><ns0:Dt>2026-06-30</ns0:Dt></ns0:Dt></ns0:Bal>
+<ns0:Bal><ns0:Tp><ns0:CdOrPrtry><ns0:Cd>CLBD</ns0:Cd></ns0:CdOrPrtry></ns0:Tp><ns0:Amt Ccy="AED">95.00</ns0:Amt><ns0:CdtDbtInd>CRDT</ns0:CdtDbtInd><ns0:Dt><ns0:Dt>2026-06-30</ns0:Dt></ns0:Dt></ns0:Bal>
+<ns0:ElctrncSeqNb>27</ns0:ElctrncSeqNb><ns0:StmtPgntn><ns0:PgNb>3</ns0:PgNb><ns0:LastPgInd>true</ns0:LastPgInd></ns0:StmtPgntn><ns0:Ntry><ns0:NtryRef>FEE</ns0:NtryRef><ns0:Amt Ccy="AED">5.00</ns0:Amt><ns0:CdtDbtInd>DBIT</ns0:CdtDbtInd><ns0:RvslInd>false</ns0:RvslInd><ns0:Sts><ns0:Cd>BOOK</ns0:Cd></ns0:Sts><ns0:BookgDt><ns0:Dt>2026-06-02</ns0:Dt></ns0:BookgDt></ns0:Ntry>
+</ns0:Stmt></ns0:BkToCstmrStmt></ns0:Document>

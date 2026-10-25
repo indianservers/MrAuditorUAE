@@ -16,8 +16,28 @@ class Citation(Strict):
     url: HttpUrl
     paragraph: str = Field(min_length=1, max_length=200)
     document_sha256: str | None = Field(default=None, pattern="^[a-f0-9]{64}$")
+    source_document_id: uuid.UUID | None = None
     retrieved_on: date | None = None
     retrieval_status: Literal["AWAITING_VALIDATION", "RETRIEVED"] = "AWAITING_VALIDATION"
+
+
+class SourceDocumentMetadata(Strict):
+    title: str = Field(min_length=3, max_length=300)
+    country: str = Field(pattern=r"^(?:[A-Z]{2}|GLOBAL)$")
+    source_url: HttpUrl
+    retrieved_on: date
+
+    @model_validator(mode="after")
+    def source_scope(self):
+        import pycountry
+
+        if self.country != "GLOBAL" and pycountry.countries.get(alpha_2=self.country) is None:
+            raise ValueError("Select a recognized source country or GLOBAL")
+        if self.retrieved_on > date.today() or self.source_url.scheme != "https":
+            raise ValueError("Source retrieval requires HTTPS and a date no later than today")
+        if self.source_url.username or self.source_url.password:
+            raise ValueError("Source URLs must not contain credentials")
+        return self
 
 
 class Predicate(Strict):

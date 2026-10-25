@@ -45,7 +45,8 @@ async def main():
         source,
     )
     from tests.unit.country_workflow_cases import document, return_box, transaction
-    from tests.unit.native_source_examples import CAMT, SIF, SIF_FILENAME
+    from tests.unit.native_source_examples import SIF, SIF_FILENAME
+    from tests.unit.test_camt_pages import packet as camt_packet
     from tests.unit.test_india_ecr_source import ECR
     from tests.unit.test_india_gstr2b_source import payload as gstr2b_payload
     from tests.unit.test_india_invoice_source import invoice
@@ -192,7 +193,7 @@ async def main():
             assert uploaded.status_code == 201, uploaded.text
             return uploaded.json()["id"]
 
-        camt_evidence = await native_file(eid, "SYNTHETIC-native-camt.xml", CAMT, "application/xml")
+        camt_evidence = await native_file(eid, "SYNTHETIC-native-camt.xml", camt_packet(), "application/xml")
         mt940_evidence = await native_file(
             eid, "SYNTHETIC-paged-AE.mt940", packet("AED", middle=True, fin=True), "text/plain"
         )
@@ -657,6 +658,19 @@ async def main():
                 assert approval.status_code == 201, approval.text
                 clearance_fixtures[country][role] = approval.json()["id"]
 
+        from tests.unit.test_dues_allocations import example as dues_example
+
+        dues_fixtures = {}
+        for country, engagement, currency in (("AE", eid, "AED"), ("IN", india, "INR")):
+            dues_fixtures[country] = {}
+            population = dues_example(currency, "SALARY" if country == "AE" else "PF:EMPLOYEE")
+            for role, kind in (("expected", "obligations"), ("reported", "obligations"), ("bank", "transactions"), ("allocations", "obligation-allocations")):
+                imported = await source(client, h, engagement, population[role], f"SYNTHETIC {country} bank-linked dues {role}",
+                    table_type=kind, totals={currency: "-180" if role == "bank" else "180"})
+                approval = await decision(client, supporting_reviewer[0], engagement, imported)
+                assert approval.status_code == 201, approval.text
+                dues_fixtures[country][role] = approval.json()["id"]
+
         from country_regulatory_fixture import prepare as prepare_regulatory
 
         regulatory_conversions = await prepare_regulatory(client, h, opts["client_id"], pdf_final_reviewer)
@@ -671,6 +685,7 @@ async def main():
                     "synthetic": True,
                     "regulatory_conversions": regulatory_conversions,
                     "bank_clearance": clearance_fixtures,
+                    "obligation_allocations": dues_fixtures,
                     "import_vat_sources": import_vat_sources,
                     "import_box_parent": import_box_approved.json()["id"],
                     "import_filed_source": import_filed_approved.json()["id"],

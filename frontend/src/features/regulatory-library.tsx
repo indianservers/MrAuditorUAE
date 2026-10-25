@@ -6,6 +6,7 @@ import { useAPI, useAction } from "@/hooks/use-api";
 import { useScope } from "@/stores/workspace";
 import { Button, ErrorState, Status, Empty } from "@/components/ui/primitives";
 import { PageHeader } from "./shared";
+import { RegulatorySources, bindRetainedSource } from "./regulatory-sources";
 
 type Rule = {
   id: string;
@@ -21,6 +22,7 @@ type Rule = {
 
 export function RegulatoryLibrary() {
   const country = useScope((s) => s.country);
+  const tenant = useScope((s) => s.tenant);
   const params = useSearchParams();
   const [id, setId] = useState(params.get("rule") || "");
   const [search, setSearch] = useState("");
@@ -137,6 +139,7 @@ export function RegulatoryLibrary() {
                       paragraph: "",
                       retrieval_status: "AWAITING_VALIDATION",
                       document_sha256: null,
+                      source_document_id: null,
                       retrieved_on: null,
                     },
                   ],
@@ -171,6 +174,19 @@ export function RegulatoryLibrary() {
           action.error ||
           error
         }
+      />
+      <RegulatorySources
+        key={`${tenant}:${country}`}
+        country={country}
+        editor={editor}
+        onAttach={(source, citationNumber) => {
+          try {
+            setEditor(bindRetainedSource(editor, source, citationNumber));
+            setError(null);
+          } catch (failure) {
+            setError(failure as Error);
+          }
+        }}
       />
       <section className="main-panel" style={{ padding: 20 }}>
         <h2>Versions and publication status</h2>
@@ -351,8 +367,10 @@ export function RegulatoryLibrary() {
           </p>
           <p>
             Enter the exact legal regime, period, applicability predicates and
-            citation provenance. Source retrieval fields are professional
-            attestations. Executable formulas are prohibited.
+            citation provenance. Attach a retained firm reference copy to each
+            citation before approval. Retrieval details remain professional
+            attestations; file integrity does not authenticate an official
+            source. Executable formulas are prohibited.
           </p>
           <label>
             Versioned rule configuration

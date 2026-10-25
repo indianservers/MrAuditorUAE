@@ -54,6 +54,17 @@ vi.mock("@/hooks/use-api", () => ({
             ],
             items: [
               {
+                id: "obligation-bank-allocations",
+                title: "Obligation bank allocations",
+                available: true,
+                roles: {
+                  expected: "obligations",
+                  reported: "obligations",
+                  bank: "transactions",
+                  allocations: "obligation-allocations",
+                },
+              },
+              {
                 id: "bank-subsequent-clearance",
                 title: "Subsequent bank clearance",
                 available: true,
@@ -235,6 +246,18 @@ vi.mock("@/hooks/use-api", () => ({
                       },
                       ...[
                         {
+                          id: "expected-dues",
+                          table_type: "obligations",
+                          label: "Reviewed expected dues",
+                          review_status: "REVIEWED",
+                        },
+                        {
+                          id: "dues-links",
+                          table_type: "obligation-allocations",
+                          label: "Reviewed bank allocations",
+                          review_status: "REVIEWED",
+                        },
+                        {
                           id: "wps",
                           table_type: "obligations",
                           label: "WPS instructions",
@@ -361,6 +384,189 @@ beforeEach(() => {
   state.result = null;
 });
 describe("country workflows", () => {
+  it("keeps obligation, reported and bank amounts readable without changing retained provenance", () => {
+    const retained = {
+      id: "result",
+      kind: "country-workflow",
+      version: 1,
+      freshness: "CURRENT",
+      body: {
+        title: "Allocated dues",
+        workflow: "obligation-bank-allocations",
+        review_status: "UNVERIFIED",
+        allocation_controls: {
+          expected_amount: "180",
+          allocated_amount: "150",
+          outstanding_expected: "30",
+        },
+        rows: [
+          {
+            id: "obligation:E1",
+            kind: "obligation",
+            subject: "EMP-1",
+            period: "2026-06",
+            component: "SALARY",
+            currency: "AED",
+            expected_amount: "100",
+            bank_settled: "70",
+            outstanding_amount: "30",
+            state: "PARTIALLY_SETTLED",
+            payment_allocations: [{ transaction_id: "BANK-1", amount: "70" }],
+          },
+          {
+            id: "bank:B1",
+            kind: "bank",
+            reference: "PAY-001",
+            currency: "AED",
+            bank_amount: "-150",
+            allocated: "150",
+            unallocated_bank_amount: "0",
+            state: "MATCHED",
+          },
+        ],
+      },
+    };
+    const original = JSON.stringify(retained);
+    state.result = retained;
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), {
+      target: { value: "result" },
+    });
+    expect(
+      screen.getByRole("columnheader", { name: "source amount" }),
+    ).toBeVisible();
+    expect(
+      screen.getByRole("cell", { name: "-150" }),
+    ).toBeVisible();
+    expect(
+      screen.queryByRole("columnheader", { name: "payment allocations" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("region", { name: "Obligation allocation controls" }),
+    ).toHaveTextContent("outstanding expected30");
+    fireEvent.click(
+      screen.getByLabelText("Show source provenance and all columns"),
+    );
+    expect(
+      screen.getByRole("columnheader", { name: "payment allocations" }),
+    ).toBeVisible();
+    expect(JSON.stringify(retained)).toBe(original);
+  });
+  it("requires explicit settlement choices and independently reviewed obligation sources", async () => {
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Workflow"), {
+      target: { value: "obligation-bank-allocations" },
+    });
+    expect(screen.getByLabelText("Bank payment sign")).toHaveValue("");
+    expect(screen.getByLabelText("expected source")).not.toHaveTextContent(
+      "WPS instructions",
+    );
+    expect(screen.getByLabelText("reported source")).toHaveTextContent(
+      "WPS instructions",
+    );
+    expect(screen.getByLabelText("reported source")).not.toHaveTextContent(
+      "Reported ECR",
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    expect(
+      await screen.findByText(
+        "Declare obligation months, bank account, settlement window and payment sign before allocating.",
+      ),
+    ).toBeVisible();
+    expect(state.mutate).not.toHaveBeenCalled();
+    for (const [label, value] of [
+      ["First obligation month", "2026-05"],
+      ["Last obligation month", "2026-06"],
+      ["Bank settlement window starts", "2026-06-01"],
+      ["Bank account identifier", "BANK-1"],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    fireEvent.change(screen.getByLabelText("Bank payment sign"), {
+      target: { value: "debit-negative" },
+    });
+    for (const [label, value] of [
+      ["expected source", "expected-dues"],
+      ["reported source", "wps"],
+      ["bank source", "statement"],
+      ["allocations source", "dues-links"],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+      workflow: "obligation-bank-allocations",
+      obligation_month_start: "2026-05",
+      obligation_month_end: "2026-06",
+      settlement_start: "2026-06-01",
+      bank_payment_sign: "debit-negative",
+      account: "BANK-1",
+      source_ids: {
+        expected: "expected-dues",
+        reported: "wps",
+        bank: "statement",
+        allocations: "dues-links",
+      },
+    });
+  });
+  it("shows readable CAMT page controls and retains the complete page provenance", () => {
+    state.result = {
+      id: "result",
+      kind: "workflow-source",
+      version: 1,
+      freshness: "CURRENT",
+      body: {
+        title: "Synthetic paginated statement",
+        table_type: "transactions",
+        review_status: "UNVERIFIED",
+        rows: [],
+        native_metadata: {
+          page_count: 2,
+          page_controls: [
+            {
+              page_number: 1,
+              source_statement_position: 1,
+              electronic_sequence: "27",
+              currency: "AED",
+              opening: "0.00",
+              closing: "100.00",
+              entry_count: 1,
+              entry_total: "100.00",
+              last_page: false,
+              closing_subtype: "INTM",
+            },
+            {
+              page_number: 2,
+              source_statement_position: 2,
+              electronic_sequence: "27",
+              currency: "AED",
+              opening: "100.00",
+              closing: "95.00",
+              entry_count: 1,
+              entry_total: "-5.00",
+              last_page: true,
+            },
+          ],
+        },
+      },
+    };
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), {
+      target: { value: "result" },
+    });
+    fireEvent.click(
+      screen.getByText("Original source controls and calculation basis"),
+    );
+    expect(
+      screen.getByRole("table", { name: "CAMT statement page controls" }),
+    ).toHaveTextContent("95.00");
+    expect(
+      screen.getByRole("table", { name: "CAMT statement page controls" }),
+    ).toHaveTextContent("-5.00");
+    fireEvent.click(
+      screen.getByText("All retained statement page control fields"),
+    );
+    expect(screen.getByText(/"closing_subtype": "INTM"/)).toBeVisible();
+  });
   it("prepares only explicitly selected reviewed BRS book exceptions with independent controls", async () => {
     state.result = {
       id: "result",

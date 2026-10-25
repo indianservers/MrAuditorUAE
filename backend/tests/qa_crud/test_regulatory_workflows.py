@@ -5,6 +5,8 @@ import pytest
 
 from tests.integration.test_platform import environment as environment
 from tests.phase4.test_workflows import actor, setup
+from tests.qa_crud.regulatory_source_fixtures import retain
+from tests.qa_crud.test_country_workflows import double_boundaries
 from tests.unit.test_regulatory_evaluation import fixture
 
 pytestmark = pytest.mark.skipif(
@@ -12,8 +14,9 @@ pytestmark = pytest.mark.skipif(
 )
 
 
-async def test_rule_review_publication_versions_and_tenant_boundary(environment):
+async def test_rule_review_publication_versions_and_tenant_boundary(environment, monkeypatch):
     c = environment
+    double_boundaries(monkeypatch)
     h, _, eid, _ = await setup(c)
     other = await actor(h, "Firm Administrator", "regulatory-independent-reviewer")
     payload = fixture().model_dump(mode="json")
@@ -36,6 +39,7 @@ async def test_rule_review_publication_versions_and_tenant_boundary(environment)
     payload["citations"][0].update(
         retrieval_status="RETRIEVED", document_sha256="a" * 64, retrieved_on="2026-10-24"
     )
+    await retain(c, h, payload)
     amended = await c.post("/api/v1/regulatory/rules", headers=h, json=payload)
     assert amended.status_code == 201, amended.text
     amended_path = "/api/v1/regulatory/rules/" + amended.json()["id"]

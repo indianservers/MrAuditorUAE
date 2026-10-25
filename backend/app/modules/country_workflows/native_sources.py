@@ -57,7 +57,7 @@ FORMATS: list[dict[str, Any]] = [
         "label": "ISO 20022 CAMT.053 bank statement",
         "countries": [],
         "table_type": "transactions",
-        "description": "Booked entry amounts with OPBD/CLBD balances; select a statement when a file contains several",
+        "description": "Booked entries and single-file statement pages with explicit sequence, interim balance and whole-statement controls; select a statement when several are present",
         "source": "https://www.swift.com/sites/default/files/files/pmpg-interbank-statement-creation-market-practice-final-version.pdf",
     },
     {
@@ -109,6 +109,12 @@ def single(elements, label):
 
 
 def camt(content, data):
+    from app.modules.country_workflows.camt_pages import assemble
+
+    return assemble(content, data, _camt_single)
+
+
+def _camt_single(content, data, *, booking_window=None, allow_interim=False):
     try:
         root = safe_xml.fromstring(
             content, forbid_dtd=True, forbid_entities=True, forbid_external=True
@@ -169,6 +175,8 @@ def camt(content, data):
             [b for b in all_(statement, "Bal") if value(b, "Tp/CdOrPrtry/Cd") == code],
             code + " balance",
         )
+        if find(node, "Tp/SubTp") is not None and not allow_interim:
+            raise ValueError("Interim CAMT balances require complete-page assembly")
         amt = find(node, "Amt")
         if amt is None or amt.attrib.get("Ccy") != currency:
             raise ValueError("CAMT balance currency differs from the selected account")
@@ -207,7 +215,8 @@ def camt(content, data):
                 f"Invalid amount, currency, direction or booking date in CAMT entry {index}"
             )
         booked = iso_date(when)
-        if not start <= booked <= end:
+        window_start, window_end = booking_window or (start, end)
+        if not window_start <= booked <= window_end:
             raise ValueError("CAMT booking date lies outside the statement balance dates")
         details = all_(entry, "NtryDtls/TxDtls")
         refs = [value(t, "Refs/EndToEndId") for t in details]
@@ -235,6 +244,7 @@ def camt(content, data):
         ).model_dump(mode="json")
         row.update(
             source_row=index,
+            source_credit_debit_indicator=direction,
             is_reversal=value(entry, "RvslInd", "false") in {"true", "1"},
             detail_count=len(details),
             bank_value_date=value(entry, "ValDt/Dt") or value(entry, "ValDt/DtTm"),
@@ -367,7 +377,11 @@ def _mt940_page(content, data, *, intermediate=False):
         raise ValueError("Invalid MT940 related-reference width")
     if "13D" in tags:
         timestamp = field("13D")
-        if not re.fullmatch(r"\d{10}[+-]\d{4}", timestamp) or int(timestamp[-4:-2]) > 23 or int(timestamp[-2:]) > 59:
+        if (
+            not re.fullmatch(r"\d{10}[+-]\d{4}", timestamp)
+            or int(timestamp[-4:-2]) > 23
+            or int(timestamp[-2:]) > 59
+        ):
             raise ValueError("Invalid MT940 date/time indication")
         try:
             datetime.strptime(timestamp[:10], "%y%m%d%H%M")
@@ -655,7 +669,8 @@ def parse_native(content, data, country, filename):
         "review_status": "UNVERIFIED",
         "nil_reason": data.nil_reason,
         "title": data.label,
-        "parser_version": data.file_format + ("-2" if data.file_format == "swift-mt940" else "-1"),
+        "parser_version": data.file_format
+        + ("-2" if data.file_format in {"swift-mt940", "camt053"} else "-1"),
         "native_format": data.file_format,
         "native_metadata": metadata,
         "native_controls_verified": True,

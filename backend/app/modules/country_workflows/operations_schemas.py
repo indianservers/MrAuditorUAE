@@ -102,7 +102,39 @@ class BankClearance(Strict):
         return self
 
 
+class ObligationAllocation(Strict):
+    id: ID
+    expected_id: ID
+    reported_id: ID
+    transaction_id: ID
+    currency: str = Field(pattern=r"^[A-Z]{3}$")
+    amount: Money = Field(gt=0)
+    evidence_reference: ID
+    rationale: str = Field(min_length=10, max_length=2000)
+
+    @model_validator(mode="after")
+    def exact_assessed_link(self):
+        if (
+            any(
+                not value.strip() or value != value.strip()
+                for value in (
+                    self.id,
+                    self.expected_id,
+                    self.reported_id,
+                    self.transaction_id,
+                    self.evidence_reference,
+                )
+            )
+            or len(self.rationale.strip()) < 10
+        ):
+            raise ValueError(
+                "Obligation allocation requires exact identifiers and an evidence assessment"
+            )
+        return self
+
+
 OPERATION_ROW_TYPES: dict[str, type[BaseModel]] = {
+    "obligation-allocations": ObligationAllocation,
     "bank-outstanding": BankOutstanding,
     "bank-clearances": BankClearance,
     "credit-applications": CreditApplication,
@@ -110,6 +142,16 @@ OPERATION_ROW_TYPES: dict[str, type[BaseModel]] = {
     "item-allocations": ItemAllocation,
 }
 OPERATION_WORKFLOWS: dict[str, tuple[str, list[str], dict[str, str]]] = {
+    "obligation-bank-allocations": (
+        "Payroll / statutory obligation / reported amount / bank allocations",
+        ["AE", "IN"],
+        {
+            "expected": "obligations",
+            "reported": "obligations",
+            "bank": "transactions",
+            "allocations": "obligation-allocations",
+        },
+    ),
     "bank-subsequent-clearance": (
         "Outstanding bank items / subsequent statement clearance",
         [],

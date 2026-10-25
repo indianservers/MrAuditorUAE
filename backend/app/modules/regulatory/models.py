@@ -1,11 +1,30 @@
 import uuid
+from datetime import date
 
-from sqlalchemy import ForeignKeyConstraint, UniqueConstraint
+from sqlalchemy import Date, ForeignKeyConstraint, UniqueConstraint
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.db.base import Base
 from app.db.models.platform import Owned
+
+
+class RuleSourceDocument(Owned, Base):
+    """Firm reference material, separate from client/engagement evidence."""
+
+    __tablename__ = "regulatory_source_documents"
+    __table_args__ = (UniqueConstraint("tenant_id", "id"),)
+    title: Mapped[str]
+    country: Mapped[str]
+    source_url: Mapped[str]
+    retrieved_on: Mapped[date] = mapped_column(Date)
+    filename: Mapped[str]
+    media_type: Mapped[str]
+    object_key: Mapped[str]
+    object_version: Mapped[str]
+    sha256: Mapped[str]
+    size: Mapped[int]
+    scan_status: Mapped[str]
 
 
 class RuleVersion(Owned, Base):

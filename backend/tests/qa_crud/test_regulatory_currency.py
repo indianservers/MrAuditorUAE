@@ -8,6 +8,7 @@ import pytest
 from tests.integration.test_platform import environment as environment
 from tests.phase2.test_pipeline import CSV, committed
 from tests.phase4.test_workflows import actor, create, grant, setup
+from tests.qa_crud.regulatory_source_fixtures import retain
 from tests.qa_crud.test_country_workflows import decision, double_boundaries, execute, source
 from tests.unit.test_regulatory_conversion import quote
 from tests.unit.test_regulatory_evaluation import fixture
@@ -128,6 +129,7 @@ async def test_rate_assessment_binds_entity_currency_and_reviewed_tax_base(
         payload["citations"][0].update(
             retrieval_status="RETRIEVED", document_sha256="a" * 64, retrieved_on="2026-10-24"
         )
+        await retain(c, h, payload)
         created = await c.post("/api/v1/regulatory/rules", headers=h, json=payload)
         assert created.status_code == 201, created.text
         identifier = created.json()["id"]

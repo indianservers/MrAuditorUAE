@@ -30,8 +30,10 @@ def csv_bytes(rows):
 def double_boundaries(monkeypatch, scan="CLEAN"):
     from app.api.v1 import audit_evidence
     from app.workers.intelligence import run
+    from app.modules.regulatory import source_documents
 
     monkeypatch.setattr(audit_evidence, "scan", lambda stream: scan)
+    monkeypatch.setattr(source_documents, "scan", lambda stream: scan)
     monkeypatch.setattr(run, "apply_async", lambda **kwargs: None)
 
 

@@ -599,4 +599,93 @@ vat_case(
     {"error": "beyond the reconciliation date"},
 )
 
-assert len(CASES) == 142
+dues_parameters = dict(
+    account="BANK-1",
+    obligation_month_start="2026-05",
+    obligation_month_end="2026-05",
+    settlement_start="2026-06-01",
+    bank_payment_sign="debit-negative",
+)
+dues_expected = [
+    obligation(id="E1", payment_date=None),
+    obligation(id="E2", subject="EMP-2", amount="80", payment_date=None),
+]
+dues_population = {
+    "expected": dues_expected,
+    "reported": [{**row, "id": "R" + row["id"][1:]} for row in dues_expected],
+    "bank": [transaction(id="BANK", amount="-180")],
+    "allocations": [
+        {
+            "id": f"A{index}",
+            "expected_id": row["id"],
+            "reported_id": "R" + row["id"][1:],
+            "transaction_id": "BANK",
+            "currency": "AED",
+            "amount": row["amount"],
+            "evidence_reference": "SYNTHETIC-PAYMENT-ADVICE",
+            "rationale": "Reviewed fictional pooled salary payment allocation",
+        }
+        for index, row in enumerate(dues_expected, 1)
+    ],
+}
+add(
+    "obligation-bank-allocations",
+    "UAE pooled bank debit settles two employee obligations",
+    dues_population,
+    {"exceptions": 0},
+    **dues_parameters,
+)
+partial_dues = deepcopy(dues_population)
+partial_dues["bank"][0]["amount"] = "-150"
+partial_dues["allocations"][1]["amount"] = "50"
+add(
+    "obligation-bank-allocations",
+    "UAE partially settled salary remains outstanding and overdue",
+    partial_dues,
+    {"exceptions": 2},
+    **dues_parameters,
+)
+incoming_dues = deepcopy(dues_population)
+incoming_dues["bank"].append(transaction(id="REFUND", amount="20"))
+add(
+    "obligation-bank-allocations",
+    "UAE salary settlement never nets an unallocated bank credit",
+    incoming_dues,
+    {"exceptions": 1},
+    **dues_parameters,
+)
+add(
+    "obligation-bank-allocations",
+    "UAE missing payroll month remains missing rather than zero",
+    dues_population,
+    {"exceptions": 1},
+    **{**dues_parameters, "obligation_month_end": "2026-06"},
+)
+india_dues = deepcopy(dues_population)
+for role, records in india_dues.items():
+    for row in records:
+        row["currency"] = "INR"
+        if role in {"expected", "reported"}:
+            row["component"] = "PF:EMPLOYEE"
+add(
+    "obligation-bank-allocations",
+    "India pooled bank debit explicitly allocates employee PF dues",
+    india_dues,
+    {"exceptions": 0},
+    country="IN",
+    currency="INR",
+    **dues_parameters,
+)
+overallocated_dues = deepcopy(india_dues)
+overallocated_dues["allocations"][1]["amount"] = "81"
+add(
+    "obligation-bank-allocations",
+    "India obligation or challan allocation cannot reuse excess cash",
+    overallocated_dues,
+    {"error": "overallocated"},
+    country="IN",
+    currency="INR",
+    **dues_parameters,
+)
+
+assert len(CASES) == 148

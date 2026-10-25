@@ -815,7 +815,13 @@ def calculate(data, country, sources):
     tables = {role: source["rows"] for role, source in sources.items()}
     with localcontext() as arithmetic:
         arithmetic.prec = 80
-        if data.workflow in {"india-withholding-liability", "india-withholding-credit"}:
+        if data.workflow == "obligation-bank-allocations":
+            from app.modules.country_workflows.dues_allocations import allocate
+
+            if sources["bank"].get("native_format") in {"camt053", "swift-mt940"} and data.bank_payment_sign != "debit-negative":
+                raise ValueError("Native bank outflows use debit-negative amounts; credits cannot settle obligations")
+            result = allocate(data, tables, country)
+        elif data.workflow in {"india-withholding-liability", "india-withholding-credit"}:
             result = withholding(data, tables)
         elif data.workflow in OPERATION_CALCULATORS:
             result = OPERATION_CALCULATORS[data.workflow](data, tables)

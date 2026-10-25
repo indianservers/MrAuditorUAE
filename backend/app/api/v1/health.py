@@ -7,7 +7,7 @@ from app.core.config import settings
 from app.db.session import Session
 
 router = APIRouter(tags=["Health"])
-EXPECTED_MIGRATION = "0020"
+EXPECTED_MIGRATION = "0021"
 
 
 class Health(BaseModel):
