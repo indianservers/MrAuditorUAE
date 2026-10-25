@@ -260,3 +260,10 @@ def test_native_validation_messages_do_not_echo_bank_identifiers():
     with pytest.raises(ValueError) as exc:
         parse_native(CAMT.replace(b"BANK-1", private_identifier), options(), "AE", "bank.xml")
     assert "PRIVATE-ACCOUNT" not in str(exc.value)
+
+
+@pytest.mark.parametrize("indicator", [b"TRUE", b"yes", b"2", b""])
+def test_camt_unknown_reversal_flag_is_not_silently_nonreversed(indicator):
+    content = CAMT.replace(b"<RvslInd>false</RvslInd>", b"<RvslInd>" + indicator + b"</RvslInd>")
+    with pytest.raises(ValueError, match="reversal indicator"):
+        parse_native(content, options(), "AE", "bank.xml")

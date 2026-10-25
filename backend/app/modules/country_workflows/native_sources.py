@@ -213,6 +213,10 @@ def _camt_single(content, data, *, booking_window=None, allow_interim=False):
             raise ValueError(
                 "Only booked CAMT entries are supported; pending records cannot be silently omitted"
             )
+        reversal_nodes = all_(entry, "RvslInd")
+        reversal = value(entry, "RvslInd") if reversal_nodes else "false"
+        if len(reversal_nodes) > 1 or reversal not in {"true", "false", "1", "0"}:
+            raise ValueError("Unsupported CAMT reversal indicator; assess the original bank entry")
         amt = find(entry, "Amt")
         direction = value(entry, "CdtDbtInd")
         when = value(entry, "BookgDt/Dt") or value(entry, "BookgDt/DtTm")
@@ -256,7 +260,7 @@ def _camt_single(content, data, *, booking_window=None, allow_interim=False):
         row.update(
             source_row=index,
             source_credit_debit_indicator=direction,
-            is_reversal=value(entry, "RvslInd", "false") in {"true", "1"},
+            is_reversal=reversal in {"true", "1"},
             detail_count=len(details),
             bank_value_date=value(entry, "ValDt/Dt") or value(entry, "ValDt/DtTm"),
         )

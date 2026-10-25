@@ -53,6 +53,8 @@ def clearances(data, tables):
             raise ValueError(
                 "Clearance allocation references a missing outstanding or statement row"
             )
+        if transaction.get("is_reversal"):
+            raise ValueError("A reversal bank movement cannot establish subsequent clearance")
         original, settled = Decimal(item["amount"]), Decimal(transaction["amount"])
         if original * settled <= 0:
             raise ValueError("Clearance requires the same signed movement direction")
@@ -108,9 +110,12 @@ def clearances(data, tables):
                 "source_id": transaction["id"],
                 "currency": transaction["currency"],
                 "statement_amount": transaction["amount"],
+                "is_reversal": bool(transaction.get("is_reversal")),
                 "allocated": str(used_transaction[transaction["id"]]),
                 "unallocated_amount": str(residual),
-                "state": "MATCHED" if residual == 0 else "UNALLOCATED_STATEMENT_MOVEMENT",
+                "state": "REVERSAL_NOT_CLEARANCE"
+                if transaction.get("is_reversal")
+                else "MATCHED" if residual == 0 else "UNALLOCATED_STATEMENT_MOVEMENT",
             }
         )
     return {
@@ -120,6 +125,7 @@ def clearances(data, tables):
                 "Subsequent clearance preserves reporting-date outstanding amounts; it does not rewrite the BRS or post entries",
                 "Explicit retained allocations only; same account, currency and direction; no reference-only automatic clearance",
                 "Unallocated later movements remain visible and may relate to other periods or transactions",
+                "Flagged reversals remain visible but cannot settle outstanding items; reversal pairing is separately assessed",
             ],
         ),
         "execution_mode": "rules_baseline",

@@ -118,3 +118,47 @@ def test_duplicate_original_item_under_another_id_cannot_inflate_clearance_popul
     p["outstanding"].append({**p["outstanding"][0], "id": "O2"})
     with pytest.raises(ValueError, match="Duplicate outstanding reference"):
         calculate(p)
+
+
+@pytest.mark.parametrize("currency", ["AED", "INR"])
+@pytest.mark.parametrize("sign", [-1, 1])
+def test_flagged_reversal_cannot_clear_but_remains_in_statement_population(currency, sign):
+    p = population(currency, sign)
+    p["statement"][0]["is_reversal"] = True
+    with pytest.raises(ValueError, match="reversal bank movement"):
+        calculate(p)
+    p["allocations"] = []
+    result = calculate(p)
+    item, statement = result["rows"]
+    assert item["remaining_after_review"] == str(100 * sign)
+    assert statement["state"] == "REVERSAL_NOT_CLEARANCE"
+    assert statement["is_reversal"] is True
+    assert statement["statement_amount"] == str(100 * sign)
+    assert statement["unallocated_amount"] == "100"
+    assert result["exception_count"] == 2
+
+
+@pytest.mark.parametrize("file_format", ["camt053", "swift-mt940"])
+def test_native_statement_reversal_is_not_subsequent_clearance(file_format):
+    from datetime import date
+    from types import SimpleNamespace
+
+    from app.modules.country_workflows.bank_clearance import clearances
+    from app.modules.country_workflows.native_sources import parse_native
+    from tests.unit.native_source_examples import CAMT, MT940
+    from tests.unit.test_native_workflow_sources import options
+
+    if file_format == "camt053":
+        content = CAMT.replace(b"<RvslInd>false</RvslInd>", b"<RvslInd>true</RvslInd>")
+    else:
+        # Reversal of credit is a debit; preserve the original signed -5 movement.
+        content = MT940.replace(b"0602D5,00", b"0602RC5,00")
+    native = parse_native(content, options(file_format), "AE", "synthetic.xml" if file_format == "camt053" else "synthetic.mt940")
+    reversed_row = next(row for row in native["rows"] if row["is_reversal"])
+    p = population()
+    p["outstanding"][0].update(date="2026-05-20", balance_date="2026-05-31", amount="-5")
+    p["statement"] = native["rows"]
+    p["allocations"][0].update(transaction_id=reversed_row["id"], amount="5")
+    scope = SimpleNamespace(account="BANK-1", currency="AED", as_of=date(2026, 5, 31), review_through=date(2026, 6, 30))
+    with pytest.raises(ValueError, match="reversal bank movement"):
+        clearances(scope, p)

@@ -39,6 +39,7 @@ class Transaction(Strict):
     currency: str = Field(pattern=r"^[A-Z]{3}$")
     amount: Money
     counterparty: str = Field(default="", max_length=120)
+    is_reversal: bool = False
 
 
 class TaxDocument(Strict):

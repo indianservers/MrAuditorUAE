@@ -234,3 +234,20 @@ def test_export_keeps_late_amount_allocations_and_residual_controls_exact():
         "B1",
         "B2",
     }
+
+
+@pytest.mark.parametrize("country,currency,component", [("AE", "AED", "SALARY"), ("IN", "INR", "PF:EMPLOYEE")])
+def test_canonical_reversal_flag_blocks_settlement_and_remains_visible(country, currency, component):
+    rows = example(currency, component)
+    for row in rows["bank"]:
+        row["is_reversal"] = row["id"] == "B1"
+    with pytest.raises(ValueError, match="unreversed bank outflows"):
+        run(rows, country, currency=currency)
+    rows["allocations"] = [rows["allocations"][2]]
+    result = run(rows, country, currency=currency)
+    bank = next(row for row in result["rows"] if row["id"] == "bank:B1")
+    assert bank["state"] == "REVERSAL_NOT_SETTLEMENT"
+    assert bank["is_reversal"] is True
+    assert bank["allocated"] == "0"
+    assert bank["unallocated_bank_amount"] == "150"
+    assert result["allocation_controls"]["outstanding_expected"] == "150"

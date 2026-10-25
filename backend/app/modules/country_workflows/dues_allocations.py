@@ -213,10 +213,13 @@ def allocate(data, tables, country):
                 "date": b["date"],
                 "currency": b["currency"],
                 "bank_amount": b["amount"],
+                "is_reversal": bool(b.get("is_reversal")),
                 "bank_direction": "OUTFLOW" if outflow > 0 else "INFLOW" if outflow < 0 else "ZERO",
                 "allocated": str(used_bank[b["id"]]),
                 "unallocated_bank_amount": str(residual),
-                "state": "MATCHED" if not residual else "UNALLOCATED_BANK_MOVEMENT",
+                "state": "REVERSAL_NOT_SETTLEMENT"
+                if b.get("is_reversal")
+                else "MATCHED" if not residual else "UNALLOCATED_BANK_MOVEMENT",
             }
         )
     first, last = data.obligation_month_start, data.obligation_month_end
