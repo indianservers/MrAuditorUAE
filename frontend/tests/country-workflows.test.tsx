@@ -24,7 +24,9 @@ const state = vi.hoisted(() => ({
 vi.mock("@/hooks/use-api", () => ({
   useCan: () => true,
   useAPI: (path: string) => ({
-    data: path.includes("excluded_offset=100")
+    data: path.endsWith("bank-cash-status")
+      ? { state: "UNRESERVED", claim_count: 0, approval_error: null, related_reviews: [] }
+      : path.includes("excluded_offset=100")
       ? state.excludedPage
       : path.endsWith("country-workflows")
         ? {

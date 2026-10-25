@@ -554,4 +554,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         contributors.update(account_contributors)
         dependencies.append(receipt)
     result = await run_in_threadpool(calculate, data, package.country, sources, bank_account_review=bank_account_review, import_nil_receipt=import_nil_receipt)
+    if data.workflow == "obligation-bank-allocations":
+        from app.modules.country_workflows.bank_consumption import manifest
+
+        result["bank_consumption_manifest"] = manifest(data, sources["bank"], result)
     return {**result, "contributors": sorted(contributors)}, dependencies

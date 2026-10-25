@@ -6163,14 +6163,12 @@ test("India TDS and TCS withholding sources support pooled and split bank alloca
       await expect(
         page.getByText("0 exceptions", { exact: true }),
       ).toBeVisible();
-      const table = page
-        .getByRole("table")
-        .filter({
-          has: page.getByRole("columnheader", {
-            name: "withholding transaction",
-            exact: true,
-          }),
-        });
+      const table = page.getByRole("table").filter({
+        has: page.getByRole("columnheader", {
+          name: "withholding transaction",
+          exact: true,
+        }),
+      });
       await expect(
         table
           .getByRole("cell", { name: "SYN-TRANSACTION-1", exact: true })
@@ -6185,7 +6183,79 @@ test("India TDS and TCS withholding sources support pooled and split bank alloca
         `${shots}/india-${legalRole}-withholding-split-bank.png`,
         () => table.locator("..").screenshot(),
       );
-      await approve(result, "country-workflow");
+      const approvedId = await approve(result, "country-workflow");
+      const cash = reviewer.getByRole("region", {
+        name: "Shared bank cash approval controls",
+      });
+      await expect(cash).toContainText("ACTIVE_APPROVED_ALLOCATION");
+      const retained = await page.request.get(
+        `/api/backend/intelligence/engagements/${eid}/events/${approvedId}`,
+        { headers: { "X-Tenant-ID": fixture.tenant } },
+      );
+      expect(retained.status()).toBe(200);
+      const duplicateJob = await page.request.post(
+        `/api/backend/intelligence/engagements/${eid}/jobs`,
+        {
+          headers: {
+            "X-Tenant-ID": fixture.tenant,
+            "Idempotency-Key": `cash-${legalRole}-${Date.now()}`,
+            Origin: "http://127.0.0.1:3010",
+          },
+          data: {
+            operation: "country-workflow",
+            payload: (await retained.json()).body.parameters,
+          },
+        },
+      );
+      expect(duplicateJob.status(), await duplicateJob.text()).toBe(202);
+      const duplicateJobId = (await duplicateJob.json()).id;
+      let duplicateResult = "";
+      await expect
+        .poll(
+          async () => {
+            const response = await page.request.get(
+              `/api/backend/intelligence/engagements/${eid}/jobs/${duplicateJobId}`,
+              { headers: { "X-Tenant-ID": fixture.tenant } },
+            );
+            const value = await response.json();
+            if (value.status === "failed")
+              throw new Error(JSON.stringify(value.error_details));
+            duplicateResult = value.result_id || "";
+            return value.status;
+          },
+          { timeout: 60000 },
+        )
+        .toBe("completed");
+      await page.reload();
+      await page
+        .getByLabel("Saved source or result")
+        .selectOption(duplicateResult);
+      const conflict = page.getByRole("region", {
+        name: "Shared bank cash approval controls",
+      });
+      await expect(conflict).toContainText("OVERALLOCATED");
+      await saveScreenshot(
+        `${shots}/india-${legalRole}-shared-bank-cash-conflict.png`,
+        () => conflict.screenshot(),
+      );
+      await cash
+        .getByLabel("Bank cash withdrawal reason")
+        .fill("Synthetic alternative review replaces this approved allocation");
+      const withdrawalResponse = reviewer.waitForResponse(
+        (r) =>
+          r.url().endsWith("/withdraw-bank-cash") &&
+          r.request().method() === "POST",
+      );
+      await cash
+        .getByRole("button", { name: "Withdraw bank cash claim" })
+        .click();
+      expect((await withdrawalResponse).status()).toBe(201);
+      await expect(cash).toContainText("WITHDRAWN");
+      await saveScreenshot(
+        `${shots}/india-${legalRole}-shared-bank-cash-withdrawn.png`,
+        () => cash.screenshot(),
+      );
+      await approve(duplicateResult, "country-workflow");
       const download = page.waitForEvent("download");
       await page
         .getByRole("button", { name: "Export XLSX", exact: true })

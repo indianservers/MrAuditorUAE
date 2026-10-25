@@ -81,6 +81,8 @@ def render(event, format):
             "bank_profile_references",
             "bank_authentication_status",
             "allocation_controls",
+            "bank_consumption_manifest",
+            "bank_consumption_review",
             "payment_scope",
             "source_totals",
             "destination_totals",

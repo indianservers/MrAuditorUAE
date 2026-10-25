@@ -83,6 +83,8 @@ async def prepare_withholding_settlement(c, h, eid, base, reviewer, legal_role="
         assert approved.status_code == 201, approved.text
         bridges[purpose] = approved.json()
     population = settlement(legal_role)
+    for movement in population["bank"]:
+        movement["reference"] += "-" + legal_role
     sources = {role: bridge["id"] for role, bridge in bridges.items()}
     for role, table_type, totals in (
         ("bank", "transactions", {"INR": "-180"}),
@@ -129,6 +131,14 @@ async def test_split_withholding_bank_settlement_review_export_and_proof_replace
     approved = await decision(c, reviewer[0], eid, result)
     assert approved.status_code == 201, approved.text
     prefix = f"/api/v1/intelligence/engagements/{eid}"
+    # A separate workpaper cannot spend the same cash a second time.
+    competing = await execute(c, h, eid, "country-workflow", args)
+    blocked = await decision(c, reviewer[0], eid, competing)
+    assert blocked.status_code == 409 and "OVERALLOCATED" in blocked.text
+    status = await c.get(prefix + f"/events/{competing['id']}/bank-cash-status", headers=h)
+    assert status.status_code == 200, status.text
+    assert status.json()["state"] == "UNRESERVED"
+    assert status.json()["related_reviews"][0]["root_id"] == approved.json()["root_id"]
     exported = await c.get(
         prefix + f"/events/{approved.json()['id']}/export?format=xlsx", headers=h
     )
@@ -173,3 +183,15 @@ async def test_split_withholding_bank_settlement_review_export_and_proof_replace
         response = await c.get(prefix + f"/events/{item['id']}", headers=h)
         assert response.status_code == 200 and response.json()["freshness"] == "STALE"
     assert (await decision(c, reviewer[0], eid, result)).status_code == 409
+    # Source staleness retains the earlier cash claim. An independent reviewer
+    # explicitly withdraws it without pretending to revalidate stale amounts.
+    withdraw_url = prefix + f"/events/{approved.json()['id']}/withdraw-bank-cash"
+    withdrawal = {"action": "reject", "expected_version": approved.json()["version"],
+                  "comments": "Synthetic evidence replaced; release the prior cash claim"}
+    assert (await c.post(withdraw_url, headers=h, json=withdrawal)).status_code == 403
+    withdrawn = await c.post(withdraw_url, headers=reviewer[0], json=withdrawal)
+    assert withdrawn.status_code == 201, withdrawn.text
+    assert withdrawn.json()["body"]["bank_consumption_review"]["status"] == "WITHDRAWN"
+    assert (await c.post(withdraw_url, headers=reviewer[0], json=withdrawal)).status_code == 409
+    historical = await c.get(prefix + f"/events/{approved.json()['id']}", headers=h)
+    assert historical.json()["body"]["review_status"] == "REVIEWED"

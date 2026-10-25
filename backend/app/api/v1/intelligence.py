@@ -32,6 +32,45 @@ from app.modules.intelligence.models import IntelligenceEvent, IntelligenceJob
 router = APIRouter(prefix="/intelligence", tags=["Accounting intelligence"])
 
 
+@router.get("/engagements/{eid}/events/{identifier}/bank-cash-status")
+async def bank_cash_status(eid: uuid.UUID, identifier: uuid.UUID, db: DB, ctx: Actor):
+    from app.modules.country_workflows.bank_consumption import WORKFLOW, status
+
+    obj = await service.event(db, ctx, eid, identifier, False)
+    if obj.kind != "country-workflow" or obj.body.get("workflow") != WORKFLOW:
+        raise HTTPException(422, "Select an obligation bank allocation review")
+    return await status(db, ctx, obj)
+
+
+@router.post("/engagements/{eid}/events/{identifier}/withdraw-bank-cash", status_code=201)
+async def withdraw_bank_cash(eid: uuid.UUID, identifier: uuid.UUID, data: s.Review, db: DB, ctx: Actor, request: Request):
+    from app.modules.country_workflows.bank_consumption import (
+        WITHDRAWN,
+        WORKFLOW,
+        current_decision,
+        is_active,
+    )
+
+    eng = await service.scope(db, ctx, eid, mutable=True)
+    await engagement_permissions(db, ctx, eid, "workingpaper.approve")
+    obj = await service.event(db, ctx, eid, identifier, False)
+    if obj.kind != "country-workflow" or obj.body.get("workflow") != WORKFLOW or data.action != "reject":
+        raise HTTPException(422, "Explicit rejection of an obligation cash review is required")
+    if obj.version != data.expected_version or await service.head(db, ctx, obj) != obj.version:
+        raise HTTPException(409, "Result version conflict")
+    if str(ctx.user_id) in obj.body.get("contributors", [str(obj.created_by)]):
+        raise HTTPException(403, "Independent reviewer required")
+    if len(data.comments.strip()) < 10:
+        raise HTTPException(422, "Document why the approved bank cash claim is being withdrawn")
+    prior_decision = await current_decision(db, ctx, eid, obj.root_id)
+    if prior_decision is None or not is_active(prior_decision.body):
+        raise HTTPException(409, "No active approved bank cash claim to withdraw")
+    body = dict(obj.body)
+    body.update(review_status="REJECTED", reviewer=str(ctx.user_id), reviewed_at=datetime.now(UTC).isoformat(), review_comments=data.comments.strip(),
+        bank_consumption_review={"status": WITHDRAWN, "withdrawn_at": datetime.now(UTC).isoformat(), "withdrawn_by": str(ctx.user_id), "reason": data.comments.strip(), "historical_cash_values_not_revalidated": True})
+    return audit.serialize(await service.append(db, ctx, eng, obj.kind, body, obj.dependencies, request.state.request_id, obj))
+
+
 @router.post("/engagements/{eid}/events/{identifier}/withholding-obligation-source", status_code=201)
 async def withholding_obligation_source(
     eid: uuid.UUID, identifier: uuid.UUID, data: WithholdingObligationInput,
@@ -1185,6 +1224,14 @@ async def review(
                     raise HTTPException(
                         409, "Accepted supporting extraction needs independent field review"
                     )
+        if obj.kind == "country-workflow" and obj.body.get("workflow") == "obligation-bank-allocations":
+            from app.modules.country_workflows.bank_consumption import WITHDRAWN, approve
+
+            if data.action == "approve":
+                cash_manifest, cash_review = await approve(db, ctx, obj)
+                body.update(bank_consumption_manifest=cash_manifest, bank_consumption_review=cash_review)
+            else:
+                body["bank_consumption_review"] = {"status": WITHDRAWN, "withdrawn_at": datetime.now(UTC).isoformat(), "withdrawn_by": str(ctx.user_id), "reason": data.comments}
         body.update(
             review_status="REVIEWED" if data.action == "approve" else "REJECTED",
             reviewer=str(ctx.user_id),

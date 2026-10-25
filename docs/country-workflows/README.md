@@ -76,3 +76,6 @@ Priority order remains UAE followed by India:
 5. Qualify representative consented client pilots and close the existing hosted security, recovery, operations and professional release gates. Synthetic success is not production certification.
 
 All original 13 reference use cases map to these workflows or the existing statutory/GRC/reporting infrastructure. Complete legal parity remains explicitly open in the roadmap; no previously planned India module is silently relabeled as qualified.
+
+
+Shared bank cash approval now checks active obligation allocation reviews within one engagement for UAE and India. Conflicting reviews block approval; explicit independent withdrawal appends a release while preserving the earlier approval, including when its source has become stale. See [shared cash approval scope and limits](native-adapters.md#shared-bank-cash-approval-controls-uae-and-india). Cross-engagement consumption and independently checked client pilots remain open.

@@ -8,6 +8,7 @@ import { useScope } from "@/stores/workspace";
 import { Button, ErrorState, Status } from "@/components/ui/primitives";
 import { PageHeader } from "./shared";
 import { BankCarryforwardSource } from "./bank-carryforward-source";
+import { BankCashReview } from "./bank-cash-review";
 import { WithholdingObligationSource } from "./withholding-obligation-source";
 import { ContributionObligationSource } from "./contribution-obligation-source";
 import {
@@ -4139,6 +4140,18 @@ export function CountryWorkflows({
                 }}
               />
             )}
+          {body.workflow === "obligation-bank-allocations" && (
+            <BankCashReview
+              key={`${tenant}:${eid}:${selected}`}
+              eid={eid}
+              eventId={selected}
+              version={detail.data.version}
+              onSelected={(id) => {
+                setSelected(id);
+                setOffset(0);
+              }}
+            />
+          )}
           {body.workflow === "india-document-series" && (
             <section aria-label="Document-series comparison scope">
               <p>
