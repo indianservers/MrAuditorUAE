@@ -7,6 +7,7 @@ import { useScope } from "@/stores/workspace";
 import { Button, ErrorState, Status, Empty } from "@/components/ui/primitives";
 import { PageHeader } from "./shared";
 import { RegulatorySources, bindRetainedSource } from "./regulatory-sources";
+import { RuleFixtureEditor, type FixtureReceipt } from "./rule-fixture-editor";
 
 type Rule = {
   id: string;
@@ -20,11 +21,16 @@ type Rule = {
     | string
     | {
         state: string;
-        body?: { comments?: string };
+        body?: { comments?: string; fixture_validation?: FixtureReceipt };
         created_by?: string;
         created_at?: string;
       };
   validation_blockers?: string[];
+  fixture_validation?: {
+    status: string;
+    case_count: number;
+    receipt_sha256: string | null;
+  };
 };
 
 export function RegulatoryLibrary() {
@@ -39,6 +45,9 @@ export function RegulatoryLibrary() {
   const [compare, setCompare] = useState("");
   const [editor, setEditor] = useState("");
   const [comments, setComments] = useState("");
+  const [fixtureDraft, setFixtureDraft] = useState({ key: "", json: "[]" });
+  const fixtureKey = `${tenant}:${id}`;
+  const fixtures = fixtureDraft.key === fixtureKey ? fixtureDraft.json : "[]";
   const [error, setError] = useState<Error | null>(null);
   const list = useAPI<{ items: Rule[] }>(
     `regulatory/rules?country=${country}&search=${encodeURIComponent(search)}&authority=${encodeURIComponent(authority)}&offset=${offset}${effective ? `&effective_on=${effective}` : ""}`,
@@ -62,6 +71,26 @@ export function RegulatoryLibrary() {
   const currentDecision =
     typeof detail.data?.state === "object" ? detail.data.state : null;
   const action = useAction<Rule>();
+  function recordDecision(value: string) {
+    setError(null);
+    try {
+      const cases: unknown =
+        value === "approve" ? JSON.parse(fixtures) : undefined;
+      if (value === "approve" && !Array.isArray(cases))
+        throw new Error("Validation fixtures must be a JSON array");
+      action.mutate({
+        path: `regulatory/rules/${id}/decisions`,
+        body: {
+          action: value,
+          expected_sequence: detail.data!.current_sequence,
+          comments,
+          ...(value === "approve" ? { validation_cases: cases } : {}),
+        },
+      });
+    } catch (failure) {
+      setError(failure as Error);
+    }
+  }
   function proposal(revert = false) {
     if (!detail.data) return;
     setEditor(
@@ -419,6 +448,42 @@ export function RegulatoryLibrary() {
               onChange={(e) => setComments(e.target.value)}
             />
           </label>
+          {currentState === "DRAFT" && (
+            <RuleFixtureEditor
+              key={fixtureKey}
+              id={id}
+              value={fixtures}
+              onChange={(json) => setFixtureDraft({ key: fixtureKey, json })}
+            />
+          )}
+          <p>
+            Recorded fixture validation:{" "}
+            {detail.data.fixture_validation?.status || "NOT_RECORDED"} ·{" "}
+            {detail.data.fixture_validation?.case_count || 0} cases
+          </p>
+          {currentDecision?.body?.fixture_validation && (
+            <>
+              {currentDecision.body.fixture_validation.support ===
+                "BLOCKING_ONLY_NO_COMPLETE_WAGE_MONTH" && (
+                <p>
+                  Recorded fixtures verify refusal of split-month calculation.
+                  They do not demonstrate a whole-month calculation.
+                </p>
+              )}
+              <details>
+                <summary>Recorded fixture outcomes</summary>
+                <pre
+                  style={{ whiteSpace: "pre-wrap", overflowWrap: "anywhere" }}
+                >
+                  {JSON.stringify(
+                    currentDecision.body.fixture_validation,
+                    null,
+                    2,
+                  )}
+                </pre>
+              </details>
+            </>
+          )}
           <div className="toolbar">
             {["approve", "reject", "publish"]
               .filter((value) =>
@@ -430,16 +495,7 @@ export function RegulatoryLibrary() {
                 <Button
                   key={value}
                   disabled={action.isPending}
-                  onClick={() =>
-                    action.mutate({
-                      path: `regulatory/rules/${id}/decisions`,
-                      body: {
-                        action: value,
-                        expected_sequence: detail.data!.current_sequence,
-                        comments,
-                      },
-                    })
-                  }
+                  onClick={() => recordDecision(value)}
                 >
                   {value === "publish"
                     ? "Publish approved version"

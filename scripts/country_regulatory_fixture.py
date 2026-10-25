@@ -4,6 +4,7 @@ from tests.phase2.test_pipeline import CSV, committed
 from tests.phase4.test_workflows import create, grant
 from tests.qa_crud.test_country_workflows import decision, execute, source
 from tests.qa_crud.regulatory_source_fixtures import retain
+from tests.qa_crud.regulatory_validation_fixtures import cases as validation_cases
 from tests.unit.test_regulatory_conversion import quote
 from tests.unit.test_regulatory_evaluation import fixture
 
@@ -187,6 +188,7 @@ async def prepare(c, h, client_id, reviewer):
                     "action": action,
                     "expected_sequence": sequence,
                     "comments": "Synthetic browser arithmetic rule; no legally adopted rate",
+                    **({"validation_cases": validation_cases(rule)} if action == "approve" else {}),
                 },
             )
             assert published.status_code == 201, published.text
@@ -216,7 +218,8 @@ async def prepare(c, h, client_id, reviewer):
             for action, person, sequence in (("approve", reviewer[0], 1), ("publish", h, 2)):
                 published = await c.post(f"/api/v1/regulatory/rules/{part_created.json()['id']}/decisions", headers=person,
                     json={"action": action, "expected_sequence": sequence,
-                          "comments": "Synthetic part-time profile for browser control verification only"})
+                          "comments": "Synthetic part-time profile for browser control verification only",
+                          **({"validation_cases": validation_cases(part)} if action == "approve" else {})})
                 assert published.status_code == 201, published.text
             employees = await source(c, h, eid, [benefit_employee(), part_time_employee(id="E2")],
                 "SYNTHETIC published-profile employees", "benefit-employees", {"AED": "3150"})

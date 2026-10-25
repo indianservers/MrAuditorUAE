@@ -16,6 +16,7 @@ from app.modules.regulatory import schemas as s
 from app.modules.regulatory import service, source_documents
 from app.modules.regulatory.conversion import ConversionInput
 from app.modules.regulatory.models import RuleSourceDocument, RuleVersion
+from app.modules.regulatory.validation_schemas import ValidationInput
 
 router = APIRouter(prefix="/regulatory", tags=["Regulatory rule library"])
 
@@ -169,10 +170,30 @@ async def propose(data: s.Rule, db: DB, ctx: Actor, request: Request):
 async def detail(identifier: uuid.UUID, db: DB, ctx: Actor):
     await service.authorize_read(db, ctx)
     obj = await service.get(db, ctx, identifier)
+    decision = await service.state(db, ctx, obj)
+    receipt = decision.body.get("fixture_validation") if decision else None
+    fixture_status = "NOT_RECORDED"
+    if decision and decision.state == "WITHDRAWN":
+        fixture_status = "WITHDRAWN"
+    elif receipt:
+        from app.modules.regulatory.validation import require_current
+
+        try:
+            require_current(s.Rule.model_validate(obj.body), obj.sha256, receipt)
+            fixture_status = "CURRENT"
+        except HTTPException as error:
+            if error.status_code != 409:
+                raise
+            fixture_status = "STALE"
     return {
         **audit.serialize(obj),
         "current_sequence": await service.sequence(db, ctx, obj.rule_key),
-        "state": audit.serialize(await service.state(db, ctx, obj)),
+        "state": audit.serialize(decision),
+        "fixture_validation": {
+            "status": fixture_status,
+            "case_count": receipt.get("case_count", 0) if receipt else 0,
+            "receipt_sha256": receipt.get("receipt_sha256") if receipt else None,
+        },
         "validation_blockers": service.validation_blockers(s.Rule.model_validate(obj.body)),
     }
 
@@ -184,6 +205,85 @@ async def decide(identifier: uuid.UUID, data: s.Decision, db: DB, ctx: Actor, re
             db, ctx, await service.get(db, ctx, identifier), data, request.state.request_id
         )
     )
+
+
+@router.post("/rules/{identifier}/validate")
+async def validate_fixtures(
+    identifier: uuid.UUID, data: ValidationInput, db: DB, ctx: Actor, request: Request
+):
+    from app.modules.audit_log.service import record
+    from app.modules.regulatory import validation
+
+    await service.authorize_read(db, ctx)
+    obj = await service.get(db, ctx, identifier)
+    try:
+        receipt = await run_in_threadpool(
+            validation.run, s.Rule.model_validate(obj.body), obj.sha256, data.cases
+        )
+    except validation.FixtureMismatch as error:
+        from app.modules.jurisdictions.packages import fingerprint
+
+        payload = {
+            "contract": validation.CONTRACT,
+            "rule_sha256": obj.sha256,
+            "method": obj.body["method"],
+            "passed": False,
+            "case_count": len(data.cases),
+            "message": str(error),
+            "outcomes": error.outcomes,
+            "scope": "SUPPLIED_FIXTURES_ONLY_NOT_LEGAL_QUALIFICATION",
+        }
+        receipt = {**payload, "receipt_sha256": fingerprint(payload)}
+    except (ValueError, ArithmeticError) as error:
+        raise HTTPException(
+            409,
+            {
+                "code": "fixture_validation_failed",
+                "message": str(error),
+                "outcomes": getattr(error, "outcomes", []),
+            },
+        ) from None
+    record(
+        db,
+        ctx,
+        "regulatory.fixtures_checked",
+        obj.id,
+        request.state.request_id,
+        {"receipt_sha256": receipt["receipt_sha256"], "case_count": receipt["case_count"]},
+    )
+    return receipt
+
+
+@router.get("/rules/{identifier}/validation-contract")
+async def validation_contract(identifier: uuid.UUID, db: DB, ctx: Actor):
+    from app.modules.regulatory.validation_schemas import RuleFixture
+
+    await service.authorize_read(db, ctx)
+    obj = await service.get(db, ctx, identifier)
+    rule = s.Rule.model_validate(obj.body)
+    template: dict[str, object] = {"id": "CASE-1", "kind": rule.method, "expected_reference": ""}
+    if rule.method in {"checklist", "flat_rate"}:
+        template.update(
+            period_start=rule.effective_from.isoformat(),
+            period_end=(rule.effective_to or rule.effective_from).isoformat(),
+            facts={},
+            expected_applicability=None,
+        )
+        if rule.period_basis == "transaction_date":
+            template["transaction_date"] = rule.effective_from.isoformat()
+    else:
+        template.update(as_of=None, expected_state=None)
+        template["employee" if rule.method == "benefit_profile" else "basis"] = None
+        if rule.method == "payroll_profile":
+            template["reported_amount"] = None
+    if rule.method != "checklist":
+        template["expected_amount"] = None
+    return {
+        "schema": RuleFixture.model_json_schema(),
+        "template": [template],
+        "maximum_cases": 20,
+        "policy": "Supply independently determined expected outcomes; only anonymized fixture inputs belong in the firm rule library",
+    }
 
 
 @router.post("/engagements/{eid}/assessments", status_code=201)

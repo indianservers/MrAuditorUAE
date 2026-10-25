@@ -471,6 +471,52 @@ test("UAE and India rules retain sources, publish independently and withdraw saf
         .fill(
           "Independent synthetic source-copy, citation binding and content mechanics checked.",
         );
+      const validationCases = [
+        {
+          id: "SYNTHETIC-APPLICABILITY",
+          kind: "checklist",
+          expected_reference:
+            "Independent synthetic company applicability fixture; not legally qualified data",
+          period_start: "2026-01-01",
+          period_end: "2026-12-31",
+          facts: { entity_type: "company" },
+          expected_applicability: "APPLICABLE",
+        },
+      ];
+      await reviewer
+        .getByLabel("Validation fixture cases (JSON)", { exact: true })
+        .fill(JSON.stringify(validationCases));
+      const checkedResponse = reviewer.waitForResponse(
+        (response) =>
+          response.url().endsWith(`/rules/${rule.id}/validate`) &&
+          response.request().method() === "POST",
+      );
+      await reviewer
+        .getByRole("button", { name: "Check supplied fixtures", exact: true })
+        .click();
+      const checked = await checkedResponse;
+      expect(checked.status(), await checked.text()).toBe(200);
+      const validationReceipt = await checked.json();
+      expect(validationReceipt.passed).toBe(true);
+      await expect(
+        reviewer
+          .getByRole("region", { name: "Fixture check result", exact: true })
+          .getByRole("status"),
+      ).toContainText("All supplied fixtures passed");
+      for (const notice of await reviewer
+        .getByRole("button", { name: "Dismiss notification", exact: true })
+        .all())
+        await notice.click();
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-rule-fixture-validation.png`,
+        () =>
+          reviewer
+            .getByRole("region", {
+              name: "Independent rule fixtures",
+              exact: true,
+            })
+            .screenshot(),
+      );
       const approved = reviewer.waitForResponse((response) =>
         response.url().endsWith(`/rules/${rule.id}/decisions`),
       );
@@ -480,7 +526,11 @@ test("UAE and India rules retain sources, publish independently and withdraw saf
           exact: true,
         })
         .click();
-      expect((await approved).status()).toBe(201);
+      const approvalResponse = await approved;
+      expect(approvalResponse.status()).toBe(201);
+      expect(
+        (await approvalResponse.json()).body.fixture_validation.receipt_sha256,
+      ).toBe(validationReceipt.receipt_sha256);
       await page.goto(`/settings/regulatory-rules?rule=${rule.id}`);
       await page
         .getByLabel("Decision rationale")
@@ -495,7 +545,11 @@ test("UAE and India rules retain sources, publish independently and withdraw saf
         .click();
       const result = await published;
       expect(result.status()).toBe(201);
-      expect((await result.json()).body.verified_source_copies[0].id).toBe(
+      const publishedAction = await result.json();
+      expect(publishedAction.body.fixture_validation.receipt_sha256).toBe(
+        validationReceipt.receipt_sha256,
+      );
+      expect(publishedAction.body.verified_source_copies[0].id).toBe(
         attached.citations[0].source_document_id,
       );
       await expect(

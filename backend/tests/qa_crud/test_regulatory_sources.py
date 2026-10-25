@@ -41,6 +41,13 @@ async def propose(c, h, payload):
 
 
 async def decide(c, h, identifier, *, action="approve", sequence=1):
+    from tests.qa_crud.regulatory_validation_fixtures import cases
+
+    vectors = []
+    if action == "approve":
+        detail = await c.get(f"/api/v1/regulatory/rules/{identifier}", headers=h)
+        assert detail.status_code == 200, detail.text
+        vectors = cases(detail.json()["body"])
     return await c.post(
         f"/api/v1/regulatory/rules/{identifier}/decisions",
         headers=h,
@@ -48,6 +55,7 @@ async def decide(c, h, identifier, *, action="approve", sequence=1):
             "action": action,
             "expected_sequence": sequence,
             "comments": "Synthetic independent source copy and rule-content assessment",
+            **({"validation_cases": vectors} if action == "approve" else {}),
         },
     )
 

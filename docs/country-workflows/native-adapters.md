@@ -2,6 +2,67 @@
 
 Implementation checkpoint: 25 October 2026. These additions extend the existing evidence, intelligence job, immutable event, review and lineage infrastructure.
 
+## Recorded rule fixture validation
+
+`VALIDATED` metadata alone no longer qualifies a rule for approval/publication.
+Independent approval supplies one to twenty typed `validation_cases` with explicit
+expected outcomes and expected-value references. The server runs the actual
+checklist/flat-rate evaluator, UAE benefit calculator or India payroll calculator.
+Wrong amounts, mismatched kinds, duplicate case IDs and suites without an
+applicable case are rejected. Decimal expectations remain independent inputs;
+the server never replaces them with its calculated values. Source-copy checks,
+proposer/source-uploader independence and the existing publication permissions
+remain in force.
+
+`POST /regulatory/rules/{id}/validate` performs a dry check and returns expected
+versus actual outcomes. A completed check with mismatches returns HTTP 200 with
+`passed: false`; malformed inputs still fail validation. Dry checking does not
+approve a rule or advance its lifecycle sequence. The rule's validation-contract
+endpoint supplies a typed input schema and an intentionally incomplete skeleton,
+with no manufactured expected monetary result. Fixtures belong to the shared
+firm rule library and must contain anonymized test inputs.
+
+Approval records the complete cases/outcomes and a receipt bound to the immutable
+rule hash, method, trusted implementation and runtime versions. Publication
+replays the approved cases and requires the identical receipt. Selection checks
+the recorded receipt against the current implementation; code changes or missing
+receipts make affected historical work stale and block reuse while preserving
+its original body/hash. Previously published versions without such a receipt
+require an explicit new proposal and independent approval, not a silent backfill.
+
+The implementation fingerprint includes source files, canonical representations
+of the loaded core function code/defaults, and Python/Pydantic/Babel versions.
+It excludes object reference counts and absolute source paths. A regression
+reproduced an unstable serialization-based fingerprint while a normal payroll
+result remained live; the canonical fingerprint now remains stable in that
+condition and still detects changed loaded calculator code.
+
+A short-lived payroll amendment that contains no complete wage month may record
+a passing **blocking-only** fixture. This verifies the expected refusal and
+records zero applicable calculation cases; it does not qualify split-month
+arithmetic or invent proration. The preparation/calculation path still blocks
+unsupported whole-month use. The UI describes this distinction, shows the recorded
+fixture status, and hides a passing preview when the inputs or expectations change.
+
+The gate proves agreement with the supplied examples, not completeness of legal
+boundary coverage or authenticity of an expected-value reference. Those references
+remain reviewer attestations. No legal pack, representative client-data pilot,
+provider qualification or statutory compliance conclusion is certified here.
+
+The current backend receipt records **1,297 passes and four opt-in connector
+skips**. `regulatory-validation-integration-results.xml` records **21 passing API
+tests**, including failed/missing fixtures, exact unrounded output, receipt replay,
+implementation-change freshness, both profile bridges, withdrawal and existing
+reporting paths. Scanner/broker are explicit boundary doubles; the database,
+storage and API/job processor are real. Frontend tests record **124 passes**,
+including immutable expectations and stale-preview handling. Production build
+and scoped lint/type checks also pass. Older checkpoint counts below are historical.
+
+Employer-residual fixtures may provide an explicitly resolved pension amount or
+test the real missing-pension refusal. The supporting resolved value is retained
+at paise precision; it is not rounded using the employer's rounding rule. This
+isolates the employer residual and does not itself qualify the pension scheme.
+
 ## Controlled rule withdrawal and explicit restoration
 
 UAE and India rules now accept an append-only `withdraw` decision. This requires

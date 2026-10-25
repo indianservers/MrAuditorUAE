@@ -7,12 +7,15 @@ import pytest
 from tests.integration.test_platform import environment as environment
 from tests.phase2.test_pipeline import committed
 from tests.phase4.test_workflows import actor, setup
+from tests.qa_crud.regulatory_validation_fixtures import cases as validation_cases
 from tests.unit.test_regulatory_evaluation import fixture
 
 pytestmark = pytest.mark.skipif(os.getenv("INTEGRATION_TESTS") != "1", reason="Disposable database")
 
 
-async def test_india_reviewed_mapping_reporting_template_and_historical_sources(environment, monkeypatch):
+async def test_india_reviewed_mapping_reporting_template_and_historical_sources(
+    environment, monkeypatch
+):
     from tests.qa_crud.regulatory_source_fixtures import retain
     from tests.qa_crud.test_country_workflows import double_boundaries
 
@@ -69,6 +72,7 @@ async def test_india_reviewed_mapping_reporting_template_and_historical_sources(
                 "action": action,
                 "expected_sequence": sequence,
                 "comments": "Synthetic source validation attestation for workflow testing only",
+                **({"validation_cases": validation_cases(rule)} if action == "approve" else {}),
             },
         )
         assert result.status_code == 201, result.text

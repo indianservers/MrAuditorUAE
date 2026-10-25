@@ -39,6 +39,7 @@ test("two real regulatory administrators propose, independently review and publi
   const second=await browser.newContext();const reviewer=await second.newPage();await login(reviewer,"qa.role01@auditos.example");
   await reviewer.goto(`/settings/regulatory-rules?rule=${rule.id}`);
   await reviewer.getByLabel("Decision rationale").fill("SYNTHETIC independent review of the source metadata fixture only");
+  await reviewer.getByLabel("Validation fixture cases (JSON)").fill(JSON.stringify([{id:"SYNTHETIC",kind:"checklist",expected_reference:"Independent synthetic company applicability case",period_start:"2026-01-01",period_end:"2026-12-31",facts:{entity_type:"company"},expected_applicability:"APPLICABLE"}]));
   const reviewed=reviewer.waitForResponse(r=>r.url().includes(`/rules/${rule.id}/decisions`));
   await reviewer.getByRole("button",{name:"Record independent approval",exact:true}).click();expect((await reviewed).status()).toBe(201);
   await page.goto(`/settings/regulatory-rules?rule=${rule.id}`);

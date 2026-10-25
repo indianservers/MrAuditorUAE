@@ -18,6 +18,7 @@ from tests.phase2.test_pipeline import committed, upload
 from tests.phase4.test_workflows import action as paper_action
 from tests.phase4.test_workflows import actor, create, grant, setup
 from tests.qa_crud.regulatory_source_fixtures import retain
+from tests.qa_crud.regulatory_validation_fixtures import cases as validation_cases
 from tests.qa_crud.test_country_workflows import decision, double_boundaries, execute
 from tests.unit.test_regulatory_evaluation import fixture
 
@@ -75,6 +76,7 @@ async def reviewed_assessment(c, h, reviewer, eid):
                 "action": action,
                 "expected_sequence": sequence,
                 "comments": "Synthetic technical fixture attestation only",
+                **({"validation_cases": validation_cases(rule)} if action == "approve" else {}),
             },
         )
         assert response.status_code == 201, response.text

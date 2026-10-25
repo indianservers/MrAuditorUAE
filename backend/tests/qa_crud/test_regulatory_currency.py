@@ -9,6 +9,7 @@ from tests.integration.test_platform import environment as environment
 from tests.phase2.test_pipeline import CSV, committed
 from tests.phase4.test_workflows import actor, create, grant, setup
 from tests.qa_crud.regulatory_source_fixtures import retain
+from tests.qa_crud.regulatory_validation_fixtures import cases as validation_cases
 from tests.qa_crud.test_country_workflows import decision, double_boundaries, execute, source
 from tests.unit.test_regulatory_conversion import quote
 from tests.unit.test_regulatory_evaluation import fixture
@@ -141,6 +142,11 @@ async def test_rate_assessment_binds_entity_currency_and_reviewed_tax_base(
                     "action": action,
                     "expected_sequence": sequence,
                     "comments": "Synthetic rate publication for currency isolation verification only",
+                    **(
+                        {"validation_cases": validation_cases(payload)}
+                        if action == "approve"
+                        else {}
+                    ),
                 },
             )
             assert response.status_code == 201, response.text

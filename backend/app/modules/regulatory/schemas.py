@@ -8,6 +8,7 @@ from pydantic import Field, HttpUrl, model_validator
 from app.modules.jurisdictions.profiles import Strict
 from app.modules.regulatory.benefit_profiles import BenefitParameters
 from app.modules.regulatory.payroll_profiles import PayrollParameters
+from app.modules.regulatory.validation_schemas import RuleFixture
 
 Fact = Annotated[str, Field(max_length=4000)] | bool | int | None
 
@@ -147,9 +148,12 @@ class Decision(Strict):
     action: Literal["approve", "reject", "publish", "withdraw"]
     expected_sequence: int = Field(ge=1)
     comments: str = Field(min_length=10, max_length=4000)
+    validation_cases: list[RuleFixture] = Field(default_factory=list, max_length=20)
 
     @model_validator(mode="after")
     def withdrawal_reason(self):
+        if self.action != "approve" and self.validation_cases:
+            raise ValueError("Validation fixtures are supplied with independent approval only")
         if self.action == "withdraw" and len(self.comments.strip()) < 10:
             raise ValueError("Document a meaningful reason for withdrawing the published rule")
         return self

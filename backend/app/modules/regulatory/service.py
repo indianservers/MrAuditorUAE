@@ -105,7 +105,9 @@ async def state(db, ctx, obj):
     )
 
 
-async def action(db, ctx, obj, status, comments, request_id, source_receipts=None):
+async def action(
+    db, ctx, obj, status, comments, request_id, source_receipts=None, fixture_receipt=None
+):
     item = RuleAction(
         tenant_id=ctx.tenant_id,
         created_by=ctx.user_id,
@@ -117,6 +119,7 @@ async def action(db, ctx, obj, status, comments, request_id, source_receipts=Non
             "comments": comments,
             "version_sha256": obj.sha256,
             **({"verified_source_copies": source_receipts} if source_receipts is not None else {}),
+            **({"fixture_validation": fixture_receipt} if fixture_receipt is not None else {}),
         },
     )
     db.add(item)
@@ -233,6 +236,9 @@ async def decide(db, ctx, obj, data, request_id):
             raise HTTPException(409, "Only a draft proposal can be reviewed")
         status = "APPROVED" if data.action == "approve" else "REJECTED"
     source_receipts = None
+    fixture_receipt = (
+        previous.body.get("fixture_validation") if status == "WITHDRAWN" and previous else None
+    )
     if status in {"APPROVED", "PUBLISHED"}:
         blockers = validation_blockers(Rule.model_validate(obj.body))
         if blockers:
@@ -246,7 +252,36 @@ async def decide(db, ctx, obj, data, request_id):
             raise HTTPException(
                 403, "A source uploader cannot independently approve a rule using that source"
             )
-    return await action(db, ctx, obj, status, data.comments, request_id, source_receipts)
+        from starlette.concurrency import run_in_threadpool
+
+        from app.modules.regulatory import validation
+        from app.modules.regulatory.validation_schemas import RuleFixture
+
+        rule = Rule.model_validate(obj.body)
+        cases = data.validation_cases
+        if status == "PUBLISHED":
+            approved_receipt = validation.require_current(
+                rule, obj.sha256, previous.body.get("fixture_validation")
+            )
+            cases = [RuleFixture.model_validate(case) for case in approved_receipt["cases"]]
+        try:
+            fixture_receipt = await run_in_threadpool(validation.run, rule, obj.sha256, cases)
+        except (ValueError, ArithmeticError) as error:
+            raise HTTPException(
+                409,
+                {
+                    "code": "fixture_validation_failed",
+                    "message": str(error),
+                    "outcomes": getattr(error, "outcomes", []),
+                },
+            ) from None
+        if status == "PUBLISHED" and fixture_receipt != approved_receipt:
+            raise HTTPException(
+                409, "Fixture replay differs from independent approval; prepare a new proposal"
+            )
+    return await action(
+        db, ctx, obj, status, data.comments, request_id, source_receipts, fixture_receipt
+    )
 
 
 async def selection(db, ctx, key, period_start, period_end, transaction_date=None):
@@ -296,7 +331,9 @@ async def selection(db, ctx, key, period_start, period_end, transaction_date=Non
                     },
                 )
             from app.modules.regulatory.source_documents import verify_rule_sources
+            from app.modules.regulatory.validation import require_current
 
+            require_current(rule, obj.sha256, latest_action.body.get("fixture_validation"))
             await verify_rule_sources(db, ctx, rule)
             return obj
     return None

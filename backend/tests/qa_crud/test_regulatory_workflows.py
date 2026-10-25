@@ -6,6 +6,7 @@ import pytest
 from tests.integration.test_platform import environment as environment
 from tests.phase4.test_workflows import actor, setup
 from tests.qa_crud.regulatory_source_fixtures import retain
+from tests.qa_crud.regulatory_validation_fixtures import cases as validation_cases
 from tests.qa_crud.test_country_workflows import double_boundaries
 from tests.unit.test_regulatory_evaluation import fixture
 
@@ -27,6 +28,7 @@ async def test_rule_review_publication_versions_and_tenant_boundary(environment,
         "action": "approve",
         "expected_sequence": 1,
         "comments": "Synthetic independent source validation review",
+        "validation_cases": validation_cases(payload),
     }
     assert (await c.post(path + "/decisions", headers=h, json=decision)).status_code == 403
     assert (await c.post(path + "/decisions", headers=other[0], json=decision)).status_code == 409
@@ -47,6 +49,7 @@ async def test_rule_review_publication_versions_and_tenant_boundary(environment,
     approved = await c.post(amended_path + "/decisions", headers=other[0], json=decision)
     assert approved.status_code == 201, approved.text
     decision.update(action="publish", expected_sequence=3)
+    decision.pop("validation_cases")
     published = await c.post(amended_path + "/decisions", headers=h, json=decision)
     assert published.status_code == 201, published.text
     assert published.json()["state"] == "PUBLISHED"
@@ -105,6 +108,11 @@ async def test_rule_review_publication_versions_and_tenant_boundary(environment,
                     "action": operation,
                     "expected_sequence": head,
                     "comments": "Synthetic effective-dated rule version change assessment",
+                    **(
+                        {"validation_cases": validation_cases(payload)}
+                        if operation == "approve"
+                        else {}
+                    ),
                 },
             )
             assert decided.status_code == 201, decided.text
