@@ -1,0 +1,31 @@
+{
+  "scope": "LOCAL_SYNTHETIC_TEMPLATE_QUEUE_CONSUMPTION",
+  "status": "FAIL",
+  "executed_at": "2026-10-25T17:55:04.702753+00:00",
+  "pool": "solo",
+  "platform": "win32",
+  "database_operations": "NONE_TEST_TASKS_ONLY",
+  "hosted_or_container_qualification": false,
+  "broker_version": "5.0.14.1",
+  "subscription_contract": {
+    "scope": "STATIC_CELERY_SUBSCRIPTION_CONTRACT",
+    "status": "PASS",
+    "required_queues": [
+      "celery",
+      "enterprise-ai",
+      "grc",
+      "intelligence"
+    ],
+    "subscribed_queues": [
+      "celery",
+      "enterprise-ai",
+      "grc",
+      "intelligence"
+    ],
+    "missing_queues": []
+  },
+  "deployment_template_sha256": "227ad32dd8436b39f67d625fedb16c619b275ef6b2a9ed62f408e497ef96d071",
+  "error": "RuntimeError: queue proof failed; inspect the owned local logs",
+  "owned_processes_stopped": true,
+  "duration_seconds": 2.094
+}

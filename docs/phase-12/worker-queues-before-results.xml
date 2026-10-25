@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="2" skipped="0" tests="11" time="0.747" timestamp="2026-10-25T23:19:32.654763+05:30" hostname="DESKTOP-B3SR465"><testcase classname="tests.phase12.test_deployment_queues" name="test_staging_worker_covers_actual_application_routes_and_default_queue" time="0.011"><failure message="AssertionError: {'scope': 'STATIC_CELERY_SUBSCRIPTION_CONTRACT', 'status': 'FAIL', 'required_queues': ['celery', 'enterprise-ai', 'grc', 'intelligence'], 'subscribed_queues': ['celery', 'enterprise-ai', 'grc'], ...}&#10;assert 'FAIL' == 'PASS'&#10;  &#10;  - PASS&#10;  + FAIL">def test_staging_worker_covers_actual_application_routes_and_default_queue():
+        command = contract.load_worker(ROOT / "deploy/compose.staging.yml")
+        result = contract.assess(command, celery_app.conf.task_routes, celery_app.conf.task_default_queue)
+&gt;       assert result["status"] == "PASS", result
+E       AssertionError: {'scope': 'STATIC_CELERY_SUBSCRIPTION_CONTRACT', 'status': 'FAIL', 'required_queues': ['celery', 'enterprise-ai', 'grc', 'intelligence'], 'subscribed_queues': ['celery', 'enterprise-ai', 'grc'], ...}
+E       assert 'FAIL' == 'PASS'
+E         
+E         - PASS
+E         + FAIL
+
+backend\tests\phase12\test_deployment_queues.py:17: AssertionError</failure></testcase><testcase classname="tests.phase12.test_deployment_queues" name="test_missing_country_queue_is_detected_before_launch" time="0.000" /><testcase classname="tests.phase12.test_deployment_queues" name="test_future_configured_queue_cannot_silently_lose_its_consumer" time="0.006"><failure message="AssertionError: assert ['future-prov...intelligence'] == ['future-provider']&#10;  &#10;  Left contains one more item: 'intelligence'&#10;  Use -v to get more diff">def test_future_configured_queue_cannot_silently_lose_its_consumer():
+        routes = {**celery_app.conf.task_routes, "future.producer": {"queue": "future-provider"}}
+        command = contract.load_worker(ROOT / "deploy/compose.staging.yml")
+&gt;       assert contract.assess(command, routes, "celery")["missing_queues"] == ["future-provider"]
+E       AssertionError: assert ['future-prov...intelligence'] == ['future-provider']
+E         
+E         Left contains one more item: 'intelligence'
+E         Use -v to get more diff
+
+backend\tests\phase12\test_deployment_queues.py:30: AssertionError</failure></testcase><testcase classname="tests.phase12.test_deployment_queues" name="test_ambiguous_subscription_arguments_are_rejected[tail0]" time="0.001" /><testcase classname="tests.phase12.test_deployment_queues" name="test_ambiguous_subscription_arguments_are_rejected[tail1]" time="0.000" /><testcase classname="tests.phase12.test_deployment_queues" name="test_ambiguous_subscription_arguments_are_rejected[tail2]" time="0.000" /><testcase classname="tests.phase12.test_deployment_queues" name="test_ambiguous_subscription_arguments_are_rejected[tail3]" time="0.000" /><testcase classname="tests.phase12.test_deployment_queues" name="test_ambiguous_subscription_arguments_are_rejected[tail4]" time="0.000" /><testcase classname="tests.phase12.test_deployment_queues" name="test_ambiguous_subscription_arguments_are_rejected[tail5]" time="0.000" /><testcase classname="tests.phase12.test_deployment_queues" name="test_ambiguous_subscription_arguments_are_rejected[tail6]" time="0.000" /><testcase classname="tests.phase12.test_deployment_queues" name="test_long_queue_option_and_dynamic_router_boundary" time="0.000" /></testsuite></testsuites>

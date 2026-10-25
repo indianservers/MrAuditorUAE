@@ -1,0 +1,97 @@
+{
+  "scope": "LOCAL_SYNTHETIC_TEMPLATE_QUEUE_CONSUMPTION",
+  "status": "PASS",
+  "executed_at": "2026-10-25T18:06:24.281306+00:00",
+  "pool": "solo",
+  "platform": "win32",
+  "database_operations": "NONE_TEST_TASKS_ONLY",
+  "hosted_or_container_qualification": false,
+  "broker_version": "5.0.14.1",
+  "subscription_contract": {
+    "scope": "STATIC_CELERY_SUBSCRIPTION_CONTRACT",
+    "status": "PASS",
+    "required_queues": [
+      "celery",
+      "enterprise-ai",
+      "grc",
+      "intelligence"
+    ],
+    "subscribed_queues": [
+      "celery",
+      "enterprise-ai",
+      "grc",
+      "intelligence"
+    ],
+    "missing_queues": []
+  },
+  "deployment_template_sha256": "e9f4581b009060afdbcfc7f9cb29fd157caf119ee849ec3e63543d9316c2b526",
+  "observed_active_queues": [
+    "celery",
+    "enterprise-ai",
+    "grc",
+    "intelligence"
+  ],
+  "health_entrypoint": {
+    "all_consumers": {
+      "missing_queues": [],
+      "reason": "REQUIRED_QUEUES_ACTIVE",
+      "required_queues": [
+        "celery",
+        "enterprise-ai",
+        "grc",
+        "intelligence"
+      ],
+      "status": "PASS",
+      "subscribed_queues": [
+        "celery",
+        "enterprise-ai",
+        "grc",
+        "intelligence"
+      ]
+    },
+    "country_consumer_removed": {
+      "missing_queues": [
+        "intelligence"
+      ],
+      "reason": "SUBSCRIPTION_MISSING",
+      "required_queues": [
+        "celery",
+        "enterprise-ai",
+        "grc",
+        "intelligence"
+      ],
+      "status": "FAIL",
+      "subscribed_queues": [
+        "celery",
+        "enterprise-ai",
+        "grc"
+      ]
+    },
+    "country_consumer_restored": {
+      "missing_queues": [],
+      "reason": "REQUIRED_QUEUES_ACTIVE",
+      "required_queues": [
+        "celery",
+        "enterprise-ai",
+        "grc",
+        "intelligence"
+      ],
+      "status": "PASS",
+      "subscribed_queues": [
+        "celery",
+        "enterprise-ai",
+        "grc",
+        "intelligence"
+      ]
+    }
+  },
+  "completed_queues": [
+    "celery",
+    "enterprise-ai",
+    "grc",
+    "intelligence"
+  ],
+  "completed_tasks": 4,
+  "owned_processes_stopped": true,
+  "duration_seconds": 8.531
+}
