@@ -1,0 +1,162 @@
+{
+  "dataset_kind": "SYNTHETIC_ENGINE_FIXTURE",
+  "real_client_data": false,
+  "professional_validation": "NOT_ESTABLISHED",
+  "source_fixture": "backend/tests/unit/country_workflow_cases.py",
+  "source_fixture_sha256": "419f87b56019034b36aecf185d0e200bc30523e4efb1cb89dc31959a8f4577f9",
+  "case": {
+    "id": "RW-153",
+    "title": "India split and pooled withholding cash settlements retain each assessed transaction",
+    "workflow": "obligation-bank-allocations",
+    "country": "IN",
+    "sources": {
+      "expected": [
+        {
+          "id": "E1",
+          "registration": "EMPLOYER-1",
+          "subject": "EMP-1",
+          "period": "2026-05",
+          "component": "TDS",
+          "currency": "INR",
+          "amount": "100",
+          "due_date": "2026-06-30",
+          "payment_date": null,
+          "withholding_scope": {
+            "legal_role": "deductor",
+            "tax_kind": "TDS",
+            "rule_reference": "SYN-ASSESSED-TDS-RULE",
+            "tax_year_start": "2026-04-01",
+            "tax_year_end": "2027-03-31",
+            "transaction_reference": "SYN-TAX-TX-1",
+            "transaction_date": "2026-05-15"
+          }
+        },
+        {
+          "id": "E2",
+          "registration": "EMPLOYER-1",
+          "subject": "EMP-2",
+          "period": "2026-05",
+          "component": "TDS",
+          "currency": "INR",
+          "amount": "80",
+          "due_date": "2026-06-30",
+          "payment_date": null,
+          "withholding_scope": {
+            "legal_role": "deductor",
+            "tax_kind": "TDS",
+            "rule_reference": "SYN-ASSESSED-TDS-RULE",
+            "tax_year_start": "2026-04-01",
+            "tax_year_end": "2027-03-31",
+            "transaction_reference": "SYN-TAX-TX-2",
+            "transaction_date": "2026-05-15"
+          }
+        }
+      ],
+      "reported": [
+        {
+          "id": "R1",
+          "registration": "EMPLOYER-1",
+          "subject": "EMP-1",
+          "period": "2026-05",
+          "component": "TDS",
+          "currency": "INR",
+          "amount": "100",
+          "due_date": "2026-06-30",
+          "payment_date": null,
+          "withholding_scope": {
+            "legal_role": "deductor",
+            "tax_kind": "TDS",
+            "rule_reference": "SYN-ASSESSED-TDS-RULE",
+            "tax_year_start": "2026-04-01",
+            "tax_year_end": "2027-03-31",
+            "transaction_reference": "SYN-TAX-TX-1",
+            "transaction_date": "2026-05-15"
+          }
+        },
+        {
+          "id": "R2",
+          "registration": "EMPLOYER-1",
+          "subject": "EMP-2",
+          "period": "2026-05",
+          "component": "TDS",
+          "currency": "INR",
+          "amount": "80",
+          "due_date": "2026-06-30",
+          "payment_date": null,
+          "withholding_scope": {
+            "legal_role": "deductor",
+            "tax_kind": "TDS",
+            "rule_reference": "SYN-ASSESSED-TDS-RULE",
+            "tax_year_start": "2026-04-01",
+            "tax_year_end": "2027-03-31",
+            "transaction_reference": "SYN-TAX-TX-2",
+            "transaction_date": "2026-05-15"
+          }
+        }
+      ],
+      "bank": [
+        {
+          "id": "BANK",
+          "account": "BANK-1",
+          "reference": "PAY-1",
+          "date": "2026-06-01",
+          "currency": "INR",
+          "amount": "-150",
+          "counterparty": "Customer"
+        },
+        {
+          "id": "BANK2",
+          "account": "BANK-1",
+          "reference": "PAY-1",
+          "date": "2026-06-02",
+          "currency": "INR",
+          "amount": "-30",
+          "counterparty": "Customer"
+        }
+      ],
+      "allocations": [
+        {
+          "id": "A1",
+          "expected_id": "E1",
+          "reported_id": "R1",
+          "transaction_id": "BANK",
+          "currency": "INR",
+          "amount": "100",
+          "evidence_reference": "SYNTHETIC-PAYMENT-ADVICE",
+          "rationale": "Reviewed fictional pooled salary payment allocation"
+        },
+        {
+          "id": "A2",
+          "expected_id": "E2",
+          "reported_id": "R2",
+          "transaction_id": "BANK",
+          "currency": "INR",
+          "amount": "50",
+          "evidence_reference": "SYNTHETIC-PAYMENT-ADVICE",
+          "rationale": "Reviewed fictional pooled salary payment allocation"
+        },
+        {
+          "id": "A3",
+          "expected_id": "E2",
+          "reported_id": "R2",
+          "transaction_id": "BANK2",
+          "currency": "INR",
+          "amount": "30",
+          "evidence_reference": "SYNTHETIC-PAYMENT-ADVICE",
+          "rationale": "Reviewed fictional pooled salary payment allocation"
+        }
+      ]
+    },
+    "expected": {
+      "exceptions": 0
+    },
+    "parameters": {
+      "currency": "INR",
+      "account": "BANK-1",
+      "obligation_month_start": "2026-05",
+      "obligation_month_end": "2026-05",
+      "settlement_start": "2026-06-01",
+      "bank_payment_sign": "debit-negative"
+    }
+  }
+}

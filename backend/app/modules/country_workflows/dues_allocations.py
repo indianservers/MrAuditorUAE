@@ -53,6 +53,11 @@ def allocate(data, tables, country):
                 "TCS",
             }:
                 raise ValueError("Indian domestic statutory component cannot run in a UAE workflow")
+            scope = row.get("withholding_scope")
+            if scope is not None and (country != "IN" or row["currency"] != "INR" or row["component"] != scope["tax_kind"]):
+                raise ValueError("Withholding settlement scopes require India and matching INR tax components")
+            if scope is not None and scope["tax_kind"] == "TCS" and scope["rule_reference"].upper().replace(" ", "") == "206C(1H)" and row["period"] >= "2025-04":
+                raise ValueError("Section206C(1H) is withdrawn for this obligation period")
             if row["component"].upper() == "TCS:206C(1H)" and row["period"] >= "2025-04":
                 raise ValueError("Section206C(1H) is withdrawn for this obligation period")
             if row.get("payment_date"):
@@ -85,8 +90,10 @@ def allocate(data, tables, country):
             raise ValueError("Allocation references a missing obligation, reported or bank row")
         if identity(e) != identity(r) or allocation["currency"] != data.currency:
             raise ValueError(
-                "Allocation crosses registration, subject, component, month or currency; pension scope must also agree"
+                "Allocation crosses registration, subject, component, month or currency; pension scope must also agree; withholding scopes must also agree"
             )
+        if e.get("withholding_scope") and b["date"] < e["withholding_scope"]["transaction_date"]:
+            raise ValueError("Bank movement predates withholding transaction; assess advance challans separately")
         if date_details(b)["booking_date_review_required"]:
             raise ValueError("A value-date fallback cannot establish dated obligation settlement; retain explicit booking-date evidence")
         amount = Decimal(allocation["amount"])
@@ -161,6 +168,7 @@ def allocate(data, tables, country):
                 },
                 "expected_amount": str(original),
                 **({"pension_scope": e["pension_scope"]} if e.get("pension_scope") else {}),
+                **({"withholding_scope": e["withholding_scope"]} if e.get("withholding_scope") else {}),
                 "reported_amount": r["amount"] if r else None,
                 "reported_difference": str(Decimal(r["amount"]) - original) if r else None,
                 "bank_settled": str(paid),
@@ -195,6 +203,7 @@ def allocate(data, tables, country):
                 },
                 "reported_amount": r["amount"],
                 **({"pension_scope": r["pension_scope"]} if r.get("pension_scope") else {}),
+                **({"withholding_scope": r["withholding_scope"]} if r.get("withholding_scope") else {}),
                 "bank_settled": str(used_reported[r["id"]]),
                 "unsettled_reported_amount": str(residual),
                 "state": "UNEXPECTED_REPORTED_OBLIGATION"
@@ -268,6 +277,7 @@ def allocate(data, tables, country):
             rows,
             limitations=[
                 "Explicit allocations only; no employee identity, payment purpose or bank ownership is inferred from matching amounts",
+                *(["Withholding allocations establish assessed bank cash links, not government challan posting, return filing or beneficiary tax credit"] if any(row.get("withholding_scope") for row in expected.values()) else []),
                 "Due dates are assessed source inputs, not a legal deadline calculation; instruction/return files are not payment execution evidence",
                 "Corrections and reversals require assessed restated populations; this workflow does not post journals or file returns",
                 "Coverage tests declared months only; employee completeness, legal liability and general-ledger reconciliation remain separate procedures",

@@ -1,0 +1,4 @@
+id,expected_id,reported_id,transaction_id,currency,amount,evidence_reference,rationale
+A1,wh-expected-ff92a4c67a41fc28ab6d201794fdc942,wh-reported-ff92a4c67a41fc28ab6d201794fdc942,B1,INR,100,SYNTHETIC-TAX-CHALLAN-ADVICE,Independently assessed fictional pooled tax-challan cash allocation
+A2,wh-expected-8fbceb1c9232c7629ad1b6927ca9d7ac,wh-reported-8fbceb1c9232c7629ad1b6927ca9d7ac,B1,INR,50,SYNTHETIC-TAX-CHALLAN-ADVICE,Independently assessed fictional pooled tax-challan cash allocation
+A3,wh-expected-8fbceb1c9232c7629ad1b6927ca9d7ac,wh-reported-8fbceb1c9232c7629ad1b6927ca9d7ac,B2,INR,30,SYNTHETIC-TAX-CHALLAN-ADVICE,Independently assessed fictional pooled tax-challan cash allocation

@@ -23,6 +23,7 @@ from app.modules.country_workflows.pension_schemas import PENSION_ROW_TYPES
 from app.modules.country_workflows.sector_schemas import SECTOR_ROW_TYPES
 from app.modules.country_workflows.vat201_layouts import LAYOUTS, VAT201Layout
 from app.modules.country_workflows.withholding_schemas import WithholdingRecord, WithholdingRole
+from app.modules.country_workflows.withholding_scope import WithholdingSettlementScope
 from app.modules.jurisdictions.profiles import Strict
 from app.modules.regulatory.conversion import ExchangeRate
 from app.modules.regulatory.pension_profiles import PensionScope
@@ -97,7 +98,20 @@ class Obligation(Strict):
     amount: Money
     due_date: date | None = None
     payment_date: date | None = None
+    withholding_scope: WithholdingSettlementScope | None = Field(default=None, exclude_if=lambda value: value is None)
     pension_scope: PensionScope | None = Field(default=None, exclude_if=lambda value: value is None)
+
+    @field_validator("withholding_scope", mode="before")
+    @classmethod
+    def csv_withholding_scope(cls, value):
+        if isinstance(value, str):
+            import json
+
+            try:
+                return json.loads(value)
+            except ValueError:
+                raise ValueError("Withholding scope CSV values require a JSON object") from None
+        return value
 
     @field_validator("pension_scope", mode="before")
     @classmethod
@@ -113,6 +127,12 @@ class Obligation(Strict):
 
     @model_validator(mode="after")
     def scope_component(self):
+        if self.withholding_scope is not None:
+            scope = self.withholding_scope
+            if self.pension_scope is not None or self.currency != "INR" or self.component != scope.tax_kind or self.population == "arrears":
+                raise ValueError("Withholding obligations require INR, the exact TDS/TCS component and a separate liability scope")
+            if not scope.tax_year_start.strftime("%Y-%m") <= self.period <= scope.tax_year_end.strftime("%Y-%m"):
+                raise ValueError("Withholding obligation period is outside its assessed tax year")
         if self.pension_scope is not None and not self.component.startswith("PENSION:"):
             raise ValueError("Pension scope applies only to pension components")
         return self

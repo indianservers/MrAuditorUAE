@@ -1,11 +1,11 @@
 {
   "dataset_kind": "SYNTHETIC_ENGINE_FIXTURES_NOT_CLIENT_PILOTS",
   "fixture_hash_policy": "Per-file original fixture hashes are preserved for unchanged cases; the root hash identifies this generator run source version",
-  "source_fixture_sha256": "406fea775668d55f81fffff29c0ffba55aa3ce097f5144506a6631d0e6f33927",
-  "scenario_count": 152,
+  "source_fixture_sha256": "419f87b56019034b36aecf185d0e200bc30523e4efb1cb89dc31959a8f4577f9",
+  "scenario_count": 154,
   "counts_by_country": {
     "UAE": 101,
-    "India": 51
+    "India": 53
   },
   "cases": [
     {
@@ -1071,6 +1071,20 @@
       "workflow": "india-document-series",
       "file": "India/RW-152.json",
       "source_fixture_sha256": "406fea775668d55f81fffff29c0ffba55aa3ce097f5144506a6631d0e6f33927"
+    },
+    {
+      "id": "RW-153",
+      "country": "IN",
+      "workflow": "obligation-bank-allocations",
+      "file": "India/RW-153.json",
+      "source_fixture_sha256": "419f87b56019034b36aecf185d0e200bc30523e4efb1cb89dc31959a8f4577f9"
+    },
+    {
+      "id": "RW-154",
+      "country": "IN",
+      "workflow": "obligation-bank-allocations",
+      "file": "India/RW-154.json",
+      "source_fixture_sha256": "419f87b56019034b36aecf185d0e200bc30523e4efb1cb89dc31959a8f4577f9"
     }
   ]
 }

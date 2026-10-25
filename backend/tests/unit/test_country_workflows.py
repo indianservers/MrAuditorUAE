@@ -21,7 +21,7 @@ def parsed(table_type, rows):
     buffer = io.StringIO(newline="")
     writer = csv.DictWriter(buffer, fieldnames=fields)
     writer.writeheader()
-    writer.writerows(rows)
+    writer.writerows([{key: json.dumps(value) if key == "withholding_scope" and isinstance(value, dict) else value for key, value in row.items()} for row in rows])
     totals = {}
     for r in rows:
         field = "amount" if "amount" in r else "tax" if "tax" in r else None
@@ -85,7 +85,7 @@ def test_country_catalogue_is_explicit_and_not_a_legal_certification():
 def test_published_scenario_catalogue_matches_executable_fixtures():
     from app.modules.country_workflows.catalogue import scenarios
 
-    assert len(scenarios()) == 152
+    assert len(scenarios()) == 154
     assert scenarios() == [
         {k: c[k] for k in ["id", "title", "workflow", "country", "expected"]} for c in CASES
     ]

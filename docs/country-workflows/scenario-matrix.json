@@ -1,6 +1,6 @@
 {
   "synthetic": true,
-  "count": 152,
+  "count": 154,
   "scope": "Operational evidence scenarios, not independently qualified laws or integrations",
   "items": [
     {
@@ -1416,6 +1416,24 @@
       "expected": {
         "exceptions": 1,
         "blocked": false
+      }
+    },
+    {
+      "id": "RW-153",
+      "title": "India split and pooled withholding cash settlements retain each assessed transaction",
+      "workflow": "obligation-bank-allocations",
+      "country": "IN",
+      "expected": {
+        "exceptions": 0
+      }
+    },
+    {
+      "id": "RW-154",
+      "title": "India withholding cash allocation cannot cross section scope despite matching amounts",
+      "workflow": "obligation-bank-allocations",
+      "country": "IN",
+      "expected": {
+        "error": "withholding scopes must also agree"
       }
     }
   ]

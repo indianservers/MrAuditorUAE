@@ -202,6 +202,7 @@ def _parse_csv(content, data, defaults=None):
         raise ValueError("Import taxable-base control does not agree to all retained source rows")
     return {
         "table_type": data.table_type,
+        **({"allowed_workflows": ["obligation-bank-allocations"], "allowed_source_roles": ["expected", "reported"]} if any(row.get("withholding_scope") for row in rows) else {}),
         **({"document_series_controls": series_controls} if series_controls is not None else {}),
         **({"metric_controls": metric_controls} if metric_controls is not None else {}),
         "rows": rows,

@@ -1,0 +1,9 @@
+{
+  "purpose": "expected",
+  "legal_role": "deductor",
+  "cutoff_date": "2026-06-30",
+  "expected_current_rows": 2,
+  "amount": "180",
+  "label": "SYNTHETIC tax obligations",
+  "assessment": "Independent withholding population, due dates and split cash settlement scope"
+}

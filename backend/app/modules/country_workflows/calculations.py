@@ -815,6 +815,12 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
 
         sources, account_scope = bind(data,country,sources,*bank_account_review)
     for role, table in sources.items():
+        if table.get("parser_version") == "withholding-obligations/1" and (role not in table.get("allowed_source_roles", []) or table.get("native_metadata", {}).get("controls", {}).get("cutoff_date") != data.as_of.isoformat()):
+            raise ValueError("Withholding obligation purpose and cutoff must match the allocation review")
+        if table.get("allowed_workflows") and data.workflow not in table["allowed_workflows"]:
+            raise ValueError("Derived source is restricted to its assessed target workflows")
+        if any(row.get("withholding_scope") for row in table["rows"]) and data.workflow != "obligation-bank-allocations":
+            raise ValueError("Transaction-scoped withholding obligations require the bank allocation workflow")
         if table.get("native_format") == "india-gstr1-document-series-json" and (data.workflow != "india-document-series" or role != "reported"):
             raise ValueError("Native document series can establish only the reported role of India document-series comparison")
         if table.get("parser_version") == "bank-clearance-carryforward/1" and (data.workflow != "bank-subsequent-clearance" or role != "outstanding"):

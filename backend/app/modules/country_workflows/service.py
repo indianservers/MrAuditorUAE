@@ -399,6 +399,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
     contributors = {str(ctx.user_id)}
     for role, identifier in data.source_ids.items():
         source = await intelligence.event(db, ctx, eng.id, identifier, True)
+        if source.body.get("parser_version") == "withholding-obligations/1" and (data.workflow != "obligation-bank-allocations" or role not in source.body.get("allowed_source_roles", [])):
+            raise HTTPException(422, "Withholding obligations can establish only their assessed bank-allocation purpose")
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
         if data.workflow == "bank-account-evidence" and source.body.get("review_status") != "REVIEWED":
@@ -503,6 +505,13 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 contributors=contributors,
             )
         )
+    for source_role, source_body in sources.items():
+        if source_body.get("parser_version") == "withholding-obligations/1":
+            from app.modules.country_workflows.withholding_obligations import (
+                verify as verify_withholding_obligations,
+            )
+
+            dependencies.extend(await verify_withholding_obligations(db, ctx, eng, source_body, data, source_role, contributors))
     if sources.get("expected", {}).get("parser_version") == "contribution-obligations/1":
         from app.modules.country_workflows.contribution_source import verify as verify_contributions
 

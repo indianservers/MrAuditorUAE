@@ -6001,3 +6001,198 @@ test("India Table 13 retains document-series counts, cancellation variances and 
     await context.close();
   }
 });
+test("India TDS and TCS withholding sources support pooled and split bank allocations", async ({
+  page,
+  browser,
+}) => {
+  test.setTimeout(240000);
+  page.setDefaultTimeout(15000);
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+    viewport: { width: 1600, height: 1100 },
+  });
+  const reviewer = await context.newPage();
+  reviewer.setDefaultTimeout(15000);
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_final_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    const eid = fixture.india_engagement;
+    async function approve(id: string, mode: string) {
+      await reviewer.goto(`/intelligence/${eid}/${mode}`);
+      await reviewer.getByLabel("Saved source or result").selectOption(id);
+      await reviewer
+        .getByLabel("Review / exception rationale")
+        .fill(
+          "Independent tax-year/transaction scope, rule assessment and split bank controls reviewed",
+        );
+      const pending = reviewer.waitForResponse(
+        (r) =>
+          r.url().endsWith(`/events/${id}/review`) &&
+          r.request().method() === "POST",
+      );
+      await reviewer
+        .getByRole("button", { name: "Independent approval", exact: true })
+        .click();
+      const response = await pending;
+      expect(response.status(), await response.text()).toBe(201);
+      return (await response.json()).id;
+    }
+    for (const legalRole of ["deductor", "collector"] as const) {
+      const entry = fixture.withholding_split[legalRole];
+      await page.goto(`/intelligence/${eid}/workflow-source`);
+      await page
+        .getByLabel("Saved source or result")
+        .selectOption(entry.parents.expected);
+      const panel = page.getByRole("region", {
+        name: "Withholding bank-allocation source",
+        exact: true,
+      });
+      await panel
+        .getByText(
+          "Prepare withholding obligations for split bank allocations",
+          { exact: true },
+        )
+        .click();
+      await panel
+        .getByLabel("Withholding obligation purpose")
+        .selectOption("expected");
+      await panel.getByLabel("Withholding payer role").selectOption(legalRole);
+      for (const [label, value] of [
+        ["Withholding obligation cutoff", "2026-06-30"],
+        ["Independent current withholding rows", "2"],
+        ["Independent current withholding total (INR)", "180"],
+        [
+          "Withholding obligation source title",
+          `SYNTHETIC ${legalRole} split cash expectations ${Date.now()}`,
+        ],
+        [
+          "Withholding allocation scope assessment",
+          "Current transaction identities and source rule evidence assessed; pooled bank cash remains separate from government credit",
+        ],
+      ])
+        await panel.getByLabel(label, { exact: true }).fill(value);
+      await saveScreenshot(
+        `${shots}/india-${legalRole}-withholding-cash-controls.png`,
+        () => panel.screenshot(),
+      );
+      const preparedResponse = page.waitForResponse(
+        (r) =>
+          r
+            .url()
+            .endsWith(
+              `/events/${entry.parents.expected}/withholding-obligation-source`,
+            ) && r.request().method() === "POST",
+      );
+      await panel
+        .getByRole("button", {
+          name: "Prepare withholding bank-allocation source",
+          exact: true,
+        })
+        .click();
+      const prepared = await preparedResponse;
+      expect(prepared.status(), await prepared.text()).toBe(201);
+      const bridge = await prepared.json();
+      expect(bridge.body.review_status).toBe("UNVERIFIED");
+      const expected = await approve(bridge.id, "workflow-source");
+      await page.goto(`/intelligence/${eid}/country-workflow`);
+      await page
+        .getByLabel("Workflow", { exact: true })
+        .selectOption("obligation-bank-allocations");
+      const title = `SYNTHETIC ${legalRole} pooled and split tax cash ${Date.now()}`;
+      for (const [label, value] of [
+        ["Schedule title", title],
+        ["Reconciliation date", "2026-06-30"],
+        [
+          "Scope and source rationale",
+          "Two distinct withholding transactions share one bank debit, with a later debit settling the second transaction in full",
+        ],
+        ["First obligation month", "2026-05"],
+        ["Last obligation month", "2026-05"],
+        ["Bank settlement window starts", "2026-06-01"],
+        ["Bank account identifier", "BANK-1"],
+        ["Account currency", "INR"],
+      ])
+        await page.getByLabel(label, { exact: true }).fill(value);
+      await page.getByLabel("Bank payment sign").selectOption("debit-negative");
+      for (const role of ["expected", "reported", "bank", "allocations"])
+        await page
+          .getByLabel(`${role} source`, { exact: true })
+          .selectOption(role === "expected" ? expected : entry.sources[role]);
+      const submitted = page.waitForResponse(
+        (r) =>
+          r.url().includes(`/engagements/${eid}/jobs`) &&
+          r.request().method() === "POST",
+      );
+      await page
+        .getByRole("button", { name: "Queue calculation", exact: true })
+        .click();
+      const response = await submitted;
+      expect(response.status(), await response.text()).toBe(202);
+      const job = await response.json();
+      let result = "";
+      await expect
+        .poll(
+          async () => {
+            const status = await page.request.get(
+              `/api/backend/intelligence/engagements/${eid}/jobs/${job.id}`,
+              { headers: { "X-Tenant-ID": fixture.tenant } },
+            );
+            const value = await status.json();
+            if (value.status === "failed")
+              throw new Error(JSON.stringify(value.error_details));
+            result = value.result_id || "";
+            return value.status;
+          },
+          { timeout: 60000 },
+        )
+        .toBe("completed");
+      await expect(
+        page
+          .getByLabel("Saved source or result")
+          .locator(`option[value="${result}"]`),
+      ).toHaveCount(1);
+      await page.getByLabel("Saved source or result").selectOption(result);
+      await expect(
+        page.getByText("0 exceptions", { exact: true }),
+      ).toBeVisible();
+      const table = page
+        .getByRole("table")
+        .filter({
+          has: page.getByRole("columnheader", {
+            name: "withholding transaction",
+            exact: true,
+          }),
+        });
+      await expect(
+        table
+          .getByRole("cell", { name: "SYN-TRANSACTION-1", exact: true })
+          .first(),
+      ).toBeVisible();
+      await expect(
+        table
+          .getByRole("cell", { name: "SYN-TRANSACTION-2", exact: true })
+          .first(),
+      ).toBeVisible();
+      await saveScreenshot(
+        `${shots}/india-${legalRole}-withholding-split-bank.png`,
+        () => table.locator("..").screenshot(),
+      );
+      await approve(result, "country-workflow");
+      const download = page.waitForEvent("download");
+      await page
+        .getByRole("button", { name: "Export XLSX", exact: true })
+        .click();
+      expect((await download).suggestedFilename()).toMatch(/\.xlsx$/);
+    }
+  } finally {
+    await context.close();
+  }
+});

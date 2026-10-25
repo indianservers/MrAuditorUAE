@@ -1,0 +1,3 @@
+id,account,reference,date,currency,amount,counterparty
+B1,BANK-1,PAY-1,2026-06-01,INR,-150,Customer
+B2,BANK-1,PAY-1,2026-06-28,INR,-30,Customer

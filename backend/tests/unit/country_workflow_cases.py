@@ -716,4 +716,21 @@ series_variance = deepcopy(series_sources)
 series_variance["reported"][0].update(cancelled=1, net_issued=9)
 add("india-document-series", "India cancelled document count discrepancy survives a large money tolerance", series_variance, {"exceptions": 1, "blocked": False}, country="IN", currency="INR", tolerance="1000")
 
-assert len(CASES) == 152
+tax_dues = deepcopy(india_dues)
+for role in ("expected", "reported"):
+    for index, tax_obligation in enumerate(tax_dues[role], 1):
+        tax_obligation.update(period="2026-05", component="TDS", due_date="2026-06-30", withholding_scope={
+            "legal_role": "deductor", "tax_kind": "TDS", "rule_reference": "SYN-ASSESSED-TDS-RULE",
+            "tax_year_start": "2026-04-01", "tax_year_end": "2027-03-31",
+            "transaction_reference": f"SYN-TAX-TX-{index}", "transaction_date": "2026-05-15",
+        })
+tax_dues["bank"][0]["amount"] = "-150"
+tax_dues["bank"].append({**tax_dues["bank"][0], "id": "BANK2", "amount": "-30", "date": "2026-06-02"})
+tax_dues["allocations"][1]["amount"] = "50"
+tax_dues["allocations"].append({**tax_dues["allocations"][1], "id": "A3", "transaction_id": "BANK2", "amount": "30"})
+add("obligation-bank-allocations", "India split and pooled withholding cash settlements retain each assessed transaction", tax_dues, {"exceptions": 0}, country="IN", currency="INR", **{**dues_parameters, "obligation_month_end": "2026-05"})
+wrong_tax_scope = deepcopy(tax_dues)
+wrong_tax_scope["reported"][0]["withholding_scope"]["rule_reference"] = "SYN-DIFFERENT-TAX-SECTION"
+add("obligation-bank-allocations", "India withholding cash allocation cannot cross section scope despite matching amounts", wrong_tax_scope, {"error": "withholding scopes must also agree"}, country="IN", currency="INR", **{**dues_parameters, "obligation_month_end": "2026-05"})
+
+assert len(CASES) == 154

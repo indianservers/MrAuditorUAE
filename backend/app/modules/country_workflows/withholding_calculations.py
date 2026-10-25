@@ -83,6 +83,51 @@ def assessment_issues(record, kind, pools):
     return issues
 
 
+def select_records(records, legal_role, as_of, role):
+    current: dict[tuple[str, ...], dict[str, Any]] = {}
+    inactive: dict[tuple[str, ...], list[str]] = {}
+    observations = set()
+    for record in records:
+        if record["legal_role"] != legal_role:
+            raise ValueError("Every source must use the explicitly selected legal role")
+        if date.fromisoformat(record["transaction_date"]) > as_of or record[
+            "period"
+        ] > as_of.strftime("%Y-%m"):
+            raise ValueError(
+                "Future withholding transaction or reporting month is outside cutoff"
+            )
+        if (
+            role == "deposited"
+            and record.get("payment_date")
+            and date.fromisoformat(record["payment_date"]) > as_of
+        ):
+            raise ValueError("Future deposit cannot settle the reporting-date liability")
+        key = tuple(record[field] for field in KEY_FIELDS)
+        observation = (key, record["source_reference"], record["source_version"])
+        if observation in observations:
+            raise ValueError(
+                "Duplicate source observation or contradictory status for the same source version"
+            )
+        observations.add(observation)
+        if (
+            role == "deposited"
+            and record.get("payment_date")
+            and record["payment_date"] < record["transaction_date"]
+        ):
+            raise ValueError(
+                "Deposit predates transaction; assess advance allocation separately"
+            )
+        if record["record_status"] != "current":
+            inactive.setdefault(key, []).append(record["id"])
+            continue
+        if key in current:
+            raise ValueError(
+                "Multiple current withholding observations; resolve amendments, do not sum versions"
+            )
+        current[key] = record
+    return current, inactive
+
+
 def withholding(data, tables):
     liability = data.workflow == "india-withholding-liability"
     allowed = {"deductor", "collector"} if liability else {"deductee", "collectee"}
@@ -92,49 +137,9 @@ def withholding(data, tables):
     excluded: dict[str, dict[tuple[str, ...], list[str]]] = {}
     all_keys: set[tuple[str, ...]] = set()
     for role, records in tables.items():
-        current: dict[tuple[str, ...], dict[str, Any]] = {}
-        inactive: dict[tuple[str, ...], list[str]] = {}
-        observations = set()
-        for record in records:
-            if record["legal_role"] != data.withholding_role:
-                raise ValueError("Every source must use the explicitly selected legal role")
-            if date.fromisoformat(record["transaction_date"]) > data.as_of or record[
-                "period"
-            ] > data.as_of.strftime("%Y-%m"):
-                raise ValueError(
-                    "Future withholding transaction or reporting month is outside cutoff"
-                )
-            if (
-                role == "deposited"
-                and record.get("payment_date")
-                and date.fromisoformat(record["payment_date"]) > data.as_of
-            ):
-                raise ValueError("Future deposit cannot settle the reporting-date liability")
-            key = tuple(record[field] for field in KEY_FIELDS)
-            observation = (key, record["source_reference"], record["source_version"])
-            if observation in observations:
-                raise ValueError(
-                    "Duplicate source observation or contradictory status for the same source version"
-                )
-            observations.add(observation)
-            if (
-                role == "deposited"
-                and record.get("payment_date")
-                and record["payment_date"] < record["transaction_date"]
-            ):
-                raise ValueError(
-                    "Deposit predates transaction; assess advance allocation separately"
-                )
-            all_keys.add(key)
-            if record["record_status"] != "current":
-                inactive.setdefault(key, []).append(record["id"])
-                continue
-            if key in current:
-                raise ValueError(
-                    "Multiple current withholding observations; resolve amendments, do not sum versions"
-                )
-            current[key] = record
+        current, inactive = select_records(records, data.withholding_role, data.as_of, role)
         selected[role], excluded[role] = current, inactive
+        all_keys.update(current.keys() | inactive.keys())
     pools = certificate_pools(selected.get("certificate", {}))
     rows = []
     base_role = "expected" if liability else "books"

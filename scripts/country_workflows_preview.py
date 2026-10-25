@@ -883,6 +883,14 @@ async def main():
                 assert reviewed.status_code == 201, reviewed.text
                 entry[role] = reviewed.json()["id"]
             document_series[mode] = entry
+        from tests.qa_crud.test_withholding_obligations import (
+            prepare_withholding_settlement,
+        )
+
+        withholding_split = {}
+        for legal_role in ("deductor", "collector"):
+            parents, _bridges, assessment, args = await prepare_withholding_settlement(client, h, india, f"/api/v1/engagements/{india}/audit", supporting_reviewer, legal_role)
+            withholding_split[legal_role] = {"parents": {key: value["id"] for key, value in parents.items()}, "sources": args["source_ids"], "assessment_record": assessment["id"]}
         if implementation_hash() != implementation:
             raise RuntimeError(
                 "Backend implementation changed during fixture preparation; prepare fresh fixtures before browser verification"
@@ -901,6 +909,7 @@ async def main():
                     "contribution_settlements": contribution_settlements,
                     "bank_clearance": clearance_fixtures,
                     "obligation_allocations": dues_fixtures,
+                    "withholding_split": withholding_split,
                     "document_series": document_series,
                     "import_nil": nil_import,
                     "import_vat_sources": import_vat_sources,

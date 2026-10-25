@@ -23,12 +23,25 @@ from app.modules.country_workflows.contribution_source import ContributionSource
 from app.modules.country_workflows.import_vat_source import ImportVATSourceInput
 from app.modules.country_workflows.payroll_source import PayrollSourceInput, PensionSourceInput
 from app.modules.country_workflows.vat_composition import VATCompositionInput
+from app.modules.country_workflows.withholding_obligations import WithholdingObligationInput
 from app.modules.intelligence import jobs, service
 from app.modules.intelligence import schemas as s
 from app.modules.intelligence.foundations import PeriodAction
 from app.modules.intelligence.models import IntelligenceEvent, IntelligenceJob
 
 router = APIRouter(prefix="/intelligence", tags=["Accounting intelligence"])
+
+
+@router.post("/engagements/{eid}/events/{identifier}/withholding-obligation-source", status_code=201)
+async def withholding_obligation_source(
+    eid: uuid.UUID, identifier: uuid.UUID, data: WithholdingObligationInput,
+    db: DB, ctx: Actor, request: Request,
+):
+    from app.modules.country_workflows.withholding_obligations import prepare
+
+    eng = await service.scope(db, ctx, eid, "country-workflow", True)
+    parent = await service.event(db, ctx, eid, identifier, True)
+    return audit.serialize(await prepare(db, ctx, eng, parent, data, request.state.request_id))
 
 
 @router.post("/engagements/{eid}/vat201-composition-source", status_code=201)
@@ -599,6 +612,7 @@ async def events(
                 "bank_account_scope": {key:row.body["bank_account_scope"].get(key) for key in ("account","currency")} if row.body.get("workflow") == "bank-account-evidence" else None,
                 "native_format": row.body.get("native_format"),
                 "allowed_source_roles": row.body.get("allowed_source_roles"),
+                "allowed_workflows": row.body.get("allowed_workflows"),
                 "invoice_direction": row.body.get("native_metadata", {}).get("direction") if row.body.get("native_format") == "india-inv01-json" else None,
                 "inventory_controls_verified": row.body.get("inventory_controls_verified") is True,
                 "obligation_populations": sorted({item.get("population", "unspecified") for item in row.body.get("rows", [])}) if row.body.get("table_type") == "obligations" else None,

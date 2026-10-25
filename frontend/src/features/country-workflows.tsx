@@ -8,6 +8,7 @@ import { useScope } from "@/stores/workspace";
 import { Button, ErrorState, Status } from "@/components/ui/primitives";
 import { PageHeader } from "./shared";
 import { BankCarryforwardSource } from "./bank-carryforward-source";
+import { WithholdingObligationSource } from "./withholding-obligation-source";
 import { ContributionObligationSource } from "./contribution-obligation-source";
 import {
   BankAccountLinkReview,
@@ -133,6 +134,7 @@ type Choice = {
   table_type?: string;
   native_format?: string;
   allowed_source_roles?: string[] | null;
+  allowed_workflows?: string[] | null;
   invoice_direction?: string | null;
   inventory_controls_verified?: boolean;
   obligation_populations?: string[] | null;
@@ -498,6 +500,19 @@ export function CountryWorkflows({
         ? (body.rows || []).map((row) => ({
             ...row,
             subject: row.subject ?? row.reference,
+            ...(row.withholding_scope
+              ? {
+                  tax_section: (row.withholding_scope as Record<string, string>)
+                    .rule_reference,
+                  tax_year: `${(row.withholding_scope as Record<string, string>).tax_year_start} to ${(row.withholding_scope as Record<string, string>).tax_year_end}`,
+                  withholding_transaction: (
+                    row.withholding_scope as Record<string, string>
+                  ).transaction_reference,
+                  withholding_date: (
+                    row.withholding_scope as Record<string, string>
+                  ).transaction_date,
+                }
+              : {}),
             source_amount:
               row.expected_amount ?? row.reported_amount ?? row.bank_amount,
             settled_or_allocated: row.bank_settled ?? row.allocated,
@@ -612,6 +627,10 @@ export function CountryWorkflows({
               "subject",
               "period",
               "component",
+              "tax_section",
+              "tax_year",
+              "withholding_transaction",
+              "withholding_date",
               "currency",
               "source_amount",
               "settled_or_allocated",
@@ -3004,6 +3023,8 @@ export function CountryWorkflows({
                           ].includes(workflow) ||
                             r.native_format !== "india-inv01-json" ||
                             r.invoice_direction === invoiceDirection) &&
+                          (!r.allowed_workflows ||
+                            r.allowed_workflows.includes(workflow)) &&
                           (!r.allowed_source_roles ||
                             r.allowed_source_roles.includes(role)) &&
                           (![
@@ -4104,6 +4125,20 @@ export function CountryWorkflows({
               </label>
             </>
           )}
+          {body.table_type === "withholding-records" &&
+            config.data?.country === "IN" &&
+            body.review_status === "REVIEWED" &&
+            detail.data.freshness === "CURRENT" && (
+              <WithholdingObligationSource
+                key={`${tenant}:${eid}:${selected}`}
+                eid={eid}
+                sourceId={selected}
+                onCreated={(id) => {
+                  setSelected(id);
+                  setOffset(0);
+                }}
+              />
+            )}
           {body.workflow === "india-document-series" && (
             <section aria-label="Document-series comparison scope">
               <p>
