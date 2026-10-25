@@ -12,6 +12,7 @@ from app.modules.country_workflows.payroll_schemas import PAYROLL_ROW_TYPES
 from app.modules.country_workflows.sector_schemas import SECTOR_ROW_TYPES
 from app.modules.country_workflows.withholding_schemas import WithholdingRecord, WithholdingRole
 from app.modules.jurisdictions.profiles import Strict
+from app.modules.regulatory.conversion import ExchangeRate
 
 Money = Annotated[Decimal, Field(max_digits=28, decimal_places=8)]
 Identifier = Annotated[str, Field(min_length=1, max_length=120)]
@@ -105,6 +106,7 @@ class Control(Strict):
 
 
 ROW_TYPES: dict[str, type[BaseModel]] = {
+    "fx-rates": ExchangeRate,
     "withholding-records": WithholdingRecord,
     **OPERATION_ROW_TYPES,
     **PAYROLL_ROW_TYPES,
@@ -157,6 +159,9 @@ class SourceInput(Strict):
     expected_documents: int | None = Field(default=None, ge=0, le=1250)
     rule_document_version_id: uuid.UUID | None = None
     table_type: Literal[
+        "fx-rates",
+        "bank-outstanding",
+        "bank-clearances",
         "withholding-records",
         "credit-applications",
         "cash-payments",
@@ -307,6 +312,7 @@ class WorkflowInput(Strict):
     withholding_role: WithholdingRole | None = None
     allocation_basis: Literal["invoice_face_amounts", "pre_application_balances"] | None = None
     workflow: Literal[
+        "bank-subsequent-clearance",
         "india-withholding-liability",
         "india-withholding-credit",
         "credit-note-applications",
@@ -409,6 +415,7 @@ class WorkflowInput(Strict):
                 "Ownership look-through requires an explicit company subject population"
             )
         if self.workflow in {
+            "bank-subsequent-clearance",
             "subsequent-settlements",
             "balance-confirmations",
             "expense-cutoff",
@@ -416,6 +423,8 @@ class WorkflowInput(Strict):
         }:
             if self.review_through is None or self.review_through < self.as_of:
                 raise ValueError("Declare a review window ending on or after the reporting date")
+        if self.workflow == "bank-subsequent-clearance" and not self.account:
+            raise ValueError("Subsequent bank clearance requires an explicit account")
         if self.workflow in {
             "expense-cutoff",
             "excise-reconciliation",

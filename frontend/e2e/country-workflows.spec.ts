@@ -8,6 +8,393 @@ const fixture = JSON.parse(
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
 
+test("reviewed currency conversions feed scoped UAE and India rule assessments", async ({
+  page,
+  browser,
+}) => {
+  test.setTimeout(180000);
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+    viewport: { width: 1600, height: 1100 },
+  });
+  const reviewer = await context.newPage();
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_final_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    async function approve(eid: string, id: string) {
+      await reviewer.goto(`/intelligence/${eid}/lead?event=${id}`);
+      await reviewer
+        .getByLabel("Auditor rationale / review comments")
+        .fill(
+          "Independent synthetic source amounts, retained direct quote, assessed rounding and currency lineage checked.",
+        );
+      const response = reviewer.waitForResponse(
+        (r) =>
+          r.url().endsWith(`/events/${id}/review`) &&
+          r.request().method() === "POST",
+      );
+      await reviewer
+        .getByRole("button", {
+          name: "Record independent approval",
+          exact: true,
+        })
+        .click();
+      const reviewed = await response;
+      expect(reviewed.status(), await reviewed.text()).toBe(201);
+      const result = await reviewed.json();
+      expect(result.body.review_status).toBe("REVIEWED");
+      await expect(
+        reviewer.getByText("REVIEWED", { exact: true }),
+      ).toBeVisible();
+      return result;
+    }
+    async function workingCountry(country: string) {
+      await page.goto("/settings/countries");
+      const picker = page.getByLabel("Working country", { exact: true });
+      await expect(picker).toBeEnabled();
+      if ((await picker.inputValue()) !== country) {
+        const changed = page.waitForResponse(
+          (r) =>
+            r.url().endsWith("/jurisdictions/settings") &&
+            r.request().method() === "PATCH",
+        );
+        await picker.selectOption(country);
+        const response = await changed;
+        expect(response.status(), await response.text()).toBe(200);
+        await expect(picker).toHaveValue(country);
+      }
+    }
+    for (const country of ["AE", "IN"] as const) {
+      await workingCountry(country);
+      const input = fixture.regulatory_conversions[country];
+      const eid = input.engagement;
+      const listed = await page.request.get(
+        "/api/backend/engagements?limit=100",
+        { headers: { "X-Tenant-ID": fixture.tenant } },
+      );
+      expect(listed.status(), await listed.text()).toBe(200);
+      const engagementList = await listed.json();
+      expect(
+        engagementList.items.map((item: { id: string }) => item.id),
+      ).toContain(eid);
+      await page.goto("/compliance/country");
+      const engagementPicker = page.getByLabel("Compliance engagement", {
+        exact: true,
+      });
+      await expect(engagementPicker).toBeVisible();
+      await expect(
+        engagementPicker.locator(`option[value="${eid}"]`),
+      ).toHaveCount(1);
+      await engagementPicker.selectOption(eid);
+      await expect(
+        page.getByRole("heading", {
+          name: `${country} Compliance Workspace`,
+          exact: true,
+        }),
+      ).toBeVisible();
+      await page
+        .getByLabel("Reviewed source schedule (required for arithmetic)")
+        .selectOption(input.source);
+      await page
+        .getByText("Prepare explicit source currency conversion", {
+          exact: true,
+        })
+        .click();
+      await page
+        .getByLabel("Reviewed exchange rate source")
+        .selectOption(input.rates);
+      await page.getByLabel("Exchange rate row").selectOption("SYN-FX");
+      for (const [label, value] of [
+        [
+          "Currency conversion title",
+          `SYNTHETIC ${country} reviewed base conversion ${Date.now()}`,
+        ],
+        ["Conversion decimal places", "2"],
+        ["Independent converted amount", "400.80"],
+        [
+          "Conversion basis and rounding assessment",
+          "Synthetic retained direct quote and explicit rounding assessed; no actual legal rate claimed",
+        ],
+      ])
+        await page.getByLabel(label, { exact: true }).fill(value);
+      await page.getByLabel("Conversion rounding").selectOption("half-up");
+      const prepared = page.waitForResponse(
+        (r) =>
+          r.url().endsWith(`/engagements/${eid}/conversions`) &&
+          r.request().method() === "POST",
+      );
+      await page
+        .getByRole("button", {
+          name: "Prepare currency conversion for review",
+          exact: true,
+        })
+        .click();
+      const response = await prepared;
+      expect(response.status(), await response.text()).toBe(201);
+      const conversion = await response.json();
+      expect(conversion.body.converted_amount).toBe("400.80");
+      const approved = await approve(eid, conversion.id);
+      for (const notice of await reviewer
+        .getByRole("button", { name: "Dismiss notification", exact: true })
+        .all())
+        await notice.click();
+      await expect(
+        reviewer.getByRole("cell", { name: "400.80", exact: true }),
+      ).toBeVisible();
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-reviewed-currency-conversion.png`,
+        () =>
+          reviewer
+            .getByRole("heading", { name: "rows", exact: true })
+            .locator("..")
+            .screenshot(),
+      );
+      await page.goto("/compliance/country");
+      await expect(
+        page
+          .getByLabel("Compliance engagement")
+          .locator(`option[value="${eid}"]`),
+      ).toHaveCount(1);
+      await page.getByLabel("Compliance engagement").selectOption(eid);
+      await page
+        .getByLabel("Published rule versions")
+        .selectOption([input.rule]);
+      await page
+        .getByLabel("Reviewed source schedule (required for arithmetic)")
+        .selectOption(input.source);
+      await page
+        .getByLabel("Reviewed currency conversion (optional)")
+        .selectOption(approved.id);
+      await page
+        .getByLabel("Additional applicability facts (JSON)")
+        .fill('{"tax_base":"400.80"}');
+      await page
+        .getByLabel("Professional applicability / tax-base selection rationale")
+        .fill(
+          "Synthetic published arithmetic rule applied to the separately reviewed converted amount; no actual tax liability asserted.",
+        );
+      const submitted = page.waitForResponse(
+        (r) =>
+          r.url().endsWith(`/engagements/${eid}/assessments`) &&
+          r.request().method() === "POST",
+      );
+      await page
+        .getByRole("button", {
+          name: "Evaluate current rules and retain receipt",
+          exact: true,
+        })
+        .click();
+      const assessmentResponse = await submitted;
+      expect(assessmentResponse.status(), await assessmentResponse.text()).toBe(
+        201,
+      );
+      const assessment = await assessmentResponse.json();
+      expect(assessment.body.facts.functional_currency).toBe(
+        input.source_currency,
+      );
+      expect(assessment.body.facts.tax_base_currency).toBe("USD");
+      expect(Number(assessment.body.rows[0].calculation.unrounded_amount)).toBe(
+        50.1,
+      );
+      await approve(eid, assessment.id);
+      for (const notice of await reviewer
+        .getByRole("button", { name: "Dismiss notification", exact: true })
+        .all())
+        await notice.click();
+      await expect(
+        reviewer.getByRole("cell", { name: /50\.100/ }).first(),
+      ).toBeVisible();
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-converted-rule-assessment.png`,
+        () =>
+          reviewer
+            .getByRole("heading", { name: "rows", exact: true })
+            .locator("..")
+            .screenshot(),
+      );
+    }
+    await workingCountry("AE");
+  } finally {
+    await context.close();
+  }
+});
+
+test("reviewed BRS exceptions feed subsequent bank clearance for UAE and India", async ({
+  page,
+  browser,
+}) => {
+  test.setTimeout(150000);
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+    viewport: { width: 1600, height: 1100 },
+  });
+  const reviewer = await context.newPage();
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_final_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    async function approve(eid: string, id: string) {
+      await reviewer.goto(`/intelligence/${eid}/country-workflow`);
+      await reviewer.getByLabel("Saved source or result").selectOption(id);
+      await reviewer
+        .getByLabel("Review / exception rationale")
+        .fill(
+          "Independent original BRS lineage, selected amount and subsequent bank clearance allocation checked.",
+        );
+      const response = reviewer.waitForResponse(
+        (r) =>
+          r.url().endsWith(`/events/${id}/review`) &&
+          r.request().method() === "POST",
+      );
+      await reviewer
+        .getByRole("button", { name: "Independent approval", exact: true })
+        .click();
+      const reviewed = await response;
+      expect(reviewed.status(), await reviewed.text()).toBe(201);
+      const approved = await reviewed.json();
+      expect(approved.body.review_status).toBe("REVIEWED");
+      await expect(reviewer.getByLabel("Saved source or result")).toHaveValue(
+        approved.id,
+      );
+      await expect(
+        reviewer.getByText("REVIEWED", { exact: true }),
+      ).toBeVisible();
+      return approved.id as string;
+    }
+    for (const [country, eid, currency] of [
+      ["AE", fixture.uae_engagement, "AED"],
+      ["IN", fixture.india_engagement, "INR"],
+    ] as const) {
+      const input = fixture.bank_clearance[country];
+      await page.goto(`/intelligence/${eid}/country-workflow`);
+      await page.getByLabel("Saved source or result").selectOption(input.brs);
+      await page
+        .getByText(
+          "Prepare selected outstanding items for subsequent clearance",
+          { exact: true },
+        )
+        .click();
+      await page.getByRole("checkbox", { name: /books:O1/ }).check();
+      for (const [label, value] of [
+        [
+          "Outstanding source title",
+          `SYNTHETIC ${country} BRS outstanding ${Date.now()}`,
+        ],
+        ["Independent outstanding row count", "1"],
+        ["Independent outstanding signed total", "-100"],
+        [
+          "Outstanding population assessment",
+          "Original reviewed cheque and original book date selected for independently evidenced subsequent bank clearance",
+        ],
+      ])
+        await page.getByLabel(label, { exact: true }).fill(value);
+      const created = page.waitForResponse(
+        (r) =>
+          r.url().endsWith(`/events/${input.brs}/bank-outstanding-source`) &&
+          r.request().method() === "POST",
+      );
+      await page
+        .getByRole("button", {
+          name: "Prepare outstanding source",
+          exact: true,
+        })
+        .click();
+      const response = await created;
+      expect(response.status(), await response.text()).toBe(201);
+      const bridge = await response.json();
+      expect(bridge.body.rows[0].source_book_row_id).toBe("O1");
+      const approvedBridge = await approve(eid, bridge.id);
+      await page.goto(`/intelligence/${eid}/country-workflow`);
+      await page
+        .getByLabel("Workflow", { exact: true })
+        .selectOption("bank-subsequent-clearance");
+      const title = `SYNTHETIC ${country} subsequent bank clearance ${Date.now()}`;
+      for (const [label, value] of [
+        ["Schedule title", title],
+        ["Reconciliation date", "2026-06-30"],
+        ["Review through date", "2026-07-31"],
+        ["Bank account identifier", "BANK-1"],
+        ["Account currency", currency],
+        ["outstanding source", approvedBridge],
+        ["statement source", input.statement],
+        ["allocations source", input.allocations],
+        [
+          "Scope and source rationale",
+          "Reviewed reporting-date BRS cheque explicitly allocated to retained later statement movement without altering the original balance",
+        ],
+      ]) {
+        const field = page.getByLabel(label, { exact: true });
+        if (label.endsWith(" source")) await field.selectOption(value);
+        else await field.fill(value);
+      }
+      const queued = page.waitForResponse(
+        (r) =>
+          r.url().includes(`/engagements/${eid}/jobs`) &&
+          r.request().method() === "POST",
+      );
+      await page
+        .getByRole("button", { name: "Queue calculation", exact: true })
+        .click();
+      const submitted = await queued;
+      expect(submitted.status()).toBe(202);
+      const job = await submitted.json();
+      let resultId = "";
+      await expect
+        .poll(
+          async () => {
+            const status = await page.request.get(
+              `/api/backend/intelligence/engagements/${eid}/jobs/${job.id}`,
+              { headers: { "X-Tenant-ID": fixture.tenant } },
+            );
+            const body = await status.json();
+            if (body.status === "failed")
+              throw new Error(JSON.stringify(body.error_details));
+            resultId = body.result_id || "";
+            return body.status;
+          },
+          { timeout: 45000 },
+        )
+        .toBe("completed");
+      await expect(
+        page
+          .getByLabel("Saved source or result")
+          .locator(`option[value="${resultId}"]`),
+      ).toHaveCount(1);
+      await page.getByLabel("Saved source or result").selectOption(resultId);
+      await expect(
+        page.getByText("0 exceptions", { exact: true }),
+      ).toBeVisible();
+      await approve(eid, resultId);
+      const heading = reviewer.getByRole("heading", {
+        name: title,
+        exact: true,
+      });
+      await expect(heading).toBeVisible();
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-subsequent-bank-clearance.png`,
+        () => heading.locator("..").screenshot(),
+      );
+    }
+  } finally {
+    await context.close();
+  }
+});
+
 test("reviewed import detail feeds selected VAT201 books boxes and independent filed evidence", async ({
   page,
   browser,
@@ -975,7 +1362,7 @@ function implementationHash() {
       resolve("../scripts/country_workflows_run.py"),
       ".venv/Scripts/python.exe",
       "-c",
-      "from app.core.operations_contracts import implementation_hash; print(implementation_hash())",
+      "from app.core.operations_contracts import country_workflow_hash; print(country_workflow_hash())",
     ],
     { cwd: resolve(".."), encoding: "utf8" },
   ).trim();
@@ -1188,6 +1575,22 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
     },
     {
       engagement: fixture.uae_engagement,
+      format: "swift-mt940",
+      evidence: fixture.mt940_evidence,
+      count: "2",
+      total: "AED=95",
+      title: `SYNTHETIC paged browser MT940 UAE ${runSuffix}`,
+    },
+    {
+      engagement: fixture.india_engagement,
+      format: "swift-mt940",
+      evidence: fixture.india_mt940_evidence,
+      count: "2",
+      total: "INR=95",
+      title: `SYNTHETIC paged browser MT940 India ${runSuffix}`,
+    },
+    {
+      engagement: fixture.uae_engagement,
       format: "uae-wps-sif",
       evidence: fixture.wps_evidence,
       count: "2",
@@ -1227,6 +1630,11 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
       .selectOption(source.evidence);
     await page.getByLabel("Expected data rows").fill(source.count);
     await page.getByLabel("Independent totals by currency").fill(source.total);
+    if (source.format === "swift-mt940") {
+      await page
+        .getByLabel("First message reference (optional cross-check)")
+        .fill("SYN-PAGE-1");
+    }
     if (source.format === "india-epfo-ecr") {
       await page
         .getByLabel("EPFO establishment registration")
@@ -1283,6 +1691,20 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
       await expect(
         page.getByText("NOT_EVIDENCED_BY_INSTRUCTION_FILE", { exact: true }),
       ).toBeVisible();
+    if (source.format === "swift-mt940") {
+      const messages = page.getByRole("table", {
+        name: "MT940 message controls",
+        exact: true,
+      });
+      await expect(messages.getByRole("row")).toHaveCount(4);
+      await expect(messages.getByRole("row").nth(2)).toContainText(
+        "SYN-PAGE-2",
+      );
+      await saveScreenshot(
+        `${shots}/swift-mt940-${source.engagement === fixture.uae_engagement ? "ae" : "in"}-message-controls.png`,
+        () => messages.screenshot(),
+      );
+    }
     if (source.format === "india-epfo-ecr")
       await expect(
         page.getByText("NOT_EVIDENCED_BY_RETURN_TEXT", { exact: true }).first(),
@@ -1308,8 +1730,14 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
         ),
       ).toBeVisible();
     }
-    await saveScreenshot(`${shots}/${source.format}-native-review.png`, () =>
-      page.screenshot({ fullPage: true }),
+    if (source.format === "swift-mt940") {
+      await expect(
+        page.getByText("mt940-sequenced-messages/1", { exact: true }),
+      ).toBeVisible();
+    }
+    await saveScreenshot(
+      `${shots}/${source.format}${source.format === "swift-mt940" ? (source.engagement === fixture.uae_engagement ? "-ae" : "-in") : ""}-native-review.png`,
+      () => page.screenshot({ fullPage: true }),
     );
   }
   await page.goto(`/intelligence/${fixture.india_engagement}/country-workflow`);

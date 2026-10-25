@@ -22,7 +22,9 @@ async def main():
 
     ensure_utf8()
     from app.core.config import settings
-    from app.core.operations_contracts import implementation_hash
+    from app.core.operations_contracts import (
+        country_workflow_hash as implementation_hash,
+    )
 
     implementation = implementation_hash()
 
@@ -33,7 +35,6 @@ async def main():
     ):
         raise SystemExit("Only the owned disposable country workflow test database is allowed")
     import pytest
-
     from tests.integration.test_platform import environment
     from tests.phase4.test_workflows import actor, create, grant, setup
     from tests.qa_crud.test_country_workflows import (
@@ -48,6 +49,7 @@ async def main():
     from tests.unit.test_india_ecr_source import ECR
     from tests.unit.test_india_gstr2b_source import payload as gstr2b_payload
     from tests.unit.test_india_invoice_source import invoice
+    from tests.unit.test_mt940_pages import packet
     from tests.unit.test_payroll_rule_workflow import pf_fixture
 
     fixture = environment.__wrapped__()
@@ -191,11 +193,13 @@ async def main():
             return uploaded.json()["id"]
 
         camt_evidence = await native_file(eid, "SYNTHETIC-native-camt.xml", CAMT, "application/xml")
+        mt940_evidence = await native_file(
+            eid, "SYNTHETIC-paged-AE.mt940", packet("AED", middle=True, fin=True), "text/plain"
+        )
         wps_evidence = await native_file(eid, SIF_FILENAME, SIF, "text/csv")
         from datetime import datetime
 
         from openpyxl import Workbook
-
         from tests.unit.test_workflow_csv_mapping import SPLIT
 
         mapped_evidence = await native_file(
@@ -312,6 +316,9 @@ async def main():
             "application/json",
         )
         ecr_evidence = await native_file(india, "SYNTHETIC-monthly-ecr.txt", ECR, "text/plain")
+        india_mt940_evidence = await native_file(
+            india, "SYNTHETIC-paged-IN.mt940", packet("INR", middle=True, fin=True), "text/plain"
+        )
         gstr2b_evidence = await native_file(
             india,
             "SYNTHETIC-gstr2b.json",
@@ -397,7 +404,9 @@ async def main():
         from tests.unit.pdf_bank_example import statement as pdf_statement
         from tests.unit.test_credit_applications import population as credit_population
         from tests.unit.test_withholding_workflows import pooled_certificate_population
-        from tests.unit.test_withholding_workflows import population as withholding_population
+        from tests.unit.test_withholding_workflows import (
+            population as withholding_population,
+        )
 
         await grant(client, h, f"/api/v1/engagements/{india}/audit", supporting_reviewer)
         credit_sources = {}
@@ -617,6 +626,40 @@ async def main():
                         sha256="0" * 64,
                     )
                 )
+        from tests.unit.test_bank_clearance import population as clearance_population
+
+        clearance_fixtures = {}
+        for country, engagement, currency in (("AE", eid, "AED"), ("IN", india, "INR")):
+            common = transaction(id="MATCH", reference="SYN-MATCH", amount="50", currency=currency, date="2026-06-10", counterparty="")
+            original_books = await source(client, h, engagement, [common, {
+                **common, "id": "O1", "reference": "SYN-CHEQUE", "date": "2026-06-20", "amount": "-100",
+            }], f"SYNTHETIC {country} clearance original cashbook", totals={currency: "-50"})
+            original_bank = await source(client, h, engagement, [{**common, "id": "BANK-MATCH"}],
+                f"SYNTHETIC {country} clearance original bank", totals={currency: "50"})
+            reviewed = []
+            for original in (original_books, original_bank):
+                approval = await decision(client, supporting_reviewer[0], engagement, original)
+                assert approval.status_code == 201, approval.text
+                reviewed.append(approval.json())
+            brs = await execute(client, h, engagement, "country-workflow", bank_payload(
+                *reviewed, currency=currency, book_closing="-50", statement_closing="50"))
+            disposition = await decision(client, h, engagement, brs, action="accept", item_id="books:O1")
+            assert disposition.status_code == 201, disposition.text
+            approved = await decision(client, supporting_reviewer[0], engagement, disposition.json())
+            assert approved.status_code == 201, approved.text
+            clearance_fixtures[country] = {"brs": approved.json()["id"]}
+            later = clearance_population(currency)
+            later["allocations"][0].update(outstanding_id="books:O1", amount="100")
+            for role, kind in (("statement", "transactions"), ("allocations", "bank-clearances")):
+                imported = await source(client, h, engagement, later[role], f"SYNTHETIC {country} later {role}",
+                    table_type=kind, totals={currency: "100" if role == "allocations" else "-100"})
+                approval = await decision(client, supporting_reviewer[0], engagement, imported)
+                assert approval.status_code == 201, approval.text
+                clearance_fixtures[country][role] = approval.json()["id"]
+
+        from country_regulatory_fixture import prepare as prepare_regulatory
+
+        regulatory_conversions = await prepare_regulatory(client, h, opts["client_id"], pdf_final_reviewer)
         if implementation_hash() != implementation:
             raise RuntimeError(
                 "Backend implementation changed during fixture preparation; prepare fresh fixtures before browser verification"
@@ -626,6 +669,8 @@ async def main():
             json.dumps(
                 {
                     "synthetic": True,
+                    "regulatory_conversions": regulatory_conversions,
+                    "bank_clearance": clearance_fixtures,
                     "import_vat_sources": import_vat_sources,
                     "import_box_parent": import_box_approved.json()["id"],
                     "import_filed_source": import_filed_approved.json()["id"],
@@ -649,6 +694,8 @@ async def main():
                     "india_engagement": india,
                     "india_result": gst["id"],
                     "camt_evidence": camt_evidence,
+                    "mt940_evidence": mt940_evidence,
+                    "india_mt940_evidence": india_mt940_evidence,
                     "wps_evidence": wps_evidence,
                     "mapped_bank_evidence": mapped_evidence,
                     "xlsx_bank_evidence": xlsx_ids["bank"],

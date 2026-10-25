@@ -169,3 +169,28 @@ def test_xlsx_retains_every_message_control_outside_the_cover_cell():
     cover = {row[0].value: row[1].value for row in workbook["Source and review"]}
     assert "3 message control records retained" in cover["native_metadata"]
     assert body == original
+
+
+def test_maximum_complete_message_chain_keeps_empty_pages_and_export_controls():
+    first, last = messages()
+    middle = [
+        f":20:SYN-PAGE-{number}\n:25:BANK-1\n:28C:42/{number}\n"
+        ":60M:C260630AED100,00\n:62M:C260630AED100,00\n"
+        for number in range(2, 100)
+    ]
+    last = last.replace("SYN-PAGE-2", "SYN-PAGE-100").replace("42/2", "42/100")
+    body = parse("\n".join([first, *middle, last]).encode())
+    assert body["native_metadata"]["message_count"] == 100
+    assert [row["source_message_sequence"] for row in body["rows"]] == [1, 100]
+    event = {
+        "id": "SYNTHETIC-MAX-MT940",
+        "kind": "workflow-source",
+        "version": 1,
+        "sha256": "a" * 64,
+        "created_at": "2026-06-30T00:00:00Z",
+        "body": body,
+        "dependencies": [],
+    }
+    content, _ = render(event, "xlsx")
+    workbook = load_workbook(io.BytesIO(content))
+    assert workbook["MT940 message controls"].max_row == 101

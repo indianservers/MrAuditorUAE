@@ -10,9 +10,18 @@ from app.modules.audit_execution import service as audit
 from app.modules.intelligence import service as intelligence
 from app.modules.regulatory import schemas as s
 from app.modules.regulatory import service
+from app.modules.regulatory.conversion import ConversionInput
 from app.modules.regulatory.models import RuleVersion
 
 router = APIRouter(prefix="/regulatory", tags=["Regulatory rule library"])
+
+
+@router.post("/engagements/{eid}/conversions", status_code=201)
+async def convert(eid: uuid.UUID, data: ConversionInput, db: DB, ctx: Actor, request: Request):
+    from app.modules.regulatory.conversion import prepare
+
+    eng = await intelligence.scope(db, ctx, eid, "lead", True)
+    return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))
 
 
 @router.get("/rules")

@@ -4,6 +4,8 @@ from collections import defaultdict
 from datetime import date
 from decimal import Decimal
 
+from app.modules.country_workflows.bank_clearance import clearances
+
 
 def allocations(data, tables):
     from app.modules.country_workflows.audit_calculations import control_rows, money, result
@@ -210,6 +212,7 @@ def credit_applications(data, tables):
 
 
 OPERATION_CALCULATORS = {
+    "bank-subsequent-clearance": clearances,
     "open-item-allocations": allocations,
     "credit-note-applications": credit_applications,
 }

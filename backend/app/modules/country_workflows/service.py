@@ -251,12 +251,12 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(422, "CSV mappings and delimiters apply only to CSV sources")
         if data.rule_document_version_id:
             if (
-                data.table_type not in {"payroll-rules", "benefit-rules", "withholding-records"}
+                data.table_type not in {"payroll-rules", "benefit-rules", "withholding-records", "fx-rates"}
                 or data.file_format != "canonical-csv"
             ):
                 raise HTTPException(
                     422,
-                    "A rule source document can be selected only for canonical payroll/benefit rules or withholding assessments",
+                    "A source document can be selected only for canonical payroll/benefit rules, withholding assessments or exchange rates",
                 )
             rule_document, _ = await intelligence.evidence(
                 db, ctx, eng, data.rule_document_version_id
@@ -284,10 +284,11 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 return parse_native(path.read_bytes(), data, package.country, evidence.filename)
 
         result = await run_in_threadpool(load)
-        if data.table_type in {"payroll-rules", "benefit-rules"}:
+        if data.table_type in {"payroll-rules", "benefit-rules", "fx-rates"}:
             dependencies.extend(
                 await payroll_rule_documents(
-                    db, ctx, eng, result["rows"], contributors=supporting_contributors
+                    db, ctx, eng, result["rows"], contributors=supporting_contributors,
+                    label="Exchange rate" if data.table_type == "fx-rates" else "Payroll rule",
                 )
             )
         if data.table_type == "withholding-records":

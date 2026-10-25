@@ -102,7 +102,41 @@
       "line": 0,
       "specs": [
         {
-          "title": "reviewed import detail feeds selected VAT201 books boxes and independent filed evidence",
+          "title": "reviewed currency conversions feed scoped UAE and India rule assessments",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 35036,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T03:03:52.838Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-7bdc3a90ad8fc5ca1e03",
+          "file": "country-workflows.spec.ts",
+          "line": 11,
+          "column": 1
+        },
+        {
+          "title": "reviewed BRS exceptions feed subsequent bank clearance for UAE and India",
           "ok": true,
           "tags": [],
           "tests": [
@@ -117,12 +151,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 26624,
+                  "duration": 88909,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T01:12:03.259Z",
+                  "startTime": "2026-10-25T03:04:29.086Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -130,9 +164,88 @@
               "status": "expected"
             }
           ],
+          "id": "e30b0a06ea3b0c92c29c-fb02b458bd93670350d5",
+          "file": "country-workflows.spec.ts",
+          "line": 230,
+          "column": 1
+        },
+        {
+          "title": "reviewed import detail feeds selected VAT201 books boxes and independent filed evidence",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 33962,
+                  "error": {
+                    "message": "TimeoutError: locator.selectOption: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Workflow', { exact: true })\u001b[22m\n",
+                    "stack": "TimeoutError: locator.selectOption: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Workflow', { exact: true })\u001b[22m\n\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts:483:8",
+                    "location": {
+                      "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts",
+                      "column": 8,
+                      "line": 483
+                    },
+                    "snippet": "  481 |     await page\n  482 |       .getByLabel(\"Workflow\", { exact: true })\n> 483 |       .selectOption(\"uae-vat-return\");\n      |        ^\n  484 |     const title = `SYNTHETIC reviewed import boxes versus filed VAT201 ${Date.now()}`;\n  485 |     for (const [label, value] of [\n  486 |       [\"Schedule title\", title],"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts",
+                        "column": 8,
+                        "line": 483
+                      },
+                      "message": "TimeoutError: locator.selectOption: Timeout 15000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Workflow', { exact: true })\u001b[22m\n\n\n  481 |     await page\n  482 |       .getByLabel(\"Workflow\", { exact: true })\n> 483 |       .selectOption(\"uae-vat-return\");\n      |        ^\n  484 |     const title = `SYNTHETIC reviewed import boxes versus filed VAT201 ${Date.now()}`;\n  485 |     for (const [label, value] of [\n  486 |       [\"Schedule title\", title],\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts:483:8"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T03:05:58.026Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\country-workflows-reviewed-5ef5d--independent-filed-evidence\\test-failed-1.png"
+                    },
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\country-workflows-reviewed-5ef5d--independent-filed-evidence\\test-failed-2.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\country-workflows-reviewed-5ef5d--independent-filed-evidence\\error-context.md"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\country-workflows-reviewed-5ef5d--independent-filed-evidence\\error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts",
+                    "column": 8,
+                    "line": 483
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
           "id": "e30b0a06ea3b0c92c29c-5ef39276706f99c6f310",
           "file": "country-workflows.spec.ts",
-          "line": 11,
+          "line": 398,
           "column": 1
         },
         {
@@ -148,15 +261,15 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 17950,
+                  "duration": 29184,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T01:12:31.093Z",
+                  "startTime": "2026-10-25T03:06:33.610Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -166,7 +279,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-79e7fad08458ff4fe1b6",
           "file": "country-workflows.spec.ts",
-          "line": 214,
+          "line": 601,
           "column": 1
         },
         {
@@ -182,15 +295,15 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3184,
+                  "duration": 2836,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T01:12:49.054Z",
+                  "startTime": "2026-10-25T03:07:04.009Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -200,7 +313,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-a130813f867235ec5e96",
           "file": "country-workflows.spec.ts",
-          "line": 373,
+          "line": 760,
           "column": 1
         },
         {
@@ -216,15 +329,15 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 70852,
+                  "duration": 171686,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T01:12:52.248Z",
+                  "startTime": "2026-10-25T03:07:06.855Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -234,7 +347,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-9492b1ba84ae537836ad",
           "file": "country-workflows.spec.ts",
-          "line": 421,
+          "line": 808,
           "column": 1
         },
         {
@@ -250,15 +363,15 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 17572,
+                  "duration": 33781,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T01:14:03.111Z",
+                  "startTime": "2026-10-25T03:09:58.579Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -268,7 +381,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-48fd0976effc478074aa",
           "file": "country-workflows.spec.ts",
-          "line": 719,
+          "line": 1106,
           "column": 1
         },
         {
@@ -284,15 +397,15 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 22772,
+                  "duration": 46049,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T01:14:20.699Z",
+                  "startTime": "2026-10-25T03:10:32.370Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -302,12 +415,12 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-c3b66c811297d61b2a1b",
           "file": "country-workflows.spec.ts",
-          "line": 820,
+          "line": 1207,
           "column": 1
         },
         {
           "title": "UAE source controls, BRS exceptions, exports and India isolation",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -318,25 +431,57 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 62236,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 120084,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts",
+                        "column": 27,
+                        "line": 1775
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoHaveCount\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator:  getByLabel('Saved source or result').getByRole('option', { name: /SYNTHETIC queued native GST comparison 1792897878487/ })\nExpected: \u001b[32m1\u001b[39m\nReceived: \u001b[31m0\u001b[39m\n\nCall log:\n\u001b[2m  - Expect \"toHaveCount\" getByLabel('Saved source or result').getByRole('option', { name: /SYNTHETIC queued native GST comparison 1792897878487/ }) with timeout 30000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Saved source or result').getByRole('option', { name: /SYNTHETIC queued native GST comparison 1792897878487/ })\u001b[22m\n\u001b[2m    18 × locator resolved to 0 elements\u001b[22m\n\u001b[2m       - unexpected value \"0\"\u001b[22m\n\u001b[2m  - Test timeout of 120000ms exceeded.\u001b[22m\n\n\n  1773 |     .getByLabel(\"Saved source or result\")\n  1774 |     .getByRole(\"option\", { name: new RegExp(gstTitle) });\n> 1775 |   await expect(gstOption).toHaveCount(1);\n       |                           ^\n  1776 |   await page\n  1777 |     .getByLabel(\"Saved source or result\")\n  1778 |     .selectOption((await gstOption.getAttribute(\"value\"))!);\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts:1775:27"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T01:14:43.486Z",
+                  "startTime": "2026-10-25T03:11:18.432Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\country-workflows-UAE-sour-1b50f-exports-and-India-isolation\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\country-workflows-UAE-sour-1b50f-exports-and-India-isolation\\error-context.md"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\country-workflows-UAE-sour-1b50f-exports-and-India-isolation\\error-context.md"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "e30b0a06ea3b0c92c29c-4910f104b29236674674",
           "file": "country-workflows.spec.ts",
-          "line": 1022,
+          "line": 1409,
           "column": 1
         },
         {
@@ -352,15 +497,15 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 2,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 62383,
+                  "duration": 106140,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T01:15:45.735Z",
+                  "startTime": "2026-10-25T03:13:20.193Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -370,7 +515,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-21b42b359901fbf0cdc3",
           "file": "country-workflows.spec.ts",
-          "line": 1430,
+          "line": 1858,
           "column": 1
         }
       ]
@@ -378,11 +523,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-25T01:12:02.847Z",
-    "duration": 286343.529,
+    "startTime": "2026-10-25T03:03:52.273Z",
+    "duration": 676379.679,
     "expected": 8,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 2,
     "flaky": 0
   }
 }

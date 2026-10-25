@@ -54,6 +54,16 @@ vi.mock("@/hooks/use-api", () => ({
             ],
             items: [
               {
+                id: "bank-subsequent-clearance",
+                title: "Subsequent bank clearance",
+                available: true,
+                roles: {
+                  outstanding: "bank-outstanding",
+                  statement: "transactions",
+                  allocations: "bank-clearances",
+                },
+              },
+              {
                 id: "uae-vat-return",
                 title: "UAE VAT201 box comparison",
                 available: state.country === "AE",
@@ -134,6 +144,7 @@ vi.mock("@/hooks/use-api", () => ({
               },
             ],
             source_contracts: {
+              "fx-rates": { id: { required: true, type: "str" } },
               "import-vat-lines": {
                 id: { required: true, type: "str" },
                 tax: { required: true, type: "Decimal" },
@@ -277,6 +288,24 @@ vi.mock("@/hooks/use-api", () => ({
                         review_status: "REVIEWED",
                       },
                       {
+                        id: "outstanding",
+                        kind: "workflow-source",
+                        table_type: "bank-outstanding",
+                        label: "Outstanding cheques",
+                        freshness: "CURRENT",
+                        version: 1,
+                        review_status: "REVIEWED",
+                      },
+                      {
+                        id: "clearances",
+                        kind: "workflow-source",
+                        table_type: "bank-clearances",
+                        label: "Clearance allocations",
+                        freshness: "CURRENT",
+                        version: 1,
+                        review_status: "REVIEWED",
+                      },
+                      {
                         id: "statement",
                         kind: "workflow-source",
                         table_type: "transactions",
@@ -332,6 +361,75 @@ beforeEach(() => {
   state.result = null;
 });
 describe("country workflows", () => {
+  it("prepares only explicitly selected reviewed BRS book exceptions with independent controls", async () => {
+    state.result = {
+      id: "result",
+      kind: "country-workflow",
+      version: 1,
+      freshness: "CURRENT",
+      body: {
+        title: "Reviewed BRS",
+        workflow: "bank-brs",
+        review_status: "REVIEWED",
+        blocked: false,
+        rows: [
+          {
+            id: "books:B1",
+            side: "books",
+            reference: "SYN-CHEQUE",
+            currency: "AED",
+            amount: "-100",
+            state: "EXCEPTION",
+          },
+          {
+            id: "statement:S1",
+            side: "statement",
+            reference: "SYN-FEE",
+            currency: "AED",
+            amount: "-5",
+            state: "EXCEPTION",
+          },
+        ],
+      },
+    };
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), {
+      target: { value: "result" },
+    });
+    fireEvent.click(
+      screen.getByText(
+        "Prepare selected outstanding items for subsequent clearance",
+      ),
+    );
+    const prepare = screen.getByRole("button", {
+      name: "Prepare outstanding source",
+    });
+    expect(prepare).toBeDisabled();
+    expect(
+      screen.queryByRole("checkbox", { name: /statement:S1/ }),
+    ).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole("checkbox", { name: /books:B1/ }));
+    for (const [label, value] of [
+      ["Outstanding source title", "Selected outstanding cheque"],
+      ["Independent outstanding row count", "1"],
+      ["Independent outstanding signed total", "-100"],
+      [
+        "Outstanding population assessment",
+        "Original BRS cheque selected for independently evidenced subsequent clearing",
+      ],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    fireEvent.click(prepare);
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0]).toMatchObject({
+      path: "intelligence/engagements/engagement/events/result/bank-outstanding-source",
+      body: {
+        exception_ids: ["books:B1"],
+        expected_rows: 1,
+        signed_total: "-100",
+      },
+    });
+  });
   it("binds a selected retained assessment document when preparing withholding records", async () => {
     state.country = "IN";
     render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
@@ -359,6 +457,23 @@ describe("country workflows", () => {
       table_type: "withholding-records",
       rule_document_version_id: "clean",
       control_totals: { INR: "100" },
+    });
+  });
+  it("binds the selected retained quote while preparing an exchange rate source", async () => {
+    render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+    for (const [label, value] of [
+      ["Source table type", "fx-rates"],
+      ["Retained exchange-rate quote (optional shared document)", "clean"],
+      ["Clean retained evidence", "clean"],
+      ["Schedule title", "Synthetic assessed direct quote"],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+      table_type: "fx-rates",
+      rule_document_version_id: "clean",
+      control_totals: {},
     });
   });
   it("shows unsupported assessment scope even when the numerical comparison matches", () => {
@@ -1028,6 +1143,47 @@ describe("country workflows", () => {
     expect(request.body.payload.book_closing).toBe("100");
     expect(request.headers["Idempotency-Key"]).toBeTruthy();
   });
+  it.each(["AED", "INR"])(
+    "queues subsequent bank clearance with an explicit window and %s scope",
+    async (currency) => {
+      render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+      fireEvent.change(screen.getByLabelText("Workflow"), {
+        target: { value: "bank-subsequent-clearance" },
+      });
+      for (const [label, value] of [
+        ["Schedule title", "Subsequent cheque clearance"],
+        ["Reconciliation date", "2026-06-30"],
+        ["Review through date", "2026-07-31"],
+        ["Bank account identifier", "BANK-1"],
+        ["Account currency", currency],
+        ["outstanding source", "outstanding"],
+        ["statement source", "statement"],
+        ["allocations source", "clearances"],
+        [
+          "Scope and source rationale",
+          "Retained original BRS items and subsequent clearing evidence",
+        ],
+      ])
+        fireEvent.change(screen.getByLabelText(label), { target: { value } });
+      expect(screen.queryByLabelText("book closing")).not.toBeInTheDocument();
+      fireEvent.click(
+        screen.getByRole("button", { name: "Queue calculation" }),
+      );
+      await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+      expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+        workflow: "bank-subsequent-clearance",
+        account: "BANK-1",
+        currency,
+        as_of: "2026-06-30",
+        review_through: "2026-07-31",
+        source_ids: {
+          outstanding: "outstanding",
+          statement: "statement",
+          allocations: "clearances",
+        },
+      });
+    },
+  );
   it("keeps quarantined evidence disabled and rejects malformed currency controls", async () => {
     render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
     expect(screen.getByRole("option", { name: /Pending scan/ })).toBeDisabled();

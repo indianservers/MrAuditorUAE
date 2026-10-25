@@ -27,6 +27,48 @@ SUPPORTING_TABLE_PATHS = (
     "modules/jurisdictions/packages.py",
 )
 
+COUNTRY_WORKFLOW_PATHS = (
+    *SUPPORTING_TABLE_PATHS,
+    "core/json_documents.py",
+    "api/v1/intelligence.py",
+    "modules/intelligence/matching.py",
+    "modules/ifrs/calculations.py",
+    "modules/ifrs/schemas.py",
+    "modules/jurisdictions/profiles.py",
+    "modules/reconciliation/service.py",
+    "modules/regulatory/conversion.py",
+)
+
+
+def country_workflow_hash():
+    """Whole trusted engine scope, including newly added readers and calculators."""
+    app = Path(__file__).resolve().parents[1]
+    paths = set(COUNTRY_WORKFLOW_PATHS)
+    for directory in ("modules/country_workflows", "modules/vat"):
+        root = app / directory
+        if not root.is_dir():
+            raise ValueError("Country workflow implementation directory is missing")
+        paths.update(
+            path.relative_to(app).as_posix()
+            for path in root.rglob("*")
+            if path.is_file() and path.suffix in {".py", ".json"}
+        )
+    digest = hashlib.sha256(b"country-workflows/1")
+    for name in sorted(paths):
+        content = (app / name).read_bytes()
+        digest.update(name.encode() + b"\0" + hashlib.sha256(content).digest())
+    for dependency in (
+        "pydantic",
+        "pycountry",
+        "Babel",
+        "openpyxl",
+        "defusedxml",
+        "pypdf",
+        "pypdfium2",
+    ):
+        digest.update(dependency.encode() + b"\0" + version(dependency).encode() + b"\0")
+    return digest.hexdigest()
+
 
 def supporting_table_hash():
     """Trusted reader scope; saved receipts cannot choose which files are checked."""
@@ -40,10 +82,34 @@ def supporting_table_hash():
     return digest.hexdigest()
 
 
-def implementation_current(saved, kind):
+def country_workflow_fingerprint(db):
+    """One code snapshot per database transaction; never cache across requests."""
+    session = getattr(db, "sync_session", None)
+    transaction = session.get_transaction() if session is not None else None
+    info = getattr(db, "info", None)
+    if transaction is None or not isinstance(info, dict):
+        return country_workflow_hash()
+    cached = info.get("_country_workflow_implementation")
+    if isinstance(cached, tuple) and cached[0] is transaction:
+        return cached[1]
+    fingerprint = country_workflow_hash()
+    info["_country_workflow_implementation"] = (transaction, fingerprint)
+    return fingerprint
+
+
+def implementation_current(saved, kind, *, country_fingerprint=None):
     contract = saved.get("contract_version")
     if contract == "audit-operations/1":
         expected = implementation_hash()
+    elif (
+        contract == "audit-operations/2"
+        and kind in {"workflow-source", "country-workflow"}
+        and saved.get("kind") == kind
+        and saved.get("implementation_scope") == "country-workflows/1"
+    ):
+        expected = (
+            country_fingerprint if country_fingerprint is not None else country_workflow_hash()
+        )
     elif (
         contract == "audit-operations/2"
         and kind == "source-table"
@@ -73,6 +139,10 @@ def implementation_hash():
         "modules/country_workflows/withholding_calculations.py",
         "modules/country_workflows/withholding_schemas.py",
         "modules/country_workflows/service.py",
+        "modules/regulatory/service.py",
+        "modules/regulatory/evaluation.py",
+        "modules/regulatory/schemas.py",
+        "modules/regulatory/conversion.py",
     ]
     digest = hashlib.sha256()
     for name in paths:
@@ -122,9 +192,13 @@ async def receipt(
         mode = "unavailable"
     return {
         "contract_version": "audit-operations/2"
-        if kind == "source-table"
+        if kind in {"source-table", "workflow-source", "country-workflow"}
         else "audit-operations/1",
-        "implementation_scope": "supporting-table/1" if kind == "source-table" else "legacy-global",
+        "implementation_scope": "supporting-table/1"
+        if kind == "source-table"
+        else "country-workflows/1"
+        if kind in {"workflow-source", "country-workflow"}
+        else "legacy-global",
         "tenant_id": str(ctx.tenant_id),
         "entity_id": str(entity_id),
         "entity_version": entity.version,
@@ -146,6 +220,8 @@ async def receipt(
         ),
         "implementation_sha256": supporting_table_hash()
         if kind == "source-table"
+        else country_workflow_fingerprint(db)
+        if kind in {"workflow-source", "country-workflow"}
         else implementation_hash(),
         "source_snapshots": sources,
         "population_completeness": body.get(
@@ -172,11 +248,18 @@ async def current(db, ctx, obj):
     saved = getattr(obj, "body", {}).get("operations_execution")
     if not saved:
         return True  # Existing source-specific freshness checks still govern legacy events.
+    country_fingerprint = (
+        country_workflow_fingerprint(db)
+        if saved.get("contract_version") == "audit-operations/2"
+        and saved.get("implementation_scope") == "country-workflows/1"
+        and obj.kind in {"workflow-source", "country-workflow"}
+        else None
+    )
     eng = await db.get(Engagement, obj.engagement_id)
     entity = await db.get(LegalEntity, eng.entity_id)
     period = await db.get(FinancialPeriod, eng.period_id) if eng.period_id else None
     return (
-        implementation_current(saved, obj.kind)
+        implementation_current(saved, obj.kind, country_fingerprint=country_fingerprint)
         and saved.get("tenant_id") == str(ctx.tenant_id)
         and saved.get("entity_id") == str(eng.entity_id)
         and saved.get("entity_version") == entity.version

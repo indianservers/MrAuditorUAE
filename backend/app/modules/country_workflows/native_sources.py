@@ -1,7 +1,7 @@
 """Native evidence readers; never infer payment execution or statutory eligibility.
 
 CAMT statement-level booked entries are retained once (not added to their detail
-records). MT940 accepts complete single statements. The WPS profile implements
+records). MT940 accepts complete statements assembled from sequenced messages. The WPS profile implements
 the bank-published EDR records followed by one SCR control trailer.
 """
 
@@ -65,7 +65,7 @@ FORMATS: list[dict[str, Any]] = [
         "label": "SWIFT MT940 complete bank statement",
         "countries": [],
         "table_type": "transactions",
-        "description": "One complete 60F/62F statement; partial pages and unsupported fields fail closed",
+        "description": "One complete statement across up to 100 sequenced messages; missing pages, broken balance carry-forward and mixed accounts fail closed",
         "source": "https://www.swift.com/sites/default/files/files/pmpg-interbank-statement-creation-market-practice-final-version.pdf",
     },
     {
@@ -655,7 +655,7 @@ def parse_native(content, data, country, filename):
         "review_status": "UNVERIFIED",
         "nil_reason": data.nil_reason,
         "title": data.label,
-        "parser_version": data.file_format + "-1",
+        "parser_version": data.file_format + ("-2" if data.file_format == "swift-mt940" else "-1"),
         "native_format": data.file_format,
         "native_metadata": metadata,
         "native_controls_verified": True,

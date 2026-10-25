@@ -192,6 +192,8 @@ const moneyTables = [
   "cash-payments",
   "item-allocations",
   "credit-applications",
+  "bank-outstanding",
+  "bank-clearances",
   "withholding-records",
   "payroll-bases",
   "transactions",
@@ -348,6 +350,13 @@ export function CountryWorkflows({
   const [reason, setReason] = useState("");
   const [localError, setLocalError] = useState<Error | null>(null);
   const [showRuleProvenance, setShowRuleProvenance] = useState(false);
+  const [outstandingSelections, setOutstandingSelections] = useState<
+    Record<string, string[]>
+  >({});
+  const [outstandingLabel, setOutstandingLabel] = useState("");
+  const [outstandingCount, setOutstandingCount] = useState("");
+  const [outstandingTotal, setOutstandingTotal] = useState("");
+  const [outstandingAssessment, setOutstandingAssessment] = useState("");
   const action = useAction<{ id: string }>();
   const available = config.data?.items.filter((w) => w.available) || [];
   const chosen = available.find((w) => w.id === workflow);
@@ -363,6 +372,7 @@ export function CountryWorkflows({
     detail.data?.kind === "workflow-source" &&
     ["transactions", "audit-open-items"].includes(body?.table_type || "");
   const compactCredit = body?.workflow === "credit-note-applications";
+  const compactBankClearance = body?.workflow === "bank-subsequent-clearance";
   const compactImport = body?.workflow === "uae-import-vat";
   const compactWithholding = [
     "india-withholding-liability",
@@ -404,73 +414,86 @@ export function CountryWorkflows({
             "differences_from_books",
             "state",
           ].filter((key) => allColumns.includes(key))
-        : compactCredit && !showRuleProvenance
+        : compactBankClearance && !showRuleProvenance
           ? [
               "kind",
-              "item_id",
+              "reference",
               "currency",
-              "amount",
-              "original_balance",
-              "applied",
-              "remaining_balance",
-              "control_amount",
-              "difference",
+              "reporting_date_amount",
+              "subsequently_cleared",
+              "remaining_after_review",
+              "statement_amount",
+              "allocated",
+              "unallocated_amount",
               "state",
             ].filter((key) => allColumns.includes(key))
-          : compactSource && !showRuleProvenance
-            ? (body?.table_type === "transactions"
+          : compactCredit && !showRuleProvenance
+            ? [
+                "kind",
+                "item_id",
+                "currency",
+                "amount",
+                "original_balance",
+                "applied",
+                "remaining_balance",
+                "control_amount",
+                "difference",
+                "state",
+              ].filter((key) => allColumns.includes(key))
+            : compactSource && !showRuleProvenance
+              ? (body?.table_type === "transactions"
+                  ? [
+                      "reference",
+                      "account",
+                      "date",
+                      "currency",
+                      "amount",
+                      "counterparty",
+                      "source_debit",
+                      "source_credit",
+                    ]
+                  : [
+                      "reference",
+                      "counterparty",
+                      "account",
+                      "side",
+                      "currency",
+                      "document_type",
+                      "document_date",
+                      "due_date",
+                      "balance_date",
+                      "amount",
+                      "supporting_reported_open_amount",
+                    ]
+                ).filter((key) => allColumns.includes(key))
+              : body?.workflow === "india-payroll-rules" && !showRuleProvenance
                 ? [
-                    "reference",
-                    "account",
-                    "date",
-                    "currency",
-                    "amount",
-                    "counterparty",
-                    "source_debit",
-                    "source_credit",
-                  ]
-                : [
-                    "reference",
-                    "counterparty",
-                    "account",
-                    "side",
-                    "currency",
-                    "document_type",
-                    "document_date",
-                    "due_date",
-                    "balance_date",
-                    "amount",
-                    "supporting_reported_open_amount",
-                  ]
-              ).filter((key) => allColumns.includes(key))
-            : body?.workflow === "india-payroll-rules" && !showRuleProvenance
-              ? [
-                  "subject",
-                  "period",
-                  "component",
-                  "currency",
-                  "assessed_base",
-                  "expected_amount",
-                  "reported_amount",
-                  "difference",
-                  "state",
-                ].filter((key) => allColumns.includes(key))
-              : ["india-gst", "uae-vat"].includes(body?.workflow || "") &&
-                  !showRuleProvenance
-                ? [
-                    "counterparty",
-                    "reference",
-                    "document_type",
+                    "subject",
+                    "period",
                     "component",
                     "currency",
-                    "books_tax",
-                    "return_tax",
-                    "tax_difference",
-                    "net_difference",
+                    "assessed_base",
+                    "expected_amount",
+                    "reported_amount",
+                    "difference",
                     "state",
-                    "source_review_reasons",
                   ].filter((key) => allColumns.includes(key))
-                : allColumns;
+                : ["india-gst", "uae-vat"].includes(body?.workflow || "") &&
+                    !showRuleProvenance
+                  ? [
+                      "counterparty",
+                      "reference",
+                      "document_type",
+                      "component",
+                      "currency",
+                      "books_tax",
+                      "return_tax",
+                      "tax_difference",
+                      "net_difference",
+                      "state",
+                      "source_review_reasons",
+                    ].filter((key) => allColumns.includes(key))
+                  : allColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -585,6 +608,7 @@ export function CountryWorkflows({
                   }
                 : {}),
               ...([
+                "fx-rates",
                 "payroll-rules",
                 "benefit-rules",
                 "withholding-records",
@@ -608,7 +632,8 @@ export function CountryWorkflows({
               ...(sourceFormat !== "canonical-csv" && account
                 ? { account_identifier: account }
                 : {}),
-              ...(sourceFormat === "camt053" && statementIdentifier
+              ...(["camt053", "swift-mt940"].includes(sourceFormat) &&
+              statementIdentifier
                 ? { statement_identifier: statementIdentifier }
                 : {}),
               ...(["uae-wps-sif", "india-epfo-ecr"].includes(sourceFormat) &&
@@ -683,6 +708,7 @@ export function CountryWorkflows({
             ? "INR"
             : currency,
           ...([
+            "bank-subsequent-clearance",
             "subsequent-settlements",
             "balance-confirmations",
             "expense-cutoff",
@@ -700,6 +726,7 @@ export function CountryWorkflows({
             : {}),
           ...(taxYear ? { tax_year_start: taxYear } : {}),
           ...(workflow === "bank-brs" ? { account, ...balances } : {}),
+          ...(workflow === "bank-subsequent-clearance" ? { account } : {}),
           required_checks: requiredChecks
             .split(",")
             .map((s) => s.trim())
@@ -1349,15 +1376,18 @@ export function CountryWorkflows({
                     </p>
                   )}
                   {[
+                    "fx-rates",
                     "payroll-rules",
                     "benefit-rules",
                     "withholding-records",
                   ].includes(tableType) && (
                     <>
                       <label>
-                        {tableType === "withholding-records"
-                          ? "Withholding assessment document (optional shared document)"
-                          : `${tableType === "benefit-rules" ? "Benefit" : "Payroll"} rule source document (optional shared document)`}
+                        {tableType === "fx-rates"
+                          ? "Retained exchange-rate quote (optional shared document)"
+                          : tableType === "withholding-records"
+                            ? "Withholding assessment document (optional shared document)"
+                            : `${tableType === "benefit-rules" ? "Benefit" : "Payroll"} rule source document (optional shared document)`}
                         <select
                           value={ruleDocument}
                           onChange={(e) => setRuleDocument(e.target.value)}
@@ -1375,7 +1405,16 @@ export function CountryWorkflows({
                         </select>
                       </label>
                       <p>
-                        {tableType === "withholding-records" ? (
+                        {tableType === "fx-rates" ? (
+                          <>
+                            Select the retained quote to bind its document ID
+                            and hash to blank CSV fields. Conflicting references
+                            are rejected. Declare the direct currency pair,
+                            effective coverage, rate method and applicability
+                            assessment in the CSV; independently review the rate
+                            source before conversion.
+                          </>
+                        ) : tableType === "withholding-records" ? (
                           <>
                             Select a retained assessment document to fill blank
                             evidence IDs and hashes. Declare the assessment kind
@@ -1408,10 +1447,11 @@ export function CountryWorkflows({
                       />
                     </label>
                   )}
-                  {sourceFormat === "camt053" && (
+                  {["camt053", "swift-mt940"].includes(sourceFormat) && (
                     <label>
-                      Statement identifier (required when selection is
-                      ambiguous)
+                      {sourceFormat === "swift-mt940"
+                        ? "First message reference (optional cross-check)"
+                        : "Statement identifier (required when selection is ambiguous)"}
                       <input
                         value={statementIdentifier}
                         onChange={(e) => setStatementIdentifier(e.target.value)}
@@ -1677,6 +1717,7 @@ export function CountryWorkflows({
                 />
               </label>
               {[
+                "bank-subsequent-clearance",
                 "subsequent-settlements",
                 "balance-confirmations",
                 "expense-cutoff",
@@ -1807,6 +1848,32 @@ export function CountryWorkflows({
                       </small>
                     </label>
                   )}
+                </>
+              )}
+              {workflow === "bank-subsequent-clearance" && (
+                <>
+                  <label>
+                    Bank account identifier
+                    <input
+                      value={account}
+                      onChange={(e) => setAccount(e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    Account currency
+                    <input
+                      value={currency}
+                      onChange={(e) =>
+                        setCurrency(e.target.value.toUpperCase())
+                      }
+                    />
+                  </label>
+                  <p>
+                    Allocate later statement movements to retained
+                    reporting-date outstanding items. Original outstanding
+                    amounts stay unchanged; partial clearances and unallocated
+                    movements remain visible.
+                  </p>
                 </>
               )}
               {workflow === "bank-brs" && (
@@ -2070,6 +2137,122 @@ export function CountryWorkflows({
               />
             </section>
           )}
+          {body.workflow === "bank-brs" &&
+            body.review_status === "REVIEWED" &&
+            !body.blocked &&
+            detail.data.freshness === "CURRENT" && (
+              <details>
+                <summary>
+                  Prepare selected outstanding items for subsequent clearance
+                </summary>
+                <p>
+                  Select book-side exceptions from the displayed rows.
+                  Selections persist across result pages. Enter independent
+                  controls for the full selection. The new source retains
+                  original book dates and requires independent review; this does
+                  not establish later clearance.
+                </p>
+                <fieldset>
+                  <legend>Outstanding book items</legend>
+                  {rows
+                    .filter((row) => row.side === "books")
+                    .map((row) => (
+                      <label key={String(row.id)}>
+                        <input
+                          type="checkbox"
+                          checked={(
+                            outstandingSelections[selected] || []
+                          ).includes(String(row.id))}
+                          onChange={(event) =>
+                            setOutstandingSelections({
+                              ...outstandingSelections,
+                              [selected]: event.target.checked
+                                ? [
+                                    ...(outstandingSelections[selected] || []),
+                                    String(row.id),
+                                  ]
+                                : (
+                                    outstandingSelections[selected] || []
+                                  ).filter((id) => id !== String(row.id)),
+                            })
+                          }
+                        />
+                        {String(row.id)} · {text(row.reference)} ·{" "}
+                        {text(row.currency)} {text(row.amount)}
+                      </label>
+                    ))}
+                </fieldset>
+                <p>
+                  {(outstandingSelections[selected] || []).length} selected
+                  items
+                </p>
+                <label>
+                  Outstanding source title
+                  <input
+                    value={outstandingLabel}
+                    onChange={(event) =>
+                      setOutstandingLabel(event.target.value)
+                    }
+                  />
+                </label>
+                <label>
+                  Independent outstanding row count
+                  <input
+                    type="number"
+                    min="1"
+                    max="5000"
+                    value={outstandingCount}
+                    onChange={(event) =>
+                      setOutstandingCount(event.target.value)
+                    }
+                  />
+                </label>
+                <label>
+                  Independent outstanding signed total
+                  <input
+                    value={outstandingTotal}
+                    onChange={(event) =>
+                      setOutstandingTotal(event.target.value)
+                    }
+                  />
+                </label>
+                <label>
+                  Outstanding population assessment
+                  <textarea
+                    value={outstandingAssessment}
+                    onChange={(event) =>
+                      setOutstandingAssessment(event.target.value)
+                    }
+                  />
+                </label>
+                <Button
+                  disabled={
+                    action.isPending ||
+                    !(outstandingSelections[selected] || []).length
+                  }
+                  onClick={async () => {
+                    const created = await action
+                      .mutateAsync({
+                        path: `${prefix}/events/${selected}/bank-outstanding-source`,
+                        body: {
+                          exception_ids: outstandingSelections[selected],
+                          expected_rows: Number(outstandingCount),
+                          signed_total: outstandingTotal,
+                          label: outstandingLabel,
+                          assessment: outstandingAssessment,
+                        },
+                      })
+                      .catch(() => null);
+                    if (created) {
+                      setSelected(created.id);
+                      setOffset(0);
+                    }
+                  }}
+                >
+                  Prepare outstanding source
+                </Button>
+              </details>
+            )}
           {compactImport &&
             body.review_status === "REVIEWED" &&
             !body.blocked &&
@@ -2373,13 +2556,72 @@ export function CountryWorkflows({
             <details>
               <summary>Original source controls and calculation basis</summary>
               <dl>
-                {Object.entries(body.native_metadata).map(([key, value]) => (
-                  <div key={key}>
-                    <dt>{key.replaceAll("_", " ")}</dt>
-                    <dd>{text(value)}</dd>
-                  </div>
-                ))}
+                {Object.entries(body.native_metadata)
+                  .filter(
+                    ([key]) =>
+                      key !== "message_controls" ||
+                      !Array.isArray(body.native_metadata?.message_controls),
+                  )
+                  .map(([key, value]) => (
+                    <div key={key}>
+                      <dt>{key.replaceAll("_", " ")}</dt>
+                      <dd>{text(value)}</dd>
+                    </div>
+                  ))}
               </dl>
+              {Array.isArray(body.native_metadata.message_controls) && (
+                <div className="table-wrap">
+                  <table aria-label="MT940 message controls">
+                    <thead>
+                      <tr>
+                        {[
+                          "Sequence",
+                          "Original message",
+                          "Reference",
+                          "Currency",
+                          "Opening tag",
+                          "Opening",
+                          "Closing tag",
+                          "Closing",
+                          "Entries",
+                        ].map((label) => (
+                          <th key={label}>{label}</th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(
+                        body.native_metadata.message_controls as Record<
+                          string,
+                          unknown
+                        >[]
+                      ).map((message, index) => (
+                        <tr key={index}>
+                          <td>{text(message.statement_sequence)}</td>
+                          <td>{text(message.source_message_index)}</td>
+                          <td>{text(message.statement_id)}</td>
+                          <td>{text(message.currency)}</td>
+                          <td>{text(message.opening_tag)}</td>
+                          <td>{text(message.opening)}</td>
+                          <td>{text(message.closing_tag)}</td>
+                          <td>{text(message.closing)}</td>
+                          <td>{text(message.entry_count)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                  <details>
+                    <summary>All retained message control fields</summary>
+                    <pre>
+                      {JSON.stringify(
+                        body.native_metadata.message_controls,
+                        null,
+                        2,
+                      )}
+                    </pre>
+                  </details>
+                </div>
+              )}
             </details>
           )}
           {body.csv_mapping && (
@@ -2483,6 +2725,7 @@ export function CountryWorkflows({
           </div>
           <div style={{ overflowX: "auto" }}>
             {(compactSource ||
+              compactBankClearance ||
               compactCredit ||
               compactWithholding ||
               compactImport) && (

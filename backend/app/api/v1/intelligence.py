@@ -16,6 +16,7 @@ from app.modules.audit_execution.access import engagement_permissions
 from app.modules.audit_execution.models import AuditRecord
 from app.modules.audit_execution.schemas import RecordInput, RecordPatch, Source
 from app.modules.audit_log.service import record
+from app.modules.country_workflows.bank_outstanding_source import BankOutstandingSourceInput
 from app.modules.country_workflows.import_vat_source import ImportVATSourceInput
 from app.modules.intelligence import jobs, service
 from app.modules.intelligence import schemas as s
@@ -23,6 +24,55 @@ from app.modules.intelligence.foundations import PeriodAction
 from app.modules.intelligence.models import IntelligenceEvent, IntelligenceJob
 
 router = APIRouter(prefix="/intelligence", tags=["Accounting intelligence"])
+
+
+@router.post("/engagements/{eid}/events/{identifier}/bank-outstanding-source", status_code=201)
+async def bank_outstanding_source(
+    eid: uuid.UUID, identifier: uuid.UUID, data: BankOutstandingSourceInput,
+    db: DB, ctx: Actor, request: Request,
+):
+    from app.modules.country_workflows.bank_outstanding_source import source_rows
+
+    eng = await service.scope(db, ctx, eid, "country-workflow", True)
+    parent = await service.event(db, ctx, eid, identifier, True)
+    if parent.kind != "country-workflow" or parent.body.get("workflow") != "bank-brs":
+        raise HTTPException(422, "Select a bank reconciliation")
+    if parent.body.get("review_status") != "REVIEWED" or parent.body.get("blocked"):
+        raise HTTPException(409, "Independently review and resolve the BRS before preparing outstanding items")
+    source_ids = parent.body.get("parameters", {}).get("source_ids", {})
+    if set(source_ids) != {"books", "statement"}:
+        raise HTTPException(409, "BRS source roles are incomplete")
+    sources = {}
+    for role, source_id in source_ids.items():
+        original = await service.event(db, ctx, eid, uuid.UUID(source_id), True)
+        if original.kind != "workflow-source" or original.body.get("table_type") != "transactions" or original.body.get("review_status") != "REVIEWED":
+            raise HTTPException(409, "Independently review every retained BRS source")
+        sources[role] = original
+    try:
+        rows, totals = source_rows(parent.body, sources["books"].body, data)
+    except ValueError as error:
+        raise HTTPException(422, str(error)) from None
+    created = await service.append(db, ctx, eng, "workflow-source", {
+        "table_type": "bank-outstanding", "rows": rows, "row_count": len(rows),
+        "control_totals": totals, "title": data.label, "review_status": "UNVERIFIED",
+        "parser_version": "brs-outstanding-bridge/1",
+        "source_identity": "brs-outstanding:" + str(parent.root_id),
+        "source_sha256": parent.sha256,
+        "contributors": sorted({*parent.body.get("contributors", [str(parent.created_by)]), str(ctx.user_id)}),
+        "population_completeness": "SELECTED_REVIEWED_BRS_BOOK_EXCEPTIONS_ONLY",
+        "native_metadata": {
+            "source_brs_id": str(parent.id), "source_books_id": str(sources["books"].id),
+            "selected_exception_ids": data.exception_ids, "scope_assessment": data.assessment,
+            "expected_rows": data.expected_rows, "signed_total": str(data.signed_total),
+            "clearance_status": "NOT_DETERMINED_BY_BRS_EXCEPTION",
+        },
+        "limitations": [
+            "Selected book exceptions only; statement-side unbooked entries are excluded",
+            "BRS candidate causes and documented dispositions do not establish later clearance",
+            "Independently review this derived population before subsequent clearance assessment",
+        ],
+    }, [service.event_receipt(parent)], request.state.request_id)
+    return audit.serialize(created)
 
 
 @router.post("/engagements/{eid}/events/{identifier}/import-vat-box-source", status_code=201)

@@ -60,6 +60,17 @@ def evaluate(rule, facts, period_start, period_end, transaction_date=None):
         "exceptions_and_elections": rule.exceptions_and_elections,
     }
     if result["applicability"] == "APPLICABLE" and rule.method == "flat_rate":
+        if (
+            rule.calculation_currency
+            and facts.get("tax_base_currency", facts.get("functional_currency"))
+            != rule.calculation_currency
+        ):
+            return {
+                **result,
+                "applicability": "PENDING",
+                "invalid_inputs": ["tax_base_currency"],
+                "expected_currency": rule.calculation_currency,
+            }
         try:
             base = Decimal(str(facts["tax_base"]))
             exponent = base.as_tuple().exponent
@@ -80,6 +91,7 @@ def evaluate(rule, facts, period_start, period_end, transaction_date=None):
                 "unrounded_amount": str(amount),
                 "method": "flat_rate",
                 "rounding": "Not applied; rule-specific rounding must be reviewed",
+                **({"currency": rule.calculation_currency} if rule.calculation_currency else {}),
             }
         except (InvalidOperation, ValueError):
             result.update(applicability="PENDING", invalid_inputs=["tax_base"])

@@ -4,7 +4,7 @@ from datetime import date
 from decimal import Decimal
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 from app.modules.jurisdictions.profiles import Strict
 
@@ -47,12 +47,78 @@ class CreditApplication(Strict):
     rationale: str = Field(min_length=10, max_length=2000)
 
 
+class BankOutstanding(Strict):
+    id: ID
+    account: ID
+    currency: str = Field(pattern=r"^[A-Z]{3}$")
+    balance_date: date
+    date: date
+    reference: ID
+    amount: Decimal = Field(max_digits=28, decimal_places=8, allow_inf_nan=False)
+    evidence_reference: ID
+
+    @field_validator("id", "account", "reference", "evidence_reference")
+    @classmethod
+    def exact_reference(cls, value):
+        if not value.strip() or value != value.strip():
+            raise ValueError("Bank outstanding identifiers require exact nonblank values")
+        return value
+
+    @model_validator(mode="after")
+    def outstanding_scope(self):
+        if not self.amount or self.date > self.balance_date:
+            raise ValueError(
+                "Outstanding bank items need nonzero signed amounts dated by reporting date"
+            )
+        return self
+
+
+class BankClearance(Strict):
+    id: ID
+    outstanding_id: ID
+    transaction_id: ID
+    currency: str = Field(pattern=r"^[A-Z]{3}$")
+    amount: Money = Field(gt=0)
+    evidence_reference: ID
+    rationale: str = Field(min_length=10, max_length=2000)
+
+    @model_validator(mode="after")
+    def explicit_assessment(self):
+        if (
+            any(
+                not value.strip() or value != value.strip()
+                for value in (
+                    self.id,
+                    self.outstanding_id,
+                    self.transaction_id,
+                    self.evidence_reference,
+                )
+            )
+            or len(self.rationale.strip()) < 10
+        ):
+            raise ValueError(
+                "Bank clearance requires exact identifiers and a meaningful evidence assessment"
+            )
+        return self
+
+
 OPERATION_ROW_TYPES: dict[str, type[BaseModel]] = {
+    "bank-outstanding": BankOutstanding,
+    "bank-clearances": BankClearance,
     "credit-applications": CreditApplication,
     "cash-payments": CashPayment,
     "item-allocations": ItemAllocation,
 }
 OPERATION_WORKFLOWS: dict[str, tuple[str, list[str], dict[str, str]]] = {
+    "bank-subsequent-clearance": (
+        "Outstanding bank items / subsequent statement clearance",
+        [],
+        {
+            "outstanding": "bank-outstanding",
+            "statement": "transactions",
+            "allocations": "bank-clearances",
+        },
+    ),
     "credit-note-applications": (
         "Credit-note applications and residual subledger controls",
         [],

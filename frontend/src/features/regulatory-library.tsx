@@ -146,6 +146,7 @@ export function RegulatoryLibrary() {
                   exceptions_and_elections: [],
                   method: "checklist",
                   rate: null,
+                  calculation_currency: null,
                   validation_status: "AWAITING_VALIDATION",
                   professional_review_status: "PENDING",
                   last_reviewed: null,
@@ -343,6 +344,11 @@ export function RegulatoryLibrary() {
       {editor && (
         <section className="main-panel" style={{ padding: 20 }}>
           <h2>Rule proposal</h2>
+          <p>
+            For a rate-based rule, set calculation_currency to the ISO currency
+            of the tax base. Assessment requires a reviewed source in that
+            currency; no currency conversion is inferred.
+          </p>
           <p>
             Enter the exact legal regime, period, applicability predicates and
             citation provenance. Source retrieval fields are professional

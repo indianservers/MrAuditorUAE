@@ -3,7 +3,7 @@ from datetime import date
 from fastapi import HTTPException
 from sqlalchemy import func, select, text
 
-from app.db.models.platform import FinancialPeriod
+from app.db.models.platform import FinancialPeriod, LegalEntity
 from app.modules.audit_execution.access import firm_roles, role_permissions
 from app.modules.audit_log.service import record
 from app.modules.jurisdictions.packages import fingerprint
@@ -29,7 +29,7 @@ OFFICIAL_HOSTS = {
 }
 
 
-def bound_facts(binding, context, period, supplied):
+def bound_facts(binding, context, period, supplied, *, functional_currency, tax_base_currency=None):
     if context["framework"].startswith("UNCONFIGURED") or context["entity_type"].startswith(
         "UNCONFIGURED"
     ):
@@ -42,6 +42,8 @@ def bound_facts(binding, context, period, supplied):
         "reporting_framework": context["framework"],
         "period_start": period.start_date.isoformat(),
         "period_end": period.end_date.isoformat(),
+        "functional_currency": functional_currency,
+        "tax_base_currency": tax_base_currency or functional_currency,
     }
     if any(key in supplied and supplied[key] != value for key, value in authoritative.items()):
         raise HTTPException(422, "Supplied facts contradict the approved engagement context")
@@ -170,6 +172,8 @@ async def propose(db, ctx, data, request_id):
 
 def validation_blockers(rule):
     blockers = []
+    if rule.method == "flat_rate" and not rule.calculation_currency:
+        blockers.append("A rate-based rule requires an explicit calculation currency")
     if rule.validation_status != "VALIDATED" or rule.professional_review_status != "REVIEWED":
         blockers.append("Technical validation and professional content review must be documented")
     if not rule.last_reviewed or rule.last_reviewed > date.today():
@@ -249,7 +253,14 @@ async def selection(db, ctx, key, period_start, period_end, transaction_date=Non
         ):
             blockers = validation_blockers(rule)
             if blockers:
-                raise HTTPException(409, {"code": "unverified_rule", "rule_id": str(obj.id), "blocking_issues": blockers})
+                raise HTTPException(
+                    409,
+                    {
+                        "code": "unverified_rule",
+                        "rule_id": str(obj.id),
+                        "blocking_issues": blockers,
+                    },
+                )
             return obj
     return None
 
@@ -260,14 +271,45 @@ async def assess(db, ctx, eng, data, request_id):
     from app.modules.regulatory.evaluation import evaluate
 
     period = await db.get(FinancialPeriod, eng.period_id)
+    entity = await db.get(LegalEntity, eng.entity_id)
     binding, context = await resolved(db, ctx, eng)
-    facts = bound_facts(binding, context, period, data.facts)
     outputs, dependencies = [], []
+    base_currency = entity.functional_currency
+    expected_base = None
     if data.source_event_id:
         source = await intelligence.event(db, ctx, eng.id, data.source_event_id, True)
         if source.kind != "lead" or source.body.get("review_status") != "REVIEWED":
             raise HTTPException(409, "A current independently reviewed lead schedule is required")
         dependencies.append(intelligence.event_receipt(source))
+        expected_base = source.body["totals"]["closing"]
+    if data.conversion_event_id:
+        conversion = await intelligence.event(db, ctx, eng.id, data.conversion_event_id, True)
+        if (
+            conversion.kind != "regulatory-conversion"
+            or conversion.body.get("conversion_contract") != "reviewed-rate-conversion/1"
+            or conversion.body.get("review_status") != "REVIEWED"
+        ):
+            raise HTTPException(
+                409, "A current independently reviewed currency conversion is required"
+            )
+        if (
+            conversion.body.get("source_event_id") != str(data.source_event_id)
+            or conversion.body.get("source_currency") != entity.functional_currency
+        ):
+            raise HTTPException(
+                422, "Conversion does not originate from the selected reviewed schedule"
+            )
+        base_currency = conversion.body["target_currency"]
+        expected_base = conversion.body["converted_amount"]
+        dependencies.append(intelligence.event_receipt(conversion))
+    facts = bound_facts(
+        binding,
+        context,
+        period,
+        data.facts,
+        functional_currency=entity.functional_currency,
+        tax_base_currency=base_currency,
+    )
     for identifier in data.rule_ids:
         obj = await get(db, ctx, identifier)
         rule = Rule.model_validate(obj.body)
@@ -287,16 +329,19 @@ async def assess(db, ctx, eng, data, request_id):
                 raise HTTPException(
                     422, "A reviewed source schedule and documented tax-base selection are required"
                 )
-            try:
-                agrees = Decimal(str(data.facts.get("tax_base"))) == Decimal(
-                    source.body["totals"]["closing"]
+            if rule.calculation_currency != base_currency:
+                raise HTTPException(
+                    422,
+                    "Rule calculation currency differs from the reviewed source currency; an explicit conversion workflow is required",
                 )
+            try:
+                agrees = Decimal(str(data.facts.get("tax_base"))) == Decimal(str(expected_base))
             except (InvalidOperation, KeyError):
                 agrees = False
             if not agrees:
                 raise HTTPException(
                     422,
-                    "Tax base must agree exactly to the reviewed source schedule closing balance",
+                    "Tax base must agree exactly to the reviewed source balance or its reviewed conversion",
                 )
         provenance_missing = await validate_fact_sources(
             db,
@@ -381,6 +426,7 @@ async def checklist(db, ctx, eng, data, request_id):
     if binding.country != expected_country:
         raise HTTPException(422, "This specialist checklist does not match the engagement country")
     period = await db.get(FinancialPeriod, eng.period_id)
+    entity = await db.get(LegalEntity, eng.entity_id)
     if len({i.clause for i in data.items}) != len(data.items):
         raise HTTPException(422, "Clause identifiers must be unique")
     rows: list[dict] = []
@@ -403,7 +449,9 @@ async def checklist(db, ctx, eng, data, request_id):
             )
         applicability = evaluate(
             rule,
-            bound_facts(binding, context, period, item.facts),
+            bound_facts(
+                binding, context, period, item.facts, functional_currency=entity.functional_currency
+            ),
             period.start_date,
             period.end_date,
         )

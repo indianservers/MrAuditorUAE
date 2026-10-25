@@ -46,7 +46,16 @@ class Rule(Strict):
     title: str = Field(min_length=3, max_length=300)
     description: str = Field(min_length=10, max_length=6000)
     framework: str = Field(min_length=2, max_length=100)
-    source_category: Literal["legislation", "official_guidance", "accounting_requirement", "firm_policy", "reviewer_judgment"] | None = None
+    source_category: (
+        Literal[
+            "legislation",
+            "official_guidance",
+            "accounting_requirement",
+            "firm_policy",
+            "reviewer_judgment",
+        ]
+        | None
+    ) = None
     publication_date: date | None = None
     topic: str | None = Field(default=None, max_length=200)
     implementation_reference: str | None = Field(default=None, max_length=300)
@@ -60,6 +69,7 @@ class Rule(Strict):
     exceptions_and_elections: list[str] = Field(default_factory=list, max_length=50)
     method: Literal["checklist", "flat_rate"] = "checklist"
     rate: Decimal | None = Field(default=None, ge=0, le=1, max_digits=18, decimal_places=12)
+    calculation_currency: str | None = Field(default=None, pattern=r"^[A-Z]{3}$")
     validation_status: Literal["AWAITING_VALIDATION", "VALIDATED"] = "AWAITING_VALIDATION"
     professional_review_status: Literal["PENDING", "REVIEWED"] = "PENDING"
     last_reviewed: date | None = None
@@ -69,6 +79,11 @@ class Rule(Strict):
 
     @model_validator(mode="after")
     def coherent(self):
+        if self.calculation_currency is not None:
+            import pycountry
+
+            if pycountry.currencies.get(alpha_3=self.calculation_currency) is None:
+                raise ValueError("Calculation currency must be a recognized ISO currency")
         if not self.rule_key.startswith(self.country + "-"):
             raise ValueError("Rule key and country differ")
         if self.effective_to and self.effective_to < self.effective_from:
@@ -97,8 +112,17 @@ class Assessment(Strict):
     facts: dict[str, Fact] = Field(max_length=100)
     transaction_date: date | None = None
     source_event_id: uuid.UUID | None = None
+    conversion_event_id: uuid.UUID | None = None
     fact_sources: dict[str, FactSource] = Field(default_factory=dict, max_length=100)
     rationale: str = Field(min_length=10, max_length=4000)
+
+    @model_validator(mode="after")
+    def unique_rules(self):
+        if self.conversion_event_id and not self.source_event_id:
+            raise ValueError("A conversion requires its original reviewed schedule")
+        if len(set(self.rule_ids)) != len(self.rule_ids):
+            raise ValueError("Select each regulatory rule version only once")
+        return self
 
 
 class ChecklistItem(Strict):

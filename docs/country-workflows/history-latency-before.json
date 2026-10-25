@@ -1,0 +1,20 @@
+{
+  "scope": "Synthetic owned database; one sequential sample per limit, not a throughput benchmark",
+  "measurements": [
+    {
+      "limit": 1,
+      "rows": 1,
+      "seconds": 0.103
+    },
+    {
+      "limit": 10,
+      "rows": 10,
+      "seconds": 0.448
+    },
+    {
+      "limit": 100,
+      "rows": 69,
+      "seconds": 2.688
+    }
+  ]
+}

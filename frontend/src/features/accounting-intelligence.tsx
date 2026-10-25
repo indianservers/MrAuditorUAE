@@ -1036,30 +1036,63 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
                 values={body![key] as unknown[]}
                 decide={decide}
                 preferredColumns={
-                  area === "source-table" && key === "rows"
-                    ? body?.table_kind === "bank"
+                  detail.data.kind === "regulatory-assessment" && key === "rows"
+                    ? [
+                        "rule_key",
+                        "rule_version",
+                        "applicability",
+                        "selected_date",
+                        "calculation_currency",
+                        "tax_base",
+                        "applied_rate",
+                        "unrounded_calculated_amount",
+                        "missing_inputs",
+                        "invalid_inputs",
+                        "missing_fact_provenance",
+                        "professional_conclusion",
+                      ]
+                    : detail.data.kind === "regulatory-conversion" &&
+                        key === "rows"
                       ? [
-                          "reference",
-                          "date",
-                          "account_code",
-                          "currency",
-                          "amount",
-                          "counterparty",
-                          "source_page",
-                          "source_page_row",
-                          "source_worksheet",
+                          "source_currency",
+                          "source_amount",
+                          "rate",
+                          "target_currency",
+                          "unrounded_amount",
+                          "converted_amount",
+                          "decimal_places",
+                          "rounding",
+                          "state",
                         ]
-                      : [
-                          "reference",
-                          "counterparty",
-                          "account_code",
-                          "currency",
-                          "open_amount",
-                          "document_type",
-                          "document_date",
-                          "due_date",
-                          "balance_date",
-                        ]
+                      : area === "source-table" && key === "rows"
+                        ? body?.table_kind === "bank"
+                          ? [
+                              "reference",
+                              "date",
+                              "account_code",
+                              "currency",
+                              "amount",
+                              "counterparty",
+                              "source_page",
+                              "source_page_row",
+                              "source_worksheet",
+                            ]
+                          : [
+                              "reference",
+                              "counterparty",
+                              "account_code",
+                              "currency",
+                              "open_amount",
+                              "document_type",
+                              "document_date",
+                              "due_date",
+                              "balance_date",
+                            ]
+                        : undefined
+                }
+                provenanceLabel={
+                  detail.data.kind.startsWith("regulatory-")
+                    ? "Show all result provenance"
                     : undefined
                 }
               />
@@ -1433,17 +1466,34 @@ function ResultTable({
   values,
   decide,
   preferredColumns,
+  provenanceLabel,
 }: {
   name: string;
   values: unknown[];
   decide: (action: string, item?: string, candidate?: string) => Promise<void>;
   preferredColumns?: string[];
+  provenanceLabel?: string;
 }) {
   const [showAll, setShowAll] = useState(false);
-  const rows = values.filter((v) => v && typeof v === "object") as Record<
-    string,
-    unknown
-  >[];
+  const originalRows = values.filter(
+    (v) => v && typeof v === "object",
+  ) as Record<string, unknown>[];
+  const rows = originalRows.map((row) => {
+    if (
+      !provenanceLabel ||
+      !row.calculation ||
+      typeof row.calculation !== "object"
+    )
+      return row;
+    const calculation = row.calculation as Record<string, unknown>;
+    return {
+      ...row,
+      calculation_currency: calculation.currency,
+      tax_base: calculation.tax_base,
+      applied_rate: calculation.rate,
+      unrounded_calculated_amount: calculation.unrounded_amount,
+    };
+  });
   const allColumns = Array.from(new Set(rows.flatMap(Object.keys))).filter(
     (key) => key !== "candidates",
   );
@@ -1470,16 +1520,17 @@ function ResultTable({
             checked={showAll}
             onChange={(event) => setShowAll(event.target.checked)}
           />
-          {preferredColumns
-            ? "Show all supporting-table provenance"
-            : "Show all result columns"}
+          {provenanceLabel ||
+            (preferredColumns
+              ? "Show all supporting-table provenance"
+              : "Show all result columns")}
         </label>
       )}
       <table>
         <thead>
           <tr>
             {columns.map((c) => (
-              <th key={c}>{c}</th>
+              <th key={c}>{provenanceLabel ? c.replaceAll("_", " ") : c}</th>
             ))}
             {rows.some((r) => r.candidates) && <th>Auditor decision</th>}
             {(name === "matches" || name.startsWith("unmatched_")) && (

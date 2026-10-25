@@ -9,12 +9,18 @@ import { useState } from "react";
 import { RegulatoryAssessmentPanel } from "./regulatory-assessment";
 
 export function CountryCompliance() {
-  const country = useScope((s) => s.country);
+  const homeCountry = useScope((s) => s.country);
   const access = useAccess();
   const [eid, setEid] = useState("");
+  const engagementCountry = useAPI<{ country: string }>(
+    `intelligence/engagements/${eid}/country-workflows`,
+    !!eid,
+  );
+  const country = eid ? engagementCountry.data?.country : homeCountry;
   const engagements = useAPI<Page<RecordRow>>("engagements?limit=100");
   const rules = useAPI<{ items: { id: string; state: string }[] }>(
     `regulatory/rules?country=${country}&limit=100`,
+    !!country,
   );
   const workspace = useAPI<{
     reporting_context: { framework: string; version: number };
@@ -117,10 +123,17 @@ export function CountryCompliance() {
     <div className="intelligence-workspace">
       <PageHeader
         eyebrow="Country compliance"
-        title={`${country} Compliance Workspace`}
+        title={`${country || "Engagement"} Compliance Workspace`}
         description="One global audit engine with country-specific content, source-linked calculations and professional review. Availability is separate from legal qualification."
       />
-      <ErrorState error={engagements.error || rules.error || workspace.error} />
+      <ErrorState
+        error={
+          engagementCountry.error ||
+          engagements.error ||
+          rules.error ||
+          workspace.error
+        }
+      />
       <section className="main-panel" style={{ padding: 20 }}>
         <div className="toolbar">
           <Link className="button" href="/settings">
@@ -128,7 +141,11 @@ export function CountryCompliance() {
           </Link>
           <label>
             Engagement
-            <select value={eid} onChange={(e) => setEid(e.target.value)}>
+            <select
+              aria-label="Compliance engagement"
+              value={eid}
+              onChange={(e) => setEid(e.target.value)}
+            >
               <option value="">Select authorized engagement</option>
               {engagements.data?.items.map((e) => (
                 <option key={e.id} value={e.id}>
@@ -217,7 +234,7 @@ export function CountryCompliance() {
             legally complete tax computation.
           </p>
         )}
-        {!["IN", "AE"].includes(country) && (
+        {country && !["IN", "AE"].includes(country) && (
           <p>
             This country currently uses the global base profile. Local statutory
             and tax content must be validated before enabling a regulatory
