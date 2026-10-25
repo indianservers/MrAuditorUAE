@@ -5424,3 +5424,193 @@ for (const country of ["AE", "IN"] as const) {
     }
   });
 }
+
+for (const country of ["AE", "IN"] as const) {
+  test(`${country} reviewed account evidence links native bank numbers to ledger scope and becomes stale on revocation`, async ({
+    page,
+    browser,
+  }) => {
+    test.setTimeout(180000);
+    const input = fixture.bank_account_binding[country],
+      eid = input.engagement;
+    const context = await browser.newContext({
+      baseURL: "http://127.0.0.1:3010",
+      viewport: { width: 1600, height: 1100 },
+    });
+    const reviewer = await context.newPage();
+    try {
+      for (const [actor, email, password] of [
+        [page, "admin@example.com", "test-strong-password-123"],
+        [reviewer, fixture.pdf_final_reviewer_email, "synthetic-password-123"],
+      ] as const) {
+        await actor.goto("/login");
+        await actor.getByLabel("Email address").fill(email);
+        await actor.getByLabel("Password", { exact: true }).fill(password);
+        await actor
+          .getByRole("button", { name: "Sign in", exact: true })
+          .click();
+        await actor.waitForURL("**/dashboard");
+      }
+      await page.goto(`/intelligence/${eid}/country-workflow`);
+      const title = `SYNTHETIC ${country} reviewed account alias ${Date.now()}`;
+      for (const [label, value] of [
+        ["Schedule title", title],
+        ["Reconciliation date", "2026-06-30"],
+        ["Bank account identifier", input.account],
+        ["Account currency", input.currency],
+        ["book opening", "0"],
+        ["book closing", "95"],
+        ["statement opening", "0"],
+        ["statement closing", "95"],
+        [
+          "Scope and source rationale",
+          "Independent synthetic signed ledger and native bank controls",
+        ],
+        [
+          "Linked account scope assessment",
+          "Reviewed ledger code to original bank account and full June validity window",
+        ],
+      ] as const) {
+        if (label === "Linked account scope assessment")
+          await page
+            .getByLabel("Reviewed bank account evidence (optional)")
+            .selectOption(input.review);
+        await page.getByLabel(label, { exact: true }).fill(value);
+      }
+      for (const role of ["books", "statement"] as const)
+        await page
+          .getByLabel(role + " source", { exact: true })
+          .selectOption(input.sources[role]);
+      const submitted = page.waitForResponse(
+        (response) =>
+          response.url().includes(`/engagements/${eid}/jobs`) &&
+          response.request().method() === "POST",
+      );
+      await page
+        .getByRole("button", { name: "Queue calculation", exact: true })
+        .click();
+      const response = await submitted;
+      expect(response.status(), await response.text()).toBe(202);
+      const job = await response.json();
+      let resultId = "";
+      await expect
+        .poll(
+          async () => {
+            const response = await page.request.get(
+              `/api/backend/intelligence/engagements/${eid}/jobs/${job.id}`,
+              { headers: { "X-Tenant-ID": fixture.tenant } },
+            );
+            expect(response.status()).toBe(200);
+            const state = await response.json();
+            if (state.status === "failed")
+              throw new Error(JSON.stringify(state.error_details));
+            resultId = state.result_id || "";
+            return state.status;
+          },
+          { timeout: 45000 },
+        )
+        .toBe("completed");
+      await expect(
+        page
+          .getByLabel("Saved source or result")
+          .locator(`option[value="${resultId}"]`),
+      ).toHaveCount(1);
+      await page.getByLabel("Saved source or result").selectOption(resultId);
+      const link = page.getByRole("region", {
+        name: "Linked bank account evidence",
+        exact: true,
+      });
+      await expect(
+        link.getByText(input.original_account, { exact: true }),
+      ).toBeVisible();
+      await expect(
+        link.getByText("Applied using the reviewed account number", {
+          exact: true,
+        }),
+      ).toBeVisible();
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-bank-account-linked-scope.png`,
+        () => link.screenshot(),
+      );
+      await reviewer.goto(`/intelligence/${eid}/country-workflow`);
+      await reviewer
+        .getByLabel("Saved source or result")
+        .selectOption(resultId);
+      await reviewer
+        .getByLabel("Review / exception rationale")
+        .fill(
+          "Independent synthetic account mapping, receipt, source controls and full window checked; no bank authentication asserted",
+        );
+      const approved = reviewer.waitForResponse(
+        (response) =>
+          response.url().includes(`/events/${resultId}/review`) &&
+          response.request().method() === "POST",
+      );
+      await reviewer
+        .getByRole("button", { name: "Independent approval", exact: true })
+        .click();
+      const approval = await approved;
+      expect(approval.status(), await approval.text()).toBe(201);
+      const item = await approval.json();
+      expect(item.body.bank_account_evidence.review_receipt.id).toBe(
+        input.review,
+      );
+      const download = reviewer.waitForEvent("download");
+      await reviewer
+        .getByRole("button", { name: "Export XLSX", exact: true })
+        .click();
+      expect((await download).suggestedFilename()).toMatch(/\.xlsx$/);
+      await link
+        .getByRole("button", {
+          name: "Open linked account review",
+          exact: true,
+        })
+        .click();
+      await expect(
+        page.getByRole("region", {
+          name: "Bank account evidence comparison",
+          exact: true,
+        }),
+      ).toBeVisible();
+      await reviewer.goto(`/intelligence/${eid}/workflow-source`);
+      await reviewer
+        .getByLabel("Saved source or result")
+        .selectOption(input.account_bank_source);
+      await reviewer
+        .getByLabel("Review / exception rationale")
+        .fill(
+          "Synthetic source assertion withdrawn to verify recursive account-link freshness",
+        );
+      const rejected = reviewer.waitForResponse(
+        (response) =>
+          response
+            .url()
+            .includes(`/events/${input.account_bank_source}/review`) &&
+          response.request().method() === "POST",
+      );
+      await reviewer
+        .getByRole("button", { name: "Reject", exact: true })
+        .click();
+      const rejection = await rejected;
+      expect(rejection.status(), await rejection.text()).toBe(201);
+      await reviewer.goto(`/intelligence/${eid}/country-workflow`);
+      await reviewer.getByLabel("Saved source or result").selectOption(item.id);
+      const panel = reviewer
+        .getByRole("heading", { name: title, exact: true })
+        .locator("..");
+      await expect(panel.getByText("STALE", { exact: true })).toBeVisible();
+      await expect(
+        panel.getByRole("button", {
+          name: "Independent approval",
+          exact: true,
+        }),
+      ).toBeDisabled();
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-bank-account-linked-stale.png`,
+        () => panel.screenshot(),
+      );
+    } finally {
+      await context.close();
+    }
+  });
+}

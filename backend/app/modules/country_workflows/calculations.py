@@ -803,12 +803,17 @@ def checks(data, tables):
     }
 
 
-def calculate(data, country, sources):
+def calculate(data, country, sources, *, bank_account_review=None):
     title, countries, roles = WORKFLOWS[data.workflow]
     if countries and country not in countries:
         raise ValueError("Workflow is unavailable for this engagement country")
     if set(sources) != set(roles):
         raise ValueError("Select every required source role exactly once")
+    account_scope = None
+    if bank_account_review is not None:
+        from app.modules.country_workflows.bank_binding import bind
+
+        sources, account_scope = bind(data,country,sources,*bank_account_review)
     for role, table in sources.items():
         if table.get("parser_version") == "bank-clearance-carryforward/1" and (data.workflow != "bank-subsequent-clearance" or role != "outstanding"):
             raise ValueError("Carried bank residuals can establish only the outstanding role of subsequent clearance")
@@ -867,7 +872,7 @@ def calculate(data, country, sources):
             native = table["native_metadata"]
             prefix = "book" if role == "books" else "statement"
             if (
-                native["account"] != data.account
+                native["account"] != (account_scope["original_bank_source_account"] if account_scope is not None and role == account_scope["bank_source_role"] else data.account)
                 or native["currency"] != data.currency
                 or native["through"] != data.as_of.isoformat()
                 or Decimal(native["opening"]) != getattr(data, prefix + "_opening")
@@ -942,6 +947,11 @@ def calculate(data, country, sources):
             result = inventory(data, tables)
         else:
             result = checks(data, tables)
+    if data.workflow in {"bank-brs","bank-subsequent-clearance","obligation-bank-allocations"}:
+        result["bank_account_evidence"] = account_scope or {
+            "status":"LINK_REQUESTED_NOT_VERIFIED" if data.bank_account_review_id else "NOT_LINKED_ARITHMETIC_SCOPE_ONLY",
+            "bank_authentication_status":"NOT_ESTABLISHED_BY_DOCUMENT_COMPARISON",
+        }
     return {
         **result,
         "title": data.title,

@@ -9,6 +9,10 @@ import { Button, ErrorState, Status } from "@/components/ui/primitives";
 import { PageHeader } from "./shared";
 import { BankCarryforwardSource } from "./bank-carryforward-source";
 import { ContributionObligationSource } from "./contribution-obligation-source";
+import {
+  BankAccountLinkReview,
+  type BankAccountLink,
+} from "./bank-account-link";
 import { BankAccountEvidenceReview } from "./bank-account-evidence";
 import { BankTransactionDates } from "./bank-transaction-dates";
 import { PayrollPostingLinks } from "./payroll-posting-links";
@@ -121,6 +125,10 @@ type Choice = {
   version: number;
   freshness: string;
   review_status: string;
+  workflow?: string | null;
+  blocked?: boolean;
+  as_of?: string | null;
+  bank_account_scope?: { account: string; currency: string } | null;
   table_type?: string;
   native_format?: string;
   allowed_source_roles?: string[] | null;
@@ -170,6 +178,7 @@ type Result = {
     language_model_dependency?: boolean;
     blocked?: boolean;
     booking_date_review_count?: number;
+    bank_account_evidence?: BankAccountLink;
     exception_count?: number;
     table_type?: string;
     rows: Record<string, unknown>[];
@@ -416,6 +425,8 @@ export function CountryWorkflows({
   const [boxScopeAssessment, setBoxScopeAssessment] = useState("");
   const [subjects, setSubjects] = useState("");
   const [account, setAccount] = useState("");
+  const [bankAccountReview, setBankAccountReview] = useState("");
+  const [bankAccountAssessment, setBankAccountAssessment] = useState("");
   const [bankOwnerName, setBankOwnerName] = useState("");
   const [bankOwnerScheme, setBankOwnerScheme] = useState("");
   const [bankOwnerIdentifier, setBankOwnerIdentifier] = useState("");
@@ -1011,6 +1022,18 @@ export function CountryWorkflows({
             "Declare obligation months, bank account, settlement window and payment sign before allocating.",
           );
         if (
+          [
+            "bank-brs",
+            "bank-subsequent-clearance",
+            "obligation-bank-allocations",
+          ].includes(workflow) &&
+          bankAccountReview &&
+          bankAccountAssessment.trim().length < 10
+        )
+          throw new Error(
+            "Assess the linked bank account, original bank identifier and complete review window before calculation.",
+          );
+        if (
           workflow === "bank-account-evidence" &&
           (!account.trim() ||
             !bankOwnerName.trim() ||
@@ -1116,6 +1139,16 @@ export function CountryWorkflows({
                 bank_owner_name: bankOwnerName,
                 bank_owner_identifier_scheme: bankOwnerScheme,
                 bank_owner_identifier: bankOwnerIdentifier,
+              }
+            : {}),
+          ...([
+            "bank-brs",
+            "bank-subsequent-clearance",
+            "obligation-bank-allocations",
+          ].includes(workflow) && bankAccountReview
+            ? {
+                bank_account_review_id: bankAccountReview,
+                bank_account_scope_assessment: bankAccountAssessment,
               }
             : {}),
           ...(workflow === "bank-brs" ? { account, ...balances } : {}),
@@ -3059,6 +3092,61 @@ export function CountryWorkflows({
                   settlement journal does not prove payment execution.
                 </p>
               )}
+              {[
+                "bank-brs",
+                "bank-subsequent-clearance",
+                "obligation-bank-allocations",
+              ].includes(workflow) && (
+                <fieldset>
+                  <legend>Account evidence scope</legend>
+                  <label>
+                    Reviewed bank account evidence (optional)
+                    <select
+                      value={bankAccountReview}
+                      onChange={(event) => {
+                        setBankAccountReview(event.target.value);
+                        if (!event.target.value) setBankAccountAssessment("");
+                      }}
+                    >
+                      <option value="">
+                        Arithmetic and declared account labels only
+                      </option>
+                      {results.data?.items
+                        .filter(
+                          (row) =>
+                            row.kind === "country-workflow" &&
+                            row.workflow === "bank-account-evidence" &&
+                            row.freshness === "CURRENT" &&
+                            row.review_status === "REVIEWED" &&
+                            !row.blocked,
+                        )
+                        .map((row) => (
+                          <option key={row.id} value={row.id}>
+                            {row.label} · {row.bank_account_scope?.account} ·{" "}
+                            {row.bank_account_scope?.currency} · {row.as_of}
+                          </option>
+                        ))}
+                    </select>
+                  </label>
+                  <label>
+                    Linked account scope assessment
+                    <textarea
+                      disabled={!bankAccountReview}
+                      value={bankAccountAssessment}
+                      onChange={(event) =>
+                        setBankAccountAssessment(event.target.value)
+                      }
+                    />
+                  </label>
+                  <p>
+                    A linked review must cover the selected ledger account,
+                    currency and entire financial window. Its comparison date
+                    must equal this window's end. Matching account numbers can
+                    map bank identifiers to ledger labels; no bank
+                    authentication or payment authority is inferred.
+                  </p>
+                </fieldset>
+              )}
               {workflow === "bank-account-evidence" && (
                 <fieldset>
                   <legend>Bank account and owner evidence scope</legend>
@@ -3950,6 +4038,12 @@ export function CountryWorkflows({
                 </option>
               </select>
             </label>
+          )}
+          {body.bank_account_evidence && (
+            <BankAccountLinkReview
+              link={body.bank_account_evidence}
+              open={(identifier) => setSelected(identifier)}
+            />
           )}
           {body.workflow === "bank-account-evidence" && (
             <BankAccountEvidenceReview rows={rows} />

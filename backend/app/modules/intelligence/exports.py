@@ -70,6 +70,7 @@ def render(event, format):
             "control_comparison",
             "booking_date_review_count",
             "bank_account_contract",
+            "bank_account_evidence",
             "bank_account_scope",
             "bank_profile_references",
             "bank_authentication_status",

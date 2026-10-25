@@ -522,5 +522,13 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(
                 422, "Committed bank-ledger source range must end on the reconciliation date"
             )
-    result = await run_in_threadpool(calculate, data, package.country, sources)
+    bank_account_review = None
+    if data.bank_account_review_id is not None:
+        from app.modules.country_workflows.bank_binding import resolve
+
+        body, receipt, account_contributors = await resolve(db,ctx,eng,data)
+        bank_account_review = (body,receipt)
+        contributors.update(account_contributors)
+        dependencies.append(receipt)
+    result = await run_in_threadpool(calculate, data, package.country, sources, bank_account_review=bank_account_review)
     return {**result, "contributors": sorted(contributors)}, dependencies

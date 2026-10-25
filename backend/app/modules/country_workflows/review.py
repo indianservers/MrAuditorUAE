@@ -1,4 +1,6 @@
 def approval_error(body):
+    if body.get("bank_account_evidence",{}).get("status") == "LINK_REQUESTED_NOT_VERIFIED":
+        return "Verify the requested bank account evidence link before independent approval"
     if body.get("workflow") == "india-withholding":
         return "Legacy aggregate withholding requires a new role-scoped liability or credit assessment"
     if body.get("blocked"):

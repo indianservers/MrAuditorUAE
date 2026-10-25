@@ -409,6 +409,31 @@ vi.mock("@/hooks/use-api", () => ({
                           version: 1,
                         }),
                       ),
+                      ...[
+                        "current",
+                        "stale",
+                        "unreviewed",
+                        "blocked",
+                        "other",
+                      ].map((status) => ({
+                        id: "account-review-" + status,
+                        label: "Account review " + status,
+                        kind: "country-workflow",
+                        workflow:
+                          status === "other"
+                            ? "controls"
+                            : "bank-account-evidence",
+                        freshness: status === "stale" ? "STALE" : "CURRENT",
+                        review_status:
+                          status === "unreviewed" ? "UNVERIFIED" : "REVIEWED",
+                        blocked: status === "blocked",
+                        bank_account_scope: {
+                          account: "BANK-1",
+                          currency: "AED",
+                        },
+                        as_of: "2026-06-30",
+                        version: 2,
+                      })),
                       ...["opening", "payroll", "posted", "closing"].map(
                         (role) => ({
                           id: "ledger-" + role,
@@ -2887,5 +2912,55 @@ it("requires scoped owner evidence and only offers independently reviewed accoun
       ledger: "account-ledger",
       bank: "account-bank",
     },
+  });
+});
+
+it("links only current reviewed account evidence with an explicit financial scope assessment", async () => {
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  const selection = screen.getByLabelText(
+    "Reviewed bank account evidence (optional)",
+  );
+  expect(selection).toHaveTextContent("Account review current");
+  for (const excluded of ["stale", "unreviewed", "blocked", "other"])
+    expect(selection).not.toHaveTextContent("Account review " + excluded);
+  fireEvent.change(selection, { target: { value: "account-review-current" } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  expect(
+    await screen.findByText(
+      "Assess the linked bank account, original bank identifier and complete review window before calculation.",
+    ),
+  ).toBeVisible();
+  for (const [label, value] of [
+    ["Schedule title", "Synthetic linked bank reconciliation"],
+    ["Reconciliation date", "2026-06-30"],
+    ["Bank account identifier", "BANK-1"],
+    ["Account currency", "AED"],
+    ["book opening", "0"],
+    ["book closing", "100"],
+    ["statement opening", "0"],
+    ["statement closing", "100"],
+    [
+      "Scope and source rationale",
+      "Independent signed bank population and source controls",
+    ],
+    [
+      "Linked account scope assessment",
+      "Reviewed owner, original account number and complete June window",
+    ],
+  ])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.change(screen.getByLabelText("books source"), {
+    target: { value: "books" },
+  });
+  fireEvent.change(screen.getByLabelText("statement source"), {
+    target: { value: "statement" },
+  });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+    bank_account_review_id: "account-review-current",
+    bank_account_scope_assessment:
+      "Reviewed owner, original account number and complete June window",
+    account: "BANK-1",
   });
 });

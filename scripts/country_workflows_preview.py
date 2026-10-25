@@ -826,6 +826,29 @@ async def main():
             assert approval.status_code == 201, approval.text
             account_parameters_data = account_parameters(code, bank_owner_name=entity_record["name"]).model_dump(mode="json")
             bank_account_evidence[code] = {"engagement": engagement, "sources": account_sources, "mismatched_bank": approval.json()["id"], "parameters": account_parameters_data}
+        from tests.qa_crud.test_bank_binding import (
+            retain_native as retain_linked_native,
+        )
+        from tests.unit.native_source_examples import CAMT as linked_camt
+
+        bank_account_binding = {}
+        for code in ("AE", "IN"):
+            entry = bank_account_evidence[code]
+            engagement = entry["engagement"]
+            scope = {**entry["parameters"], "source_ids":entry["sources"]}
+            prepared = await execute(client,h,engagement,"country-workflow",scope)
+            review = await decision(client,pdf_final_reviewer[0],engagement,prepared)
+            assert review.status_code == 201, review.text
+            currency = scope["currency"]
+            number = account_population(code)["bank"][0]["account_number"]
+            native,_ = await retain_linked_native(client,h,engagement,linked_camt.replace(b"BANK-1",number.encode()).replace(b"AED",currency.encode()),currency)
+            books = await source(client,h,engagement,[{"id":"LINKED-B1","account":scope["account"],"reference":"PAY-1","date":"2026-06-01","currency":currency,"amount":"100"},{"id":"LINKED-B2","account":scope["account"],"reference":"FEE","date":"2026-06-02","currency":currency,"amount":"-5"}],"SYNTHETIC bank alias ledger books",totals={currency:"95"})
+            linked_sources = {}
+            for role,item in [("books",books),("statement",native)]:
+                approved = await decision(client,pdf_final_reviewer[0],engagement,item)
+                assert approved.status_code == 201, approved.text
+                linked_sources[role] = approved.json()["id"]
+            bank_account_binding[code] = {"engagement":engagement,"account":scope["account"],"currency":currency,"original_account":number,"review":review.json()["id"],"sources":linked_sources,"account_bank_source":entry["sources"]["bank"]}
         if implementation_hash() != implementation:
             raise RuntimeError(
                 "Backend implementation changed during fixture preparation; prepare fresh fixtures before browser verification"
@@ -837,6 +860,7 @@ async def main():
                     "synthetic": True,
                     "bank_dates": bank_dates,
                     "bank_account_evidence": bank_account_evidence,
+                    "bank_account_binding": bank_account_binding,
                     "regulatory_conversions": regulatory_conversions,
                     "pension_sources": pension_sources,
                     "published_pension": published_pension,

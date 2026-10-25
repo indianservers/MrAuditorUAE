@@ -513,6 +513,8 @@ class WorkflowInput(Strict):
     rationale: str = Field(min_length=10, max_length=4000)
     account: str | None = Field(default=None, max_length=120)
     currency: str = Field(default="AED", pattern=r"^[A-Z]{3}$")
+    bank_account_review_id: uuid.UUID | None = None
+    bank_account_scope_assessment: str = Field(default="",max_length=2000)
     bank_owner_name: str = Field(default="", max_length=200)
     bank_owner_identifier_scheme: str = Field(default="", max_length=80)
     bank_owner_identifier: str = Field(default="", max_length=120)
@@ -533,6 +535,11 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
+        if self.bank_account_review_id is not None:
+            if self.workflow not in {"bank-brs","bank-subsequent-clearance","obligation-bank-allocations"} or len(self.bank_account_scope_assessment.strip())<10:
+                raise ValueError("A bank account evidence link requires a supported financial workflow and meaningful scope assessment")
+        elif self.bank_account_scope_assessment:
+            raise ValueError("Account scope assessment requires an explicit reviewed bank account link")
         if self.workflow == "bank-account-evidence":
             if not self.account or any(not value.strip() for value in (self.bank_owner_name,self.bank_owner_identifier_scheme,self.bank_owner_identifier)):
                 raise ValueError("Account evidence comparison requires account and explicit owner name/identifier scope")
