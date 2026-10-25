@@ -4,9 +4,11 @@ Implementation checkpoint: 25 October 2026. These additions extend the existing 
 
 ## Supported profiles
 
+- [UAE import VAT detail review](uae-import-vat.md): customs/portal/books comparison with separate taxable-base/tax controls, current-version resolution and distinct declaration/adjustment populations. Reviewed selected populations can now feed the books side of VAT201 box comparison with independent controls and review. Native customs/EmaraTax qualification and whole-return composition remain open.
+
 - [Value-only XLSX supporting schedules](supporting-spreadsheets.md): reuse the shared guarded workbook reader with explicit worksheet scope, original numeric decimals, date-epoch receipts and physical row links. Independently reviewed schedules can feed the existing bank/open-item bridges without rewriting the original evidence.
 
-- [Reviewed supporting bank-table bridge](supporting-bank-bridge.md): reuse current independently reviewed bank rows with original evidence, row links, new independent controls and propagated staleness. This reuses existing CSV table normalization; PDF/OCR table qualification remains open.
+- [Reviewed supporting bank-table bridge](supporting-bank-bridge.md): reuse current independently reviewed bank rows with original evidence, row links, new independent controls and propagated staleness. Explicit PDF text grids are supported as described below; provider and OCR qualification remains open.
 - [Reviewed supporting open-item bridge](supporting-open-items-bridge.md): reuse receivable/payable schedules with explicit side, balance date and sign convention; retain invoice/credit-note/debit-note classification, due dates, segments and original balances for existing shared audit workflows.
 
 - [Original CSV column mapping](csv-column-mapping.md): explicit field-to-header mapping and declared exclusions, with original evidence retained. This extends canonical sources across shared and country workflows; it is not a qualified bank or government-format adapter and performs no amount/date conversion.
@@ -206,7 +208,7 @@ authentication of the certificate, extraction of its printed terms, legal tax co
 or a reservation of credit across filings and separate runs. Those qualifications remain
 open; `credit_entitlement` remains `NOT_DETERMINED`.
 
-Current receipts: `withholding-assessment-unit-results.xml` records 481 backend tests;
+Prior assessment checkpoint: `withholding-assessment-unit-results.xml` records 481 backend tests;
 `withholding-assessment-integration-results.xml` records ten database/API cases covering
 withholding, shared certificates, document ownership/integrity/replacement, existing
 payroll/UAE benefit rules, credit applications and supporting-table freshness.
@@ -229,6 +231,77 @@ calculation changes do not. Scope selection is not accepted from saved metadata.
 receipts and other result kinds retain their conservative global implementation guard.
 Evidence replacements and dependent-result freshness still propagate normally. This is
 file-level isolation for supporting tables, not complete dependency scoping for every engine.
+
+## Explicit PDF bank text grids
+
+Retained bank PDFs can now use an explicit text-grid profile in Supporting tables.
+Map the exact account and currency header values on every selected page, the data-row
+bands, and the amount or debit/credit columns. Select the sign convention explicitly.
+The authenticated raster preview supplies percentage coordinates; the original file
+remains unchanged. Reviewers see financial fields first and can expand all provenance.
+
+Extraction verifies the original hash in an isolated process, matches header values,
+rejects text crossing row or undeclared column boundaries, and retains page, row,
+native cell bounds, raw cell text, ignored-column bounds and selected/unselected pages.
+Cropped-page origins are preserved. Limits are 10 MiB, 20 pages, 5,000 selected row
+bands, 100,000 characters per page, one million total characters and 45 seconds.
+Encrypted, active-content, rotated, image-only and wrapped-row profiles are rejected.
+
+The resulting bank table requires independent review before the existing workflow-source
+bridge can consume it. Independent population totals and BRS opening/closing controls
+remain supplied separately; footer balances and whole-document completeness are not
+inferred. Header transcription checks do not establish ownership or authenticity.
+The two cases in `pdf-grid-integration-results.xml` exercise UAE/AED and India/INR
+extraction, independent approvals, source bridging, reconciliation, working papers,
+export and replacement staleness. These are synthetic fixtures, not provider qualification.
+
+`pdf-grid-unit-results.xml` records 22 reader cases and `pdf-grid-frontend-results.xml`
+records all 90 frontend tests. The PDF browser test uses distinct preparer and reviewer
+sessions, checks the preview has actually decoded, queues extraction and source bridging
+through the real worker, independently approves each stage and reconciles against a
+separately retained cashbook in AED and INR. A content-policy defect discovered by
+visual review was fixed to allow local blob images; image decoding is now asserted.
+Counts overlap previous checkpoints and are not additive.
+
+The combined `browser-results.json` receipt records five passing real-worker browser
+tests after fresh fixture preparation: PDF mapping/review/reconciliation in both countries,
+credit applications, India withholding role separation, UAE/native country controls and
+CSV/XLSX bridges. Production frontend build, type checking, scoped lint and UTF-8
+preflight also pass. A fixture variable collision found by the combined run was corrected
+so PDF cashbooks cannot replace the older UAE cashbook reference.
+
+## Source history beyond 100 events
+
+Country workflow and accounting-intelligence pickers now expose **Load older sources
+and results**. Each request remains bounded to 100 raw events. The newest-first API
+accepts `before=<event UUID>` and returns `next_before`; its keyset uses creation time
+and UUID together, so tied timestamps and concurrent new events do not shift an older
+page's boundary. Cursors must belong to the same tenant, engagement and kind filter.
+The existing ascending `after` interface remains available; incompatible cursor modes
+are rejected. Event access checks and freshness evaluation still run for every choice.
+
+The UI keeps the newest page live and a contiguous loaded history, deduplicates IDs
+with live values taking precedence, and refreshes the full loaded cursor chain after
+query invalidation. Retaining the history head prevents new results from pushing
+boundary rows out of both visible populations. Older pages do not poll continuously.
+Failed requests preserve the current choices and can be retried; history queries are
+partitioned by tenant and engagement. This removes the old picker cutoff rather than
+increasing a hidden fixed cap.
+
+`event-history-integration-results.xml` verifies 105 tied-time events, a concurrent
+insert, exhaustion, cursor/filter rejection and the legacy interface in the disposable
+database. `event-history-frontend-results.xml` records 94 passing frontend tests,
+including retries, invalidation, scope isolation and the live-boundary regression.
+The dedicated browser fixture retains a real reviewed cashbook behind 105 explicitly
+unreviewed synthetic placeholders; the placeholders have no qualified provenance and
+cannot substitute for approved sources. Its screenshot is
+`screenshots/native-sources/older-approved-source-selection.png`.
+
+After the live-boundary fix, the combined browser receipt records six passing tests
+(history selection plus the five country-workflow regressions). Production build,
+TypeScript checks, scoped frontend/backend lint and UTF-8 preflight pass. This verifies
+source-history navigation and the exercised synthetic workflows; it does not qualify
+100 client cases or the outstanding country legal packs.
 
 ## Remaining work
 

@@ -472,6 +472,68 @@ async def main():
                 approved = await decision(client, supporting_reviewer[0], india, prepared)
                 assert approved.status_code == 201, approved.text
                 withholding_sources[scope][role] = approved.json()["id"]
+        from tests.unit.test_import_vat import line as import_vat_line
+
+        import_vat_sources = {}
+        for role in ("customs", "portal", "books", "customs-ambiguous"):
+            import_rows = [
+                import_vat_line(),
+                import_vat_line(
+                    id="ADJ-1",
+                    entry_kind="adjustment",
+                    adjustment_reference="ADJ-1",
+                    net="-100",
+                    tax="-5",
+                ),
+            ]
+            if role == "customs-ambiguous":
+                import_rows.append(import_vat_line(id="IMPORT-REV2", record_version="2"))
+            for import_row in import_rows:
+                import_row["evidence_reference"] = f"SYNTHETIC-{role}-{import_row['id']}"
+            import_prepared = await source(
+                client,
+                h,
+                eid,
+                import_rows,
+                f"SYNTHETIC {role} import VAT details",
+                table_type="import-vat-lines",
+                totals={"AED": "95" if role == "customs-ambiguous" else "45"},
+                import_taxable_base_control="1900" if role == "customs-ambiguous" else "900",
+            )
+            import_reviewed = await decision(client, supporting_reviewer[0], eid, import_prepared)
+            assert import_reviewed.status_code == 201, import_reviewed.text
+            import_vat_sources[role] = import_reviewed.json()["id"]
+        import_box_parent = await execute(
+            client,
+            h,
+            eid,
+            "country-workflow",
+            {
+                "workflow": "uae-import-vat",
+                "source_ids": {
+                    role: import_vat_sources[role] for role in ("customs", "portal", "books")
+                },
+                "as_of": "2026-06-30",
+                "currency": "AED",
+                "title": "SYNTHETIC reviewed import detail for box bridge",
+                "rationale": "Independent assessed import details and signed corrections reviewed for selected-box comparison only",
+            },
+        )
+        import_box_approved = await decision(client, supporting_reviewer[0], eid, import_box_parent)
+        assert import_box_approved.status_code == 201, import_box_approved.text
+        from tests.unit.test_vat_box_scope import full_filed_boxes
+
+        import_filed = await source(
+            client,
+            h,
+            eid,
+            full_filed_boxes(),
+            "SYNTHETIC independently retained filed import boxes",
+            table_type="return-boxes",
+            totals={"AED": "230"},
+        )
+        import_filed_approved = await decision(client, supporting_reviewer[0], eid, import_filed)
+        assert import_filed_approved.status_code == 201, import_filed_approved.text
         pdf_evidence, pdf_books = {}, {}
         pdf_final_reviewer = await actor(h, "Firm Administrator", "browser-pdf-final-reviewer")
         for country, engagement, currency in (("AE", eid, "AED"), ("IN", india, "INR")):
@@ -482,7 +544,7 @@ async def main():
                 pdf_statement(currency),
                 "application/pdf",
             )
-            book = await source(
+            pdf_book = await source(
                 client,
                 h,
                 engagement,
@@ -507,9 +569,54 @@ async def main():
                 f"SYNTHETIC {country} independent PDF cashbook",
                 totals={currency: "95.25"},
             )
-            approved = await decision(client, supporting_reviewer[0], engagement, book)
+            approved = await decision(client, supporting_reviewer[0], engagement, pdf_book)
             assert approved.status_code == 201, approved.text
             pdf_books[country] = approved.json()["id"]
+        # Dedicated history engagement: never crowd the other workflow fixtures.
+        history_response = await client.post(
+            "/api/v1/engagements",
+            headers=h,
+            json={
+                "entity_id": opts["entity_id"],
+                "period_id": opts["period_id"],
+                "name": "SYNTHETIC source history pagination",
+                "engagement_type": "External Audit",
+            },
+        )
+        assert history_response.status_code == 201, history_response.text
+        history_eid = history_response.json()["id"]
+        await grant(client, h, f"/api/v1/engagements/{history_eid}/audit", supporting_reviewer)
+        history_source = await source(
+            client, h, history_eid, [transaction()], "SYNTHETIC retained older approved cashbook"
+        )
+        history_approval = await decision(
+            client, supporting_reviewer[0], history_eid, history_source
+        )
+        assert history_approval.status_code == 201, history_approval.text
+        import uuid
+
+        from app.db.session import Session, tenant_context
+        from app.modules.intelligence.models import IntelligenceEvent
+
+        async with Session() as history_db, history_db.begin():
+            await tenant_context(history_db, h["X-Tenant-ID"])
+            for index in range(105):
+                placeholder_id = uuid.uuid4()
+                history_db.add(
+                    IntelligenceEvent(
+                        id=placeholder_id,
+                        root_id=placeholder_id,
+                        version=1,
+                        tenant_id=uuid.UUID(h["X-Tenant-ID"]),
+                        engagement_id=uuid.UUID(history_eid),
+                        kind="source-table",
+                        body={
+                            "source_filename": f"SYNTHETIC unreviewed history placeholder {index}"
+                        },
+                        dependencies=[],
+                        sha256="0" * 64,
+                    )
+                )
         if implementation_hash() != implementation:
             raise RuntimeError(
                 "Backend implementation changed during fixture preparation; prepare fresh fixtures before browser verification"
@@ -519,6 +626,11 @@ async def main():
             json.dumps(
                 {
                     "synthetic": True,
+                    "import_vat_sources": import_vat_sources,
+                    "import_box_parent": import_box_approved.json()["id"],
+                    "import_filed_source": import_filed_approved.json()["id"],
+                    "history_engagement": history_eid,
+                    "history_source": history_approval.json()["id"],
                     "credit_application_sources": credit_sources,
                     "withholding_sources": withholding_sources,
                     "pdf_bank_evidence": pdf_evidence,

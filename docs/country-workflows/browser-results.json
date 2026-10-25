@@ -102,6 +102,142 @@
       "line": 0,
       "specs": [
         {
+          "title": "reviewed import detail feeds selected VAT201 books boxes and independent filed evidence",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 26624,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T01:12:03.259Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-5ef39276706f99c6f310",
+          "file": "country-workflows.spec.ts",
+          "line": 11,
+          "column": 1
+        },
+        {
+          "title": "UAE import VAT keeps declarations, adjustments and unresolved versions separate",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 17950,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T01:12:31.093Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-79e7fad08458ff4fe1b6",
+          "file": "country-workflows.spec.ts",
+          "line": 214,
+          "column": 1
+        },
+        {
+          "title": "older approved sources remain selectable beyond 100 events",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 3184,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T01:12:49.054Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-a130813f867235ec5e96",
+          "file": "country-workflows.spec.ts",
+          "line": 373,
+          "column": 1
+        },
+        {
+          "title": "UAE and India PDF grids preserve amounts and page provenance through the real worker",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 70852,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T01:12:52.248Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-9492b1ba84ae537836ad",
+          "file": "country-workflows.spec.ts",
+          "line": 421,
+          "column": 1
+        },
+        {
           "title": "UAE and India credit applications preserve residuals through the real worker",
           "ok": true,
           "tags": [],
@@ -117,12 +253,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 11269,
+                  "duration": 17572,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T22:34:43.645Z",
+                  "startTime": "2026-10-25T01:14:03.111Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -132,7 +268,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-48fd0976effc478074aa",
           "file": "country-workflows.spec.ts",
-          "line": 11,
+          "line": 719,
           "column": 1
         },
         {
@@ -151,12 +287,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 17319,
+                  "duration": 22772,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T22:34:56.068Z",
+                  "startTime": "2026-10-25T01:14:20.699Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -166,7 +302,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-c3b66c811297d61b2a1b",
           "file": "country-workflows.spec.ts",
-          "line": 112,
+          "line": 820,
           "column": 1
         },
         {
@@ -185,12 +321,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 42002,
+                  "duration": 62236,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T22:35:13.406Z",
+                  "startTime": "2026-10-25T01:14:43.486Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -200,7 +336,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-4910f104b29236674674",
           "file": "country-workflows.spec.ts",
-          "line": 314,
+          "line": 1022,
           "column": 1
         },
         {
@@ -219,12 +355,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 37558,
+                  "duration": 62383,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-24T22:35:55.426Z",
+                  "startTime": "2026-10-25T01:15:45.735Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -234,7 +370,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-21b42b359901fbf0cdc3",
           "file": "country-workflows.spec.ts",
-          "line": 722,
+          "line": 1430,
           "column": 1
         }
       ]
@@ -242,9 +378,9 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-24T22:34:43.143Z",
-    "duration": 111054.653,
-    "expected": 4,
+    "startTime": "2026-10-25T01:12:02.847Z",
+    "duration": 286343.529,
+    "expected": 8,
     "skipped": 0,
     "unexpected": 0,
     "flaky": 0

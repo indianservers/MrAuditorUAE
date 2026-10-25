@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { resolve } from "node:path";
@@ -7,6 +7,714 @@ const fixture = JSON.parse(
 );
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
+
+test("reviewed import detail feeds selected VAT201 books boxes and independent filed evidence", async ({
+  page,
+  browser,
+}) => {
+  test.setTimeout(150000);
+  page.setDefaultTimeout(15000);
+  const reviewerContext = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+    viewport: { width: 1600, height: 1100 },
+  });
+  const reviewer = await reviewerContext.newPage();
+  reviewer.setDefaultTimeout(15000);
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_final_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    const eid = fixture.uae_engagement;
+    await page.goto(`/intelligence/${eid}/country-workflow`);
+    await page
+      .getByLabel("Saved source or result")
+      .selectOption(fixture.import_box_parent);
+    await page
+      .getByText("Prepare selected import boxes for VAT201 comparison", {
+        exact: true,
+      })
+      .click();
+    await page
+      .getByLabel("Import box source title", { exact: true })
+      .fill(`SYNTHETIC import VAT book boxes ${Date.now()}`);
+    await page.getByLabel("Assessed import source role").selectOption("books");
+    for (const [label, value] of [
+      ["Box 6 expected detail rows", "1"],
+      ["Box 6 taxable amount (AED)", "1000"],
+      ["Box 6 tax (AED)", "50"],
+      ["Box 7 expected detail rows", "1"],
+      ["Box 7 taxable amount (AED)", "-100"],
+      ["Box 7 tax (AED)", "-5"],
+      [
+        "Import box scope assessment",
+        "Independently assessed book declaration and correction populations for selected Boxes 6 and 7; separate filed evidence retained.",
+      ],
+    ])
+      await page.getByLabel(label, { exact: true }).fill(value);
+    const created = page.waitForResponse(
+      (r) =>
+        r
+          .url()
+          .endsWith(
+            `/events/${fixture.import_box_parent}/import-vat-box-source`,
+          ) && r.request().method() === "POST",
+    );
+    await page
+      .getByRole("button", { name: "Prepare import box source", exact: true })
+      .click();
+    const sourceResponse = await created;
+    expect(sourceResponse.status(), await sourceResponse.text()).toBe(201);
+    const source = await sourceResponse.json();
+    await reviewer.goto(`/intelligence/${eid}/workflow-source`);
+    await reviewer.getByLabel("Saved source or result").selectOption(source.id);
+    await reviewer
+      .getByLabel("Review / exception rationale")
+      .fill(
+        "Independent control counts, signed import values, selected box scope and original source lineage checked.",
+      );
+    const sourceReview = reviewer.waitForResponse(
+      (r) =>
+        r.url().endsWith(`/events/${source.id}/review`) &&
+        r.request().method() === "POST",
+    );
+    await reviewer
+      .getByRole("button", { name: "Independent approval", exact: true })
+      .click();
+    const reviewed = await sourceReview;
+    expect(reviewed.status(), await reviewed.text()).toBe(201);
+    const bridge = await reviewed.json();
+    await page.goto(`/intelligence/${eid}/country-workflow`);
+    await page
+      .getByLabel("Workflow", { exact: true })
+      .selectOption("uae-vat-return");
+    const title = `SYNTHETIC reviewed import boxes versus filed VAT201 ${Date.now()}`;
+    for (const [label, value] of [
+      ["Schedule title", title],
+      ["Reconciliation date", "2026-06-30"],
+      ["Required VAT201 boxes, comma separated", "6,7"],
+      [
+        "Scope and source rationale",
+        "Selected assessed import boxes compared with independently retained filed VAT201 evidence; no whole-return or recovery conclusion.",
+      ],
+    ])
+      await page.getByLabel(label, { exact: true }).fill(value);
+    await page
+      .getByLabel("Compare only the required VAT201 boxes", { exact: true })
+      .check();
+    await page
+      .getByLabel("Selected VAT201 box scope assessment", { exact: true })
+      .fill(
+        "Only import boxes 6 and 7 are assessed; all twelve other retained filed boxes remain outside this comparison and are preserved for review.",
+      );
+    await page
+      .getByLabel("books source", { exact: true })
+      .selectOption(bridge.id);
+    await page
+      .getByLabel("return source", { exact: true })
+      .selectOption(fixture.import_filed_source);
+    const submitted = page.waitForResponse(
+      (r) =>
+        r.url().includes(`/engagements/${eid}/jobs`) &&
+        r.request().method() === "POST",
+    );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const response = await submitted;
+    expect(response.status(), await response.text()).toBe(202);
+    const job = await response.json();
+    let result = "";
+    await expect
+      .poll(
+        async () => {
+          const status = await page.request.get(
+            `/api/backend/intelligence/engagements/${eid}/jobs/${job.id}`,
+            { headers: { "X-Tenant-ID": fixture.tenant } },
+          );
+          const body = await status.json();
+          if (body.status === "failed")
+            throw new Error(JSON.stringify(body.error_details));
+          result = body.result_id || "";
+          return body.status;
+        },
+        { timeout: 45000 },
+      )
+      .toBe("completed");
+    await expect(
+      page
+        .getByLabel("Saved source or result")
+        .locator(`option[value="${result}"]`),
+    ).toHaveCount(1);
+    await page.getByLabel("Saved source or result").selectOption(result);
+    await expect(page.getByText("0 exceptions", { exact: true })).toBeVisible();
+    await reviewer.goto(`/intelligence/${eid}/country-workflow`);
+    await reviewer.getByLabel("Saved source or result").selectOption(result);
+    await reviewer
+      .getByLabel("Review / exception rationale")
+      .fill(
+        "Selected Box 6 and Box 7 values and separate filed evidence agreed; scope restricted to import boxes.",
+      );
+    const finalReview = reviewer.waitForResponse(
+      (r) =>
+        r.url().endsWith(`/events/${result}/review`) &&
+        r.request().method() === "POST",
+    );
+    await reviewer
+      .getByRole("button", { name: "Independent approval", exact: true })
+      .click();
+    expect((await finalReview).status()).toBe(201);
+    const panel = reviewer
+      .getByRole("heading", { name: title, exact: true })
+      .locator("..");
+    await expect(panel.getByText("REVIEWED", { exact: true })).toBeVisible();
+    const scope = panel.getByRole("region", {
+      name: "Selected VAT201 comparison scope",
+    });
+    await expect(scope).toContainText(
+      "Whole-return completeness is not determined",
+    );
+    await expect(scope).toContainText("return: 12 excluded rows");
+    const dismiss = reviewer.getByRole("button", {
+      name: "Dismiss notification",
+      exact: true,
+    });
+    if (await dismiss.isVisible()) await dismiss.click();
+    await saveScreenshot(`${shots}/uae-import-boxes-filed-comparison.png`, () =>
+      panel.screenshot(),
+    );
+    await scope
+      .getByText("Review 12 excluded VAT box rows", { exact: true })
+      .click();
+    await expect(
+      scope.getByRole("cell", { name: "FILED-1", exact: true }),
+    ).toBeVisible();
+    await saveScreenshot(`${shots}/uae-vat-selected-scope-exclusions.png`, () =>
+      scope.screenshot(),
+    );
+    await scope
+      .getByText("Review 12 excluded VAT box rows", { exact: true })
+      .click();
+    const download = reviewer.waitForEvent("download");
+    await panel
+      .getByRole("button", { name: "Export XLSX", exact: true })
+      .click();
+    expect((await download).suggestedFilename()).toMatch(/\.xlsx$/);
+  } finally {
+    await reviewerContext.close();
+  }
+});
+
+test("UAE import VAT keeps declarations, adjustments and unresolved versions separate", async ({
+  page,
+}) => {
+  page.setDefaultTimeout(15000);
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill("admin@example.com");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("test-strong-password-123");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+  await page.goto(`/intelligence/${fixture.india_engagement}/country-workflow`);
+  await expect(
+    page
+      .getByLabel("Workflow", { exact: true })
+      .locator('option[value="uae-import-vat"]'),
+  ).toHaveCount(0);
+  const eid = fixture.uae_engagement;
+  for (const ambiguous of [false, true]) {
+    await page.goto(`/intelligence/${eid}/country-workflow`);
+    await page
+      .getByLabel("Workflow", { exact: true })
+      .selectOption("uae-import-vat");
+    const title = `SYNTHETIC UAE import VAT ${ambiguous ? "unresolved versions" : "independent comparison"} ${Date.now()}`;
+    await page.getByLabel("Schedule title", { exact: true }).fill(title);
+    await page
+      .getByLabel("Reconciliation date", { exact: true })
+      .fill("2026-06-30");
+    await page
+      .getByLabel("Scope and source rationale")
+      .fill(
+        "Independently assessed customs, portal and book details; declarations and corrections compared without automatic return or recovery conclusions.",
+      );
+    for (const role of ["customs", "portal", "books"])
+      await page
+        .getByLabel(`${role} source`, { exact: true })
+        .selectOption(
+          fixture.import_vat_sources[
+            role === "customs" && ambiguous ? "customs-ambiguous" : role
+          ],
+        );
+    const submitted = page.waitForResponse(
+      (r) =>
+        r.url().includes(`/engagements/${eid}/jobs`) &&
+        r.request().method() === "POST",
+    );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const response = await submitted;
+    expect(response.status(), await response.text()).toBe(202);
+    const job = await response.json();
+    let result = "";
+    await expect
+      .poll(
+        async () => {
+          const status = await page.request.get(
+            `/api/backend/intelligence/engagements/${eid}/jobs/${job.id}`,
+            { headers: { "X-Tenant-ID": fixture.tenant } },
+          );
+          const body = await status.json();
+          if (body.status === "failed")
+            throw new Error(JSON.stringify(body.error_details));
+          result = body.result_id || "";
+          return body.status;
+        },
+        { timeout: 45000 },
+      )
+      .toBe("completed");
+    await expect(
+      page
+        .getByLabel("Saved source or result")
+        .locator(`option[value="${result}"]`),
+    ).toHaveCount(1);
+    await page.getByLabel("Saved source or result").selectOption(result);
+    await expect(
+      page.getByRole("heading", { name: title, exact: true }),
+    ).toBeVisible();
+    const totals = page.getByRole("table", {
+      name: "Import VAT selected population totals",
+    });
+    await expect(
+      totals.getByRole("cell", { name: "declaration / 6", exact: true }),
+    ).toHaveCount(3);
+    await expect(
+      totals.getByRole("cell", { name: "adjustment / 7", exact: true }),
+    ).toHaveCount(3);
+    if (ambiguous) {
+      await expect(
+        page.getByRole("alert").filter({ hasText: "Approval blocked" }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("button", { name: "Independent approval", exact: true }),
+      ).toBeDisabled();
+      await expect(
+        page.getByRole("cell", {
+          name: '["CUSTOMS_CURRENT_VERSION_UNRESOLVED"]',
+          exact: true,
+        }),
+      ).toBeVisible();
+    } else {
+      await expect(
+        page.getByText("0 exceptions", { exact: true }),
+      ).toBeVisible();
+      await expect(
+        totals.getByRole("cell", { name: "50", exact: true }),
+      ).toHaveCount(3);
+      await expect(
+        totals.getByRole("cell", { name: "-5", exact: true }),
+      ).toHaveCount(3);
+      const download = page.waitForEvent("download");
+      await page
+        .getByRole("button", { name: "Export XLSX", exact: true })
+        .click();
+      expect((await download).suggestedFilename()).toMatch(/\.xlsx$/);
+    }
+    const dismiss = page.getByRole("button", {
+      name: "Dismiss notification",
+      exact: true,
+    });
+    if (await dismiss.isVisible()) await dismiss.click();
+    await saveScreenshot(
+      `${shots}/uae-import-vat-${ambiguous ? "unresolved-versions" : "declarations-adjustments"}.png`,
+      () =>
+        page
+          .getByRole("heading", { name: title, exact: true })
+          .locator("..")
+          .screenshot(),
+    );
+    const rowRegion = page
+      .getByRole("table")
+      .filter({
+        has: page.getByRole("columnheader", {
+          name: "declaration",
+          exact: true,
+        }),
+      })
+      .locator("..");
+    await rowRegion.scrollIntoViewIfNeeded();
+    await saveScreenshot(
+      `${shots}/uae-import-vat-${ambiguous ? "unresolved" : "matched"}-rows.png`,
+      () => rowRegion.screenshot(),
+    );
+    if (
+      await rowRegion.evaluate(
+        (element) => element.scrollWidth > element.clientWidth,
+      )
+    ) {
+      await rowRegion.evaluate((element) => {
+        element.scrollLeft = element.scrollWidth;
+      });
+      await saveScreenshot(
+        `${shots}/uae-import-vat-${ambiguous ? "unresolved" : "matched"}-row-decisions.png`,
+        () => rowRegion.screenshot(),
+      );
+    }
+  }
+});
+
+test("older approved sources remain selectable beyond 100 events", async ({
+  page,
+}) => {
+  page.setDefaultTimeout(15000);
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill("admin@example.com");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("test-strong-password-123");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+  await page.goto(
+    `/intelligence/${fixture.history_engagement}/country-workflow`,
+  );
+  await expect(
+    page
+      .getByLabel("books source", { exact: true })
+      .locator(`option[value="${fixture.history_source}"]`),
+  ).toHaveCount(0);
+  await page
+    .getByRole("button", {
+      name: "Load older sources and results",
+      exact: true,
+    })
+    .click();
+  await expect(
+    page
+      .getByLabel("books source", { exact: true })
+      .locator(`option[value="${fixture.history_source}"]`),
+  ).toHaveCount(1);
+  await page
+    .getByLabel("books source", { exact: true })
+    .selectOption(fixture.history_source);
+  await page
+    .getByLabel("Saved source or result")
+    .selectOption(fixture.history_source);
+  await expect(page.getByText("REVIEWED", { exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("button", {
+      name: "Load older sources and results",
+      exact: true,
+    }),
+  ).toHaveCount(0);
+  await saveScreenshot(`${shots}/older-approved-source-selection.png`, () =>
+    page.screenshot({ fullPage: true }),
+  );
+});
+
+test("UAE and India PDF grids preserve amounts and page provenance through the real worker", async ({
+  page,
+  browser,
+}) => {
+  test.setTimeout(180000);
+  page.setDefaultTimeout(15000);
+  const reviewerContexts = await Promise.all([
+    browser.newContext({ baseURL: "http://127.0.0.1:3010" }),
+    browser.newContext({ baseURL: "http://127.0.0.1:3010" }),
+  ]);
+  const reviewers = await Promise.all(
+    reviewerContexts.map((context) => context.newPage()),
+  );
+  reviewers.forEach((reviewer) => reviewer.setDefaultTimeout(15000));
+  async function approve(actor: Page, eid: string, button: string) {
+    const response = actor.waitForResponse(
+      (r) =>
+        r.url().includes(`/engagements/${eid}/events/`) &&
+        r.url().endsWith("/review") &&
+        r.request().method() === "POST",
+    );
+    await actor.getByRole("button", { name: button, exact: true }).click();
+    const reviewed = await response;
+    expect(reviewed.status(), await reviewed.text()).toBe(201);
+    return (await reviewed.json()).id as string;
+  }
+  async function queueWorkflow(eid: string) {
+    const response = page.waitForResponse(
+      (r) =>
+        r.url().includes(`/engagements/${eid}/jobs`) &&
+        r.request().method() === "POST",
+    );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const submitted = await response;
+    expect(submitted.status(), await submitted.text()).toBe(202);
+    const job = await submitted.json();
+    let result = "";
+    await expect
+      .poll(
+        async () => {
+          const status = await page.request.get(
+            `/api/backend/intelligence/engagements/${eid}/jobs/${job.id}`,
+            { headers: { "X-Tenant-ID": fixture.tenant } },
+          );
+          const body = await status.json();
+          if (body.status === "failed")
+            throw new Error(JSON.stringify(body.error_details));
+          result = body.result_id || "";
+          return body.status;
+        },
+        { timeout: 45000 },
+      )
+      .toBe("completed");
+    await expect(
+      page
+        .getByLabel("Saved source or result")
+        .locator(`option[value="${result}"]`),
+    ).toHaveCount(1);
+    await page.getByLabel("Saved source or result").selectOption(result);
+    return result;
+  }
+  try {
+    for (const [index, email] of [
+      fixture.pdf_table_reviewer_email,
+      fixture.pdf_final_reviewer_email,
+    ].entries()) {
+      const reviewer = reviewers[index];
+      await reviewer.goto("/login");
+      await reviewer.getByLabel("Email address").fill(email);
+      await reviewer
+        .getByLabel("Password", { exact: true })
+        .fill("synthetic-password-123");
+      await reviewer
+        .getByRole("button", { name: "Sign in", exact: true })
+        .click();
+      await reviewer.waitForURL("**/dashboard");
+    }
+    await page.goto("/login");
+    await page.getByLabel("Email address").fill("admin@example.com");
+    await page
+      .getByLabel("Password", { exact: true })
+      .fill("test-strong-password-123");
+    await page.getByRole("button", { name: "Sign in", exact: true }).click();
+    await page.waitForURL("**/dashboard");
+    for (const [country, eid] of [
+      ["AE", fixture.uae_engagement],
+      ["IN", fixture.india_engagement],
+    ]) {
+      const layout = fixture.pdf_bank_layouts[country];
+      await page.goto(`/intelligence/${eid}/source-table`);
+      await page
+        .getByLabel("Evidence version")
+        .selectOption(fixture.pdf_bank_evidence[country]);
+      await page.getByLabel("Map a PDF bank text grid").check();
+      await page
+        .getByLabel("PDF account header", { exact: true })
+        .fill(layout.account);
+      await page.getByLabel("PDF statement currency").fill(layout.currency);
+      await page
+        .getByLabel("PDF amount convention")
+        .selectOption(layout.amount_basis);
+      for (const [field, bounds] of Object.entries(layout.columns) as [
+        string,
+        Record<string, number>,
+      ][]) {
+        for (const [edge, value] of Object.entries(bounds))
+          await page
+            .getByLabel(`PDF ${field} column ${edge} (%)`, { exact: true })
+            .fill(String(value));
+      }
+      for (const field of ["page", "top", "row_height", "row_count"])
+        await page
+          .getByLabel(`PDF grid 1 ${field.replaceAll("_", " ")}`, {
+            exact: true,
+          })
+          .fill(String(layout.pages[0][field]));
+      for (const header of ["account_header", "currency_header"])
+        for (const [edge, value] of Object.entries(layout.pages[0][header]))
+          await page
+            .getByLabel(
+              `PDF grid 1 ${header.replaceAll("_", " ")} ${edge} (%)`,
+              {
+                exact: true,
+              },
+            )
+            .fill(String(value));
+      await page
+        .getByLabel("PDF scope and excluded-column assessment")
+        .fill(layout.scope_assessment);
+      await page
+        .getByRole("button", { name: "Show retained PDF preview", exact: true })
+        .click();
+      await expect(
+        page.getByAltText("Raster preview of the retained PDF page"),
+      ).toBeVisible();
+      await expect
+        .poll(() =>
+          page
+            .getByAltText("Raster preview of the retained PDF page")
+            .evaluate((image) => (image as HTMLImageElement).naturalWidth),
+        )
+        .toBeGreaterThan(0);
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-pdf-grid-mapping.png`,
+        () =>
+          page
+            .getByRole("region", { name: "PDF text-grid mapping" })
+            .screenshot(),
+      );
+      const submitted = page.waitForResponse(
+        (r) =>
+          r.url().includes(`/engagements/${eid}/jobs`) &&
+          r.request().method() === "POST",
+      );
+      await page
+        .getByRole("button", { name: "Queue supporting tables", exact: true })
+        .click();
+      const response = await submitted;
+      expect(response.status(), await response.text()).toBe(202);
+      const job = await response.json();
+      let result = "";
+      await expect
+        .poll(
+          async () => {
+            const status = await page.request.get(
+              `/api/backend/intelligence/engagements/${eid}/jobs/${job.id}`,
+              { headers: { "X-Tenant-ID": fixture.tenant } },
+            );
+            expect(status.status()).toBe(200);
+            const body = await status.json();
+            if (body.status === "failed")
+              throw new Error(JSON.stringify(body.error_details));
+            result = body.result_id || "";
+            return body.status;
+          },
+          { timeout: 45000 },
+        )
+        .toBe("completed");
+      await expect(
+        page.getByLabel("Result version").locator(`option[value="${result}"]`),
+      ).toHaveCount(1);
+      await page.getByLabel("Result version").selectOption(result);
+      await expect(
+        page.getByRole("cell", { name: "100.25", exact: true }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("cell", { name: "-5", exact: true }),
+      ).toBeVisible();
+      await page.getByLabel("Show all supporting-table provenance").check();
+      await expect(
+        page.getByRole("columnheader", {
+          name: "source_pdf_bbox",
+          exact: true,
+        }),
+      ).toBeVisible();
+      await reviewers[0].goto(
+        `/intelligence/${eid}/source-table?event=${result}`,
+      );
+      await reviewers[0].getByLabel("Result version").selectOption(result);
+      await expect(
+        reviewers[0].getByRole("cell", { name: "100.25", exact: true }),
+      ).toBeVisible();
+      await reviewers[0]
+        .getByLabel("Auditor rationale / review comments")
+        .fill(
+          "Independently checked synthetic PDF row population, verified headers, sign convention and page provenance against original evidence.",
+        );
+      const approvedTable = await approve(
+        reviewers[0],
+        eid,
+        "Record independent approval",
+      );
+      await page.goto(`/intelligence/${eid}/workflow-source`);
+      await page.getByLabel("Source origin").selectOption("supporting");
+      await page
+        .getByLabel("Reviewed supporting bank table")
+        .selectOption(approvedTable);
+      await page
+        .getByLabel("Schedule title", { exact: true })
+        .fill(`SYNTHETIC ${country} PDF bridge ${Date.now()}`);
+      await page.getByLabel("Bank account identifier").fill("BANK-1");
+      await page
+        .getByLabel("Supporting bank account scope assessment")
+        .fill(
+          "Independent selected PDF population checked against retained original account and currency headers.",
+        );
+      await page.getByLabel("Expected data rows").fill("2");
+      await page
+        .getByLabel("Independent totals by currency")
+        .fill(`${layout.currency}=95.25`);
+      const bridge = await queueWorkflow(eid);
+      await reviewers[1].goto(`/intelligence/${eid}/workflow-source`);
+      await reviewers[1]
+        .getByLabel("Saved source or result")
+        .selectOption(bridge);
+      await reviewers[1]
+        .getByLabel("Review / exception rationale")
+        .fill(
+          "Independent control totals and original PDF lineage checked before approval.",
+        );
+      const approvedBridge = await approve(
+        reviewers[1],
+        eid,
+        "Independent approval",
+      );
+      await page.goto(`/intelligence/${eid}/country-workflow`);
+      const title = `SYNTHETIC ${country} PDF bank reconciliation ${Date.now()}`;
+      for (const [label, value] of [
+        ["Schedule title", title],
+        ["Reconciliation date", "2026-06-30"],
+        ["Bank account identifier", "BANK-1"],
+        ["Account currency", layout.currency],
+        ["book opening", "0"],
+        ["book closing", "95.25"],
+        ["statement opening", "0"],
+        ["statement closing", "95.25"],
+        [
+          "Scope and source rationale",
+          "Independent cashbook compared to reviewed retained PDF statement with independent opening and closing controls.",
+        ],
+      ])
+        await page.getByLabel(label, { exact: true }).fill(value);
+      await page
+        .getByLabel("books source", { exact: true })
+        .selectOption(fixture.pdf_bank_books[country]);
+      await page
+        .getByLabel("statement source", { exact: true })
+        .selectOption(approvedBridge);
+      const reconciliation = await queueWorkflow(eid);
+      await expect(
+        page.getByText("0 exceptions", { exact: true }),
+      ).toBeVisible();
+      await reviewers[1].goto(`/intelligence/${eid}/country-workflow`);
+      await reviewers[1]
+        .getByLabel("Saved source or result")
+        .selectOption(reconciliation);
+      await reviewers[1]
+        .getByLabel("Review / exception rationale")
+        .fill(
+          "Independent cashbook and statement comparison, balances and zero exceptions checked.",
+        );
+      await approve(reviewers[1], eid, "Independent approval");
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-pdf-bank-reconciliation.png`,
+        () =>
+          page
+            .getByRole("heading", { name: title, exact: true })
+            .locator("..")
+            .screenshot(),
+      );
+    }
+  } finally {
+    await Promise.all(reviewerContexts.map((context) => context.close()));
+  }
+});
 
 test("UAE and India credit applications preserve residuals through the real worker", async ({
   page,

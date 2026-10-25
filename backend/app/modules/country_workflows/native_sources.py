@@ -261,6 +261,12 @@ def camt(content, data):
 
 
 def mt940(content, data):
+    from app.modules.country_workflows.mt940_pages import assemble
+
+    return assemble(content, data, _mt940_page)
+
+
+def _mt940_page(content, data, *, intermediate=False):
     try:
         text = content.decode("utf-8-sig")
     except UnicodeDecodeError:
@@ -286,9 +292,11 @@ def mt940(content, data):
             records[-1][1] += "\n" + line
         else:
             raise ValueError("Unsupported MT940 line or field continuation")
-    if len(records) > 15010:
+    if len(records) > 15010 or any(len(value) > 4000 for tag, value in records):
         raise ValueError("MT940 field bound exceeded")
     allowed = {"20", "21", "25", "28C", "60F", "61", "86", "62F", "64", "65", "13D"}
+    if intermediate:
+        allowed |= {"60M", "62M"}
     if any(tag not in allowed for tag, value in records):
         raise ValueError("Partial or unsupported MT940 statement fields")
 
@@ -298,7 +306,13 @@ def mt940(content, data):
     statement = field("20")
     account = field("25")
     sequence = field("28C")
-    if "/" in sequence and sequence.split("/")[-1].lstrip("0") not in {"", "1"}:
+    if (
+        not 1 <= len(statement) <= 16
+        or not 1 <= len(account) <= 35
+        or not re.fullmatch(r"\d{1,5}(?:/\d{1,5})?", sequence)
+    ):
+        raise ValueError("Invalid MT940 message reference, account or statement sequence format")
+    if not intermediate and "/" in sequence and sequence.split("/")[-1].lstrip("0") != "1":
         raise ValueError("Multi-page MT940 statement requires page assembly")
     if data.account_identifier and data.account_identifier != account:
         raise ValueError("MT940 account differs from the explicitly selected account")
@@ -317,18 +331,75 @@ def mt940(content, data):
             raise ValueError("Invalid MT940 balance field")
         return number(m[4], comma=True) * (1 if m[1] == "C" else -1), short_date(m[2]), m[3]
 
-    opening, start, currency = balance(field("60F"))
-    closing, end, closing_currency = balance(field("62F"))
+    opening_tag = single(
+        [tag for tag, value in records if tag in {"60F", "60M"}], "MT940 opening balance"
+    )
+    closing_tag = single(
+        [tag for tag, value in records if tag in {"62F", "62M"}], "MT940 closing balance"
+    )
+    opening, start, currency = balance(field(opening_tag))
+    closing, end, closing_currency = balance(field(closing_tag))
     if currency != closing_currency or end < start:
         raise ValueError("MT940 balance currencies or dates are inconsistent")
     tags = [tag for tag, value in records]
-    opening_index, closing_index = tags.index("60F"), tags.index("62F")
-    if not tags.index("20") < tags.index("25") < opening_index < closing_index or any(
-        tag in {"61", "86"} and not opening_index < i < closing_index for i, tag in enumerate(tags)
+    opening_index, closing_index = tags.index(opening_tag), tags.index(closing_tag)
+    if (
+        tags[0] != "20"
+        or not tags.index("20")
+        < tags.index("25")
+        < tags.index("28C")
+        < opening_index
+        < closing_index
+        or any(
+            (tag == "61" and not opening_index < i < closing_index)
+            or (tag == "86" and i < opening_index)
+            or (tag in {"64", "65"} and i < closing_index)
+            for i, tag in enumerate(tags)
+        )
     ):
         raise ValueError("MT940 booking fields must lie between opening and closing balances")
+    for optional in ("21", "64", "13D"):
+        if tags.count(optional) > 1:
+            raise ValueError("Duplicate MT940 optional header or balance field")
+    if sum(tag == "86" and index > closing_index for index, tag in enumerate(tags)) > 1:
+        raise ValueError("Duplicate MT940 closing statement information")
+    if "21" in tags and len(field("21")) > 16:
+        raise ValueError("Invalid MT940 related-reference width")
+    if "13D" in tags:
+        timestamp = field("13D")
+        if not re.fullmatch(r"\d{10}[+-]\d{4}", timestamp) or int(timestamp[-4:-2]) > 23 or int(timestamp[-2:]) > 59:
+            raise ValueError("Invalid MT940 date/time indication")
+        try:
+            datetime.strptime(timestamp[:10], "%y%m%d%H%M")
+        except ValueError:
+            raise ValueError("Invalid MT940 date/time indication") from None
+    if "21" in tags and not tags.index("20") < tags.index("21") < tags.index("25"):
+        raise ValueError("Invalid MT940 related-reference placement")
+    auxiliary = []
+    for index, (tag, value) in enumerate(records):
+        if tag in {"64", "65"}:
+            if balance(value.strip())[2] != currency:
+                raise ValueError("MT940 available balance currency differs from booked currency")
+        if tag in {"21", "64", "65", "13D"} or (tag == "86" and index > closing_index):
+            auxiliary.append(
+                {
+                    "tag": tag,
+                    "value": value,
+                    "source_message_field": index + 1,
+                    "basis": "NOT_A_BOOKED_TRANSACTION",
+                }
+            )
+            if len(auxiliary) > 100:
+                raise ValueError("MT940 auxiliary field bound exceeded")
     rows: list[dict[str, Any]] = []
     for index, (tag, value) in enumerate(records):
+        if tag == "86" and opening_index < index < closing_index:
+            if not rows:
+                raise ValueError("MT940 transaction information has no preceding statement line")
+            information = rows[-1].setdefault("source_mt940_information", [])
+            if sum(map(len, information)) + len(value) > 4000:
+                raise ValueError("MT940 transaction information exceeds supported bound")
+            information.append(value)
         if tag != "61":
             continue
         m = re.fullmatch(
@@ -349,7 +420,7 @@ def mt940(content, data):
                 booked = date(year, month, day)
             except ValueError:
                 raise ValueError("Invalid MT940 entry date") from None
-        if not start <= booked <= end:
+        if not intermediate and not start <= booked <= end:
             raise ValueError("MT940 entry date lies outside the complete statement period")
         reference = m[7].split("//")[0].strip()
         if reference in {"NONREF", "NOTPROVIDED"}:
@@ -367,6 +438,7 @@ def mt940(content, data):
             source_row=index + 1,
             bank_value_date=value_date.isoformat(),
             is_reversal=m[3].startswith("R"),
+            source_mt940_entry=value,
         )
         rows.append(row)
         if len(rows) > 5000:
@@ -375,6 +447,10 @@ def mt940(content, data):
         raise ValueError("MT940 opening plus transactions does not agree to closing balance")
     return rows, {
         "statement_id": statement,
+        "opening_tag": opening_tag,
+        "closing_tag": closing_tag,
+        "field_count": len(records),
+        "auxiliary_fields": auxiliary,
         "statement_sequence": sequence,
         "account": account,
         "currency": currency,

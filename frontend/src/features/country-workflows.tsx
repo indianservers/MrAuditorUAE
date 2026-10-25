@@ -3,9 +3,94 @@
 import Link from "next/link";
 import { useState } from "react";
 import { useAPI, useAction, useCan } from "@/hooks/use-api";
+import { useEventHistory } from "@/hooks/use-event-history";
 import { useScope } from "@/stores/workspace";
 import { Button, ErrorState, Status } from "@/components/ui/primitives";
 import { PageHeader } from "./shared";
+
+function ExcludedVATBoxes({
+  prefix,
+  selected,
+  initial,
+  total,
+}: {
+  prefix: string;
+  selected: string;
+  initial: Record<string, unknown>[];
+  total: number;
+}) {
+  const [offset, setOffset] = useState(0);
+  const page = useAPI<Result>(
+    `${prefix}/events/${selected}?limit=1&excluded_offset=${offset}&excluded_limit=100`,
+    offset > 0,
+  );
+  const rows = offset ? page.data?.body.excluded_box_rows || [] : initial;
+  const columns = [
+    "source_role",
+    "source_row_id",
+    "registration",
+    "period_start",
+    "period_end",
+    "box",
+    "currency",
+    "taxable_amount",
+    "tax",
+    "adjustment",
+  ];
+  if (!total) return null;
+  return (
+    <details>
+      <summary>Review {total} excluded VAT box rows</summary>
+      <ErrorState error={page.error} />
+      {page.error && (
+        <Button onClick={() => void page.refetch()}>Retry excluded rows</Button>
+      )}
+      <p>
+        {page.isFetching && offset > 0
+          ? "Loading excluded rows…"
+          : rows.length
+            ? `Excluded rows ${offset + 1}–${offset + rows.length} of ${total}. This list has its own page controls.`
+            : "Excluded rows are unavailable for this page."}
+      </p>
+      <div style={{ overflowX: "auto" }}>
+        <table aria-label="Excluded VAT box rows">
+          <thead>
+            <tr>
+              {columns.map((column) => (
+                <th key={column}>{column.replaceAll("_", " ")}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, index) => (
+              <tr key={`${row.source_role}:${row.source_row_id}:${index}`}>
+                {columns.map((column) => (
+                  <td key={column}>{text(row[column])}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="toolbar" aria-label="Excluded VAT box pages">
+        <Button
+          disabled={!offset || page.isFetching}
+          onClick={() => setOffset(Math.max(0, offset - 100))}
+        >
+          Previous excluded rows
+        </Button>
+        <Button
+          disabled={
+            offset + rows.length >= total || page.isFetching || !rows.length
+          }
+          onClick={() => setOffset(offset + 100)}
+        >
+          Next excluded rows
+        </Button>
+      </div>
+    </details>
+  );
+}
 
 type Choice = {
   id: string;
@@ -35,6 +120,18 @@ type Result = {
     workflow?: string;
     expected_total?: string;
     reported_total?: string;
+    role_totals?: Record<
+      string,
+      Record<
+        string,
+        {
+          net: string | null;
+          tax: string | null;
+          selected_rows: number;
+          complete_for_selected_population: boolean;
+        }
+      >
+    >;
     expected_total_complete?: boolean;
     title: string;
     review_status: string;
@@ -46,6 +143,16 @@ type Result = {
     rows: Record<string, unknown>[];
     limitations?: string[];
     control_comparison?: Record<string, string>;
+    box_comparison_scope?: {
+      mode: string;
+      required_boxes: string[];
+      assessment: string | null;
+      excluded_rows: Record<string, number>;
+      whole_return_completeness: string;
+    };
+    excluded_box_rows?: Record<string, unknown>[];
+    excluded_box_controls?: Record<string, unknown>[];
+    included_box_controls?: Record<string, unknown>[];
     native_metadata?: Record<string, unknown>;
     supporting_table_id?: string;
     supporting_scope_assessment?: string;
@@ -100,6 +207,7 @@ const moneyTables = [
   "expense-claims",
   "benefit-employees",
   "trade-lines",
+  "import-vat-lines",
   "excise-movements",
   "excise-returns",
   "escrow-entries",
@@ -144,11 +252,7 @@ export function CountryWorkflows({
     evidence: { id: string; label: string; scan_status: string }[];
     snapshots: { id: string; label: string }[];
   }>(`${prefix}/inputs`);
-  const results = useAPI<{ items: Choice[] }>(
-    `${prefix}/events?limit=100&newest=true`,
-    true,
-    true,
-  );
+  const results = useEventHistory<Choice>(prefix);
   const jobs = useAPI<{
     items: {
       id: string;
@@ -213,6 +317,20 @@ export function CountryWorkflows({
   const [expectedRows, setExpectedRows] = useState("1");
   const [nilReason, setNilReason] = useState("");
   const [totals, setTotals] = useState("AED=0");
+  const [importBaseControl, setImportBaseControl] = useState("");
+  const [importBridgeRole, setImportBridgeRole] = useState("");
+  const [importBridgeLabel, setImportBridgeLabel] = useState("");
+  const [importBridgeAssessment, setImportBridgeAssessment] = useState("");
+  const [importBridgeBoxes, setImportBridgeBoxes] = useState({
+    "6": true,
+    "7": true,
+  });
+  const [importBridgeControls, setImportBridgeControls] = useState<
+    Record<string, Record<string, string>>
+  >({
+    "6": { expected_rows: "", taxable_amount: "", tax: "" },
+    "7": { expected_rows: "", taxable_amount: "", tax: "" },
+  });
   const [sources, setSources] = useState<Record<string, string>>({});
   const [asOf, setAsOf] = useState("");
   const [reviewThrough, setReviewThrough] = useState("");
@@ -220,6 +338,8 @@ export function CountryWorkflows({
   const [taxYear, setTaxYear] = useState("");
   const [requiredChecks, setRequiredChecks] = useState("");
   const [requiredBoxes, setRequiredBoxes] = useState("");
+  const [restrictBoxes, setRestrictBoxes] = useState(false);
+  const [boxScopeAssessment, setBoxScopeAssessment] = useState("");
   const [subjects, setSubjects] = useState("");
   const [account, setAccount] = useState("");
   const [currency, setCurrency] = useState("AED");
@@ -243,6 +363,7 @@ export function CountryWorkflows({
     detail.data?.kind === "workflow-source" &&
     ["transactions", "audit-open-items"].includes(body?.table_type || "");
   const compactCredit = body?.workflow === "credit-note-applications";
+  const compactImport = body?.workflow === "uae-import-vat";
   const compactWithholding = [
     "india-withholding-liability",
     "india-withholding-credit",
@@ -255,89 +376,101 @@ export function CountryWorkflows({
         row.assessment_issues.length > 0,
     );
   const columns =
-    compactWithholding && !showRuleProvenance
+    compactImport && !showRuleProvenance
       ? [
-          "transaction_reference",
-          "counterparty",
-          "legal_role",
-          "tax_kind",
-          "period",
-          "currency",
+          "declaration",
+          "line_reference",
+          "entry_kind",
+          "adjustment_reference",
+          "vat201_box",
           "amounts",
-          ...(assessmentAttention
-            ? ["comparison_state", "assessment_issues"]
-            : []),
-          "differences_from_expected",
-          "differences_from_books",
+          "differences",
+          "exceptions",
           "state",
         ].filter((key) => allColumns.includes(key))
-      : compactCredit && !showRuleProvenance
+      : compactWithholding && !showRuleProvenance
         ? [
-            "kind",
-            "item_id",
+            "transaction_reference",
+            "counterparty",
+            "legal_role",
+            "tax_kind",
+            "period",
             "currency",
-            "amount",
-            "original_balance",
-            "applied",
-            "remaining_balance",
-            "control_amount",
-            "difference",
+            "amounts",
+            ...(assessmentAttention
+              ? ["comparison_state", "assessment_issues"]
+              : []),
+            "differences_from_expected",
+            "differences_from_books",
             "state",
           ].filter((key) => allColumns.includes(key))
-        : compactSource && !showRuleProvenance
-          ? (body?.table_type === "transactions"
+        : compactCredit && !showRuleProvenance
+          ? [
+              "kind",
+              "item_id",
+              "currency",
+              "amount",
+              "original_balance",
+              "applied",
+              "remaining_balance",
+              "control_amount",
+              "difference",
+              "state",
+            ].filter((key) => allColumns.includes(key))
+          : compactSource && !showRuleProvenance
+            ? (body?.table_type === "transactions"
+                ? [
+                    "reference",
+                    "account",
+                    "date",
+                    "currency",
+                    "amount",
+                    "counterparty",
+                    "source_debit",
+                    "source_credit",
+                  ]
+                : [
+                    "reference",
+                    "counterparty",
+                    "account",
+                    "side",
+                    "currency",
+                    "document_type",
+                    "document_date",
+                    "due_date",
+                    "balance_date",
+                    "amount",
+                    "supporting_reported_open_amount",
+                  ]
+              ).filter((key) => allColumns.includes(key))
+            : body?.workflow === "india-payroll-rules" && !showRuleProvenance
               ? [
-                  "reference",
-                  "account",
-                  "date",
-                  "currency",
-                  "amount",
-                  "counterparty",
-                  "source_debit",
-                  "source_credit",
-                ]
-              : [
-                  "reference",
-                  "counterparty",
-                  "account",
-                  "side",
-                  "currency",
-                  "document_type",
-                  "document_date",
-                  "due_date",
-                  "balance_date",
-                  "amount",
-                  "supporting_reported_open_amount",
-                ]
-            ).filter((key) => allColumns.includes(key))
-          : body?.workflow === "india-payroll-rules" && !showRuleProvenance
-            ? [
-                "subject",
-                "period",
-                "component",
-                "currency",
-                "assessed_base",
-                "expected_amount",
-                "reported_amount",
-                "difference",
-                "state",
-              ].filter((key) => allColumns.includes(key))
-            : ["india-gst", "uae-vat"].includes(body?.workflow || "") &&
-                !showRuleProvenance
-              ? [
-                  "counterparty",
-                  "reference",
-                  "document_type",
+                  "subject",
+                  "period",
                   "component",
                   "currency",
-                  "books_tax",
-                  "return_tax",
-                  "tax_difference",
-                  "net_difference",
+                  "assessed_base",
+                  "expected_amount",
+                  "reported_amount",
+                  "difference",
                   "state",
-                  "source_review_reasons",
                 ].filter((key) => allColumns.includes(key))
-              : allColumns;
+              : ["india-gst", "uae-vat"].includes(body?.workflow || "") &&
+                  !showRuleProvenance
+                ? [
+                    "counterparty",
+                    "reference",
+                    "document_type",
+                    "component",
+                    "currency",
+                    "books_tax",
+                    "return_tax",
+                    "tax_difference",
+                    "net_difference",
+                    "state",
+                    "source_review_reasons",
+                  ].filter((key) => allColumns.includes(key))
+                : allColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -493,6 +626,9 @@ export function CountryWorkflows({
                   }
                 : {}),
               table_type: tableType,
+              ...(tableType === "import-vat-lines"
+                ? { import_taxable_base_control: importBaseControl }
+                : {}),
               label,
               expected_rows: Number(expectedRows),
               ...(Number(expectedRows) === 0 ? { nil_reason: nilReason } : {}),
@@ -572,6 +708,12 @@ export function CountryWorkflows({
             .split(",")
             .map((s) => s.trim())
             .filter(Boolean),
+          ...(workflow === "uae-vat-return" && restrictBoxes
+            ? {
+                restrict_to_required_boxes: true,
+                box_scope_assessment: boxScopeAssessment,
+              }
+            : {}),
         };
         payload.subjects = subjects
           .split(",")
@@ -1475,8 +1617,27 @@ export function CountryWorkflows({
                         onChange={(e) => setTotals(e.target.value)}
                       />
                       <small>
-                        Signed amount totals; tax-document sources use tax
-                        totals. Confirmation sources use requested amounts.
+                        {tableType === "return-boxes"
+                          ? "Sum the tax fields across every retained row, including summary boxes. This file control is not VAT payable or recoverable."
+                          : tableType === "import-vat-lines"
+                            ? "Tax totals across every retained row, including superseded and cancelled observations. Control the taxable base separately below."
+                            : "Signed amount totals; tax-document sources use tax totals. Confirmation sources use requested amounts."}
+                      </small>
+                    </label>
+                  )}
+                  {tableType === "import-vat-lines" && (
+                    <label>
+                      Independent import taxable-base total (AED)
+                      <input
+                        value={importBaseControl}
+                        onChange={(event) =>
+                          setImportBaseControl(event.target.value)
+                        }
+                      />
+                      <small>
+                        Control the entire retained file, including superseded
+                        observations. The currency total above controls tax
+                        separately.
                       </small>
                     </label>
                   )}
@@ -1611,13 +1772,42 @@ export function CountryWorkflows({
                 </label>
               ))}
               {workflow === "uae-vat-return" && (
-                <label>
-                  Required VAT201 boxes, comma separated
-                  <input
-                    value={requiredBoxes}
-                    onChange={(e) => setRequiredBoxes(e.target.value)}
-                  />
-                </label>
+                <>
+                  <label>
+                    Required VAT201 boxes, comma separated
+                    <input
+                      value={requiredBoxes}
+                      onChange={(e) => setRequiredBoxes(e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={restrictBoxes}
+                      onChange={(event) =>
+                        setRestrictBoxes(event.target.checked)
+                      }
+                    />
+                    Compare only the required VAT201 boxes
+                  </label>
+                  {restrictBoxes && (
+                    <label>
+                      Selected VAT201 box scope assessment
+                      <textarea
+                        aria-label="Selected VAT201 box scope assessment"
+                        value={boxScopeAssessment}
+                        onChange={(event) =>
+                          setBoxScopeAssessment(event.target.value)
+                        }
+                      />
+                      <small>
+                        Other retained boxes remain outside this comparison.
+                        Their original rows, counts and totals are retained for
+                        review and export.
+                      </small>
+                    </label>
+                  )}
+                </>
               )}
               {workflow === "bank-brs" && (
                 <>
@@ -1805,7 +1995,7 @@ export function CountryWorkflows({
           ))}
       </section>
       <label>
-        Saved source or result (latest 100)
+        Saved source or result
         <select
           aria-label="Saved source or result"
           value={selected}
@@ -1826,9 +2016,186 @@ export function CountryWorkflows({
             ))}
         </select>
       </label>
+      {results.hasOlder && (
+        <Button disabled={results.loadingOlder} onClick={results.loadOlder}>
+          Load older sources and results
+        </Button>
+      )}
       {detail.data && body && (
         <section className="main-panel" style={{ padding: 20, marginTop: 16 }}>
           <h2>{body.title}</h2>
+          {body.box_comparison_scope?.mode === "SELECTED_REQUIRED_BOXES" && (
+            <section aria-label="Selected VAT201 comparison scope">
+              <p>
+                <strong>
+                  Selected VAT201 boxes only:{" "}
+                  {body.box_comparison_scope.required_boxes.join(", ")}.
+                </strong>{" "}
+                Whole-return completeness is not determined.
+              </p>
+              <p>{body.box_comparison_scope.assessment}</p>
+              <p>
+                {Object.entries(body.box_comparison_scope.excluded_rows)
+                  .map(([role, count]) => `${role}: ${count} excluded rows`)
+                  .join("; ")}
+                . Excluded rows remain retained; the XLSX includes their full
+                detail.
+              </p>
+              {!!body.included_box_controls?.length && (
+                <details>
+                  <summary>Included box control totals</summary>
+                  <pre style={{ whiteSpace: "pre-wrap" }}>
+                    {text(body.included_box_controls)}
+                  </pre>
+                </details>
+              )}
+              {!!body.excluded_box_controls?.length && (
+                <details>
+                  <summary>Excluded box control totals</summary>
+                  <pre style={{ whiteSpace: "pre-wrap" }}>
+                    {text(body.excluded_box_controls)}
+                  </pre>
+                </details>
+              )}
+              <ExcludedVATBoxes
+                key={selected}
+                prefix={prefix}
+                selected={selected}
+                initial={body.excluded_box_rows || []}
+                total={
+                  detail.data.collection_totals?.excluded_box_rows ??
+                  body.excluded_box_rows?.length ??
+                  0
+                }
+              />
+            </section>
+          )}
+          {compactImport &&
+            body.review_status === "REVIEWED" &&
+            !body.blocked &&
+            detail.data.freshness === "CURRENT" && (
+              <details>
+                <summary>
+                  Prepare selected import boxes for VAT201 comparison
+                </summary>
+                <p>
+                  Choose the assessed source role and populated boxes. Supply
+                  independent controls for each selected population. Missing Box
+                  7 detail is not a nil declaration. The new source requires
+                  independent review and can feed only the books side of the
+                  VAT201 comparison.
+                </p>
+                <label>
+                  Import box source title
+                  <input
+                    value={importBridgeLabel}
+                    onChange={(event) =>
+                      setImportBridgeLabel(event.target.value)
+                    }
+                  />
+                </label>
+                <label>
+                  Assessed import source role
+                  <select
+                    value={importBridgeRole}
+                    onChange={(event) =>
+                      setImportBridgeRole(event.target.value)
+                    }
+                  >
+                    <option value="">Select assessed role</option>
+                    <option value="books">Books</option>
+                    <option value="customs">Customs</option>
+                    <option value="portal">Portal import detail</option>
+                  </select>
+                </label>
+                {(["6", "7"] as const).map((box) => (
+                  <fieldset key={box}>
+                    <legend>Import Box {box}</legend>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={importBridgeBoxes[box]}
+                        onChange={(event) =>
+                          setImportBridgeBoxes({
+                            ...importBridgeBoxes,
+                            [box]: event.target.checked,
+                          })
+                        }
+                      />
+                      Include import Box {box}
+                    </label>
+                    {importBridgeBoxes[box] &&
+                      (
+                        [
+                          ["expected_rows", "expected detail rows"],
+                          ["taxable_amount", "taxable amount (AED)"],
+                          ["tax", "tax (AED)"],
+                        ] as const
+                      ).map(([field, label]) => (
+                        <label key={field}>
+                          Box {box} {label}
+                          <input
+                            value={importBridgeControls[box][field]}
+                            onChange={(event) =>
+                              setImportBridgeControls({
+                                ...importBridgeControls,
+                                [box]: {
+                                  ...importBridgeControls[box],
+                                  [field]: event.target.value,
+                                },
+                              })
+                            }
+                          />
+                        </label>
+                      ))}
+                  </fieldset>
+                ))}
+                <label>
+                  Import box scope assessment
+                  <textarea
+                    value={importBridgeAssessment}
+                    onChange={(event) =>
+                      setImportBridgeAssessment(event.target.value)
+                    }
+                  />
+                </label>
+                <Button
+                  disabled={action.isPending}
+                  onClick={async () => {
+                    const boxes = Object.fromEntries(
+                      Object.entries(importBridgeBoxes)
+                        .filter(([, enabled]) => enabled)
+                        .map(([box]) => [
+                          box,
+                          {
+                            ...importBridgeControls[box],
+                            expected_rows: Number(
+                              importBridgeControls[box].expected_rows,
+                            ),
+                          },
+                        ]),
+                    );
+                    const created = await action
+                      .mutateAsync({
+                        path: `${prefix}/events/${selected}/import-vat-box-source`,
+                        body: {
+                          source_role: importBridgeRole,
+                          boxes,
+                          label: importBridgeLabel,
+                          assessment: importBridgeAssessment,
+                        },
+                      })
+                      .catch(() => null);
+                    if (created) {
+                      setSelected(created.id);
+                      setOffset(0);
+                    }
+                  }}
+                >
+                  Prepare import box source
+                </Button>
+              </details>
+            )}
           {body.operations_execution && (
             <p>
               Source scope:{" "}
@@ -1886,6 +2253,47 @@ export function CountryWorkflows({
               Approval blocked: correct source controls or missing/expired
               evidence and regenerate.
             </p>
+          )}
+          {compactImport && body.role_totals && (
+            <div style={{ overflowX: "auto" }}>
+              <p>
+                Assessed import detail only. Box 6 and Box 7 populations remain
+                separate; an absent population is not a verified nil return box.
+              </p>
+              <table aria-label="Import VAT selected population totals">
+                <thead>
+                  <tr>
+                    <th>Source</th>
+                    <th>Population / indicative box</th>
+                    <th>Selected rows</th>
+                    <th>Taxable base AED</th>
+                    <th>Tax AED</th>
+                    <th>Coverage</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.entries(body.role_totals).flatMap(([role, kinds]) =>
+                    Object.entries(kinds).map(([kind, total]) => (
+                      <tr key={`${role}:${kind}`}>
+                        <td>{role}</td>
+                        <td>
+                          {kind} / {kind === "declaration" ? "6" : "7"}
+                        </td>
+                        <td>{total.selected_rows}</td>
+                        <td>{total.net ?? "Not determined"}</td>
+                        <td>{total.tax ?? "Not determined"}</td>
+                        <td>
+                          {total.complete_for_selected_population &&
+                          total.selected_rows
+                            ? "Selected current population"
+                            : "Incomplete or not assessed"}
+                        </td>
+                      </tr>
+                    )),
+                  )}
+                </tbody>
+              </table>
+            </div>
           )}
           {body.workflow === "india-payroll-rules" && (
             <>
@@ -2074,7 +2482,10 @@ export function CountryWorkflows({
             </Link>
           </div>
           <div style={{ overflowX: "auto" }}>
-            {(compactSource || compactCredit || compactWithholding) && (
+            {(compactSource ||
+              compactCredit ||
+              compactWithholding ||
+              compactImport) && (
               <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <input
                   type="checkbox"

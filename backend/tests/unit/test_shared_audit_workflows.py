@@ -65,7 +65,13 @@ def source(kind, rows):
     writer = csv.DictWriter(buffer, fieldnames=fields)
     writer.writeheader()
     writer.writerows(rows)
-    field = "requested_amount" if kind == "confirmations" else "amount"
+    field = (
+        "tax"
+        if kind == "import-vat-lines"
+        else "requested_amount"
+        if kind == "confirmations"
+        else "amount"
+    )
     totals = {}
     for row in rows:
         if field in row:
@@ -78,6 +84,15 @@ def source(kind, rows):
             label="SYNTHETIC audit source",
             expected_rows=len(rows),
             control_totals=totals,
+            **(
+                {
+                    "import_taxable_base_control": sum(
+                        (Decimal(row["net"]) for row in rows), Decimal(0)
+                    )
+                }
+                if kind == "import-vat-lines"
+                else {}
+            ),
             nil_reason="Independent declaration of a nil source population" if not rows else None,
         ),
     )

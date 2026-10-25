@@ -1,0 +1,3 @@
+id,registration,customs_registration,authority,declaration,line_reference,entry_kind,adjustment_reference,record_version,version_status,period_start,period_end,date,currency,net,tax,evidence_reference,assessment
+IMPORT-1,100000000000001,SYN-CRN,SYNTHETIC-DXB,DECL-1,1,declaration,,1,current,2026-04-01,2026-06-30,2026-06-10,AED,1000,50,SYNTHETIC-PORTAL-IMPORT-1,Synthetic assessed import detail only; no legal conclusion
+ADJ-1,100000000000001,SYN-CRN,SYNTHETIC-DXB,DECL-1,1,adjustment,ADJ-1,1,current,2026-04-01,2026-06-30,2026-06-10,AED,-100,-5,SYNTHETIC-PORTAL-ADJ-1,Synthetic assessed import detail only; no legal conclusion

@@ -7,7 +7,7 @@ from typing import Annotated, Literal
 from fastapi import APIRouter, Header, HTTPException, Query, Request
 from fastapi.responses import Response
 from pydantic import Field, ValidationError
-from sqlalchemy import select
+from sqlalchemy import and_, or_, select
 
 from app.api.v1.audit_execution import Actor
 from app.core.dependencies import DB
@@ -16,12 +16,92 @@ from app.modules.audit_execution.access import engagement_permissions
 from app.modules.audit_execution.models import AuditRecord
 from app.modules.audit_execution.schemas import RecordInput, RecordPatch, Source
 from app.modules.audit_log.service import record
+from app.modules.country_workflows.import_vat_source import ImportVATSourceInput
 from app.modules.intelligence import jobs, service
 from app.modules.intelligence import schemas as s
 from app.modules.intelligence.foundations import PeriodAction
 from app.modules.intelligence.models import IntelligenceEvent, IntelligenceJob
 
 router = APIRouter(prefix="/intelligence", tags=["Accounting intelligence"])
+
+
+@router.post("/engagements/{eid}/events/{identifier}/import-vat-box-source", status_code=201)
+async def import_vat_box_source(
+    eid: uuid.UUID,
+    identifier: uuid.UUID,
+    data: ImportVATSourceInput,
+    db: DB,
+    ctx: Actor,
+    request: Request,
+):
+    from app.modules.country_workflows.import_vat_source import source_rows
+    from app.modules.jurisdictions.workspace import resolved
+
+    eng = await service.scope(db, ctx, eid, "country-workflow", True)
+    package, _ = await resolved(db, ctx, eng)
+    if package.country != "AE":
+        raise HTTPException(422, "Import VAT box sources require a UAE engagement")
+    parent = await service.event(db, ctx, eid, identifier, True)
+    if parent.kind != "country-workflow" or parent.body.get("workflow") != "uae-import-vat":
+        raise HTTPException(422, "Select an import VAT detail comparison")
+    if parent.body.get("review_status") != "REVIEWED" or parent.body.get("blocked"):
+        raise HTTPException(
+            409, "Independently review and resolve the import comparison before bridging"
+        )
+    source_ids = parent.body.get("parameters", {}).get("source_ids", {})
+    if set(source_ids) != {"customs", "portal", "books"}:
+        raise HTTPException(409, "Import comparison source roles are incomplete")
+    for source_id in source_ids.values():
+        original = await service.event(db, ctx, eid, uuid.UUID(source_id), True)
+        if (
+            original.kind != "workflow-source"
+            or original.body.get("table_type") != "import-vat-lines"
+            or original.body.get("review_status") != "REVIEWED"
+        ):
+            raise HTTPException(409, "Independently review every retained import-detail source")
+    try:
+        rows, totals = source_rows(parent.body, data)
+    except ValueError as error:
+        raise HTTPException(422, str(error)) from None
+    created = await service.append(
+        db,
+        ctx,
+        eng,
+        "workflow-source",
+        {
+            "table_type": "return-boxes",
+            "rows": rows,
+            "row_count": len(rows),
+            "control_totals": totals,
+            "title": data.label,
+            "review_status": "UNVERIFIED",
+            "parser_version": "import-vat-box-bridge/1",
+            "source_identity": "import-vat:" + str(parent.root_id),
+            "source_sha256": parent.sha256,
+            "contributors": sorted(
+                {*parent.body.get("contributors", [str(parent.created_by)]), str(ctx.user_id)}
+            ),
+            "population_completeness": "SELECTED_REVIEWED_IMPORT_BOX_POPULATIONS_ONLY",
+            "statutory_calculation_qualified": False,
+            "native_metadata": {
+                "source_import_comparison_id": str(parent.id),
+                "source_role": data.source_role,
+                "selected_box_controls": data.model_dump(mode="json")["boxes"],
+                "scope_assessment": data.assessment,
+                "upstream_exception_count": parent.body.get("exception_count"),
+                "return_role": "BOOKS_ONLY_NOT_FILED_RETURN",
+                "tax_field_basis": "FINAL_ASSESSED_SELECTED_IMPORT_TAX_WITH_ZERO_SEPARATE_TAX_ADJUSTMENT",
+            },
+            "limitations": [
+                "Selected import detail only; independently retained filed VAT201 evidence is still required",
+                "This bridge does not prepare a whole VAT201, infer absent boxes, approve recovery or execute filing",
+                "Documented upstream exceptions remain part of the parent comparison and are not resolved by aggregation",
+            ],
+        },
+        [service.event_receipt(parent)],
+        request.state.request_id,
+    )
+    return audit.serialize(created)
 
 
 @router.post("/engagements/{eid}/events/{identifier}/remaining-open-items", status_code=201)
@@ -347,6 +427,7 @@ async def events(
     ctx: Actor,
     kind: str | None = None,
     after: uuid.UUID | None = None,
+    before: uuid.UUID | None = None,
     limit: int = Query(50, ge=1, le=100),
     newest: bool = False,
 ):
@@ -356,6 +437,21 @@ async def events(
     )
     if kind:
         query = query.where(IntelligenceEvent.kind == kind)
+    if before:
+        if not newest or after:
+            raise HTTPException(422, "An older-result cursor requires newest ordering without after")
+        anchor = await db.scalar(query.where(IntelligenceEvent.id == before))
+        if anchor is None:
+            raise HTTPException(404, "Result cursor not found in this engagement and filter")
+        query = query.where(
+            or_(
+                IntelligenceEvent.created_at < anchor.created_at,
+                and_(
+                    IntelligenceEvent.created_at == anchor.created_at,
+                    IntelligenceEvent.id < anchor.id,
+                ),
+            )
+        )
     if after:
         if newest:
             raise HTTPException(422, "Newest result selection does not support an ID cursor")
@@ -399,6 +495,7 @@ async def events(
     return {
         "items": items,
         "next_cursor": str(rows[limit - 1].id) if len(rows) > limit and not newest else None,
+        "next_before": str(rows[limit - 1].id) if len(rows) > limit and newest else None,
         "truncated": len(rows) > limit,
         "limit": limit,
     }
@@ -412,6 +509,8 @@ async def event_details(
     ctx: Actor,
     offset: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=500),
+    excluded_offset: int = Query(0, ge=0),
+    excluded_limit: int = Query(100, ge=1, le=500),
 ):
     obj = await service.event(db, ctx, eid, identifier)
     body = dict(obj.body)
@@ -430,6 +529,9 @@ async def event_details(
         if isinstance(body.get(key), list):
             totals[key] = len(body[key])
             body[key] = body[key][offset : offset + limit]
+    if isinstance(body.get("excluded_box_rows"), list):
+        totals["excluded_box_rows"] = len(body["excluded_box_rows"])
+        body["excluded_box_rows"] = body["excluded_box_rows"][excluded_offset : excluded_offset + excluded_limit]
     return {
         **audit.serialize(obj),
         "body": body,
@@ -987,6 +1089,9 @@ async def generate_paper(
             "comparison_basis",
             "selected_current_totals",
             "assessment_contract_version",
+            "box_comparison_scope",
+            "excluded_box_controls",
+            "included_box_controls",
             "limitations",
         }
     }
@@ -1008,6 +1113,8 @@ async def generate_paper(
                 "bounded": len(obj.body["rows"]) > 1000,
             }
         )
+    if obj.body.get("excluded_box_rows"):
+        tables.append({"title": "Rows excluded from selected VAT box scope", "rows": obj.body["excluded_box_rows"][:1000], "total_rows": len(obj.body["excluded_box_rows"]), "bounded": len(obj.body["excluded_box_rows"]) > 1000})
     paper = RecordInput(
         reference=data.reference,
         title=data.title,
@@ -1017,6 +1124,7 @@ async def generate_paper(
             "sources": [{"kind": "intelligence", "id": str(obj.id)}],
             "sections": [
                 {"heading": "Objective — auditor authored", "text": data.objective},
+                *([{"heading": "Selected VAT201 comparison coverage", "text": "Machine comparison covers only VAT201 boxes " + ", ".join(obj.body["box_comparison_scope"]["required_boxes"]) + ". Whole-return completeness is not determined. " + str(len(obj.body.get("excluded_box_rows", []))) + " retained source rows were excluded from this comparison; their full detail remains in the source result and XLSX export."}] if obj.body.get("box_comparison_scope", {}).get("mode") == "SELECTED_REQUIRED_BOXES" else []),
                 {
                     "heading": "System-generated source information",
                     "text": f"Derived from immutable {obj.kind} result {obj.id}, version {obj.version}, SHA-256 {obj.sha256}. Machine output is not a performed audit procedure or reviewed conclusion.",

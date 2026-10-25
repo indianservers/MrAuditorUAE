@@ -119,3 +119,14 @@ describe("foundation validation workspace", () => {
     );
   });
 });
+vi.mock("@/hooks/use-event-history", async () => {
+  const { useAPI } = await import("@/hooks/use-api");
+  return {
+    useEventHistory: (prefix: string) => ({
+      ...useAPI(`${prefix}/events?limit=100&newest=true`),
+      hasOlder: false,
+      loadingOlder: false,
+      loadOlder: vi.fn(),
+    }),
+  };
+});

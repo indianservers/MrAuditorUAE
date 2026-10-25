@@ -5,6 +5,7 @@ import { CountryWorkflows } from "@/features/country-workflows";
 const state = vi.hoisted(() => ({
   mutate: vi.fn(),
   result: null as unknown,
+  excludedPage: null as unknown,
   country: "AE",
   jobs: [] as {
     id: string;
@@ -16,256 +17,296 @@ const state = vi.hoisted(() => ({
 vi.mock("@/hooks/use-api", () => ({
   useCan: () => true,
   useAPI: (path: string) => ({
-    data: path.endsWith("country-workflows")
-      ? {
-          country: state.country,
-          source_formats: [
-            {
-              id: "india-gstr2b-json",
-              label: "India GSTR-2B document JSON",
-              available: state.country === "IN",
-              table_type: "tax-documents",
-            },
-            {
-              id: "india-epfo-ecr",
-              label: "India EPFO monthly ECR text",
-              available: state.country === "IN",
-              table_type: "obligations",
-            },
-            {
-              id: "canonical-csv",
-              label: "Controlled canonical CSV",
-              available: true,
-              table_type: null,
-            },
-            {
-              id: "india-inv01-json",
-              label: "India INV-01 JSON",
-              available: state.country === "IN",
-              table_type: "tax-documents",
-            },
-          ],
-          check_templates: { controls: ["access-review"] },
-          scenarios: [
-            { id: "RW-001", title: "Bank receipt", workflow: "bank-brs" },
-          ],
-          items: [
-            {
-              id: "india-withholding-liability",
-              title: "India withholding liability",
-              available: state.country === "IN",
-              roles: {
-                expected: "withholding-records",
-                withheld: "withholding-records",
-                reported: "withholding-records",
-                deposited: "withholding-records",
-              },
-            },
-            {
-              id: "india-withholding-credit",
-              title: "India withholding credit",
-              available: state.country === "IN",
-              roles: {
-                books: "withholding-records",
-                statement: "withholding-records",
-                certificate: "withholding-records",
-              },
-            },
-            {
-              id: "credit-note-applications",
-              title: "Credit-note applications",
-              available: true,
-              roles: {
-                items: "audit-open-items",
-                controls: "balance-controls",
-                applications: "credit-applications",
-              },
-            },
-            {
-              id: "payroll-settlement",
-              title: "Payroll settlement",
-              available: true,
-              roles: {
-                payroll: "obligations",
-                channel: "obligations",
-                bank: "obligations",
-              },
-            },
-            {
-              id: "india-payroll-rules",
-              title: "India payroll contribution rules review",
-              available: state.country === "IN",
-              roles: {
-                bases: "payroll-bases",
-                rules: "payroll-rules",
-                reported: "obligations",
-              },
-            },
-            {
-              id: "bank-brs",
-              title: "Bank reconciliation",
-              available: true,
-              roles: { books: "transactions", statement: "transactions" },
-            },
-            {
-              id: "india-gst",
-              title: "India GST",
-              available: false,
-              roles: { books: "tax-documents", return: "tax-documents" },
-            },
-          ],
-          source_contracts: {
-            "withholding-records": { id: { required: true, type: "str" } },
-            "benefit-rules": { id: { required: true, type: "str" } },
-            "payroll-rules": { id: { required: true, type: "str" } },
-            obligations: {
-              id: { required: true, type: "str" },
-              amount: { required: true, type: "Decimal" },
-            },
-            "tax-documents": {
-              id: { required: true, type: "str" },
-              tax: { required: true, type: "Decimal" },
-            },
-            transactions: {
-              id: { required: true, type: "str" },
-              amount: { required: true, type: "Decimal" },
-            },
-          },
-        }
-      : path.endsWith("inputs")
+    data: path.includes("excluded_offset=100")
+      ? state.excludedPage
+      : path.endsWith("country-workflows")
         ? {
-            snapshots: [{ id: "snapshot", label: "Committed GL snapshot" }],
-            evidence: [
-              { id: "clean", label: "Clean statement", scan_status: "CLEAN" },
+            country: state.country,
+            source_formats: [
               {
-                id: "quarantine",
-                label: "Pending scan",
-                scan_status: "QUARANTINED",
+                id: "india-gstr2b-json",
+                label: "India GSTR-2B document JSON",
+                available: state.country === "IN",
+                table_type: "tax-documents",
+              },
+              {
+                id: "india-epfo-ecr",
+                label: "India EPFO monthly ECR text",
+                available: state.country === "IN",
+                table_type: "obligations",
+              },
+              {
+                id: "canonical-csv",
+                label: "Controlled canonical CSV",
+                available: true,
+                table_type: null,
+              },
+              {
+                id: "india-inv01-json",
+                label: "India INV-01 JSON",
+                available: state.country === "IN",
+                table_type: "tax-documents",
               },
             ],
+            check_templates: { controls: ["access-review"] },
+            scenarios: [
+              { id: "RW-001", title: "Bank receipt", workflow: "bank-brs" },
+            ],
+            items: [
+              {
+                id: "uae-vat-return",
+                title: "UAE VAT201 box comparison",
+                available: state.country === "AE",
+                roles: { books: "return-boxes", return: "return-boxes" },
+              },
+              {
+                id: "uae-import-vat",
+                title: "UAE import VAT review",
+                available: state.country === "AE",
+                roles: {
+                  customs: "import-vat-lines",
+                  portal: "import-vat-lines",
+                  books: "import-vat-lines",
+                },
+              },
+              {
+                id: "india-withholding-liability",
+                title: "India withholding liability",
+                available: state.country === "IN",
+                roles: {
+                  expected: "withholding-records",
+                  withheld: "withholding-records",
+                  reported: "withholding-records",
+                  deposited: "withholding-records",
+                },
+              },
+              {
+                id: "india-withholding-credit",
+                title: "India withholding credit",
+                available: state.country === "IN",
+                roles: {
+                  books: "withholding-records",
+                  statement: "withholding-records",
+                  certificate: "withholding-records",
+                },
+              },
+              {
+                id: "credit-note-applications",
+                title: "Credit-note applications",
+                available: true,
+                roles: {
+                  items: "audit-open-items",
+                  controls: "balance-controls",
+                  applications: "credit-applications",
+                },
+              },
+              {
+                id: "payroll-settlement",
+                title: "Payroll settlement",
+                available: true,
+                roles: {
+                  payroll: "obligations",
+                  channel: "obligations",
+                  bank: "obligations",
+                },
+              },
+              {
+                id: "india-payroll-rules",
+                title: "India payroll contribution rules review",
+                available: state.country === "IN",
+                roles: {
+                  bases: "payroll-bases",
+                  rules: "payroll-rules",
+                  reported: "obligations",
+                },
+              },
+              {
+                id: "bank-brs",
+                title: "Bank reconciliation",
+                available: true,
+                roles: { books: "transactions", statement: "transactions" },
+              },
+              {
+                id: "india-gst",
+                title: "India GST",
+                available: false,
+                roles: { books: "tax-documents", return: "tax-documents" },
+              },
+            ],
+            source_contracts: {
+              "import-vat-lines": {
+                id: { required: true, type: "str" },
+                tax: { required: true, type: "Decimal" },
+              },
+              "withholding-records": { id: { required: true, type: "str" } },
+              "benefit-rules": { id: { required: true, type: "str" } },
+              "payroll-rules": { id: { required: true, type: "str" } },
+              obligations: {
+                id: { required: true, type: "str" },
+                amount: { required: true, type: "Decimal" },
+              },
+              "tax-documents": {
+                id: { required: true, type: "str" },
+                tax: { required: true, type: "Decimal" },
+              },
+              transactions: {
+                id: { required: true, type: "str" },
+                amount: { required: true, type: "Decimal" },
+              },
+            },
           }
-        : path.includes("/events/result")
-          ? state.result
-          : path.endsWith("/jobs")
-            ? { items: state.jobs }
-            : path.includes("/events?")
-              ? {
-                  items: [
-                    {
-                      id: "supporting-items",
-                      kind: "source-table",
-                      table_kind: "open-items",
-                      label: "Reviewed payable population",
-                      evidence_version_id: "original-items",
-                      version: 2,
-                      freshness: "CURRENT",
-                      review_status: "REVIEWED",
-                    },
-                    {
-                      id: "supporting-bank",
-                      kind: "source-table",
-                      table_kind: "bank",
-                      label: "Reviewed supporting statement",
-                      evidence_version_id: "original-bank",
-                      version: 2,
-                      freshness: "CURRENT",
-                      review_status: "REVIEWED",
-                    },
-                    {
-                      id: "unreviewed-bank",
-                      kind: "source-table",
-                      table_kind: "bank",
-                      label: "Unreviewed supporting statement",
-                      evidence_version_id: "original-unreviewed",
-                      version: 1,
-                      freshness: "CURRENT",
-                      review_status: "UNVERIFIED",
-                    },
-                    ...[
+        : path.endsWith("inputs")
+          ? {
+              snapshots: [{ id: "snapshot", label: "Committed GL snapshot" }],
+              evidence: [
+                { id: "clean", label: "Clean statement", scan_status: "CLEAN" },
+                {
+                  id: "quarantine",
+                  label: "Pending scan",
+                  scan_status: "QUARANTINED",
+                },
+              ],
+            }
+          : path.includes("/events/result")
+            ? state.result
+            : path.endsWith("/jobs")
+              ? { items: state.jobs }
+              : path.includes("/events?")
+                ? {
+                    items: [
                       {
-                        id: "wps",
-                        table_type: "obligations",
-                        label: "WPS instructions",
-                        native_format: "uae-wps-sif",
+                        id: "vat-books",
+                        kind: "workflow-source",
+                        table_type: "return-boxes",
+                        label: "Assessed import boxes",
+                        freshness: "CURRENT",
+                        version: 1,
                         review_status: "REVIEWED",
                       },
                       {
-                        id: "ecr",
-                        table_type: "obligations",
-                        label: "Native ECR return",
-                        native_format: "india-epfo-ecr",
+                        id: "vat-filed",
+                        kind: "workflow-source",
+                        table_type: "return-boxes",
+                        label: "Full filed VAT201 source",
+                        freshness: "CURRENT",
+                        version: 1,
                         review_status: "REVIEWED",
                       },
                       {
-                        id: "bases",
-                        table_type: "payroll-bases",
-                        label: "Payroll component bases",
+                        id: "supporting-items",
+                        kind: "source-table",
+                        table_kind: "open-items",
+                        label: "Reviewed payable population",
+                        evidence_version_id: "original-items",
+                        version: 2,
+                        freshness: "CURRENT",
                         review_status: "REVIEWED",
                       },
                       {
-                        id: "rules",
-                        table_type: "payroll-rules",
-                        label: "Reviewed contribution rules",
+                        id: "supporting-bank",
+                        kind: "source-table",
+                        table_kind: "bank",
+                        label: "Reviewed supporting statement",
+                        evidence_version_id: "original-bank",
+                        version: 2,
+                        freshness: "CURRENT",
                         review_status: "REVIEWED",
                       },
                       {
-                        id: "unreviewed-rules",
-                        table_type: "payroll-rules",
-                        label: "Unreviewed contribution rules",
+                        id: "unreviewed-bank",
+                        kind: "source-table",
+                        table_kind: "bank",
+                        label: "Unreviewed supporting statement",
+                        evidence_version_id: "original-unreviewed",
+                        version: 1,
+                        freshness: "CURRENT",
                         review_status: "UNVERIFIED",
                       },
+                      ...[
+                        {
+                          id: "wps",
+                          table_type: "obligations",
+                          label: "WPS instructions",
+                          native_format: "uae-wps-sif",
+                          review_status: "REVIEWED",
+                        },
+                        {
+                          id: "ecr",
+                          table_type: "obligations",
+                          label: "Native ECR return",
+                          native_format: "india-epfo-ecr",
+                          review_status: "REVIEWED",
+                        },
+                        {
+                          id: "bases",
+                          table_type: "payroll-bases",
+                          label: "Payroll component bases",
+                          review_status: "REVIEWED",
+                        },
+                        {
+                          id: "rules",
+                          table_type: "payroll-rules",
+                          label: "Reviewed contribution rules",
+                          review_status: "REVIEWED",
+                        },
+                        {
+                          id: "unreviewed-rules",
+                          table_type: "payroll-rules",
+                          label: "Unreviewed contribution rules",
+                          review_status: "UNVERIFIED",
+                        },
+                        {
+                          id: "reported",
+                          table_type: "obligations",
+                          label: "Reported ECR",
+                          review_status: "UNVERIFIED",
+                        },
+                      ].map((source) => ({
+                        ...source,
+                        kind: "workflow-source",
+                        freshness: "CURRENT",
+                        version: 1,
+                      })),
                       {
-                        id: "reported",
-                        table_type: "obligations",
-                        label: "Reported ECR",
+                        id: "books",
+                        kind: "workflow-source",
+                        table_type: "transactions",
+                        label: "Books",
+                        freshness: "CURRENT",
+                        version: 1,
+                        review_status: "REVIEWED",
+                      },
+                      {
+                        id: "statement",
+                        kind: "workflow-source",
+                        table_type: "transactions",
+                        label: "Bank",
+                        freshness: "CURRENT",
+                        version: 1,
+                        review_status: "REVIEWED",
+                      },
+                      {
+                        id: "wrong",
+                        kind: "workflow-source",
+                        table_type: "tax-documents",
+                        label: "Wrong source type",
+                        freshness: "CURRENT",
+                        version: 1,
+                        review_status: "REVIEWED",
+                      },
+                      {
+                        id: "result",
+                        kind: "country-workflow",
+                        label: "Saved reconciliation",
+                        freshness: "CURRENT",
+                        version: 1,
                         review_status: "UNVERIFIED",
                       },
-                    ].map((source) => ({
-                      ...source,
-                      kind: "workflow-source",
-                      freshness: "CURRENT",
-                      version: 1,
-                    })),
-                    {
-                      id: "books",
-                      kind: "workflow-source",
-                      table_type: "transactions",
-                      label: "Books",
-                      freshness: "CURRENT",
-                      version: 1,
-                      review_status: "REVIEWED",
-                    },
-                    {
-                      id: "statement",
-                      kind: "workflow-source",
-                      table_type: "transactions",
-                      label: "Bank",
-                      freshness: "CURRENT",
-                      version: 1,
-                      review_status: "REVIEWED",
-                    },
-                    {
-                      id: "wrong",
-                      kind: "workflow-source",
-                      table_type: "tax-documents",
-                      label: "Wrong source type",
-                      freshness: "CURRENT",
-                      version: 1,
-                      review_status: "REVIEWED",
-                    },
-                    {
-                      id: "result",
-                      kind: "country-workflow",
-                      label: "Saved reconciliation",
-                      freshness: "CURRENT",
-                      version: 1,
-                      review_status: "UNVERIFIED",
-                    },
-                  ],
-                }
-              : path.includes("/accounts?")
-                ? { items: [{ id: "cash", code: "100", name: "Bank GL" }] }
-                : { items: [] },
+                    ],
+                  }
+                : path.includes("/accounts?")
+                  ? { items: [{ id: "cash", code: "100", name: "Bank GL" }] }
+                  : { items: [] },
     error: null,
   }),
   useAction: () => ({
@@ -283,6 +324,7 @@ vi.mock("@/features/shared", () => ({
 }));
 
 beforeEach(() => {
+  state.excludedPage = null;
   state.jobs = [];
   state.country = "AE";
   state.mutate.mockReset();
@@ -1022,4 +1064,223 @@ describe("country workflows", () => {
       screen.getByRole("button", { name: "Independent approval" }),
     ).toBeDisabled();
   });
+});
+describe("UAE import VAT review", () => {
+  it("submits an explicit selected-box scope rather than silently filtering a full return", async () => {
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Workflow"), {
+      target: { value: "uae-vat-return" },
+    });
+    for (const [label, value] of [
+      ["Schedule title", "Selected import review"],
+      ["Reconciliation date", "2026-06-30"],
+      [
+        "Scope and source rationale",
+        "Independent assessed import books compared to the complete retained filed source",
+      ],
+      ["Required VAT201 boxes, comma separated", "6,7"],
+      ["books source", "vat-books"],
+      ["return source", "vat-filed"],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    fireEvent.click(
+      screen.getByLabelText("Compare only the required VAT201 boxes"),
+    );
+    fireEvent.change(
+      screen.getByLabelText("Selected VAT201 box scope assessment"),
+      {
+        target: {
+          value:
+            "Only imports are assessed; all other retained VAT boxes remain outside this comparison",
+        },
+      },
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+      restrict_to_required_boxes: true,
+      required_boxes: ["6", "7"],
+      box_scope_assessment:
+        "Only imports are assessed; all other retained VAT boxes remain outside this comparison",
+    });
+  });
+
+  it("pages excluded rows without changing the selected comparison rows", () => {
+    const excluded = Array.from({ length: 101 }, (_, index) => ({
+      source_role: "return",
+      source_row_id: `EXCLUDED-${index + 1}`,
+      box: "1",
+      currency: "AED",
+      taxable_amount: "1",
+      tax: "0.05",
+      adjustment: "0",
+    }));
+    state.result = {
+      id: "result",
+      kind: "country-workflow",
+      version: 1,
+      freshness: "CURRENT",
+      collection_totals: { rows: 2, excluded_box_rows: 101 },
+      body: {
+        workflow: "uae-vat-return",
+        title: "Selected import boxes",
+        review_status: "UNVERIFIED",
+        rows: [
+          { id: "selected-six", box: "6", state: "MATCHED" },
+          { id: "selected-seven", box: "7", state: "MATCHED" },
+        ],
+        excluded_box_rows: excluded.slice(0, 100),
+        box_comparison_scope: {
+          mode: "SELECTED_REQUIRED_BOXES",
+          required_boxes: ["6", "7"],
+          assessment: "Imports only; retain all excluded rows",
+          excluded_rows: { books: 0, return: 101 },
+          whole_return_completeness: "NOT_DETERMINED",
+        },
+        population_completeness: "UPLOADED_FILE_CONTROLS_ONLY",
+      },
+    };
+    state.excludedPage = { body: { excluded_box_rows: excluded.slice(100) } };
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), {
+      target: { value: "result" },
+    });
+    expect(
+      screen.getByText(/Whole-return completeness is not determined/),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByText("Review 101 excluded VAT box rows"));
+    expect(screen.getByRole("cell", { name: "EXCLUDED-1" })).toBeVisible();
+    fireEvent.click(screen.getByRole("button", { name: "Next excluded rows" }));
+    expect(screen.getByRole("cell", { name: "EXCLUDED-101" })).toBeVisible();
+    expect(screen.getByRole("cell", { name: "selected-six" })).toBeVisible();
+    expect(screen.getByRole("cell", { name: "selected-seven" })).toBeVisible();
+    expect(screen.getByRole("button", { name: "Next rows" })).toBeDisabled();
+  });
+  it("prepares selected boxes only from a current independently reviewed import result", async () => {
+    state.result = {
+      id: "result",
+      kind: "country-workflow",
+      version: 2,
+      freshness: "CURRENT",
+      body: {
+        workflow: "uae-import-vat",
+        title: "Reviewed imports",
+        review_status: "REVIEWED",
+        rows: [],
+        exception_count: 0,
+        population_completeness: "UPLOADED_FILE_CONTROLS_ONLY",
+      },
+    };
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), {
+      target: { value: "result" },
+    });
+    fireEvent.click(
+      screen.getByText("Prepare selected import boxes for VAT201 comparison"),
+    );
+    fireEvent.change(screen.getByLabelText("Import box source title"), {
+      target: { value: "Assessed book import boxes" },
+    });
+    fireEvent.change(screen.getByLabelText("Assessed import source role"), {
+      target: { value: "books" },
+    });
+    fireEvent.click(screen.getByLabelText("Include import Box 7"));
+    for (const [label, value] of [
+      ["Box 6 expected detail rows", "1"],
+      ["Box 6 taxable amount (AED)", "1000"],
+      ["Box 6 tax (AED)", "50"],
+      [
+        "Import box scope assessment",
+        "Independent book role and declaration controls assessed for selected Box 6 only",
+      ],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    fireEvent.click(
+      screen.getByRole("button", { name: "Prepare import box source" }),
+    );
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0]).toMatchObject({
+      path: "intelligence/engagements/engagement/events/result/import-vat-box-source",
+      body: {
+        source_role: "books",
+        boxes: { "6": { expected_rows: 1, taxable_amount: "1000", tax: "50" } },
+      },
+    });
+    expect(state.mutate.mock.calls[0][0].body.boxes).not.toHaveProperty("7");
+  });
+
+  it.each(["unreviewed", "stale", "blocked"])(
+    "does not offer an import bridge for %s results",
+    (status) => {
+      state.result = {
+        id: "result",
+        kind: "country-workflow",
+        version: 1,
+        freshness: status === "stale" ? "STALE" : "CURRENT",
+        body: {
+          workflow: "uae-import-vat",
+          title: "Import review",
+          review_status: status === "unreviewed" ? "UNVERIFIED" : "REVIEWED",
+          blocked: status === "blocked",
+          rows: [],
+          population_completeness: "UPLOADED_FILE_CONTROLS_ONLY",
+        },
+      };
+      render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+      fireEvent.change(screen.getByLabelText("Saved source or result"), {
+        target: { value: "result" },
+      });
+      expect(
+        screen.queryByText(
+          "Prepare selected import boxes for VAT201 comparison",
+        ),
+      ).not.toBeInTheDocument();
+    },
+  );
+  it("requires separate source tax and taxable-base controls", async () => {
+    render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+    fireEvent.change(screen.getByLabelText("Source table type"), {
+      target: { value: "import-vat-lines" },
+    });
+    fireEvent.change(screen.getByLabelText("Clean retained evidence"), {
+      target: { value: "clean" },
+    });
+    fireEvent.change(screen.getByLabelText("Expected data rows"), {
+      target: { value: "2" },
+    });
+    fireEvent.change(screen.getByLabelText("Independent totals by currency"), {
+      target: { value: "AED=45" },
+    });
+    fireEvent.change(
+      screen.getByLabelText(/Independent import taxable-base total/),
+      { target: { value: "900" } },
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+      table_type: "import-vat-lines",
+      control_totals: { AED: "45" },
+      import_taxable_base_control: "900",
+    });
+  });
+
+  it("does not offer a domestic UAE import review in India", () => {
+    state.country = "IN";
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    expect(
+      screen.queryByRole("option", { name: "UAE import VAT review" }),
+    ).not.toBeInTheDocument();
+  });
+});
+
+vi.mock("@/hooks/use-event-history", async () => {
+  const { useAPI } = await import("@/hooks/use-api");
+  return {
+    useEventHistory: (prefix: string) => ({
+      ...useAPI(`${prefix}/events?limit=100&newest=true`),
+      hasOlder: false,
+      loadingOlder: false,
+      loadOlder: vi.fn(),
+    }),
+  };
 });

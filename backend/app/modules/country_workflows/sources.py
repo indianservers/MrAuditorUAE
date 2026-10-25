@@ -146,6 +146,7 @@ def _parse_csv(content, data, defaults=None):
         "item-allocations",
         "transactions",
         "tax-documents",
+        "import-vat-lines",
         "obligations",
         "return-boxes",
         "audit-open-items",
@@ -172,11 +173,22 @@ def _parse_csv(content, data, defaults=None):
         raise ValueError(
             "Money control totals apply only to transaction, tax and obligation tables"
         )
+    if (
+        data.table_type == "import-vat-lines"
+        and sum((Decimal(row["net"]) for row in rows), Decimal(0))
+        != data.import_taxable_base_control
+    ):
+        raise ValueError("Import taxable-base control does not agree to all retained source rows")
     return {
         "table_type": data.table_type,
         "rows": rows,
         "row_count": len(rows),
         "control_totals": {k: str(v) for k, v in sorted(totals.items())},
+        **(
+            {"import_taxable_base_control": str(data.import_taxable_base_control)}
+            if data.table_type == "import-vat-lines"
+            else {}
+        ),
         "population_completeness": "UPLOADED_FILE_CONTROLS_ONLY",
         "review_status": "UNVERIFIED",
         "nil_reason": data.nil_reason,

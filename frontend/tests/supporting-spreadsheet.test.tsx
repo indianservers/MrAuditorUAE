@@ -175,3 +175,45 @@ it("submits an explicit XLSX worksheet with the supporting-table conventions", a
     },
   });
 });
+it("keeps selected VAT coverage visible in workpaper actions and does not mix exclusion paging with result paging", () => {
+  state.result = {
+    id: "result",
+    kind: "country-workflow",
+    version: 1,
+    freshness: "CURRENT",
+    collection_totals: { rows: 2, excluded_box_rows: 101 },
+    body: {
+      review_status: "REVIEWED",
+      workflow: "uae-vat-return",
+      box_comparison_scope: {
+        mode: "SELECTED_REQUIRED_BOXES",
+        required_boxes: ["6", "7"],
+        assessment: "Only import boxes are assessed",
+      },
+      rows: [
+        { id: "six", box: "6", state: "MATCHED" },
+        { id: "seven", box: "7", state: "MATCHED" },
+      ],
+    },
+  };
+  render(<AccountingIntelligence eid="engagement" area="lead" />);
+  fireEvent.change(screen.getByLabelText("Result version"), {
+    target: { value: "result" },
+  });
+  expect(
+    screen.getByText(/Whole-return completeness is not determined/),
+  ).toBeVisible();
+  expect(screen.getByRole("button", { name: "Next 100" })).toBeDisabled();
+});
+
+vi.mock("@/hooks/use-event-history", async () => {
+  const { useAPI } = await import("@/hooks/use-api");
+  return {
+    useEventHistory: (prefix: string) => ({
+      ...useAPI(`${prefix}/events?limit=100&newest=true`),
+      hasOlder: false,
+      loadingOlder: false,
+      loadOlder: vi.fn(),
+    }),
+  };
+});

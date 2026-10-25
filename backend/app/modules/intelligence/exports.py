@@ -44,6 +44,16 @@ def render(event, format):
                 "Workflow limitations": body.get("limitations", []),
             }
         )
+    if body.get("box_comparison_scope", {}).get("mode") == "SELECTED_REQUIRED_BOXES":
+        metadata["Comparison scope"] = (
+            "Selected VAT201 boxes only: "
+            + ", ".join(body["box_comparison_scope"]["required_boxes"])
+            + ". Whole-return completeness is not determined."
+        )
+    if body.get("excluded_box_rows"):
+        metadata["Excluded VAT box rows"] = (
+            f"{len(body['excluded_box_rows'])} outside the selected box scope; full details are retained in the XLSX Excluded VAT boxes sheet and original source result"
+        )
     summary = {
         k: v
         for k, v in body.items()
@@ -99,6 +109,9 @@ def render(event, format):
             "comparison_basis",
             "selected_current_totals",
             "assessment_contract_version",
+            "box_comparison_scope",
+            "excluded_box_controls",
+            "included_box_controls",
         }
     }
 
@@ -110,6 +123,18 @@ def render(event, format):
             if value is None
             else str(value)
         )
+
+    native_metadata = body.get("native_metadata")
+    message_controls = (
+        native_metadata.get("message_controls", [])
+        if body.get("native_format") == "swift-mt940" and isinstance(native_metadata, dict)
+        else []
+    )
+    if message_controls:
+        summary["native_metadata"] = {
+            **body["native_metadata"],
+            "message_controls": f"{len(message_controls)} message control records retained in the source result and full XLSX MT940 message controls sheet",
+        }
 
     buffer = io.BytesIO()
     if format == "xlsx":
@@ -136,6 +161,22 @@ def render(event, format):
         append(source, keys)
         for row in rows:
             append(source, [row.get(key) for key in keys])
+        if body.get("excluded_box_rows"):
+            excluded = workbook.create_sheet("Excluded VAT boxes")
+            excluded_keys = list(
+                dict.fromkeys(key for row in body["excluded_box_rows"] for key in row)
+            )
+            append(excluded, excluded_keys)
+            for row in body["excluded_box_rows"]:
+                append(excluded, [row.get(key) for key in excluded_keys])
+        if message_controls:
+            messages = workbook.create_sheet("MT940 message controls")
+            message_keys = list(
+                dict.fromkeys(key for message in message_controls for key in message)
+            )
+            append(messages, message_keys)
+            for message in message_controls:
+                append(messages, [message.get(key) for key in message_keys])
         receipts = workbook.create_sheet("Dependency receipts")
         for dep in event["dependencies"]:
             append(receipts, [dep["type"], dep])

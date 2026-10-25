@@ -182,6 +182,7 @@ class SourceInput(Strict):
         "benefit-employees",
         "benefit-rules",
         "trade-lines",
+        "import-vat-lines",
         "price-bands",
         "excise-movements",
         "excise-rules",
@@ -205,9 +206,17 @@ class SourceInput(Strict):
     expected_rows: int = Field(ge=0, le=5000)
     nil_reason: str | None = Field(default=None, min_length=10, max_length=2000)
     control_totals: dict[str, Money] = Field(default_factory=dict, max_length=20)
+    import_taxable_base_control: Money | None = None
 
     @model_validator(mode="after")
     def declared_nil(self):
+        if self.table_type == "import-vat-lines":
+            if self.import_taxable_base_control is None:
+                raise ValueError(
+                    "Import VAT sources require an independent AED taxable-base control"
+                )
+        elif self.import_taxable_base_control is not None:
+            raise ValueError("Import taxable-base controls apply only to import VAT detail")
         if self.supporting_table_id:
             if (
                 self.file_format != "canonical-csv"
@@ -314,6 +323,7 @@ class WorkflowInput(Strict):
         "employee-expenses",
         "uae-benefit-review",
         "customs-reconciliation",
+        "uae-import-vat",
         "trade-document-review",
         "excise-reconciliation",
         "gold-reconciliation",
@@ -357,10 +367,21 @@ class WorkflowInput(Strict):
     stale_days: int = Field(default=90, ge=1, le=3650)
     required_checks: list[Identifier] = Field(default_factory=list, max_length=100)
     required_boxes: list[Identifier] = Field(default_factory=list, max_length=50)
+    restrict_to_required_boxes: bool = False
+    box_scope_assessment: str = Field(default="", max_length=2000)
     subjects: list[Identifier] = Field(default_factory=list, max_length=100)
 
     @model_validator(mode="after")
     def independent_sources(self):
+        if self.restrict_to_required_boxes:
+            if self.workflow != "uae-vat-return" or len(self.box_scope_assessment.strip()) < 10:
+                raise ValueError(
+                    "Selected VAT201 box comparison requires an explicit scope assessment"
+                )
+            if any(not box.strip() or box != box.strip() for box in self.required_boxes):
+                raise ValueError("Selected VAT201 box identifiers must be exact nonblank values")
+        elif self.box_scope_assessment:
+            raise ValueError("A box scope assessment requires explicit selected-box comparison")
         if self.workflow in {"india-withholding-liability", "india-withholding-credit"}:
             allowed = (
                 {"deductor", "collector"}

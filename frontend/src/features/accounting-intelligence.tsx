@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAPI, useAction } from "@/hooks/use-api";
+import { useEventHistory } from "@/hooks/use-event-history";
 import { useScope } from "@/stores/workspace";
 import {
   Badge,
@@ -143,11 +144,7 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
   const capabilities = useAPI<{ lead_sections: string[] }>(
     "intelligence/capabilities",
   );
-  const records = useAPI<{ items: Result[] }>(
-    `${prefix}/events?limit=100&newest=true`,
-    true,
-    true,
-  );
+  const records = useEventHistory<Result>(prefix);
   const jobs = useAPI<{ items: Job[] }>(`${prefix}/jobs`, true, true);
   const foundation = useAPI<{
     runtime: string;
@@ -177,6 +174,14 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
   }>(`${prefix}/accounts?snapshot_id=${snapshot}`, !!snapshot);
   const action = useAction<Result>();
   const body = detail.data?.body;
+  const boxScope = body?.box_comparison_scope;
+  const selectedVATScope =
+    boxScope &&
+    typeof boxScope === "object" &&
+    "mode" in boxScope &&
+    boxScope.mode === "SELECTED_REQUIRED_BOXES"
+      ? (boxScope as Record<string, unknown>)
+      : null;
   const choices = records.data?.items || [];
   const choose = (id: string) => {
     setSelected(id);
@@ -847,6 +852,11 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
             ))}
           </select>
         </label>
+        {records.hasOlder && (
+          <Button disabled={records.loadingOlder} onClick={records.loadOlder}>
+            Load older sources and results
+          </Button>
+        )}
         {!detail.data ? (
           <Empty title="Select a result">
             Completed runs and human decisions retain their original source
@@ -854,6 +864,19 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
           </Empty>
         ) : (
           <>
+            {selectedVATScope && (
+              <aside aria-label="Selected VAT201 comparison coverage">
+                <strong>
+                  Selected VAT201 boxes only:{" "}
+                  {Array.isArray(selectedVATScope.required_boxes)
+                    ? selectedVATScope.required_boxes.map(String).join(", ")
+                    : ""}
+                  .
+                </strong>{" "}
+                Whole-return completeness is not determined.
+                <p>{val(selectedVATScope.assessment)}</p>
+              </aside>
+            )}
             {body?.table_metadata != null &&
               typeof body.table_metadata === "object" && (
                 <details>
@@ -1080,8 +1103,9 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
               <Button
                 disabled={
                   action.isPending ||
-                  !Object.values(detail.data.collection_totals || {}).some(
-                    (n) => n > offset + 100,
+                  !Object.entries(detail.data.collection_totals || {}).some(
+                    ([collection, n]) =>
+                      collection !== "excluded_box_rows" && n > offset + 100,
                   )
                 }
                 onClick={() => setOffset(offset + 100)}

@@ -4,10 +4,67 @@ from datetime import date
 from decimal import Decimal
 from typing import Literal
 
-from pydantic import Field, model_validator
+from pydantic import Field, field_validator, model_validator
 
 from app.modules.country_workflows.audit_schemas import Currency, Identifier, Money
 from app.modules.jurisdictions.profiles import Strict
+
+
+class ImportVATLine(Strict):
+    """Assessed import values, not a tariff or tax eligibility calculation."""
+
+    id: Identifier
+    registration: str = Field(pattern=r"^\d{15}$")
+    customs_registration: Identifier
+    authority: Identifier
+    declaration: Identifier
+    line_reference: Identifier
+    entry_kind: Literal["declaration", "adjustment"]
+    adjustment_reference: str = Field(default="", max_length=120)
+    record_version: Identifier
+    version_status: Literal["current", "superseded", "cancelled"]
+    period_start: date
+    period_end: date
+    date: date
+    currency: Literal["AED"] = "AED"
+    net: Money
+    tax: Money
+    evidence_reference: Identifier
+    assessment: str = Field(min_length=10, max_length=2000)
+
+    @field_validator(
+        "customs_registration",
+        "authority",
+        "declaration",
+        "line_reference",
+        "record_version",
+        "evidence_reference",
+    )
+    @classmethod
+    def explicit_identifiers(cls, value):
+        if not value.strip() or value != value.strip():
+            raise ValueError(
+                "Import identifiers require nonblank exact values without surrounding whitespace"
+            )
+        return value
+
+    @model_validator(mode="after")
+    def scope_and_sign(self):
+        if self.period_end < self.period_start:
+            raise ValueError("Import VAT return period must be ordered")
+        if self.entry_kind == "declaration":
+            if self.net < 0 or self.tax < 0 or self.adjustment_reference:
+                raise ValueError(
+                    "Declaration values must be non-negative without an adjustment reference"
+                )
+        elif not self.adjustment_reference.strip():
+            raise ValueError("Each import adjustment needs its own explicit reference")
+        if (
+            len(self.assessment.strip()) < 10
+            or self.adjustment_reference != self.adjustment_reference.strip()
+        ):
+            raise ValueError("Import assessment and adjustment references must be explicit")
+        return self
 
 
 class TradeLine(Strict):
@@ -173,6 +230,7 @@ class ConstructionProject(Strict):
 
 
 SECTOR_ROW_TYPES: dict[str, type[Strict]] = {
+    "import-vat-lines": ImportVATLine,
     "trade-lines": TradeLine,
     "price-bands": PriceBand,
     "excise-movements": ExciseMovement,
@@ -185,6 +243,11 @@ SECTOR_ROW_TYPES: dict[str, type[Strict]] = {
     "construction-projects": ConstructionProject,
 }
 SECTOR_WORKFLOWS: dict[str, tuple[str, list[str], dict[str, str]]] = {
+    "uae-import-vat": (
+        "UAE import VAT declarations / portal / books review",
+        ["AE"],
+        {"customs": "import-vat-lines", "portal": "import-vat-lines", "books": "import-vat-lines"},
+    ),
     "customs-reconciliation": (
         "Customs / invoice / goods receipt reconciliation",
         ["AE"],

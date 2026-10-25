@@ -6,6 +6,7 @@ from datetime import date
 from decimal import Decimal
 
 from app.modules.country_workflows.audit_calculations import money, result
+from app.modules.country_workflows.import_vat import import_vat
 from app.modules.ifrs.calculations import revenue
 from app.modules.ifrs.schemas import Revenue
 from app.modules.intelligence.matching import reconcile_transactions
@@ -540,6 +541,7 @@ def construction(data, tables):
 
 
 SECTOR_CALCULATORS = {
+    "uae-import-vat": import_vat,
     "customs-reconciliation": trade,
     "trade-document-review": trade,
     "excise-reconciliation": excise,

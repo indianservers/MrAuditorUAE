@@ -489,7 +489,65 @@ def vat_return(data, tables):
             r["currency"],
         )
 
-    filed = unique(tables["return"], key)
+    included = {
+        role: [
+            row
+            for row in population
+            if not data.restrict_to_required_boxes or row["box"] in data.required_boxes
+        ]
+        for role, population in tables.items()
+    }
+    excluded = [
+        {
+            "source_role": role,
+            "source_row_id": row["id"],
+            **{
+                field: row[field]
+                for field in (
+                    "registration",
+                    "period_start",
+                    "period_end",
+                    "box",
+                    "currency",
+                    "taxable_amount",
+                    "tax",
+                    "adjustment",
+                )
+            },
+        }
+        for role, population in tables.items()
+        for row in population
+        if data.restrict_to_required_boxes and row["box"] not in data.required_boxes
+    ]
+
+    def controls(population):
+        totals: dict[tuple[str, str], dict[str, Any]] = {}
+        for row in population:
+            total = totals.setdefault(
+                (row["source_role"], row["currency"]),
+                {
+                    "row_count": 0,
+                    "taxable_amount": Decimal(0),
+                    "tax": Decimal(0),
+                    "adjustment": Decimal(0),
+                },
+            )
+            total["row_count"] += 1
+            for field in ("taxable_amount", "tax", "adjustment"):
+                total[field] += amount(row, field)
+        return [
+            {
+                "source_role": role,
+                "currency": currency,
+                **{
+                    field: str(value) if field != "row_count" else value
+                    for field, value in values.items()
+                },
+            }
+            for (role, currency), values in sorted(totals.items())
+        ]
+
+    filed = unique(included["return"], key)
     books: defaultdict[tuple, dict[str, Any]] = defaultdict(
         lambda: {
             "taxable_amount": Decimal(0),
@@ -498,7 +556,7 @@ def vat_return(data, tables):
             "ids": [],
         }
     )
-    for r in tables["books"]:
+    for r in included["books"]:
         group = books[key(r)]
         for field in ["taxable_amount", "tax", "adjustment"]:
             group[field] += amount(r, field)
@@ -553,7 +611,33 @@ def vat_return(data, tables):
         "rows": rows,
         "exception_count": sum(r["state"] != "MATCHED" for r in rows),
         "blocked": any(r["state"] == "MISSING_BOX_EVIDENCE" for r in rows),
+        "box_comparison_scope": {
+            "mode": "SELECTED_REQUIRED_BOXES"
+            if data.restrict_to_required_boxes
+            else "ALL_RETAINED_BOXES",
+            "required_boxes": data.required_boxes,
+            "assessment": data.box_scope_assessment.strip()
+            if data.restrict_to_required_boxes
+            else None,
+            "included_rows": {role: len(population) for role, population in included.items()},
+            "excluded_rows": {
+                role: len(population) - len(included[role]) for role, population in tables.items()
+            },
+            "whole_return_completeness": "NOT_DETERMINED",
+        },
+        "excluded_box_rows": excluded,
+        "excluded_box_controls": controls(excluded),
+        "included_box_controls": controls(
+            [
+                {**row, "source_role": role}
+                for role, population in included.items()
+                for row in population
+            ]
+        ),
         "limitations": [
+            "Selected-box comparison excludes only explicitly assessed box populations; no whole-return completeness conclusion is determined"
+            if data.restrict_to_required_boxes
+            else "All retained boxes are compared; source-file completeness is not whole-return completeness",
             "VAT201 box assignments and required-box scope must be independently assessed",
             "Taxable amounts, tax and adjustments compare separately; no tax rate or recovery entitlement is inferred",
             "Canonical source contracts do not imply a live FTA connection or native VAT201 parser",
