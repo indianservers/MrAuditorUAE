@@ -5262,3 +5262,165 @@ test("bank matched schedules show a clear empty caption for UAE and India", asyn
     );
   }
 });
+
+for (const country of ["AE", "IN"] as const) {
+  test(`${country} bank account identity evidence uses country format rules and independent review`, async ({
+    page,
+    browser,
+  }) => {
+    test.setTimeout(180000);
+    const input = fixture.bank_account_evidence[country],
+      eid = input.engagement;
+    const context = await browser.newContext({
+      baseURL: "http://127.0.0.1:3010",
+      viewport: { width: 1600, height: 1100 },
+    });
+    const reviewer = await context.newPage();
+    try {
+      for (const [actor, email, password] of [
+        [page, "admin@example.com", "test-strong-password-123"],
+        [reviewer, fixture.pdf_final_reviewer_email, "synthetic-password-123"],
+      ] as const) {
+        await actor.goto("/login");
+        await actor.getByLabel("Email address").fill(email);
+        await actor.getByLabel("Password", { exact: true }).fill(password);
+        await actor
+          .getByRole("button", { name: "Sign in", exact: true })
+          .click();
+        await actor.waitForURL("**/dashboard");
+      }
+      await page.goto(`/intelligence/${eid}/country-workflow`);
+      await page
+        .getByLabel("Workflow", { exact: true })
+        .selectOption("bank-account-evidence");
+      for (const [label, value] of [
+        ["Schedule title", `SYNTHETIC ${country} bank identity ${Date.now()}`],
+        ["Reconciliation date", "2026-06-30"],
+        ["Bank account identifier", input.parameters.account],
+        ["Account currency", input.parameters.currency],
+        ["Engagement legal entity name", input.parameters.bank_owner_name],
+        [
+          "Owner identifier scheme",
+          input.parameters.bank_owner_identifier_scheme,
+        ],
+        ["Owner identifier", input.parameters.bank_owner_identifier],
+        [
+          "Scope and source rationale",
+          "Independent retained register, ledger and bank document observations with scoped owner identifiers",
+        ],
+      ] as const)
+        await page.getByLabel(label, { exact: true }).fill(value);
+      for (const role of ["register", "ledger", "bank"] as const)
+        await page
+          .getByLabel(role + " source", { exact: true })
+          .selectOption(input.sources[role]);
+      async function queue() {
+        const submitted = page.waitForResponse(
+          (response) =>
+            response.url().includes(`/engagements/${eid}/jobs`) &&
+            response.request().method() === "POST",
+        );
+        await page
+          .getByRole("button", { name: "Queue calculation", exact: true })
+          .click();
+        const response = await submitted;
+        expect(response.status(), await response.text()).toBe(202);
+        const job = await response.json();
+        let resultId = "";
+        await expect
+          .poll(
+            async () => {
+              const response = await page.request.get(
+                `/api/backend/intelligence/engagements/${eid}/jobs/${job.id}`,
+                { headers: { "X-Tenant-ID": fixture.tenant } },
+              );
+              expect(response.status()).toBe(200);
+              const state = await response.json();
+              if (state.status === "failed")
+                throw new Error(JSON.stringify(state.error_details));
+              resultId = state.result_id || "";
+              return state.status;
+            },
+            { timeout: 45000 },
+          )
+          .toBe("completed");
+        await expect(
+          page
+            .getByLabel("Saved source or result")
+            .locator(`option[value="${resultId}"]`),
+        ).toHaveCount(1);
+        await page.getByLabel("Saved source or result").selectOption(resultId);
+        return resultId;
+      }
+      const resultId = await queue();
+      const comparison = page.getByRole("region", {
+        name: "Bank account evidence comparison",
+        exact: true,
+      });
+      await expect(
+        comparison.getByRole("table", {
+          name: "Bank account identity observations",
+        }),
+      ).toBeVisible();
+      await expect(comparison.getByText("00123", { exact: true })).toHaveCount(
+        3,
+      );
+      if (country === "IN")
+        await expect(
+          comparison.getByText("000123456789", { exact: true }),
+        ).toHaveCount(3);
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-bank-account-evidence.png`,
+        () => comparison.screenshot(),
+      );
+      await reviewer.goto(`/intelligence/${eid}/country-workflow`);
+      await reviewer
+        .getByLabel("Saved source or result")
+        .selectOption(resultId);
+      await reviewer
+        .getByLabel("Review / exception rationale")
+        .fill(
+          "Independent synthetic bank identity evidence and owner scope checked; no bank authentication asserted",
+        );
+      const approval = reviewer.waitForResponse(
+        (response) =>
+          response.url().includes(`/events/${resultId}/review`) &&
+          response.request().method() === "POST",
+      );
+      await reviewer
+        .getByRole("button", { name: "Independent approval", exact: true })
+        .click();
+      const approved = await approval;
+      expect(approved.status(), await approved.text()).toBe(201);
+      const item = await approved.json();
+      expect(item.body.review_status).toBe("REVIEWED");
+      expect(item.body.bank_authentication_status).toBe(
+        "NOT_ESTABLISHED_BY_DOCUMENT_COMPARISON",
+      );
+      const download = reviewer.waitForEvent("download");
+      await reviewer
+        .getByRole("button", { name: "Export XLSX", exact: true })
+        .click();
+      expect((await download).suggestedFilename()).toMatch(/\.xlsx$/);
+      await page
+        .getByLabel("bank source", { exact: true })
+        .selectOption(input.mismatched_bank);
+      await page
+        .getByLabel("Schedule title", { exact: true })
+        .fill(`SYNTHETIC ${country} unmatched bank owner ${Date.now()}`);
+      await queue();
+      await expect(
+        page.getByRole("button", { name: "Independent approval", exact: true }),
+      ).toBeDisabled();
+      await expect(
+        comparison.getByText("owner identifier unresolved", { exact: true }),
+      ).toBeVisible();
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-bank-owner-mismatch.png`,
+        () => comparison.screenshot(),
+      );
+    } finally {
+      await context.close();
+    }
+  });
+}

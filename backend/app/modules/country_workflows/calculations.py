@@ -881,7 +881,11 @@ def calculate(data, country, sources):
     tables = {role: source["rows"] for role, source in sources.items()}
     with localcontext() as arithmetic:
         arithmetic.prec = 80
-        if data.workflow == "payroll-ledger-rollforward":
+        if data.workflow == "bank-account-evidence":
+            from app.modules.country_workflows.bank_accounts import compare
+
+            result = compare(data, tables, country)
+        elif data.workflow == "payroll-ledger-rollforward":
             from app.modules.country_workflows.payroll_ledger import reconcile
 
             result = reconcile(data, tables, country)

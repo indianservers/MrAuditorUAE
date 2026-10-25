@@ -1373,5 +1373,25 @@
     "expected": {
       "error": "overallocated"
     }
+  },
+  {
+    "id": "RW-149",
+    "title": "UAE register/ledger/bank owner evidence agrees without bank authentication",
+    "workflow": "bank-account-evidence",
+    "country": "AE",
+    "expected": {
+      "exceptions": 0,
+      "blocked": false
+    }
+  },
+  {
+    "id": "RW-150",
+    "title": "India leading-zero account mismatch cannot be approved as ownership evidence",
+    "workflow": "bank-account-evidence",
+    "country": "IN",
+    "expected": {
+      "exceptions": 1,
+      "blocked": true
+    }
   }
 ]

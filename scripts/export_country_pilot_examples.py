@@ -34,14 +34,20 @@ def export():
             "case": case,
         }
         content = json.dumps(document, ensure_ascii=False, indent=2) + "\n"
-        if path.exists() and path.read_text(encoding="utf-8") != content:
-            raise FileExistsError(f"Preserve the existing example before regenerating: {path}")
-        path.write_text(content, encoding="utf-8")
+        retained_hash = source_hash
+        if path.exists():
+            existing = json.loads(path.read_text(encoding="utf-8"))
+            retained_hash = existing.get("source_fixture_sha256", "")
+            if not isinstance(retained_hash, str) or not re.fullmatch(r"[a-f0-9]{64}", retained_hash) or {key:value for key,value in existing.items() if key != "source_fixture_sha256"} != {key:value for key,value in document.items() if key != "source_fixture_sha256"}:
+                raise FileExistsError(f"Preserve the existing example before regenerating: {path}")
+        else:
+            path.write_text(content, encoding="utf-8")
         assert json.loads(path.read_text(encoding="utf-8"))["case"] == case
         counts[country] += 1
-        index.append({"id": case["id"], "country": case["country"], "workflow": case["workflow"], "file": f"{country}/{path.name}"})
+        index.append({"id": case["id"], "country": case["country"], "workflow": case["workflow"], "file": f"{country}/{path.name}", "source_fixture_sha256": retained_hash})
     (DESTINATION / "catalog.json").write_text(json.dumps({
         "dataset_kind": "SYNTHETIC_ENGINE_FIXTURES_NOT_CLIENT_PILOTS",
+        "fixture_hash_policy": "Per-file original fixture hashes are preserved for unchanged cases; the root hash identifies this generator run source version",
         "source_fixture_sha256": source_hash,
         "scenario_count": len(cases), "counts_by_country": dict(counts), "cases": index,
     }, indent=2) + "\n", encoding="utf-8")

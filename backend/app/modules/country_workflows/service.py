@@ -386,6 +386,12 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(422, "Payroll accounting window must be within the engagement period")
     elif data.period_start and data.period_start != period.start_date:
         raise HTTPException(422, "Reporting-period start must equal the engagement period start")
+    if data.workflow == "bank-account-evidence":
+        from app.modules.country_workflows.bank_accounts import owner_name
+
+        entity = await db.get(LegalEntity, eng.entity_id)
+        if entity is None or owner_name(data.bank_owner_name) != owner_name(entity.name):
+            raise HTTPException(422, "Bank owner name scope must equal the engagement legal entity name")
     sources = {}
     hashes = set()
     evidence_versions = set()
@@ -394,6 +400,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         source = await intelligence.event(db, ctx, eng.id, identifier, True)
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
+        if data.workflow == "bank-account-evidence" and source.body.get("review_status") != "REVIEWED":
+            raise HTTPException(409, "Independently review all bank account evidence source populations before comparison")
         if data.workflow in {"india-invoice-register", "india-gstr1-summary", "india-gstr1-documents"} and source.body.get("review_status") != "REVIEWED":
             raise HTTPException(409, "Independently review both source populations before invoice/register, outward GST or summary comparison")
         if data.workflow == "uae-vat-return" and data.vat201_layout == "emirate-20" and source.body.get("review_status") != "REVIEWED":

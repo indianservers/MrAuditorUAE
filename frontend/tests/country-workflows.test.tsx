@@ -256,6 +256,16 @@ vi.mock("@/hooks/use-api", () => ({
                 },
               },
               {
+                id: "bank-account-evidence",
+                title: "Bank account identity and owner evidence",
+                available: true,
+                roles: {
+                  register: "bank-account-evidence",
+                  ledger: "bank-account-evidence",
+                  bank: "bank-account-evidence",
+                },
+              },
+              {
                 id: "bank-brs",
                 title: "Bank reconciliation",
                 available: true,
@@ -273,6 +283,10 @@ vi.mock("@/hooks/use-api", () => ({
                 id: { required: true, type: "str" },
                 metric: { required: true, type: "str" },
                 value: { required: true, type: "Decimal" },
+              },
+              "bank-account-evidence": {
+                id: { required: true, type: "str" },
+                account: { required: true, type: "str" },
               },
               "payroll-account-balances": {
                 id: { required: true, type: "str" },
@@ -383,6 +397,18 @@ vi.mock("@/hooks/use-api", () => ({
                         invoice_direction: "purchase",
                         allowed_source_roles: ["books", "invoices"],
                       })),
+                      ...["register", "ledger", "bank", "unreviewed"].map(
+                        (role) => ({
+                          id: "account-" + role,
+                          label: "Account evidence " + role,
+                          kind: "workflow-source",
+                          table_type: "bank-account-evidence",
+                          freshness: "CURRENT",
+                          review_status:
+                            role === "unreviewed" ? "UNVERIFIED" : "REVIEWED",
+                          version: 1,
+                        }),
+                      ),
                       ...["opening", "payroll", "posted", "closing"].map(
                         (role) => ({
                           id: "ledger-" + role,
@@ -2813,4 +2839,53 @@ it("shows the bank date blocker and avoids an inverted range on an empty excepti
     screen.queryByRole("columnheader", { name: "Disposition" }),
   ).not.toBeInTheDocument();
   expect(screen.getByText("Bank transaction dates · 1 entry")).toBeVisible();
+});
+
+it("requires scoped owner evidence and only offers independently reviewed account sources", async () => {
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Workflow"), {
+    target: { value: "bank-account-evidence" },
+  });
+  expect(screen.getByLabelText("register source")).not.toHaveTextContent(
+    "Account evidence unreviewed",
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  expect(
+    await screen.findByText(
+      "Declare the account, engagement entity name and owner identifier before comparison.",
+    ),
+  ).toBeVisible();
+  for (const [label, value] of [
+    ["Schedule title", "Synthetic account evidence"],
+    ["Reconciliation date", "2026-06-30"],
+    ["Bank account identifier", "SYN-BANK"],
+    ["Account currency", "INR"],
+    ["Engagement legal entity name", "Synthetic Entity"],
+    ["Owner identifier scheme", "SYNTHETIC-REGISTRY"],
+    ["Owner identifier", "00123"],
+    [
+      "Scope and source rationale",
+      "Independent synthetic three source ownership scope",
+    ],
+  ])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  for (const role of ["register", "ledger", "bank"])
+    fireEvent.change(screen.getByLabelText(role + " source"), {
+      target: { value: "account-" + role },
+    });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+    workflow: "bank-account-evidence",
+    account: "SYN-BANK",
+    currency: "INR",
+    bank_owner_identifier: "00123",
+    bank_owner_identifier_scheme: "SYNTHETIC-REGISTRY",
+    bank_owner_name: "Synthetic Entity",
+    source_ids: {
+      register: "account-register",
+      ledger: "account-ledger",
+      bank: "account-bank",
+    },
+  });
 });

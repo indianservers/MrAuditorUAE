@@ -9,6 +9,7 @@ import { Button, ErrorState, Status } from "@/components/ui/primitives";
 import { PageHeader } from "./shared";
 import { BankCarryforwardSource } from "./bank-carryforward-source";
 import { ContributionObligationSource } from "./contribution-obligation-source";
+import { BankAccountEvidenceReview } from "./bank-account-evidence";
 import { BankTransactionDates } from "./bank-transaction-dates";
 import { PayrollPostingLinks } from "./payroll-posting-links";
 import { InventoryEvidenceTable } from "./inventory-evidence-table";
@@ -415,6 +416,9 @@ export function CountryWorkflows({
   const [boxScopeAssessment, setBoxScopeAssessment] = useState("");
   const [subjects, setSubjects] = useState("");
   const [account, setAccount] = useState("");
+  const [bankOwnerName, setBankOwnerName] = useState("");
+  const [bankOwnerScheme, setBankOwnerScheme] = useState("");
+  const [bankOwnerIdentifier, setBankOwnerIdentifier] = useState("");
   const [currency, setCurrency] = useState("AED");
   const [balances, setBalances] = useState<Record<string, string>>({});
   const [comments, setComments] = useState("");
@@ -1006,6 +1010,16 @@ export function CountryWorkflows({
           throw new Error(
             "Declare obligation months, bank account, settlement window and payment sign before allocating.",
           );
+        if (
+          workflow === "bank-account-evidence" &&
+          (!account.trim() ||
+            !bankOwnerName.trim() ||
+            !bankOwnerScheme.trim() ||
+            !bankOwnerIdentifier.trim())
+        )
+          throw new Error(
+            "Declare the account, engagement entity name and owner identifier before comparison.",
+          );
         if (workflow === "open-item-allocations" && !invoiceFaceAmounts)
           throw new Error(
             "Confirm that invoices contain face amounts before cash allocation.",
@@ -1096,6 +1110,14 @@ export function CountryWorkflows({
             ? { period_start: periodStart }
             : {}),
           ...(taxYear ? { tax_year_start: taxYear } : {}),
+          ...(workflow === "bank-account-evidence"
+            ? {
+                account,
+                bank_owner_name: bankOwnerName,
+                bank_owner_identifier_scheme: bankOwnerScheme,
+                bank_owner_identifier: bankOwnerIdentifier,
+              }
+            : {}),
           ...(workflow === "bank-brs" ? { account, ...balances } : {}),
           ...(workflow === "bank-subsequent-clearance" ? { account } : {}),
           ...(workflow === "obligation-bank-allocations"
@@ -2794,6 +2816,7 @@ export function CountryWorkflows({
                           (!r.allowed_source_roles ||
                             r.allowed_source_roles.includes(role)) &&
                           (![
+                            "bank-account-evidence",
                             "obligation-bank-allocations",
                             "payroll-ledger-rollforward",
                             "india-gstr1-documents",
@@ -3035,6 +3058,54 @@ export function CountryWorkflows({
                   category, employer, account and currency stay separate. A
                   settlement journal does not prove payment execution.
                 </p>
+              )}
+              {workflow === "bank-account-evidence" && (
+                <fieldset>
+                  <legend>Bank account and owner evidence scope</legend>
+                  <p>
+                    Compare independently reviewed register, ledger setup and
+                    bank evidence. UAE IBAN and India IFSC checks verify format
+                    only. No bank ownership confirmation or payment is
+                    requested.
+                  </p>
+                  <label>
+                    Bank account identifier
+                    <input
+                      value={account}
+                      onChange={(e) => setAccount(e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    Account currency
+                    <input
+                      value={currency}
+                      onChange={(e) =>
+                        setCurrency(e.target.value.toUpperCase())
+                      }
+                    />
+                  </label>
+                  <label>
+                    Engagement legal entity name
+                    <input
+                      value={bankOwnerName}
+                      onChange={(e) => setBankOwnerName(e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    Owner identifier scheme
+                    <input
+                      value={bankOwnerScheme}
+                      onChange={(e) => setBankOwnerScheme(e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    Owner identifier
+                    <input
+                      value={bankOwnerIdentifier}
+                      onChange={(e) => setBankOwnerIdentifier(e.target.value)}
+                    />
+                  </label>
+                </fieldset>
               )}
               {workflow === "bank-brs" && (
                 <>
@@ -3880,6 +3951,9 @@ export function CountryWorkflows({
               </select>
             </label>
           )}
+          {body.workflow === "bank-account-evidence" && (
+            <BankAccountEvidenceReview rows={rows} />
+          )}
           {body.transaction_dates && (
             <BankTransactionDates
               key={selected + ":bank-dates"}
@@ -4236,6 +4310,7 @@ export function CountryWorkflows({
             {(compactSource ||
               compactArrearResult ||
               compactBenefit ||
+              body.workflow === "bank-account-evidence" ||
               body.workflow === "payroll-ledger-rollforward" ||
               body.workflow === "india-gstr1-documents" ||
               body.workflow === "india-invoice-register" ||
@@ -4258,77 +4333,82 @@ export function CountryWorkflows({
                 Show source provenance and all columns
               </label>
             )}
-            <table>
-              <caption>
-                {rows.length
-                  ? `Source-linked schedule · rows ${offset + 1}–${offset + rows.length}; XLSX contains the full result`
-                  : "No schedule rows on this page; XLSX contains the full result"}
-              </caption>
-              <thead>
-                <tr>
-                  {columns.map((k) => (
-                    <th key={k} scope="col">
-                      {compactDues && k === "settled_or_allocated"
-                        ? "allocated"
-                        : k.replaceAll("_", " ")}
-                    </th>
-                  ))}
-                  {detail.data.kind === "country-workflow" &&
-                    rows.length > 0 && <th scope="col">Disposition</th>}
-                </tr>
-              </thead>
-              <tbody>
-                {rows.map((row, i) => (
-                  <tr key={String(row.id || i)}>
+            {(body.workflow !== "bank-account-evidence" ||
+              showRuleProvenance) && (
+              <table>
+                <caption>
+                  {rows.length
+                    ? `Source-linked schedule · rows ${offset + 1}–${offset + rows.length}; XLSX contains the full result`
+                    : "No schedule rows on this page; XLSX contains the full result"}
+                </caption>
+                <thead>
+                  <tr>
                     {columns.map((k) => (
-                      <td key={k}>
-                        {compactWithholding &&
-                        k === "assessment_issues" &&
-                        Array.isArray(row[k]) ? (
-                          <ul>
-                            {(row[k] as unknown[]).map((issue) => (
-                              <li key={String(issue)}>
-                                {text(issue).replaceAll("_", " ").toLowerCase()}
-                              </li>
-                            ))}
-                          </ul>
-                        ) : compactWithholding &&
-                          [
-                            "amounts",
-                            "differences_from_expected",
-                            "differences_from_books",
-                          ].includes(k) &&
-                          row[k] &&
-                          typeof row[k] === "object" &&
-                          !Array.isArray(row[k]) ? (
-                          <div style={{ display: "grid", gap: 4 }}>
-                            {Object.entries(
-                              row[k] as Record<string, unknown>,
-                            ).map(([role, value]) => (
-                              <span key={role}>
-                                {role}: {text(value)}
-                              </span>
-                            ))}
-                          </div>
-                        ) : (
-                          text(row[k])
-                        )}
-                      </td>
+                      <th key={k} scope="col">
+                        {compactDues && k === "settled_or_allocated"
+                          ? "allocated"
+                          : k.replaceAll("_", " ")}
+                      </th>
                     ))}
-                    {detail.data?.kind === "country-workflow" && (
-                      <td>
-                        <Button
-                          disabled={action.isPending}
-                          onClick={() => decide("accept", String(row.id))}
-                        >
-                          Document exception
-                        </Button>
-                      </td>
-                    )}
+                    {detail.data.kind === "country-workflow" &&
+                      rows.length > 0 && <th scope="col">Disposition</th>}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {rows.map((row, i) => (
+                    <tr key={String(row.id || i)}>
+                      {columns.map((k) => (
+                        <td key={k}>
+                          {compactWithholding &&
+                          k === "assessment_issues" &&
+                          Array.isArray(row[k]) ? (
+                            <ul>
+                              {(row[k] as unknown[]).map((issue) => (
+                                <li key={String(issue)}>
+                                  {text(issue)
+                                    .replaceAll("_", " ")
+                                    .toLowerCase()}
+                                </li>
+                              ))}
+                            </ul>
+                          ) : compactWithholding &&
+                            [
+                              "amounts",
+                              "differences_from_expected",
+                              "differences_from_books",
+                            ].includes(k) &&
+                            row[k] &&
+                            typeof row[k] === "object" &&
+                            !Array.isArray(row[k]) ? (
+                            <div style={{ display: "grid", gap: 4 }}>
+                              {Object.entries(
+                                row[k] as Record<string, unknown>,
+                              ).map(([role, value]) => (
+                                <span key={role}>
+                                  {role}: {text(value)}
+                                </span>
+                              ))}
+                            </div>
+                          ) : (
+                            text(row[k])
+                          )}
+                        </td>
+                      ))}
+                      {detail.data?.kind === "country-workflow" && (
+                        <td>
+                          <Button
+                            disabled={action.isPending}
+                            onClick={() => decide("accept", String(row.id))}
+                          >
+                            Document exception
+                          </Button>
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
           <div className="toolbar" aria-label="Schedule pages">
             <Button

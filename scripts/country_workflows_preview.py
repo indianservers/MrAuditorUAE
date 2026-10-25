@@ -805,6 +805,27 @@ async def main():
                 date_result = await execute(client, h, engagement, "country-workflow", bank_payload(book_approval.json(), statement_approval.json(), currency=currency, book_closing="101", statement_closing="101", title="SYNTHETIC " + code + " " + mode + " bank dates"))
                 date_results[mode] = date_result["id"]
             bank_dates[code] = {"engagement": engagement, **date_results}
+        from tests.unit.test_bank_accounts import parameters as account_parameters
+        from tests.unit.test_bank_accounts import population as account_population
+
+        bank_account_evidence = {}
+        for code, engagement in [("AE", eid), ("IN", india)]:
+            engagement_record = (await client.get("/api/v1/engagements/" + engagement, headers=h)).json()
+            entity_record = (await client.get("/api/v1/entities/" + engagement_record["entity_id"], headers=h)).json()
+            account_rows = account_population(code)
+            account_sources = {}
+            for role, observations in account_rows.items():
+                observations[0]["owner_name"] = entity_record["name"]
+                prepared = await source(client, h, engagement, observations, "SYNTHETIC account evidence " + role, "bank-account-evidence", {})
+                approval = await decision(client, pdf_final_reviewer[0], engagement, prepared)
+                assert approval.status_code == 201, approval.text
+                account_sources[role] = approval.json()["id"]
+            wrong_rows = [{**account_rows["bank"][0], "id":"SYNTHETIC-wrong-owner", "owner_identifier":"UNRELATED-OWNER"}]
+            prepared = await source(client, h, engagement, wrong_rows, "SYNTHETIC mismatched bank owner evidence", "bank-account-evidence", {})
+            approval = await decision(client, pdf_final_reviewer[0], engagement, prepared)
+            assert approval.status_code == 201, approval.text
+            account_parameters_data = account_parameters(code, bank_owner_name=entity_record["name"]).model_dump(mode="json")
+            bank_account_evidence[code] = {"engagement": engagement, "sources": account_sources, "mismatched_bank": approval.json()["id"], "parameters": account_parameters_data}
         if implementation_hash() != implementation:
             raise RuntimeError(
                 "Backend implementation changed during fixture preparation; prepare fresh fixtures before browser verification"
@@ -815,6 +836,7 @@ async def main():
                 {
                     "synthetic": True,
                     "bank_dates": bank_dates,
+                    "bank_account_evidence": bank_account_evidence,
                     "regulatory_conversions": regulatory_conversions,
                     "pension_sources": pension_sources,
                     "published_pension": published_pension,

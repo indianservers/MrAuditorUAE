@@ -688,4 +688,21 @@ add(
     **dues_parameters,
 )
 
-assert len(CASES) == 148
+for bank_country, bank_currency in [("AE", "AED"), ("IN", "INR")]:
+    bank_assertion = {
+        "id":"register-1", "account":"SYN-BANK", "bank_country":bank_country,
+        "account_scheme":"IBAN" if bank_country == "AE" else "LOCAL",
+        "account_number":"AE070331234567890123456" if bank_country == "AE" else "000123456789",
+        "routing_code":"033" if bank_country == "AE" else "SYNB0ABC123",
+        "currency":bank_currency, "owner_country":bank_country,
+        "owner_name":"SYNTHETIC Entity LLC", "owner_identifier_scheme":"SYNTHETIC-REGISTRY",
+        "owner_identifier":"00123", "valid_from":"2026-01-01", "valid_through":"2026-12-31",
+        "assertion_status":"confirmed", "evidence_reference":"SYNTHETIC register",
+        "assessment":"Independently specified synthetic account ownership evidence",
+    }
+    account_assertions = {role:[{**bank_assertion,"id":role+"-1","evidence_reference":"SYNTHETIC "+role}] for role in ("register","ledger","bank")}
+    if bank_country == "IN":
+        account_assertions["bank"][0]["account_number"] = "123456789"
+    add("bank-account-evidence", "UAE register/ledger/bank owner evidence agrees without bank authentication" if bank_country == "AE" else "India leading-zero account mismatch cannot be approved as ownership evidence", account_assertions, {"exceptions":0 if bank_country == "AE" else 1,"blocked":bank_country == "IN"}, country=bank_country, account="SYN-BANK", currency=bank_currency, bank_owner_name="SYNTHETIC Entity LLC", bank_owner_identifier_scheme="SYNTHETIC-REGISTRY", bank_owner_identifier="00123")
+
+assert len(CASES) == 150

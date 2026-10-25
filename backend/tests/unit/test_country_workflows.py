@@ -84,7 +84,7 @@ def test_country_catalogue_is_explicit_and_not_a_legal_certification():
 def test_published_scenario_catalogue_matches_executable_fixtures():
     from app.modules.country_workflows.catalogue import scenarios
 
-    assert len(scenarios()) == 148
+    assert len(scenarios()) == 150
     assert scenarios() == [
         {k: c[k] for k in ["id", "title", "workflow", "country", "expected"]} for c in CASES
     ]

@@ -29,6 +29,7 @@ WORKFLOWS = {
         ["AE"],
         {"books": "return-boxes", "return": "return-boxes"},
     ),
+    "bank-account-evidence": ("Bank account identity and owner evidence", ["AE", "IN"], {role:"bank-account-evidence" for role in ("register","ledger","bank")}),
     "bank-brs": (
         "Account-level bank reconciliation",
         [],

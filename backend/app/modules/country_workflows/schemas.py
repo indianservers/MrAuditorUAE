@@ -6,6 +6,7 @@ from typing import Annotated, Literal
 from pydantic import BaseModel, Field, field_validator, model_validator
 
 from app.modules.country_workflows.audit_schemas import AUDIT_ROW_TYPES
+from app.modules.country_workflows.bank_accounts import BankAccountEvidence
 from app.modules.country_workflows.diligence_schemas import DILIGENCE_ROW_TYPES
 from app.modules.country_workflows.ecr_arrear_schemas import ECRArrearControls
 from app.modules.country_workflows.gst_summary import METRICS, GSTSummaryMetric
@@ -170,6 +171,7 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
     **SECTOR_ROW_TYPES,
     "return-boxes": ReturnBox,
     "transactions": Transaction,
+    "bank-account-evidence": BankAccountEvidence,
     "tax-documents": TaxDocument,
     "obligations": Obligation,
     "stock": Stock,
@@ -249,6 +251,7 @@ class SourceInput(Strict):
         "payroll-bases",
         "payroll-rules",
         "transactions",
+        "bank-account-evidence",
         "tax-documents",
         "obligations",
         "stock",
@@ -478,6 +481,7 @@ class WorkflowInput(Strict):
         "ownership-lookthrough",
         "sanctions-name-review",
         "bank-brs",
+        "bank-account-evidence",
         "uae-vat",
         "uae-vat-return",
         "india-gst",
@@ -509,6 +513,9 @@ class WorkflowInput(Strict):
     rationale: str = Field(min_length=10, max_length=4000)
     account: str | None = Field(default=None, max_length=120)
     currency: str = Field(default="AED", pattern=r"^[A-Z]{3}$")
+    bank_owner_name: str = Field(default="", max_length=200)
+    bank_owner_identifier_scheme: str = Field(default="", max_length=80)
+    bank_owner_identifier: str = Field(default="", max_length=120)
     book_opening: Money | None = None
     book_closing: Money | None = None
     statement_opening: Money | None = None
@@ -526,6 +533,11 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
+        if self.workflow == "bank-account-evidence":
+            if not self.account or any(not value.strip() for value in (self.bank_owner_name,self.bank_owner_identifier_scheme,self.bank_owner_identifier)):
+                raise ValueError("Account evidence comparison requires account and explicit owner name/identifier scope")
+        elif any((self.bank_owner_name,self.bank_owner_identifier_scheme,self.bank_owner_identifier)):
+            raise ValueError("Bank owner scope applies only to bank account evidence comparison")
         if self.workflow == "india-invoice-register":
             if self.invoice_direction is None:
                 raise ValueError("Select purchase or sale for the invoice evidence comparison")
