@@ -58,6 +58,18 @@ storage and API/job processor are real. Frontend tests record **124 passes**,
 including immutable expectations and stale-preview handling. Production build
 and scoped lint/type checks also pass. Older checkpoint counts below are historical.
 
+After this gate was added, the complete browser campaign was rerun from freshly
+seeded synthetic fixtures against the owned API, database, private storage and
+real Redis/Celery worker. `browser-results.json` records **14 passing tests** in
+**501.1 seconds**, with **zero failures, skips or flaky results**, starting
+25 October 2026 at 08:02 UTC. It includes both published profile bridges,
+independent fixture approval/publication and withdrawal, pooled dues payments,
+reviewed FX, subsequent bank clearance, import VAT, history beyond 100 events,
+PDF provenance, credit applications, India withholding, country isolation,
+exports and CSV/XLSX reconciliation. Preparation uses an explicit scanner double;
+this campaign does not qualify a production scanner, legal packs or client data.
+The accompanying screenshots were refreshed by the same campaign.
+
 Employer-residual fixtures may provide an explicitly resolved pension amount or
 test the real missing-pension refusal. The supporting resolved value is retained
 at paise precision; it is not rounded using the employer's rounding rule. This
