@@ -3,7 +3,7 @@ from datetime import date
 from decimal import Decimal
 from typing import Annotated, Literal
 
-from pydantic import BaseModel, Field, model_validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 
 from app.modules.country_workflows.audit_schemas import AUDIT_ROW_TYPES
 from app.modules.country_workflows.diligence_schemas import DILIGENCE_ROW_TYPES
@@ -14,6 +14,7 @@ from app.modules.country_workflows.sector_schemas import SECTOR_ROW_TYPES
 from app.modules.country_workflows.withholding_schemas import WithholdingRecord, WithholdingRole
 from app.modules.jurisdictions.profiles import Strict
 from app.modules.regulatory.conversion import ExchangeRate
+from app.modules.regulatory.pension_profiles import PensionScope
 
 Money = Annotated[Decimal, Field(max_digits=28, decimal_places=8)]
 Identifier = Annotated[str, Field(min_length=1, max_length=120)]
@@ -62,6 +63,25 @@ class Obligation(Strict):
     amount: Money
     due_date: date | None = None
     payment_date: date | None = None
+    pension_scope: PensionScope | None = Field(default=None, exclude_if=lambda value: value is None)
+
+    @field_validator("pension_scope", mode="before")
+    @classmethod
+    def csv_scope(cls, value):
+        if isinstance(value, str):
+            import json
+
+            try:
+                return json.loads(value)
+            except ValueError:
+                raise ValueError("Pension scope CSV values require a JSON object") from None
+        return value
+
+    @model_validator(mode="after")
+    def scope_component(self):
+        if self.pension_scope is not None and not self.component.startswith("PENSION:"):
+            raise ValueError("Pension scope applies only to pension components")
+        return self
 
 
 class ReturnBox(Strict):

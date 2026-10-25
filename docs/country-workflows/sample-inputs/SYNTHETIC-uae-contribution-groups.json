@@ -1,0 +1,20 @@
+[
+  {
+    "registration": "PENSION-ESTABLISHMENT",
+    "period": "2026-06",
+    "component": "PENSION:EMPLOYEE",
+    "expected_rows": 1,
+    "amount": "700.00",
+    "due_date": "2026-07-15",
+    "due_date_reference": "SYNTHETIC-DATE-REFERENCE"
+  },
+  {
+    "registration": "PENSION-ESTABLISHMENT",
+    "period": "2026-06",
+    "component": "PENSION:EMPLOYER",
+    "expected_rows": 1,
+    "amount": "1500.00",
+    "due_date": "2026-07-15",
+    "due_date_reference": "SYNTHETIC-DATE-REFERENCE"
+  }
+]

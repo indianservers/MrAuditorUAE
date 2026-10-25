@@ -7,6 +7,7 @@ import { useEventHistory } from "@/hooks/use-event-history";
 import { useScope } from "@/stores/workspace";
 import { Button, ErrorState, Status } from "@/components/ui/primitives";
 import { PageHeader } from "./shared";
+import { ContributionObligationSource } from "./contribution-obligation-source";
 import {
   PublishedBenefitSource,
   PublishedPayrollSource,
@@ -106,6 +107,7 @@ type Choice = {
   review_status: string;
   table_type?: string;
   native_format?: string;
+  allowed_source_roles?: string[] | null;
   table_kind?: string;
   evidence_version_id?: string;
 };
@@ -1881,6 +1883,8 @@ export function CountryWorkflows({
                           r.kind === "workflow-source" &&
                           r.table_type === type &&
                           r.freshness === "CURRENT" &&
+                          (!r.allowed_source_roles ||
+                            r.allowed_source_roles.includes(role)) &&
                           (![
                             "obligation-bank-allocations",
                             "uae-pension-review",
@@ -2706,6 +2710,22 @@ export function CountryWorkflows({
             Population basis: {body.population_completeness}. Calculations do
             not determine a statutory compliance conclusion.
           </p>
+          {["uae-pension-review", "india-payroll-rules"].includes(
+            body.workflow || "",
+          ) &&
+            detail.data.freshness === "CURRENT" &&
+            body.review_status === "REVIEWED" &&
+            !body.blocked &&
+            body.expected_total_complete === true && (
+              <ContributionObligationSource
+                key={`${tenant}:${eid}:${selected}`}
+                eid={eid}
+                resultId={selected}
+                pension={body.workflow === "uae-pension-review"}
+                evidence={inputs.data?.evidence || []}
+                onCreated={setSelected}
+              />
+            )}
           {["india-gst", "uae-vat"].includes(body.workflow || "") && (
             <label>
               <input

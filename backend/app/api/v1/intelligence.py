@@ -18,6 +18,7 @@ from app.modules.audit_execution.schemas import RecordInput, RecordPatch, Source
 from app.modules.audit_log.service import record
 from app.modules.country_workflows.bank_outstanding_source import BankOutstandingSourceInput
 from app.modules.country_workflows.benefit_source import BenefitSourceInput
+from app.modules.country_workflows.contribution_source import ContributionSourceInput
 from app.modules.country_workflows.import_vat_source import ImportVATSourceInput
 from app.modules.country_workflows.payroll_source import PayrollSourceInput, PensionSourceInput
 from app.modules.intelligence import jobs, service
@@ -26,6 +27,14 @@ from app.modules.intelligence.foundations import PeriodAction
 from app.modules.intelligence.models import IntelligenceEvent, IntelligenceJob
 
 router = APIRouter(prefix="/intelligence", tags=["Accounting intelligence"])
+
+
+@router.post("/engagements/{eid}/contribution-obligation-source", status_code=201)
+async def contribution_obligation_source(eid: uuid.UUID, data: ContributionSourceInput, db: DB, ctx: Actor, request: Request):
+    from app.modules.country_workflows.contribution_source import prepare
+
+    eng = await service.scope(db, ctx, eid, "country-workflow", True)
+    return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))
 
 
 @router.post("/engagements/{eid}/payroll-rule-source", status_code=201)
@@ -559,6 +568,7 @@ async def events(
                 "kind": row.kind,
                 "table_type": row.body.get("table_type"),
                 "native_format": row.body.get("native_format"),
+                "allowed_source_roles": row.body.get("allowed_source_roles"),
                 "evidence_version_id": row.body.get("evidence_version_id"),
                 "table_kind": row.body.get("table_kind"),
                 "version": row.version,

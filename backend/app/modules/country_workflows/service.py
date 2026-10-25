@@ -336,6 +336,11 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         source = await intelligence.event(db, ctx, eng.id, identifier, True)
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
+        if source.body.get("parser_version") == "contribution-obligations/1":
+            if data.workflow not in {"statutory-dues", "obligation-bank-allocations"} or role != "expected":
+                raise HTTPException(422, "Derived contribution obligations can establish only expected remittances, not returns or payments")
+            if source.body.get("review_status") != "REVIEWED":
+                raise HTTPException(409, "Independently review derived contribution obligations before settlement comparison")
         if source.body.get("parser_version") == "published-pension-profiles/1" and (
             data.workflow != "uae-pension-review" or role != "rules"
         ):
@@ -409,6 +414,10 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 contributors=contributors,
             )
         )
+    if sources.get("expected", {}).get("parser_version") == "contribution-obligations/1":
+        from app.modules.country_workflows.contribution_source import verify as verify_contributions
+
+        dependencies.extend(await verify_contributions(db, ctx, eng, sources["expected"], contributors))
     if data.workflow == "bank-brs":
         book_range = sources.get("books", {}).get("source_range")
         if book_range and book_range["through"] != data.as_of.isoformat():

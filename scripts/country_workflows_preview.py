@@ -681,6 +681,11 @@ async def main():
         published_pension = await prepare_published_pension(
             client, h, regulatory_conversions["AE"]["engagement"], pdf_final_reviewer
         )
+        from contribution_fixture import prepare as prepare_contributions
+
+        contribution_settlements = await prepare_contributions(
+            client, h, regulatory_conversions, published_pension, pdf_final_reviewer
+        )
         if implementation_hash() != implementation:
             raise RuntimeError(
                 "Backend implementation changed during fixture preparation; prepare fresh fixtures before browser verification"
@@ -693,6 +698,7 @@ async def main():
                     "regulatory_conversions": regulatory_conversions,
                     "pension_sources": pension_sources,
                     "published_pension": published_pension,
+                    "contribution_settlements": contribution_settlements,
                     "bank_clearance": clearance_fixtures,
                     "obligation_allocations": dues_fixtures,
                     "import_vat_sources": import_vat_sources,

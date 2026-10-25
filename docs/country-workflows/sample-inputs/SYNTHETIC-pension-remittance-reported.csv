@@ -1,0 +1,3 @@
+id,registration,subject,period,component,currency,amount,pension_scope
+R-EMPLOYEE,PENSION-ESTABLISHMENT,PERSON-1,2026-06,PENSION:EMPLOYEE,AED,700.00,"{""authority"":""SYNTHETIC-AUTHORITY"",""scheme"":""SYNTHETIC-SCHEME"",""membership_cohort"":""CONTINUING-MEMBER"",""pension_country"":""AE"",""nationality"":""AE"",""employment_sector"":""private"",""jurisdiction"":""AE-DU""}"
+R-EMPLOYER,PENSION-ESTABLISHMENT,PERSON-1,2026-06,PENSION:EMPLOYER,AED,1500.00,"{""authority"":""SYNTHETIC-AUTHORITY"",""scheme"":""SYNTHETIC-SCHEME"",""membership_cohort"":""CONTINUING-MEMBER"",""pension_country"":""AE"",""nationality"":""AE"",""employment_sector"":""private"",""jurisdiction"":""AE-DU""}"

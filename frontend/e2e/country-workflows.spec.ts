@@ -8,6 +8,181 @@ const fixture = JSON.parse(
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
 
+test("reviewed UAE and India contributions become controlled expected bank remittances", async ({
+  page,
+  browser,
+}) => {
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+    viewport: { width: 1600, height: 1100 },
+  });
+  const reviewer = await context.newPage();
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_final_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    for (const country of ["AE", "IN"] as const) {
+      const input = fixture.contribution_settlements[country];
+      const eid = input.engagement;
+      await page.goto(`/intelligence/${eid}/country-workflow`);
+      await page
+        .getByLabel("Saved source or result")
+        .selectOption(input.result);
+      const bridge = page.getByRole("region", {
+        name: "Expected contribution remittances",
+        exact: true,
+      });
+      await expect(bridge).toBeVisible();
+      await bridge
+        .getByLabel("Expected remittance source title")
+        .fill(`SYNTHETIC ${country} contribution remittances`);
+      await bridge
+        .getByLabel("Retained due-date evidence version")
+        .fill(input.due_date_evidence);
+      await bridge
+        .getByLabel("Independent contribution group controls (JSON)")
+        .fill(JSON.stringify(input.groups, null, 2));
+      if (country === "AE")
+        await bridge
+          .getByLabel("Assessed pension scope (JSON)")
+          .fill(JSON.stringify(input.pension_scope, null, 2));
+      await bridge
+        .getByLabel("Remittance scope and due-date assessment")
+        .fill(
+          "Independent synthetic registration, wage month, component controls and retained due-date reference; separate payer assessment",
+        );
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-contribution-remittance-controls.png`,
+        () => bridge.screenshot(),
+      );
+      const created = page.waitForResponse(
+        (response) =>
+          response
+            .url()
+            .includes(`/engagements/${eid}/contribution-obligation-source`) &&
+          response.request().method() === "POST",
+      );
+      await bridge
+        .getByRole("button", {
+          name: "Prepare expected remittance source",
+          exact: true,
+        })
+        .click();
+      const response = await created;
+      expect(response.status(), await response.text()).toBe(201);
+      const child = await response.json();
+      expect(child.body.control_totals[input.currency]).toBe(input.total);
+      expect(child.body.rows).toHaveLength(country === "AE" ? 2 : 3);
+      await reviewer.goto(`/intelligence/${eid}/country-workflow`);
+      await reviewer
+        .getByLabel("Saved source or result")
+        .selectOption(child.id);
+      await reviewer
+        .getByLabel("Review / exception rationale")
+        .fill(
+          "Independent remittance group controls, retained due-date source and payer scope reviewed",
+        );
+      const approval = reviewer.waitForResponse(
+        (result) =>
+          result.url().includes(`/events/${child.id}/review`) &&
+          result.request().method() === "POST",
+      );
+      await reviewer
+        .getByRole("button", { name: "Independent approval", exact: true })
+        .click();
+      const approvedResponse = await approval;
+      expect(approvedResponse.status(), await approvedResponse.text()).toBe(
+        201,
+      );
+      const approved = await approvedResponse.json();
+      await page.goto(`/intelligence/${eid}/country-workflow`);
+      await page
+        .getByLabel("Workflow", { exact: true })
+        .selectOption("obligation-bank-allocations");
+      const title = `SYNTHETIC ${country} contribution bank settlement ${Date.now()}`;
+      await expect(
+        page
+          .getByLabel("reported source", { exact: true })
+          .locator(`option[value="${approved.id}"]`),
+      ).toHaveCount(0);
+      await expect(
+        page
+          .getByLabel("expected source", { exact: true })
+          .locator(`option[value="${approved.id}"]`),
+      ).toHaveCount(1);
+      for (const [label, value] of [
+        ["Schedule title", title],
+        ["Reconciliation date", "2026-07-31"],
+        ["First obligation month", "2026-06"],
+        ["Last obligation month", "2026-06"],
+        ["Bank settlement window starts", "2026-07-01"],
+        ["Bank account identifier", "BANK-1"],
+        ["Account currency", input.currency],
+        [
+          "Scope and source rationale",
+          "Independent contribution expectations, authority return, bank and remittance allocation advice",
+        ],
+      ])
+        await page.getByLabel(label, { exact: true }).fill(value);
+      await page.getByLabel("Bank payment sign").selectOption("debit-negative");
+      for (const [role, identifier] of Object.entries({
+        ...input.sources,
+        expected: approved.id,
+      }))
+        await page
+          .getByLabel(`${role} source`, { exact: true })
+          .selectOption(String(identifier));
+      await page
+        .getByRole("button", { name: "Queue calculation", exact: true })
+        .click();
+      const option = page
+        .getByLabel("Saved source or result")
+        .getByRole("option", { name: new RegExp(title) });
+      await expect(option).toHaveCount(1);
+      await page
+        .getByLabel("Saved source or result")
+        .selectOption((await option.getAttribute("value"))!);
+      const panel = page
+        .getByRole("heading", { name: title, exact: true })
+        .locator("..");
+      await expect(
+        panel.getByText("0 exceptions", { exact: true }),
+      ).toBeVisible();
+      await expect(
+        panel.getByRole("cell", { name: "MATCHED", exact: true }),
+      ).toHaveCount(country === "AE" ? 5 : 7);
+      for (const notice of await page
+        .getByRole("button", { name: "Dismiss notification", exact: true })
+        .all())
+        await notice.click();
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-contribution-bank-settlement.png`,
+        () => panel.screenshot(),
+      );
+      if (country === "AE") {
+        await panel
+          .getByLabel("Show source provenance and all columns")
+          .check();
+        await expect(
+          panel.getByRole("columnheader", {
+            name: "pension scope",
+            exact: true,
+          }),
+        ).toBeVisible();
+      }
+    }
+  } finally {
+    await context.close();
+  }
+});
+
 test("published UAE pension profiles bind reviewed salary bases and retain rule provenance", async ({
   page,
   browser,

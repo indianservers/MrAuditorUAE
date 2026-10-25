@@ -1,0 +1,29 @@
+[
+  {
+    "registration": "EPFO-SYNTHETIC",
+    "period": "2026-06",
+    "component": "PF:EMPLOYEE",
+    "expected_rows": 1,
+    "amount": "1800",
+    "due_date": "2026-07-15",
+    "due_date_reference": "SYNTHETIC-DATE-REFERENCE"
+  },
+  {
+    "registration": "EPFO-SYNTHETIC",
+    "period": "2026-06",
+    "component": "PF:EPS",
+    "expected_rows": 1,
+    "amount": "1250",
+    "due_date": "2026-07-15",
+    "due_date_reference": "SYNTHETIC-DATE-REFERENCE"
+  },
+  {
+    "registration": "EPFO-SYNTHETIC",
+    "period": "2026-06",
+    "component": "PF:EMPLOYER",
+    "expected_rows": 1,
+    "amount": "550",
+    "due_date": "2026-07-15",
+    "due_date_reference": "SYNTHETIC-DATE-REFERENCE"
+  }
+]

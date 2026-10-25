@@ -5,6 +5,7 @@ from datetime import date
 from decimal import Decimal
 
 from app.modules.country_workflows.audit_calculations import result
+from app.modules.country_workflows.obligation_scope import scope_key
 
 
 def allocate(data, tables, country):
@@ -23,7 +24,7 @@ def allocate(data, tables, country):
     def identity(row):
         return tuple(
             row[field] for field in ("registration", "subject", "period", "component", "currency")
-        )
+        ) + (scope_key(row),)
 
     for role, records in (("expected", expected), ("reported", reported)):
         by_key = {}
@@ -83,7 +84,7 @@ def allocate(data, tables, country):
             raise ValueError("Allocation references a missing obligation, reported or bank row")
         if identity(e) != identity(r) or allocation["currency"] != data.currency:
             raise ValueError(
-                "Allocation crosses registration, subject, component, month or currency"
+                "Allocation crosses registration, subject, component, month or currency; pension scope must also agree"
             )
         amount = Decimal(allocation["amount"])
         outflow = Decimal(b["amount"]) * sign
@@ -155,6 +156,7 @@ def allocate(data, tables, country):
                     for field in ("registration", "subject", "period", "component", "currency")
                 },
                 "expected_amount": str(original),
+                **({"pension_scope": e["pension_scope"]} if e.get("pension_scope") else {}),
                 "reported_amount": r["amount"] if r else None,
                 "reported_difference": str(Decimal(r["amount"]) - original) if r else None,
                 "bank_settled": str(paid),
@@ -188,6 +190,7 @@ def allocate(data, tables, country):
                     for field in ("registration", "subject", "period", "component", "currency")
                 },
                 "reported_amount": r["amount"],
+                **({"pension_scope": r["pension_scope"]} if r.get("pension_scope") else {}),
                 "bank_settled": str(used_reported[r["id"]]),
                 "unsettled_reported_amount": str(residual),
                 "state": "UNEXPECTED_REPORTED_OBLIGATION"

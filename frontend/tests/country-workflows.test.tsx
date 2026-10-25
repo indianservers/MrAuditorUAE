@@ -284,6 +284,7 @@ vi.mock("@/hooks/use-api", () => ({
                           id: "expected-dues",
                           table_type: "obligations",
                           label: "Reviewed expected dues",
+                          allowed_source_roles: ["expected"],
                           review_status: "REVIEWED",
                         },
                         {
@@ -1281,6 +1282,19 @@ describe("country workflows", () => {
       });
     },
   );
+  it("keeps derived expected dues out of the independent return role", () => {
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Workflow"), {
+      target: { value: "obligation-bank-allocations" },
+    });
+    expect(screen.getByLabelText("expected source")).toHaveTextContent(
+      "Reviewed expected dues",
+    );
+    expect(screen.getByLabelText("reported source")).not.toHaveTextContent(
+      "Reviewed expected dues",
+    );
+  });
+
   it("queues INR payroll calculations using only independently reviewed rule sources", async () => {
     state.country = "IN";
     render(<CountryWorkflows eid="engagement" mode="country-workflow" />);

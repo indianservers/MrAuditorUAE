@@ -10,6 +10,7 @@ from typing import Any
 from app.modules.country_workflows.audit_calculations import AUDIT_CALCULATORS
 from app.modules.country_workflows.catalogue import WORKFLOWS, country_guidance
 from app.modules.country_workflows.diligence_calculations import DILIGENCE_CALCULATORS
+from app.modules.country_workflows.obligation_scope import scope_key
 from app.modules.country_workflows.operations import OPERATION_CALCULATORS
 from app.modules.country_workflows.payroll_calculations import PAYROLL_CALCULATORS
 from app.modules.country_workflows.pension_calculations import PENSION_CALCULATORS
@@ -386,8 +387,10 @@ def obligations(data, tables, country):
                 r["period"],
                 component,
                 r["currency"],
+                scope_key(r),
             )
             g = grouped[k]
+            g["pension_scope"] = r.get("pension_scope")
             g["amount"] += amount(r)
             g["ids"].append(r["id"])
             if r.get("due_date"):
@@ -454,6 +457,7 @@ def obligations(data, tables, country):
                 "currency": k[4],
                 "state": state,
                 "amounts": amounts,
+                **({"pension_scope": next(value["pension_scope"] for value in present.values() if value and value.get("pension_scope"))} if k[5] else {}),
                 "source_ids": {
                     role: value["ids"] if value else [] for role, value in present.items()
                 },
@@ -785,6 +789,10 @@ def calculate(data, country, sources):
     if set(sources) != set(roles):
         raise ValueError("Select every required source role exactly once")
     for role, table in sources.items():
+        if table.get("parser_version") == "contribution-obligations/1" and (
+            data.workflow not in {"statutory-dues", "obligation-bank-allocations"} or role != "expected"
+        ):
+            raise ValueError("Derived contribution obligations can establish only expected remittances, not returns or payments")
         # Instruction/return populations are not an independent payroll expectation
         # or evidence that money was settled, even when their totals agree.
         if table.get("native_format") in {"uae-wps-sif", "india-epfo-ecr"} and role not in {

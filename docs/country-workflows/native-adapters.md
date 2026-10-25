@@ -2,6 +2,65 @@
 
 Implementation checkpoint: 25 October 2026. These additions extend the existing evidence, intelligence job, immutable event, review and lineage infrastructure.
 
+## Reviewed contributions to expected remittances
+
+`POST /intelligence/engagements/{eid}/contribution-obligation-source` prepares
+expected settlement obligations from a current, independently reviewed UAE pension
+or India payroll contribution result. It preserves employee-level rows and their
+original calculation/basis references, with no re-entry of calculated amounts.
+Only explicitly selected registration/month/component groups are included; each
+requires an independent row count, amount control, assessed due date and reference
+to a retained clean due-date document. Missing groups are not nil populations.
+The full parent calculation must be resolved before any group can be prepared.
+
+UAE selection additionally requires one explicit authority, scheme, membership
+cohort, nationality, pension-country, sector and jurisdiction scope. Government
+support remains a separate payer and cannot be selected as an employer remittance.
+The synthetic example therefore prepares **AED 2,200.00** of employee plus net
+employer remittances from a **AED 2,500.00** contribution comparison. India keeps
+employee PF, employer PF, EPS, ESI, PT and advance-refund components separate.
+Dates in the sample controls are fictional inputs, not legal deadline defaults.
+
+The resulting `contribution-obligations/1` source needs independent review and
+can feed only the **expected** role of statutory-dues or obligation-bank-allocation
+review. It cannot establish a return, payment or bank population. Consumption
+rederives its rows and controls against the original reviewed result and retained
+due-date evidence. Changing that document stales the expected source and settlement
+result without changing the original contribution arithmetic or historical hashes.
+Changing an upstream calculation/rule also propagates through the dependency graph.
+
+Canonical obligation sources now support an optional typed `pension_scope` JSON
+column. All seven scope fields are mandatory when present, and the field is
+restricted to pension components. Both statutory comparison and explicit bank
+allocation include that scope in their matching identity. A scoped expectation
+cannot be settled against an unscoped return or another authority/cohort with the
+same registration, employee and amount. Legacy unscoped obligations retain their
+existing identities. CSV values use quoted JSON objects, not executable expressions.
+
+The reviewed-result screen offers independent group controls and due-date evidence
+selection. Its format helper leaves amounts and row counts blank. Synthetic JSON
+controls and a scoped reported-remittance CSV are supplied in `sample-inputs/`;
+they are fixture formats, not qualified country rules or proof of filing/payment.
+
+`contribution-source-full-unit-results.xml` records **1,358 passing backend unit
+tests**, with four opt-in connector skips. The two country cases in
+`contribution-source-integration-results.xml` verify the complete review → expected
+source → independent return/bank/allocation → settlement → export chain, source-role
+substitution refusal and due-document replacement staleness. Integration storage,
+API, database and job processor are real; scanner and broker dispatch are explicit
+doubles. All **133 frontend tests**, type checks, scoped lint and production build
+pass. The event listing exposes the expected-role restriction so derived sources
+are excluded from return/payment pickers; backend checks enforce it independently.
+
+`contribution-source-browser-results.txt` records the complete UAE/India browser
+chain passing in **36.4 seconds** through the owned API and real Redis/Celery worker,
+including independent derived-source review and the expected-only picker behavior.
+The four `*-contribution-remittance-controls.png` and
+`*-contribution-bank-settlement.png` screenshots were visually inspected. The JSON
+editors have bounded readable heights so the supplied controls and scope remain
+visible. Earlier full-suite receipts are retained as historical evidence; this
+focused run does not qualify legal deadlines, native providers or client pilots.
+
 ## Published UAE pension profiles
 
 The regulatory library now supports `pension_profile` with the same
