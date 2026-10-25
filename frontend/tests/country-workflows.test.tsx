@@ -24,6 +24,12 @@ vi.mock("@/hooks/use-api", () => ({
             country: state.country,
             source_formats: [
               {
+                id: "india-epfo-arrear-ecr-v2",
+                label: "India EPFO arrears eight-field text",
+                available: state.country === "IN",
+                table_type: "obligations",
+              },
+              {
                 id: "uae-wps-sif-evp",
                 label: "UAE WPS EDR EVP SCR",
                 available: state.country === "AE",
@@ -59,6 +65,16 @@ vi.mock("@/hooks/use-api", () => ({
               { id: "RW-001", title: "Bank receipt", workflow: "bank-brs" },
             ],
             items: [
+              {
+                id: "statutory-dues",
+                title: "Statutory dues",
+                available: true,
+                roles: {
+                  expected: "obligations",
+                  return: "obligations",
+                  payment: "obligations",
+                },
+              },
               {
                 id: "inventory-count-bridge",
                 title: "Inventory count bridge",
@@ -219,6 +235,11 @@ vi.mock("@/hooks/use-api", () => ({
               evidence: [
                 { id: "clean", label: "Clean statement", scan_status: "CLEAN" },
                 {
+                  id: "context-clean",
+                  label: "Clean arrear context",
+                  scan_status: "CLEAN",
+                },
+                {
                   id: "quarantine",
                   label: "Pending scan",
                   scan_status: "QUARANTINED",
@@ -232,6 +253,34 @@ vi.mock("@/hooks/use-api", () => ({
               : path.includes("/events?")
                 ? {
                     items: [
+                      ...["expected", "return", "payment"].map((role) => ({
+                        id: "arrear-" + role,
+                        label: "Reviewed arrear " + role,
+                        kind: "workflow-source",
+                        table_type: "obligations",
+                        freshness: "CURRENT",
+                        review_status: "REVIEWED",
+                        version: 1,
+                        obligation_populations: ["arrears"],
+                        native_format:
+                          role === "return"
+                            ? "india-epfo-arrear-ecr-v2"
+                            : undefined,
+                        allowed_source_roles:
+                          role === "return"
+                            ? ["return", "reported"]
+                            : undefined,
+                      })),
+                      {
+                        id: "regular-payment",
+                        label: "Regular monthly payment",
+                        kind: "workflow-source",
+                        table_type: "obligations",
+                        freshness: "CURRENT",
+                        review_status: "REVIEWED",
+                        version: 1,
+                        obligation_populations: ["regular"],
+                      },
                       ...["books", "counts", "movements"].map((role) => ({
                         id: "inventory-" + role,
                         label: "Controlled inventory " + role,
@@ -2042,6 +2091,95 @@ it("uses only reviewed quantity-controlled inventory sources in bidirectional mo
       books: "inventory-books",
       counts: "inventory-counts",
       movements: "inventory-movements",
+    },
+  });
+});
+
+it("queues the separate arrear profile with retained context and six independent controls", async () => {
+  state.country = "IN";
+  render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+  fireEvent.change(screen.getByLabelText("Source file format"), {
+    target: { value: "india-epfo-arrear-ecr-v2" },
+  });
+  fireEvent.change(screen.getByLabelText("Clean retained evidence"), {
+    target: { value: "clean" },
+  });
+  const controls = {
+    epf_wages: "1500",
+    eps_wages: "1000",
+    edli_wages: "1500",
+    employee_pf: "180",
+    employer_pf: "97",
+    employer_eps: "83",
+  };
+  for (const [label, value] of [
+    ["Schedule title", "Arrear source"],
+    ["EPFO establishment registration", "SYNTHETIC-EPFO-001"],
+    ["ECR wage month", "2026-06"],
+    ["Independent ECR member count", "2"],
+    ["Expected data rows", "6"],
+    ["Retained arrear month/disbursement context", "context-clean"],
+    ["Salary arrear disbursement date", "2026-07-10"],
+    [
+      "Independent arrear wage and contribution totals (INR, JSON)",
+      JSON.stringify(controls),
+    ],
+    [
+      "Arrear wage-month attribution assessment",
+      "Independent retained context and member wage-month attribution assessed",
+    ],
+    ["Independent totals by currency", "INR=360"],
+  ])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+    file_format: "india-epfo-arrear-ecr-v2",
+    obligation_period: "2026-06",
+    employer_registration: "SYNTHETIC-EPFO-001",
+    expected_members: 2,
+    expected_rows: 6,
+    ecr_arrear_controls: controls,
+    arrear_context_evidence_version_id: "context-clean",
+    arrear_disbursement_date: "2026-07-10",
+  });
+});
+
+it("keeps regular payments out of an explicitly arrear-only comparison", async () => {
+  state.country = "IN";
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Workflow"), {
+    target: { value: "statutory-dues" },
+  });
+  fireEvent.click(
+    screen.getByLabelText(
+      "Compare arrears only, separately from regular monthly dues",
+    ),
+  );
+  expect(screen.getByLabelText("payment source")).not.toHaveTextContent(
+    "Regular monthly payment",
+  );
+  for (const [label, value] of [
+    ["Schedule title", "Arrear-only comparison"],
+    ["Arrear comparison currency", "INR"],
+    ["Reconciliation date", "2026-07-31"],
+    [
+      "Scope and source rationale",
+      "Independent arrear populations compared separately from monthly regular dues",
+    ],
+    ["expected source", "arrear-expected"],
+    ["return source", "arrear-return"],
+    ["payment source", "arrear-payment"],
+  ])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+    arrear_only: true,
+    source_ids: {
+      expected: "arrear-expected",
+      return: "arrear-return",
+      payment: "arrear-payment",
     },
   });
 });

@@ -54,6 +54,8 @@ def render(event, format):
         metadata["Excluded VAT box rows"] = (
             f"{len(body['excluded_box_rows'])} outside the selected box scope; full details are retained in the XLSX Excluded VAT boxes sheet and original source result"
         )
+    if body.get("obligation_population_scope") == "ARREARS_ONLY_NOT_COMPLETE_MONTHLY_RETURN":
+        metadata["Comparison scope"] = "Arrears only; regular monthly obligations, returns and payments are outside this comparison. Salary disbursement does not establish PF contribution payment."
     summary = {
         k: v
         for k, v in body.items()

@@ -790,6 +790,15 @@ def calculate(data, country, sources):
     if set(sources) != set(roles):
         raise ValueError("Select every required source role exactly once")
     for role, table in sources.items():
+        has_arrears = table.get("native_format") == "india-epfo-arrear-ecr-v2" or (table.get("table_type") == "obligations" and any(row.get("population") == "arrears" for row in table["rows"]))
+        if has_arrears and not data.arrear_only:
+            raise ValueError("Select explicit arrear-only comparison scope; arrears cannot stand in for a complete monthly return")
+        if data.arrear_only and table.get("table_type") == "obligations" and any(row.get("population") != "arrears" for row in table["rows"]):
+            raise ValueError("Every expected, reported and payment obligation must be explicitly tagged as an arrear population")
+        if table.get("native_format") == "india-epfo-arrear-ecr-v2" and data.currency != "INR":
+            raise ValueError("Native arrear ECR comparisons require INR; no currency conversion is inferred")
+        if table.get("native_format") == "india-epfo-arrear-ecr-v2" and (data.workflow, role) not in {("statutory-dues", "return"), ("india-payroll-rules", "reported"), ("obligation-bank-allocations", "reported")}:
+            raise ValueError("Native arrear ECR can establish only an assessed return/reported role, not expected dues or bank payment")
         if data.workflow == "inventory-count-bridge" and data.stock_bridge_mode == "bidirectional-controlled":
             from app.modules.country_workflows.inventory_controls import verify_quantity_controls
 
@@ -893,6 +902,7 @@ def calculate(data, country, sources):
         "country_guidance": country_guidance(country, data.as_of, data.tax_year_start),
         "statutory_calculation_qualified": False,
         "professional_conclusion": "NOT_DETERMINED",
+        "obligation_population_scope": "ARREARS_ONLY_NOT_COMPLETE_MONTHLY_RETURN" if data.arrear_only else "DECLARED_SOURCE_SCOPE",
         "execution_mode": "deterministic_engine",
         "ml_execution_mode": None,
         "language_model_dependency": False,

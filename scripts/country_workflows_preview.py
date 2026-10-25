@@ -757,6 +757,17 @@ async def main():
                 "source_ids": reviewed_ids,
                 "movement_evidence": originals["movements"]["body"]["evidence_version_id"],
                 "movement_controls": quantity_controls["movements"]}
+        from tests.qa_crud.test_ecr_arrears import obligations as arrear_obligations
+        from tests.qa_crud.test_ecr_arrears import retain as retain_arrears
+
+        arrear_input, _ = await retain_arrears(client, h, india, f"/api/v1/engagements/{india}/audit")
+        arrear_source_ids = {}
+        for role in ("expected", "payment"):
+            prepared = await source(client, h, india, arrear_obligations(role),
+                "SYNTHETIC independently assessed arrear " + role, "obligations", {"INR": "360"})
+            approved = await decision(client, supporting_reviewer[0], india, prepared)
+            assert approved.status_code == 201, approved.text
+            arrear_source_ids[role] = approved.json()["id"]
         if implementation_hash() != implementation:
             raise RuntimeError(
                 "Backend implementation changed during fixture preparation; prepare fresh fixtures before browser verification"
@@ -809,6 +820,8 @@ async def main():
                     "india_ecr_evidence": ecr_evidence,
                     "india_gstr2b_evidence": gstr2b_evidence,
                     "india_gstr2b_books": gstr2b_books["id"],
+                    "ecr_arrear_input": arrear_input,
+                    "ecr_arrear_sources": arrear_source_ids,
                     "inventory_controls": inventory_controls,
                     "wps_evp_input": evp_input,
                     "vat_composition_sources": [composed_import_approval.json()["id"], composed_other_approval.json()["id"]],

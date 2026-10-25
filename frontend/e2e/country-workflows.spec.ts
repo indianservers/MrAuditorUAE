@@ -3997,3 +3997,174 @@ test("UAE then India controlled inventory bridges earlier and later lot counts",
     await context.close();
   }
 });
+
+test("India eight-field arrears retain month context and cannot replace regular monthly dues", async ({
+  page,
+  browser,
+}) => {
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+    viewport: { width: 1600, height: 1100 },
+  });
+  const reviewer = await context.newPage();
+  const eid = fixture.india_engagement;
+  const input = fixture.ecr_arrear_input;
+  const title = `SYNTHETIC arrear ECR ${Date.now()}`;
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_table_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    await page.goto(`/intelligence/${eid}/workflow-source`);
+    await page
+      .getByLabel("Source file format")
+      .selectOption("india-epfo-arrear-ecr-v2");
+    await page.getByLabel("Schedule title", { exact: true }).fill(title);
+    await page
+      .getByLabel("Clean retained evidence")
+      .selectOption(input.evidence_version_id);
+    await page
+      .getByLabel("EPFO establishment registration")
+      .fill(input.employer_registration);
+    await page.getByLabel("ECR wage month").fill("2026-06");
+    await page.getByLabel("Independent ECR member count").fill("2");
+    await page.getByLabel("Expected data rows").fill("6");
+    await page.getByLabel("Independent totals by currency").fill("INR=360");
+    await page
+      .getByLabel("Retained arrear month/disbursement context")
+      .selectOption(input.arrear_context_evidence_version_id);
+    await page.getByLabel("Salary arrear disbursement date").fill("2026-07-10");
+    await page
+      .getByLabel("Independent arrear wage and contribution totals (INR, JSON)")
+      .fill(JSON.stringify(input.ecr_arrear_controls, null, 2));
+    await page
+      .getByLabel("Arrear wage-month attribution assessment")
+      .fill(input.arrear_scope_assessment);
+    await saveScreenshot(`${shots}/india-ecr-arrear-source-controls.png`, () =>
+      page
+        .getByRole("group", {
+          name: "Arrear ECR context and independent controls",
+        })
+        .screenshot(),
+    );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const option = page
+      .getByLabel("Saved source or result")
+      .getByRole("option", { name: new RegExp(title) });
+    await expect(option).toHaveCount(1);
+    const id = (await option.getAttribute("value"))!;
+    await page.getByLabel("Saved source or result").selectOption(id);
+    const panel = page
+      .getByRole("heading", { name: title, exact: true })
+      .locator("..");
+    await expect(
+      panel.getByRole("cell", { name: "37", exact: true }),
+    ).toBeVisible();
+    await expect(
+      panel.getByRole("cell", { name: "83", exact: true }),
+    ).toBeVisible();
+    await panel
+      .getByText("Original source controls and calculation basis", {
+        exact: true,
+      })
+      .click();
+    const controls = panel.getByRole("table", {
+      name: "Arrear ECR independent controls",
+      exact: true,
+    });
+    await expect(controls.getByRole("row")).toHaveCount(7);
+    await expect(
+      controls.getByRole("row").filter({ hasText: "employer pf" }),
+    ).toContainText("97");
+    await saveScreenshot(
+      `${shots}/india-ecr-arrear-component-controls.png`,
+      () => controls.screenshot(),
+    );
+    await reviewer.goto(`/intelligence/${eid}/country-workflow`);
+    await reviewer.getByLabel("Saved source or result").selectOption(id);
+    await reviewer
+      .getByLabel("Review / exception rationale")
+      .fill(
+        "Independent retained context, wage-month attribution, salary disbursement and separate employer EPF/pension fields assessed",
+      );
+    const approving = reviewer.waitForResponse(
+      (r) =>
+        r.url().includes(`/events/${id}/review`) &&
+        r.request().method() === "POST",
+    );
+    await reviewer
+      .getByRole("button", { name: "Independent approval", exact: true })
+      .click();
+    const approval = await approving;
+    expect(approval.status(), await approval.text()).toBe(201);
+    const approved = await approval.json();
+    await page.goto(`/intelligence/${eid}/country-workflow`);
+    await page
+      .getByLabel("Workflow", { exact: true })
+      .selectOption("statutory-dues");
+    await page
+      .getByLabel("Compare arrears only, separately from regular monthly dues")
+      .check();
+    await page.getByLabel("Arrear comparison currency").fill("INR");
+    const resultTitle = title + " comparison";
+    await page.getByLabel("Schedule title", { exact: true }).fill(resultTitle);
+    await page
+      .getByLabel("Reconciliation date", { exact: true })
+      .fill("2026-07-31");
+    for (const [role, identifier] of Object.entries({
+      ...fixture.ecr_arrear_sources,
+      return: approved.id,
+    }))
+      await page
+        .getByLabel(`${role} source`, { exact: true })
+        .selectOption(String(identifier));
+    await page
+      .getByLabel("Scope and source rationale", { exact: true })
+      .fill(
+        "Only independently tagged arrear expectation, return and contribution payment populations; regular monthly activity remains separate",
+      );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const result = page
+      .getByLabel("Saved source or result")
+      .getByRole("option", { name: new RegExp(resultTitle) });
+    await expect(result).toHaveCount(1);
+    await page
+      .getByLabel("Saved source or result")
+      .selectOption((await result.getAttribute("value"))!);
+    const comparison = page
+      .getByRole("heading", { name: resultTitle, exact: true })
+      .locator("..");
+    await expect(
+      comparison.getByText("0 exceptions", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      comparison.getByRole("cell", { name: "MATCHED", exact: true }),
+    ).toHaveCount(6);
+    await expect(comparison.getByRole("note")).toContainText("Arrears only");
+    for (const notice of await page
+      .getByRole("button", { name: "Dismiss notification", exact: true })
+      .all())
+      await notice.click();
+    await saveScreenshot(`${shots}/india-ecr-arrear-only-comparison.png`, () =>
+      comparison.screenshot(),
+    );
+    await page.goto(`/intelligence/${fixture.uae_engagement}/workflow-source`);
+    await expect(
+      page
+        .getByLabel("Source file format")
+        .locator('option[value="india-epfo-arrear-ecr-v2"]'),
+    ).toHaveCount(0);
+  } finally {
+    await context.close();
+  }
+});

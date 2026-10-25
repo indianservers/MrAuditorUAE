@@ -214,6 +214,16 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         supporting_contributors = set()
         if evidence.created_by is not None:
             supporting_contributors.add(str(evidence.created_by))
+        arrear_context = None
+        if data.file_format == "india-epfo-arrear-ecr-v2":
+            if package.country != "IN":
+                raise HTTPException(422, "Arrear ECR requires an India engagement")
+            arrear_context, _ = await intelligence.evidence(db, ctx, eng, data.arrear_context_evidence_version_id)
+            if arrear_context.sha256 == evidence.sha256:
+                raise HTTPException(422, "Arrear member text cannot also establish independent filing context")
+            dependencies.extend(await payroll_rule_documents(db, ctx, eng,
+                [{"source_evidence_version_id": str(arrear_context.id), "source_sha256": arrear_context.sha256}],
+                label="Arrear filing context", contributors=supporting_contributors))
         if part_documents:
             dependencies.extend(await payroll_rule_documents(
                 db, ctx, eng,
@@ -253,6 +263,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "uae-wps-sif-evp": {"text/csv"},
             "india-inv01-json": {"application/json"},
             "india-epfo-ecr": {"text/plain"},
+            "india-epfo-arrear-ecr-v2": {"text/plain"},
             "india-gstr2b-json": {"application/json"},
         }
         if evidence.media_type not in supported_media[data.file_format]:
@@ -314,6 +325,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 return parse_native(path.read_bytes(), data, package.country, evidence.filename)
 
         result = await run_in_threadpool(load)
+        if arrear_context is not None:
+            result["native_metadata"].update(arrear_context_sha256=arrear_context.sha256, arrear_context_filename=arrear_context.filename)
         if data.table_type in {"payroll-rules", "pension-rules", "benefit-rules", "fx-rates"}:
             dependencies.extend(
                 await payroll_rule_documents(
@@ -364,6 +377,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         source = await intelligence.event(db, ctx, eng.id, identifier, True)
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
+        if source.body.get("native_format") == "india-epfo-arrear-ecr-v2" and source.body.get("review_status") != "REVIEWED":
+            raise HTTPException(409, "Independently review the arrear month attribution and retained context before comparison")
         if data.workflow == "inventory-count-bridge" and data.stock_bridge_mode == "bidirectional-controlled" and source.body.get("review_status") != "REVIEWED":
             raise HTTPException(409, "Independently review every controlled inventory source before count-date bridging")
         if source.body.get("parser_version") == "india-gstr2b-json-parts-1" and source.body.get("review_status") != "REVIEWED":
@@ -459,6 +474,12 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         from app.modules.country_workflows.vat_composition import verify as verify_composition
 
         dependencies.extend(await verify_composition(db, ctx, eng, sources["books"], contributors, data.source_ids["return"]))
+    for source in sources.values():
+        if source.get("native_format") == "india-epfo-arrear-ecr-v2":
+            context = source["native_metadata"]
+            dependencies.extend(await payroll_rule_documents(db, ctx, eng,
+                [{"source_evidence_version_id": context["arrear_context_evidence_version_id"], "source_sha256": context["arrear_context_sha256"]}],
+                label="Arrear filing context", contributors=contributors))
     if data.workflow == "bank-brs":
         book_range = sources.get("books", {}).get("source_range")
         if book_range and book_range["through"] != data.as_of.isoformat():

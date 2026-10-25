@@ -121,6 +121,7 @@ type Choice = {
   native_format?: string;
   allowed_source_roles?: string[] | null;
   inventory_controls_verified?: boolean;
+  obligation_populations?: string[] | null;
   table_kind?: string;
   evidence_version_id?: string;
 };
@@ -156,6 +157,7 @@ type Result = {
     expected_total_complete?: boolean;
     title: string;
     review_status: string;
+    obligation_population_scope?: string;
     execution_mode?: string;
     language_model_dependency?: boolean;
     blocked?: boolean;
@@ -339,6 +341,11 @@ export function CountryWorkflows({
   const [gstRegistration, setGSTRegistration] = useState("");
   const [gstDirection, setGSTDirection] = useState("purchase");
   const [gstPeriod, setGSTPeriod] = useState("");
+  const [ecrArrearControls, setECRArrearControls] = useState("{}");
+  const [ecrArrearContext, setECRArrearContext] = useState("");
+  const [ecrDisbursed, setECRDisbursed] = useState("");
+  const [ecrArrearAssessment, setECRArrearAssessment] = useState("");
+  const [arrearsOnly, setArrearsOnly] = useState(false);
   const [wpsVariableCount, setWPSVariableCount] = useState("");
   const [wpsVariableTotals, setWPSVariableTotals] = useState("{}");
   const [gstrBundle, setGSTRBundle] = useState(false);
@@ -421,31 +428,49 @@ export function CountryWorkflows({
             row.unsettled_reported_amount ??
             row.unallocated_bank_amount,
         }))
-      : compactVAT && !showRuleProvenance
-        ? (body.rows || [])
-            .map((row): Record<string, unknown> => ({
-              ...row,
-              taxable_difference: (
-                row.differences as Record<string, unknown> | undefined
-              )?.taxable_amount,
-              tax_difference: (
-                row.differences as Record<string, unknown> | undefined
-              )?.tax,
-              adjustment_difference: (
-                row.differences as Record<string, unknown> | undefined
-              )?.adjustment,
-            }))
-            .sort((left, right) => Number(left.box) - Number(right.box))
-        : body?.rows || [];
+      : body?.workflow === "statutory-dues" &&
+          body.obligation_population_scope ===
+            "ARREARS_ONLY_NOT_COMPLETE_MONTHLY_RETURN" &&
+          !showRuleProvenance
+        ? (body.rows || []).map((row): Record<string, unknown> => ({
+            ...row,
+            expected_amount: (row.amounts as Record<string, unknown>)?.expected,
+            return_amount: (row.amounts as Record<string, unknown>)?.return,
+            payment_amount: (row.amounts as Record<string, unknown>)?.payment,
+          }))
+        : compactVAT && !showRuleProvenance
+          ? (body.rows || [])
+              .map((row): Record<string, unknown> => ({
+                ...row,
+                taxable_difference: (
+                  row.differences as Record<string, unknown> | undefined
+                )?.taxable_amount,
+                tax_difference: (
+                  row.differences as Record<string, unknown> | undefined
+                )?.tax,
+                adjustment_difference: (
+                  row.differences as Record<string, unknown> | undefined
+                )?.adjustment,
+              }))
+              .sort((left, right) => Number(left.box) - Number(right.box))
+          : body?.rows || [];
   const allColumns = [
     ...new Set(rows.flatMap((row) => Object.keys(row))),
   ].filter((k) => !["auditor", "auditor_at"].includes(k));
+  const compactArrear =
+    body?.native_metadata?.layout ===
+    "EPFO_ECR2_ARREAR_8_FIELDS_HASH_TILDE_HASH";
+  const compactArrearResult =
+    body?.workflow === "statutory-dues" &&
+    body.obligation_population_scope ===
+      "ARREARS_ONLY_NOT_COMPLETE_MONTHLY_RETURN";
   const compactWPS =
     body?.native_metadata?.profile === "emirates-islamic-edr-evp-scr/1";
   const compactSource =
     detail.data?.kind === "workflow-source" &&
     (["transactions", "audit-open-items"].includes(body?.table_type || "") ||
-      compactWPS);
+      compactWPS ||
+      compactArrear);
   const compactCredit = body?.workflow === "credit-note-applications";
   const compactBankClearance = body?.workflow === "bank-subsequent-clearance";
   const compactDues = body?.workflow === "obligation-bank-allocations";
@@ -626,17 +651,38 @@ export function CountryWorkflows({
                           ].filter((key) => allColumns.includes(key))
                         : allColumns;
   const columns =
-    compactWPS && !showRuleProvenance
+    compactArrear && !showRuleProvenance
       ? [
           "subject",
           "period",
+          "population",
+          "component",
           "currency",
-          "fixed_income",
-          "variable_income",
           "amount",
-          "unpaid_days",
+          "source_row",
         ].filter((key) => allColumns.includes(key))
-      : defaultColumns;
+      : compactArrearResult && !showRuleProvenance
+        ? [
+            "subject",
+            "period",
+            "component",
+            "currency",
+            "expected_amount",
+            "return_amount",
+            "payment_amount",
+            "state",
+          ].filter((key) => allColumns.includes(key))
+        : compactWPS && !showRuleProvenance
+          ? [
+              "subject",
+              "period",
+              "currency",
+              "fixed_income",
+              "variable_income",
+              "amount",
+              "unpaid_days",
+            ].filter((key) => allColumns.includes(key))
+          : defaultColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -791,6 +837,14 @@ export function CountryWorkflows({
               statementIdentifier
                 ? { statement_identifier: statementIdentifier }
                 : {}),
+              ...(sourceFormat === "india-epfo-arrear-ecr-v2"
+                ? {
+                    ecr_arrear_controls: JSON.parse(ecrArrearControls),
+                    arrear_context_evidence_version_id: ecrArrearContext,
+                    arrear_disbursement_date: ecrDisbursed,
+                    arrear_scope_assessment: ecrArrearAssessment,
+                  }
+                : {}),
               ...(sourceFormat === "uae-wps-sif-evp"
                 ? {
                     wps_variable_pay_count: wpsVariableCount.trim()
@@ -799,17 +853,25 @@ export function CountryWorkflows({
                     wps_variable_pay_totals: JSON.parse(wpsVariableTotals),
                   }
                 : {}),
-              ...(["uae-wps-sif", "uae-wps-sif-evp", "india-epfo-ecr"].includes(
-                sourceFormat,
-              ) && employerRegistration
+              ...([
+                "uae-wps-sif",
+                "uae-wps-sif-evp",
+                "india-epfo-ecr",
+                "india-epfo-arrear-ecr-v2",
+              ].includes(sourceFormat) && employerRegistration
                 ? { employer_registration: employerRegistration }
                 : {}),
-              ...(["uae-wps-sif", "uae-wps-sif-evp", "india-epfo-ecr"].includes(
-                sourceFormat,
-              ) && obligationDue
+              ...([
+                "uae-wps-sif",
+                "uae-wps-sif-evp",
+                "india-epfo-ecr",
+                "india-epfo-arrear-ecr-v2",
+              ].includes(sourceFormat) && obligationDue
                 ? { obligation_due_date: obligationDue }
                 : {}),
-              ...(sourceFormat === "india-epfo-ecr"
+              ...(["india-epfo-ecr", "india-epfo-arrear-ecr-v2"].includes(
+                sourceFormat,
+              )
                 ? {
                     obligation_period: obligationPeriod,
                     expected_members: Number(expectedMembers),
@@ -882,6 +944,13 @@ export function CountryWorkflows({
                     }
                   : {}),
               }
+            : {}),
+          ...([
+            "statutory-dues",
+            "india-payroll-rules",
+            "obligation-bank-allocations",
+          ].includes(workflow)
+            ? { arrear_only: arrearsOnly }
             : {}),
           source_ids: sources,
           as_of: asOf,
@@ -1751,6 +1820,98 @@ export function CountryWorkflows({
                       </p>
                     </fieldset>
                   )}
+                  {sourceFormat === "india-epfo-arrear-ecr-v2" && (
+                    <fieldset>
+                      <legend>
+                        Arrear ECR context and independent controls
+                      </legend>
+                      <p>
+                        Explicit EPFO ECR 2.0 eight-field layout. Employer EPF
+                        is field 7 and pension field 8. Declare one assessed
+                        wage month for every member; this file does not supply
+                        establishment, original wage-month attribution or salary
+                        disbursement context. Confirm layout applicability
+                        against retained evidence for the selected period.
+                      </p>
+                      <label>
+                        Retained arrear month/disbursement context
+                        <select
+                          value={ecrArrearContext}
+                          onChange={(e) => setECRArrearContext(e.target.value)}
+                        >
+                          <option value="">
+                            Select separate clean context evidence
+                          </option>
+                          {inputs.data?.evidence
+                            .filter(
+                              (item) =>
+                                item.scan_status === "CLEAN" &&
+                                item.id !== evidence,
+                            )
+                            .map((item) => (
+                              <option key={item.id} value={item.id}>
+                                {item.label}
+                              </option>
+                            ))}
+                        </select>
+                      </label>
+                      <label>
+                        Salary arrear disbursement date
+                        <input
+                          type="date"
+                          value={ecrDisbursed}
+                          onChange={(e) => setECRDisbursed(e.target.value)}
+                        />
+                      </label>
+                      <label>
+                        Independent arrear wage and contribution totals (INR,
+                        JSON)
+                        <textarea
+                          style={{ height: 240 }}
+                          value={ecrArrearControls}
+                          onChange={(e) => setECRArrearControls(e.target.value)}
+                          spellCheck={false}
+                        />
+                      </label>
+                      <Button
+                        onClick={() =>
+                          setECRArrearControls(
+                            JSON.stringify(
+                              {
+                                epf_wages: null,
+                                eps_wages: null,
+                                edli_wages: null,
+                                employee_pf: null,
+                                employer_pf: null,
+                                employer_eps: null,
+                              },
+                              null,
+                              2,
+                            ),
+                          )
+                        }
+                      >
+                        Insert arrear control format
+                      </Button>
+                      <label>
+                        Arrear wage-month attribution assessment
+                        <textarea
+                          style={{ height: 100 }}
+                          value={ecrArrearAssessment}
+                          onChange={(e) =>
+                            setECRArrearAssessment(e.target.value)
+                          }
+                        />
+                      </label>
+                      <p>
+                        Declare three component rows per member, including
+                        zeros. Salary disbursement is not PF payment. Filing,
+                        membership and legal rate correctness remain unverified.
+                        Independently review this source and compare it only
+                        with separately tagged arrear expectations and payments.
+                      </p>
+                    </fieldset>
+                  )}
                   {sourceFormat === "india-inv01-json" && (
                     <>
                       <label>
@@ -1934,7 +2095,9 @@ export function CountryWorkflows({
                       )}
                     </fieldset>
                   )}
-                  {sourceFormat === "india-epfo-ecr" && (
+                  {["india-epfo-ecr", "india-epfo-arrear-ecr-v2"].includes(
+                    sourceFormat,
+                  ) && (
                     <>
                       <label>
                         EPFO establishment registration
@@ -2141,6 +2304,7 @@ export function CountryWorkflows({
                     setWorkflow(e.target.value);
                     setInvoiceFaceAmounts(false);
                     setWithholdingRole("");
+                    setArrearsOnly(false);
                     setSources({});
                     setRequiredChecks("");
                   }}
@@ -2210,6 +2374,48 @@ export function CountryWorkflows({
                   )}
                 </fieldset>
               )}
+              {[
+                "statutory-dues",
+                "india-payroll-rules",
+                "obligation-bank-allocations",
+              ].includes(workflow) && (
+                <label style={{ flexDirection: "row", alignItems: "center" }}>
+                  <input
+                    type="checkbox"
+                    style={{ width: 16, height: 16 }}
+                    checked={arrearsOnly}
+                    onChange={(e) => {
+                      setArrearsOnly(e.target.checked);
+                      setSources({});
+                    }}
+                  />
+                  Compare arrears only, separately from regular monthly dues
+                </label>
+              )}
+              {arrearsOnly && workflow === "statutory-dues" && (
+                <label>
+                  Arrear comparison currency
+                  <input
+                    value={currency}
+                    maxLength={3}
+                    onChange={(e) => setCurrency(e.target.value.toUpperCase())}
+                  />
+                </label>
+              )}
+              {arrearsOnly &&
+                [
+                  "statutory-dues",
+                  "india-payroll-rules",
+                  "obligation-bank-allocations",
+                ].includes(workflow) && (
+                  <p>
+                    Every expected, reported and payment obligation row must
+                    declare population=arrears. Regular monthly activity is
+                    outside this comparison. For payroll-rule review, use
+                    independently assessed incremental arrear bases and
+                    applicable rules.
+                  </p>
+                )}
               <label>
                 Reconciliation date
                 <input
@@ -2287,6 +2493,12 @@ export function CountryWorkflows({
                           r.kind === "workflow-source" &&
                           r.table_type === type &&
                           r.freshness === "CURRENT" &&
+                          (!arrearsOnly ||
+                            r.table_type !== "obligations" ||
+                            (r.obligation_populations?.length === 1 &&
+                              r.obligation_populations[0] === "arrears")) &&
+                          (r.native_format !== "india-epfo-arrear-ecr-v2" ||
+                            (arrearsOnly && r.review_status === "REVIEWED")) &&
                           (workflow !== "inventory-count-bridge" ||
                             !stockControlled ||
                             (r.review_status === "REVIEWED" &&
@@ -3246,6 +3458,14 @@ export function CountryWorkflows({
               bridge
             />
           )}
+          {body.obligation_population_scope ===
+            "ARREARS_ONLY_NOT_COMPLETE_MONTHLY_RETURN" && (
+            <p role="note">
+              Arrears only: regular monthly obligations, returns and payments
+              are outside this comparison. Salary disbursement does not
+              establish payment of PF contributions.
+            </p>
+          )}
           {body.native_metadata && (
             <details>
               <summary>Original source controls and calculation basis</summary>
@@ -3282,6 +3502,41 @@ export function CountryWorkflows({
                               (
                                 body.native_metadata
                                   ?.variable_pay_component_totals as Record<
+                                  string,
+                                  unknown
+                                >
+                              )[name],
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
+              {!!body.native_metadata.arrear_controls &&
+                typeof body.native_metadata.arrear_controls === "object" && (
+                  <table aria-label="Arrear ECR independent controls">
+                    <thead>
+                      <tr>
+                        <th>Arrear field</th>
+                        <th>INR control total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {[
+                        "epf_wages",
+                        "eps_wages",
+                        "edli_wages",
+                        "employee_pf",
+                        "employer_pf",
+                        "employer_eps",
+                      ].map((name) => (
+                        <tr key={name}>
+                          <td>{name.replaceAll("_", " ")}</td>
+                          <td>
+                            {text(
+                              (
+                                body.native_metadata?.arrear_controls as Record<
                                   string,
                                   unknown
                                 >
@@ -3508,6 +3763,7 @@ export function CountryWorkflows({
           </div>
           <div style={{ overflowX: "auto" }}>
             {(compactSource ||
+              compactArrearResult ||
               compactBenefit ||
               compactBankClearance ||
               compactDues ||

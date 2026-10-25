@@ -88,6 +88,7 @@ def parse_ecr(content, data):
                 subject=uan,
                 period=data.obligation_period,
                 component=component,
+                population="regular",
                 currency="INR",
                 amount=amount,
                 due_date=data.obligation_due_date,

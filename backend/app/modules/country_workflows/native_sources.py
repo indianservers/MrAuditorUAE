@@ -21,6 +21,10 @@ from app.modules.country_workflows.schemas import Transaction
 from app.modules.country_workflows.sources import MAX_BYTES
 
 FORMATS: list[dict[str, Any]] = [
+    {"id": "india-epfo-arrear-ecr-v2", "label": "India EPFO ECR 2.0 arrears - eight-field text",
+     "countries": ["IN"], "table_type": "obligations",
+     "description": "Explicit arrear layout; independent wage/contribution controls and retained month/disbursement context; no filing, bank payment or current portal compatibility qualification",
+     "source": "https://www.epfindia.gov.in/site_docs/PDFs/EPFOUnifiedPortal/Introduction_ECR2.0.pdf"},
     {
         "id": "uae-wps-sif-evp",
         "label": "UAE WPS SIF - Emirates Islamic EDR / EVP / SCR",
@@ -634,6 +638,10 @@ def parse_native(content, data, country, filename):
                 from app.modules.country_workflows.india_ecr_source import parse_ecr
 
                 rows, metadata = parse_ecr(content, data)
+            elif data.file_format == "india-epfo-arrear-ecr-v2":
+                from app.modules.country_workflows.india_ecr_arrear_source import parse_arrears
+
+                rows, metadata = parse_arrears(content, data)
             elif data.file_format == "india-gstr2b-json":
                 from app.modules.country_workflows.india_gstr2b_source import parse_gstr2b
 
@@ -674,6 +682,8 @@ def parse_native(content, data, country, filename):
         if data.file_format == "india-inv01-json"
         else "ECR_DECLARED_MEMBER_AND_COMPONENT_CONTROLS"
         if data.file_format == "india-epfo-ecr"
+        else "ECR_ARREAR_DECLARED_MEMBER_WAGE_AND_CONTRIBUTION_CONTROLS"
+        if data.file_format == "india-epfo-arrear-ecr-v2"
         else "GSTR2B_DECLARED_DOCUMENT_AND_COMPONENT_CONTROLS"
         if data.file_format == "india-gstr2b-json"
         else "WPS_INSTRUCTION_FILE_CONTROLS",
@@ -684,6 +694,7 @@ def parse_native(content, data, country, filename):
         + ("-2" if data.file_format in {"swift-mt940", "camt053"} else "-1"),
         "native_format": data.file_format,
         **({"allowed_source_roles": ["return"]} if data.file_format == "india-gstr2b-json" else {}),
+        **({"allowed_source_roles": ["return", "reported"]} if data.file_format == "india-epfo-arrear-ecr-v2" else {}),
         **({"allowed_source_roles": ["channel", "return", "reported"]} if data.file_format == "uae-wps-sif-evp" else {}),
         "native_metadata": metadata,
         "native_controls_verified": True,
