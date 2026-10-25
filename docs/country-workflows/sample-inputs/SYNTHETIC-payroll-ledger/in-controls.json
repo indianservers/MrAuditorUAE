@@ -1,0 +1,39 @@
+{
+  "synthetic": true,
+  "period_start": "2026-06-01",
+  "as_of": "2026-06-30",
+  "sources": {
+    "opening": {
+      "filename": "in-opening.csv",
+      "table_type": "payroll-account-balances",
+      "expected_rows": 5,
+      "control_totals": {
+        "INR": "200"
+      }
+    },
+    "payroll": {
+      "filename": "in-payroll.csv",
+      "table_type": "payroll-ledger-lines",
+      "expected_rows": 6,
+      "control_totals": {
+        "INR": "1200"
+      }
+    },
+    "posted": {
+      "filename": "in-posted.csv",
+      "table_type": "payroll-ledger-lines",
+      "expected_rows": 6,
+      "control_totals": {
+        "INR": "1200"
+      }
+    },
+    "closing": {
+      "filename": "in-closing.csv",
+      "table_type": "payroll-account-balances",
+      "expected_rows": 5,
+      "control_totals": {
+        "INR": "1400"
+      }
+    }
+  }
+}

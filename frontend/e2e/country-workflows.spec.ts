@@ -4169,9 +4169,14 @@ test("India eight-field arrears retain month context and cannot replace regular 
   }
 });
 
-
-test("reviewed bank residuals carry to the next window for UAE then India", async ({ page, browser }) => {
-  const context = await browser.newContext({ baseURL: "http://127.0.0.1:3010", viewport: { width: 1600, height: 1100 } });
+test("reviewed bank residuals carry to the next window for UAE then India", async ({
+  page,
+  browser,
+}) => {
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+    viewport: { width: 1600, height: 1100 },
+  });
   const reviewer = await context.newPage();
   try {
     for (const [actor, email, password] of [
@@ -4189,56 +4194,264 @@ test("reviewed bank residuals carry to the next window for UAE then India", asyn
       const eid = input.engagement;
       const title = `SYNTHETIC ${country} carried bank residuals ${Date.now()}`;
       await page.goto(`/intelligence/${eid}/country-workflow`);
-      await page.getByLabel("Saved source or result").selectOption(input.parent);
-      const summary = page.getByText("Carry reviewed bank residuals into the next clearance window", { exact: true });
+      await page
+        .getByLabel("Saved source or result")
+        .selectOption(input.parent);
+      const summary = page.getByText(
+        "Carry reviewed bank residuals into the next clearance window",
+        { exact: true },
+      );
       await summary.click();
       const controls = summary.locator("..");
       await controls.getByLabel("Carry-forward source title").fill(title);
       await controls.getByLabel("Independent residual row count").fill("1");
-      await controls.getByLabel("Independent positive residual total").fill("0");
-      await controls.getByLabel("Independent negative residual total").fill("-60");
-      await controls.getByLabel("Carry-forward window and reversal assessment").fill("Independent retained statement-window completeness, continuing cheque validity and unresolved reversal context assessed");
-      await saveScreenshot(`${shots}/${country.toLowerCase()}-bank-carryforward-controls.png`, () => controls.screenshot());
-      const preparing = page.waitForResponse((r) => r.url().includes(`/events/${input.parent}/bank-carryforward-source`) && r.request().method() === "POST");
-      await controls.getByRole("button", { name: "Prepare carried bank residuals", exact: true }).click();
+      await controls
+        .getByLabel("Independent positive residual total")
+        .fill("0");
+      await controls
+        .getByLabel("Independent negative residual total")
+        .fill("-60");
+      await controls
+        .getByLabel("Carry-forward window and reversal assessment")
+        .fill(
+          "Independent retained statement-window completeness, continuing cheque validity and unresolved reversal context assessed",
+        );
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-bank-carryforward-controls.png`,
+        () => controls.screenshot(),
+      );
+      const preparing = page.waitForResponse(
+        (r) =>
+          r
+            .url()
+            .includes(`/events/${input.parent}/bank-carryforward-source`) &&
+          r.request().method() === "POST",
+      );
+      await controls
+        .getByRole("button", {
+          name: "Prepare carried bank residuals",
+          exact: true,
+        })
+        .click();
       const response = await preparing;
       expect(response.status(), await response.text()).toBe(201);
       const source = await response.json();
-      await expect(page.getByRole("heading", { name: title, exact: true })).toBeVisible();
-      const sourcePanel = page.getByRole("heading", { name: title, exact: true }).locator("..");
-      await expect(sourcePanel.getByRole("cell", { name: "2026-06-20", exact: true })).toBeVisible();
-      await expect(sourcePanel.getByRole("cell", { name: "2026-07-31", exact: true })).toBeVisible();
-      await expect(sourcePanel.getByRole("cell", { name: "-60", exact: true })).toBeVisible();
-      for (const notice of await page.getByRole("button", { name: "Dismiss notification", exact: true }).all()) await notice.click();
-      await saveScreenshot(`${shots}/${country.toLowerCase()}-bank-carried-original-date.png`, () => sourcePanel.screenshot());
+      await expect(
+        page.getByRole("heading", { name: title, exact: true }),
+      ).toBeVisible();
+      const sourcePanel = page
+        .getByRole("heading", { name: title, exact: true })
+        .locator("..");
+      await expect(
+        sourcePanel.getByRole("cell", { name: "2026-06-20", exact: true }),
+      ).toBeVisible();
+      await expect(
+        sourcePanel.getByRole("cell", { name: "2026-07-31", exact: true }),
+      ).toBeVisible();
+      await expect(
+        sourcePanel.getByRole("cell", { name: "-60", exact: true }),
+      ).toBeVisible();
+      for (const notice of await page
+        .getByRole("button", { name: "Dismiss notification", exact: true })
+        .all())
+        await notice.click();
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-bank-carried-original-date.png`,
+        () => sourcePanel.screenshot(),
+      );
       await reviewer.goto(`/intelligence/${eid}/country-workflow`);
-      await reviewer.getByLabel("Saved source or result").selectOption(source.id);
-      await reviewer.getByLabel("Review / exception rationale").fill("Independent complete residual count and signed direction controls checked; original item date and retained July clearance window preserved");
-      const approving = reviewer.waitForResponse((r) => r.url().includes(`/events/${source.id}/review`) && r.request().method() === "POST");
-      await reviewer.getByRole("button", { name: "Independent approval", exact: true }).click();
+      await reviewer
+        .getByLabel("Saved source or result")
+        .selectOption(source.id);
+      await reviewer
+        .getByLabel("Review / exception rationale")
+        .fill(
+          "Independent complete residual count and signed direction controls checked; original item date and retained July clearance window preserved",
+        );
+      const approving = reviewer.waitForResponse(
+        (r) =>
+          r.url().includes(`/events/${source.id}/review`) &&
+          r.request().method() === "POST",
+      );
+      await reviewer
+        .getByRole("button", { name: "Independent approval", exact: true })
+        .click();
       const approval = await approving;
       expect(approval.status(), await approval.text()).toBe(201);
       const approved = await approval.json();
       await page.goto(`/intelligence/${eid}/country-workflow`);
-      await page.getByLabel("Workflow", { exact: true }).selectOption("bank-subsequent-clearance");
+      await page
+        .getByLabel("Workflow", { exact: true })
+        .selectOption("bank-subsequent-clearance");
       const resultTitle = title + " August comparison";
-      await page.getByLabel("Schedule title", { exact: true }).fill(resultTitle);
-      await page.getByLabel("Reconciliation date", { exact: true }).fill("2026-07-31");
-      await page.getByLabel("Review through date", { exact: true }).fill("2026-08-31");
-      await page.getByLabel("Bank account identifier", { exact: true }).fill("BANK-1");
-      await page.getByLabel("Account currency", { exact: true }).fill(country === "AE" ? "AED" : "INR");
-      for (const [role, id] of Object.entries({ outstanding: approved.id, statement: input.statement, allocations: input.allocations }))
-        await page.getByLabel(`${role} source`, { exact: true }).selectOption(id as string);
-      await page.getByLabel("Scope and source rationale", { exact: true }).fill("Independent August bank evidence clears only the carried remaining cheque amount; original item age remains June-based");
-      await page.getByRole("button", { name: "Queue calculation", exact: true }).click();
-      const saved = page.getByLabel("Saved source or result").locator("option").filter({ hasText: resultTitle });
+      await page
+        .getByLabel("Schedule title", { exact: true })
+        .fill(resultTitle);
+      await page
+        .getByLabel("Reconciliation date", { exact: true })
+        .fill("2026-07-31");
+      await page
+        .getByLabel("Review through date", { exact: true })
+        .fill("2026-08-31");
+      await page
+        .getByLabel("Bank account identifier", { exact: true })
+        .fill("BANK-1");
+      await page
+        .getByLabel("Account currency", { exact: true })
+        .fill(country === "AE" ? "AED" : "INR");
+      for (const [role, id] of Object.entries({
+        outstanding: approved.id,
+        statement: input.statement,
+        allocations: input.allocations,
+      }))
+        await page
+          .getByLabel(`${role} source`, { exact: true })
+          .selectOption(id as string);
+      await page
+        .getByLabel("Scope and source rationale", { exact: true })
+        .fill(
+          "Independent August bank evidence clears only the carried remaining cheque amount; original item age remains June-based",
+        );
+      await page
+        .getByRole("button", { name: "Queue calculation", exact: true })
+        .click();
+      const saved = page
+        .getByLabel("Saved source or result")
+        .locator("option")
+        .filter({ hasText: resultTitle });
       await expect(saved).toHaveCount(1, { timeout: 120000 });
-      await page.getByLabel("Saved source or result").selectOption((await saved.getAttribute("value"))!);
-      const resultPanel = page.getByRole("heading", { name: resultTitle, exact: true }).locator("..");
-      await expect(resultPanel.getByText("0 exceptions", { exact: true })).toBeVisible();
-      await expect(resultPanel.getByRole("cell", { name: "MATCHED", exact: true })).toHaveCount(2);
-      for (const notice of await page.getByRole("button", { name: "Dismiss notification", exact: true }).all()) await notice.click();
-      await saveScreenshot(`${shots}/${country.toLowerCase()}-bank-carried-next-window.png`, () => resultPanel.screenshot());
+      await page
+        .getByLabel("Saved source or result")
+        .selectOption((await saved.getAttribute("value"))!);
+      const resultPanel = page
+        .getByRole("heading", { name: resultTitle, exact: true })
+        .locator("..");
+      await expect(
+        resultPanel.getByText("0 exceptions", { exact: true }),
+      ).toBeVisible();
+      await expect(
+        resultPanel.getByRole("cell", { name: "MATCHED", exact: true }),
+      ).toHaveCount(2);
+      for (const notice of await page
+        .getByRole("button", { name: "Dismiss notification", exact: true })
+        .all())
+        await notice.click();
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-bank-carried-next-window.png`,
+        () => resultPanel.screenshot(),
+      );
     }
-  } finally { await context.close(); }
+  } finally {
+    await context.close();
+  }
+});
+
+test("payroll accounts reconcile gross net deductions and employer contributions for UAE then India", async ({
+  page,
+}) => {
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill("admin@example.com");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("test-strong-password-123");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+  for (const country of ["AE", "IN"] as const) {
+    const input = fixture.payroll_ledger[country];
+    const eid = input.engagement;
+    const title = `SYNTHETIC ${country} payroll GL ${Date.now()}`;
+    await page.goto(`/intelligence/${eid}/country-workflow`);
+    await page
+      .getByLabel("Workflow", { exact: true })
+      .selectOption("payroll-ledger-rollforward");
+    await page.getByLabel("Schedule title", { exact: true }).fill(title);
+    await page
+      .getByLabel("Reporting period start", { exact: true })
+      .fill("2026-06-01");
+    await page
+      .getByLabel("Reconciliation date", { exact: true })
+      .fill("2026-06-30");
+    await page
+      .getByLabel("Scope and source rationale", { exact: true })
+      .fill(
+        "Independent payroll gross/net/deduction/employer allocations and debit-positive expense / credit-positive liability basis assessed against opening and closing GL evidence",
+      );
+    for (const [role, id] of Object.entries(input.sources))
+      await page
+        .getByLabel(`${role} source`, { exact: true })
+        .selectOption(id as string);
+    await saveScreenshot(
+      `${shots}/${country.toLowerCase()}-payroll-ledger-accounting-window.png`,
+      () =>
+        page
+          .getByLabel("Reporting period start", { exact: true })
+          .locator("..")
+          .locator("..")
+          .screenshot(),
+    );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const saved = page
+      .getByLabel("Saved source or result")
+      .locator("option")
+      .filter({ hasText: title });
+    await expect(saved).toHaveCount(1, { timeout: 120000 });
+    await page
+      .getByLabel("Saved source or result")
+      .selectOption((await saved.getAttribute("value"))!);
+    const panel = page
+      .getByRole("heading", { name: title, exact: true })
+      .locator("..");
+    await expect(
+      panel.getByText("0 exceptions", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      panel.getByRole("cell", { name: "MATCHED", exact: true }),
+    ).toHaveCount(5);
+    await expect(
+      panel.getByRole("row").filter({ hasText: "NET-PAY" }),
+    ).toContainText("200");
+    await expect(
+      panel.getByRole("cell", { name: "1000", exact: true }),
+    ).toHaveCount(4);
+    for (const notice of await page
+      .getByRole("button", { name: "Dismiss notification", exact: true })
+      .all())
+      await notice.click();
+    await saveScreenshot(
+      `${shots}/${country.toLowerCase()}-payroll-ledger-account-balances.png`,
+      () => panel.locator("table").last().screenshot(),
+    );
+    await panel.getByLabel("Payroll accounting view").selectOption("postings");
+    await expect(
+      panel.getByRole("cell", { name: "MATCHED", exact: true }),
+    ).toHaveCount(6);
+    await expect(
+      panel.getByRole("cell", { name: "SALARY:GROSS", exact: true }),
+    ).toBeVisible();
+    await expect(
+      panel.getByRole("cell", { name: "EMPLOYEE_DEDUCTION", exact: true }),
+    ).toBeVisible();
+    await saveScreenshot(
+      `${shots}/${country.toLowerCase()}-payroll-ledger-direction-comparisons.png`,
+      () => panel.locator("table").last().screenshot(),
+    );
+    await panel
+      .locator("summary")
+      .filter({ hasText: "Payroll posting source links" })
+      .click();
+    const links = panel.getByRole("table", {
+      name: "Payroll posting source links",
+      exact: true,
+    });
+    await expect(links.getByRole("row")).toHaveCount(13);
+    await expect(
+      links.getByRole("cell", { name: "GL-5", exact: true }),
+    ).toBeVisible();
+    await saveScreenshot(
+      `${shots}/${country.toLowerCase()}-payroll-ledger-source-links.png`,
+      () => links.screenshot(),
+    );
+  }
 });

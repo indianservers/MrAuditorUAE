@@ -152,6 +152,8 @@ def _parse_csv(content, data, defaults=None):
         "cash-payments",
         "item-allocations",
         "transactions",
+        "payroll-account-balances",
+        "payroll-ledger-lines",
         "tax-documents",
         "import-vat-lines",
         "obligations",

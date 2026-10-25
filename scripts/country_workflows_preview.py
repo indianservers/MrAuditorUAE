@@ -757,6 +757,10 @@ async def main():
                 "source_ids": reviewed_ids,
                 "movement_evidence": originals["movements"]["body"]["evidence_version_id"],
                 "movement_controls": quantity_controls["movements"]}
+        from country_payroll_ledger_fixture import prepare as prepare_payroll_ledger
+
+        payroll_ledger = await prepare_payroll_ledger(client, h, (("AE", eid, "AED"), ("IN", india, "INR")), supporting_reviewer)
+
         from country_bank_carryforward_fixture import prepare as prepare_carryforward
 
         bank_carryforward = await prepare_carryforward(client, h, (("AE", eid, "AED"), ("IN", india, "INR")), supporting_reviewer)
@@ -824,6 +828,7 @@ async def main():
                     "india_ecr_evidence": ecr_evidence,
                     "india_gstr2b_evidence": gstr2b_evidence,
                     "india_gstr2b_books": gstr2b_books["id"],
+                    "payroll_ledger": payroll_ledger,
                     "bank_carryforward": bank_carryforward,
                     "ecr_arrear_input": arrear_input,
                     "ecr_arrear_sources": arrear_source_ids,

@@ -11,6 +11,7 @@ from app.modules.country_workflows.ecr_arrear_schemas import ECRArrearControls
 from app.modules.country_workflows.gstr2b_part_schemas import GSTR2BPart
 from app.modules.country_workflows.inventory_controls import InventoryQuantityControl
 from app.modules.country_workflows.operations_schemas import OPERATION_ROW_TYPES
+from app.modules.country_workflows.payroll_ledger_schemas import PAYROLL_LEDGER_ROW_TYPES
 from app.modules.country_workflows.payroll_schemas import PAYROLL_ROW_TYPES
 from app.modules.country_workflows.pension_schemas import PENSION_ROW_TYPES
 from app.modules.country_workflows.sector_schemas import SECTOR_ROW_TYPES
@@ -145,6 +146,7 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
     "withholding-records": WithholdingRecord,
     **OPERATION_ROW_TYPES,
     **PAYROLL_ROW_TYPES,
+    **PAYROLL_LEDGER_ROW_TYPES,
     **PENSION_ROW_TYPES,
     **AUDIT_ROW_TYPES,
     **DILIGENCE_ROW_TYPES,
@@ -207,6 +209,8 @@ class SourceInput(Strict):
     expected_documents: int | None = Field(default=None, ge=0, le=1250)
     rule_document_version_id: uuid.UUID | None = None
     table_type: Literal[
+        "payroll-account-balances",
+        "payroll-ledger-lines",
         "obligation-allocations",
         "fx-rates",
         "bank-outstanding",
@@ -401,6 +405,7 @@ class WorkflowInput(Strict):
     withholding_role: WithholdingRole | None = None
     allocation_basis: Literal["invoice_face_amounts", "pre_application_balances"] | None = None
     workflow: Literal[
+        "payroll-ledger-rollforward",
         "obligation-bank-allocations",
         "bank-subsequent-clearance",
         "india-withholding-liability",
@@ -477,6 +482,8 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
+        if self.workflow == "payroll-ledger-rollforward" and (self.period_start is None or self.period_start <= date.min or self.period_start > self.as_of):
+            raise ValueError("Payroll ledger bridge requires an ordered accounting period and prior-day opening balance")
         if self.arrear_only and self.workflow not in {"statutory-dues", "india-payroll-rules", "obligation-bank-allocations"}:
             raise ValueError("Arrear-only scope applies to statutory dues, India payroll rules or obligation bank allocations")
         if self.stock_bridge_mode == "bidirectional-controlled":

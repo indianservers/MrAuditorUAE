@@ -6,6 +6,7 @@ const state = vi.hoisted(() => ({
   mutate: vi.fn(),
   result: null as unknown,
   excludedPage: null as unknown,
+  postingPage: null as unknown,
   country: "AE",
   jobs: [] as {
     id: string;
@@ -65,6 +66,17 @@ vi.mock("@/hooks/use-api", () => ({
               { id: "RW-001", title: "Bank receipt", workflow: "bank-brs" },
             ],
             items: [
+              {
+                id: "payroll-ledger-rollforward",
+                title: "Payroll accounting bridge",
+                available: true,
+                roles: {
+                  opening: "payroll-account-balances",
+                  payroll: "payroll-ledger-lines",
+                  posted: "payroll-ledger-lines",
+                  closing: "payroll-account-balances",
+                },
+              },
               {
                 id: "statutory-dues",
                 title: "Statutory dues",
@@ -197,6 +209,14 @@ vi.mock("@/hooks/use-api", () => ({
               },
             ],
             source_contracts: {
+              "payroll-account-balances": {
+                id: { required: true, type: "str" },
+                amount: { required: true, type: "Decimal" },
+              },
+              "payroll-ledger-lines": {
+                id: { required: true, type: "str" },
+                amount: { required: true, type: "Decimal" },
+              },
               stock: {
                 id: { required: true, type: "str" },
                 quantity: { required: true, type: "Decimal" },
@@ -233,7 +253,11 @@ vi.mock("@/hooks/use-api", () => ({
           ? {
               snapshots: [{ id: "snapshot", label: "Committed GL snapshot" }],
               evidence: [
-                { id: "clean", label: "Clean statement", scan_status: "CLEAN" },
+                {
+                  id: "clean",
+                  label: "Clean statement",
+                  scan_status: "CLEAN",
+                },
                 {
                   id: "context-clean",
                   label: "Clean arrear context",
@@ -247,12 +271,36 @@ vi.mock("@/hooks/use-api", () => ({
               ],
             }
           : path.includes("/events/result")
-            ? state.result
+            ? path.includes("posting_offset=100")
+              ? state.postingPage
+              : state.result
             : path.endsWith("/jobs")
               ? { items: state.jobs }
               : path.includes("/events?")
                 ? {
                     items: [
+                      ...["opening", "payroll", "posted", "closing"].map(
+                        (role) => ({
+                          id: "ledger-" + role,
+                          label: "Reviewed ledger " + role,
+                          kind: "workflow-source",
+                          table_type: ["opening", "closing"].includes(role)
+                            ? "payroll-account-balances"
+                            : "payroll-ledger-lines",
+                          freshness: "CURRENT",
+                          review_status: "REVIEWED",
+                          version: 1,
+                        }),
+                      ),
+                      {
+                        id: "unreviewed-ledger",
+                        label: "Unreviewed payroll ledger",
+                        kind: "workflow-source",
+                        table_type: "payroll-ledger-lines",
+                        freshness: "CURRENT",
+                        review_status: "UNVERIFIED",
+                        version: 1,
+                      },
                       ...["expected", "return", "payment"].map((role) => ({
                         id: "arrear-" + role,
                         label: "Reviewed arrear " + role,
@@ -508,6 +556,7 @@ vi.mock("@/features/shared", () => ({
 
 beforeEach(() => {
   state.excludedPage = null;
+  state.postingPage = null;
   state.jobs = [];
   state.country = "AE";
   state.mutate.mockReset();
@@ -2264,5 +2313,110 @@ describe("reviewed bank residual carry-forward", () => {
         "Carry reviewed bank residuals into the next clearance window",
       ),
     ).not.toBeInTheDocument();
+  });
+});
+
+describe("payroll accounting bridge", () => {
+  it.each(["AE", "IN"])(
+    "queues a scoped accounting window with reviewed sources for %s",
+    async (country) => {
+      state.country = country;
+      render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+      fireEvent.change(screen.getByLabelText("Workflow", { exact: true }), {
+        target: { value: "payroll-ledger-rollforward" },
+      });
+      expect(
+        screen.getByLabelText("payroll source", { exact: true }),
+      ).not.toHaveTextContent("Unreviewed payroll ledger");
+      for (const [label, value] of [
+        ["Schedule title", "Payroll GL June"],
+        ["Reconciliation date", "2026-06-30"],
+        ["Reporting period start", "2026-06-01"],
+        [
+          "Scope and source rationale",
+          "Independent debit/credit normal signs and wage-month allocation assessed",
+        ],
+      ])
+        fireEvent.change(screen.getByLabelText(label, { exact: true }), {
+          target: { value },
+        });
+      for (const role of ["opening", "payroll", "posted", "closing"])
+        fireEvent.change(
+          screen.getByLabelText(`${role} source`, { exact: true }),
+          { target: { value: "ledger-" + role } },
+        );
+      fireEvent.click(
+        screen.getByRole("button", { name: "Queue calculation" }),
+      );
+      await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+      expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+        workflow: "payroll-ledger-rollforward",
+        period_start: "2026-06-01",
+        as_of: "2026-06-30",
+        source_ids: {
+          opening: "ledger-opening",
+          payroll: "ledger-payroll",
+          posted: "ledger-posted",
+          closing: "ledger-closing",
+        },
+      });
+    },
+  );
+  it("pages individual posting links independently of the comparison rows", () => {
+    state.result = {
+      id: "result",
+      kind: "country-workflow",
+      version: 1,
+      freshness: "CURRENT",
+      collection_totals: { payroll_posting_links: 101 },
+      body: {
+        title: "Payroll GL comparison",
+        workflow: "payroll-ledger-rollforward",
+        review_status: "UNVERIFIED",
+        rows: [
+          {
+            id: "COMP",
+            kind: "posting-comparison",
+            account: "SALARY",
+            state: "MATCHED",
+          },
+        ],
+        payroll_posting_links: Array.from({ length: 100 }, (_, index) => ({
+          source_row_id: "PAY-" + index,
+          source_role: "payroll",
+          comparison_row_id: "COMP",
+          account: "SALARY",
+          currency: "AED",
+          amount: "1",
+        })),
+      },
+    };
+    state.postingPage = {
+      body: {
+        payroll_posting_links: [
+          {
+            source_row_id: "PAY-100",
+            source_role: "posted",
+            comparison_row_id: "COMP",
+            account: "SALARY",
+            currency: "AED",
+            amount: "1",
+          },
+        ],
+      },
+    };
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), {
+      target: { value: "result" },
+    });
+    fireEvent.click(screen.getByText(/Payroll posting source links/));
+    fireEvent.click(screen.getByRole("button", { name: "Next posting links" }));
+    expect(screen.getByRole("cell", { name: "PAY-100" })).toBeVisible();
+    expect(
+      screen.queryByRole("cell", { name: "PAY-0" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Next posting links" }),
+    ).toBeDisabled();
   });
 });

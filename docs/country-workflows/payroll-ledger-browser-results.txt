@@ -1,0 +1,4 @@
+Command: npx playwright test --config playwright.country-workflows.config.ts --grep "payroll accounts reconcile gross" --reporter=list
+Scope: UAE then India; reviewed original accounting sources, explicit subperiod, independent account and posting views, and individual source links.
+Boundary: owned disposable country-workflow database; fictional inputs and explicit fixture-preparation scanner/broker doubles. Runtime API and Celery worker exercised.
+Result: 1 passed (29.3s), covering UAE and India.

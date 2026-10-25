@@ -631,9 +631,15 @@ async def event_details(
     inventory_limit: int = Query(100, ge=1, le=500),
     bridge_offset: int = Query(0, ge=0),
     bridge_limit: int = Query(100, ge=1, le=500),
+    posting_offset: int = Query(0, ge=0),
+    posting_limit: int = Query(100, ge=1, le=500),
+    payroll_view: Literal["all", "accounts", "postings"] = "all",
 ):
     obj = await service.event(db, ctx, eid, identifier)
     body = dict(obj.body)
+    if body.get("workflow") == "payroll-ledger-rollforward" and payroll_view != "all":
+        selected_kind = "account-rollforward" if payroll_view == "accounts" else "posting-comparison"
+        body["rows"] = [row for row in body["rows"] if row["kind"] == selected_kind]
     totals = {}
     for key in [
         "rows",
@@ -652,7 +658,7 @@ async def event_details(
     if isinstance(body.get("excluded_box_rows"), list):
         totals["excluded_box_rows"] = len(body["excluded_box_rows"])
         body["excluded_box_rows"] = body["excluded_box_rows"][excluded_offset : excluded_offset + excluded_limit]
-    for key, start, size in [("inventory_quantity_controls", inventory_offset, inventory_limit), ("count_bridges", bridge_offset, bridge_limit)]:
+    for key, start, size in [("inventory_quantity_controls", inventory_offset, inventory_limit), ("count_bridges", bridge_offset, bridge_limit), ("payroll_posting_links", posting_offset, posting_limit)]:
         if isinstance(body.get(key), list):
             totals[key] = len(body[key])
             body[key] = body[key][start : start + size]
@@ -1411,8 +1417,9 @@ async def export_result(
     from app.modules.intelligence.exports import render
 
     tenant = await db.get(Tenant, ctx.tenant_id)
+    freshness = "CURRENT" if await service.current(db, ctx, obj) else "STALE"
     content, media = await run_in_threadpool(
-        render, {**audit.serialize(obj), "firm_name": tenant.name if tenant else ""}, format
+        render, {**audit.serialize(obj), "firm_name": tenant.name if tenant else "", "freshness": freshness, "exported_at": datetime.now(UTC).isoformat()}, format
     )
     record(
         db,
@@ -1420,7 +1427,7 @@ async def export_result(
         "intelligence.exported",
         obj.id,
         request.state.request_id,
-        {"format": format, "sha256": obj.sha256},
+        {"format": format, "sha256": obj.sha256, "freshness": freshness},
     )
     return Response(
         content,

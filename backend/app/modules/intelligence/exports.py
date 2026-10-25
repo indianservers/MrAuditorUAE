@@ -27,6 +27,9 @@ def render(event, format):
         "Country": body.get("country"),
         "Framework": body.get("reporting_framework"),
         "Review status": body.get("review_status", "UNVERIFIED"),
+        "Export timestamp": event.get("exported_at", "NOT_RECORDED"),
+        "Source freshness at export": event.get("freshness", "NOT_EVALUATED"),
+        "Export status": "STALE_HISTORICAL_RESULT_REQUIRES_RECALCULATION" if event.get("freshness") == "STALE" else "CURRENT_RETAINED_RESULT" if event.get("freshness") == "CURRENT" else "FRESHNESS_NOT_EVALUATED",
         "Prepared by": ", ".join(body.get("contributors", [])),
         "Reviewed by": body.get("reviewer"),
         "Generated result timestamp": event["created_at"],
@@ -90,6 +93,7 @@ def render(event, format):
             "calculation_engine",
             "total_ecl_by_currency",
             "count_bridges",
+            "payroll_ledger_scope",
             "native_format",
             "native_metadata",
             "csv_mapping",
@@ -123,6 +127,9 @@ def render(event, format):
         summary["count_bridges"] = f"{len(body['count_bridges'])} bridge rows; complete original count details and individual movement links are retained in the XLSX Count date bridges and Inventory movement links sheets"
     if isinstance(body.get("inventory_quantity_controls"), list):
         summary["inventory_quantity_controls"] = f"{len(body['inventory_quantity_controls'])} controlled partitions; complete row and directional quantity controls are retained in the XLSX Inventory quantity controls sheet"
+
+    if isinstance(body.get("payroll_posting_links"), list):
+        summary["payroll_posting_links"] = f"{len(body['payroll_posting_links'])} individual source posting links; complete detail is retained in the XLSX Payroll posting links sheet"
 
     def text(value):
         return (
@@ -180,6 +187,12 @@ def render(event, format):
         append(source, keys)
         for row in rows:
             append(source, [row.get(key) for key in keys])
+        if body.get("payroll_posting_links") is not None:
+            posting_links = workbook.create_sheet("Payroll posting links")
+            posting_fields = list(dict.fromkeys(key for row in body["payroll_posting_links"] for key in row))
+            append(posting_links, posting_fields)
+            for link in body["payroll_posting_links"]:
+                append(posting_links, [link.get(key) for key in posting_fields])
         if body.get("inventory_quantity_controls") is not None:
             controls = workbook.create_sheet("Inventory quantity controls")
             fields = ["site", "sku", "lot", "uom", "currency", "expected_rows", "positive_quantity", "negative_quantity"]

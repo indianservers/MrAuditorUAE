@@ -1,0 +1,39 @@
+{
+  "synthetic": true,
+  "period_start": "2026-06-01",
+  "as_of": "2026-06-30",
+  "sources": {
+    "opening": {
+      "filename": "ae-opening.csv",
+      "table_type": "payroll-account-balances",
+      "expected_rows": 5,
+      "control_totals": {
+        "AED": "200"
+      }
+    },
+    "payroll": {
+      "filename": "ae-payroll.csv",
+      "table_type": "payroll-ledger-lines",
+      "expected_rows": 6,
+      "control_totals": {
+        "AED": "1200"
+      }
+    },
+    "posted": {
+      "filename": "ae-posted.csv",
+      "table_type": "payroll-ledger-lines",
+      "expected_rows": 6,
+      "control_totals": {
+        "AED": "1200"
+      }
+    },
+    "closing": {
+      "filename": "ae-closing.csv",
+      "table_type": "payroll-account-balances",
+      "expected_rows": 5,
+      "control_totals": {
+        "AED": "1400"
+      }
+    }
+  }
+}

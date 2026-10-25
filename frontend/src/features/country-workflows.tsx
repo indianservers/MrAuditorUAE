@@ -9,6 +9,7 @@ import { Button, ErrorState, Status } from "@/components/ui/primitives";
 import { PageHeader } from "./shared";
 import { BankCarryforwardSource } from "./bank-carryforward-source";
 import { ContributionObligationSource } from "./contribution-obligation-source";
+import { PayrollPostingLinks } from "./payroll-posting-links";
 import { InventoryEvidenceTable } from "./inventory-evidence-table";
 import { VATCompositionSource } from "./vat-composition-source";
 import {
@@ -166,6 +167,7 @@ type Result = {
     table_type?: string;
     rows: Record<string, unknown>[];
     count_bridges?: Record<string, unknown>[];
+    payroll_posting_links?: Record<string, unknown>[];
     inventory_quantity_controls?: Record<string, unknown>[];
     limitations?: string[];
     control_comparison?: Record<string, string>;
@@ -217,6 +219,8 @@ type Result = {
 const text = (v: unknown) =>
   v == null ? "—" : typeof v === "object" ? JSON.stringify(v) : String(v);
 const moneyTables = [
+  "payroll-account-balances",
+  "payroll-ledger-lines",
   "obligation-allocations",
   "cash-payments",
   "item-allocations",
@@ -298,8 +302,9 @@ export function CountryWorkflows({
   const [selected, setSelected] = useState("");
   const [showAllJobs, setShowAllJobs] = useState(false);
   const [offset, setOffset] = useState(0);
+  const [payrollView, setPayrollView] = useState("accounts");
   const detail = useAPI<Result>(
-    `${prefix}/events/${selected}?offset=${offset}&limit=100`,
+    `${prefix}/events/${selected}?offset=${offset}&limit=100&payroll_view=${payrollView}`,
     !!selected,
   );
   const [workflow, setWorkflow] = useState("bank-brs");
@@ -654,48 +659,78 @@ export function CountryWorkflows({
                           ].filter((key) => allColumns.includes(key))
                         : allColumns;
   const columns =
-    body?.table_type === "bank-outstanding" && !showRuleProvenance
-      ? [
-          "reference",
-          "date",
-          "balance_date",
-          "currency",
-          "amount",
-          "previous_outstanding_amount",
-          "cleared_in_previous_window",
-        ].filter((key) => allColumns.includes(key))
-      : compactArrear && !showRuleProvenance
+    body?.workflow === "payroll-ledger-rollforward" && !showRuleProvenance
+      ? (payrollView === "accounts"
+          ? [
+              "registration",
+              "account",
+              "currency",
+              "opening_amount",
+              "payroll_movement",
+              "posted_movement",
+              "expected_closing",
+              "actual_closing",
+              "payroll_closing_difference",
+              "posted_closing_difference",
+              "state",
+            ]
+          : [
+              "account",
+              "wage_month",
+              "component",
+              "category",
+              "currency",
+              "payroll_positive",
+              "posted_positive",
+              "payroll_negative",
+              "posted_negative",
+              "positive_difference",
+              "negative_difference",
+              "state",
+            ]
+        ).filter((key) => allColumns.includes(key))
+      : body?.table_type === "bank-outstanding" && !showRuleProvenance
         ? [
-            "subject",
-            "period",
-            "population",
-            "component",
+            "reference",
+            "date",
+            "balance_date",
             "currency",
             "amount",
-            "source_row",
+            "previous_outstanding_amount",
+            "cleared_in_previous_window",
           ].filter((key) => allColumns.includes(key))
-        : compactArrearResult && !showRuleProvenance
+        : compactArrear && !showRuleProvenance
           ? [
               "subject",
               "period",
+              "population",
               "component",
               "currency",
-              "expected_amount",
-              "return_amount",
-              "payment_amount",
-              "state",
+              "amount",
+              "source_row",
             ].filter((key) => allColumns.includes(key))
-          : compactWPS && !showRuleProvenance
+          : compactArrearResult && !showRuleProvenance
             ? [
                 "subject",
                 "period",
+                "component",
                 "currency",
-                "fixed_income",
-                "variable_income",
-                "amount",
-                "unpaid_days",
+                "expected_amount",
+                "return_amount",
+                "payment_amount",
+                "state",
               ].filter((key) => allColumns.includes(key))
-            : defaultColumns;
+            : compactWPS && !showRuleProvenance
+              ? [
+                  "subject",
+                  "period",
+                  "currency",
+                  "fixed_income",
+                  "variable_income",
+                  "amount",
+                  "unpaid_days",
+                ].filter((key) => allColumns.includes(key))
+              : defaultColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -994,6 +1029,7 @@ export function CountryWorkflows({
             "excise-reconciliation",
             "gold-reconciliation",
             "asset-register-review",
+            "payroll-ledger-rollforward",
           ].includes(workflow)
             ? { period_start: periodStart }
             : {}),
@@ -2459,6 +2495,7 @@ export function CountryWorkflows({
                 "excise-reconciliation",
                 "gold-reconciliation",
                 "asset-register-review",
+                "payroll-ledger-rollforward",
               ].includes(workflow) && (
                 <label>
                   Reporting period start
@@ -2520,6 +2557,7 @@ export function CountryWorkflows({
                             r.allowed_source_roles.includes(role)) &&
                           (![
                             "obligation-bank-allocations",
+                            "payroll-ledger-rollforward",
                             "uae-pension-review",
                           ].includes(workflow) ||
                             r.review_status === "REVIEWED") &&
@@ -2684,6 +2722,16 @@ export function CountryWorkflows({
                     movements remain visible.
                   </p>
                 </>
+              )}
+              {workflow === "payroll-ledger-rollforward" && (
+                <p>
+                  Compare independently reviewed payroll allocations with posted
+                  GL lines and prior-day opening / reporting-date closing
+                  controls. Expense amounts are debit-positive; liability
+                  amounts credit-positive. Wage month, component, posting
+                  category, employer, account and currency stay separate. A
+                  settlement journal does not prove payment execution.
+                </p>
               )}
               {workflow === "bank-brs" && (
                 <>
@@ -3460,6 +3508,37 @@ export function CountryWorkflows({
               ))}
             </dl>
           )}
+          {body.workflow === "payroll-ledger-rollforward" && (
+            <label>
+              Payroll accounting view
+              <select
+                value={payrollView}
+                onChange={(event) => {
+                  setPayrollView(event.target.value);
+                  setOffset(0);
+                }}
+              >
+                <option value="accounts">
+                  Account opening and closing balances
+                </option>
+                <option value="postings">
+                  Payroll and posted direction comparisons
+                </option>
+              </select>
+            </label>
+          )}
+          {body.payroll_posting_links && (
+            <PayrollPostingLinks
+              key={selected}
+              prefix={prefix}
+              selected={selected}
+              initial={body.payroll_posting_links}
+              total={
+                detail.data.collection_totals?.payroll_posting_links ??
+                body.payroll_posting_links.length
+              }
+            />
+          )}
           {body.inventory_quantity_controls && (
             <InventoryEvidenceTable
               key={selected + ":inventory-controls"}
@@ -3792,6 +3871,7 @@ export function CountryWorkflows({
             {(compactSource ||
               compactArrearResult ||
               compactBenefit ||
+              body.workflow === "payroll-ledger-rollforward" ||
               compactBankClearance ||
               compactDues ||
               compactCredit ||

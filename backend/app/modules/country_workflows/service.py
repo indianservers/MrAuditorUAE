@@ -367,7 +367,10 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         raise HTTPException(422, "Reconciliation date must be within the engagement period")
     if data.tax_year_start and data.tax_year_start > data.as_of:
         raise HTTPException(422, "Tax year cannot start after the reconciliation date")
-    if data.period_start and data.period_start != period.start_date:
+    if data.workflow == "payroll-ledger-rollforward":
+        if data.period_start is None or not period.start_date <= data.period_start <= data.as_of:
+            raise HTTPException(422, "Payroll accounting window must be within the engagement period")
+    elif data.period_start and data.period_start != period.start_date:
         raise HTTPException(422, "Reporting-period start must equal the engagement period start")
     sources = {}
     hashes = set()
@@ -377,6 +380,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         source = await intelligence.event(db, ctx, eng.id, identifier, True)
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
+        if data.workflow == "payroll-ledger-rollforward" and source.body.get("review_status") != "REVIEWED":
+            raise HTTPException(409, "Independently review payroll accounting allocations and both GL balances before comparison")
         if source.body.get("parser_version") == "bank-clearance-carryforward/1":
             if data.workflow != "bank-subsequent-clearance" or role != "outstanding":
                 raise HTTPException(422, "Carried bank residuals can establish only the outstanding role of subsequent clearance")

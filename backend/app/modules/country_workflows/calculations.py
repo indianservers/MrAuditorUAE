@@ -846,7 +846,11 @@ def calculate(data, country, sources):
     tables = {role: source["rows"] for role, source in sources.items()}
     with localcontext() as arithmetic:
         arithmetic.prec = 80
-        if data.workflow == "obligation-bank-allocations":
+        if data.workflow == "payroll-ledger-rollforward":
+            from app.modules.country_workflows.payroll_ledger import reconcile
+
+            result = reconcile(data, tables, country)
+        elif data.workflow == "obligation-bank-allocations":
             from app.modules.country_workflows.dues_allocations import allocate
 
             if sources["bank"].get("native_format") in {"camt053", "swift-mt940"} and data.bank_payment_sign != "debit-negative":

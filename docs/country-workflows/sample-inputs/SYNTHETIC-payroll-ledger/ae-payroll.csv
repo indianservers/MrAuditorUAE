@@ -1,0 +1,7 @@
+registration,currency,evidence_reference,id,account,account_class,amount,posting_date,wage_month,component,category,subject,reference,assessment
+SYNTHETIC-EMPLOYER,AED,SYNTHETIC-ORIGINAL,PAY-0,SALARY-EXP,expense,1000,2026-06-20,2026-06,SALARY:GROSS,accrual,EMP-1,SYN-EXPECTED-0,Independently assessed fictional payroll allocation and posting date
+SYNTHETIC-EMPLOYER,AED,SYNTHETIC-ORIGINAL,PAY-1,NET-PAY,liability,900,2026-06-20,2026-06,SALARY:NET,accrual,EMP-1,SYN-EXPECTED-1,Independently assessed fictional payroll allocation and posting date
+SYNTHETIC-EMPLOYER,AED,SYNTHETIC-ORIGINAL,PAY-2,DEDUCTIONS,liability,100,2026-06-20,2026-06,EMPLOYEE_DEDUCTION,accrual,EMP-1,SYN-EXPECTED-2,Independently assessed fictional payroll allocation and posting date
+SYNTHETIC-EMPLOYER,AED,SYNTHETIC-ORIGINAL,PAY-3,NET-PAY,liability,-900,2026-06-20,2026-06,SALARY:NET,settlement,EMP-1,SYN-EXPECTED-3,Independently assessed fictional payroll allocation and posting date
+SYNTHETIC-EMPLOYER,AED,SYNTHETIC-ORIGINAL,PAY-4,PENSION-EXP,expense,50,2026-06-20,2026-06,PENSION:EMPLOYER,accrual,EMP-1,SYN-EXPECTED-4,Independently assessed fictional payroll allocation and posting date
+SYNTHETIC-EMPLOYER,AED,SYNTHETIC-ORIGINAL,PAY-5,PENSION-PAY,liability,50,2026-06-20,2026-06,PENSION:EMPLOYER,accrual,EMP-1,SYN-EXPECTED-5,Independently assessed fictional payroll allocation and posting date
