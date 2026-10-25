@@ -1,0 +1,21 @@
+{
+  "gstin": "27ABCDE5678G1Z8",
+  "fp": "062026",
+  "doc_issue": {
+    "doc_det": [
+      {
+        "doc_num": 1,
+        "docs": [
+          {
+            "num": 1,
+            "from": "SYN/0001",
+            "to": "SYN/0010",
+            "totnum": 10,
+            "cancel": 2,
+            "net_issue": 8
+          }
+        ]
+      }
+    ]
+  }
+}

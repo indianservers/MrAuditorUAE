@@ -197,7 +197,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "parser_version": "committed-ledger-1",
         }, [*dependencies, receipt]
     if operation == "workflow-source":
-        if data.table_type == "gst-summary-metrics" and package.country != "IN":
+        if data.table_type in {"gst-summary-metrics", "gst-document-series"} and package.country != "IN":
             raise HTTPException(422, "GST summary metric sources require an India engagement")
         if data.table_type.startswith("pension-") and package.country != "AE":
             raise HTTPException(422, "Pension sources require a UAE engagement")
@@ -217,7 +217,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         if evidence.created_by is not None:
             supporting_contributors.add(str(evidence.created_by))
         gstr1_context = None
-        if data.file_format == "india-gstr1-documents-json":
+        if data.file_format in {"india-gstr1-documents-json", "india-gstr1-document-series-json"}:
             if package.country != "IN":
                 raise HTTPException(422, "GSTR-1 invoice/note sources require an India engagement")
             gstr1_context, _ = await intelligence.evidence(db, ctx, eng, data.gstr1_context_evidence_version_id)
@@ -276,6 +276,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "india-epfo-arrear-ecr-v2": {"text/plain"},
             "india-gstr1-documents-json": {"application/json"},
             "india-gstr1-summary-json": {"application/json"},
+            "india-gstr1-document-series-json": {"application/json"},
             "india-gstr2b-json": {"application/json"},
         }
         if evidence.media_type not in supported_media[data.file_format]:
@@ -402,7 +403,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(422, "Select canonical country-workflow source events")
         if data.workflow == "bank-account-evidence" and source.body.get("review_status") != "REVIEWED":
             raise HTTPException(409, "Independently review all bank account evidence source populations before comparison")
-        if data.workflow in {"india-invoice-register", "india-gstr1-summary", "india-gstr1-documents"} and source.body.get("review_status") != "REVIEWED":
+        if data.workflow in {"india-invoice-register", "india-gstr1-summary", "india-gstr1-documents", "india-document-series"} and source.body.get("review_status") != "REVIEWED":
             raise HTTPException(409, "Independently review both source populations before invoice/register, outward GST or summary comparison")
         if data.workflow == "uae-vat-return" and data.vat201_layout == "emirate-20" and source.body.get("review_status") != "REVIEWED":
             raise HTTPException(409, "Independently review emirate allocation and filed VAT201 sources before comparison")

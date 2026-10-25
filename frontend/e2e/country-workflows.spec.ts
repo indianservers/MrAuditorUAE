@@ -5813,3 +5813,191 @@ test("UAE evidenced nil imports produce reviewed zero VAT201 boxes", async ({
     await context.close();
   }
 });
+test("India Table 13 retains document-series counts, cancellation variances and independent review", async ({
+  page,
+  browser,
+}) => {
+  test.setTimeout(240000);
+  page.setDefaultTimeout(15000);
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+    viewport: { width: 1600, height: 1100 },
+  });
+  const reviewer = await context.newPage();
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_final_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    const eid = fixture.india_engagement;
+    async function queue() {
+      const pending = page.waitForResponse(
+        (r) =>
+          r.url().includes(`/engagements/${eid}/jobs`) &&
+          r.request().method() === "POST",
+      );
+      await page
+        .getByRole("button", { name: "Queue calculation", exact: true })
+        .click();
+      const submitted = await pending;
+      expect(submitted.status(), await submitted.text()).toBe(202);
+      const job = await submitted.json();
+      let result = "";
+      await expect
+        .poll(
+          async () => {
+            const response = await page.request.get(
+              `/api/backend/intelligence/engagements/${eid}/jobs/${job.id}`,
+              { headers: { "X-Tenant-ID": fixture.tenant } },
+            );
+            const body = await response.json();
+            if (body.status === "failed")
+              throw new Error(JSON.stringify(body.error_details));
+            result = body.result_id || "";
+            return body.status;
+          },
+          { timeout: 60000 },
+        )
+        .toBe("completed");
+      await expect(
+        page
+          .getByLabel("Saved source or result")
+          .locator(`option[value="${result}"]`),
+      ).toHaveCount(1);
+      await page.getByLabel("Saved source or result").selectOption(result);
+      return result;
+    }
+    async function approve(result: string, mode: string) {
+      await reviewer.goto(`/intelligence/${eid}/${mode}`);
+      await reviewer.getByLabel("Saved source or result").selectOption(result);
+      await reviewer
+        .getByLabel("Review / exception rationale")
+        .fill(
+          "Independent request scope, original serial ranges and cancellation count controls checked",
+        );
+      const pending = reviewer.waitForResponse(
+        (r) =>
+          r.url().endsWith(`/events/${result}/review`) &&
+          r.request().method() === "POST",
+      );
+      await reviewer
+        .getByRole("button", { name: "Independent approval", exact: true })
+        .click();
+      const response = await pending;
+      expect(response.status(), await response.text()).toBe(201);
+      return (await response.json()).id;
+    }
+    await page.goto(`/intelligence/${eid}/workflow-source`);
+    await page
+      .getByLabel("Source file format", { exact: true })
+      .selectOption("india-gstr1-document-series-json");
+    const input = fixture.document_series.matching;
+    for (const [label, value] of [
+      [
+        "Schedule title",
+        `SYNTHETIC native document-series preparation ${Date.now()}`,
+      ],
+      ["Clean retained evidence", input.originals.response],
+      ["Expected data rows", "1"],
+      ["Issued documents control", "10"],
+      ["Cancelled documents control", "2"],
+      ["Net issued documents control", "8"],
+      ["Document-series GSTIN", "27ABCDE5678G1Z8"],
+      ["Document-series reporting month", "2026-06"],
+      ["Document-series request context", input.originals.context],
+      [
+        "Document-series retrieval assessment",
+        "Separately retained synthetic request context establishes this GSTIN, month and unfiltered document-issue section",
+      ],
+    ]) {
+      const field = page.getByLabel(label, { exact: true });
+      if (
+        ["Clean retained evidence", "Document-series request context"].includes(
+          label,
+        )
+      )
+        await page.getByLabel(label).selectOption(value);
+      else await field.fill(value);
+    }
+    await saveScreenshot(
+      `${shots}/india-document-series-native-controls.png`,
+      () =>
+        page
+          .getByRole("group", {
+            name: "Independent document-series count controls",
+            exact: true,
+          })
+          .screenshot(),
+    );
+    const prepared = await queue();
+    const native = await approve(prepared, "workflow-source");
+    for (const variance of [false, true]) {
+      const entry = fixture.document_series[variance ? "variance" : "matching"];
+      await page.goto(`/intelligence/${eid}/country-workflow`);
+      await page
+        .getByLabel("Workflow", { exact: true })
+        .selectOption("india-document-series");
+      for (const [label, value] of [
+        [
+          "Schedule title",
+          `SYNTHETIC document-series ${variance ? "cancellation discrepancy" : "matching counts"} ${Date.now()}`,
+        ],
+        ["Reconciliation date", "2026-06-30"],
+        [
+          "Scope and source rationale",
+          "Independently reviewed serial ranges and issued/cancelled/net counts compared without a filing conclusion",
+        ],
+      ])
+        await page.getByLabel(label, { exact: true }).fill(value);
+      await page
+        .getByLabel("books source", { exact: true })
+        .selectOption(entry.books);
+      await page
+        .getByLabel("reported source", { exact: true })
+        .selectOption(variance ? entry.reported : native);
+      const result = await queue();
+      await expect(
+        page.getByRole("region", { name: "Document-series comparison scope" }),
+      ).toContainText("27ABCDE5678G1Z8");
+      const table = page.getByRole("table").filter({
+        has: page.getByRole("columnheader", {
+          name: "books cancelled",
+          exact: true,
+        }),
+      });
+      await expect(
+        table.getByRole("cell", { name: "SYN/0001", exact: true }),
+      ).toBeVisible();
+      await expect(
+        page.getByText(variance ? "1 exceptions" : "0 exceptions", {
+          exact: true,
+        }),
+      ).toBeVisible();
+      await expect(
+        table.getByRole("cell", {
+          name: variance ? "EXCEPTIONS" : "MATCHED",
+          exact: true,
+        }),
+      ).toBeVisible();
+      await table.scrollIntoViewIfNeeded();
+      await saveScreenshot(
+        `${shots}/india-document-series-${variance ? "cancellation-variance" : "matched-counts"}.png`,
+        () => table.locator("..").screenshot(),
+      );
+      if (!variance) await approve(result, "country-workflow");
+      const download = page.waitForEvent("download");
+      await page
+        .getByRole("button", { name: "Export XLSX", exact: true })
+        .click();
+      expect((await download).suggestedFilename()).toMatch(/\.xlsx$/);
+    }
+  } finally {
+    await context.close();
+  }
+});

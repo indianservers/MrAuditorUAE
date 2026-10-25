@@ -180,6 +180,7 @@ type Result = {
     blocked?: boolean;
     booking_date_review_count?: number;
     bank_account_evidence?: BankAccountLink;
+    document_series_scope?: { registration: string; period: string };
     import_nil_scope?: ImportNilDraft & { binding_status: string };
     exception_count?: number;
     table_type?: string;
@@ -371,6 +372,11 @@ export function CountryWorkflows({
   const [expectedMembers, setExpectedMembers] = useState("");
   const [expectedDocuments, setExpectedDocuments] = useState("");
   const [ruleDocument, setRuleDocument] = useState("");
+  const [seriesControls, setSeriesControls] = useState({
+    issued: "",
+    cancelled: "",
+    net_issued: "",
+  });
   const [gstr1Controls, setGSTR1Controls] = useState("[]");
   const [gstr1Context, setGSTR1Context] = useState("");
   const [gstr1Assessment, setGSTR1Assessment] = useState("");
@@ -460,44 +466,73 @@ export function CountryWorkflows({
   const body = detail.data?.body;
   const compactVAT = body?.workflow === "uae-vat-return";
   const rows: Record<string, unknown>[] =
-    body?.workflow === "obligation-bank-allocations" && !showRuleProvenance
+    body?.workflow === "india-document-series" && !showRuleProvenance
       ? (body.rows || []).map((row) => ({
-          ...row,
-          subject: row.subject ?? row.reference,
-          source_amount:
-            row.expected_amount ?? row.reported_amount ?? row.bank_amount,
-          settled_or_allocated: row.bank_settled ?? row.allocated,
-          remaining:
-            row.outstanding_amount ??
-            row.unsettled_reported_amount ??
-            row.unallocated_bank_amount,
+          id: row.id,
+          doc_num: row.doc_num,
+          serial_from: row.serial_from,
+          serial_to: row.serial_to,
+          ...Object.fromEntries(
+            ["issued", "cancelled", "net_issued"].flatMap((field) => [
+              [
+                `books_${field}`,
+                (row.books_counts as Record<string, number> | null)?.[field] ??
+                  "Not determined",
+              ],
+              [
+                `reported_${field}`,
+                (row.reported_counts as Record<string, number> | null)?.[
+                  field
+                ] ?? "Not determined",
+              ],
+              [
+                `${field}_difference`,
+                (row.differences as Record<string, number | null>)[field] ??
+                  "Not determined",
+              ],
+            ]),
+          ),
+          state: row.state,
         }))
-      : body?.workflow === "statutory-dues" &&
-          body.obligation_population_scope ===
-            "ARREARS_ONLY_NOT_COMPLETE_MONTHLY_RETURN" &&
-          !showRuleProvenance
-        ? (body.rows || []).map((row): Record<string, unknown> => ({
+      : body?.workflow === "obligation-bank-allocations" && !showRuleProvenance
+        ? (body.rows || []).map((row) => ({
             ...row,
-            expected_amount: (row.amounts as Record<string, unknown>)?.expected,
-            return_amount: (row.amounts as Record<string, unknown>)?.return,
-            payment_amount: (row.amounts as Record<string, unknown>)?.payment,
+            subject: row.subject ?? row.reference,
+            source_amount:
+              row.expected_amount ?? row.reported_amount ?? row.bank_amount,
+            settled_or_allocated: row.bank_settled ?? row.allocated,
+            remaining:
+              row.outstanding_amount ??
+              row.unsettled_reported_amount ??
+              row.unallocated_bank_amount,
           }))
-        : compactVAT && !showRuleProvenance
-          ? (body.rows || [])
-              .map((row): Record<string, unknown> => ({
-                ...row,
-                taxable_difference: (
-                  row.differences as Record<string, unknown> | undefined
-                )?.taxable_amount,
-                tax_difference: (
-                  row.differences as Record<string, unknown> | undefined
-                )?.tax,
-                adjustment_difference: (
-                  row.differences as Record<string, unknown> | undefined
-                )?.adjustment,
-              }))
-              .sort((left, right) => Number(left.box) - Number(right.box))
-          : body?.rows || [];
+        : body?.workflow === "statutory-dues" &&
+            body.obligation_population_scope ===
+              "ARREARS_ONLY_NOT_COMPLETE_MONTHLY_RETURN" &&
+            !showRuleProvenance
+          ? (body.rows || []).map((row): Record<string, unknown> => ({
+              ...row,
+              expected_amount: (row.amounts as Record<string, unknown>)
+                ?.expected,
+              return_amount: (row.amounts as Record<string, unknown>)?.return,
+              payment_amount: (row.amounts as Record<string, unknown>)?.payment,
+            }))
+          : compactVAT && !showRuleProvenance
+            ? (body.rows || [])
+                .map((row): Record<string, unknown> => ({
+                  ...row,
+                  taxable_difference: (
+                    row.differences as Record<string, unknown> | undefined
+                  )?.taxable_amount,
+                  tax_difference: (
+                    row.differences as Record<string, unknown> | undefined
+                  )?.tax,
+                  adjustment_difference: (
+                    row.differences as Record<string, unknown> | undefined
+                  )?.adjustment,
+                }))
+                .sort((left, right) => Number(left.box) - Number(right.box))
+            : body?.rows || [];
   const allColumns = [
     ...new Set(rows.flatMap((row) => Object.keys(row))),
   ].filter((k) => !["auditor", "auditor_at"].includes(k));
@@ -918,6 +953,17 @@ export function CountryWorkflows({
               ].includes(tableType) && ruleDocument
                 ? { rule_document_version_id: ruleDocument }
                 : {}),
+              ...(tableType === "gst-document-series"
+                ? { document_series_controls: seriesControls }
+                : {}),
+              ...(sourceFormat === "india-gstr1-document-series-json"
+                ? {
+                    gst_registration: gstRegistration,
+                    gst_period: gstPeriod,
+                    gstr1_context_evidence_version_id: gstr1Context,
+                    gstr1_retrieval_assessment: gstr1Assessment,
+                  }
+                : {}),
               ...(tableType === "gst-summary-metrics"
                 ? {
                     gst_summary_metric_controls: JSON.parse(gstSummaryControls),
@@ -1112,6 +1158,7 @@ export function CountryWorkflows({
           title: label,
           rationale: reason,
           currency: [
+            "india-document-series",
             "india-gstr1-documents",
             "india-gstr1-summary",
             "india-payroll-rules",
@@ -1638,6 +1685,8 @@ export function CountryWorkflows({
                         );
                         if (chosenFormat?.table_type)
                           setTableType(chosenFormat.table_type);
+                        if (chosenFormat?.table_type === "gst-document-series")
+                          setTotals("");
                       }}
                     >
                       {(
@@ -1667,6 +1716,8 @@ export function CountryWorkflows({
                       value={tableType}
                       onChange={(e) => {
                         setTableType(e.target.value);
+                        if (e.target.value === "gst-document-series")
+                          setTotals("");
                         setRuleDocument("");
                         setCSVColumns({});
                         setAmountDerivation("none");
@@ -2192,6 +2243,102 @@ export function CountryWorkflows({
                         Amendments and source status/de-link flags remain
                         unresolved.
                       </p>
+                    </fieldset>
+                  )}
+                  {tableType === "gst-document-series" && (
+                    <fieldset style={{ gridColumn: "1 / -1", minWidth: 0 }}>
+                      <legend>
+                        Independent document-series count controls
+                      </legend>
+                      <p>
+                        Enter separately checked counts across all retained
+                        serial rows. Cancelled documents stay explicit. Counts
+                        are exact and have no currency; leave monetary control
+                        totals empty.
+                      </p>
+                      {(
+                        [
+                          ["issued", "Issued documents control"],
+                          ["cancelled", "Cancelled documents control"],
+                          ["net_issued", "Net issued documents control"],
+                        ] as const
+                      ).map(([field, label]) => (
+                        <label key={field}>
+                          {label}
+                          <input
+                            inputMode="numeric"
+                            value={seriesControls[field]}
+                            onChange={(event) =>
+                              setSeriesControls({
+                                ...seriesControls,
+                                [field]: event.target.value,
+                              })
+                            }
+                          />
+                        </label>
+                      ))}
+                      {sourceFormat === "india-gstr1-document-series-json" && (
+                        <>
+                          <label>
+                            Document-series GSTIN
+                            <input
+                              value={gstRegistration}
+                              onChange={(event) =>
+                                setGSTRegistration(event.target.value)
+                              }
+                            />
+                          </label>
+                          <label>
+                            Document-series reporting month
+                            <input
+                              type="month"
+                              value={gstPeriod}
+                              onChange={(event) =>
+                                setGSTPeriod(event.target.value)
+                              }
+                            />
+                          </label>
+                          <label>
+                            Document-series request context
+                            <select
+                              value={gstr1Context}
+                              onChange={(event) =>
+                                setGSTR1Context(event.target.value)
+                              }
+                            >
+                              <option value="">
+                                Select separate clean evidence
+                              </option>
+                              {inputs.data?.evidence
+                                .filter(
+                                  (item) =>
+                                    item.scan_status === "CLEAN" &&
+                                    item.id !== evidence,
+                                )
+                                .map((item) => (
+                                  <option key={item.id} value={item.id}>
+                                    {item.label}
+                                  </option>
+                                ))}
+                            </select>
+                          </label>
+                          <label>
+                            Document-series retrieval assessment
+                            <textarea
+                              value={gstr1Assessment}
+                              onChange={(event) =>
+                                setGSTR1Assessment(event.target.value)
+                              }
+                            />
+                          </label>
+                          <p>
+                            Imports the declared doc_issue section only.
+                            Category codes and serial endpoints remain literal;
+                            range continuity, provider origin and filing are not
+                            established by this file.
+                          </p>
+                        </>
+                      )}
                     </fieldset>
                   )}
                   {tableType === "gst-summary-metrics" && (
@@ -2863,6 +3010,7 @@ export function CountryWorkflows({
                             "bank-account-evidence",
                             "obligation-bank-allocations",
                             "payroll-ledger-rollforward",
+                            "india-document-series",
                             "india-gstr1-documents",
                             "india-gstr1-summary",
                             "india-invoice-register",
@@ -3955,6 +4103,31 @@ export function CountryWorkflows({
                 Show rule provenance and source references
               </label>
             </>
+          )}
+          {body.workflow === "india-document-series" && (
+            <section aria-label="Document-series comparison scope">
+              <p>
+                GSTIN {body.document_series_scope?.registration}; reporting
+                month {body.document_series_scope?.period}.
+              </p>
+              <p>
+                Document counts are compared exactly for each retained category
+                and literal serial range. Differences are reported minus books;
+                monetary tolerances do not apply. Missing ranges remain unknown.
+                This comparison does not establish invoice-level completeness or
+                filing.
+              </p>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={showRuleProvenance}
+                  onChange={(event) =>
+                    setShowRuleProvenance(event.target.checked)
+                  }
+                />
+                Show document-series source references and full scope
+              </label>
+            </section>
           )}
           {body.import_nil_scope && (
             <section aria-label="Evidenced nil import scope">

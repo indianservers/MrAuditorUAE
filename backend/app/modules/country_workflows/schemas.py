@@ -1,5 +1,6 @@
 import uuid
 from datetime import date
+from datetime import date as CalendarDate
 from decimal import Decimal, localcontext
 from typing import Annotated, Literal
 
@@ -8,6 +9,7 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 from app.modules.country_workflows.audit_schemas import AUDIT_ROW_TYPES
 from app.modules.country_workflows.bank_accounts import BankAccountEvidence
 from app.modules.country_workflows.diligence_schemas import DILIGENCE_ROW_TYPES
+from app.modules.country_workflows.document_series import DocumentSeries, SeriesCounts
 from app.modules.country_workflows.ecr_arrear_schemas import ECRArrearControls
 from app.modules.country_workflows.gst_summary import METRICS, GSTSummaryMetric
 from app.modules.country_workflows.gstr1_schemas import GSTR1SectionControl
@@ -46,8 +48,8 @@ class Transaction(Strict):
     amount: Money
     counterparty: str = Field(default="", max_length=120)
     is_reversal: bool = False
-    bank_booking_date: date | None = Field(default=None, exclude_if=lambda value: value is None)
-    bank_value_date: date | None = Field(default=None, exclude_if=lambda value: value is None)
+    bank_booking_date: CalendarDate | None = Field(default=None, exclude_if=lambda value: value is None)
+    bank_value_date: CalendarDate | None = Field(default=None, exclude_if=lambda value: value is None)
     bank_date_basis: Literal["BOOKING_DATE", "ENTRY_DATE_INFERRED_YEAR", "VALUE_DATE_FALLBACK"] | None = Field(default=None, exclude_if=lambda value: value is None)
 
     @model_validator(mode="after")
@@ -160,6 +162,7 @@ class Control(Strict):
 
 
 ROW_TYPES: dict[str, type[BaseModel]] = {
+    "gst-document-series": DocumentSeries,
     "gst-summary-metrics": GSTSummaryMetric,
     "fx-rates": ExchangeRate,
     "withholding-records": WithholdingRecord,
@@ -215,11 +218,13 @@ class SourceInput(Strict):
         "india-epfo-arrear-ecr-v2",
         "india-gstr2b-json",
         "india-gstr1-summary-json",
+        "india-gstr1-document-series-json",
         "india-gstr1-documents-json",
     ] = "canonical-csv"
     gstr1_section_controls: list[GSTR1SectionControl] = Field(default_factory=list, max_length=10)
     gstr1_context_evidence_version_id: uuid.UUID | None = None
     gstr1_retrieval_assessment: str = Field(default="", max_length=2000)
+    document_series_controls: SeriesCounts | None = None
     gst_summary_metric_controls: dict[str, Money] = Field(default_factory=dict, max_length=19)
     gst_registration: str | None = Field(
         default=None, pattern=r"^\d{2}[A-Z]{5}\d{4}[A-Z][A-Z0-9]Z[A-Z0-9]$"
@@ -235,6 +240,7 @@ class SourceInput(Strict):
     expected_documents: int | None = Field(default=None, ge=0, le=1250)
     rule_document_version_id: uuid.UUID | None = None
     table_type: Literal[
+        "gst-document-series",
         "gst-summary-metrics",
         "payroll-account-balances",
         "payroll-ledger-lines",
@@ -299,6 +305,14 @@ class SourceInput(Strict):
 
     @model_validator(mode="after")
     def declared_nil(self):
+        if self.table_type == "gst-document-series":
+            if self.document_series_controls is None or self.control_totals or self.expected_rows < 1:
+                raise ValueError("Document series require explicit range rows and independent issued/cancelled/net count controls without money totals")
+        elif self.document_series_controls is not None:
+            raise ValueError("Document-series count controls apply only to document-series sources")
+        if self.file_format == "india-gstr1-document-series-json":
+            if self.table_type != "gst-document-series" or not self.gst_registration or not self.gst_period or not self.gstr1_context_evidence_version_id or self.gstr1_context_evidence_version_id == self.evidence_version_id or len(self.gstr1_retrieval_assessment.strip()) < 10 or self.gstr1_section_controls:
+                raise ValueError("Native document series require distinct retained request context, assessed GSTIN/period and count controls")
         if self.file_format == "india-gstr1-documents-json":
             controls = self.gstr1_section_controls
             sections = [c.section for c in controls]
@@ -307,7 +321,7 @@ class SourceInput(Strict):
                 tax = sum((c.igst + c.cgst + c.sgst + c.cess for c in controls), Decimal(0))
             if not controls or len(set(sections)) != len(sections) or not self.gstr1_context_evidence_version_id or self.gstr1_context_evidence_version_id == self.evidence_version_id or len(self.gstr1_retrieval_assessment.strip()) < 10 or not self.gst_registration or not self.gst_period or self.table_type != "tax-documents" or self.expected_documents != sum(c.document_count for c in controls) or self.expected_rows != 4 * sum(c.document_count for c in controls) or self.control_totals != {"INR": tax}:
                 raise ValueError("GSTR-1 documents require distinct retained request context, assessed retrieval scope, unique section counts/base/component controls and agreeing whole-source controls")
-        elif self.gstr1_section_controls or self.gstr1_context_evidence_version_id is not None or self.gstr1_retrieval_assessment:
+        elif self.file_format != "india-gstr1-document-series-json" and (self.gstr1_section_controls or self.gstr1_context_evidence_version_id is not None or self.gstr1_retrieval_assessment):
             raise ValueError("GSTR-1 document controls/context apply only to the explicit invoice/note profile")
         if self.table_type == "gst-summary-metrics":
             if not self.gst_summary_metric_controls or set(self.gst_summary_metric_controls) - METRICS or self.control_totals or self.expected_rows < 1:
@@ -448,6 +462,7 @@ class WorkflowInput(Strict):
     withholding_role: WithholdingRole | None = None
     allocation_basis: Literal["invoice_face_amounts", "pre_application_balances"] | None = None
     workflow: Literal[
+        "india-document-series",
         "payroll-ledger-rollforward",
         "obligation-bank-allocations",
         "bank-subsequent-clearance",

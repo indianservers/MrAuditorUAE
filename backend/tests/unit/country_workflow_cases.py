@@ -705,4 +705,15 @@ for bank_country, bank_currency in [("AE", "AED"), ("IN", "INR")]:
         account_assertions["bank"][0]["account_number"] = "123456789"
     add("bank-account-evidence", "UAE register/ledger/bank owner evidence agrees without bank authentication" if bank_country == "AE" else "India leading-zero account mismatch cannot be approved as ownership evidence", account_assertions, {"exceptions":0 if bank_country == "AE" else 1,"blocked":bank_country == "IN"}, country=bank_country, account="SYN-BANK", currency=bank_currency, bank_owner_name="SYNTHETIC Entity LLC", bank_owner_identifier_scheme="SYNTHETIC-REGISTRY", bank_owner_identifier="00123")
 
-assert len(CASES) == 150
+series_row = {
+    "id": "SYN-SERIES-1", "registration": "27ABCDE5678G1Z8", "period": "2026-06",
+    "doc_num": 1, "serial_from": "SYN/0001", "serial_to": "SYN/0010",
+    "issued": 10, "cancelled": 2, "net_issued": 8,
+}
+series_sources = {role: [{**series_row, "id": "SYN-" + role}] for role in ("books", "reported")}
+add("india-document-series", "India document-series issued and cancelled counts agree with independent reported ranges", series_sources, {"exceptions": 0, "blocked": False}, country="IN", currency="INR")
+series_variance = deepcopy(series_sources)
+series_variance["reported"][0].update(cancelled=1, net_issued=9)
+add("india-document-series", "India cancelled document count discrepancy survives a large money tolerance", series_variance, {"exceptions": 1, "blocked": False}, country="IN", currency="INR", tolerance="1000")
+
+assert len(CASES) == 152

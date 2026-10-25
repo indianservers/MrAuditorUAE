@@ -815,6 +815,8 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
 
         sources, account_scope = bind(data,country,sources,*bank_account_review)
     for role, table in sources.items():
+        if table.get("native_format") == "india-gstr1-document-series-json" and (data.workflow != "india-document-series" or role != "reported"):
+            raise ValueError("Native document series can establish only the reported role of India document-series comparison")
         if table.get("parser_version") == "bank-clearance-carryforward/1" and (data.workflow != "bank-subsequent-clearance" or role != "outstanding"):
             raise ValueError("Carried bank residuals can establish only the outstanding role of subsequent clearance")
         if table.get("native_format") == "india-gstr1-documents-json" and (data.workflow != "india-gstr1-documents" or role != "return"):
@@ -922,6 +924,10 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
             result = DILIGENCE_CALCULATORS[data.workflow](data, tables, country)
         elif data.workflow == "bank-brs":
             result = bank(data, tables)
+        elif data.workflow == "india-document-series":
+            from app.modules.country_workflows.document_series import compare as compare_series
+
+            result = compare_series(data, tables)
         elif data.workflow == "india-gstr1-summary":
             from app.modules.country_workflows.gst_summary import compare_summary
 

@@ -1,11 +1,11 @@
 {
   "dataset_kind": "SYNTHETIC_ENGINE_FIXTURES_NOT_CLIENT_PILOTS",
   "fixture_hash_policy": "Per-file original fixture hashes are preserved for unchanged cases; the root hash identifies this generator run source version",
-  "source_fixture_sha256": "fa9e753c9e64100f67dfa7ab64ab0eecfc58bae3d9b6bfde71f0700ee035148b",
-  "scenario_count": 150,
+  "source_fixture_sha256": "406fea775668d55f81fffff29c0ffba55aa3ce097f5144506a6631d0e6f33927",
+  "scenario_count": 152,
   "counts_by_country": {
     "UAE": 101,
-    "India": 49
+    "India": 51
   },
   "cases": [
     {
@@ -1057,6 +1057,20 @@
       "workflow": "bank-account-evidence",
       "file": "India/RW-150.json",
       "source_fixture_sha256": "fa9e753c9e64100f67dfa7ab64ab0eecfc58bae3d9b6bfde71f0700ee035148b"
+    },
+    {
+      "id": "RW-151",
+      "country": "IN",
+      "workflow": "india-document-series",
+      "file": "India/RW-151.json",
+      "source_fixture_sha256": "406fea775668d55f81fffff29c0ffba55aa3ce097f5144506a6631d0e6f33927"
+    },
+    {
+      "id": "RW-152",
+      "country": "IN",
+      "workflow": "india-document-series",
+      "file": "India/RW-152.json",
+      "source_fixture_sha256": "406fea775668d55f81fffff29c0ffba55aa3ce097f5144506a6631d0e6f33927"
     }
   ]
 }

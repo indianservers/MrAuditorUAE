@@ -1393,5 +1393,25 @@
       "exceptions": 1,
       "blocked": true
     }
+  },
+  {
+    "id": "RW-151",
+    "title": "India document-series issued and cancelled counts agree with independent reported ranges",
+    "workflow": "india-document-series",
+    "country": "IN",
+    "expected": {
+      "exceptions": 0,
+      "blocked": false
+    }
+  },
+  {
+    "id": "RW-152",
+    "title": "India cancelled document count discrepancy survives a large money tolerance",
+    "workflow": "india-document-series",
+    "country": "IN",
+    "expected": {
+      "exceptions": 1,
+      "blocked": false
+    }
   }
 ]

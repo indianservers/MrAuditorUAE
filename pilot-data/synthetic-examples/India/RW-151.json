@@ -1,0 +1,48 @@
+{
+  "dataset_kind": "SYNTHETIC_ENGINE_FIXTURE",
+  "real_client_data": false,
+  "professional_validation": "NOT_ESTABLISHED",
+  "source_fixture": "backend/tests/unit/country_workflow_cases.py",
+  "source_fixture_sha256": "406fea775668d55f81fffff29c0ffba55aa3ce097f5144506a6631d0e6f33927",
+  "case": {
+    "id": "RW-151",
+    "title": "India document-series issued and cancelled counts agree with independent reported ranges",
+    "workflow": "india-document-series",
+    "country": "IN",
+    "sources": {
+      "books": [
+        {
+          "id": "SYN-books",
+          "registration": "27ABCDE5678G1Z8",
+          "period": "2026-06",
+          "doc_num": 1,
+          "serial_from": "SYN/0001",
+          "serial_to": "SYN/0010",
+          "issued": 10,
+          "cancelled": 2,
+          "net_issued": 8
+        }
+      ],
+      "reported": [
+        {
+          "id": "SYN-reported",
+          "registration": "27ABCDE5678G1Z8",
+          "period": "2026-06",
+          "doc_num": 1,
+          "serial_from": "SYN/0001",
+          "serial_to": "SYN/0010",
+          "issued": 10,
+          "cancelled": 2,
+          "net_issued": 8
+        }
+      ]
+    },
+    "expected": {
+      "exceptions": 0,
+      "blocked": false
+    },
+    "parameters": {
+      "currency": "INR"
+    }
+  }
+}

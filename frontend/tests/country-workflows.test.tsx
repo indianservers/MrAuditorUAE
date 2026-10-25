@@ -52,6 +52,12 @@ vi.mock("@/hooks/use-api", () => ({
                 : {},
             source_formats: [
               {
+                id: "india-gstr1-document-series-json",
+                label: "India GSTR-1 document issue series JSON",
+                available: state.country === "IN",
+                table_type: "gst-document-series",
+              },
+              {
                 id: "india-gstr1-documents-json",
                 label: "India GSTR-1 outward invoices",
                 available: state.country === "IN",
@@ -279,6 +285,7 @@ vi.mock("@/hooks/use-api", () => ({
               },
             ],
             source_contracts: {
+              "gst-document-series": {},
               "gst-summary-metrics": {
                 id: { required: true, type: "str" },
                 metric: { required: true, type: "str" },
@@ -3008,4 +3015,84 @@ it("links only current reviewed account evidence with an explicit financial scop
       "Reviewed owner, original account number and complete June window",
     account: "BANK-1",
   });
+});
+
+it("queues document-series counts independently from money with separately retained scope context", async () => {
+  state.country = "IN";
+  render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+  fireEvent.change(screen.getByLabelText("Source file format"), {
+    target: { value: "india-gstr1-document-series-json" },
+  });
+  for (const [label, value] of [
+    ["Clean retained evidence", "clean"],
+    ["Schedule title", "Synthetic document series"],
+    ["Expected data rows", "1"],
+    ["Issued documents control", "10"],
+    ["Cancelled documents control", "2"],
+    ["Net issued documents control", "8"],
+    ["Document-series GSTIN", "27ABCDE5678G1Z8"],
+    ["Document-series reporting month", "2026-06"],
+    ["Document-series request context", "context-clean"],
+    [
+      "Document-series retrieval assessment",
+      "Separate retained request scope and original section assessed",
+    ],
+  ])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+    file_format: "india-gstr1-document-series-json",
+    table_type: "gst-document-series",
+    document_series_controls: { issued: "10", cancelled: "2", net_issued: "8" },
+    control_totals: {},
+    gstr1_context_evidence_version_id: "context-clean",
+    gst_registration: "27ABCDE5678G1Z8",
+    gst_period: "2026-06",
+  });
+});
+
+it("shows document counts and missing ranges as labelled values without currency tolerance", () => {
+  state.country = "IN";
+  state.result = {
+    id: "result",
+    kind: "country-workflow",
+    version: 1,
+    freshness: "CURRENT",
+    body: {
+      workflow: "india-document-series",
+      title: "Synthetic series review",
+      review_status: "UNVERIFIED",
+      population_completeness: "UPLOADED_FILE_CONTROLS_ONLY",
+      document_series_scope: {
+        registration: "27ABCDE5678G1Z8",
+        period: "2026-06",
+      },
+      rows: [
+        {
+          id: "series-1",
+          doc_num: 1,
+          serial_from: "SYN/0001",
+          serial_to: "SYN/0010",
+          books_counts: { issued: 10, cancelled: 2, net_issued: 8 },
+          reported_counts: null,
+          differences: { issued: null, cancelled: null, net_issued: null },
+          state: "EXCEPTIONS",
+        },
+      ],
+    },
+  };
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Saved source or result"), {
+    target: { value: "result" },
+  });
+  expect(
+    screen.getByRole("region", { name: "Document-series comparison scope" }),
+  ).toHaveTextContent("27ABCDE5678G1Z8");
+  expect(
+    screen.getByRole("columnheader", { name: "books cancelled" }),
+  ).toBeVisible();
+  expect(
+    screen.getAllByRole("cell", { name: "Not determined" }),
+  ).toHaveLength(6);
 });

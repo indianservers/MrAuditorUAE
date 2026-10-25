@@ -21,6 +21,7 @@ from app.modules.country_workflows.schemas import Transaction
 from app.modules.country_workflows.sources import MAX_BYTES
 
 FORMATS: list[dict[str, Any]] = [
+    {"id": "india-gstr1-document-series-json", "label": "India GSTR-1 document issue series JSON", "countries": ["IN"], "table_type": "gst-document-series", "description": "Retained Table 13 ranges and issued/cancelled/net counts; no inferred continuity or filing proof", "source": "https://whitebooks.in/developer/gst-api/put-gstr1-retsave"},
     {"id":"india-gstr1-documents-json","label":"India GSTR-1 outward invoice/note JSON","countries":["IN"],"table_type":"tax-documents","description":"Ten declared invoice/note sections, independent head/base/count controls and retained request context; amendments stay unresolved, no filing conclusion","source":"https://developer.sandbox.co.in/api-reference/gst/compliance/endpoints/taxpayer/gstr-1/documents/b2b"},
     {"id": "india-gstr1-summary-json", "label": "India GSTR-1 summary JSON - explicit hierarchy metrics", "countries": ["IN"], "table_type": "gst-summary-metrics", "description": "Preserves section/subsection/counterparty metrics and independent count/INR controls; no netting across hierarchy or filing conclusion", "source": "https://developer.sandbox.co.in/api-reference/gst/compliance/endpoints/taxpayer/gstr-1/documents/gstr_1"},
     {"id": "india-epfo-arrear-ecr-v2", "label": "India EPFO ECR 2.0 arrears - eight-field text",
@@ -666,6 +667,10 @@ def parse_native(content, data, country, filename):
                 from app.modules.country_workflows.india_gstr1_source import parse_gstr1
 
                 rows, metadata = parse_gstr1(content, data)
+            elif data.file_format == "india-gstr1-document-series-json":
+                from app.modules.country_workflows.document_series import parse_series
+
+                rows, metadata = parse_series(content, data)
             elif data.file_format == "india-gstr1-summary-json":
                 from app.modules.country_workflows.gst_summary import parse_summary
 
@@ -689,7 +694,7 @@ def parse_native(content, data, country, filename):
         if len(rows) > 5000:
             raise ValueError("Native source exceeds 5,000 derived rows")
         totals: dict[str, Decimal] = {}
-        for row in ([] if data.table_type == "gst-summary-metrics" else rows):
+        for row in ([] if data.table_type in {"gst-summary-metrics", "gst-document-series"} else rows):
             totals[row["currency"]] = totals.get(row["currency"], Decimal(0)) + Decimal(
                 row["tax"] if data.table_type == "tax-documents" else row["amount"]
             )
@@ -704,7 +709,9 @@ def parse_native(content, data, country, filename):
         "rows": rows,
         "row_count": len(rows),
         "control_totals": {k: str(v) for k, v in sorted(totals.items())},
-        "population_completeness": "DECLARED_GSTR1_INVOICE_NOTE_SECTION_CONTROLS_NOT_COMPLETE_RETURN"
+        "population_completeness": "RETAINED_DOCUMENT_SERIES_COUNTS_NOT_INVOICE_COMPLETENESS"
+        if data.file_format == "india-gstr1-document-series-json"
+        else "DECLARED_GSTR1_INVOICE_NOTE_SECTION_CONTROLS_NOT_COMPLETE_RETURN"
         if data.file_format == "india-gstr1-documents-json"
         else "RETAINED_GSTR1_SUMMARY_HIERARCHY_METRIC_CONTROLS"
         if data.file_format == "india-gstr1-summary-json"
@@ -725,6 +732,7 @@ def parse_native(content, data, country, filename):
         "parser_version": data.file_format
         + ("-3" if data.file_format in {"swift-mt940", "camt053"} else "-1"),
         "native_format": data.file_format,
+        **({"allowed_source_roles": ["reported"], "document_series_controls": metadata["count_controls"]} if data.file_format == "india-gstr1-document-series-json" else {}),
         **({"allowed_source_roles": ["return"]} if data.file_format == "india-gstr1-documents-json" else {}),
         **({"allowed_source_roles": ["return"], "metric_controls": metadata["metric_controls"]} if data.file_format == "india-gstr1-summary-json" else {}),
         **({"allowed_source_roles": ["books", "invoices"]} if data.file_format == "india-inv01-json" else {}),

@@ -872,6 +872,17 @@ async def main():
                 assert approved.status_code == 201, approved.text
                 linked_sources[role] = approved.json()["id"]
             bank_account_binding[code] = {"engagement":engagement,"account":scope["account"],"currency":currency,"original_account":number,"review":review.json()["id"],"sources":linked_sources,"account_bank_source":entry["sources"]["bank"]}
+        from tests.qa_crud.test_document_series import retain_series
+
+        document_series = {}
+        for mode, variance in (("matching", False), ("variance", True)):
+            retained = await retain_series(client, h, india, f"/api/v1/engagements/{india}/audit", variance)
+            entry = {"originals": retained["originals"]}
+            for role in ("books", "reported"):
+                reviewed = await decision(client, supporting_reviewer[0], india, retained[role])
+                assert reviewed.status_code == 201, reviewed.text
+                entry[role] = reviewed.json()["id"]
+            document_series[mode] = entry
         if implementation_hash() != implementation:
             raise RuntimeError(
                 "Backend implementation changed during fixture preparation; prepare fresh fixtures before browser verification"
@@ -890,6 +901,7 @@ async def main():
                     "contribution_settlements": contribution_settlements,
                     "bank_clearance": clearance_fixtures,
                     "obligation_allocations": dues_fixtures,
+                    "document_series": document_series,
                     "import_nil": nil_import,
                     "import_vat_sources": import_vat_sources,
                     "import_box_parent": import_box_approved.json()["id"],

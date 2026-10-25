@@ -1,0 +1,14 @@
+{
+  "table_type": "gst-document-series",
+  "file_format": "india-gstr1-document-series-json",
+  "expected_rows": 1,
+  "control_totals": {},
+  "document_series_controls": {
+    "issued": 10,
+    "cancelled": 2,
+    "net_issued": 8
+  },
+  "gst_registration": "27ABCDE5678G1Z8",
+  "gst_period": "2026-06",
+  "note": "Upload response and context separately, select their actual evidence version IDs, and enter an independent request-scope assessment before preparing."
+}

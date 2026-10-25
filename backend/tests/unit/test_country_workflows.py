@@ -32,6 +32,7 @@ def parsed(table_type, rows):
         table_type=table_type,
         label="Synthetic controlled source",
         expected_rows=len(rows),
+        **({"document_series_controls": {field: sum(row[field] for row in rows) for field in ("issued", "cancelled", "net_issued")}} if table_type == "gst-document-series" else {}),
         control_totals=totals,
     )
     return parse_csv(buffer.getvalue().encode(), source)
@@ -84,7 +85,7 @@ def test_country_catalogue_is_explicit_and_not_a_legal_certification():
 def test_published_scenario_catalogue_matches_executable_fixtures():
     from app.modules.country_workflows.catalogue import scenarios
 
-    assert len(scenarios()) == 150
+    assert len(scenarios()) == 152
     assert scenarios() == [
         {k: c[k] for k in ["id", "title", "workflow", "country", "expected"]} for c in CASES
     ]
