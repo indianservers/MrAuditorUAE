@@ -5,6 +5,7 @@ in-process test doubles during fixture preparation, never server configuration.
 """
 
 import asyncio
+import csv
 import hashlib
 import io
 import json
@@ -831,6 +832,28 @@ async def main():
         )
         from tests.unit.native_source_examples import CAMT as linked_camt
 
+        # Header-only populations remain explicit, separately retained and reviewed.
+        nil_sources = {}
+        for role in ("customs", "portal", "books"):
+            buffer = io.StringIO()
+            csv.DictWriter(buffer, fieldnames=list(import_vat_line())).writeheader()
+            record = await create(client, h, _base, "evidence", {"category": "Other", "retain_until": "2036-12-31"})
+            uploaded = await client.post(_base + "/evidence-files/" + record["id"], headers=h, files={"file": ("SYNTHETIC nil " + role + ".csv", buffer.getvalue().encode(), "text/csv")})
+            assert uploaded.status_code == 201, uploaded.text
+            prepared = await execute(client, h, eid, "workflow-source", {
+                "evidence_version_id": uploaded.json()["id"], "table_type": "import-vat-lines",
+                "label": "SYNTHETIC nil import " + role, "expected_rows": 0,
+                "nil_reason": "Synthetic explicitly assessed empty import population",
+                "control_totals": {"AED": "0"}, "import_taxable_base_control": "0",
+            })
+            reviewed = await decision(client, supporting_reviewer[0], eid, prepared)
+            assert reviewed.status_code == 201, reviewed.text
+            nil_sources[role] = reviewed.json()["id"]
+        nil_raw = b"SYNTHETIC independent nil import assessment,not client data\nBox6,explicit nil\nBox7,explicit nil\n"
+        nil_record = await create(client, h, _base, "evidence", {"category": "Other", "retain_until": "2036-12-31"})
+        uploaded = await client.post(_base + "/evidence-files/" + nil_record["id"], headers=h, files={"file": ("SYNTHETIC independent nil import evidence.csv", nil_raw, "text/csv")})
+        assert uploaded.status_code == 201, uploaded.text
+        nil_import = {"sources": nil_sources, "context": uploaded.json()["id"]}
         bank_account_binding = {}
         for code in ("AE", "IN"):
             entry = bank_account_evidence[code]
@@ -867,6 +890,7 @@ async def main():
                     "contribution_settlements": contribution_settlements,
                     "bank_clearance": clearance_fixtures,
                     "obligation_allocations": dues_fixtures,
+                    "import_nil": nil_import,
                     "import_vat_sources": import_vat_sources,
                     "import_box_parent": import_box_approved.json()["id"],
                     "import_filed_source": import_filed_approved.json()["id"],

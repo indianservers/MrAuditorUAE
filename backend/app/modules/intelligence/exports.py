@@ -69,6 +69,7 @@ def render(event, format):
             "totals_by_currency",
             "control_comparison",
             "booking_date_review_count",
+            "import_nil_scope",
             "bank_account_contract",
             "bank_account_evidence",
             "bank_account_scope",

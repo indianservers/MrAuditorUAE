@@ -820,6 +820,7 @@ async def inputs(eid: uuid.UUID, db: DB, ctx: Actor):
                 record_id=str(r.record_id),
                 label=r.filename,
                 scan_status=r.scan_status,
+                sha256=r.sha256,
                 version=r.number,
             )
             for r in evidence

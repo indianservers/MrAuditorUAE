@@ -12,6 +12,7 @@ from app.modules.country_workflows.ecr_arrear_schemas import ECRArrearControls
 from app.modules.country_workflows.gst_summary import METRICS, GSTSummaryMetric
 from app.modules.country_workflows.gstr1_schemas import GSTR1SectionControl
 from app.modules.country_workflows.gstr2b_part_schemas import GSTR2BPart
+from app.modules.country_workflows.import_nil_schemas import ImportNilScope
 from app.modules.country_workflows.inventory_controls import InventoryQuantityControl
 from app.modules.country_workflows.operations_schemas import OPERATION_ROW_TYPES
 from app.modules.country_workflows.payroll_ledger_schemas import PAYROLL_LEDGER_ROW_TYPES
@@ -513,6 +514,7 @@ class WorkflowInput(Strict):
     rationale: str = Field(min_length=10, max_length=4000)
     account: str | None = Field(default=None, max_length=120)
     currency: str = Field(default="AED", pattern=r"^[A-Z]{3}$")
+    import_nil_scope: ImportNilScope | None = None
     bank_account_review_id: uuid.UUID | None = None
     bank_account_scope_assessment: str = Field(default="",max_length=2000)
     bank_owner_name: str = Field(default="", max_length=200)
@@ -535,6 +537,9 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
+        if self.import_nil_scope is not None:
+            if self.workflow != "uae-import-vat" or self.import_nil_scope.period_end > self.as_of:
+                raise ValueError("Nil import scope requires the UAE import workflow and a closed assessed period")
         if self.bank_account_review_id is not None:
             if self.workflow not in {"bank-brs","bank-subsequent-clearance","obligation-bank-allocations"} or len(self.bank_account_scope_assessment.strip())<10:
                 raise ValueError("A bank account evidence link requires a supported financial workflow and meaningful scope assessment")

@@ -1866,6 +1866,7 @@ test("UAE import VAT keeps declarations, adjustments and unresolved versions sep
     await page
       .getByLabel("Workflow", { exact: true })
       .selectOption("uae-import-vat");
+    await loadRetainedHistory(page);
     const title = `SYNTHETIC UAE import VAT ${ambiguous ? "unresolved versions" : "independent comparison"} ${Date.now()}`;
     await page.getByLabel("Schedule title", { exact: true }).fill(title);
     await page
@@ -5614,3 +5615,201 @@ for (const country of ["AE", "IN"] as const) {
     }
   });
 }
+test("UAE evidenced nil imports produce reviewed zero VAT201 boxes", async ({
+  page,
+  browser,
+}) => {
+  test.setTimeout(150000);
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+  });
+  const reviewer = await context.newPage();
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_final_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    const eid = fixture.uae_engagement;
+    await page.goto(`/intelligence/${eid}/country-workflow`);
+    await page
+      .getByLabel("Workflow", { exact: true })
+      .selectOption("uae-import-vat");
+    for (const [label, value] of [
+      ["Schedule title", `SYNTHETIC nil imports ${Date.now()}`],
+      ["Reconciliation date", "2026-06-30"],
+      [
+        "Scope and source rationale",
+        "Three independently reviewed empty sources and separate retained nil assessment",
+      ],
+    ])
+      await page.getByLabel(label, { exact: true }).fill(value);
+    for (const role of ["customs", "portal", "books"])
+      await page
+        .getByLabel(`${role} source`, { exact: true })
+        .selectOption(fixture.import_nil.sources[role]);
+    await page.getByLabel("Declare an evidenced nil import population").check();
+    for (const [label, value] of [
+      ["Nil import TRN", "100000000000001"],
+      ["Nil import period start", "2026-04-01"],
+      ["Nil import period end", "2026-06-30"],
+      [
+        "Nil import assessment",
+        "Separate retained synthetic assessment establishes nil declarations and nil adjustments for this TRN and period",
+      ],
+    ])
+      await page.getByLabel(label, { exact: true }).fill(value);
+    await page.getByLabel("Box 6 declarations are nil").check();
+    await page.getByLabel("Box 7 adjustments are nil").check();
+    await page
+      .getByLabel("Nil import supporting evidence")
+      .selectOption(fixture.import_nil.context);
+    await saveScreenshot(`${shots}/uae-import-nil-scope-form.png`, () =>
+      page
+        .getByRole("group", {
+          name: "Explicit nil import populations",
+          exact: true,
+        })
+        .screenshot(),
+    );
+    const submitted = page.waitForResponse(
+      (r) =>
+        r.url().includes(`/engagements/${eid}/jobs`) &&
+        r.request().method() === "POST",
+    );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const response = await submitted;
+    expect(response.status(), await response.text()).toBe(202);
+    const job = await response.json();
+    let result = "";
+    await expect
+      .poll(
+        async () => {
+          const response = await page.request.get(
+            `/api/backend/intelligence/engagements/${eid}/jobs/${job.id}`,
+            { headers: { "X-Tenant-ID": fixture.tenant } },
+          );
+          const body = await response.json();
+          if (body.status === "failed")
+            throw new Error(JSON.stringify(body.error_details));
+          result = body.result_id || "";
+          return body.status;
+        },
+        { timeout: 45000 },
+      )
+      .toBe("completed");
+    await expect(
+      page
+        .getByLabel("Saved source or result")
+        .locator(`option[value="${result}"]`),
+    ).toHaveCount(1);
+    await page.getByLabel("Saved source or result").selectOption(result);
+    await expect(
+      page.getByRole("region", {
+        name: "Evidenced nil import scope",
+        exact: true,
+      }),
+    ).toContainText("VERIFIED_RETAINED_CONTEXT");
+    const totals = page.getByRole("table", {
+      name: "Import VAT selected population totals",
+    });
+    await expect(
+      totals.getByRole("cell", { name: "Explicit evidenced nil", exact: true }),
+    ).toHaveCount(6);
+    await saveScreenshot(`${shots}/uae-import-nil-selected-totals.png`, () =>
+      totals.locator("..").screenshot(),
+    );
+    await reviewer.goto(`/intelligence/${eid}/country-workflow`);
+    await reviewer.getByLabel("Saved source or result").selectOption(result);
+    await reviewer
+      .getByLabel("Review / exception rationale")
+      .fill(
+        "Independent scope, clean retained context and three reviewed nil sources checked",
+      );
+    const reviewedResponse = reviewer.waitForResponse(
+      (r) =>
+        r.url().endsWith(`/events/${result}/review`) &&
+        r.request().method() === "POST",
+    );
+    await reviewer
+      .getByRole("button", { name: "Independent approval", exact: true })
+      .click();
+    const reviewed = await reviewedResponse;
+    expect(reviewed.status(), await reviewed.text()).toBe(201);
+    const parent = await reviewed.json();
+    await page.reload();
+    await page.getByLabel("Saved source or result").selectOption(parent.id);
+    await page
+      .getByText("Prepare selected import boxes for VAT201 comparison", {
+        exact: true,
+      })
+      .click();
+    await page
+      .getByLabel("Import box source title", { exact: true })
+      .fill("SYNTHETIC evidenced nil import VAT201 books");
+    await page.getByLabel("Assessed import source role").selectOption("books");
+    for (const box of ["6", "7"])
+      for (const suffix of [
+        "expected detail rows",
+        "taxable amount (AED)",
+        "tax (AED)",
+      ])
+        await page
+          .getByLabel(`Box ${box} ${suffix}`, { exact: true })
+          .fill("0");
+    await page
+      .getByLabel("Import box scope assessment")
+      .fill(
+        "Independent zero counts, taxable bases and tax controls assessed for both nil populations",
+      );
+    const createdResponse = page.waitForResponse(
+      (r) =>
+        r.url().endsWith(`/events/${parent.id}/import-vat-box-source`) &&
+        r.request().method() === "POST",
+    );
+    await page
+      .getByRole("button", { name: "Prepare import box source", exact: true })
+      .click();
+    const created = await createdResponse;
+    expect(created.status(), await created.text()).toBe(201);
+    const source = await created.json();
+    expect(source.body.review_status).toBe("UNVERIFIED");
+    expect(source.body.rows).toHaveLength(2);
+    expect(
+      source.body.rows.every(
+        (row: { tax: string; population_basis: string }) =>
+          row.tax === "0" && row.population_basis === "EXPLICIT_EVIDENCED_NIL",
+      ),
+    ).toBe(true);
+    await reviewer.goto(`/intelligence/${eid}/workflow-source`);
+    await reviewer.getByLabel("Saved source or result").selectOption(source.id);
+    await reviewer
+      .getByLabel("Review / exception rationale")
+      .fill(
+        "Independent zero controls and explicit nil scope provenance checked",
+      );
+    const approvedResponse = reviewer.waitForResponse(
+      (r) =>
+        r.url().endsWith(`/events/${source.id}/review`) &&
+        r.request().method() === "POST",
+    );
+    await reviewer
+      .getByRole("button", { name: "Independent approval", exact: true })
+      .click();
+    expect((await approvedResponse).status()).toBe(201);
+    const download = reviewer.waitForEvent("download");
+    await reviewer
+      .getByRole("button", { name: "Export XLSX", exact: true })
+      .click();
+    expect((await download).suggestedFilename()).toMatch(/\.xlsx$/);
+  } finally {
+    await context.close();
+  }
+});

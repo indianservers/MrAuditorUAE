@@ -803,7 +803,7 @@ def checks(data, tables):
     }
 
 
-def calculate(data, country, sources, *, bank_account_review=None):
+def calculate(data, country, sources, *, bank_account_review=None, import_nil_receipt=None):
     title, countries, roles = WORKFLOWS[data.workflow]
     if countries and country not in countries:
         raise ValueError("Workflow is unavailable for this engagement country")
@@ -912,6 +912,10 @@ def calculate(data, country, sources, *, bank_account_review=None):
             result = AUDIT_CALCULATORS[data.workflow](data, tables)
         elif data.workflow in PRACTICE_CALCULATORS:
             result = PRACTICE_CALCULATORS[data.workflow](data, tables)
+        elif data.workflow == "uae-import-vat":
+            from app.modules.country_workflows.import_vat import import_vat
+
+            result = import_vat(data, tables, nil_receipt=import_nil_receipt)
         elif data.workflow in SECTOR_CALCULATORS:
             result = SECTOR_CALCULATORS[data.workflow](data, tables)
         elif data.workflow in DILIGENCE_CALCULATORS:

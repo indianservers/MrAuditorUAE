@@ -2061,6 +2061,51 @@ describe("UAE import VAT review", () => {
     expect(state.mutate.mock.calls[0][0].body.boxes).not.toHaveProperty("7");
   });
 
+  it("requires an explicitly entered zero row count rather than coercing a blank", async () => {
+    state.result = {
+      id: "result",
+      kind: "country-workflow",
+      version: 2,
+      freshness: "CURRENT",
+      body: {
+        workflow: "uae-import-vat",
+        title: "Reviewed nil imports",
+        review_status: "REVIEWED",
+        rows: [],
+        exception_count: 0,
+      },
+    };
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), {
+      target: { value: "result" },
+    });
+    fireEvent.click(
+      screen.getByText("Prepare selected import boxes for VAT201 comparison"),
+    );
+    fireEvent.click(screen.getByLabelText("Include import Box 7"));
+    for (const field of ["Box 6 taxable amount (AED)", "Box 6 tax (AED)"])
+      fireEvent.change(screen.getByLabelText(field), {
+        target: { value: "0" },
+      });
+    fireEvent.click(
+      screen.getByRole("button", { name: "Prepare import box source" }),
+    );
+    expect(
+      await screen.findByText(
+        "Enter independent detail-count, taxable-base and tax controls for every selected import box, including explicit zeros.",
+      ),
+    ).toBeVisible();
+    expect(state.mutate).not.toHaveBeenCalled();
+    fireEvent.change(screen.getByLabelText("Box 6 expected detail rows"), {
+      target: { value: "0" },
+    });
+    fireEvent.click(
+      screen.getByRole("button", { name: "Prepare import box source" }),
+    );
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0].body.boxes["6"].expected_rows).toBe(0);
+  });
+
   it.each(["unreviewed", "stale", "blocked"])(
     "does not offer an import bridge for %s results",
     (status) => {

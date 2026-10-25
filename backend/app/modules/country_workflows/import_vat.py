@@ -16,7 +16,7 @@ class PopulationTotal(TypedDict):
     count: int
 
 
-def import_vat(data, tables):
+def import_vat(data, tables, *, nil_receipt=None):
     if data.currency != "AED":
         raise ValueError("UAE import VAT comparison requires AED")
     groups: defaultdict[tuple[str, ...], defaultdict[str, list[dict[str, Any]]]] = defaultdict(
@@ -43,9 +43,21 @@ def import_vat(data, tables):
                 )
             )
             groups[key][role].append(row)
+    nil = data.import_nil_scope
+    if nil is not None:
+        if nil_receipt is not None and (
+            nil_receipt.get("type") != "evidence"
+            or nil_receipt.get("id") != str(nil.context_evidence_version_id)
+            or nil_receipt.get("sha256") != nil.context_sha256
+        ):
+            raise ValueError("Nil import evidence receipt differs from the assessed context")
+        for population in tables.values():
+            if any(row["entry_kind"] in nil.kinds for row in population):
+                raise ValueError("Observed import history contradicts the declared nil population")
+        scopes.add((nil.registration, nil.period_start.isoformat(), nil.period_end.isoformat()))
     if len(scopes) != 1:
         raise ValueError("Select one VAT registration and assessed return period per import review")
-    rows, blocked = [], False
+    rows, blocked = [], bool(nil is not None and nil_receipt is None)
     totals: dict[str, dict[str, PopulationTotal]] = {
         role: {
             kind: {"net": Decimal(0), "tax": Decimal(0), "count": 0}
@@ -151,13 +163,20 @@ def import_vat(data, tables):
         ),
         "import_comparison_contract": "uae-import-vat/1",
         "vat201_scope": "ASSESSED_IMPORT_DETAIL_ONLY_NOT_RETURN_OR_RECOVERY_APPROVAL",
+        "import_nil_scope": {
+            **nil.model_dump(mode="json"),
+            "currency": "AED",
+            "binding_status": "VERIFIED_RETAINED_CONTEXT" if nil_receipt else "NOT_VERIFIED",
+            "context_receipt": nil_receipt,
+            "basis": "EXPLICIT_EVIDENCED_NIL",
+        } if nil else None,
         "role_totals": {
             role: {
                 kind: {
-                    "net": str(total["net"]) if total["count"] and complete[role] else None,
-                    "tax": str(total["tax"]) if total["count"] and complete[role] else None,
+                    "net": str(total["net"]) if (total["count"] and complete[role]) or (nil and kind in nil.kinds) else None,
+                    "tax": str(total["tax"]) if (total["count"] and complete[role]) or (nil and kind in nil.kinds) else None,
                     "selected_rows": total["count"],
-                    "complete_for_selected_population": complete[role],
+                    "complete_for_selected_population": complete[role] or bool(nil and kind in nil.kinds),
                 }
                 for kind, total in kinds.items()
             }

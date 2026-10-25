@@ -10,7 +10,7 @@ from app.modules.jurisdictions.profiles import Strict
 
 
 class ImportBoxControl(Strict):
-    expected_rows: int = Field(ge=1, le=5000)
+    expected_rows: int = Field(ge=0, le=5000)
     taxable_amount: Money
     tax: Money
 
@@ -40,8 +40,17 @@ def source_rows(body, data):
             kind = "declaration" if box == "6" else "adjustment"
             total = body.get("role_totals", {}).get(data.source_role, {}).get(kind, {})
             selected = [row for row in body["rows"] if row["entry_kind"] == kind]
-            if (
+            nil = body.get("import_nil_scope") or {}
+            evidenced_nil = (
                 not selected
+                and kind in nil.get("kinds", [])
+                and nil.get("binding_status") == "VERIFIED_RETAINED_CONTEXT"
+                and bool(nil.get("context_receipt"))
+                and nil.get("basis") == "EXPLICIT_EVIDENCED_NIL"
+                and nil.get("currency") == "AED"
+            )
+            if (
+                (not selected and not evidenced_nil)
                 or not total.get("complete_for_selected_population")
                 or total.get("selected_rows") != len(selected)
                 or any(
@@ -57,6 +66,8 @@ def source_rows(body, data):
                 (row["registration"], row["period_start"], row["period_end"], row["currency"])
                 for row in selected
             }
+            if evidenced_nil:
+                scopes.add((nil["registration"], nil["period_start"], nil["period_end"], "AED"))
             if len(scopes) != 1 or next(iter(scopes))[3] != "AED":
                 raise ValueError("Import bridge requires one AED registration and period")
             registration, start, end, currency = next(iter(scopes))
@@ -92,6 +103,8 @@ def source_rows(body, data):
             rows.append(
                 {
                     **canonical,
+                    "population_basis": "EXPLICIT_EVIDENCED_NIL" if evidenced_nil else "SELECTED_IMPORT_DETAIL",
+                    "nil_context_receipt": nil["context_receipt"] if evidenced_nil else None,
                     "source_import_row_ids": [row["id"] for row in selected],
                     "source_import_detail_ids": [
                         row["selected_source_ids"][data.source_role] for row in selected

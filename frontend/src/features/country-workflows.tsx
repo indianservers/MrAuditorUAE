@@ -14,6 +14,7 @@ import {
   type BankAccountLink,
 } from "./bank-account-link";
 import { BankAccountEvidenceReview } from "./bank-account-evidence";
+import { ImportNilScopeForm, type ImportNilDraft } from "./import-nil-scope";
 import { BankTransactionDates } from "./bank-transaction-dates";
 import { PayrollPostingLinks } from "./payroll-posting-links";
 import { InventoryEvidenceTable } from "./inventory-evidence-table";
@@ -179,6 +180,7 @@ type Result = {
     blocked?: boolean;
     booking_date_review_count?: number;
     bank_account_evidence?: BankAccountLink;
+    import_nil_scope?: ImportNilDraft & { binding_status: string };
     exception_count?: number;
     table_type?: string;
     rows: Record<string, unknown>[];
@@ -305,7 +307,12 @@ export function CountryWorkflows({
     >;
   }>(`${prefix}/country-workflows`);
   const inputs = useAPI<{
-    evidence: { id: string; label: string; scan_status: string }[];
+    evidence: {
+      id: string;
+      label: string;
+      scan_status: string;
+      sha256?: string;
+    }[];
     snapshots: { id: string; label: string }[];
   }>(`${prefix}/inputs`);
   const results = useEventHistory<Choice>(prefix);
@@ -425,6 +432,7 @@ export function CountryWorkflows({
   const [boxScopeAssessment, setBoxScopeAssessment] = useState("");
   const [subjects, setSubjects] = useState("");
   const [account, setAccount] = useState("");
+  const [importNil, setImportNil] = useState<ImportNilDraft | null>(null);
   const [bankAccountReview, setBankAccountReview] = useState("");
   const [bankAccountAssessment, setBankAccountAssessment] = useState("");
   const [bankOwnerName, setBankOwnerName] = useState("");
@@ -1095,6 +1103,9 @@ export function CountryWorkflows({
             : {}),
           ...(workflow === "india-invoice-register"
             ? { invoice_direction: invoiceDirection }
+            : {}),
+          ...(workflow === "uae-import-vat" && importNil
+            ? { import_nil_scope: importNil }
             : {}),
           source_ids: sources,
           as_of: asOf,
@@ -2887,6 +2898,13 @@ export function CountryWorkflows({
                     )}
                 </label>
               ))}
+              {workflow === "uae-import-vat" && (
+                <ImportNilScopeForm
+                  value={importNil}
+                  onChange={setImportNil}
+                  evidence={inputs.data?.evidence || []}
+                />
+              )}
               {workflow === "india-invoice-register" && (
                 <>
                   <label>
@@ -3754,6 +3772,28 @@ export function CountryWorkflows({
                 <Button
                   disabled={action.isPending}
                   onClick={async () => {
+                    const enabledBoxes = Object.entries(
+                      importBridgeBoxes,
+                    ).filter(([, enabled]) => enabled);
+                    if (
+                      !enabledBoxes.length ||
+                      enabledBoxes.some(
+                        ([box]) =>
+                          !/^(0|[1-9][0-9]*)$/.test(
+                            importBridgeControls[box].expected_rows.trim(),
+                          ) ||
+                          !importBridgeControls[box].taxable_amount.trim() ||
+                          !importBridgeControls[box].tax.trim(),
+                      )
+                    ) {
+                      setLocalError(
+                        new Error(
+                          "Enter independent detail-count, taxable-base and tax controls for every selected import box, including explicit zeros.",
+                        ),
+                      );
+                      return;
+                    }
+                    setLocalError(null);
                     const boxes = Object.fromEntries(
                       Object.entries(importBridgeBoxes)
                         .filter(([, enabled]) => enabled)
@@ -3879,7 +3919,11 @@ export function CountryWorkflows({
                           {total.complete_for_selected_population &&
                           total.selected_rows
                             ? "Selected current population"
-                            : "Incomplete or not assessed"}
+                            : body.import_nil_scope?.kinds.includes(kind) &&
+                                body.import_nil_scope.binding_status ===
+                                  "VERIFIED_RETAINED_CONTEXT"
+                              ? "Explicit evidenced nil"
+                              : "Incomplete or not assessed"}
                         </td>
                       </tr>
                     )),
@@ -3911,6 +3955,24 @@ export function CountryWorkflows({
                 Show rule provenance and source references
               </label>
             </>
+          )}
+          {body.import_nil_scope && (
+            <section aria-label="Evidenced nil import scope">
+              <h3>Evidenced nil import scope</h3>
+              <p>
+                TRN {body.import_nil_scope.registration}:{" "}
+                {body.import_nil_scope.period_start} to{" "}
+                {body.import_nil_scope.period_end}. Declared nil:{" "}
+                {body.import_nil_scope.kinds.join(", ")}.{" "}
+                {body.import_nil_scope.binding_status}
+              </p>
+              <p>{body.import_nil_scope.assessment}</p>
+              <p>
+                Supporting evidence version:{" "}
+                {body.import_nil_scope.context_evidence_version_id}. Other boxes
+                and recoverability require separate assessment.
+              </p>
+            </section>
           )}
           <p>
             Population basis: {body.population_completeness}. Calculations do

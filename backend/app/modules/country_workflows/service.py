@@ -522,6 +522,19 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(
                 422, "Committed bank-ledger source range must end on the reconciliation date"
             )
+    import_nil_receipt = None
+    if data.import_nil_scope is not None:
+        nil = data.import_nil_scope
+        if any(source.get("review_status") != "REVIEWED" for source in sources.values()):
+            raise HTTPException(409, "Independently review every import source before declaring a nil population")
+        if any(str(nil.context_evidence_version_id) == source.get("evidence_version_id") or nil.context_sha256 == source.get("evidence_sha256") for source in sources.values()):
+            raise HTTPException(422, "Nil context must be separate from the import population files")
+        receipts = await payroll_rule_documents(db, ctx, eng, [{
+            "source_evidence_version_id": str(nil.context_evidence_version_id),
+            "source_sha256": nil.context_sha256,
+        }], label="Nil import context", contributors=contributors)
+        dependencies.extend(receipts)
+        import_nil_receipt = receipts[0]
     bank_account_review = None
     if data.bank_account_review_id is not None:
         from app.modules.country_workflows.bank_binding import resolve
@@ -530,5 +543,5 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         bank_account_review = (body,receipt)
         contributors.update(account_contributors)
         dependencies.append(receipt)
-    result = await run_in_threadpool(calculate, data, package.country, sources, bank_account_review=bank_account_review)
+    result = await run_in_threadpool(calculate, data, package.country, sources, bank_account_review=bank_account_review, import_nil_receipt=import_nil_receipt)
     return {**result, "contributors": sorted(contributors)}, dependencies
