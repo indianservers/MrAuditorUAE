@@ -250,6 +250,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "camt053": {"application/xml", "text/xml"},
             "swift-mt940": {"text/plain"},
             "uae-wps-sif": {"text/csv"},
+            "uae-wps-sif-evp": {"text/csv"},
             "india-inv01-json": {"application/json"},
             "india-epfo-ecr": {"text/plain"},
             "india-gstr2b-json": {"application/json"},

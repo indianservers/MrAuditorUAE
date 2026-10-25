@@ -15,6 +15,16 @@ import {
   PublishedPensionSource,
 } from "./published-benefit-source";
 
+const WPS_VARIABLE_FIELDS = [
+  "housing_allowance",
+  "conveyance_allowance",
+  "medical_allowance",
+  "annual_passage_allowance",
+  "overtime_allowance",
+  "other_allowances",
+  "leave_encashment",
+] as const;
+
 function ExcludedVATBoxes({
   prefix,
   selected,
@@ -320,6 +330,8 @@ export function CountryWorkflows({
   const [gstRegistration, setGSTRegistration] = useState("");
   const [gstDirection, setGSTDirection] = useState("purchase");
   const [gstPeriod, setGSTPeriod] = useState("");
+  const [wpsVariableCount, setWPSVariableCount] = useState("");
+  const [wpsVariableTotals, setWPSVariableTotals] = useState("{}");
   const [gstrBundle, setGSTRBundle] = useState(false);
   const [gstrFiles, setGSTRFiles] = useState("");
   const [gstrParts, setGSTRParts] = useState("[]");
@@ -419,9 +431,12 @@ export function CountryWorkflows({
   const allColumns = [
     ...new Set(rows.flatMap((row) => Object.keys(row))),
   ].filter((k) => !["auditor", "auditor_at"].includes(k));
+  const compactWPS =
+    body?.native_metadata?.profile === "emirates-islamic-edr-evp-scr/1";
   const compactSource =
     detail.data?.kind === "workflow-source" &&
-    ["transactions", "audit-open-items"].includes(body?.table_type || "");
+    (["transactions", "audit-open-items"].includes(body?.table_type || "") ||
+      compactWPS);
   const compactCredit = body?.workflow === "credit-note-applications";
   const compactBankClearance = body?.workflow === "bank-subsequent-clearance";
   const compactDues = body?.workflow === "obligation-bank-allocations";
@@ -440,7 +455,7 @@ export function CountryWorkflows({
         Array.isArray(row.assessment_issues) &&
         row.assessment_issues.length > 0,
     );
-  const columns =
+  const defaultColumns =
     compactVAT && !showRuleProvenance
       ? [
           "box",
@@ -601,6 +616,18 @@ export function CountryWorkflows({
                             "source_review_reasons",
                           ].filter((key) => allColumns.includes(key))
                         : allColumns;
+  const columns =
+    compactWPS && !showRuleProvenance
+      ? [
+          "subject",
+          "period",
+          "currency",
+          "fixed_income",
+          "variable_income",
+          "amount",
+          "unpaid_days",
+        ].filter((key) => allColumns.includes(key))
+      : defaultColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -751,12 +778,22 @@ export function CountryWorkflows({
               statementIdentifier
                 ? { statement_identifier: statementIdentifier }
                 : {}),
-              ...(["uae-wps-sif", "india-epfo-ecr"].includes(sourceFormat) &&
-              employerRegistration
+              ...(sourceFormat === "uae-wps-sif-evp"
+                ? {
+                    wps_variable_pay_count: wpsVariableCount.trim()
+                      ? Number(wpsVariableCount)
+                      : null,
+                    wps_variable_pay_totals: JSON.parse(wpsVariableTotals),
+                  }
+                : {}),
+              ...(["uae-wps-sif", "uae-wps-sif-evp", "india-epfo-ecr"].includes(
+                sourceFormat,
+              ) && employerRegistration
                 ? { employer_registration: employerRegistration }
                 : {}),
-              ...(["uae-wps-sif", "india-epfo-ecr"].includes(sourceFormat) &&
-              obligationDue
+              ...(["uae-wps-sif", "uae-wps-sif-evp", "india-epfo-ecr"].includes(
+                sourceFormat,
+              ) && obligationDue
                 ? { obligation_due_date: obligationDue }
                 : {}),
               ...(sourceFormat === "india-epfo-ecr"
@@ -1603,7 +1640,9 @@ export function CountryWorkflows({
                       />
                     </label>
                   )}
-                  {sourceFormat === "uae-wps-sif" && (
+                  {["uae-wps-sif", "uae-wps-sif-evp"].includes(
+                    sourceFormat,
+                  ) && (
                     <>
                       <label>
                         Employer registration cross-check (optional)
@@ -1627,6 +1666,64 @@ export function CountryWorkflows({
                         evidence is required separately.
                       </p>
                     </>
+                  )}
+                  {sourceFormat === "uae-wps-sif-evp" && (
+                    <fieldset>
+                      <legend>WPS variable-pay component controls</legend>
+                      <p>
+                        EVP details must follow their employee EDR and equal its
+                        variable income. Details are already included in salary,
+                        so they do not create additional obligations. Confirm
+                        this explicit bank layout against your retained source.
+                      </p>
+                      <label>
+                        Independent EVP record count
+                        <input
+                          type="number"
+                          min={0}
+                          max={5000}
+                          step={1}
+                          value={wpsVariableCount}
+                          onChange={(e) => setWPSVariableCount(e.target.value)}
+                        />
+                      </label>
+                      <label>
+                        Independent EVP component totals (AED, JSON)
+                        <textarea
+                          style={{ height: 240 }}
+                          value={wpsVariableTotals}
+                          onChange={(e) => setWPSVariableTotals(e.target.value)}
+                          spellCheck={false}
+                        />
+                      </label>
+                      <Button
+                        onClick={() =>
+                          setWPSVariableTotals(
+                            JSON.stringify(
+                              {
+                                housing_allowance: null,
+                                conveyance_allowance: null,
+                                medical_allowance: null,
+                                annual_passage_allowance: null,
+                                overtime_allowance: null,
+                                other_allowances: null,
+                                leave_encashment: null,
+                              },
+                              null,
+                              2,
+                            ),
+                          )
+                        }
+                      >
+                        Insert EVP control format
+                      </Button>
+                      <p>
+                        Enter all seven independently checked totals, including
+                        explicit zeros. Employee count and salary totals exclude
+                        separate EVP detail records. No routing-master
+                        verification or bank acceptance is established.
+                      </p>
+                    </fieldset>
                   )}
                   {sourceFormat === "india-inv01-json" && (
                     <>
@@ -2040,9 +2137,11 @@ export function CountryWorkflows({
                             "uae-pension-review",
                           ].includes(workflow) ||
                             r.review_status === "REVIEWED") &&
-                          (!["uae-wps-sif", "india-epfo-ecr"].includes(
-                            r.native_format || "",
-                          ) ||
+                          (![
+                            "uae-wps-sif",
+                            "uae-wps-sif-evp",
+                            "india-epfo-ecr",
+                          ].includes(r.native_format || "") ||
                             ["channel", "return", "reported"].includes(role)) &&
                           (![
                             "india-payroll-rules",
@@ -2978,6 +3077,36 @@ export function CountryWorkflows({
                     </div>
                   ))}
               </dl>
+              {!!body.native_metadata.variable_pay_component_totals &&
+                typeof body.native_metadata.variable_pay_component_totals ===
+                  "object" && (
+                  <table aria-label="WPS variable-pay component controls">
+                    <thead>
+                      <tr>
+                        <th>Variable-pay component</th>
+                        <th>AED control total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {WPS_VARIABLE_FIELDS.map((name) => (
+                        <tr key={name}>
+                          <td>{name.replaceAll("_", " ")}</td>
+                          <td>
+                            {text(
+                              (
+                                body.native_metadata
+                                  ?.variable_pay_component_totals as Record<
+                                  string,
+                                  unknown
+                                >
+                              )[name],
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
               {Array.isArray(body.native_metadata.page_controls) && (
                 <div className="table-wrap">
                   <table aria-label="CAMT statement page controls">

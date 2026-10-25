@@ -19,6 +19,14 @@ from app.modules.regulatory.pension_profiles import PensionScope
 
 Money = Annotated[Decimal, Field(max_digits=28, decimal_places=8)]
 Identifier = Annotated[str, Field(min_length=1, max_length=120)]
+WPSVariableComponent = Literal[
+    "housing_allowance", "conveyance_allowance", "medical_allowance",
+    "annual_passage_allowance", "overtime_allowance", "other_allowances", "leave_encashment",
+]
+WPS_VARIABLE_FIELDS = (
+    "housing_allowance", "conveyance_allowance", "medical_allowance",
+    "annual_passage_allowance", "overtime_allowance", "other_allowances", "leave_encashment",
+)
 
 
 class Transaction(Strict):
@@ -147,6 +155,8 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
 
 class SourceInput(Strict):
     evidence_version_id: uuid.UUID
+    wps_variable_pay_count: int | None = Field(default=None, ge=0, le=5000, strict=True)
+    wps_variable_pay_totals: dict[WPSVariableComponent, Money] = Field(default_factory=dict, max_length=7)
     gstr2b_parts: list[GSTR2BPart] = Field(default_factory=list, max_length=100)
     gstr2b_expected_files: int | None = Field(default=None, ge=1, le=100, strict=True)
     gstr2b_retrieval_assessment: str = Field(default="", max_length=2000)
@@ -167,6 +177,7 @@ class SourceInput(Strict):
         "camt053",
         "swift-mt940",
         "uae-wps-sif",
+        "uae-wps-sif-evp",
         "india-inv01-json",
         "india-epfo-ecr",
         "india-gstr2b-json",
@@ -245,6 +256,13 @@ class SourceInput(Strict):
 
     @model_validator(mode="after")
     def declared_nil(self):
+        if self.file_format == "uae-wps-sif-evp":
+            if self.wps_variable_pay_count is None or set(self.wps_variable_pay_totals) != set(WPS_VARIABLE_FIELDS):
+                raise ValueError("Declare the EVP record count and every independent variable-pay component total")
+            if any(value < 0 for value in self.wps_variable_pay_totals.values()):
+                raise ValueError("WPS variable-pay controls must be non-negative")
+        elif self.wps_variable_pay_count is not None or self.wps_variable_pay_totals:
+            raise ValueError("Variable-pay controls apply only to the explicit EDR/EVP/SCR WPS profile")
         if self.gstr2b_parts:
             numbers = [part.file_number for part in self.gstr2b_parts]
             identifiers = [part.evidence_version_id for part in self.gstr2b_parts]

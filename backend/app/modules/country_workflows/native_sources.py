@@ -22,6 +22,13 @@ from app.modules.country_workflows.sources import MAX_BYTES
 
 FORMATS: list[dict[str, Any]] = [
     {
+        "id": "uae-wps-sif-evp",
+        "label": "UAE WPS SIF - Emirates Islamic EDR / EVP / SCR",
+        "countries": ["AE"], "table_type": "obligations",
+        "description": "Explicit variable-pay profile with adjacent employee/routing binding and independent seven-component controls; instructions do not establish payment",
+        "source": "https://www.emiratesislamic.ae/-/media/ei/pdfs/business-online/salary-and-utility-payments/ei_businessonline_salary_wps_file_creation_user_guide.pdf",
+    },
+    {
         "id": "india-gstr2b-json",
         "label": "India GSTR-2B v1.0 document JSON",
         "countries": ["IN"],
@@ -631,6 +638,10 @@ def parse_native(content, data, country, filename):
                 from app.modules.country_workflows.india_gstr2b_source import parse_gstr2b
 
                 rows, metadata = parse_gstr2b(content, data)
+            elif data.file_format == "uae-wps-sif-evp":
+                from app.modules.country_workflows.wps_variable_pay import parse_wps_variable_pay
+
+                rows, metadata = parse_wps_variable_pay(content, data, filename)
             else:
                 rows, metadata = wps(content, data, filename)
         except ValidationError:
@@ -673,6 +684,7 @@ def parse_native(content, data, country, filename):
         + ("-2" if data.file_format in {"swift-mt940", "camt053"} else "-1"),
         "native_format": data.file_format,
         **({"allowed_source_roles": ["return"]} if data.file_format == "india-gstr2b-json" else {}),
+        **({"allowed_source_roles": ["channel", "return", "reported"]} if data.file_format == "uae-wps-sif-evp" else {}),
         "native_metadata": metadata,
         "native_controls_verified": True,
         "statutory_calculation_qualified": False,

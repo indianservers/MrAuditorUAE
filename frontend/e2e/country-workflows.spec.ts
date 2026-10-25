@@ -3664,3 +3664,150 @@ test("UAE reviewed import boxes compose with other VAT201 books before filed com
     await context.close();
   }
 });
+
+test("UAE WPS EVP preparation preserves variable-pay controls without duplicating salary", async ({
+  page,
+  browser,
+}) => {
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+    viewport: { width: 1600, height: 1100 },
+  });
+  const reviewer = await context.newPage();
+  const eid = fixture.uae_engagement;
+  const input = fixture.wps_evp_input;
+  const title = `SYNTHETIC WPS EVP ${Date.now()}`;
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_table_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    await page.goto(`/intelligence/${eid}/workflow-source`);
+    await page.getByLabel("Source file format").selectOption("uae-wps-sif-evp");
+    await page.getByLabel("Schedule title", { exact: true }).fill(title);
+    await page
+      .getByLabel("Clean retained evidence")
+      .selectOption(input.evidence_version_id);
+    await page.getByLabel("Expected data rows").fill("2");
+    await page.getByLabel("Independent totals by currency").fill("AED=1500");
+    await page
+      .getByLabel("Employer registration cross-check (optional)")
+      .fill("1234567890123");
+    await page.getByLabel("Independent EVP record count").fill("1");
+    await page
+      .getByLabel("Independent EVP component totals (AED, JSON)")
+      .fill(JSON.stringify(input.wps_variable_pay_totals, null, 2));
+    await saveScreenshot(`${shots}/uae-wps-evp-source-controls.png`, () =>
+      page
+        .getByRole("group", { name: "WPS variable-pay component controls" })
+        .screenshot(),
+    );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const option = page
+      .getByLabel("Saved source or result")
+      .getByRole("option", { name: new RegExp(title) });
+    await expect(option).toHaveCount(1);
+    const id = (await option.getAttribute("value"))!;
+    await page.getByLabel("Saved source or result").selectOption(id);
+    const panel = page
+      .getByRole("heading", { name: title, exact: true })
+      .locator("..");
+    await expect(
+      panel.getByRole("columnheader", { name: "variable income", exact: true }),
+    ).toBeVisible();
+    await expect(
+      panel.getByRole("cell", { name: "1100.00", exact: true }),
+    ).toBeVisible();
+    await expect(
+      panel.getByRole("cell", { name: "400.00", exact: true }).first(),
+    ).toBeVisible();
+    for (const notice of await page
+      .getByRole("button", { name: "Dismiss notification", exact: true })
+      .all())
+      await notice.click();
+    await saveScreenshot(`${shots}/uae-wps-evp-salary-summary.png`, () =>
+      panel.screenshot(),
+    );
+    await panel
+      .getByText("Original source controls and calculation basis", {
+        exact: true,
+      })
+      .click();
+    const controls = panel.getByRole("table", {
+      name: "WPS variable-pay component controls",
+      exact: true,
+    });
+    await expect(controls.getByRole("row")).toHaveCount(8);
+    await expect(controls.getByRole("row").nth(1)).toContainText(
+      "housing allowance",
+    );
+    await expect(
+      controls.getByRole("row").filter({ hasText: "housing allowance" }),
+    ).toContainText("40.00");
+    await expect(
+      panel.getByText("NOT_EVIDENCED_BY_INSTRUCTION_FILE", { exact: true }),
+    ).toBeVisible();
+    await saveScreenshot(`${shots}/uae-wps-evp-component-controls.png`, () =>
+      controls.screenshot(),
+    );
+    const detail = await page.request.get(
+      `/api/backend/intelligence/engagements/${eid}/events/${id}`,
+      { headers: { "X-Tenant-ID": fixture.tenant } },
+    );
+    expect(detail.status()).toBe(200);
+    const source = await detail.json();
+    expect(source.body.rows).toHaveLength(2);
+    expect(source.body.control_totals.AED).toBe("1500.00");
+    expect(
+      source.body.rows.map((row: { source_row: number }) => row.source_row),
+    ).toEqual([1, 3]);
+    expect(
+      source.body.rows.every(
+        (row: { payment_date: unknown }) => row.payment_date === null,
+      ),
+    ).toBe(true);
+    await reviewer.goto(`/intelligence/${eid}/country-workflow`);
+    await reviewer.getByLabel("Saved source or result").selectOption(id);
+    await reviewer
+      .getByLabel("Review / exception rationale")
+      .fill(
+        "Independent original EDR/EVP employee binding, declared component controls and SCR salary reviewed; no payment execution inference",
+      );
+    const approving = reviewer.waitForResponse(
+      (r) =>
+        r.url().includes(`/events/${id}/review`) &&
+        r.request().method() === "POST",
+    );
+    await reviewer
+      .getByRole("button", { name: "Independent approval", exact: true })
+      .click();
+    const approval = await approving;
+    expect(approval.status(), await approval.text()).toBe(201);
+    const approved = await approval.json();
+    await page.goto(`/intelligence/${eid}/country-workflow`);
+    await page
+      .getByLabel("Workflow", { exact: true })
+      .selectOption("payroll-settlement");
+    await expect(
+      page
+        .getByLabel("channel source", { exact: true })
+        .locator(`option[value="${approved.id}"]`),
+    ).toHaveCount(1);
+    for (const role of ["payroll", "bank"])
+      await expect(
+        page
+          .getByLabel(`${role} source`, { exact: true })
+          .locator(`option[value="${approved.id}"]`),
+      ).toHaveCount(0);
+  } finally {
+    await context.close();
+  }
+});

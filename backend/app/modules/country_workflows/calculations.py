@@ -799,7 +799,7 @@ def calculate(data, country, sources):
             raise ValueError("Derived contribution obligations can establish only expected remittances, not returns or payments")
         # Instruction/return populations are not an independent payroll expectation
         # or evidence that money was settled, even when their totals agree.
-        if table.get("native_format") in {"uae-wps-sif", "india-epfo-ecr"} and role not in {
+        if table.get("native_format") in {"uae-wps-sif", "uae-wps-sif-evp", "india-epfo-ecr"} and role not in {
             "channel",
             "return",
             "reported",

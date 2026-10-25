@@ -736,6 +736,11 @@ async def main():
         )
         composed_other_approval = await decision(client, pdf_final_reviewer[0], eid, composed_other)
         assert composed_other_approval.status_code == 201, composed_other_approval.text
+        from tests.unit.test_wps_variable_pay import SIF_EVP
+        from tests.unit.test_wps_variable_pay import options as evp_options
+
+        evp_evidence = await native_file(eid, SIF_FILENAME, SIF_EVP, "text/csv")
+        evp_input = evp_options(evidence_version_id=evp_evidence).model_dump(mode="json")
         if implementation_hash() != implementation:
             raise RuntimeError(
                 "Backend implementation changed during fixture preparation; prepare fresh fixtures before browser verification"
@@ -788,6 +793,7 @@ async def main():
                     "india_ecr_evidence": ecr_evidence,
                     "india_gstr2b_evidence": gstr2b_evidence,
                     "india_gstr2b_books": gstr2b_books["id"],
+                    "wps_evp_input": evp_input,
                     "vat_composition_sources": [composed_import_approval.json()["id"], composed_other_approval.json()["id"]],
                     "gstr2b_bundle_input": gstr2b_bundle_input,
                     "gstr2b_bundle_books": bundle_books_approval.json()["id"],

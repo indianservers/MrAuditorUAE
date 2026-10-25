@@ -24,6 +24,12 @@ vi.mock("@/hooks/use-api", () => ({
             country: state.country,
             source_formats: [
               {
+                id: "uae-wps-sif-evp",
+                label: "UAE WPS EDR EVP SCR",
+                available: state.country === "AE",
+                table_type: "obligations",
+              },
+              {
                 id: "india-gstr2b-json",
                 label: "India GSTR-2B document JSON",
                 available: state.country === "IN",
@@ -1882,4 +1888,41 @@ it("shows VAT201 monetary differences first and preserves original provenance", 
     screen.getByRole("columnheader", { name: "book source ids" }),
   ).toBeVisible();
   expect(screen.getByText('["composed-box-6"]')).toBeVisible();
+});
+
+it("queues the explicit WPS EVP profile with separate employee and component controls", async () => {
+  render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+  fireEvent.change(screen.getByLabelText("Source file format"), {
+    target: { value: "uae-wps-sif-evp" },
+  });
+  const totals = {
+    housing_allowance: "40",
+    conveyance_allowance: "10",
+    medical_allowance: "5",
+    annual_passage_allowance: "15",
+    overtime_allowance: "20",
+    other_allowances: "8",
+    leave_encashment: "2",
+  };
+  for (const [label, value] of [
+    ["Schedule title", "EVP source"],
+    ["Clean retained evidence", "clean"],
+    ["Expected data rows", "2"],
+    ["Independent totals by currency", "AED=1500"],
+    ["Independent EVP record count", "1"],
+    ["Independent EVP component totals (AED, JSON)", JSON.stringify(totals)],
+    ["Employer registration cross-check (optional)", "1234567890123"],
+  ])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+    file_format: "uae-wps-sif-evp",
+    table_type: "obligations",
+    expected_rows: 2,
+    control_totals: { AED: "1500" },
+    wps_variable_pay_count: 1,
+    wps_variable_pay_totals: totals,
+    employer_registration: "1234567890123",
+  });
 });
