@@ -1,0 +1,71 @@
+{
+  "schema_version": 2,
+  "scope": "UNQUALIFIED template: populate from independently reviewed execution evidence for the selected artifact and target",
+  "release": {
+    "commit": null,
+    "image_digest": null,
+    "environment": null
+  },
+  "gates": {
+    "tenant_isolation": {
+      "status": "NOT_TESTED",
+      "evidence": null,
+      "evidence_sha256": null,
+      "open_blocker": true
+    },
+    "financial_accuracy": {
+      "status": "NOT_TESTED",
+      "evidence": null,
+      "evidence_sha256": null,
+      "open_blocker": true
+    },
+    "professional_approvals": {
+      "status": "NOT_TESTED",
+      "evidence": null,
+      "evidence_sha256": null,
+      "open_blocker": true
+    },
+    "critical_security": {
+      "status": "NOT_TESTED",
+      "evidence": null,
+      "evidence_sha256": null,
+      "open_blocker": true
+    },
+    "migration": {
+      "status": "NOT_TESTED",
+      "evidence": null,
+      "evidence_sha256": null,
+      "open_blocker": true
+    },
+    "recovery": {
+      "status": "NOT_TESTED",
+      "evidence": null,
+      "evidence_sha256": null,
+      "open_blocker": true
+    },
+    "deployment_rollback": {
+      "status": "NOT_TESTED",
+      "evidence": null,
+      "evidence_sha256": null,
+      "open_blocker": true
+    },
+    "ai_authorization": {
+      "status": "NOT_TESTED",
+      "evidence": null,
+      "evidence_sha256": null,
+      "open_blocker": true
+    },
+    "audit_history": {
+      "status": "NOT_TESTED",
+      "evidence": null,
+      "evidence_sha256": null,
+      "open_blocker": true
+    },
+    "demo_isolation": {
+      "status": "NOT_TESTED",
+      "evidence": null,
+      "evidence_sha256": null,
+      "open_blocker": true
+    }
+  }
+}

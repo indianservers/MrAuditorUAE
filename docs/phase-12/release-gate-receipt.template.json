@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "gate": null,
+  "release": {
+    "commit": null,
+    "image_digest": null,
+    "environment": null
+  },
+  "outcome": "NOT_EXECUTED",
+  "executed_at": null,
+  "evidence": []
+}
