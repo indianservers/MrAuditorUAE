@@ -1702,6 +1702,9 @@ describe("UAE import VAT review", () => {
     expect(screen.getByRole("cell", { name: "EXCLUDED-1" })).toBeVisible();
     fireEvent.click(screen.getByRole("button", { name: "Next excluded rows" }));
     expect(screen.getByRole("cell", { name: "EXCLUDED-101" })).toBeVisible();
+    fireEvent.click(
+      screen.getByLabelText("Show source versions and review details"),
+    );
     expect(screen.getByRole("cell", { name: "selected-six" })).toBeVisible();
     expect(screen.getByRole("cell", { name: "selected-seven" })).toBeVisible();
     expect(screen.getByRole("button", { name: "Next rows" })).toBeDisabled();
@@ -1833,4 +1836,50 @@ vi.mock("@/hooks/use-event-history", async () => {
       loadOlder: vi.fn(),
     }),
   };
+});
+
+it("shows VAT201 monetary differences first and preserves original provenance", () => {
+  state.result = {
+    id: "result",
+    kind: "country-workflow",
+    version: 1,
+    freshness: "CURRENT",
+    body: {
+      title: "VAT201 comparison",
+      workflow: "uae-vat-return",
+      review_status: "UNVERIFIED",
+      rows: [
+        {
+          id: "box-1",
+          box: "6",
+          registration: "100000000000001",
+          period_start: "2026-04-01",
+          period_end: "2026-06-30",
+          currency: "AED",
+          differences: { taxable_amount: "10", tax: "0.50", adjustment: "0" },
+          book_source_ids: ["composed-box-6"],
+          return_source_id: "filed-6",
+          state: "VARIANCE",
+        },
+      ],
+    },
+  };
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Saved source or result"), {
+    target: { value: "result" },
+  });
+  expect(
+    screen.getByRole("columnheader", { name: "taxable difference" }),
+  ).toBeVisible();
+  expect(screen.getByRole("cell", { name: /^0\.50$/ })).toBeVisible();
+  expect(
+    screen.queryByRole("columnheader", { name: "book source ids" }),
+  ).not.toBeInTheDocument();
+  fireEvent.click(
+    screen.getByLabelText("Show source versions and review details"),
+  );
+  expect(
+    screen.getByRole("columnheader", { name: "book source ids" }),
+  ).toBeVisible();
+  expect(screen.getByText('["composed-box-6"]')).toBeVisible();
 });

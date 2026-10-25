@@ -1,0 +1,10 @@
+Command: npx playwright test --config playwright.country-workflows.config.ts --grep "UAE reviewed import boxes compose" --reporter=list
+Environment: owned disposable country-workflow database, API 58014, frontend 3010, Redis/Celery intelligence worker. Explicit scanner and seed broker doubles; synthetic retained evidence only.
+
+Running 1 test using 1 worker
+
+(node:924) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 e2e\country-workflows.spec.ts:3507:1 › UAE reviewed import boxes compose with other VAT201 books before filed comparison (31.2s)
+
+  1 passed (34.4s)

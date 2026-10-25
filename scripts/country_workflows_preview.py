@@ -719,6 +719,23 @@ async def main():
             client, supporting_reviewer[0], india, bundle_books
         )
         assert bundle_books_approval.status_code == 201, bundle_books_approval.text
+        composed_import = await client.post(
+            f"/api/v1/intelligence/engagements/{eid}/events/{import_box_approved.json()['id']}/import-vat-box-source",
+            headers=h,
+            json={"source_role": "books", "label": "SYNTHETIC import component for composed VAT201",
+                  "assessment": "Independent selected book declarations and signed import corrections for composition",
+                  "boxes": {"6": {"expected_rows": 1, "taxable_amount": "1000", "tax": "50"},
+                            "7": {"expected_rows": 1, "taxable_amount": "-100", "tax": "-5"}}},
+        )
+        assert composed_import.status_code == 201, composed_import.text
+        composed_import_approval = await decision(client, pdf_final_reviewer[0], eid, composed_import.json())
+        assert composed_import_approval.status_code == 201, composed_import_approval.text
+        composed_other = await source(
+            client, h, eid, [row for row in full_filed_boxes() if row["box"] not in {"6", "7"}],
+            "SYNTHETIC other twelve explicit VAT201 book boxes", "return-boxes", {"AED": "185"},
+        )
+        composed_other_approval = await decision(client, pdf_final_reviewer[0], eid, composed_other)
+        assert composed_other_approval.status_code == 201, composed_other_approval.text
         if implementation_hash() != implementation:
             raise RuntimeError(
                 "Backend implementation changed during fixture preparation; prepare fresh fixtures before browser verification"
@@ -771,6 +788,7 @@ async def main():
                     "india_ecr_evidence": ecr_evidence,
                     "india_gstr2b_evidence": gstr2b_evidence,
                     "india_gstr2b_books": gstr2b_books["id"],
+                    "vat_composition_sources": [composed_import_approval.json()["id"], composed_other_approval.json()["id"]],
                     "gstr2b_bundle_input": gstr2b_bundle_input,
                     "gstr2b_bundle_books": bundle_books_approval.json()["id"],
                     "india_payroll_bases": payroll_bases["id"],

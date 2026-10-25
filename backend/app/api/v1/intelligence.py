@@ -21,12 +21,21 @@ from app.modules.country_workflows.benefit_source import BenefitSourceInput
 from app.modules.country_workflows.contribution_source import ContributionSourceInput
 from app.modules.country_workflows.import_vat_source import ImportVATSourceInput
 from app.modules.country_workflows.payroll_source import PayrollSourceInput, PensionSourceInput
+from app.modules.country_workflows.vat_composition import VATCompositionInput
 from app.modules.intelligence import jobs, service
 from app.modules.intelligence import schemas as s
 from app.modules.intelligence.foundations import PeriodAction
 from app.modules.intelligence.models import IntelligenceEvent, IntelligenceJob
 
 router = APIRouter(prefix="/intelligence", tags=["Accounting intelligence"])
+
+
+@router.post("/engagements/{eid}/vat201-composition-source", status_code=201)
+async def vat201_composition_source(eid: uuid.UUID, data: VATCompositionInput, db: DB, ctx: Actor, request: Request):
+    from app.modules.country_workflows.vat_composition import prepare
+
+    eng = await service.scope(db, ctx, eid, "country-workflow", True)
+    return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))
 
 
 @router.post("/engagements/{eid}/contribution-obligation-source", status_code=201)

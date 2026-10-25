@@ -3503,3 +3503,164 @@ test("numbered GSTR-2B originals require review before purchase-register matchin
     await context.close();
   }
 });
+
+test("UAE reviewed import boxes compose with other VAT201 books before filed comparison", async ({
+  page,
+  browser,
+}) => {
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+    viewport: { width: 1600, height: 1100 },
+  });
+  const reviewer = await context.newPage();
+  const eid = fixture.uae_engagement;
+  const title = `SYNTHETIC composed VAT201 ${Date.now()}`;
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_table_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    await page.goto(`/intelligence/${eid}/workflow-source`);
+    await page
+      .getByText("Compose reviewed VAT201 book schedules", { exact: true })
+      .click();
+    await page.getByLabel("Composed VAT201 source title").fill(title);
+    await page
+      .getByLabel("Reviewed VAT201 component schedules")
+      .selectOption(fixture.vat_composition_sources);
+    for (const [label, value] of [
+      ["Independent composed taxable amount", "2400"],
+      ["Independent composed tax total", "230"],
+      ["Independent composed adjustment total", "0"],
+      [
+        "VAT201 composition scope assessment",
+        "Independent import book boxes 6 and 7 plus twelve other explicit book boxes; all fourteen boxes assessed without overlap",
+      ],
+    ])
+      await page.getByLabel(label).fill(value);
+    await saveScreenshot(`${shots}/uae-vat201-composition-controls.png`, () =>
+      page
+        .getByText("Compose reviewed VAT201 book schedules", { exact: true })
+        .locator("..")
+        .screenshot(),
+    );
+    const creating = page.waitForResponse(
+      (r) =>
+        r.url().includes("/vat201-composition-source") &&
+        r.request().method() === "POST",
+    );
+    await page
+      .getByRole("button", {
+        name: "Prepare composed VAT201 books",
+        exact: true,
+      })
+      .click();
+    const response = await creating;
+    expect(response.status(), await response.text()).toBe(201);
+    const created = await response.json();
+    expect(created.body.rows).toHaveLength(14);
+    expect(
+      new Set(
+        created.body.rows.map(
+          (row: { source_component_event_id: string }) =>
+            row.source_component_event_id,
+        ),
+      ),
+    ).toEqual(new Set(fixture.vat_composition_sources));
+    await reviewer.goto(`/intelligence/${eid}/country-workflow`);
+    await reviewer
+      .getByLabel("Saved source or result")
+      .selectOption(created.id);
+    await reviewer
+      .getByLabel("Review / exception rationale")
+      .fill(
+        "Independent reviewed parent schedules, complete explicit disjoint boxes and whole-schedule controls checked",
+      );
+    const approval = reviewer.waitForResponse(
+      (r) =>
+        r.url().includes(`/events/${created.id}/review`) &&
+        r.request().method() === "POST",
+    );
+    await reviewer
+      .getByRole("button", { name: "Independent approval", exact: true })
+      .click();
+    const approvedResponse = await approval;
+    expect(approvedResponse.status(), await approvedResponse.text()).toBe(201);
+    const approved = await approvedResponse.json();
+    await page.goto(`/intelligence/${eid}/country-workflow`);
+    await page
+      .getByLabel("Workflow", { exact: true })
+      .selectOption("uae-vat-return");
+    await expect(
+      page
+        .getByLabel("return source", { exact: true })
+        .locator(`option[value="${approved.id}"]`),
+    ).toHaveCount(0);
+    await page
+      .getByLabel("Schedule title", { exact: true })
+      .fill(title + " comparison");
+    await page
+      .getByLabel("Reconciliation date", { exact: true })
+      .fill("2026-06-30");
+    await page
+      .getByLabel("books source", { exact: true })
+      .selectOption(approved.id);
+    await page
+      .getByLabel("return source", { exact: true })
+      .selectOption(fixture.import_filed_source);
+    await page
+      .getByLabel("Required VAT201 boxes, comma separated", { exact: true })
+      .fill("1,2,3,4,5,6,7,8,9,10,11,12,13,14");
+    await page
+      .getByLabel("Scope and source rationale", { exact: true })
+      .fill(
+        "Complete explicit composed book boxes compared with separate retained filed evidence; no legal completeness inference",
+      );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const option = page
+      .getByLabel("Saved source or result")
+      .getByRole("option", { name: new RegExp(title + " comparison") });
+    await expect(option).toHaveCount(1);
+    await page
+      .getByLabel("Saved source or result")
+      .selectOption((await option.getAttribute("value"))!);
+    const panel = page
+      .getByRole("heading", { name: title + " comparison", exact: true })
+      .locator("..");
+    await expect(
+      panel.getByText("0 exceptions", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      panel.getByRole("cell", { name: "MATCHED", exact: true }),
+    ).toHaveCount(14);
+    for (const notice of await page
+      .getByRole("button", { name: "Dismiss notification", exact: true })
+      .all())
+      await notice.click();
+    await expect(
+      panel.getByRole("columnheader", { name: "tax difference", exact: true }),
+    ).toBeVisible();
+    const provenance = panel.getByLabel(
+      "Show source versions and review details",
+    );
+    await provenance.check();
+    await expect(
+      panel.getByRole("columnheader", { name: "book source ids", exact: true }),
+    ).toBeVisible();
+    await provenance.uncheck();
+    await saveScreenshot(
+      `${shots}/uae-vat201-composed-books-comparison.png`,
+      () => panel.screenshot(),
+    );
+  } finally {
+    await context.close();
+  }
+});

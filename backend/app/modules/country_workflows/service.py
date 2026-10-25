@@ -386,6 +386,11 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(409, "Independently review all pension bases, rules and reported sources before calculation")
         if data.workflow == "obligation-bank-allocations" and source.body.get("review_status") != "REVIEWED":
             raise HTTPException(409, "Independently review all obligation, reported, bank and allocation sources before settlement review")
+        if source.body.get("parser_version") == "uae-vat201-composition/1":
+            if data.workflow != "uae-vat-return" or role != "books":
+                raise HTTPException(422, "Composed VAT201 sources can establish only books, not filed-return evidence")
+            if source.body.get("review_status") != "REVIEWED":
+                raise HTTPException(409, "Independently review the composed VAT201 source before matching")
         if source.body.get("parser_version") == "import-vat-box-bridge/1" and (data.workflow != "uae-vat-return" or role != "books"):
             raise HTTPException(422, "Derived import boxes can feed only the books role of VAT201 comparison, not filed return evidence")
         if (
@@ -447,6 +452,10 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         from app.modules.country_workflows.contribution_source import verify as verify_contributions
 
         dependencies.extend(await verify_contributions(db, ctx, eng, sources["expected"], contributors))
+    if sources.get("books", {}).get("parser_version") == "uae-vat201-composition/1":
+        from app.modules.country_workflows.vat_composition import verify as verify_composition
+
+        dependencies.extend(await verify_composition(db, ctx, eng, sources["books"], contributors, data.source_ids["return"]))
     if data.workflow == "bank-brs":
         book_range = sources.get("books", {}).get("source_range")
         if book_range and book_range["through"] != data.as_of.isoformat():
