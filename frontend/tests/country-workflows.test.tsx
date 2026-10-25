@@ -88,6 +88,12 @@ vi.mock("@/hooks/use-api", () => ({
             ],
             items: [
               {
+                id: "india-invoice-register",
+                title: "India invoice evidence register",
+                available: state.country === "IN",
+                roles: { books: "tax-documents", invoices: "tax-documents" },
+              },
+              {
                 id: "payroll-ledger-rollforward",
                 title: "Payroll accounting bridge",
                 available: true,
@@ -225,7 +231,7 @@ vi.mock("@/hooks/use-api", () => ({
               {
                 id: "india-gst",
                 title: "India GST",
-                available: false,
+                available: state.country === "IN",
                 roles: { books: "tax-documents", return: "tax-documents" },
               },
             ],
@@ -300,6 +306,31 @@ vi.mock("@/hooks/use-api", () => ({
               : path.includes("/events?")
                 ? {
                     items: [
+                      {
+                        id: "invoice-register",
+                        label: "Reviewed purchase register",
+                        kind: "workflow-source",
+                        table_type: "tax-documents",
+                        freshness: "CURRENT",
+                        review_status: "REVIEWED",
+                        version: 1,
+                      },
+                      ...[true, false].map((reviewed) => ({
+                        id: reviewed
+                          ? "invoice-evidence"
+                          : "unreviewed-invoice-evidence",
+                        label: reviewed
+                          ? "Reviewed INV-01 evidence"
+                          : "Unreviewed INV-01 evidence",
+                        kind: "workflow-source",
+                        table_type: "tax-documents",
+                        freshness: "CURRENT",
+                        review_status: reviewed ? "REVIEWED" : "UNVERIFIED",
+                        version: 1,
+                        native_format: "india-inv01-json",
+                        invoice_direction: "purchase",
+                        allowed_source_roles: ["books", "invoices"],
+                      })),
                       ...["opening", "payroll", "posted", "closing"].map(
                         (role) => ({
                           id: "ledger-" + role,
@@ -2476,4 +2507,54 @@ it("requires all twenty explicit VAT201 boxes after selecting the emirate layout
   expect(payload.vat201_layout).toBe("emirate-20");
   expect(payload.required_boxes).toHaveLength(20);
   expect(payload.restrict_to_required_boxes).toBeUndefined();
+});
+
+it("compares invoice evidence with an independent register without offering it as filed return evidence", async () => {
+  state.country = "IN";
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Workflow"), {
+    target: { value: "india-invoice-register" },
+  });
+  fireEvent.change(screen.getByLabelText("Invoice comparison direction"), {
+    target: { value: "purchase" },
+  });
+  expect(screen.getByLabelText("books source")).not.toHaveTextContent(
+    "Reviewed INV-01 evidence",
+  );
+  expect(screen.getByLabelText("invoices source")).not.toHaveTextContent(
+    "Unreviewed INV-01 evidence",
+  );
+  for (const [label, value] of [
+    ["Schedule title", "Invoice comparison"],
+    ["Reconciliation date", "2026-06-30"],
+    [
+      "Scope and source rationale",
+      "Independent book and original invoice evidence assessed",
+    ],
+    ["books source", "invoice-register"],
+    ["invoices source", "invoice-evidence"],
+  ])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+    workflow: "india-invoice-register",
+    invoice_direction: "purchase",
+    currency: "INR",
+    source_ids: { books: "invoice-register", invoices: "invoice-evidence" },
+  });
+});
+
+it("keeps native invoice JSON out of the India GST return selector", () => {
+  state.country = "IN";
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Workflow"), {
+    target: { value: "india-gst" },
+  });
+  expect(screen.getByLabelText("return source")).not.toHaveTextContent(
+    "Reviewed INV-01 evidence",
+  );
+  expect(screen.getByLabelText("books source")).toHaveTextContent(
+    "Reviewed INV-01 evidence",
+  );
 });

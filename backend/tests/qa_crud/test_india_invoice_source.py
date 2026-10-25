@@ -6,8 +6,8 @@ import pytest
 from app.modules.country_workflows.schemas import TaxDocument
 from tests.integration.test_platform import environment as environment
 from tests.phase2.test_pipeline import scope
-from tests.phase4.test_workflows import create
-from tests.qa_crud.test_country_workflows import double_boundaries, execute
+from tests.phase4.test_workflows import actor, create, grant
+from tests.qa_crud.test_country_workflows import decision, double_boundaries, execute
 from tests.qa_crud.test_country_workflows import source as csv_source
 from tests.unit.test_india_invoice_source import BUYER, invoice
 
@@ -92,6 +92,9 @@ async def test_india_native_invoice_retained_evidence_job_and_country_gating(
         next(item for item in choices.json()["items"] if item["id"] == source["id"])["label"]
         == "SYNTHETIC INV-01 source"
     )
+    choice = next(item for item in choices.json()["items"] if item["id"] == source["id"])
+    assert choice["invoice_direction"] == "purchase"
+    assert choice["allowed_source_roles"] == ["books", "invoices"]
     original = await c.get(
         base + "/evidence-files/" + evidence["id"] + "/" + uploaded.json()["id"] + "/download",
         headers=h,
@@ -115,14 +118,25 @@ async def test_india_native_invoice_retained_evidence_job_and_country_gating(
         "tax-documents",
         {"INR": "18"},
     )
+    await execute(c,h,eid,"country-workflow",{"workflow":"india-gst","source_ids":{"books":register["id"],"return":source["id"]},"as_of":"2026-06-30","currency":"INR","title":"SYNTHETIC invalid return role","rationale":"Invoice structure is not filed return evidence"},failed="not a filed GST return")
+    reviewer = await actor(h, "Firm Administrator", "invoice-register-reviewer")
+    await grant(c,h,base,reviewer)
+    for role, obj in (("books",register),("invoices",source)):
+        approved = await decision(c,reviewer[0],eid,obj)
+        assert approved.status_code==201,approved.text
+        if role == "books":
+            register = approved.json()
+        else:
+            source = approved.json()
     reconciled = await execute(
         c,
         h,
         eid,
         "country-workflow",
         {
-            "workflow": "india-gst",
-            "source_ids": {"books": register["id"], "return": source["id"]},
+            "workflow": "india-invoice-register",
+            "invoice_direction": "purchase",
+            "source_ids": {"books": register["id"], "invoices": source["id"]},
             "as_of": "2026-06-30",
             "currency": "INR",
             "title": "Synthetic native invoice reconciliation",
@@ -130,6 +144,12 @@ async def test_india_native_invoice_retained_evidence_job_and_country_gating(
         },
     )
     assert reconciled["body"]["exception_count"] == 0
+    assert reconciled["body"]["invoice_evidence_scope"]["direction"] == "purchase"
+    assert "invoices_tax" in reconciled["body"]["rows"][0]
+    assert "return_tax" not in reconciled["body"]["rows"][0]
+    exported = await c.get(f"/api/v1/intelligence/engagements/{eid}/events/{reconciled['id']}/export?format=xlsx", headers=h)
+    assert exported.status_code == 200
+
     assert (
         sum(
             row["comparison_basis"]

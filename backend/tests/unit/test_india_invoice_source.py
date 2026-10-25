@@ -9,7 +9,7 @@ import pytest
 from app.modules.audit_execution.evidence import validate_file
 from app.modules.country_workflows.calculations import calculate
 from app.modules.country_workflows.native_sources import parse_native
-from app.modules.country_workflows.schemas import SourceInput, WorkflowInput
+from app.modules.country_workflows.schemas import SourceInput, TaxDocument, WorkflowInput
 from tests.unit.test_country_workflows import parsed
 
 SELLER = "29ABCDE1234F1Z5"
@@ -131,9 +131,10 @@ def test_negative_cess_cannot_be_hidden_by_positive_non_ad_valorem_cess():
 
 def test_future_reporting_period_cannot_reconcile_even_with_an_earlier_invoice_date():
     native = parse(invoice(), options(gst_period="2026-07"))
-    sources = {"books": native, "return": native}
+    sources = {"books": parsed("tax-documents", [{key: value for key, value in row.items() if key in TaxDocument.model_fields} for row in native["rows"]]), "invoices": native}
     data = WorkflowInput(
-        workflow="india-gst",
+        workflow="india-invoice-register",
+        invoice_direction="purchase",
         source_ids={role: uuid.uuid4() for role in sources},
         as_of="2026-06-30",
         currency="INR",
@@ -145,7 +146,7 @@ def test_future_reporting_period_cannot_reconcile_even_with_an_earlier_invoice_d
 
 
 @pytest.mark.parametrize("defect", [None, "tax", "net", "date", "period", "status", "reference"])
-@pytest.mark.parametrize("native_role", ["books", "return"])
+@pytest.mark.parametrize("native_role", ["books", "invoices"])
 def test_native_components_compare_with_sparse_purchase_register_without_hiding_exceptions(
     defect, native_role
 ):
@@ -182,7 +183,8 @@ def test_native_components_compare_with_sparse_purchase_register_without_hiding_
     other_role = "return" if native_role == "books" else "books"
     sources = {native_role: native, other_role: parsed("tax-documents", [row])}
     data = WorkflowInput(
-        workflow="india-gst",
+        workflow="india-gst" if native_role == "books" else "india-invoice-register",
+        **({"invoice_direction": "purchase"} if native_role == "invoices" else {}),
         source_ids={role: uuid.uuid4() for role in sources},
         as_of="2026-06-30",
         currency="INR",
@@ -254,3 +256,36 @@ def test_duplicate_documents_items_future_dates_and_country_boundary():
 def test_unsafe_json_evidence_rejected(content):
     with pytest.raises(ValueError):
         validate_file(io.BytesIO(content), "invoice.json")
+
+
+def test_native_invoice_is_not_filed_return_evidence_even_when_amounts_agree():
+    native = parse(invoice())
+    register = parsed("tax-documents", [{key: value for key, value in row.items() if key in TaxDocument.model_fields} for row in native["rows"]])
+    data = WorkflowInput(workflow="india-gst",source_ids={"books":uuid.uuid4(),"return":uuid.uuid4()},as_of="2026-06-30",currency="INR",title="SYNTHETIC wrong evidence role",rationale="Identical invoice amounts cannot establish a filed return")
+    with pytest.raises(ValueError, match="not a filed GST return"):
+        calculate(data,"IN",{"books":register,"return":native})
+
+
+@pytest.mark.parametrize("direction", ["purchase", "sale"])
+def test_explicit_invoice_direction_and_invoice_labels_are_preserved(direction):
+    native = parse(invoice(), options(gst_direction=direction,gst_registration=BUYER if direction=="purchase" else SELLER))
+    register = parsed("tax-documents", [{key:value for key,value in row.items() if key in TaxDocument.model_fields} for row in native["rows"]])
+    data = WorkflowInput(workflow="india-invoice-register",invoice_direction=direction,source_ids={"books":uuid.uuid4(),"invoices":uuid.uuid4()},as_of="2026-06-30",currency="INR",title="SYNTHETIC invoice register",rationale="Independent register compared with retained invoice evidence")
+    result=calculate(data,"IN",{"books":register,"invoices":native})
+    assert result["exception_count"]==0
+    assert result["invoice_evidence_scope"]["direction"]==direction
+    assert result["invoice_evidence_scope"]["filing_status"]=="NOT_ASSESSED_BY_INVOICE_COMPARISON"
+    assert "invoices_tax" in result["rows"][0] and "return_tax" not in result["rows"][0]
+    with pytest.raises(ValueError,match="direction differs"):
+        calculate(data.model_copy(update={"invoice_direction":"sale" if direction=="purchase" else "purchase"}),"IN",{"books":register,"invoices":native})
+    with pytest.raises(ValueError,match="not a filed GST return"):
+        calculate(data,"IN",{"books":native,"invoices":register})
+
+
+def test_sale_invoice_cannot_clear_an_inward_gstr2b_document_with_matching_identifiers():
+    native = parse(invoice(),options(gst_direction="sale",gst_registration=SELLER))
+    inward = parsed("tax-documents", [{key:value for key,value in row.items() if key in TaxDocument.model_fields} for row in native["rows"]])
+    inward["native_format"]="india-gstr2b-json"
+    data=WorkflowInput(workflow="india-gst",source_ids={"books":uuid.uuid4(),"return":uuid.uuid4()},as_of="2026-06-30",currency="INR",title="SYNTHETIC dual-role counterparty",rationale="A customer may also be a supplier; matching IDs do not erase direction")
+    with pytest.raises(ValueError,match="sales invoice cannot establish purchase books"):
+        calculate(data,"IN",{"books":native,"return":inward})

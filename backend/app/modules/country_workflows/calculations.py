@@ -127,7 +127,7 @@ def bank(data, tables):
     }
 
 
-def tax_documents(data, tables):
+def tax_documents(data, tables, right_role="return"):
     def key(r):
         return (
             r["registration"].strip().upper(),
@@ -198,7 +198,7 @@ def tax_documents(data, tables):
             }
         return resolved
 
-    books, portal = (tax_population(tables[role]) for role in ["books", "return"])
+    books, portal = (tax_population(tables[role]) for role in ["books", right_role])
     document_groups = []
     for population in (books, portal):
         grouped = defaultdict(list)
@@ -261,11 +261,11 @@ def tax_documents(data, tables):
             if explicit_zero
             else "BOOKS_ONLY"
             if not right
-            else "RETURN_ONLY"
+            else ("INVOICE_ONLY" if right_role == "invoices" else "RETURN_ONLY")
             if not left
             else "SOURCE_STATUS_PENDING"
             if right["status"] == "pending"
-            else "REJECTED_ON_RETURN"
+            else ("SOURCE_INVOICE_REJECTED" if right_role == "invoices" else "REJECTED_ON_RETURN")
             if right["status"] == "rejected"
             else "SOURCE_STATUS_PENDING"
             if left["status"] != "active"
@@ -291,27 +291,27 @@ def tax_documents(data, tables):
                 "currency": k[5],
                 "state": state,
                 "books_id": left["id"] if left else None,
-                "return_id": right["id"] if right else None,
+                right_role + "_id": right["id"] if right else None,
                 "books_tax": left["tax"] if left and left.get("amounts_available", True) else None,
-                "return_tax": right["tax"]
+                right_role + "_tax": right["tax"]
                 if right and right.get("amounts_available", True)
                 else None,
                 "books_version_source_ids": left.get("version_source_ids", [left["id"]])
                 if left
                 else [],
-                "return_version_source_ids": right.get("version_source_ids", [right["id"]])
+                right_role + "_version_source_ids": right.get("version_source_ids", [right["id"]])
                 if right
                 else [],
                 "books_source_versions": left.get("source_versions") if left else None,
-                "return_source_versions": right.get("source_versions") if right else None,
+                right_role + "_source_versions": right.get("source_versions") if right else None,
                 "tax_difference": str(delta) if delta is not None else None,
                 "net_difference": str(base_delta) if base_delta is not None else None,
                 "books_period": left["period"] if left else None,
-                "return_period": right["period"] if right else None,
+                right_role + "_period": right["period"] if right else None,
                 "legal_credit_eligibility": "NOT_DETERMINED",
                 "source_review_reasons": source_reasons,
                 "books_source_section": left.get("source_section") if left else None,
-                "return_source_section": right.get("source_section") if right else None,
+                right_role + "_source_section": right.get("source_section") if right else None,
                 "source_itc_availability": right.get("source_itc_availability") if right else None,
                 "source_ims_status": right.get("source_ims_status") if right else None,
                 "comparison_basis": "EXPLICIT_NATIVE_ZERO_COMPONENT_WITH_OPPOSITE_DOCUMENT_PRESENT"
@@ -320,13 +320,14 @@ def tax_documents(data, tables):
             }
         )
     totals: defaultdict[str, defaultdict[str, Decimal]] = defaultdict(lambda: defaultdict(Decimal))
-    for role in ["books", "return"]:
+    for role in ["books", right_role]:
         for r in tables[role]:
             partition = "|".join(
                 [r["registration"].upper(), r["period"], r["component"].upper(), r["currency"]]
             )
             totals[partition][role + "_tax"] += amount(r, "tax")
     return {
+        **({"invoice_evidence_scope": {"direction": data.invoice_direction, "filing_status": "NOT_ASSESSED_BY_INVOICE_COMPARISON", "irp_authenticity": "NOT_VERIFIED"}} if right_role == "invoices" else {}),
         "rows": rows,
         "totals": {
             k: {s: str(v) for s, v in values.items()} for k, values in sorted(totals.items())
@@ -338,7 +339,7 @@ def tax_documents(data, tables):
             "Canonical document comparison only; native government export adapters are not qualified",
             "No input-credit eligibility, reverse-charge liability, interest or filing conclusion is calculated",
             "UAE VAT returns contain aggregates; do not represent them as a supplier-matching portal",
-            "Canonical return documents require independently prepared document schedules",
+            "Invoice evidence does not establish filed GST returns, IRP authenticity or complete book population" if right_role == "invoices" else "Canonical return documents require independently prepared document schedules",
         ],
     }
 
@@ -803,6 +804,11 @@ def calculate(data, country, sources):
     for role, table in sources.items():
         if table.get("parser_version") == "bank-clearance-carryforward/1" and (data.workflow != "bank-subsequent-clearance" or role != "outstanding"):
             raise ValueError("Carried bank residuals can establish only the outstanding role of subsequent clearance")
+        if table.get("native_format") == "india-inv01-json":
+            if (data.workflow, role) not in {("india-gst", "books"), ("india-invoice-register", "invoices")}:
+                raise ValueError("INV-01 supplies invoice evidence, not a filed GST return; use invoices in the register comparison or invoice-supported books against independent return evidence")
+            if data.workflow == "india-invoice-register" and table.get("native_metadata", {}).get("direction") != data.invoice_direction:
+                raise ValueError("Native invoice direction differs from the declared purchase/sale comparison")
         has_arrears = table.get("native_format") == "india-epfo-arrear-ecr-v2" or (table.get("table_type") == "obligations" and any(row.get("population") == "arrears" for row in table["rows"]))
         if has_arrears and not data.arrear_only:
             raise ValueError("Select explicit arrear-only comparison scope; arrears cannot stand in for a complete monthly return")
@@ -856,6 +862,8 @@ def calculate(data, country, sources):
                 raise ValueError(
                     "BRS scope and balance controls must agree to the original native bank statement"
                 )
+    if data.workflow == "india-gst" and sources["return"].get("native_format") == "india-gstr2b-json" and sources["books"].get("native_format") == "india-inv01-json" and sources["books"].get("native_metadata", {}).get("direction") != "purchase":
+        raise ValueError("A sales invoice cannot establish purchase books against an inward GSTR-2B source")
     tables = {role: source["rows"] for role, source in sources.items()}
     with localcontext() as arithmetic:
         arithmetic.prec = 80
@@ -887,6 +895,8 @@ def calculate(data, country, sources):
             result = DILIGENCE_CALCULATORS[data.workflow](data, tables, country)
         elif data.workflow == "bank-brs":
             result = bank(data, tables)
+        elif data.workflow == "india-invoice-register":
+            result = tax_documents(data, tables, "invoices")
         elif data.workflow in {"uae-vat", "india-gst"}:
             result = tax_documents(data, tables)
         elif data.workflow == "uae-vat-return":

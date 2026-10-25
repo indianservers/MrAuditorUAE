@@ -122,6 +122,7 @@ type Choice = {
   table_type?: string;
   native_format?: string;
   allowed_source_roles?: string[] | null;
+  invoice_direction?: string | null;
   inventory_controls_verified?: boolean;
   obligation_populations?: string[] | null;
   table_kind?: string;
@@ -161,6 +162,7 @@ type Result = {
     title: string;
     review_status: string;
     obligation_population_scope?: string;
+    invoice_evidence_scope?: { direction: string; filing_status: string };
     execution_mode?: string;
     language_model_dependency?: boolean;
     blocked?: boolean;
@@ -310,6 +312,7 @@ export function CountryWorkflows({
     !!selected,
   );
   const [workflow, setWorkflow] = useState("bank-brs");
+  const [invoiceDirection, setInvoiceDirection] = useState("");
   const [invoiceFaceAmounts, setInvoiceFaceAmounts] = useState(false);
   const [withholdingRole, setWithholdingRole] = useState("");
   const [tableType, setTableType] = useState("transactions");
@@ -645,9 +648,12 @@ export function CountryWorkflows({
                           "difference",
                           "state",
                         ].filter((key) => allColumns.includes(key))
-                      : ["india-gst", "uae-vat"].includes(
-                            body?.workflow || "",
-                          ) && !showRuleProvenance
+                      : [
+                            "india-gst",
+                            "uae-vat",
+                            "india-invoice-register",
+                          ].includes(body?.workflow || "") &&
+                          !showRuleProvenance
                         ? [
                             "counterparty",
                             "reference",
@@ -656,6 +662,7 @@ export function CountryWorkflows({
                             "currency",
                             "books_tax",
                             "return_tax",
+                            "invoices_tax",
                             "tax_difference",
                             "net_difference",
                             "state",
@@ -1004,6 +1011,9 @@ export function CountryWorkflows({
           ].includes(workflow)
             ? { arrear_only: arrearsOnly }
             : {}),
+          ...(workflow === "india-invoice-register"
+            ? { invoice_direction: invoiceDirection }
+            : {}),
           source_ids: sources,
           as_of: asOf,
           title: label,
@@ -1011,6 +1021,7 @@ export function CountryWorkflows({
           currency: [
             "india-payroll-rules",
             "india-gst",
+            "india-invoice-register",
             "india-withholding",
             "india-withholding-liability",
             "india-withholding-credit",
@@ -2360,6 +2371,7 @@ export function CountryWorkflows({
                   onChange={(e) => {
                     setWorkflow(e.target.value);
                     setInvoiceFaceAmounts(false);
+                    setInvoiceDirection("");
                     setWithholdingRole("");
                     setArrearsOnly(false);
                     setVATLayout("custom");
@@ -2552,6 +2564,11 @@ export function CountryWorkflows({
                           r.kind === "workflow-source" &&
                           r.table_type === type &&
                           r.freshness === "CURRENT" &&
+                          (r.native_format !== "india-inv01-json" ||
+                            (workflow === "india-invoice-register"
+                              ? role === "invoices"
+                              : workflow === "india-gst" &&
+                                role === "books")) &&
                           (workflow !== "uae-vat-return" ||
                             vatLayout !== "emirate-20" ||
                             r.review_status === "REVIEWED") &&
@@ -2565,11 +2582,15 @@ export function CountryWorkflows({
                             !stockControlled ||
                             (r.review_status === "REVIEWED" &&
                               r.inventory_controls_verified === true)) &&
+                          (workflow !== "india-invoice-register" ||
+                            r.native_format !== "india-inv01-json" ||
+                            r.invoice_direction === invoiceDirection) &&
                           (!r.allowed_source_roles ||
                             r.allowed_source_roles.includes(role)) &&
                           (![
                             "obligation-bank-allocations",
                             "payroll-ledger-rollforward",
+                            "india-invoice-register",
                             "uae-pension-review",
                           ].includes(workflow) ||
                             r.review_status === "REVIEWED") &&
@@ -2602,6 +2623,29 @@ export function CountryWorkflows({
                     )}
                 </label>
               ))}
+              {workflow === "india-invoice-register" && (
+                <>
+                  <label>
+                    Invoice comparison direction
+                    <select
+                      value={invoiceDirection}
+                      onChange={(event) => {
+                        setInvoiceDirection(event.target.value);
+                        setSources({});
+                      }}
+                    >
+                      <option value="">Select purchase or sale</option>
+                      <option value="purchase">Purchase invoices</option>
+                      <option value="sale">Sales invoices</option>
+                    </select>
+                  </label>
+                  <p>
+                    Compare independently reviewed register and invoice
+                    evidence. INV-01 files supply the invoices role; they do not
+                    establish filed GST returns or IRP authenticity.
+                  </p>
+                </>
+              )}
               {workflow === "uae-vat-return" && (
                 <>
                   <label>
@@ -3029,6 +3073,15 @@ export function CountryWorkflows({
       {detail.data && body && (
         <section className="main-panel" style={{ padding: 20, marginTop: 16 }}>
           <h2>{body.title}</h2>
+          {body.invoice_evidence_scope && (
+            <p role="note">
+              {body.invoice_evidence_scope.direction === "purchase"
+                ? "Purchase"
+                : "Sales"}{" "}
+              register compared with invoice evidence. This comparison does not
+              establish GST return filing or IRP authenticity.
+            </p>
+          )}
           {body.box_comparison_scope?.mode === "SELECTED_REQUIRED_BOXES" && (
             <section aria-label="Selected VAT201 comparison scope">
               <p>
@@ -3474,9 +3527,12 @@ export function CountryWorkflows({
                 onCreated={setSelected}
               />
             )}
-          {["india-gst", "uae-vat", "uae-vat-return"].includes(
-            body.workflow || "",
-          ) && (
+          {[
+            "india-gst",
+            "uae-vat",
+            "uae-vat-return",
+            "india-invoice-register",
+          ].includes(body.workflow || "") && (
             <label style={{ flexDirection: "row", alignItems: "center" }}>
               <input
                 type="checkbox"
@@ -3923,6 +3979,7 @@ export function CountryWorkflows({
               compactArrearResult ||
               compactBenefit ||
               body.workflow === "payroll-ledger-rollforward" ||
+              body.workflow === "india-invoice-register" ||
               compactBankClearance ||
               compactDues ||
               compactCredit ||

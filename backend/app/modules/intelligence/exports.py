@@ -119,6 +119,7 @@ def render(event, format):
             "assessment_contract_version",
             "box_comparison_scope",
             "vat201_layout",
+            "invoice_evidence_scope",
             "excluded_box_controls",
             "included_box_controls",
         }

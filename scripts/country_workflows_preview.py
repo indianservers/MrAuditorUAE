@@ -757,6 +757,10 @@ async def main():
                 "source_ids": reviewed_ids,
                 "movement_evidence": originals["movements"]["body"]["evidence_version_id"],
                 "movement_controls": quantity_controls["movements"]}
+        from country_invoice_register_fixture import prepare as prepare_invoice_register
+
+        invoice_register = await prepare_invoice_register(client, h, india, supporting_reviewer, native_file)
+
         from tests.qa_crud.test_vat_emirates import (
             prepare_sources as prepare_emirate_sources,
         )
@@ -834,6 +838,7 @@ async def main():
                     "india_ecr_evidence": ecr_evidence,
                     "india_gstr2b_evidence": gstr2b_evidence,
                     "india_gstr2b_books": gstr2b_books["id"],
+                    "invoice_register": invoice_register,
                     "emirate_vat": {"components": emirate_components, "filed": emirate_filed},
                     "payroll_ledger": payroll_ledger,
                     "bank_carryforward": bank_carryforward,

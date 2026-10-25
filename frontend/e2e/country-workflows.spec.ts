@@ -4629,3 +4629,115 @@ test("UAE VAT201 retains seven emirates and exposes offsetting geographic differ
     await context.close();
   }
 });
+
+test("India purchase and sales invoices compare with registers without becoming filed returns", async ({
+  page,
+}) => {
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill("admin@example.com");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("test-strong-password-123");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+  const eid = fixture.india_engagement;
+  for (const direction of ["purchase", "sale"] as const) {
+    const input = fixture.invoice_register[direction];
+    const opposite =
+      fixture.invoice_register[direction === "purchase" ? "sale" : "purchase"];
+    await page.goto(`/intelligence/${eid}/country-workflow`);
+    await page
+      .getByLabel("Workflow", { exact: true })
+      .selectOption("india-invoice-register");
+    await page
+      .getByLabel("Invoice comparison direction")
+      .selectOption(direction);
+    await expect(
+      page
+        .getByLabel("books source", { exact: true })
+        .locator(`option[value="${input.invoices}"]`),
+    ).toHaveCount(0);
+    await expect(
+      page
+        .getByLabel("invoices source", { exact: true })
+        .locator(`option[value="${opposite.invoices}"]`),
+    ).toHaveCount(0);
+    const title = `SYNTHETIC ${direction} invoice register ${Date.now()}`;
+    await page.getByLabel("Schedule title", { exact: true }).fill(title);
+    await page
+      .getByLabel("Reconciliation date", { exact: true })
+      .fill("2026-06-30");
+    await page
+      .getByLabel("books source", { exact: true })
+      .selectOption(input.books);
+    await page
+      .getByLabel("invoices source", { exact: true })
+      .selectOption(input.invoices);
+    await page
+      .getByLabel("Scope and source rationale", { exact: true })
+      .fill(
+        "Independent register compared with original invoice facts for the explicit direction; neither file establishes GST return filing or IRP authenticity",
+      );
+    await saveScreenshot(
+      `${shots}/india-${direction}-invoice-register-scope.png`,
+      () =>
+        page
+          .getByLabel("Invoice comparison direction")
+          .locator("..")
+          .locator("..")
+          .screenshot(),
+    );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const saved = page
+      .getByLabel("Saved source or result")
+      .locator("option")
+      .filter({ hasText: title });
+    await expect(saved).toHaveCount(1, { timeout: 120000 });
+    await page
+      .getByLabel("Saved source or result")
+      .selectOption((await saved.getAttribute("value"))!);
+    const panel = page
+      .getByRole("heading", { name: title, exact: true })
+      .locator("..");
+    await expect(
+      panel.getByText("0 exceptions", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      panel.getByRole("cell", { name: "MATCHED", exact: true }),
+    ).toHaveCount(5);
+    await expect(
+      panel.getByRole("columnheader", { name: "invoices tax", exact: true }),
+    ).toBeVisible();
+    await expect(
+      panel.getByRole("columnheader", { name: "return tax", exact: true }),
+    ).toHaveCount(0);
+    await expect(panel.getByRole("note")).toContainText(
+      "does not establish GST return filing",
+    );
+    for (const notice of await page
+      .getByRole("button", { name: "Dismiss notification", exact: true })
+      .all())
+      await notice.click();
+    await saveScreenshot(
+      `${shots}/india-${direction}-invoice-register-comparison.png`,
+      () => panel.screenshot(),
+    );
+  }
+  await page.getByLabel("Workflow", { exact: true }).selectOption("india-gst");
+  for (const direction of ["purchase", "sale"] as const)
+    await expect(
+      page
+        .getByLabel("return source", { exact: true })
+        .locator(
+          `option[value="${fixture.invoice_register[direction].invoices}"]`,
+        ),
+    ).toHaveCount(0);
+  await page.goto(`/intelligence/${fixture.uae_engagement}/country-workflow`);
+  await expect(
+    page
+      .getByLabel("Workflow", { exact: true })
+      .locator('option[value="india-invoice-register"]'),
+  ).toHaveCount(0);
+});

@@ -37,6 +37,11 @@ WORKFLOWS = {
         ["AE"],
         {"books": "tax-documents", "return": "tax-documents"},
     ),
+    "india-invoice-register": (
+        "India invoice evidence to purchase/sales register",
+        ["IN"],
+        {"books": "tax-documents", "invoices": "tax-documents"},
+    ),
     "india-gst": (
         "India GST document reconciliation",
         ["IN"],

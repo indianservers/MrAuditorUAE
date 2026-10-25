@@ -443,6 +443,7 @@ class WorkflowInput(Strict):
         "uae-vat",
         "uae-vat-return",
         "india-gst",
+        "india-invoice-register",
         "payroll-settlement",
         "statutory-dues",
         "india-withholding",
@@ -476,6 +477,7 @@ class WorkflowInput(Strict):
     date_tolerance: int = Field(default=0, ge=0, le=90)
     stale_days: int = Field(default=90, ge=1, le=3650)
     required_checks: list[Identifier] = Field(default_factory=list, max_length=100)
+    invoice_direction: Literal["purchase", "sale"] | None = None
     vat201_layout: VAT201Layout | Literal["custom"] = "custom"
     required_boxes: list[Identifier] = Field(default_factory=list, max_length=50)
     restrict_to_required_boxes: bool = False
@@ -484,6 +486,11 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
+        if self.workflow == "india-invoice-register":
+            if self.invoice_direction is None:
+                raise ValueError("Select purchase or sale for the invoice evidence comparison")
+        elif self.invoice_direction is not None:
+            raise ValueError("Invoice direction applies only to invoice evidence/register comparison")
         if self.vat201_layout != "custom":
             if self.workflow != "uae-vat-return" or self.restrict_to_required_boxes or set(self.required_boxes) != set(LAYOUTS[self.vat201_layout]["boxes"]):
                 raise ValueError("A selected VAT201 layout requires all its explicit boxes without selected-box exclusion")

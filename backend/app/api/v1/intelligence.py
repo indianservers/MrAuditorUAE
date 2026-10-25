@@ -594,6 +594,7 @@ async def events(
                 "table_type": row.body.get("table_type"),
                 "native_format": row.body.get("native_format"),
                 "allowed_source_roles": row.body.get("allowed_source_roles"),
+                "invoice_direction": row.body.get("native_metadata", {}).get("direction") if row.body.get("native_format") == "india-inv01-json" else None,
                 "inventory_controls_verified": row.body.get("inventory_controls_verified") is True,
                 "obligation_populations": sorted({item.get("population", "unspecified") for item in row.body.get("rows", [])}) if row.body.get("table_type") == "obligations" else None,
                 "evidence_version_id": row.body.get("evidence_version_id"),
