@@ -161,6 +161,8 @@ def _parse_csv(content, data, defaults=None):
         "expense-claims",
         "benefit-employees",
         "payroll-bases",
+        "pension-bases",
+        "pension-reported",
         "trade-lines",
         "excise-movements",
         "excise-returns",

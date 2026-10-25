@@ -9,6 +9,7 @@ from app.modules.country_workflows.audit_schemas import AUDIT_ROW_TYPES
 from app.modules.country_workflows.diligence_schemas import DILIGENCE_ROW_TYPES
 from app.modules.country_workflows.operations_schemas import OPERATION_ROW_TYPES
 from app.modules.country_workflows.payroll_schemas import PAYROLL_ROW_TYPES
+from app.modules.country_workflows.pension_schemas import PENSION_ROW_TYPES
 from app.modules.country_workflows.sector_schemas import SECTOR_ROW_TYPES
 from app.modules.country_workflows.withholding_schemas import WithholdingRecord, WithholdingRole
 from app.modules.jurisdictions.profiles import Strict
@@ -110,6 +111,7 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
     "withholding-records": WithholdingRecord,
     **OPERATION_ROW_TYPES,
     **PAYROLL_ROW_TYPES,
+    **PENSION_ROW_TYPES,
     **AUDIT_ROW_TYPES,
     **DILIGENCE_ROW_TYPES,
     **SECTOR_ROW_TYPES,
@@ -167,6 +169,9 @@ class SourceInput(Strict):
         "credit-applications",
         "cash-payments",
         "item-allocations",
+        "pension-bases",
+        "pension-rules",
+        "pension-reported",
         "payroll-bases",
         "payroll-rules",
         "transactions",
@@ -320,6 +325,7 @@ class WorkflowInput(Strict):
         "credit-note-applications",
         "open-item-allocations",
         "india-payroll-rules",
+        "uae-pension-review",
         "subledger-control",
         "subsequent-settlements",
         "balance-confirmations",

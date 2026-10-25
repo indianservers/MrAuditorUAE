@@ -2,6 +2,65 @@
 
 Implementation checkpoint: 25 October 2026. These additions extend the existing evidence, intelligence job, immutable event, review and lineage infrastructure.
 
+## UAE pension contributions
+
+`uae-pension-review` adds separate assessed salary bases, retained-document rule
+inputs and authority-reported contributions. It reuses canonical CSV preparation,
+row/currency controls, private evidence verification, immutable intelligence jobs,
+independent source/result review, source-change freshness and XLSX export. All
+three sources must be independently reviewed before calculation. India engagements
+cannot prepare these pension sources or run the UAE workflow.
+
+Each row declares its pension authority, scheme, membership cohort, nationality,
+pension country, employment sector and jurisdiction. No authority or law is chosen
+from an employment start date. A salary-basis reference and membership-continuity
+reference are required. Salary definitions, reference months, partial-month
+treatment and foreign-currency conversion must be assessed before supplying an
+AED basis; this comparison does not derive those assessments from gross payroll.
+
+Rules supply explicit rates or fixed amounts, salary caps, minimum supported bases,
+effective dates and a fils-rounding method. No statutory rate or ceiling is seeded.
+An assessed salary below a reviewed minimum blocks calculation rather than being
+silently increased. A rule must cover the entire wage month. An overlapping
+partial-month amendment blocks the old whole-month calculation; overlapping
+whole-month rules remain ambiguous. Contributions retain unrounded values,
+rounded gross amounts, rule versions and document hashes.
+
+Employee, employer and government components remain separate. The optional
+`employer-minus-government` formula subtracts only separately resolved government
+support for the exact person, employer registration, wage month and pension scope.
+Missing support is unresolved, never zero. Explicitly assessed ineligible support
+can resolve to zero under its reviewed rule. Support above the employer's gross
+contribution blocks calculation. Totals sum employee, **net employer** and
+government components; they are not the employer's bank-payment amount.
+
+The three `sample-inputs/SYNTHETIC-pension-*.csv` files use fictional arithmetic
+and authority identifiers. Their controls are AED 30,000.03 for the three assessed
+basis rows and AED 2,500.00 for reported contributions. The rule CSV deliberately
+omits its document ID/hash: select a retained clean rule document during source
+preparation, or provide matching original document references yourself. These
+examples are not GPSSA, ADPF, Sharjah or GCC legal packs.
+
+`pension-full-unit-results.xml`, `pension-integration-results.xml` and
+`pension-frontend-results.xml` record 1,324 passing backend unit tests (four
+opt-in skips), six passing API tests and 128 passing frontend tests. API checks
+exercise independent sources and final review, exact support arithmetic, export,
+document-hash rejection, India exclusion and original-document replacement
+staleness. Scanner and broker dispatch are explicit integration doubles; database,
+API, private storage and job processing are real. Scoped type/lint checks and the
+production frontend build pass. `pension-browser-results.txt` records the new
+real Redis/Celery browser case passing in 12.5 seconds, including an XLSX export.
+The screenshot `screenshots/native-sources/uae-pension-contribution-review.png`
+was visually inspected for the three components, visible scope and readable
+amounts. The earlier complete 14-test campaign predates this new workflow; this
+focused receipt does not silently replace its full-suite evidence.
+
+Published pension profiles in the firm regulatory library, legally qualified
+authority/cohort packs, native pension-authority statement readers, salary-basis
+derivation, filing/payment adapters and consented client pilots remain open.
+This increment supports reviewed canonical contribution comparisons and does not
+complete those remaining roadmap requirements.
+
 ## Recorded rule fixture validation
 
 `VALIDATED` metadata alone no longer qualifies a rule for approval/publication.

@@ -12,6 +12,7 @@ from app.modules.country_workflows.catalogue import WORKFLOWS, country_guidance
 from app.modules.country_workflows.diligence_calculations import DILIGENCE_CALCULATORS
 from app.modules.country_workflows.operations import OPERATION_CALCULATORS
 from app.modules.country_workflows.payroll_calculations import PAYROLL_CALCULATORS
+from app.modules.country_workflows.pension_calculations import PENSION_CALCULATORS
 from app.modules.country_workflows.practice_calculations import PRACTICE_CALCULATORS
 from app.modules.country_workflows.sector_calculations import SECTOR_CALCULATORS
 from app.modules.country_workflows.withholding_calculations import withholding
@@ -825,6 +826,8 @@ def calculate(data, country, sources):
             result = withholding(data, tables)
         elif data.workflow in OPERATION_CALCULATORS:
             result = OPERATION_CALCULATORS[data.workflow](data, tables)
+        elif data.workflow in PENSION_CALCULATORS:
+            result = PENSION_CALCULATORS[data.workflow](data, tables)
         elif data.workflow in PAYROLL_CALCULATORS:
             result = PAYROLL_CALCULATORS[data.workflow](data, tables)
         elif data.workflow in AUDIT_CALCULATORS:
@@ -862,6 +865,7 @@ def calculate(data, country, sources):
             *SECTOR_CALCULATORS,
             *DILIGENCE_CALCULATORS,
             *PAYROLL_CALCULATORS,
+            *PENSION_CALCULATORS,
         }
         else "country-workflows-1",
         "as_of": data.as_of.isoformat(),

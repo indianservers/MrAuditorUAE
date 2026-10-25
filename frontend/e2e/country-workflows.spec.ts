@@ -8,6 +8,108 @@ const fixture = JSON.parse(
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
 
+test("UAE pension compares employee net employer and government support through the worker", async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on("pageerror", (error) => errors.push(error.message));
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill("admin@example.com");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("test-strong-password-123");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+  const eid = fixture.uae_engagement;
+  await page.goto(`/intelligence/${eid}/country-workflow`);
+  await page
+    .getByLabel("Workflow", { exact: true })
+    .selectOption("uae-pension-review");
+  const title = `SYNTHETIC UAE pension contribution review ${Date.now()}`;
+  await page.getByLabel("Schedule title", { exact: true }).fill(title);
+  await page
+    .getByLabel("Reconciliation date", { exact: true })
+    .fill("2026-06-30");
+  await page
+    .getByLabel("Scope and source rationale")
+    .fill(
+      "Explicit synthetic authority and continuing-member cohort; independently reviewed contribution salary and rules",
+    );
+  for (const [role, identifier] of Object.entries(fixture.pension_sources))
+    await page
+      .getByLabel(`${role} source`, { exact: true })
+      .selectOption(String(identifier));
+  const submitted = page.waitForResponse(
+    (response) =>
+      response.url().includes(`/engagements/${eid}/jobs`) &&
+      response.request().method() === "POST",
+  );
+  await page
+    .getByRole("button", { name: "Queue calculation", exact: true })
+    .click();
+  const response = await submitted;
+  expect(response.status()).toBe(202);
+  const job = await response.json();
+  let result = "";
+  await expect
+    .poll(
+      async () => {
+        const status = await page.request.get(
+          `/api/backend/intelligence/engagements/${eid}/jobs/${job.id}`,
+          { headers: { "X-Tenant-ID": fixture.tenant } },
+        );
+        expect(status.status()).toBe(200);
+        const body = await status.json();
+        if (body.status === "failed")
+          throw new Error(JSON.stringify(body.error_details));
+        result = body.result_id || "";
+        return body.status;
+      },
+      { timeout: 45000 },
+    )
+    .toBe("completed");
+  const selector = page.getByLabel("Saved source or result");
+  await expect(selector.locator(`option[value="${result}"]`)).toHaveCount(1);
+  await selector.selectOption(result);
+  const panel = page
+    .getByRole("heading", { name: title, exact: true })
+    .locator("..");
+  await expect(
+    panel.getByText(/Expected contributions: AED 2500.00/),
+  ).toBeVisible();
+  const table = panel.getByRole("table");
+  await expect(
+    table.getByRole("cell", { name: "MATCHED", exact: true }),
+  ).toHaveCount(3);
+  await expect(
+    table.getByRole("cell", { name: "1500.00", exact: true }),
+  ).toHaveCount(2);
+  await expect(
+    table.getByRole("columnheader", { name: "authority", exact: true }),
+  ).toBeVisible();
+  for (const notice of await page
+    .getByRole("button", { name: "Dismiss notification", exact: true })
+    .all())
+    await notice.click();
+  await saveScreenshot(`${shots}/uae-pension-contribution-review.png`, () =>
+    panel.screenshot(),
+  );
+  await panel.getByLabel("Show rule provenance and source references").check();
+  await expect(
+    table.getByRole("columnheader", {
+      name: "government support",
+      exact: true,
+    }),
+  ).toBeVisible();
+  const exported = await page.request.get(
+    `/api/backend/intelligence/engagements/${eid}/events/${result}/export?format=xlsx`,
+    { headers: { "X-Tenant-ID": fixture.tenant } },
+  );
+  expect(exported.status()).toBe(200);
+  expect((await exported.body()).subarray(0, 2).toString()).toBe("PK");
+  expect(errors).toEqual([]);
+});
+
 test("published India payroll profiles feed reviewed PF and EPS calculations", async ({
   page,
   browser,

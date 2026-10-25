@@ -196,6 +196,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "parser_version": "committed-ledger-1",
         }, [*dependencies, receipt]
     if operation == "workflow-source":
+        if data.table_type.startswith("pension-") and package.country != "AE":
+            raise HTTPException(422, "Pension sources require a UAE engagement")
         evidence, receipt = await intelligence.evidence(db, ctx, eng, data.evidence_version_id)
         supporting = None
         supporting_contributors = set()
@@ -251,12 +253,12 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(422, "CSV mappings and delimiters apply only to CSV sources")
         if data.rule_document_version_id:
             if (
-                data.table_type not in {"payroll-rules", "benefit-rules", "withholding-records", "fx-rates"}
+                data.table_type not in {"payroll-rules", "pension-rules", "benefit-rules", "withholding-records", "fx-rates"}
                 or data.file_format != "canonical-csv"
             ):
                 raise HTTPException(
                     422,
-                    "A source document can be selected only for canonical payroll/benefit rules, withholding assessments or exchange rates",
+                    "A source document can be selected only for canonical payroll/pension/benefit rules, withholding assessments or exchange rates",
                 )
             rule_document, _ = await intelligence.evidence(
                 db, ctx, eng, data.rule_document_version_id
@@ -284,7 +286,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 return parse_native(path.read_bytes(), data, package.country, evidence.filename)
 
         result = await run_in_threadpool(load)
-        if data.table_type in {"payroll-rules", "benefit-rules", "fx-rates"}:
+        if data.table_type in {"payroll-rules", "pension-rules", "benefit-rules", "fx-rates"}:
             dependencies.extend(
                 await payroll_rule_documents(
                     db, ctx, eng, result["rows"], contributors=supporting_contributors,
@@ -342,6 +344,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             data.workflow != "uae-benefit-review" or role != "rules"
         ):
             raise HTTPException(422, "Published benefit profiles can feed only the UAE benefit rules role")
+        if data.workflow == "uae-pension-review" and source.body.get("review_status") != "REVIEWED":
+            raise HTTPException(409, "Independently review all pension bases, rules and reported sources before calculation")
         if data.workflow == "obligation-bank-allocations" and source.body.get("review_status") != "REVIEWED":
             raise HTTPException(409, "Independently review all obligation, reported, bank and allocation sources before settlement review")
         if source.body.get("parser_version") == "import-vat-box-bridge/1" and (data.workflow != "uae-vat-return" or role != "books"):
@@ -381,7 +385,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         from app.modules.country_workflows.payroll_source import verify as verify_payroll
 
         dependencies.extend(await verify_payroll(db, ctx, eng, sources, data, contributors))
-    elif data.workflow in {"india-payroll-rules", "uae-benefit-review"}:
+    elif data.workflow in {"india-payroll-rules", "uae-benefit-review", "uae-pension-review"}:
         dependencies.extend(
             await payroll_rule_documents(
                 db, ctx, eng, sources["rules"]["rows"], contributors=contributors

@@ -132,6 +132,16 @@ vi.mock("@/hooks/use-api", () => ({
                 },
               },
               {
+                id: "uae-pension-review",
+                title: "UAE pension contribution review",
+                available: state.country === "AE",
+                roles: {
+                  bases: "pension-bases",
+                  rules: "pension-rules",
+                  reported: "pension-reported",
+                },
+              },
+              {
                 id: "india-payroll-rules",
                 title: "India payroll contribution rules review",
                 available: state.country === "IN",
@@ -163,6 +173,7 @@ vi.mock("@/hooks/use-api", () => ({
               "withholding-records": { id: { required: true, type: "str" } },
               "benefit-rules": { id: { required: true, type: "str" } },
               "payroll-rules": { id: { required: true, type: "str" } },
+              "pension-rules": { id: { required: true, type: "str" } },
               obligations: {
                 id: { required: true, type: "str" },
                 amount: { required: true, type: "Decimal" },
@@ -196,6 +207,30 @@ vi.mock("@/hooks/use-api", () => ({
               : path.includes("/events?")
                 ? {
                     items: [
+                      ...[
+                        "pension-bases",
+                        "pension-rules",
+                        "pension-reported",
+                      ].flatMap((table_type) => [
+                        {
+                          id: table_type,
+                          kind: "workflow-source",
+                          table_type,
+                          label: `Reviewed ${table_type}`,
+                          freshness: "CURRENT",
+                          version: 1,
+                          review_status: "REVIEWED",
+                        },
+                        {
+                          id: `unreviewed-${table_type}`,
+                          kind: "workflow-source",
+                          table_type,
+                          label: `Unreviewed ${table_type}`,
+                          freshness: "CURRENT",
+                          version: 1,
+                          review_status: "UNVERIFIED",
+                        },
+                      ]),
                       {
                         id: "vat-books",
                         kind: "workflow-source",
@@ -435,9 +470,7 @@ describe("country workflows", () => {
     expect(
       screen.getByRole("columnheader", { name: "source amount" }),
     ).toBeVisible();
-    expect(
-      screen.getByRole("cell", { name: "-150" }),
-    ).toBeVisible();
+    expect(screen.getByRole("cell", { name: "-150" })).toBeVisible();
     expect(
       screen.queryByRole("columnheader", { name: "payment allocations" }),
     ).not.toBeInTheDocument();
@@ -1075,6 +1108,101 @@ describe("country workflows", () => {
       control_totals: { INR: "18" },
     });
   });
+  it("shows pension amounts in AED with the authority and membership cohort", () => {
+    state.result = {
+      id: "result",
+      kind: "country-workflow",
+      version: 1,
+      freshness: "CURRENT",
+      body: {
+        workflow: "uae-pension-review",
+        title: "Pension review",
+        currency: "AED",
+        review_status: "UNVERIFIED",
+        population_completeness: "UPLOADED_FILE_CONTROLS_ONLY",
+        expected_total: "1500.00",
+        reported_total: "1500.00",
+        expected_total_complete: true,
+        rows: [
+          {
+            id: "PENSION-1",
+            subject: "MEMBER",
+            component: "PENSION:EMPLOYER",
+            authority: "SYNTHETIC-AUTHORITY",
+            scheme: "SYNTHETIC-SCHEME",
+            membership_cohort: "CONTINUING-MEMBER",
+            expected_amount: "1500.00",
+            reported_amount: "1500.00",
+            state: "MATCHED",
+            rule_document_sha256: "f".repeat(64),
+          },
+        ],
+      },
+    };
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), {
+      target: { value: "result" },
+    });
+    expect(
+      screen.getByText(/Expected contributions: AED 1500.00/),
+    ).toBeVisible();
+    expect(
+      screen.getByRole("columnheader", { name: "authority" }),
+    ).toBeVisible();
+    expect(screen.getByText("CONTINUING-MEMBER")).toBeVisible();
+    expect(
+      screen.queryByRole("columnheader", { name: "rule document sha256" }),
+    ).not.toBeInTheDocument();
+    fireEvent.click(
+      screen.getByLabelText("Show rule provenance and source references"),
+    );
+    expect(
+      screen.getByRole("columnheader", { name: "rule document sha256" }),
+    ).toBeVisible();
+  });
+
+  it("queues AED pension review using only independently reviewed sources", async () => {
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Workflow"), {
+      target: { value: "uae-pension-review" },
+    });
+    for (const role of ["bases", "rules", "reported"])
+      expect(screen.getByLabelText(`${role} source`)).not.toHaveTextContent(
+        "Unreviewed",
+      );
+    for (const [label, value] of [
+      ["Schedule title", "Pension June comparison"],
+      ["Reconciliation date", "2026-06-30"],
+      ["bases source", "pension-bases"],
+      ["rules source", "pension-rules"],
+      ["reported source", "pension-reported"],
+      [
+        "Scope and source rationale",
+        "Reviewed pension salary, membership and authority assessment",
+      ],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+      workflow: "uae-pension-review",
+      currency: "AED",
+      source_ids: {
+        bases: "pension-bases",
+        rules: "pension-rules",
+        reported: "pension-reported",
+      },
+    });
+  });
+
+  it("does not offer UAE pension review for an India engagement", () => {
+    state.country = "IN";
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    expect(
+      screen.queryByRole("option", { name: "UAE pension contribution review" }),
+    ).not.toBeInTheDocument();
+  });
+
   it("shows payroll amounts first and reveals rule references on request", () => {
     state.result = {
       id: "result",
@@ -1084,6 +1212,7 @@ describe("country workflows", () => {
       body: {
         workflow: "india-payroll-rules",
         title: "Partial payroll expectation",
+        currency: "INR",
         review_status: "UNVERIFIED",
         population_completeness: "UPLOADED_FILE_CONTROLS_ONLY",
         expected_total: "1800",
@@ -1120,6 +1249,7 @@ describe("country workflows", () => {
   });
   it.each([
     ["payroll-rules", "Payroll"],
+    ["pension-rules", "Pension"],
     ["benefit-rules", "Benefit"],
   ])(
     "binds %s imports to a selected clean retained document",

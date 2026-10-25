@@ -674,6 +674,9 @@ async def main():
         from country_regulatory_fixture import prepare as prepare_regulatory
 
         regulatory_conversions = await prepare_regulatory(client, h, opts["client_id"], pdf_final_reviewer)
+        from country_pension_fixture import prepare as prepare_pension
+
+        pension_sources = await prepare_pension(client, h, eid, supporting_reviewer)
         if implementation_hash() != implementation:
             raise RuntimeError(
                 "Backend implementation changed during fixture preparation; prepare fresh fixtures before browser verification"
@@ -684,6 +687,7 @@ async def main():
                 {
                     "synthetic": True,
                     "regulatory_conversions": regulatory_conversions,
+                    "pension_sources": pension_sources,
                     "bank_clearance": clearance_fixtures,
                     "obligation_allocations": dues_fixtures,
                     "import_vat_sources": import_vat_sources,

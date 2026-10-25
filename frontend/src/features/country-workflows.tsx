@@ -122,6 +122,7 @@ type Result = {
   collection_totals?: Record<string, number>;
   body: {
     workflow?: string;
+    currency?: string;
     expected_total?: string;
     reported_total?: string;
     role_totals?: Record<
@@ -203,6 +204,8 @@ const moneyTables = [
   "bank-clearances",
   "withholding-records",
   "payroll-bases",
+  "pension-bases",
+  "pension-reported",
   "transactions",
   "tax-documents",
   "obligations",
@@ -528,12 +531,16 @@ export function CountryWorkflows({
                           "supporting_reported_open_amount",
                         ]
                     ).filter((key) => allColumns.includes(key))
-                  : body?.workflow === "india-payroll-rules" &&
-                      !showRuleProvenance
+                  : ["india-payroll-rules", "uae-pension-review"].includes(
+                        body?.workflow || "",
+                      ) && !showRuleProvenance
                     ? [
                         "subject",
                         "period",
                         "component",
+                        "authority",
+                        "scheme",
+                        "membership_cohort",
                         "currency",
                         "assessed_base",
                         "expected_amount",
@@ -673,6 +680,7 @@ export function CountryWorkflows({
               ...([
                 "fx-rates",
                 "payroll-rules",
+                "pension-rules",
                 "benefit-rules",
                 "withholding-records",
               ].includes(tableType) && ruleDocument
@@ -780,7 +788,9 @@ export function CountryWorkflows({
             "india-withholding-credit",
           ].includes(workflow)
             ? "INR"
-            : currency,
+            : workflow === "uae-pension-review"
+              ? "AED"
+              : currency,
           ...([
             "bank-subsequent-clearance",
             "subsequent-settlements",
@@ -1450,17 +1460,18 @@ export function CountryWorkflows({
                       )}
                     </>
                   )}
-                  {tableType === "payroll-bases" && (
+                  {["payroll-bases", "pension-bases"].includes(tableType) && (
                     <p>
                       Payroll base controls sum assessed bases across component
                       rows. They are not gross payroll totals. Record each
-                      membership or exemption decision and its evidence
-                      reference explicitly.
+                      authority, scheme, membership continuity, salary basis,
+                      exemption decision and its evidence reference explicitly.
                     </p>
                   )}
                   {[
                     "fx-rates",
                     "payroll-rules",
+                    "pension-rules",
                     "benefit-rules",
                     "withholding-records",
                   ].includes(tableType) && (
@@ -1470,7 +1481,7 @@ export function CountryWorkflows({
                           ? "Retained exchange-rate quote (optional shared document)"
                           : tableType === "withholding-records"
                             ? "Withholding assessment document (optional shared document)"
-                            : `${tableType === "benefit-rules" ? "Benefit" : "Payroll"} rule source document (optional shared document)`}
+                            : `${tableType === "benefit-rules" ? "Benefit" : tableType === "pension-rules" ? "Pension" : "Payroll"} rule source document (optional shared document)`}
                         <select
                           value={ruleDocument}
                           onChange={(e) => setRuleDocument(e.target.value)}
@@ -1869,7 +1880,10 @@ export function CountryWorkflows({
                           r.kind === "workflow-source" &&
                           r.table_type === type &&
                           r.freshness === "CURRENT" &&
-                          (workflow !== "obligation-bank-allocations" ||
+                          (![
+                            "obligation-bank-allocations",
+                            "uae-pension-review",
+                          ].includes(workflow) ||
                             r.review_status === "REVIEWED") &&
                           (!["uae-wps-sif", "india-epfo-ecr"].includes(
                             r.native_format || "",
@@ -2653,15 +2667,17 @@ export function CountryWorkflows({
               </table>
             </div>
           )}
-          {body.workflow === "india-payroll-rules" && (
+          {["india-payroll-rules", "uae-pension-review"].includes(
+            body.workflow || "",
+          ) && (
             <>
               <p>
                 {body.expected_total_complete === false
                   ? "Partial expected total"
                   : "Expected contributions"}
-                : INR {body.expected_total}. Reported contributions: INR{" "}
-                {body.reported_total}. Payment is not verified by this
-                comparison.
+                : {body.currency} {body.expected_total}. Reported contributions:{" "}
+                {body.currency} {body.reported_total}. Payment is not verified
+                by this comparison.
               </p>
               <label>
                 <input
