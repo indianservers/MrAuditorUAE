@@ -8,6 +8,7 @@ import { useScope } from "@/stores/workspace";
 import { Button, ErrorState, Status } from "@/components/ui/primitives";
 import { PageHeader } from "./shared";
 import { ContributionObligationSource } from "./contribution-obligation-source";
+import { InventoryEvidenceTable } from "./inventory-evidence-table";
 import { VATCompositionSource } from "./vat-composition-source";
 import {
   PublishedBenefitSource,
@@ -119,6 +120,7 @@ type Choice = {
   table_type?: string;
   native_format?: string;
   allowed_source_roles?: string[] | null;
+  inventory_controls_verified?: boolean;
   table_kind?: string;
   evidence_version_id?: string;
 };
@@ -160,6 +162,8 @@ type Result = {
     exception_count?: number;
     table_type?: string;
     rows: Record<string, unknown>[];
+    count_bridges?: Record<string, unknown>[];
+    inventory_quantity_controls?: Record<string, unknown>[];
     limitations?: string[];
     control_comparison?: Record<string, string>;
     allocation_controls?: Record<string, string>;
@@ -312,6 +316,11 @@ export function CountryWorkflows({
     sourceOrigin === "vat" && canUseVAT,
   );
   const [sourceFormat, setSourceFormat] = useState("canonical-csv");
+  const [inventoryControlsEnabled, setInventoryControlsEnabled] =
+    useState(false);
+  const [inventoryControls, setInventoryControls] = useState("[]");
+  const [stockControlled, setStockControlled] = useState(false);
+  const [stockCutoffAssessment, setStockCutoffAssessment] = useState("");
   const [customColumns, setCustomColumns] = useState(false);
   const [csvColumns, setCSVColumns] = useState<Record<string, string>>({});
   const [ignoredColumns, setIgnoredColumns] = useState("");
@@ -713,6 +722,10 @@ export function CountryWorkflows({
           : {
               evidence_version_id: evidence,
               file_format: sourceFormat,
+              ...(inventoryControlsEnabled &&
+              ["stock", "stock-movements"].includes(tableType)
+                ? { inventory_quantity_controls: JSON.parse(inventoryControls) }
+                : {}),
               ...(sourceFormat === "canonical-csv" && customColumns
                 ? {
                     column_mapping: Object.fromEntries(
@@ -857,6 +870,19 @@ export function CountryWorkflows({
             : workflow === "credit-note-applications"
               ? { allocation_basis: "pre_application_balances" }
               : {}),
+          ...(workflow === "inventory-count-bridge"
+            ? {
+                stock_bridge_mode: stockControlled
+                  ? "bidirectional-controlled"
+                  : "forward",
+                ...(stockControlled
+                  ? {
+                      review_through: reviewThrough,
+                      stock_cutoff_assessment: stockCutoffAssessment,
+                    }
+                  : {}),
+              }
+            : {}),
           source_ids: sources,
           as_of: asOf,
           title: label,
@@ -1992,6 +2018,79 @@ export function CountryWorkflows({
                       />
                     </label>
                   )}
+                  {["stock", "stock-movements"].includes(tableType) && (
+                    <fieldset>
+                      <legend>Inventory partition quantity controls</legend>
+                      <label
+                        style={{ flexDirection: "row", alignItems: "center" }}
+                      >
+                        <input
+                          type="checkbox"
+                          style={{ width: 16, height: 16 }}
+                          checked={inventoryControlsEnabled}
+                          onChange={(e) =>
+                            setInventoryControlsEnabled(e.target.checked)
+                          }
+                        />
+                        Declare independent inventory quantity controls
+                      </label>
+                      {inventoryControlsEnabled && (
+                        <>
+                          <p>
+                            Control every site, SKU, lot, UOM and currency
+                            separately. Declare row count and positive/negative
+                            quantities independently; a zero net movement is not
+                            a nil population. An explicitly nil source uses an
+                            empty control list and the nil rationale.
+                          </p>
+                          <label>
+                            Independent inventory partitions (JSON)
+                            <textarea
+                              style={{
+                                height: Math.min(
+                                  640,
+                                  Math.max(
+                                    320,
+                                    (inventoryControls.split("\n").length + 1) *
+                                      18,
+                                  ),
+                                ),
+                              }}
+                              value={inventoryControls}
+                              onChange={(e) =>
+                                setInventoryControls(e.target.value)
+                              }
+                              spellCheck={false}
+                            />
+                          </label>
+                          <Button
+                            onClick={() =>
+                              setInventoryControls(
+                                JSON.stringify(
+                                  [
+                                    {
+                                      site: "",
+                                      sku: "",
+                                      lot: "",
+                                      uom: "",
+                                      currency: "",
+                                      expected_rows: null,
+                                      positive_quantity: null,
+                                      negative_quantity: null,
+                                    },
+                                  ],
+                                  null,
+                                  2,
+                                ),
+                              )
+                            }
+                          >
+                            Insert inventory control format
+                          </Button>
+                        </>
+                      )}
+                    </fieldset>
+                  )}
                   {moneyTables.includes(tableType) && (
                     <label>
                       Independent totals by currency
@@ -2053,6 +2152,64 @@ export function CountryWorkflows({
                   ))}
                 </select>
               </label>
+              {workflow === "inventory-count-bridge" && (
+                <fieldset>
+                  <legend>Controlled inventory count-date bridge</legend>
+                  <label style={{ flexDirection: "row", alignItems: "center" }}>
+                    <input
+                      type="checkbox"
+                      style={{ width: 16, height: 16 }}
+                      checked={stockControlled}
+                      onChange={(e) => {
+                        setStockControlled(e.target.checked);
+                        setSources({});
+                      }}
+                    />
+                    Use controlled counts before or after reporting
+                  </label>
+                  {stockControlled && (
+                    <>
+                      <label>
+                        Inventory reporting currency
+                        <input
+                          value={currency}
+                          maxLength={3}
+                          onChange={(e) =>
+                            setCurrency(e.target.value.toUpperCase())
+                          }
+                        />
+                      </label>
+                      <label>
+                        Inventory evidence review through
+                        <input
+                          type="date"
+                          min={asOf}
+                          value={reviewThrough}
+                          onChange={(e) => setReviewThrough(e.target.value)}
+                        />
+                      </label>
+                      <label>
+                        Inventory day-end cutoff assessment
+                        <textarea
+                          style={{ height: 100 }}
+                          value={stockCutoffAssessment}
+                          onChange={(e) =>
+                            setStockCutoffAssessment(e.target.value)
+                          }
+                        />
+                      </label>
+                      <p>
+                        All three sources need independent review and partition
+                        quantity controls. Earlier counts add movements; later
+                        counts subtract movements. The earlier day-end is
+                        excluded and the later day-end included. No intraday
+                        cutoff, reporting-date condition or physical attendance
+                        is inferred.
+                      </p>
+                    </>
+                  )}
+                </fieldset>
+              )}
               <label>
                 Reconciliation date
                 <input
@@ -2130,6 +2287,10 @@ export function CountryWorkflows({
                           r.kind === "workflow-source" &&
                           r.table_type === type &&
                           r.freshness === "CURRENT" &&
+                          (workflow !== "inventory-count-bridge" ||
+                            !stockControlled ||
+                            (r.review_status === "REVIEWED" &&
+                              r.inventory_controls_verified === true)) &&
                           (!r.allowed_source_roles ||
                             r.allowed_source_roles.includes(role)) &&
                           (![
@@ -3059,6 +3220,31 @@ export function CountryWorkflows({
                 </div>
               ))}
             </dl>
+          )}
+          {body.inventory_quantity_controls && (
+            <InventoryEvidenceTable
+              key={selected + ":inventory-controls"}
+              prefix={prefix}
+              selected={selected}
+              initial={body.inventory_quantity_controls}
+              total={
+                detail.data.collection_totals?.inventory_quantity_controls ??
+                body.inventory_quantity_controls.length
+              }
+            />
+          )}
+          {body.count_bridges && (
+            <InventoryEvidenceTable
+              key={selected + ":count-bridges"}
+              prefix={prefix}
+              selected={selected}
+              initial={body.count_bridges}
+              total={
+                detail.data.collection_totals?.count_bridges ??
+                body.count_bridges.length
+              }
+              bridge
+            />
           )}
           {body.native_metadata && (
             <details>

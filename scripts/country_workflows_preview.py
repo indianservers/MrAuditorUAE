@@ -741,6 +741,22 @@ async def main():
 
         evp_evidence = await native_file(eid, SIF_FILENAME, SIF_EVP, "text/csv")
         evp_input = evp_options(evidence_version_id=evp_evidence).model_dump(mode="json")
+        from tests.qa_crud.test_inventory_controlled_bridge import (
+            retain as retain_inventory,
+        )
+
+        inventory_controls = {}
+        for country, engagement, currency in (("AE", eid, "AED"), ("IN", india, "INR")):
+            originals, _, quantity_controls = await retain_inventory(client, h, engagement, currency)
+            reviewed_ids = {}
+            for role in ("books", "counts"):
+                approved = await decision(client, supporting_reviewer[0], engagement, originals[role])
+                assert approved.status_code == 201, approved.text
+                reviewed_ids[role] = approved.json()["id"]
+            inventory_controls[country] = {"engagement": engagement, "currency": currency,
+                "source_ids": reviewed_ids,
+                "movement_evidence": originals["movements"]["body"]["evidence_version_id"],
+                "movement_controls": quantity_controls["movements"]}
         if implementation_hash() != implementation:
             raise RuntimeError(
                 "Backend implementation changed during fixture preparation; prepare fresh fixtures before browser verification"
@@ -793,6 +809,7 @@ async def main():
                     "india_ecr_evidence": ecr_evidence,
                     "india_gstr2b_evidence": gstr2b_evidence,
                     "india_gstr2b_books": gstr2b_books["id"],
+                    "inventory_controls": inventory_controls,
                     "wps_evp_input": evp_input,
                     "vat_composition_sources": [composed_import_approval.json()["id"], composed_other_approval.json()["id"]],
                     "gstr2b_bundle_input": gstr2b_bundle_input,

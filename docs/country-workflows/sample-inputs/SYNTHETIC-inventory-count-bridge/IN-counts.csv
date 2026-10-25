@@ -1,0 +1,3 @@
+id,site,sku,uom,currency,quantity,unit_cost,unit_nrv,ownership,condition,count_date,lot
+COUNT-A,WH-1,SKU-1,EA,INR,9,5,5,owned,good,2026-06-29,A
+COUNT-B,WH-1,SKU-1,EA,INR,23,5,5,owned,good,2026-07-02,B

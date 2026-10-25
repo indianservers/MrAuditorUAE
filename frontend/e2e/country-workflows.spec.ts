@@ -3811,3 +3811,189 @@ test("UAE WPS EVP preparation preserves variable-pay controls without duplicatin
     await context.close();
   }
 });
+
+test("UAE then India controlled inventory bridges earlier and later lot counts", async ({
+  page,
+  browser,
+}) => {
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+    viewport: { width: 1600, height: 1100 },
+  });
+  const reviewer = await context.newPage();
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_table_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    for (const country of ["AE", "IN"] as const) {
+      const input = fixture.inventory_controls[country];
+      const eid = input.engagement;
+      const sourceTitle = `SYNTHETIC ${country} inventory movements ${Date.now()}`;
+      await page.goto(`/intelligence/${eid}/workflow-source`);
+      await page
+        .getByLabel("Source table type")
+        .selectOption("stock-movements");
+      await page
+        .getByLabel("Schedule title", { exact: true })
+        .fill(sourceTitle);
+      await page
+        .getByLabel("Clean retained evidence")
+        .selectOption(input.movement_evidence);
+      await page.getByLabel("Expected data rows").fill("3");
+      await page
+        .getByLabel("Declare independent inventory quantity controls")
+        .check();
+      await page
+        .getByLabel("Independent inventory partitions (JSON)")
+        .fill(JSON.stringify(input.movement_controls, null, 2));
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-inventory-source-quantity-controls.png`,
+        () =>
+          page
+            .getByRole("group", {
+              name: "Inventory partition quantity controls",
+            })
+            .screenshot(),
+      );
+      await page
+        .getByRole("button", { name: "Queue calculation", exact: true })
+        .click();
+      const option = page
+        .getByLabel("Saved source or result")
+        .getByRole("option", { name: new RegExp(sourceTitle) });
+      await expect(option).toHaveCount(1);
+      const id = (await option.getAttribute("value"))!;
+      await reviewer.goto(`/intelligence/${eid}/country-workflow`);
+      await reviewer
+        .getByLabel("Saved source or result")
+        .selectOption(id, { timeout: 15000 });
+      await reviewer
+        .getByText(/^Inventory quantity controls .* 2 partitions$/)
+        .click({ timeout: 15000 });
+      const controls = reviewer.getByRole("table", {
+        name: "Inventory quantity controls",
+        exact: true,
+      });
+      await expect(controls.getByRole("row")).toHaveCount(3);
+      await expect(
+        controls.getByRole("cell", { name: "-1", exact: true }),
+      ).toBeVisible();
+      await reviewer
+        .getByLabel("Review / exception rationale")
+        .fill(
+          "Independent original movement population, lot controls, signed quantities and line references reviewed",
+        );
+      const approval = reviewer.waitForResponse(
+        (r) =>
+          r.url().includes(`/events/${id}/review`) &&
+          r.request().method() === "POST",
+      );
+      await reviewer
+        .getByRole("button", { name: "Independent approval", exact: true })
+        .click();
+      const response = await approval;
+      expect(response.status(), await response.text()).toBe(201);
+      const approved = await response.json();
+      await page.goto(`/intelligence/${eid}/country-workflow`);
+      await page
+        .getByLabel("Workflow", { exact: true })
+        .selectOption("inventory-count-bridge");
+      await page
+        .getByLabel("Use controlled counts before or after reporting")
+        .check();
+      const title = `SYNTHETIC ${country} controlled inventory bridge ${Date.now()}`;
+      for (const [label, value] of [
+        ["Schedule title", title],
+        ["Reconciliation date", "2026-06-30"],
+        ["Inventory reporting currency", input.currency],
+        ["Inventory evidence review through", "2026-07-03"],
+        [
+          "Inventory day-end cutoff assessment",
+          "Independent lot populations assessed at exclusive earlier day-end through inclusive later day-end; condition is not established by the quantity bridge",
+        ],
+        ["books source", input.source_ids.books],
+        ["counts source", input.source_ids.counts],
+        ["movements source", approved.id],
+        [
+          "Scope and source rationale",
+          "Independent reporting-date books and original earlier/later lot counts with every signed movement retained",
+        ],
+      ])
+        if (label.endsWith(" source"))
+          await page.getByLabel(label, { exact: true }).selectOption(value);
+        else await page.getByLabel(label, { exact: true }).fill(value);
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-inventory-bridge-scope.png`,
+        () =>
+          page
+            .getByRole("group", {
+              name: "Controlled inventory count-date bridge",
+            })
+            .screenshot(),
+      );
+      await page
+        .getByRole("button", { name: "Queue calculation", exact: true })
+        .click();
+      const result = page
+        .getByLabel("Saved source or result")
+        .getByRole("option", { name: new RegExp(title) });
+      await expect(result).toHaveCount(1);
+      const resultId = (await result.getAttribute("value"))!;
+      await page.getByLabel("Saved source or result").selectOption(resultId);
+      const panel = page
+        .getByRole("heading", { name: title, exact: true })
+        .locator("..");
+      await expect(
+        panel.getByText("0 exceptions", { exact: true }),
+      ).toBeVisible();
+      await expect(
+        panel.getByRole("cell", { name: "MATCHED", exact: true }),
+      ).toHaveCount(2);
+      await panel
+        .getByText(/^Inventory count-date bridges .* 2 partitions$/)
+        .click({ timeout: 15000 });
+      const bridges = panel.getByRole("table", {
+        name: "Inventory count-date bridges",
+        exact: true,
+      });
+      await expect(bridges.getByRole("row")).toHaveCount(3);
+      await expect(
+        bridges.getByRole("row").filter({ hasText: "ROLL_BACK" }),
+      ).toContainText("20");
+      await expect(
+        bridges.getByRole("row").filter({ hasText: "ROLL_FORWARD" }),
+      ).toContainText("10");
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-inventory-count-date-bridges.png`,
+        () => bridges.screenshot(),
+      );
+      const detail = await page.request.get(
+        `/api/backend/intelligence/engagements/${eid}/events/${resultId}`,
+        { headers: { "X-Tenant-ID": fixture.tenant } },
+      );
+      expect(detail.status()).toBe(200);
+      const body = (await detail.json()).body;
+      expect(body.count_bridges.map((row: { lot: string }) => row.lot)).toEqual(
+        ["A", "B"],
+      );
+      expect(
+        body.count_bridges.map(
+          (row: { reporting_date_quantity: string }) =>
+            row.reporting_date_quantity,
+        ),
+      ).toEqual(["10", "20"]);
+      expect(
+        body.rows.map((row: { currency: string }) => row.currency),
+      ).toEqual([input.currency, input.currency]);
+    }
+  } finally {
+    await context.close();
+  }
+});

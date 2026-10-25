@@ -652,7 +652,7 @@ def vat_return(data, tables):
 
 def inventory(data, tables):
     def key(r):
-        return (r["site"], r["sku"], r["uom"], r["currency"])
+        return (r["site"], r["sku"], r["uom"], r["currency"], r.get("lot", ""))
 
     books, counts = (unique(tables[role], key) for role in ["books", "count"])
     rows: list[dict[str, Any]] = []
@@ -705,6 +705,7 @@ def inventory(data, tables):
                 "id": f"stock-{index}",
                 "site": k[0],
                 "sku": k[1],
+                "lot": k[4],
                 "uom": k[2],
                 "currency": k[3],
                 "state": state,
@@ -789,6 +790,12 @@ def calculate(data, country, sources):
     if set(sources) != set(roles):
         raise ValueError("Select every required source role exactly once")
     for role, table in sources.items():
+        if data.workflow == "inventory-count-bridge" and data.stock_bridge_mode == "bidirectional-controlled":
+            from app.modules.country_workflows.inventory_controls import verify_quantity_controls
+
+            if table.get("inventory_controls_verified") is not True or table.get("inventory_quantity_controls") is None:
+                raise ValueError("Controlled inventory bridging requires independent partition quantity controls for every source")
+            verify_quantity_controls(table["rows"], table["inventory_quantity_controls"])
         if table.get("parser_version") == "uae-vat201-composition/1" and (data.workflow != "uae-vat-return" or role != "books"):
             raise ValueError("Composed VAT201 sources can establish only books, not filed-return evidence")
         if table.get("native_format") == "india-gstr2b-json" and (data.workflow != "india-gst" or role != "return"):

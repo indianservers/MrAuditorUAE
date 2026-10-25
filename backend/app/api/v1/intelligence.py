@@ -578,6 +578,7 @@ async def events(
                 "table_type": row.body.get("table_type"),
                 "native_format": row.body.get("native_format"),
                 "allowed_source_roles": row.body.get("allowed_source_roles"),
+                "inventory_controls_verified": row.body.get("inventory_controls_verified") is True,
                 "evidence_version_id": row.body.get("evidence_version_id"),
                 "table_kind": row.body.get("table_kind"),
                 "version": row.version,
@@ -612,6 +613,10 @@ async def event_details(
     limit: int = Query(100, ge=1, le=500),
     excluded_offset: int = Query(0, ge=0),
     excluded_limit: int = Query(100, ge=1, le=500),
+    inventory_offset: int = Query(0, ge=0),
+    inventory_limit: int = Query(100, ge=1, le=500),
+    bridge_offset: int = Query(0, ge=0),
+    bridge_limit: int = Query(100, ge=1, le=500),
 ):
     obj = await service.event(db, ctx, eid, identifier)
     body = dict(obj.body)
@@ -633,6 +638,10 @@ async def event_details(
     if isinstance(body.get("excluded_box_rows"), list):
         totals["excluded_box_rows"] = len(body["excluded_box_rows"])
         body["excluded_box_rows"] = body["excluded_box_rows"][excluded_offset : excluded_offset + excluded_limit]
+    for key, start, size in [("inventory_quantity_controls", inventory_offset, inventory_limit), ("count_bridges", bridge_offset, bridge_limit)]:
+        if isinstance(body.get(key), list):
+            totals[key] = len(body[key])
+            body[key] = body[key][start : start + size]
     return {
         **audit.serialize(obj),
         "body": body,

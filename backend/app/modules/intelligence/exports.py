@@ -117,6 +117,11 @@ def render(event, format):
         }
     }
 
+    if isinstance(body.get("count_bridges"), list):
+        summary["count_bridges"] = f"{len(body['count_bridges'])} bridge rows; complete original count details and individual movement links are retained in the XLSX Count date bridges and Inventory movement links sheets"
+    if isinstance(body.get("inventory_quantity_controls"), list):
+        summary["inventory_quantity_controls"] = f"{len(body['inventory_quantity_controls'])} controlled partitions; complete row and directional quantity controls are retained in the XLSX Inventory quantity controls sheet"
+
     def text(value):
         return (
             json.dumps(value, ensure_ascii=False, sort_keys=True)
@@ -173,6 +178,22 @@ def render(event, format):
         append(source, keys)
         for row in rows:
             append(source, [row.get(key) for key in keys])
+        if body.get("inventory_quantity_controls") is not None:
+            controls = workbook.create_sheet("Inventory quantity controls")
+            fields = ["site", "sku", "lot", "uom", "currency", "expected_rows", "positive_quantity", "negative_quantity"]
+            append(controls, fields)
+            for control in body["inventory_quantity_controls"]:
+                append(controls, [control.get(key) for key in fields])
+        if body.get("count_bridges") is not None:
+            bridges = workbook.create_sheet("Count date bridges")
+            links = workbook.create_sheet("Inventory movement links")
+            bridge_keys = list(dict.fromkeys(key for bridge in body["count_bridges"] for key in bridge if key != "movement_source_ids"))
+            append(bridges, bridge_keys)
+            append(links, ["count_source_id", "movement_source_id", "site", "sku", "lot", "uom", "currency"])
+            for bridge in body["count_bridges"]:
+                append(bridges, [bridge.get(key) for key in bridge_keys])
+                for movement_id in bridge.get("movement_source_ids", []):
+                    append(links, [bridge["count_source_id"], movement_id, *[bridge.get(key) for key in ["site", "sku", "lot", "uom", "currency"]]])
         if body.get("excluded_box_rows"):
             excluded = workbook.create_sheet("Excluded VAT boxes")
             excluded_keys = list(

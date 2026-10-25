@@ -1,0 +1,10 @@
+Command: npx playwright test --config playwright.country-workflows.config.ts --grep "UAE then India controlled inventory" --reporter=list
+Environment: owned disposable country-workflow database, API 58014, frontend 3010, Redis/Celery intelligence worker. Explicit scanner and seed broker doubles; synthetic retained inventory evidence only.
+
+Running 1 test using 1 worker
+
+(node:11904) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 e2e\country-workflows.spec.ts:3815:1 › UAE then India controlled inventory bridges earlier and later lot counts (38.0s)
+
+  1 passed (41.0s)

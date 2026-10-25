@@ -1,0 +1,22 @@
+[
+  {
+    "site": "WH-1",
+    "sku": "SKU-1",
+    "lot": "A",
+    "uom": "EA",
+    "currency": "INR",
+    "expected_rows": 1,
+    "positive_quantity": "10",
+    "negative_quantity": "0"
+  },
+  {
+    "site": "WH-1",
+    "sku": "SKU-1",
+    "lot": "B",
+    "uom": "EA",
+    "currency": "INR",
+    "expected_rows": 1,
+    "positive_quantity": "20",
+    "negative_quantity": "0"
+  }
+]

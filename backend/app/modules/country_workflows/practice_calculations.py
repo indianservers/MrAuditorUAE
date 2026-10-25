@@ -578,33 +578,44 @@ def assets(data, tables):
 
 def stock_bridge(data, tables):
     from app.modules.country_workflows.calculations import inventory
+    from app.modules.country_workflows.inventory_controls import stock_key
 
     def key(row):
-        return row["site"], row["sku"], row["uom"], row["currency"]
+        return stock_key(row)
 
+    controlled = data.stock_bridge_mode == "bidirectional-controlled"
+    through = data.review_through if controlled else data.as_of
     counts = {}
     for count in tables["counts"]:
-        if key(count) in counts or date.fromisoformat(count["count_date"]) > data.as_of:
+        if key(count) in counts or date.fromisoformat(count["count_date"]) > through:
             raise ValueError("Duplicate or future-dated stock count")
         counts[key(count)] = count
     if any(book["count_date"] != data.as_of.isoformat() for book in tables["books"]):
         raise ValueError("Stock books must contain reporting-date balances")
     movements = defaultdict(list)
+    seen = set()
     for movement in tables["movements"]:
         count = counts.get(key(movement))
-        if not count or not count["count_date"] < movement["date"] <= data.as_of.isoformat():
+        first, last = sorted([count["count_date"], data.as_of.isoformat()]) if count else (None, None)
+        if not count or not first < movement["date"] <= last:
             raise ValueError(
                 "Stock movement has no count or lies outside its count-to-reporting bridge"
             )
+        identity = (key(movement), movement["date"], movement["evidence_reference"], money(movement, "quantity"))
+        if controlled and identity in seen:
+            raise ValueError("Duplicate stock movement observation; retain distinct line evidence references")
+        seen.add(identity)
         movements[key(movement)].append(movement)
     derived = []
     bridges = []
     for k, count in counts.items():
         delta = sum((money(r, "quantity") for r in movements[k]), Decimal(0))
+        backward = count["count_date"] > data.as_of.isoformat()
+        signed_delta = -delta if backward else delta
         derived.append(
             {
                 **count,
-                "quantity": str(money(count, "quantity") + delta),
+                "quantity": str(money(count, "quantity") + signed_delta),
                 "count_date": data.as_of.isoformat(),
             }
         )
@@ -614,17 +625,31 @@ def stock_bridge(data, tables):
                 "original_count_date": count["count_date"],
                 "movement_source_ids": [r["id"] for r in movements[k]],
                 "movement_quantity": str(delta),
+                "site": count["site"], "sku": count["sku"], "lot": count.get("lot", ""),
+                "uom": count["uom"], "currency": count["currency"],
+                "direction": "ROLL_BACK" if backward else "ROLL_FORWARD" if count["count_date"] < data.as_of.isoformat() else "ALREADY_AT_REPORTING_DATE",
+                "original_count_quantity": count["quantity"],
+                "applied_movement_quantity": str(signed_delta),
+                "reporting_date_quantity": str(money(count, "quantity") + signed_delta),
+                "cutoff_basis": "EXCLUSIVE_EARLIER_DAY_END_THROUGH_INCLUSIVE_LATER_DAY_END",
+                "original_condition_date": count["count_date"],
+                "reporting_date_condition": "NOT_ESTABLISHED_BY_QUANTITY_BRIDGE",
             }
         )
     computed = inventory(data, {"books": tables["books"], "count": derived})
     return {
         **computed,
         "count_bridges": bridges,
+        "coverage": {**computed["coverage"], "basis": "Uploaded book monetary value supported by calculated reporting-date quantities from retained counts and movements; not reporting-date physical verification"},
         "calculation_engine": "country_workflows.inventory",
+        "count_bridge_mode": data.stock_bridge_mode,
+        "cutoff_assessment": data.stock_cutoff_assessment.strip(),
         "limitations": [
             *computed["limitations"],
             "Reporting-date counts are calculated from uploaded counts and movements; no reporting-date physical attendance is inferred",
             "Movement and count population completeness require independent control evidence",
+            "Controlled mode checks original row and directional quantity controls by site/SKU/lot/UOM/currency; incompatible units and lots never net",
+            "Original count condition is retained; quantity roll-forward or roll-back does not establish reporting-date condition or physical attendance",
         ],
     }
 

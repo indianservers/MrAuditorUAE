@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 from app.modules.country_workflows.audit_schemas import AUDIT_ROW_TYPES
 from app.modules.country_workflows.diligence_schemas import DILIGENCE_ROW_TYPES
 from app.modules.country_workflows.gstr2b_part_schemas import GSTR2BPart
+from app.modules.country_workflows.inventory_controls import InventoryQuantityControl
 from app.modules.country_workflows.operations_schemas import OPERATION_ROW_TYPES
 from app.modules.country_workflows.payroll_schemas import PAYROLL_ROW_TYPES
 from app.modules.country_workflows.pension_schemas import PENSION_ROW_TYPES
@@ -115,6 +116,7 @@ class Stock(Strict):
     id: Identifier
     site: Identifier
     sku: Identifier
+    lot: str = Field(default="", max_length=120)
     uom: Identifier
     currency: str = Field(pattern=r"^[A-Z]{3}$")
     quantity: Money
@@ -155,6 +157,7 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
 
 class SourceInput(Strict):
     evidence_version_id: uuid.UUID
+    inventory_quantity_controls: list[InventoryQuantityControl] | None = Field(default=None, max_length=5000)
     wps_variable_pay_count: int | None = Field(default=None, ge=0, le=5000, strict=True)
     wps_variable_pay_totals: dict[WPSVariableComponent, Money] = Field(default_factory=dict, max_length=7)
     gstr2b_parts: list[GSTR2BPart] = Field(default_factory=list, max_length=100)
@@ -256,6 +259,8 @@ class SourceInput(Strict):
 
     @model_validator(mode="after")
     def declared_nil(self):
+        if self.inventory_quantity_controls is not None and self.table_type not in {"stock", "stock-movements"}:
+            raise ValueError("Inventory quantity controls apply only to stock and stock-movement sources")
         if self.file_format == "uae-wps-sif-evp":
             if self.wps_variable_pay_count is None or set(self.wps_variable_pay_totals) != set(WPS_VARIABLE_FIELDS):
                 raise ValueError("Declare the EVP record count and every independent variable-pay component total")
@@ -429,6 +434,8 @@ class WorkflowInput(Strict):
     settlement_start: date | None = None
     bank_payment_sign: Literal["debit-negative", "debit-positive"] | None = None
     review_through: date | None = None
+    stock_bridge_mode: Literal["forward", "bidirectional-controlled"] = "forward"
+    stock_cutoff_assessment: str = Field(default="", max_length=2000)
     period_start: date | None = None
     tax_year_start: date | None = None
     title: str = Field(min_length=3, max_length=200)
@@ -450,6 +457,11 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
+        if self.stock_bridge_mode == "bidirectional-controlled":
+            if self.workflow != "inventory-count-bridge" or self.review_through is None or self.review_through < self.as_of or len(self.stock_cutoff_assessment.strip()) < 10:
+                raise ValueError("Controlled inventory bridging requires the inventory workflow, an ordered review-through date and explicit day-end cutoff assessment")
+        elif self.stock_cutoff_assessment:
+            raise ValueError("An inventory cutoff assessment requires explicit controlled bridge mode")
         if self.workflow == "obligation-bank-allocations":
             if (
                 not self.account

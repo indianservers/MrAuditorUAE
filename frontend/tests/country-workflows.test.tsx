@@ -60,6 +60,16 @@ vi.mock("@/hooks/use-api", () => ({
             ],
             items: [
               {
+                id: "inventory-count-bridge",
+                title: "Inventory count bridge",
+                available: true,
+                roles: {
+                  books: "stock",
+                  counts: "stock",
+                  movements: "stock-movements",
+                },
+              },
+              {
                 id: "obligation-bank-allocations",
                 title: "Obligation bank allocations",
                 available: true,
@@ -171,6 +181,15 @@ vi.mock("@/hooks/use-api", () => ({
               },
             ],
             source_contracts: {
+              stock: {
+                id: { required: true, type: "str" },
+                quantity: { required: true, type: "Decimal" },
+                lot: { required: false, type: "str" },
+              },
+              "stock-movements": {
+                id: { required: true, type: "str" },
+                quantity: { required: true, type: "Decimal" },
+              },
               "fx-rates": { id: { required: true, type: "str" } },
               "import-vat-lines": {
                 id: { required: true, type: "str" },
@@ -213,6 +232,27 @@ vi.mock("@/hooks/use-api", () => ({
               : path.includes("/events?")
                 ? {
                     items: [
+                      ...["books", "counts", "movements"].map((role) => ({
+                        id: "inventory-" + role,
+                        label: "Controlled inventory " + role,
+                        kind: "workflow-source",
+                        table_type:
+                          role === "movements" ? "stock-movements" : "stock",
+                        freshness: "CURRENT",
+                        version: 1,
+                        review_status: "REVIEWED",
+                        inventory_controls_verified: true,
+                      })),
+                      {
+                        id: "uncontrolled-stock",
+                        label: "Uncontrolled stock",
+                        kind: "workflow-source",
+                        table_type: "stock",
+                        freshness: "CURRENT",
+                        version: 1,
+                        review_status: "REVIEWED",
+                        inventory_controls_verified: false,
+                      },
                       ...[
                         "pension-bases",
                         "pension-rules",
@@ -1924,5 +1964,84 @@ it("queues the explicit WPS EVP profile with separate employee and component con
     wps_variable_pay_count: 1,
     wps_variable_pay_totals: totals,
     employer_registration: "1234567890123",
+  });
+});
+
+it("submits independently declared inventory partition controls with the retained CSV", async () => {
+  render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+  fireEvent.change(screen.getByLabelText("Source table type"), {
+    target: { value: "stock-movements" },
+  });
+  fireEvent.click(
+    screen.getByLabelText("Declare independent inventory quantity controls"),
+  );
+  const controls = [
+    {
+      site: "WH-1",
+      sku: "SKU-1",
+      lot: "A",
+      uom: "EA",
+      currency: "AED",
+      expected_rows: 2,
+      positive_quantity: "4",
+      negative_quantity: "-1",
+    },
+  ];
+  for (const [label, value] of [
+    ["Schedule title", "Inventory movements"],
+    ["Clean retained evidence", "clean"],
+    ["Expected data rows", "2"],
+    ["Independent inventory partitions (JSON)", JSON.stringify(controls)],
+  ])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+    table_type: "stock-movements",
+    inventory_quantity_controls: controls,
+    control_totals: {},
+  });
+});
+
+it("uses only reviewed quantity-controlled inventory sources in bidirectional mode", async () => {
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Workflow"), {
+    target: { value: "inventory-count-bridge" },
+  });
+  fireEvent.click(
+    screen.getByLabelText("Use controlled counts before or after reporting"),
+  );
+  expect(screen.getByLabelText("books source")).not.toHaveTextContent(
+    "Uncontrolled stock",
+  );
+  for (const [label, value] of [
+    ["Schedule title", "Reviewed inventory bridge"],
+    ["Reconciliation date", "2026-06-30"],
+    ["Inventory evidence review through", "2026-07-03"],
+    [
+      "Inventory day-end cutoff assessment",
+      "Independent exclusive earlier and inclusive later day-end movement populations assessed",
+    ],
+    ["books source", "inventory-books"],
+    ["counts source", "inventory-counts"],
+    ["movements source", "inventory-movements"],
+    [
+      "Scope and source rationale",
+      "Original retained count and complete signed movement populations by lot",
+    ],
+  ])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+    stock_bridge_mode: "bidirectional-controlled",
+    review_through: "2026-07-03",
+    stock_cutoff_assessment:
+      "Independent exclusive earlier and inclusive later day-end movement populations assessed",
+    source_ids: {
+      books: "inventory-books",
+      counts: "inventory-counts",
+      movements: "inventory-movements",
+    },
   });
 });

@@ -1,0 +1,3 @@
+id,site,sku,uom,currency,quantity,unit_cost,unit_nrv,ownership,condition,count_date,lot
+BOOK-A,WH-1,SKU-1,EA,AED,10,5,5,owned,good,2026-06-30,A
+BOOK-B,WH-1,SKU-1,EA,AED,20,5,5,owned,good,2026-06-30,B

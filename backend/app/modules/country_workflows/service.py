@@ -364,6 +364,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         source = await intelligence.event(db, ctx, eng.id, identifier, True)
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
+        if data.workflow == "inventory-count-bridge" and data.stock_bridge_mode == "bidirectional-controlled" and source.body.get("review_status") != "REVIEWED":
+            raise HTTPException(409, "Independently review every controlled inventory source before count-date bridging")
         if source.body.get("parser_version") == "india-gstr2b-json-parts-1" and source.body.get("review_status") != "REVIEWED":
             raise HTTPException(409, "Independently review the assembled GSTR-2B retrieval batch before matching")
         if source.body.get("parser_version") == "contribution-obligations/1":

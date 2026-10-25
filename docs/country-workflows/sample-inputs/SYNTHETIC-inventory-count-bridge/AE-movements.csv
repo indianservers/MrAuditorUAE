@@ -1,0 +1,4 @@
+id,site,sku,lot,uom,currency,date,quantity,evidence_reference
+M1,WH-1,SKU-1,A,EA,AED,2026-06-30,1,LINE-M1
+M2,WH-1,SKU-1,B,EA,AED,2026-07-01,4,LINE-M2
+M3,WH-1,SKU-1,B,EA,AED,2026-07-02,-1,LINE-M3

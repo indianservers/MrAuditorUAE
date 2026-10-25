@@ -1,0 +1,22 @@
+[
+  {
+    "site": "WH-1",
+    "sku": "SKU-1",
+    "lot": "A",
+    "uom": "EA",
+    "currency": "AED",
+    "expected_rows": 1,
+    "positive_quantity": "1",
+    "negative_quantity": "0"
+  },
+  {
+    "site": "WH-1",
+    "sku": "SKU-1",
+    "lot": "B",
+    "uom": "EA",
+    "currency": "AED",
+    "expected_rows": 2,
+    "positive_quantity": "4",
+    "negative_quantity": "-1"
+  }
+]

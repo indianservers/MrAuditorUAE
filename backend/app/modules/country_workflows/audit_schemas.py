@@ -286,6 +286,7 @@ class StockMovement(Strict):
     id: Identifier
     site: Identifier
     sku: Identifier
+    lot: str = Field(default="", max_length=120)
     uom: Identifier
     currency: Currency
     date: date
