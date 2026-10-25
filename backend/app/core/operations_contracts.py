@@ -11,6 +11,7 @@ from app.db.models.platform import Engagement, FinancialPeriod, LegalEntity
 from app.modules.accounting.models import ImportBatch, ImportSnapshot
 
 SUPPORTING_TABLE_PATHS = (
+    "core/read_projection.py",
     "core/operations_contracts.py",
     "modules/intelligence/service.py",
     "modules/intelligence/schemas.py",
@@ -271,9 +272,10 @@ async def current(db, ctx, obj):
         and obj.kind in {"workflow-source", "country-workflow"}
         else None
     )
-    eng = await db.get(Engagement, obj.engagement_id)
-    entity = await db.get(LegalEntity, eng.entity_id)
-    period = await db.get(FinancialPeriod, eng.period_id) if eng.period_id else None
+    from app.core.read_projection import read_once
+
+    eng, entity, period = await read_once(db, ctx, "operations-scope", str(obj.engagement_id),
+                                         lambda: _scope_objects(db, obj.engagement_id))
     return (
         implementation_current(saved, obj.kind, country_fingerprint=country_fingerprint)
         and saved.get("tenant_id") == str(ctx.tenant_id)
@@ -284,3 +286,10 @@ async def current(db, ctx, obj):
         and saved.get("period_end") == (str(period.end_date) if period else None)
         and saved.get("functional_currency") == entity.functional_currency
     )
+
+
+async def _scope_objects(db, engagement_id):
+    eng = await db.get(Engagement, engagement_id)
+    entity = await db.get(LegalEntity, eng.entity_id)
+    period = await db.get(FinancialPeriod, eng.period_id) if eng.period_id else None
+    return eng, entity, period

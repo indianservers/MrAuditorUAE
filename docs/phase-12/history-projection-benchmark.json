@@ -1,0 +1,123 @@
+{
+  "classification": "SYNTHETIC_LOCAL_HISTORY_BENCHMARK_NOT_A_PRODUCTION_SLA",
+  "measured_at": "2026-10-25T23:03:28.847868+00:00",
+  "implementation_sha256": "fd3946b5c6011a3080dcd94ad585a97e56a8fcf3f7981b7974c096ee86da1a8e",
+  "method": "Same complete JSON and implementation; request reuse off versus on; three alternating pairs per country",
+  "limits": "Owned local DB/ASGI/object fixtures, one actor, sequential requests; excludes network, concurrent polling, large tenants and production capacity",
+  "results": [
+    {
+      "country": "AE",
+      "items": 100,
+      "results_equal": true,
+      "payload_sha256": "81c49ce8c8facddd4d2d49a467e069cb5cae237ad1fbedcbcbb1f5140cc2b3cb",
+      "current": 50,
+      "summary": {
+        "reference": {
+          "median_seconds": 1.19381,
+          "queries": [
+            2561,
+            2561,
+            2561
+          ]
+        },
+        "reuse": {
+          "median_seconds": 0.219206,
+          "queries": [
+            350,
+            350,
+            350
+          ]
+        }
+      },
+      "samples": [
+        {
+          "mode": "reference",
+          "seconds": 1.813114,
+          "queries": 2561
+        },
+        {
+          "mode": "reuse",
+          "seconds": 0.22543,
+          "queries": 350
+        },
+        {
+          "mode": "reuse",
+          "seconds": 0.219206,
+          "queries": 350
+        },
+        {
+          "mode": "reference",
+          "seconds": 1.19381,
+          "queries": 2561
+        },
+        {
+          "mode": "reference",
+          "seconds": 1.192862,
+          "queries": 2561
+        },
+        {
+          "mode": "reuse",
+          "seconds": 0.201812,
+          "queries": 350
+        }
+      ]
+    },
+    {
+      "country": "IN",
+      "items": 100,
+      "results_equal": true,
+      "payload_sha256": "72a33c24b64697233a31671ed243760bcc3df2212185f87f5f2c65acc787acc1",
+      "current": 51,
+      "summary": {
+        "reference": {
+          "median_seconds": 1.119316,
+          "queries": [
+            2409,
+            2409,
+            2409
+          ]
+        },
+        "reuse": {
+          "median_seconds": 0.206816,
+          "queries": [
+            349,
+            349,
+            349
+          ]
+        }
+      },
+      "samples": [
+        {
+          "mode": "reference",
+          "seconds": 1.174006,
+          "queries": 2409
+        },
+        {
+          "mode": "reuse",
+          "seconds": 0.204535,
+          "queries": 349
+        },
+        {
+          "mode": "reuse",
+          "seconds": 0.220155,
+          "queries": 349
+        },
+        {
+          "mode": "reference",
+          "seconds": 1.115734,
+          "queries": 2409
+        },
+        {
+          "mode": "reference",
+          "seconds": 1.119316,
+          "queries": 2409
+        },
+        {
+          "mode": "reuse",
+          "seconds": 0.206816,
+          "queries": 349
+        }
+      ]
+    }
+  ]
+}

@@ -37,6 +37,15 @@ def serialize(obj):
 
 
 async def engagement(db, ctx, identifier, permission="audit.read", mutable=False, *, lock=True):
+    from app.core.read_projection import read_once
+
+    if mutable or lock or not permission.endswith("read"):
+        return await _engagement(db, ctx, identifier, permission, mutable, lock=lock)
+    return await read_once(db, ctx, "read-engagement", (str(identifier), permission),
+                           lambda: _engagement(db, ctx, identifier, permission, mutable, lock=lock))
+
+
+async def _engagement(db, ctx, identifier, permission="audit.read", mutable=False, *, lock=True):
     statement = select(Engagement).where(
         Engagement.tenant_id == ctx.tenant_id, Engagement.id == identifier
     )

@@ -2174,8 +2174,14 @@ test("older approved sources remain selectable beyond 100 events", async ({
       exact: true,
     }),
   ).toHaveCount(0);
+  const retained = page.locator("section.main-panel").filter({
+    has: page.getByRole("heading", {
+      name: "SYNTHETIC retained older approved cashbook",
+      exact: true,
+    }),
+  });
   await saveScreenshot(`${shots}/older-approved-source-selection.png`, () =>
-    page.screenshot({ fullPage: true }),
+    retained.screenshot(),
   );
 });
 
@@ -6155,7 +6161,9 @@ test("India TDS and TCS withholding sources support pooled and split bank alloca
     const eid = fixture.india_engagement;
     async function approve(id: string, mode: string) {
       await reviewer.goto(`/intelligence/${eid}/${mode}?event=${id}`);
-      await expect(reviewer.getByLabel("Saved source or result")).toHaveValue(id);
+      await expect(reviewer.getByLabel("Saved source or result")).toHaveValue(
+        id,
+      );
       await reviewer
         .getByLabel("Review / exception rationale")
         .fill(

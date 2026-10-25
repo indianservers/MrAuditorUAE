@@ -73,6 +73,15 @@ async def firm_roles(db, tenant_id, user_id):
 
 
 async def engagement_permissions(db, ctx, engagement_id: uuid.UUID, permission: str):
+    from app.core.read_projection import read_once
+
+    if not permission.endswith("read"):
+        return await _engagement_permissions(db, ctx, engagement_id, permission)
+    return await read_once(db, ctx, "engagement-permission", (str(engagement_id), permission),
+                           lambda: _engagement_permissions(db, ctx, engagement_id, permission))
+
+
+async def _engagement_permissions(db, ctx, engagement_id: uuid.UUID, permission: str):
     # Recheck identities and permissions inside services; callers cannot forge a trusted Context.
     user = await db.get(User, ctx.user_id)
     tenant = await db.get(Tenant, ctx.tenant_id)

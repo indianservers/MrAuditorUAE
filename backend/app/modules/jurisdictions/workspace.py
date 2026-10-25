@@ -54,6 +54,13 @@ class ContextInput(Strict):
 
 
 async def resolved(db, ctx, eng):
+    from app.core.read_projection import read_once
+
+    return await read_once(db, ctx, "reporting-context", (str(eng.id), getattr(eng, "version", None)),
+                           lambda: _resolved(db, ctx, eng))
+
+
+async def _resolved(db, ctx, eng):
     from app.modules.jurisdictions.service import original_binding
 
     initial = await original_binding(db, ctx, eng)

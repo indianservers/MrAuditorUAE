@@ -171,6 +171,13 @@ async def event(db, ctx, eid, identifier, require_current=False, auth_seen=None)
 
 
 async def head(db, ctx, obj):
+    from app.core.read_projection import read_once
+
+    return await read_once(db, ctx, "intelligence-head", str(obj.root_id),
+                           lambda: _head(db, ctx, obj))
+
+
+async def _head(db, ctx, obj):
     return await db.scalar(
         select(func.max(IntelligenceEvent.version)).where(
             IntelligenceEvent.tenant_id == ctx.tenant_id, IntelligenceEvent.root_id == obj.root_id
@@ -205,10 +212,12 @@ async def current(db, ctx, obj, visited=None):
                 return False
         if obj.body.get("action")=="inspect-provenance":
             from app.modules.jurisdictions.ae.provenance import corpus
-            if digest(await corpus(db,ctx,obj.engagement_id))!=obj.body["output"]["population_sha256"]:return False
+            if digest(await corpus(db,ctx,obj.engagement_id))!=obj.body["output"]["population_sha256"]:
+                return False
         if obj.body.get("action")=="rule-impact":
             from app.modules.jurisdictions.ae.rule_impact import fingerprint as impact_fingerprint
-            if await impact_fingerprint(db,ctx,obj.engagement_id)!=obj.body["output"]["population_sha256"]:return False
+            if await impact_fingerprint(db,ctx,obj.engagement_id)!=obj.body["output"]["population_sha256"]:
+                return False
         if obj.body.get("action") == "file-readiness":
             rows = (await db.scalars(select(AuditRecord).where(AuditRecord.tenant_id == ctx.tenant_id, AuditRecord.engagement_id == obj.engagement_id).order_by(AuditRecord.id).limit(2001))).all()
             if digest([[str(r.id), r.version, r.status] for r in rows]) != obj.body["output"]["file_population_sha256"]:

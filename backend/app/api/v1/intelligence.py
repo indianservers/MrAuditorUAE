@@ -290,7 +290,7 @@ async def remaining_open_items(
     # The existing ECL/count/source consumers use this same canonical source type.
     rows = source.body["remaining_open_items"]
     credit_application = source.body.get("workflow") == "credit-note-applications"
-    totals = defaultdict(Decimal)
+    totals: defaultdict[str, Decimal] = defaultdict(Decimal)
     for row in rows:
         totals[row["currency"]] += Decimal(row["amount"])
     body = {
@@ -633,45 +633,48 @@ async def events(
         else [IntelligenceEvent.id]
     )
     rows = (await db.scalars(query.order_by(*ordering).limit(limit + 1))).all()
-    items = []
-    for row in rows[:limit]:
-        try:
-            await service.event(db, ctx, eid, row.id)
-        except HTTPException as exc:
-            if exc.status_code == 403:
-                continue
-            raise
-        items.append(
-            {
-                "id": str(row.id),
-                "root_id": str(row.root_id),
-                "kind": row.kind,
-                "table_type": row.body.get("table_type"),
-                "workflow": row.body.get("workflow"),
-                "blocked": bool(row.body.get("blocked")),
-                "as_of": row.body.get("as_of"),
-                "bank_account_scope": {key:row.body["bank_account_scope"].get(key) for key in ("account","currency")} if row.body.get("workflow") == "bank-account-evidence" else None,
-                "native_format": row.body.get("native_format"),
-                "allowed_source_roles": row.body.get("allowed_source_roles"),
-                "allowed_workflows": row.body.get("allowed_workflows"),
-                "invoice_direction": row.body.get("native_metadata", {}).get("direction") if row.body.get("native_format") == "india-inv01-json" else None,
-                "inventory_controls_verified": row.body.get("inventory_controls_verified") is True,
-                "obligation_populations": sorted({item.get("population", "unspecified") for item in row.body.get("rows", [])}) if row.body.get("table_type") == "obligations" else None,
-                "evidence_version_id": row.body.get("evidence_version_id"),
-                "table_kind": row.body.get("table_kind"),
-                "version": row.version,
-                "sha256": row.sha256,
-                "created_at": row.created_at.isoformat(),
-                "created_by": str(row.created_by),
-                "review_status": row.body.get("review_status", "UNVERIFIED"),
-                "label": (row.body.get("title") if row.kind == "workflow-source" else None)
-                or row.body.get("source_filename")
-                or row.body.get("section")
-                or row.body.get("title")
-                or row.kind,
-                "freshness": "CURRENT" if await service.current(db, ctx, row) else "STALE",
-            }
-        )
+    from app.core.read_projection import read_projection
+
+    with read_projection(db, ctx):
+        items = []
+        for row in rows[:limit]:
+            try:
+                await service.event(db, ctx, eid, row.id)
+            except HTTPException as exc:
+                if exc.status_code == 403:
+                    continue
+                raise
+            items.append(
+                {
+                    "id": str(row.id),
+                    "root_id": str(row.root_id),
+                    "kind": row.kind,
+                    "table_type": row.body.get("table_type"),
+                    "workflow": row.body.get("workflow"),
+                    "blocked": bool(row.body.get("blocked")),
+                    "as_of": row.body.get("as_of"),
+                    "bank_account_scope": {key:row.body["bank_account_scope"].get(key) for key in ("account","currency")} if row.body.get("workflow") == "bank-account-evidence" else None,
+                    "native_format": row.body.get("native_format"),
+                    "allowed_source_roles": row.body.get("allowed_source_roles"),
+                    "allowed_workflows": row.body.get("allowed_workflows"),
+                    "invoice_direction": row.body.get("native_metadata", {}).get("direction") if row.body.get("native_format") == "india-inv01-json" else None,
+                    "inventory_controls_verified": row.body.get("inventory_controls_verified") is True,
+                    "obligation_populations": sorted({item.get("population", "unspecified") for item in row.body.get("rows", [])}) if row.body.get("table_type") == "obligations" else None,
+                    "evidence_version_id": row.body.get("evidence_version_id"),
+                    "table_kind": row.body.get("table_kind"),
+                    "version": row.version,
+                    "sha256": row.sha256,
+                    "created_at": row.created_at.isoformat(),
+                    "created_by": str(row.created_by),
+                    "review_status": row.body.get("review_status", "UNVERIFIED"),
+                    "label": (row.body.get("title") if row.kind == "workflow-source" else None)
+                    or row.body.get("source_filename")
+                    or row.body.get("section")
+                    or row.body.get("title")
+                    or row.kind,
+                    "freshness": "CURRENT" if await service.current(db, ctx, row) else "STALE",
+                }
+            )
     return {
         "items": items,
         "next_cursor": str(rows[limit - 1].id) if len(rows) > limit and not newest else None,

@@ -79,3 +79,6 @@ All original 13 reference use cases map to these workflows or the existing statu
 
 
 Shared bank cash approval now checks active obligation allocation reviews across the same legal entity’s engagements within the current firm, for UAE and India. Conflicting reviews block approval; explicit independent withdrawal appends a release while preserving the earlier approval, including when its source has become stale. See [shared cash approval scope and limits](native-adapters.md#shared-bank-cash-approval-controls-uae-and-india). See [entity scope, access boundaries and historical claims](native-adapters.md#bank-cash-capacity-across-a-legal-entitys-engagements). Cross-entity bank ownership and independently checked client pilots remain open.
+
+
+Retained-history listing now reuses bounded request-local read metadata while preserving recursive access and freshness checks. The 100-row UAE/India paired benchmark returned identical JSON with about 85–86% fewer SQL queries; this is synthetic local evidence, not production capacity qualification. See [implementation, measurements and repeat command](native-adapters.md#retained-history-request-reuse--uae-then-india).
