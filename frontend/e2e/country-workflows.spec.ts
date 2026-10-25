@@ -3348,3 +3348,158 @@ test("original CSV and reviewed XLSX tables reach bank and payable reconciliatio
   await captureResult(controlTitle, "reviewed-xlsx-payable-control-worker.png");
   expect(errors).toEqual([]);
 });
+
+test("numbered GSTR-2B originals require review before purchase-register matching", async ({
+  page,
+  browser,
+}) => {
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+    viewport: { width: 1600, height: 1100 },
+  });
+  const reviewer = await context.newPage();
+  const eid = fixture.india_engagement;
+  const input = fixture.gstr2b_bundle_input;
+  const title = `SYNTHETIC numbered GSTR-2B ${Date.now()}`;
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_table_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    await page.goto(`/intelligence/${eid}/workflow-source`);
+    await page
+      .getByLabel("Source file format")
+      .selectOption("india-gstr2b-json");
+    await page.getByLabel("Schedule title", { exact: true }).fill(title);
+    await page
+      .getByLabel("Clean retained evidence")
+      .selectOption(input.evidence_version_id);
+    await page.getByLabel("Recipient GSTIN").fill("27ABCDE5678G1Z8");
+    await page.getByLabel("GSTR-2B return month").fill("2026-06");
+    await page.getByLabel("Independent GSTR-2B document count").fill("2");
+    await page.getByLabel("Independent totals by currency").fill("INR=27");
+    await page.getByLabel("Assemble numbered GSTR-2B files").check();
+    await page.getByLabel("Independent GSTR-2B file count").fill("2");
+    await page
+      .getByLabel("Original response parts and independent controls (JSON)")
+      .fill(JSON.stringify(input.gstr2b_parts, null, 2));
+    await page
+      .getByLabel("GSTR-2B retrieval batch assessment")
+      .fill(input.gstr2b_retrieval_assessment);
+    await saveScreenshot(
+      `${shots}/india-gstr2b-numbered-file-controls.png`,
+      () =>
+        page
+          .getByRole("group", { name: "Numbered GSTR-2B response files" })
+          .screenshot(),
+    );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const option = page
+      .getByLabel("Saved source or result")
+      .getByRole("option", { name: new RegExp(title) });
+    await expect(option).toHaveCount(1);
+    const id = (await option.getAttribute("value"))!;
+    const detail = await page.request.get(
+      `/api/backend/intelligence/engagements/${eid}/events/${id}`,
+      { headers: { "X-Tenant-ID": fixture.tenant } },
+    );
+    expect(detail.status()).toBe(200);
+    const prepared = await detail.json();
+    expect(prepared.body.rows).toHaveLength(8);
+    expect(
+      new Set(
+        prepared.body.rows.map(
+          (row: { source_part_evidence_version_id: string }) =>
+            row.source_part_evidence_version_id,
+        ),
+      ),
+    ).toEqual(
+      new Set(
+        input.gstr2b_parts.map(
+          (part: { evidence_version_id: string }) => part.evidence_version_id,
+        ),
+      ),
+    );
+    await reviewer.goto(`/intelligence/${eid}/country-workflow`);
+    await reviewer.getByLabel("Saved source or result").selectOption(id);
+    await reviewer
+      .getByLabel("Review / exception rationale")
+      .fill(
+        "Independent original manifest, numbered request references and separate per-file controls reviewed for this synthetic batch",
+      );
+    const approval = reviewer.waitForResponse(
+      (r) =>
+        r.url().includes(`/events/${id}/review`) &&
+        r.request().method() === "POST",
+    );
+    await reviewer
+      .getByRole("button", { name: "Independent approval", exact: true })
+      .click();
+    const approvedResponse = await approval;
+    expect(approvedResponse.status(), await approvedResponse.text()).toBe(201);
+    const approved = await approvedResponse.json();
+    await page.goto(`/intelligence/${eid}/country-workflow`);
+    await page
+      .getByLabel("Workflow", { exact: true })
+      .selectOption("india-gst");
+    await expect(
+      page
+        .getByLabel("books source", { exact: true })
+        .locator(`option[value="${approved.id}"]`),
+    ).toHaveCount(0);
+    await page
+      .getByLabel("Schedule title", { exact: true })
+      .fill(title + " comparison");
+    await page
+      .getByLabel("Reconciliation date", { exact: true })
+      .fill("2026-06-30");
+    await page
+      .getByLabel("books source", { exact: true })
+      .selectOption(fixture.gstr2b_bundle_books);
+    await page
+      .getByLabel("return source", { exact: true })
+      .selectOption(approved.id);
+    await page
+      .getByLabel("Scope and source rationale", { exact: true })
+      .fill(
+        "Independent purchase register compared with the reviewed complete numbered response set",
+      );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const result = page
+      .getByLabel("Saved source or result")
+      .getByRole("option", { name: new RegExp(title + " comparison") });
+    await expect(result).toHaveCount(1);
+    await page
+      .getByLabel("Saved source or result")
+      .selectOption((await result.getAttribute("value"))!);
+    const panel = page
+      .getByRole("heading", { name: title + " comparison", exact: true })
+      .locator("..");
+    await expect(
+      panel.getByText("0 exceptions", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      panel.getByRole("cell", { name: "MATCHED", exact: true }),
+    ).toHaveCount(8);
+    for (const notice of await page
+      .getByRole("button", { name: "Dismiss notification", exact: true })
+      .all())
+      await notice.click();
+    await saveScreenshot(
+      `${shots}/india-gstr2b-numbered-file-comparison.png`,
+      () => panel.screenshot(),
+    );
+  } finally {
+    await context.close();
+  }
+});

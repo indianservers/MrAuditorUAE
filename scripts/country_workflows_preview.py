@@ -675,7 +675,9 @@ async def main():
 
         regulatory_conversions = await prepare_regulatory(client, h, opts["client_id"], pdf_final_reviewer)
         from country_pension_fixture import prepare as prepare_pension
-        from country_pension_fixture import prepare_published as prepare_published_pension
+        from country_pension_fixture import (
+            prepare_published as prepare_published_pension,
+        )
 
         pension_sources = await prepare_pension(client, h, eid, supporting_reviewer)
         published_pension = await prepare_published_pension(
@@ -686,6 +688,37 @@ async def main():
         contribution_settlements = await prepare_contributions(
             client, h, regulatory_conversions, published_pension, pdf_final_reviewer
         )
+        from tests.qa_crud.test_gstr2b_parts import retained_bundle
+
+        gstr2b_bundle_input, _ = await retained_bundle(
+            client, h, india, f"/api/v1/engagements/{india}/audit"
+        )
+        bundle_books = await source(
+            client,
+            h,
+            india,
+            [
+                document(
+                    id=f"B{index}",
+                    registration="27ABCDE5678G1Z8",
+                    counterparty="29ABCDE1234F1Z5",
+                    reference=f"SYNTHETIC-{index}",
+                    date="2026-06-15",
+                    currency="INR",
+                    component="IGST",
+                    net=net,
+                    tax=tax,
+                )
+                for index, net, tax in ((1, "100", "18"), (2, "50", "9"))
+            ],
+            "SYNTHETIC independent numbered-return purchase register",
+            "tax-documents",
+            {"INR": "27"},
+        )
+        bundle_books_approval = await decision(
+            client, supporting_reviewer[0], india, bundle_books
+        )
+        assert bundle_books_approval.status_code == 201, bundle_books_approval.text
         if implementation_hash() != implementation:
             raise RuntimeError(
                 "Backend implementation changed during fixture preparation; prepare fresh fixtures before browser verification"
@@ -738,6 +771,8 @@ async def main():
                     "india_ecr_evidence": ecr_evidence,
                     "india_gstr2b_evidence": gstr2b_evidence,
                     "india_gstr2b_books": gstr2b_books["id"],
+                    "gstr2b_bundle_input": gstr2b_bundle_input,
+                    "gstr2b_bundle_books": bundle_books_approval.json()["id"],
                     "india_payroll_bases": payroll_bases["id"],
                     "india_payroll_rules": reviewed_rules.json()["id"],
                     "india_payroll_reported": payroll_reported["id"],

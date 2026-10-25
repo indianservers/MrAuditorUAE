@@ -1677,9 +1677,12 @@ export function CountryWorkflows({
                   {sourceFormat === "india-gstr2b-json" && (
                     <fieldset>
                       <legend>Numbered GSTR-2B response files</legend>
-                      <label>
+                      <label
+                        style={{ flexDirection: "row", alignItems: "center" }}
+                      >
                         <input
                           type="checkbox"
+                          style={{ width: 16, height: 16, flexShrink: 0 }}
                           checked={gstrBundle}
                           onChange={(event) =>
                             setGSTRBundle(event.target.checked)
@@ -2837,9 +2840,10 @@ export function CountryWorkflows({
               />
             )}
           {["india-gst", "uae-vat"].includes(body.workflow || "") && (
-            <label>
+            <label style={{ flexDirection: "row", alignItems: "center" }}>
               <input
                 type="checkbox"
+                style={{ width: 16, height: 16, flexShrink: 0 }}
                 checked={showRuleProvenance}
                 onChange={(event) =>
                   setShowRuleProvenance(event.target.checked)
