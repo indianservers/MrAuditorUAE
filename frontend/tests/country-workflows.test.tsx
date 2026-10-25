@@ -46,6 +46,12 @@ vi.mock("@/hooks/use-api", () => ({
                 : {},
             source_formats: [
               {
+                id: "india-gstr1-summary-json",
+                label: "India GSTR-1 summary JSON",
+                available: state.country === "IN",
+                table_type: "gst-summary-metrics",
+              },
+              {
                 id: "india-epfo-arrear-ecr-v2",
                 label: "India EPFO arrears eight-field text",
                 available: state.country === "IN",
@@ -87,6 +93,15 @@ vi.mock("@/hooks/use-api", () => ({
               { id: "RW-001", title: "Bank receipt", workflow: "bank-brs" },
             ],
             items: [
+              {
+                id: "india-gstr1-summary",
+                title: "India GSTR-1 summary reconciliation",
+                available: state.country === "IN",
+                roles: {
+                  books: "gst-summary-metrics",
+                  return: "gst-summary-metrics",
+                },
+              },
               {
                 id: "india-invoice-register",
                 title: "India invoice evidence register",
@@ -236,6 +251,11 @@ vi.mock("@/hooks/use-api", () => ({
               },
             ],
             source_contracts: {
+              "gst-summary-metrics": {
+                id: { required: true, type: "str" },
+                metric: { required: true, type: "str" },
+                value: { required: true, type: "Decimal" },
+              },
               "payroll-account-balances": {
                 id: { required: true, type: "str" },
                 amount: { required: true, type: "Decimal" },
@@ -2557,4 +2577,78 @@ it("keeps native invoice JSON out of the India GST return selector", () => {
   expect(screen.getByLabelText("books source")).toHaveTextContent(
     "Reviewed INV-01 evidence",
   );
+});
+
+it("queues GSTR-1 summary metrics with separate independent controls and no mixed currency total", async () => {
+  state.country = "IN";
+  render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+  fireEvent.change(screen.getByLabelText("Source file format"), {
+    target: { value: "india-gstr1-summary-json" },
+  });
+  for (const [label, value] of [
+    ["Schedule title", "Synthetic outward summary"],
+    ["Entity GSTIN", "27ABCDE5678G1Z8"],
+    ["GSTR-1 summary month", "2026-06"],
+    ["Clean retained evidence", "clean"],
+    ["Expected data rows", "2"],
+    [
+      "Independent GST summary metric controls (JSON)",
+      JSON.stringify({ ttl_igst: "18", ttl_rec: "1" }),
+    ],
+  ])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  expect(
+    screen.queryByLabelText("Independent totals by currency"),
+  ).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+    file_format: "india-gstr1-summary-json",
+    table_type: "gst-summary-metrics",
+    gst_registration: "27ABCDE5678G1Z8",
+    gst_period: "2026-06",
+    expected_rows: 2,
+    control_totals: {},
+    gst_summary_metric_controls: { ttl_igst: "18", ttl_rec: "1" },
+  });
+});
+
+it("shows original summary metrics and count units without inventing liability totals", () => {
+  state.country = "IN";
+  state.result = {
+    id: "result",
+    kind: "country-workflow",
+    version: 1,
+    freshness: "CURRENT",
+    body: {
+      workflow: "india-gstr1-summary",
+      title: "Summary comparison",
+      rows: [
+        {
+          section: "B2B",
+          metric: "ttl_rec",
+          unit: "COUNT",
+          books_value: "2",
+          return_value: "1",
+          difference: "1",
+          state: "VARIANCE",
+        },
+      ],
+      exception_count: 1,
+      population_completeness: "UPLOADED_FILE_CONTROLS_ONLY",
+    },
+  };
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Saved source or result"), {
+    target: { value: "result" },
+  });
+  expect(screen.getByRole("cell", { name: "COUNT" })).toBeVisible();
+  expect(
+    screen.getByRole("columnheader", { name: "books value" }),
+  ).toBeVisible();
+  expect(
+    screen.getByText(
+      /matching does not establish filing or invoice completeness/,
+    ),
+  ).toBeVisible();
 });

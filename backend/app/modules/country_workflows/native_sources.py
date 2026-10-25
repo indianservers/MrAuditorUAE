@@ -21,6 +21,7 @@ from app.modules.country_workflows.schemas import Transaction
 from app.modules.country_workflows.sources import MAX_BYTES
 
 FORMATS: list[dict[str, Any]] = [
+    {"id": "india-gstr1-summary-json", "label": "India GSTR-1 summary JSON - explicit hierarchy metrics", "countries": ["IN"], "table_type": "gst-summary-metrics", "description": "Preserves section/subsection/counterparty metrics and independent count/INR controls; no netting across hierarchy or filing conclusion", "source": "https://developer.sandbox.co.in/api-reference/gst/compliance/endpoints/taxpayer/gstr-1/documents/gstr_1"},
     {"id": "india-epfo-arrear-ecr-v2", "label": "India EPFO ECR 2.0 arrears - eight-field text",
      "countries": ["IN"], "table_type": "obligations",
      "description": "Explicit arrear layout; independent wage/contribution controls and retained month/disbursement context; no filing, bank payment or current portal compatibility qualification",
@@ -646,6 +647,10 @@ def parse_native(content, data, country, filename):
                 from app.modules.country_workflows.india_ecr_arrear_source import parse_arrears
 
                 rows, metadata = parse_arrears(content, data)
+            elif data.file_format == "india-gstr1-summary-json":
+                from app.modules.country_workflows.gst_summary import parse_summary
+
+                rows, metadata = parse_summary(content, data)
             elif data.file_format == "india-gstr2b-json":
                 from app.modules.country_workflows.india_gstr2b_source import parse_gstr2b
 
@@ -665,7 +670,7 @@ def parse_native(content, data, country, filename):
         if len(rows) > 5000:
             raise ValueError("Native source exceeds 5,000 derived rows")
         totals: dict[str, Decimal] = {}
-        for row in rows:
+        for row in ([] if data.table_type == "gst-summary-metrics" else rows):
             totals[row["currency"]] = totals.get(row["currency"], Decimal(0)) + Decimal(
                 row["tax"] if data.table_type == "tax-documents" else row["amount"]
             )
@@ -680,7 +685,9 @@ def parse_native(content, data, country, filename):
         "rows": rows,
         "row_count": len(rows),
         "control_totals": {k: str(v) for k, v in sorted(totals.items())},
-        "population_completeness": "SELECTED_NATIVE_STATEMENT_CONTROLS"
+        "population_completeness": "RETAINED_GSTR1_SUMMARY_HIERARCHY_METRIC_CONTROLS"
+        if data.file_format == "india-gstr1-summary-json"
+        else "SELECTED_NATIVE_STATEMENT_CONTROLS"
         if data.table_type == "transactions"
         else "INV01_SELECTED_DOCUMENT_ITEM_CONTROLS"
         if data.file_format == "india-inv01-json"
@@ -697,6 +704,7 @@ def parse_native(content, data, country, filename):
         "parser_version": data.file_format
         + ("-2" if data.file_format in {"swift-mt940", "camt053"} else "-1"),
         "native_format": data.file_format,
+        **({"allowed_source_roles": ["return"], "metric_controls": metadata["metric_controls"]} if data.file_format == "india-gstr1-summary-json" else {}),
         **({"allowed_source_roles": ["books", "invoices"]} if data.file_format == "india-inv01-json" else {}),
         **({"allowed_source_roles": ["return"]} if data.file_format == "india-gstr2b-json" else {}),
         **({"allowed_source_roles": ["return", "reported"]} if data.file_format == "india-epfo-arrear-ecr-v2" else {}),

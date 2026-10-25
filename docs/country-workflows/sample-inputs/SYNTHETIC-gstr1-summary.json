@@ -1,0 +1,56 @@
+{
+  "gstin": "27ABCDE5678G1Z8",
+  "ret_period": "062026",
+  "newSumFlag": true,
+  "sec_sum": [
+    {
+      "sec_nm": "B2B",
+      "ttl_igst": 18,
+      "ttl_tax": 100,
+      "ttl_rec": 1,
+      "cpty_sum": [
+        {
+          "ctin": "29ABCDE1234F1Z5",
+          "ttl_igst": 18,
+          "ttl_tax": 100,
+          "ttl_rec": 1
+        }
+      ]
+    },
+    {
+      "sec_nm": "B2B_4A",
+      "ttl_igst": 18,
+      "ttl_tax": 100,
+      "ttl_rec": 1
+    },
+    {
+      "sec_nm": "CDNR",
+      "ttl_igst": -9,
+      "ttl_tax": -50,
+      "ttl_rec": 1,
+      "sub_sections": [
+        {
+          "sec_nm": "CDNR_4A",
+          "typ": "C",
+          "ttl_igst": -9,
+          "ttl_tax": -50,
+          "ttl_rec": 1
+        }
+      ]
+    },
+    {
+      "sec_nm": "NIL",
+      "ttl_expt_amt": 25,
+      "ttl_nilsup_amt": 0,
+      "ttl_ngsup_amt": 0,
+      "ttl_rec": 1
+    },
+    {
+      "sec_nm": "DOC_ISSUE",
+      "ttl_doc_issued": 3,
+      "ttl_doc_cancelled": 1,
+      "net_doc_issued": 2,
+      "ttl_rec": 1
+    }
+  ]
+}

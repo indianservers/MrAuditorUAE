@@ -133,6 +133,11 @@ def _parse_csv(content, data, defaults=None):
             amount = getattr(item, "requested_amount")
         if amount is not None:
             totals[getattr(item, "currency")] += amount
+    metric_controls = None
+    if data.table_type == "gst-summary-metrics":
+        from app.modules.country_workflows.gst_summary import verify_controls
+
+        metric_controls = verify_controls(rows, data.gst_summary_metric_controls)
     if len(rows) != data.expected_rows:
         raise ValueError("Source row-count control does not agree")
     if data.inventory_quantity_controls is not None:
@@ -192,6 +197,7 @@ def _parse_csv(content, data, defaults=None):
         raise ValueError("Import taxable-base control does not agree to all retained source rows")
     return {
         "table_type": data.table_type,
+        **({"metric_controls": metric_controls} if metric_controls is not None else {}),
         "rows": rows,
         "row_count": len(rows),
         "control_totals": {k: str(v) for k, v in sorted(totals.items())},

@@ -186,6 +186,7 @@ type Result = {
     excluded_box_rows?: Record<string, unknown>[];
     excluded_box_controls?: Record<string, unknown>[];
     included_box_controls?: Record<string, unknown>[];
+    metric_controls?: Record<string, string>;
     native_metadata?: Record<string, unknown>;
     supporting_table_id?: string;
     supporting_scope_assessment?: string;
@@ -349,6 +350,7 @@ export function CountryWorkflows({
   const [expectedMembers, setExpectedMembers] = useState("");
   const [expectedDocuments, setExpectedDocuments] = useState("");
   const [ruleDocument, setRuleDocument] = useState("");
+  const [gstSummaryControls, setGSTSummaryControls] = useState("{}");
   const [gstRegistration, setGSTRegistration] = useState("");
   const [gstDirection, setGSTDirection] = useState("purchase");
   const [gstPeriod, setGSTPeriod] = useState("");
@@ -670,78 +672,95 @@ export function CountryWorkflows({
                           ].filter((key) => allColumns.includes(key))
                         : allColumns;
   const columns =
-    body?.workflow === "payroll-ledger-rollforward" && !showRuleProvenance
-      ? (payrollView === "accounts"
+    (body?.workflow === "india-gstr1-summary" ||
+      body?.table_type === "gst-summary-metrics") &&
+    !showRuleProvenance
+      ? [
+          "section",
+          "sub_section",
+          "nature",
+          "counterparty",
+          "state_code",
+          "metric",
+          "unit",
+          "value",
+          "books_value",
+          "return_value",
+          "difference",
+          "state",
+        ].filter((key) => allColumns.includes(key))
+      : body?.workflow === "payroll-ledger-rollforward" && !showRuleProvenance
+        ? (payrollView === "accounts"
+            ? [
+                "registration",
+                "account",
+                "currency",
+                "opening_amount",
+                "payroll_movement",
+                "posted_movement",
+                "expected_closing",
+                "actual_closing",
+                "payroll_closing_difference",
+                "posted_closing_difference",
+                "state",
+              ]
+            : [
+                "account",
+                "wage_month",
+                "component",
+                "category",
+                "currency",
+                "payroll_positive",
+                "posted_positive",
+                "payroll_negative",
+                "posted_negative",
+                "positive_difference",
+                "negative_difference",
+                "state",
+              ]
+          ).filter((key) => allColumns.includes(key))
+        : body?.table_type === "bank-outstanding" && !showRuleProvenance
           ? [
-              "registration",
-              "account",
-              "currency",
-              "opening_amount",
-              "payroll_movement",
-              "posted_movement",
-              "expected_closing",
-              "actual_closing",
-              "payroll_closing_difference",
-              "posted_closing_difference",
-              "state",
-            ]
-          : [
-              "account",
-              "wage_month",
-              "component",
-              "category",
-              "currency",
-              "payroll_positive",
-              "posted_positive",
-              "payroll_negative",
-              "posted_negative",
-              "positive_difference",
-              "negative_difference",
-              "state",
-            ]
-        ).filter((key) => allColumns.includes(key))
-      : body?.table_type === "bank-outstanding" && !showRuleProvenance
-        ? [
-            "reference",
-            "date",
-            "balance_date",
-            "currency",
-            "amount",
-            "previous_outstanding_amount",
-            "cleared_in_previous_window",
-          ].filter((key) => allColumns.includes(key))
-        : compactArrear && !showRuleProvenance
-          ? [
-              "subject",
-              "period",
-              "population",
-              "component",
+              "reference",
+              "date",
+              "balance_date",
               "currency",
               "amount",
-              "source_row",
+              "previous_outstanding_amount",
+              "cleared_in_previous_window",
             ].filter((key) => allColumns.includes(key))
-          : compactArrearResult && !showRuleProvenance
+          : compactArrear && !showRuleProvenance
             ? [
                 "subject",
                 "period",
+                "population",
                 "component",
                 "currency",
-                "expected_amount",
-                "return_amount",
-                "payment_amount",
-                "state",
+                "amount",
+                "source_row",
               ].filter((key) => allColumns.includes(key))
-            : compactWPS && !showRuleProvenance
+            : compactArrearResult && !showRuleProvenance
               ? [
                   "subject",
                   "period",
+                  "component",
                   "currency",
-                  "fixed_income",
-                  "variable_income",
-                  "amount",
-                  "unpaid_days",
+                  "expected_amount",
+                  "return_amount",
+                  "payment_amount",
+                  "state",
                 ].filter((key) => allColumns.includes(key))
-              : defaultColumns;
+              : compactWPS && !showRuleProvenance
+                ? [
+                    "subject",
+                    "period",
+                    "currency",
+                    "fixed_income",
+                    "variable_income",
+                    "amount",
+                    "unpaid_days",
+                  ].filter((key) => allColumns.includes(key))
+                : defaultColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -867,6 +886,14 @@ export function CountryWorkflows({
                 "withholding-records",
               ].includes(tableType) && ruleDocument
                 ? { rule_document_version_id: ruleDocument }
+                : {}),
+              ...(tableType === "gst-summary-metrics"
+                ? {
+                    gst_summary_metric_controls: JSON.parse(gstSummaryControls),
+                  }
+                : {}),
+              ...(sourceFormat === "india-gstr1-summary-json"
+                ? { gst_registration: gstRegistration, gst_period: gstPeriod }
                 : {}),
               ...(sourceFormat === "india-inv01-json"
                 ? {
@@ -1019,6 +1046,7 @@ export function CountryWorkflows({
           title: label,
           rationale: reason,
           currency: [
+            "india-gstr1-summary",
             "india-payroll-rules",
             "india-gst",
             "india-invoice-register",
@@ -1980,6 +2008,55 @@ export function CountryWorkflows({
                       </p>
                     </fieldset>
                   )}
+                  {tableType === "gst-summary-metrics" && (
+                    <fieldset style={{ gridColumn: "1 / -1", minWidth: 0 }}>
+                      <legend>
+                        Independent GST summary metric controls (JSON)
+                      </legend>
+                      <textarea
+                        aria-label="Independent GST summary metric controls (JSON)"
+                        style={{ height: 200, width: "100%", display: "block" }}
+                        value={gstSummaryControls}
+                        onChange={(event) =>
+                          setGSTSummaryControls(event.target.value)
+                        }
+                      />
+                      <p>
+                        Supply every retained metric name and its independently
+                        assessed sum across all supplied hierarchy levels. These
+                        arithmetic controls are not return liability. Counts
+                        remain separate from INR values; omitted fields are not
+                        zero.
+                      </p>
+                    </fieldset>
+                  )}
+                  {sourceFormat === "india-gstr1-summary-json" && (
+                    <>
+                      <label>
+                        Entity GSTIN
+                        <input
+                          value={gstRegistration}
+                          onChange={(event) =>
+                            setGSTRegistration(event.target.value)
+                          }
+                        />
+                      </label>
+                      <label>
+                        GSTR-1 summary month
+                        <input
+                          type="month"
+                          value={gstPeriod}
+                          onChange={(event) => setGSTPeriod(event.target.value)}
+                        />
+                      </label>
+                      <p>
+                        Import retained section, subsection and counterparty
+                        metrics without netting overlapping levels. A generated
+                        summary does not establish filing or invoice
+                        completeness.
+                      </p>
+                    </>
+                  )}
                   {sourceFormat === "india-inv01-json" && (
                     <>
                       <label>
@@ -2582,7 +2659,10 @@ export function CountryWorkflows({
                             !stockControlled ||
                             (r.review_status === "REVIEWED" &&
                               r.inventory_controls_verified === true)) &&
-                          (workflow !== "india-invoice-register" ||
+                          (![
+                            "india-invoice-register",
+                            "india-gstr1-summary",
+                          ].includes(workflow) ||
                             r.native_format !== "india-inv01-json" ||
                             r.invoice_direction === invoiceDirection) &&
                           (!r.allowed_source_roles ||
@@ -3078,6 +3158,24 @@ export function CountryWorkflows({
       {detail.data && body && (
         <section className="main-panel" style={{ padding: 20, marginTop: 16 }}>
           <h2>{body.title}</h2>
+          {body.workflow === "india-gstr1-summary" && (
+            <p role="note">
+              GSTR-1 summary metrics compared at their original hierarchy level.
+              Counts are separate from INR values; matching does not establish
+              filing or invoice completeness.
+            </p>
+          )}
+          {body.metric_controls && (
+            <details>
+              <summary>Independent GST summary metric controls</summary>
+              <p>
+                Arithmetic controls across retained hierarchy levels; these are
+                not a tax-liability total.
+              </p>
+              <pre>{JSON.stringify(body.metric_controls, null, 2)}</pre>
+            </details>
+          )}
+
           {body.invoice_evidence_scope && (
             <p role="note">
               {body.invoice_evidence_scope.direction === "purchase"
@@ -3985,6 +4083,8 @@ export function CountryWorkflows({
               compactBenefit ||
               body.workflow === "payroll-ledger-rollforward" ||
               body.workflow === "india-invoice-register" ||
+              body.workflow === "india-gstr1-summary" ||
+              body.table_type === "gst-summary-metrics" ||
               compactBankClearance ||
               compactDues ||
               compactCredit ||

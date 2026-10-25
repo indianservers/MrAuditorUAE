@@ -197,6 +197,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "parser_version": "committed-ledger-1",
         }, [*dependencies, receipt]
     if operation == "workflow-source":
+        if data.table_type == "gst-summary-metrics" and package.country != "IN":
+            raise HTTPException(422, "GST summary metric sources require an India engagement")
         if data.table_type.startswith("pension-") and package.country != "AE":
             raise HTTPException(422, "Pension sources require a UAE engagement")
         evidence, receipt = await intelligence.evidence(db, ctx, eng, data.evidence_version_id)
@@ -264,6 +266,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "india-inv01-json": {"application/json"},
             "india-epfo-ecr": {"text/plain"},
             "india-epfo-arrear-ecr-v2": {"text/plain"},
+            "india-gstr1-summary-json": {"application/json"},
             "india-gstr2b-json": {"application/json"},
         }
         if evidence.media_type not in supported_media[data.file_format]:
@@ -380,8 +383,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         source = await intelligence.event(db, ctx, eng.id, identifier, True)
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
-        if data.workflow == "india-invoice-register" and source.body.get("review_status") != "REVIEWED":
-            raise HTTPException(409, "Independently review invoice evidence and register sources before comparison")
+        if data.workflow in {"india-invoice-register", "india-gstr1-summary"} and source.body.get("review_status") != "REVIEWED":
+            raise HTTPException(409, "Independently review both source populations before invoice/register or GST summary comparison")
         if data.workflow == "uae-vat-return" and data.vat201_layout == "emirate-20" and source.body.get("review_status") != "REVIEWED":
             raise HTTPException(409, "Independently review emirate allocation and filed VAT201 sources before comparison")
         if data.workflow == "payroll-ledger-rollforward" and source.body.get("review_status") != "REVIEWED":

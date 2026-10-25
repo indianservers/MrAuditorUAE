@@ -14,6 +14,7 @@ from app.modules.country_workflows.sector_schemas import SECTOR_WORKFLOWS
 from app.modules.country_workflows.withholding_schemas import WITHHOLDING_WORKFLOWS
 
 WORKFLOWS = {
+    "india-gstr1-summary": ("India GSTR-1 summary metric reconciliation", ["IN"], {"books": "gst-summary-metrics", "return": "gst-summary-metrics"}),
     **WITHHOLDING_WORKFLOWS,
     **OPERATION_WORKFLOWS,
     **PAYROLL_WORKFLOWS,

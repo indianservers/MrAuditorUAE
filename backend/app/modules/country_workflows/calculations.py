@@ -804,6 +804,8 @@ def calculate(data, country, sources):
     for role, table in sources.items():
         if table.get("parser_version") == "bank-clearance-carryforward/1" and (data.workflow != "bank-subsequent-clearance" or role != "outstanding"):
             raise ValueError("Carried bank residuals can establish only the outstanding role of subsequent clearance")
+        if table.get("native_format") == "india-gstr1-summary-json" and (data.workflow != "india-gstr1-summary" or role != "return"):
+            raise ValueError("Native GSTR-1 summary can supply only the return role of summary reconciliation")
         if table.get("native_format") == "india-inv01-json":
             if (data.workflow, role) not in {("india-gst", "books"), ("india-invoice-register", "invoices")}:
                 raise ValueError("INV-01 supplies invoice evidence, not a filed GST return; use invoices in the register comparison or invoice-supported books against independent return evidence")
@@ -895,6 +897,10 @@ def calculate(data, country, sources):
             result = DILIGENCE_CALCULATORS[data.workflow](data, tables, country)
         elif data.workflow == "bank-brs":
             result = bank(data, tables)
+        elif data.workflow == "india-gstr1-summary":
+            from app.modules.country_workflows.gst_summary import compare_summary
+
+            result = compare_summary(data, tables)
         elif data.workflow == "india-invoice-register":
             result = tax_documents(data, tables, "invoices")
         elif data.workflow in {"uae-vat", "india-gst"}:

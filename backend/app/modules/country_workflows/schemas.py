@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 from app.modules.country_workflows.audit_schemas import AUDIT_ROW_TYPES
 from app.modules.country_workflows.diligence_schemas import DILIGENCE_ROW_TYPES
 from app.modules.country_workflows.ecr_arrear_schemas import ECRArrearControls
+from app.modules.country_workflows.gst_summary import METRICS, GSTSummaryMetric
 from app.modules.country_workflows.gstr2b_part_schemas import GSTR2BPart
 from app.modules.country_workflows.inventory_controls import InventoryQuantityControl
 from app.modules.country_workflows.operations_schemas import OPERATION_ROW_TYPES
@@ -143,6 +144,7 @@ class Control(Strict):
 
 
 ROW_TYPES: dict[str, type[BaseModel]] = {
+    "gst-summary-metrics": GSTSummaryMetric,
     "fx-rates": ExchangeRate,
     "withholding-records": WithholdingRecord,
     **OPERATION_ROW_TYPES,
@@ -195,7 +197,9 @@ class SourceInput(Strict):
         "india-epfo-ecr",
         "india-epfo-arrear-ecr-v2",
         "india-gstr2b-json",
+        "india-gstr1-summary-json",
     ] = "canonical-csv"
+    gst_summary_metric_controls: dict[str, Money] = Field(default_factory=dict, max_length=19)
     gst_registration: str | None = Field(
         default=None, pattern=r"^\d{2}[A-Z]{5}\d{4}[A-Z][A-Z0-9]Z[A-Z0-9]$"
     )
@@ -210,6 +214,7 @@ class SourceInput(Strict):
     expected_documents: int | None = Field(default=None, ge=0, le=1250)
     rule_document_version_id: uuid.UUID | None = None
     table_type: Literal[
+        "gst-summary-metrics",
         "payroll-account-balances",
         "payroll-ledger-lines",
         "obligation-allocations",
@@ -272,6 +277,11 @@ class SourceInput(Strict):
 
     @model_validator(mode="after")
     def declared_nil(self):
+        if self.table_type == "gst-summary-metrics":
+            if not self.gst_summary_metric_controls or set(self.gst_summary_metric_controls) - METRICS or self.control_totals or self.expected_rows < 1:
+                raise ValueError("GST summary sources require explicit rows and every independent metric control; do not use mixed currency totals")
+        elif self.gst_summary_metric_controls:
+            raise ValueError("GST summary metric controls apply only to summary metric sources")
         if self.file_format == "india-epfo-arrear-ecr-v2":
             if self.ecr_arrear_controls is None or self.arrear_context_evidence_version_id is None or self.arrear_disbursement_date is None or len(self.arrear_scope_assessment.strip()) < 10:
                 raise ValueError("Arrear ECR requires independent wage/contribution controls, distinct retained context, disbursement date and month attribution assessment")
@@ -444,6 +454,7 @@ class WorkflowInput(Strict):
         "uae-vat-return",
         "india-gst",
         "india-invoice-register",
+        "india-gstr1-summary",
         "payroll-settlement",
         "statutory-dues",
         "india-withholding",
