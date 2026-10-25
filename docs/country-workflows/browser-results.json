@@ -102,6 +102,108 @@
       "line": 0,
       "specs": [
         {
+          "title": "reviewed UAE and India contributions become controlled expected bank remittances",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 42002,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:10:02.330Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-26a59f88f80c797750d4",
+          "file": "country-workflows.spec.ts",
+          "line": 11,
+          "column": 1
+        },
+        {
+          "title": "published UAE pension profiles bind reviewed salary bases and retain rule provenance",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 27756,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:10:45.840Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-756e05d429a416468855",
+          "file": "country-workflows.spec.ts",
+          "line": 186,
+          "column": 1
+        },
+        {
+          "title": "UAE pension compares employee net employer and government support through the worker",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 13934,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:11:13.610Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-10437e94bb005f2e2fe1",
+          "file": "country-workflows.spec.ts",
+          "line": 356,
+          "column": 1
+        },
+        {
           "title": "published India payroll profiles feed reviewed PF and EPS calculations",
           "ok": true,
           "tags": [],
@@ -117,12 +219,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 10477,
+                  "duration": 26278,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T08:02:11.010Z",
+                  "startTime": "2026-10-25T15:11:27.558Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -132,7 +234,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-041cc2263972db4afba4",
           "file": "country-workflows.spec.ts",
-          "line": 11,
+          "line": 458,
           "column": 1
         },
         {
@@ -151,12 +253,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 9525,
+                  "duration": 24673,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T08:02:22.654Z",
+                  "startTime": "2026-10-25T15:11:53.847Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -166,7 +268,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-2e565f60e4719992c245",
           "file": "country-workflows.spec.ts",
-          "line": 170,
+          "line": 617,
           "column": 1
         },
         {
@@ -185,12 +287,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 15942,
+                  "duration": 17470,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T08:02:32.188Z",
+                  "startTime": "2026-10-25T15:12:18.531Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -200,7 +302,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-282719d09d06aebc2178",
           "file": "country-workflows.spec.ts",
-          "line": 340,
+          "line": 787,
           "column": 1
         },
         {
@@ -219,12 +321,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 31642,
+                  "duration": 49169,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T08:02:48.140Z",
+                  "startTime": "2026-10-25T15:12:36.011Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -234,7 +336,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-287903a1e39b0df134c1",
           "file": "country-workflows.spec.ts",
-          "line": 650,
+          "line": 1097,
           "column": 1
         },
         {
@@ -253,12 +355,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 26678,
+                  "duration": 56000,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T08:03:19.801Z",
+                  "startTime": "2026-10-25T15:13:25.193Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -268,7 +370,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-7bdc3a90ad8fc5ca1e03",
           "file": "country-workflows.spec.ts",
-          "line": 809,
+          "line": 1256,
           "column": 1
         },
         {
@@ -287,12 +389,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 55280,
+                  "duration": 90965,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T08:03:46.490Z",
+                  "startTime": "2026-10-25T15:14:21.204Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -302,7 +404,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-fb02b458bd93670350d5",
           "file": "country-workflows.spec.ts",
-          "line": 1028,
+          "line": 1475,
           "column": 1
         },
         {
@@ -321,12 +423,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 34419,
+                  "duration": 48637,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T08:04:41.784Z",
+                  "startTime": "2026-10-25T15:15:52.182Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -336,7 +438,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-5ef39276706f99c6f310",
           "file": "country-workflows.spec.ts",
-          "line": 1196,
+          "line": 1643,
           "column": 1
         },
         {
@@ -355,12 +457,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 19731,
+                  "duration": 24818,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T08:05:16.217Z",
+                  "startTime": "2026-10-25T15:16:40.830Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -370,7 +472,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-79e7fad08458ff4fe1b6",
           "file": "country-workflows.spec.ts",
-          "line": 1399,
+          "line": 1846,
           "column": 1
         },
         {
@@ -389,12 +491,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 3279,
+                  "duration": 3578,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T08:05:35.958Z",
+                  "startTime": "2026-10-25T15:17:05.659Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -404,7 +506,7 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-a130813f867235ec5e96",
           "file": "country-workflows.spec.ts",
-          "line": 1558,
+          "line": 2005,
           "column": 1
         },
         {
@@ -423,12 +525,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 95195,
+                  "duration": 150363,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T08:05:39.245Z",
+                  "startTime": "2026-10-25T15:17:09.246Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -438,12 +540,12 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-9492b1ba84ae537836ad",
           "file": "country-workflows.spec.ts",
-          "line": 1606,
+          "line": 2053,
           "column": 1
         },
         {
           "title": "UAE and India credit applications preserve residuals through the real worker",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -456,23 +558,55 @@
                 {
                   "workerIndex": 0,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 22612,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 120101,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts",
+                        "column": 10,
+                        "line": 2386
+                      },
+                      "message": "Error: locator.selectOption: Test timeout of 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('items source', { exact: true })\u001b[22m\n\u001b[2m    - locator resolved to <select aria-label=\"items source\">…</select>\u001b[22m\n\u001b[2m  - attempting select option action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible and enabled\u001b[22m\n\u001b[2m      - did not find some options\u001b[22m\n\u001b[2m    - retrying select option action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible and enabled\u001b[22m\n\u001b[2m      - did not find some options\u001b[22m\n\u001b[2m    - retrying select option action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    228 × waiting for element to be visible and enabled\u001b[22m\n\u001b[2m        - did not find some options\u001b[22m\n\u001b[2m      - retrying select option action\u001b[22m\n\u001b[2m        - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible and enabled\u001b[22m\n\n\n  2384 |       await page\n  2385 |         .getByLabel(`${role} source`, { exact: true })\n> 2386 |         .selectOption(String(id));\n       |          ^\n  2387 |     await page\n  2388 |       .getByRole(\"checkbox\", {\n  2389 |         name: /Balances are before the listed credit applications/,\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts:2386:10"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T08:07:14.455Z",
+                  "startTime": "2026-10-25T15:19:39.626Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\country-workflows-UAE-and--8d1e7-als-through-the-real-worker\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\country-workflows-UAE-and--8d1e7-als-through-the-real-worker\\error-context.md"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\country-workflows-UAE-and--8d1e7-als-through-the-real-worker\\error-context.md"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "e30b0a06ea3b0c92c29c-48fd0976effc478074aa",
           "file": "country-workflows.spec.ts",
-          "line": 1904,
+          "line": 2351,
           "column": 1
         },
         {
@@ -488,15 +622,15 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 28633,
+                  "duration": 33181,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T08:07:37.079Z",
+                  "startTime": "2026-10-25T15:21:42.053Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -506,12 +640,12 @@
           ],
           "id": "e30b0a06ea3b0c92c29c-c3b66c811297d61b2a1b",
           "file": "country-workflows.spec.ts",
-          "line": 2005,
+          "line": 2452,
           "column": 1
         },
         {
           "title": "UAE source controls, BRS exceptions, exports and India isolation",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -522,29 +656,127 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 1,
                   "parallelIndex": 0,
-                  "status": "passed",
-                  "duration": 84951,
-                  "errors": [],
+                  "status": "timedOut",
+                  "duration": 120092,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts",
+                        "column": 6,
+                        "line": 2681
+                      },
+                      "message": "Error: locator.selectOption: Test timeout of 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Saved source or result')\u001b[22m\n\u001b[2m    - locator resolved to <select aria-label=\"Saved source or result\">…</select>\u001b[22m\n\u001b[2m  - attempting select option action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible and enabled\u001b[22m\n\u001b[2m      - did not find some options\u001b[22m\n\u001b[2m    - retrying select option action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible and enabled\u001b[22m\n\u001b[2m      - did not find some options\u001b[22m\n\u001b[2m    - retrying select option action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    231 × waiting for element to be visible and enabled\u001b[22m\n\u001b[2m        - did not find some options\u001b[22m\n\u001b[2m      - retrying select option action\u001b[22m\n\u001b[2m        - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible and enabled\u001b[22m\n\n\n  2679 |   await page\n  2680 |     .getByLabel(\"Saved source or result\")\n> 2681 |     .selectOption(fixture.uae_result);\n       |      ^\n  2682 |   await expect(\n  2683 |     page.getByText(\"SYNTHETIC account reconciliation\", { exact: true }),\n  2684 |   ).toBeVisible();\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts:2681:6"
+                    }
+                  ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T08:08:05.719Z",
+                  "startTime": "2026-10-25T15:22:16.534Z",
                   "annotations": [],
-                  "attachments": []
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\country-workflows-UAE-sour-1b50f-exports-and-India-isolation\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\country-workflows-UAE-sour-1b50f-exports-and-India-isolation\\error-context.md"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\country-workflows-UAE-sour-1b50f-exports-and-India-isolation\\error-context.md"
+                    }
+                  ]
                 }
               ],
-              "status": "expected"
+              "status": "unexpected"
             }
           ],
           "id": "e30b0a06ea3b0c92c29c-4910f104b29236674674",
           "file": "country-workflows.spec.ts",
-          "line": 2207,
+          "line": 2654,
           "column": 1
         },
         {
           "title": "original CSV and reviewed XLSX tables reach bank and payable reconciliations",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "timedOut",
+                  "duration": 120102,
+                  "error": {
+                    "message": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m",
+                    "stack": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+                  },
+                  "errors": [
+                    {
+                      "message": "\u001b[31mTest timeout of 120000ms exceeded.\u001b[39m"
+                    },
+                    {
+                      "location": {
+                        "file": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts",
+                        "column": 6,
+                        "line": 3244
+                      },
+                      "message": "Error: locator.selectOption: Test timeout of 120000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByLabel('Reviewed supporting bank table')\u001b[22m\n\u001b[2m    - locator resolved to <select aria-label=\"Reviewed supporting bank table\">…</select>\u001b[22m\n\u001b[2m  - attempting select option action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible and enabled\u001b[22m\n\u001b[2m      - did not find some options\u001b[22m\n\u001b[2m    - retrying select option action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible and enabled\u001b[22m\n\u001b[2m      - did not find some options\u001b[22m\n\u001b[2m    - retrying select option action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    193 × waiting for element to be visible and enabled\u001b[22m\n\u001b[2m        - did not find some options\u001b[22m\n\u001b[2m      - retrying select option action\u001b[22m\n\u001b[2m        - waiting 500ms\u001b[22m\n\u001b[2m    - waiting for element to be visible and enabled\u001b[22m\n\n\n  3242 |   await page\n  3243 |     .getByLabel(\"Reviewed supporting bank table\")\n> 3244 |     .selectOption(fixture.reviewed_xlsx_bank);\n       |      ^\n  3245 |   await fill([\n  3246 |     [\"Schedule title\", bankTitle],\n  3247 |     [\"Bank account identifier\", \"BANK-1\"],\n    at C:\\Indian Servers\\TheAuditor\\frontend\\e2e\\country-workflows.spec.ts:3244:6"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:24:18.475Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "screenshot",
+                      "contentType": "image/png",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\country-workflows-original-dab3e-and-payable-reconciliations\\test-failed-1.png"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\country-workflows-original-dab3e-and-payable-reconciliations\\error-context.md"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results\\country-workflows-original-dab3e-and-payable-reconciliations\\error-context.md"
+                    }
+                  ]
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-21b42b359901fbf0cdc3",
+          "file": "country-workflows.spec.ts",
+          "line": 3115,
+          "column": 1
+        },
+        {
+          "title": "numbered GSTR-2B originals require review before purchase-register matching",
           "ok": true,
           "tags": [],
           "tests": [
@@ -556,15 +788,15 @@
               "projectName": "",
               "results": [
                 {
-                  "workerIndex": 0,
+                  "workerIndex": 3,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 59820,
+                  "duration": 30580,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-10-25T08:09:30.688Z",
+                  "startTime": "2026-10-25T15:26:21.708Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -572,9 +804,281 @@
               "status": "expected"
             }
           ],
-          "id": "e30b0a06ea3b0c92c29c-21b42b359901fbf0cdc3",
+          "id": "e30b0a06ea3b0c92c29c-92663a433b813873dfe3",
           "file": "country-workflows.spec.ts",
-          "line": 2668,
+          "line": 3352,
+          "column": 1
+        },
+        {
+          "title": "UAE reviewed import boxes compose with other VAT201 books before filed comparison",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 37147,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:26:53.698Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-75b1de5e717db4aaa81b",
+          "file": "country-workflows.spec.ts",
+          "line": 3507,
+          "column": 1
+        },
+        {
+          "title": "UAE WPS EVP preparation preserves variable-pay controls without duplicating salary",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 32534,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:27:30.859Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-f75e4733a479bfb4b011",
+          "file": "country-workflows.spec.ts",
+          "line": 3668,
+          "column": 1
+        },
+        {
+          "title": "UAE then India controlled inventory bridges earlier and later lot counts",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 70952,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:28:03.404Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-a315eba02828c89590e6",
+          "file": "country-workflows.spec.ts",
+          "line": 3815,
+          "column": 1
+        },
+        {
+          "title": "India eight-field arrears retain month context and cannot replace regular monthly dues",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 36509,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:29:14.368Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-0712356ea27a11e80727",
+          "file": "country-workflows.spec.ts",
+          "line": 4001,
+          "column": 1
+        },
+        {
+          "title": "reviewed bank residuals carry to the next window for UAE then India",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 80788,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:29:50.892Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-bfb38f251dde1bb66322",
+          "file": "country-workflows.spec.ts",
+          "line": 4172,
+          "column": 1
+        },
+        {
+          "title": "payroll accounts reconcile gross net deductions and employer contributions for UAE then India",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 35494,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:31:11.699Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-3041145be5517509c9a2",
+          "file": "country-workflows.spec.ts",
+          "line": 4349,
+          "column": 1
+        },
+        {
+          "title": "UAE VAT201 retains seven emirates and exposes offsetting geographic differences",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 66666,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:31:47.204Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-fee544d61dec12c9d50a",
+          "file": "country-workflows.spec.ts",
+          "line": 4459,
+          "column": 1
+        },
+        {
+          "title": "India purchase and sales invoices compare with registers without becoming filed returns",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 120000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 34582,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-25T15:32:53.884Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "e30b0a06ea3b0c92c29c-729e4185ab829e116225",
+          "file": "country-workflows.spec.ts",
+          "line": 4633,
           "column": 1
         }
       ]
@@ -582,11 +1086,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-10-25T08:02:10.572Z",
-    "duration": 501065.149,
-    "expected": 14,
+    "startTime": "2026-10-25T15:10:01.799Z",
+    "duration": 1408160.1909999999,
+    "expected": 23,
     "skipped": 0,
-    "unexpected": 0,
+    "unexpected": 3,
     "flaky": 0
   }
 }

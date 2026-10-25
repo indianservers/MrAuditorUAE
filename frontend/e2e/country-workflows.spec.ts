@@ -2365,6 +2365,7 @@ test("UAE and India credit applications preserve residuals through the real work
     ["IN", fixture.india_engagement, "INR"],
   ]) {
     await page.goto(`/intelligence/${eid}/country-workflow`);
+    await loadRetainedHistory(page);
     await page
       .getByLabel("Workflow", { exact: true })
       .selectOption("credit-note-applications");
@@ -2595,6 +2596,31 @@ test("India withholding separates legal roles and excludes superseded observatio
   expect(errors).toEqual([]);
 });
 
+async function loadRetainedHistory(page: Page) {
+  const load = page.getByRole("button", {
+    name: "Load older source choices",
+    exact: true,
+  });
+  const saved = page.getByLabel("Saved source or result");
+  await expect(saved).toBeVisible();
+  // These shared fixture engagements deliberately contain more than 100 events.
+  // Wait for both initial history requests before inspecting pagination state.
+  await expect(load).toBeVisible();
+  for (let pageNumber = 0; pageNumber < 50; pageNumber++) {
+    if (!(await load.count())) return;
+    const previousCount = await saved.locator("option").count();
+    await load.click();
+    await expect
+      .poll(
+        async () =>
+          (await saved.locator("option").count()) > previousCount ||
+          !(await load.count()),
+      )
+      .toBe(true);
+  }
+  throw new Error("Retained history exceeds the browser fixture page bound");
+}
+
 function implementationHash() {
   execFileSync(
     resolve("../backend/.venv/Scripts/python.exe"),
@@ -2654,6 +2680,7 @@ async function saveScreenshot(path: string, capture: () => Promise<Buffer>) {
 test("UAE source controls, BRS exceptions, exports and India isolation", async ({
   page,
 }) => {
+  test.setTimeout(300000);
   const runSuffix = Date.now().toString();
   const queuedBRSTitle = `SYNTHETIC queued browser BRS ${runSuffix}`;
   const payrollTitle = `SYNTHETIC queued reviewed payroll calculation ${runSuffix}`;
@@ -2668,6 +2695,7 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await page.waitForURL("**/dashboard");
   await page.goto(`/intelligence/${fixture.uae_engagement}/country-workflow`);
+  await loadRetainedHistory(page);
   await expect(
     page.getByRole("heading", { name: "Reconcile and assess evidence" }),
   ).toBeVisible();
@@ -2714,6 +2742,7 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
     page.screenshot({ fullPage: true }),
   );
   await page.goto(`/intelligence/${fixture.india_engagement}/country-workflow`);
+  await loadRetainedHistory(page);
   await expect(
     page
       .getByLabel("Workflow")
@@ -2740,6 +2769,7 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
     page.screenshot({ fullPage: true }),
   );
   await page.goto(`/intelligence/${fixture.uae_engagement}/country-workflow`);
+  await loadRetainedHistory(page);
   await page
     .getByLabel("Saved source or result")
     .selectOption(fixture.uae_vat_result);
@@ -2868,6 +2898,7 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
     },
   ]) {
     await page.goto(`/intelligence/${source.engagement}/workflow-source`);
+    await loadRetainedHistory(page);
     await page.getByLabel("Source file format").selectOption(source.format);
     await page.getByLabel("Schedule title", { exact: true }).fill(source.title);
     await page
@@ -2998,6 +3029,7 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
     );
   }
   await page.goto(`/intelligence/${fixture.india_engagement}/country-workflow`);
+  await loadRetainedHistory(page);
   await page.getByLabel("Workflow", { exact: true }).selectOption("india-gst");
   const gstTitle = `SYNTHETIC queued native GST comparison ${runSuffix}`;
   await page.getByLabel("Schedule title", { exact: true }).fill(gstTitle);
@@ -3044,6 +3076,7 @@ test("UAE source controls, BRS exceptions, exports and India isolation", async (
       .screenshot(),
   );
   await page.goto(`/intelligence/${fixture.india_engagement}/country-workflow`);
+  await loadRetainedHistory(page);
   await page
     .getByLabel("Workflow", { exact: true })
     .selectOption("india-payroll-rules");
@@ -3199,6 +3232,7 @@ test("original CSV and reviewed XLSX tables reach bank and payable reconciliatio
   );
 
   await page.goto(`/intelligence/${eid}/workflow-source`);
+  await loadRetainedHistory(page);
   const mappedTitle = `SYNTHETIC mapped bank browser ${suffix}`;
   await page.getByLabel("Map original CSV columns").check();
   await page.getByLabel("CSV separator").selectOption(";");
@@ -3237,6 +3271,7 @@ test("original CSV and reviewed XLSX tables reach bank and payable reconciliatio
   await captureResult(mappedTitle, "mapped-debit-credit-worker-review.png");
 
   await page.goto(`/intelligence/${eid}/workflow-source`);
+  await loadRetainedHistory(page);
   const bankTitle = `SYNTHETIC reviewed XLSX bank browser ${suffix}`;
   await page.getByLabel("Source origin").selectOption("supporting");
   await page
@@ -3268,6 +3303,7 @@ test("original CSV and reviewed XLSX tables reach bank and payable reconciliatio
     ["xlsx", bank],
   ]) {
     await page.goto(`/intelligence/${eid}/country-workflow`);
+    await loadRetainedHistory(page);
     const title = `SYNTHETIC ${kind} bank reconciliation ${suffix}`;
     await fill([
       ["Schedule title", title],
@@ -3297,6 +3333,7 @@ test("original CSV and reviewed XLSX tables reach bank and payable reconciliatio
   }
 
   await page.goto(`/intelligence/${eid}/workflow-source`);
+  await loadRetainedHistory(page);
   const itemsTitle = `SYNTHETIC reviewed XLSX payables ${suffix}`;
   await page.getByLabel("Source origin").selectOption("supporting-items");
   await page
@@ -3324,6 +3361,7 @@ test("original CSV and reviewed XLSX tables reach bank and payable reconciliatio
   ).toBeVisible();
   await captureResult(itemsTitle, "reviewed-xlsx-payable-sign-source.png");
   await page.goto(`/intelligence/${eid}/country-workflow`);
+  await loadRetainedHistory(page);
   await page
     .getByLabel("Workflow", { exact: true })
     .selectOption("subledger-control");

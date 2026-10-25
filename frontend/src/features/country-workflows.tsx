@@ -2950,6 +2950,11 @@ export function CountryWorkflows({
               )}
             </>
           )}
+          {results.hasOlder && (
+            <Button disabled={results.loadingOlder} onClick={results.loadOlder}>
+              Load older source choices
+            </Button>
+          )}
           <Button disabled={action.isPending} onClick={run}>
             Queue calculation
           </Button>

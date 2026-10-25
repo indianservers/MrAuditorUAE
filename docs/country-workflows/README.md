@@ -4,6 +4,14 @@ Later additions, verification receipts and remaining native-format gaps are docu
 
 UAE first, then India. This increment adds twelve operational workflows and 142 named synthetic reference scenarios. It does **not** complete the entire regulatory roadmap or qualify the application for production statutory reporting.
 
+## Consolidated browser follow-up — 25 October 2026
+
+The current 26-test UAE/India browser campaign exercised the running API and real Redis/Celery worker after the invoice/register addition. `browser-results.json` preserves the first run: 23 passed and three timed out while selecting original fixture events outside the first loaded history page. `browser-history-intermediate-results.json` preserves the intermediate run: two passed and the combined smoke test reached its overall two-minute bound. The final `browser-history-regression-results.json` records all three affected tests passing, without a database reset between attempts. This is passing coverage across the full campaign plus a focused rerun, not a single green 26-test execution.
+
+Source preparation and workflow forms now offer **Load older source choices** next to their action controls, reusing the same cursor history as the existing saved-event loading button. Older sources remain subject to the original review, freshness, country and role filters. The affected browser tests explicitly load the known multi-page fixture history through the UI and wait for the initial pagination state. The combined multi-operation smoke test has a five-minute overall bound; individual response and job checks retain their existing bounds. Its final execution took 3.1 minutes. The other focused flows cover both countries' credit residuals and original CSV/reviewed XLSX bank and payable sources.
+
+`consolidated-api-regression-results.xml` records 68 passing API tests across 29 selected country-workflow and regulatory test files in 236.11 seconds. These exercise the real disposable PostgreSQL database, API, private object storage and job processor with explicit scanner/broker test doubles. `history-controls-frontend-results.xml` records 152 passing frontend tests. Production build, typecheck, scoped ESLint and source UTF-8 preflight pass. These runs remain synthetic verification. Native GSTR-1, professionally qualified country packs, real client pilots and the existing production release gates remain open. The pilot folders and 148 labelled synthetic examples are described in [pilot-data/README.txt](../../pilot-data/README.txt).
+
 ## Implemented
 
 - Account-level bank BRS: four opening/closing controls, an arithmetic bridge, bounded matching, unresolved amounts, candidate causes, aging and stale items. Arabic/Unicode counterparties retain distinct identities. Matching tolerance cannot hide a nonzero bridge residual.
@@ -30,7 +38,7 @@ Bank books can come directly from a committed GL/journal snapshot, selecting one
 5. Open a completed job, investigate exceptions and document their dispositions. Balance-control failures, expired evidence and missing mandatory checks require correction and regeneration. An independent authorized reviewer approves the result. Sources changed after preparation make dependent results stale.
 6. Export XLSX or use the existing working-paper actions. Exports preserve source receipts, unqualified statutory status, limitations and review state. Working-paper generation requires a reviewed current result and still produces a draft for actual audit procedures and conclusions.
 
-The source/result picker shows the latest 100 events, jobs show the latest 50, and result rows paginate by 100. XLSX includes the full bounded result. Each uploaded source is limited to 5,000 rows and 10 MiB; no unbounded performance claim is made.
+The source/result picker starts with the latest 100 events and offers cursor-based loading of older sources/results. Jobs show the latest 50, and result rows paginate by 100. XLSX includes the full bounded result. Each uploaded source is limited to 5,000 rows and 10 MiB; no unbounded performance claim is made.
 
 ## Coverage evidence
 
