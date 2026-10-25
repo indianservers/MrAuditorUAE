@@ -8,6 +8,7 @@ from pydantic import Field, HttpUrl, model_validator
 from app.modules.jurisdictions.profiles import Strict
 from app.modules.regulatory.benefit_profiles import BenefitParameters
 from app.modules.regulatory.payroll_profiles import PayrollParameters
+from app.modules.regulatory.pension_profiles import PensionParameters
 from app.modules.regulatory.validation_schemas import RuleFixture
 
 Fact = Annotated[str, Field(max_length=4000)] | bool | int | None
@@ -90,9 +91,12 @@ class Rule(Strict):
     input_requirements: list[str] = Field(min_length=1, max_length=50)
     output_requirements: list[str] = Field(min_length=1, max_length=50)
     exceptions_and_elections: list[str] = Field(default_factory=list, max_length=50)
-    method: Literal["checklist", "flat_rate", "benefit_profile", "payroll_profile"] = "checklist"
+    method: Literal[
+        "checklist", "flat_rate", "benefit_profile", "payroll_profile", "pension_profile"
+    ] = "checklist"
     benefit_parameters: BenefitParameters | None = None
     payroll_parameters: PayrollParameters | None = None
+    pension_parameters: PensionParameters | None = None
     rate: Decimal | None = Field(default=None, ge=0, le=1, max_digits=18, decimal_places=12)
     calculation_currency: str | None = Field(default=None, pattern=r"^[A-Z]{3}$")
     validation_status: Literal["AWAITING_VALIDATION", "VALIDATED"] = "AWAITING_VALIDATION"
@@ -121,6 +125,15 @@ class Rule(Strict):
             raise ValueError("Benefit parameters require the benefit-profile method only")
         if (self.method == "payroll_profile") != (self.payroll_parameters is not None):
             raise ValueError("Payroll parameters require the payroll-profile method only")
+        if (self.method == "pension_profile") != (self.pension_parameters is not None):
+            raise ValueError("Pension parameters require the pension-profile method only")
+        if self.method == "pension_profile":
+            if self.country != "AE" or self.period_basis != "transaction_date":
+                raise ValueError("UAE pension profiles require whole wage-month date selection")
+            if self.calculation_currency is not None or self.applicability:
+                raise ValueError(
+                    "Pension profiles use AED and explicit authority, scheme and membership scope"
+                )
         if self.method == "payroll_profile":
             if self.country != "IN" or self.period_basis != "transaction_date":
                 raise ValueError("India payroll profiles require wage-month date selection")

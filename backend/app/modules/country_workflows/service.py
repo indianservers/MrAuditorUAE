@@ -336,6 +336,10 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         source = await intelligence.event(db, ctx, eng.id, identifier, True)
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
+        if source.body.get("parser_version") == "published-pension-profiles/1" and (
+            data.workflow != "uae-pension-review" or role != "rules"
+        ):
+            raise HTTPException(422, "Published pension profiles can feed only the UAE pension rules role")
         if source.body.get("parser_version") == "published-payroll-profiles/1" and (
             data.workflow != "india-payroll-rules" or role != "rules"
         ):
@@ -385,6 +389,10 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         from app.modules.country_workflows.payroll_source import verify as verify_payroll
 
         dependencies.extend(await verify_payroll(db, ctx, eng, sources, data, contributors))
+    elif data.workflow == "uae-pension-review" and sources["rules"].get("parser_version") == "published-pension-profiles/1":
+        from app.modules.country_workflows.payroll_source import verify as verify_pension
+
+        dependencies.extend(await verify_pension(db, ctx, eng, sources, data, contributors, profile_kind="pension"))
     elif data.workflow in {"india-payroll-rules", "uae-benefit-review", "uae-pension-review"}:
         dependencies.extend(
             await payroll_rule_documents(

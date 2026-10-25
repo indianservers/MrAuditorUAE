@@ -3,6 +3,7 @@ import { beforeEach, expect, it, vi } from "vitest";
 import {
   PublishedBenefitSource,
   PublishedPayrollSource,
+  PublishedPensionSource,
 } from "@/features/published-benefit-source";
 
 const state = vi.hoisted(() => ({
@@ -223,6 +224,72 @@ it("retains selected profile versions across pages and submits explicit employee
       label: "Synthetic selected profiles",
       assessment:
         "Synthetic explicit employee cohort and service date assessment",
+    },
+  });
+});
+
+it("prepares UAE pension profiles with their exact reviewed salary-basis event", async () => {
+  state.pages["regulatory/rules?country=AE&offset=0&limit=50"] = {
+    items: [
+      { ...profile, body: { ...profile.body, method: "pension_profile" } },
+      { ...profile, id: "benefit", rule_key: "AE-BENEFIT" },
+      {
+        ...profile,
+        id: "withdrawn",
+        state: "WITHDRAWN",
+        body: { ...profile.body, method: "pension_profile" },
+      },
+    ],
+  };
+  state.mutate.mockResolvedValue({ id: "pension-derived" });
+  const created = vi.fn();
+  render(
+    <PublishedPensionSource
+      eid="uae"
+      employees={[
+        { ...employee, table_type: "pension-bases" },
+        {
+          ...employee,
+          id: "unreviewed",
+          label: "Unreviewed pension salary",
+          table_type: "pension-bases",
+          review_status: "UNVERIFIED",
+        },
+        { ...employee, id: "benefit", label: "Benefit employees" },
+      ]}
+      onCreated={created}
+    />,
+  );
+  expect(
+    screen.queryByRole("option", { name: "Unreviewed pension salary" }),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.queryByRole("option", { name: "Benefit employees" }),
+  ).not.toBeInTheDocument();
+  expect(screen.getAllByRole("checkbox")).toHaveLength(1);
+  for (const [label, value] of [
+    ["Reviewed pension basis source", "employees"],
+    ["Independent wage-basis row count", "3"],
+    ["Published pension source title", "Synthetic sourced pension rules"],
+    [
+      "Pension profile applicability assessment",
+      "Authority, scheme, continuity and contribution salary explicitly assessed",
+    ],
+  ])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("checkbox"));
+  fireEvent.click(
+    screen.getByRole("button", {
+      name: "Prepare published pension rule source",
+    }),
+  );
+  await waitFor(() => expect(created).toHaveBeenCalledWith("pension-derived"));
+  expect(state.mutate.mock.calls[0][0]).toMatchObject({
+    path: "intelligence/engagements/uae/pension-rule-source",
+    body: {
+      basis_source_id: "employees",
+      expected_basis_rows: 3,
+      rule_version_ids: ["profile"],
     },
   });
 });

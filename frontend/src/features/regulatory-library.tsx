@@ -264,6 +264,68 @@ export function RegulatoryLibrary() {
             Propose UAE benefit profile
           </Button>
         )}
+        {country === "AE" && (
+          <Button
+            onClick={() =>
+              setEditor(
+                JSON.stringify(
+                  {
+                    rule_key: "AE-",
+                    country: "AE",
+                    title: "",
+                    description: "",
+                    framework: "IFRS",
+                    period_basis: "transaction_date",
+                    effective_from: "",
+                    effective_to: null,
+                    citations: [
+                      {
+                        authority: "",
+                        legislation: "",
+                        url: "",
+                        paragraph: "",
+                        retrieval_status: "AWAITING_VALIDATION",
+                        source_document_id: null,
+                        document_sha256: null,
+                        retrieved_on: null,
+                      },
+                    ],
+                    input_requirements: ["reviewed_assessed_pension_bases"],
+                    output_requirements: ["pension_contributions"],
+                    applicability: [],
+                    exceptions_and_elections: [],
+                    method: "pension_profile",
+                    pension_parameters: {
+                      authority: "",
+                      scheme: "",
+                      membership_cohort: "",
+                      pension_country: "",
+                      nationality: "",
+                      employment_sector: "",
+                      jurisdiction: "",
+                      component: "",
+                      minimum_basis: null,
+                      salary_cap: null,
+                      formula: "rate",
+                      rate: null,
+                      fixed_amount: null,
+                      rounding: "",
+                    },
+                    validation_status: "AWAITING_VALIDATION",
+                    professional_review_status: "PENDING",
+                    last_reviewed: null,
+                    amendment_reason: "",
+                    expected_sequence: 0,
+                  },
+                  null,
+                  2,
+                ),
+              )
+            }
+          >
+            Propose UAE pension profile
+          </Button>
+        )}
         {country === "IN" && (
           <Button
             onClick={() =>

@@ -10,6 +10,7 @@ import { PageHeader } from "./shared";
 import {
   PublishedBenefitSource,
   PublishedPayrollSource,
+  PublishedPensionSource,
 } from "./published-benefit-source";
 
 function ExcludedVATBoxes({
@@ -2200,6 +2201,16 @@ export function CountryWorkflows({
         config.data?.country === "AE" &&
         tableType === "benefit-rules" && (
           <PublishedBenefitSource
+            key={`${tenant}:${eid}`}
+            eid={eid}
+            employees={results.data?.items || []}
+            onCreated={setSelected}
+          />
+        )}
+      {mode === "workflow-source" &&
+        config.data?.country === "AE" &&
+        tableType === "pension-rules" && (
+          <PublishedPensionSource
             key={`${tenant}:${eid}`}
             eid={eid}
             employees={results.data?.items || []}

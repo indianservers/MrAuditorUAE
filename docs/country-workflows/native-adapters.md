@@ -2,6 +2,70 @@
 
 Implementation checkpoint: 25 October 2026. These additions extend the existing evidence, intelligence job, immutable event, review and lineage infrastructure.
 
+## Published UAE pension profiles
+
+The regulatory library now supports `pension_profile` with the same
+`PensionParameters` model used by retained canonical pension-rule sources. Profiles
+require UAE scope, wage-month date selection, explicit authority/scheme/cohort
+parameters and reviewed fixture receipts. Generic regulatory assessments refuse
+this method and direct the user to `uae-pension-review`. The proposal template
+contains empty scope fields and null rates; it does not seed a legal pack.
+
+Pension fixture inputs use `pension_basis`, `reported_amount` and independently
+specified expected outcomes. Employer-offset fixtures may supply an explicitly
+resolved `government_amount`, retained at fils precision, or test the actual
+missing-support refusal. The supporting fixture value isolates employer arithmetic;
+it does not qualify the government-support scheme. Short-lived versions with no
+complete wage month can record blocking-only validation. Publication replays the
+approved fixtures and retains the receipt; calculator/schema/runtime changes
+invalidate reuse while preserving historical output. Previously published versions
+with stale receipts require explicit new versions and independent review.
+
+`POST /intelligence/engagements/{eid}/pension-rule-source` binds selected published
+versions to one exact, current, independently reviewed `pension-bases` event and an
+independent row-count control. It reuses the India payroll whole-month selection,
+source verification, contributor and dependency infrastructure. Each basis needs
+one published version matching authority, scheme, membership cohort, nationality,
+pension country, employment sector and jurisdiction throughout its entire wage
+month. A newer interior-month amendment blocks the original version even when
+both month endpoints would select it. Limits remain twenty selected profiles,
+5,000 basis rows and one hundred distinct wage months.
+
+The derived source requires independent review and can feed only the pension
+workflow's rules role. Calculation rederives it against the original basis event
+and current published rules; substituting a different reviewed basis event is
+rejected. Results retain global source-copy identifiers separately from engagement
+evidence IDs, published version IDs/hashes and the separately resolved government
+component. Amendments, withdrawal or source replacement stale dependencies;
+historical bodies/hashes remain readable. Multiple published versions retain their
+selected wage months so older versions cannot create false overlaps in new months.
+
+The source-preparation UI supports published pension profiles alongside the existing
+benefit and India payroll selectors. Profile choices remain paginated and exclude
+unpublished versions. Native authority statement readers, qualified legal packs,
+salary-basis derivation, filing/payment adapters and client pilots remain open;
+published profile mechanics do not establish any of those external qualifications.
+
+Verification: `published-pension-full-unit-results.xml` records **1,339 passing
+backend unit tests**, with four opt-in connector skips. The seven tests in
+`published-pension-integration-results.xml` cover pension publication and recorded
+fixtures, exact basis-event binding, support arithmetic, export, withdrawal and
+interior-month amendment staleness, plus existing India payroll, UAE benefit and
+manual pension paths. They use a real database, API, private storage and job
+processor with explicit scanner/broker doubles. All **129 frontend tests**, scoped
+type/lint checks and the production build pass. The additional four tests in
+`published-pension-regulatory-regression-results.xml` verify generic fixture
+approval/publication and controlled withdrawal after the shared schema extension.
+
+`published-pension-browser-results.txt` records **four passing browser tests in
+44.8 seconds** against the owned API and real Redis/Celery worker: published
+pension preparation/review/calculation, manual pension comparison, published India
+payroll and published UAE benefits. The pension test also checks that the proposal
+template starts without a rate or authority and preserves all selected version IDs
+in the result. The two `uae-published-pension-*.png` screenshots were visually
+inspected. These focused results preserve the earlier full-suite receipt rather
+than replacing it with a four-test report.
+
 ## UAE pension contributions
 
 `uae-pension-review` adds separate assessed salary bases, retained-document rule
@@ -55,9 +119,9 @@ was visually inspected for the three components, visible scope and readable
 amounts. The earlier complete 14-test campaign predates this new workflow; this
 focused receipt does not silently replace its full-suite evidence.
 
-Published pension profiles in the firm regulatory library, legally qualified
+At this earlier checkpoint, published pension profiles in the firm regulatory library, legally qualified
 authority/cohort packs, native pension-authority statement readers, salary-basis
-derivation, filing/payment adapters and consented client pilots remain open.
+derivation, filing/payment adapters and consented client pilots remained open.
 This increment supports reviewed canonical contribution comparisons and does not
 complete those remaining roadmap requirements.
 
@@ -66,7 +130,7 @@ complete those remaining roadmap requirements.
 `VALIDATED` metadata alone no longer qualifies a rule for approval/publication.
 Independent approval supplies one to twenty typed `validation_cases` with explicit
 expected outcomes and expected-value references. The server runs the actual
-checklist/flat-rate evaluator, UAE benefit calculator or India payroll calculator.
+checklist/flat-rate evaluator, UAE benefit/pension calculator or India payroll calculator.
 Wrong amounts, mismatched kinds, duplicate case IDs and suites without an
 applicable case are rejected. Decimal expectations remain independent inputs;
 the server never replaces them with its calculated values. Source-copy checks,
@@ -108,8 +172,8 @@ boundary coverage or authenticity of an expected-value reference. Those referenc
 remain reviewer attestations. No legal pack, representative client-data pilot,
 provider qualification or statutory compliance conclusion is certified here.
 
-The current backend receipt records **1,297 passes and four opt-in connector
-skips**. `regulatory-validation-integration-results.xml` records **21 passing API
+At the recorded-fixture checkpoint, the backend receipt recorded **1,297 passes
+and four opt-in connector skips**. `regulatory-validation-integration-results.xml` records **21 passing API
 tests**, including failed/missing fixtures, exact unrounded output, receipt replay,
 implementation-change freshness, both profile bridges, withdrawal and existing
 reporting paths. Scanner/broker are explicit boundary doubles; the database,

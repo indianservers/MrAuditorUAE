@@ -273,8 +273,14 @@ async def validation_contract(identifier: uuid.UUID, db: DB, ctx: Actor):
             template["transaction_date"] = rule.effective_from.isoformat()
     else:
         template.update(as_of=None, expected_state=None)
-        template["employee" if rule.method == "benefit_profile" else "basis"] = None
-        if rule.method == "payroll_profile":
+        template[
+            "employee"
+            if rule.method == "benefit_profile"
+            else "pension_basis"
+            if rule.method == "pension_profile"
+            else "basis"
+        ] = None
+        if rule.method in {"payroll_profile", "pension_profile"}:
             template["reported_amount"] = None
     if rule.method != "checklist":
         template["expected_amount"] = None

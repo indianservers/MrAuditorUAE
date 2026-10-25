@@ -95,6 +95,14 @@ def implementation_hash(method):
                 "modules/country_workflows/audit_calculations.py",
             ]
         )
+    elif method == "pension_profile":
+        paths.extend(
+            [
+                "modules/regulatory/pension_profiles.py",
+                "modules/country_workflows/pension_schemas.py",
+                "modules/country_workflows/pension_calculations.py",
+            ]
+        )
     elif method == "payroll_profile":
         paths.extend(
             [
@@ -119,6 +127,12 @@ def implementation_hash(method):
         functions.extend(
             [calculator.benefits, calculator.rounded, calculator.money, calculator.result]
         )
+    elif method == "pension_profile":
+        from app.modules.country_workflows import pension_calculations as pension_calculator
+
+        functions.extend(
+            [pension_calculator.pension, pension_calculator.identity, evaluate_pension_case]
+        )
     else:
         from app.modules.country_workflows import payroll_calculations as payroll_calculator
 
@@ -132,7 +146,10 @@ def implementation_hash(method):
             "keyword_defaults": constant(function.__kwdefaults__),
         }
         digest.update(fingerprint(payload).encode())
-    for dependency in ("pydantic", "Babel"):
+    dependencies = (
+        ("pydantic", "Babel", "pycountry") if method == "pension_profile" else ("pydantic", "Babel")
+    )
+    for dependency in dependencies:
         digest.update(dependency.encode() + b"\0" + version(dependency).encode())
     digest.update(platform.python_version().encode())
     return digest.hexdigest()
@@ -187,6 +204,8 @@ def evaluate_case(rule, case):
         return {"state": row["state"], "amount": row.get("expected_benefit")}, (
             row.get("expected_benefit") is not None and case.employee.monthly_basic_salary > 0
         )
+    if rule.method == "pension_profile":
+        return evaluate_pension_case(rule, case)
     from app.modules.country_workflows.payroll_calculations import payroll_rules
 
     assert case.basis is not None and rule.payroll_parameters is not None
@@ -235,6 +254,57 @@ def evaluate_case(rule, case):
     )
 
 
+def evaluate_pension_case(rule, case):
+    from app.modules.country_workflows.pension_calculations import pension
+
+    assert case.pension_basis is not None and rule.pension_parameters is not None
+    params = rule.pension_parameters
+    if params.formula != "employer-minus-government" and case.government_amount is not None:
+        raise ValueError("Government offsets apply only to employer-minus-government fixtures")
+    basis = case.pension_basis.model_dump(mode="json")
+    rules = [{**params.model_dump(mode="json"), **provenance(rule)}]
+    bases = [basis]
+    reported = [{**basis, "id": "FIXTURE-REPORTED", "amount": str(case.reported_amount)}]
+    if case.government_amount is not None:
+        support = {
+            **basis,
+            "id": "FIXTURE-GOVERNMENT-BASIS",
+            "component": "PENSION:GOVERNMENT",
+            "eligible": True,
+        }
+        bases.append(support)
+        rules.append(
+            {
+                **rules[0],
+                "id": "FIXTURE-GOVERNMENT-RULE",
+                "component": "PENSION:GOVERNMENT",
+                "formula": "fixed",
+                "rate": None,
+                "minimum_basis": "0",
+                "salary_cap": None,
+                "fixed_amount": str(case.government_amount),
+                "rounding": "nearest-fils",
+            }
+        )
+        reported.append(
+            {**support, "id": "FIXTURE-GOVERNMENT-REPORTED", "amount": str(case.government_amount)}
+        )
+    output = pension(
+        SimpleNamespace(as_of=case.as_of, tolerance=Decimal(0), currency="AED"),
+        {"bases": bases, "rules": rules, "reported": reported},
+    )
+    row = next(
+        item
+        for item in output["rows"]
+        if item["basis_source_id"] == basis["id"] and item["component"] == basis["component"]
+    )
+    return {"state": row["state"], "amount": row["expected_amount"]}, (
+        row["expected_amount"] is not None
+        and case.pension_basis.amount > 0
+        and case.pension_basis.eligible
+    )
+
+
 def run(rule, rule_sha256, cases):
     if not cases:
         raise ValueError("At least one independently specified validation fixture is required")
@@ -244,7 +314,7 @@ def run(rule, rule_sha256, cases):
     demonstrated = False
     calculation_count = 0
     blocking_contract = False
-    if rule.method == "payroll_profile" and rule.effective_to is not None:
+    if rule.method in {"payroll_profile", "pension_profile"} and rule.effective_to is not None:
         first = rule.effective_from
         if first.day != 1:
             first = (
@@ -286,25 +356,44 @@ def run(rule, rule_sha256, cases):
         outcomes.append({"id": case.id, "expected": expected, "actual": actual, "passed": agrees})
         demonstrated |= positive and agrees
         calculation_count += int(positive and agrees)
+        reviewed_basis = case.pension_basis if rule.method == "pension_profile" else case.basis
         if (
             blocking_contract
-            and case.basis is not None
+            and reviewed_basis is not None
             and agrees
             and actual.get("state") == "RULE_MISSING_OR_SPLIT_PERIOD"
         ):
-            params = rule.payroll_parameters
-            first_day = date.fromisoformat(case.basis.period + "-01")
+            params = (
+                rule.pension_parameters
+                if rule.method == "pension_profile"
+                else rule.payroll_parameters
+            )
+            first_day = date.fromisoformat(reviewed_basis.period + "-01")
             last_day = first_day.replace(
                 day=calendar.monthrange(first_day.year, first_day.month)[1]
             )
+            if rule.method == "pension_profile":
+                from app.modules.country_workflows.pension_calculations import SCOPE
+
+                fields: tuple[str, ...] = (*SCOPE, "component")
+                in_band = (
+                    rule.pension_parameters is not None
+                    and reviewed_basis.amount >= rule.pension_parameters.minimum_basis
+                )
+            else:
+                fields = ("component", "rule_group", "jurisdiction")
+                payroll = rule.payroll_parameters
+                in_band = (
+                    payroll is not None
+                    and reviewed_basis.amount >= payroll.threshold_from
+                    and (
+                        payroll.threshold_to is None or reviewed_basis.amount < payroll.threshold_to
+                    )
+                )
             if (
                 params is not None
-                and all(
-                    getattr(case.basis, key) == getattr(params, key)
-                    for key in ("component", "rule_group", "jurisdiction")
-                )
-                and case.basis.amount >= params.threshold_from
-                and (params.threshold_to is None or case.basis.amount < params.threshold_to)
+                and all(getattr(reviewed_basis, key) == getattr(params, key) for key in fields)
+                and in_band
                 and first_day <= rule.effective_to
                 and last_day >= rule.effective_from
             ):

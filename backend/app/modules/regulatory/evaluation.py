@@ -4,11 +4,13 @@ from decimal import Decimal, InvalidOperation, localcontext
 
 
 def evaluate(rule, facts, period_start, period_end, transaction_date=None):
-    if rule.method in {"benefit_profile", "payroll_profile"}:
+    if rule.method in {"benefit_profile", "payroll_profile", "pension_profile"}:
         return {
             "applicability": "PENDING",
             "required_workflow": "uae-benefit-review"
             if rule.method == "benefit_profile"
+            else "uae-pension-review"
+            if rule.method == "pension_profile"
             else "india-payroll-rules",
             "professional_conclusion": "NOT_DETERMINED",
             "reason": "Employee profiles require the dedicated employee-level workflow and retained-source review",

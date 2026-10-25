@@ -50,7 +50,11 @@ def pension(data, tables):
         overlapping = [
             rule
             for rule in grouped[tuple(basis[field] for field in (*SCOPE, "component"))]
-            if date.fromisoformat(rule["effective_from"]) <= last
+            if (
+                "selected_wage_months" not in rule
+                or basis["period"] in rule["selected_wage_months"]
+            )
+            and date.fromisoformat(rule["effective_from"]) <= last
             and date.fromisoformat(rule["effective_to"]) >= first
         ]
         rules = [
@@ -144,11 +148,26 @@ def pension(data, tables):
                 "assessed_base": basis_row["amount"] if basis_row else None,
                 "eligible_as_declared": basis_row["eligible"] if basis_row else None,
                 "membership_reference": basis_row["membership_reference"] if basis_row else None,
-                "salary_basis_reference": basis_row["salary_basis_reference"] if basis_row else None,
+                "salary_basis_reference": basis_row["salary_basis_reference"]
+                if basis_row
+                else None,
                 "rule_source_id": rule["id"] if rule else None,
                 "rule_version": rule["source_version"] if rule else None,
                 "rule_document_sha256": rule["source_sha256"] if rule else None,
                 "rule_url": rule["source_url"] if rule else None,
+                **(
+                    {
+                        field: rule[field]
+                        for field in (
+                            "source_document_id",
+                            "published_rule_version_id",
+                            "published_rule_sha256",
+                            "source_copies",
+                        )
+                    }
+                    if rule and rule.get("published_rule_version_id")
+                    else {}
+                ),
                 "formula": rule["formula"] if rule else None,
                 "rate": rule["rate"] if rule else None,
                 "rounding": rule["rounding"] if rule else None,

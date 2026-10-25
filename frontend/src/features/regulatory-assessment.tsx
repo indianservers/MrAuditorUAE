@@ -110,9 +110,11 @@ export function RegulatoryAssessmentPanel({ eid }: { eid: string }) {
                 key={r.id}
                 value={r.id}
                 disabled={
-                  ["benefit_profile", "payroll_profile"].includes(
-                    r.body.method,
-                  ) ||
+                  [
+                    "benefit_profile",
+                    "payroll_profile",
+                    "pension_profile",
+                  ].includes(r.body.method) ||
                   (r.body.method === "flat_rate" &&
                     !r.body.calculation_currency)
                 }
@@ -124,9 +126,11 @@ export function RegulatoryAssessmentPanel({ eid }: { eid: string }) {
                   ? ` • ${r.body.calculation_currency || "currency review required"}`
                   : r.body.method === "benefit_profile"
                     ? " • use employee benefit review"
-                    : r.body.method === "payroll_profile"
-                      ? " • use payroll contribution review"
-                      : ""}
+                    : r.body.method === "pension_profile"
+                      ? " � use pension contribution review"
+                      : r.body.method === "payroll_profile"
+                        ? " • use payroll contribution review"
+                        : ""}
               </option>
             ))}
         </select>
@@ -134,7 +138,7 @@ export function RegulatoryAssessmentPanel({ eid }: { eid: string }) {
       {country === "AE" && (
         <p>
           <Link href={`/intelligence/${eid}/workflow-source`}>
-            Prepare published benefit profiles for employee review
+            Prepare published benefit or pension profiles for employee review
           </Link>
         </p>
       )}

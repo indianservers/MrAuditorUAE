@@ -8,6 +8,176 @@ const fixture = JSON.parse(
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
 
+test("published UAE pension profiles bind reviewed salary bases and retain rule provenance", async ({
+  page,
+  browser,
+}) => {
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+    viewport: { width: 1600, height: 1100 },
+  });
+  const reviewer = await context.newPage();
+  const input = fixture.published_pension;
+  const eid = input.engagement;
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_final_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    await page.goto("/settings/regulatory-rules");
+    await page
+      .getByRole("button", { name: "Propose UAE pension profile", exact: true })
+      .click();
+    const template = JSON.parse(
+      await page.getByLabel("Versioned rule configuration").inputValue(),
+    );
+    expect(template.method).toBe("pension_profile");
+    expect(template.pension_parameters.rate).toBeNull();
+    expect(template.pension_parameters.authority).toBe("");
+    expect(template.validation_status).toBe("AWAITING_VALIDATION");
+    await page.goto(`/intelligence/${eid}/workflow-source`);
+    await page
+      .getByLabel("Source table type", { exact: true })
+      .selectOption("pension-rules");
+    const preparation = page.getByRole("region", {
+      name: "Published UAE pension profiles",
+      exact: true,
+    });
+    await preparation
+      .getByLabel("Reviewed pension basis source")
+      .selectOption(input.bases);
+    for (const component of ["EMPLOYEE", "EMPLOYER", "GOVERNMENT"])
+      await preparation
+        .getByRole("checkbox", {
+          name: new RegExp(`AE-SYNTHETIC-PENSION-${component}`),
+        })
+        .check();
+    await preparation.getByLabel("Independent wage-basis row count").fill("3");
+    await preparation
+      .getByLabel("Published pension source title")
+      .fill("SYNTHETIC published pension sources");
+    await preparation
+      .getByLabel("Pension profile applicability assessment")
+      .fill(
+        "Explicit synthetic authority, scheme, membership continuity and assessed contribution salary reviewed for June",
+      );
+    const created = page.waitForResponse(
+      (response) =>
+        response.url().includes(`/engagements/${eid}/pension-rule-source`) &&
+        response.request().method() === "POST",
+    );
+    await preparation
+      .getByRole("button", {
+        name: "Prepare published pension rule source",
+        exact: true,
+      })
+      .click();
+    const response = await created;
+    expect(response.status(), await response.text()).toBe(201);
+    const source = await response.json();
+    await saveScreenshot(`${shots}/uae-published-pension-source.png`, () =>
+      preparation.screenshot(),
+    );
+    await reviewer.goto(`/intelligence/${eid}/country-workflow`);
+    await reviewer.getByLabel("Saved source or result").selectOption(source.id);
+    await reviewer
+      .getByLabel("Review / exception rationale")
+      .fill(
+        "Independent retained-source, authority, scheme, membership and June coverage assessment",
+      );
+    const approval = reviewer.waitForResponse(
+      (response) =>
+        response.url().includes(`/events/${source.id}/review`) &&
+        response.request().method() === "POST",
+    );
+    await reviewer
+      .getByRole("button", { name: "Independent approval", exact: true })
+      .click();
+    const approvedResponse = await approval;
+    expect(approvedResponse.status(), await approvedResponse.text()).toBe(201);
+    const approved = await approvedResponse.json();
+    await page.goto(`/intelligence/${eid}/country-workflow`);
+    await page
+      .getByLabel("Workflow", { exact: true })
+      .selectOption("uae-pension-review");
+    const title = `SYNTHETIC published UAE pension ${Date.now()}`;
+    await page.getByLabel("Schedule title", { exact: true }).fill(title);
+    await page
+      .getByLabel("Reconciliation date", { exact: true })
+      .fill("2026-06-30");
+    await page
+      .getByLabel("Scope and source rationale")
+      .fill(
+        "Reviewed contribution salary, authority observations and independently published pension profiles",
+      );
+    for (const [role, identifier] of [
+      ["bases", input.bases],
+      ["rules", approved.id],
+      ["reported", input.reported],
+    ])
+      await page
+        .getByLabel(`${role} source`, { exact: true })
+        .selectOption(identifier);
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const option = page
+      .getByLabel("Saved source or result")
+      .getByRole("option", { name: new RegExp(title) });
+    await expect(option).toHaveCount(1);
+    const result = (await option.getAttribute("value"))!;
+    await page.getByLabel("Saved source or result").selectOption(result);
+    const panel = page
+      .getByRole("heading", { name: title, exact: true })
+      .locator("..");
+    await expect(
+      panel.getByText(/Expected contributions: AED 2500.00/),
+    ).toBeVisible();
+    const table = panel.getByRole("table");
+    await expect(
+      table.getByRole("cell", { name: "MATCHED", exact: true }),
+    ).toHaveCount(3);
+    for (const notice of await page
+      .getByRole("button", { name: "Dismiss notification", exact: true })
+      .all())
+      await notice.click();
+    await saveScreenshot(`${shots}/uae-published-pension-calculation.png`, () =>
+      panel.screenshot(),
+    );
+    await panel
+      .getByLabel("Show rule provenance and source references")
+      .check();
+    await expect(
+      table.getByRole("columnheader", {
+        name: "published rule version id",
+        exact: true,
+      }),
+    ).toBeVisible();
+    const detail = await page.request.get(
+      `/api/backend/intelligence/engagements/${eid}/events/${result}`,
+      { headers: { "X-Tenant-ID": fixture.tenant } },
+    );
+    expect(detail.status()).toBe(200);
+    const body = await detail.json();
+    expect(
+      new Set(
+        body.body.rows.map(
+          (row: { published_rule_version_id: string }) =>
+            row.published_rule_version_id,
+        ),
+      ),
+    ).toEqual(new Set(input.profiles));
+  } finally {
+    await context.close();
+  }
+});
+
 test("UAE pension compares employee net employer and government support through the worker", async ({
   page,
 }) => {

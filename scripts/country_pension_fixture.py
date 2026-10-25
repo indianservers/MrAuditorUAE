@@ -47,3 +47,31 @@ async def prepare(c, h, eid, reviewer):
         assert reviewed.status_code == 201, reviewed.text
         output[role] = reviewed.json()["id"]
     return output
+
+
+async def prepare_published(c, h, eid, reviewer):
+    from app.core.config import settings
+    from tests.qa_crud.test_published_pension_source import publish
+
+    if settings().environment != "test" or not settings().database_url.endswith(
+        "/auditos_country_workflows_test"
+    ):
+        raise RuntimeError(
+            "Published pension browser fixtures require the owned disposable database"
+        )
+    bases, _, reported = pension_fixture()
+    output = {"engagement": eid, "profiles": []}
+    for component in ("EMPLOYEE", "EMPLOYER", "GOVERNMENT"):
+        identifier, _ = await publish(c, h, reviewer[0], component)
+        output["profiles"].append(identifier)
+    for role, table, rows, totals in (
+        ("bases", "pension-bases", bases, {"AED": "30000.03"}),
+        ("reported", "pension-reported", reported, {"AED": "2500"}),
+    ):
+        item = await source(
+            c, h, eid, rows, "SYNTHETIC published pension " + role, table, totals
+        )
+        reviewed = await decision(c, reviewer[0], eid, item)
+        assert reviewed.status_code == 201, reviewed.text
+        output[role] = reviewed.json()["id"]
+    return output

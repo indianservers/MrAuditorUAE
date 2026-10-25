@@ -8,6 +8,7 @@ from pydantic import Field, model_validator
 
 from app.modules.country_workflows.audit_schemas import BenefitEmployee
 from app.modules.country_workflows.payroll_schemas import PayrollBasis
+from app.modules.country_workflows.pension_schemas import PensionBasis
 from app.modules.jurisdictions.profiles import Strict
 
 Amount = Annotated[Decimal, Field(max_digits=80, decimal_places=40, allow_inf_nan=False)]
@@ -18,7 +19,7 @@ Fact = Annotated[str, Field(max_length=4000)] | bool | int | None
 
 class RuleFixture(Strict):
     id: str = Field(min_length=1, max_length=80)
-    kind: Literal["checklist", "flat_rate", "benefit_profile", "payroll_profile"]
+    kind: Literal["checklist", "flat_rate", "benefit_profile", "payroll_profile", "pension_profile"]
     expected_reference: str = Field(min_length=10, max_length=1000)
     period_start: date | None = None
     period_end: date | None = None
@@ -26,6 +27,8 @@ class RuleFixture(Strict):
     facts: dict[str, Fact] = Field(default_factory=dict, max_length=100)
     employee: BenefitEmployee | None = None
     basis: PayrollBasis | None = None
+    pension_basis: PensionBasis | None = None
+    government_amount: ResolvedMoney | None = Field(default=None, ge=0)
     as_of: date | None = None
     reported_amount: InputMoney | None = Field(default=None, ge=0)
     pension_amount: ResolvedMoney | None = Field(default=None, ge=0)
@@ -53,6 +56,8 @@ class RuleFixture(Strict):
             if any(
                 value is not None
                 for value in (
+                    self.pension_basis,
+                    self.government_amount,
                     self.employee,
                     self.basis,
                     self.as_of,
@@ -86,9 +91,31 @@ class RuleFixture(Strict):
             if self.kind == "benefit_profile":
                 if self.employee is None or any(
                     value is not None
-                    for value in (self.basis, self.reported_amount, self.pension_amount)
+                    for value in (
+                        self.basis,
+                        self.pension_basis,
+                        self.government_amount,
+                        self.reported_amount,
+                        self.pension_amount,
+                    )
                 ):
                     raise ValueError("Benefit fixtures require one assessed employee only")
+            elif self.kind == "pension_profile":
+                if (
+                    self.pension_basis is None
+                    or self.reported_amount is None
+                    or any(
+                        value is not None
+                        for value in (self.employee, self.basis, self.pension_amount)
+                    )
+                ):
+                    raise ValueError(
+                        "Pension fixtures require an assessed pension basis and reported amount only"
+                    )
+            elif self.pension_basis is not None or self.government_amount is not None:
+                raise ValueError(
+                    "Government support and pension bases apply only to pension fixtures"
+                )
             elif self.basis is None or self.reported_amount is None or self.employee is not None:
                 raise ValueError(
                     "Payroll fixtures require an assessed wage basis and reported amount"

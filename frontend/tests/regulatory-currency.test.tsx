@@ -63,6 +63,17 @@ vi.mock("@/hooks/use-api", () => ({
                   },
                 },
                 {
+                  id: "pension",
+                  rule_key: "AE-SYNTHETIC-PENSION",
+                  version: 1,
+                  state: "PUBLISHED",
+                  body: {
+                    framework: "IFRS",
+                    method: "pension_profile",
+                    effective_from: "2026-01-01",
+                  },
+                },
+                {
                   id: "check",
                   rule_key: "AE-SYNTHETIC-CHECK",
                   version: 1,
@@ -111,6 +122,11 @@ describe("regulatory rule currency", () => {
     expect(
       screen.getByRole("option", {
         name: /AE-SYNTHETIC-LEGACY.*currency review required/,
+      }),
+    ).toBeDisabled();
+    expect(
+      screen.getByRole("option", {
+        name: /AE-SYNTHETIC-PENSION.*use pension contribution review/,
       }),
     ).toBeDisabled();
     expect(

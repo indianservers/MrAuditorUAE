@@ -19,6 +19,8 @@ OFFICIAL_HOSTS = {
     "gst.gov.in",
     "gstcouncil.gov.in",
     "tax.gov.ae",
+    "gpssa.gov.ae",
+    "pension.gov.ae",
     "mof.gov.ae",
     "uaelegislation.gov.ae",
     "ifrs.org",
@@ -391,6 +393,8 @@ async def assess(db, ctx, eng, data, request_id):
             raise HTTPException(
                 422, "Use the employee-level UAE benefit workflow for a benefit profile"
             )
+        if rule.method == "pension_profile":
+            raise HTTPException(422, "Use the UAE pension contribution workflow for a pension profile")
         if rule.method == "payroll_profile":
             raise HTTPException(
                 422, "Use the India payroll contribution workflow for a payroll profile"

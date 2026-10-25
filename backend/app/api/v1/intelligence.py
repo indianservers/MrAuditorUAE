@@ -19,7 +19,7 @@ from app.modules.audit_log.service import record
 from app.modules.country_workflows.bank_outstanding_source import BankOutstandingSourceInput
 from app.modules.country_workflows.benefit_source import BenefitSourceInput
 from app.modules.country_workflows.import_vat_source import ImportVATSourceInput
-from app.modules.country_workflows.payroll_source import PayrollSourceInput
+from app.modules.country_workflows.payroll_source import PayrollSourceInput, PensionSourceInput
 from app.modules.intelligence import jobs, service
 from app.modules.intelligence import schemas as s
 from app.modules.intelligence.foundations import PeriodAction
@@ -34,6 +34,14 @@ async def payroll_rule_source(eid: uuid.UUID, data: PayrollSourceInput, db: DB, 
 
     eng = await service.scope(db, ctx, eid, "country-workflow", True)
     return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))
+
+
+@router.post("/engagements/{eid}/pension-rule-source", status_code=201)
+async def pension_rule_source(eid: uuid.UUID, data: PensionSourceInput, db: DB, ctx: Actor, request: Request):
+    from app.modules.country_workflows.payroll_source import prepare
+
+    eng = await service.scope(db, ctx, eid, "country-workflow", True)
+    return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id, profile_kind="pension"))
 
 
 @router.post("/engagements/{eid}/benefit-rule-source", status_code=201)

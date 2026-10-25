@@ -33,11 +33,15 @@ type SourceProps = {
 };
 
 export function PublishedBenefitSource(props: SourceProps) {
-  return <PublishedProfiles {...props} country="AE" />;
+  return <PublishedProfiles {...props} country="AE" profileKind="benefit" />;
 }
 
 export function PublishedPayrollSource(props: SourceProps) {
-  return <PublishedProfiles {...props} country="IN" />;
+  return <PublishedProfiles {...props} country="IN" profileKind="payroll" />;
+}
+
+export function PublishedPensionSource(props: SourceProps) {
+  return <PublishedProfiles {...props} country="AE" profileKind="pension" />;
 }
 
 function PublishedProfiles({
@@ -45,19 +49,23 @@ function PublishedProfiles({
   employees,
   onCreated,
   country,
-}: SourceProps & { country: "AE" | "IN" }) {
-  const payroll = country === "IN";
-  const noun = payroll ? "payroll" : "benefit";
-  const region = payroll ? "India payroll" : "UAE benefit";
+  profileKind,
+}: SourceProps & {
+  country: "AE" | "IN";
+  profileKind: "benefit" | "payroll" | "pension";
+}) {
+  const payroll = profileKind !== "benefit";
+  const noun = profileKind;
+  const region = `${country === "IN" ? "India" : "UAE"} ${noun}`;
   const sourceLabel = payroll
-    ? "Reviewed payroll basis source"
+    ? `Reviewed ${noun} basis source`
     : "Reviewed benefit employee source";
   const countLabel = payroll
     ? "Independent wage-basis row count"
     : "Independent employee row count";
   const titleLabel = `Published ${noun} source title`;
   const assessmentLabel = payroll
-    ? "Payroll profile applicability assessment"
+    ? `${noun === "pension" ? "Pension" : "Payroll"} profile applicability assessment`
     : "Benefit profile applicability assessment";
   const [employee, setEmployee] = useState("");
   const [selected, setSelected] = useState<Profile[]>([]);
@@ -72,7 +80,7 @@ function PublishedProfiles({
   const eligible = employees.filter(
     (item) =>
       item.kind === "workflow-source" &&
-      item.table_type === (payroll ? "payroll-bases" : "benefit-employees") &&
+      item.table_type === (payroll ? `${noun}-bases` : "benefit-employees") &&
       item.freshness === "CURRENT" &&
       item.review_status === "REVIEWED",
   );
@@ -89,9 +97,11 @@ function PublishedProfiles({
     >
       <h2>Prepare rules from published {region} profiles</h2>
       <p>
-        {payroll
-          ? "Select reviewed assessed wage bases and profiles covering every complete wage month and slab."
-          : "Select a reviewed employee population and the published profiles covering its service-end dates."}{" "}
+        {noun === "pension"
+          ? "Select reviewed pension salary bases and profiles covering every complete wage month, authority, scheme and membership cohort."
+          : payroll
+            ? "Select reviewed assessed wage bases and profiles covering every complete wage month and slab."
+            : "Select a reviewed employee population and the published profiles covering its service-end dates."}{" "}
         The prepared source needs independent review before calculation.
       </p>
       <Link href="/settings/regulatory-rules">Review the rule library</Link>
