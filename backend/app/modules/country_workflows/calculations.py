@@ -894,7 +894,11 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
     tables = {role: source["rows"] for role, source in sources.items()}
     with localcontext() as arithmetic:
         arithmetic.prec = 80
-        if data.workflow == "bank-account-evidence":
+        if data.workflow == "india-esic-population":
+            from app.modules.country_workflows.esic_population import compare as compare_esic
+
+            result = compare_esic(data, tables)
+        elif data.workflow == "bank-account-evidence":
             from app.modules.country_workflows.bank_accounts import compare
 
             result = compare(data, tables, country)

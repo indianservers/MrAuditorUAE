@@ -776,6 +776,11 @@ async def main():
 
         payroll_ledger = await prepare_payroll_ledger(client, h, (("AE", eid, "AED"), ("IN", india, "INR")), supporting_reviewer)
 
+        from tests.qa_crud.test_esic_population import prepare as prepare_esic
+
+        esic_sources, _ = await prepare_esic(client, h, india, supporting_reviewer)
+        esic_population = {"engagement": india, "sources": esic_sources}
+
         from country_bank_carryforward_fixture import prepare as prepare_carryforward
 
         bank_carryforward = await prepare_carryforward(client, h, (("AE", eid, "AED"), ("IN", india, "INR")), supporting_reviewer)
@@ -1015,6 +1020,7 @@ async def main():
                     "gstr1_documents": gstr1_documents,
                     "emirate_vat": {"components": emirate_components, "filed": emirate_filed},
                     "payroll_ledger": payroll_ledger,
+                    "esic_population": esic_population,
                     "bank_carryforward": bank_carryforward,
                     "ecr_arrear_input": arrear_input,
                     "ecr_arrear_sources": arrear_source_ids,

@@ -1,0 +1,3 @@
+id,registration,period,subject,member_name,paid_days,amount,currency,zero_wage_reason,last_working_day,evidence_reference,assessment
+payroll-SYN-1,00123456789012345,2026-06,0012345678,SYNTHETIC MEMBER ONE,25,10000,INR,,,SYNTHETIC payroll original,Independently assessed fictional membership and wage evidence
+payroll-SYN-2,00123456789012345,2026-06,0012345679,SYNTHETIC MEMBER TWO,0,0,INR,SYN-ASSESSED-LEAVER,2026-06-02,SYNTHETIC payroll original,Independently assessed fictional membership and wage evidence

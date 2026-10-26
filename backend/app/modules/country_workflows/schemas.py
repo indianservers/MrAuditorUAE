@@ -11,6 +11,7 @@ from app.modules.country_workflows.bank_accounts import BankAccountEvidence
 from app.modules.country_workflows.diligence_schemas import DILIGENCE_ROW_TYPES
 from app.modules.country_workflows.document_series import DocumentSeries, SeriesCounts
 from app.modules.country_workflows.ecr_arrear_schemas import ECRArrearControls
+from app.modules.country_workflows.esic_population import ESICMember
 from app.modules.country_workflows.gst_summary import METRICS, GSTSummaryMetric
 from app.modules.country_workflows.gstr1_schemas import GSTR1SectionControl
 from app.modules.country_workflows.gstr2b_part_schemas import GSTR2BPart
@@ -182,6 +183,7 @@ class Control(Strict):
 
 
 ROW_TYPES: dict[str, type[BaseModel]] = {
+    "esic-members": ESICMember,
     "gst-document-series": DocumentSeries,
     "gst-summary-metrics": GSTSummaryMetric,
     "fx-rates": ExchangeRate,
@@ -204,6 +206,8 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
 
 
 class SourceInput(Strict):
+    esic_paid_days_control: int | None = Field(default=None, ge=0, le=155000, strict=True)
+    esic_zero_wage_members_control: int | None = Field(default=None, ge=0, le=5000, strict=True)
     evidence_version_id: uuid.UUID
     ecr_arrear_controls: ECRArrearControls | None = None
     arrear_context_evidence_version_id: uuid.UUID | None = None
@@ -260,6 +264,7 @@ class SourceInput(Strict):
     expected_documents: int | None = Field(default=None, ge=0, le=1250)
     rule_document_version_id: uuid.UUID | None = None
     table_type: Literal[
+        "esic-members",
         "gst-document-series",
         "gst-summary-metrics",
         "payroll-account-balances",
@@ -325,6 +330,11 @@ class SourceInput(Strict):
 
     @model_validator(mode="after")
     def declared_nil(self):
+        if self.table_type == "esic-members":
+            if self.file_format != "canonical-csv" or self.esic_paid_days_control is None or self.esic_zero_wage_members_control is None or set(self.control_totals) != {"INR"}:
+                raise ValueError("ESIC populations require controlled canonical CSV with independent paid-day and zero-wage member totals")
+        elif self.esic_paid_days_control is not None or self.esic_zero_wage_members_control is not None:
+            raise ValueError("ESIC population controls apply only to ESIC member sources")
         if self.table_type == "gst-document-series":
             if self.document_series_controls is None or self.control_totals or self.expected_rows < 1:
                 raise ValueError("Document series require explicit range rows and independent issued/cancelled/net count controls without money totals")
@@ -482,6 +492,7 @@ class WorkflowInput(Strict):
     withholding_role: WithholdingRole | None = None
     allocation_basis: Literal["invoice_face_amounts", "pre_application_balances"] | None = None
     workflow: Literal[
+        "india-esic-population",
         "india-document-series",
         "payroll-ledger-rollforward",
         "obligation-bank-allocations",

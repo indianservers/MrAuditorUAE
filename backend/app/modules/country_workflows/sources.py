@@ -133,6 +133,11 @@ def _parse_csv(content, data, defaults=None):
             amount = getattr(item, "requested_amount")
         if amount is not None:
             totals[getattr(item, "currency")] += amount
+    esic_controls = None
+    if data.table_type == "esic-members":
+        from app.modules.country_workflows.esic_population import verify_controls as verify_esic
+
+        esic_controls = verify_esic(rows, data.esic_paid_days_control, data.esic_zero_wage_members_control)
     series_controls = None
     if data.table_type == "gst-document-series":
         from app.modules.country_workflows.document_series import verify_controls as verify_series
@@ -154,6 +159,7 @@ def _parse_csv(content, data, defaults=None):
             raise ValueError("A nil population cannot carry nonzero control totals")
         totals.update(data.control_totals)
     if data.table_type in {
+        "esic-members",
         "obligation-allocations",
         "bank-outstanding",
         "bank-clearances",
@@ -201,6 +207,7 @@ def _parse_csv(content, data, defaults=None):
     ):
         raise ValueError("Import taxable-base control does not agree to all retained source rows")
     return {
+        **({"esic_population_controls": esic_controls} if esic_controls is not None else {}),
         "table_type": data.table_type,
         **({"allowed_workflows": ["obligation-bank-allocations"], "allowed_source_roles": ["expected", "reported"]} if any(row.get("withholding_scope") for row in rows) else {}),
         **({"document_series_controls": series_controls} if series_controls is not None else {}),

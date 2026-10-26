@@ -197,6 +197,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "parser_version": "committed-ledger-1",
         }, [*dependencies, receipt]
     if operation == "workflow-source":
+        if data.table_type == "esic-members" and package.country != "IN":
+            raise HTTPException(422, "ESIC member sources require an India engagement")
         if data.table_type in {"gst-summary-metrics", "gst-document-series"} and package.country != "IN":
             raise HTTPException(422, "GST summary metric sources require an India engagement")
         if data.table_type.startswith("pension-") and package.country != "AE":
@@ -403,6 +405,15 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(422, "Withholding obligations can establish only their assessed bank-allocation purpose")
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
+        if data.workflow == "india-esic-population":
+            from app.modules.country_workflows.esic_population import month_bounds
+
+            if source.body.get("table_type") != "esic-members":
+                raise HTTPException(422, "Select controlled ESIC member populations for both roles")
+            if source.body.get("review_status") != "REVIEWED":
+                raise HTTPException(409, "Independently review both ESIC member and wage populations before comparison")
+            if any(not period.start_date <= month_bounds(row["period"])[0] <= month_bounds(row["period"])[1] <= data.as_of for row in source.body["rows"]):
+                raise HTTPException(422, "ESIC wage month must be fully within the engagement reporting period")
         if data.workflow == "bank-account-evidence" and source.body.get("review_status") != "REVIEWED":
             raise HTTPException(409, "Independently review all bank account evidence source populations before comparison")
         if data.workflow in {"india-invoice-register", "india-gstr1-summary", "india-gstr1-documents", "india-document-series"} and source.body.get("review_status") != "REVIEWED":

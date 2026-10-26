@@ -14,6 +14,7 @@ from app.modules.country_workflows.sector_schemas import SECTOR_WORKFLOWS
 from app.modules.country_workflows.withholding_schemas import WITHHOLDING_WORKFLOWS
 
 WORKFLOWS = {
+    "india-esic-population": ("India ESIC member, paid-day and wage reconciliation", ["IN"], {"payroll": "esic-members", "reported": "esic-members"}),
     "india-document-series": ("India GSTR-1 document series and cancellation counts", ["IN"], {"books": "gst-document-series", "reported": "gst-document-series"}),
     "india-gstr1-documents": ("India GSTR-1 outward invoice/note reconciliation", ["IN"], {"books": "tax-documents", "return": "tax-documents"}),
     "india-gstr1-summary": ("India GSTR-1 summary metric reconciliation", ["IN"], {"books": "gst-summary-metrics", "return": "gst-summary-metrics"}),

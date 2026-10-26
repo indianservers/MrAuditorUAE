@@ -67,6 +67,8 @@ Run the backend unit suite from `backend`, not the repository root. Run frontend
 
 ## Gaps that remain
 
+India now has a separate ESIC member/day/wage comparison using independently reviewed controlled CSV populations. It preserves zero-wage members and reports nonmonetary differences separately from wage tolerances. See [ESIC contract, examples and limits](native-adapters.md#india-esic-member-paid-day-and-wage-populations). Native XLS import, current portal compatibility and legal contribution qualification remain open.
+
 Priority order remains UAE followed by India:
 
 1. Qualify native UAE bank formats and VAT201/customs adapters, WPS/SIF schemas, employment/pension cohorts and end-of-service calculations. Extend existing UAE VAT/CT/IFRS engines rather than maintaining duplicate tax arithmetic.

@@ -146,6 +146,12 @@ vi.mock("@/hooks/use-api", () => ({
                 },
               },
               {
+                id: "india-esic-population",
+                title: "India ESIC population",
+                available: state.country === "IN",
+                roles: { payroll: "esic-members", reported: "esic-members" },
+              },
+              {
                 id: "statutory-dues",
                 title: "Statutory dues",
                 available: true,
@@ -287,6 +293,7 @@ vi.mock("@/hooks/use-api", () => ({
               },
             ],
             source_contracts: {
+              "esic-members": { id: { required: true, type: "str" }, amount: { required: true, type: "Decimal" } },
               "gst-document-series": {},
               "gst-summary-metrics": {
                 id: { required: true, type: "str" },
@@ -2531,6 +2538,22 @@ describe("reviewed bank residual carry-forward", () => {
         "Carry reviewed bank residuals into the next clearance window",
       ),
     ).not.toBeInTheDocument();
+  });
+});
+
+it("queues independently controlled ESIC wage populations without contribution inference", async () => {
+  state.country = "IN";
+  render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+  for (const [label, value] of [
+    ["Source table type", "esic-members"], ["Clean retained evidence", "clean"],
+    ["Schedule title", "Synthetic ESIC wages"], ["Expected data rows", "2"],
+    ["Independent totals by currency", "INR=10000"], ["Total paid days", "25"], ["Zero-wage members", "1"],
+  ]) fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+    table_type: "esic-members", expected_rows: 2, control_totals: { INR: "10000" },
+    esic_paid_days_control: 25, esic_zero_wage_members_control: 1,
   });
 });
 

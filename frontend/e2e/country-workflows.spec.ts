@@ -8,6 +8,84 @@ const fixture = JSON.parse(
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
 
+test("India ESIC member and paid-day review preserves zero-wage members", async ({
+  page,
+}) => {
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill("admin@example.com");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("test-strong-password-123");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+  const input = fixture.esic_population;
+  const title = `SYNTHETIC ESIC member review ${Date.now()}`;
+  await page.goto(`/intelligence/${input.engagement}/country-workflow`);
+  await page
+    .getByLabel("Workflow", { exact: true })
+    .selectOption("india-esic-population");
+  await loadRetainedHistory(page);
+  await page.getByLabel("Schedule title", { exact: true }).fill(title);
+  await page
+    .getByLabel("Reconciliation date", { exact: true })
+    .fill("2026-06-30");
+  await page
+    .getByLabel("Scope and source rationale", { exact: true })
+    .fill(
+      "Independently reviewed fictional payroll and reported ESIC member evidence; paid days remain distinct from wages and contributions",
+    );
+  for (const [role, id] of Object.entries(input.sources))
+    await page
+      .getByLabel(`${role} source`, { exact: true })
+      .selectOption(id as string);
+  await page
+    .getByRole("button", { name: "Queue calculation", exact: true })
+    .click();
+  const saved = page
+    .getByLabel("Saved source or result")
+    .locator("option")
+    .filter({ hasText: title });
+  await expect(saved).toHaveCount(1, { timeout: 120000 });
+  await page
+    .getByLabel("Saved source or result")
+    .selectOption((await saved.getAttribute("value"))!);
+  const panel = page
+    .getByRole("heading", { name: title, exact: true })
+    .locator("..");
+  await expect(panel.getByText("1 exceptions", { exact: true })).toBeVisible();
+  await expect(
+    panel.getByRole("cell", { name: "0012345678", exact: true }),
+  ).toBeVisible();
+  await expect(
+    panel.getByRole("cell", { name: "0012345679", exact: true }),
+  ).toBeVisible();
+  await expect(
+    panel.getByRole("cell", { name: "-1", exact: true }),
+  ).toBeVisible();
+  const scope = panel.getByRole("region", {
+    name: "ESIC comparison scope and totals",
+  });
+  await expect(scope).toContainText("00123456789012345");
+  await expect(scope).toContainText("25 paid days");
+  await expect(scope).toContainText("24 paid days");
+  await expect(scope).toContainText("1 zero-wage members");
+  for (const notice of await page
+    .getByRole("button", { name: "Dismiss notification", exact: true })
+    .all())
+    await notice.click();
+  await saveScreenshot(`${shots}/in-esic-scope.png`, () => scope.screenshot());
+  await saveScreenshot(`${shots}/in-esic-member-comparison.png`, () =>
+    panel.locator("table").last().screenshot(),
+  );
+  await panel.getByLabel("Show source provenance and all columns").check();
+  await expect(
+    panel.getByRole("cell", { name: "SYN-ASSESSED-LEAVER", exact: true }),
+  ).toHaveCount(2);
+  await expect(
+    panel.getByRole("cell", { name: "2026-06-02", exact: true }),
+  ).toHaveCount(2);
+});
+
 test("UAE and India downloads retain large bank cash manifests and allocation links", async ({
   page,
 }) => {

@@ -184,6 +184,16 @@ type Result = {
     booking_date_review_count?: number;
     bank_account_evidence?: BankAccountLink;
     document_series_scope?: { registration: string; period: string };
+    esic_population_scope?: { registration: string; period: string };
+    esic_population_totals?: Record<
+      string,
+      {
+        members: number;
+        wages: string;
+        paid_days: number;
+        zero_wage_members: number;
+      }
+    >;
     import_nil_scope?: ImportNilDraft & { binding_status: string };
     exception_count?: number;
     table_type?: string;
@@ -245,6 +255,7 @@ const text = (v: unknown) =>
 const moneyTables = [
   "payroll-account-balances",
   "payroll-ledger-lines",
+  "esic-members",
   "obligation-allocations",
   "cash-payments",
   "item-allocations",
@@ -411,6 +422,8 @@ export function CountryWorkflows({
   const [evidence, setEvidence] = useState("");
   const [label, setLabel] = useState("");
   const [expectedRows, setExpectedRows] = useState("1");
+  const [esicDaysControl, setEsicDaysControl] = useState("");
+  const [esicZeroControl, setEsicZeroControl] = useState("");
   const [nilReason, setNilReason] = useState("");
   const [totals, setTotals] = useState("AED=0");
   const [importBaseControl, setImportBaseControl] = useState("");
@@ -759,7 +772,7 @@ export function CountryWorkflows({
                             "source_review_reasons",
                           ].filter((key) => allColumns.includes(key))
                         : allColumns;
-  const columns =
+  const baseColumns =
     (body?.workflow === "india-gstr1-summary" ||
       body?.table_type === "gst-summary-metrics") &&
     !showRuleProvenance
@@ -850,6 +863,22 @@ export function CountryWorkflows({
                     "unpaid_days",
                   ].filter((key) => allColumns.includes(key))
                 : defaultColumns;
+  const columns =
+    body?.workflow === "india-esic-population" && !showRuleProvenance
+      ? [
+          "subject",
+          "payroll_member_name",
+          "reported_member_name",
+          "payroll_amount",
+          "reported_amount",
+          "wage_difference",
+          "payroll_paid_days",
+          "reported_paid_days",
+          "paid_day_difference",
+          "exceptions",
+          "state",
+        ].filter((key) => allColumns.includes(key))
+      : baseColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -1074,6 +1103,16 @@ export function CountryWorkflows({
                   }
                 : {}),
               table_type: tableType,
+              ...(tableType === "esic-members"
+                ? {
+                    esic_paid_days_control: esicDaysControl.trim()
+                      ? Number(esicDaysControl)
+                      : null,
+                    esic_zero_wage_members_control: esicZeroControl.trim()
+                      ? Number(esicZeroControl)
+                      : null,
+                  }
+                : {}),
               ...(tableType === "import-vat-lines"
                 ? { import_taxable_base_control: importBaseControl }
                 : {}),
@@ -1181,6 +1220,7 @@ export function CountryWorkflows({
           title: label,
           rationale: reason,
           currency: [
+            "india-esic-population",
             "india-document-series",
             "india-gstr1-documents",
             "india-gstr1-summary",
@@ -2682,6 +2722,39 @@ export function CountryWorkflows({
                       />
                     </label>
                   )}
+                  {tableType === "esic-members" && (
+                    <fieldset>
+                      <legend>Independent ESIC population controls</legend>
+                      <label>
+                        Total paid days
+                        <input
+                          type="number"
+                          min={0}
+                          max={155000}
+                          step={1}
+                          value={esicDaysControl}
+                          onChange={(e) => setEsicDaysControl(e.target.value)}
+                        />
+                      </label>
+                      <label>
+                        Zero-wage members
+                        <input
+                          type="number"
+                          min={0}
+                          max={5000}
+                          step={1}
+                          value={esicZeroControl}
+                          onChange={(e) => setEsicZeroControl(e.target.value)}
+                        />
+                      </label>
+                      <p>
+                        Declare totals independently of the uploaded file.
+                        Currency totals control wages in INR, not contribution
+                        dues. Retain original evidence and the assessed
+                        zero-wage reasons.
+                      </p>
+                    </fieldset>
+                  )}
                   {["stock", "stock-movements"].includes(tableType) && (
                     <fieldset>
                       <legend>Inventory partition quantity controls</legend>
@@ -3035,6 +3108,7 @@ export function CountryWorkflows({
                             "bank-account-evidence",
                             "obligation-bank-allocations",
                             "payroll-ledger-rollforward",
+                            "india-esic-population",
                             "india-document-series",
                             "india-gstr1-documents",
                             "india-gstr1-summary",
@@ -3272,6 +3346,16 @@ export function CountryWorkflows({
                     movements remain visible.
                   </p>
                 </>
+              )}
+              {workflow === "india-esic-population" && (
+                <p>
+                  Compare independently reviewed payroll and reported ESIC
+                  member populations for one employer and wage month. Member
+                  IDs, paid days, names, zero-wage reasons and leaving dates
+                  stay separate from wage amounts. Contributions, eligibility,
+                  native XLS import, supplementary-return composition and portal
+                  filing require separate procedures.
+                </p>
               )}
               {workflow === "payroll-ledger-rollforward" && (
                 <p>
@@ -4651,6 +4735,25 @@ export function CountryWorkflows({
               ))}
             </ul>
           )}
+          {body.esic_population_scope && (
+            <section aria-label="ESIC comparison scope and totals">
+              <h3>ESIC wage and member population</h3>
+              <p>
+                Employer {body.esic_population_scope.registration} · wage month{" "}
+                {body.esic_population_scope.period}. Wages are compared
+                separately from contribution dues.
+              </p>
+              {Object.entries(body.esic_population_totals || {}).map(
+                ([role, totals]) => (
+                  <p key={role}>
+                    {role}: {totals.members} members · INR {totals.wages} wages
+                    · {totals.paid_days} paid days · {totals.zero_wage_members}{" "}
+                    zero-wage members
+                  </p>
+                ),
+              )}
+            </section>
+          )}
           {body.country_guidance && (
             <details>
               <summary>Country-specific scope guidance</summary>
@@ -4701,6 +4804,7 @@ export function CountryWorkflows({
               compactBenefit ||
               body.workflow === "bank-account-evidence" ||
               body.workflow === "payroll-ledger-rollforward" ||
+              body.workflow === "india-esic-population" ||
               body.workflow === "india-gstr1-documents" ||
               body.workflow === "india-invoice-register" ||
               body.workflow === "india-gstr1-summary" ||
