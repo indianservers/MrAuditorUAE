@@ -206,6 +206,9 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
 
 
 class SourceInput(Strict):
+    esic_context_evidence_version_id: uuid.UUID | None = None
+    esic_return_kind: Literal["monthly", "supplementary"] | None = None
+    esic_scope_assessment: str = Field(default="", max_length=2000)
     esic_paid_days_control: int | None = Field(default=None, ge=0, le=155000, strict=True)
     esic_zero_wage_members_control: int | None = Field(default=None, ge=0, le=5000, strict=True)
     evidence_version_id: uuid.UUID
@@ -232,6 +235,7 @@ class SourceInput(Strict):
     debit_column: Identifier | None = None
     credit_column: Identifier | None = None
     file_format: Literal[
+        "india-esic-members-xls",
         "canonical-csv",
         "camt053",
         "swift-mt940",
@@ -331,10 +335,17 @@ class SourceInput(Strict):
     @model_validator(mode="after")
     def declared_nil(self):
         if self.table_type == "esic-members":
-            if self.file_format != "canonical-csv" or self.esic_paid_days_control is None or self.esic_zero_wage_members_control is None or set(self.control_totals) != {"INR"}:
-                raise ValueError("ESIC populations require controlled canonical CSV with independent paid-day and zero-wage member totals")
+            if self.file_format not in {"canonical-csv", "india-esic-members-xls"} or self.esic_paid_days_control is None or self.esic_zero_wage_members_control is None or set(self.control_totals) != {"INR"}:
+                raise ValueError("ESIC populations require controlled CSV/XLS with independent paid-day and zero-wage member totals")
         elif self.esic_paid_days_control is not None or self.esic_zero_wage_members_control is not None:
             raise ValueError("ESIC population controls apply only to ESIC member sources")
+        if self.file_format == "india-esic-members-xls":
+            registration = self.employer_registration or ""
+            if self.table_type != "esic-members" or not self.esic_context_evidence_version_id or self.esic_context_evidence_version_id == self.evidence_version_id or self.esic_return_kind is None or len(self.esic_scope_assessment.strip()) < 10 or not self.obligation_period or not registration.isascii() or not registration.isdigit() or len(registration) != 17:
+                raise ValueError("ESIC XLS requires one employer/month, declared return kind, distinct retained context and meaningful scope assessment")
+            date.fromisoformat(f"{self.obligation_period}-01")
+        elif self.esic_context_evidence_version_id is not None or self.esic_return_kind is not None or self.esic_scope_assessment:
+            raise ValueError("ESIC workbook context applies only to the explicit native XLS profile")
         if self.table_type == "gst-document-series":
             if self.document_series_controls is None or self.control_totals or self.expected_rows < 1:
                 raise ValueError("Document series require explicit range rows and independent issued/cancelled/net count controls without money totals")

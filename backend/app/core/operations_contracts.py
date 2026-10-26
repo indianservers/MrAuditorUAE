@@ -30,6 +30,8 @@ SUPPORTING_TABLE_PATHS = (
 
 COUNTRY_WORKFLOW_PATHS = (
     *SUPPORTING_TABLE_PATHS,
+    "modules/ingestion/legacy_xls.py",
+    "modules/audit_execution/evidence.py",
     "core/json_documents.py",
     "api/v1/intelligence.py",
     "modules/intelligence/matching.py",
@@ -75,6 +77,8 @@ def country_workflow_hash():
         "defusedxml",
         "pypdf",
         "pypdfium2",
+        "xlrd",
+        "olefile",
     ):
         digest.update(dependency.encode() + b"\0" + version(dependency).encode() + b"\0")
     return digest.hexdigest()

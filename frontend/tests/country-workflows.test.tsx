@@ -95,6 +95,7 @@ vi.mock("@/hooks/use-api", () => ({
                 available: state.country === "IN",
                 table_type: "obligations",
               },
+              { id: "india-esic-members-xls", label: "India ESIC six-column XLS", available: state.country === "IN", table_type: "esic-members" },
               {
                 id: "canonical-csv",
                 label: "Controlled canonical CSV",
@@ -2567,6 +2568,28 @@ describe("reviewed bank residual carry-forward", () => {
         "Carry reviewed bank residuals into the next clearance window",
       ),
     ).not.toBeInTheDocument();
+  });
+});
+
+it("prepares native ESIC XLS with separate employer/month context and independent controls", async () => {
+  state.country = "IN";
+  render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+  for (const [label, value] of [
+    ["Source file format", "india-esic-members-xls"], ["Clean retained evidence", "clean"],
+    ["Schedule title", "Synthetic original ESIC XLS"], ["Expected data rows", "2"],
+    ["Independent totals by currency", "INR=10000"], ["Total paid days", "25"], ["Zero-wage members", "1"],
+    ["ESIC employer registration", "00123456789012345"], ["ESIC wage month", "2026-06"],
+    ["ESIC return kind", "monthly"], ["Retained ESIC employer/month context", "context-clean"],
+    ["ESIC workbook scope assessment", "Independent original workbook and employer/month context assessment"],
+  ]) fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  expect(screen.getByLabelText("Retained ESIC employer/month context")).not.toHaveTextContent("Clean statement");
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+    file_format: "india-esic-members-xls", table_type: "esic-members", expected_rows: 2,
+    esic_context_evidence_version_id: "context-clean", esic_return_kind: "monthly",
+    employer_registration: "00123456789012345", obligation_period: "2026-06",
+    esic_paid_days_control: 25, esic_zero_wage_members_control: 1, control_totals: { INR: "10000" },
   });
 });
 

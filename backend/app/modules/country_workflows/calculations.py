@@ -872,6 +872,8 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
                 "Native WPS/ECR files may establish only a return/channel role; "
                 "select independent expected dues and confirmed payment evidence"
             )
+        if table.get("allowed_source_roles") is not None and role not in table["allowed_source_roles"]:
+            raise ValueError("Source is restricted to its assessed source roles")
         if table["table_type"] != roles[role] or (
             not table["rows"] and not table.get("nil_reason")
         ):

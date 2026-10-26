@@ -18,7 +18,7 @@ from app.modules.intelligence.exports import render
 def population():
     row = {"id": "SYN-1", "registration": "00123456789012345", "period": "2026-06",
            "subject": "0012345678", "member_name": "SYNTHETIC MEMBER ONE", "paid_days": 25,
-           "amount": "10000", "currency": "INR", "zero_wage_reason": "", "last_working_day": None,
+           "amount": "10000", "currency": "INR", "zero_wage_reason": "", "zero_day_reason": "", "last_working_day": None,
            "evidence_reference": "SYNTHETIC original payroll", "assessment": "Independently assessed fictional membership and wage evidence"}
     return [row, {**row, "id": "SYN-2", "subject": "0012345679", "member_name": "SYNTHETIC MEMBER TWO",
                   "paid_days": 0, "amount": "0", "zero_wage_reason": "SYN-ASSESSED-LEAVER", "last_working_day": "2026-06-02"}]
@@ -66,6 +66,7 @@ def test_complete_population_retains_zero_wage_member_and_leading_zeros():
 @pytest.mark.parametrize("field,value,issue", [
     ("paid_days", 24, "PAID_DAY_VARIANCE"), ("member_name", "SYNTHETIC DIFFERENT NAME", "MEMBER_NAME_DIFFERENCE"),
     ("zero_wage_reason", "SYN-DIFFERENT-REASON", "ZERO_WAGE_REASON_DIFFERENCE"),
+    ("zero_day_reason", "6", "ZERO_DAY_REASON_DIFFERENCE"),
     ("last_working_day", "2026-06-03", "LAST_WORKING_DAY_DIFFERENCE"),
 ])
 def test_money_tolerance_never_excuses_nonmonetary_difference(field, value, issue):

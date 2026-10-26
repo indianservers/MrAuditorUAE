@@ -226,6 +226,12 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             if gstr1_context.sha256 == evidence.sha256:
                 raise HTTPException(422, "Retain GSTR-1 request context separately from the document response")
             dependencies.extend(await payroll_rule_documents(db, ctx, eng, [{"source_evidence_version_id": str(gstr1_context.id), "source_sha256": gstr1_context.sha256}], label="GSTR-1 request context", contributors=supporting_contributors))
+        esic_context = None
+        if data.file_format == "india-esic-members-xls":
+            esic_context, _ = await intelligence.evidence(db, ctx, eng, data.esic_context_evidence_version_id)
+            if esic_context.sha256 == evidence.sha256:
+                raise HTTPException(422, "Retain ESIC employer/month context separately from the workbook")
+            dependencies.extend(await payroll_rule_documents(db, ctx, eng, [{"source_evidence_version_id": str(esic_context.id), "source_sha256": esic_context.sha256}], label="ESIC workbook context", contributors=supporting_contributors))
         arrear_context = None
         if data.file_format == "india-epfo-arrear-ecr-v2":
             if package.country != "IN":
@@ -262,6 +268,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         from app.modules.country_workflows.native_sources import parse_native
 
         supported_media = {
+            "india-esic-members-xls": {"application/vnd.ms-excel"},
             "canonical-csv": {
                 "text/csv",
                 "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
@@ -342,6 +349,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         result = await run_in_threadpool(load)
         if gstr1_context is not None:
             result["native_metadata"].update(context_sha256=gstr1_context.sha256, context_filename=gstr1_context.filename, context_basis="INDEPENDENTLY_ASSESSED_RETAINED_REQUEST_SCOPE_NOT_MACHINE_AUTHENTICATED")
+        if esic_context is not None:
+            result["native_metadata"].update(context_sha256=esic_context.sha256, context_filename=esic_context.filename)
         if arrear_context is not None:
             result["native_metadata"].update(arrear_context_sha256=arrear_context.sha256, arrear_context_filename=arrear_context.filename)
         if data.table_type in {"payroll-rules", "pension-rules", "benefit-rules", "fx-rates"}:

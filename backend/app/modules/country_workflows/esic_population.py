@@ -24,6 +24,7 @@ class ESICMember(Strict):
     amount: Decimal = Field(ge=0, max_digits=28, decimal_places=2, allow_inf_nan=False)
     currency: Literal["INR"] = "INR"
     zero_wage_reason: str = Field(default="", max_length=120)
+    zero_day_reason: str = Field(default="", max_length=120)
     last_working_day: date | None = None
     evidence_reference: str = Field(min_length=1, max_length=120)
     assessment: str = Field(min_length=10, max_length=2000)
@@ -49,7 +50,7 @@ class ESICMember(Strict):
         for value in (self.id, self.member_name, self.evidence_reference, self.assessment):
             if not value.strip() or value != value.strip():
                 raise ValueError("Retain exact nonblank ESIC identifiers and assessments")
-        if self.zero_wage_reason != self.zero_wage_reason.strip():
+        if self.zero_wage_reason != self.zero_wage_reason.strip() or self.zero_day_reason != self.zero_day_reason.strip():
             raise ValueError("Retain the exact assessed zero-wage reason")
         return self
 
@@ -95,21 +96,21 @@ def compare(data, tables):
                 issues.append("WAGE_VARIANCE")
             if day_difference:
                 issues.append("PAID_DAY_VARIANCE")
-            for field in ("member_name", "zero_wage_reason", "last_working_day"):
+            for field in ("member_name", "zero_wage_reason", "zero_day_reason", "last_working_day"):
                 if payroll[field] != reported[field]:
                     issues.append(field.upper() + "_DIFFERENCE")
         rows.append({
             "id": f"esic-member:{index}", "registration": key[0], "period": key[1], "subject": key[2],
             **{f"{role}_{field}": row[field] if row else None
                for role, row in (("payroll", payroll), ("reported", reported))
-               for field in ("id", "member_name", "amount", "paid_days", "zero_wage_reason", "last_working_day", "evidence_reference")},
+               for field in ("id", "member_name", "amount", "paid_days", "zero_wage_reason", "zero_day_reason", "last_working_day", "evidence_reference")},
             "currency": "INR", "wage_difference": str(difference) if difference is not None else None,
             "paid_day_difference": day_difference, "exceptions": issues,
             "state": "EXCEPTIONS" if issues else "MATCHED",
         })
     return {
         **result(rows, blocked=any(any(issue.startswith("MISSING_") for issue in row["exceptions"]) for row in rows), limitations=[
-            "Controlled canonical populations, not native ESIC XLS import, portal retrieval, filing or payment evidence",
+            "Controlled member/wage populations; native file structure checks do not establish current portal compatibility, retrieval, filing or payment evidence",
             "Employer/IP identifiers and zero-wage reasons are assessed inputs; registry membership, reason-code applicability and employment status require independent verification",
             "Wages are not contributions: eligibility, contribution bases, rates, rounding and challan/bank settlement remain separate reviewed procedures",
             "Monetary tolerance never excuses member identity, paid-day, name, reason or leaving-date differences; supplementary returns are not automatically merged",

@@ -8,6 +8,143 @@ const fixture = JSON.parse(
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
 
+test("original ESIC text XLS is prepared reviewed and reconciled through the worker", async ({
+  page,
+  browser,
+}) => {
+  test.setTimeout(180000);
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:3010",
+  });
+  const reviewer = await context.newPage();
+  try {
+    for (const [actor, email, password] of [
+      [page, "admin@example.com", "test-strong-password-123"],
+      [reviewer, fixture.pdf_final_reviewer_email, "synthetic-password-123"],
+    ] as const) {
+      await actor.goto("/login");
+      await actor.getByLabel("Email address").fill(email);
+      await actor.getByLabel("Password", { exact: true }).fill(password);
+      await actor.getByRole("button", { name: "Sign in", exact: true }).click();
+      await actor.waitForURL("**/dashboard");
+    }
+    const input = fixture.esic_xls;
+    const title = `SYNTHETIC original ESIC XLS ${Date.now()}`;
+    await page.goto(`/intelligence/${input.engagement}/workflow-source`);
+    await page
+      .getByLabel("Source file format", { exact: true })
+      .selectOption("india-esic-members-xls");
+    await page
+      .getByLabel("Clean retained evidence")
+      .selectOption(input.original);
+    await page
+      .getByLabel("Retained ESIC employer/month context")
+      .selectOption(input.context);
+    for (const [label, value] of [
+      ["Schedule title", title],
+      ["Expected data rows", "2"],
+      ["Independent totals by currency", "INR=10000"],
+      ["Total paid days", "25"],
+      ["Zero-wage members", "1"],
+      ["ESIC employer registration", "00123456789012345"],
+      ["ESIC wage month", "2026-06"],
+      ["ESIC workbook scope assessment", input.payload.esic_scope_assessment],
+    ])
+      await page.getByLabel(label, { exact: true }).fill(value);
+    await page.getByLabel("ESIC return kind").selectOption("monthly");
+    await saveScreenshot(`${shots}/in-esic-xls-scope.png`, () =>
+      page
+        .getByRole("group", { name: "ESIC six-column XLS scope" })
+        .screenshot(),
+    );
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const saved = page
+      .getByLabel("Saved source or result")
+      .locator("option")
+      .filter({ hasText: title });
+    await expect(saved).toHaveCount(1, { timeout: 120000 });
+    const sourceId = (await saved.getAttribute("value"))!;
+    await page.getByLabel("Saved source or result").selectOption(sourceId);
+    const sourcePanel = page
+      .getByRole("heading", { name: title, exact: true })
+      .locator("..");
+    await expect(
+      sourcePanel.getByRole("cell", { name: "0012345679", exact: true }),
+    ).toBeVisible();
+    for (const notice of await page
+      .getByRole("button", { name: "Dismiss notification", exact: true })
+      .all())
+      await notice.click();
+    await saveScreenshot(`${shots}/in-esic-xls-members.png`, () =>
+      sourcePanel.locator("table").last().screenshot(),
+    );
+    await reviewer.goto(
+      `/intelligence/${input.engagement}/workflow-source?event=${sourceId}`,
+    );
+    await reviewer
+      .getByLabel("Review / exception rationale", { exact: true })
+      .fill(
+        "Independent review of synthetic original XLS, exact text cells, separate employer/month context and all population controls",
+      );
+    const approved = reviewer.waitForResponse(
+      (r) =>
+        r.url().endsWith(`/events/${sourceId}/review`) &&
+        r.request().method() === "POST",
+    );
+    await reviewer
+      .getByRole("button", { name: "Independent approval", exact: true })
+      .click();
+    const response = await approved;
+    expect(response.status()).toBe(201);
+    const native = (await response.json()).id;
+    await page.goto(`/intelligence/${input.engagement}/country-workflow`);
+    await page
+      .getByLabel("Workflow", { exact: true })
+      .selectOption("india-esic-population");
+    await loadRetainedHistory(page);
+    const resultTitle = title + " comparison";
+    await page.getByLabel("Schedule title", { exact: true }).fill(resultTitle);
+    await page
+      .getByLabel("Reconciliation date", { exact: true })
+      .fill("2026-06-30");
+    await page
+      .getByLabel("Scope and source rationale", { exact: true })
+      .fill(
+        "Original native member worksheet reconciled to independent payroll including zero-day and zero-wage reason codes",
+      );
+    await page
+      .getByLabel("payroll source", { exact: true })
+      .selectOption(input.source_ids.payroll);
+    await page
+      .getByLabel("reported source", { exact: true })
+      .selectOption(native);
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const resultOption = page
+      .getByLabel("Saved source or result")
+      .locator("option")
+      .filter({ hasText: resultTitle });
+    await expect(resultOption).toHaveCount(1, { timeout: 120000 });
+    await page
+      .getByLabel("Saved source or result")
+      .selectOption((await resultOption.getAttribute("value"))!);
+    const panel = page
+      .getByRole("heading", { name: resultTitle, exact: true })
+      .locator("..");
+    await expect(
+      panel.getByText("0 exceptions", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      panel.getByRole("cell", { name: "MATCHED", exact: true }),
+    ).toHaveCount(2);
+  } finally {
+    await context.close();
+  }
+});
+
 test("reviewed ESIC members bind explicit contribution bases through the real worker", async ({
   page,
 }) => {

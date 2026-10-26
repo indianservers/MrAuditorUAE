@@ -1,0 +1,6 @@
+SYNTHETIC ENGINE FIXTURE ONLY. Not a portal acknowledgement.
+Employer: 00123456789012345
+Wage month: 2026-06
+Declared return kind: monthly
+Independently authored fixture controls: 2 members, INR 10000 wages, 25 paid days, 1 zero-wage member.
+This fictional employer/month context is retained separately from the original member workbook.

@@ -785,6 +785,10 @@ async def main():
 
         esic_binding = {"engagement": india, **await prepare_esic_binding(client, h, india, f"/api/v1/engagements/{india}/audit", supporting_reviewer, esic_sources)}
 
+        from tests.qa_crud.test_esic_xls import prepare as prepare_esic_xls
+
+        esic_xls = await prepare_esic_xls(client, h, india, f"/api/v1/engagements/{india}/audit", supporting_reviewer)
+
         from country_bank_carryforward_fixture import prepare as prepare_carryforward
 
         bank_carryforward = await prepare_carryforward(client, h, (("AE", eid, "AED"), ("IN", india, "INR")), supporting_reviewer)
@@ -1026,6 +1030,7 @@ async def main():
                     "payroll_ledger": payroll_ledger,
                     "esic_population": esic_population,
                     "esic_binding": esic_binding,
+                    "esic_xls": esic_xls,
                     "bank_carryforward": bank_carryforward,
                     "ecr_arrear_input": arrear_input,
                     "ecr_arrear_sources": arrear_source_ids,

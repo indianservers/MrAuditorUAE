@@ -434,6 +434,9 @@ export function CountryWorkflows({
   const [expectedRows, setExpectedRows] = useState("1");
   const [esicDaysControl, setEsicDaysControl] = useState("");
   const [esicZeroControl, setEsicZeroControl] = useState("");
+  const [esicContextEvidence, setEsicContextEvidence] = useState("");
+  const [esicReturnKind, setEsicReturnKind] = useState("monthly");
+  const [esicScopeAssessment, setEsicScopeAssessment] = useState("");
   const [nilReason, setNilReason] = useState("");
   const [totals, setTotals] = useState("AED=0");
   const [importBaseControl, setImportBaseControl] = useState("");
@@ -881,21 +884,34 @@ export function CountryWorkflows({
                   ].filter((key) => allColumns.includes(key))
                 : defaultColumns;
   const columns =
-    body?.workflow === "india-esic-population" && !showRuleProvenance
+    body?.table_type === "esic-members" && !showRuleProvenance
       ? [
           "subject",
-          "payroll_member_name",
-          "reported_member_name",
-          "payroll_amount",
-          "reported_amount",
-          "wage_difference",
-          "payroll_paid_days",
-          "reported_paid_days",
-          "paid_day_difference",
-          "exceptions",
-          "state",
+          "member_name",
+          "period",
+          "currency",
+          "amount",
+          "paid_days",
+          "zero_wage_reason",
+          "zero_day_reason",
+          "last_working_day",
+          "source_row",
         ].filter((key) => allColumns.includes(key))
-      : baseColumns;
+      : body?.workflow === "india-esic-population" && !showRuleProvenance
+        ? [
+            "subject",
+            "payroll_member_name",
+            "reported_member_name",
+            "payroll_amount",
+            "reported_amount",
+            "wage_difference",
+            "payroll_paid_days",
+            "reported_paid_days",
+            "paid_day_difference",
+            "exceptions",
+            "state",
+          ].filter((key) => allColumns.includes(key))
+        : baseColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -1120,6 +1136,15 @@ export function CountryWorkflows({
                   }
                 : {}),
               table_type: tableType,
+              ...(sourceFormat === "india-esic-members-xls"
+                ? {
+                    employer_registration: employerRegistration,
+                    obligation_period: obligationPeriod,
+                    esic_context_evidence_version_id: esicContextEvidence,
+                    esic_return_kind: esicReturnKind,
+                    esic_scope_assessment: esicScopeAssessment,
+                  }
+                : {}),
               ...(tableType === "esic-members"
                 ? {
                     esic_paid_days_control: esicDaysControl.trim()
@@ -2749,6 +2774,80 @@ export function CountryWorkflows({
                       />
                     </label>
                   )}
+                  {sourceFormat === "india-esic-members-xls" && (
+                    <fieldset>
+                      <legend>ESIC six-column XLS scope</legend>
+                      <label>
+                        ESIC employer registration
+                        <input
+                          value={employerRegistration}
+                          onChange={(e) =>
+                            setEmployerRegistration(e.target.value)
+                          }
+                        />
+                      </label>
+                      <label>
+                        ESIC wage month
+                        <input
+                          type="month"
+                          value={obligationPeriod}
+                          onChange={(e) => setObligationPeriod(e.target.value)}
+                        />
+                      </label>
+                      <label>
+                        ESIC return kind
+                        <select
+                          value={esicReturnKind}
+                          onChange={(e) => setEsicReturnKind(e.target.value)}
+                        >
+                          <option value="monthly">Monthly</option>
+                          <option value="supplementary">
+                            Supplementary (kept separate)
+                          </option>
+                        </select>
+                      </label>
+                      <label>
+                        Retained ESIC employer/month context
+                        <select
+                          value={esicContextEvidence}
+                          onChange={(e) =>
+                            setEsicContextEvidence(e.target.value)
+                          }
+                        >
+                          <option value="">
+                            Select separate clean context evidence
+                          </option>
+                          {inputs.data?.evidence
+                            .filter(
+                              (item) =>
+                                item.scan_status === "CLEAN" &&
+                                item.id !== evidence,
+                            )
+                            .map((item) => (
+                              <option key={item.id} value={item.id}>
+                                {item.label}
+                              </option>
+                            ))}
+                        </select>
+                      </label>
+                      <label>
+                        ESIC workbook scope assessment
+                        <textarea
+                          value={esicScopeAssessment}
+                          onChange={(e) =>
+                            setEsicScopeAssessment(e.target.value)
+                          }
+                        />
+                      </label>
+                      <p>
+                        Retain one visible six-column text-only .xls worksheet
+                        with its original headers. Employer/month context is
+                        independently assessed. This file supplies reported
+                        members and wages, not filing or payment proof;
+                        supplementary files are not merged.
+                      </p>
+                    </fieldset>
+                  )}
                   {tableType === "esic-members" && (
                     <fieldset>
                       <legend>Independent ESIC population controls</legend>
@@ -3441,8 +3540,10 @@ export function CountryWorkflows({
                   member populations for one employer and wage month. Member
                   IDs, paid days, names, zero-wage reasons and leaving dates
                   stay separate from wage amounts. Contributions, eligibility,
-                  native XLS import, supplementary-return composition and portal
-                  filing require separate procedures.
+                  supplementary-return composition and portal filing require
+                  separate procedures. Native XLS preparation supports the
+                  explicit text-only profile with independently retained
+                  employer/month context.
                 </p>
               )}
               {workflow === "payroll-ledger-rollforward" && (
@@ -4919,6 +5020,7 @@ export function CountryWorkflows({
               body.workflow === "india-invoice-register" ||
               body.workflow === "india-gstr1-summary" ||
               body.table_type === "gst-summary-metrics" ||
+              body.table_type === "esic-members" ||
               compactBankClearance ||
               compactDues ||
               compactCredit ||

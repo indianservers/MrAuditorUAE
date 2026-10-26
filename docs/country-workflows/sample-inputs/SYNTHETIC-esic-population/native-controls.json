@@ -1,0 +1,27 @@
+{
+  "classification": "SYNTHETIC_ENGINE_FIXTURE",
+  "file_format": "india-esic-members-xls",
+  "table_type": "esic-members",
+  "country": "IN",
+  "employer_registration": "00123456789012345",
+  "obligation_period": "2026-06",
+  "esic_return_kind": "monthly",
+  "expected_rows": 2,
+  "control_totals": {
+    "INR": "10000"
+  },
+  "esic_paid_days_control": 25,
+  "esic_zero_wage_members_control": 1,
+  "xls_sha256": "03344da84951837fb4bf11b58a4f47eac139c38b7d0dab0ca304c5f13becef17",
+  "context_file": "native-context.txt",
+  "expected": {
+    "last_member": "0012345679",
+    "last_working_day": "2026-06-02",
+    "literal_source_date": "02/06/2026",
+    "zero_wage_reason": "6",
+    "zero_day_reason": "6"
+  },
+  "evidence_versions": "Select actual separately retained clean workbook and context evidence versions in the application",
+  "legal_qualification": false,
+  "portal_compatibility_qualified": false
+}

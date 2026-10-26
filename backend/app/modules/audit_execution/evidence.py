@@ -18,6 +18,7 @@ TYPES = {
     ".pdf": "application/pdf",
     ".csv": "text/csv",
     ".xlsx": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    ".xls": "application/vnd.ms-excel",
     ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ".png": "image/png",
     ".jpg": "image/jpeg",
@@ -32,7 +33,7 @@ def validate_file(stream, filename):
     extension = Path(filename).suffix.lower()
     if extension not in TYPES:
         raise ValueError(
-            "Supported evidence: PDF, CSV, JSON, XML, UTF-8 TXT/ECR, MT940/STA, SIF, XLSX, DOCX, images and bounded document ZIP"
+            "Supported evidence: PDF, CSV, JSON, XML, UTF-8 TXT/ECR, MT940/STA, SIF, value-only XLS, XLSX, DOCX, images and bounded document ZIP"
         )
     stream.seek(0)
     header = stream.read(1024)
@@ -105,6 +106,11 @@ def validate_file(stream, filename):
             b"\xef\xbb\xbf\r\n "
         ).startswith((b":20:", b"{1:")):
             raise ValueError("Invalid MT940 evidence record signature")
+    if extension == ".xls":
+        from app.modules.ingestion.legacy_xls import MAX_BYTES, validate_xls_container
+
+        stream.seek(0)
+        validate_xls_container(stream.read(MAX_BYTES + 1))
     if extension in {".xlsx", ".docx"}:
         stream.seek(0)
         with zipfile.ZipFile(stream) as archive:

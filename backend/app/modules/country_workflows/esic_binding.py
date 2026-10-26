@@ -49,6 +49,7 @@ def bind(data, tables, body, receipt):
             "payroll_wages": member["payroll_amount"], "reported_wages": member["reported_amount"],
             "payroll_paid_days": member["payroll_paid_days"], "reported_paid_days": member["reported_paid_days"],
             "payroll_zero_wage_reason": member["payroll_zero_wage_reason"], "reported_zero_wage_reason": member["reported_zero_wage_reason"],
+            "payroll_zero_day_reason": member.get("payroll_zero_day_reason"), "reported_zero_day_reason": member.get("reported_zero_day_reason"),
             "payroll_last_working_day": member["payroll_last_working_day"], "reported_last_working_day": member["reported_last_working_day"],
             "assessed_base": basis["amount"],
             "base_minus_payroll_wages": str(Decimal(basis["amount"]) - Decimal(member["payroll_amount"])),

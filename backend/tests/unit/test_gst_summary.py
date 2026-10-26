@@ -179,8 +179,12 @@ def test_independent_csv_comparison_never_nets_metrics_or_treats_absent_zero_as_
     assert {r["difference"] for r in result["rows"] if r["state"] == "VARIANCE"} == {"1", "-1"}
     rows = copy.deepcopy(right["rows"])
     rows.pop(next(i for i, r in enumerate(rows) if r["metric"] == "ttl_nilsup_amt"))
-    books = {**right, "rows": rows}
-    books.pop("native_format")
+    # Independent canonical books, not a native return with its format marker removed.
+    output = io.StringIO(newline="")
+    writer = csv.DictWriter(output, fieldnames=list(GSTSummaryMetric.model_fields))
+    writer.writeheader()
+    writer.writerows(rows)
+    books = parse_csv(output.getvalue().encode(), options(file_format="canonical-csv", expected_rows=len(rows), gst_summary_metric_controls={key: value for key, value in CONTROLS.items() if key != "ttl_nilsup_amt"}))
     missing = calculate(workflow(), "IN", {"books": books, "return": right})
     assert missing["blocked"]
     assert (
@@ -256,7 +260,11 @@ def test_native_summary_rejects_ambiguous_or_uncontrolled_populations(defect):
 
 def test_summary_country_role_period_and_duplicate_boundaries():
     right = parsed()
-    books = {k: v for k, v in right.items() if k != "native_format"}
+    output = io.StringIO(newline="")
+    writer = csv.DictWriter(output, fieldnames=list(GSTSummaryMetric.model_fields))
+    writer.writeheader()
+    writer.writerows(right["rows"])
+    books = parse_csv(output.getvalue().encode(), options(file_format="canonical-csv"))
     with pytest.raises(ValueError, match="unavailable"):
         calculate(workflow(), "AE", {"books": books, "return": right})
     with pytest.raises(ValueError, match="requires INR"):
