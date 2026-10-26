@@ -430,6 +430,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(422, "Select canonical country-workflow source events")
         if data.workflow == "inventory-valuation-control" and source.body.get("review_status") != "REVIEWED":
             raise HTTPException(409, "Independently review inventory books, valuation evidence and GL controls before comparison")
+        if data.workflow == "procurement-match" and source.body.get("review_status") != "REVIEWED":
+            raise HTTPException(409, "Independently review all procurement sources before comparison")
         if data.workflow == "india-esic-population":
             from app.modules.country_workflows.esic_population import month_bounds
 

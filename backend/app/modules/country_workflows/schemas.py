@@ -25,6 +25,7 @@ from app.modules.country_workflows.operations_schemas import OPERATION_ROW_TYPES
 from app.modules.country_workflows.payroll_ledger_schemas import PAYROLL_LEDGER_ROW_TYPES
 from app.modules.country_workflows.payroll_schemas import PAYROLL_ROW_TYPES
 from app.modules.country_workflows.pension_schemas import PENSION_ROW_TYPES
+from app.modules.country_workflows.purchase_controls import PurchaseQuantityControl
 from app.modules.country_workflows.sector_schemas import SECTOR_ROW_TYPES
 from app.modules.country_workflows.vat201_layouts import LAYOUTS, VAT201Layout
 from app.modules.country_workflows.withholding_schemas import WithholdingRecord, WithholdingRole
@@ -212,6 +213,7 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
 
 
 class SourceInput(Strict):
+    purchase_quantity_controls: list[PurchaseQuantityControl] | None = Field(default=None, max_length=5000)
     inventory_cost_document_version_id: uuid.UUID | None = None
     inventory_nrv_document_version_id: uuid.UUID | None = None
     inventory_valuation_controls: list[InventoryValueControl] | None = Field(default=None, max_length=20)
@@ -397,6 +399,8 @@ class SourceInput(Strict):
                 raise ValueError("Arrear disbursement cannot precede the declared wage month")
         elif self.ecr_arrear_controls is not None or self.arrear_context_evidence_version_id is not None or self.arrear_disbursement_date is not None or self.arrear_scope_assessment:
             raise ValueError("Arrear controls and context apply only to the explicit eight-field arrear ECR profile")
+        if self.purchase_quantity_controls is not None and self.table_type != "purchase-lines":
+            raise ValueError("Purchase quantity controls apply only to purchase-line sources")
         if self.inventory_quantity_controls is not None and self.table_type not in {"stock", "stock-movements"}:
             raise ValueError("Inventory quantity controls apply only to stock and stock-movement sources")
         if self.file_format == "uae-wps-sif-evp":

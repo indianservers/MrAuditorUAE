@@ -851,6 +851,12 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
             if table.get("inventory_controls_verified") is not True or table.get("inventory_quantity_controls") is None:
                 raise ValueError("Controlled inventory bridging requires independent partition quantity controls for every source")
             verify_quantity_controls(table["rows"], table["inventory_quantity_controls"])
+        if data.workflow == "procurement-match" and role != "payments":
+            from app.modules.country_workflows.purchase_controls import verify as verify_purchase
+
+            if table.get("purchase_controls_verified") is not True or table.get("purchase_quantity_controls") is None:
+                raise ValueError("Procurement matching requires independently controlled purchase quantities and explicit units on orders, receipts and invoices")
+            verify_purchase(table["rows"], table["purchase_quantity_controls"])
         if table.get("parser_version") == "uae-vat201-composition/1" and table.get("native_metadata", {}).get("layout") == "emirate-20" and data.vat201_layout != "emirate-20":
             raise ValueError("Select the explicit twenty-row emirate VAT201 layout for this composed source")
         if table.get("parser_version") == "uae-vat201-composition/1" and (data.workflow != "uae-vat-return" or role != "books"):

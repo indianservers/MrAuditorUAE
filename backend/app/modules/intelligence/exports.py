@@ -231,6 +231,12 @@ def render(event, format):
                 append(controls, fields)
                 for control in body["inventory_quantity_controls"]:
                     append(controls, [control.get(key) for key in fields])
+            if body.get("purchase_quantity_controls") is not None:
+                controls = workbook.create_sheet("Purchase quantity controls")
+                fields = ["order_id", "line_reference", "vendor", "currency", "uom", "document_type", "expected_rows", "quantity"]
+                append(controls, fields)
+                for control in body["purchase_quantity_controls"]:
+                    append(controls, [control.get(key) for key in fields])
             if body.get("count_bridges") is not None:
                 bridges = workbook.create_sheet("Count date bridges")
                 links = workbook.create_sheet("Inventory movement links")

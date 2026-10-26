@@ -11,47 +11,70 @@ export function InventoryEvidenceTable({
   initial,
   total,
   bridge = false,
+  purchase = false,
 }: {
   prefix: string;
   selected: string;
   initial: Row[];
   total: number;
   bridge?: boolean;
+  purchase?: boolean;
 }) {
   const [offset, setOffset] = useState(0);
-  const field = bridge ? "count_bridges" : "inventory_quantity_controls";
-  const parameter = bridge ? "bridge_offset" : "inventory_offset";
+  const field = purchase
+    ? "purchase_quantity_controls"
+    : bridge
+      ? "count_bridges"
+      : "inventory_quantity_controls";
+  const parameter = purchase
+    ? "purchase_offset"
+    : bridge
+      ? "bridge_offset"
+      : "inventory_offset";
   const page = useAPI<{ body: Record<string, Row[]> }>(
     `${prefix}/events/${selected}?limit=1&${parameter}=${offset}`,
     offset > 0,
   );
   const rows = offset ? page.data?.body[field] || [] : initial;
-  const title = bridge
-    ? "Inventory count-date bridges"
-    : "Inventory quantity controls";
-  const columns = bridge
+  const title = purchase
+    ? "Purchase quantity controls"
+    : bridge
+      ? "Inventory count-date bridges"
+      : "Inventory quantity controls";
+  const columns = purchase
     ? [
-        "site",
-        "sku",
-        "lot",
-        "uom",
+        "order_id",
+        "line_reference",
+        "vendor",
         "currency",
-        "original_count_date",
-        "direction",
-        "original_count_quantity",
-        "applied_movement_quantity",
-        "reporting_date_quantity",
-      ]
-    : [
-        "site",
-        "sku",
-        "lot",
         "uom",
-        "currency",
+        "document_type",
         "expected_rows",
-        "positive_quantity",
-        "negative_quantity",
-      ];
+        "quantity",
+      ]
+    : bridge
+      ? [
+          "site",
+          "sku",
+          "lot",
+          "uom",
+          "currency",
+          "original_count_date",
+          "direction",
+          "original_count_quantity",
+          "applied_movement_quantity",
+          "reporting_date_quantity",
+        ]
+      : [
+          "site",
+          "sku",
+          "lot",
+          "uom",
+          "currency",
+          "expected_rows",
+          "positive_quantity",
+          "negative_quantity",
+        ];
   return (
     <details style={{ margin: "16px 0" }}>
       <summary>
@@ -59,16 +82,20 @@ export function InventoryEvidenceTable({
       </summary>
       <ErrorState error={page.error} />
       <p>
-        {bridge
-          ? "Original count quantities and dates remain distinct from the calculated reporting-date quantities. Quantity bridging does not establish reporting-date condition or physical attendance. Complete original row links are retained in the XLSX."
-          : "Independent row and directional quantity controls remain separate for every site, SKU, lot, unit and currency. Positive and negative movements cannot offset an incomplete population."}
+        {purchase
+          ? "Independent row and quantity controls remain separate for each order, line, vendor, currency, unit and document type. Payment quantities are excluded. No unit conversion is inferred."
+          : bridge
+            ? "Original count quantities and dates remain distinct from the calculated reporting-date quantities. Quantity bridging does not establish reporting-date condition or physical attendance. Complete original row links are retained in the XLSX."
+            : "Independent row and directional quantity controls remain separate for every site, SKU, lot, unit and currency. Positive and negative movements cannot offset an incomplete population."}
       </p>
       <div className="table-wrap">
         <table aria-label={title}>
           <caption>
             {total
               ? `Rows ${offset + 1}–${offset + rows.length} of ${total}`
-              : "Explicit nil controlled population"}
+              : purchase
+                ? "No non-payment quantity partitions in this source"
+                : "Explicit nil controlled population"}
           </caption>
           <thead>
             <tr>

@@ -8,6 +8,109 @@ const fixture = JSON.parse(
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
 
+test("controlled procurement quantities keep incompatible units unresolved for UAE then India", async ({
+  page,
+}) => {
+  test.setTimeout(180000);
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill("admin@example.com");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("test-strong-password-123");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+  for (const country of ["AE", "IN"] as const) {
+    for (const kind of ["valid", "bad_units"] as const) {
+      const input = fixture.purchase_quantities[country][kind];
+      const title = `SYNTHETIC ${country} purchase ${kind} ${Date.now()}`;
+      await page.goto(`/intelligence/${input.engagement}/country-workflow`);
+      await page
+        .getByLabel("Workflow", { exact: true })
+        .selectOption("procurement-match");
+      await loadRetainedHistory(page);
+      await page.getByLabel("Schedule title", { exact: true }).fill(title);
+      await page
+        .getByLabel("Reconciliation date", { exact: true })
+        .fill("2026-06-30");
+      await page
+        .getByLabel("Scope and source rationale", { exact: true })
+        .fill(input.payload.rationale);
+      for (const [role, id] of Object.entries(input.sources))
+        await page
+          .getByLabel(`${role} source`, { exact: true })
+          .selectOption(id as string);
+      await page
+        .getByRole("button", { name: "Queue calculation", exact: true })
+        .click();
+      const option = page
+        .getByLabel("Saved source or result")
+        .locator("option")
+        .filter({ hasText: title });
+      await expect(option).toHaveCount(1, { timeout: 120000 });
+      await page
+        .getByLabel("Saved source or result")
+        .selectOption((await option.getAttribute("value"))!);
+      const panel = page
+        .getByRole("heading", { name: title, exact: true })
+        .locator("..");
+      if (kind === "valid") {
+        await expect(
+          panel.getByText("0 exceptions", { exact: true }),
+        ).toBeVisible();
+        await expect(
+          panel.getByRole("cell", { name: "PCS", exact: true }),
+        ).toBeVisible();
+        await expect(
+          panel.getByRole("cell", { name: "EXPLICIT_SAME_UNIT", exact: true }),
+        ).toBeVisible();
+      } else {
+        await expect(
+          panel.getByRole("cell", { name: "NOT_COMPARABLE", exact: true }),
+        ).toBeVisible();
+        await expect(
+          panel.getByText(
+            "Approval blocked: correct source controls or missing/expired evidence and regenerate.",
+            { exact: true },
+          ),
+        ).toBeVisible();
+      }
+      for (const notice of await page
+        .getByRole("button", { name: "Dismiss notification", exact: true })
+        .all())
+        await notice.click();
+      await panel.locator("table").last().scrollIntoViewIfNeeded();
+      await expect(
+        panel.getByRole("button", { name: "Document exception", exact: true }),
+      ).toBeInViewport({ ratio: 1 });
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-purchase-${kind}.png`,
+        () => panel.locator("table").last().screenshot(),
+      );
+      if (kind === "valid") {
+        await page
+          .getByLabel("Saved source or result")
+          .selectOption(input.sources.orders);
+        await page
+          .getByText("Purchase quantity controls · 1 partitions", {
+            exact: true,
+          })
+          .click();
+        const controls = page.getByRole("table", {
+          name: "Purchase quantity controls",
+          exact: true,
+        });
+        await expect(
+          controls.getByRole("cell", { name: "PCS", exact: true }),
+        ).toBeVisible();
+        await saveScreenshot(
+          `${shots}/${country.toLowerCase()}-purchase-controls.png`,
+          () => controls.screenshot(),
+        );
+      }
+    }
+  }
+});
+
 test("all uploaded-list screening candidates remain reviewable for UAE then India", async ({
   page,
 }) => {

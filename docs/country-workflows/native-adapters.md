@@ -1495,3 +1495,73 @@ and [India last candidate](screenshots/native-sources/in-screening-candidates.pn
 All names and source records in these checks are synthetic. The frozen
 154-scenario catalogue is unchanged; real-client and professional/provider
 qualification remain open.
+
+## Independently controlled procurement quantities — UAE then India
+
+The existing `procurement-match` workflow now requires explicit units and
+independent quantity controls for order, receipt and invoice sources. Source
+preparation verifies row counts and quantity totals separately for each exact
+order/line/vendor/currency/UOM/document-type partition. These controls are
+separate from the existing per-currency monetary controls. Split receipts or
+invoices can share a partition when their independent count and quantity agree.
+Payments do not supply goods quantities. All four sources must be independently
+reviewed before comparison; old sources without controls require new preparation.
+
+Identical numeric quantities in PCS and KG no longer establish agreement. The
+result retains each source row's original unit and quantity, marks the position
+`NOT_COMPARABLE`, and leaves its aggregate quantity comparison empty. It remains
+blocked even after an exception disposition. Exact units include case and code:
+EA and PCS are not silently converted. Source controls are reverified when the
+workflow consumes them, not trusted solely from a saved verification flag.
+
+Unit price differences are now exact tests. For example, a change from 100 to
+99.999 on one million units is flagged even with a 0.01 money tolerance; the
+previous unit-price tolerance could conceal a 1,000 extended-value difference.
+The money tolerance still applies to document extensions and invoice/payment
+amount comparisons. Quantity differences are exact and cannot be excused by
+that tolerance. Draft-payment segregation checks require both nonblank preparer
+and approver identities, with distinct trimmed values. Existing document holds,
+bank-verification assertions and matching exceptions remain draft holds.
+
+Results identify `controlled-purchase-quantities/1`. Historical procurement
+results without this contract remain available, but cannot receive a new
+independent approval; regenerate them from current controlled sources. Existing
+historical approvals are not rewritten. Independently paged source-control views
+and a **Purchase quantity controls** XLSX sheet preserve the full declared
+partition population beyond the first 100 rows. Result provenance retains all
+original source row IDs and unit observations.
+
+This is shared procurement evidence logic exercised for UAE before India. It
+does not calculate UAE VAT/India GST, authenticate supplied approvals or bank
+ownership, authorize payments, infer unit conversions, or handle returns,
+tax-inclusive pricing and service acceptance automatically. Payment proposals
+remain drafts without payment instructions. [Saved AE/IN examples](sample-inputs/SYNTHETIC-purchase-quantities/README.md)
+are synthetic and separate from the real pilot folders. The frozen 154-case
+catalogue is unchanged; legal/provider, client and hosted qualification remain open.
+
+Verification checkpoint, 26 October 2026: **1,880 backend unit tests passed,
+four skipped**; **188 frontend tests passed**; four new PostgreSQL/HTTP tests
+and the existing connected procurement/bank-revision regression passed.
+Scoped Ruff/mypy, ESLint, TypeScript, production build and UTF-8 preflight passed.
+The saved AE/IN CSVs were parsed back with their literal controls and expected
+quantities. Unit tests cover 5,000 distinct control partitions, split receipts,
+wrong partition/count/quantity controls, absent source controls, different units,
+exact price/quantity tests and missing/equivalent preparer identities. HTTP
+tests verify independent review, incompatible-unit approval rejection even
+after disposition, all 121 control partitions across separate pagination and
+the complete control XLSX sheet. The older connected flow was rerun without
+rewriting its historical public receipt; the current local receipt is retained
+in the private verification runtime.
+
+The [real-worker browser scenario](../phase-12/purchase-quantities-browser-results.json)
+passed for valid and incompatible-unit cases in UAE, then India, including the
+source-control view. Initial screenshots revealed oversized JSON cells; these
+are now labelled role/value lists with wrapped exception text. The final browser
+check requires the disposition button to fit entirely in the viewport after
+scrolling to the schedule. Final screenshots were visually inspected:
+[UAE matched](screenshots/native-sources/ae-purchase-valid.png),
+[UAE incompatible units](screenshots/native-sources/ae-purchase-bad_units.png),
+[UAE controls](screenshots/native-sources/ae-purchase-controls.png),
+[India matched](screenshots/native-sources/in-purchase-valid.png),
+[India incompatible units](screenshots/native-sources/in-purchase-bad_units.png),
+[India controls](screenshots/native-sources/in-purchase-controls.png).

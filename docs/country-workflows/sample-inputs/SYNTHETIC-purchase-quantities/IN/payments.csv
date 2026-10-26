@@ -1,0 +1,2 @@
+id,order_id,line_reference,vendor,currency,date,document_type,quantity,uom,unit_price,amount,evidence_reference,approval_status,payment_hold,bank_change_verified,prepared_by,approved_by
+SYN-payment,PO-1,LINE-1,V1,INR,2026-06-01,payment,2,PCS,50,100,SYN-PAYMENT-DOCUMENT,approved,False,True,SYN-preparer,SYN-independent-reviewer

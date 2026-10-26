@@ -161,6 +161,7 @@ class PurchaseLine(Strict):
     date: date
     document_type: Literal["order", "receipt", "invoice", "payment"]
     quantity: Money = Field(ge=0)
+    uom: Identifier | None = None
     unit_price: Money = Field(ge=0)
     amount: Money = Field(ge=0)
     evidence_reference: Identifier
@@ -169,6 +170,13 @@ class PurchaseLine(Strict):
     bank_change_verified: bool = False
     prepared_by: str = Field(default="", max_length=120)
     approved_by: str = Field(default="", max_length=120)
+
+    @model_validator(mode="after")
+    def exact_purchase_identity(self):
+        for value in (self.id, self.order_id, self.line_reference, self.vendor, self.evidence_reference, self.uom):
+            if value is not None and (not value.strip() or value != value.strip()):
+                raise ValueError("Purchase identifiers and units require exact nonblank values")
+        return self
 
 
 class PartyMaster(Strict):

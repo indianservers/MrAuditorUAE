@@ -107,3 +107,9 @@ Uploaded-list screening now retains every candidate within the existing
 comparison bound, replacing the previous first-20-only retention. A paged
 candidate view and separate XLSX sheet preserve all source references; historical
 truncated results remain visibly incomplete. See [candidate coverage and limits](native-adapters.md#complete-uploaded-list-screening-candidates--uae-then-india).
+
+Procurement matching now requires independently controlled quantities and exact
+declared units on orders, receipts and invoices. Incompatible units block
+approval; money tolerance cannot hide unit-price or quantity differences. See
+[procurement controls and limits](native-adapters.md#independently-controlled-procurement-quantities--uae-then-india)
+and [synthetic AE/IN inputs](sample-inputs/SYNTHETIC-purchase-quantities/README.md).

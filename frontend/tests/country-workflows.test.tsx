@@ -8,6 +8,19 @@ import {
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { CountryWorkflows } from "@/features/country-workflows";
 
+it("retains independent purchase quantity controls separately from money controls", async () => {
+  render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+  fireEvent.change(screen.getByLabelText("Source table type"), { target: { value: "purchase-lines" } });
+  fireEvent.change(screen.getByLabelText("Clean retained evidence"), { target: { value: "clean" } });
+  fireEvent.change(screen.getByLabelText("Schedule title"), { target: { value: "SYN independent purchase quantity source" } });
+  fireEvent.change(screen.getByLabelText("Expected data rows"), { target: { value: "1" } });
+  const controls = [{ order_id: "PO-1", line_reference: "LINE-1", vendor: "V1", currency: "AED", uom: "PCS", document_type: "order", expected_rows: 1, quantity: "2" }];
+  fireEvent.change(screen.getByLabelText("Purchase row and quantity controls (JSON)"), { target: { value: JSON.stringify(controls) } });
+  await fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({ table_type: "purchase-lines", purchase_quantity_controls: controls });
+});
+
 const state = vi.hoisted(() => ({
   mutate: vi.fn(),
   result: null as unknown,
@@ -147,6 +160,7 @@ vi.mock("@/hooks/use-api", () => ({
                 },
               },
               { id: "inventory-valuation-control", title: "Inventory valuation and GL controls", available: true, roles: { books: "stock", valuations: "inventory-valuations", controls: "accounting-controls" } },
+              { id: "procurement-match", title: "Controlled procurement", available: true, roles: { orders: "purchase-lines", receipts: "purchase-lines", invoices: "purchase-lines", payments: "purchase-lines" } },
               {
                 id: "india-esic-population",
                 title: "India ESIC population",
@@ -295,6 +309,7 @@ vi.mock("@/hooks/use-api", () => ({
               },
             ],
             source_contracts: {
+              "purchase-lines": { id: { required: true, type: "str" }, uom: { required: false, type: "str" } },
               "inventory-valuations": { id: { required: true, type: "str" }, assessed_unit_cost: { required: true, type: "Decimal" } },
               "esic-members": { id: { required: true, type: "str" }, amount: { required: true, type: "Decimal" } },
               "gst-document-series": {},

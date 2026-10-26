@@ -162,6 +162,10 @@ def _parse_csv(content, data, defaults=None):
         from app.modules.country_workflows.inventory_controls import verify_quantity_controls
 
         verify_quantity_controls(rows, [item.model_dump(mode="json") for item in data.inventory_quantity_controls])
+    if data.purchase_quantity_controls is not None:
+        from app.modules.country_workflows.purchase_controls import verify as verify_purchase
+
+        verify_purchase(rows, [item.model_dump(mode="json") for item in data.purchase_quantity_controls])
     if not rows:
         if any(v != 0 for v in data.control_totals.values()):
             raise ValueError("A nil population cannot carry nonzero control totals")
@@ -225,6 +229,7 @@ def _parse_csv(content, data, defaults=None):
         "row_count": len(rows),
         "control_totals": {k: str(v) for k, v in sorted(totals.items())},
         **({"inventory_controls_verified": True, "inventory_quantity_controls": [item.model_dump(mode="json") for item in data.inventory_quantity_controls]} if data.inventory_quantity_controls is not None else {}),
+        **({"purchase_controls_verified": True, "purchase_quantity_controls": [item.model_dump(mode="json") for item in data.purchase_quantity_controls]} if data.purchase_quantity_controls is not None else {}),
         **(
             {"import_taxable_base_control": str(data.import_taxable_base_control)}
             if data.table_type == "import-vat-lines"

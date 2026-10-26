@@ -203,13 +203,19 @@ def procurement(data, tables):
     blocked = False
     for index, (k, group) in enumerate(sorted(grouped.items()), 1):
         exceptions = []
+        observations = [{"source_role": role, "source_row_id": r["id"], "uom": r.get("uom"), "quantity": r["quantity"]} for role in ("orders", "receipts", "invoices") for r in group[role]]
+        units = {observation["uom"] for observation in observations}
+        units_valid = len(units) == 1 and None not in units and "" not in units
+        if not units_valid:
+            exceptions.append("UNIT_OF_MEASURE_MISSING_OR_DIFFERENT")
+            blocked = True
         if len(group["orders"]) != 1:
             exceptions.append("ORDER_MISSING_OR_AMBIGUOUS")
             blocked = True
         for role in ("receipts", "invoices", "payments"):
             if not group[role]:
                 exceptions.append("MISSING_" + role.upper())
-        qty = {role: sum((money(r, "quantity") for r in group[role]), Decimal(0)) for role in types}
+        qty = {role: sum((money(r, "quantity") for r in group[role]), Decimal(0)) for role in ("orders", "receipts", "invoices")} if units_valid else {}
         amounts = {role: sum((money(r) for r in group[role]), Decimal(0)) for role in types}
         for role in ("orders", "receipts", "invoices"):
             if any(
@@ -217,12 +223,12 @@ def procurement(data, tables):
                 for r in group[role]
             ):
                 exceptions.append("EXTENSION_DIFFERENCE_" + role.upper())
-        if qty["receipts"] > qty["orders"]:
+        if units_valid and qty["receipts"] > qty["orders"]:
             exceptions.append("RECEIPT_EXCEEDS_ORDER")
-        if qty["invoices"] > qty["receipts"]:
+        if units_valid and qty["invoices"] > qty["receipts"]:
             exceptions.append("INVOICE_EXCEEDS_RECEIPT")
-        if group["orders"] and any(
-            abs(money(r, "unit_price") - money(group["orders"][0], "unit_price")) > data.tolerance
+        if units_valid and group["orders"] and any(
+            money(r, "unit_price") != money(group["orders"][0], "unit_price")
             for r in group["invoices"]
         ):
             exceptions.append("PRICE_DIFFERENCE")
@@ -240,9 +246,7 @@ def procurement(data, tables):
                     holds.append("SOURCE_PAYMENT_HOLD")
                 if not document.get("bank_change_verified"):
                     holds.append("INDEPENDENT_BANK_DETAILS_VERIFICATION_REQUIRED")
-                if not document.get("approved_by") or document.get("approved_by") == document.get(
-                    "prepared_by"
-                ):
+                if not document.get("prepared_by", "").strip() or not document.get("approved_by", "").strip() or document.get("approved_by", "").strip() == document.get("prepared_by", "").strip():
                     holds.append("SEGREGATION_OF_DUTIES_NOT_ESTABLISHED")
             proposals.append(
                 {
@@ -250,6 +254,7 @@ def procurement(data, tables):
                     "line_reference": k[1],
                     "vendor": k[2],
                     "currency": k[3],
+                    "uom": next(iter(units)) if units_valid else None,
                     "amount": str(outstanding),
                     "state": "HOLD" if holds else "DRAFT_REQUIRES_PAYMENT_APPROVAL",
                     "holds": sorted(set(holds)),
@@ -264,6 +269,9 @@ def procurement(data, tables):
                 "line_reference": k[1],
                 "vendor": k[2],
                 "currency": k[3],
+                "uom": next(iter(units)) if units_valid else None,
+                "quantity_comparison_status": "EXPLICIT_SAME_UNIT" if units_valid else "NOT_COMPARABLE",
+                "source_unit_observations": observations,
                 "quantities": {r: str(v) for r, v in qty.items()},
                 "amounts": {r: str(v) for r, v in amounts.items()},
                 "exceptions": exceptions,
@@ -276,11 +284,15 @@ def procurement(data, tables):
             rows,
             blocked,
             [
-                "Bounded positive-quantity purchase lines; returns, tax-inclusive pricing and service acceptance need separate assessment",
+                "Bounded non-negative purchase lines in an explicit identical unit; returns, tax-inclusive pricing and service acceptance need separate assessment",
                 "Partial receipts and unpaid invoices may be legitimate; exception dispositions require evidence",
+                "No unit conversion is inferred; incompatible quantities are not summed or compared. Payment quantities are not a goods control",
+                "Unit prices are compared exactly; money tolerance applies to extensions and payment amount comparisons, not unit price changes",
+                "Document approvals and bank verification are supplied assertions, not authenticated bank ownership or payment authorization; proposals never create payment instructions",
             ],
         ),
         "payment_proposals": proposals,
+        "purchase_quantity_contract": "controlled-purchase-quantities/1",
     }
 
 

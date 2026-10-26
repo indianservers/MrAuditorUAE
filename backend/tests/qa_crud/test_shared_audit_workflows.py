@@ -18,9 +18,10 @@ pytestmark = pytest.mark.skipif(
 
 
 async def prepare(c, h, reviewer, eid, populations):
+    from tests.unit.purchase_fixtures import quantity_controls
     sources = {}
     for role, kind, rows, totals in populations:
-        event = await source(c, h, eid, rows, "SYNTHETIC " + role, kind, totals)
+        event = await source(c, h, eid, rows, "SYNTHETIC " + role, kind, totals, **({"purchase_quantity_controls": quantity_controls(rows)} if kind == "purchase-lines" else {}))
         reviewed = await decision(c, reviewer[0], eid, event)
         assert reviewed.status_code == 201, reviewed.text
         sources[role] = reviewed.json()["id"]

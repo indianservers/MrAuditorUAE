@@ -1,4 +1,6 @@
 def approval_error(body):
+    if body.get("workflow") == "procurement-match" and body.get("purchase_quantity_contract") != "controlled-purchase-quantities/1":
+        return "Regenerate procurement with independently controlled quantities and explicit units before approval"
     if body.get("workflow") == "sanctions-name-review" and any(
         row.get("candidate_preview_truncated")
         or (row.get("candidate_count") is not None and row["candidate_count"] != len(row.get("candidates", [])))

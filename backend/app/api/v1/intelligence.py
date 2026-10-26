@@ -660,6 +660,7 @@ async def events(
                     "allowed_workflows": row.body.get("allowed_workflows"),
                     "invoice_direction": row.body.get("native_metadata", {}).get("direction") if row.body.get("native_format") == "india-inv01-json" else None,
                     "inventory_controls_verified": row.body.get("inventory_controls_verified") is True,
+                    "purchase_controls_verified": row.body.get("purchase_controls_verified") is True,
                     "obligation_populations": sorted({item.get("population", "unspecified") for item in row.body.get("rows", [])}) if row.body.get("table_type") == "obligations" else None,
                     "evidence_version_id": row.body.get("evidence_version_id"),
                     "table_kind": row.body.get("table_kind"),
@@ -705,6 +706,8 @@ async def event_details(
     date_limit: int = Query(100, ge=1, le=500),
     payroll_view: Literal["all", "accounts", "postings"] = "all",
     inventory_view: Literal["all", "valuations", "gl-controls"] = "all",
+    purchase_offset: int = Query(0, ge=0),
+    purchase_limit: int = Query(100, ge=1, le=500),
 ):
     obj = await service.event(db, ctx, eid, identifier)
     body = dict(obj.body)
@@ -732,7 +735,7 @@ async def event_details(
     if isinstance(body.get("excluded_box_rows"), list):
         totals["excluded_box_rows"] = len(body["excluded_box_rows"])
         body["excluded_box_rows"] = body["excluded_box_rows"][excluded_offset : excluded_offset + excluded_limit]
-    for key, start, size in [("inventory_quantity_controls", inventory_offset, inventory_limit), ("count_bridges", bridge_offset, bridge_limit), ("payroll_posting_links", posting_offset, posting_limit), ("transaction_dates", date_offset, date_limit)]:
+    for key, start, size in [("purchase_quantity_controls", purchase_offset, purchase_limit), ("inventory_quantity_controls", inventory_offset, inventory_limit), ("count_bridges", bridge_offset, bridge_limit), ("payroll_posting_links", posting_offset, posting_limit), ("transaction_dates", date_offset, date_limit)]:
         if isinstance(body.get(key), list):
             totals[key] = len(body[key])
             body[key] = body[key][start : start + size]

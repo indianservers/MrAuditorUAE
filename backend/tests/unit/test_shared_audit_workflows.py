@@ -60,6 +60,7 @@ def settlement(**changes):
 
 
 def source(kind, rows):
+    from tests.unit.purchase_fixtures import quantity_controls
     fields = list(ROW_TYPES[kind].model_fields)
     buffer = io.StringIO(newline="")
     writer = csv.DictWriter(buffer, fieldnames=fields)
@@ -84,6 +85,7 @@ def source(kind, rows):
             label="SYNTHETIC audit source",
             expected_rows=len(rows),
             control_totals=totals,
+            **({"purchase_quantity_controls": quantity_controls(rows)} if kind == "purchase-lines" else {}),
             **(
                 {
                     "import_taxable_base_control": sum(

@@ -109,6 +109,7 @@ def purchase(role, **changes):
         "date": "2026-06-01",
         "document_type": role,
         "quantity": "2",
+        "uom": "PCS",
         "unit_price": "50",
         "amount": "100",
         "evidence_reference": role.upper() + "-DOCUMENT",

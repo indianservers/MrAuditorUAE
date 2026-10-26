@@ -139,6 +139,7 @@ type Choice = {
   allowed_workflows?: string[] | null;
   invoice_direction?: string | null;
   inventory_controls_verified?: boolean;
+  purchase_controls_verified?: boolean;
   obligation_populations?: string[] | null;
   table_kind?: string;
   evidence_version_id?: string;
@@ -219,6 +220,7 @@ type Result = {
     payroll_posting_links?: Record<string, unknown>[];
     transaction_dates?: Record<string, unknown>[];
     inventory_quantity_controls?: Record<string, unknown>[];
+    purchase_quantity_controls?: Record<string, unknown>[];
     limitations?: string[];
     control_comparison?: Record<string, string>;
     allocation_controls?: Record<string, string>;
@@ -390,6 +392,7 @@ export function CountryWorkflows({
     useState(false);
   const [inventoryControls, setInventoryControls] = useState("[]");
   const [inventoryValueControls, setInventoryValueControls] = useState("[]");
+  const [purchaseControls, setPurchaseControls] = useState("[]");
   const [inventoryCostEvidence, setInventoryCostEvidence] = useState("");
   const [inventoryNRVEvidence, setInventoryNRVEvidence] = useState("");
   const [inventoryGLBasis, setInventoryGLBasis] = useState("");
@@ -897,72 +900,86 @@ export function CountryWorkflows({
                   ].filter((key) => allColumns.includes(key))
                 : defaultColumns;
   const columns =
-    body?.workflow === "sanctions-name-review" && !showRuleProvenance
+    body?.workflow === "procurement-match" && !showRuleProvenance
       ? [
-          "id",
-          "subject_name",
-          "list_version",
-          "candidate_count",
-          "candidate_preview_truncated",
+          "order_id",
+          "line_reference",
+          "vendor",
+          "currency",
+          "uom",
+          "quantity_comparison_status",
+          "quantities",
+          "amounts",
+          "exceptions",
           "state",
-          "reviewer_disposition",
         ].filter((key) => allColumns.includes(key))
-      : body?.workflow === "inventory-valuation-control" && !showRuleProvenance
-        ? (inventoryView === "gl-controls"
-            ? [
-                "account",
-                "currency",
-                "recorded_book_value",
-                "gl_amount",
-                "difference",
-                "state",
-              ]
-            : [
-                "site",
-                "sku",
-                "lot",
-                "uom",
-                "currency",
-                "book_quantity",
-                "book_unit_cost",
-                "assessed_unit_cost",
-                "book_unit_nrv",
-                "assessed_unit_nrv",
-                "recorded_gl_basis_value",
-                "assessed_lower_cost_nrv_value",
-                "recorded_minus_assessed_value",
-                "exceptions",
-                "state",
-              ]
-          ).filter((key) => allColumns.includes(key))
-        : body?.table_type === "esic-members" && !showRuleProvenance
-          ? [
-              "subject",
-              "member_name",
-              "period",
-              "currency",
-              "amount",
-              "paid_days",
-              "zero_wage_reason",
-              "zero_day_reason",
-              "last_working_day",
-              "source_row",
-            ].filter((key) => allColumns.includes(key))
-          : body?.workflow === "india-esic-population" && !showRuleProvenance
+      : body?.workflow === "sanctions-name-review" && !showRuleProvenance
+        ? [
+            "id",
+            "subject_name",
+            "list_version",
+            "candidate_count",
+            "candidate_preview_truncated",
+            "state",
+            "reviewer_disposition",
+          ].filter((key) => allColumns.includes(key))
+        : body?.workflow === "inventory-valuation-control" &&
+            !showRuleProvenance
+          ? (inventoryView === "gl-controls"
+              ? [
+                  "account",
+                  "currency",
+                  "recorded_book_value",
+                  "gl_amount",
+                  "difference",
+                  "state",
+                ]
+              : [
+                  "site",
+                  "sku",
+                  "lot",
+                  "uom",
+                  "currency",
+                  "book_quantity",
+                  "book_unit_cost",
+                  "assessed_unit_cost",
+                  "book_unit_nrv",
+                  "assessed_unit_nrv",
+                  "recorded_gl_basis_value",
+                  "assessed_lower_cost_nrv_value",
+                  "recorded_minus_assessed_value",
+                  "exceptions",
+                  "state",
+                ]
+            ).filter((key) => allColumns.includes(key))
+          : body?.table_type === "esic-members" && !showRuleProvenance
             ? [
                 "subject",
-                "payroll_member_name",
-                "reported_member_name",
-                "payroll_amount",
-                "reported_amount",
-                "wage_difference",
-                "payroll_paid_days",
-                "reported_paid_days",
-                "paid_day_difference",
-                "exceptions",
-                "state",
+                "member_name",
+                "period",
+                "currency",
+                "amount",
+                "paid_days",
+                "zero_wage_reason",
+                "zero_day_reason",
+                "last_working_day",
+                "source_row",
               ].filter((key) => allColumns.includes(key))
-            : baseColumns;
+            : body?.workflow === "india-esic-population" && !showRuleProvenance
+              ? [
+                  "subject",
+                  "payroll_member_name",
+                  "reported_member_name",
+                  "payroll_amount",
+                  "reported_amount",
+                  "wage_difference",
+                  "payroll_paid_days",
+                  "reported_paid_days",
+                  "paid_day_difference",
+                  "exceptions",
+                  "state",
+                ].filter((key) => allColumns.includes(key))
+              : baseColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -1048,6 +1065,9 @@ export function CountryWorkflows({
           : {
               evidence_version_id: evidence,
               file_format: sourceFormat,
+              ...(tableType === "purchase-lines"
+                ? { purchase_quantity_controls: JSON.parse(purchaseControls) }
+                : {}),
               ...(inventoryControlsEnabled &&
               ["stock", "stock-movements"].includes(tableType)
                 ? { inventory_quantity_controls: JSON.parse(inventoryControls) }
@@ -2925,6 +2945,31 @@ export function CountryWorkflows({
                       </p>
                     </fieldset>
                   )}
+                  {tableType === "purchase-lines" && (
+                    <fieldset>
+                      <legend>Independent purchase quantity controls</legend>
+                      <label>
+                        Purchase row and quantity controls (JSON)
+                        <textarea
+                          value={purchaseControls}
+                          onChange={(event) =>
+                            setPurchaseControls(event.target.value)
+                          }
+                          rows={6}
+                          placeholder={
+                            '[{"order_id":"PO-1","line_reference":"LINE-1","vendor":"V1","currency":"AED","uom":"PCS","document_type":"order","expected_rows":1,"quantity":"2"}]'
+                          }
+                        />
+                      </label>
+                      <p>
+                        Declare each non-payment
+                        order/line/vendor/currency/unit/document partition
+                        independently. Use [] for a payments-only source. Money
+                        controls remain separate. No unit conversion is
+                        inferred.
+                      </p>
+                    </fieldset>
+                  )}
                   {tableType === "inventory-valuations" && (
                     <fieldset>
                       <legend>Inventory valuation evidence controls</legend>
@@ -3411,6 +3456,10 @@ export function CountryWorkflows({
                             !stockControlled ||
                             (r.review_status === "REVIEWED" &&
                               r.inventory_controls_verified === true)) &&
+                          (workflow !== "procurement-match" ||
+                            (r.review_status === "REVIEWED" &&
+                              (role === "payments" ||
+                                r.purchase_controls_verified === true))) &&
                           (![
                             "india-invoice-register",
                             "india-gstr1-summary",
@@ -4832,6 +4881,19 @@ export function CountryWorkflows({
               }
             />
           )}
+          {body.purchase_quantity_controls && (
+            <InventoryEvidenceTable
+              key={selected + ":purchase-controls"}
+              prefix={prefix}
+              selected={selected}
+              initial={body.purchase_quantity_controls}
+              total={
+                detail.data.collection_totals?.purchase_quantity_controls ??
+                body.purchase_quantity_controls.length
+              }
+              purchase
+            />
+          )}
           {body.inventory_quantity_controls && (
             <InventoryEvidenceTable
               key={selected + ":inventory-controls"}
@@ -5236,6 +5298,7 @@ export function CountryWorkflows({
               body.workflow === "payroll-ledger-rollforward" ||
               body.workflow === "inventory-valuation-control" ||
               body.workflow === "sanctions-name-review" ||
+              body.workflow === "procurement-match" ||
               body.workflow === "india-esic-population" ||
               body.workflow === "india-gstr1-documents" ||
               body.workflow === "india-invoice-register" ||
@@ -5284,9 +5347,17 @@ export function CountryWorkflows({
                   {rows.map((row, i) => (
                     <tr key={String(row.id || i)}>
                       {columns.map((k) => (
-                        <td key={k}>
-                          {compactWithholding &&
-                          k === "assessment_issues" &&
+                        <td
+                          key={k}
+                          style={
+                            body.workflow === "procurement-match"
+                              ? { maxWidth: 200, overflowWrap: "anywhere" }
+                              : undefined
+                          }
+                        >
+                          {((compactWithholding && k === "assessment_issues") ||
+                            (body.workflow === "procurement-match" &&
+                              k === "exceptions")) &&
                           Array.isArray(row[k]) ? (
                             <ul>
                               {(row[k] as unknown[]).map((issue) => (
@@ -5297,12 +5368,14 @@ export function CountryWorkflows({
                                 </li>
                               ))}
                             </ul>
-                          ) : compactWithholding &&
-                            [
-                              "amounts",
-                              "differences_from_expected",
-                              "differences_from_books",
-                            ].includes(k) &&
+                          ) : ((body.workflow === "procurement-match" &&
+                              ["quantities", "amounts"].includes(k)) ||
+                              (compactWithholding &&
+                                [
+                                  "amounts",
+                                  "differences_from_expected",
+                                  "differences_from_books",
+                                ].includes(k))) &&
                             row[k] &&
                             typeof row[k] === "object" &&
                             !Array.isArray(row[k]) ? (

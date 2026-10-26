@@ -1,0 +1,58 @@
+{
+  "synthetic_only": true,
+  "country": "AE",
+  "as_of": "2026-06-30",
+  "expected_rows": 1,
+  "money_control_totals": {
+    "AED": "100"
+  },
+  "quantity_controls": {
+    "orders": [
+      {
+        "order_id": "PO-1",
+        "line_reference": "LINE-1",
+        "vendor": "V1",
+        "currency": "AED",
+        "uom": "PCS",
+        "document_type": "order",
+        "expected_rows": 1,
+        "quantity": "2"
+      }
+    ],
+    "receipts": [
+      {
+        "order_id": "PO-1",
+        "line_reference": "LINE-1",
+        "vendor": "V1",
+        "currency": "AED",
+        "uom": "PCS",
+        "document_type": "receipt",
+        "expected_rows": 1,
+        "quantity": "2"
+      }
+    ],
+    "invoices": [
+      {
+        "order_id": "PO-1",
+        "line_reference": "LINE-1",
+        "vendor": "V1",
+        "currency": "AED",
+        "uom": "PCS",
+        "document_type": "invoice",
+        "expected_rows": 1,
+        "quantity": "2"
+      }
+    ],
+    "payments": []
+  },
+  "expected_result": {
+    "row_count": 1,
+    "exception_count": 0,
+    "uom": "PCS",
+    "quantities": {
+      "orders": "2",
+      "receipts": "2",
+      "invoices": "2"
+    }
+  }
+}

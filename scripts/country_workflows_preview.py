@@ -799,6 +799,12 @@ async def main():
         screening_candidates = {}
         for code, engagement in (("AE", eid), ("IN", india)):
             screening_candidates[code] = await prepare_screening(client, h, engagement)
+        from tests.qa_crud.test_purchase_quantity_controls import prepare as prepare_purchases
+
+        purchase_quantities = {}
+        for code, engagement, currency in (("AE", eid, "AED"), ("IN", india, "INR")):
+            purchase_quantities[code] = {"valid": await prepare_purchases(client, h, engagement, supporting_reviewer, currency),
+                "bad_units": await prepare_purchases(client, h, engagement, supporting_reviewer, currency, receipt_unit="KG")}
 
         from country_bank_carryforward_fixture import prepare as prepare_carryforward
 
@@ -1044,6 +1050,7 @@ async def main():
                     "esic_xls": esic_xls,
                     "inventory_values": inventory_values,
                     "screening_candidates": screening_candidates,
+                    "purchase_quantities": purchase_quantities,
                     "bank_carryforward": bank_carryforward,
                     "ecr_arrear_input": arrear_input,
                     "ecr_arrear_sources": arrear_source_ids,
