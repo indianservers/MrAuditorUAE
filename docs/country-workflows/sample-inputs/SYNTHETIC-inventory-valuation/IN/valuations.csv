@@ -1,0 +1,2 @@
+id,site,sku,lot,uom,currency,quantity,as_of,assessed_unit_cost,selling_unit_price,completion_unit_cost,selling_unit_cost,cost_observation_date,nrv_observation_date,cost_evidence_version_id,nrv_evidence_version_id,cost_source_sha256,nrv_source_sha256,cost_reference,nrv_reference,assessment
+SYN-VALUE-1,SYN-WAREHOUSE,SKU-001,LOT-001,PCS,INR,10,2026-06-30,100,120,5,5,2026-06-10,2026-07-03,,,,,SYN-COST-PAGE-2,SYN-SELLING-EVIDENCE-PAGE-3,Independently assessed fictional cost policy and selling/completion/selling-cost evidence applicable at reporting date

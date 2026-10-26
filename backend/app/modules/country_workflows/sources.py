@@ -106,7 +106,9 @@ def _parse_csv(content, data, defaults=None):
         for key, selected_value in (defaults or {}).items():
             if key in values and values[key] != selected_value:
                 raise ValueError(
-                    "CSV rule document differs from the explicitly selected retained evidence"
+                    "CSV valuation document differs from the explicitly selected retained evidence"
+                    if data.table_type == "inventory-valuations"
+                    else "CSV rule document differs from the explicitly selected retained evidence"
                 )
             values[key] = selected_value
         # Empty references are permitted for bank statements, not tax documents.
@@ -133,6 +135,12 @@ def _parse_csv(content, data, defaults=None):
             amount = getattr(item, "requested_amount")
         if amount is not None:
             totals[getattr(item, "currency")] += amount
+    if data.table_type == "inventory-valuations":
+        from app.modules.country_workflows.inventory_valuation import (
+            verify_controls as verify_values,
+        )
+
+        verify_values(rows, [control.model_dump(mode="json") for control in data.inventory_valuation_controls])
     esic_controls = None
     if data.table_type == "esic-members":
         from app.modules.country_workflows.esic_population import verify_controls as verify_esic
@@ -207,6 +215,7 @@ def _parse_csv(content, data, defaults=None):
     ):
         raise ValueError("Import taxable-base control does not agree to all retained source rows")
     return {
+        **({"inventory_valuation_controls": [control.model_dump(mode="json") for control in data.inventory_valuation_controls]} if data.inventory_valuation_controls is not None else {}),
         **({"esic_population_controls": esic_controls} if esic_controls is not None else {}),
         "table_type": data.table_type,
         **({"allowed_workflows": ["obligation-bank-allocations"], "allowed_source_roles": ["expected", "reported"]} if any(row.get("withholding_scope") for row in rows) else {}),

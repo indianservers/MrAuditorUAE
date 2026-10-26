@@ -184,6 +184,12 @@ type Result = {
     booking_date_review_count?: number;
     bank_account_evidence?: BankAccountLink;
     document_series_scope?: { registration: string; period: string };
+    inventory_valuation_scope?: {
+      as_of: string;
+      review_through: string;
+      gl_basis: string;
+      assessment: string;
+    };
     esic_population_scope?: { registration: string; period: string };
     esic_population_binding?: {
       status: string;
@@ -356,8 +362,9 @@ export function CountryWorkflows({
   const [showAllJobs, setShowAllJobs] = useState(false);
   const [offset, setOffset] = useState(0);
   const [payrollView, setPayrollView] = useState("accounts");
+  const [inventoryView, setInventoryView] = useState("valuations");
   const detail = useAPI<Result>(
-    `${prefix}/events/${selected}?offset=${offset}&limit=100&payroll_view=${payrollView}`,
+    `${prefix}/events/${selected}?offset=${offset}&limit=100&payroll_view=${payrollView}&inventory_view=${inventoryView}`,
     !!selected,
   );
   const [workflow, setWorkflow] = useState("bank-brs");
@@ -381,6 +388,11 @@ export function CountryWorkflows({
   const [inventoryControlsEnabled, setInventoryControlsEnabled] =
     useState(false);
   const [inventoryControls, setInventoryControls] = useState("[]");
+  const [inventoryValueControls, setInventoryValueControls] = useState("[]");
+  const [inventoryCostEvidence, setInventoryCostEvidence] = useState("");
+  const [inventoryNRVEvidence, setInventoryNRVEvidence] = useState("");
+  const [inventoryGLBasis, setInventoryGLBasis] = useState("");
+  const [inventoryScopeAssessment, setInventoryScopeAssessment] = useState("");
   const [stockControlled, setStockControlled] = useState(false);
   const [stockCutoffAssessment, setStockCutoffAssessment] = useState("");
   const [customColumns, setCustomColumns] = useState(false);
@@ -884,34 +896,62 @@ export function CountryWorkflows({
                   ].filter((key) => allColumns.includes(key))
                 : defaultColumns;
   const columns =
-    body?.table_type === "esic-members" && !showRuleProvenance
-      ? [
-          "subject",
-          "member_name",
-          "period",
-          "currency",
-          "amount",
-          "paid_days",
-          "zero_wage_reason",
-          "zero_day_reason",
-          "last_working_day",
-          "source_row",
-        ].filter((key) => allColumns.includes(key))
-      : body?.workflow === "india-esic-population" && !showRuleProvenance
+    body?.workflow === "inventory-valuation-control" && !showRuleProvenance
+      ? (inventoryView === "gl-controls"
+          ? [
+              "account",
+              "currency",
+              "recorded_book_value",
+              "gl_amount",
+              "difference",
+              "state",
+            ]
+          : [
+              "site",
+              "sku",
+              "lot",
+              "uom",
+              "currency",
+              "book_quantity",
+              "book_unit_cost",
+              "assessed_unit_cost",
+              "book_unit_nrv",
+              "assessed_unit_nrv",
+              "recorded_gl_basis_value",
+              "assessed_lower_cost_nrv_value",
+              "recorded_minus_assessed_value",
+              "exceptions",
+              "state",
+            ]
+        ).filter((key) => allColumns.includes(key))
+      : body?.table_type === "esic-members" && !showRuleProvenance
         ? [
             "subject",
-            "payroll_member_name",
-            "reported_member_name",
-            "payroll_amount",
-            "reported_amount",
-            "wage_difference",
-            "payroll_paid_days",
-            "reported_paid_days",
-            "paid_day_difference",
-            "exceptions",
-            "state",
+            "member_name",
+            "period",
+            "currency",
+            "amount",
+            "paid_days",
+            "zero_wage_reason",
+            "zero_day_reason",
+            "last_working_day",
+            "source_row",
           ].filter((key) => allColumns.includes(key))
-        : baseColumns;
+        : body?.workflow === "india-esic-population" && !showRuleProvenance
+          ? [
+              "subject",
+              "payroll_member_name",
+              "reported_member_name",
+              "payroll_amount",
+              "reported_amount",
+              "wage_difference",
+              "payroll_paid_days",
+              "reported_paid_days",
+              "paid_day_difference",
+              "exceptions",
+              "state",
+            ].filter((key) => allColumns.includes(key))
+          : baseColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -1136,6 +1176,25 @@ export function CountryWorkflows({
                   }
                 : {}),
               table_type: tableType,
+              ...(tableType === "inventory-valuations"
+                ? {
+                    inventory_valuation_controls: JSON.parse(
+                      inventoryValueControls,
+                    ),
+                    ...(inventoryCostEvidence
+                      ? {
+                          inventory_cost_document_version_id:
+                            inventoryCostEvidence,
+                        }
+                      : {}),
+                    ...(inventoryNRVEvidence
+                      ? {
+                          inventory_nrv_document_version_id:
+                            inventoryNRVEvidence,
+                        }
+                      : {}),
+                  }
+                : {}),
               ...(sourceFormat === "india-esic-members-xls"
                 ? {
                     employer_registration: employerRegistration,
@@ -1220,6 +1279,13 @@ export function CountryWorkflows({
           );
         payload = {
           workflow,
+          ...(workflow === "inventory-valuation-control"
+            ? {
+                inventory_gl_basis: inventoryGLBasis,
+                inventory_scope_assessment: inventoryScopeAssessment,
+                review_through: reviewThrough,
+              }
+            : {}),
           ...([
             "india-withholding-liability",
             "india-withholding-credit",
@@ -2848,6 +2914,74 @@ export function CountryWorkflows({
                       </p>
                     </fieldset>
                   )}
+                  {tableType === "inventory-valuations" && (
+                    <fieldset>
+                      <legend>Inventory valuation evidence controls</legend>
+                      <label>
+                        Independent extended cost/NRV controls (JSON)
+                        <textarea
+                          value={inventoryValueControls}
+                          onChange={(e) =>
+                            setInventoryValueControls(e.target.value)
+                          }
+                          rows={6}
+                          placeholder={
+                            '[{"currency":"AED","expected_rows":1,"cost_value":"1000","nrv_value":"1100"}]'
+                          }
+                        />
+                      </label>
+                      <p>
+                        Declare per-currency row counts and extended cost/NRV
+                        totals independently. Unit prices and incompatible
+                        quantities are not summed together.
+                      </p>
+                      {[
+                        {
+                          key: "cost",
+                          caption:
+                            "Retained cost evidence (optional shared document)",
+                          value: inventoryCostEvidence,
+                          setValue: setInventoryCostEvidence,
+                        },
+                        {
+                          key: "nrv",
+                          caption:
+                            "Retained selling/NRV evidence (optional shared document)",
+                          value: inventoryNRVEvidence,
+                          setValue: setInventoryNRVEvidence,
+                        },
+                      ].map(({ key, caption, value, setValue }) => (
+                        <label key={key}>
+                          {caption}
+                          <select
+                            value={value}
+                            onChange={(e) => setValue(e.target.value)}
+                          >
+                            <option value="">
+                              Use explicit document references in the CSV
+                            </option>
+                            {inputs.data?.evidence
+                              .filter(
+                                (item) =>
+                                  item.scan_status === "CLEAN" &&
+                                  item.id !== evidence,
+                              )
+                              .map((item) => (
+                                <option key={item.id} value={item.id}>
+                                  {item.label}
+                                </option>
+                              ))}
+                          </select>
+                        </label>
+                      ))}
+                      <p>
+                        Selected documents supply retained evidence references;
+                        conflicting CSV references are rejected. Assess original
+                        reference locations and cost/NRV applicability in every
+                        row.
+                      </p>
+                    </fieldset>
+                  )}
                   {tableType === "esic-members" && (
                     <fieldset>
                       <legend>Independent ESIC population controls</legend>
@@ -3018,6 +3152,49 @@ export function CountryWorkflows({
                   ))}
                 </select>
               </label>
+              {workflow === "inventory-valuation-control" && (
+                <fieldset>
+                  <legend>Inventory valuation and recorded GL scope</legend>
+                  <label>
+                    Recorded inventory GL basis
+                    <select
+                      value={inventoryGLBasis}
+                      onChange={(e) => setInventoryGLBasis(e.target.value)}
+                    >
+                      <option value="">Select the recorded basis</option>
+                      <option value="gross-cost">Gross recorded cost</option>
+                      <option value="recorded-lower-of-cost-nrv">
+                        Recorded lower of cost and NRV
+                      </option>
+                    </select>
+                  </label>
+                  <label>
+                    Valuation evidence review through
+                    <input
+                      type="date"
+                      min={asOf}
+                      value={reviewThrough}
+                      onChange={(e) => setReviewThrough(e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    Inventory framework and scope assessment
+                    <textarea
+                      value={inventoryScopeAssessment}
+                      onChange={(e) =>
+                        setInventoryScopeAssessment(e.target.value)
+                      }
+                    />
+                  </label>
+                  <p>
+                    Independently review all sources. Book quantity controls,
+                    exact SKU/site/lot/UOM/currency identity, retained cost/NRV
+                    documents and mapped GL accounts are required. Price tests
+                    do not prove physical existence, ownership or framework
+                    applicability.
+                  </p>
+                </fieldset>
+              )}
               {workflow === "inventory-count-bridge" && (
                 <fieldset>
                   <legend>Controlled inventory count-date bridge</legend>
@@ -3196,6 +3373,9 @@ export function CountryWorkflows({
                           r.kind === "workflow-source" &&
                           r.table_type === type &&
                           r.freshness === "CURRENT" &&
+                          (workflow !== "inventory-valuation-control" ||
+                            role !== "books" ||
+                            r.inventory_controls_verified === true) &&
                           (r.native_format !== "india-gstr1-documents-json" ||
                             workflow === "india-gstr1-documents") &&
                           (r.native_format !== "india-gstr2b-json" ||
@@ -3235,6 +3415,7 @@ export function CountryWorkflows({
                             r.review_status === "REVIEWED") &&
                           (![
                             "bank-account-evidence",
+                            "inventory-valuation-control",
                             "obligation-bank-allocations",
                             "payroll-ledger-rollforward",
                             "india-esic-population",
@@ -4924,6 +5105,30 @@ export function CountryWorkflows({
               ))}
             </ul>
           )}
+          {body.inventory_valuation_scope && (
+            <section aria-label="Inventory valuation scope">
+              <h3>Inventory valuation and GL controls</h3>
+              <p>
+                Reporting date {body.inventory_valuation_scope.as_of} · evidence
+                review through {body.inventory_valuation_scope.review_through} ·
+                GL basis {body.inventory_valuation_scope.gl_basis}
+              </p>
+              <p>{body.inventory_valuation_scope.assessment}</p>
+              <label>
+                Inventory valuation view
+                <select
+                  value={inventoryView}
+                  onChange={(e) => {
+                    setInventoryView(e.target.value);
+                    setOffset(0);
+                  }}
+                >
+                  <option value="valuations">Cost and NRV tests</option>
+                  <option value="gl-controls">Recorded GL controls</option>
+                </select>
+              </label>
+            </section>
+          )}
           {body.esic_population_binding && (
             <section aria-label="ESIC contribution population binding">
               <h3>ESIC contribution population link</h3>
@@ -5015,6 +5220,7 @@ export function CountryWorkflows({
               compactBenefit ||
               body.workflow === "bank-account-evidence" ||
               body.workflow === "payroll-ledger-rollforward" ||
+              body.workflow === "inventory-valuation-control" ||
               body.workflow === "india-esic-population" ||
               body.workflow === "india-gstr1-documents" ||
               body.workflow === "india-invoice-register" ||

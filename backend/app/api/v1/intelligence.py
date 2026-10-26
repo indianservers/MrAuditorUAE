@@ -704,11 +704,15 @@ async def event_details(
     date_offset: int = Query(0, ge=0),
     date_limit: int = Query(100, ge=1, le=500),
     payroll_view: Literal["all", "accounts", "postings"] = "all",
+    inventory_view: Literal["all", "valuations", "gl-controls"] = "all",
 ):
     obj = await service.event(db, ctx, eid, identifier)
     body = dict(obj.body)
     if body.get("workflow") == "payroll-ledger-rollforward" and payroll_view != "all":
         selected_kind = "account-rollforward" if payroll_view == "accounts" else "posting-comparison"
+        body["rows"] = [row for row in body["rows"] if row["kind"] == selected_kind]
+    if body.get("workflow") == "inventory-valuation-control" and inventory_view != "all":
+        selected_kind = "valuation-test" if inventory_view == "valuations" else "gl-control"
         body["rows"] = [row for row in body["rows"] if row["kind"] == selected_kind]
     totals = {}
     for key in [

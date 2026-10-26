@@ -324,6 +324,11 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                     "assessment_sha256": rule_document.sha256,
                 }
 
+        for prefix, identifier in (("cost", data.inventory_cost_document_version_id), ("nrv", data.inventory_nrv_document_version_id)):
+            if identifier is not None:
+                document, _ = await intelligence.evidence(db, ctx, eng, identifier)
+                defaults = {**(defaults or {}), prefix + "_evidence_version_id": str(document.id), prefix + "_source_sha256": document.sha256}
+
         def load():
             if part_documents:
                 from app.modules.country_workflows.gstr2b_parts import assemble
@@ -353,6 +358,14 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             result["native_metadata"].update(context_sha256=esic_context.sha256, context_filename=esic_context.filename)
         if arrear_context is not None:
             result["native_metadata"].update(arrear_context_sha256=arrear_context.sha256, arrear_context_filename=arrear_context.filename)
+        if data.table_type == "inventory-valuations":
+            from app.modules.country_workflows.inventory_valuation import documents
+
+            copies = documents(result["rows"])
+            copies.extend({"source_evidence_version_id": defaults[prefix + "_evidence_version_id"], "source_sha256": defaults[prefix + "_source_sha256"]} for prefix in ("cost", "nrv") if defaults and prefix + "_evidence_version_id" in defaults)
+            if any(str(copy["source_evidence_version_id"]) == str(evidence.id) or copy["source_sha256"] == evidence.sha256 for copy in copies):
+                raise HTTPException(422, "Inventory valuation assessments need distinct retained cost/NRV documents")
+            dependencies.extend(await payroll_rule_documents(db, ctx, eng, copies, contributors=supporting_contributors, label="Inventory valuation documents"))
         if data.table_type in {"payroll-rules", "pension-rules", "benefit-rules", "fx-rates"}:
             dependencies.extend(
                 await payroll_rule_documents(
@@ -384,9 +397,10 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                     "rule_document_version_id": str(data.rule_document_version_id),
                     "rule_document_binding": "SELECTED_RETAINED_DOCUMENT",
                 }
-                if defaults
+                if defaults and data.rule_document_version_id is not None
                 else {}
             ),
+            **({"inventory_document_bindings": defaults} if defaults and data.table_type == "inventory-valuations" else {}),
         }, [*dependencies, receipt]
     period = await db.get(FinancialPeriod, eng.period_id)
     if not period or not period.start_date <= data.as_of <= period.end_date:
@@ -414,6 +428,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(422, "Withholding obligations can establish only their assessed bank-allocation purpose")
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
+        if data.workflow == "inventory-valuation-control" and source.body.get("review_status") != "REVIEWED":
+            raise HTTPException(409, "Independently review inventory books, valuation evidence and GL controls before comparison")
         if data.workflow == "india-esic-population":
             from app.modules.country_workflows.esic_population import month_bounds
 
@@ -546,6 +562,10 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             dependencies.extend(await payroll_rule_documents(db, ctx, eng,
                 [{"source_evidence_version_id": context["arrear_context_evidence_version_id"], "source_sha256": context["arrear_context_sha256"]}],
                 label="Arrear filing context", contributors=contributors))
+    if data.workflow == "inventory-valuation-control":
+        from app.modules.country_workflows.inventory_valuation import documents
+
+        dependencies.extend(await payroll_rule_documents(db, ctx, eng, documents(sources["valuations"]["rows"]), contributors=contributors, label="Inventory valuation documents"))
     if data.workflow == "bank-brs":
         book_range = sources.get("books", {}).get("source_range")
         if book_range and book_range["through"] != data.as_of.isoformat():

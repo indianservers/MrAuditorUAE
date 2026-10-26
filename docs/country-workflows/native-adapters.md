@@ -1378,3 +1378,63 @@ Source data reconstructed from the pack is checked against the original retained
 Verification checkpoint, 26 October 2026: **1,758 backend unit tests passed, four skipped**; **five PostgreSQL/HTTP regressions passed**; scoped Ruff/mypy and UTF-8 checks passed. Tests cover legacy long fields, Unicode/raw source chunks, complete nested cells, original source-envelope hashes, wrong-country rejection, unreviewed and stale template rejection, current/stale reporting packs, explicit export-limit failure and draft/freshness labels in all three formats. Application-generated 500-payment UAE and India workbooks were independently imported and visually inspected: [UAE review metadata](screenshots/statutory-exports/ae-review.png), [UAE continuation controls](screenshots/statutory-exports/ae-values.png), [India review metadata](screenshots/statutory-exports/in-review.png), [India continuation controls](screenshots/statutory-exports/in-values.png). This is saved-file/readback and selected-range rendering evidence, not native Excel application or legal-form certification. The local preview now includes draft statutory reporting-pack examples built from the existing reviewed large reconciliation sources. Frontend application code is unchanged.
 
 All examples remain synthetic; unconfigured reporting frameworks remain visibly unconfigured. These export controls do not qualify complete Section 44AB/Form 3CD, CARO, Schedule III, SOX or UAE audit/filing content. The original country implementation, client validation, provider and professional release requirements remain open.
+## Inventory valuation evidence and recorded GL controls — UAE then India
+
+`inventory-valuation-control` complements the existing stock audit and inventory
+count bridge. It consumes three independently reviewed sources: books (`stock`),
+price assessments (`inventory-valuations`) and recorded GL (`accounting-controls`).
+Books require independent directional quantity controls and an account mapping.
+Valuations require independent row counts and separate extended cost and NRV
+totals per currency. [Synthetic AE and IN inputs](sample-inputs/SYNTHETIC-inventory-valuation/README.md)
+include literal controls and clearly fictional supporting documents.
+
+Each valuation binds retained cost and NRV document version IDs and SHA-256
+hashes, with source references, observation dates and a human assessment. Shared
+document selectors can fill blank CSV IDs/hashes; conflicting supplied bindings
+fail. Supporting documents must be distinct from the assessment CSV. Their
+actual retained bytes are checked during source preparation and consumption;
+replacing them makes dependent results stale. Hashes identify bytes, not
+authenticity or the correctness of an assessment.
+
+Exact site/SKU/lot/UOM/currency positions remain separate. Missing evidence,
+quantity disagreement, unconfirmed ownership, negative book quantity or a
+different book reporting date blocks completion. Unit cost and unit NRV
+differences cannot be hidden by GL agreement or monetary tolerance. NRV is the
+assessed selling price less completion and selling costs; negative NRV remains
+unresolved, with no automatic zero floor or liability recognition. An entirely
+empty population does not qualify nil inventory through this workflow.
+
+The reviewer explicitly selects gross recorded cost or recorded lower-of-cost-
+and-NRV as the GL basis. Recorded book values are compared separately with GL
+account/currency balances at the reporting date; assessed prices are never
+substituted into recorded GL values. The declared monetary tolerance applies
+to that GL comparison. Missing recorded NRV under a net basis leaves the
+recorded value unknown. There is no FX conversion, UOM conversion or netting
+between positions. A declared review-through date bounds observations, while
+the human assessment explains their relevance to the reporting date.
+
+The UI independently pages valuation tests and GL controls so a GL exception
+remains accessible beyond the first 100 positions. Exports and approval operate
+on the complete retained result. Tests cover the maximum 5,000-position source,
+independent review, document tampering, staleness, scoped pagination and export.
+
+This shared procedure is exercised for UAE before India. Applicable framework,
+cost policy, evidence reliability and recognition require independent judgment.
+See the official [IAS 2 overview](https://www.ifrs.org/issued-standards/list-of-standards/ias-2-inventories/)
+and [ICAI AS 2 text](https://indasaccess.icai.org/Volume-III/AS/asb.html?a=105)
+for the underlying concepts; neither establishes automatic applicability to an
+entity. No tax valuation, title verification, physical count, drawing-power
+certification, statutory opinion or posting is supplied. Statutory qualification
+remains false. Client pilots and professional country/framework validation remain open.
+
+Verification checkpoint, 26 October 2026: 1,851 backend unit tests passed,
+four skipped; four inventory PostgreSQL/HTTP tests and 183 frontend tests passed.
+Scoped Ruff/mypy, ESLint and the frontend production build passed.
+TypeScript and UTF-8 preflight passed. Both saved country example sets were
+parsed back and their controls and expected results verified. The
+[real-worker browser scenario](../phase-12/inventory-values-browser-results.json)
+passed for UAE then India; the saved valuation and GL views were visually
+inspected: [UAE valuation](screenshots/native-sources/ae-inventory-value-tests.png),
+[UAE GL](screenshots/native-sources/ae-inventory-value-gl.png),
+[India valuation](screenshots/native-sources/in-inventory-value-tests.png),
+[India GL](screenshots/native-sources/in-inventory-value-gl.png).

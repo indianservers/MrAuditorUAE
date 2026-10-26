@@ -1,0 +1,2 @@
+id,account,site,sku,lot,uom,currency,quantity,unit_cost,unit_nrv,ownership,condition,count_date
+SYN-BOOK-1,INV-001,SYN-WAREHOUSE,SKU-001,LOT-001,PCS,AED,10,100,110,owned,good,2026-06-30

@@ -1,0 +1,42 @@
+{
+  "synthetic_only": true,
+  "as_of": "2026-06-30",
+  "review_through": "2026-07-15",
+  "inventory_gl_basis": "gross-cost",
+  "inventory_scope_assessment": "Fictional framework and cost policy assessment for synthetic demonstration only",
+  "expected_rows": {
+    "books": 1,
+    "valuations": 1,
+    "controls": 1
+  },
+  "inventory_quantity_controls": [
+    {
+      "site": "SYN-WAREHOUSE",
+      "sku": "SKU-001",
+      "lot": "LOT-001",
+      "uom": "PCS",
+      "currency": "INR",
+      "expected_rows": 1,
+      "positive_quantity": "10",
+      "negative_quantity": "0"
+    }
+  ],
+  "inventory_valuation_controls": [
+    {
+      "currency": "INR",
+      "expected_rows": 1,
+      "cost_value": "1000",
+      "nrv_value": "1100"
+    }
+  ],
+  "accounting_control_totals": {
+    "INR": "1000"
+  },
+  "expected_result": {
+    "valuation_rows": 1,
+    "gl_rows": 1,
+    "exception_count": 0,
+    "recorded_book_value": "1000",
+    "assessed_lower_cost_nrv_value": "1000"
+  }
+}

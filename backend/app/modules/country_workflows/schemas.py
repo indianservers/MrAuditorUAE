@@ -17,6 +17,10 @@ from app.modules.country_workflows.gstr1_schemas import GSTR1SectionControl
 from app.modules.country_workflows.gstr2b_part_schemas import GSTR2BPart
 from app.modules.country_workflows.import_nil_schemas import ImportNilScope
 from app.modules.country_workflows.inventory_controls import InventoryQuantityControl
+from app.modules.country_workflows.inventory_valuation import (
+    InventoryValuation,
+    InventoryValueControl,
+)
 from app.modules.country_workflows.operations_schemas import OPERATION_ROW_TYPES
 from app.modules.country_workflows.payroll_ledger_schemas import PAYROLL_LEDGER_ROW_TYPES
 from app.modules.country_workflows.payroll_schemas import PAYROLL_ROW_TYPES
@@ -159,6 +163,7 @@ class ReturnBox(Strict):
 
 class Stock(Strict):
     id: Identifier
+    account: Identifier | None = None
     site: Identifier
     sku: Identifier
     lot: str = Field(default="", max_length=120)
@@ -183,6 +188,7 @@ class Control(Strict):
 
 
 ROW_TYPES: dict[str, type[BaseModel]] = {
+    "inventory-valuations": InventoryValuation,
     "esic-members": ESICMember,
     "gst-document-series": DocumentSeries,
     "gst-summary-metrics": GSTSummaryMetric,
@@ -206,6 +212,9 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
 
 
 class SourceInput(Strict):
+    inventory_cost_document_version_id: uuid.UUID | None = None
+    inventory_nrv_document_version_id: uuid.UUID | None = None
+    inventory_valuation_controls: list[InventoryValueControl] | None = Field(default=None, max_length=20)
     esic_context_evidence_version_id: uuid.UUID | None = None
     esic_return_kind: Literal["monthly", "supplementary"] | None = None
     esic_scope_assessment: str = Field(default="", max_length=2000)
@@ -268,6 +277,7 @@ class SourceInput(Strict):
     expected_documents: int | None = Field(default=None, ge=0, le=1250)
     rule_document_version_id: uuid.UUID | None = None
     table_type: Literal[
+        "inventory-valuations",
         "esic-members",
         "gst-document-series",
         "gst-summary-metrics",
@@ -334,6 +344,13 @@ class SourceInput(Strict):
 
     @model_validator(mode="after")
     def declared_nil(self):
+        if (self.inventory_cost_document_version_id is not None or self.inventory_nrv_document_version_id is not None) and (self.table_type != "inventory-valuations" or self.file_format != "canonical-csv"):
+            raise ValueError("Shared inventory documents apply only to canonical valuation evidence sources")
+        if self.table_type == "inventory-valuations":
+            if self.inventory_valuation_controls is None or self.control_totals:
+                raise ValueError("Inventory valuations require independent currency cost/NRV controls without mixed monetary totals")
+        elif self.inventory_valuation_controls is not None:
+            raise ValueError("Inventory valuation controls apply only to valuation evidence sources")
         if self.table_type == "esic-members":
             if self.file_format not in {"canonical-csv", "india-esic-members-xls"} or self.esic_paid_days_control is None or self.esic_zero_wage_members_control is None or set(self.control_totals) != {"INR"}:
                 raise ValueError("ESIC populations require controlled CSV/XLS with independent paid-day and zero-wage member totals")
@@ -507,12 +524,15 @@ def esi_components() -> list[ESIComponent]:
 
 
 class WorkflowInput(Strict):
+    inventory_gl_basis: Literal["gross-cost", "recorded-lower-of-cost-nrv"] | None = None
+    inventory_scope_assessment: str = Field(default="", max_length=2000)
     esic_population_review_id: uuid.UUID | None = None
     esic_basis_scope_assessment: str = Field(default="", max_length=2000)
     esic_components: list[ESIComponent] = Field(default_factory=esi_components, min_length=1, max_length=2)
     withholding_role: WithholdingRole | None = None
     allocation_basis: Literal["invoice_face_amounts", "pre_application_balances"] | None = None
     workflow: Literal[
+        "inventory-valuation-control",
         "india-esic-population",
         "india-document-series",
         "payroll-ledger-rollforward",
@@ -604,6 +624,11 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
+        if self.workflow == "inventory-valuation-control":
+            if self.inventory_gl_basis is None or self.review_through is None or self.review_through < self.as_of or len(self.inventory_scope_assessment.strip()) < 10:
+                raise ValueError("Inventory valuation requires an explicit recorded GL basis, review-through date and source/framework scope assessment")
+        elif self.inventory_gl_basis is not None or self.inventory_scope_assessment:
+            raise ValueError("Inventory valuation basis and scope apply only to the valuation-control workflow")
         if self.esic_population_review_id is not None:
             if self.workflow != "india-payroll-rules" or len(self.esic_basis_scope_assessment.strip()) < 10 or len(set(self.esic_components)) != len(self.esic_components):
                 raise ValueError("An ESIC population link requires India contribution review, explicit unique ESI components and a meaningful basis assessment")

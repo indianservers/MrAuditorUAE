@@ -146,6 +146,7 @@ vi.mock("@/hooks/use-api", () => ({
                   closing: "payroll-account-balances",
                 },
               },
+              { id: "inventory-valuation-control", title: "Inventory valuation and GL controls", available: true, roles: { books: "stock", valuations: "inventory-valuations", controls: "accounting-controls" } },
               {
                 id: "india-esic-population",
                 title: "India ESIC population",
@@ -294,6 +295,7 @@ vi.mock("@/hooks/use-api", () => ({
               },
             ],
             source_contracts: {
+              "inventory-valuations": { id: { required: true, type: "str" }, assessed_unit_cost: { required: true, type: "Decimal" } },
               "esic-members": { id: { required: true, type: "str" }, amount: { required: true, type: "Decimal" } },
               "gst-document-series": {},
               "gst-summary-metrics": {
@@ -457,6 +459,7 @@ vi.mock("@/hooks/use-api", () => ({
                         freshness: status === "stale" ? "STALE" : "CURRENT",
                         review_status: status === "unreviewed" ? "UNVERIFIED" : "REVIEWED", blocked: status === "blocked",
                       })),
+                      ...["valuations", "controls"].map((role) => ({ id: "valuation-" + role, label: "Reviewed inventory " + role, kind: "workflow-source", table_type: role === "valuations" ? "inventory-valuations" : "accounting-controls", freshness: "CURRENT", version: 1, review_status: "REVIEWED" })),
                       ...["opening", "payroll", "posted", "closing"].map(
                         (role) => ({
                           id: "ledger-" + role,
@@ -2591,6 +2594,34 @@ it("prepares native ESIC XLS with separate employer/month context and independen
     employer_registration: "00123456789012345", obligation_period: "2026-06",
     esic_paid_days_control: 25, esic_zero_wage_members_control: 1, control_totals: { INR: "10000" },
   });
+});
+
+it("queues retained inventory valuation documents with separate extended cost and NRV controls", async () => {
+  render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+  const controls = [{ currency: "AED", expected_rows: 1, cost_value: "1000", nrv_value: "1100" }];
+  for (const [label, value] of [["Source table type", "inventory-valuations"], ["Clean retained evidence", "clean"],
+    ["Schedule title", "Inventory value evidence"], ["Expected data rows", "1"],
+    ["Independent extended cost/NRV controls (JSON)", JSON.stringify(controls)],
+    ["Retained cost evidence (optional shared document)", "context-clean"], ["Retained selling/NRV evidence (optional shared document)", "context-clean"],
+  ]) fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({ table_type: "inventory-valuations", inventory_valuation_controls: controls,
+    inventory_cost_document_version_id: "context-clean", inventory_nrv_document_version_id: "context-clean", control_totals: {} });
+});
+
+it("requires explicit recorded GL basis and inventory review scope", async () => {
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Workflow"), { target: { value: "inventory-valuation-control" } });
+  for (const [label, value] of [["Recorded inventory GL basis", "gross-cost"], ["Valuation evidence review through", "2026-07-15"],
+    ["Inventory framework and scope assessment", "Independent fictional framework and GL mapping assessment"],
+    ["Schedule title", "Inventory valuation GL bridge"], ["Reconciliation date", "2026-06-30"],
+    ["books source", "inventory-books"], ["valuations source", "valuation-valuations"], ["controls source", "valuation-controls"],
+    ["Scope and source rationale", "Independent quantities and cost/NRV evidence against mapped GL balances"],
+  ]) fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({ workflow: "inventory-valuation-control", inventory_gl_basis: "gross-cost", review_through: "2026-07-15" });
 });
 
 it("queues independently controlled ESIC wage populations without contribution inference", async () => {
