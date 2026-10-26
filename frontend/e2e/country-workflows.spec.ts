@@ -8,6 +8,87 @@ const fixture = JSON.parse(
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
 
+test("all uploaded-list screening candidates remain reviewable for UAE then India", async ({
+  page,
+}) => {
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill("admin@example.com");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("test-strong-password-123");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+  for (const country of ["AE", "IN"] as const) {
+    const input = fixture.screening_candidates[country];
+    const title = `SYNTHETIC ${country} complete candidate review ${Date.now()}`;
+    await page.goto(`/intelligence/${input.engagement}/country-workflow`);
+    await page
+      .getByLabel("Workflow", { exact: true })
+      .selectOption("sanctions-name-review");
+    await loadRetainedHistory(page);
+    await page.getByLabel("Schedule title", { exact: true }).fill(title);
+    await page
+      .getByLabel("Reconciliation date", { exact: true })
+      .fill("2026-06-30");
+    await page
+      .getByLabel("Scope and source rationale", { exact: true })
+      .fill(input.payload.rationale);
+    for (const [role, id] of Object.entries(input.sources))
+      await page
+        .getByLabel(`${role} source`, { exact: true })
+        .selectOption(id as string);
+    await page
+      .getByRole("button", { name: "Queue calculation", exact: true })
+      .click();
+    const option = page
+      .getByLabel("Saved source or result")
+      .locator("option")
+      .filter({ hasText: title });
+    await expect(option).toHaveCount(1, { timeout: 120000 });
+    await page
+      .getByLabel("Saved source or result")
+      .selectOption((await option.getAttribute("value"))!);
+    const review = page.getByRole("region", {
+      name: "Screening candidate review",
+    });
+    await expect(
+      review.getByText("Candidates 1–100 of 201", { exact: true }),
+    ).toBeVisible();
+    await review
+      .getByRole("button", { name: "Next candidates", exact: true })
+      .click();
+    await expect(
+      review.getByText("Candidates 101–200 of 201", { exact: true }),
+    ).toBeVisible();
+    await review
+      .getByRole("button", { name: "Next candidates", exact: true })
+      .click();
+    await expect(
+      review.getByText("Candidates 201–201 of 201", { exact: true }),
+    ).toBeVisible();
+    await expect(
+      review.getByRole("cell", { name: "ENTRY-0200", exact: true }),
+    ).toBeVisible();
+    await expect(
+      review.getByRole("cell", {
+        name: "SYNTHETIC-LIST-PAGE-0200",
+        exact: true,
+      }),
+    ).toBeVisible();
+    await expect(
+      review.getByRole("button", { name: "Next candidates", exact: true }),
+    ).toBeDisabled();
+    for (const notice of await page
+      .getByRole("button", { name: "Dismiss notification", exact: true })
+      .all())
+      await notice.click();
+    await saveScreenshot(
+      `${shots}/${country.toLowerCase()}-screening-candidates.png`,
+      () => review.screenshot(),
+    );
+  }
+});
+
 test("inventory cost and NRV evidence ties separately to recorded GL for UAE then India", async ({
   page,
 }) => {

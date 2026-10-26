@@ -9,6 +9,7 @@ import { Button, ErrorState, Status } from "@/components/ui/primitives";
 import { PageHeader } from "./shared";
 import { BankCarryforwardSource } from "./bank-carryforward-source";
 import { BankCashReview } from "./bank-cash-review";
+import { ScreeningCandidates } from "./screening-candidates";
 import { WithholdingObligationSource } from "./withholding-obligation-source";
 import { ContributionObligationSource } from "./contribution-obligation-source";
 import {
@@ -896,62 +897,72 @@ export function CountryWorkflows({
                   ].filter((key) => allColumns.includes(key))
                 : defaultColumns;
   const columns =
-    body?.workflow === "inventory-valuation-control" && !showRuleProvenance
-      ? (inventoryView === "gl-controls"
-          ? [
-              "account",
-              "currency",
-              "recorded_book_value",
-              "gl_amount",
-              "difference",
-              "state",
-            ]
-          : [
-              "site",
-              "sku",
-              "lot",
-              "uom",
-              "currency",
-              "book_quantity",
-              "book_unit_cost",
-              "assessed_unit_cost",
-              "book_unit_nrv",
-              "assessed_unit_nrv",
-              "recorded_gl_basis_value",
-              "assessed_lower_cost_nrv_value",
-              "recorded_minus_assessed_value",
-              "exceptions",
-              "state",
-            ]
-        ).filter((key) => allColumns.includes(key))
-      : body?.table_type === "esic-members" && !showRuleProvenance
-        ? [
-            "subject",
-            "member_name",
-            "period",
-            "currency",
-            "amount",
-            "paid_days",
-            "zero_wage_reason",
-            "zero_day_reason",
-            "last_working_day",
-            "source_row",
-          ].filter((key) => allColumns.includes(key))
-        : body?.workflow === "india-esic-population" && !showRuleProvenance
+    body?.workflow === "sanctions-name-review" && !showRuleProvenance
+      ? [
+          "id",
+          "subject_name",
+          "list_version",
+          "candidate_count",
+          "candidate_preview_truncated",
+          "state",
+          "reviewer_disposition",
+        ].filter((key) => allColumns.includes(key))
+      : body?.workflow === "inventory-valuation-control" && !showRuleProvenance
+        ? (inventoryView === "gl-controls"
+            ? [
+                "account",
+                "currency",
+                "recorded_book_value",
+                "gl_amount",
+                "difference",
+                "state",
+              ]
+            : [
+                "site",
+                "sku",
+                "lot",
+                "uom",
+                "currency",
+                "book_quantity",
+                "book_unit_cost",
+                "assessed_unit_cost",
+                "book_unit_nrv",
+                "assessed_unit_nrv",
+                "recorded_gl_basis_value",
+                "assessed_lower_cost_nrv_value",
+                "recorded_minus_assessed_value",
+                "exceptions",
+                "state",
+              ]
+          ).filter((key) => allColumns.includes(key))
+        : body?.table_type === "esic-members" && !showRuleProvenance
           ? [
               "subject",
-              "payroll_member_name",
-              "reported_member_name",
-              "payroll_amount",
-              "reported_amount",
-              "wage_difference",
-              "payroll_paid_days",
-              "reported_paid_days",
-              "paid_day_difference",
-              "exceptions",
-              "state",
+              "member_name",
+              "period",
+              "currency",
+              "amount",
+              "paid_days",
+              "zero_wage_reason",
+              "zero_day_reason",
+              "last_working_day",
+              "source_row",
             ].filter((key) => allColumns.includes(key))
-          : baseColumns;
+          : body?.workflow === "india-esic-population" && !showRuleProvenance
+            ? [
+                "subject",
+                "payroll_member_name",
+                "reported_member_name",
+                "payroll_amount",
+                "reported_amount",
+                "wage_difference",
+                "payroll_paid_days",
+                "reported_paid_days",
+                "paid_day_difference",
+                "exceptions",
+                "state",
+              ].filter((key) => allColumns.includes(key))
+            : baseColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -5214,6 +5225,9 @@ export function CountryWorkflows({
               Open working-paper actions
             </Link>
           </div>
+          {body.workflow === "sanctions-name-review" && (
+            <ScreeningCandidates key={`${selected}:${offset}`} rows={rows} />
+          )}
           <div style={{ overflowX: "auto" }}>
             {(compactSource ||
               compactArrearResult ||
@@ -5221,6 +5235,7 @@ export function CountryWorkflows({
               body.workflow === "bank-account-evidence" ||
               body.workflow === "payroll-ledger-rollforward" ||
               body.workflow === "inventory-valuation-control" ||
+              body.workflow === "sanctions-name-review" ||
               body.workflow === "india-esic-population" ||
               body.workflow === "india-gstr1-documents" ||
               body.workflow === "india-invoice-register" ||

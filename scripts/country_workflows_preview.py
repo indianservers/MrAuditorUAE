@@ -794,6 +794,11 @@ async def main():
         inventory_values = {}
         for code, engagement, currency in (("AE", eid, "AED"), ("IN", india, "INR")):
             inventory_values[code] = await prepare_inventory_values(client, h, engagement, f"/api/v1/engagements/{engagement}/audit", supporting_reviewer, currency)
+        from tests.qa_crud.test_screening_candidates import prepare as prepare_screening
+
+        screening_candidates = {}
+        for code, engagement in (("AE", eid), ("IN", india)):
+            screening_candidates[code] = await prepare_screening(client, h, engagement)
 
         from country_bank_carryforward_fixture import prepare as prepare_carryforward
 
@@ -1038,6 +1043,7 @@ async def main():
                     "esic_binding": esic_binding,
                     "esic_xls": esic_xls,
                     "inventory_values": inventory_values,
+                    "screening_candidates": screening_candidates,
                     "bank_carryforward": bank_carryforward,
                     "ecr_arrear_input": arrear_input,
                     "ecr_arrear_sources": arrear_source_ids,

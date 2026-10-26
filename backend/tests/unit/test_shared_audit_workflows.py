@@ -99,6 +99,7 @@ def source(kind, rows):
 
 
 def run(workflow, populations, **parameters):
+    country = parameters.pop("country", "AE")
     sources = {
         role: source(WORKFLOWS[workflow][2][role], rows) for role, rows in populations.items()
     }
@@ -122,7 +123,7 @@ def run(workflow, populations, **parameters):
     validated = WorkflowInput(**params)
     # The job boundary must preserve exactly the same typed contract.
     JobInput(operation="country-workflow", payload=validated.model_dump(mode="json"))
-    return calculate(validated, "AE", sources)
+    return calculate(validated, country, sources)
 
 
 def population(**changes):

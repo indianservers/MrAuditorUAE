@@ -102,3 +102,8 @@ for UAE then India. See [source contract and limits](native-adapters.md#inventor
 and [synthetic input examples](sample-inputs/SYNTHETIC-inventory-valuation/README.md).
 Real pilot files and independently checked results belong in the separate
 [country pilot folders](../../pilot-data/README.md).
+
+Uploaded-list screening now retains every candidate within the existing
+comparison bound, replacing the previous first-20-only retention. A paged
+candidate view and separate XLSX sheet preserve all source references; historical
+truncated results remain visibly incomplete. See [candidate coverage and limits](native-adapters.md#complete-uploaded-list-screening-candidates--uae-then-india).

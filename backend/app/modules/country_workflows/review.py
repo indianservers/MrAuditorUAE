@@ -1,4 +1,10 @@
 def approval_error(body):
+    if body.get("workflow") == "sanctions-name-review" and any(
+        row.get("candidate_preview_truncated")
+        or (row.get("candidate_count") is not None and row["candidate_count"] != len(row.get("candidates", [])))
+        for row in body["rows"]
+    ):
+        return "Regenerate screening with complete retained candidates before independent approval"
     if body.get("bank_account_evidence",{}).get("status") == "LINK_REQUESTED_NOT_VERIFIED":
         return "Verify the requested bank account evidence link before independent approval"
     if body.get("workflow") == "india-withholding":

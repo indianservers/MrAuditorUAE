@@ -1438,3 +1438,60 @@ inspected: [UAE valuation](screenshots/native-sources/ae-inventory-value-tests.p
 [UAE GL](screenshots/native-sources/ae-inventory-value-gl.png),
 [India valuation](screenshots/native-sources/in-inventory-value-tests.png),
 [India GL](screenshots/native-sources/in-inventory-value-gl.png).
+
+## Complete uploaded-list screening candidates — UAE then India
+
+The existing `sanctions-name-review` workflow previously counted all candidates
+but retained only its first 20 hits per subject. It now retains every candidate
+within the existing 100,000 subject/list comparison bound. Results identify
+`complete-screening-candidates/1`; each hit includes the list row ID, list subject
+ID, original list name, list version, publication date, declared evidence reference
+and baseline similarity score. Original subject names and evidence references
+are retained too. Ordering remains descending score, then exact source row ID.
+
+The review screen has a separate candidate view with 100-hit pages and a subject
+selector for the current schedule page. Schedule pagination reaches additional
+subjects. This prevents a large candidate list from turning the summary schedule
+into one oversized JSON cell. No candidate is cleared by pagination, and zero
+hits still require independent review. Subject-level dispositions must assess
+all candidates; this increment does not create individual candidate decisions.
+
+XLSX retains the complete nested original and adds a **Screening candidates**
+sheet with one row per subject/candidate pair. Existing complete-text continuation
+records preserve nested values beyond Excel's cell limit. Historical truncated
+results keep their original data: the UI warns that a rerun is required and the
+candidate sheet labels their rows `LEGACY_TRUNCATED`. Older results without the
+new contract remain `LEGACY_UNQUALIFIED`, never relabelled as complete.
+Independent approval rejects truncated or count-inconsistent candidate sets,
+even when all visible subject exceptions have documented dispositions. Historical
+exports remain available with their original data and incomplete labels.
+
+This is a shared uploaded-list name baseline exercised for UAE before India.
+The supplied list is not an authenticated current UAE, India or global provider
+feed. References remain declared references; no linked registry verification,
+transliteration, identifier-based matching, automatic sanctions clearance,
+onboarding decision or legal qualification is added. Source authenticity,
+completeness, threshold assessment and independent adjudication remain required.
+
+Verification checkpoint, 26 October 2026: the final serial backend run passed
+**1,858 unit tests, four skipped**; both UAE/India PostgreSQL/HTTP tests passed;
+**186 frontend tests** passed. Scoped Ruff/mypy, ESLint, TypeScript, production
+build and UTF-8 checks passed. Unit tests exercise all 100,000 retained hits at
+the comparison bound and reject an excess population. HTTP tests retain all
+201 candidates per country, verify the last hit and source reference, and
+reassemble the original nested candidate JSON through XLSX continuation hashes.
+Historical incomplete retention cannot be approved by documenting visible rows.
+
+An earlier concurrent full-unit run had one local PDF extraction worker failure
+(invalid Windows handle followed by timeout). Its two extraction tests passed
+on isolated recheck, followed by the clean serial full-suite result above. No
+extraction code or timeout was changed; hosted extraction/recovery qualification
+remains separate from these local results.
+
+The [real-worker browser scenario](../phase-12/screening-candidates-browser-results.json)
+passed for UAE then India, paging through candidates 1–100, 101–200 and 201.
+Saved screenshots were visually inspected: [UAE last candidate](screenshots/native-sources/ae-screening-candidates.png)
+and [India last candidate](screenshots/native-sources/in-screening-candidates.png).
+All names and source records in these checks are synthetic. The frozen
+154-scenario catalogue is unchanged; real-client and professional/provider
+qualification remain open.

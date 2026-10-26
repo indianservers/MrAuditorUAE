@@ -192,6 +192,10 @@ def sanctions(data, tables, country):
                     {
                         "source_id": entry["id"],
                         "list_subject_id": entry["list_subject_id"],
+                        "list_name": entry["name"],
+                        "list_version": entry["list_version"],
+                        "published_on": entry["published_on"],
+                        "evidence_reference": entry["evidence_reference"],
                         "name_similarity": score,
                     }
                 )
@@ -199,11 +203,13 @@ def sanctions(data, tables, country):
         rows.append(
             {
                 "id": subject["id"],
+                "subject_name": subject["name"],
+                "subject_evidence_reference": subject["evidence_reference"],
                 "execution_mode": "rules_baseline",
                 "list_version": policy["list_version"],
                 "candidate_count": len(hits),
-                "candidates": hits[:20],
-                "candidate_preview_truncated": len(hits) > 20,
+                "candidates": hits,
+                "candidate_preview_truncated": False,
                 "state": "POTENTIAL_NAME_MATCH" if hits else "NO_NAME_MATCH_REQUIRES_REVIEW",
                 "reviewer_disposition": "UNREVIEWED",
             }
@@ -218,6 +224,7 @@ def sanctions(data, tables, country):
             ],
         ),
         "screening_execution_mode": "rules_baseline",
+        "candidate_retention_contract": "complete-screening-candidates/1",
         "feature_version": "unicode-name-ratio/1",
     }
 

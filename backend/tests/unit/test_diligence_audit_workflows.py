@@ -1,5 +1,8 @@
 from decimal import Decimal
 
+import pytest
+
+from app.modules.country_workflows.review import approval_error
 from tests.unit.test_shared_audit_workflows import run
 
 
@@ -148,3 +151,42 @@ def test_empty_stale_or_wrong_version_list_does_not_clear_anyone():
     sources["list"] = []
     output = run("sanctions-name-review", sources)
     assert output["blocked"] and output["rows"][0]["state"] == "SCREENING_LIST_UNAVAILABLE"
+
+
+@pytest.mark.parametrize("country", ["AE", "IN"])
+def test_all_screening_candidates_retained_with_source_context(country):
+    sources = screening_sources()
+    entry = sources["list"][0]
+    sources["list"] = [{**entry, "id": f"ENTRY-{index:04d}", "list_subject_id": f"PERSON-{index:04d}"} for index in reversed(range(121))]
+    output = run("sanctions-name-review", sources, country=country)
+    row = output["rows"][0]
+    assert output["candidate_retention_contract"] == "complete-screening-candidates/1"
+    assert row["subject_name"] == sources["subjects"][0]["name"]
+    assert row["subject_evidence_reference"] == "SUBJECT-EVIDENCE"
+    assert row["candidate_count"] == len(row["candidates"]) == 121
+    assert not row["candidate_preview_truncated"]
+    assert [hit["source_id"] for hit in row["candidates"]] == [f"ENTRY-{index:04d}" for index in range(121)]
+    assert row["candidates"][-1] == {"source_id": "ENTRY-0120", "list_subject_id": "PERSON-0120", "list_name": entry["name"], "list_version": entry["list_version"], "published_on": entry["published_on"], "evidence_reference": entry["evidence_reference"], "name_similarity": 1.0}
+    assert row["reviewer_disposition"] == "UNREVIEWED"
+
+
+def test_maximum_screening_comparison_population_is_complete_and_excess_rejected():
+    sources = screening_sources(name="SYNTHETIC NAME", list_name="SYNTHETIC NAME")
+    sources["subjects"] = [{**sources["subjects"][0], "id": f"SUBJECT-{index}"} for index in range(20)]
+    sources["list"] = [{**sources["list"][0], "id": f"ENTRY-{index:04d}"} for index in range(5000)]
+    output = run("sanctions-name-review", sources)
+    assert sum(len(row["candidates"]) for row in output["rows"]) == 100000
+    assert all(row["candidate_count"] == 5000 and not row["candidate_preview_truncated"] for row in output["rows"])
+    sources["subjects"].append({**sources["subjects"][0], "id": "EXCESS"})
+    with pytest.raises(ValueError, match="comparison bound"):
+        run("sanctions-name-review", sources)
+
+
+@pytest.mark.parametrize("truncated_flag", [True, False])
+def test_documented_dispositions_cannot_approve_incomplete_candidate_retention(truncated_flag):
+    output = run("sanctions-name-review", screening_sources())
+    row = output["rows"][0]
+    row["auditor_status"] = "EXCEPTION_DOCUMENTED"
+    assert approval_error(output) is None
+    row.update(candidate_count=121, candidate_preview_truncated=truncated_flag)
+    assert "complete retained candidates" in approval_error(output)

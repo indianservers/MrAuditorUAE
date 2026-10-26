@@ -204,6 +204,15 @@ def render(event, format):
             append(source, keys)
             for row in rows:
                 append(source, [row.get(key) for key in keys])
+            if body.get("workflow") == "sanctions-name-review":
+                candidates = workbook.create_sheet("Screening candidates")
+                candidate_fields = ["source_id", "list_subject_id", "list_name", "list_version", "published_on", "evidence_reference", "name_similarity"]
+                append(candidates, ["subject_id", "subject_name", "subject_evidence_reference", "candidate_retention", *candidate_fields])
+                for subject in body.get("rows", []):
+                    incomplete = subject.get("candidate_preview_truncated") or (subject.get("candidate_count") is not None and subject["candidate_count"] != len(subject.get("candidates", [])))
+                    retained = "LEGACY_TRUNCATED" if incomplete else body.get("candidate_retention_contract", "LEGACY_UNQUALIFIED")
+                    for candidate in subject.get("candidates", []):
+                        append(candidates, [subject.get("id"), subject.get("subject_name"), subject.get("subject_evidence_reference"), retained, *[candidate.get(key) for key in candidate_fields]])
             if body.get("transaction_dates") is not None:
                 dates = workbook.create_sheet("Bank transaction dates")
                 date_fields = ["source_role", "source_row_id", "transaction_date", "bank_booking_date", "bank_value_date", "bank_date_basis", "booking_date_review_required"]
