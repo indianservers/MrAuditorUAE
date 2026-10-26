@@ -34,6 +34,8 @@ async def prepare(
     status="received",
     with_followup=False,
     side="receivable",
+    request_basis="stated-balance",
+    include_coverage=False,
 ):
     base = f"/api/v1/engagements/{eid}/audit"
     template = population(currency)
@@ -43,7 +45,7 @@ async def prepare(
             row.update(account=account, side=side)
     parties = [f"PARTY-{index:04d}" for index in range(positions)]
     documents = {}
-    written = status in {"received", "disputed", "unreliable"}
+    written = status in {"received", "disputed", "unreliable", "partially-received"}
     for prefix in (
         ("request", "response") if written else () if status == "not-sent" else ("request",)
     ) + (("followup",) if with_followup else ()):
@@ -52,8 +54,15 @@ async def prepare(
             + prefix
             + " batch; no real client or authenticated sender.\n"
         )
+        document_amount = (
+            "BLANK"
+            if prefix == "request" and request_basis == "blank-positive"
+            else "100"
+            if prefix == "response" and status == "partially-received"
+            else "150"
+        )
         text += "\n".join(
-            f"SYN-{prefix.upper()}-LINE-{index:04d}|{party}|{account}|{side}|{currency}|2026-06-30|150"
+            f"SYN-{prefix.upper()}-LINE-{index:04d}|{party}|{account}|{side}|{currency}|2026-06-30|{document_amount}"
             for index, party in enumerate(parties)
         )
         record = await create(
@@ -87,10 +96,16 @@ async def prepare(
             letter["status"] = status
             if status == "unreliable":
                 letter.update(contact_verified=False, independently_received=False)
+        if request_basis == "blank-positive":
+            letter.update(request_basis=request_basis, scope_balance="150", requested_amount=None)
+        if status == "partially-received":
+            letter["response_amount"] = "100"
         if with_followup:
             letter = followup(
                 letter,
-                "exception-investigation"
+                "partial-response-procedures"
+                if status == "partially-received"
+                else "exception-investigation"
                 if status in {"received", "disputed"}
                 else "alternative-procedures",
             )
@@ -101,15 +116,40 @@ async def prepare(
         letters.append(letter)
     controls = [{**template["controls"][0], "amount": str(150 * positions)}]
     selected, events = {}, {}
-    for role, table, rows in (
+    tables = [
         ("items", "audit-open-items", items),
         ("controls", "balance-controls", controls),
         ("responses", "party-confirmations", letters),
-    ):
+    ]
+    if include_coverage:
+        tables.append(
+            (
+                "coverage",
+                "confirmation-item-coverage",
+                [
+                    {
+                        "id": f"COVERAGE-{index:04d}",
+                        "confirmation_id": f"SYN-LETTER-{index:04d}",
+                        "item_id": items[index * 3]["id"],
+                        "as_of": "2026-06-30",
+                        "evidence_reference": f"SYN-RESPONSE-LINE-{index:04d}",
+                    }
+                    for index in range(positions)
+                ],
+            )
+        )
+    for role, table, rows in tables:
         options = {}
         if role == "responses":
             options = {
-                "confirmation_response_totals": {currency: str(150 * positions)} if written else {},
+                "confirmation_request_totals": {}
+                if request_basis == "blank-positive"
+                else {currency: str(150 * positions)},
+                "confirmation_response_totals": {
+                    currency: str((100 if status == "partially-received" else 150) * positions)
+                }
+                if written
+                else {},
                 **{
                     "confirmation_" + prefix + "_document_version_id": document["id"]
                     for prefix, document in documents.items()
@@ -122,7 +162,7 @@ async def prepare(
             rows,
             "SYNTHETIC party confirmation " + role,
             table,
-            {currency: str(150 * positions)},
+            {} if role == "coverage" else {currency: str(150 * positions)},
             **options,
         )
         reviewed = await decision(c, reviewer[0], eid, event)
@@ -307,6 +347,7 @@ async def test_unreviewed_assessments_bad_hashes_and_self_evidence_fail_closed(
         "SYNTHETIC unknown party assessment",
         "party-confirmations",
         {"AED": "150"},
+        confirmation_request_totals={"AED": "150"},
         confirmation_response_totals={"AED": "150"},
     )
     reviewed_unknown = await decision(c, reviewer[0], eid, unknown_source)
@@ -338,6 +379,7 @@ async def test_unreviewed_assessments_bad_hashes_and_self_evidence_fail_closed(
         "SYNTHETIC unreviewed assessment",
         "party-confirmations",
         {"AED": "150"},
+        confirmation_request_totals={"AED": "150"},
         confirmation_response_totals={"AED": "150"},
     )
     await execute(
@@ -356,6 +398,7 @@ async def test_unreviewed_assessments_bad_hashes_and_self_evidence_fail_closed(
         "SYNTHETIC incorrect response hash",
         "party-confirmations",
         {"AED": "150"},
+        confirmation_request_totals={"AED": "150"},
         confirmation_response_totals={"AED": "150"},
         failed="document hash differs",
     )
@@ -367,6 +410,7 @@ async def test_unreviewed_assessments_bad_hashes_and_self_evidence_fail_closed(
         "SYNTHETIC incorrect response total",
         "party-confirmations",
         {"AED": "150"},
+        confirmation_request_totals={"AED": "150"},
         confirmation_response_totals={"AED": "149"},
         failed="written-response currency totals do not agree",
     )
@@ -398,8 +442,71 @@ async def test_unreviewed_assessments_bad_hashes_and_self_evidence_fail_closed(
             "label": "SYNTHETIC self evidence guard",
             "expected_rows": 1,
             "control_totals": {"AED": "150"},
+            "confirmation_request_totals": {"AED": "150"},
             "confirmation_response_totals": {"AED": "150"},
             "confirmation_response_document_version_id": uploaded.json()["id"],
         },
         failed="distinct retained request/response/follow-up documents",
     )
+
+
+@pytest.mark.parametrize("country,currency", [("AE", "AED"), ("IN", "INR")])
+@pytest.mark.parametrize("partial_reply", [False, True])
+async def test_blank_requests_and_explicit_partial_coverage_persist_and_export(
+    environment, monkeypatch, country, currency, partial_reply
+):
+    c = environment
+    double_boundaries(monkeypatch)
+    if country == "AE":
+        h, _, eid, base = await setup(c)
+    else:
+        h, eid, base = await india_context(c)
+    reviewer = await actor(h, "Firm Administrator", "extension-source-reviewer")
+    await grant(c, h, base, reviewer)
+    final = await actor(h, "Firm Administrator", "extension-final-reviewer")
+    await grant(c, h, base, final)
+    fixture = await prepare(
+        c,
+        h,
+        eid,
+        reviewer,
+        currency,
+        status="partially-received" if partial_reply else "received",
+        with_followup=partial_reply,
+        request_basis="blank-positive",
+        include_coverage=partial_reply,
+    )
+    result = await execute(c, h, eid, "country-workflow", fixture["payload"])
+    body = result["body"]
+    party = body["rows"][-1]
+    assert not body["blocked"] and party["requested_amount"] is None
+    assert party["scope_balance"] == "150"
+    assert "|BLANK" in fixture["documents"]["request"]["expected_text"]
+    prefix = f"/api/v1/intelligence/engagements/{eid}/events/{result['id']}"
+    if partial_reply:
+        assert party["difference"] is None
+        assert party["covered_book_balance"] == "100"
+        assert party["uncovered_book_balance"] == "50"
+        assert party["covered_response_difference"] == "0"
+        assert len(party["uncovered_item_source_ids"]) == 2
+        assert (await decision(c, reviewer[0], eid, result)).status_code == 409
+        page = await c.get(
+            prefix + "?confirmation_link_offset=1&confirmation_link_limit=1", headers=h
+        )
+        assert page.status_code == 200, page.text
+        assert page.json()["body"]["confirmation_coverage_links"] == []
+        assert page.json()["collection_totals"]["confirmation_coverage_links"] == 1
+        accepted = await decision(c, h, eid, result, action="accept", item_id="party-confirmation:1")
+        assert accepted.status_code == 201, accepted.text
+        approved = await decision(c, final[0], eid, accepted.json())
+        assert approved.status_code == 201, approved.text
+    else:
+        assert party["difference"] == "0"
+    response = await c.get(prefix + "/export?format=xlsx", headers=h)
+    assert response.status_code == 200, response.text
+    book = load_workbook(io.BytesIO(response.content), read_only=True)
+    mappings = list(book["Confirmation coverage links"].values)
+    assert len(mappings) == (2 if partial_reply else 1)
+    if partial_reply:
+        assert mappings[-1][2] == party["covered_item_source_ids"][0]
+    book.close()

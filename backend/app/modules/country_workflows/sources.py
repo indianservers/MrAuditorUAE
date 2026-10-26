@@ -135,6 +135,8 @@ def _parse_csv(content, data, defaults=None):
         amount = getattr(item, "amount", getattr(item, "tax", None))
         if data.table_type in {"confirmations", "party-confirmations"}:
             amount = getattr(item, "requested_amount")
+        if data.table_type == "party-confirmations":
+            amount = getattr(item, "scope_balance")
         if amount is not None:
             totals[getattr(item, "currency")] += amount
     if data.table_type == "inventory-valuations":
@@ -161,8 +163,12 @@ def _parse_csv(content, data, defaults=None):
     if len(rows) != data.expected_rows:
         raise ValueError("Source row-count control does not agree")
     if data.table_type == "party-confirmations":
-        from app.modules.country_workflows.party_confirmations import verify_response_totals
+        from app.modules.country_workflows.party_confirmations import (
+            verify_request_totals,
+            verify_response_totals,
+        )
 
+        verify_request_totals(rows, data.confirmation_request_totals)
         verify_response_totals(rows, data.confirmation_response_totals)
     if data.inventory_quantity_controls is not None:
         from app.modules.country_workflows.inventory_controls import verify_quantity_controls
@@ -226,6 +232,8 @@ def _parse_csv(content, data, defaults=None):
     ):
         raise ValueError("Import taxable-base control does not agree to all retained source rows")
     return {
+        **({"confirmation_request_totals": {currency: str(value) for currency, value in data.confirmation_request_totals.items()}} if data.confirmation_request_totals is not None else {}),
+        **({"allowed_workflows": ["party-balance-confirmations"], "allowed_source_roles": ["coverage"]} if data.table_type == "confirmation-item-coverage" else {}),
         **({"confirmation_response_totals": {currency: str(value) for currency, value in data.confirmation_response_totals.items()}} if data.confirmation_response_totals is not None else {}),
         **({"inventory_valuation_controls": [control.model_dump(mode="json") for control in data.inventory_valuation_controls]} if data.inventory_valuation_controls is not None else {}),
         **({"esic_population_controls": esic_controls} if esic_controls is not None else {}),

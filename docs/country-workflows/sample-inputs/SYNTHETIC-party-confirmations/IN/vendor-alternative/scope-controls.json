@@ -29,5 +29,8 @@
     "exception_count": 1,
     "blocked": false,
     "independent_disposition_required": true
+  },
+  "confirmation_request_totals": {
+    "INR": "150"
   }
 }

@@ -150,6 +150,7 @@ type Workflow = {
   title: string;
   available: boolean;
   roles: Record<string, string>;
+  optional_roles?: Record<string, string>;
 };
 type Result = {
   dependencies?: {
@@ -205,7 +206,9 @@ type Result = {
       open_items: number;
       party_positions: number;
       confirmation_rows: number;
+      coverage_rows?: number;
     };
+    confirmation_coverage_links?: Record<string, unknown>[];
     esic_population_scope?: { registration: string; period: string };
     esic_population_binding?: {
       status: string;
@@ -412,6 +415,8 @@ export function CountryWorkflows({
     Record<string, string>
   >({});
   const [confirmationResponseTotals, setConfirmationResponseTotals] =
+    useState("{}");
+  const [confirmationRequestTotals, setConfirmationRequestTotals] =
     useState("{}");
   const [inventoryCostEvidence, setInventoryCostEvidence] = useState("");
   const [inventoryNRVEvidence, setInventoryNRVEvidence] = useState("");
@@ -938,6 +943,7 @@ export function CountryWorkflows({
               "currency",
               "open_item_count",
               "book_balance",
+              "request_basis",
               "confirmation_status",
               "response_amount",
               "difference",
@@ -1112,6 +1118,9 @@ export function CountryWorkflows({
               file_format: sourceFormat,
               ...(tableType === "party-confirmations"
                 ? {
+                    confirmation_request_totals: JSON.parse(
+                      confirmationRequestTotals,
+                    ),
                     confirmation_response_totals: JSON.parse(
                       confirmationResponseTotals,
                     ),
@@ -3010,6 +3019,17 @@ export function CountryWorkflows({
                     <fieldset>
                       <legend>Positive party confirmation documents</legend>
                       <label>
+                        Independent written-request totals (JSON)
+                        <textarea
+                          value={confirmationRequestTotals}
+                          onChange={(event) =>
+                            setConfirmationRequestTotals(event.target.value)
+                          }
+                          rows={3}
+                          placeholder={'{"AED":"150"}'}
+                        />
+                      </label>
+                      <label>
                         Independent written-response totals (JSON)
                         <textarea
                           value={confirmationResponseTotals}
@@ -3021,12 +3041,15 @@ export function CountryWorkflows({
                         />
                       </label>
                       <p>
-                        Money controls cover requested balances separately. Use{" "}
-                        {"{}"} here when there are no written response amounts.
-                        Select shared documents only when they apply to every
-                        row; otherwise supply each row's retained version and
-                        hash in the CSV. Sender authenticity and direct receipt
-                        require independent assessment.
+                        Ordinary money controls cover assessed scope balances.
+                        Written-request and written-response totals are
+                        separate. Use {"{}"} for blank requests with no stated
+                        amount, or for absent response amounts. Blank requests
+                        require an explicit scope_balance in the CSV. Select
+                        shared documents only when they apply to every row;
+                        otherwise supply each row's retained version and hash in
+                        the CSV. Sender authenticity and direct receipt require
+                        independent assessment.
                       </p>
                       {(["request", "response", "followup"] as const).map(
                         (prefix) => (
@@ -3636,6 +3659,49 @@ export function CountryWorkflows({
                     )}
                 </label>
               ))}
+              {Object.entries(chosen?.optional_roles || {}).map(
+                ([role, type]) => (
+                  <label key={role}>
+                    {role} source (optional)
+                    <select
+                      aria-label={`${role} source (optional)`}
+                      value={sources[role] || ""}
+                      onChange={(event) =>
+                        setSources((previous) => {
+                          const next = { ...previous };
+                          if (event.target.value)
+                            next[role] = event.target.value;
+                          else delete next[role];
+                          return next;
+                        })
+                      }
+                    >
+                      <option value="">No {type} source selected</option>
+                      {results.data?.items
+                        .filter(
+                          (row) =>
+                            row.kind === "workflow-source" &&
+                            row.table_type === type &&
+                            row.freshness === "CURRENT" &&
+                            row.review_status === "REVIEWED" &&
+                            (!row.allowed_workflows ||
+                              row.allowed_workflows.includes(workflow)) &&
+                            (!row.allowed_source_roles ||
+                              row.allowed_source_roles.includes(role)),
+                        )
+                        .map((row) => (
+                          <option key={row.id} value={row.id}>
+                            {row.label} · v{row.version} · {row.review_status}
+                          </option>
+                        ))}
+                    </select>
+                    <small>
+                      Partial replies require explicit reviewed item links. No
+                      subset is inferred from matching amounts.
+                    </small>
+                  </label>
+                ),
+              )}
               {workflow === "uae-import-vat" && (
                 <ImportNilScopeForm
                   value={importNil}
@@ -5002,6 +5068,19 @@ export function CountryWorkflows({
               }
             />
           )}
+          {body.confirmation_coverage_links && (
+            <InventoryEvidenceTable
+              key={selected + ":confirmation-links"}
+              prefix={prefix}
+              selected={selected}
+              initial={body.confirmation_coverage_links}
+              total={
+                detail.data.collection_totals?.confirmation_coverage_links ??
+                body.confirmation_coverage_links.length
+              }
+              confirmation
+            />
+          )}
           {body.purchase_quantity_controls && (
             <InventoryEvidenceTable
               key={selected + ":purchase-controls"}
@@ -5491,9 +5570,12 @@ export function CountryWorkflows({
                   <tr>
                     {columns.map((k) => (
                       <th key={k} scope="col">
-                        {compactDues && k === "settled_or_allocated"
-                          ? "allocated"
-                          : k.replaceAll("_", " ")}
+                        {body.workflow === "party-balance-confirmations" &&
+                        k === "difference"
+                          ? "response comparison"
+                          : compactDues && k === "settled_or_allocated"
+                            ? "allocated"
+                            : k.replaceAll("_", " ")}
                       </th>
                     ))}
                     {detail.data.kind === "country-workflow" &&
@@ -5515,10 +5597,25 @@ export function CountryWorkflows({
                               : undefined
                           }
                         >
-                          {((compactWithholding && k === "assessment_issues") ||
-                            (body.workflow === "procurement-match" &&
-                              k === "exceptions")) &&
-                          Array.isArray(row[k]) ? (
+                          {body.workflow === "party-balance-confirmations" &&
+                          k === "difference" &&
+                          row.confirmation_status === "partially-received" ? (
+                            <span>
+                              Covered reply difference:{" "}
+                              {String(
+                                row.covered_response_difference ?? "Unknown",
+                              )}
+                              . Covered book:{" "}
+                              {String(row.covered_book_balance ?? "Unknown")}.
+                              Uncovered book:{" "}
+                              {String(row.uncovered_book_balance ?? "Unknown")}.
+                              Full balance not compared.
+                            </span>
+                          ) : ((compactWithholding &&
+                              k === "assessment_issues") ||
+                              (body.workflow === "procurement-match" &&
+                                k === "exceptions")) &&
+                            Array.isArray(row[k]) ? (
                             <ul>
                               {(row[k] as unknown[]).map((issue) => (
                                 <li key={String(issue)}>

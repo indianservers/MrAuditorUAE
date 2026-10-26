@@ -21,7 +21,12 @@ test("positive party balance evidence and retained documents for UAE then India"
   await page.getByRole("button", { name: "Sign in", exact: true }).click();
   await page.waitForURL("**/dashboard");
   for (const country of ["AE", "IN"] as const) {
-    for (const kind of ["received_customer", "alternative_vendor"] as const) {
+    for (const kind of [
+      "received_customer",
+      "alternative_vendor",
+      "blank_customer",
+      "partial_vendor",
+    ] as const) {
       const input = fixture.party_confirmations[country][kind];
       const title = `SYNTHETIC ${country} positive party ${kind} ${Date.now()}`;
       await page.goto(`/intelligence/${input.engagement}/country-workflow`);
@@ -38,7 +43,12 @@ test("positive party balance evidence and retained documents for UAE then India"
         await page.getByLabel(label, { exact: true }).fill(value);
       for (const [role, id] of Object.entries(input.sources))
         await page
-          .getByLabel(`${role} source`, { exact: true })
+          .getByLabel(
+            role === "coverage"
+              ? "coverage source (optional)"
+              : `${role} source`,
+            { exact: true },
+          )
           .selectOption(id as string);
       await page
         .getByRole("button", { name: "Queue calculation", exact: true })
@@ -60,9 +70,11 @@ test("positive party balance evidence and retained documents for UAE then India"
       await expect(
         panel.getByRole("cell", {
           name:
-            kind === "received_customer"
+            kind === "received_customer" || kind === "blank_customer"
               ? "MATCHED"
-              : "ALTERNATIVE_PROCEDURES_REQUIRE_REVIEW",
+              : kind === "partial_vendor"
+                ? "PARTIAL_RESPONSE_REQUIRES_REVIEW"
+                : "ALTERNATIVE_PROCEDURES_REQUIRE_REVIEW",
           exact: true,
         }),
       ).toBeVisible();
@@ -91,7 +103,33 @@ test("positive party balance evidence and retained documents for UAE then India"
       await expect(
         evidence.getByText("2026-07-01", { exact: true }),
       ).toBeVisible();
-      const prefix = kind === "received_customer" ? "response" : "followup";
+      const prefix =
+        kind === "received_customer" || kind === "blank_customer"
+          ? "response"
+          : "followup";
+      if (kind === "blank_customer" || kind === "partial_vendor")
+        await expect(
+          evidence.getByText("Intentionally blank", { exact: true }),
+        ).toBeVisible();
+      if (kind === "partial_vendor") {
+        await evidence
+          .getByText("Linked open items · 3", { exact: true })
+          .click();
+        await evidence
+          .getByLabel("Linked item scope")
+          .selectOption("uncovered");
+        await expect(
+          evidence.getByText("SYN-INV-2-0000", { exact: true }),
+        ).toBeVisible();
+        await expect(
+          evidence.getByText("SYN-INV-1-0000", { exact: true }),
+        ).toHaveCount(0);
+        await expect(
+          panel.getByText("Partial confirmation item links · 1 links", {
+            exact: true,
+          }),
+        ).toBeVisible();
+      }
       if (kind === "alternative_vendor")
         await expect(
           evidence.getByText("No retained response document", { exact: true }),
@@ -120,7 +158,10 @@ test("positive party balance evidence and retained documents for UAE then India"
       await panel.getByLabel("Confirmation view").selectOption("gl-controls");
       await expect(
         panel.getByRole("cell", {
-          name: kind === "received_customer" ? "AR" : "AP",
+          name:
+            kind === "received_customer" || kind === "blank_customer"
+              ? "AR"
+              : "AP",
           exact: true,
         }),
       ).toBeVisible();

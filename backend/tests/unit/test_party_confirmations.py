@@ -121,16 +121,30 @@ def source(kind, rows, **changes):
         "expected_rows": len(rows),
         "control_totals": {},
     }
-    field = "requested_amount" if kind == "party-confirmations" else "amount"
-    totals, responses = {}, {}
+    totals, requests, responses = {}, {}, {}
     for row in rows:
-        totals[row["currency"]] = totals.get(row["currency"], Decimal(0)) + Decimal(row[field])
+        amount = (
+            (
+                row.get("scope_balance")
+                if row.get("scope_balance") is not None
+                else row.get("requested_amount")
+            )
+            if kind == "party-confirmations"
+            else row.get("amount")
+        )
+        if amount is not None:
+            totals[row["currency"]] = totals.get(row["currency"], Decimal(0)) + Decimal(amount)
+        if row.get("requested_amount") is not None:
+            requests[row["currency"]] = requests.get(row["currency"], Decimal(0)) + Decimal(
+                row["requested_amount"]
+            )
         if row.get("response_amount") is not None:
             responses[row["currency"]] = responses.get(row["currency"], Decimal(0)) + Decimal(
                 row["response_amount"]
             )
     options["control_totals"] = totals
     if kind == "party-confirmations":
+        options["confirmation_request_totals"] = requests
         options["confirmation_response_totals"] = responses
     if not rows:
         options["nil_reason"] = (
@@ -154,7 +168,9 @@ def run(rows=None, country="AE", sources=None, **changes):
             ("items", "audit-open-items"),
             ("controls", "balance-controls"),
             ("responses", "party-confirmations"),
+            ("coverage", "confirmation-item-coverage"),
         )
+        if role in rows
     }
     data = WorkflowInput.model_validate(
         {

@@ -107,3 +107,60 @@ describe("positive party confirmation evidence", () => {
     );
   });
 });
+
+it("keeps blank request amounts absent and exposes partial reply membership", () => {
+  const row = {
+    ...position("PARTIAL"),
+    confirmation_status: "partially-received",
+    covered_item_source_ids: ["PARTIAL-ITEM-0"],
+    uncovered_item_source_ids: ["PARTIAL-ITEM-1", "PARTIAL-ITEM-2"],
+    covered_book_balance: "100",
+    uncovered_book_balance: "50",
+    covered_response_difference: "0",
+  };
+  Object.assign(row.confirmation_evidence, {
+    request_basis: "blank-positive",
+    requested_amount: null,
+    scope_balance: "150",
+  });
+  render(
+    <PartyConfirmationEvidence
+      eid="eng"
+      tenant="tenant"
+      rows={[row]}
+      dependencies={[]}
+    />,
+  );
+  fireEvent.click(screen.getByText("Request, response and follow-up evidence"));
+  expect(screen.getByText("Intentionally blank")).toBeVisible();
+  fireEvent.click(screen.getByText("Linked open items · 3"));
+  fireEvent.change(screen.getByLabelText("Linked item scope"), {
+    target: { value: "uncovered" },
+  });
+  expect(screen.queryByText("PARTIAL-ITEM-0")).not.toBeInTheDocument();
+  expect(screen.getByText("PARTIAL-ITEM-2")).toBeVisible();
+  expect(screen.getByText(/full balance has not been confirmed/)).toBeVisible();
+});
+
+it("does not invent membership for an unmapped partial reply", () => {
+  const row = {
+    ...position("UNMAPPED"),
+    confirmation_status: "partially-received",
+  };
+  render(
+    <PartyConfirmationEvidence
+      eid="eng"
+      tenant="tenant"
+      rows={[row]}
+      dependencies={[]}
+    />,
+  );
+  fireEvent.click(screen.getByText("Request, response and follow-up evidence"));
+  fireEvent.click(screen.getByText("Linked open items · 3"));
+  fireEvent.change(screen.getByLabelText("Linked item scope"), {
+    target: { value: "covered" },
+  });
+  expect(
+    screen.getByText(/Partial reply item membership is unknown/),
+  ).toBeVisible();
+});

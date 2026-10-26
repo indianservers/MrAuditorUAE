@@ -4,7 +4,7 @@ import { InventoryEvidenceTable } from "@/features/inventory-evidence-table";
 
 vi.mock("@/hooks/use-api", () => ({
   useAPI: (path: string) => ({
-    data: path.includes("purchase_offset=100")
+    data: path.includes("confirmation_link_offset=100") ? {body: {confirmation_coverage_links: [{source_row_id: "LINK-LAST", item_id: "INV-LAST", evidence_reference: "REPLY-PAGE-9"}]}} : path.includes("purchase_offset=100")
       ? {
           body: {
             purchase_quantity_controls: [
@@ -108,4 +108,14 @@ describe("inventory evidence pagination", () => {
       screen.getByRole("button", { name: "Next quantity control rows" }),
     ).toBeDisabled();
   });
+});
+
+
+it("pages reviewed confirmation links using an independent offset", () => {
+  render(<InventoryEvidenceTable prefix="/audit" selected="result" initial={Array.from({length:100},(_,i)=>({source_row_id:`LINK-${i}`,item_id:`INV-${i}`}))} total={101} confirmation />);
+  fireEvent.click(screen.getByText("Partial confirmation item links · 101 links"));
+  fireEvent.click(screen.getByRole("button", {name:"Next confirmation link rows"}));
+  expect(screen.getByText("INV-LAST")).toBeVisible();
+  expect(screen.getByText("REPLY-PAGE-9")).toBeVisible();
+  expect(screen.getByRole("button", {name:"Next confirmation link rows"})).toBeDisabled();
 });

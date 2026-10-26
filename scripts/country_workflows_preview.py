@@ -810,7 +810,9 @@ async def main():
         party_confirmations = {}
         for code, engagement, currency in (("AE", eid, "AED"), ("IN", india, "INR")):
             party_confirmations[code] = {"received_customer": await prepare_party_confirmations(client, h, engagement, supporting_reviewer, currency),
-                "alternative_vendor": await prepare_party_confirmations(client, h, engagement, supporting_reviewer, currency, status="pending", with_followup=True, side="payable")}
+                "alternative_vendor": await prepare_party_confirmations(client, h, engagement, supporting_reviewer, currency, status="pending", with_followup=True, side="payable"),
+                "blank_customer": await prepare_party_confirmations(client, h, engagement, supporting_reviewer, currency, request_basis="blank-positive"),
+                "partial_vendor": await prepare_party_confirmations(client, h, engagement, supporting_reviewer, currency, status="partially-received", with_followup=True, side="payable", request_basis="blank-positive", include_coverage=True)}
 
         from country_bank_carryforward_fixture import prepare as prepare_carryforward
 

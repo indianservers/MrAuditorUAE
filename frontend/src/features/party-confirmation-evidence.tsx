@@ -24,6 +24,7 @@ export function PartyConfirmationEvidence({
 }) {
   const [index, setIndex] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);
+  const [itemScope, setItemScope] = useState("all");
   const [error, setError] = useState<string | null>(null);
   const row = rows[index];
   if (!row) return null;
@@ -31,7 +32,10 @@ export function PartyConfirmationEvidence({
   const itemIds = Array.isArray(row.open_item_source_ids)
     ? row.open_item_source_ids.map(String)
     : [];
-  const page = itemIds.slice(itemOffset, itemOffset + 100);
+  const selectedIds =
+    itemScope === "all" ? itemIds : row[`${itemScope}_item_source_ids`];
+  const scopedIds = Array.isArray(selectedIds) ? selectedIds.map(String) : null;
+  const page = (scopedIds || []).slice(itemOffset, itemOffset + 100);
 
   async function download(prefix: string, receipt: Receipt) {
     setError(null);
@@ -72,6 +76,7 @@ export function PartyConfirmationEvidence({
             onChange={(event) => {
               setIndex(Number(event.target.value));
               setItemOffset(0);
+              setItemScope("all");
               setError(null);
             }}
           >
@@ -99,6 +104,9 @@ export function PartyConfirmationEvidence({
         >
           {[
             "status",
+            "request_basis",
+            "scope_balance",
+            "requested_amount",
             "requested_on",
             "responded_on",
             "contact_verified",
@@ -112,7 +120,10 @@ export function PartyConfirmationEvidence({
               </dt>
               <dd style={{ margin: 0 }}>
                 {evidence[field] == null
-                  ? "Not supplied"
+                  ? field === "requested_amount" &&
+                    evidence.request_basis === "blank-positive"
+                    ? "Intentionally blank"
+                    : "Not supplied"
                   : String(evidence[field])}
               </dd>
             </div>
@@ -183,10 +194,38 @@ export function PartyConfirmationEvidence({
         {error && <p role="alert">{error}</p>}
         <details>
           <summary>Linked open items · {itemIds.length}</summary>
+          {row.confirmation_status === "partially-received" && (
+            <>
+              <label>
+                Linked item scope
+                <select
+                  value={itemScope}
+                  onChange={(event) => {
+                    setItemScope(event.target.value);
+                    setItemOffset(0);
+                  }}
+                >
+                  <option value="all">All book items</option>
+                  <option value="covered">Declared reply-covered items</option>
+                  <option value="uncovered">Items outside reply scope</option>
+                </select>
+              </label>
+              <p>
+                Covered book balance:{" "}
+                {String(row.covered_book_balance ?? "Unknown")}. Uncovered book
+                balance: {String(row.uncovered_book_balance ?? "Unknown")}.
+                Covered reply difference:{" "}
+                {String(row.covered_response_difference ?? "Unknown")}. The full
+                balance has not been confirmed.
+              </p>
+            </>
+          )}
           <p>
             {page.length
-              ? `Item links ${itemOffset + 1}–${itemOffset + page.length} of ${itemIds.length}`
-              : "No reporting-date item links"}
+              ? `Item links ${itemOffset + 1}–${itemOffset + page.length} of ${scopedIds?.length}`
+              : scopedIds === null
+                ? "Partial reply item membership is unknown"
+                : "No reporting-date item links"}
             . Use the schedule pages to reach additional party positions. XLSX
             retains every item ID.
           </p>
@@ -203,7 +242,7 @@ export function PartyConfirmationEvidence({
               Previous item links
             </Button>
             <Button
-              disabled={itemOffset + page.length >= itemIds.length}
+              disabled={itemOffset + page.length >= (scopedIds?.length || 0)}
               onClick={() => setItemOffset(itemOffset + 100)}
             >
               Next item links

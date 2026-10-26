@@ -13,6 +13,8 @@ from app.modules.country_workflows.pension_schemas import PENSION_WORKFLOWS
 from app.modules.country_workflows.sector_schemas import SECTOR_WORKFLOWS
 from app.modules.country_workflows.withholding_schemas import WITHHOLDING_WORKFLOWS
 
+OPTIONAL_ROLES = {"party-balance-confirmations": {"coverage": "confirmation-item-coverage"}}
+
 WORKFLOWS = {
     "party-balance-confirmations": ("Positive customer/vendor balance confirmations", [], {"items": "audit-open-items", "controls": "balance-controls", "responses": "party-confirmations"}),
     "inventory-valuation-control": ("Inventory cost / NRV evidence and recorded GL controls", [], {"books": "stock", "valuations": "inventory-valuations", "controls": "accounting-controls"}),
@@ -126,6 +128,7 @@ def catalogue(country=None):
             "title": title,
             "countries": countries,
             "roles": roles,
+            "optional_roles": OPTIONAL_ROLES.get(key, {}),
             "available": key != "india-withholding" and (not countries or country in countries),
             "state": "LEGACY_PREVIEW_REQUIRES_ROLE_SCOPED_REPLACEMENT"
             if key == "india-withholding"

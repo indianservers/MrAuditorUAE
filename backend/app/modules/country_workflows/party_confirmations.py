@@ -24,9 +24,19 @@ class PartyConfirmation(Strict):
     currency: str = Field(pattern=r"^[A-Z]{3}$")
     as_of: date
     confirmation_type: Literal["positive"] = "positive"
-    requested_amount: Money
+    request_basis: Literal["stated-balance", "blank-positive"] = "stated-balance"
+    scope_balance: Money | None = None
+    requested_amount: Money | None = None
     response_amount: Money | None = None
-    status: Literal["not-sent", "pending", "received", "disputed", "undeliverable", "unreliable"]
+    status: Literal[
+        "not-sent",
+        "pending",
+        "received",
+        "disputed",
+        "undeliverable",
+        "unreliable",
+        "partially-received",
+    ]
     requested_on: date | None = None
     responded_on: date | None = None
     contact_verified: bool = False
@@ -39,7 +49,10 @@ class PartyConfirmation(Strict):
     response_source_sha256: SHA | None = None
     followup_evidence_version_id: UUID | None = None
     followup_source_sha256: SHA | None = None
-    followup_kind: Literal["alternative-procedures", "exception-investigation"] | None = None
+    followup_kind: (
+        Literal["alternative-procedures", "exception-investigation", "partial-response-procedures"]
+        | None
+    ) = None
     followup_on: date | None = None
     followup_reference: str = Field(default="", max_length=120)
     followup_assessment: str = Field(default="", max_length=2000)
@@ -47,6 +60,19 @@ class PartyConfirmation(Strict):
 
     @model_validator(mode="after")
     def evidence_scope(self):
+        if self.request_basis == "blank-positive":
+            if self.requested_amount is not None or self.scope_balance is None:
+                raise ValueError(
+                    "A blank positive request needs an explicit assessed scope balance and no written requested amount"
+                )
+        else:
+            if self.requested_amount is None or (
+                self.scope_balance is not None and self.scope_balance != self.requested_amount
+            ):
+                raise ValueError(
+                    "A stated-balance request needs its written amount and matching assessed scope"
+                )
+            self.scope_balance = self.requested_amount
         for value in (self.id, self.account, self.counterparty):
             if not value.strip() or value != value.strip():
                 raise ValueError("Confirmation scope identifiers must be exact nonblank values")
@@ -62,7 +88,7 @@ class PartyConfirmation(Strict):
                 raise ValueError(
                     "Each confirmation document needs both its retained version and hash"
                 )
-        has_response = self.status in {"received", "disputed", "unreliable"}
+        has_response = self.status in {"received", "disputed", "unreliable", "partially-received"}
         if self.status == "not-sent":
             if self.requested_on or self.request_evidence_version_id or self.request_reference:
                 raise ValueError("An unsent confirmation cannot carry sent-request evidence")
@@ -105,7 +131,9 @@ class PartyConfirmation(Strict):
                     "Follow-up evidence requires its kind, reference and meaningful assessment"
                 )
             required = (
-                "exception-investigation"
+                "partial-response-procedures"
+                if self.status == "partially-received"
+                else "exception-investigation"
                 if self.status in {"received", "disputed"}
                 else "alternative-procedures"
             )
@@ -129,6 +157,25 @@ class PartyConfirmation(Strict):
         return self
 
 
+class ConfirmationItemCoverage(Strict):
+    id: ID
+    confirmation_id: ID
+    item_id: ID
+    as_of: date
+    evidence_reference: ID
+
+    @model_validator(mode="after")
+    def exact(self):
+        if any(
+            not value.strip() or value != value.strip()
+            for value in (self.id, self.confirmation_id, self.item_id, self.evidence_reference)
+        ):
+            raise ValueError(
+                "Partial-response item links require exact nonblank identifiers and references"
+            )
+        return self
+
+
 def documents(rows):
     return [
         {
@@ -145,23 +192,72 @@ def party_key(row):
     return tuple(row[field] for field in ("account", "counterparty", "side", "currency"))
 
 
-def verify_response_totals(rows, declared):
+def _verify_totals(rows, declared, field, label):
     if declared is None:
-        raise ValueError("Independent written-response currency totals are required")
+        raise ValueError(f"Independent {label} currency totals are required")
     actual: dict[str, Decimal] = {}
     with localcontext() as context:
         context.prec = 80
         for row in rows:
-            if row["response_amount"] is not None:
+            if row.get(field) is not None:
                 actual[row["currency"]] = actual.get(row["currency"], Decimal(0)) + Decimal(
-                    row["response_amount"]
+                    row[field]
                 )
     if actual != {currency: Decimal(value) for currency, value in declared.items()}:
-        raise ValueError("Independent written-response currency totals do not agree")
+        raise ValueError(f"Independent {label} currency totals do not agree")
+
+
+def verify_response_totals(rows, declared):
+    _verify_totals(rows, declared, "response_amount", "written-response")
+
+
+def verify_request_totals(rows, declared):
+    _verify_totals(rows, declared, "requested_amount", "written-request")
+
+
+def item_coverage(data, tables, letters):
+    items = {row["id"]: row for row in tables["items"]}
+    by_id = {row["id"]: row for row in letters.values()}
+    groups = defaultdict(list)
+    links = []
+    seen = set()
+    for link in tables.get("coverage", []):
+        identity = link["confirmation_id"], link["item_id"]
+        if identity in seen:
+            raise ValueError("Duplicate partial-response confirmation/item link")
+        seen.add(identity)
+        letter, item = by_id.get(identity[0]), items.get(identity[1])
+        if (
+            not letter
+            or not item
+            or letter["status"] != "partially-received"
+            or party_key(letter) != party_key(item)
+        ):
+            raise ValueError(
+                "Partial-response coverage must link a current partial assessment to its own scoped open item"
+            )
+        if date.fromisoformat(link["as_of"]) != data.as_of:
+            raise ValueError("Partial-response coverage date must equal the reporting date")
+        groups[letter["id"]].append(item["id"])
+        links.append(
+            {
+                "source_row_id": link["id"],
+                "confirmation_source_row_id": letter["id"],
+                "item_id": item["id"],
+                "as_of": link["as_of"],
+                **{field: item[field] for field in ("account", "counterparty", "side", "currency")},
+                "book_amount": item["amount"],
+                "evidence_reference": link["evidence_reference"],
+            }
+        )
+    return groups, links
 
 
 def compare(data, sources):
     tables = {role: source["rows"] for role, source in sources.items()}
+    verify_request_totals(
+        tables["responses"], sources["responses"].get("confirmation_request_totals")
+    )
     verify_response_totals(
         tables["responses"], sources["responses"].get("confirmation_response_totals")
     )
@@ -182,21 +278,42 @@ def compare(data, sources):
                 "Select one current positive confirmation per account/counterparty/side/currency"
             )
         letters[key] = letter
+    covered_groups, links = item_coverage(data, tables, letters)
     for index, key in enumerate(sorted(groups.keys() | letters.keys()), 1):
         items, letter = groups.get(key, []), letters.get(key)
         book = sum((Decimal(item["amount"]) for item in items), Decimal(0))
         difference = (
             Decimal(letter["response_amount"]) - book
-            if items and letter and letter["response_amount"] is not None
+            if items
+            and letter
+            and letter["response_amount"] is not None
+            and letter["status"] != "partially-received"
             else None
         )
+        covered_ids = uncovered_ids = covered_balance = uncovered_balance = partial_difference = (
+            None
+        )
+        partial = bool(letter and letter["status"] == "partially-received")
+        if partial and items and letter and covered_groups.get(letter["id"]):
+            covered_ids = covered_groups[letter["id"]]
+            covered_set = set(covered_ids)
+            uncovered_ids = [item["id"] for item in items if item["id"] not in covered_set]
+            covered_balance = sum(
+                (Decimal(item["amount"]) for item in items if item["id"] in covered_set), Decimal(0)
+            )
+            uncovered_balance = book - covered_balance
+            partial_difference = (
+                Decimal(letter["response_amount"]) - covered_balance
+                if letter["response_amount"] is not None
+                else None
+            )
         state, hard = "NOT_REQUESTED_REQUIRES_EVIDENCE", True
         if not items:
             state = "UNKNOWN_PARTY_POPULATION"
         elif letter:
             in_scope = (
                 letter["as_of"] == data.as_of.isoformat()
-                and Decimal(letter["requested_amount"]) == book
+                and Decimal(letter["scope_balance"]) == book
             )
             in_window = all(
                 not letter.get(field) or date.fromisoformat(letter[field]) <= data.review_through
@@ -205,8 +322,24 @@ def compare(data, sources):
             has_followup = bool(letter["followup_evidence_version_id"])
             if not in_scope:
                 state = "CONFIRMATION_SCOPE_MISMATCH"
+                difference = partial_difference = None
             elif not in_window:
                 state = "OUTSIDE_REVIEW_WINDOW"
+                difference = partial_difference = None
+            elif partial:
+                if not letter["contact_verified"] or not letter["independently_received"]:
+                    state = "INDEPENDENCE_ASSESSMENT_MISSING"
+                elif covered_ids is None:
+                    state = "PARTIAL_RESPONSE_ITEM_SCOPE_MISSING"
+                elif not uncovered_ids:
+                    state = "PARTIAL_RESPONSE_SCOPE_IS_FULL_POPULATION"
+                else:
+                    state = (
+                        "PARTIAL_RESPONSE_REQUIRES_REVIEW"
+                        if has_followup
+                        else "PARTIAL_RESPONSE_FOLLOWUP_MISSING"
+                    )
+                    hard = not has_followup
             elif letter["status"] in {"received", "disputed"}:
                 if not letter["contact_verified"] or not letter["independently_received"]:
                     state = "INDEPENDENCE_ASSESSMENT_MISSING"
@@ -243,8 +376,37 @@ def compare(data, sources):
                 "confirmation_source_row_id": letter["id"] if letter else None,
                 "confirmation_status": letter["status"] if letter else "not-requested",
                 "requested_amount": letter["requested_amount"] if letter else None,
+                "request_basis": letter["request_basis"] if letter else None,
+                "scope_balance": letter["scope_balance"] if letter else None,
                 "response_amount": letter["response_amount"] if letter else None,
                 "difference": str(difference) if difference is not None else None,
+                "response_comparison_basis": "COVERED_ITEMS_ONLY"
+                if partial_difference is not None
+                else "FULL_PARTY_BALANCE"
+                if difference is not None
+                else None,
+                "covered_book_balance": str(covered_balance)
+                if covered_balance is not None
+                else None,
+                "uncovered_book_balance": str(uncovered_balance)
+                if uncovered_balance is not None
+                else None,
+                "covered_item_source_ids": covered_ids,
+                "uncovered_item_source_ids": uncovered_ids,
+                "covered_response_difference": str(partial_difference)
+                if partial_difference is not None
+                else None,
+                "partial_response_issues": (
+                    ["UNCONFIRMED_ITEMS_REMAIN"]
+                    + (
+                        ["COVERED_RESPONSE_DIFFERENCE"]
+                        if partial_difference is not None
+                        and abs(partial_difference) > data.tolerance
+                        else []
+                    )
+                )
+                if partial and uncovered_ids
+                else [],
                 "confirmation_evidence": letter,
                 "state": state,
             }
@@ -261,12 +423,14 @@ def compare(data, sources):
                 "Open-item/GL agreement establishes supplied-population arithmetic, not complete receivable/payable existence, recoverability or an audit opinion",
             ],
         ),
-        "confirmation_contract": "positive-party-balance-confirmations/1",
+        "confirmation_contract": "positive-party-balance-confirmations/2",
+        "confirmation_coverage_links": links,
         "confirmation_scope": {
             "as_of": data.as_of.isoformat(),
             "review_through": data.review_through.isoformat(),
             "open_items": len(tables["items"]),
             "party_positions": len(groups),
             "confirmation_rows": len(letters),
+            "coverage_rows": len(links),
         },
     }

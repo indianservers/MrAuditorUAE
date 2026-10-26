@@ -8,7 +8,7 @@ from decimal import Decimal, localcontext
 from typing import Any
 
 from app.modules.country_workflows.audit_calculations import AUDIT_CALCULATORS
-from app.modules.country_workflows.catalogue import WORKFLOWS, country_guidance
+from app.modules.country_workflows.catalogue import OPTIONAL_ROLES, WORKFLOWS, country_guidance
 from app.modules.country_workflows.diligence_calculations import DILIGENCE_CALCULATORS
 from app.modules.country_workflows.obligation_scope import scope_key
 from app.modules.country_workflows.operations import OPERATION_CALCULATORS
@@ -807,8 +807,10 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
     title, countries, roles = WORKFLOWS[data.workflow]
     if countries and country not in countries:
         raise ValueError("Workflow is unavailable for this engagement country")
-    if set(sources) != set(roles):
+    optional_roles = OPTIONAL_ROLES.get(data.workflow, {})
+    if not set(roles) <= set(sources) or not set(sources) <= (set(roles) | set(optional_roles)):
         raise ValueError("Select every required source role exactly once")
+    roles = {**roles, **{role: kind for role, kind in optional_roles.items() if role in sources}}
     account_scope = None
     if bank_account_review is not None:
         from app.modules.country_workflows.bank_binding import bind

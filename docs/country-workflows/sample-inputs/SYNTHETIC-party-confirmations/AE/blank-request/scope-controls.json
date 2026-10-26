@@ -1,0 +1,37 @@
+{
+  "synthetic_only": true,
+  "country": "AE",
+  "workflow": "party-balance-confirmations",
+  "as_of": "2026-06-30",
+  "review_through": "2026-07-15",
+  "source_rows": {
+    "items": 3,
+    "controls": 1,
+    "responses": 1
+  },
+  "money_controls_each_source": {
+    "AED": "150"
+  },
+  "confirmation_response_totals": {
+    "AED": "150"
+  },
+  "supporting_documents": {
+    "request": {
+      "filename": "request.txt",
+      "sha256": "df83b0070fb1a4b99ce866f8dd11dc53717768e00a58ad4c51ed32c516254836"
+    },
+    "response": {
+      "filename": "response.txt",
+      "sha256": "742999b5daec358414673e4364227414c91ca36a6cce43621a754c5de05d2318"
+    }
+  },
+  "expected_result": {
+    "party_state": "MATCHED",
+    "book_balance": "150",
+    "exception_count": 0,
+    "blocked": false,
+    "independent_disposition_required": false
+  },
+  "confirmation_request_totals": {},
+  "confirmation_contract": "positive-party-balance-confirmations/2"
+}

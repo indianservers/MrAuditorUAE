@@ -8,8 +8,9 @@ professional qualification.
 Upload the CSVs and the supporting TXT files as separate retained evidence.
 Prepare `items.csv` as `audit-open-items`, `gl-controls.csv` as `balance-controls`,
 and `party-assessments.csv` as `party-confirmations`. Copy the independent row
-counts and money controls from `scope-controls.json`. Requested balances use
-the ordinary money controls; written-response amounts use the separate
+counts and money controls from `scope-controls.json`. Assessed scope balances use
+the ordinary money controls; actual written request amounts use
+`confirmation_request_totals`, and written-response amounts use the separate
 `confirmation_response_totals`, which is `{}` for the pending vendor case.
 
 For the assessment CSV select the retained request and response documents in
@@ -31,3 +32,18 @@ matches. The pending vendor remains `ALTERNATIVE_PROCEDURES_REQUIRE_REVIEW`;
 its follow-up file does not become a confirmation. It still needs a documented
 disposition and independent approval. No request is sent, payment initiated,
 sender authenticated or audit opinion issued.
+
+
+The `blank-request` and `partial-reply` examples exercise contract version 2.
+Blank request documents intentionally omit the amount; their assessment CSV
+retains explicit `scope_balance=150`, while `requested_amount` stays empty and
+`confirmation_request_totals` is `{}`. A written zero remains an actual zero.
+
+For `partial-reply`, also prepare `coverage.csv` as
+`confirmation-item-coverage`, with one independently controlled row and `{}`
+money totals. Independently review this fourth source and select it in the
+optional coverage role. The reply covers only the invoice of 100; two items
+remain outside reply scope, net 50. The covered reply difference is zero and
+the full-party response difference is absent. Follow-up evidence does not
+confirm the remaining items. Document an exception and obtain independent
+review; the result never becomes an automatic match.

@@ -1,0 +1,47 @@
+{
+  "synthetic_only": true,
+  "country": "IN",
+  "workflow": "party-balance-confirmations",
+  "as_of": "2026-06-30",
+  "review_through": "2026-07-15",
+  "source_rows": {
+    "items": 3,
+    "controls": 1,
+    "responses": 1,
+    "coverage": 1
+  },
+  "money_controls_each_source": {
+    "INR": "150"
+  },
+  "confirmation_response_totals": {
+    "INR": "100"
+  },
+  "supporting_documents": {
+    "request": {
+      "filename": "request.txt",
+      "sha256": "b219bea6379763598f0ae6f0bee974a5429a53afd7202b63c9784c4257f7b818"
+    },
+    "response": {
+      "filename": "response.txt",
+      "sha256": "cea5fbb7968f547358a9b5e79474d9e1ccae5753fca76891fcc234b5607d1688"
+    },
+    "followup": {
+      "filename": "followup.txt",
+      "sha256": "b86c4350d286ec52ca8cc7cfc5b5bd4ae81e7c0fcda58843773f7edb57411514"
+    }
+  },
+  "expected_result": {
+    "party_state": "PARTIAL_RESPONSE_REQUIRES_REVIEW",
+    "book_balance": "150",
+    "exception_count": 1,
+    "blocked": false,
+    "independent_disposition_required": true,
+    "difference": null,
+    "covered_book_balance": "100",
+    "uncovered_book_balance": "50",
+    "covered_response_difference": "0"
+  },
+  "confirmation_request_totals": {},
+  "confirmation_contract": "positive-party-balance-confirmations/2",
+  "coverage_control_totals": {}
+}

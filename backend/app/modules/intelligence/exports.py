@@ -208,18 +208,28 @@ def render(event, format):
                 links = workbook.create_sheet("Confirmation item links")
                 documents = workbook.create_sheet("Confirmation documents")
                 identity_fields = ["id", "account", "counterparty", "side", "currency"]
-                append(links, ["result_row_id", *identity_fields[1:], "open_item_source_id"])
-                append(documents, ["result_row_id", *identity_fields[1:], "confirmation_status", "document_role", "document_date", "evidence_version_id", "source_sha256", "reference", "contact_verified_declaration", "independent_receipt_declaration", "scope_assessment", "followup_kind", "followup_assessment", "evidence_status"])
+                append(links, ["result_row_id", *identity_fields[1:], "reply_scope_membership", "open_item_source_id"])
+                append(documents, ["result_row_id", *identity_fields[1:], "confirmation_status", "request_basis", "scope_balance", "requested_amount", "document_role", "document_date", "evidence_version_id", "source_sha256", "reference", "contact_verified_declaration", "independent_receipt_declaration", "scope_assessment", "followup_kind", "followup_assessment", "evidence_status"])
                 for position in body.get("rows", []):
                     if position.get("kind") != "party-confirmation":
                         continue
                     identity = [position.get(field) for field in identity_fields]
                     for identifier in position.get("open_item_source_ids", []):
-                        append(links, [*identity, identifier])
+                        membership = "FULL_BALANCE_SCOPE"
+                        if position.get("confirmation_status") == "partially-received":
+                            covered = position.get("covered_item_source_ids")
+                            membership = "UNASSESSED_PARTIAL_SCOPE" if covered is None else "DECLARED_REPLY_COVERED" if identifier in covered else "NOT_REPLY_COVERED"
+                        append(links, [*identity, membership, identifier])
                     evidence = position.get("confirmation_evidence") or {}
                     for prefix, date_field in (("request", "requested_on"), ("response", "responded_on"), ("followup", "followup_on")):
                         if evidence.get(prefix + "_evidence_version_id"):
-                            append(documents, [*identity, position.get("confirmation_status"), prefix, evidence.get(date_field), evidence[prefix + "_evidence_version_id"], evidence[prefix + "_source_sha256"], evidence[prefix + "_reference"], evidence.get("contact_verified"), evidence.get("independently_received"), evidence.get("scope_assessment"), evidence.get("followup_kind") if prefix == "followup" else None, evidence.get("followup_assessment") if prefix == "followup" else None, "RETAINED_IDENTITY_ONLY"])
+                            append(documents, [*identity, position.get("confirmation_status"), evidence.get("request_basis"), evidence.get("scope_balance"), evidence.get("requested_amount"), prefix, evidence.get(date_field), evidence[prefix + "_evidence_version_id"], evidence[prefix + "_source_sha256"], evidence[prefix + "_reference"], evidence.get("contact_verified"), evidence.get("independently_received"), evidence.get("scope_assessment"), evidence.get("followup_kind") if prefix == "followup" else None, evidence.get("followup_assessment") if prefix == "followup" else None, "RETAINED_IDENTITY_ONLY"])
+            if body.get("confirmation_coverage_links") is not None:
+                coverage = workbook.create_sheet("Confirmation coverage links")
+                fields = ["source_row_id", "confirmation_source_row_id", "item_id", "as_of", "account", "counterparty", "side", "currency", "book_amount", "evidence_reference"]
+                append(coverage, fields)
+                for link in body["confirmation_coverage_links"]:
+                    append(coverage, [link.get(field) for field in fields])
             if body.get("workflow") == "sanctions-name-review":
                 candidates = workbook.create_sheet("Screening candidates")
                 candidate_fields = ["source_id", "list_subject_id", "list_name", "list_version", "published_on", "evidence_reference", "name_similarity"]

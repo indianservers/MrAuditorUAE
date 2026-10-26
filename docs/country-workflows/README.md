@@ -118,3 +118,10 @@ Positive party-balance confirmations now connect one customer/vendor balance
 letter to multiple invoices and credit notes, with separate GL controls,
 retained correspondence and follow-up evidence. See [scope and verification](native-adapters.md#positive-party-balance-confirmations--uae-then-india)
 and [saved UAE/India examples](sample-inputs/SYNTHETIC-party-confirmations/README.md).
+
+
+Blank positive requests and explicitly mapped partial replies now extend the
+same confirmation workflow. Scope balance, actual written request amount and
+actual response amount have separate independent controls. Partial replies
+retain uncovered items and require follow-up plus independent exception review.
+See [contract, evidence and verification](native-adapters.md#blank-positive-requests-and-partial-replies--uae-then-india).

@@ -1666,3 +1666,46 @@ retained SHA-256 hashes. Final screenshots were visually inspected:
 [India vendor schedule](screenshots/native-sources/in-party-alternative_vendor-schedule.png),
 [India vendor evidence](screenshots/native-sources/in-party-alternative_vendor-evidence.png),
 [India GL](screenshots/native-sources/in-party-gl.png).
+
+
+### Blank positive requests and partial replies — UAE then India
+
+New party-confirmation runs use `positive-party-balance-confirmations/2`.
+Existing saved results retain their original contract. Blank requests require
+an explicit assessed scope balance, an absent written request amount and
+separate independent controls for scope, actual written request amounts and
+actual responses. Neither a missing amount nor a missing response becomes zero.
+
+An optional reviewed `confirmation-item-coverage` CSV declares the exact
+assessment/item links for a partially received reply. Links must match the
+party, account, side, currency and reporting date, and include a source
+reference. Duplicate links, unknown items, other-party items and links to
+full-response assessments fail preparation/calculation. Amounts never infer
+item membership. A partial reply covering every item remains a classification
+error. Missing mappings remain unknown and block approval.
+
+Valid partial replies compare only the explicitly covered items. Remaining
+item IDs and their signed book balance remain visible, including a zero-net
+remainder. Retained partial-response follow-up and independent exception review
+are required. API links have independent `confirmation_link_offset/limit`
+pagination; XLSX retains every link and labels membership without claiming
+confirmation. The evidence pane distinguishes intentionally blank requests,
+actual written zeroes, covered and uncovered items, and retained documents.
+
+These controls support assessed positive requests, not automated dispatch,
+sender authentication, negative requests, sampling, client qualification or a
+statutory audit opinion. UAE/India professional applicability still needs
+qualified engagement review. Synthetic examples do not close those gates.
+
+
+Verification on 26 October 2026: 1,941 backend unit tests passed (four skipped),
+195 frontend tests passed, and 12 owned PostgreSQL/API tests passed, including
+independent approval after partial-response disposition. TypeScript, production
+frontend build, targeted ESLint, Ruff, mypy (68 source files) and UTF-8 checks
+passed. One real-worker browser test exercised eight cases in UAE-then-India
+order and verified downloaded document SHA-256 values. The eight new blank and
+partial screenshots were visually inspected. The four saved example sets also
+parse through the canonical source/calculation path under unit tests.
+See [browser receipt](../phase-12/confirmation-extensions-browser-results.json).
+The frozen authored synthetic catalogue remains 154; these checks do not
+constitute 154 qualified client engagements or professional sign-off.

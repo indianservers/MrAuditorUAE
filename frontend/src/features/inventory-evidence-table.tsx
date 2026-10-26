@@ -12,6 +12,7 @@ export function InventoryEvidenceTable({
   total,
   bridge = false,
   purchase = false,
+  confirmation = false,
 }: {
   prefix: string;
   selected: string;
@@ -19,74 +20,96 @@ export function InventoryEvidenceTable({
   total: number;
   bridge?: boolean;
   purchase?: boolean;
+  confirmation?: boolean;
 }) {
   const [offset, setOffset] = useState(0);
-  const field = purchase
-    ? "purchase_quantity_controls"
-    : bridge
-      ? "count_bridges"
-      : "inventory_quantity_controls";
-  const parameter = purchase
-    ? "purchase_offset"
-    : bridge
-      ? "bridge_offset"
-      : "inventory_offset";
+  const field = confirmation
+    ? "confirmation_coverage_links"
+    : purchase
+      ? "purchase_quantity_controls"
+      : bridge
+        ? "count_bridges"
+        : "inventory_quantity_controls";
+  const parameter = confirmation
+    ? "confirmation_link_offset"
+    : purchase
+      ? "purchase_offset"
+      : bridge
+        ? "bridge_offset"
+        : "inventory_offset";
   const page = useAPI<{ body: Record<string, Row[]> }>(
     `${prefix}/events/${selected}?limit=1&${parameter}=${offset}`,
     offset > 0,
   );
   const rows = offset ? page.data?.body[field] || [] : initial;
-  const title = purchase
-    ? "Purchase quantity controls"
-    : bridge
-      ? "Inventory count-date bridges"
-      : "Inventory quantity controls";
-  const columns = purchase
+  const title = confirmation
+    ? "Partial confirmation item links"
+    : purchase
+      ? "Purchase quantity controls"
+      : bridge
+        ? "Inventory count-date bridges"
+        : "Inventory quantity controls";
+  const columns = confirmation
     ? [
-        "order_id",
-        "line_reference",
-        "vendor",
+        "source_row_id",
+        "confirmation_source_row_id",
+        "item_id",
+        "as_of",
+        "account",
+        "counterparty",
+        "side",
         "currency",
-        "uom",
-        "document_type",
-        "expected_rows",
-        "quantity",
+        "book_amount",
+        "evidence_reference",
       ]
-    : bridge
+    : purchase
       ? [
-          "site",
-          "sku",
-          "lot",
-          "uom",
+          "order_id",
+          "line_reference",
+          "vendor",
           "currency",
-          "original_count_date",
-          "direction",
-          "original_count_quantity",
-          "applied_movement_quantity",
-          "reporting_date_quantity",
-        ]
-      : [
-          "site",
-          "sku",
-          "lot",
           "uom",
-          "currency",
+          "document_type",
           "expected_rows",
-          "positive_quantity",
-          "negative_quantity",
-        ];
+          "quantity",
+        ]
+      : bridge
+        ? [
+            "site",
+            "sku",
+            "lot",
+            "uom",
+            "currency",
+            "original_count_date",
+            "direction",
+            "original_count_quantity",
+            "applied_movement_quantity",
+            "reporting_date_quantity",
+          ]
+        : [
+            "site",
+            "sku",
+            "lot",
+            "uom",
+            "currency",
+            "expected_rows",
+            "positive_quantity",
+            "negative_quantity",
+          ];
   return (
     <details style={{ margin: "16px 0" }}>
       <summary>
-        {title} · {total} partitions
+        {title} · {total} {confirmation ? "links" : "partitions"}
       </summary>
       <ErrorState error={page.error} />
       <p>
-        {purchase
-          ? "Independent row and quantity controls remain separate for each order, line, vendor, currency, unit and document type. Payment quantities are excluded. No unit conversion is inferred."
-          : bridge
-            ? "Original count quantities and dates remain distinct from the calculated reporting-date quantities. Quantity bridging does not establish reporting-date condition or physical attendance. Complete original row links are retained in the XLSX."
-            : "Independent row and directional quantity controls remain separate for every site, SKU, lot, unit and currency. Positive and negative movements cannot offset an incomplete population."}
+        {confirmation
+          ? "Reviewed item mappings declare the scope of a partial reply. They do not confirm the remaining items or authenticate the response. Every link is retained in the XLSX."
+          : purchase
+            ? "Independent row and quantity controls remain separate for each order, line, vendor, currency, unit and document type. Payment quantities are excluded. No unit conversion is inferred."
+            : bridge
+              ? "Original count quantities and dates remain distinct from the calculated reporting-date quantities. Quantity bridging does not establish reporting-date condition or physical attendance. Complete original row links are retained in the XLSX."
+              : "Independent row and directional quantity controls remain separate for every site, SKU, lot, unit and currency. Positive and negative movements cannot offset an incomplete population."}
       </p>
       <div className="table-wrap">
         <table aria-label={title}>
@@ -123,13 +146,25 @@ export function InventoryEvidenceTable({
         disabled={offset === 0 || page.isFetching}
         onClick={() => setOffset(Math.max(0, offset - 100))}
       >
-        Previous {bridge ? "bridge" : "quantity control"} rows
+        Previous{" "}
+        {confirmation
+          ? "confirmation link"
+          : bridge
+            ? "bridge"
+            : "quantity control"}{" "}
+        rows
       </Button>
       <Button
         disabled={offset + rows.length >= total || page.isFetching}
         onClick={() => setOffset(offset + 100)}
       >
-        Next {bridge ? "bridge" : "quantity control"} rows
+        Next{" "}
+        {confirmation
+          ? "confirmation link"
+          : bridge
+            ? "bridge"
+            : "quantity control"}{" "}
+        rows
       </Button>
     </details>
   );
