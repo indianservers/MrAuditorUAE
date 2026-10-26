@@ -2596,6 +2596,7 @@ describe("payroll accounting bridge", () => {
             id: "COMP",
             kind: "posting-comparison",
             account: "SALARY",
+            subject: "ASSESSED-EMPLOYEE",
             state: "MATCHED",
           },
         ],
@@ -2627,6 +2628,10 @@ describe("payroll accounting bridge", () => {
     fireEvent.change(screen.getByLabelText("Saved source or result"), {
       target: { value: "result" },
     });
+    fireEvent.change(screen.getByLabelText("Payroll accounting view"), {
+      target: { value: "postings" },
+    });
+    expect(screen.getByRole("cell", { name: "ASSESSED-EMPLOYEE" })).toBeVisible();
     fireEvent.click(screen.getByText(/Payroll posting source links/));
     fireEvent.click(screen.getByRole("button", { name: "Next posting links" }));
     expect(screen.getByRole("cell", { name: "PAY-100" })).toBeVisible();

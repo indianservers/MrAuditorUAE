@@ -4677,6 +4677,9 @@ test("payroll accounts reconcile gross net deductions and employer contributions
     await expect(
       panel.getByRole("cell", { name: "EMPLOYEE_DEDUCTION", exact: true }),
     ).toBeVisible();
+    await expect(
+      panel.getByRole("cell", { name: "EMP-1", exact: true }),
+    ).toHaveCount(6);
     await saveScreenshot(
       `${shots}/${country.toLowerCase()}-payroll-ledger-direction-comparisons.png`,
       () => panel.locator("table").last().screenshot(),

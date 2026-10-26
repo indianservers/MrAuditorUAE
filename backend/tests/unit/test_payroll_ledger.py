@@ -57,13 +57,41 @@ def test_offsetting_extra_postings_cannot_hide_behind_equal_net_or_closing_balan
     assert all(row["state"] == "MATCHED" for row in result["rows"] if row["kind"] == "account-rollforward")
 
 
-@pytest.mark.parametrize("field,value", [("wage_month", "2026-05"), ("component", "SALARY:OTHER"), ("category", "adjustment"), ("registration", "OTHER-EMPLOYER"), ("currency", "USD"), ("account", "OTHER-ACCOUNT")])
+@pytest.mark.parametrize("field,value", [("wage_month", "2026-05"), ("component", "SALARY:OTHER"), ("category", "adjustment"), ("registration", "OTHER-EMPLOYER"), ("currency", "USD"), ("account", "OTHER-ACCOUNT"), ("subject", "OTHER-EMPLOYEE")])
 def test_partition_changes_never_clear_other_payroll_buckets(field, value):
     p = population()
     p["posted"][0][field] = value
     result = run(p)
     assert any(row["state"] == "MISSING_GL_PAYROLL_MOVEMENT" for row in result["rows"])
     assert any(row["state"] == "UNEXPECTED_GL_PAYROLL_MOVEMENT" for row in result["rows"])
+
+
+@pytest.mark.parametrize("country,currency", [("AE", "AED"), ("IN", "INR")])
+def test_equal_account_totals_cannot_clear_misallocated_employee_amounts(country, currency):
+    p = population(currency)
+    for role in ("payroll", "posted"):
+        original = p[role][0]
+        original["amount"] = "600" if role == "payroll" else "400"
+        p[role].append({**original, "id": role + "-EMP2", "subject": "EMP-2",
+                        "amount": "400" if role == "payroll" else "600"})
+    result = run(p, country)
+    comparisons = [row for row in result["rows"] if row["kind"] == "posting-comparison" and row["account"] == "SALARY-EXP"]
+    assert {row["subject"]: row["positive_difference"] for row in comparisons} == {"EMP-1": "-200", "EMP-2": "200"}
+    assert all(row["state"] == "DIRECTIONAL_POSTING_VARIANCE" for row in comparisons)
+    assert all(row["state"] == "MATCHED" for row in result["rows"] if row["kind"] == "account-rollforward")
+    by_id = {row["id"]: row for row in result["rows"]}
+    assert all(by_id[link["comparison_row_id"]]["subject"] == link["subject"] for link in result["payroll_posting_links"])
+
+
+@pytest.mark.parametrize("country,currency", [("AE", "AED"), ("IN", "INR")])
+def test_same_subject_split_journal_lines_match_without_requiring_equal_references(country, currency):
+    p = population(currency)
+    p["posted"][0]["amount"] = "400"
+    p["posted"].append({**p["posted"][0], "id": "SPLIT-GL", "reference": "SYN-OTHER-JOURNAL", "amount": "600"})
+    result = run(p, country)
+    assert result["exception_count"] == 0
+    row = next(row for row in result["rows"] if row["kind"] == "posting-comparison" and row["account"] == "SALARY-EXP")
+    assert row["subject"] == "EMP-1" and row["posted_entry_count"] == 2 and row["payroll_entry_count"] == 1
 
 
 @pytest.mark.parametrize("role,field,value,error", [

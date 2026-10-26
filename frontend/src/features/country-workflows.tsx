@@ -795,6 +795,7 @@ export function CountryWorkflows({
             : [
                 "account",
                 "wage_month",
+                "subject",
                 "component",
                 "category",
                 "currency",
@@ -3278,8 +3279,10 @@ export function CountryWorkflows({
                   GL lines and prior-day opening / reporting-date closing
                   controls. Expense amounts are debit-positive; liability
                   amounts credit-positive. Wage month, component, posting
-                  category, employer, account and currency stay separate. A
-                  settlement journal does not prove payment execution.
+                  category, subject, employer, account and currency stay
+                  separate. Aggregate GL journals need independently evidenced
+                  subject allocations. A settlement journal does not prove
+                  payment execution.
                 </p>
               )}
               {[

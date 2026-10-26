@@ -48,8 +48,8 @@ def reconcile(data, tables, country):
                 raise ValueError("Payroll posting is outside the declared accounting window")
             if country == "AE" and row["component"].upper().split(":")[0] in {"PF", "ESI", "PT", "TDS", "TCS"}:
                 raise ValueError("Indian domestic payroll components cannot be activated in a UAE ledger bridge")
-            bucket = key + (row["wage_month"], row["component"], row["category"])
-            identity = bucket + (row["subject"], row["reference"], row["posting_date"], Decimal(row["amount"]))
+            bucket = key + (row["wage_month"], row["component"], row["category"], row["subject"])
+            identity = bucket + (row["reference"], row["posting_date"], Decimal(row["amount"]))
             if identity in seen:
                 raise ValueError("Duplicate payroll accounting observation; resolve repeated source lines before reconciliation")
             seen.add(identity)
@@ -66,7 +66,7 @@ def reconcile(data, tables, country):
     buckets = sorted(movements["payroll"].keys() | movements["posted"].keys())
     bucket_ids = {bucket: f"payroll-posting:{index}" for index, bucket in enumerate(buckets, 1)}
     for link in links:
-        link["comparison_row_id"] = bucket_ids[tuple(link[field] for field in ("registration", "account", "currency", "wage_month", "component", "category"))]
+        link["comparison_row_id"] = bucket_ids[tuple(link[field] for field in ("registration", "account", "currency", "wage_month", "component", "category", "subject"))]
     rows, blocked = [], False
     net: dict[str, defaultdict[tuple[str, str, str], Decimal]] = {role: defaultdict(Decimal) for role in ("payroll", "posted")}
     for index, bucket in enumerate(buckets, 1):
@@ -83,6 +83,7 @@ def reconcile(data, tables, country):
             "id": f"payroll-posting:{index}", "kind": "posting-comparison",
             "registration": bucket[0], "account": bucket[1], "currency": bucket[2],
             "wage_month": bucket[3], "component": bucket[4], "category": bucket[5],
+            "subject": bucket[6],
             **{f"{role}_{direction}": str(group[direction]) if group else None for role, group in (("payroll", expected), ("posted", posted)) for direction in ("positive", "negative")},
             "positive_difference": str(differences["positive"]), "negative_difference": str(differences["negative"]),
             "payroll_entry_count": expected["count"] if expected else 0, "posted_entry_count": posted["count"] if posted else 0,
@@ -115,7 +116,8 @@ def reconcile(data, tables, country):
             "Accrual, settlement and adjustment categories and wage-month attribution are assessed source inputs, not inferred from the GL",
             "Settlement journal postings do not prove bank execution; use the separate payroll/channel/bank or explicit obligation allocation workflow",
             "Registers, legal wage and tax calculations, pension eligibility, complete balanced journals and statutory filing remain separate procedures",
-            "No currency, employer registration, wage month, component or posting category is netted against another partition",
+            "No currency, employer registration, wage month, component, posting category or assessed subject is netted against another partition",
+            "Subject identity is an assessed source input; aggregate journals require independently evidenced allocation to comparable subjects before matching",
         ]),
         "payroll_posting_links": links,
         "payroll_ledger_scope": {"from": start.isoformat(), "through": data.as_of.isoformat(), "opening_date": opening_date.isoformat(), "normal_sign_basis": "EXPENSE_DEBIT_POSITIVE_LIABILITY_CREDIT_POSITIVE"},

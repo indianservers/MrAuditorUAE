@@ -14,9 +14,9 @@ from tests.unit.test_payroll_ledger import population
 pytestmark = pytest.mark.skipif(os.getenv("INTEGRATION_TESTS") != "1", reason="Owned disposable DB required")
 
 
-async def prepare_sources(c, h, eid, currency, reviewer):
+async def prepare_sources(c, h, eid, currency, reviewer, populations=None):
     selected, originals = {}, {}
-    for role, rows in population(currency).items():
+    for role, rows in (populations or population(currency)).items():
         imported = await source(c, h, eid, rows, "SYNTHETIC payroll ledger " + role,
             table_type="payroll-account-balances" if role in {"opening", "closing"} else "payroll-ledger-lines",
             totals={currency: str(sum((Decimal(row["amount"]) for row in rows), Decimal(0)))})
@@ -77,3 +77,39 @@ async def test_controlled_payroll_accounting_review_export_paging_and_withdrawal
     cover = dict(stale_book["Source and review"].values)
     assert cover["Source freshness at export"] == "STALE"
     assert cover["Export status"] == "STALE_HISTORICAL_RESULT_REQUIRES_RECALCULATION"
+
+
+@pytest.mark.parametrize("country,currency", [("AE", "AED"), ("IN", "INR")])
+async def test_subject_substitution_survives_review_paging_and_export(environment, monkeypatch, country, currency):
+    c = environment
+    double_boundaries(monkeypatch)
+    if country == "AE":
+        h, _, eid, base = await setup(c)
+    else:
+        h, eid, base = await india_context(c)
+    reviewer = await actor(h, "Firm Administrator", "subject-allocation-reviewer")
+    await grant(c, h, base, reviewer)
+    populations = population(currency)
+    populations["posted"][0]["subject"] = "WRONG-EMPLOYEE"
+    selected, _ = await prepare_sources(c, h, eid, currency, reviewer, populations)
+    result = await execute(c, h, eid, "country-workflow", {
+        "workflow": "payroll-ledger-rollforward", "source_ids": selected,
+        "period_start": "2026-06-01", "as_of": "2026-06-30",
+        "title": "SYNTHETIC employee substitution",
+        "rationale": "Independently retained payroll and GL have equal totals but different employee attribution",
+    })
+    rows = result["body"]["rows"]
+    assert result["body"]["exception_count"] == 2
+    assert all(row["state"] == "MATCHED" for row in rows if row["kind"] == "account-rollforward")
+    prefix = f"/api/v1/intelligence/engagements/{eid}/events/{result['id']}"
+    response = await c.get(prefix + "?payroll_view=postings&limit=100", headers=h)
+    assert response.status_code == 200, response.text
+    comparisons = response.json()["body"]["rows"]
+    exceptions = {row["subject"]: row["state"] for row in comparisons if row["state"] != "MATCHED"}
+    assert exceptions == {"EMP-1": "MISSING_GL_PAYROLL_MOVEMENT", "WRONG-EMPLOYEE": "UNEXPECTED_GL_PAYROLL_MOVEMENT"}
+    exported = await c.get(prefix + "/export?format=xlsx", headers=h)
+    assert exported.status_code == 200, exported.text
+    book = load_workbook(io.BytesIO(exported.content))
+    # Full result rows and original source links both retain the misallocation.
+    values = [value for sheet in book for row in sheet.values for value in row]
+    assert "WRONG-EMPLOYEE" in values and "UNEXPECTED_GL_PAYROLL_MOVEMENT" in values

@@ -88,3 +88,5 @@ XLSX exports now preserve oversized source/control values in ordered continuatio
 
 
 Statutory reporting-pack exports now share the same complete-text storage and expose export-time freshness separately from draft/review status in XLSX, PDF and DOCX. See [statutory export scope and evidence](native-adapters.md#complete-statutory-reporting-pack-exports--uae-then-india); country legal-form qualification remains open.
+
+The UAE/India payroll GL bridge now compares assessed subjects separately. Equal account totals cannot clear employee substitutions or offsetting employee allocation errors. Split journal lines for the same subject remain supported; aggregate journals require independently evidenced subject allocation. The posting view, source links and XLSX retain the subject. See [payroll accounting controls and limits](native-adapters.md#payroll-accounting-allocations-to-gl-balances) for the source contract.
