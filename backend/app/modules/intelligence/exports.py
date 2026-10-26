@@ -225,6 +225,8 @@ def render(event, format):
                         if evidence.get(prefix + "_evidence_version_id"):
                             append(documents, [*identity, position.get("confirmation_status"), evidence.get("request_basis"), evidence.get("scope_balance"), evidence.get("requested_amount"), prefix, evidence.get(date_field), evidence[prefix + "_evidence_version_id"], evidence[prefix + "_source_sha256"], evidence[prefix + "_reference"], evidence.get("contact_verified"), evidence.get("independently_received"), evidence.get("scope_assessment"), evidence.get("followup_kind") if prefix == "followup" else None, evidence.get("followup_assessment") if prefix == "followup" else None, "RETAINED_IDENTITY_ONLY"])
             for key, title, fields in (
+                ("ownership_paths", "Ownership paths", ["path_id", "subject_company", "person_id", "kind", "economic_fraction", "reach_fraction", "gap_reason", "gap_at_company", "observed_outgoing_fraction", "edge_count", "edge_source_ids", "company_owner_chain", "source_graph_complete"]),
+                ("ownership_path_steps", "Ownership path steps", ["path_id", "subject_company", "step", "edge_source_id", "company", "owner", "owner_kind", "fraction", "effective_from", "effective_to", "evidence_reference"]),
                 ("cutoff_document_controls", "Cutoff document controls", ["document_source_id", "counterparty", "reference", "currency", "document_kind", "document_amount", "allocated_amount", "difference", "allocation_rows", "state"]),
                 ("cutoff_posting_links", "Cutoff posting links", ["posting_source_id", "allocation_id", "document_id", "counterparty", "currency", "account", "amount", "posting_date", "journal_reference", "evidence_reference"]),
             ):

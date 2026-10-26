@@ -1,4 +1,6 @@
 def approval_error(body):
+    if body.get("workflow") == "ownership-lookthrough" and body.get("ownership_path_contract") != "economic-ownership-paths/1":
+        return "Regenerate ownership with retained complete source paths before independent approval"
     if body.get("workflow") == "procurement-match" and body.get("purchase_quantity_contract") != "controlled-purchase-quantities/1":
         return "Regenerate procurement with independently controlled quantities and explicit units before approval"
     if body.get("workflow") == "sanctions-name-review" and any(

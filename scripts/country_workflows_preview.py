@@ -805,6 +805,11 @@ async def main():
         for code, engagement, currency in (("AE", eid, "AED"), ("IN", india, "INR")):
             purchase_quantities[code] = {"valid": await prepare_purchases(client, h, engagement, supporting_reviewer, currency),
                 "bad_units": await prepare_purchases(client, h, engagement, supporting_reviewer, currency, receipt_unit="KG")}
+        from tests.qa_crud.test_ownership_paths import prepare as prepare_ownership_paths
+
+        ownership_paths = {}
+        for code, engagement in (("AE", eid), ("IN", india)):
+            ownership_paths[code] = {case: await prepare_ownership_paths(client, h, engagement, supporting_reviewer, code, case) for case in ("complete", "incomplete")}
         from tests.qa_crud.test_cutoff_schedules import prepare as prepare_cutoff_schedules
 
         cutoff_schedules = {}
@@ -1066,6 +1071,7 @@ async def main():
                     "purchase_quantities": purchase_quantities,
                     "party_confirmations": party_confirmations,
                     "cutoff_schedules": cutoff_schedules,
+                    "ownership_paths": ownership_paths,
                     "bank_carryforward": bank_carryforward,
                     "ecr_arrear_input": arrear_input,
                     "ecr_arrear_sources": arrear_source_ids,

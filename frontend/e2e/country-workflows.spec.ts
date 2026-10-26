@@ -9,6 +9,134 @@ const fixture = JSON.parse(
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
 
+test("economic ownership paths and incomplete graph evidence for UAE then India", async ({
+  page,
+}) => {
+  test.setTimeout(180000);
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill("admin@example.com");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("test-strong-password-123");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+  for (const country of ["AE", "IN"] as const)
+    for (const kind of ["complete", "incomplete"] as const) {
+      const input = fixture.ownership_paths[country][kind];
+      const title = `SYNTHETIC ${country} ownership ${kind} ${Date.now()}`;
+      await page.goto(`/intelligence/${input.engagement}/country-workflow`);
+      await page
+        .getByLabel("Workflow", { exact: true })
+        .selectOption("ownership-lookthrough");
+      await loadRetainedHistory(page);
+      for (const [label, value] of [
+        ["Schedule title", title],
+        ["Reconciliation date", "2026-06-30"],
+        ["Company subject IDs, comma separated", "A"],
+        ["Scope and source rationale", input.payload.rationale],
+      ])
+        await page.getByLabel(label, { exact: true }).fill(value);
+      for (const [role, id] of Object.entries(input.sources))
+        await page
+          .getByLabel(`${role} source`, { exact: true })
+          .selectOption(id as string);
+      await page
+        .getByRole("button", { name: "Queue calculation", exact: true })
+        .click();
+      const option = page
+        .getByLabel("Saved source or result")
+        .locator("option")
+        .filter({ hasText: title });
+      await expect(option).toHaveCount(1, { timeout: 120000 });
+      await page
+        .getByLabel("Saved source or result")
+        .selectOption((await option.getAttribute("value"))!);
+      const panel = page
+        .getByRole("heading", { name: title, exact: true })
+        .locator("..");
+      await expect(
+        panel
+          .getByRole("cell", {
+            name:
+              kind === "complete"
+                ? "REQUIRES_UBO_REVIEW"
+                : "OWNERSHIP_EVIDENCE_GAPS",
+            exact: true,
+          })
+          .first(),
+      ).toBeVisible();
+      const evidence = panel.getByRole("region", {
+        name: "Economic ownership path evidence",
+        exact: true,
+      });
+      await expect(
+        evidence.getByText(new RegExp(`Policy country: ${country}`)),
+      ).toBeVisible();
+      for (const notice of await page
+        .getByRole("button", { name: "Dismiss notification", exact: true })
+        .all())
+        await notice.click();
+      const schedule = panel.locator("table").last();
+      await schedule.scrollIntoViewIfNeeded();
+      await expect(
+        panel
+          .getByRole("button", { name: "Document exception", exact: true })
+          .first(),
+      ).toBeInViewport({ ratio: 1 });
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-ownership-${kind}-schedule.png`,
+        () => schedule.screenshot(),
+      );
+      await evidence
+        .getByText(
+          `Ownership calculation paths · ${kind === "complete" ? 3 : 2} records`,
+          { exact: true },
+        )
+        .click();
+      const paths = evidence.getByRole("table", {
+        name: "Ownership calculation paths",
+        exact: true,
+      });
+      await expect(
+        paths.getByRole("cell", {
+          name: kind === "complete" ? '["A","B","P1"]' : '["A","MISSING"]',
+          exact: true,
+        }),
+      ).toBeVisible();
+      if (kind === "incomplete")
+        await expect(
+          paths.getByRole("cell", {
+            name: "CORPORATE_OWNER_EVIDENCE_MISSING",
+            exact: true,
+          }),
+        ).toBeVisible();
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-ownership-${kind}-paths.png`,
+        () => paths.screenshot(),
+      );
+      await evidence
+        .getByText(
+          `Ownership source edge steps · ${kind === "complete" ? 5 : 2} records`,
+          { exact: true },
+        )
+        .click();
+      const steps = evidence.getByRole("table", {
+        name: "Ownership source edge steps",
+        exact: true,
+      });
+      await expect(
+        steps.getByRole("cell", {
+          name: kind === "complete" ? "B:P2" : "A:MISSING",
+          exact: true,
+        }),
+      ).toBeVisible();
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-ownership-${kind}-steps.png`,
+        () => steps.screenshot(),
+      );
+    }
+});
+
 test("explicit expense cutoff schedules and original posting links for UAE then India", async ({
   page,
 }) => {

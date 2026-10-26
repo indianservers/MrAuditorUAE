@@ -1,5 +1,4 @@
 import unicodedata
-from collections import defaultdict
 from datetime import date
 from decimal import Decimal
 from difflib import SequenceMatcher
@@ -50,104 +49,9 @@ def kyc(data, tables, country):
 
 
 def ownership(data, tables, country):
-    policies = [
-        p
-        for p in tables["policy"]
-        if p["country"] == country
-        and date.fromisoformat(p["effective_from"])
-        <= data.as_of
-        <= date.fromisoformat(p["effective_to"])
-    ]
-    if len(policies) != 1:
-        return result([{"id": "policy", "state": "OWNERSHIP_POLICY_MISSING_OR_AMBIGUOUS"}], True)
-    policy = policies[0]
-    graph = defaultdict(list)
-    identities: dict[str, str] = {}
-    for edge in tables["ownership"]:
-        if date.fromisoformat(edge["effective_from"]) > data.as_of or (
-            edge.get("effective_to") and date.fromisoformat(edge["effective_to"]) < data.as_of
-        ):
-            continue
-        if edge["owner"] in identities and identities[edge["owner"]] != edge["owner_kind"]:
-            raise ValueError("Conflicting company/person owner identity")
-        identities[edge["owner"]] = edge["owner_kind"]
-        graph[edge["company"]].append(edge)
-    if any(identities.get(company) == "person" for company in graph):
-        raise ValueError("A natural-person identity cannot also be an owned company")
-    rows = []
-    blocked = False
-    for company in data.subjects:
-        totals: defaultdict[str, Decimal] = defaultdict(Decimal)
-        paths = 0
-        failures = set()
+    from app.modules.country_workflows.ownership_paths import compare
 
-        def walk(node, fraction, visited):
-            nonlocal paths
-            paths += 1
-            if paths > 10000 or len(visited) > 20:
-                raise ValueError(
-                    "Ownership complexity bound exceeded; select a reviewed bounded graph"
-                )
-            if node in visited:
-                failures.add("OWNERSHIP_CYCLE_REQUIRES_ASSESSMENT")
-                return
-            edges = graph.get(node, [])
-            if not edges:
-                failures.add("CORPORATE_OWNER_EVIDENCE_MISSING")
-                return
-            total = sum((Decimal(e["fraction"]) for e in edges), Decimal(0))
-            if total != 1:
-                failures.add("OWNERSHIP_POPULATION_NOT_COMPLETE")
-            owners = set()
-            for edge in edges:
-                if edge["owner"] in owners:
-                    failures.add("DUPLICATE_CURRENT_OWNERSHIP_EDGE")
-                    continue
-                owners.add(edge["owner"])
-                weight = fraction * Decimal(edge["fraction"])
-                if edge["owner_kind"] == "person":
-                    totals[edge["owner"]] += weight
-                else:
-                    walk(edge["owner"], weight, {*visited, node})
-
-        walk(company, Decimal(1), set())
-        if failures:
-            blocked = True
-            rows.append(
-                {
-                    "id": "company:" + company,
-                    "company": company,
-                    "exceptions": sorted(failures),
-                    "state": "OWNERSHIP_EVIDENCE_GAPS",
-                }
-            )
-        for person, fraction in sorted(totals.items()):
-            threshold = Decimal(policy["threshold"])
-            candidate = (
-                fraction > threshold
-                if policy["comparison"] == "greater-than"
-                else fraction >= threshold
-            )
-            rows.append(
-                {
-                    "id": company + ":" + person,
-                    "company": company,
-                    "person_id": person,
-                    "economic_fraction": str(fraction),
-                    "threshold_candidate": candidate,
-                    "policy_source_id": policy["id"],
-                    "state": "REQUIRES_UBO_REVIEW" if candidate else "MATCHED",
-                }
-            )
-    return result(
-        rows,
-        blocked,
-        [
-            "Economic ownership is multiplied along paths; voting rights, control, nominee/trust arrangements and legal UBO conclusions require separate review",
-            "Threshold and comparison operator come from reviewed policy evidence; no registry verification is implied",
-            "Cyclic, incomplete or ambiguous ownership blocks approval; partial paths are never a complete UBO conclusion",
-        ],
-    )
+    return compare(data, tables, country)
 
 
 def normalized_name(value):

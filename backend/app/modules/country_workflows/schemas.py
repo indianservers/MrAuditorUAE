@@ -756,6 +756,8 @@ class WorkflowInput(Strict):
             raise ValueError(
                 "Ownership look-through requires an explicit company subject population"
             )
+        if self.workflow == "ownership-lookthrough" and (len(set(self.subjects)) != len(self.subjects) or any(not subject.strip() or subject != subject.strip() for subject in self.subjects)):
+            raise ValueError("Ownership subjects must be distinct exact nonblank company identifiers")
         if self.workflow in {
             "bank-subsequent-clearance",
             "subsequent-settlements",
