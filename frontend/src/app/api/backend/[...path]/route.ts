@@ -9,7 +9,14 @@ async function proxy(
 ) {
   const path = (await context.params).path.join("/");
   if (
-    (!allowed.test(path) && !/^(?:jurisdictions|intelligence|regulatory|collaboration)\/[a-zA-Z0-9/-]+$/.test(path) && !/^(?:tp|ml|dmtt|grc|governance|platform|subscriptions)(?:\/[a-zA-Z0-9/-]+)?$/.test(path) && !/^auth\/mfa(?:\/(?:enroll|confirm))?$/.test(path)) ||
+    (!allowed.test(path) &&
+      !/^(?:jurisdictions|intelligence|regulatory|collaboration)\/[a-zA-Z0-9/-]+$/.test(
+        path,
+      ) &&
+      !/^(?:tp|ml|dmtt|grc|governance|platform|subscriptions)(?:\/[a-zA-Z0-9/-]+)?$/.test(
+        path,
+      ) &&
+      !/^auth\/mfa(?:\/(?:enroll|confirm))?$/.test(path)) ||
     path.includes("..") ||
     path.includes("%")
   )
@@ -57,6 +64,9 @@ async function proxy(
         "Content-Type": r.headers.get("content-type") || "application/json",
         ...(r.headers.get("content-disposition")
           ? { "Content-Disposition": r.headers.get("content-disposition")! }
+          : {}),
+        ...(r.headers.get("x-export-sha256")
+          ? { "X-Export-SHA256": r.headers.get("x-export-sha256")! }
           : {}),
         ...(r.headers.get("content-security-policy")
           ? {

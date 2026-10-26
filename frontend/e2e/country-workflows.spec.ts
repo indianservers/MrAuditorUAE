@@ -8,6 +8,77 @@ const fixture = JSON.parse(
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
 
+test("UAE and India downloads retain large bank cash manifests and allocation links", async ({
+  page,
+}) => {
+  test.setTimeout(120000);
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill("admin@example.com");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("test-strong-password-123");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+  for (const country of ["AE", "IN"] as const) {
+    const entry = fixture.lossless_exports[country];
+    await page.goto(
+      `/intelligence/${entry.engagement}/country-workflow?event=${entry.result}`,
+    );
+    await expect(page.getByLabel("Saved source or result")).toHaveValue(
+      entry.result,
+    );
+    await expect(
+      page.getByRole("region", { name: "Obligation allocation controls" }),
+    ).toContainText("500");
+    const exported = page.waitForResponse(
+      (r) =>
+        r.url().endsWith(`/events/${entry.result}/export?format=xlsx`) &&
+        r.request().method() === "GET",
+    );
+    const download = page.waitForEvent("download");
+    await page
+      .getByRole("button", { name: "Export XLSX", exact: true })
+      .click();
+    const file = resolve(
+      `../.local-runtime/country-workflows/${country.toLowerCase()}-lossless-browser.xlsx`,
+    );
+    await (await download).saveAs(file);
+    const checksum = (await exported).headers()["x-export-sha256"];
+    expect(checksum).toMatch(/^[a-f0-9]{64}$/);
+    const verified = execFileSync(
+      resolve("../backend/.venv/Scripts/python.exe"),
+      [
+        "-c",
+        `
+import io,json,sys,hashlib
+from pathlib import Path
+from openpyxl import load_workbook
+from tests.unit.test_xlsx_values import originals
+raw=Path(sys.argv[1]).read_bytes()
+assert hashlib.sha256(raw).hexdigest()==sys.argv[3]
+book=load_workbook(io.BytesIO(raw),read_only=True)
+restored=originals(book)
+meta=dict(book['Source and review'].values)
+assert meta['Country']==sys.argv[2] and meta['Source freshness at export']=='CURRENT'
+row=next(i for i,r in enumerate(book['Source and review'].values,1) if r[0]=='bank_consumption_manifest')
+manifest=json.loads(restored[('Source and review',f'B{row}')])
+assert len(manifest['rows'])==500 and len(list(book['Bank cash claims'].values))==501
+assert sum(int(r['allocated']) for r in manifest['rows'])==500
+assert len(list(book['Rows'].values))==503
+assert all(c.data_type!='f' for s in book for r in s for c in r if c.value is not None)
+print(json.dumps({'claims':len(manifest['rows']),'restored_values':len(restored)}))
+`,
+        file,
+        country,
+        checksum,
+      ],
+      { cwd: resolve("../backend"), encoding: "utf8" },
+    );
+    expect(JSON.parse(verified).claims).toBe(500);
+    expect(JSON.parse(verified).restored_values).toBeGreaterThan(1);
+  }
+});
+
 test("UAE then India bank cash approvals share capacity across entity engagements", async ({
   page,
   browser,

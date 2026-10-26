@@ -1,5 +1,6 @@
 """Connected accounting/document workflows using immutable source and result versions."""
 
+import hashlib
 import uuid
 from datetime import UTC, datetime
 from typing import Annotated, Literal
@@ -1501,16 +1502,22 @@ async def export_result(
 
     tenant = await db.get(Tenant, ctx.tenant_id)
     freshness = "CURRENT" if await service.current(db, ctx, obj) else "STALE"
-    content, media = await run_in_threadpool(
-        render, {**audit.serialize(obj), "firm_name": tenant.name if tenant else "", "freshness": freshness, "exported_at": datetime.now(UTC).isoformat()}, format
-    )
+    from app.modules.intelligence.xlsx_values import XlsxValueLimitError
+
+    try:
+        content, media = await run_in_threadpool(
+            render, {**audit.serialize(obj), "firm_name": tenant.name if tenant else "", "freshness": freshness, "exported_at": datetime.now(UTC).isoformat()}, format
+        )
+    except XlsxValueLimitError as error:
+        raise HTTPException(422, str(error)) from error
+    content_sha256 = hashlib.sha256(content).hexdigest()
     record(
         db,
         ctx,
         "intelligence.exported",
         obj.id,
         request.state.request_id,
-        {"format": format, "sha256": obj.sha256, "freshness": freshness},
+        {"format": format, "sha256": obj.sha256, "freshness": freshness, "content_sha256": content_sha256, "content_bytes": len(content)},
     )
     return Response(
         content,
@@ -1519,6 +1526,7 @@ async def export_result(
             "Content-Disposition": f'attachment; filename="{obj.kind}-{str(obj.id)[:8]}.{format}"',
             "Cache-Control": "no-store",
             "X-Content-Type-Options": "nosniff",
+            "X-Export-SHA256": content_sha256,
         },
     )
 

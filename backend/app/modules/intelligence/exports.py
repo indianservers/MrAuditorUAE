@@ -35,6 +35,8 @@ def render(event, format):
         "Generated result timestamp": event["created_at"],
         "Financial convention": "Exact Decimal strings; no audit opinion or evidence sufficiency inferred",
     }
+    if format == "xlsx":
+        metadata["XLSX text contract"] = "exact-text-with-continuations/1"
     if event["kind"] in {"workflow-source", "country-workflow"}:
         metadata.update(
             {
@@ -184,86 +186,105 @@ def render(event, format):
     buffer = io.BytesIO()
     if format == "xlsx":
         from openpyxl import Workbook
-        from openpyxl.cell import WriteOnlyCell
+
+        from app.modules.intelligence.xlsx_values import ExactTextWriter, XlsxValueLimitError
 
         workbook = Workbook(write_only=True)
+        writer = ExactTextWriter(workbook, text)
+        append = writer.append
 
-        def append(sheet, values):
-            cells = []
-            for value in values:
-                cell = WriteOnlyCell(sheet, value=text(value))
-                cell.data_type = "s"
-                cells.append(cell)
-            sheet.append(cells)
+        try:
+            cover = workbook.create_sheet("Source and review")
+            for key, value in metadata.items():
+                append(cover, [key, value])
+            for key, value in summary.items():
+                append(cover, [key, value])
+            source = workbook.create_sheet("Rows")
+            keys = list(dict.fromkeys(key for row in rows for key in row))
+            append(source, keys)
+            for row in rows:
+                append(source, [row.get(key) for key in keys])
+            if body.get("transaction_dates") is not None:
+                dates = workbook.create_sheet("Bank transaction dates")
+                date_fields = ["source_role", "source_row_id", "transaction_date", "bank_booking_date", "bank_value_date", "bank_date_basis", "booking_date_review_required"]
+                append(dates, date_fields)
+                for record in body["transaction_dates"]:
+                    append(dates, [record.get(key) for key in date_fields])
+            if body.get("payroll_posting_links") is not None:
+                posting_links = workbook.create_sheet("Payroll posting links")
+                posting_fields = list(dict.fromkeys(key for row in body["payroll_posting_links"] for key in row))
+                append(posting_links, posting_fields)
+                for link in body["payroll_posting_links"]:
+                    append(posting_links, [link.get(key) for key in posting_fields])
+            if body.get("inventory_quantity_controls") is not None:
+                controls = workbook.create_sheet("Inventory quantity controls")
+                fields = ["site", "sku", "lot", "uom", "currency", "expected_rows", "positive_quantity", "negative_quantity"]
+                append(controls, fields)
+                for control in body["inventory_quantity_controls"]:
+                    append(controls, [control.get(key) for key in fields])
+            if body.get("count_bridges") is not None:
+                bridges = workbook.create_sheet("Count date bridges")
+                links = workbook.create_sheet("Inventory movement links")
+                bridge_keys = list(dict.fromkeys(key for bridge in body["count_bridges"] for key in bridge if key != "movement_source_ids"))
+                append(bridges, bridge_keys)
+                append(links, ["count_source_id", "movement_source_id", "site", "sku", "lot", "uom", "currency"])
+                for bridge in body["count_bridges"]:
+                    append(bridges, [bridge.get(key) for key in bridge_keys])
+                    for movement_id in bridge.get("movement_source_ids", []):
+                        append(links, [bridge["count_source_id"], movement_id, *[bridge.get(key) for key in ["site", "sku", "lot", "uom", "currency"]]])
+            if body.get("excluded_box_rows"):
+                excluded = workbook.create_sheet("Excluded VAT boxes")
+                excluded_keys = list(
+                    dict.fromkeys(key for row in body["excluded_box_rows"] for key in row)
+                )
+                append(excluded, excluded_keys)
+                for row in body["excluded_box_rows"]:
+                    append(excluded, [row.get(key) for key in excluded_keys])
+            if message_controls:
+                messages = workbook.create_sheet("MT940 message controls")
+                message_keys = list(
+                    dict.fromkeys(key for message in message_controls for key in message)
+                )
+                append(messages, message_keys)
+                for message in message_controls:
+                    append(messages, [message.get(key) for key in message_keys])
+            if page_controls:
+                pages = workbook.create_sheet("CAMT page controls")
+                page_keys = list(dict.fromkeys(key for page in page_controls for key in page))
+                append(pages, page_keys)
+                for page in page_controls:
+                    append(pages, [page.get(key) for key in page_keys])
+            cash_manifest = body.get("bank_consumption_manifest")
+            if isinstance(cash_manifest, dict) and isinstance(cash_manifest.get("rows"), list):
+                cash = workbook.create_sheet("Bank cash claims")
+                cash_keys = list(dict.fromkeys(["bank_source_row_id", "account", "account_basis", "currency", "capacity", "allocated", "source_sha256", "cash_key", "economic_key", "origin_key", *[key for claim in cash_manifest["rows"] for key in claim]]))
+                from openpyxl.utils import get_column_letter
 
-        cover = workbook.create_sheet("Source and review")
-        for key, value in metadata.items():
-            append(cover, [key, value])
-        for key, value in summary.items():
-            append(cover, [key, value])
-        source = workbook.create_sheet("Rows")
-        keys = list(dict.fromkeys(key for row in rows for key in row))
-        append(source, keys)
-        for row in rows:
-            append(source, [row.get(key) for key in keys])
-        if body.get("transaction_dates") is not None:
-            dates = workbook.create_sheet("Bank transaction dates")
-            date_fields = ["source_role", "source_row_id", "transaction_date", "bank_booking_date", "bank_value_date", "bank_date_basis", "booking_date_review_required"]
-            append(dates, date_fields)
-            for record in body["transaction_dates"]:
-                append(dates, [record.get(key) for key in date_fields])
-        if body.get("payroll_posting_links") is not None:
-            posting_links = workbook.create_sheet("Payroll posting links")
-            posting_fields = list(dict.fromkeys(key for row in body["payroll_posting_links"] for key in row))
-            append(posting_links, posting_fields)
-            for link in body["payroll_posting_links"]:
-                append(posting_links, [link.get(key) for key in posting_fields])
-        if body.get("inventory_quantity_controls") is not None:
-            controls = workbook.create_sheet("Inventory quantity controls")
-            fields = ["site", "sku", "lot", "uom", "currency", "expected_rows", "positive_quantity", "negative_quantity"]
-            append(controls, fields)
-            for control in body["inventory_quantity_controls"]:
-                append(controls, [control.get(key) for key in fields])
-        if body.get("count_bridges") is not None:
-            bridges = workbook.create_sheet("Count date bridges")
-            links = workbook.create_sheet("Inventory movement links")
-            bridge_keys = list(dict.fromkeys(key for bridge in body["count_bridges"] for key in bridge if key != "movement_source_ids"))
-            append(bridges, bridge_keys)
-            append(links, ["count_source_id", "movement_source_id", "site", "sku", "lot", "uom", "currency"])
-            for bridge in body["count_bridges"]:
-                append(bridges, [bridge.get(key) for key in bridge_keys])
-                for movement_id in bridge.get("movement_source_ids", []):
-                    append(links, [bridge["count_source_id"], movement_id, *[bridge.get(key) for key in ["site", "sku", "lot", "uom", "currency"]]])
-        if body.get("excluded_box_rows"):
-            excluded = workbook.create_sheet("Excluded VAT boxes")
-            excluded_keys = list(
-                dict.fromkeys(key for row in body["excluded_box_rows"] for key in row)
+                cash.freeze_panes = "A2"
+                for index, key in enumerate(cash_keys, 1):
+                    cash.column_dimensions[get_column_letter(index)].width = 68 if key.endswith("key") or key.endswith("sha256") else 42 if key in {"capacity", "allocated"} else 36 if key in {"account", "account_basis"} else max(24, len(key) + 2)
+                append(cash, cash_keys)
+                for claim in cash_manifest["rows"]:
+                    append(cash, [claim.get(key) for key in cash_keys])
+            receipts = workbook.create_sheet("Dependency receipts")
+            for dep in event["dependencies"]:
+                append(receipts, [dep["type"], dep])
+            if writer.long_values:
+                append(cover, ["Oversized cells", f"{len(writer.long_values)} exact values retained in ordered parts on Long values; source sheet/cell and UTF-8 SHA-256 identify each original value"])
+            writer.finish()
+            workbook.save(buffer)
+            return (
+                buffer.getvalue(),
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             )
-            append(excluded, excluded_keys)
-            for row in body["excluded_box_rows"]:
-                append(excluded, [row.get(key) for key in excluded_keys])
-        if message_controls:
-            messages = workbook.create_sheet("MT940 message controls")
-            message_keys = list(
-                dict.fromkeys(key for message in message_controls for key in message)
-            )
-            append(messages, message_keys)
-            for message in message_controls:
-                append(messages, [message.get(key) for key in message_keys])
-        if page_controls:
-            pages = workbook.create_sheet("CAMT page controls")
-            page_keys = list(dict.fromkeys(key for page in page_controls for key in page))
-            append(pages, page_keys)
-            for page in page_controls:
-                append(pages, [page.get(key) for key in page_keys])
-        receipts = workbook.create_sheet("Dependency receipts")
-        for dep in event["dependencies"]:
-            append(receipts, [dep["type"], dep])
-        workbook.save(buffer)
-        return (
-            buffer.getvalue(),
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        )
+        except XlsxValueLimitError:
+            # Public save closes streaming XML writers and removes their temp
+            # files. This partial cleanup archive is discarded, never returned.
+            from contextlib import suppress
+
+            with suppress(Exception):
+                workbook.save(io.BytesIO())
+            raise
     if format == "docx":
         from docx import Document
 

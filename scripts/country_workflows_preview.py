@@ -921,6 +921,14 @@ async def main():
                 entries.append({"engagement": cash_eid, "result": cash_result["id"]})
             entity_cash[country] = entries
 
+        from tests.qa_crud.test_lossless_exports import retained_allocations
+
+        lossless_exports = {}
+        for country in ("AE", "IN"):
+            export_eid = entity_cash[country][0]["engagement"]
+            exported, _sources, _values = await retained_allocations(client, h, export_eid, pdf_final_reviewer, country)
+            lossless_exports[country] = {"engagement": export_eid, "result": exported["id"], "claims": 500}
+
         if implementation_hash() != implementation:
             raise RuntimeError(
                 "Backend implementation changed during fixture preparation; prepare fresh fixtures before browser verification"
@@ -941,6 +949,7 @@ async def main():
                     "obligation_allocations": dues_fixtures,
                     "withholding_split": withholding_split,
                     "entity_cash": entity_cash,
+                    "lossless_exports": lossless_exports,
                     "document_series": document_series,
                     "import_nil": nil_import,
                     "import_vat_sources": import_vat_sources,

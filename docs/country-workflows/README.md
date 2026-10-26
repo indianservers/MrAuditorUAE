@@ -82,3 +82,6 @@ Shared bank cash approval now checks active obligation allocation reviews across
 
 
 Retained-history listing now reuses bounded request-local read metadata while preserving recursive access and freshness checks. The 100-row UAE/India paired benchmark returned identical JSON with about 85–86% fewer SQL queries; this is synthetic local evidence, not production capacity qualification. See [implementation, measurements and repeat command](native-adapters.md#retained-history-request-reuse--uae-then-india).
+
+
+XLSX exports now preserve oversized source/control values in ordered continuation records and show all bank cash manifest movements on a dedicated sheet. Download checksums bind the saved bytes to the export audit record. See [complete-text export behavior and bounds](native-adapters.md#complete-text-in-uae-and-india-reconciliation-xlsx-exports).
