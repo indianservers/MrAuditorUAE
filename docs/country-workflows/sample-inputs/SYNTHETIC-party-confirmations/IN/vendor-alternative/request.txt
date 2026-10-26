@@ -1,0 +1,3 @@
+SYNTHETIC ONLY. Fictional request evidence for AP / PARTY-1 / payable / INR; reporting date 2026-06-30; balance 150.
+Fictional invoices 100 and 60, credit note -10. No real client, authenticated sender, payment proof or professional certification.
+SYN-REQUEST-PAGE-1: fictional positive stated-balance request dated 2026-07-01.

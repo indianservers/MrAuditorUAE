@@ -1,0 +1,4 @@
+id,account,counterparty,reference,side,currency,document_date,due_date,balance_date,amount,document_type,segment,specific_ecl,specific_assessment
+SYN-INV-1,AR,PARTY-1,SYN-INV-1,receivable,AED,2026-05-01,2026-05-31,2026-06-30,100,invoice,,,
+SYN-INV-2,AR,PARTY-1,SYN-INV-2,receivable,AED,2026-05-01,2026-05-31,2026-06-30,60,invoice,,,
+SYN-CREDIT-1,AR,PARTY-1,SYN-CREDIT-1,receivable,AED,2026-05-01,2026-05-31,2026-06-30,-10,credit-note,,,

@@ -1565,3 +1565,104 @@ scrolling to the schedule. Final screenshots were visually inspected:
 [India matched](screenshots/native-sources/in-purchase-valid.png),
 [India incompatible units](screenshots/native-sources/in-purchase-bad_units.png),
 [India controls](screenshots/native-sources/in-purchase-controls.png).
+
+## Positive party-balance confirmations — UAE then India
+
+`party-balance-confirmations` complements the existing invoice-level
+`balance-confirmations` workflow. One explicitly scoped customer or vendor
+balance can now cover many invoices and credit notes without inventing a
+separate response allocation for each invoice. Three independently reviewed
+sources are required: reporting-date `audit-open-items`, `balance-controls`
+using the declared subledger normal sign, and current `party-confirmations`
+assessments. The source control totals cover requested balances separately
+from mandatory independent written-response totals. A zero written response
+is retained as zero; a non-response remains absent, not zero.
+
+Each position is exact account/counterparty/receivable-or-payable/currency.
+Accounts, parties, sides and currencies cannot offset one another. GL control
+agreement does not clear party response differences. The requested amount must
+equal the scoped book balance exactly, independently of the response comparison
+tolerance. Request, response and follow-up dates cannot be after review-through, and a
+follow-up cannot precede its request or response. Duplicate current assessments within the selected source,
+unknown parties, different dates/scopes, missing GL control agreement or missing
+reliability declarations remain unresolved. A raw credit-signed payable GL is
+not automatically flipped to force agreement.
+For an unknown party the observed response stays visible, but book balance and
+difference remain unknown; no difference is calculated against an invented zero.
+
+Sent requests and observed written responses require retained version IDs,
+SHA-256 hashes and source references. Follow-ups require a dated retained
+document, reference, procedure kind and meaningful assessment. Shared document
+selectors can fill blank CSV bindings; conflicting supplied bindings fail.
+The assessment CSV cannot act as its own correspondence. Original clean bytes
+and current versions are verified on preparation and consumption. Replacing a
+supporting document makes the source and dependent result stale. The existing
+50-distinct-document / 100 MiB supporting-evidence bound applies per prepared
+source; batch documents may support several explicitly referenced positions.
+Partition larger document sets deliberately. Canonical CSV remains bounded to
+10 MiB and 5,000 rows per source.
+
+Pending, unsent and undeliverable requests require actual alternative-procedure
+evidence. A response classified as unreliable retains its observed amount,
+date and document while requiring alternatives. A dispute remains a dispute even
+if its amount equals books. Other response differences require documented
+investigation. Bound follow-up evidence permits independent disposition; it
+never changes these rows to automatically confirmed. A comment alone cannot
+clear missing follow-up evidence or hard scope/GL/independence blockers.
+
+The UI separates party evidence and GL control pages. Its evidence panel shows
+dates, assessed declarations, references and hashes, and downloads only through
+the existing authorized, hash-verified evidence route. All linked item IDs have
+their own pages. XLSX preserves the complete original result and adds
+**Confirmation item links** and **Confirmation documents** sheets with one row
+per item link or contextual document binding. Document rows explicitly identify
+retained identity, not authentication or evidence sufficiency.
+
+This contract covers declared positive stated-balance evidence. It does not
+send requests, authenticate a respondent, infer country-standard applicability,
+qualify negative/blank requests, automatically allocate partial responses,
+infer unit/currency conversions, or issue an audit opinion. Completeness of the
+client population, response coverage and reliability need professional review.
+Positive denotes the request method, not the amount's sign; net credit balances
+remain signed. Every book-party position in the supplied population requires
+an assessment row. Sampling/exclusions and selection completeness are not inferred.
+The [IAASB 2026 Handbook](https://www.iaasb.org/news-events/2026-10/iaasb-2026-handbook-now-available-online-access-and-print-orders)
+and [ICAI SA 505](https://kb.icai.org/pdfs/PDFFile5b3b5643c27186.05385959.pdf)
+are professional references; their applicability and edition must be selected
+for the actual engagement. This source-evidence workflow is not qualification
+of ISA/SA compliance or local UAE/India statutory content.
+
+[Saved examples](sample-inputs/SYNTHETIC-party-confirmations/README.md) cover a
+received customer response and pending vendor with alternatives in AE/AED and
+IN/INR. Every file is synthetic and separate from client pilot evidence. The
+frozen 154-scenario catalogue is unchanged. Real-client, professional/provider
+and hosted release qualification remain open.
+
+Verification checkpoint, 26 October 2026: **1,913 backend unit tests passed,
+four skipped**, **192 frontend tests passed**, and **eight PostgreSQL/HTTP
+regressions passed**. Scoped Ruff/mypy, ESLint, TypeScript, production build and
+UTF-8 checks passed. Coverage includes customer/vendor positions in both
+countries, signed credit balances, confirmed zero, absent/unreliable responses,
+equal-amount disputes, offsetting party errors, missing/unknown scope without
+invented zeroes, future follow-ups, hash mismatch, self-evidence, independent
+review and document replacement staleness. Unit/export checks retain all 5,000
+item IDs for one letter. HTTP checks retain 121 party positions, separate GL
+pagination, 363 item-link rows and 242 contextual document rows in XLSX.
+
+All four saved example populations were parsed back against their literal
+controls and expected states. Supporting TXT files use pinned UTF-8/LF bytes
+for portable published checksums; this affects synthetic examples only, not
+uploaded client originals. The [real-worker browser scenario](../phase-12/party-confirmations-browser-results.json)
+passed customer written-response and vendor alternative-procedure flows in UAE,
+then India. Actual browser downloads of response/follow-up files matched their
+retained SHA-256 hashes. Final screenshots were visually inspected:
+[UAE customer schedule](screenshots/native-sources/ae-party-received_customer-schedule.png),
+[UAE customer evidence](screenshots/native-sources/ae-party-received_customer-evidence.png),
+[UAE vendor schedule](screenshots/native-sources/ae-party-alternative_vendor-schedule.png),
+[UAE vendor evidence](screenshots/native-sources/ae-party-alternative_vendor-evidence.png),
+[UAE GL](screenshots/native-sources/ae-party-gl.png),
+[India customer schedule](screenshots/native-sources/in-party-received_customer-schedule.png),
+[India customer evidence](screenshots/native-sources/in-party-received_customer-evidence.png),
+[India vendor schedule](screenshots/native-sources/in-party-alternative_vendor-schedule.png),
+[India vendor evidence](screenshots/native-sources/in-party-alternative_vendor-evidence.png),
+[India GL](screenshots/native-sources/in-party-gl.png).

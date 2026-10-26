@@ -1,0 +1,35 @@
+{
+  "synthetic_only": true,
+  "country": "IN",
+  "workflow": "party-balance-confirmations",
+  "as_of": "2026-06-30",
+  "review_through": "2026-07-15",
+  "source_rows": {
+    "items": 3,
+    "controls": 1,
+    "responses": 1
+  },
+  "money_controls_each_source": {
+    "INR": "150"
+  },
+  "confirmation_response_totals": {
+    "INR": "150"
+  },
+  "supporting_documents": {
+    "request": {
+      "filename": "request.txt",
+      "sha256": "eb17ee0cff53048abfd28df0858f29231d27e00296094e72f5a8d6219c7b7275"
+    },
+    "response": {
+      "filename": "response.txt",
+      "sha256": "9b18f1ef78b03b467bc3d0e00f2597acd89caf464549d1d6fcd721a06b49f836"
+    }
+  },
+  "expected_result": {
+    "party_state": "MATCHED",
+    "book_balance": "150",
+    "exception_count": 0,
+    "blocked": false,
+    "independent_disposition_required": false
+  }
+}

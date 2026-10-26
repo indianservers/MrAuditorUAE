@@ -706,6 +706,7 @@ async def event_details(
     date_limit: int = Query(100, ge=1, le=500),
     payroll_view: Literal["all", "accounts", "postings"] = "all",
     inventory_view: Literal["all", "valuations", "gl-controls"] = "all",
+    confirmation_view: Literal["all", "parties", "gl-controls"] = "all",
     purchase_offset: int = Query(0, ge=0),
     purchase_limit: int = Query(100, ge=1, le=500),
 ):
@@ -716,6 +717,9 @@ async def event_details(
         body["rows"] = [row for row in body["rows"] if row["kind"] == selected_kind]
     if body.get("workflow") == "inventory-valuation-control" and inventory_view != "all":
         selected_kind = "valuation-test" if inventory_view == "valuations" else "gl-control"
+        body["rows"] = [row for row in body["rows"] if row["kind"] == selected_kind]
+    if body.get("workflow") == "party-balance-confirmations" and confirmation_view != "all":
+        selected_kind = "party-confirmation" if confirmation_view == "parties" else "control"
         body["rows"] = [row for row in body["rows"] if row["kind"] == selected_kind]
     totals = {}
     for key in [

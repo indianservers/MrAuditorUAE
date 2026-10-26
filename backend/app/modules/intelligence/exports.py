@@ -204,6 +204,22 @@ def render(event, format):
             append(source, keys)
             for row in rows:
                 append(source, [row.get(key) for key in keys])
+            if body.get("workflow") == "party-balance-confirmations":
+                links = workbook.create_sheet("Confirmation item links")
+                documents = workbook.create_sheet("Confirmation documents")
+                identity_fields = ["id", "account", "counterparty", "side", "currency"]
+                append(links, ["result_row_id", *identity_fields[1:], "open_item_source_id"])
+                append(documents, ["result_row_id", *identity_fields[1:], "confirmation_status", "document_role", "document_date", "evidence_version_id", "source_sha256", "reference", "contact_verified_declaration", "independent_receipt_declaration", "scope_assessment", "followup_kind", "followup_assessment", "evidence_status"])
+                for position in body.get("rows", []):
+                    if position.get("kind") != "party-confirmation":
+                        continue
+                    identity = [position.get(field) for field in identity_fields]
+                    for identifier in position.get("open_item_source_ids", []):
+                        append(links, [*identity, identifier])
+                    evidence = position.get("confirmation_evidence") or {}
+                    for prefix, date_field in (("request", "requested_on"), ("response", "responded_on"), ("followup", "followup_on")):
+                        if evidence.get(prefix + "_evidence_version_id"):
+                            append(documents, [*identity, position.get("confirmation_status"), prefix, evidence.get(date_field), evidence[prefix + "_evidence_version_id"], evidence[prefix + "_source_sha256"], evidence[prefix + "_reference"], evidence.get("contact_verified"), evidence.get("independently_received"), evidence.get("scope_assessment"), evidence.get("followup_kind") if prefix == "followup" else None, evidence.get("followup_assessment") if prefix == "followup" else None, "RETAINED_IDENTITY_ONLY"])
             if body.get("workflow") == "sanctions-name-review":
                 candidates = workbook.create_sheet("Screening candidates")
                 candidate_fields = ["source_id", "list_subject_id", "list_name", "list_version", "published_on", "evidence_reference", "name_similarity"]

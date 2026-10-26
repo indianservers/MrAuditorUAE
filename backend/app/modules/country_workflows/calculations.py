@@ -911,7 +911,11 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
             esic_links, esic_metadata = bind_esic(data, tables, *esic_population_review)
         elif esic_population_review is not None:
             raise ValueError("An ESIC population receipt requires an explicit reviewed link")
-        if data.workflow == "inventory-valuation-control":
+        if data.workflow == "party-balance-confirmations":
+            from app.modules.country_workflows.party_confirmations import compare as compare_parties
+
+            result = compare_parties(data, sources)
+        elif data.workflow == "inventory-valuation-control":
             from app.modules.country_workflows.inventory_valuation import (
                 compare as compare_inventory_values,
             )

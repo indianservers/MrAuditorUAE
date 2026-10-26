@@ -10,6 +10,7 @@ import { PageHeader } from "./shared";
 import { BankCarryforwardSource } from "./bank-carryforward-source";
 import { BankCashReview } from "./bank-cash-review";
 import { ScreeningCandidates } from "./screening-candidates";
+import { PartyConfirmationEvidence } from "./party-confirmation-evidence";
 import { WithholdingObligationSource } from "./withholding-obligation-source";
 import { ContributionObligationSource } from "./contribution-obligation-source";
 import {
@@ -151,6 +152,12 @@ type Workflow = {
   roles: Record<string, string>;
 };
 type Result = {
+  dependencies?: {
+    type: string;
+    id: string;
+    record_id?: string;
+    sha256?: string;
+  }[];
   id: string;
   version: number;
   kind: string;
@@ -191,6 +198,13 @@ type Result = {
       review_through: string;
       gl_basis: string;
       assessment: string;
+    };
+    confirmation_scope?: {
+      as_of: string;
+      review_through: string;
+      open_items: number;
+      party_positions: number;
+      confirmation_rows: number;
     };
     esic_population_scope?: { registration: string; period: string };
     esic_population_binding?: {
@@ -366,8 +380,9 @@ export function CountryWorkflows({
   const [offset, setOffset] = useState(0);
   const [payrollView, setPayrollView] = useState("accounts");
   const [inventoryView, setInventoryView] = useState("valuations");
+  const [confirmationView, setConfirmationView] = useState("parties");
   const detail = useAPI<Result>(
-    `${prefix}/events/${selected}?offset=${offset}&limit=100&payroll_view=${payrollView}&inventory_view=${inventoryView}`,
+    `${prefix}/events/${selected}?offset=${offset}&limit=100&payroll_view=${payrollView}&inventory_view=${inventoryView}&confirmation_view=${confirmationView}`,
     !!selected,
   );
   const [workflow, setWorkflow] = useState("bank-brs");
@@ -393,6 +408,11 @@ export function CountryWorkflows({
   const [inventoryControls, setInventoryControls] = useState("[]");
   const [inventoryValueControls, setInventoryValueControls] = useState("[]");
   const [purchaseControls, setPurchaseControls] = useState("[]");
+  const [confirmationDocuments, setConfirmationDocuments] = useState<
+    Record<string, string>
+  >({});
+  const [confirmationResponseTotals, setConfirmationResponseTotals] =
+    useState("{}");
   const [inventoryCostEvidence, setInventoryCostEvidence] = useState("");
   const [inventoryNRVEvidence, setInventoryNRVEvidence] = useState("");
   const [inventoryGLBasis, setInventoryGLBasis] = useState("");
@@ -900,86 +920,111 @@ export function CountryWorkflows({
                   ].filter((key) => allColumns.includes(key))
                 : defaultColumns;
   const columns =
-    body?.workflow === "procurement-match" && !showRuleProvenance
-      ? [
-          "order_id",
-          "line_reference",
-          "vendor",
-          "currency",
-          "uom",
-          "quantity_comparison_status",
-          "quantities",
-          "amounts",
-          "exceptions",
-          "state",
-        ].filter((key) => allColumns.includes(key))
-      : body?.workflow === "sanctions-name-review" && !showRuleProvenance
+    body?.workflow === "party-balance-confirmations" && !showRuleProvenance
+      ? (confirmationView === "gl-controls"
+          ? [
+              "account",
+              "side",
+              "currency",
+              "subledger_amount",
+              "control_amount",
+              "difference",
+              "state",
+            ]
+          : [
+              "account",
+              "counterparty",
+              "side",
+              "currency",
+              "open_item_count",
+              "book_balance",
+              "confirmation_status",
+              "response_amount",
+              "difference",
+              "state",
+            ]
+        ).filter((key) => allColumns.includes(key))
+      : body?.workflow === "procurement-match" && !showRuleProvenance
         ? [
-            "id",
-            "subject_name",
-            "list_version",
-            "candidate_count",
-            "candidate_preview_truncated",
+            "order_id",
+            "line_reference",
+            "vendor",
+            "currency",
+            "uom",
+            "quantity_comparison_status",
+            "quantities",
+            "amounts",
+            "exceptions",
             "state",
-            "reviewer_disposition",
           ].filter((key) => allColumns.includes(key))
-        : body?.workflow === "inventory-valuation-control" &&
-            !showRuleProvenance
-          ? (inventoryView === "gl-controls"
-              ? [
-                  "account",
-                  "currency",
-                  "recorded_book_value",
-                  "gl_amount",
-                  "difference",
-                  "state",
-                ]
-              : [
-                  "site",
-                  "sku",
-                  "lot",
-                  "uom",
-                  "currency",
-                  "book_quantity",
-                  "book_unit_cost",
-                  "assessed_unit_cost",
-                  "book_unit_nrv",
-                  "assessed_unit_nrv",
-                  "recorded_gl_basis_value",
-                  "assessed_lower_cost_nrv_value",
-                  "recorded_minus_assessed_value",
-                  "exceptions",
-                  "state",
-                ]
-            ).filter((key) => allColumns.includes(key))
-          : body?.table_type === "esic-members" && !showRuleProvenance
-            ? [
-                "subject",
-                "member_name",
-                "period",
-                "currency",
-                "amount",
-                "paid_days",
-                "zero_wage_reason",
-                "zero_day_reason",
-                "last_working_day",
-                "source_row",
-              ].filter((key) => allColumns.includes(key))
-            : body?.workflow === "india-esic-population" && !showRuleProvenance
+        : body?.workflow === "sanctions-name-review" && !showRuleProvenance
+          ? [
+              "id",
+              "subject_name",
+              "list_version",
+              "candidate_count",
+              "candidate_preview_truncated",
+              "state",
+              "reviewer_disposition",
+            ].filter((key) => allColumns.includes(key))
+          : body?.workflow === "inventory-valuation-control" &&
+              !showRuleProvenance
+            ? (inventoryView === "gl-controls"
+                ? [
+                    "account",
+                    "currency",
+                    "recorded_book_value",
+                    "gl_amount",
+                    "difference",
+                    "state",
+                  ]
+                : [
+                    "site",
+                    "sku",
+                    "lot",
+                    "uom",
+                    "currency",
+                    "book_quantity",
+                    "book_unit_cost",
+                    "assessed_unit_cost",
+                    "book_unit_nrv",
+                    "assessed_unit_nrv",
+                    "recorded_gl_basis_value",
+                    "assessed_lower_cost_nrv_value",
+                    "recorded_minus_assessed_value",
+                    "exceptions",
+                    "state",
+                  ]
+              ).filter((key) => allColumns.includes(key))
+            : body?.table_type === "esic-members" && !showRuleProvenance
               ? [
                   "subject",
-                  "payroll_member_name",
-                  "reported_member_name",
-                  "payroll_amount",
-                  "reported_amount",
-                  "wage_difference",
-                  "payroll_paid_days",
-                  "reported_paid_days",
-                  "paid_day_difference",
-                  "exceptions",
-                  "state",
+                  "member_name",
+                  "period",
+                  "currency",
+                  "amount",
+                  "paid_days",
+                  "zero_wage_reason",
+                  "zero_day_reason",
+                  "last_working_day",
+                  "source_row",
                 ].filter((key) => allColumns.includes(key))
-              : baseColumns;
+              : body?.workflow === "india-esic-population" &&
+                  !showRuleProvenance
+                ? [
+                    "subject",
+                    "payroll_member_name",
+                    "reported_member_name",
+                    "payroll_amount",
+                    "reported_amount",
+                    "wage_difference",
+                    "payroll_paid_days",
+                    "reported_paid_days",
+                    "paid_day_difference",
+                    "exceptions",
+                    "state",
+                  ].filter((key) => allColumns.includes(key))
+                : baseColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -1065,6 +1110,21 @@ export function CountryWorkflows({
           : {
               evidence_version_id: evidence,
               file_format: sourceFormat,
+              ...(tableType === "party-confirmations"
+                ? {
+                    confirmation_response_totals: JSON.parse(
+                      confirmationResponseTotals,
+                    ),
+                    ...Object.fromEntries(
+                      Object.entries(confirmationDocuments)
+                        .filter(([, value]) => value)
+                        .map(([prefix, value]) => [
+                          `confirmation_${prefix}_document_version_id`,
+                          value,
+                        ]),
+                    ),
+                  }
+                : {}),
               ...(tableType === "purchase-lines"
                 ? { purchase_quantity_controls: JSON.parse(purchaseControls) }
                 : {}),
@@ -1388,6 +1448,7 @@ export function CountryWorkflows({
             "bank-subsequent-clearance",
             "subsequent-settlements",
             "balance-confirmations",
+            "party-balance-confirmations",
             "expense-cutoff",
             "going-concern-cash",
           ].includes(workflow)
@@ -2945,6 +3006,63 @@ export function CountryWorkflows({
                       </p>
                     </fieldset>
                   )}
+                  {tableType === "party-confirmations" && (
+                    <fieldset>
+                      <legend>Positive party confirmation documents</legend>
+                      <label>
+                        Independent written-response totals (JSON)
+                        <textarea
+                          value={confirmationResponseTotals}
+                          onChange={(event) =>
+                            setConfirmationResponseTotals(event.target.value)
+                          }
+                          rows={3}
+                          placeholder={'{"AED":"150"}'}
+                        />
+                      </label>
+                      <p>
+                        Money controls cover requested balances separately. Use{" "}
+                        {"{}"} here when there are no written response amounts.
+                        Select shared documents only when they apply to every
+                        row; otherwise supply each row's retained version and
+                        hash in the CSV. Sender authenticity and direct receipt
+                        require independent assessment.
+                      </p>
+                      {(["request", "response", "followup"] as const).map(
+                        (prefix) => (
+                          <label key={prefix}>
+                            Shared{" "}
+                            {prefix === "followup" ? "follow-up" : prefix}{" "}
+                            document (optional)
+                            <select
+                              value={confirmationDocuments[prefix] || ""}
+                              onChange={(event) =>
+                                setConfirmationDocuments({
+                                  ...confirmationDocuments,
+                                  [prefix]: event.target.value,
+                                })
+                              }
+                            >
+                              <option value="">
+                                Use per-row retained document bindings
+                              </option>
+                              {inputs.data?.evidence
+                                .filter(
+                                  (item) =>
+                                    item.scan_status === "CLEAN" &&
+                                    item.id !== evidence,
+                                )
+                                .map((item) => (
+                                  <option key={item.id} value={item.id}>
+                                    {item.label}
+                                  </option>
+                                ))}
+                            </select>
+                          </label>
+                        ),
+                      )}
+                    </fieldset>
+                  )}
                   {tableType === "purchase-lines" && (
                     <fieldset>
                       <legend>Independent purchase quantity controls</legend>
@@ -3363,6 +3481,7 @@ export function CountryWorkflows({
                 "bank-subsequent-clearance",
                 "subsequent-settlements",
                 "balance-confirmations",
+                "party-balance-confirmations",
                 "expense-cutoff",
                 "going-concern-cash",
               ].includes(workflow) && (
@@ -3460,6 +3579,8 @@ export function CountryWorkflows({
                             (r.review_status === "REVIEWED" &&
                               (role === "payments" ||
                                 r.purchase_controls_verified === true))) &&
+                          (workflow !== "party-balance-confirmations" ||
+                            r.review_status === "REVIEWED") &&
                           (![
                             "india-invoice-register",
                             "india-gstr1-summary",
@@ -5178,6 +5299,41 @@ export function CountryWorkflows({
               ))}
             </ul>
           )}
+          {body.confirmation_scope && (
+            <section aria-label="Positive party confirmation scope">
+              <h3>Positive party-balance evidence</h3>
+              <p>
+                Reporting date {body.confirmation_scope.as_of} · review through{" "}
+                {body.confirmation_scope.review_through} ·{" "}
+                {body.confirmation_scope.open_items} open items ·{" "}
+                {body.confirmation_scope.party_positions} party positions ·{" "}
+                {body.confirmation_scope.confirmation_rows} assessment rows.
+                Counts do not establish sent requests or confirmed balances.
+              </p>
+              <label>
+                Confirmation view
+                <select
+                  value={confirmationView}
+                  onChange={(event) => {
+                    setConfirmationView(event.target.value);
+                    setOffset(0);
+                  }}
+                >
+                  <option value="parties">Party balance evidence</option>
+                  <option value="gl-controls">GL control tie-outs</option>
+                </select>
+              </label>
+              {confirmationView === "parties" && (
+                <PartyConfirmationEvidence
+                  key={`${selected}:${offset}`}
+                  eid={eid}
+                  tenant={tenant}
+                  rows={rows}
+                  dependencies={detail.data.dependencies || []}
+                />
+              )}
+            </section>
+          )}
           {body.inventory_valuation_scope && (
             <section aria-label="Inventory valuation scope">
               <h3>Inventory valuation and GL controls</h3>
@@ -5299,6 +5455,7 @@ export function CountryWorkflows({
               body.workflow === "inventory-valuation-control" ||
               body.workflow === "sanctions-name-review" ||
               body.workflow === "procurement-match" ||
+              body.workflow === "party-balance-confirmations" ||
               body.workflow === "india-esic-population" ||
               body.workflow === "india-gstr1-documents" ||
               body.workflow === "india-invoice-register" ||
@@ -5350,7 +5507,10 @@ export function CountryWorkflows({
                         <td
                           key={k}
                           style={
-                            body.workflow === "procurement-match"
+                            [
+                              "procurement-match",
+                              "party-balance-confirmations",
+                            ].includes(body.workflow || "")
                               ? { maxWidth: 200, overflowWrap: "anywhere" }
                               : undefined
                           }

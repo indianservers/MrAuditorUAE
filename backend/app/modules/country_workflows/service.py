@@ -328,6 +328,11 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             if identifier is not None:
                 document, _ = await intelligence.evidence(db, ctx, eng, identifier)
                 defaults = {**(defaults or {}), prefix + "_evidence_version_id": str(document.id), prefix + "_source_sha256": document.sha256}
+        for prefix in ("request", "response", "followup"):
+            identifier = getattr(data, "confirmation_" + prefix + "_document_version_id")
+            if identifier is not None:
+                document, _ = await intelligence.evidence(db, ctx, eng, identifier)
+                defaults = {**(defaults or {}), prefix + "_evidence_version_id": str(document.id), prefix + "_source_sha256": document.sha256}
 
         def load():
             if part_documents:
@@ -358,6 +363,16 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             result["native_metadata"].update(context_sha256=esic_context.sha256, context_filename=esic_context.filename)
         if arrear_context is not None:
             result["native_metadata"].update(arrear_context_sha256=arrear_context.sha256, arrear_context_filename=arrear_context.filename)
+        if data.table_type == "party-confirmations":
+            from app.modules.country_workflows.party_confirmations import (
+                documents as confirmation_documents,
+            )
+
+            bindings = confirmation_documents(result["rows"])
+            bindings.extend({"source_evidence_version_id": defaults[prefix + "_evidence_version_id"], "source_sha256": defaults[prefix + "_source_sha256"]} for prefix in ("request", "response", "followup") if defaults and prefix + "_evidence_version_id" in defaults)
+            if any(str(binding["source_evidence_version_id"]) == str(evidence.id) or binding["source_sha256"] == evidence.sha256 for binding in bindings):
+                raise HTTPException(422, "Party confirmation assessments need distinct retained request/response/follow-up documents")
+            dependencies.extend(await payroll_rule_documents(db, ctx, eng, bindings, contributors=supporting_contributors, label="Party confirmation documents"))
         if data.table_type == "inventory-valuations":
             from app.modules.country_workflows.inventory_valuation import documents
 
@@ -401,6 +416,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 else {}
             ),
             **({"inventory_document_bindings": defaults} if defaults and data.table_type == "inventory-valuations" else {}),
+            **({"confirmation_document_bindings": defaults} if defaults and data.table_type == "party-confirmations" else {}),
         }, [*dependencies, receipt]
     period = await db.get(FinancialPeriod, eng.period_id)
     if not period or not period.start_date <= data.as_of <= period.end_date:
@@ -432,6 +448,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(409, "Independently review inventory books, valuation evidence and GL controls before comparison")
         if data.workflow == "procurement-match" and source.body.get("review_status") != "REVIEWED":
             raise HTTPException(409, "Independently review all procurement sources before comparison")
+        if data.workflow == "party-balance-confirmations" and source.body.get("review_status") != "REVIEWED":
+            raise HTTPException(409, "Independently review open items, GL controls and confirmation assessments before comparison")
         if data.workflow == "india-esic-population":
             from app.modules.country_workflows.esic_population import month_bounds
 
@@ -564,6 +582,12 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             dependencies.extend(await payroll_rule_documents(db, ctx, eng,
                 [{"source_evidence_version_id": context["arrear_context_evidence_version_id"], "source_sha256": context["arrear_context_sha256"]}],
                 label="Arrear filing context", contributors=contributors))
+    if data.workflow == "party-balance-confirmations":
+        from app.modules.country_workflows.party_confirmations import (
+            documents as confirmation_documents,
+        )
+
+        dependencies.extend(await payroll_rule_documents(db, ctx, eng, confirmation_documents(sources["responses"]["rows"]), contributors=contributors, label="Party confirmation documents"))
     if data.workflow == "inventory-valuation-control":
         from app.modules.country_workflows.inventory_valuation import documents
 

@@ -22,6 +22,7 @@ from app.modules.country_workflows.inventory_valuation import (
     InventoryValueControl,
 )
 from app.modules.country_workflows.operations_schemas import OPERATION_ROW_TYPES
+from app.modules.country_workflows.party_confirmations import PartyConfirmation
 from app.modules.country_workflows.payroll_ledger_schemas import PAYROLL_LEDGER_ROW_TYPES
 from app.modules.country_workflows.payroll_schemas import PAYROLL_ROW_TYPES
 from app.modules.country_workflows.pension_schemas import PENSION_ROW_TYPES
@@ -189,6 +190,7 @@ class Control(Strict):
 
 
 ROW_TYPES: dict[str, type[BaseModel]] = {
+    "party-confirmations": PartyConfirmation,
     "inventory-valuations": InventoryValuation,
     "esic-members": ESICMember,
     "gst-document-series": DocumentSeries,
@@ -213,6 +215,10 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
 
 
 class SourceInput(Strict):
+    confirmation_response_totals: dict[str, Money] | None = Field(default=None, max_length=20)
+    confirmation_request_document_version_id: uuid.UUID | None = None
+    confirmation_response_document_version_id: uuid.UUID | None = None
+    confirmation_followup_document_version_id: uuid.UUID | None = None
     purchase_quantity_controls: list[PurchaseQuantityControl] | None = Field(default=None, max_length=5000)
     inventory_cost_document_version_id: uuid.UUID | None = None
     inventory_nrv_document_version_id: uuid.UUID | None = None
@@ -309,6 +315,7 @@ class SourceInput(Strict):
         "settlements",
         "balance-controls",
         "confirmations",
+        "party-confirmations",
         "cutoff-documents",
         "ecl-loss-rates",
         "cash-forecasts",
@@ -401,6 +408,13 @@ class SourceInput(Strict):
             raise ValueError("Arrear controls and context apply only to the explicit eight-field arrear ECR profile")
         if self.purchase_quantity_controls is not None and self.table_type != "purchase-lines":
             raise ValueError("Purchase quantity controls apply only to purchase-line sources")
+        if any((self.confirmation_request_document_version_id, self.confirmation_response_document_version_id, self.confirmation_followup_document_version_id)) and (self.table_type != "party-confirmations" or self.file_format != "canonical-csv"):
+            raise ValueError("Confirmation documents apply only to canonical party-confirmation sources")
+        if self.table_type == "party-confirmations":
+            if self.confirmation_response_totals is None or self.file_format != "canonical-csv":
+                raise ValueError("Party confirmations require canonical CSV and independent written-response totals, separate from requested amounts")
+        elif self.confirmation_response_totals is not None:
+            raise ValueError("Written-response totals apply only to party-confirmation sources")
         if self.inventory_quantity_controls is not None and self.table_type not in {"stock", "stock-movements"}:
             raise ValueError("Inventory quantity controls apply only to stock and stock-movement sources")
         if self.file_format == "uae-wps-sif-evp":
@@ -536,6 +550,7 @@ class WorkflowInput(Strict):
     withholding_role: WithholdingRole | None = None
     allocation_basis: Literal["invoice_face_amounts", "pre_application_balances"] | None = None
     workflow: Literal[
+        "party-balance-confirmations",
         "inventory-valuation-control",
         "india-esic-population",
         "india-document-series",
@@ -734,6 +749,7 @@ class WorkflowInput(Strict):
             "bank-subsequent-clearance",
             "subsequent-settlements",
             "balance-confirmations",
+            "party-balance-confirmations",
             "expense-cutoff",
             "going-concern-cash",
         }:

@@ -113,3 +113,8 @@ declared units on orders, receipts and invoices. Incompatible units block
 approval; money tolerance cannot hide unit-price or quantity differences. See
 [procurement controls and limits](native-adapters.md#independently-controlled-procurement-quantities--uae-then-india)
 and [synthetic AE/IN inputs](sample-inputs/SYNTHETIC-purchase-quantities/README.md).
+
+Positive party-balance confirmations now connect one customer/vendor balance
+letter to multiple invoices and credit notes, with separate GL controls,
+retained correspondence and follow-up evidence. See [scope and verification](native-adapters.md#positive-party-balance-confirmations--uae-then-india)
+and [saved UAE/India examples](sample-inputs/SYNTHETIC-party-confirmations/README.md).

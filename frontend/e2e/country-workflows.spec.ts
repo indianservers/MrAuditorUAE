@@ -1,12 +1,140 @@
 import { test, expect, type Page } from "@playwright/test";
 import { readFileSync, mkdirSync, writeFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
+import { createHash } from "node:crypto";
 import { resolve } from "node:path";
 const fixture = JSON.parse(
   readFileSync("../.local-runtime/country-workflows/fixture.json", "utf8"),
 );
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
+
+test("positive party balance evidence and retained documents for UAE then India", async ({
+  page,
+}) => {
+  test.setTimeout(180000);
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill("admin@example.com");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("test-strong-password-123");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+  for (const country of ["AE", "IN"] as const) {
+    for (const kind of ["received_customer", "alternative_vendor"] as const) {
+      const input = fixture.party_confirmations[country][kind];
+      const title = `SYNTHETIC ${country} positive party ${kind} ${Date.now()}`;
+      await page.goto(`/intelligence/${input.engagement}/country-workflow`);
+      await page
+        .getByLabel("Workflow", { exact: true })
+        .selectOption("party-balance-confirmations");
+      await loadRetainedHistory(page);
+      for (const [label, value] of [
+        ["Schedule title", title],
+        ["Reconciliation date", "2026-06-30"],
+        ["Review through date", "2026-07-15"],
+        ["Scope and source rationale", input.payload.rationale],
+      ])
+        await page.getByLabel(label, { exact: true }).fill(value);
+      for (const [role, id] of Object.entries(input.sources))
+        await page
+          .getByLabel(`${role} source`, { exact: true })
+          .selectOption(id as string);
+      await page
+        .getByRole("button", { name: "Queue calculation", exact: true })
+        .click();
+      const option = page
+        .getByLabel("Saved source or result")
+        .locator("option")
+        .filter({ hasText: title });
+      await expect(option).toHaveCount(1, { timeout: 120000 });
+      await page
+        .getByLabel("Saved source or result")
+        .selectOption((await option.getAttribute("value"))!);
+      const panel = page
+        .getByRole("heading", { name: title, exact: true })
+        .locator("..");
+      await expect(
+        panel.getByRole("cell", { name: "PARTY-0000", exact: true }),
+      ).toBeVisible();
+      await expect(
+        panel.getByRole("cell", {
+          name:
+            kind === "received_customer"
+              ? "MATCHED"
+              : "ALTERNATIVE_PROCEDURES_REQUIRE_REVIEW",
+          exact: true,
+        }),
+      ).toBeVisible();
+      await expect(
+        panel.getByRole("cell", { name: "3", exact: true }),
+      ).toBeVisible();
+      for (const notice of await page
+        .getByRole("button", { name: "Dismiss notification", exact: true })
+        .all())
+        await notice.click();
+      const schedule = panel.locator("table").last();
+      await schedule.scrollIntoViewIfNeeded();
+      await expect(
+        panel.getByRole("button", { name: "Document exception", exact: true }),
+      ).toBeInViewport({ ratio: 1 });
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-party-${kind}-schedule.png`,
+        () => schedule.screenshot(),
+      );
+      await panel
+        .getByText("Request, response and follow-up evidence", { exact: true })
+        .click();
+      const evidence = panel.getByRole("region", {
+        name: "Party confirmation evidence",
+      });
+      await expect(
+        evidence.getByText("2026-07-01", { exact: true }),
+      ).toBeVisible();
+      const prefix = kind === "received_customer" ? "response" : "followup";
+      if (kind === "alternative_vendor")
+        await expect(
+          evidence.getByText("No retained response document", { exact: true }),
+        ).toBeVisible();
+      const [download] = await Promise.all([
+        page.waitForEvent("download"),
+        evidence
+          .getByRole("button", {
+            name:
+              prefix === "followup"
+                ? "Download follow-up evidence"
+                : "Download response evidence",
+            exact: true,
+          })
+          .click(),
+      ]);
+      const path = await download.path();
+      expect(path).not.toBeNull();
+      expect(
+        createHash("sha256").update(readFileSync(path!)).digest("hex"),
+      ).toBe(input.documents[prefix].sha256);
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-party-${kind}-evidence.png`,
+        () => evidence.screenshot(),
+      );
+      await panel.getByLabel("Confirmation view").selectOption("gl-controls");
+      await expect(
+        panel.getByRole("cell", {
+          name: kind === "received_customer" ? "AR" : "AP",
+          exact: true,
+        }),
+      ).toBeVisible();
+      await expect(
+        panel.getByRole("cell", { name: "MATCHED", exact: true }),
+      ).toBeVisible();
+      if (kind === "received_customer")
+        await saveScreenshot(
+          `${shots}/${country.toLowerCase()}-party-gl.png`,
+          () => panel.locator("table").last().screenshot(),
+        );
+    }
+  }
+});
 
 test("controlled procurement quantities keep incompatible units unresolved for UAE then India", async ({
   page,

@@ -8,6 +8,26 @@ import {
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { CountryWorkflows } from "@/features/country-workflows";
 
+it("queues separate requested and written-response controls with retained party documents", async () => {
+  render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+  for (const [label, value] of [["Source table type", "party-confirmations"], ["Clean retained evidence", "clean"], ["Schedule title", "SYN positive party assessments"], ["Expected data rows", "1"], ["Independent written-response totals (JSON)", '{"AED":"150"}'], ["Shared request document (optional)", "context-clean"], ["Shared response document (optional)", "context-clean"]])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({ table_type: "party-confirmations", confirmation_response_totals: { AED: "150" }, confirmation_request_document_version_id: "context-clean", confirmation_response_document_version_id: "context-clean" });
+});
+
+it("queues only reviewed positive-party sources with an explicit review window", async () => {
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Workflow"), { target: { value: "party-balance-confirmations" } });
+  expect(within(screen.getByLabelText("responses source")).queryByRole("option", { name: /Unreviewed party/ })).not.toBeInTheDocument();
+  for (const [label, value] of [["Schedule title", "SYN party balance letter"], ["Reconciliation date", "2026-06-30"], ["Review through date", "2026-07-15"], ["Scope and source rationale", "Independent positive balance scope and source review"], ["items source", "party-items"], ["controls source", "party-controls"], ["responses source", "party-responses"]])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({ workflow: "party-balance-confirmations", review_through: "2026-07-15", source_ids: { items: "party-items", controls: "party-controls", responses: "party-responses" } });
+});
+
 it("retains independent purchase quantity controls separately from money controls", async () => {
   render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
   fireEvent.change(screen.getByLabelText("Source table type"), { target: { value: "purchase-lines" } });
@@ -161,6 +181,7 @@ vi.mock("@/hooks/use-api", () => ({
               },
               { id: "inventory-valuation-control", title: "Inventory valuation and GL controls", available: true, roles: { books: "stock", valuations: "inventory-valuations", controls: "accounting-controls" } },
               { id: "procurement-match", title: "Controlled procurement", available: true, roles: { orders: "purchase-lines", receipts: "purchase-lines", invoices: "purchase-lines", payments: "purchase-lines" } },
+              { id: "party-balance-confirmations", title: "Positive party balances", available: true, roles: { items: "audit-open-items", controls: "balance-controls", responses: "party-confirmations" } },
               {
                 id: "india-esic-population",
                 title: "India ESIC population",
@@ -309,6 +330,7 @@ vi.mock("@/hooks/use-api", () => ({
               },
             ],
             source_contracts: {
+              "party-confirmations": { id: { required: true, type: "str" }, requested_amount: { required: true, type: "Decimal" } },
               "purchase-lines": { id: { required: true, type: "str" }, uom: { required: false, type: "str" } },
               "inventory-valuations": { id: { required: true, type: "str" }, assessed_unit_cost: { required: true, type: "Decimal" } },
               "esic-members": { id: { required: true, type: "str" }, amount: { required: true, type: "Decimal" } },
@@ -475,6 +497,8 @@ vi.mock("@/hooks/use-api", () => ({
                         review_status: status === "unreviewed" ? "UNVERIFIED" : "REVIEWED", blocked: status === "blocked",
                       })),
                       ...["valuations", "controls"].map((role) => ({ id: "valuation-" + role, label: "Reviewed inventory " + role, kind: "workflow-source", table_type: role === "valuations" ? "inventory-valuations" : "accounting-controls", freshness: "CURRENT", version: 1, review_status: "REVIEWED" })),
+                      ...["items", "controls", "responses"].map(role => ({ id: "party-" + role, label: "Reviewed party " + role, kind: "workflow-source", table_type: role === "items" ? "audit-open-items" : role === "controls" ? "balance-controls" : "party-confirmations", freshness: "CURRENT", version: 1, review_status: "REVIEWED" })),
+                      { id: "party-unreviewed", label: "Unreviewed party responses", kind: "workflow-source", table_type: "party-confirmations", freshness: "CURRENT", version: 1, review_status: "UNVERIFIED" },
                       ...["opening", "payroll", "posted", "closing"].map(
                         (role) => ({
                           id: "ledger-" + role,

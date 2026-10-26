@@ -1,0 +1,2 @@
+# Keep the published synthetic supporting-document checksums portable.
+*.txt text eol=lf

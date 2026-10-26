@@ -805,6 +805,12 @@ async def main():
         for code, engagement, currency in (("AE", eid, "AED"), ("IN", india, "INR")):
             purchase_quantities[code] = {"valid": await prepare_purchases(client, h, engagement, supporting_reviewer, currency),
                 "bad_units": await prepare_purchases(client, h, engagement, supporting_reviewer, currency, receipt_unit="KG")}
+        from tests.qa_crud.test_party_confirmations import prepare as prepare_party_confirmations
+
+        party_confirmations = {}
+        for code, engagement, currency in (("AE", eid, "AED"), ("IN", india, "INR")):
+            party_confirmations[code] = {"received_customer": await prepare_party_confirmations(client, h, engagement, supporting_reviewer, currency),
+                "alternative_vendor": await prepare_party_confirmations(client, h, engagement, supporting_reviewer, currency, status="pending", with_followup=True, side="payable")}
 
         from country_bank_carryforward_fixture import prepare as prepare_carryforward
 
@@ -1051,6 +1057,7 @@ async def main():
                     "inventory_values": inventory_values,
                     "screening_candidates": screening_candidates,
                     "purchase_quantities": purchase_quantities,
+                    "party_confirmations": party_confirmations,
                     "bank_carryforward": bank_carryforward,
                     "ecr_arrear_input": arrear_input,
                     "ecr_arrear_sources": arrear_source_ids,
