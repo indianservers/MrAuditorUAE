@@ -67,63 +67,80 @@ def render(event, format):
         "Review status": body["review_status"],
         "Status": "DRAFT — NOT SIGNED OR FILED",
         "Created": event["created_at"],
+        "Export timestamp": event.get("exported_at", "NOT_RECORDED"),
+        "Source freshness at export": event.get("freshness", "NOT_EVALUATED"),
+        "Export status": "STALE_HISTORICAL_RESULT_REQUIRES_RECALCULATION" if event.get("freshness") == "STALE" else "CURRENT_RETAINED_RESULT" if event.get("freshness") == "CURRENT" else "FRESHNESS_NOT_EVALUATED",
     }
     buffer = io.BytesIO()
     if format == "xlsx":
         from openpyxl import Workbook
-        from openpyxl.cell import WriteOnlyCell
+
+        from app.modules.intelligence.xlsx_values import ExactTextWriter, XlsxValueLimitError
 
         workbook = Workbook(write_only=True)
+        writer = ExactTextWriter(workbook, value)
+        append = writer.append
+        metadata["XLSX text contract"] = "exact-text-with-continuations/1"
 
-        def append(sheet, row):
-            cells = []
-            for item in row:
-                cell = WriteOnlyCell(sheet, value=value(item))
-                cell.data_type = "s"
-                cells.append(cell)
-            sheet.append(cells)
-
-        cover = workbook.create_sheet("Report and review")
-        for key, item in metadata.items():
-            append(cover, [key, item])
-        blocks = workbook.create_sheet("Ordered blocks")
-        append(blocks, ["Number", "Title", "Kind", "Narrative", "Source receipt"])
-        source = workbook.create_sheet("Complete source chunks")
-        append(source, ["Block", "Chunk", "JSON source (concatenate chunks per block)"])
-        count = 0
-        for block in body["blocks"]:
-            append(
-                blocks,
-                [
-                    block["number"],
-                    block["title"],
-                    block["kind"],
-                    block["text"],
-                    block["source_receipt"],
-                ],
-            )
-            raw = value(block.get("data"))
-            for index in range(0, len(raw), 30000):
-                append(source, [block["number"], index // 30000 + 1, raw[index : index + 30000]])
-            for title, rows in tables(block.get("data")):
-                count += 1
-                sheet = workbook.create_sheet(f"Table {count}")
-                keys = list(dict.fromkeys(k for row in rows for k in row))
-                append(sheet, [title])
-                append(sheet, keys)
-                for row in rows:
-                    append(sheet, [value(row.get(k))[:30000] for k in keys])
+        try:
+            cover = workbook.create_sheet("Report and review")
+            cover.column_dimensions["A"].width = 34
+            cover.column_dimensions["B"].width = 120
+            for key, item in metadata.items():
+                append(cover, [key, item])
+            blocks = workbook.create_sheet("Ordered blocks")
+            blocks.freeze_panes = "A2"
+            for column, width in {"A": 10, "B": 36, "C": 24, "D": 80, "E": 80}.items():
+                blocks.column_dimensions[column].width = width
+            append(blocks, ["Number", "Title", "Kind", "Narrative", "Source receipt"])
+            source = workbook.create_sheet("Complete source chunks")
+            source.freeze_panes = "A2"
+            for column, width in {"A": 12, "B": 12, "C": 120}.items():
+                source.column_dimensions[column].width = width
+            append(source, ["Block", "Chunk", "JSON source (resolve Long values, then concatenate chunks per block)"])
+            count = 0
+            for block in body["blocks"]:
                 append(
-                    sheet,
+                    blocks,
                     [
-                        "Nested fields above 30,000 characters are abbreviated; complete original JSON is in Complete source chunks"
+                        block["number"],
+                        block["title"],
+                        block["kind"],
+                        block["text"],
+                        block["source_receipt"],
                     ],
                 )
-        workbook.save(buffer)
-        return (
-            buffer.getvalue(),
-            "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        )
+                raw = value(block.get("data"))
+                for index in range(0, len(raw), 30000):
+                    append(source, [block["number"], index // 30000 + 1, raw[index : index + 30000]], integer_columns=frozenset({2}))
+                for title, rows in tables(block.get("data")):
+                    count += 1
+                    sheet = workbook.create_sheet(f"Table {count}")
+                    keys = list(dict.fromkeys(k for row in rows for k in row))
+                    append(sheet, [title])
+                    append(sheet, keys)
+                    for row in rows:
+                        append(sheet, [row.get(k) for k in keys])
+                    append(
+                        sheet,
+                        [
+                            "Complete original JSON is in Complete source chunks; oversized cells are retained in Long values"
+                        ],
+                    )
+            if writer.long_values:
+                append(cover, ["Oversized cells", f"Full values retained: {len(writer.long_values)}. Long values contains original coordinates, ordered parts and UTF-8 checksums"])
+            writer.finish()
+            workbook.save(buffer)
+            return (
+                buffer.getvalue(),
+                "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            )
+        except XlsxValueLimitError:
+            from contextlib import suppress
+
+            with suppress(Exception):
+                workbook.save(io.BytesIO())
+            raise
     if format == "docx":
         from docx import Document
         from docx.shared import Inches, Pt

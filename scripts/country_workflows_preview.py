@@ -929,6 +929,26 @@ async def main():
             exported, _sources, _values = await retained_allocations(client, h, export_eid, pdf_final_reviewer, country)
             lossless_exports[country] = {"engagement": export_eid, "result": exported["id"], "claims": 500}
 
+        statutory_exports = {}
+        for country, entry in lossless_exports.items():
+            report_eid = entry["engagement"]
+            report_prefix = f"/api/v1/regulatory/engagements/{report_eid}"
+            template_response = await client.post(report_prefix + "/report-templates", headers=h, json={
+                "title": f"SYNTHETIC {country} complete source reporting pack",
+                "category": "uae-ifrs" if country == "AE" else "india-statutory",
+                "rationale": "Synthetic complete data export; no legal form qualification",
+                "blocks": [{"key": "cash", "title": "Reviewed settlement source", "kind": "financial_table",
+                    "source_kind": "intelligence", "source_id": entry["result"],
+                    "text": "Synthetic source scope; not signed or filed"}]})
+            assert template_response.status_code == 201, template_response.text
+            template_review = await decision(client, pdf_final_reviewer[0], report_eid, template_response.json())
+            assert template_review.status_code == 201, template_review.text
+            report_response = await client.post(report_prefix + "/reports", headers=h, json={
+                "template_id": template_review.json()["id"],
+                "rationale": "Synthetic draft generation from independently reviewed retained source and template"})
+            assert report_response.status_code == 201, report_response.text
+            statutory_exports[country] = {"engagement": report_eid, "result": report_response.json()["id"]}
+
         if implementation_hash() != implementation:
             raise RuntimeError(
                 "Backend implementation changed during fixture preparation; prepare fresh fixtures before browser verification"
@@ -950,6 +970,7 @@ async def main():
                     "withholding_split": withholding_split,
                     "entity_cash": entity_cash,
                     "lossless_exports": lossless_exports,
+                    "statutory_exports": statutory_exports,
                     "document_series": document_series,
                     "import_nil": nil_import,
                     "import_vat_sources": import_vat_sources,

@@ -85,3 +85,6 @@ Retained-history listing now reuses bounded request-local read metadata while pr
 
 
 XLSX exports now preserve oversized source/control values in ordered continuation records and show all bank cash manifest movements on a dedicated sheet. Download checksums bind the saved bytes to the export audit record. See [complete-text export behavior and bounds](native-adapters.md#complete-text-in-uae-and-india-reconciliation-xlsx-exports).
+
+
+Statutory reporting-pack exports now share the same complete-text storage and expose export-time freshness separately from draft/review status in XLSX, PDF and DOCX. See [statutory export scope and evidence](native-adapters.md#complete-statutory-reporting-pack-exports--uae-then-india); country legal-form qualification remains open.
