@@ -363,6 +363,13 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             result["native_metadata"].update(context_sha256=esic_context.sha256, context_filename=esic_context.filename)
         if arrear_context is not None:
             result["native_metadata"].update(arrear_context_sha256=arrear_context.sha256, arrear_context_filename=arrear_context.filename)
+        if data.table_type.startswith("media-"):
+            from app.modules.country_workflows.adverse_media import documents as media_documents
+
+            bindings = media_documents(result["rows"])
+            if any(str(binding["source_evidence_version_id"]) == str(evidence.id) or binding["source_sha256"] == evidence.sha256 for binding in bindings):
+                raise HTTPException(422, "Media schedules require distinct retained supporting documents")
+            dependencies.extend(await payroll_rule_documents(db, ctx, eng, bindings, contributors=supporting_contributors, label="Adverse media support"))
         if data.table_type in {"grant-budgets", "grant-allocations"}:
             from app.modules.country_workflows.grant_utilisation import documents as grant_documents
 
@@ -454,6 +461,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(422, "Withholding obligations can establish only their assessed bank-allocation purpose")
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
+        if data.workflow == "adverse-media-review" and source.body.get("review_status") != "REVIEWED":
+            raise HTTPException(409, "Independently review all media subjects, searches, mentions and policy sources before comparison")
         if data.workflow == "grant-utilisation" and source.body.get("review_status") != "REVIEWED":
             raise HTTPException(409, "Independently review all grant mandate, expenditure, allocation and ledger-control sources before comparison")
         if data.workflow == "ownership-lookthrough" and source.body.get("review_status") != "REVIEWED":
@@ -549,6 +558,15 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         sources[role] = source.body
         contributors.update(source.body.get("contributors", [str(source.created_by)]))
         dependencies.append(intelligence.event_receipt(source))
+    media_documents_receipts = None
+    if data.workflow == "adverse-media-review":
+        from app.modules.country_workflows.adverse_media import documents as media_documents
+
+        bindings = media_documents([row for source in sources.values() for row in source["rows"]])
+        if any(str(binding["source_evidence_version_id"]) == source.get("evidence_version_id") or binding["source_sha256"] == source.get("evidence_sha256") for binding in bindings for source in sources.values()):
+            raise HTTPException(422, "Media supporting documents must be distinct from all calculation source schedules")
+        media_documents_receipts = await payroll_rule_documents(db, ctx, eng, bindings, contributors=contributors, label="Adverse media support")
+        dependencies.extend(media_documents_receipts)
     grant_documents_receipts = None
     if data.workflow == "grant-utilisation":
         from app.modules.country_workflows.grant_utilisation import documents as grant_documents
@@ -655,6 +673,9 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         dependencies.append(receipt)
         contributors.update(esic_contributors)
     result = await run_in_threadpool(calculate, data, package.country, sources, bank_account_review=bank_account_review, import_nil_receipt=import_nil_receipt, esic_population_review=esic_population_review)
+    if media_documents_receipts is not None:
+        result["media_document_binding"] = "RETAINED_DOCUMENT_BYTES_VERIFIED"
+        result["retained_media_documents"] = media_documents_receipts
     if grant_documents_receipts is not None:
         result["grant_document_binding"] = "RETAINED_DOCUMENT_BYTES_VERIFIED"
         result["retained_grant_documents"] = grant_documents_receipts

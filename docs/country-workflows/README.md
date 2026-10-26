@@ -147,3 +147,9 @@ workflow, with independent position/unit controls, retained documents, explicit
 zero-held responses and source-change staleness. It keeps custody separate from
 ownership, physical attendance and valuation. See
 [scope and verification](native-adapters.md#offsite-inventory-custody-quantities-and-condition--uae-then-india).
+
+Adverse-media diligence now retains declared provider search coverage, explicit
+mention counts, original articles and human identity/risk assessments. Missing
+searches and unresolved identities block approval; zero reported mentions never
+become clearance. See [scope and source contracts](native-adapters.md#adverse-media-search-coverage-and-identity-adjudication)
+and [ten fictional UAE/India examples](sample-inputs/SYNTHETIC-adverse-media/README.md).

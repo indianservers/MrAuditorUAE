@@ -1,0 +1,64 @@
+{
+  "verified_on": "2026-10-27",
+  "workflow": "adverse-media-review",
+  "contract": "retained-adverse-media/1",
+  "implementation_sha256": "e7c816b537e5ecb51153690ac87009d2f951d839ac7f0702073e31dd33eb2890",
+  "country_order": [
+    "AE",
+    "IN"
+  ],
+  "backend": {
+    "unit_passed": 2192,
+    "calculation_regressions_passed": 11,
+    "total_passed": 2203,
+    "skipped": 4,
+    "media_api_passed": 11,
+    "latest_focused_media_and_grant_unit_passed": 118
+  },
+  "frontend": {
+    "files_passed": 45,
+    "tests_passed": 216,
+    "production_build": "passed",
+    "typescript": "passed",
+    "scoped_eslint": "passed"
+  },
+  "browser": {
+    "tests_passed": 1,
+    "real_worker_cases": 10,
+    "original_document_downloads_sha256_verified": 36,
+    "screenshots": 26,
+    "visual_review": "Final 26 captures reviewed in UAE/India contact sheets; representative scope, blocked approval, documents and corrected same/unresolved identity assessments inspected at full size"
+  },
+  "maximum_unit_population": {
+    "mentions": 5000,
+    "retained_result_rows": 5003
+  },
+  "http_paging": {
+    "mentions": 121,
+    "retained_result_rows": 124,
+    "xlsx_rows_with_header": 125
+  },
+  "saved_synthetic_sets": 10,
+  "saved_csv_txt_hashes_verified": 76,
+  "mypy_source_files": 73,
+  "scoped_ruff": "passed",
+  "utf8": "passed",
+  "authored_catalogue_cases": 154,
+  "test_boundaries": {
+    "api": "Real owned PostgreSQL, HTTP, private objects and in-process jobs; scanner and broker are explicit test doubles",
+    "browser": "Real local production frontend/API and Celery worker; source preparation used synthetic scanner/broker doubles",
+    "live_media_provider": "Not called or qualified"
+  },
+  "verification_notes": [
+    "First broad run had a ZIP/PDF extraction timeout; isolated retry and full repeated suite passed without extraction implementation changes",
+    "Browser test corrected document-order assumptions and notification expiry race; a local preview server interruption required a verified restart",
+    "Screenshot review found contradictory synthetic rationale text; corrected fixtures passed 118 focused unit/regression tests, 11 repeated API tests and the complete regenerated browser run"
+  ],
+  "qualification": "Controlled synthetic engineering evidence only",
+  "remaining": [
+    "Consented/redacted client pilot files and independently checked expected outcomes",
+    "Live/native provider qualification and source licensing assessment",
+    "Independent professional country-policy approval",
+    "Hosted security, operations and release validation"
+  ]
+}

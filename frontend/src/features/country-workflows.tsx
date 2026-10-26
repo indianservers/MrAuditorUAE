@@ -1,5 +1,10 @@
 "use client";
 
+import {
+  AdverseMediaEvidence,
+  MediaMentionAssessments,
+  type MediaScope,
+} from "./adverse-media-evidence";
 import Link from "next/link";
 import { useState } from "react";
 import { useAPI, useAction, useCan } from "@/hooks/use-api";
@@ -173,6 +178,8 @@ type Result = {
   body: {
     workflow?: string;
     retained_grant_documents?: GrantDocument[];
+    retained_media_documents?: GrantDocument[];
+    media_scope?: MediaScope;
     currency_scope?: string[];
     review_window?: { from: string; through: string };
     vat201_layout?: string;
@@ -946,173 +953,197 @@ export function CountryWorkflows({
                   ].filter((key) => allColumns.includes(key))
                 : defaultColumns;
   const columns =
-    (body?.workflow === "grant-utilisation" ||
-      body?.table_type?.startsWith("grant-")) &&
+    (body?.workflow === "adverse-media-review" ||
+      body?.table_type?.startsWith("media-")) &&
     !showRuleProvenance
       ? [
           "kind",
-          "fund_id",
-          "category",
-          "expense_id",
-          "account",
-          "currency",
-          "amount",
-          "allocated_amount",
-          "difference",
-          "opening_amount",
-          "positive_amount",
-          "negative_amount",
-          "closing_utilisation",
-          "category_ceiling",
-          "fund_ceiling",
-          "ceiling",
-          "remaining_under_signed_schedule",
+          "subject_id",
+          "name",
+          "search_id",
+          "provider",
+          "queried_on",
+          "observed_mentions",
+          "expected_mentions",
+          "article_id",
+          "title",
+          "published_on",
+          "identity_status",
+          "reported_stage",
+          "risk",
+          "disposition",
+          "followup_on",
+          "reasons",
           "state",
         ].filter((key) => allColumns.includes(key))
-      : body?.workflow === "inventory-custody-confirmations" &&
+      : (body?.workflow === "grant-utilisation" ||
+            body?.table_type?.startsWith("grant-")) &&
           !showRuleProvenance
         ? [
-            "custodian",
-            "site",
-            "sku",
-            "lot",
-            "uom",
-            "book_quantity",
-            "response_quantity",
-            "quantity_difference",
-            "condition",
+            "kind",
+            "fund_id",
+            "category",
+            "expense_id",
+            "account",
+            "currency",
+            "amount",
+            "allocated_amount",
+            "difference",
+            "opening_amount",
+            "positive_amount",
+            "negative_amount",
+            "closing_utilisation",
+            "category_ceiling",
+            "fund_ceiling",
+            "ceiling",
+            "remaining_under_signed_schedule",
             "state",
           ].filter((key) => allColumns.includes(key))
-        : body?.workflow === "ownership-lookthrough" && !showRuleProvenance
+        : body?.workflow === "inventory-custody-confirmations" &&
+            !showRuleProvenance
           ? [
-              "company",
-              "person_id",
-              "economic_fraction",
-              "fraction_scope",
-              "threshold_candidate",
-              "path_count",
+              "custodian",
+              "site",
+              "sku",
+              "lot",
+              "uom",
+              "book_quantity",
+              "response_quantity",
+              "quantity_difference",
+              "condition",
               "state",
             ].filter((key) => allColumns.includes(key))
-          : body?.cutoff_schedule_contract && !showRuleProvenance
+          : body?.workflow === "ownership-lookthrough" && !showRuleProvenance
             ? [
-                "allocation_source_id",
-                "document_source_id",
-                "counterparty",
-                "currency",
-                "recognition_date",
-                "expected_period_amount",
-                "posted_period_amount",
-                "difference",
+                "company",
+                "person_id",
+                "economic_fraction",
+                "fraction_scope",
+                "threshold_candidate",
+                "path_count",
                 "state",
               ].filter((key) => allColumns.includes(key))
-            : body?.workflow === "party-balance-confirmations" &&
-                !showRuleProvenance
-              ? (confirmationView === "gl-controls"
+            : body?.cutoff_schedule_contract && !showRuleProvenance
+              ? [
+                  "allocation_source_id",
+                  "document_source_id",
+                  "counterparty",
+                  "currency",
+                  "recognition_date",
+                  "expected_period_amount",
+                  "posted_period_amount",
+                  "difference",
+                  "state",
+                ].filter((key) => allColumns.includes(key))
+              : body?.workflow === "party-balance-confirmations" &&
+                  !showRuleProvenance
+                ? (confirmationView === "gl-controls"
+                    ? [
+                        "account",
+                        "side",
+                        "currency",
+                        "subledger_amount",
+                        "control_amount",
+                        "difference",
+                        "state",
+                      ]
+                    : [
+                        "account",
+                        "counterparty",
+                        "side",
+                        "currency",
+                        "open_item_count",
+                        "book_balance",
+                        "request_basis",
+                        "confirmation_status",
+                        "response_amount",
+                        "difference",
+                        "state",
+                      ]
+                  ).filter((key) => allColumns.includes(key))
+                : body?.workflow === "procurement-match" && !showRuleProvenance
                   ? [
-                      "account",
-                      "side",
+                      "order_id",
+                      "line_reference",
+                      "vendor",
                       "currency",
-                      "subledger_amount",
-                      "control_amount",
-                      "difference",
+                      "uom",
+                      "quantity_comparison_status",
+                      "quantities",
+                      "amounts",
+                      "exceptions",
                       "state",
-                    ]
-                  : [
-                      "account",
-                      "counterparty",
-                      "side",
-                      "currency",
-                      "open_item_count",
-                      "book_balance",
-                      "request_basis",
-                      "confirmation_status",
-                      "response_amount",
-                      "difference",
-                      "state",
-                    ]
-                ).filter((key) => allColumns.includes(key))
-              : body?.workflow === "procurement-match" && !showRuleProvenance
-                ? [
-                    "order_id",
-                    "line_reference",
-                    "vendor",
-                    "currency",
-                    "uom",
-                    "quantity_comparison_status",
-                    "quantities",
-                    "amounts",
-                    "exceptions",
-                    "state",
-                  ].filter((key) => allColumns.includes(key))
-                : body?.workflow === "sanctions-name-review" &&
-                    !showRuleProvenance
-                  ? [
-                      "id",
-                      "subject_name",
-                      "list_version",
-                      "candidate_count",
-                      "candidate_preview_truncated",
-                      "state",
-                      "reviewer_disposition",
                     ].filter((key) => allColumns.includes(key))
-                  : body?.workflow === "inventory-valuation-control" &&
+                  : body?.workflow === "sanctions-name-review" &&
                       !showRuleProvenance
-                    ? (inventoryView === "gl-controls"
-                        ? [
-                            "account",
-                            "currency",
-                            "recorded_book_value",
-                            "gl_amount",
-                            "difference",
-                            "state",
-                          ]
-                        : [
-                            "site",
-                            "sku",
-                            "lot",
-                            "uom",
-                            "currency",
-                            "book_quantity",
-                            "book_unit_cost",
-                            "assessed_unit_cost",
-                            "book_unit_nrv",
-                            "assessed_unit_nrv",
-                            "recorded_gl_basis_value",
-                            "assessed_lower_cost_nrv_value",
-                            "recorded_minus_assessed_value",
-                            "exceptions",
-                            "state",
-                          ]
-                      ).filter((key) => allColumns.includes(key))
-                    : body?.table_type === "esic-members" && !showRuleProvenance
-                      ? [
-                          "subject",
-                          "member_name",
-                          "period",
-                          "currency",
-                          "amount",
-                          "paid_days",
-                          "zero_wage_reason",
-                          "zero_day_reason",
-                          "last_working_day",
-                          "source_row",
-                        ].filter((key) => allColumns.includes(key))
-                      : body?.workflow === "india-esic-population" &&
+                    ? [
+                        "id",
+                        "subject_name",
+                        "list_version",
+                        "candidate_count",
+                        "candidate_preview_truncated",
+                        "state",
+                        "reviewer_disposition",
+                      ].filter((key) => allColumns.includes(key))
+                    : body?.workflow === "inventory-valuation-control" &&
+                        !showRuleProvenance
+                      ? (inventoryView === "gl-controls"
+                          ? [
+                              "account",
+                              "currency",
+                              "recorded_book_value",
+                              "gl_amount",
+                              "difference",
+                              "state",
+                            ]
+                          : [
+                              "site",
+                              "sku",
+                              "lot",
+                              "uom",
+                              "currency",
+                              "book_quantity",
+                              "book_unit_cost",
+                              "assessed_unit_cost",
+                              "book_unit_nrv",
+                              "assessed_unit_nrv",
+                              "recorded_gl_basis_value",
+                              "assessed_lower_cost_nrv_value",
+                              "recorded_minus_assessed_value",
+                              "exceptions",
+                              "state",
+                            ]
+                        ).filter((key) => allColumns.includes(key))
+                      : body?.table_type === "esic-members" &&
                           !showRuleProvenance
                         ? [
                             "subject",
-                            "payroll_member_name",
-                            "reported_member_name",
-                            "payroll_amount",
-                            "reported_amount",
-                            "wage_difference",
-                            "payroll_paid_days",
-                            "reported_paid_days",
-                            "paid_day_difference",
-                            "exceptions",
-                            "state",
+                            "member_name",
+                            "period",
+                            "currency",
+                            "amount",
+                            "paid_days",
+                            "zero_wage_reason",
+                            "zero_day_reason",
+                            "last_working_day",
+                            "source_row",
                           ].filter((key) => allColumns.includes(key))
-                        : baseColumns;
+                        : body?.workflow === "india-esic-population" &&
+                            !showRuleProvenance
+                          ? [
+                              "subject",
+                              "payroll_member_name",
+                              "reported_member_name",
+                              "payroll_amount",
+                              "reported_amount",
+                              "wage_difference",
+                              "payroll_paid_days",
+                              "reported_paid_days",
+                              "paid_day_difference",
+                              "exceptions",
+                              "state",
+                            ].filter((key) => allColumns.includes(key))
+                          : baseColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -3794,7 +3825,10 @@ export function CountryWorkflows({
                             (r.review_status === "REVIEWED" &&
                               (role === "payments" ||
                                 r.purchase_controls_verified === true))) &&
-                          (workflow !== "party-balance-confirmations" ||
+                          (![
+                            "party-balance-confirmations",
+                            "adverse-media-review",
+                          ].includes(workflow) ||
                             r.review_status === "REVIEWED") &&
                           (![
                             "india-invoice-register",
@@ -5264,6 +5298,22 @@ export function CountryWorkflows({
               }
             />
           )}
+          {body.workflow === "adverse-media-review" && (
+            <AdverseMediaEvidence
+              eid={eid}
+              tenant={tenant}
+              documents={body.retained_media_documents || []}
+              scope={body.media_scope}
+            />
+          )}
+          {body.table_type?.startsWith("media-") && (
+            <p role="note">
+              Retain original subject, provider query, article, identity and
+              policy file versions with their SHA-256 hashes. Expected mention
+              counts come from independently assessed search receipts; an
+              unavailable search is not a zero-result search.
+            </p>
+          )}
           {body.table_type?.startsWith("grant-") && (
             <GrantSourceNotice kind={body.table_type} />
           )}
@@ -5847,11 +5897,16 @@ export function CountryWorkflows({
               Open working-paper actions
             </Link>
           </div>
+          {body.workflow === "adverse-media-review" && (
+            <MediaMentionAssessments rows={rows} />
+          )}
           {body.workflow === "sanctions-name-review" && (
             <ScreeningCandidates key={`${selected}:${offset}`} rows={rows} />
           )}
           <div style={{ overflowX: "auto" }}>
             {(compactSource ||
+              body.workflow === "adverse-media-review" ||
+              body.table_type?.startsWith("media-") ||
               body.workflow === "grant-utilisation" ||
               body.table_type?.startsWith("grant-") ||
               compactArrearResult ||

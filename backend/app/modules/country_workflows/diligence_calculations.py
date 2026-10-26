@@ -3,6 +3,7 @@ from datetime import date
 from decimal import Decimal
 from difflib import SequenceMatcher
 
+from app.modules.country_workflows.adverse_media import compare as media_review
 from app.modules.country_workflows.audit_calculations import result
 
 
@@ -134,6 +135,7 @@ def sanctions(data, tables, country):
 
 
 DILIGENCE_CALCULATORS = {
+    "adverse-media-review": media_review,
     "kyc-edd-review": kyc,
     "ownership-lookthrough": ownership,
     "sanctions-name-review": sanctions,

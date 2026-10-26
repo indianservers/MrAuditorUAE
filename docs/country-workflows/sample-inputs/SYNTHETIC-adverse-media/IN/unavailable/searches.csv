@@ -1,0 +1,2 @@
+id,subject_id,provider,query,aliases_and_identifiers,queried_on,coverage_from,coverage_through,status,expected_mentions,licence_reference,source_evidence_version_id,source_sha256,assessment
+Q1,V1,SYNTHETIC provider,Example Trading SYN-123,Example Trading; fictional registration SYN-123,2026-06-29,2025-01-01,2026-06-28,unavailable,0,SYN-LICENCE-1,cb829227-e837-53b5-8ad3-4aaf88692f64,abd4af75f784925391bdfb64828d34366c75b92906384d92d53023b65ab27922,Synthetic uploaded search receipt with declared coverage

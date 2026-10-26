@@ -6,6 +6,8 @@ from typing import Literal
 
 from pydantic import Field, model_validator
 
+from app.modules.country_workflows.adverse_media import ROLES as MEDIA_ROLES
+from app.modules.country_workflows.adverse_media import ROW_TYPES as MEDIA_ROW_TYPES
 from app.modules.country_workflows.audit_schemas import Identifier
 from app.modules.jurisdictions.profiles import Strict
 
@@ -85,6 +87,7 @@ class ScreeningPolicy(Strict):
 
 
 DILIGENCE_ROW_TYPES: dict[str, type[Strict]] = {
+    **MEDIA_ROW_TYPES,
     "diligence-subjects": DiligenceSubject,
     "ownership-edges": OwnershipEdge,
     "ownership-policies": OwnershipPolicy,
@@ -93,6 +96,7 @@ DILIGENCE_ROW_TYPES: dict[str, type[Strict]] = {
     "screening-policies": ScreeningPolicy,
 }
 DILIGENCE_WORKFLOWS: dict[str, tuple[str, list[str], dict[str, str]]] = {
+    "adverse-media-review": ("Adverse-media search coverage and identity adjudication", [], MEDIA_ROLES),
     "kyc-edd-review": (
         "KYC periodic review and enhanced-diligence evidence",
         [],

@@ -1,0 +1,52 @@
+{
+  "dataset_kind": "SYNTHETIC_TEST_ONLY",
+  "country": "IN",
+  "case": "collision",
+  "as_of": "2026-06-30",
+  "document_ids_are_placeholders": true,
+  "document_version_placeholders": {
+    "subject.txt": "9d748dfd-c06b-5ad3-9679-d7c8a87c0581",
+    "query.txt": "2b5c6744-9dd5-5f88-a449-601d95693a91",
+    "article.txt": "298dda6b-6384-5bb1-9654-020b99fefaa5",
+    "policy.txt": "73b46b14-6abb-50c7-8b35-91196b4df55e"
+  },
+  "source_controls": {
+    "subjects": {
+      "table_type": "media-subjects",
+      "expected_rows": 1,
+      "control_totals": {}
+    },
+    "searches": {
+      "table_type": "media-searches",
+      "expected_rows": 1,
+      "control_totals": {}
+    },
+    "mentions": {
+      "table_type": "media-mentions",
+      "expected_rows": 1,
+      "control_totals": {}
+    },
+    "policy": {
+      "table_type": "media-policies",
+      "expected_rows": 1,
+      "control_totals": {}
+    }
+  },
+  "expected": {
+    "blocked": false,
+    "exception_count": 0,
+    "result_rows": 4,
+    "media_clearance_issued": false,
+    "automatic_rejection": false
+  },
+  "sha256": {
+    "article.txt": "981d07c4a18124f5efdfceb811789ec30972d26c3680df47862cc72536c0fe07",
+    "mentions.csv": "c80e9fe8519674ac9add0fd29e0cd86f789977b04026c65694e36e32ca129d45",
+    "policy.csv": "ad6eac9c4cf96da8b5c9f4f06518554fedb586779c1243b0661fe8433b281f2a",
+    "policy.txt": "66cd03666c011d9b0d0476644f413621a6c3e9d24a20dbb5bcaa0e4f168744a0",
+    "query.txt": "04ffb4c46c6a42e426ca84108d39fc99bd9076d8fa565b545598cd68ee0d8bf7",
+    "searches.csv": "3b63dce988676a851cfee5ad7661b4b8b9ab885de33aed22226abbb021f00152",
+    "subject.txt": "6bc4f9c7f67374e2511f62184774e248a2e7db7f043ed5b6898225b8ad49b668",
+    "subjects.csv": "6e713317899b2ef7374ec2c607b4a0f0079af80b344f414777acc77d14152876"
+  }
+}

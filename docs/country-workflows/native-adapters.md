@@ -2125,3 +2125,73 @@ passed. See the [verification receipt](../phase-12/grant-utilisation-verificatio
 and [browser receipt](../phase-12/grant-utilisation-browser-results.json).
 The authored catalogue remains 154; real pilots, native provider qualification,
 professional country review and hosted release validation remain open.
+
+## Adverse-media search coverage and identity adjudication
+
+The shared `adverse-media-review` workflow fills the vendor/nonprofit diligence
+gap between a name-screening candidate and a retained human media assessment.
+It uses four independently reviewed CSV sources: `media-subjects`,
+`media-searches`, `media-mentions` and `media-policies`. The policy country is the
+engagement review context; a foreign vendor or implementing partner may have a
+different country of registration. UAE and India are exercised separately. Query
+age, coverage and risk assessments are supplied policy/evidence, not statutory
+defaults or an automated legal opinion.
+
+The subject population must agree with the policy's independent count. Every
+subject needs a declared search, provider, licence reference, exact query,
+alias/identifier scope, query date, coverage dates and expected mention count.
+A completed, current query with an explicit count of zero is distinct from an
+unavailable, partial, stale or absent query. Declared coverage must agree with the
+policy; it does not prove provider or internet completeness. Search identities,
+article IDs and URLs within each search cannot be duplicated to inflate counts.
+
+Every mention retains its publisher, original URL, publication/retrieval/review
+dates, reported procedural stage, human identity rationale, risk rationale,
+disposition and any follow-up date. Concluded same/different-subject assessments
+need retained identity-support evidence. Unresolved identity, unknown publication
+date, missing or extra mentions, contradictory dispositions and absent/overdue
+required follow-up block approval. A same-subject observation requires documented
+exception disposition and independent approval even after these controls agree.
+Allegations, charges, convictions and retractions are reported source descriptions;
+the software does not authenticate them as legal facts or infer guilt.
+
+Subject, query, article, policy and identity-support documents use exact retained
+file-version IDs and SHA-256 hashes. Supporting documents must be distinct from
+the source schedules. The existing private-file verifier checks current clean
+versions, actual bytes, access and contributors, with 50 unique documents/100 MiB
+per verification. Replaced documents recursively stale dependent sources/results.
+All media sources, reads, reviews and exports reuse the existing sensitive
+diligence permission gate and maker/checker controls. No article is fetched from
+its URL automatically, no onboarding rejection or media clearance is issued, and
+follow-up dates do not enable automatic monitoring.
+
+The review screen displays declared scope, original supporting downloads and
+expandable identity/risk rationales for the current result page. Complete XLSX
+exports retain every result row and a separate original-document receipt sheet.
+Each source remains bounded to 5,000 rows. Tests retain all 5,000 article
+observations; the HTTP paging test preserves 121 mentions across result pages and
+all 124 result rows in the workbook. The
+[ten synthetic UAE/India examples](sample-inputs/SYNTHETIC-adverse-media/README.md)
+include exact file hashes, explicit counts, placeholder file-version IDs and
+expected engineering outcomes. They are not real provider/client evidence.
+
+Verification on 27 October 2026: the repeated broad suite passed 2,192 backend
+unit tests plus 11 existing calculation regressions (four skipped). After a
+synthetic rationale correction found during screenshot review, all 118 focused
+media/grant unit regressions and all 11 media PostgreSQL/HTTP tests passed again.
+All 216 frontend tests passed. The final production-browser run exercised ten
+real-worker cases across UAE then India and verified 36 original-document
+downloads by SHA-256. All 26 final captures were reviewed in country contact
+sheets, with representative scope, blocked approval, document and corrected
+identity/risk captures inspected at full size. Production build, TypeScript,
+scoped ESLint/Ruff, mypy across 73 source files and UTF-8 checks passed.
+
+The first broad run had an existing ZIP/PDF extraction timeout; its isolated retry
+and the full repeat passed without extraction changes. Browser test assumptions
+about receipt order and notification expiry were corrected; a terminated local
+preview server was verified and restarted. Final regenerated evidence passed.
+See the [verification receipt](../phase-12/adverse-media-verification.json) and
+[browser receipt](../phase-12/adverse-media-browser-results.json). Scanner/broker
+doubles during source preparation do not qualify a live provider or malware
+service. Real pilots, provider qualification, professional country-policy review
+and hosted release validation remain open. The authored catalogue stays at 154.

@@ -303,6 +303,7 @@ class SourceInput(Strict):
     expected_documents: int | None = Field(default=None, ge=0, le=1250)
     rule_document_version_id: uuid.UUID | None = None
     table_type: Literal[
+        "media-subjects", "media-searches", "media-mentions", "media-policies",
         "grant-budgets", "grant-expenses", "grant-allocations", "grant-utilisation-controls",
         "inventory-valuations",
         "esic-members",
@@ -574,7 +575,7 @@ class WorkflowInput(Strict):
     @model_validator(mode="before")
     @classmethod
     def explicit_grant_calendar(cls, value):
-        if isinstance(value,dict) and value.get("workflow")=="grant-utilisation":
+        if isinstance(value,dict) and value.get("workflow") in {"grant-utilisation", "adverse-media-review"}:
             from app.modules.country_workflows.grant_utilisation import calendar_day
 
             for key in ("as_of","period_start"):
@@ -590,6 +591,7 @@ class WorkflowInput(Strict):
     withholding_role: WithholdingRole | None = None
     allocation_basis: Literal["invoice_face_amounts", "pre_application_balances"] | None = None
     workflow: Literal[
+        "adverse-media-review",
         "grant-utilisation",
         "inventory-custody-confirmations",
         "party-balance-confirmations",
@@ -685,6 +687,8 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
+        if self.workflow == "adverse-media-review" and (self.tolerance != 0 or self.date_tolerance != 0):
+            raise ValueError("Adverse media review uses exact source counts and policy dates, without money or fuzzy date tolerances")
         if self.workflow == "grant-utilisation" and (self.period_start is None or self.period_start > self.as_of or self.period_start == date.min or self.tolerance != 0 or self.date_tolerance != 0):
             raise ValueError("Grant utilisation requires an explicit ordered period and exact controls without netting tolerance")
         if self.workflow == "inventory-valuation-control":

@@ -1,0 +1,51 @@
+{
+  "dataset_kind": "SYNTHETIC_TEST_ONLY",
+  "country": "AE",
+  "case": "unavailable",
+  "as_of": "2026-06-30",
+  "document_ids_are_placeholders": true,
+  "document_version_placeholders": {
+    "subject.txt": "cabe78d3-15cf-54c6-8b83-5a7baa884cdc",
+    "query.txt": "b51bc6ba-9662-5a2f-82d5-e2c9a4c293a2",
+    "policy.txt": "69afbec9-7922-54db-8fa2-88803610b434"
+  },
+  "source_controls": {
+    "subjects": {
+      "table_type": "media-subjects",
+      "expected_rows": 1,
+      "control_totals": {}
+    },
+    "searches": {
+      "table_type": "media-searches",
+      "expected_rows": 1,
+      "control_totals": {}
+    },
+    "mentions": {
+      "table_type": "media-mentions",
+      "expected_rows": 0,
+      "control_totals": {},
+      "nil_reason": "Fictional search receipt reports no mentions; availability is separately assessed"
+    },
+    "policy": {
+      "table_type": "media-policies",
+      "expected_rows": 1,
+      "control_totals": {}
+    }
+  },
+  "expected": {
+    "blocked": true,
+    "exception_count": 1,
+    "result_rows": 3,
+    "media_clearance_issued": false,
+    "automatic_rejection": false
+  },
+  "sha256": {
+    "mentions.csv": "9458ab56fff0385c57e7663a2109fb5c24dbd9f4c310b06a785322cb91aa91b3",
+    "policy.csv": "9746b7842848c1302817154d94032ed2e00c0f0b0c0a0ead0fc7b76f7c6f6012",
+    "policy.txt": "351387a758e83c074ef0f4f16b6bde25d1ec5fecb0e14a09a33156c1be1ca75a",
+    "query.txt": "5844e9d3755d11236f5b994064d7d6660209d4ca171a2aec0f11680157b87e28",
+    "searches.csv": "ff6d8e9aa83478c86602dc18a651ed24532fede20a5b40f54bc2807c2a08f508",
+    "subject.txt": "b1bc8fb55bdb3fc6e547d577f62e6930629c4443c457e1f798af78484afcb74e",
+    "subjects.csv": "92b149699b65274b85b13a3bd3c055c6fac3c95dde10b664844ec224d170a78b"
+  }
+}

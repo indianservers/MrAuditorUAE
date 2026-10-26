@@ -1,4 +1,6 @@
 def approval_error(body):
+    if body.get("workflow") == "adverse-media-review" and (body.get("media_review_contract") != "retained-adverse-media/1" or body.get("media_document_binding") != "RETAINED_DOCUMENT_BYTES_VERIFIED"):
+        return "Regenerate media review with current retained search, article, identity and policy evidence before approval"
     if body.get("workflow") == "grant-utilisation" and (body.get("grant_utilisation_contract") != "mandate-expenditure-allocation/1" or body.get("grant_document_binding") != "RETAINED_DOCUMENT_BYTES_VERIFIED"):
         return "Regenerate grant utilisation with current retained mandate and recovery evidence before independent approval"
     if body.get("workflow") == "ownership-lookthrough" and body.get("ownership_path_contract") != "economic-ownership-paths/1":

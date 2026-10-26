@@ -1,0 +1,2 @@
+id,name,country,identifiers,source_evidence_version_id,source_sha256,assessment
+V1,SYNTHETIC Example Trading,AE,Fictional register SYN-123; identity not authenticated,8f1c1ff9-4bd8-5cb7-9250-3368b980a905,9bd53f03bd7036070df242d56e2b852fd3bfca8cfd18a5632d37cec11539ee24,Synthetic subject identifiers independently assessed

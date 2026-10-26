@@ -73,8 +73,8 @@ def _parse_csv(content, data, defaults=None):
     ids = set()
     totals: defaultdict[str, Decimal] = defaultdict(Decimal)
     for index, raw in enumerate(reader, 2):
-        if data.table_type.startswith("grant-") and any(value is not None and value != value.strip() for value in raw.values() if isinstance(value, str)):
-            raise ValueError("Grant canonical values must be explicit without silently trimmed identities or numbers")
+        if data.table_type.startswith(("grant-", "media-")) and any(value is not None and value != value.strip() for value in raw.values() if isinstance(value, str)):
+            raise ValueError("Grant/media canonical values must be explicit without silently trimmed identities or numbers")
         if (
             len(rows) >= 5000
             or None in raw

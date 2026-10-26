@@ -66,6 +66,7 @@ def render(event, format):
         for k, v in body.items()
         if k
         in {
+            "media_review_contract", "media_document_binding", "media_scope", "identity_authenticity_established", "media_clearance_issued", "automatic_rejection",
             "grant_utilisation_contract", "grant_document_binding", "cash_availability_established", "legal_eligibility_established", "certificate_issued", "source_amount_basis", "population_basis", "currency_scope", "review_window",
             "totals",
             "totals_basis",
@@ -200,6 +201,12 @@ def render(event, format):
                 append(cover, [key, value])
             for key, value in summary.items():
                 append(cover, [key, value])
+            if body.get("workflow") == "adverse-media-review":
+                documents = workbook.create_sheet("Media documents")
+                fields = ["type", "id", "record_id", "number", "sha256"]
+                append(documents, fields)
+                for document in body.get("retained_media_documents", []):
+                    append(documents, [document.get(field) for field in fields])
             if body.get("workflow") == "grant-utilisation":
                 documents = workbook.create_sheet("Grant documents")
                 fields = ["type", "id", "record_id", "number", "sha256"]

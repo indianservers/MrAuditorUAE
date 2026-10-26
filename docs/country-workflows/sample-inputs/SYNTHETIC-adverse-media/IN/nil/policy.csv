@@ -1,0 +1,2 @@
+id,country,effective_from,effective_to,coverage_from,coverage_through,maximum_query_age_days,expected_subjects,source_evidence_version_id,source_sha256,assessment
+P1,IN,2026-01-01,2026-12-31,2025-01-01,2026-06-28,7,1,34fbf2b0-6232-518f-bbc6-a745a3c1edd4,21de1f5277ffd1d71cdbf14a3d8c5c902df4c2d75b3b585d69e44f6979c4f414,"Synthetic reviewed provider, scope and revalidation policy"
