@@ -1969,9 +1969,10 @@ paths are reused; monitoring keeps source dependencies and returns candidates
 for review. A changed source blocks recalculation; an implementation change
 creates a new snapshot. The import form exposes history and population controls;
 the generic policy editor exposes effective dates and direct scope mappings.
-Current generic result/history views retain the complete bounded arrays. A
-specialized SoD paged viewer and full workbook export remain future usability
-work, not claimed as delivered by this increment.
+The professional SoD read model now provides independently paged row collections,
+a saved-snapshot selector and a complete workbook. Compact calculation/history
+requests omit the large assignment/result collections while the frozen snapshot
+retains them. See the reporting contract below.
 
 Bounds are 10,000 input assignments, 100 incompatible permission pairs, 1,000
 direct scope relationships, 1,000,000 interval comparisons and 10,000 retained
@@ -2001,3 +2002,74 @@ were visually inspected. Production build, TypeScript, scoped ESLint/Ruff, mypy
 across 16 GRC modules and UTF-8 checks passed. See the
 [verification receipt](../phase-12/sod-history-verification.json) and
 [browser receipt](../phase-12/sod-history-browser-results.json).
+
+
+## Professional SoD reporting
+
+The same reviewed SoD calculations now have a compact summary and eight separately
+paged collections: conflicts, conflict intervals, original assignment-pair links,
+original input assignments, direct scope mappings, permission pairs, source
+receipts and record dependencies. API pages default to 100 rows with a maximum
+of 500; the screen requests 50 at a time and preserves independent page positions.
+The imported workpaper population is also rendered 50 rows at a time, including
+before approval. Its original one-based indices match the frozen assignment
+links. The screen presents evidence at full workspace width with bounded,
+keyboard-focusable table scrolling instead of rendering the entire population
+inside the narrow generic workpaper panel.
+
+Saved calculations are selectable separately from freezing a new calculation.
+A historical snapshot remains readable after a source is reopened. Current
+record-version status and calculation-implementation status are separate labels.
+The read model does not re-read original file bytes or represent source receipts
+as current verification; file checks were recorded at freeze. A source change
+still blocks a fresh calculation pending reassessment. Permission-pair definitions
+are retained for newly frozen runs. An older interval snapshot without the full
+pair definition is explicitly labelled rather than filled from today's policy.
+
+The complete XLSX includes Scope, Conflicts, Conflict intervals, Assignment links,
+Assignments, Scope mappings, Permission pairs, Source receipts and Dependencies.
+Every retained row is exported independently of the displayed page. Conflicts
+retain counts and links rather than large nested arrays in individual cells.
+Scope metadata recursively retains optional nested workpaper source references.
+Formula-prefixed identifiers remain literal text. Absent values stay blank,
+explicit false remains false, and generated nonnegative indices/counts are
+numeric. The existing exact-text writer retains oversized or newline-heavy text
+in ordered Long values parts with hashes. XML-incompatible characters use a
+separate Encoded values sheet with exact UTF-8 base64, hash and source coordinate.
+The shared continuation bound is 64 MiB; an exceeded representation bound
+rejects export with an explicit partitioning requirement, never truncation.
+
+Read and export authorize the exact tenant, engagement and SoD run. Owner-scoped
+and board roles cannot use the professional read model, and unassigned audit
+roles do not gain engagement access. Export records an audit-log receipt. The
+legacy full calculation/history response remains available; new SoD screens
+request compact responses and fetch retained collections separately.
+
+
+Verification completed 27 October 2026: 2,074 backend unit tests and 11 existing
+GRC calculation tests passed (four skipped); 210 frontend tests passed. Five
+owned PostgreSQL/API tests passed: two reporting flows, the two existing
+history/source/monitoring flows, and the existing GRC approval/owner-isolation
+regression. The maximum-input workbook test retains all 10,000 assignments,
+5,000 conflicts and 5,000 original assignment-pair links. Tests preserve literal
+formula-prefixed identifiers, false versus absent values, newline-heavy text,
+XML control characters and nested workpaper source references. Authorization
+tests reject owner/board roles, unassigned auditors and a different tenant.
+Historical exports preserve snapshot data/hash after a source is reopened.
+
+One production-browser test exercised UAE then India using 242 assignments and
+121 conflicts per country. It verified independent conflict/link/assignment
+paging, the final assignment index, and all rows in four complete workbook
+downloads before and after independent source reopening. Hyphenated collection
+paths pass through the application gateway. All six screenshots were visually
+inspected. Production build, TypeScript, scoped ESLint/Ruff, mypy across 18 source
+files and UTF-8 checks passed. The first broad backend run had a Windows OCR
+child queue handle failure; both an isolated retry and the full repeated suite
+passed. No OCR implementation change or extraction qualification is claimed.
+See the [reporting verification receipt](../phase-12/sod-reporting-verification.json)
+and [browser receipt](../phase-12/sod-reporting-browser-results.json).
+
+These are controlled synthetic tests. They do not supply real client inputs,
+independently checked client expectations, native ERP qualification, country
+framework adoption or hosted release validation. The authored catalogue remains
+154 scenarios, with real pilot evidence still pending in `pilot-data/`.

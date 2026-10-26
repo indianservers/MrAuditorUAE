@@ -13,6 +13,7 @@ import type { Engagement, Page, RecordRow } from "@/types/models";
 import { PageHeader } from "./shared";
 import { PaperEditor, label, type Paper, type Schema } from "./grc-forms";
 import { ComplianceFiling } from "./compliance-filing";
+import { SoDCalculation, SoDInputAssignments } from "./sod-results";
 
 export const grcAreas = [
   ["command", "Internal Audit Command Center", ""],
@@ -325,7 +326,13 @@ function Panel({
           )}
           {area === "obligations" && <Calendar rows={rows} />}
           {area === "third-parties" && <VendorReview rows={rows} />}
-          <div className="grc-split">
+          <div
+            className={
+              detail?.kind === "grc-sod-access"
+                ? "grc-split grc-sod-split"
+                : "grc-split"
+            }
+          >
             <div className="grc-grid">
               <FinancialDataGrid
                 name={`grc-${area}-${kind}`}
@@ -359,9 +366,30 @@ function Panel({
                 <span className="grc-status">
                   {detail.status} · v{detail.version}
                 </span>
-                <Narrative value={detail.body} />
+                {detail.kind === "grc-sod-access" ? (
+                  <>
+                    <Narrative
+                      value={Object.fromEntries(
+                        Object.entries(detail.body).filter(
+                          ([key]) => key !== "assignments",
+                        ),
+                      )}
+                    />
+                    <SoDInputAssignments
+                      key={detail.id}
+                      assignments={
+                        Array.isArray(detail.body.assignments)
+                          ? detail.body.assignments
+                          : []
+                      }
+                    />
+                  </>
+                ) : (
+                  <Narrative value={detail.body} />
+                )}
                 {area === "obligations" &&
-                  (permissions.includes("compliance.manage") || permissions.includes("compliance.approve")) && (
+                  (permissions.includes("compliance.manage") ||
+                    permissions.includes("compliance.approve")) && (
                     <ComplianceFiling
                       key={`${detail.id}:${detail.version}`}
                       base={base}
@@ -376,6 +404,17 @@ function Panel({
                   />
                 )}
                 {area === "testing" && <SampleSelector base={base} />}
+                {detail.kind === "grc-sod-access" && (
+                  <SoDCalculation
+                    key={detail.id}
+                    base={base}
+                    paper={detail.id}
+                    canCalculate={
+                      detail.status === "APPROVED" &&
+                      permissions.includes("grc.calculate")
+                    }
+                  />
+                )}
                 {area === "rules" &&
                   permissions.includes("monitor.job.execute") && (
                     <MonitorRun base={base} paper={detail} />
@@ -471,13 +510,7 @@ function Panel({
                   )}
                   {detail.status === "APPROVED" &&
                     permissions.includes("grc.calculate") &&
-                    [
-                      "assessment",
-                      "plan",
-                      "kri",
-                      "sod-access",
-                      "test",
-                    ].includes(kind) && (
+                    ["assessment", "plan", "kri", "test"].includes(kind) && (
                       <Calculation base={base} paper={detail} />
                     )}
                 </div>

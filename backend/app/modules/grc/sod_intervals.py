@@ -175,6 +175,10 @@ def calculate(rule, access):
         "definition_effective_from": effective_from.isoformat() if effective_from else None,
         "definition_effective_to": effective_to.isoformat() if effective_to else None,
         "scope_mappings": mappings,
+        "permission_pairs": [
+            {"first": pair.first, "second": pair.second, "rationale": pair.rationale}
+            for pair in rule.pairs
+        ],
         "conflicts": conflicts,
         "count": len(conflicts),
         "conflict_intervals": intervals,

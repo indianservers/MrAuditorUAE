@@ -4003,6 +4003,51 @@ kbd,
   border-radius: 6px;
   background: var(--surface, #fff);
 }
+.grc-sod-split {
+  flex-direction: column;
+}
+.grc-sod-split .grc-grid {
+  flex: none;
+  height: 300px;
+  width: 100%;
+}
+.grc-sod-split .grc-detail {
+  width: 100%;
+  min-width: 0;
+  resize: none;
+  max-height: none;
+}
+.sod-results dl {
+  display: grid;
+  grid-template-columns: minmax(140px, 220px) minmax(0, 1fr);
+  gap: 8px 16px;
+}
+.sod-results dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.sod-results details,
+.sod-input {
+  border-top: 1px solid var(--border, #dbe4ef);
+  padding: 12px 0;
+  min-width: 0;
+}
+.sod-results summary,
+.sod-input summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.sod-results table,
+.sod-input table {
+  min-width: 100%;
+  border-collapse: collapse;
+}
+.sod-results th,
+.sod-input th {
+  position: sticky;
+  top: 0;
+  background: var(--surface, #fff);
+}
 .grc-values {
   font-size: 12px;
   line-height: 1.65;

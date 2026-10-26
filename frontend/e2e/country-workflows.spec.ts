@@ -9,6 +9,154 @@ const fixture = JSON.parse(
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
 
+test("paged SoD snapshots and complete historical exports for UAE then India", async ({
+  page,
+}) => {
+  test.setTimeout(180000);
+  page.setDefaultTimeout(30000);
+  const saved = JSON.parse(
+    readFileSync(
+      "../.local-runtime/country-workflows/sod-reporting-fixture.json",
+      "utf8",
+    ),
+  );
+  const folder = "../docs/country-workflows/screenshots/sod-reporting";
+  mkdirSync(folder, { recursive: true });
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill("admin@example.com");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("test-strong-password-123");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+  for (const country of ["AE", "IN"] as const) {
+    const input = saved.cases[country];
+    await page.goto("/settings/countries");
+    await page
+      .getByLabel("Working country", { exact: true })
+      .selectOption(country);
+    await expect(
+      page.getByLabel("Working country", { exact: true }),
+    ).toHaveValue(country);
+    await page.goto(`/grc/${input.engagement}/sod`);
+    await page.getByText(input.reference, { exact: true }).click();
+    await expect(
+      page.getByRole("heading", { name: "Frozen SoD results", exact: true }),
+    ).toBeVisible();
+    await expect(
+      page.getByText(/Record versions: CURRENT_RECORD_VERSIONS/),
+    ).toBeVisible();
+    await page
+      .getByRole("button", { name: "Next Conflicts", exact: true })
+      .click();
+    await page
+      .getByRole("button", { name: "Next Conflicts", exact: true })
+      .click();
+    const conflicts = page.getByRole("region", {
+      name: "Conflicts rows",
+      exact: true,
+    });
+    await expect(
+      conflicts.getByText(`SYN-${country}-user-0120`, { exact: true }),
+    ).toBeVisible();
+    await expect(conflicts.getByRole("row")).toHaveCount(22);
+    await conflicts.scrollIntoViewIfNeeded();
+    await page.screenshot({ path: `${folder}/${country}-conflicts.png` });
+    await page
+      .locator("summary")
+      .filter({ hasText: /^Assignment links$/ })
+      .click();
+    await page
+      .getByRole("button", { name: "Next Assignment links", exact: true })
+      .click();
+    const links = page.getByRole("region", {
+      name: "Assignment links rows",
+      exact: true,
+    });
+    await expect(
+      links.getByText(`SYN-${country}-user-0050`, { exact: true }),
+    ).toBeVisible();
+    await expect(
+      conflicts.getByText(`SYN-${country}-user-0120`, { exact: true }),
+    ).toBeVisible();
+    await page
+      .locator("summary")
+      .filter({ hasText: /^Original assignments$/ })
+      .click();
+    for (let index = 0; index < 4; index++)
+      await page
+        .getByRole("button", { name: "Next Original assignments", exact: true })
+        .click();
+    const assignments = page.getByRole("region", {
+      name: "Original assignments rows",
+      exact: true,
+    });
+    await expect(assignments.getByRole("row")).toHaveCount(43);
+    await expect(
+      assignments.getByRole("cell", { name: "242", exact: true }),
+    ).toBeVisible();
+    await assignments.scrollIntoViewIfNeeded();
+    await page.screenshot({ path: `${folder}/${country}-assignments.png` });
+
+    async function download(status: string) {
+      const wait = page.waitForEvent("download");
+      await page
+        .getByRole("button", {
+          name: "Download complete SoD workbook",
+          exact: true,
+        })
+        .click();
+      const file = await wait;
+      const path = resolve(
+        `../.local-runtime/country-workflows/sod-${country}-${status}.xlsx`,
+      );
+      await file.saveAs(path);
+      const counts = JSON.parse(
+        execFileSync(
+          "../backend/.venv/Scripts/python.exe",
+          [
+            "-c",
+            "import json,sys; from openpyxl import load_workbook; b=load_workbook(sys.argv[1]); s=list(b['Scope'].values); print(json.dumps({'conflicts':b['Conflicts'].max_row-1,'assignments':b['Assignments'].max_row-1,'links':b['Assignment links'].max_row-1,'pairs':b['Permission pairs'].max_row-1,'status':next(r[2] for r in s if r[0]=='snapshot' and r[1]=='record_versions_status')}))",
+            path,
+          ],
+          { encoding: "utf8" },
+        ),
+      );
+      expect(counts).toEqual({
+        conflicts: 121,
+        assignments: 242,
+        links: 121,
+        pairs: 1,
+        status,
+      });
+    }
+    await download("CURRENT_RECORD_VERSIONS");
+    const reopened = await page.request.post(
+      `http://127.0.0.1:58014/api/v1/engagements/${input.engagement}/audit/records/${input.source.id}/actions`,
+      {
+        headers: saved.reviewer,
+        data: {
+          version: input.source.version,
+          action: "reopen",
+          comments:
+            "Synthetic independent source reopening for historical reporting verification",
+        },
+      },
+    );
+    expect(reopened.status()).toBe(200);
+    await page.reload();
+    await page.getByText(input.reference, { exact: true }).click();
+    await expect(
+      page.getByText(/Record versions: STALE_HISTORICAL_SNAPSHOT/),
+    ).toBeVisible();
+    await page
+      .getByRole("heading", { name: "Frozen SoD results", exact: true })
+      .scrollIntoViewIfNeeded();
+    await page.screenshot({ path: `${folder}/${country}-historical.png` });
+    await download("STALE_HISTORICAL_SNAPSHOT");
+  }
+});
+
 test("SoD import exposes explicit history coverage and separate controls", async ({
   page,
 }) => {

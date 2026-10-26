@@ -1,0 +1,75 @@
+{
+  "scope": "SYNTHETIC_OWNED_LOCAL_VERIFICATION_ONLY",
+  "feature": "Professional SoD paging, historical snapshots and complete XLSX",
+  "calculation_contract": "permission-overlap-intervals/1",
+  "calculation_implementation_sha256": "4a31d9ed2507fff6091a567610b770dc2c875dfaf2bcc21c61a1d192fd9dc2a0",
+  "reporting_implementation_sha256": "ecb7d3a6e35ea423e26de0e42591f4c0d44987bf8c5a461c5b762cc3f54d07d8",
+  "reporting_implementation_files": [
+    "backend/app/modules/grc/sod_reporting.py",
+    "backend/app/api/v1/grc.py",
+    "frontend/src/features/sod-results.tsx",
+    "frontend/src/features/grc-studio.tsx",
+    "frontend/src/styles/globals.css"
+  ],
+  "country_order": [
+    "AE",
+    "IN"
+  ],
+  "backend": {
+    "unit_passed": 2074,
+    "phase10_calculation_regressions_passed": 11,
+    "combined_passed": 2085,
+    "skipped": 4,
+    "initial_run": {
+      "passed": 2084,
+      "failed": 1,
+      "failure": "Windows OCR child queue WinError 6: invalid handle"
+    },
+    "isolated_ocr_retry_passed": true,
+    "full_repeat_passed": true,
+    "ocr_implementation_changed": false
+  },
+  "frontend_tests_passed": 210,
+  "database_api": {
+    "passed": 5,
+    "reporting_country_flows": 2,
+    "history_country_regressions": 2,
+    "existing_grc_regression": 1
+  },
+  "browser": {
+    "passed": 1,
+    "countries": 2,
+    "complete_downloads": 4,
+    "screenshots_visually_inspected": 6,
+    "report": "docs/phase-12/sod-reporting-browser-results.json"
+  },
+  "api_page_maximum": 500,
+  "ui_page_size": 50,
+  "independent_collections": 8,
+  "max_assignment_population_export_tested": 10000,
+  "complete_conflicts_exported_at_bound": 5000,
+  "complete_assignment_links_exported_at_bound": 5000,
+  "api_browser_population": {
+    "assignments": 242,
+    "conflicts": 121,
+    "assignment_links": 121,
+    "permission_pairs": 1
+  },
+  "build": "passed",
+  "typescript": "passed",
+  "scoped_eslint_ruff": "passed",
+  "mypy_source_files": 18,
+  "utf8": "passed",
+  "source_bytes_reverified_on_read": false,
+  "historical_reads_preserve_snapshot": true,
+  "actual_client_files_supplied": false,
+  "native_provider_qualified": false,
+  "sox_ifc_country_applicability_inferred": false,
+  "authored_synthetic_catalogue_count": 154,
+  "remaining": [
+    "Real client inputs and independently checked client expectations/review records",
+    "Native ERP provider extraction, completeness and role/timezone semantics qualification",
+    "Professional country/framework applicability assessment",
+    "Hosted release qualification"
+  ]
+}

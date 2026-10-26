@@ -29,7 +29,9 @@ Actor = Annotated[Context, Depends(require("grc.read"))]
 
 class FilingTransition(Strict):
     version: int = Field(ge=1)
-    stage: str = Field(pattern="^(not_started|preparing|under_review|approved_for_submission|submitted|acknowledged)$")
+    stage: str = Field(
+        pattern="^(not_started|preparing|under_review|approved_for_submission|submitted|acknowledged)$"
+    )
     submission_evidence_id: uuid.UUID | None = None
     acknowledgment_evidence_id: uuid.UUID | None = None
 
@@ -43,7 +45,9 @@ async def compliance_reminders(eid: uuid.UUID, db: DB, ctx: Actor):
 
 
 @router.post("/engagements/{eid}/obligations/{rid}/filing-stage")
-async def filing_stage(eid: uuid.UUID, rid: uuid.UUID, data: FilingTransition, db: DB, ctx: Actor, request: Request):
+async def filing_stage(
+    eid: uuid.UUID, rid: uuid.UUID, data: FilingTransition, db: DB, ctx: Actor, request: Request
+):
     from app.modules.grc.filing import transition
 
     return await transition(db, ctx, eid, rid, data, request.state.request_id)
@@ -55,21 +59,39 @@ async def compliance_calendar(eid: uuid.UUID, db: DB, ctx: Actor):
     from app.modules.lineage.working_papers import freshness
 
     await audit.engagement(db, ctx, eid, "grc.read")
-    rows = (await db.scalars(select(AuditRecord).where(
-        AuditRecord.tenant_id == ctx.tenant_id, AuditRecord.engagement_id == eid,
-        AuditRecord.kind == "grc-obligation",
-    ).order_by(AuditRecord.created_at.desc(), AuditRecord.id).limit(200))).all()
+    rows = (
+        await db.scalars(
+            select(AuditRecord)
+            .where(
+                AuditRecord.tenant_id == ctx.tenant_id,
+                AuditRecord.engagement_id == eid,
+                AuditRecord.kind == "grc-obligation",
+            )
+            .order_by(AuditRecord.created_at.desc(), AuditRecord.id)
+            .limit(200)
+        )
+    ).all()
     items = []
     for obj in rows:
         await service.authorize_record(db, ctx, obj)
         current = await freshness(db, ctx, obj)
-        items.append({"record_id": str(obj.id), "version": obj.version, "reference": obj.reference,
-            "deadline": obj.body.get("deadline"), "extension_deadline": obj.body.get("extension_deadline"),
-            "deadline_kind": obj.body.get("deadline_kind", "unresolved"),
-            "filing_stage": obj.body.get("filing_stage", "not_started"),
-            "calendar_state": state(obj.body, local_today(obj.body)), "freshness": current,
-            "reassessment_required": current != "CURRENT", "review_status": obj.status,
-            "owner_id": obj.body["owner_id"], "reviewer_id": obj.body.get("reviewer_id")})
+        items.append(
+            {
+                "record_id": str(obj.id),
+                "version": obj.version,
+                "reference": obj.reference,
+                "deadline": obj.body.get("deadline"),
+                "extension_deadline": obj.body.get("extension_deadline"),
+                "deadline_kind": obj.body.get("deadline_kind", "unresolved"),
+                "filing_stage": obj.body.get("filing_stage", "not_started"),
+                "calendar_state": state(obj.body, local_today(obj.body)),
+                "freshness": current,
+                "reassessment_required": current != "CURRENT",
+                "review_status": obj.status,
+                "owner_id": obj.body["owner_id"],
+                "reviewer_id": obj.body.get("reviewer_id"),
+            }
+        )
     return {"items": items, "bounded_to": 200, "external_submission_performed": False}
 
 
@@ -211,8 +233,86 @@ async def history(eid: uuid.UUID, rid: uuid.UUID, db: DB, ctx: Actor):
 
 
 @router.post("/engagements/{eid}/records/{rid}/calculate", status_code=201)
-async def calculate(eid: uuid.UUID, rid: uuid.UUID, db: DB, ctx: Actor):
-    return audit.serialize(await operations.calculate(db, ctx, eid, rid))
+async def calculate(eid: uuid.UUID, rid: uuid.UUID, db: DB, ctx: Actor, compact_sod: bool = False):
+    run = await operations.calculate(db, ctx, eid, rid)
+    result = audit.serialize(run)
+    if compact_sod and run.kind == "sod-access" and run.results.get("sod_contract"):
+        from app.modules.grc.sod_reporting import compact
+
+        result["results"] = compact(run)
+        result["inputs"] = {key: value for key, value in run.inputs.items() if key != "assignments"}
+    return result
+
+
+@router.get("/engagements/{eid}/runs/{rid}/sod")
+async def sod_summary(eid: uuid.UUID, rid: uuid.UUID, db: DB, ctx: Actor):
+    from app.modules.grc.sod_reporting import read, summary
+
+    run, state = await read(db, ctx, eid, rid)
+    return summary(run, state)
+
+
+@router.get("/engagements/{eid}/runs/{rid}/sod/export")
+async def sod_export(eid: uuid.UUID, rid: uuid.UUID, db: DB, ctx: Actor, request: Request):
+    from fastapi.responses import Response
+    from starlette.concurrency import run_in_threadpool
+
+    from app.modules.grc.sod_reporting import read, workbook
+
+    run, state = await read(db, ctx, eid, rid)
+    try:
+        content = await run_in_threadpool(workbook, run, state)
+    except ValueError as error:
+        raise HTTPException(
+            422,
+            "Complete SoD workbook exceeds its representation bounds; partition the reviewed scope",
+        ) from error
+    log(
+        db,
+        ctx,
+        "grc.sod.export",
+        rid,
+        request.state.request_id,
+        {
+            "engagement_id": str(eid),
+            "record_versions_status": state["record_versions_status"],
+            "snapshot_sha256": run.sha256,
+        },
+    )
+    return Response(
+        content,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers={
+            "Content-Disposition": f'attachment; filename="sod-{rid}.xlsx"',
+            "Cache-Control": "no-store",
+        },
+    )
+
+
+@router.get("/engagements/{eid}/runs/{rid}/sod/rows/{collection}")
+async def sod_rows(
+    eid: uuid.UUID,
+    rid: uuid.UUID,
+    collection: str,
+    db: DB,
+    ctx: Actor,
+    offset: int = Query(0, ge=0),
+    limit: int = Query(100, ge=1, le=500),
+):
+    from app.modules.grc.sod_reporting import COLLECTIONS, read, rows
+
+    collection = collection.replace("-", "_")
+    if collection not in COLLECTIONS:
+        raise HTTPException(404, "Unknown SoD row collection")
+    run, state = await read(db, ctx, eid, rid)
+    values = rows(run, collection)
+    return dict(
+        items=values[offset : offset + limit],
+        total=len(values),
+        offset=offset,
+        limit=limit,
+        **state,
+    )
 
 
 @router.post("/engagements/{eid}/internal-audits/{rid}/transitions", status_code=201)
@@ -228,6 +328,8 @@ async def runs(
     kind: str | None = None,
     limit: int = Query(50, ge=1, le=100),
     offset: int = Query(0, ge=0),
+    record_id: uuid.UUID | None = None,
+    compact_sod: bool = False,
 ):
     await audit.engagement(db, ctx, eid, "grc.read")
     if await service.owner_scoped(db, ctx, eid):
@@ -239,6 +341,8 @@ async def runs(
     ]
     if kind:
         where.append(GRCRun.kind == kind)
+    if record_id:
+        where.append(GRCRun.record_id == record_id)
     rows = (
         await db.scalars(
             select(GRCRun)
@@ -248,8 +352,19 @@ async def runs(
             .limit(limit)
         )
     ).all()
+    items = []
+    for row in rows:
+        item = audit.serialize(row)
+        if compact_sod and row.kind == "sod-access" and row.results.get("sod_contract"):
+            from app.modules.grc.sod_reporting import compact
+
+            item["results"] = compact(row)
+            item["inputs"] = {
+                key: value for key, value in row.inputs.items() if key != "assignments"
+            }
+        items.append(item)
     return {
-        "items": [audit.serialize(x) for x in rows],
+        "items": items,
         "total": await db.scalar(select(func.count()).select_from(GRCRun).where(*where)),
     }
 
