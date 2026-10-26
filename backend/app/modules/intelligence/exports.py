@@ -224,7 +224,16 @@ def render(event, format):
                     for prefix, date_field in (("request", "requested_on"), ("response", "responded_on"), ("followup", "followup_on")):
                         if evidence.get(prefix + "_evidence_version_id"):
                             append(documents, [*identity, position.get("confirmation_status"), evidence.get("request_basis"), evidence.get("scope_balance"), evidence.get("requested_amount"), prefix, evidence.get(date_field), evidence[prefix + "_evidence_version_id"], evidence[prefix + "_source_sha256"], evidence[prefix + "_reference"], evidence.get("contact_verified"), evidence.get("independently_received"), evidence.get("scope_assessment"), evidence.get("followup_kind") if prefix == "followup" else None, evidence.get("followup_assessment") if prefix == "followup" else None, "RETAINED_IDENTITY_ONLY"])
+            if body.get("workflow") == "inventory-custody-confirmations":
+                documents = workbook.create_sheet("Custody documents")
+                append(documents, ["result_row_id", "position_source_id", "custodian", "site", "sku", "lot", "uom", "document_role", "document_date", "evidence_version_id", "source_sha256", "reference", "evidence_status"])
+                for position in body.get("rows", []):
+                    evidence = position.get("confirmation_evidence") or {}
+                    for role, date_field in (("request", "requested_on"), ("response", "responded_on"), ("followup", "followup_on")):
+                        if evidence.get(role + "_evidence_version_id"):
+                            append(documents, [*[position.get(field) for field in ("id", "position_source_id", "custodian", "site", "sku", "lot", "uom")], role, evidence.get(date_field), evidence[role + "_evidence_version_id"], evidence[role + "_source_sha256"], evidence[role + "_reference"], "RETAINED_IDENTITY_ONLY"])
             for key, title, fields in (
+                ("custody_quantity_controls", "Custody quantity controls", ["source_role", "position_id", "custodian", "site", "sku", "lot", "uom", "quantity", "response_quantity"]),
                 ("ownership_paths", "Ownership paths", ["path_id", "subject_company", "person_id", "kind", "economic_fraction", "reach_fraction", "gap_reason", "gap_at_company", "observed_outgoing_fraction", "edge_count", "edge_source_ids", "company_owner_chain", "source_graph_complete"]),
                 ("ownership_path_steps", "Ownership path steps", ["path_id", "subject_company", "step", "edge_source_id", "company", "owner", "owner_kind", "fraction", "effective_from", "effective_to", "evidence_reference"]),
                 ("cutoff_document_controls", "Cutoff document controls", ["document_source_id", "counterparty", "reference", "currency", "document_kind", "document_amount", "allocated_amount", "difference", "allocation_rows", "state"]),

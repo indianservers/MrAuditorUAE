@@ -210,6 +210,8 @@ type Result = {
       coverage_rows?: number;
     };
     confirmation_coverage_links?: Record<string, unknown>[];
+    custody_confirmation_contract?: string;
+    custody_quantity_controls?: Record<string, unknown>[];
     ownership_path_contract?: string;
     ownership_paths?: Record<string, unknown>[];
     ownership_path_steps?: Record<string, unknown>[];
@@ -421,6 +423,7 @@ export function CountryWorkflows({
   const [inventoryControls, setInventoryControls] = useState("[]");
   const [inventoryValueControls, setInventoryValueControls] = useState("[]");
   const [purchaseControls, setPurchaseControls] = useState("[]");
+  const [custodyControls, setCustodyControls] = useState("[]");
   const [confirmationDocuments, setConfirmationDocuments] = useState<
     Record<string, string>
   >({});
@@ -935,135 +938,149 @@ export function CountryWorkflows({
                   ].filter((key) => allColumns.includes(key))
                 : defaultColumns;
   const columns =
-    body?.workflow === "ownership-lookthrough" && !showRuleProvenance
+    body?.workflow === "inventory-custody-confirmations" && !showRuleProvenance
       ? [
-          "company",
-          "person_id",
-          "economic_fraction",
-          "fraction_scope",
-          "threshold_candidate",
-          "path_count",
+          "custodian",
+          "site",
+          "sku",
+          "lot",
+          "uom",
+          "book_quantity",
+          "response_quantity",
+          "quantity_difference",
+          "condition",
           "state",
         ].filter((key) => allColumns.includes(key))
-      : body?.cutoff_schedule_contract && !showRuleProvenance
+      : body?.workflow === "ownership-lookthrough" && !showRuleProvenance
         ? [
-            "allocation_source_id",
-            "document_source_id",
-            "counterparty",
-            "currency",
-            "recognition_date",
-            "expected_period_amount",
-            "posted_period_amount",
-            "difference",
+            "company",
+            "person_id",
+            "economic_fraction",
+            "fraction_scope",
+            "threshold_candidate",
+            "path_count",
             "state",
           ].filter((key) => allColumns.includes(key))
-        : body?.workflow === "party-balance-confirmations" &&
-            !showRuleProvenance
-          ? (confirmationView === "gl-controls"
+        : body?.cutoff_schedule_contract && !showRuleProvenance
+          ? [
+              "allocation_source_id",
+              "document_source_id",
+              "counterparty",
+              "currency",
+              "recognition_date",
+              "expected_period_amount",
+              "posted_period_amount",
+              "difference",
+              "state",
+            ].filter((key) => allColumns.includes(key))
+          : body?.workflow === "party-balance-confirmations" &&
+              !showRuleProvenance
+            ? (confirmationView === "gl-controls"
+                ? [
+                    "account",
+                    "side",
+                    "currency",
+                    "subledger_amount",
+                    "control_amount",
+                    "difference",
+                    "state",
+                  ]
+                : [
+                    "account",
+                    "counterparty",
+                    "side",
+                    "currency",
+                    "open_item_count",
+                    "book_balance",
+                    "request_basis",
+                    "confirmation_status",
+                    "response_amount",
+                    "difference",
+                    "state",
+                  ]
+              ).filter((key) => allColumns.includes(key))
+            : body?.workflow === "procurement-match" && !showRuleProvenance
               ? [
-                  "account",
-                  "side",
+                  "order_id",
+                  "line_reference",
+                  "vendor",
                   "currency",
-                  "subledger_amount",
-                  "control_amount",
-                  "difference",
+                  "uom",
+                  "quantity_comparison_status",
+                  "quantities",
+                  "amounts",
+                  "exceptions",
                   "state",
-                ]
-              : [
-                  "account",
-                  "counterparty",
-                  "side",
-                  "currency",
-                  "open_item_count",
-                  "book_balance",
-                  "request_basis",
-                  "confirmation_status",
-                  "response_amount",
-                  "difference",
-                  "state",
-                ]
-            ).filter((key) => allColumns.includes(key))
-          : body?.workflow === "procurement-match" && !showRuleProvenance
-            ? [
-                "order_id",
-                "line_reference",
-                "vendor",
-                "currency",
-                "uom",
-                "quantity_comparison_status",
-                "quantities",
-                "amounts",
-                "exceptions",
-                "state",
-              ].filter((key) => allColumns.includes(key))
-            : body?.workflow === "sanctions-name-review" && !showRuleProvenance
-              ? [
-                  "id",
-                  "subject_name",
-                  "list_version",
-                  "candidate_count",
-                  "candidate_preview_truncated",
-                  "state",
-                  "reviewer_disposition",
                 ].filter((key) => allColumns.includes(key))
-              : body?.workflow === "inventory-valuation-control" &&
+              : body?.workflow === "sanctions-name-review" &&
                   !showRuleProvenance
-                ? (inventoryView === "gl-controls"
-                    ? [
-                        "account",
-                        "currency",
-                        "recorded_book_value",
-                        "gl_amount",
-                        "difference",
-                        "state",
-                      ]
-                    : [
-                        "site",
-                        "sku",
-                        "lot",
-                        "uom",
-                        "currency",
-                        "book_quantity",
-                        "book_unit_cost",
-                        "assessed_unit_cost",
-                        "book_unit_nrv",
-                        "assessed_unit_nrv",
-                        "recorded_gl_basis_value",
-                        "assessed_lower_cost_nrv_value",
-                        "recorded_minus_assessed_value",
-                        "exceptions",
-                        "state",
-                      ]
-                  ).filter((key) => allColumns.includes(key))
-                : body?.table_type === "esic-members" && !showRuleProvenance
-                  ? [
-                      "subject",
-                      "member_name",
-                      "period",
-                      "currency",
-                      "amount",
-                      "paid_days",
-                      "zero_wage_reason",
-                      "zero_day_reason",
-                      "last_working_day",
-                      "source_row",
-                    ].filter((key) => allColumns.includes(key))
-                  : body?.workflow === "india-esic-population" &&
-                      !showRuleProvenance
+                ? [
+                    "id",
+                    "subject_name",
+                    "list_version",
+                    "candidate_count",
+                    "candidate_preview_truncated",
+                    "state",
+                    "reviewer_disposition",
+                  ].filter((key) => allColumns.includes(key))
+                : body?.workflow === "inventory-valuation-control" &&
+                    !showRuleProvenance
+                  ? (inventoryView === "gl-controls"
+                      ? [
+                          "account",
+                          "currency",
+                          "recorded_book_value",
+                          "gl_amount",
+                          "difference",
+                          "state",
+                        ]
+                      : [
+                          "site",
+                          "sku",
+                          "lot",
+                          "uom",
+                          "currency",
+                          "book_quantity",
+                          "book_unit_cost",
+                          "assessed_unit_cost",
+                          "book_unit_nrv",
+                          "assessed_unit_nrv",
+                          "recorded_gl_basis_value",
+                          "assessed_lower_cost_nrv_value",
+                          "recorded_minus_assessed_value",
+                          "exceptions",
+                          "state",
+                        ]
+                    ).filter((key) => allColumns.includes(key))
+                  : body?.table_type === "esic-members" && !showRuleProvenance
                     ? [
                         "subject",
-                        "payroll_member_name",
-                        "reported_member_name",
-                        "payroll_amount",
-                        "reported_amount",
-                        "wage_difference",
-                        "payroll_paid_days",
-                        "reported_paid_days",
-                        "paid_day_difference",
-                        "exceptions",
-                        "state",
+                        "member_name",
+                        "period",
+                        "currency",
+                        "amount",
+                        "paid_days",
+                        "zero_wage_reason",
+                        "zero_day_reason",
+                        "last_working_day",
+                        "source_row",
                       ].filter((key) => allColumns.includes(key))
-                    : baseColumns;
+                    : body?.workflow === "india-esic-population" &&
+                        !showRuleProvenance
+                      ? [
+                          "subject",
+                          "payroll_member_name",
+                          "reported_member_name",
+                          "payroll_amount",
+                          "reported_amount",
+                          "wage_difference",
+                          "payroll_paid_days",
+                          "reported_paid_days",
+                          "paid_day_difference",
+                          "exceptions",
+                          "state",
+                        ].filter((key) => allColumns.includes(key))
+                      : baseColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -1166,6 +1183,22 @@ export function CountryWorkflows({
                         ]),
                     ),
                   }
+                : {}),
+              ...([
+                "inventory-custody-positions",
+                "inventory-custody-confirmations",
+              ].includes(tableType)
+                ? { custody_quantity_controls: JSON.parse(custodyControls) }
+                : {}),
+              ...(tableType === "inventory-custody-confirmations"
+                ? Object.fromEntries(
+                    Object.entries(confirmationDocuments)
+                      .filter(([, value]) => value)
+                      .map(([role, value]) => [
+                        `confirmation_${role}_document_version_id`,
+                        value,
+                      ]),
+                  )
                 : {}),
               ...(tableType === "purchase-lines"
                 ? { purchase_quantity_controls: JSON.parse(purchaseControls) }
@@ -1491,6 +1524,7 @@ export function CountryWorkflows({
             "subsequent-settlements",
             "balance-confirmations",
             "party-balance-confirmations",
+            "inventory-custody-confirmations",
             "expense-cutoff",
             "going-concern-cash",
           ].includes(workflow)
@@ -3063,6 +3097,67 @@ export function CountryWorkflows({
                       service-period proration is inferred.
                     </p>
                   )}
+                  {[
+                    "inventory-custody-positions",
+                    "inventory-custody-confirmations",
+                  ].includes(tableType) && (
+                    <fieldset>
+                      <legend>
+                        Independent custody quantities by position and unit
+                      </legend>
+                      <label>
+                        Custody quantity controls (JSON)
+                        <textarea
+                          value={custodyControls}
+                          onChange={(event) =>
+                            setCustodyControls(event.target.value)
+                          }
+                          rows={5}
+                        />
+                      </label>
+                      <p>
+                        Declare each position ID, custodian, site, SKU, lot,
+                        unit and quantity. For replies, quantity is the stated
+                        request quantity; response_quantity is the actual
+                        written quantity or null for an unanswered request. A
+                        declared zero is distinct from an absent response. Money
+                        controls are empty.
+                      </p>
+                      {tableType === "inventory-custody-confirmations" &&
+                        (["request", "response", "followup"] as const).map(
+                          (role) => (
+                            <label key={role}>
+                              Shared {role === "followup" ? "follow-up" : role}{" "}
+                              document (optional)
+                              <select
+                                value={confirmationDocuments[role] || ""}
+                                onChange={(event) =>
+                                  setConfirmationDocuments({
+                                    ...confirmationDocuments,
+                                    [role]: event.target.value,
+                                  })
+                                }
+                              >
+                                <option value="">
+                                  Use per-row retained document bindings
+                                </option>
+                                {inputs.data?.evidence
+                                  .filter(
+                                    (item) =>
+                                      item.scan_status === "CLEAN" &&
+                                      item.id !== evidence,
+                                  )
+                                  .map((item) => (
+                                    <option key={item.id} value={item.id}>
+                                      {item.label}
+                                    </option>
+                                  ))}
+                              </select>
+                            </label>
+                          ),
+                        )}
+                    </fieldset>
+                  )}
                   {tableType === "party-confirmations" && (
                     <fieldset>
                       <legend>Positive party confirmation documents</legend>
@@ -3553,6 +3648,7 @@ export function CountryWorkflows({
                 "subsequent-settlements",
                 "balance-confirmations",
                 "party-balance-confirmations",
+                "inventory-custody-confirmations",
                 "expense-cutoff",
                 "going-concern-cash",
               ].includes(workflow) && (
@@ -3666,6 +3762,7 @@ export function CountryWorkflows({
                             !esicPopulationReview ||
                             r.review_status === "REVIEWED") &&
                           (![
+                            "inventory-custody-confirmations",
                             "ownership-lookthrough",
                             "bank-account-evidence",
                             "inventory-valuation-control",
@@ -5118,6 +5215,47 @@ export function CountryWorkflows({
               }
             />
           )}
+          {body.custody_quantity_controls && (
+            <InventoryEvidenceTable
+              key={`${selected}:custody-controls`}
+              prefix={prefix}
+              selected={selected}
+              initial={body.custody_quantity_controls}
+              total={
+                detail.data.collection_totals?.custody_quantity_controls ??
+                body.custody_quantity_controls.length
+              }
+              custody
+            />
+          )}
+          {body.custody_confirmation_contract && (
+            <>
+              <p>
+                Offsite custody quantities compare exactly within each
+                custodian, site, SKU, lot and unit. Title and valuation need
+                separate evidence. An unanswered request or unreliable response
+                remains distinct from a confirmation.
+              </p>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={showRuleProvenance}
+                  onChange={(event) =>
+                    setShowRuleProvenance(event.target.checked)
+                  }
+                />{" "}
+                Show custody source provenance and all columns
+              </label>
+              <PartyConfirmationEvidence
+                key={`${selected}:custody:${offset}`}
+                eid={eid}
+                tenant={tenant}
+                rows={rows.filter((row) => row.custodian != null)}
+                dependencies={detail.data.dependencies || []}
+                inventory
+              />
+            </>
+          )}
           {body.workflow === "ownership-lookthrough" && (
             <>
               {!body.ownership_path_contract && (
@@ -5718,6 +5856,7 @@ export function CountryWorkflows({
                             [
                               "procurement-match",
                               "party-balance-confirmations",
+                              "inventory-custody-confirmations",
                               "ownership-lookthrough",
                             ].includes(body.workflow || "")
                               ? { maxWidth: 200, overflowWrap: "anywhere" }

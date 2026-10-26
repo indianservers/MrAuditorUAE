@@ -16,11 +16,13 @@ export function PartyConfirmationEvidence({
   tenant,
   rows,
   dependencies,
+  inventory = false,
 }: {
   eid: string;
   tenant: string;
   rows: Row[];
   dependencies: Receipt[];
+  inventory?: boolean;
 }) {
   const [index, setIndex] = useState(0);
   const [itemOffset, setItemOffset] = useState(0);
@@ -68,9 +70,15 @@ export function PartyConfirmationEvidence({
   return (
     <details style={{ margin: "16px 0" }}>
       <summary>Request, response and follow-up evidence</summary>
-      <section aria-label="Party confirmation evidence">
+      <section
+        aria-label={
+          inventory
+            ? "Inventory custody confirmation evidence"
+            : "Party confirmation evidence"
+        }
+      >
         <label>
-          Party evidence position
+          {inventory ? "Custody evidence position" : "Party evidence position"}
           <select
             value={index}
             onChange={(event) => {
@@ -82,8 +90,16 @@ export function PartyConfirmationEvidence({
           >
             {rows.map((value, position) => (
               <option key={String(value.id)} value={position}>
-                {String(value.account)} · {String(value.counterparty)} ·{" "}
-                {String(value.side)} · {String(value.currency)}
+                {inventory ? (
+                  [value.custodian, value.site, value.sku, value.lot, value.uom]
+                    .map((value) => String(value ?? "Not supplied"))
+                    .join(" · ")
+                ) : (
+                  <>
+                    {String(value.account)} · {String(value.counterparty)} ·{" "}
+                    {String(value.side)} · {String(value.currency)}
+                  </>
+                )}
               </option>
             ))}
           </select>
@@ -104,9 +120,14 @@ export function PartyConfirmationEvidence({
         >
           {[
             "status",
-            "request_basis",
-            "scope_balance",
-            "requested_amount",
+            ...(inventory
+              ? [
+                  "requested_quantity",
+                  "response_quantity",
+                  "condition",
+                  "held_for_entity",
+                ]
+              : ["request_basis", "scope_balance", "requested_amount"]),
             "requested_on",
             "responded_on",
             "contact_verified",
@@ -192,63 +213,68 @@ export function PartyConfirmationEvidence({
           <p>Follow-up assessment: {String(evidence.followup_assessment)}</p>
         ) : null}
         {error && <p role="alert">{error}</p>}
-        <details>
-          <summary>Linked open items · {itemIds.length}</summary>
-          {row.confirmation_status === "partially-received" && (
-            <>
-              <label>
-                Linked item scope
-                <select
-                  value={itemScope}
-                  onChange={(event) => {
-                    setItemScope(event.target.value);
-                    setItemOffset(0);
-                  }}
-                >
-                  <option value="all">All book items</option>
-                  <option value="covered">Declared reply-covered items</option>
-                  <option value="uncovered">Items outside reply scope</option>
-                </select>
-              </label>
-              <p>
-                Covered book balance:{" "}
-                {String(row.covered_book_balance ?? "Unknown")}. Uncovered book
-                balance: {String(row.uncovered_book_balance ?? "Unknown")}.
-                Covered reply difference:{" "}
-                {String(row.covered_response_difference ?? "Unknown")}. The full
-                balance has not been confirmed.
-              </p>
-            </>
-          )}
-          <p>
-            {page.length
-              ? `Item links ${itemOffset + 1}–${itemOffset + page.length} of ${scopedIds?.length}`
-              : scopedIds === null
-                ? "Partial reply item membership is unknown"
-                : "No reporting-date item links"}
-            . Use the schedule pages to reach additional party positions. XLSX
-            retains every item ID.
-          </p>
-          <ol start={itemOffset + 1}>
-            {page.map((id) => (
-              <li key={id}>{id}</li>
-            ))}
-          </ol>
-          <div className="toolbar">
-            <Button
-              disabled={itemOffset === 0}
-              onClick={() => setItemOffset(Math.max(0, itemOffset - 100))}
-            >
-              Previous item links
-            </Button>
-            <Button
-              disabled={itemOffset + page.length >= (scopedIds?.length || 0)}
-              onClick={() => setItemOffset(itemOffset + 100)}
-            >
-              Next item links
-            </Button>
-          </div>
-        </details>
+        {!inventory && (
+          <details>
+            <summary>Linked open items · {itemIds.length}</summary>
+            {row.confirmation_status === "partially-received" && (
+              <>
+                <label>
+                  Linked item scope
+                  <select
+                    value={itemScope}
+                    onChange={(event) => {
+                      setItemScope(event.target.value);
+                      setItemOffset(0);
+                    }}
+                  >
+                    <option value="all">All book items</option>
+                    <option value="covered">
+                      Declared reply-covered items
+                    </option>
+                    <option value="uncovered">Items outside reply scope</option>
+                  </select>
+                </label>
+                <p>
+                  Covered book balance:{" "}
+                  {String(row.covered_book_balance ?? "Unknown")}. Uncovered
+                  book balance:{" "}
+                  {String(row.uncovered_book_balance ?? "Unknown")}. Covered
+                  reply difference:{" "}
+                  {String(row.covered_response_difference ?? "Unknown")}. The
+                  full balance has not been confirmed.
+                </p>
+              </>
+            )}
+            <p>
+              {page.length
+                ? `Item links ${itemOffset + 1}–${itemOffset + page.length} of ${scopedIds?.length}`
+                : scopedIds === null
+                  ? "Partial reply item membership is unknown"
+                  : "No reporting-date item links"}
+              . Use the schedule pages to reach additional party positions. XLSX
+              retains every item ID.
+            </p>
+            <ol start={itemOffset + 1}>
+              {page.map((id) => (
+                <li key={id}>{id}</li>
+              ))}
+            </ol>
+            <div className="toolbar">
+              <Button
+                disabled={itemOffset === 0}
+                onClick={() => setItemOffset(Math.max(0, itemOffset - 100))}
+              >
+                Previous item links
+              </Button>
+              <Button
+                disabled={itemOffset + page.length >= (scopedIds?.length || 0)}
+                onClick={() => setItemOffset(itemOffset + 100)}
+              >
+                Next item links
+              </Button>
+            </div>
+          </details>
+        )}
       </section>
     </details>
   );

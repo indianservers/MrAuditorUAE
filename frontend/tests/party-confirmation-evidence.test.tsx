@@ -164,3 +164,71 @@ it("does not invent membership for an unmapped partial reply", () => {
     screen.getByText(/Partial reply item membership is unknown/),
   ).toBeVisible();
 });
+
+it("shows inventory quantity and condition evidence without financial fields or open-item links", () => {
+  const row = {
+    id: "custody:1",
+    custodian: "WH-1",
+    site: "OFFSITE",
+    sku: "SKU-1",
+    lot: "L1",
+    uom: "KG",
+    confirmation_evidence: {
+      status: "received",
+      requested_quantity: "0",
+      response_quantity: "0",
+      condition: "not-applicable",
+      held_for_entity: "none-held",
+      scope_assessment: "SYNTHETIC scoped offsite inventory",
+      requested_on: "2026-07-01",
+      responded_on: "2026-07-05",
+    },
+  };
+  render(
+    <PartyConfirmationEvidence
+      eid="eng"
+      tenant="tenant"
+      rows={[row]}
+      dependencies={[]}
+      inventory
+    />,
+  );
+  fireEvent.click(screen.getByText("Request, response and follow-up evidence"));
+  expect(screen.getByLabelText("Custody evidence position")).toBeVisible();
+  expect(screen.getAllByText("0")).toHaveLength(2);
+  expect(screen.getByText("not-applicable")).toBeVisible();
+  expect(screen.queryByText("requested amount")).not.toBeInTheDocument();
+  expect(screen.queryByText(/Linked open items/)).not.toBeInTheDocument();
+});
+
+it("keeps unanswered inventory quantity and condition absent", () => {
+  const row = {
+    id: "custody:1",
+    custodian: "WH-1",
+    site: "OFFSITE",
+    sku: "SKU-1",
+    lot: "L1",
+    uom: "KG",
+    confirmation_evidence: {
+      status: "pending",
+      requested_quantity: "10",
+      response_quantity: null,
+      condition: null,
+      held_for_entity: "unknown",
+      scope_assessment: "SYNTHETIC pending offsite inventory",
+      requested_on: "2026-07-01",
+    },
+  };
+  render(
+    <PartyConfirmationEvidence
+      eid="eng"
+      tenant="tenant"
+      rows={[row]}
+      dependencies={[]}
+      inventory
+    />,
+  );
+  fireEvent.click(screen.getByText("Request, response and follow-up evidence"));
+  expect(screen.getByText("No retained response document")).toBeVisible();
+  expect(screen.queryByText("0")).not.toBeInTheDocument();
+});

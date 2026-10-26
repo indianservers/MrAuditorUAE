@@ -1,0 +1,55 @@
+{
+  "synthetic_only": true,
+  "country": "IN",
+  "workflow": "inventory-custody-confirmations",
+  "as_of": "2026-06-30",
+  "review_through": "2026-07-15",
+  "source_rows": {
+    "positions": 1,
+    "responses": 1
+  },
+  "control_totals": {},
+  "custody_quantity_controls_by_source": {
+    "positions": [
+      {
+        "position_id": "SYN-POS-1",
+        "custodian": "SYN-CUSTODIAN-1",
+        "site": "SYN-OFFSITE-1",
+        "sku": "SYN-SKU-1",
+        "lot": "SYN-LOT-1",
+        "uom": "KG",
+        "quantity": "10",
+        "response_quantity": null
+      }
+    ],
+    "responses": [
+      {
+        "position_id": "SYN-POS-1",
+        "custodian": "SYN-CUSTODIAN-1",
+        "site": "SYN-OFFSITE-1",
+        "sku": "SYN-SKU-1",
+        "lot": "SYN-LOT-1",
+        "uom": "KG",
+        "quantity": "10",
+        "response_quantity": "10"
+      }
+    ]
+  },
+  "supporting_documents": {
+    "request": {
+      "filename": "request.txt",
+      "sha256": "30b4a1f42bf165c43967dba58d25306759264a61b81f289ba9c8afc68016df6e"
+    },
+    "response": {
+      "filename": "response.txt",
+      "sha256": "82789fed57def834c3a72780f3e16586097c8d788530e09ae6cde147c9c7924d"
+    }
+  },
+  "expected": {
+    "state": "MATCHED",
+    "blocked": false,
+    "quantity_difference": "0",
+    "response_quantity": "10",
+    "independent_exception_disposition_required": false
+  }
+}

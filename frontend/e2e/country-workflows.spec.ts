@@ -9,6 +9,141 @@ const fixture = JSON.parse(
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
 
+test("offsite inventory custody documents and condition for UAE then India", async ({
+  page,
+}) => {
+  test.setTimeout(180000);
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill("admin@example.com");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("test-strong-password-123");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+  for (const country of ["AE", "IN"] as const)
+    for (const kind of ["received", "pending", "zero"] as const) {
+      const input = fixture.inventory_custody[country][kind];
+      const title = `SYNTHETIC ${country} inventory custody ${kind} ${Date.now()}`;
+      await page.goto(`/intelligence/${input.engagement}/country-workflow`);
+      await page
+        .getByLabel("Workflow", { exact: true })
+        .selectOption("inventory-custody-confirmations");
+      await loadRetainedHistory(page);
+      for (const [label, value] of [
+        ["Schedule title", title],
+        ["Reconciliation date", "2026-06-30"],
+        ["Review through date", "2026-07-15"],
+        ["Scope and source rationale", input.payload.rationale],
+      ])
+        await page.getByLabel(label, { exact: true }).fill(value);
+      for (const [role, id] of Object.entries(input.sources))
+        await page
+          .getByLabel(`${role} source`, { exact: true })
+          .selectOption(id as string);
+      await page
+        .getByRole("button", { name: "Queue calculation", exact: true })
+        .click();
+      const option = page
+        .getByLabel("Saved source or result")
+        .locator("option")
+        .filter({ hasText: title });
+      await expect(option).toHaveCount(1, { timeout: 120000 });
+      await page
+        .getByLabel("Saved source or result")
+        .selectOption((await option.getAttribute("value"))!);
+      const panel = page
+        .getByRole("heading", { name: title, exact: true })
+        .locator("..");
+      await expect(
+        panel.getByRole("cell", {
+          name:
+            kind !== "pending"
+              ? "MATCHED"
+              : "CUSTODY_ALTERNATIVE_PROCEDURES_REQUIRE_REVIEW",
+          exact: true,
+        }),
+      ).toBeVisible();
+      await expect(
+        panel.getByRole("cell", { name: "KG", exact: true }),
+      ).toBeVisible();
+      for (const notice of await page
+        .getByRole("button", { name: "Dismiss notification", exact: true })
+        .all())
+        await notice.click();
+      const schedule = panel.locator("table").last();
+      await schedule.scrollIntoViewIfNeeded();
+      await expect(
+        panel.getByRole("button", { name: "Document exception", exact: true }),
+      ).toBeInViewport({ ratio: 1 });
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-custody-${kind}-schedule.png`,
+        () => schedule.screenshot(),
+      );
+      await panel
+        .getByText("Request, response and follow-up evidence", { exact: true })
+        .click();
+      const evidence = panel.getByRole("region", {
+        name: "Inventory custody confirmation evidence",
+        exact: true,
+      });
+      await expect(
+        evidence.getByLabel("Custody evidence position"),
+      ).toBeVisible();
+      await expect(
+        evidence.getByText("2026-07-01", { exact: true }),
+      ).toBeVisible();
+      if (kind !== "pending")
+        await expect(
+          evidence.getByText(kind === "zero" ? "not-applicable" : "good", {
+            exact: true,
+          }),
+        ).toBeVisible();
+      else
+        await expect(
+          evidence.getByText("No retained response document", { exact: true }),
+        ).toBeVisible();
+      const role = kind !== "pending" ? "response" : "followup";
+      const [download] = await Promise.all([
+        page.waitForEvent("download"),
+        evidence
+          .getByRole("button", {
+            name:
+              role === "response"
+                ? "Download response evidence"
+                : "Download follow-up evidence",
+            exact: true,
+          })
+          .click(),
+      ]);
+      const path = await download.path();
+      expect(path).not.toBeNull();
+      expect(
+        createHash("sha256").update(readFileSync(path!)).digest("hex"),
+      ).toBe(input.documents[role].sha256);
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-custody-${kind}-evidence.png`,
+        () => evidence.screenshot(),
+      );
+      await panel
+        .getByText("Custody quantity controls · 2 records", { exact: true })
+        .click();
+      const controls = panel.getByRole("table", {
+        name: "Custody quantity controls",
+        exact: true,
+      });
+      await expect(
+        controls.getByRole("cell", { name: "positions", exact: true }),
+      ).toBeVisible();
+      await expect(
+        controls.getByRole("cell", { name: "responses", exact: true }),
+      ).toBeVisible();
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-custody-${kind}-controls.png`,
+        () => controls.screenshot(),
+      );
+    }
+});
+
 test("economic ownership paths and incomplete graph evidence for UAE then India", async ({
   page,
 }) => {

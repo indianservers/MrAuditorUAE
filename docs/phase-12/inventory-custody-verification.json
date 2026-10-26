@@ -1,0 +1,54 @@
+{
+  "scope": "SYNTHETIC_OWNED_LOCAL_VERIFICATION_ONLY",
+  "contract": "offsite-inventory-confirmations/1",
+  "country_order": [
+    "AE",
+    "IN"
+  ],
+  "browser_cases": [
+    "received",
+    "pending",
+    "zero"
+  ],
+  "implementation_sha256": "4804d6f4eaa6b9d22b0bed9487e973e929015a4460fef1c4372e702d8d38ba97",
+  "backend_unit": {
+    "passed": 2032,
+    "skipped": 4
+  },
+  "frontend": {
+    "passed": 202
+  },
+  "database_api": {
+    "passed": 19,
+    "custody_flows": 7,
+    "party_confirmation_regressions": 12
+  },
+  "browser": {
+    "passed": 1,
+    "cases_exercised": 6,
+    "report": "docs/phase-12/inventory-custody-browser-results.json"
+  },
+  "maximum_tested_positions_per_source": 5000,
+  "retained_quantity_controls_at_that_bound": 10000,
+  "retained_correspondence_links_at_that_bound": 10000,
+  "api_pagination_tested": {
+    "positions": 121,
+    "quantity_controls": 242,
+    "correspondence_links": 242
+  },
+  "authored_synthetic_catalogue_count": 154,
+  "title_authenticated": false,
+  "sender_authenticated": false,
+  "native_extraction_qualified": false,
+  "client_pilots_qualified": false,
+  "professional_signoff_established": false,
+  "release_qualified": false,
+  "log_sha256": {
+    "unit": "415823d2c4927eb581bba6c705606934dcf32209ed6195e25303d9b73b6194c4",
+    "frontend": "c4704c443a4be82ade894704f765435aafd1c72c98e12d46ede54d4d1f0c6b5a",
+    "api": "916b4fcd79ab249c9910cbe1c61fd7093e00c8e2d72bae98bf800ad7b499be0b",
+    "build": "0deadd7ceea23efb1c34eb1976ba63420e14111a6dbdbb4c227db67af7e80265",
+    "mypy": "ebc452c04843a6e276fcbcb457bb24c28fd326ffd6dbabb8c368b2549602046e",
+    "browser": "efc94b5dfd5e8ee8755b4f17ca754656bd7313393a2ed07eeffce171fb782e8c"
+  }
+}

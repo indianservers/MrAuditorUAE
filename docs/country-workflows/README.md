@@ -140,3 +140,10 @@ source-edge steps and explicit graph-gap paths. It requires reviewed ownership
 and country/date policy sources, preserves partial results as incomplete and
 blocks approval until source gaps are corrected. See
 [scope and verification](native-adapters.md#retained-exact-economic-ownership-paths--uae-then-india).
+
+
+Offsite inventory custody now has a separate quantity/condition correspondence
+workflow, with independent position/unit controls, retained documents, explicit
+zero-held responses and source-change staleness. It keeps custody separate from
+ownership, physical attendance and valuation. See
+[scope and verification](native-adapters.md#offsite-inventory-custody-quantities-and-condition--uae-then-india).

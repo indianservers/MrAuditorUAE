@@ -1842,3 +1842,93 @@ mypy across 70 source files and UTF-8 checks passed. See the
 [verification summary](../phase-12/ownership-paths-verification.json).
 The frozen authored synthetic catalogue remains 154. Real-client, legal-policy,
 registry/provider, professional and hosted-release qualification remain open.
+
+
+### Offsite inventory custody quantities and condition — UAE then India
+
+`inventory-custody-confirmations` compares independently reviewed offsite book
+positions with retained quantity/condition correspondence. This is a shared
+custody-evidence procedure, separate from customer/vendor financial balance
+letters, physical count attendance, title authentication and cost/NRV testing.
+Custody is not ownership: an entity-owned item may be held externally, while
+third-party-owned goods are not silently included in entity inventory.
+
+Prepare canonical `inventory-custody-positions` and
+`inventory-custody-confirmations` sources. Both require independent quantity
+controls for every exact position ID, custodian, site, SKU, lot and unit. On a
+response source, control quantity means the stated request quantity;
+response_quantity means the actual written reply, or null for an unanswered
+request. Money totals are empty. Controls are verified at preparation and
+calculation. Duplicate physical position/response scopes, missing controls and
+incorrect quantities fail. No cross-unit netting or automatic conversion occurs.
+
+Each response retains request, response and follow-up versions, SHA-256 values,
+references, assessed dates, contact/direct-receipt declarations and scope
+assessment. Shared actual retained files can bind a batch; mixed documents need
+per-row bindings. The correspondence and control infrastructure reuses the
+existing verified-source, retained-file and independent-review paths. Bound
+correspondence-file integrity is checked again before calculation. A document change makes
+its source and dependent comparison stale. Source CSVs cannot masquerade as
+their own retained correspondence. Hashes establish identity, not sender or
+content authenticity; dates and source-to-document interpretations remain
+independently assessed declarations.
+
+A received full-position reply needs quantity, condition and held-for-entity
+scope. Book/request/date/unit/custodian differences, unknown positions,
+unassessed direct receipt and ownership/held-for-entity gaps block approval.
+Monetary tolerance cannot hide a quantity difference. Quantity/condition
+exceptions require retained investigation before documented exception and
+independent final review. Pending, undeliverable and unreliable replies require
+retained alternative procedures and remain visibly unconfirmed. Those
+procedures do not turn an absent or unreliable reply into a matched quantity.
+
+An affirmative zero is distinct from missing data. `none-held` custody and
+`not-applicable` condition are allowed only with an explicit written zero.
+A zero reply against positive books retains the entire quantity difference.
+An empty schedule does not qualify entity-wide nil offsite inventory; named
+zero-position responses do not establish that no other inventory exists.
+Requests may be issued before the reporting date, but a written response cannot
+purport to confirm future reporting-date holdings. A different-date physical
+observation needs a separately assessed bridge, not an inferred quantity.
+
+The screen retains separate book/reply quantities, condition and raw scope,
+plus downloadable correspondence. Independently paged quantity controls use
+`custody_control_offset/limit`. Full XLSX retains every position, quantity
+control and request/response/follow-up link. New results retain
+`offsite-inventory-confirmations/1`.
+
+As a design reference for India reviewers, [ICAI SA 501 paragraph 8](https://kb.icai.org/pdfs/PDFFile5b3b56931ba5b3.25548018.pdf)
+addresses quantity/condition evidence for inventory held by third parties and
+other appropriate procedures. This reference does not automatically apply an
+Indian standard to UAE engagements or qualify either country's methodology.
+Actual framework adoption, procedure sufficiency, title, liens, consignment,
+completeness, physical attendance, valuation and professional conclusions
+remain separate engagement assessments. Canonical CSV and synthetic examples
+do not qualify native custodian-file extraction, live confirmation dispatch,
+sender authentication or real-client coverage. See [saved UAE/India examples](sample-inputs/SYNTHETIC-inventory-custody/README.md).
+
+
+Verification completed 27 October 2026: 2,032 backend unit tests passed (four
+skipped), 202 frontend tests passed and 19 owned PostgreSQL/API tests passed
+(seven custody flows plus 12 party-confirmation regressions for the shared
+correspondence path). Tests cover independent source review, exact units and
+quantities, explicit zero versus absent replies, zero against positive books,
+condition and ownership gaps, preissued requests, reporting/review windows,
+retained follow-up, independent final approval, source/document staleness,
+original download bytes and complete exports. The 5,000-position maximum case
+retains all 10,000 controls and 10,000 correspondence links. Separate API
+pagination/export preserves 121 positions and all 242 controls/document links.
+Six saved UAE/India input sets parse and match their expected outcomes and
+published document checksums.
+
+One browser test exercised received, pending and explicit-zero cases in
+UAE-then-India order against the production frontend and real local worker,
+including exact downloaded-document SHA-256 checks. All 18 screenshots were
+visually inspected. Production build, TypeScript, scoped ESLint/Ruff, mypy
+across 71 source files and UTF-8 checks passed. The first build attempt hit a
+Windows lock held by the owned preview server; after stopping it, the build
+completed successfully. See the [browser receipt](../phase-12/inventory-custody-browser-results.json)
+and [verification summary](../phase-12/inventory-custody-verification.json).
+The frozen authored synthetic catalogue remains 154. These checks do not
+establish 154 qualified client engagements. Real-client, native-provider,
+professional/legal and hosted-release gates remain open.

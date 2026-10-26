@@ -18,6 +18,11 @@ from app.modules.country_workflows.gstr1_schemas import GSTR1SectionControl
 from app.modules.country_workflows.gstr2b_part_schemas import GSTR2BPart
 from app.modules.country_workflows.import_nil_schemas import ImportNilScope
 from app.modules.country_workflows.inventory_controls import InventoryQuantityControl
+from app.modules.country_workflows.inventory_custody import (
+    CustodyConfirmation,
+    CustodyPosition,
+    CustodyQuantityControl,
+)
 from app.modules.country_workflows.inventory_valuation import (
     InventoryValuation,
     InventoryValueControl,
@@ -194,6 +199,8 @@ class Control(Strict):
 
 
 ROW_TYPES: dict[str, type[BaseModel]] = {
+    "inventory-custody-positions": CustodyPosition,
+    "inventory-custody-confirmations": CustodyConfirmation,
     "cutoff-recognition-lines": CutoffRecognition,
     "cutoff-posting-lines": CutoffPosting,
     "party-confirmations": PartyConfirmation,
@@ -222,6 +229,7 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
 
 
 class SourceInput(Strict):
+    custody_quantity_controls: list[CustodyQuantityControl] | None = Field(default=None, max_length=5000)
     confirmation_request_totals: dict[str, Money] | None = Field(default=None, max_length=20)
     confirmation_response_totals: dict[str, Money] | None = Field(default=None, max_length=20)
     confirmation_request_document_version_id: uuid.UUID | None = None
@@ -325,6 +333,8 @@ class SourceInput(Strict):
         "confirmations",
         "party-confirmations",
         "confirmation-item-coverage",
+        "inventory-custody-positions",
+        "inventory-custody-confirmations",
         "cutoff-documents",
         "cutoff-recognition-lines",
         "cutoff-posting-lines",
@@ -419,8 +429,13 @@ class SourceInput(Strict):
             raise ValueError("Arrear controls and context apply only to the explicit eight-field arrear ECR profile")
         if self.purchase_quantity_controls is not None and self.table_type != "purchase-lines":
             raise ValueError("Purchase quantity controls apply only to purchase-line sources")
-        if any((self.confirmation_request_document_version_id, self.confirmation_response_document_version_id, self.confirmation_followup_document_version_id)) and (self.table_type != "party-confirmations" or self.file_format != "canonical-csv"):
-            raise ValueError("Confirmation documents apply only to canonical party-confirmation sources")
+        if any((self.confirmation_request_document_version_id, self.confirmation_response_document_version_id, self.confirmation_followup_document_version_id)) and (self.table_type not in {"party-confirmations", "inventory-custody-confirmations"} or self.file_format != "canonical-csv"):
+            raise ValueError("Confirmation documents apply only to canonical party or custody confirmation sources")
+        if self.table_type in {"inventory-custody-positions", "inventory-custody-confirmations"}:
+            if self.file_format != "canonical-csv" or self.custody_quantity_controls is None:
+                raise ValueError("Custody sources require canonical CSV and independent position/unit quantity controls")
+        elif self.custody_quantity_controls is not None:
+            raise ValueError("Custody quantity controls apply only to custody position or confirmation sources")
         if self.table_type == "party-confirmations":
             if self.confirmation_request_totals is None or self.confirmation_response_totals is None or self.file_format != "canonical-csv":
                 raise ValueError("Party confirmations require canonical CSV and separate independent scope, written-request and written-response totals")
@@ -561,6 +576,7 @@ class WorkflowInput(Strict):
     withholding_role: WithholdingRole | None = None
     allocation_basis: Literal["invoice_face_amounts", "pre_application_balances"] | None = None
     workflow: Literal[
+        "inventory-custody-confirmations",
         "party-balance-confirmations",
         "inventory-valuation-control",
         "india-esic-population",
@@ -763,6 +779,7 @@ class WorkflowInput(Strict):
             "subsequent-settlements",
             "balance-confirmations",
             "party-balance-confirmations",
+            "inventory-custody-confirmations",
             "expense-cutoff",
             "going-concern-cash",
         }:

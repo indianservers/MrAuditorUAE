@@ -19,6 +19,7 @@ OPTIONAL_ROLES = {
 }
 
 WORKFLOWS = {
+    "inventory-custody-confirmations": ("Offsite inventory custody quantities and condition evidence", [], {"positions": "inventory-custody-positions", "responses": "inventory-custody-confirmations"}),
     "party-balance-confirmations": ("Positive customer/vendor balance confirmations", [], {"items": "audit-open-items", "controls": "balance-controls", "responses": "party-confirmations"}),
     "inventory-valuation-control": ("Inventory cost / NRV evidence and recorded GL controls", [], {"books": "stock", "valuations": "inventory-valuations", "controls": "accounting-controls"}),
     "india-esic-population": ("India ESIC member, paid-day and wage reconciliation", ["IN"], {"payroll": "esic-members", "reported": "esic-members"}),

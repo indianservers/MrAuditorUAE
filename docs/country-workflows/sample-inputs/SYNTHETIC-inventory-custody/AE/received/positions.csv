@@ -1,0 +1,2 @@
+id,custodian,site,sku,lot,uom,as_of,quantity,ownership,title_reference
+SYN-POS-1,SYN-CUSTODIAN-1,SYN-OFFSITE-1,SYN-SKU-1,SYN-LOT-1,KG,2026-06-30,10,entity-owned,SYN-DECLARED-TITLE-REF-NOT-AUTHENTICATED

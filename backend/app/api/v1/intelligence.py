@@ -709,6 +709,8 @@ async def event_details(
     confirmation_view: Literal["all", "parties", "gl-controls"] = "all",
     confirmation_link_offset: int = Query(0, ge=0),
     confirmation_link_limit: int = Query(100, ge=1, le=500),
+    custody_control_offset: int = Query(0, ge=0),
+    custody_control_limit: int = Query(100, ge=1, le=500),
     ownership_path_offset: int = Query(0, ge=0),
     ownership_path_limit: int = Query(100, ge=1, le=500),
     ownership_step_offset: int = Query(0, ge=0),
@@ -749,7 +751,7 @@ async def event_details(
     if isinstance(body.get("excluded_box_rows"), list):
         totals["excluded_box_rows"] = len(body["excluded_box_rows"])
         body["excluded_box_rows"] = body["excluded_box_rows"][excluded_offset : excluded_offset + excluded_limit]
-    for key, start, size in [("ownership_paths", ownership_path_offset, ownership_path_limit), ("ownership_path_steps", ownership_step_offset, ownership_step_limit), ("cutoff_document_controls", cutoff_control_offset, cutoff_control_limit), ("cutoff_posting_links", cutoff_posting_offset, cutoff_posting_limit), ("confirmation_coverage_links", confirmation_link_offset, confirmation_link_limit), ("purchase_quantity_controls", purchase_offset, purchase_limit), ("inventory_quantity_controls", inventory_offset, inventory_limit), ("count_bridges", bridge_offset, bridge_limit), ("payroll_posting_links", posting_offset, posting_limit), ("transaction_dates", date_offset, date_limit)]:
+    for key, start, size in [("custody_quantity_controls", custody_control_offset, custody_control_limit), ("ownership_paths", ownership_path_offset, ownership_path_limit), ("ownership_path_steps", ownership_step_offset, ownership_step_limit), ("cutoff_document_controls", cutoff_control_offset, cutoff_control_limit), ("cutoff_posting_links", cutoff_posting_offset, cutoff_posting_limit), ("confirmation_coverage_links", confirmation_link_offset, confirmation_link_limit), ("purchase_quantity_controls", purchase_offset, purchase_limit), ("inventory_quantity_controls", inventory_offset, inventory_limit), ("count_bridges", bridge_offset, bridge_limit), ("payroll_posting_links", posting_offset, posting_limit), ("transaction_dates", date_offset, date_limit)]:
         if isinstance(body.get(key), list):
             totals[key] = len(body[key])
             body[key] = body[key][start : start + size]

@@ -162,6 +162,12 @@ def _parse_csv(content, data, defaults=None):
         metric_controls = verify_controls(rows, data.gst_summary_metric_controls)
     if len(rows) != data.expected_rows:
         raise ValueError("Source row-count control does not agree")
+    if data.table_type in {"inventory-custody-positions", "inventory-custody-confirmations"}:
+        from app.modules.country_workflows.inventory_custody import (
+            verify_controls as verify_custody_controls,
+        )
+
+        verify_custody_controls(rows, [control.model_dump(mode="json") for control in data.custody_quantity_controls], responses=data.table_type == "inventory-custody-confirmations")
     if data.table_type == "party-confirmations":
         from app.modules.country_workflows.party_confirmations import (
             verify_request_totals,
@@ -234,6 +240,7 @@ def _parse_csv(content, data, defaults=None):
     ):
         raise ValueError("Import taxable-base control does not agree to all retained source rows")
     return {
+        **({"custody_quantity_controls": [control.model_dump(mode="json") for control in data.custody_quantity_controls]} if data.custody_quantity_controls is not None else {}),
         **({"confirmation_request_totals": {currency: str(value) for currency, value in data.confirmation_request_totals.items()}} if data.confirmation_request_totals is not None else {}),
         **({"allowed_workflows": ["party-balance-confirmations"], "allowed_source_roles": ["coverage"]} if data.table_type == "confirmation-item-coverage" else {}),
         **({"confirmation_response_totals": {currency: str(value) for currency, value in data.confirmation_response_totals.items()}} if data.confirmation_response_totals is not None else {}),

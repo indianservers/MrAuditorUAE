@@ -335,6 +335,8 @@ vi.mock("@/hooks/use-api", () => ({
               },
             ],
             source_contracts: {
+              "inventory-custody-positions": {id:{required:true,type:"str"}},
+              "inventory-custody-confirmations": {id:{required:true,type:"str"}},
               "party-confirmations": { id: { required: true, type: "str" }, requested_amount: { required: true, type: "Decimal" } },
               "purchase-lines": { id: { required: true, type: "str" }, uom: { required: false, type: "str" } },
               "inventory-valuations": { id: { required: true, type: "str" }, assessed_unit_cost: { required: true, type: "Decimal" } },
@@ -3274,4 +3276,14 @@ it("queues expense cutoff with explicit reviewed recognition and posting sources
   fireEvent.click(screen.getByRole("button",{name:"Queue calculation"}));
   await waitFor(()=>expect(state.mutate).toHaveBeenCalled());
   expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({workflow:"expense-cutoff",period_start:"2026-01-01",source_ids:{documents:"cutoff-documents",recognitions:"cutoff-recognitions",postings:"cutoff-postings"}});
+});
+
+
+it("queues independently controlled inventory response quantities with retained correspondence",async()=>{
+  render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+  const controls=[{position_id:"POS-1",custodian:"WH",site:"OFFSITE",sku:"SKU",lot:"",uom:"KG",quantity:"10",response_quantity:null}];
+  for(const [label,value] of [["Source table type","inventory-custody-confirmations"],["Clean retained evidence","clean"],["Schedule title","SYN custody response source"],["Expected data rows","1"],["Custody quantity controls (JSON)",JSON.stringify(controls)],["Shared request document (optional)","context-clean"]]) fireEvent.change(screen.getByLabelText(label),{target:{value}});
+  fireEvent.click(screen.getByRole("button",{name:"Queue calculation"}));
+  await waitFor(()=>expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({table_type:"inventory-custody-confirmations",custody_quantity_controls:controls,confirmation_request_document_version_id:"context-clean",control_totals:{}});
 });
