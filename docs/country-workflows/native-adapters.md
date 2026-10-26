@@ -1932,3 +1932,72 @@ and [verification summary](../phase-12/inventory-custody-verification.json).
 The frozen authored synthetic catalogue remains 154. These checks do not
 establish 154 qualified client engagements. Real-client, native-provider,
 professional/legal and hosted-release gates remain open.
+
+
+## Permission conflicts during an audit period
+
+The shared GRC SoD workflow now supports an optional inclusive analysis period,
+in addition to its existing assessment-date view. A permission revoked before
+year-end can therefore remain a conflict candidate for its actual overlap
+interval. Regrants preserve every original one-based assignment index and
+assignment-pair link; overlapping/adjacent days are merged only for interval
+presentation. Distinct scope pairs remain separate findings. These are
+permission combinations, not evidence of transactions or fraud.
+
+The default compares exact opaque scope identifiers. An independently approved,
+effective-dated policy can explicitly declare direct scope relationships and
+retain their rationale and supporting policy reference. There is no automatic
+wildcard, global scope, role expansion, identity equivalence, cross-system
+comparison or transitive hierarchy. A policy must cover the complete requested
+window; policy changes need explicitly partitioned workpapers. Dates are ISO
+calendar dates, inclusive, without inferred timestamps or ERP timezone semantics.
+
+Historical analysis requires a retained hashed CSV, explicit history coverage,
+a source-scope assessment, independent assignment/principal counts and a separate
+approved control record/reference. Reviewed cross-scope analysis also requires
+the hashed CSV and separate counts controls. Calculations re-read clean approved
+source files, check actual file hashes and compare every ordered assignment
+against the CSV before returning a cached result. Definition and control records
+remain independently approved, current dependencies. Legacy exact point-in-time
+approved references remain readable as explicitly unverified CSV bindings;
+they do not silently acquire history completeness.
+
+New immutable runs retain `permission-overlap-intervals/1`, implementation hash,
+source receipts, coverage declarations, all conflict intervals and all original
+assignment-pair links. Existing GRC review, import, calculation and monitoring
+paths are reused; monitoring keeps source dependencies and returns candidates
+for review. A changed source blocks recalculation; an implementation change
+creates a new snapshot. The import form exposes history and population controls;
+the generic policy editor exposes effective dates and direct scope mappings.
+Current generic result/history views retain the complete bounded arrays. A
+specialized SoD paged viewer and full workbook export remain future usability
+work, not claimed as delivered by this increment.
+
+Bounds are 10,000 input assignments, 100 incompatible permission pairs, 1,000
+direct scope relationships, 1,000,000 interval comparisons and 10,000 retained
+assignment-pair links. An exceeded bound rejects analysis with a partitioning
+requirement; it never silently truncates. The 10,000-assignment test retains
+all 5,000 logical conflicts and original assignment-pair links.
+
+[Saved UAE/India synthetic source sets](sample-inputs/SYNTHETIC-sod-history/README.md)
+include actual CSV/policy/count-memo bytes, checksums and expected point/period
+outcomes. They do not establish client source completeness, ERP-native adapter
+qualification, country framework adoption, verified compensating controls,
+SOX/IFC conclusions or a real-client pilot. The original authored catalogue
+remains 154 synthetic scenarios. Real pilot folders and manifest templates are
+saved under `pilot-data/UAE` and `pilot-data/India`; supplied private inputs,
+independent expected results and review records are excluded from Git.
+
+Verification completed 27 October 2026: 2,068 backend unit tests and 11 existing
+GRC calculation tests passed (four skipped); 204 frontend tests passed. Three
+owned PostgreSQL/API tests passed: UAE and India source/review/history/cache/
+monitoring flows, plus the existing GRC approval/owner-isolation regression.
+API tests reject changed source bytes and edited assignment bodies despite an
+unchanged declared hash, check source reopening, and verify that an
+implementation change produces a new immutable calculation. A production-browser
+test exercised both import-form modes with empty coverage defaults and required
+independent controls; it does not submit a browser CSV. All four screenshots
+were visually inspected. Production build, TypeScript, scoped ESLint/Ruff, mypy
+across 16 GRC modules and UTF-8 checks passed. See the
+[verification receipt](../phase-12/sod-history-verification.json) and
+[browser receipt](../phase-12/sod-history-browser-results.json).

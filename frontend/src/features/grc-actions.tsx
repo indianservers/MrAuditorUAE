@@ -14,6 +14,21 @@ export function SoDImport({ base }: { base: string }) {
   const [rule, setRule] = useState("");
   const [asOf, setAsOf] = useState("");
   const [evidence, setEvidence] = useState("");
+  const [basis, setBasis] = useState("point-in-time-export");
+  const [periodStart, setPeriodStart] = useState("");
+  const [coverageStart, setCoverageStart] = useState("");
+  const [coverageEnd, setCoverageEnd] = useState("");
+  const [assessment, setAssessment] = useState("");
+  const [assignmentCount, setAssignmentCount] = useState("");
+  const [principalCount, setPrincipalCount] = useState("");
+  const [controlEvidence, setControlEvidence] = useState("");
+  const [controlReference, setControlReference] = useState("");
+  const history = basis === "validity-history";
+  const controls =
+    history ||
+    Boolean(
+      assignmentCount || principalCount || controlEvidence || controlReference,
+    );
   return (
     <details>
       <summary>Import an ERP permission population</summary>
@@ -34,6 +49,23 @@ export function SoDImport({ base }: { base: string }) {
                 rule_id: rule,
                 as_of: asOf,
                 source_evidence_id: evidence,
+                population_basis: basis,
+                ...(history
+                  ? {
+                      ...(periodStart ? { period_start: periodStart } : {}),
+                      coverage_start: coverageStart,
+                      coverage_end: coverageEnd,
+                      history_scope_assessment: assessment,
+                    }
+                  : {}),
+                ...(controls
+                  ? {
+                      expected_assignment_count: Number(assignmentCount),
+                      expected_principal_count: Number(principalCount),
+                      population_control_evidence_id: controlEvidence,
+                      population_control_reference: controlReference,
+                    }
+                  : {}),
               },
             }),
           );
@@ -94,6 +126,113 @@ export function SoDImport({ base }: { base: string }) {
             onChange={(e) => setEvidence(e.target.value)}
           />
         </label>
+        <label>
+          Population basis
+          <select value={basis} onChange={(e) => setBasis(e.target.value)}>
+            <option value="point-in-time-export">Point-in-time export</option>
+            <option value="validity-history">
+              Grant and revocation history
+            </option>
+          </select>
+        </label>
+        <p>
+          Dates are inclusive calendar dates. A current export cannot establish
+          historical completeness. Roles, wildcard scopes and scope hierarchies
+          are not inferred. Period analysis requires a policy effective
+          throughout the requested period. Reviewed scope overlaps require
+          separate population controls below.
+        </p>
+        {history && (
+          <>
+            <label>
+              Analysis period start (optional; otherwise assessment date)
+              <input
+                type="date"
+                value={periodStart}
+                max={asOf || undefined}
+                onChange={(e) => setPeriodStart(e.target.value)}
+              />
+            </label>
+            <label>
+              Verified history coverage start
+              <input
+                required
+                type="date"
+                value={coverageStart}
+                onChange={(e) => setCoverageStart(e.target.value)}
+              />
+            </label>
+            <label>
+              Verified history coverage end
+              <input
+                required
+                type="date"
+                value={coverageEnd}
+                onChange={(e) => setCoverageEnd(e.target.value)}
+              />
+            </label>
+            <label>
+              History population scope assessment
+              <textarea
+                required
+                minLength={10}
+                maxLength={4000}
+                value={assessment}
+                onChange={(e) => setAssessment(e.target.value)}
+              />
+            </label>
+          </>
+        )}
+        <fieldset>
+          <legend>Independent population controls</legend>
+          <p>
+            Use counts checked against a separate approved control record. These
+            declarations do not automatically prove source completeness. Enter
+            approved record IDs for evidence references.
+          </p>
+          <label>
+            Expected assignment count
+            <input
+              type="number"
+              min={1}
+              max={10000}
+              step={1}
+              required={controls}
+              value={assignmentCount}
+              onChange={(e) => setAssignmentCount(e.target.value)}
+            />
+          </label>
+          <label>
+            Expected principal count
+            <input
+              type="number"
+              min={1}
+              max={10000}
+              step={1}
+              required={controls}
+              value={principalCount}
+              onChange={(e) => setPrincipalCount(e.target.value)}
+            />
+          </label>
+          <label>
+            Approved population control evidence reference
+            <input
+              required={controls}
+              value={controlEvidence}
+              onChange={(e) => setControlEvidence(e.target.value)}
+            />
+          </label>
+          <label>
+            Population control memo reference
+            <input
+              required={controls}
+              minLength={10}
+              maxLength={4000}
+              value={controlReference}
+              onChange={(e) => setControlReference(e.target.value)}
+            />
+          </label>
+        </fieldset>
         <label>
           ERP access CSV
           <input

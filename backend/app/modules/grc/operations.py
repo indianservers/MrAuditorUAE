@@ -26,14 +26,34 @@ async def calculate(db, ctx, eid, rid):
             dependency = await service.record(db, ctx, eid, uuid.UUID(identifier), expected)
             if not any(x["id"] == str(dependency.id) for x in deps):
                 deps.append(service.dependency(dependency))
+    sod_metadata = None
+    sod_rule = None
+    if key == "sod-access":
+        from app.modules.grc.sod_sources import bind
+
+        source = await service.record(db, ctx, eid, data.rule_id, "sod-rule")
+        sod_rule = s.SoDRule.model_validate(service.clean(source.body))
+        sod_metadata, sod_dependencies = await bind(db, ctx, eid, obj, source, data, sod_rule)
+        deps = list({dep["id"]: dep for dep in [*deps, *sod_dependencies]}.values())
     previous = await db.scalar(
         select(GRCRun)
         .where(GRCRun.tenant_id == ctx.tenant_id, GRCRun.record_id == obj.id, GRCRun.kind == key)
         .order_by(GRCRun.created_at.desc(), GRCRun.id.desc())
         .limit(1)
     )
-    if previous and any(
-        d["id"] == str(obj.id) and d["version"] == obj.version for d in previous.dependencies
+    compatible = key != "sod-access" or (
+        previous is not None
+        and previous.results.get("sod_contract") == "permission-overlap-intervals/1"
+        and sod_metadata is not None
+        and previous.results.get("sod_implementation_sha256")
+        == sod_metadata["sod_implementation_sha256"]
+    )
+    if (
+        previous
+        and compatible
+        and any(
+            d["id"] == str(obj.id) and d["version"] == obj.version for d in previous.dependencies
+        )
     ):
         for dep in previous.dependencies:
             source = await db.scalar(
@@ -64,10 +84,11 @@ async def calculate(db, ctx, eid, rid):
             else calc.plan_score(data, scoring)
         )
     elif key == "sod-access":
-        source = await service.record(db, ctx, eid, data.rule_id, "sod-rule")
-        if not any(x["id"] == str(source.id) for x in deps):
-            deps.append(service.dependency(source))
-        results = calc.sod(s.SoDRule.model_validate(service.clean(source.body)), data)
+        try:
+            results = calc.sod(sod_rule, data)
+        except ValueError as error:
+            raise HTTPException(422, str(error)) from error
+        results.update(sod_metadata or {})
     elif key == "kri":
         rows = sorted(data.observations, key=lambda x: x.observed_on)
         results = {

@@ -1,0 +1,3 @@
+principal,permission,scope,valid_from,valid_to
+SYN-user,create,A,2026-01-01,
+SYN-user,approve,B,2026-01-01,2026-06-30

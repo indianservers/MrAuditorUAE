@@ -1,5 +1,6 @@
 import csv
 import io
+import re
 
 from app.modules.grc.schemas import AccessAssignment
 
@@ -11,6 +12,7 @@ def parse(content: bytes):
     required = {"principal", "permission", "scope", "valid_from"}
     if (
         not source.fieldnames
+        or len(source.fieldnames) != len(set(source.fieldnames))
         or not required <= set(source.fieldnames)
         or set(source.fieldnames) - required - {"valid_to"}
     ):
@@ -20,6 +22,12 @@ def parse(content: bytes):
         if index >= 10000 or None in row:
             raise ValueError(
                 "Partition ERP access files above 10000 rows; inconsistent columns rejected"
+            )
+        if not re.fullmatch(r"\d{4}-\d{2}-\d{2}", row.get("valid_from") or "") or (
+            row.get("valid_to") and not re.fullmatch(r"\d{4}-\d{2}-\d{2}", row["valid_to"])
+        ):
+            raise ValueError(
+                "Access validity must use explicit ISO dates, not timestamps or inferred timezones"
             )
         item = AccessAssignment.model_validate({**row, "valid_to": row.get("valid_to") or None})
         if item.valid_to and item.valid_to < item.valid_from:

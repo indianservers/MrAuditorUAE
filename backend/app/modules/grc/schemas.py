@@ -1,9 +1,10 @@
+import re
 import uuid
 from datetime import date, datetime
 from decimal import Decimal
 from typing import Annotated, Literal
 
-from pydantic import Field, model_validator
+from pydantic import BeforeValidator, Field, model_validator
 
 from app.modules.audit_execution.schemas import Body, Strict
 from app.modules.grc.deadlines import DeadlineRule
@@ -13,6 +14,15 @@ Money = Annotated[Decimal, Field(max_digits=28, decimal_places=8)]
 Nonnegative = Annotated[Money, Field(ge=0)]
 Text = Annotated[str, Field(min_length=1, max_length=4000)]
 Evidence = Annotated[list[uuid.UUID], Field(max_length=50)]
+
+
+def calendar_date(value):
+    if type(value) is date or isinstance(value, str) and re.fullmatch(r"\d{4}-\d{2}-\d{2}", value):
+        return value
+    raise ValueError("Use an explicit ISO calendar date; timestamps and timezones are not inferred")
+
+
+SoDDate = Annotated[date, BeforeValidator(calendar_date)]
 
 
 class Framework(Body):
@@ -242,29 +252,169 @@ class SoDPair(Strict):
     second: str = Field(min_length=1, max_length=200)
     rationale: Text
 
+    @model_validator(mode="after")
+    def exact_pair(self):
+        if self.first == self.second or any(
+            not value.strip() or value != value.strip() or any(c in value for c in "\r\n\t\0")
+            for value in (self.first, self.second)
+        ):
+            raise ValueError("SoD pairs require distinct exact permission identifiers")
+        return self
+
+
+class ScopeOverlap(Strict):
+    first_scope: str = Field(min_length=1, max_length=200)
+    second_scope: str = Field(min_length=1, max_length=200)
+    rationale: str = Field(min_length=10, max_length=4000)
+    evidence_reference: str = Field(min_length=1, max_length=4000)
+
+    @model_validator(mode="after")
+    def explicit_relation(self):
+        if self.first_scope == self.second_scope or any(
+            not value.strip() or value != value.strip() or any(c in value for c in "\r\n\t\0")
+            for value in (self.first_scope, self.second_scope)
+        ):
+            raise ValueError("Declare distinct exact scopes; identical scopes already overlap")
+        if len(self.rationale.strip()) < 10 or not self.evidence_reference.strip():
+            raise ValueError(
+                "Scope overlap needs its independently reviewed rationale and definition reference"
+            )
+        return self
+
 
 class SoDRule(Body):
     system: Text
     version_number: int = Field(ge=1)
     pairs: list[SoDPair] = Field(min_length=1, max_length=100)
     definition_evidence_id: uuid.UUID
+    effective_from: SoDDate | None = None
+    effective_to: SoDDate | None = None
+    scope_mode: Literal["exact", "reviewed-overlap"] = "exact"
+    scope_overlaps: list[ScopeOverlap] = Field(default_factory=list, max_length=1000)
+
+    @model_validator(mode="after")
+    def scope_policy(self):
+        if self.effective_to is not None and (
+            self.effective_from is None or self.effective_to < self.effective_from
+        ):
+            raise ValueError(
+                "SoD definition effective dates must be ordered and identify their start"
+            )
+        if self.scope_mode == "reviewed-overlap" and self.effective_from is None:
+            raise ValueError("Reviewed overlap policies must identify their effective date")
+
+        pairs = [frozenset((pair.first, pair.second)) for pair in self.pairs]
+        overlaps = [
+            frozenset((item.first_scope, item.second_scope)) for item in self.scope_overlaps
+        ]
+        if len(set(pairs)) != len(pairs) or len(set(overlaps)) != len(overlaps):
+            raise ValueError(
+                "Duplicate or reversed SoD permission/scope pairs are not separate rules"
+            )
+        if (self.scope_mode == "exact" and self.scope_overlaps) or (
+            self.scope_mode == "reviewed-overlap" and not self.scope_overlaps
+        ):
+            raise ValueError(
+                "Reviewed overlap mode needs explicit mappings; exact mode cannot silently ignore them"
+            )
+        return self
 
 
 class AccessAssignment(Strict):
     principal: str = Field(min_length=1, max_length=200)
     permission: str = Field(min_length=1, max_length=200)
     scope: str = Field(min_length=1, max_length=200)
-    valid_from: date
-    valid_to: date | None = None
+    valid_from: SoDDate
+    valid_to: SoDDate | None = None
+
+    @model_validator(mode="after")
+    def exact_assignment(self):
+        if any(
+            not value.strip() or value != value.strip() or any(c in value for c in "\r\n\t\0")
+            for value in (self.principal, self.permission, self.scope)
+        ):
+            raise ValueError("Access principals, permissions and scopes require exact identifiers")
+        if self.valid_to is not None and self.valid_to < self.valid_from:
+            raise ValueError("Access validity end precedes start")
+        return self
 
 
 class SoDAccess(Body):
     system: Text
     rule_id: uuid.UUID
-    as_of: date
+    as_of: SoDDate
     assignments: list[AccessAssignment] = Field(min_length=1, max_length=10000)
     source_evidence_id: uuid.UUID
-    source_hash: str = Field(default="", max_length=64)
+    source_hash: str = Field(default="", pattern=r"^(?:[a-f0-9]{64})?$")
+    period_start: SoDDate | None = None
+    population_basis: Literal["point-in-time-export", "validity-history"] = "point-in-time-export"
+    coverage_start: SoDDate | None = None
+    coverage_end: SoDDate | None = None
+    history_scope_assessment: str = Field(default="", max_length=4000)
+    expected_assignment_count: int | None = Field(default=None, ge=1, le=10000, strict=True)
+    expected_principal_count: int | None = Field(default=None, ge=1, le=10000, strict=True)
+    population_control_evidence_id: uuid.UUID | None = None
+    population_control_reference: str = Field(default="", max_length=4000)
+
+    @model_validator(mode="after")
+    def analysis_scope(self):
+        identities = [
+            (item.principal, item.permission, item.scope, item.valid_from, item.valid_to)
+            for item in self.assignments
+        ]
+        if len(set(identities)) != len(identities):
+            raise ValueError("Duplicate access assignments must not multiply conflict evidence")
+        if self.period_start is not None and (
+            self.period_start > self.as_of or self.population_basis != "validity-history"
+        ):
+            raise ValueError(
+                "Period analysis requires validity history and a start on or before assessment date"
+            )
+        controls = (
+            self.expected_assignment_count,
+            self.expected_principal_count,
+            self.population_control_evidence_id,
+            bool(self.population_control_reference),
+        )
+        if any(value is not None and value is not False for value in controls):
+            if not all(controls) or len(self.population_control_reference.strip()) < 10:
+                raise ValueError(
+                    "Declare both independent access counts and their separate approved control evidence/reference"
+                )
+            if self.population_control_evidence_id == self.source_evidence_id:
+                raise ValueError(
+                    "Independent access controls must be separate from the assignment CSV"
+                )
+            if self.expected_assignment_count != len(
+                self.assignments
+            ) or self.expected_principal_count != len(
+                {item.principal for item in self.assignments}
+            ):
+                raise ValueError("Independent access assignment/principal counts do not agree")
+        if self.population_basis == "validity-history":
+            if (
+                self.coverage_start is None
+                or self.coverage_end is None
+                or not self.coverage_start
+                <= (self.period_start or self.as_of)
+                <= self.as_of
+                <= self.coverage_end
+                or len(self.history_scope_assessment.strip()) < 10
+                or not all(controls)
+                or not self.source_hash
+            ):
+                raise ValueError(
+                    "Validity history requires hashed CSV, declared full coverage, scope assessment and independent population controls"
+                )
+        elif (
+            self.coverage_start is not None
+            or self.coverage_end is not None
+            or self.history_scope_assessment
+        ):
+            raise ValueError(
+                "History coverage applies only to a declared validity-history population"
+            )
+        return self
 
 
 class MonitorRule(Body):
@@ -351,7 +501,9 @@ class Obligation(Body):
     jurisdiction: Text
     effective_from: date
     deadline: date | None = None
-    deadline_kind: Literal["legal", "authority_extension", "client_agreed", "firm_internal", "unresolved"] = "unresolved"
+    deadline_kind: Literal[
+        "legal", "authority_extension", "client_agreed", "firm_internal", "unresolved"
+    ] = "unresolved"
     deadline_rule: DeadlineRule | None = None
     rule_evidence_id: uuid.UUID | None = None
     extension_deadline: date | None = None
@@ -359,7 +511,14 @@ class Obligation(Body):
     entity_facts: dict[str, str] = Field(default_factory=dict, max_length=30)
     fact_evidence_ids: Evidence = Field(default_factory=list)
     reviewer_id: uuid.UUID | None = None
-    filing_stage: Literal["not_started", "preparing", "under_review", "approved_for_submission", "submitted", "acknowledged"] = "not_started"
+    filing_stage: Literal[
+        "not_started",
+        "preparing",
+        "under_review",
+        "approved_for_submission",
+        "submitted",
+        "acknowledged",
+    ] = "not_started"
     readiness_evidence_ids: Evidence = Field(default_factory=list)
     submission_evidence_id: uuid.UUID | None = None
     acknowledgment_evidence_id: uuid.UUID | None = None
@@ -374,7 +533,9 @@ class Obligation(Body):
 
     @model_validator(mode="after")
     def filing_contract(self):
-        if any(day < 0 or day > 365 for day in self.reminder_days) or len(set(self.reminder_days)) != len(self.reminder_days):
+        if any(day < 0 or day > 365 for day in self.reminder_days) or len(
+            set(self.reminder_days)
+        ) != len(self.reminder_days):
             raise ValueError("Reminder offsets must be unique days from 0 through 365")
         if self.deadline_rule:
             if not self.rule_evidence_id:
@@ -383,20 +544,36 @@ class Obligation(Body):
             if self.deadline is not None and self.deadline != computed:
                 raise ValueError("Declared deadline differs from versioned calculation")
             self.deadline = computed
-        if self.extension_deadline and (not self.extension_evidence_id or not self.deadline or self.extension_deadline < self.deadline):
+        if self.extension_deadline and (
+            not self.extension_evidence_id
+            or not self.deadline
+            or self.extension_deadline < self.deadline
+        ):
             raise ValueError("Extension requires base deadline and separate authority evidence")
         if self.deadline_kind == "authority_extension" and not self.extension_deadline:
             raise ValueError("Authority extension evidence and date required")
         if self.deadline_kind == "legal" and not self.rule_evidence_id:
             raise ValueError("Legal deadline requires verified supporting rule evidence")
         if self.filing_stage in {"approved_for_submission", "submitted", "acknowledged"}:
-            if self.blockers or not self.deadline or not self.reviewer_id or not self.readiness_evidence_ids:
-                raise ValueError("Resolved deadline, independent reviewer and readiness evidence without blockers required")
+            if (
+                self.blockers
+                or not self.deadline
+                or not self.reviewer_id
+                or not self.readiness_evidence_ids
+            ):
+                raise ValueError(
+                    "Resolved deadline, independent reviewer and readiness evidence without blockers required"
+                )
         if self.filing_stage in {"submitted", "acknowledged"} and not self.submission_evidence_id:
-            raise ValueError("Actual submission evidence required; generated exports are not submissions")
+            raise ValueError(
+                "Actual submission evidence required; generated exports are not submissions"
+            )
         if self.filing_stage == "acknowledged" and not self.acknowledgment_evidence_id:
             raise ValueError("Separate acknowledgment evidence required")
-        if self.submission_evidence_id and self.submission_evidence_id == self.acknowledgment_evidence_id:
+        if (
+            self.submission_evidence_id
+            and self.submission_evidence_id == self.acknowledgment_evidence_id
+        ):
             raise ValueError("Submission and acknowledgment must be separate evidence")
         return self
 

@@ -1,0 +1,48 @@
+{
+  "scope": "SYNTHETIC_OWNED_LOCAL_VERIFICATION_ONLY",
+  "contract": "permission-overlap-intervals/1",
+  "implementation_sha256": "70cbb806498badc47d2605a39272763d90d5ff985dd29de7899edf3ab103fc3a",
+  "country_order": [
+    "AE",
+    "IN"
+  ],
+  "backend_tests": {
+    "unit_passed": 2068,
+    "phase10_calculation_regressions_passed": 11,
+    "combined_passed": 2079,
+    "skipped": 4
+  },
+  "frontend_tests_passed": 204,
+  "database_api": {
+    "passed": 3,
+    "country_flows": 2,
+    "existing_grc_regression": 1
+  },
+  "browser": {
+    "passed": 1,
+    "screenshots_visually_inspected": 4,
+    "scope": "Production import UI in point-in-time/history modes; no browser CSV submission",
+    "report": "docs/phase-12/sod-history-browser-results.json"
+  },
+  "max_assignment_population_tested": 10000,
+  "retained_conflict_groups_at_tested_bound": 5000,
+  "retained_assignment_links_at_tested_bound": 5000,
+  "saved_synthetic_country_source_sets": 2,
+  "authored_synthetic_catalogue_count": 154,
+  "build": "passed",
+  "typescript": "passed",
+  "scoped_eslint_ruff": "passed",
+  "mypy_grc_source_files": 16,
+  "utf8": "passed",
+  "actual_client_files_supplied": false,
+  "real_client_qualified": false,
+  "native_erp_provider_qualified": false,
+  "sox_ifc_country_adoption_inferred": false,
+  "compensating_controls_verified": false,
+  "remaining": [
+    "Real client files, independently checked expectations and review records",
+    "Native ERP source completeness, identities, roles and date semantics qualification",
+    "Specialized paged SoD viewer and complete workbook export",
+    "Professional country/framework applicability and hosted release qualification"
+  ]
+}

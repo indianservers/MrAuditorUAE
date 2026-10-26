@@ -9,6 +9,66 @@ const fixture = JSON.parse(
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
 
+test("SoD import exposes explicit history coverage and separate controls", async ({
+  page,
+}) => {
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill("admin@example.com");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("test-strong-password-123");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+  await page.goto("/grc");
+  const directory = page.getByLabel("GRC engagement");
+  await expect(directory.locator("option")).not.toHaveCount(1);
+  await directory.selectOption({ index: 1 });
+  await page
+    .getByRole("link", { name: "Segregation of Duties Analyzer", exact: true })
+    .click();
+  await page
+    .getByText("Import an ERP permission population", { exact: true })
+    .click();
+  await expect(page.getByLabel("Population basis")).toHaveValue(
+    "point-in-time-export",
+  );
+  await expect(page.getByLabel("Verified history coverage start")).toHaveCount(
+    0,
+  );
+  const folder = "../docs/country-workflows/screenshots/sod-history";
+  mkdirSync(folder, { recursive: true });
+  await page.screenshot({
+    path: `${folder}/point-in-time.png`,
+    fullPage: true,
+  });
+  await page
+    .getByRole("button", { name: "Import for review", exact: true })
+    .scrollIntoViewIfNeeded();
+  await page.screenshot({ path: `${folder}/point-controls.png` });
+  await page.getByLabel("Population basis").selectOption("validity-history");
+  await expect(page.getByLabel("Verified history coverage start")).toHaveValue(
+    "",
+  );
+  await expect(page.getByLabel("Verified history coverage end")).toHaveValue(
+    "",
+  );
+  await expect(page.getByLabel("Expected assignment count")).toHaveAttribute(
+    "required",
+    "",
+  );
+  await expect(
+    page.getByLabel("Approved population control evidence reference"),
+  ).toHaveAttribute("required", "");
+  await page.screenshot({
+    path: `${folder}/period-history.png`,
+    fullPage: true,
+  });
+  await page
+    .getByRole("button", { name: "Import for review", exact: true })
+    .scrollIntoViewIfNeeded();
+  await page.screenshot({ path: `${folder}/history-controls.png` });
+});
+
 test("offsite inventory custody documents and condition for UAE then India", async ({
   page,
 }) => {

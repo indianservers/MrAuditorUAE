@@ -11,5 +11,10 @@ contain real client files or independently approved client results. Their
 contents are ignored by Git to keep client material out of repository pushes.
 Do not store passwords or access tokens in manifests.
 
+For each pilot, copy the country's manifest template and populate it only from
+the supplied files and an independently checked result. Leave its awaiting-data
+and not-reviewed status in place until those records actually exist. Creating
+these folders or saving synthetic examples does not complete a client pilot.
+
 `synthetic-examples/` contains generated test examples only. These are separate
 from client pilots and do not establish real client or statutory qualification.

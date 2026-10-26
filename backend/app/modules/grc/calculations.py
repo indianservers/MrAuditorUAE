@@ -71,33 +71,9 @@ def plan_score(plan, scoring):
 
 
 def sod(rule, access):
-    by_principal = defaultdict(set)
-    for item in access.assignments:
-        if item.valid_from <= access.as_of and (
-            item.valid_to is None or item.valid_to >= access.as_of
-        ):
-            by_principal[(item.principal, item.scope)].add(item.permission)
-    conflicts = []
-    for (principal, scope), permissions in sorted(by_principal.items()):
-        for pair in rule.pairs:
-            if pair.first in permissions and pair.second in permissions:
-                conflicts.append(
-                    {
-                        "principal": principal,
-                        "scope": scope,
-                        "first": pair.first,
-                        "second": pair.second,
-                        "rationale": pair.rationale,
-                        "compensating_control_verified": False,
-                    }
-                )
-    return {
-        "system": access.system,
-        "as_of": str(access.as_of),
-        "conflicts": conflicts,
-        "count": len(conflicts),
-        "application_roles_inferred": False,
-    }
+    from app.modules.grc.sod_intervals import calculate
+
+    return calculate(rule, access)
 
 
 def next_due(current, frequency):

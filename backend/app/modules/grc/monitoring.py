@@ -290,6 +290,7 @@ async def workpaper_checks(db, ctx, eng, rule):
                 [],
             )
         from app.modules.grc.calculations import sod
+        from app.modules.grc.sod_sources import bind
 
         access = await service.record(
             db, ctx, eng.id, uuid.UUID(rule.criteria["access_id"]), "sod-access"
@@ -297,10 +298,13 @@ async def workpaper_checks(db, ctx, eng, rule):
         definition = await service.record(
             db, ctx, eng.id, uuid.UUID(access.body["rule_id"]), "sod-rule"
         )
-        result = sod(
-            s.SoDRule.model_validate(service.clean(definition.body)),
-            s.SoDAccess.model_validate(service.clean(access.body)),
-        )
+        policy = s.SoDRule.model_validate(service.clean(definition.body))
+        population = s.SoDAccess.model_validate(service.clean(access.body))
+        binding, dependencies = await bind(db, ctx, eng.id, access, definition, population, policy)
+        try:
+            result = sod(policy, population)
+        except ValueError as error:
+            return ({"status": "NOT_TESTABLE", "requirements": str(error)}, [], None, [])
         signals = [
             {
                 "source_id": str(access.id),
@@ -315,6 +319,13 @@ async def workpaper_checks(db, ctx, eng, rule):
                 "population": len(access.body["assignments"]),
                 "matches": len(signals),
                 "requirements": MONITOR_RULES[rule.rule_code][0],
+                "analysis_from": result["analysis_from"],
+                "analysis_through": result["analysis_through"],
+                "analysis_mode": result["analysis_mode"],
+                "population_completeness": result["population_completeness"],
+                "sod_contract": result["sod_contract"],
+                **binding,
+                "_sod_dependencies": dependencies,
             },
             signals,
             None,
@@ -399,6 +410,7 @@ async def execute(db, ctx, payload):
         else workpaper_checks(db, ctx, eng, rule)
     )
     deps = [service.dependency(obj)]
+    deps.extend(result.pop("_sod_dependencies", []))
     ml_summary: dict = {"status": "NOT_REQUESTED"}
     if rule.ml_deployment_id and ml_rows:
         from starlette.concurrency import run_in_threadpool

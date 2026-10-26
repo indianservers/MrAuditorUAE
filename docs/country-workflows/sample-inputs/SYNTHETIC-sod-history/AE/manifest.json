@@ -1,0 +1,27 @@
+{
+  "dataset_kind": "SYNTHETIC_TEST_ONLY",
+  "country": "AE",
+  "system": "SYNTHETIC ERP",
+  "as_of": "2026-12-31",
+  "period_start": "2026-01-01",
+  "coverage_start": "2026-01-01",
+  "coverage_end": "2026-12-31",
+  "expected_assignment_count": 2,
+  "expected_principal_count": 1,
+  "sha256": {
+    "SYNTHETIC-access.csv": "2bde3474abdf1a7d8dafc88d5433ec5bcdae8def5268b350772224910200ce9c",
+    "SYNTHETIC-policy.txt": "b8cb810e2e137be6005d0f0484a18b4a07c848887faf099e209b1ef6547b0593",
+    "SYNTHETIC-controls.txt": "51d09c108ddc35242fe36f2d0569d59b9ebef2c4df6e303b1d0a0ed938554c31"
+  },
+  "expected_counts": {
+    "point_exact": 0,
+    "period_exact": 0,
+    "point_reviewed_overlap": 0,
+    "period_reviewed_overlap": 1
+  },
+  "expected_overlap_interval": {
+    "conflict_from": "2026-01-01",
+    "conflict_through": "2026-06-30"
+  },
+  "real_client_qualified": false
+}

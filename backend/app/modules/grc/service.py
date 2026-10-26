@@ -235,6 +235,21 @@ async def validate_body(db, ctx, eng, kind, data, record_id=None):
         rule = await record(db, ctx, eng.id, data.rule_id, "sod-rule")
         if data.system != rule.body["system"]:
             raise HTTPException(422, "Access and SoD definition systems must match")
+        policy = s.SoDRule.model_validate(clean(rule.body))
+        start = data.period_start or data.as_of
+        strict = data.period_start is not None or policy.scope_mode == "reviewed-overlap"
+        if strict and policy.effective_from is None:
+            raise HTTPException(422, "Period/overlap SoD requires an effective-dated definition")
+        if (policy.effective_from and policy.effective_from > start) or (
+            policy.effective_to and policy.effective_to < data.as_of
+        ):
+            raise HTTPException(422, "Partition analysis to the definition's effective window")
+        if policy.scope_mode == "reviewed-overlap" and (
+            not data.source_hash or data.population_control_evidence_id is None
+        ):
+            raise HTTPException(
+                422, "Reviewed overlaps require imported CSV and independent population controls"
+            )
         for item in data.assignments:
             if item.valid_to and item.valid_to < item.valid_from:
                 raise HTTPException(422, "Invalid access validity window")
