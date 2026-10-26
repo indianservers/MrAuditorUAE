@@ -9,6 +9,141 @@ const fixture = JSON.parse(
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
 
+test("explicit expense cutoff schedules and original posting links for UAE then India", async ({
+  page,
+}) => {
+  test.setTimeout(180000);
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill("admin@example.com");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("test-strong-password-123");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+  for (const country of ["AE", "IN"] as const) {
+    for (const kind of ["split_reversal", "late_credit"] as const) {
+      const input = fixture.cutoff_schedules[country][kind];
+      const title = `SYNTHETIC ${country} cutoff ${kind} ${Date.now()}`;
+      await page.goto(`/intelligence/${input.engagement}/country-workflow`);
+      await page
+        .getByLabel("Workflow", { exact: true })
+        .selectOption("expense-cutoff");
+      await loadRetainedHistory(page);
+      for (const [label, value] of [
+        ["Schedule title", title],
+        ["Reconciliation date", input.payload.as_of],
+        ["Reporting period start", input.payload.period_start],
+        ["Review through date", input.payload.review_through],
+        ["Scope and source rationale", input.payload.rationale],
+      ])
+        await page.getByLabel(label, { exact: true }).fill(value);
+      for (const [role, id] of Object.entries(input.sources))
+        await page
+          .getByLabel(
+            role === "documents"
+              ? "documents source"
+              : `${role} source (optional)`,
+            { exact: true },
+          )
+          .selectOption(id as string);
+      await page
+        .getByRole("button", { name: "Queue calculation", exact: true })
+        .click();
+      const option = page
+        .getByLabel("Saved source or result")
+        .locator("option")
+        .filter({ hasText: title });
+      await expect(option).toHaveCount(1, { timeout: 120000 });
+      await page
+        .getByLabel("Saved source or result")
+        .selectOption((await option.getAttribute("value"))!);
+      const panel = page
+        .getByRole("heading", { name: title, exact: true })
+        .locator("..");
+      await expect(
+        panel.getByRole("cell", { name: "ALLOC-1-0000", exact: true }),
+      ).toBeVisible();
+      await expect(
+        panel
+          .getByRole("cell", {
+            name: kind === "late_credit" ? "LATE_RECOGNITION" : "MATCHED",
+            exact: true,
+          })
+          .first(),
+      ).toBeVisible();
+      for (const notice of await page
+        .getByRole("button", { name: "Dismiss notification", exact: true })
+        .all())
+        await notice.click();
+      const schedule = panel.locator("table").last();
+      await schedule.scrollIntoViewIfNeeded();
+      await expect(
+        panel
+          .getByRole("button", { name: "Document exception", exact: true })
+          .first(),
+      ).toBeInViewport({ ratio: 1 });
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-cutoff-${kind}-schedule.png`,
+        () => schedule.screenshot(),
+      );
+      await panel
+        .getByText("Cutoff document allocation controls · 1 documents", {
+          exact: true,
+        })
+        .click();
+      const controls = panel.getByRole("table", {
+        name: "Cutoff document allocation controls",
+        exact: true,
+      });
+      await expect(
+        controls
+          .getByRole("cell", {
+            name: kind === "late_credit" ? "-1200" : "1200",
+            exact: true,
+          })
+          .first(),
+      ).toBeVisible();
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-cutoff-${kind}-controls.png`,
+        () => controls.screenshot(),
+      );
+      await panel
+        .getByText(
+          `Cutoff ledger posting links · ${kind === "late_credit" ? 1 : 3} links`,
+          { exact: true },
+        )
+        .click();
+      const postings = panel.getByRole("table", {
+        name: "Cutoff ledger posting links",
+        exact: true,
+      });
+      await expect(
+        postings
+          .getByRole("cell", { name: "EXP-SERVICES", exact: true })
+          .first(),
+      ).toBeVisible();
+      await expect(
+        postings.getByRole("cell", {
+          name: kind === "late_credit" ? "-100" : "-20",
+          exact: true,
+        }),
+      ).toBeVisible();
+      await expect(
+        postings
+          .getByRole("cell", {
+            name: kind === "late_credit" ? "2026-07-10" : "2026-06-30",
+            exact: true,
+          })
+          .first(),
+      ).toBeVisible();
+      await saveScreenshot(
+        `${shots}/${country.toLowerCase()}-cutoff-${kind}-postings.png`,
+        () => postings.screenshot(),
+      );
+    }
+  }
+});
+
 test("positive party balance evidence and retained documents for UAE then India", async ({
   page,
 }) => {

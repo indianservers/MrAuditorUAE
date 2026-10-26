@@ -805,6 +805,11 @@ async def main():
         for code, engagement, currency in (("AE", eid, "AED"), ("IN", india, "INR")):
             purchase_quantities[code] = {"valid": await prepare_purchases(client, h, engagement, supporting_reviewer, currency),
                 "bad_units": await prepare_purchases(client, h, engagement, supporting_reviewer, currency, receipt_unit="KG")}
+        from tests.qa_crud.test_cutoff_schedules import prepare as prepare_cutoff_schedules
+
+        cutoff_schedules = {}
+        for code, engagement, currency in (("AE", eid, "AED"), ("IN", india, "INR")):
+            cutoff_schedules[code] = {case: await prepare_cutoff_schedules(client, h, engagement, supporting_reviewer, currency, case) for case in ("split_reversal", "late_credit")}
         from tests.qa_crud.test_party_confirmations import prepare as prepare_party_confirmations
 
         party_confirmations = {}
@@ -1060,6 +1065,7 @@ async def main():
                     "screening_candidates": screening_candidates,
                     "purchase_quantities": purchase_quantities,
                     "party_confirmations": party_confirmations,
+                    "cutoff_schedules": cutoff_schedules,
                     "bank_carryforward": bank_carryforward,
                     "ecr_arrear_input": arrear_input,
                     "ecr_arrear_sources": arrear_source_ids,

@@ -204,6 +204,8 @@ def _parse_csv(content, data, defaults=None):
         "confirmations",
         "party-confirmations",
         "cutoff-documents",
+        "cutoff-recognition-lines",
+        "cutoff-posting-lines",
         "purchase-lines",
         "expense-claims",
         "benefit-employees",

@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 
 from app.modules.country_workflows.audit_schemas import AUDIT_ROW_TYPES
 from app.modules.country_workflows.bank_accounts import BankAccountEvidence
+from app.modules.country_workflows.cutoff_schedules import CutoffPosting, CutoffRecognition
 from app.modules.country_workflows.diligence_schemas import DILIGENCE_ROW_TYPES
 from app.modules.country_workflows.document_series import DocumentSeries, SeriesCounts
 from app.modules.country_workflows.ecr_arrear_schemas import ECRArrearControls
@@ -193,6 +194,8 @@ class Control(Strict):
 
 
 ROW_TYPES: dict[str, type[BaseModel]] = {
+    "cutoff-recognition-lines": CutoffRecognition,
+    "cutoff-posting-lines": CutoffPosting,
     "party-confirmations": PartyConfirmation,
     "confirmation-item-coverage": ConfirmationItemCoverage,
     "inventory-valuations": InventoryValuation,
@@ -323,6 +326,8 @@ class SourceInput(Strict):
         "party-confirmations",
         "confirmation-item-coverage",
         "cutoff-documents",
+        "cutoff-recognition-lines",
+        "cutoff-posting-lines",
         "ecl-loss-rates",
         "cash-forecasts",
         "purchase-lines",

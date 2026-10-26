@@ -125,3 +125,11 @@ same confirmation workflow. Scope balance, actual written request amount and
 actual response amount have separate independent controls. Partial replies
 retain uncovered items and require follow-up plus independent exception review.
 See [contract, evidence and verification](native-adapters.md#blank-positive-requests-and-partial-replies--uae-then-india).
+
+
+Expense cut-off now supports explicit recognition allocations and independently
+supplied expense-account posting schedules, including split postings, reversals,
+credit notes and subsequent dates. It retains exact document allocation
+controls, independently paged original links and full exports. See
+[scope and verification](native-adapters.md#explicit-expense-cut-off-allocations-and-posting-schedules--uae-then-india)
+and [saved UAE/India examples](sample-inputs/SYNTHETIC-cutoff-schedules/README.md).

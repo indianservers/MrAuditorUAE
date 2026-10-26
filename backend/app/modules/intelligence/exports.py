@@ -224,6 +224,15 @@ def render(event, format):
                     for prefix, date_field in (("request", "requested_on"), ("response", "responded_on"), ("followup", "followup_on")):
                         if evidence.get(prefix + "_evidence_version_id"):
                             append(documents, [*identity, position.get("confirmation_status"), evidence.get("request_basis"), evidence.get("scope_balance"), evidence.get("requested_amount"), prefix, evidence.get(date_field), evidence[prefix + "_evidence_version_id"], evidence[prefix + "_source_sha256"], evidence[prefix + "_reference"], evidence.get("contact_verified"), evidence.get("independently_received"), evidence.get("scope_assessment"), evidence.get("followup_kind") if prefix == "followup" else None, evidence.get("followup_assessment") if prefix == "followup" else None, "RETAINED_IDENTITY_ONLY"])
+            for key, title, fields in (
+                ("cutoff_document_controls", "Cutoff document controls", ["document_source_id", "counterparty", "reference", "currency", "document_kind", "document_amount", "allocated_amount", "difference", "allocation_rows", "state"]),
+                ("cutoff_posting_links", "Cutoff posting links", ["posting_source_id", "allocation_id", "document_id", "counterparty", "currency", "account", "amount", "posting_date", "journal_reference", "evidence_reference"]),
+            ):
+                if body.get(key) is not None:
+                    sheet = workbook.create_sheet(title)
+                    append(sheet, fields)
+                    for record in body[key]:
+                        append(sheet, [record.get(field) for field in fields])
             if body.get("confirmation_coverage_links") is not None:
                 coverage = workbook.create_sheet("Confirmation coverage links")
                 fields = ["source_row_id", "confirmation_source_row_id", "item_id", "as_of", "account", "counterparty", "side", "currency", "book_amount", "evidence_reference"]

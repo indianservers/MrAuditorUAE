@@ -1,0 +1,48 @@
+{
+  "scope": "SYNTHETIC_OWNED_LOCAL_VERIFICATION_ONLY",
+  "contract": "explicit-cutoff-schedules/1",
+  "country_order": [
+    "AE",
+    "IN"
+  ],
+  "browser_cases": [
+    "split_reversal",
+    "late_credit"
+  ],
+  "implementation_sha256": "7cceb38ea622c0a841374efa587eb3ad45b9c0b93b6764d4f9a15cbe07a28e36",
+  "backend_unit": {
+    "passed": 1971,
+    "skipped": 4
+  },
+  "frontend": {
+    "passed": 197
+  },
+  "database_api": {
+    "passed": 5
+  },
+  "browser": {
+    "passed": 1,
+    "cases_exercised": 4,
+    "report": "docs/phase-12/cutoff-schedules-browser-results.json"
+  },
+  "maximum_tested_source_rows": {
+    "recognitions": 5000,
+    "postings": 5000
+  },
+  "api_pagination_tested": {
+    "documents": 121,
+    "posting_links": 363
+  },
+  "authored_synthetic_catalogue_count": 154,
+  "release_qualified": false,
+  "client_pilots_qualified": false,
+  "professional_signoff_established": false,
+  "log_sha256": {
+    "unit": "bbeb0bf2dd8197e7ee338d09aed5a6164c9e9388ca5ed4d050556ae1cfe87380",
+    "frontend": "1c2bf675bb11a09e941ef05216e4b2f9d25f038f258127dc45b6383396675601",
+    "api": "48379ed70b890c015ea95446e1463b40056239ee47bc5167f955bc204c98c59d",
+    "build": "679658c8ada7e85bb06e3bce539a2072101a93935cae738875c5196b0d4ec44c",
+    "mypy": "983e45a1573bdc3dc4ac842170891e6f013874a8cadda16fde2fbe3b7b5c6021",
+    "browser": "2315b26c1e19dbc97187552cc6ec3c67673daa79bc423c82e3a7d967e7f1b21d"
+  }
+}

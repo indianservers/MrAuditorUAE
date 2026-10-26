@@ -1,0 +1,45 @@
+{
+  "synthetic_only": true,
+  "country": "AE",
+  "workflow": "expense-cutoff",
+  "contract": "explicit-cutoff-schedules/1",
+  "period_start": "2026-01-01",
+  "as_of": "2026-06-30",
+  "review_through": "2026-07-31",
+  "sources": {
+    "documents": {
+      "table_type": "cutoff-documents",
+      "expected_rows": 1,
+      "control_totals": {
+        "AED": "-1200"
+      }
+    },
+    "recognitions": {
+      "table_type": "cutoff-recognition-lines",
+      "expected_rows": 2,
+      "control_totals": {
+        "AED": "-1200"
+      }
+    },
+    "postings": {
+      "table_type": "cutoff-posting-lines",
+      "expected_rows": 1,
+      "control_totals": {
+        "AED": "-100"
+      }
+    }
+  },
+  "expected_current": {
+    "state": "LATE_RECOGNITION",
+    "expected_period_amount": "-100",
+    "posted_period_amount": "0",
+    "subsequent_posted_amount": "-100",
+    "difference": "100"
+  },
+  "expected_future": {
+    "expected_period_amount": "0",
+    "recognition_timing": "AFTER_REVIEW_WINDOW_ASSESSED_SCHEDULE"
+  },
+  "blocked": false,
+  "independent_exception_disposition_required": true
+}

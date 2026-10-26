@@ -444,6 +444,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(422, "Withholding obligations can establish only their assessed bank-allocation purpose")
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
+        if data.workflow == "expense-cutoff" and {"recognitions", "postings"} & set(data.source_ids) and source.body.get("review_status") != "REVIEWED":
+            raise HTTPException(409, "Independently review cutoff documents, recognition allocations and ledger postings before comparison")
         if data.workflow == "inventory-valuation-control" and source.body.get("review_status") != "REVIEWED":
             raise HTTPException(409, "Independently review inventory books, valuation evidence and GL controls before comparison")
         if data.workflow == "procurement-match" and source.body.get("review_status") != "REVIEWED":

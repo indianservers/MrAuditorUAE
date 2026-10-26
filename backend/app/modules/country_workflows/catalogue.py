@@ -13,7 +13,10 @@ from app.modules.country_workflows.pension_schemas import PENSION_WORKFLOWS
 from app.modules.country_workflows.sector_schemas import SECTOR_WORKFLOWS
 from app.modules.country_workflows.withholding_schemas import WITHHOLDING_WORKFLOWS
 
-OPTIONAL_ROLES = {"party-balance-confirmations": {"coverage": "confirmation-item-coverage"}}
+OPTIONAL_ROLES = {
+    "party-balance-confirmations": {"coverage": "confirmation-item-coverage"},
+    "expense-cutoff": {"recognitions": "cutoff-recognition-lines", "postings": "cutoff-posting-lines"},
+}
 
 WORKFLOWS = {
     "party-balance-confirmations": ("Positive customer/vendor balance confirmations", [], {"items": "audit-open-items", "controls": "balance-controls", "responses": "party-confirmations"}),

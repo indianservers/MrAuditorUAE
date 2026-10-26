@@ -13,6 +13,7 @@ export function InventoryEvidenceTable({
   bridge = false,
   purchase = false,
   confirmation = false,
+  cutoff,
 }: {
   prefix: string;
   selected: string;
@@ -21,95 +22,141 @@ export function InventoryEvidenceTable({
   bridge?: boolean;
   purchase?: boolean;
   confirmation?: boolean;
+  cutoff?: "controls" | "postings";
 }) {
   const [offset, setOffset] = useState(0);
-  const field = confirmation
-    ? "confirmation_coverage_links"
-    : purchase
-      ? "purchase_quantity_controls"
-      : bridge
-        ? "count_bridges"
-        : "inventory_quantity_controls";
-  const parameter = confirmation
-    ? "confirmation_link_offset"
-    : purchase
-      ? "purchase_offset"
-      : bridge
-        ? "bridge_offset"
-        : "inventory_offset";
+  const field = cutoff
+    ? cutoff === "controls"
+      ? "cutoff_document_controls"
+      : "cutoff_posting_links"
+    : confirmation
+      ? "confirmation_coverage_links"
+      : purchase
+        ? "purchase_quantity_controls"
+        : bridge
+          ? "count_bridges"
+          : "inventory_quantity_controls";
+  const parameter = cutoff
+    ? cutoff === "controls"
+      ? "cutoff_control_offset"
+      : "cutoff_posting_offset"
+    : confirmation
+      ? "confirmation_link_offset"
+      : purchase
+        ? "purchase_offset"
+        : bridge
+          ? "bridge_offset"
+          : "inventory_offset";
   const page = useAPI<{ body: Record<string, Row[]> }>(
     `${prefix}/events/${selected}?limit=1&${parameter}=${offset}`,
     offset > 0,
   );
   const rows = offset ? page.data?.body[field] || [] : initial;
-  const title = confirmation
-    ? "Partial confirmation item links"
-    : purchase
-      ? "Purchase quantity controls"
-      : bridge
-        ? "Inventory count-date bridges"
-        : "Inventory quantity controls";
-  const columns = confirmation
-    ? [
-        "source_row_id",
-        "confirmation_source_row_id",
-        "item_id",
-        "as_of",
-        "account",
-        "counterparty",
-        "side",
-        "currency",
-        "book_amount",
-        "evidence_reference",
-      ]
-    : purchase
+  const title = cutoff
+    ? cutoff === "controls"
+      ? "Cutoff document allocation controls"
+      : "Cutoff ledger posting links"
+    : confirmation
+      ? "Partial confirmation item links"
+      : purchase
+        ? "Purchase quantity controls"
+        : bridge
+          ? "Inventory count-date bridges"
+          : "Inventory quantity controls";
+  const columns = cutoff
+    ? cutoff === "controls"
       ? [
-          "order_id",
-          "line_reference",
-          "vendor",
+          "document_source_id",
+          "counterparty",
+          "reference",
           "currency",
-          "uom",
-          "document_type",
-          "expected_rows",
-          "quantity",
+          "document_kind",
+          "document_amount",
+          "allocated_amount",
+          "difference",
+          "allocation_rows",
+          "state",
         ]
-      : bridge
+      : [
+          "posting_source_id",
+          "allocation_id",
+          "document_id",
+          "counterparty",
+          "currency",
+          "account",
+          "amount",
+          "posting_date",
+          "journal_reference",
+          "evidence_reference",
+        ]
+    : confirmation
+      ? [
+          "source_row_id",
+          "confirmation_source_row_id",
+          "item_id",
+          "as_of",
+          "account",
+          "counterparty",
+          "side",
+          "currency",
+          "book_amount",
+          "evidence_reference",
+        ]
+      : purchase
         ? [
-            "site",
-            "sku",
-            "lot",
-            "uom",
+            "order_id",
+            "line_reference",
+            "vendor",
             "currency",
-            "original_count_date",
-            "direction",
-            "original_count_quantity",
-            "applied_movement_quantity",
-            "reporting_date_quantity",
-          ]
-        : [
-            "site",
-            "sku",
-            "lot",
             "uom",
-            "currency",
+            "document_type",
             "expected_rows",
-            "positive_quantity",
-            "negative_quantity",
-          ];
+            "quantity",
+          ]
+        : bridge
+          ? [
+              "site",
+              "sku",
+              "lot",
+              "uom",
+              "currency",
+              "original_count_date",
+              "direction",
+              "original_count_quantity",
+              "applied_movement_quantity",
+              "reporting_date_quantity",
+            ]
+          : [
+              "site",
+              "sku",
+              "lot",
+              "uom",
+              "currency",
+              "expected_rows",
+              "positive_quantity",
+              "negative_quantity",
+            ];
   return (
     <details style={{ margin: "16px 0" }}>
       <summary>
-        {title} · {total} {confirmation ? "links" : "partitions"}
+        {title} · {total}{" "}
+        {cutoff === "controls"
+          ? "documents"
+          : cutoff || confirmation
+            ? "links"
+            : "partitions"}
       </summary>
       <ErrorState error={page.error} />
       <p>
-        {confirmation
-          ? "Reviewed item mappings declare the scope of a partial reply. They do not confirm the remaining items or authenticate the response. Every link is retained in the XLSX."
-          : purchase
-            ? "Independent row and quantity controls remain separate for each order, line, vendor, currency, unit and document type. Payment quantities are excluded. No unit conversion is inferred."
-            : bridge
-              ? "Original count quantities and dates remain distinct from the calculated reporting-date quantities. Quantity bridging does not establish reporting-date condition or physical attendance. Complete original row links are retained in the XLSX."
-              : "Independent row and directional quantity controls remain separate for every site, SKU, lot, unit and currency. Positive and negative movements cannot offset an incomplete population."}
+        {cutoff
+          ? "Every allocation must exactly cover its document amount. Posting dates, partial entries and reversals remain source linked; assessed future recognition does not establish that the service has occurred."
+          : confirmation
+            ? "Reviewed item mappings declare the scope of a partial reply. They do not confirm the remaining items or authenticate the response. Every link is retained in the XLSX."
+            : purchase
+              ? "Independent row and quantity controls remain separate for each order, line, vendor, currency, unit and document type. Payment quantities are excluded. No unit conversion is inferred."
+              : bridge
+                ? "Original count quantities and dates remain distinct from the calculated reporting-date quantities. Quantity bridging does not establish reporting-date condition or physical attendance. Complete original row links are retained in the XLSX."
+                : "Independent row and directional quantity controls remain separate for every site, SKU, lot, unit and currency. Positive and negative movements cannot offset an incomplete population."}
       </p>
       <div className="table-wrap">
         <table aria-label={title}>
@@ -147,11 +194,13 @@ export function InventoryEvidenceTable({
         onClick={() => setOffset(Math.max(0, offset - 100))}
       >
         Previous{" "}
-        {confirmation
-          ? "confirmation link"
-          : bridge
-            ? "bridge"
-            : "quantity control"}{" "}
+        {cutoff
+          ? `cutoff ${cutoff}`
+          : confirmation
+            ? "confirmation link"
+            : bridge
+              ? "bridge"
+              : "quantity control"}{" "}
         rows
       </Button>
       <Button
@@ -159,11 +208,13 @@ export function InventoryEvidenceTable({
         onClick={() => setOffset(offset + 100)}
       >
         Next{" "}
-        {confirmation
-          ? "confirmation link"
-          : bridge
-            ? "bridge"
-            : "quantity control"}{" "}
+        {cutoff
+          ? `cutoff ${cutoff}`
+          : confirmation
+            ? "confirmation link"
+            : bridge
+              ? "bridge"
+              : "quantity control"}{" "}
         rows
       </Button>
     </details>

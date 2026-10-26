@@ -227,7 +227,7 @@ def confirmations(data, tables):
     )
 
 
-def cutoff(data, tables):
+def single_date_cutoff(data, tables):
     rows = []
     for document in tables["documents"]:
         recognition = date.fromisoformat(document["recognition_date"])
@@ -242,7 +242,7 @@ def cutoff(data, tables):
         belongs = data.period_start <= recognition <= data.as_of
         recorded = posted is not None and data.period_start <= posted <= data.as_of
         state = (
-            "UNRECORDED_LIABILITY"
+            ("UNRECORDED_CREDIT" if money(document) < 0 else "UNRECORDED_LIABILITY")
             if belongs and posted is None
             else "LATE_RECOGNITION"
             if belongs and posted > data.as_of
@@ -270,6 +270,14 @@ def cutoff(data, tables):
             "The uploaded population does not establish completeness of subsequent invoices or liabilities",
         ],
     )
+
+
+def cutoff(data, tables):
+    if any(row.get("recognition_mode") == "explicit-schedule" for row in tables["documents"]) or {"recognitions", "postings"} & set(tables):
+        from app.modules.country_workflows.cutoff_schedules import compare
+
+        return compare(data, tables, single_date_cutoff)
+    return single_date_cutoff(data, tables)
 
 
 AUDIT_CALCULATORS = {

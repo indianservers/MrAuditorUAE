@@ -185,6 +185,7 @@ vi.mock("@/hooks/use-api", () => ({
               },
               { id: "inventory-valuation-control", title: "Inventory valuation and GL controls", available: true, roles: { books: "stock", valuations: "inventory-valuations", controls: "accounting-controls" } },
               { id: "procurement-match", title: "Controlled procurement", available: true, roles: { orders: "purchase-lines", receipts: "purchase-lines", invoices: "purchase-lines", payments: "purchase-lines" } },
+              {id:"expense-cutoff", title:"Expense cutoff", available:true, roles:{documents:"cutoff-documents"}, optional_roles:{recognitions:"cutoff-recognition-lines",postings:"cutoff-posting-lines"}},
               { id: "party-balance-confirmations", title: "Positive party balances", available: true, optional_roles: { coverage: "confirmation-item-coverage" }, roles: { items: "audit-open-items", controls: "balance-controls", responses: "party-confirmations" } },
               {
                 id: "india-esic-population",
@@ -502,6 +503,7 @@ vi.mock("@/hooks/use-api", () => ({
                       })),
                       ...["valuations", "controls"].map((role) => ({ id: "valuation-" + role, label: "Reviewed inventory " + role, kind: "workflow-source", table_type: role === "valuations" ? "inventory-valuations" : "accounting-controls", freshness: "CURRENT", version: 1, review_status: "REVIEWED" })),
                       ...["items", "controls", "responses"].map(role => ({ id: "party-" + role, label: "Reviewed party " + role, kind: "workflow-source", table_type: role === "items" ? "audit-open-items" : role === "controls" ? "balance-controls" : "party-confirmations", freshness: "CURRENT", version: 1, review_status: "REVIEWED" })),
+                      ...["documents", "recognitions", "postings"].map(role => ({id:"cutoff-"+role,label:"Reviewed cutoff "+role,kind:"workflow-source",table_type:role === "documents" ? "cutoff-documents" : role === "recognitions" ? "cutoff-recognition-lines" : "cutoff-posting-lines",freshness:"CURRENT",version:1,review_status:"REVIEWED"})),
                       ...["REVIEWED", "UNVERIFIED"].map(status => ({id: "coverage-" + status, label: "Coverage " + status, kind: "workflow-source", table_type: "confirmation-item-coverage", freshness: "CURRENT", version: 1, review_status: status})),
                       { id: "party-unreviewed", label: "Unreviewed party responses", kind: "workflow-source", table_type: "party-confirmations", freshness: "CURRENT", version: 1, review_status: "UNVERIFIED" },
                       ...["opening", "payroll", "posted", "closing"].map(
@@ -3261,4 +3263,15 @@ it("shows document counts and missing ranges as labelled values without currency
   expect(
     screen.getAllByRole("cell", { name: "Not determined" }),
   ).toHaveLength(6);
+});
+
+
+it("queues expense cutoff with explicit reviewed recognition and posting sources", async () => {
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Workflow"),{target:{value:"expense-cutoff"}});
+  for (const [label,value] of [["Schedule title","SYN split service cutoff"],["Reconciliation date","2026-06-30"],["Reporting period start","2026-01-01"],["Review through date","2026-07-31"],["Scope and source rationale","Independent reviewed recognition and ledger scope"],["documents source","cutoff-documents"],["recognitions source (optional)","cutoff-recognitions"],["postings source (optional)","cutoff-postings"]])
+    fireEvent.change(screen.getByLabelText(label),{target:{value}});
+  fireEvent.click(screen.getByRole("button",{name:"Queue calculation"}));
+  await waitFor(()=>expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({workflow:"expense-cutoff",period_start:"2026-01-01",source_ids:{documents:"cutoff-documents",recognitions:"cutoff-recognitions",postings:"cutoff-postings"}});
 });

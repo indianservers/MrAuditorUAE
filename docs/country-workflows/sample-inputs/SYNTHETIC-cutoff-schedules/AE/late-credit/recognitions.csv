@@ -1,0 +1,3 @@
+id,document_id,counterparty,currency,amount,recognition_date,recognition_basis,evidence_reference
+ALLOC-1,DOC-1,VENDOR-1,AED,-100,2026-06-30,service-performed,SYN-REVIEWED-JUNE-SERVICE
+ALLOC-2,DOC-1,VENDOR-1,AED,-1100,2027-05-31,service-performed,SYN-REVIEWED-FUTURE-SCHEDULE

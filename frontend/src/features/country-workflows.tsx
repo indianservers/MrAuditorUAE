@@ -209,6 +209,9 @@ type Result = {
       coverage_rows?: number;
     };
     confirmation_coverage_links?: Record<string, unknown>[];
+    cutoff_document_controls?: Record<string, unknown>[];
+    cutoff_posting_links?: Record<string, unknown>[];
+    cutoff_schedule_contract?: string;
     esic_population_scope?: { registration: string; period: string };
     esic_population_binding?: {
       status: string;
@@ -311,6 +314,8 @@ const moneyTables = [
   "balance-controls",
   "confirmations",
   "cutoff-documents",
+  "cutoff-recognition-lines",
+  "cutoff-posting-lines",
   "purchase-lines",
   "expense-claims",
   "benefit-employees",
@@ -925,112 +930,124 @@ export function CountryWorkflows({
                   ].filter((key) => allColumns.includes(key))
                 : defaultColumns;
   const columns =
-    body?.workflow === "party-balance-confirmations" && !showRuleProvenance
-      ? (confirmationView === "gl-controls"
+    body?.cutoff_schedule_contract && !showRuleProvenance
+      ? [
+          "allocation_source_id",
+          "document_source_id",
+          "counterparty",
+          "currency",
+          "recognition_date",
+          "expected_period_amount",
+          "posted_period_amount",
+          "difference",
+          "state",
+        ].filter((key) => allColumns.includes(key))
+      : body?.workflow === "party-balance-confirmations" && !showRuleProvenance
+        ? (confirmationView === "gl-controls"
+            ? [
+                "account",
+                "side",
+                "currency",
+                "subledger_amount",
+                "control_amount",
+                "difference",
+                "state",
+              ]
+            : [
+                "account",
+                "counterparty",
+                "side",
+                "currency",
+                "open_item_count",
+                "book_balance",
+                "request_basis",
+                "confirmation_status",
+                "response_amount",
+                "difference",
+                "state",
+              ]
+          ).filter((key) => allColumns.includes(key))
+        : body?.workflow === "procurement-match" && !showRuleProvenance
           ? [
-              "account",
-              "side",
+              "order_id",
+              "line_reference",
+              "vendor",
               "currency",
-              "subledger_amount",
-              "control_amount",
-              "difference",
+              "uom",
+              "quantity_comparison_status",
+              "quantities",
+              "amounts",
+              "exceptions",
               "state",
-            ]
-          : [
-              "account",
-              "counterparty",
-              "side",
-              "currency",
-              "open_item_count",
-              "book_balance",
-              "request_basis",
-              "confirmation_status",
-              "response_amount",
-              "difference",
-              "state",
-            ]
-        ).filter((key) => allColumns.includes(key))
-      : body?.workflow === "procurement-match" && !showRuleProvenance
-        ? [
-            "order_id",
-            "line_reference",
-            "vendor",
-            "currency",
-            "uom",
-            "quantity_comparison_status",
-            "quantities",
-            "amounts",
-            "exceptions",
-            "state",
-          ].filter((key) => allColumns.includes(key))
-        : body?.workflow === "sanctions-name-review" && !showRuleProvenance
-          ? [
-              "id",
-              "subject_name",
-              "list_version",
-              "candidate_count",
-              "candidate_preview_truncated",
-              "state",
-              "reviewer_disposition",
             ].filter((key) => allColumns.includes(key))
-          : body?.workflow === "inventory-valuation-control" &&
-              !showRuleProvenance
-            ? (inventoryView === "gl-controls"
-                ? [
-                    "account",
-                    "currency",
-                    "recorded_book_value",
-                    "gl_amount",
-                    "difference",
-                    "state",
-                  ]
-                : [
-                    "site",
-                    "sku",
-                    "lot",
-                    "uom",
-                    "currency",
-                    "book_quantity",
-                    "book_unit_cost",
-                    "assessed_unit_cost",
-                    "book_unit_nrv",
-                    "assessed_unit_nrv",
-                    "recorded_gl_basis_value",
-                    "assessed_lower_cost_nrv_value",
-                    "recorded_minus_assessed_value",
-                    "exceptions",
-                    "state",
-                  ]
-              ).filter((key) => allColumns.includes(key))
-            : body?.table_type === "esic-members" && !showRuleProvenance
-              ? [
-                  "subject",
-                  "member_name",
-                  "period",
-                  "currency",
-                  "amount",
-                  "paid_days",
-                  "zero_wage_reason",
-                  "zero_day_reason",
-                  "last_working_day",
-                  "source_row",
-                ].filter((key) => allColumns.includes(key))
-              : body?.workflow === "india-esic-population" &&
-                  !showRuleProvenance
+          : body?.workflow === "sanctions-name-review" && !showRuleProvenance
+            ? [
+                "id",
+                "subject_name",
+                "list_version",
+                "candidate_count",
+                "candidate_preview_truncated",
+                "state",
+                "reviewer_disposition",
+              ].filter((key) => allColumns.includes(key))
+            : body?.workflow === "inventory-valuation-control" &&
+                !showRuleProvenance
+              ? (inventoryView === "gl-controls"
+                  ? [
+                      "account",
+                      "currency",
+                      "recorded_book_value",
+                      "gl_amount",
+                      "difference",
+                      "state",
+                    ]
+                  : [
+                      "site",
+                      "sku",
+                      "lot",
+                      "uom",
+                      "currency",
+                      "book_quantity",
+                      "book_unit_cost",
+                      "assessed_unit_cost",
+                      "book_unit_nrv",
+                      "assessed_unit_nrv",
+                      "recorded_gl_basis_value",
+                      "assessed_lower_cost_nrv_value",
+                      "recorded_minus_assessed_value",
+                      "exceptions",
+                      "state",
+                    ]
+                ).filter((key) => allColumns.includes(key))
+              : body?.table_type === "esic-members" && !showRuleProvenance
                 ? [
                     "subject",
-                    "payroll_member_name",
-                    "reported_member_name",
-                    "payroll_amount",
-                    "reported_amount",
-                    "wage_difference",
-                    "payroll_paid_days",
-                    "reported_paid_days",
-                    "paid_day_difference",
-                    "exceptions",
-                    "state",
+                    "member_name",
+                    "period",
+                    "currency",
+                    "amount",
+                    "paid_days",
+                    "zero_wage_reason",
+                    "zero_day_reason",
+                    "last_working_day",
+                    "source_row",
                   ].filter((key) => allColumns.includes(key))
-                : baseColumns;
+                : body?.workflow === "india-esic-population" &&
+                    !showRuleProvenance
+                  ? [
+                      "subject",
+                      "payroll_member_name",
+                      "reported_member_name",
+                      "payroll_amount",
+                      "reported_amount",
+                      "wage_difference",
+                      "payroll_paid_days",
+                      "reported_paid_days",
+                      "paid_day_difference",
+                      "exceptions",
+                      "state",
+                    ].filter((key) => allColumns.includes(key))
+                  : baseColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -3015,6 +3032,21 @@ export function CountryWorkflows({
                       </p>
                     </fieldset>
                   )}
+                  {[
+                    "cutoff-documents",
+                    "cutoff-recognition-lines",
+                    "cutoff-posting-lines",
+                  ].includes(tableType) && (
+                    <p>
+                      For split cut-off use explicit-schedule documents with no
+                      document-level recognition or posting date, exact
+                      recognition allocations covering each document amount, and
+                      separate posting lines linked by allocation ID. Keep
+                      original dates and signed reversals. Invoice amounts are
+                      nonnegative and credit-note amounts nonpositive; no
+                      service-period proration is inferred.
+                    </p>
+                  )}
                   {tableType === "party-confirmations" && (
                     <fieldset>
                       <legend>Positive party confirmation documents</legend>
@@ -3696,8 +3728,9 @@ export function CountryWorkflows({
                         ))}
                     </select>
                     <small>
-                      Partial replies require explicit reviewed item links. No
-                      subset is inferred from matching amounts.
+                      {workflow === "expense-cutoff"
+                        ? "Explicit schedules require both reviewed recognition and posting sources. Use a controlled nil posting source when no postings were observed. No proration or posting links are inferred."
+                        : "Partial replies require explicit reviewed item links. No subset is inferred from matching amounts."}
                     </small>
                   </label>
                 ),
@@ -5068,6 +5101,43 @@ export function CountryWorkflows({
               }
             />
           )}
+          {body.cutoff_schedule_contract && (
+            <>
+              <p>
+                Explicit cut-off allocations compare only the declared reporting
+                period. Future recognition dates are assessed schedules.
+                Document allocations must exactly cover invoice or credit-note
+                amounts; postings retain their actual dates.
+              </p>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={showRuleProvenance}
+                  onChange={(event) =>
+                    setShowRuleProvenance(event.target.checked)
+                  }
+                />{" "}
+                Show cutoff source provenance and all columns
+              </label>
+            </>
+          )}
+          {(["controls", "postings"] as const).map((mode) => {
+            const key =
+              mode === "controls"
+                ? "cutoff_document_controls"
+                : "cutoff_posting_links";
+            const initial = body[key];
+            return initial ? (
+              <InventoryEvidenceTable
+                key={`${selected}:cutoff:${mode}`}
+                prefix={prefix}
+                selected={selected}
+                initial={initial}
+                total={detail.data.collection_totals?.[key] ?? initial.length}
+                cutoff={mode}
+              />
+            ) : null;
+          })}
           {body.confirmation_coverage_links && (
             <InventoryEvidenceTable
               key={selected + ":confirmation-links"}

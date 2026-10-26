@@ -1709,3 +1709,73 @@ parse through the canonical source/calculation path under unit tests.
 See [browser receipt](../phase-12/confirmation-extensions-browser-results.json).
 The frozen authored synthetic catalogue remains 154; these checks do not
 constitute 154 qualified client engagements or professional sign-off.
+
+
+### Explicit expense cut-off allocations and posting schedules — UAE then India
+
+The existing `expense-cutoff` workflow now supports `explicit-schedule`
+documents, alongside its existing single-date path. This closes the supplied
+schedule comparison gap for invoices spanning recognition periods, split
+expense postings, signed reversals, credit notes and subsequent posting dates.
+It does not calculate service-period proration or choose legal recognition.
+
+Prepare three independently controlled and reviewed CSV sources:
+`cutoff-documents`, `cutoff-recognition-lines` and `cutoff-posting-lines`.
+The latter two use optional `recognitions` and `postings` roles; both are
+required when assessing an explicit schedule. A genuinely nil posting
+population needs an independently reviewed nil source, not an absent role.
+The API rejects unreviewed inputs before comparison. Source revisions make
+results stale through the existing retained-source dependency graph.
+
+Each recognition row identifies its exact document, counterparty and currency,
+with a signed amount, assessed recognition date, basis and source reference.
+Allocations must equal each document amount exactly; monetary tolerance cannot
+mask an incomplete or overallocated invoice. Invoice amounts are nonnegative,
+credit-note amounts nonpositive. Explicit schedules cannot compete with
+single-date recognition or posting fields on the scope document. Duplicate
+supplied document identities are rejected. Unknown, wrong-party or wrong-
+currency links fail rather than becoming guessed allocations.
+
+Each posting identifies its allocation, document, counterparty, currency,
+expense account, signed amount, actual posting date, journal reference and
+evidence reference. Partial entries and reversals stay as separate original
+links. Current, prior and subsequent posted amounts remain distinct; postings
+after the review-through date fail. Assessed future recognition allocations
+are labelled as schedules rather than evidence of future completed services.
+Missing or wrong-period postings cannot become matches through a large money
+tolerance. Document control failures block approval; other period/amount
+exceptions need documented disposition and an independent authorized reviewer.
+
+UAE and India share this arithmetic. The server enforces each engagement's
+actual period start; it does not infer a universal country financial year,
+VAT/GST treatment, deductibility, proration or FX conversion. Supplied expense
+postings do not reconcile prepayment, payable, tax or cash control accounts.
+Population completeness, source authenticity, sufficient audit evidence and
+professional/legal recognition still require engagement-specific work.
+
+New results retain `explicit-cutoff-schedules/1`. Document controls and original
+posting links have separate API pagination (`cutoff_control_offset/limit` and
+`cutoff_posting_offset/limit`), screen tables and complete XLSX sheets. The
+compact comparison shows expected/current posted amounts by allocation;
+source provenance, dates, prior/subsequent amounts and every original posting
+ID remain available through the expanded result and export. The existing
+single-date path remains readable and supports explicitly signed credit notes.
+Historical source rows without the new mode/kind fields keep their original
+single-date invoice meaning, including when nil optional schedules are supplied.
+
+Verification on 26 October 2026: 1,971 backend unit tests passed (four skipped),
+197 frontend tests passed and five owned PostgreSQL/API tests passed. The API
+checks include refusal before source review, actual India/UAE engagement
+periods, independent exception approval, source-change staleness and independent
+pagination/export across 121 documents and 363 original postings. The maximum
+5,000-allocation/5,000-posting unit case exports every row and link. Four saved
+synthetic input sets also parse and reproduce their expected period amounts.
+Production frontend build, TypeScript, scoped ESLint/Ruff, mypy across 69 source
+files and UTF-8 checks passed. One real-worker browser test exercised both
+split/reversal and late-credit cases in UAE-then-India order; all 12 screenshots
+were visually inspected. See [browser receipt](../phase-12/cutoff-schedules-browser-results.json)
+and [saved examples](sample-inputs/SYNTHETIC-cutoff-schedules/README.md).
+A [verification summary](../phase-12/cutoff-schedules-verification.json) retains
+counts, tested bounds and hashes of the owned local execution logs.
+The frozen authored synthetic catalogue remains 154. This extension does not
+close real-client, professional, native-provider or hosted-release gates.

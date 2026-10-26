@@ -101,12 +101,32 @@ class CutoffDocument(Strict):
     counterparty: Identifier
     reference: Identifier
     currency: Currency
-    amount: Money = Field(ge=0)
+    amount: Money
+    document_kind: Literal["invoice", "credit-note"] = "invoice"
+    recognition_mode: Literal["single-date", "explicit-schedule"] = "single-date"
     invoice_date: date
-    recognition_date: date
+    recognition_date: date | None = None
     posting_date: date | None = None
     evidence_reference: Identifier
     recognition_basis: Literal["goods-received", "service-performed", "reviewed-accrual"]
+
+    @model_validator(mode="after")
+    def cutoff_scope(self):
+        if (self.document_kind == "invoice" and self.amount < 0) or (
+            self.document_kind == "credit-note" and self.amount > 0
+        ):
+            raise ValueError(
+                "Cutoff invoices use nonnegative amounts; credit notes use nonpositive amounts"
+            )
+        if self.recognition_mode == "single-date" and self.recognition_date is None:
+            raise ValueError("Single-date cutoff requires its recognition date")
+        if self.recognition_mode == "explicit-schedule" and (
+            self.recognition_date is not None or self.posting_date is not None
+        ):
+            raise ValueError(
+                "Explicit cutoff schedules cannot compete with document-level recognition or posting dates"
+            )
+        return self
 
 
 class LossRate(Strict):
@@ -173,7 +193,14 @@ class PurchaseLine(Strict):
 
     @model_validator(mode="after")
     def exact_purchase_identity(self):
-        for value in (self.id, self.order_id, self.line_reference, self.vendor, self.evidence_reference, self.uom):
+        for value in (
+            self.id,
+            self.order_id,
+            self.line_reference,
+            self.vendor,
+            self.evidence_reference,
+            self.uom,
+        ):
             if value is not None and (not value.strip() or value != value.strip()):
                 raise ValueError("Purchase identifiers and units require exact nonblank values")
         return self

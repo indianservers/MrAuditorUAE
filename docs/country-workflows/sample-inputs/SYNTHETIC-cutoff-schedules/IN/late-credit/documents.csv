@@ -1,0 +1,2 @@
+id,counterparty,reference,currency,amount,document_kind,invoice_date,recognition_mode,recognition_basis,evidence_reference
+DOC-1,VENDOR-1,SYN-INV-1,INR,-1200,credit-note,2026-06-01,explicit-schedule,service-performed,SYN-SERVICE-CONTRACT-1

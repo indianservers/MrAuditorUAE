@@ -4,7 +4,7 @@ import { InventoryEvidenceTable } from "@/features/inventory-evidence-table";
 
 vi.mock("@/hooks/use-api", () => ({
   useAPI: (path: string) => ({
-    data: path.includes("confirmation_link_offset=100") ? {body: {confirmation_coverage_links: [{source_row_id: "LINK-LAST", item_id: "INV-LAST", evidence_reference: "REPLY-PAGE-9"}]}} : path.includes("purchase_offset=100")
+    data: path.includes("cutoff_control_offset=100") ? {body:{cutoff_document_controls:[{document_source_id:"DOC-LAST",document_amount:"1200",allocated_amount:"1200",state:"MATCHED"}]}} : path.includes("cutoff_posting_offset=100") ? {body:{cutoff_posting_links:[{posting_source_id:"POST-LAST",journal_reference:"JV-LAST",amount:"-20"}]}} : path.includes("confirmation_link_offset=100") ? {body: {confirmation_coverage_links: [{source_row_id: "LINK-LAST", item_id: "INV-LAST", evidence_reference: "REPLY-PAGE-9"}]}} : path.includes("purchase_offset=100")
       ? {
           body: {
             purchase_quantity_controls: [
@@ -118,4 +118,20 @@ it("pages reviewed confirmation links using an independent offset", () => {
   expect(screen.getByText("INV-LAST")).toBeVisible();
   expect(screen.getByText("REPLY-PAGE-9")).toBeVisible();
   expect(screen.getByRole("button", {name:"Next confirmation link rows"})).toBeDisabled();
+});
+
+
+it("pages cutoff controls and original ledger links independently", () => {
+  render(<>
+    <InventoryEvidenceTable prefix="/audit" selected="result" initial={Array.from({length:100},(_,i)=>({document_source_id:`DOC-${i}`}))} total={101} cutoff="controls" />
+    <InventoryEvidenceTable prefix="/audit" selected="result" initial={Array.from({length:100},(_,i)=>({posting_source_id:`POST-${i}`}))} total={101} cutoff="postings" />
+  </>);
+  fireEvent.click(screen.getByText("Cutoff document allocation controls · 101 documents"));
+  fireEvent.click(screen.getByText("Cutoff ledger posting links · 101 links"));
+  fireEvent.click(screen.getByRole("button", {name:"Next cutoff controls rows"}));
+  expect(screen.getByText("DOC-LAST")).toBeVisible();
+  expect(screen.getByText("POST-0")).toBeVisible();
+  fireEvent.click(screen.getByRole("button", {name:"Next cutoff postings rows"}));
+  expect(screen.getByText("POST-LAST")).toBeVisible();
+  expect(screen.getByText("JV-LAST")).toBeVisible();
 });

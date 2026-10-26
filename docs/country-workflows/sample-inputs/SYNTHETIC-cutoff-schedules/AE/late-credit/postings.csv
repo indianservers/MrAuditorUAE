@@ -1,0 +1,2 @@
+id,document_id,allocation_id,counterparty,currency,amount,account,posting_date,journal_reference,evidence_reference
+POST-1,DOC-1,ALLOC-1,VENDOR-1,AED,-100,EXP-SERVICES,2026-07-10,SYN-JV-1,SYN-LEDGER-LINE-1
