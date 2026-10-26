@@ -857,7 +857,9 @@ async def completion(db, ctx, eid):
         )
     ).all()
     approved = {r.kind for r in rows if r.status in {"APPROVED", "LOCKED"}}
-    checks = []
+    from app.modules.audit_execution.completion_sources import reviewed_source_control
+
+    checks = [await reviewed_source_control(db, ctx, rows)]
     # Approved consultation inputs can still contain unresolved release blockers.
     for paper in rows:
         if (paper.body.get("advanced_input") or {}).get("use_case_id") not in {150,190} or paper.status == "ARCHIVED":

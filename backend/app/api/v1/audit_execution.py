@@ -401,6 +401,10 @@ async def quality(eid: uuid.UUID, data: Action, db: DB, ctx: Actor, request: Req
     )
     if not declaration:
         raise HTTPException(409, "Approved independence declaration required")
+    from app.modules.audit_execution.completion_sources import reviewed_source_control
+
+    if not (await reviewed_source_control(db, ctx, rows))["passed"]:
+        raise HTTPException(409, "Current reviewed sources are required before quality approval")
     p = await s.policy(db, ctx, eid)
     from datetime import UTC, datetime
 

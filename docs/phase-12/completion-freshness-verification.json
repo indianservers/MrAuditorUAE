@@ -1,0 +1,61 @@
+{
+  "verified_on": "2026-10-27",
+  "control": "reviewed_source_freshness",
+  "contract": "reviewed-source-freshness/1",
+  "implementation_sha256": "801ddf4caeed082de3a5beae068d0a439566ff31486c4bcc12d7a7675c2d9f3c",
+  "regression_proof": {
+    "before_fix": "Real HTTP reproduction remained ready after superseding the sampled ledger",
+    "after_fix": "Testing, working-paper and completion roots retain APPROVED status but become STALE; release is rejected",
+    "recovery": "Independent reopening, revised sampling/source assessments and independent approval restore readiness"
+  },
+  "backend": {
+    "unit_passed": 2205,
+    "existing_calculation_regressions_passed": 11,
+    "total_passed": 2216,
+    "skipped": 4,
+    "new_control_unit_cases": 13,
+    "existing_audit_http_passed": 18,
+    "new_http_passed": 8,
+    "http_execution_note": "18 existing cases passed in the combined run; eight new cases passed in the corrected focused rerun"
+  },
+  "frontend": {
+    "tests_passed": 219,
+    "files_passed": 46,
+    "typescript": "passed",
+    "scoped_eslint": "passed",
+    "production_build": "passed"
+  },
+  "browser": {
+    "tests_passed": 1,
+    "country_order": [
+      "AE",
+      "IN"
+    ],
+    "isolated_cases": 6,
+    "cases_per_country": [
+      "current",
+      "stale",
+      "reassessed"
+    ],
+    "screenshots": 10,
+    "visual_review": "All ten inspected; explicit final-check scrolling verifies access below the initial screenshot viewport",
+    "affected_record_links_followed": 2,
+    "historical_approval_preserved": true
+  },
+  "unit_population": {
+    "reviewed_roots": 1001,
+    "last_root_stale_detected": true
+  },
+  "mypy_source_files": 4,
+  "scoped_ruff": "passed",
+  "utf8": "passed",
+  "authored_catalogue_cases": 154,
+  "qualification": "Synthetic engineering evidence only",
+  "test_boundaries": "Owned disposable PostgreSQL, real HTTP, private object storage and local production browser; evidence scanner is an explicit test double",
+  "remaining": [
+    "Real client pilot validation and independent expected results",
+    "Professional country/framework qualification",
+    "Native/live provider qualification",
+    "Hosted security, operations and release gates"
+  ]
+}

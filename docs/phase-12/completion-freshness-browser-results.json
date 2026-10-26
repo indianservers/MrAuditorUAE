@@ -1,0 +1,150 @@
+{
+  "config": {
+    "argv": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "C:\\Indian Servers\\TheAuditor\\frontend\\node_modules\\@playwright\\test\\cli.js",
+      "test",
+      "--config",
+      "playwright.completion-freshness.config.ts"
+    ],
+    "configFile": "C:\\Indian Servers\\TheAuditor\\frontend\\playwright.completion-freshness.config.ts",
+    "rootDir": "C:/Indian Servers/TheAuditor/frontend/e2e",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "C:/Indian Servers/TheAuditor/frontend/test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "C:/Indian Servers/TheAuditor/frontend/e2e",
+        "testIgnore": [],
+        "testMatch": [
+          "completion-freshness.spec.ts"
+        ],
+        "timeout": 120000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "C:\\Indian Servers\\TheAuditor\\frontend\\test-results",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e",
+        "snapshotDir": "C:\\Indian Servers\\TheAuditor\\frontend\\e2e",
+        "testIgnore": [],
+        "testMatch": "completion-freshness.spec.ts",
+        "timeout": 120000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3010",
+          "viewport": {
+            "width": 1600,
+            "height": 1100
+          },
+          "screenshot": "only-on-failure"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "../docs/phase-12/completion-freshness-browser-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "completion-freshness.spec.ts",
+      "file": "completion-freshness.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "completion identifies stale approved work and independently reassessed sources in UAE then India",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 180000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6633,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-10-26T23:36:19.356Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "757ce540f1d9fab5e730-4f9376d924bfeaaab9dd",
+          "file": "completion-freshness.spec.ts",
+          "line": 31,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-10-26T23:36:18.739Z",
+    "duration": 9179.688,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

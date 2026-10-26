@@ -153,3 +153,8 @@ mention counts, original articles and human identity/risk assessments. Missing
 searches and unresolved identities block approval; zero reported mentions never
 become clearance. See [scope and source contracts](native-adapters.md#adverse-media-search-coverage-and-identity-adjudication)
 and [ten fictional UAE/India examples](sample-inputs/SYNTHETIC-adverse-media/README.md).
+
+Engagement completion now rechecks source freshness for every approved or locked
+audit record. Replacing a ledger can block release while historical approval
+labels remain intact; the completion screen identifies the affected records.
+See [completion gates and verification](native-adapters.md#engagement-completion-requires-current-reviewed-sources).

@@ -1,4 +1,8 @@
 "use client";
+import {
+  CompletionControls,
+  type CompletionCheck,
+} from "./completion-controls";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -921,32 +925,21 @@ function EvidenceFiles({
   );
 }
 function Completion({ base }: { base: string }) {
-  const q = useAPI<{
-    checks: {
-      code: string;
-      passed: boolean;
-      description?: string;
-      record_ids?: string[];
-    }[];
-    ready: boolean;
-  }>(base + "/completion-checks", true, true);
+  const q = useAPI<{ checks: CompletionCheck[]; ready: boolean }>(
+    base + "/completion-checks",
+    true,
+    true,
+  );
+  const eid = base.split("/")[1];
   return (
-    <div className="audit-completion">
-      <h3>
-        Completion controls{" "}
-        <Status value={q.data?.ready ? "ready" : "outstanding"} />
-      </h3>
-      {q.data?.checks.map((c) => (
-        <div key={c.code}>
-          <span className={c.passed ? "check-pass" : "check-open"}>
-            {c.passed ? "✓" : "○"}
-          </span>
-          <span>{c.description || label(c.code)}</span>
-          <Status value={c.passed ? "passed" : "review required"} />
-        </div>
-      ))}
+    <>
+      <CompletionControls
+        eid={eid}
+        checks={q.data?.checks || []}
+        ready={q.data?.ready}
+      />
       <ErrorState error={q.error} />
-    </div>
+    </>
   );
 }
 function AuditAI({ base, tasks }: { base: string; tasks: string[] }) {

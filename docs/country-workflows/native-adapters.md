@@ -2195,3 +2195,58 @@ See the [verification receipt](../phase-12/adverse-media-verification.json) and
 doubles during source preparation do not qualify a live provider or malware
 service. Real pilots, provider qualification, professional country-policy review
 and hosted release validation remain open. The authored catalogue stays at 154.
+
+## Engagement completion requires current reviewed sources
+
+A reproduced completion defect allowed a fully approved engagement to remain
+ready after its sampled ledger was superseded. Approval labels alone were being
+counted; dependent testing, working-paper and completion records remained
+`APPROVED` even though their source lineage was stale.
+
+Completion now adds `reviewed_source_freshness`, contract
+`reviewed-source-freshness/1`. It checks every approved or locked audit record
+with the existing recursive lineage verifier. Stale, blocked, unverifiable or
+unrecognized freshness states fail the control. Known inaccessible/malformed
+receipt errors fail closed; unexpected infrastructure errors propagate. A shared
+request cache avoids repeating source traversal, while each linked engagement
+keeps its own reporting-context expectations. Historical closed/archived records
+are not new reviewed roots; references from active conclusions still undergo
+recursive checks. There is no truncation to a history or UI preview page.
+
+The existing review, quality-review, reporting and completion transitions consume
+this control without an override. Independent quality approval also checks it
+before recording a decision. Historical approvals are preserved. Recovery requires
+independent reopening, a revised source assessment and independent approval up
+the affected chain; merely repeating an old approval cannot restore readiness.
+This is a source-version release control, not a new audit opinion or a finding
+that the supplied population/evidence is professionally sufficient.
+
+The completion screen shows the reviewed-root count and failed record IDs, kinds
+and freshness states, without exposing source bodies or sensitive titles. It links
+affected records to their governed editors. Source issues initially show 25 links
+and allow the complete list to be expanded. Browser checks scroll to the final
+quality control as well as the initial source control, so a long list is not
+mistaken for an inaccessible or omitted final check.
+
+Verification on 27 October 2026: 2,205 backend unit tests and 11 existing calculation
+regressions passed (2,216 total; four existing skips). Thirteen new unit cases cover
+all noncurrent states, expected and unexpected errors, cache/context behavior,
+metadata minimization and a stale record after 1,000 other reviewed roots.
+The 18 existing audit HTTP workflow regressions passed in the combined run; all
+eight new UAE/India lifecycle/quality cases passed in the corrected focused run.
+These are 26 passing cases across those executions, not one green combined run.
+The new cases verify source replacement, unchanged historical approval, failed
+review/reporting/completion or quality decisions, and recovery after independently
+reassessing sampled testing and its dependent conclusions. Existing currency and
+independent-reopening controls remain enforced.
+
+All 219 frontend tests passed. One production-browser test exercised six isolated
+current/stale/reassessed cases across UAE first then India, followed affected
+working-paper links and retained approval status, and verified the final quality
+check remains reachable. Ten screenshots were saved and visually inspected.
+Production build, TypeScript, scoped ESLint/Ruff, mypy across four changed/related
+source modules and UTF-8 checks passed. The API and preview use the owned
+disposable database/private files with an explicit scanner double; no provider,
+malware-service, legal, professional or hosted-release qualification is claimed.
+See the [verification receipt](../phase-12/completion-freshness-verification.json)
+and [browser receipt](../phase-12/completion-freshness-browser-results.json).
