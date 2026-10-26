@@ -1,0 +1,2 @@
+id,account,project,vendor,reference,line_reference,currency,date,kind,amount,original_reference,evidence_reference
+E1,5000,P1,V1,SYN-INV-1,LINE-1,AED,2026-06-30,expense,300,,SYN-COST-1

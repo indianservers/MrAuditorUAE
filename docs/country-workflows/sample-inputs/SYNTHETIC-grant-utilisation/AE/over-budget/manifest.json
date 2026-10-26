@@ -1,0 +1,62 @@
+{
+  "dataset_kind": "SYNTHETIC_TEST_ONLY",
+  "country": "AE",
+  "case": "over-budget",
+  "period_start": "2026-01-01",
+  "as_of": "2026-06-30",
+  "currency": "AED",
+  "budget_binding_defaults": {
+    "source_evidence_version_id": "4c8277e4-f5a7-56f9-af0c-b0ddbabf1fe8",
+    "source_sha256": "1234158379030f1b71f1d4331f379e9e5adab209cc113a0bff6688421254f2c5"
+  },
+  "document_ids_are_placeholders": true,
+  "document_version_placeholders": {
+    "mandate.txt": "4c8277e4-f5a7-56f9-af0c-b0ddbabf1fe8"
+  },
+  "source_controls": {
+    "budgets": {
+      "table_type": "grant-budgets",
+      "expected_rows": 1,
+      "control_totals": {
+        "AED": "400"
+      }
+    },
+    "expenses": {
+      "table_type": "grant-expenses",
+      "expected_rows": 1,
+      "control_totals": {
+        "AED": "300"
+      }
+    },
+    "allocations": {
+      "table_type": "grant-allocations",
+      "expected_rows": 1,
+      "control_totals": {
+        "AED": "300"
+      }
+    },
+    "controls": {
+      "table_type": "grant-utilisation-controls",
+      "expected_rows": 2,
+      "control_totals": {
+        "AED": "500"
+      }
+    }
+  },
+  "sha256": {
+    "mandate.txt": "1234158379030f1b71f1d4331f379e9e5adab209cc113a0bff6688421254f2c5",
+    "budgets.csv": "f2901a8fa06061cbc646933617b3e938d6f9e1b862bb8c2eb223caad29ff296e",
+    "expenses.csv": "2d0bcf06e48e850ca38c394ee699146f49fb16c4c69755d3471e4dbacd60d4ff",
+    "allocations.csv": "c0f07c68dd743fae7d1b2b6869cc84a0fe2957618d4ebb9009db3a022b6d423c",
+    "controls.csv": "3a4188dc3920b20efb2b99b7e90faa310e84cf25efa2b8f2c22ff70be7335700"
+  },
+  "expected": {
+    "closing_utilisation": "500",
+    "exception_count": 1,
+    "blocked": false,
+    "cash_availability_established": false,
+    "legal_eligibility_established": false,
+    "certificate_issued": false
+  },
+  "actual_client_qualified": false
+}

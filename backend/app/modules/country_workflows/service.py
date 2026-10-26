@@ -304,7 +304,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(422, "CSV mappings and delimiters apply only to CSV sources")
         if data.rule_document_version_id:
             if (
-                data.table_type not in {"payroll-rules", "pension-rules", "benefit-rules", "withholding-records", "fx-rates"}
+                data.table_type not in {"payroll-rules", "pension-rules", "benefit-rules", "withholding-records", "fx-rates", "grant-budgets"}
                 or data.file_format != "canonical-csv"
             ):
                 raise HTTPException(
@@ -363,6 +363,13 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             result["native_metadata"].update(context_sha256=esic_context.sha256, context_filename=esic_context.filename)
         if arrear_context is not None:
             result["native_metadata"].update(arrear_context_sha256=arrear_context.sha256, arrear_context_filename=arrear_context.filename)
+        if data.table_type in {"grant-budgets", "grant-allocations"}:
+            from app.modules.country_workflows.grant_utilisation import documents as grant_documents
+
+            bindings = grant_documents(result["rows"], data.table_type)
+            if any(str(binding["source_evidence_version_id"]) == str(evidence.id) or binding["source_sha256"] == evidence.sha256 for binding in bindings):
+                raise HTTPException(422, "Grant schedules require distinct retained mandate/recovery-assessment documents")
+            dependencies.extend(await payroll_rule_documents(db, ctx, eng, bindings, contributors=supporting_contributors, label="Grant mandate/recovery assessment"))
         if data.table_type in {"party-confirmations", "inventory-custody-confirmations"}:
             from app.modules.country_workflows.party_confirmations import (
                 documents as confirmation_documents,
@@ -426,6 +433,9 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
     if data.workflow == "payroll-ledger-rollforward":
         if data.period_start is None or not period.start_date <= data.period_start <= data.as_of:
             raise HTTPException(422, "Payroll accounting window must be within the engagement period")
+    elif data.workflow == "grant-utilisation":
+        if data.period_start is None or not period.start_date <= data.period_start <= data.as_of:
+            raise HTTPException(422, "Grant expenditure review window must be within the engagement period")
     elif data.period_start and data.period_start != period.start_date:
         raise HTTPException(422, "Reporting-period start must equal the engagement period start")
     if data.workflow == "bank-account-evidence":
@@ -444,6 +454,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(422, "Withholding obligations can establish only their assessed bank-allocation purpose")
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
+        if data.workflow == "grant-utilisation" and source.body.get("review_status") != "REVIEWED":
+            raise HTTPException(409, "Independently review all grant mandate, expenditure, allocation and ledger-control sources before comparison")
         if data.workflow == "ownership-lookthrough" and source.body.get("review_status") != "REVIEWED":
             raise HTTPException(409, "Independently review ownership edges and country/date policy before look-through")
         if data.workflow == "expense-cutoff" and {"recognitions", "postings"} & set(data.source_ids) and source.body.get("review_status") != "REVIEWED":
@@ -537,6 +549,15 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         sources[role] = source.body
         contributors.update(source.body.get("contributors", [str(source.created_by)]))
         dependencies.append(intelligence.event_receipt(source))
+    grant_documents_receipts = None
+    if data.workflow == "grant-utilisation":
+        from app.modules.country_workflows.grant_utilisation import documents as grant_documents
+
+        bindings = grant_documents(sources["budgets"]["rows"], "grant-budgets") + grant_documents(sources["allocations"]["rows"], "grant-allocations")
+        if any(str(binding["source_evidence_version_id"]) == source.get("evidence_version_id") or binding["source_sha256"] == source.get("evidence_sha256") for binding in bindings for source in sources.values()):
+            raise HTTPException(422, "Mandate and credit recovery documents must be distinct from all calculation source schedules")
+        grant_documents_receipts = await payroll_rule_documents(db, ctx, eng, bindings, contributors=contributors, label="Grant mandate/recovery assessment")
+        dependencies.extend(grant_documents_receipts)
     if data.workflow == "uae-benefit-review" and sources["rules"].get("parser_version") == "published-benefit-profiles/1":
         from app.modules.country_workflows.benefit_source import verify
 
@@ -634,6 +655,9 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         dependencies.append(receipt)
         contributors.update(esic_contributors)
     result = await run_in_threadpool(calculate, data, package.country, sources, bank_account_review=bank_account_review, import_nil_receipt=import_nil_receipt, esic_population_review=esic_population_review)
+    if grant_documents_receipts is not None:
+        result["grant_document_binding"] = "RETAINED_DOCUMENT_BYTES_VERIFIED"
+        result["retained_grant_documents"] = grant_documents_receipts
     if data.workflow == "obligation-bank-allocations":
         from app.modules.country_workflows.bank_consumption import manifest
 

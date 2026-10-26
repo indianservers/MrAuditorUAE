@@ -73,6 +73,8 @@ def _parse_csv(content, data, defaults=None):
     ids = set()
     totals: defaultdict[str, Decimal] = defaultdict(Decimal)
     for index, raw in enumerate(reader, 2):
+        if data.table_type.startswith("grant-") and any(value is not None and value != value.strip() for value in raw.values() if isinstance(value, str)):
+            raise ValueError("Grant canonical values must be explicit without silently trimmed identities or numbers")
         if (
             len(rows) >= 5000
             or None in raw
@@ -133,6 +135,8 @@ def _parse_csv(content, data, defaults=None):
             )
         rows.append(row)
         amount = getattr(item, "amount", getattr(item, "tax", None))
+        if data.table_type == "grant-budgets":
+            amount = getattr(item, "category_ceiling")
         if data.table_type in {"confirmations", "party-confirmations"}:
             amount = getattr(item, "requested_amount")
         if data.table_type == "party-confirmations":
@@ -189,6 +193,7 @@ def _parse_csv(content, data, defaults=None):
             raise ValueError("A nil population cannot carry nonzero control totals")
         totals.update(data.control_totals)
     if data.table_type in {
+        "grant-budgets", "grant-expenses", "grant-allocations", "grant-utilisation-controls",
         "esic-members",
         "obligation-allocations",
         "bank-outstanding",
@@ -261,6 +266,7 @@ def _parse_csv(content, data, defaults=None):
             else {}
         ),
         "population_completeness": "UPLOADED_FILE_CONTROLS_ONLY",
+        **({"source_amount_basis": "CATEGORY_CEILING_FILE_TOTAL_NOT_CASH"} if data.table_type == "grant-budgets" else {"source_amount_basis":"MIXED_LEDGER_CONTROL_ROWS_FILE_TOTAL_ONLY"} if data.table_type == "grant-utilisation-controls" else {}),
         "review_status": "UNVERIFIED",
         "nil_reason": data.nil_reason,
         "title": data.label,

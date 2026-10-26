@@ -2073,3 +2073,55 @@ These are controlled synthetic tests. They do not supply real client inputs,
 independently checked client expectations, native ERP qualification, country
 framework adoption or hosted release validation. The authored catalogue remains
 154 scenarios, with real pilot evidence still pending in `pilot-data/`.
+
+## Restricted grant expenditure and utilisation
+
+The shared `grant-utilisation` workflow adds mandate-based book expenditure
+allocation, exercised for UAE first and India second. Four independently reviewed
+canonical schedules supply budgets, expenses, allocations and utilisation controls.
+Budgets retain donor/project/country/currency, category and whole-fund ceilings,
+validity dates and original mandate file-version/hash bindings. Negative allocations
+also retain recovery document bindings. Original documents must be current, clean,
+distinct from the schedules and byte/hash verified before calculation; existing
+limits of 50 documents and 100 MiB apply.
+
+An explicit review window must fall inside the engagement. Every fund/category
+requires declared opening utilisation dated the preceding day; absent openings
+remain missing. Expense-period controls independently compare account/currency
+row counts and positive, negative and net amounts exactly. Allocations must reconcile
+each expense, including shared expenses across funds, without exceeding declared
+capacity. Currency, project, source references and credit signs must agree.
+Category and whole-fund limits are tested separately against opening plus signed
+period expenditure. Credits always need documented recovery review. Expired
+mandates, budget excesses and credit observations require individual dispositions
+and independent approval; unresolved population or allocation controls block it.
+
+Budget import totals sum category ceilings, not available cash. Mixed control-row
+file totals establish import integrity only. These schedules do not establish cash
+availability, donor authentication, prior-charge validity, legal eligibility or a
+utilisation certificate. UAE charity/licensing and India CSR/FCRA assessments
+remain separate country procedures. No country fiscal period is inferred.
+Allocation capacity applies within the declared population, not an entity-wide
+posting ledger. Keep complete fund/currency populations together; controlled
+adjacent periods need independently supported openings. Overlapping partial
+reports cannot establish complete fund capacity.
+
+Each source supports 5,000 rows. The maximum-size test preserves all 10,003 result
+rows in XLSX (10,004 with header). Results retain original document receipts,
+scope and review limitations; the UI provides authenticated original downloads.
+[Eight synthetic UAE/India examples](sample-inputs/SYNTHETIC-grant-utilisation/README.md)
+cover matched expenditure, credit recovery, nil activity and budget excess.
+Their published hashes and expected outcomes are checked by tests. They are
+examples, not client qualification evidence.
+
+Verification on 27 October 2026: 2,132 backend tests passed (2,121 unit plus 11
+existing calculation regressions; four skipped), 213 frontend tests and 11 grant
+API tests passed. A production-browser test ran ten real-worker UAE/India cases,
+including unallocated expenditure, and verified 12 original-document downloads.
+Twenty screenshots were saved and reviewed as a contact sheet, with representative
+scope, blocked approval and document captures inspected at full size. Production
+build, TypeScript, scoped ESLint/Ruff, mypy across 72 source files and UTF-8 checks
+passed. See the [verification receipt](../phase-12/grant-utilisation-verification.json)
+and [browser receipt](../phase-12/grant-utilisation-browser-results.json).
+The authored catalogue remains 154; real pilots, native provider qualification,
+professional country review and hosted release validation remain open.

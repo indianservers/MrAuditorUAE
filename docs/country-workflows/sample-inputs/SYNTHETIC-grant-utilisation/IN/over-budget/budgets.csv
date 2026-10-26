@@ -1,0 +1,2 @@
+id,fund_id,category,donor,project,country,currency,valid_from,valid_to,category_ceiling,fund_ceiling,mandate_reference,assessment
+B1,F1,training,D1,P1,IN,INR,2025-01-01,2027-12-31,400,1500,SYNTHETIC mandate appendix,Synthetic professionally assessed grant terms

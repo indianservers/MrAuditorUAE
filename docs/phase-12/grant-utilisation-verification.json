@@ -1,0 +1,49 @@
+{
+  "verified_on": "2026-10-27",
+  "workflow": "grant-utilisation",
+  "contract": "mandate-expenditure-allocation/1",
+  "implementation_sha256": "44050a83c288da3235320c938ff6610a2bbd08f3d2784e150483632724a75e0f",
+  "country_order": [
+    "AE",
+    "IN"
+  ],
+  "backend": {
+    "unit_passed": 2121,
+    "calculation_regressions_passed": 11,
+    "total_passed": 2132,
+    "skipped": 4,
+    "grant_api_passed": 11
+  },
+  "frontend": {
+    "tests_passed": 213,
+    "production_build": "passed",
+    "typescript": "passed",
+    "scoped_eslint": "passed"
+  },
+  "browser": {
+    "tests_passed": 1,
+    "real_worker_cases": 10,
+    "original_document_downloads_sha256_verified": 12,
+    "screenshots": 20,
+    "visual_review": "All 20 in contact sheet; representative scope, blocked approval and document captures inspected at full size"
+  },
+  "maximum_size": {
+    "expense_rows": 5000,
+    "allocation_rows": 5000,
+    "result_rows": 10003,
+    "xlsx_rows_including_header": 10004
+  },
+  "saved_synthetic_sets": 8,
+  "saved_csv_txt_files": 42,
+  "scoped_ruff": "passed",
+  "mypy_source_files": 72,
+  "utf8": "passed",
+  "authored_catalogue_cases": 154,
+  "qualification": "Controlled synthetic engineering verification only",
+  "remaining": [
+    "Real client pilot files and independent expected outcomes",
+    "Native provider qualification",
+    "Professional country-specific legal eligibility review",
+    "Hosted release validation"
+  ]
+}

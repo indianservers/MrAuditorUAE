@@ -6,6 +6,7 @@ from pathlib import Path
 
 from app.modules.country_workflows.audit_schemas import AUDIT_WORKFLOWS
 from app.modules.country_workflows.diligence_schemas import DILIGENCE_WORKFLOWS
+from app.modules.country_workflows.grant_utilisation import ROLES as GRANT_ROLES
 from app.modules.country_workflows.operations_schemas import OPERATION_WORKFLOWS
 from app.modules.country_workflows.payroll_ledger_schemas import PAYROLL_LEDGER_WORKFLOWS
 from app.modules.country_workflows.payroll_schemas import PAYROLL_WORKFLOWS
@@ -19,6 +20,7 @@ OPTIONAL_ROLES = {
 }
 
 WORKFLOWS = {
+    "grant-utilisation": ("Grant mandates / opening utilisation / expenditure allocations", [], GRANT_ROLES),
     "inventory-custody-confirmations": ("Offsite inventory custody quantities and condition evidence", [], {"positions": "inventory-custody-positions", "responses": "inventory-custody-confirmations"}),
     "party-balance-confirmations": ("Positive customer/vendor balance confirmations", [], {"items": "audit-open-items", "controls": "balance-controls", "responses": "party-confirmations"}),
     "inventory-valuation-control": ("Inventory cost / NRV evidence and recorded GL controls", [], {"books": "stock", "valuations": "inventory-valuations", "controls": "accounting-controls"}),

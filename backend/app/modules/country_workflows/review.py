@@ -1,4 +1,6 @@
 def approval_error(body):
+    if body.get("workflow") == "grant-utilisation" and (body.get("grant_utilisation_contract") != "mandate-expenditure-allocation/1" or body.get("grant_document_binding") != "RETAINED_DOCUMENT_BYTES_VERIFIED"):
+        return "Regenerate grant utilisation with current retained mandate and recovery evidence before independent approval"
     if body.get("workflow") == "ownership-lookthrough" and body.get("ownership_path_contract") != "economic-ownership-paths/1":
         return "Regenerate ownership with retained complete source paths before independent approval"
     if body.get("workflow") == "procurement-match" and body.get("purchase_quantity_contract") != "controlled-purchase-quantities/1":

@@ -1,0 +1,2 @@
+id,expense_id,fund_id,category,currency,amount,rationale,credit_original_reference,credit_evidence_version_id,credit_source_sha256
+A1,E1,F1,training,INR,300,Synthetic project expenditure allocation,,,

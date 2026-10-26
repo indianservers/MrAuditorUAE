@@ -13,6 +13,7 @@ from app.modules.country_workflows.diligence_schemas import DILIGENCE_ROW_TYPES
 from app.modules.country_workflows.document_series import DocumentSeries, SeriesCounts
 from app.modules.country_workflows.ecr_arrear_schemas import ECRArrearControls
 from app.modules.country_workflows.esic_population import ESICMember
+from app.modules.country_workflows.grant_utilisation import ROW_TYPES as GRANT_ROW_TYPES
 from app.modules.country_workflows.gst_summary import METRICS, GSTSummaryMetric
 from app.modules.country_workflows.gstr1_schemas import GSTR1SectionControl
 from app.modules.country_workflows.gstr2b_part_schemas import GSTR2BPart
@@ -199,6 +200,7 @@ class Control(Strict):
 
 
 ROW_TYPES: dict[str, type[BaseModel]] = {
+    **GRANT_ROW_TYPES,
     "inventory-custody-positions": CustodyPosition,
     "inventory-custody-confirmations": CustodyConfirmation,
     "cutoff-recognition-lines": CutoffRecognition,
@@ -301,6 +303,7 @@ class SourceInput(Strict):
     expected_documents: int | None = Field(default=None, ge=0, le=1250)
     rule_document_version_id: uuid.UUID | None = None
     table_type: Literal[
+        "grant-budgets", "grant-expenses", "grant-allocations", "grant-utilisation-controls",
         "inventory-valuations",
         "esic-members",
         "gst-document-series",
@@ -568,6 +571,17 @@ def esi_components() -> list[ESIComponent]:
 
 
 class WorkflowInput(Strict):
+    @model_validator(mode="before")
+    @classmethod
+    def explicit_grant_calendar(cls, value):
+        if isinstance(value,dict) and value.get("workflow")=="grant-utilisation":
+            from app.modules.country_workflows.grant_utilisation import calendar_day
+
+            for key in ("as_of","period_start"):
+                if value.get(key) is not None:
+                    calendar_day(value[key])
+        return value
+
     inventory_gl_basis: Literal["gross-cost", "recorded-lower-of-cost-nrv"] | None = None
     inventory_scope_assessment: str = Field(default="", max_length=2000)
     esic_population_review_id: uuid.UUID | None = None
@@ -576,6 +590,7 @@ class WorkflowInput(Strict):
     withholding_role: WithholdingRole | None = None
     allocation_basis: Literal["invoice_face_amounts", "pre_application_balances"] | None = None
     workflow: Literal[
+        "grant-utilisation",
         "inventory-custody-confirmations",
         "party-balance-confirmations",
         "inventory-valuation-control",
@@ -670,6 +685,8 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
+        if self.workflow == "grant-utilisation" and (self.period_start is None or self.period_start > self.as_of or self.period_start == date.min or self.tolerance != 0 or self.date_tolerance != 0):
+            raise ValueError("Grant utilisation requires an explicit ordered period and exact controls without netting tolerance")
         if self.workflow == "inventory-valuation-control":
             if self.inventory_gl_basis is None or self.review_through is None or self.review_through < self.as_of or len(self.inventory_scope_assessment.strip()) < 10:
                 raise ValueError("Inventory valuation requires an explicit recorded GL basis, review-through date and source/framework scope assessment")

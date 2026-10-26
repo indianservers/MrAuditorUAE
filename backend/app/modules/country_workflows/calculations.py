@@ -913,7 +913,11 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
             esic_links, esic_metadata = bind_esic(data, tables, *esic_population_review)
         elif esic_population_review is not None:
             raise ValueError("An ESIC population receipt requires an explicit reviewed link")
-        if data.workflow == "inventory-custody-confirmations":
+        if data.workflow == "grant-utilisation":
+            from app.modules.country_workflows.grant_utilisation import compare as grant_compare
+
+            result = grant_compare(data, tables, country)
+        elif data.workflow == "inventory-custody-confirmations":
             from app.modules.country_workflows.inventory_custody import compare as compare_custody
 
             result = compare_custody(data, sources)
@@ -1015,7 +1019,9 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
         **result,
         "title": data.title,
         "workflow": data.workflow,
-        "workflow_version": "withholding-evidence-1"
+        "workflow_version": "grant-utilisation-1"
+        if data.workflow == "grant-utilisation"
+        else "withholding-evidence-1"
         if data.workflow in {"india-withholding-liability", "india-withholding-credit"}
         else "audit-extensions-1"
         if data.workflow

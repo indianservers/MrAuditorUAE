@@ -1,0 +1,64 @@
+{
+  "dataset_kind": "SYNTHETIC_TEST_ONLY",
+  "country": "AE",
+  "case": "nil",
+  "period_start": "2026-01-01",
+  "as_of": "2026-06-30",
+  "currency": "AED",
+  "budget_binding_defaults": {
+    "source_evidence_version_id": "5363e78d-fe46-5943-b5a3-7bdc961f546f",
+    "source_sha256": "85d264c915031b1761594352692828d0c34ce267f43b40ae37882a6635c2d2c0"
+  },
+  "document_ids_are_placeholders": true,
+  "document_version_placeholders": {
+    "mandate.txt": "5363e78d-fe46-5943-b5a3-7bdc961f546f"
+  },
+  "source_controls": {
+    "budgets": {
+      "table_type": "grant-budgets",
+      "expected_rows": 1,
+      "control_totals": {
+        "AED": "1000"
+      }
+    },
+    "expenses": {
+      "table_type": "grant-expenses",
+      "expected_rows": 0,
+      "control_totals": {
+        "AED": "0"
+      },
+      "nil_reason": "Synthetic independently assessed absence of current-period expenditure/allocations"
+    },
+    "allocations": {
+      "table_type": "grant-allocations",
+      "expected_rows": 0,
+      "control_totals": {
+        "AED": "0"
+      },
+      "nil_reason": "Synthetic independently assessed absence of current-period expenditure/allocations"
+    },
+    "controls": {
+      "table_type": "grant-utilisation-controls",
+      "expected_rows": 2,
+      "control_totals": {
+        "AED": "200"
+      }
+    }
+  },
+  "sha256": {
+    "mandate.txt": "85d264c915031b1761594352692828d0c34ce267f43b40ae37882a6635c2d2c0",
+    "budgets.csv": "8e004cede3d8c02f9beddc16ab25049c92621a569467c2b2d84fd117d8553b56",
+    "expenses.csv": "c13403299da0be50c6c5fa3887e2047f98023e0de20a93d532d5fdf036578ec6",
+    "allocations.csv": "9bbcd6b46054d3411d0c299d4cbe9e7519b637a859f3cd1658a74a30ee19ef23",
+    "controls.csv": "b0686b6b38e7649a9a2c3264a0e253e89c2b8ac7b917f4aac3d738d722098bab"
+  },
+  "expected": {
+    "closing_utilisation": "200",
+    "exception_count": 0,
+    "blocked": false,
+    "cash_availability_established": false,
+    "legal_eligibility_established": false,
+    "certificate_issued": false
+  },
+  "actual_client_qualified": false
+}

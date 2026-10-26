@@ -1,0 +1,64 @@
+{
+  "dataset_kind": "SYNTHETIC_TEST_ONLY",
+  "country": "AE",
+  "case": "credit",
+  "period_start": "2026-01-01",
+  "as_of": "2026-06-30",
+  "currency": "AED",
+  "budget_binding_defaults": {
+    "source_evidence_version_id": "e91304f6-a7ab-5f4d-905a-286693ce2af2",
+    "source_sha256": "85d264c915031b1761594352692828d0c34ce267f43b40ae37882a6635c2d2c0"
+  },
+  "document_ids_are_placeholders": true,
+  "document_version_placeholders": {
+    "mandate.txt": "e91304f6-a7ab-5f4d-905a-286693ce2af2",
+    "credit-recovery.txt": "19ed45c9-71cc-53cd-a679-d269ba51468e"
+  },
+  "source_controls": {
+    "budgets": {
+      "table_type": "grant-budgets",
+      "expected_rows": 1,
+      "control_totals": {
+        "AED": "1000"
+      }
+    },
+    "expenses": {
+      "table_type": "grant-expenses",
+      "expected_rows": 2,
+      "control_totals": {
+        "AED": "250"
+      }
+    },
+    "allocations": {
+      "table_type": "grant-allocations",
+      "expected_rows": 2,
+      "control_totals": {
+        "AED": "250"
+      }
+    },
+    "controls": {
+      "table_type": "grant-utilisation-controls",
+      "expected_rows": 2,
+      "control_totals": {
+        "AED": "450"
+      }
+    }
+  },
+  "sha256": {
+    "mandate.txt": "85d264c915031b1761594352692828d0c34ce267f43b40ae37882a6635c2d2c0",
+    "credit-recovery.txt": "93eea5e04c2cf892ae8127241d724810307454294a5fa34ef003e976c57cea72",
+    "budgets.csv": "8e004cede3d8c02f9beddc16ab25049c92621a569467c2b2d84fd117d8553b56",
+    "expenses.csv": "857fcc67601056247589dcca6b4c8d5c0c9facac4e3d688bc658aa2b1250d0e6",
+    "allocations.csv": "b98477f2682dcae1cf34b84d338ad05bb4b3218f7f7114692ca2613037dfa87d",
+    "controls.csv": "6f34f778955411c4f0f0d019502f2fa621cb9dbfbe49f0241aebf4ae321f3198"
+  },
+  "expected": {
+    "closing_utilisation": "450",
+    "exception_count": 3,
+    "blocked": false,
+    "cash_availability_established": false,
+    "legal_eligibility_established": false,
+    "certificate_issued": false
+  },
+  "actual_client_qualified": false
+}

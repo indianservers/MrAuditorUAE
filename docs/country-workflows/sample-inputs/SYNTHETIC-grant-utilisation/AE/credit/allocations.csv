@@ -1,0 +1,3 @@
+id,expense_id,fund_id,category,currency,amount,rationale,credit_original_reference,credit_evidence_version_id,credit_source_sha256
+A1,E1,F1,training,AED,300,Synthetic project expenditure allocation,,,
+CA1,CR1,F1,training,AED,-50,Synthetic project expenditure allocation,SYN-INV-1,19ed45c9-71cc-53cd-a679-d269ba51468e,93eea5e04c2cf892ae8127241d724810307454294a5fa34ef003e976c57cea72

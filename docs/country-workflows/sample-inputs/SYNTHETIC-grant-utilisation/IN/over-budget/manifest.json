@@ -1,0 +1,62 @@
+{
+  "dataset_kind": "SYNTHETIC_TEST_ONLY",
+  "country": "IN",
+  "case": "over-budget",
+  "period_start": "2026-04-01",
+  "as_of": "2026-06-30",
+  "currency": "INR",
+  "budget_binding_defaults": {
+    "source_evidence_version_id": "7f106380-e3cf-5d97-91e1-bf0882126678",
+    "source_sha256": "af7f6c848593b44ef3b4e257b6dbe098690e190c2f5ab71d7133b9ce4e14c1f6"
+  },
+  "document_ids_are_placeholders": true,
+  "document_version_placeholders": {
+    "mandate.txt": "7f106380-e3cf-5d97-91e1-bf0882126678"
+  },
+  "source_controls": {
+    "budgets": {
+      "table_type": "grant-budgets",
+      "expected_rows": 1,
+      "control_totals": {
+        "INR": "400"
+      }
+    },
+    "expenses": {
+      "table_type": "grant-expenses",
+      "expected_rows": 1,
+      "control_totals": {
+        "INR": "300"
+      }
+    },
+    "allocations": {
+      "table_type": "grant-allocations",
+      "expected_rows": 1,
+      "control_totals": {
+        "INR": "300"
+      }
+    },
+    "controls": {
+      "table_type": "grant-utilisation-controls",
+      "expected_rows": 2,
+      "control_totals": {
+        "INR": "500"
+      }
+    }
+  },
+  "sha256": {
+    "mandate.txt": "af7f6c848593b44ef3b4e257b6dbe098690e190c2f5ab71d7133b9ce4e14c1f6",
+    "budgets.csv": "57bcee395ee261d1c804a49f0d312eb120b13cb7fc0835b071d3446d3efcce53",
+    "expenses.csv": "dc6d3fbb3f3ecdf640c1060bc3afd4bb2a084f36af0f80794d15e7ae30f43115",
+    "allocations.csv": "0fd4363b723b69ba6cff362e52115b93e45856280e80591cb1ce4173cd4fa5cb",
+    "controls.csv": "162bbda6cd476d6e1419c7001485d1c8c331ccf3ed1f49cc4006be9101df9124"
+  },
+  "expected": {
+    "closing_utilisation": "500",
+    "exception_count": 1,
+    "blocked": false,
+    "cash_availability_established": false,
+    "legal_eligibility_established": false,
+    "certificate_issued": false
+  },
+  "actual_client_qualified": false
+}

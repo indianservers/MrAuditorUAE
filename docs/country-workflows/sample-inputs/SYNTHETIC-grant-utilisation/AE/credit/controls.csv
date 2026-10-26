@@ -1,0 +1,3 @@
+id,kind,account,fund_id,category,currency,period_start,period_end,amount,expected_rows,positive_amount,negative_amount,ledger_reference,assessment
+C1,expense-period,5000,,,AED,2026-01-01,2026-06-30,250,2,300,-50,SYN-LEDGER-1,Independent synthetic expense ledger controls
+O1,fund-opening,,F1,training,AED,2025-12-31,2025-12-31,200,,,,SYN-OPENING-1,Independent synthetic opening utilisation

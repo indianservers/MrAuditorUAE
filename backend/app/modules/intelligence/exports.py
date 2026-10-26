@@ -66,6 +66,7 @@ def render(event, format):
         for k, v in body.items()
         if k
         in {
+            "grant_utilisation_contract", "grant_document_binding", "cash_availability_established", "legal_eligibility_established", "certificate_issued", "source_amount_basis", "population_basis", "currency_scope", "review_window",
             "totals",
             "totals_basis",
             "totals_by_currency",
@@ -199,6 +200,12 @@ def render(event, format):
                 append(cover, [key, value])
             for key, value in summary.items():
                 append(cover, [key, value])
+            if body.get("workflow") == "grant-utilisation":
+                documents = workbook.create_sheet("Grant documents")
+                fields = ["type", "id", "record_id", "number", "sha256"]
+                append(documents, fields)
+                for document in body.get("retained_grant_documents", []):
+                    append(documents, [document.get(field) for field in fields])
             source = workbook.create_sheet("Rows")
             keys = list(dict.fromkeys(key for row in rows for key in row))
             append(source, keys)
