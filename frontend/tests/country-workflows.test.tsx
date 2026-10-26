@@ -450,6 +450,12 @@ vi.mock("@/hooks/use-api", () => ({
                         as_of: "2026-06-30",
                         version: 2,
                       })),
+                      ...["reviewed", "unreviewed", "stale", "blocked"].map((status) => ({
+                        id: "esic-review-" + status, label: "ESIC population " + status,
+                        kind: "country-workflow", workflow: "india-esic-population", version: 2,
+                        freshness: status === "stale" ? "STALE" : "CURRENT",
+                        review_status: status === "unreviewed" ? "UNVERIFIED" : "REVIEWED", blocked: status === "blocked",
+                      })),
                       ...["opening", "payroll", "posted", "closing"].map(
                         (role) => ({
                           id: "ledger-" + role,
@@ -645,6 +651,7 @@ vi.mock("@/hooks/use-api", () => ({
                           label: "Reported ECR",
                           review_status: "UNVERIFIED",
                         },
+                        { id: "esic-reported", table_type: "obligations", label: "Reviewed ESI reported", review_status: "REVIEWED" },
                       ].map((source) => ({
                         ...source,
                         kind: "workflow-source",
@@ -1690,6 +1697,28 @@ describe("country workflows", () => {
       workflow: "india-payroll-rules",
       currency: "INR",
       source_ids: { bases: "bases", rules: "rules", reported: "reported" },
+    });
+  });
+  it("links only reviewed ESIC populations with explicit component coverage and reviewed sources", async () => {
+    state.country = "IN";
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Workflow"), { target: { value: "india-payroll-rules" } });
+    const select = screen.getByLabelText("Reviewed ESIC population");
+    expect(select).toHaveTextContent("ESIC population reviewed");
+    for (const status of ["unreviewed", "stale", "blocked"]) expect(select).not.toHaveTextContent("ESIC population " + status);
+    for (const [label, value] of [
+      ["Reviewed ESIC population", "esic-review-reviewed"], ["ESI components covered", "ESI:EMPLOYEE"],
+      ["ESIC wage-to-basis assessment", "Independent fictional member and eligibility/base assessment"],
+      ["Schedule title", "ESI June linked calculation"], ["Reconciliation date", "2026-06-30"],
+      ["bases source", "bases"], ["rules source", "rules"], ["reported source", "esic-reported"],
+      ["Scope and source rationale", "Retained population and explicitly assessed component bases"],
+    ]) fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    expect(screen.getByLabelText("reported source")).not.toHaveTextContent("Reported ECR");
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+      esic_population_review_id: "esic-review-reviewed", esic_components: ["ESI:EMPLOYEE"],
+      esic_basis_scope_assessment: "Independent fictional member and eligibility/base assessment",
     });
   });
   it("prepares ECR with declared establishment, wage month, members and amounts", async () => {

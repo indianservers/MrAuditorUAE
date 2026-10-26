@@ -564,7 +564,17 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         bank_account_review = (body,receipt)
         contributors.update(account_contributors)
         dependencies.append(receipt)
-    result = await run_in_threadpool(calculate, data, package.country, sources, bank_account_review=bank_account_review, import_nil_receipt=import_nil_receipt)
+    esic_population_review = None
+    if data.esic_population_review_id is not None:
+        from app.modules.country_workflows.esic_binding import resolve as resolve_esic
+
+        if any(source.get("review_status") != "REVIEWED" for source in sources.values()):
+            raise HTTPException(409, "Independently review every contribution source before binding ESIC population evidence")
+        body, receipt, esic_contributors = await resolve_esic(db, ctx, eng, data)
+        esic_population_review = (body, receipt)
+        dependencies.append(receipt)
+        contributors.update(esic_contributors)
+    result = await run_in_threadpool(calculate, data, package.country, sources, bank_account_review=bank_account_review, import_nil_receipt=import_nil_receipt, esic_population_review=esic_population_review)
     if data.workflow == "obligation-bank-allocations":
         from app.modules.country_workflows.bank_consumption import manifest
 

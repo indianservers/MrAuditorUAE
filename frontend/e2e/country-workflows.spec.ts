@@ -8,6 +8,89 @@ const fixture = JSON.parse(
 const shots = "../docs/country-workflows/screenshots/native-sources";
 mkdirSync(shots, { recursive: true });
 
+test("reviewed ESIC members bind explicit contribution bases through the real worker", async ({
+  page,
+}) => {
+  await page.goto("/login");
+  await page.getByLabel("Email address").fill("admin@example.com");
+  await page
+    .getByLabel("Password", { exact: true })
+    .fill("test-strong-password-123");
+  await page.getByRole("button", { name: "Sign in", exact: true }).click();
+  await page.waitForURL("**/dashboard");
+  const input = fixture.esic_binding;
+  const title = `SYNTHETIC ESIC-linked contributions ${Date.now()}`;
+  await page.goto(`/intelligence/${input.engagement}/country-workflow`);
+  await page
+    .getByLabel("Workflow", { exact: true })
+    .selectOption("india-payroll-rules");
+  await loadRetainedHistory(page);
+  await page
+    .getByLabel("Reviewed ESIC population")
+    .selectOption(input.population_review);
+  await page.getByLabel("ESI components covered").selectOption("both");
+  await page
+    .getByLabel("ESIC wage-to-basis assessment")
+    .fill(input.payload.esic_basis_scope_assessment);
+  await page.getByLabel("Schedule title", { exact: true }).fill(title);
+  await page
+    .getByLabel("Reconciliation date", { exact: true })
+    .fill("2026-06-30");
+  await page
+    .getByLabel("Scope and source rationale", { exact: true })
+    .fill(input.payload.rationale);
+  for (const [role, id] of Object.entries(input.sources))
+    await page
+      .getByLabel(`${role} source`, { exact: true })
+      .selectOption(id as string);
+  await page
+    .getByRole("button", { name: "Queue calculation", exact: true })
+    .click();
+  const saved = page
+    .getByLabel("Saved source or result")
+    .locator("option")
+    .filter({ hasText: title });
+  await expect(saved).toHaveCount(1, { timeout: 120000 });
+  await page
+    .getByLabel("Saved source or result")
+    .selectOption((await saved.getAttribute("value"))!);
+  const panel = page
+    .getByRole("heading", { name: title, exact: true })
+    .locator("..");
+  await expect(panel.getByText("0 exceptions", { exact: true })).toBeVisible();
+  const binding = panel.getByRole("region", {
+    name: "ESIC contribution population binding",
+  });
+  await expect(binding).toContainText("2 members");
+  await expect(binding).toContainText("4 assessed bases");
+  await expect(binding).toContainText("1 documented population exceptions");
+  await expect(
+    binding.getByRole("link", { name: "Open linked ESIC population review" }),
+  ).toHaveAttribute(
+    "href",
+    `/intelligence/${input.engagement}/country-workflow?event=${input.population_review}`,
+  );
+  await expect(
+    panel.getByRole("cell", { name: "0012345679", exact: true }),
+  ).toHaveCount(2);
+  await expect(
+    panel.getByRole("columnheader", {
+      name: "esic payroll wages",
+      exact: true,
+    }),
+  ).toBeVisible();
+  for (const notice of await page
+    .getByRole("button", { name: "Dismiss notification", exact: true })
+    .all())
+    await notice.click();
+  await saveScreenshot(`${shots}/in-esic-contribution-binding.png`, () =>
+    binding.screenshot(),
+  );
+  await saveScreenshot(`${shots}/in-esic-contribution-bases.png`, () =>
+    panel.locator("table").last().screenshot(),
+  );
+});
+
 test("India ESIC member and paid-day review preserves zero-wage members", async ({
   page,
 }) => {

@@ -803,7 +803,7 @@ def checks(data, tables):
     }
 
 
-def calculate(data, country, sources, *, bank_account_review=None, import_nil_receipt=None):
+def calculate(data, country, sources, *, bank_account_review=None, import_nil_receipt=None, esic_population_review=None):
     title, countries, roles = WORKFLOWS[data.workflow]
     if countries and country not in countries:
         raise ValueError("Workflow is unavailable for this engagement country")
@@ -892,8 +892,17 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
     if data.workflow == "india-gst" and sources["return"].get("native_format") == "india-gstr2b-json" and sources["books"].get("native_format") == "india-inv01-json" and sources["books"].get("native_metadata", {}).get("direction") != "purchase":
         raise ValueError("A sales invoice cannot establish purchase books against an inward GSTR-2B source")
     tables = {role: source["rows"] for role, source in sources.items()}
+    esic_links = esic_metadata = None
     with localcontext() as arithmetic:
         arithmetic.prec = 80
+        if data.esic_population_review_id is not None:
+            from app.modules.country_workflows.esic_binding import bind as bind_esic
+
+            if esic_population_review is None:
+                raise ValueError("Verify the requested ESIC population review before contribution calculation")
+            esic_links, esic_metadata = bind_esic(data, tables, *esic_population_review)
+        elif esic_population_review is not None:
+            raise ValueError("An ESIC population receipt requires an explicit reviewed link")
         if data.workflow == "india-esic-population":
             from app.modules.country_workflows.esic_population import compare as compare_esic
 
@@ -967,6 +976,12 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
             result = inventory(data, tables)
         else:
             result = checks(data, tables)
+    if esic_links is not None:
+        from app.modules.country_workflows.esic_binding import annotate
+
+        result = annotate(result, esic_links, esic_metadata)
+    elif data.workflow == "india-payroll-rules" and any(row["component"].startswith("ESI:") for row in tables["bases"]):
+        result["esic_population_binding"] = {"status": "NOT_LINKED", "eligibility_status": "ASSESSED_SEPARATELY_NOT_INFERRED_FROM_ESIC_WAGES"}
     if data.workflow in {"bank-brs","bank-subsequent-clearance","obligation-bank-allocations"}:
         result["bank_account_evidence"] = account_scope or {
             "status":"LINK_REQUESTED_NOT_VERIFIED" if data.bank_account_review_id else "NOT_LINKED_ARITHMETIC_SCOPE_ONLY",

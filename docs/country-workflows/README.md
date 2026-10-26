@@ -69,6 +69,8 @@ Run the backend unit suite from `backend`, not the repository root. Run frontend
 
 India now has a separate ESIC member/day/wage comparison using independently reviewed controlled CSV populations. It preserves zero-wage members and reports nonmonetary differences separately from wage tolerances. See [ESIC contract, examples and limits](native-adapters.md#india-esic-member-paid-day-and-wage-populations). Native XLS import, current portal compatibility and legal contribution qualification remain open.
 
+India contribution reviews can optionally bind their assessed ESI bases to that reviewed ESIC population, with explicit employee/employer component coverage and full zero-wage member coverage. Wage/base differences and documented population observations remain visible; dependency withdrawal propagates into expected remittances. See [population-to-basis binding](native-adapters.md#esic-populations-linked-to-assessed-contribution-bases).
+
 Priority order remains UAE followed by India:
 
 1. Qualify native UAE bank formats and VAT201/customs adapters, WPS/SIF schemas, employment/pension cohorts and end-of-service calculations. Extend existing UAE VAT/CT/IFRS engines rather than maintaining duplicate tax arithmetic.

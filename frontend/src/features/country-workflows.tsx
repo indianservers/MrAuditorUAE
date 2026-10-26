@@ -185,6 +185,16 @@ type Result = {
     bank_account_evidence?: BankAccountLink;
     document_series_scope?: { registration: string; period: string };
     esic_population_scope?: { registration: string; period: string };
+    esic_population_binding?: {
+      status: string;
+      members?: number;
+      basis_rows?: number;
+      documented_population_exceptions?: number;
+      components?: string[];
+      assessment?: string;
+      review_receipt?: { id: string };
+      scope?: { registration: string; period: string };
+    };
     esic_population_totals?: Record<
       string,
       {
@@ -458,6 +468,9 @@ export function CountryWorkflows({
   const [account, setAccount] = useState("");
   const [importNil, setImportNil] = useState<ImportNilDraft | null>(null);
   const [bankAccountReview, setBankAccountReview] = useState("");
+  const [esicPopulationReview, setEsicPopulationReview] = useState("");
+  const [esicBasisAssessment, setEsicBasisAssessment] = useState("");
+  const [esicComponents, setEsicComponents] = useState("both");
   const [bankAccountAssessment, setBankAccountAssessment] = useState("");
   const [bankOwnerName, setBankOwnerName] = useState("");
   const [bankOwnerScheme, setBankOwnerScheme] = useState("");
@@ -745,6 +758,10 @@ export function CountryWorkflows({
                           "membership_cohort",
                           "currency",
                           "assessed_base",
+                          "esic_payroll_wages",
+                          "esic_reported_wages",
+                          "esic_base_minus_payroll_wages",
+                          "esic_base_minus_reported_wages",
                           "expected_amount",
                           "reported_amount",
                           "difference",
@@ -1211,6 +1228,16 @@ export function CountryWorkflows({
             : {}),
           ...(workflow === "india-invoice-register"
             ? { invoice_direction: invoiceDirection }
+            : {}),
+          ...(workflow === "india-payroll-rules" && esicPopulationReview
+            ? {
+                esic_population_review_id: esicPopulationReview,
+                esic_basis_scope_assessment: esicBasisAssessment,
+                esic_components:
+                  esicComponents === "both"
+                    ? ["ESI:EMPLOYEE", "ESI:EMPLOYER"]
+                    : [esicComponents],
+              }
             : {}),
           ...(workflow === "uae-import-vat" && importNil
             ? { import_nil_scope: importNil }
@@ -3104,6 +3131,9 @@ export function CountryWorkflows({
                             r.allowed_workflows.includes(workflow)) &&
                           (!r.allowed_source_roles ||
                             r.allowed_source_roles.includes(role)) &&
+                          (workflow !== "india-payroll-rules" ||
+                            !esicPopulationReview ||
+                            r.review_status === "REVIEWED") &&
                           (![
                             "bank-account-evidence",
                             "obligation-bank-allocations",
@@ -3346,6 +3376,64 @@ export function CountryWorkflows({
                     movements remain visible.
                   </p>
                 </>
+              )}
+              {workflow === "india-payroll-rules" && (
+                <fieldset>
+                  <legend>ESIC member population link (optional)</legend>
+                  <label>
+                    Reviewed ESIC population
+                    <select
+                      value={esicPopulationReview}
+                      onChange={(e) => {
+                        setEsicPopulationReview(e.target.value);
+                        setSources({});
+                        if (!e.target.value) setEsicBasisAssessment("");
+                      }}
+                    >
+                      <option value="">No ESIC population linked</option>
+                      {results.data?.items
+                        .filter(
+                          (row) =>
+                            row.kind === "country-workflow" &&
+                            row.workflow === "india-esic-population" &&
+                            row.review_status === "REVIEWED" &&
+                            row.freshness === "CURRENT" &&
+                            !row.blocked,
+                        )
+                        .map((row) => (
+                          <option key={row.id} value={row.id}>
+                            {row.label} · v{row.version}
+                          </option>
+                        ))}
+                    </select>
+                  </label>
+                  <label>
+                    ESI components covered
+                    <select
+                      value={esicComponents}
+                      disabled={!esicPopulationReview}
+                      onChange={(e) => setEsicComponents(e.target.value)}
+                    >
+                      <option value="both">Employee and employer</option>
+                      <option value="ESI:EMPLOYEE">Employee only</option>
+                      <option value="ESI:EMPLOYER">Employer only</option>
+                    </select>
+                  </label>
+                  <label>
+                    ESIC wage-to-basis assessment
+                    <textarea
+                      value={esicBasisAssessment}
+                      disabled={!esicPopulationReview}
+                      onChange={(e) => setEsicBasisAssessment(e.target.value)}
+                    />
+                  </label>
+                  <p>
+                    Every retained member needs an assessed basis for each
+                    selected component, including zero-wage and ineligible
+                    members. Wages, eligibility and assessed contribution bases
+                    remain separate; differences are retained for review.
+                  </p>
+                </fieldset>
               )}
               {workflow === "india-esic-population" && (
                 <p>
@@ -4734,6 +4822,28 @@ export function CountryWorkflows({
                 <li key={l}>{l}</li>
               ))}
             </ul>
+          )}
+          {body.esic_population_binding && (
+            <section aria-label="ESIC contribution population binding">
+              <h3>ESIC contribution population link</h3>
+              <p>
+                {body.esic_population_binding.status === "BOUND"
+                  ? `${body.esic_population_binding.members} members · ${body.esic_population_binding.basis_rows} assessed bases · ${body.esic_population_binding.components?.join(", ")} · ${body.esic_population_binding.documented_population_exceptions ?? 0} documented population exceptions`
+                  : "No reviewed ESIC population linked"}
+              </p>
+              {body.esic_population_binding.review_receipt && (
+                <Link
+                  href={`/intelligence/${eid}/country-workflow?event=${body.esic_population_binding.review_receipt.id}`}
+                >
+                  Open linked ESIC population review
+                </Link>
+              )}
+              <p>{body.esic_population_binding.assessment}</p>
+              <p>
+                Eligibility and contribution bases remain separately assessed.
+                This link does not verify filing or payment.
+              </p>
+            </section>
           )}
           {body.esic_population_scope && (
             <section aria-label="ESIC comparison scope and totals">

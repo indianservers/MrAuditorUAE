@@ -488,7 +488,17 @@ class VATSourceInput(Strict):
     label: str = Field(min_length=3, max_length=200)
 
 
+ESIComponent = Literal["ESI:EMPLOYEE", "ESI:EMPLOYER"]
+
+
+def esi_components() -> list[ESIComponent]:
+    return ["ESI:EMPLOYEE", "ESI:EMPLOYER"]
+
+
 class WorkflowInput(Strict):
+    esic_population_review_id: uuid.UUID | None = None
+    esic_basis_scope_assessment: str = Field(default="", max_length=2000)
+    esic_components: list[ESIComponent] = Field(default_factory=esi_components, min_length=1, max_length=2)
     withholding_role: WithholdingRole | None = None
     allocation_basis: Literal["invoice_face_amounts", "pre_application_balances"] | None = None
     workflow: Literal[
@@ -583,6 +593,11 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
+        if self.esic_population_review_id is not None:
+            if self.workflow != "india-payroll-rules" or len(self.esic_basis_scope_assessment.strip()) < 10 or len(set(self.esic_components)) != len(self.esic_components):
+                raise ValueError("An ESIC population link requires India contribution review, explicit unique ESI components and a meaningful basis assessment")
+        elif self.esic_basis_scope_assessment or self.esic_components != ["ESI:EMPLOYEE", "ESI:EMPLOYER"]:
+            raise ValueError("ESIC basis assessment/component selection requires an explicit reviewed population link")
         if self.import_nil_scope is not None:
             if self.workflow != "uae-import-vat" or self.import_nil_scope.period_end > self.as_of:
                 raise ValueError("Nil import scope requires the UAE import workflow and a closed assessed period")
