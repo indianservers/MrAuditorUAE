@@ -1,0 +1,3 @@
+id,company,owner,owner_kind,fraction,effective_from,evidence_reference
+A:P1,A,P1,person,0.5,2026-01-01,SYNTHETIC-OWNERSHIP-REFERENCE
+A:MISSING,A,MISSING,company,0.5,2026-01-01,SYNTHETIC-OWNERSHIP-REFERENCE

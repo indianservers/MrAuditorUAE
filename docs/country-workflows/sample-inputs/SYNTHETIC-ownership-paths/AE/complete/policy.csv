@@ -1,0 +1,2 @@
+id,country,threshold,comparison,effective_from,effective_to,evidence_reference
+SYNTHETIC-POLICY,AE,0.25,greater-than,2026-01-01,2026-12-31,FICTIONAL-POLICY-NOT-LEGAL-QUALIFICATION

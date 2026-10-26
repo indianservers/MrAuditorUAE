@@ -106,6 +106,13 @@ def test_exact_deep_shares_do_not_round_up_to_a_policy_threshold():
     )
     assert row["threshold_candidate"] is False and not result["blocked"]
     assert max(path["edge_count"] for path in result["ownership_paths"]) == 20
+    from tests.unit.test_xlsx_values import event, workbook
+
+    book = workbook(event(**result))
+    values = [value for record in book["Rows"].values for value in record]
+    assert row["economic_fraction"] in values
+    assert len(list(book["Ownership paths"].values)) == len(result["ownership_paths"]) + 1
+    book.close()
 
 
 @pytest.mark.parametrize("subjects", [["A", "A"], [" A"], [" "]])
@@ -158,3 +165,47 @@ def test_global_traversal_and_retained_step_bounds_fail_instead_of_truncating(mo
     monkeypatch.setattr(ownership_paths, "MAX_PATH_STEPS", 4)
     with pytest.raises(ValueError, match="bound exceeded"):
         run("ownership-lookthrough", population(), subjects=["A"])
+
+
+@pytest.mark.parametrize("country", ["AE", "IN"])
+@pytest.mark.parametrize("case", ["complete", "incomplete"])
+def test_saved_ownership_examples_match_expected_paths_and_partial_decisions(country, case):
+    import csv
+    import json
+    from pathlib import Path
+
+    folder = (
+        Path(__file__).resolve().parents[3]
+        / "docs/country-workflows/sample-inputs/SYNTHETIC-ownership-paths"
+        / country
+        / case
+    )
+    manifest = json.loads((folder / "scope-controls.json").read_text(encoding="utf-8"))
+    tables = {
+        role: list(
+            csv.DictReader((folder / (role + ".csv")).read_text(encoding="utf-8").splitlines())
+        )
+        for role in ("ownership", "policy")
+    }
+    assert {role: len(rows) for role, rows in tables.items()} == manifest["source_rows"]
+    result = run("ownership-lookthrough", tables, subjects=manifest["subjects"], country=country)
+    expected = manifest["expected"]
+    assert result["blocked"] == expected["blocked"]
+    assert len(result["ownership_paths"]) == expected["path_count"]
+    assert len(result["ownership_path_steps"]) == expected["step_count"]
+    p1 = next(row for row in result["rows"] if row.get("person_id") == "P1")
+    assert p1["economic_fraction"] == expected["p1_fraction"]
+    assert p1["threshold_candidate"] is expected["p1_threshold_candidate"]
+
+
+def test_delimiters_in_subject_and_person_identifiers_cannot_collide_in_result_row_ids():
+    tables = {
+        "ownership": [edge("A", "B:C", "1", id="EDGE-1"), edge("A:B", "C", "1", id="EDGE-2")],
+        "policy": [policy()],
+    }
+    result = run("ownership-lookthrough", tables, subjects=["A", "A:B"])
+    assert len({row["id"] for row in result["rows"]}) == 2
+    assert {(row["company"], row["person_id"]) for row in result["rows"]} == {
+        ("A", "B:C"),
+        ("A:B", "C"),
+    }

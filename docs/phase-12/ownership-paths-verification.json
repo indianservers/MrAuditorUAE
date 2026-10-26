@@ -1,0 +1,48 @@
+{
+  "scope": "SYNTHETIC_OWNED_LOCAL_VERIFICATION_ONLY",
+  "contract": "economic-ownership-paths/1",
+  "country_order": [
+    "AE",
+    "IN"
+  ],
+  "browser_cases": [
+    "complete",
+    "incomplete"
+  ],
+  "implementation_sha256": "f74aa913e21384669be42fbfa91e82049174dcc37fc986aa785de89f99f9fa70",
+  "backend_unit": {
+    "passed": 1989,
+    "skipped": 4
+  },
+  "frontend": {
+    "passed": 199
+  },
+  "database_api": {
+    "passed": 5
+  },
+  "browser": {
+    "passed": 1,
+    "cases_exercised": 4,
+    "report": "docs/phase-12/ownership-paths-browser-results.json"
+  },
+  "maximum_tested_source_rows": 5000,
+  "derived_path_records_at_that_bound": 9996,
+  "retained_edge_steps_at_that_bound": 19992,
+  "api_pagination_tested": {
+    "paths": 128,
+    "steps": 256
+  },
+  "authored_synthetic_catalogue_count": 154,
+  "legal_threshold_qualified": false,
+  "registry_authenticated": false,
+  "client_pilots_qualified": false,
+  "release_qualified": false,
+  "log_sha256": {
+    "unit": "12f522defcc2a3bbaa4ca79049b32bb37362f2e0ac5fed023ff24c34a54656b4",
+    "frontend": "f2de1b2adbe7fa3bde002a263232c1ad5bcc3db52118eb4a48e983e173aec57c",
+    "api": "893e3256b95d9bf97e5bb2ee958f6e68e93dd2c7463f1b823ed87260dcbc4e2b",
+    "build": "3bbce6dca1979c6ab96cc8c8e04f91e2b6b826f30cbd401c82599b1dc8fdcfbf",
+    "mypy": "53eff321367cb7c84b853eaf52a4405886e013d20aee3ea61f3809ce5b4b3384",
+    "browser": "997e2d6400eecdf1786c01e7ae2cefe983f6c21e9651d0b769a66a22b783464a"
+  }
+}

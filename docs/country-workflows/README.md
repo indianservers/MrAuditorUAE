@@ -133,3 +133,10 @@ credit notes and subsequent dates. It retains exact document allocation
 controls, independently paged original links and full exports. See
 [scope and verification](native-adapters.md#explicit-expense-cut-off-allocations-and-posting-schedules--uae-then-india)
 and [saved UAE/India examples](sample-inputs/SYNTHETIC-cutoff-schedules/README.md).
+
+
+Economic ownership look-through now retains exact path fractions, original
+source-edge steps and explicit graph-gap paths. It requires reviewed ownership
+and country/date policy sources, preserves partial results as incomplete and
+blocks approval until source gaps are corrected. See
+[scope and verification](native-adapters.md#retained-exact-economic-ownership-paths--uae-then-india).

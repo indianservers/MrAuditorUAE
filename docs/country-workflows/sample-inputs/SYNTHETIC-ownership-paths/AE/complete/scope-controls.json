@@ -1,0 +1,21 @@
+{
+  "synthetic_only": true,
+  "country": "AE",
+  "workflow": "ownership-lookthrough",
+  "subjects": [
+    "A"
+  ],
+  "as_of": "2026-06-30",
+  "control_totals": {},
+  "source_rows": {
+    "ownership": 4,
+    "policy": 1
+  },
+  "expected": {
+    "blocked": false,
+    "path_count": 3,
+    "step_count": 5,
+    "p1_fraction": "0.75",
+    "p1_threshold_candidate": true
+  }
+}

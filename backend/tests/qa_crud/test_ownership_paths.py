@@ -10,7 +10,7 @@ from tests.integration.test_platform import environment as environment
 from tests.phase4.test_workflows import actor, grant, setup
 from tests.qa_crud.test_country_workflows import decision, double_boundaries, execute, source
 from tests.qa_crud.test_india_ecr_source import india_context
-from tests.unit.test_diligence_audit_workflows import edge, policy
+from tests.unit.test_diligence_audit_workflows import edge
 from tests.unit.test_ownership_paths import population
 
 pytestmark = pytest.mark.skipif(

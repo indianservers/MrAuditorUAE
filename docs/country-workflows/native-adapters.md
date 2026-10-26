@@ -1779,3 +1779,66 @@ A [verification summary](../phase-12/cutoff-schedules-verification.json) retains
 counts, tested bounds and hashes of the owned local execution logs.
 The frozen authored synthetic catalogue remains 154. This extension does not
 close real-client, professional, native-provider or hosted-release gates.
+
+
+### Retained exact economic ownership paths — UAE then India
+
+`ownership-lookthrough` now retains every supplied natural-person path and its
+original source-edge steps, not only final economic totals. The shared engine
+uses exact rational arithmetic over canonical decimal shares. Deep-chain
+products and threshold comparisons therefore avoid rounding a fraction just
+below an illustrative threshold up to equality. Decimal exports retain every
+digit. Path IDs connect the person totals to their detailed chains and original
+references; result row IDs remain distinct when source identifiers contain
+separators.
+
+Both ownership and country/date policy sources must be independently reviewed
+before comparison. The selected policy supplies its threshold and comparison
+operator; no UAE or India legal default is manufactured. The UI displays the
+country, as-of date, threshold, operator and retained policy reference. Voting
+rights, control, nominees, trusts and legal UBO conclusions require separate
+assessment. A reviewed uploaded policy does not authenticate a publisher or
+qualify current local law.
+
+Cycles, missing corporate-owner evidence, incomplete ownership sums and duplicate
+current owner edges retain explicit graph-gap paths with source references.
+Observed successful paths are also retained, but incomplete roots have an
+unknown full threshold decision and visibly partial fractions. Graph-gap
+person identities and economic fractions remain absent, not zero. Documenting
+an exception cannot override an incomplete graph's approval block. Sources
+must be corrected, independently reviewed and recomputed. Historical results
+without `economic-ownership-paths/1` require regeneration before approval.
+
+The graph remains bounded: 5,000 rows per canonical source, 100 distinct exact
+company subjects, at most 20 edges per retained path, 10,000 explored transitions
+across the selected subject scope, and 50,000 retained source steps. A bound
+failure stops calculation rather than truncating evidence. Economic agreement
+describes the supplied graph; it does not prove complete ownership disclosure,
+registry verification, legal status, onboarding approval or an audit opinion.
+
+Paths and steps have independent API pagination (`ownership_path_offset/limit`
+and `ownership_step_offset/limit`), screen views and full XLSX sheets. Canonical
+sources retain their original hashes and dependency history; a revised source
+or policy makes the calculated result stale. See [saved synthetic UAE/India examples](sample-inputs/SYNTHETIC-ownership-paths/README.md).
+
+
+Verification completed 27 October 2026: 1,989 backend unit tests passed (four
+skipped), 199 frontend tests passed and five owned PostgreSQL/API tests passed.
+The API flows test refusal before independent source review, candidate review,
+incomplete-graph approval refusal despite documented dispositions, policy
+revision staleness, complete exports and separate pagination over 128 paths and
+256 steps. The maximum 5,000-edge source case retains all 9,996 derived paths
+and 19,992 source steps; exceeding a configured traversal/retention bound fails.
+A 20-edge precision case stays below its policy threshold without Decimal
+round-up, and preserves the exact fraction in XLSX. Four saved UAE/India sets
+reproduce their expected complete/partial states and counts. Historical approval
+and source-identifier delimiter collision regressions also pass.
+
+One browser test ran complete and incomplete cases in UAE-then-India order
+against the production frontend build and real local worker. All 12 screenshots
+were visually inspected. Production build, TypeScript, targeted ESLint/Ruff,
+mypy across 70 source files and UTF-8 checks passed. See the
+[browser receipt](../phase-12/ownership-paths-browser-results.json) and
+[verification summary](../phase-12/ownership-paths-verification.json).
+The frozen authored synthetic catalogue remains 154. Real-client, legal-policy,
+registry/provider, professional and hosted-release qualification remain open.
