@@ -3688,3 +3688,23 @@ notification. The reviewer screenshot is also taken after independent approval
 and a visible CURRENT_REVIEWED_SOURCES_RECHECKED status, with the retained block
 open. These capture refinements require a new hosted result before claiming the
 final images; no financial or review gate is relaxed.
+
+
+The earlier full hosted verification of source 52a23db completed successfully in
+[job 122215234592](https://github.com/indianservers/MrAuditorUAE/actions/runs/40511763381/job/122215234592):
+3,694 passed, nine skipped and 54 warnings; overall coverage 85.85% and Phase 2
+calculation/validation core coverage 89.35% (831/930). Migrations/Alembic drift,
+full lint/format, application mypy, contract verification and both coverage gates
+passed. The original [JUnit receipt](../phase-12/52a23db-hosted-full.xml) and
+[coverage data](../phase-12/52a23db-hosted-coverage.json) were retrieved from artifact
+12741859671 after verifying archive SHA-256
+0acfe7c9b647f02daf6739a8715895572fcd985b27a42a330caa308e875c1d25.
+This proves that earlier source revision, not every subsequent change.
+
+The final screenshot-refinement job 122268842754 remains live in the existing
+frontend/browser setup step at this observation. The same-source frontend,
+security, ML and promoted container jobs have passed; full backend verification
+also remains live. No restart, cancellation, relaxed assertions or new local
+preview server is used to replace those pending results. The original broader
+roadmap remains unfinished, including real-client pilot evidence and independently
+qualified complete country-rule/form content.
