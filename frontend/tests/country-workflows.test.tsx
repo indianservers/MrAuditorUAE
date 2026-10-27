@@ -84,6 +84,7 @@ const state = vi.hoisted(() => ({
   mutate: vi.fn(),
   result: null as unknown,
   excludedPage: null as unknown,
+  turnoverPage: null as unknown,
   postingPage: null as unknown,
   country: "AE",
   jobs: [] as {
@@ -98,6 +99,7 @@ vi.mock("@/hooks/use-api", () => ({
   useAPI: (path: string) => ({
     data: path.endsWith("bank-cash-status")
       ? { state: "UNRESERVED", claim_count: 0, approval_error: null, related_reviews: [] }
+      : path.includes("turnover_offset=100") ? state.turnoverPage
       : path.includes("excluded_offset=100")
       ? state.excludedPage
       : path.endsWith("country-workflows")
@@ -370,6 +372,9 @@ vi.mock("@/hooks/use-api", () => ({
               },
             ],
             source_contracts: {
+              "turnover-scope": {id:{required:true,type:"str"}},
+              "turnover-amounts": {id:{required:true,type:"str"}, amount:{required:true,type:"Decimal"}},
+              "turnover-adjustments": {id:{required:true,type:"str"}, amount:{required:true,type:"Decimal"}},
               "inventory-custody-positions": {id:{required:true,type:"str"}},
               "inventory-custody-confirmations": {id:{required:true,type:"str"}},
               "party-confirmations": { id: { required: true, type: "str" }, requested_amount: { required: true, type: "Decimal" } },
@@ -821,6 +826,7 @@ vi.mock("@/features/shared", () => ({
 
 beforeEach(() => {
   state.excludedPage = null;
+  state.turnoverPage = null;
   state.postingPage = null;
   state.jobs = [];
   state.country = "AE";
@@ -3391,4 +3397,33 @@ it("shows independent VAT201 summary errors even when box comparisons match", ()
   expect(within(section).getByText("ARITHMETIC_ERROR")).toBeVisible();
   expect(within(section).getByRole("cell", { name: "55.01" })).toBeVisible();
   expect(within(section).getByText(/Recovery eligibility/)).toBeVisible();
+});
+
+
+it("pages all retained turnover adjustments independently of registration rows", () => {
+  const adjustments = Array.from({length: 101}, (_, i) => ({id: `ADJ-${i}`, registration: "100000000000001", reference: `REFERENCE-${i}`, period_start: "2026-04-01", period_end: "2026-06-30", currency: "AED", amount: "-0.05", reason: "timing", assessment: "Synthetic assessed timing difference"}));
+  state.result = {id: "result", kind: "country-workflow", version: 1, freshness: "CURRENT", collection_totals: {turnover_adjustment_rows: 101}, body: {
+    workflow: "tax-turnover-bridge", title: "Synthetic turnover bridge", review_status: "UNVERIFIED", turnover_contract: "registration-period-turnover/1", turnover_quantification: {complete_for_declared_scope: false},
+    turnover_adjustment_rows: adjustments.slice(0, 100), rows: [{id: "partition-1", registration: "100000000000001", state: "MISSING_POPULATION"}]
+  }};
+  state.turnoverPage = {body: {turnover_adjustment_rows: adjustments.slice(100)}};
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Saved source or result"), {target: {value: "result"}});
+  expect(screen.getByText(/totals are partial/)).toBeVisible();
+  fireEvent.click(screen.getByText("Review 101 turnover adjustment rows"));
+  expect(screen.getByRole("cell", {name: "ADJ-0"})).toBeVisible();
+  fireEvent.click(screen.getByRole("button", {name: "Next turnover adjustments"}));
+  expect(screen.getByRole("cell", {name: "ADJ-100"})).toBeVisible();
+  expect(screen.queryByRole("cell", {name: "ADJ-0"})).not.toBeInTheDocument();
+});
+
+
+it("retains independent signed monetary controls when preparing turnover amounts", async () => {
+  render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+  for (const [label, value] of [["Source table type", "turnover-amounts"], ["Clean retained evidence", "clean"], ["Schedule title", "Synthetic turnover book source"], ["Expected data rows", "1"], ["Independent totals by currency", "AED=-100.00000001"]]) {
+    fireEvent.change(screen.getByLabelText(label), {target: {value}});
+  }
+  fireEvent.click(screen.getByRole("button", {name: "Queue calculation"}));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({table_type: "turnover-amounts", control_totals: {AED: "-100.00000001"}});
 });

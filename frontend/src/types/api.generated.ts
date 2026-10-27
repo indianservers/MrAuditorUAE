@@ -29596,6 +29596,8 @@ export interface operations {
             query?: {
                 offset?: number;
                 limit?: number;
+                turnover_offset?: number;
+                turnover_limit?: number;
                 excluded_offset?: number;
                 excluded_limit?: number;
                 inventory_offset?: number;

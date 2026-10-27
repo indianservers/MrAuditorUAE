@@ -140,6 +140,93 @@ function ExcludedVATBoxes({
   );
 }
 
+function TurnoverAdjustments({
+  prefix,
+  selected,
+  initial,
+  total,
+}: {
+  prefix: string;
+  selected: string;
+  initial: Record<string, unknown>[];
+  total: number;
+}) {
+  const [offset, setOffset] = useState(0);
+  const page = useAPI<Result>(
+    `${prefix}/events/${selected}?limit=1&turnover_offset=${offset}&turnover_limit=100`,
+    offset > 0,
+  );
+  const rows = offset
+    ? page.data?.body.turnover_adjustment_rows || []
+    : initial;
+  const columns = [
+    "id",
+    "registration",
+    "period_start",
+    "period_end",
+    "currency",
+    "reference",
+    "amount",
+    "reason",
+    "assessment",
+  ];
+  if (!total) return null;
+  return (
+    <details>
+      <summary>Review {total} turnover adjustment rows</summary>
+      <ErrorState error={page.error} />
+      {page.error && (
+        <Button onClick={() => void page.refetch()}>
+          Retry turnover adjustments
+        </Button>
+      )}
+      <p>
+        {page.isFetching && offset > 0
+          ? "Loading turnover adjustments…"
+          : rows.length
+            ? `Adjustment rows ${offset + 1}–${offset + rows.length} of ${total}. This list has its own page controls.`
+            : "Adjustment rows are unavailable for this page."}
+      </p>
+      <div style={{ overflowX: "auto" }}>
+        <table aria-label="Turnover adjustment rows">
+          <thead>
+            <tr>
+              {columns.map((column) => (
+                <th key={column}>{column.replaceAll("_", " ")}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row, index) => (
+              <tr key={`${row.id}:${index}`}>
+                {columns.map((column) => (
+                  <td key={column}>{text(row[column])}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="toolbar" aria-label="Turnover adjustment pages">
+        <Button
+          disabled={!offset || page.isFetching}
+          onClick={() => setOffset(Math.max(0, offset - 100))}
+        >
+          Previous turnover adjustments
+        </Button>
+        <Button
+          disabled={
+            offset + rows.length >= total || page.isFetching || !rows.length
+          }
+          onClick={() => setOffset(offset + 100)}
+        >
+          Next turnover adjustments
+        </Button>
+      </div>
+    </details>
+  );
+}
+
 type Choice = {
   id: string;
   label: string;
@@ -190,6 +277,10 @@ type Result = {
     media_scope?: MediaScope;
     currency_scope?: string[];
     review_window?: { from: string; through: string };
+    turnover_contract?: string;
+    turnover_quantification?: Record<string, unknown>;
+    turnover_difference_totals?: Record<string, Record<string, string>>;
+    turnover_adjustment_rows?: Record<string, unknown>[];
     vat201_layout?: string;
     vat201_arithmetic_scope?: string;
     vat201_arithmetic_error_count?: number;
@@ -347,6 +438,8 @@ type Result = {
 const text = (v: unknown) =>
   v == null ? "—" : typeof v === "object" ? JSON.stringify(v) : String(v);
 const moneyTables = [
+  "turnover-amounts",
+  "turnover-adjustments",
   "payroll-account-balances",
   "payroll-ledger-lines",
   "esic-members",
@@ -721,7 +814,7 @@ export function CountryWorkflows({
         Array.isArray(row.assessment_issues) &&
         row.assessment_issues.length > 0,
     );
-  const defaultColumns =
+  const standardColumns =
     compactVAT && !showRuleProvenance
       ? [
           "box",
@@ -897,6 +990,22 @@ export function CountryWorkflows({
                             "source_review_reasons",
                           ].filter((key) => allColumns.includes(key))
                         : allColumns;
+  const defaultColumns =
+    body?.workflow === "tax-turnover-bridge" && !showRuleProvenance
+      ? [
+          "registration",
+          "period_start",
+          "period_end",
+          "currency",
+          "book_revenue",
+          "signed_adjustments",
+          "expected_return_turnover",
+          "reported_turnover",
+          "difference",
+          "missing_roles",
+          "state",
+        ]
+      : standardColumns;
   const baseColumns =
     (body?.workflow === "india-gstr1-summary" ||
       body?.table_type === "gst-summary-metrics") &&
@@ -3615,6 +3724,10 @@ export function CountryWorkflows({
                   value={workflow}
                   onChange={(e) => {
                     setWorkflow(e.target.value);
+                    if (e.target.value === "tax-turnover-bridge")
+                      setCurrency(
+                        config.data?.country === "IN" ? "INR" : "AED",
+                      );
                     setInvoiceFaceAmounts(false);
                     setInvoiceDirection("");
                     setWithholdingRole("");
@@ -3905,6 +4018,7 @@ export function CountryWorkflows({
                             !esicPopulationReview ||
                             r.review_status === "REVIEWED") &&
                           (![
+                            "tax-turnover-bridge",
                             "grant-utilisation",
                             "inventory-custody-confirmations",
                             "ownership-lookthrough",
@@ -4677,6 +4791,41 @@ export function CountryWorkflows({
               register compared with invoice evidence. This comparison does not
               establish GST return filing or IRP authenticity.
             </p>
+          )}
+          {body.turnover_contract && (
+            <section aria-label="Turnover bridge assessment">
+              <h3>Book revenue to return turnover</h3>
+              <p>
+                Book revenue plus signed assessed adjustments equals expected
+                return turnover. Each registration and period stands alone;
+                absent books, return or adjustment populations remain missing.
+                Explicit zero rows are needed for assessed nil populations.
+              </p>
+              <p>
+                This is a declared net-of-tax turnover bridge in the return
+                currency. Tax classifications, FX conversion, filing
+                authenticity and whole-taxpayer completeness are not inferred.
+              </p>
+              <p>
+                {body.turnover_quantification?.complete_for_declared_scope
+                  ? "All declared partition differences are quantified."
+                  : "Some partition differences are unquantified or outside declared scope; totals are partial."}
+              </p>
+              <pre style={{ whiteSpace: "pre-wrap" }}>
+                {text(body.turnover_difference_totals)}
+              </pre>
+              <TurnoverAdjustments
+                key={selected}
+                prefix={prefix}
+                selected={selected}
+                initial={body.turnover_adjustment_rows || []}
+                total={
+                  detail.data.collection_totals?.turnover_adjustment_rows ??
+                  body.turnover_adjustment_rows?.length ??
+                  0
+                }
+              />
+            </section>
           )}
           {body.vat201_arithmetic_scope && (
             <section aria-label="VAT201 arithmetic checks">

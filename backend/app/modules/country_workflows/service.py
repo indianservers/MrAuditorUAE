@@ -1,5 +1,6 @@
 """Adapters reuse the existing authorization, object store, jobs and event receipts."""
 
+from datetime import date
 from decimal import Decimal, localcontext
 from uuid import UUID
 
@@ -693,6 +694,22 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 422,
                 "Withholding obligations can establish only their assessed bank-allocation purpose",
             )
+        if data.workflow == "tax-turnover-bridge":
+            if source.body.get("review_status") != "REVIEWED":
+                raise HTTPException(
+                    409,
+                    "Independently review every turnover scope, books, return and adjustment source",
+                )
+            if any(
+                not period.start_date
+                <= date.fromisoformat(row["period_start"])
+                <= date.fromisoformat(row["period_end"])
+                <= period.end_date
+                for row in source.body.get("rows", [])
+            ):
+                raise HTTPException(
+                    422, "Turnover source periods must be within the engagement financial period"
+                )
         if source.kind != "workflow-source":
             raise HTTPException(422, "Select canonical country-workflow source events")
         if (

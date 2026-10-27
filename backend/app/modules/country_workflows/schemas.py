@@ -38,6 +38,7 @@ from app.modules.country_workflows.payroll_schemas import PAYROLL_ROW_TYPES
 from app.modules.country_workflows.pension_schemas import PENSION_ROW_TYPES
 from app.modules.country_workflows.purchase_controls import PurchaseQuantityControl
 from app.modules.country_workflows.sector_schemas import SECTOR_ROW_TYPES
+from app.modules.country_workflows.turnover import ROW_TYPES as TURNOVER_ROW_TYPES
 from app.modules.country_workflows.vat201_layouts import LAYOUTS, VAT201Layout
 from app.modules.country_workflows.withholding_schemas import WithholdingRecord, WithholdingRole
 from app.modules.country_workflows.withholding_scope import WithholdingSettlementScope
@@ -236,6 +237,7 @@ class Control(Strict):
 
 
 ROW_TYPES: dict[str, type[BaseModel]] = {
+    **TURNOVER_ROW_TYPES,
     **GRANT_ROW_TYPES,
     "inventory-custody-positions": CustodyPosition,
     "inventory-custody-confirmations": CustodyConfirmation,
@@ -351,6 +353,9 @@ class SourceInput(Strict):
     expected_documents: int | None = Field(default=None, ge=0, le=1250)
     rule_document_version_id: uuid.UUID | None = None
     table_type: Literal[
+        "turnover-scope",
+        "turnover-amounts",
+        "turnover-adjustments",
         "media-subjects",
         "media-searches",
         "media-mentions",
@@ -809,6 +814,7 @@ class WorkflowInput(Strict):
     withholding_role: WithholdingRole | None = None
     allocation_basis: Literal["invoice_face_amounts", "pre_application_balances"] | None = None
     workflow: Literal[
+        "tax-turnover-bridge",
         "adverse-media-review",
         "grant-utilisation",
         "inventory-custody-confirmations",

@@ -168,6 +168,10 @@ def render(event, format):
             "selected_current_totals",
             "assessment_contract_version",
             "box_comparison_scope",
+            "turnover_contract",
+            "turnover_basis",
+            "turnover_quantification",
+            "turnover_difference_totals",
             "vat201_layout",
             "vat201_arithmetic_contract",
             "vat201_arithmetic_scope",
@@ -180,6 +184,10 @@ def render(event, format):
         }
     }
 
+    if body.get("turnover_adjustment_rows"):
+        metadata["Turnover adjustment detail"] = (
+            f"{len(body['turnover_adjustment_rows'])} signed adjustments retained with full reasons and assessments in the Turnover adjustments XLSX sheet and original result"
+        )
     if body.get("vat201_arithmetic_checks"):
         metadata["VAT201 arithmetic detail"] = (
             f"{len(body['vat201_arithmetic_checks'])} independent checks retained in the VAT201 arithmetic XLSX sheet and original result; scalar Boxes 12-14 use tax only, with zero base and adjustment."
@@ -316,6 +324,14 @@ def render(event, format):
                 append(documents, fields)
                 for document in body.get("retained_grant_documents", []):
                     append(documents, [document.get(field) for field in fields])
+            if body.get("turnover_adjustment_rows"):
+                adjustments = workbook.create_sheet("Turnover adjustments")
+                fields = list(
+                    dict.fromkeys(key for row in body["turnover_adjustment_rows"] for key in row)
+                )
+                append(adjustments, fields)
+                for row in body["turnover_adjustment_rows"]:
+                    append(adjustments, [row.get(field) for field in fields])
             if body.get("vat201_arithmetic_checks"):
                 arithmetic = workbook.create_sheet("VAT201 arithmetic")
                 fields = [

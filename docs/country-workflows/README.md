@@ -164,3 +164,7 @@ Tax close now rolls up exact linked audit finding IDs across reviewed workpapers
 counting a repeated finding once and keeping currencies and impact signs separate.
 Missing values or unreviewed findings remain unresolved. See
 [source, review and regression scope](native-adapters.md#shared-tax-close-finding-roll-up-27-october-2026).
+
+The shared [turnover bridge](native-adapters.md#book-revenue-to-vatgst-turnover-by-registration-and-period)
+adds declared registration-period coverage, signed adjustments, separate
+books/return evidence and full adjustment review/export for UAE and India.

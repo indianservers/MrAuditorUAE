@@ -29277,6 +29277,29 @@
             }
           },
           {
+            "name": "turnover_offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Turnover Offset"
+            }
+          },
+          {
+            "name": "turnover_limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 500,
+              "minimum": 1,
+              "default": 100,
+              "title": "Turnover Limit"
+            }
+          },
+          {
             "name": "excluded_offset",
             "in": "query",
             "required": false,

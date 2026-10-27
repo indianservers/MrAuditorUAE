@@ -1,0 +1,32 @@
+{
+  "synthetic_only": true,
+  "professional_qualification": false,
+  "roles": {
+    "scope": {
+      "table_type": "turnover-scope",
+      "expected_rows": 1,
+      "control_totals": {}
+    },
+    "books": {
+      "table_type": "turnover-amounts",
+      "expected_rows": 1,
+      "control_totals": {
+        "AED": "100.00"
+      }
+    },
+    "return": {
+      "table_type": "turnover-amounts",
+      "expected_rows": 1,
+      "control_totals": {
+        "AED": "95.00"
+      }
+    },
+    "adjustments": {
+      "table_type": "turnover-adjustments",
+      "expected_rows": 1,
+      "control_totals": {
+        "AED": "-5.00"
+      }
+    }
+  }
+}

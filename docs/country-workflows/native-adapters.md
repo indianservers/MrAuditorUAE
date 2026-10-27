@@ -3500,3 +3500,67 @@ regressions](../phase-12/report-authorship-api.xml) passed. Scoped Ruff, mypy
 in this increment; no new full-app browser qualification is claimed. Catalogue
 coverage remains 154 authored synthetic scenarios, with real-client, complete
 country-rule/form qualification and release/security work still outstanding.
+
+
+### Book revenue to VAT/GST turnover by registration and period
+
+The shared tax-turnover-bridge workflow is enabled for UAE (AED and 15-digit TRN
+syntax) and India (INR and GSTIN syntax). It reconciles assessed net-of-tax book
+revenue plus signed adjustments against separately retained reported turnover.
+It does not infer legal revenue recognition, VAT/GST classification, exchange
+rates, tax liability, return authenticity or a filing schema.
+
+Four current independently reviewed canonical sources are required: expected
+turnover-scope, books and return turnover-amounts, and turnover-adjustments. All
+have explicit registration, period and currency. Scope is a separate expected
+population; absence from every monetary source is still a missing partition.
+Overlapping expected periods for one registration and duplicate source-role
+references within a period are refused. Periods must close by the reconciliation
+date and remain within the engagement financial period. Country identifier
+syntax is validated, not registry identity or actual registration ownership.
+
+A nil population requires explicit zero rows. An assessed-nil adjustment must be
+zero and cannot coexist with other adjustments in the same partition. Signed
+timing, scope, valuation, FX, non-revenue-supply and other adjustments retain their
+reference and assessment; the reason is a reviewed assertion, not a machine
+legal conclusion. Monetary files retain independent row and signed currency
+controls. Source versions and identical underlying files cannot establish
+independent roles. Shared preparer/reviewer separation and source-change
+staleness apply.
+
+Each registration-period retains book revenue, signed adjustments, expected
+return turnover, reported turnover, difference, missing roles and original row
+identities. Missing or outside-scope populations hard-block approval. Quantified
+variances require documented exception disposition under the existing workflow
+review policy. Positive and negative differences are reported separately and do
+not cancel across periods or registrations. Partial quantification is explicit;
+no partial total is presented as a complete scope conclusion.
+
+The UI offers separate adjustment pagination with original signed amounts and
+reason assessments. API turnover_offset/turnover_limit retrieves all retained
+adjustments independently of partition pagination. XLSX includes the complete
+Turnover adjustments sheet; paper exports identify the complete XLSX detail and
+scope limitations. Sources can subsequently support current reviewed workpapers,
+findings and declared report requirements through existing shared paths.
+
+[Reusable UAE/India synthetic CSV examples](sample-inputs/SYNTHETIC-turnover/README.md)
+include explicit source types, row counts and currency controls. They do not
+supply real-client pilot evidence or replace independent professional review.
+
+Verification: [2,853 backend unit tests](../phase-12/turnover-backend.xml) passed
+with five skips and two existing warnings. The [four API regressions](../phase-12/turnover-api.xml)
+passed UAE/India turnover plus existing tax-close finding roll-ups. They exercise
+retained original CSVs, independent source review, unreviewed-source refusal,
+101-adjustment pagination and complete XLSX detail, missing registration blocking,
+engagement-period rejection, self-review refusal and immutable stale history.
+Fourteen focused engine cases cover signed precision, opposite variances, missing
+partitions, overlapping scopes, duplicate references, nil conflicts, wrong-country
+syntax/currency, future periods and explicit nils. Both committed country sample
+sets were parsed from disk with their controls and calculated to MATCHED.
+All 272 frontend tests, production build, API contracts/types, scoped Ruff and
+mypy (seven modules) passed; ESLint has zero errors and one existing warning.
+The full unit suite was rerun after contract generation, so its snapshot gate
+passes without exemptions. No new full-app browser/screenshot qualification is
+claimed. Catalogue coverage remains 154 authored synthetic scenarios, not
+qualified real-client cases; professional rule/form qualification, live providers,
+consented pilot evidence and release/security gates remain open.

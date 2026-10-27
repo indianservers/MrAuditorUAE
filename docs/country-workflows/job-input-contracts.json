@@ -220,6 +220,7 @@
           },
           "workflow": {
             "enum": [
+              "tax-turnover-bridge",
               "adverse-media-review",
               "grant-utilisation",
               "inventory-custody-confirmations",
@@ -2805,6 +2806,9 @@
           },
           "table_type": {
             "enum": [
+              "turnover-scope",
+              "turnover-amounts",
+              "turnover-adjustments",
               "media-subjects",
               "media-searches",
               "media-mentions",
@@ -10802,6 +10806,202 @@
         "amount"
       ],
       "title": "Transaction",
+      "type": "object"
+    },
+    "turnover-adjustments": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "registration": {
+          "maxLength": 15,
+          "minLength": 1,
+          "title": "Registration",
+          "type": "string"
+        },
+        "period_start": {
+          "format": "date",
+          "title": "Period Start",
+          "type": "string"
+        },
+        "period_end": {
+          "format": "date",
+          "title": "Period End",
+          "type": "string"
+        },
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "title": "Currency",
+          "type": "string"
+        },
+        "assessment": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Assessment",
+          "type": "string"
+        },
+        "reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Reference",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Amount"
+        },
+        "reason": {
+          "enum": [
+            "timing",
+            "scope",
+            "valuation",
+            "foreign-exchange",
+            "non-revenue-supply",
+            "other",
+            "assessed-nil"
+          ],
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "registration",
+        "period_start",
+        "period_end",
+        "currency",
+        "assessment",
+        "reference",
+        "amount",
+        "reason"
+      ],
+      "title": "TurnoverAdjustment",
+      "type": "object"
+    },
+    "turnover-amounts": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "registration": {
+          "maxLength": 15,
+          "minLength": 1,
+          "title": "Registration",
+          "type": "string"
+        },
+        "period_start": {
+          "format": "date",
+          "title": "Period Start",
+          "type": "string"
+        },
+        "period_end": {
+          "format": "date",
+          "title": "Period End",
+          "type": "string"
+        },
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "title": "Currency",
+          "type": "string"
+        },
+        "assessment": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Assessment",
+          "type": "string"
+        },
+        "reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Reference",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Amount"
+        }
+      },
+      "required": [
+        "id",
+        "registration",
+        "period_start",
+        "period_end",
+        "currency",
+        "assessment",
+        "reference",
+        "amount"
+      ],
+      "title": "TurnoverAmount",
+      "type": "object"
+    },
+    "turnover-scope": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "registration": {
+          "maxLength": 15,
+          "minLength": 1,
+          "title": "Registration",
+          "type": "string"
+        },
+        "period_start": {
+          "format": "date",
+          "title": "Period Start",
+          "type": "string"
+        },
+        "period_end": {
+          "format": "date",
+          "title": "Period End",
+          "type": "string"
+        },
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "title": "Currency",
+          "type": "string"
+        },
+        "assessment": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Assessment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "registration",
+        "period_start",
+        "period_end",
+        "currency",
+        "assessment"
+      ],
+      "title": "TurnoverScope",
       "type": "object"
     },
     "withholding-records": {

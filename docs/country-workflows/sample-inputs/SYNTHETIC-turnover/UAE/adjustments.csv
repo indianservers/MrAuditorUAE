@@ -1,0 +1,2 @@
+registration,period_start,period_end,currency,assessment,id,reference,amount,reason
+100000000000001,2026-04-01,2026-06-30,AED,SYNTHETIC independently assessed net-of-tax turnover; not client or filing evidence,adjustment-1,ADJ-1,-5.00,timing

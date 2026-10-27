@@ -778,6 +778,8 @@ async def event_details(
     ctx: Actor,
     offset: int = Query(0, ge=0),
     limit: int = Query(100, ge=1, le=500),
+    turnover_offset: int = Query(0, ge=0),
+    turnover_limit: int = Query(100, ge=1, le=500),
     excluded_offset: int = Query(0, ge=0),
     excluded_limit: int = Query(100, ge=1, le=500),
     inventory_offset: int = Query(0, ge=0),
@@ -846,6 +848,7 @@ async def event_details(
             excluded_offset : excluded_offset + excluded_limit
         ]
     for key, start, size in [
+        ("turnover_adjustment_rows", turnover_offset, turnover_limit),
         ("custody_quantity_controls", custody_control_offset, custody_control_limit),
         ("ownership_paths", ownership_path_offset, ownership_path_limit),
         ("ownership_path_steps", ownership_step_offset, ownership_step_limit),
@@ -1480,6 +1483,9 @@ async def generate_paper(
             "comparison_basis",
             "selected_current_totals",
             "assessment_contract_version",
+            "turnover_contract",
+            "turnover_basis",
+            "turnover_difference_totals",
             "box_comparison_scope",
             "excluded_box_controls",
             "included_box_controls",

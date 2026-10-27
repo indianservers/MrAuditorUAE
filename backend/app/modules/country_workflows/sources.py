@@ -211,6 +211,8 @@ def _parse_csv(content, data, defaults=None):
             raise ValueError("A nil population cannot carry nonzero control totals")
         totals.update(data.control_totals)
     if data.table_type in {
+        "turnover-amounts",
+        "turnover-adjustments",
         "grant-budgets",
         "grant-expenses",
         "grant-allocations",

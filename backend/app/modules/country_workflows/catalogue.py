@@ -12,6 +12,7 @@ from app.modules.country_workflows.payroll_ledger_schemas import PAYROLL_LEDGER_
 from app.modules.country_workflows.payroll_schemas import PAYROLL_WORKFLOWS
 from app.modules.country_workflows.pension_schemas import PENSION_WORKFLOWS
 from app.modules.country_workflows.sector_schemas import SECTOR_WORKFLOWS
+from app.modules.country_workflows.turnover import ROLES as TURNOVER_ROLES
 from app.modules.country_workflows.withholding_schemas import WITHHOLDING_WORKFLOWS
 from app.modules.regulatory.tax_forms import india_tax_regime
 
@@ -24,6 +25,11 @@ OPTIONAL_ROLES = {
 }
 
 WORKFLOWS = {
+    "tax-turnover-bridge": (
+        "Book revenue to VAT/GST turnover by registration and period",
+        ["AE", "IN"],
+        TURNOVER_ROLES,
+    ),
     "grant-utilisation": (
         "Grant mandates / opening utilisation / expenditure allocations",
         [],
