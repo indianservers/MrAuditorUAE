@@ -60,11 +60,13 @@ export function VATCompositionSource({
           ))}
         </select>
       </label>
-      {layout === "emirate-20" && (
+      {["emirate-20", "ecommerce-20"].includes(layout) && (
         <p>
           Retain all seven assessed Box 1a-1g allocations and Boxes 2-14.
           Aggregate Box 1 cannot be spread automatically. This compares emirate
-          totals; e-commerce/other breakdowns and legal allocation remain
+          totals. For the e-commerce layout retain both explicit three-amount
+          supply breakdowns for every emirate, including zero. Qualifying
+          registrant status, reporting periods and legal allocation remain
           separately assessed.
         </p>
       )}

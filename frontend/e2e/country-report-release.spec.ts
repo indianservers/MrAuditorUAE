@@ -199,6 +199,30 @@ for (const code of ["AE", "IN"] as const) {
       await page.screenshot({
         path: `${screenshots}/AE-vat201-report-preset.png`,
       });
+      await page
+        .getByRole("combobox", {
+          name: "Operational report preset",
+          exact: true,
+        })
+        .selectOption("uae-vat201-review:ecommerce-20/1");
+      await expect(
+        page.getByLabel("Requirement reference 20", { exact: true }),
+      ).toHaveValue("vat201.box.14");
+      await expect(
+        page.getByRole("button", {
+          name: "Save template version",
+          exact: true,
+        }),
+      ).toBeDisabled();
+      await page
+        .getByRole("combobox", {
+          name: "Operational report preset",
+          exact: true,
+        })
+        .scrollIntoViewIfNeeded();
+      await page.screenshot({
+        path: `${screenshots}/AE-vat201-ecommerce-report-preset.png`,
+      });
       await page.setViewportSize({ width: 1440, height: 1000 });
     } else {
       await expect(
@@ -705,7 +729,7 @@ for (const code of ["AE", "IN"] as const) {
         .getByLabel("Title", { exact: true })
         .fill("SYNTHETIC workpaper item mapping draft");
       await page
-        .getByRole("textbox", { name: /^Folder/ })
+        .getByRole("textbox", { name: /^folder/i })
         .fill("SYNTHETIC report mappings");
       await page
         .getByLabel("Section 1 text", { exact: true })
@@ -713,7 +737,7 @@ for (const code of ["AE", "IN"] as const) {
           "SYNTHETIC substantive mapping mechanics and source assessment; no legal conclusion",
         );
       await page
-        .getByRole("textbox", { name: /^Conclusion/ })
+        .getByRole("textbox", { name: /^conclusion/i })
         .fill("SYNTHETIC draft controls only; not reviewed client findings");
       await page
         .getByRole("combobox", { name: "Link source record", exact: true })

@@ -1,0 +1,13 @@
+{
+  "classification": "SYNTHETIC_ENGINE_FIXTURE_NOT_CLIENT_OR_LEGAL_QUALIFICATION",
+  "layout": "ecommerce-20",
+  "rows_per_file": 20,
+  "all_box_taxable_amount_control": "2400",
+  "all_box_tax_control": "230",
+  "all_box_adjustment_control": "0",
+  "scope": "One TRN and quarter. Controls include summaries and are not payable tax. Seven explicit zero-inclusive splits; no qualifying-registrant or location assessment inferred.",
+  "files": {
+    "books.csv": "de6ea47a50e0ada54f6b4d0544b1fc7652842c90908da2951f5d39e5c8ff6840",
+    "filed.csv": "b0a41120992288fd20347b3fe05300285775dcc0b60881b4ace4bd3173035ef4"
+  }
+}

@@ -12,12 +12,13 @@ from tests.phase4.test_workflows import actor, grant, setup
 from tests.qa_crud.test_country_workflows import decision, double_boundaries, execute, source
 from tests.qa_crud.test_india_ecr_source import india_context
 from tests.unit.test_vat_box_scope import full_filed_boxes
+from tests.unit.test_vat_ecommerce import split_rows
 from tests.unit.test_vat_emirates import detailed_rows
 
 pytestmark = pytest.mark.skipif(os.getenv("INTEGRATION_TESTS") != "1", reason="Dedicated test DB")
 
 
-@pytest.mark.parametrize("layout", ["aggregate-14", "emirate-20"])
+@pytest.mark.parametrize("layout", ["aggregate-14", "emirate-20", "ecommerce-20"])
 async def test_vat_preset_requires_complete_reviewed_comparison_and_preserves_stale_report(
     environment, monkeypatch, layout
 ):
@@ -28,9 +29,15 @@ async def test_vat_preset_requires_complete_reviewed_comparison_and_preserves_st
     await grant(c, h, base, reviewer)
     prefix = f"/api/v1/regulatory/engagements/{eid}"
     presets = (await c.get(prefix + "/report-presets", headers=h)).json()
-    assert presets["country"] == "AE" and len(presets["items"]) == 2
+    assert presets["country"] == "AE" and len(presets["items"]) == 3
     pack = next(p for p in presets["items"] if p["layout"] == layout)
-    rows = detailed_rows() if layout == "emirate-20" else full_filed_boxes()
+    rows = (
+        split_rows()
+        if layout == "ecommerce-20"
+        else detailed_rows()
+        if layout == "emirate-20"
+        else full_filed_boxes()
+    )
     ids, originals = {}, {}
     for role in ("books", "return"):
         records = [{**row, "id": role + "-" + row["box"]} for row in rows]

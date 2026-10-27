@@ -4071,3 +4071,48 @@ existing worker-start timing failure while frontend/API jobs ran concurrently:
 the one-second timeout expired before its PID marker was written. All 33 worker
 cases passed in an [isolated recheck](../phase-12/workpaper-scope-worker-recheck.xml),
 and the full serial rerun passed without test or production timeout changes.
+
+### UAE VAT201 e-commerce and other-supply breakdown
+
+A new explicit `ecommerce-20` layout retains the same twenty operational boxes
+and requires six additional values on each Box 1a-1g row: e-commerce and other
+standard-rated taxable amount, tax and adjustment. Both independently reviewed
+source populations must contain all seven breakdowns, including explicit nil.
+Split fields on other boxes or under an aggregate, ordinary-emirate or custom
+layout are rejected, so supplied breakdowns cannot silently disappear.
+
+Each component is compared independently between books and return; offsetting
+category differences cannot hide behind an unchanged emirate total. Twenty-one
+additional equations per source check that the two categories sum to the three
+emirate totals. Together with existing summary/scalar equations this produces
+72 arithmetic checks across books and return. Identically wrong sources still
+block. Values retain signed adjustments and must be stated to the nearest fils.
+The existing source composition/review/staleness and report preset mechanisms
+are reused, with a separate UAE e-commerce report preset requiring exact
+agreement and all 72 checks. India does not receive UAE layouts or presets.
+
+The [FTA source receipt](uae-vat201-ecommerce-source.json) records the actual
+5,403,611-byte July 2023 PDF and SHA-256. Page 24 was rendered locally and visually
+checked for both component rows and the three amount columns. This is an
+operational structure reference; it does not qualify the current portal schema,
+threshold, reporting duration, group scope or customer-receipt location. The
+[synthetic CSV examples](sample-inputs/SYNTHETIC-vat-ecommerce/README.txt) are
+separate from real client pilot folders and legal expected results.
+
+Hosted browser job 122348172555 on source `a81bf63` ended with two passing cases
+and one failure: the new India authoring smoke used case-sensitive `Folder`
+against the existing lowercase `folder` label. Its `Conclusion` selector had
+the same issue. Both selectors are corrected using case-insensitive accessible
+names; the new source-specific browser rerun is pending, not claimed passed.
+The smoke also adds UAE e-commerce preset selection/draft blocking and a capture.
+
+Verification of the e-commerce increment: all 2,928 backend unit cases passed
+(five skipped), including twelve new split/negative cases. Fifteen real-database
+regressions passed across ordinary/emirate/e-commerce VAT presets, composition,
+source review/withdrawal, exports, India exclusion, Form 26 scope and generic
+statutory reporting. All 281 frontend tests, production build, TypeScript,
+scoped ESLint, application-wide Ruff/format and mypy (387 source files), and
+current API/payload contract checks passed. The retained [backend receipt](../phase-12/vat-ecommerce-backend.xml)
+and [API receipt](../phase-12/vat-ecommerce-api.xml) document these local checks.
+The catalogue remains 154 authored synthetic scenarios; this increment adds
+operational coverage and tests without claiming additional qualified clients.

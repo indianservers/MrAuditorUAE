@@ -203,6 +203,13 @@ class ReturnBox(Strict):
     tax: Money
     adjustment: Money = Decimal(0)
 
+    ecommerce_taxable_amount: Money | None = None
+    ecommerce_tax: Money | None = None
+    ecommerce_adjustment: Money | None = None
+    other_standard_taxable_amount: Money | None = None
+    other_standard_tax: Money | None = None
+    other_standard_adjustment: Money | None = None
+
     @model_validator(mode="after")
     def period(self):
         if self.period_end < self.period_start:

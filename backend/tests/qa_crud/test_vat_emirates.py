@@ -9,6 +9,7 @@ from tests.integration.test_platform import environment as environment
 from tests.phase4.test_workflows import actor, grant, setup
 from tests.qa_crud.test_country_workflows import decision, double_boundaries, execute, source
 from tests.qa_crud.test_india_ecr_source import india_context
+from tests.unit.test_vat_ecommerce import split_rows
 from tests.unit.test_vat_emirates import detailed_rows
 
 pytestmark = pytest.mark.skipif(
@@ -16,8 +17,8 @@ pytestmark = pytest.mark.skipif(
 )
 
 
-async def prepare_sources(c, h, eid, reviewer):
-    rows = detailed_rows("BOOK")
+async def prepare_sources(c, h, eid, reviewer, layout="emirate-20"):
+    rows = split_rows("BOOK") if layout == "ecommerce-20" else detailed_rows("BOOK")
     components = []
     for label, records, tax in (
         ("emirate book allocations", rows[:7], "10"),
@@ -29,9 +30,16 @@ async def prepare_sources(c, h, eid, reviewer):
         reviewed = await decision(c, reviewer[0], eid, imported)
         assert reviewed.status_code == 201, reviewed.text
         components.append(reviewed.json()["id"])
-    filed = detailed_rows("INDEPENDENT-FILED")
+    filed = (
+        split_rows("INDEPENDENT-FILED")
+        if layout == "ecommerce-20"
+        else detailed_rows("INDEPENDENT-FILED")
+    )
     filed[0].update(taxable_amount="120", tax="6")
     filed[1].update(taxable_amount="80", tax="4")
+    if layout == "ecommerce-20":
+        for row in filed[:2]:
+            row.update(ecommerce_taxable_amount=row["taxable_amount"], ecommerce_tax=row["tax"])
     imported = await source(
         c,
         h,
@@ -46,22 +54,23 @@ async def prepare_sources(c, h, eid, reviewer):
     return components, reviewed.json()["id"]
 
 
+@pytest.mark.parametrize("layout", ["emirate-20", "ecommerce-20"])
 async def test_emirate_composition_review_mismatch_missing_zero_export_and_staleness(
-    environment, monkeypatch
+    environment, monkeypatch, layout
 ):
     c = environment
     double_boundaries(monkeypatch)
     h, _, eid, base = await setup(c)
     reviewer = await actor(h, "Firm Administrator", "vat-emirate-reviewer")
     await grant(c, h, base, reviewer)
-    components, filed_id = await prepare_sources(c, h, eid, reviewer)
+    components, filed_id = await prepare_sources(c, h, eid, reviewer, layout)
     path = f"/api/v1/intelligence/engagements/{eid}"
     config = await c.get(path + "/country-workflows", headers=h)
-    boxes = config.json()["vat201_layouts"]["emirate-20"]["boxes"]
+    boxes = config.json()["vat201_layouts"][layout]["boxes"]
     assert len(boxes) == 20 and config.json()["vat201_emirates"]["1g"] == "Fujairah"
     payload = {
         "source_ids": components,
-        "layout": "emirate-20",
+        "layout": layout,
         "taxable_amount": "2400",
         "tax": "230",
         "adjustment": "0",
@@ -77,7 +86,7 @@ async def test_emirate_composition_review_mismatch_missing_zero_export_and_stale
     )
     compare = {
         "workflow": "uae-vat-return",
-        "vat201_layout": "emirate-20",
+        "vat201_layout": layout,
         "source_ids": {"books": composed["id"], "return": filed_id},
         "as_of": "2026-06-30",
         "currency": "AED",
@@ -114,7 +123,13 @@ async def test_emirate_composition_review_mismatch_missing_zero_export_and_stale
         c,
         h,
         eid,
-        [row for row in detailed_rows("MISSING-FILED") if row["box"] != "1g"],
+        [
+            row
+            for row in (
+                split_rows() if layout == "ecommerce-20" else detailed_rows("MISSING-FILED")
+            )
+            if row["box"] != "1g"
+        ],
         "SYNTHETIC missing zero emirate",
         "return-boxes",
         {"AED": "230"},
@@ -133,7 +148,11 @@ async def test_emirate_composition_review_mismatch_missing_zero_export_and_stale
     # The same wrong summary in independent books and filed populations must block.
     bad_ids = {}
     for role in ("books", "return"):
-        wrong = detailed_rows("ARITHMETIC-" + role)
+        wrong = (
+            split_rows("ARITHMETIC-" + role)
+            if layout == "ecommerce-20"
+            else detailed_rows("ARITHMETIC-" + role)
+        )
         next(row for row in wrong if row["box"] == "8")["tax"] = "55.01"
         imported = await source(
             c,
@@ -155,7 +174,7 @@ async def test_emirate_composition_review_mismatch_missing_zero_export_and_stale
     exported = await c.get(path + f"/events/{invalid['id']}/export?format=xlsx", headers=h)
     assert exported.status_code == 200
     arithmetic = list(load_workbook(io.BytesIO(exported.content))["VAT201 arithmetic"].values)
-    assert len(arithmetic) == 31
+    assert len(arithmetic) == (73 if layout == "ecommerce-20" else 31)
     assert any("ARITHMETIC_ERROR" in row for row in arithmetic)
     original = await c.get(path + "/events/" + components[0], headers=h)
     rejected = await decision(c, reviewer[0], eid, original.json(), "reject")
@@ -165,7 +184,8 @@ async def test_emirate_composition_review_mismatch_missing_zero_export_and_stale
         assert stale.json()["freshness"] == "STALE"
 
 
-async def test_detailed_uae_layout_is_not_enabled_in_india(environment, monkeypatch):
+@pytest.mark.parametrize("layout", ["emirate-20", "ecommerce-20"])
+async def test_detailed_uae_layout_is_not_enabled_in_india(environment, monkeypatch, layout):
     c = environment
     double_boundaries(monkeypatch)
     h, eid, _ = await india_context(c)
@@ -177,7 +197,7 @@ async def test_detailed_uae_layout_is_not_enabled_in_india(environment, monkeypa
         headers=h,
         json={
             "source_ids": [str(uuid.uuid4()), str(uuid.uuid4())],
-            "layout": "emirate-20",
+            "layout": layout,
             "taxable_amount": "0",
             "tax": "0",
             "adjustment": "0",

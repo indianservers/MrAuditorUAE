@@ -87,77 +87,86 @@ describe("VAT201 composition", () => {
   });
 });
 
-it("composes an explicitly selected twenty-row emirate layout", async () => {
-  mutate.mockResolvedValue({ id: "composed-emirates" });
-  render(
-    <VATCompositionSource
-      eid="eng"
-      sources={[
-        {
-          id: "emirates",
-          label: "Emirate book allocations",
-          kind: "workflow-source",
-          table_type: "return-boxes",
-          freshness: "CURRENT",
-          review_status: "REVIEWED",
-        },
-        {
-          id: "other",
-          label: "Other book boxes",
-          kind: "workflow-source",
-          table_type: "return-boxes",
-          freshness: "CURRENT",
-          review_status: "REVIEWED",
-        },
-      ]}
-      layouts={{
-        "aggregate-14": {
-          label: "Aggregate fourteen",
-          boxes: Array.from({ length: 14 }, (_, i) => String(i + 1)),
-        },
-        "emirate-20": {
-          label: "Twenty emirate rows",
-          boxes: [..."abcdefg"]
-            .map((x) => "1" + x)
-            .concat(Array.from({ length: 13 }, (_, i) => String(i + 2))),
-        },
-      }}
-      onCreated={vi.fn()}
-    />,
-  );
-  fireEvent.click(screen.getByText("Compose reviewed VAT201 book schedules"));
-  fireEvent.change(screen.getByLabelText("VAT201 composition layout"), {
-    target: { value: "emirate-20" },
-  });
-  const schedules = screen.getByLabelText(
-    "Reviewed VAT201 component schedules",
-  ) as HTMLSelectElement;
-  Array.from(schedules.options).forEach((option) => {
-    option.selected = true;
-  });
-  fireEvent.change(schedules);
-  for (const [label, value] of [
-    ["Composed VAT201 source title", "Emirate books"],
-    ["Independent composed taxable amount", "2400"],
-    ["Independent composed tax total", "230"],
-    ["Independent composed adjustment total", "0"],
-    [
-      "VAT201 composition scope assessment",
-      "All seven emirates separately assessed with explicit nil rows and retained geographic support",
-    ],
-  ])
-    fireEvent.change(screen.getByLabelText(label), { target: { value } });
-  fireEvent.click(
-    screen.getByRole("button", { name: "Prepare composed VAT201 books" }),
-  );
-  await waitFor(() =>
-    expect(mutate).toHaveBeenLastCalledWith(
-      expect.objectContaining({
-        body: expect.objectContaining({
-          layout: "emirate-20",
-          source_ids: ["emirates", "other"],
+it.each(["emirate-20", "ecommerce-20"])(
+  "composes explicitly selected %s layout",
+  async (layout) => {
+    mutate.mockResolvedValue({ id: "composed-emirates" });
+    render(
+      <VATCompositionSource
+        eid="eng"
+        sources={[
+          {
+            id: "emirates",
+            label: "Emirate book allocations",
+            kind: "workflow-source",
+            table_type: "return-boxes",
+            freshness: "CURRENT",
+            review_status: "REVIEWED",
+          },
+          {
+            id: "other",
+            label: "Other book boxes",
+            kind: "workflow-source",
+            table_type: "return-boxes",
+            freshness: "CURRENT",
+            review_status: "REVIEWED",
+          },
+        ]}
+        layouts={{
+          "aggregate-14": {
+            label: "Aggregate fourteen",
+            boxes: Array.from({ length: 14 }, (_, i) => String(i + 1)),
+          },
+          "ecommerce-20": {
+            label: "E-commerce and other emirate supplies",
+            boxes: [..."abcdefg"]
+              .map((x) => "1" + x)
+              .concat(Array.from({ length: 13 }, (_, i) => String(i + 2))),
+          },
+          "emirate-20": {
+            label: "Twenty emirate rows",
+            boxes: [..."abcdefg"]
+              .map((x) => "1" + x)
+              .concat(Array.from({ length: 13 }, (_, i) => String(i + 2))),
+          },
+        }}
+        onCreated={vi.fn()}
+      />,
+    );
+    fireEvent.click(screen.getByText("Compose reviewed VAT201 book schedules"));
+    fireEvent.change(screen.getByLabelText("VAT201 composition layout"), {
+      target: { value: layout },
+    });
+    const schedules = screen.getByLabelText(
+      "Reviewed VAT201 component schedules",
+    ) as HTMLSelectElement;
+    Array.from(schedules.options).forEach((option) => {
+      option.selected = true;
+    });
+    fireEvent.change(schedules);
+    for (const [label, value] of [
+      ["Composed VAT201 source title", "Emirate books"],
+      ["Independent composed taxable amount", "2400"],
+      ["Independent composed tax total", "230"],
+      ["Independent composed adjustment total", "0"],
+      [
+        "VAT201 composition scope assessment",
+        "All seven emirates separately assessed with explicit nil rows and retained geographic support",
+      ],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    fireEvent.click(
+      screen.getByRole("button", { name: "Prepare composed VAT201 books" }),
+    );
+    await waitFor(() =>
+      expect(mutate).toHaveBeenLastCalledWith(
+        expect.objectContaining({
+          body: expect.objectContaining({
+            layout,
+            source_ids: ["emirates", "other"],
+          }),
         }),
-      }),
-    ),
-  );
-});
+      ),
+    );
+  },
+);

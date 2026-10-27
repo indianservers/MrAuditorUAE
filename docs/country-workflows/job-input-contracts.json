@@ -607,7 +607,8 @@
               {
                 "enum": [
                   "aggregate-14",
-                  "emirate-20"
+                  "emirate-20",
+                  "ecommerce-20"
                 ],
                 "type": "string"
               },
@@ -10032,6 +10033,96 @@
           ],
           "default": "0",
           "title": "Adjustment"
+        },
+        "ecommerce_taxable_amount": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ecommerce Taxable Amount"
+        },
+        "ecommerce_tax": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ecommerce Tax"
+        },
+        "ecommerce_adjustment": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ecommerce Adjustment"
+        },
+        "other_standard_taxable_amount": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Other Standard Taxable Amount"
+        },
+        "other_standard_tax": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Other Standard Tax"
+        },
+        "other_standard_adjustment": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Other Standard Adjustment"
         }
       },
       "required": [

@@ -1,0 +1,19 @@
+{
+  "retrieved_at": "2026-10-27",
+  "authority": "UAE Federal Tax Authority",
+  "title": "Final VAT 201 Return for e-commerce reporting - User Manual",
+  "url": "https://tax.gov.ae/DownloadOpenTextFile?fileUrl=en%2FVAT_VAT_Guides%2FProcess_Final_VAT_return%2FFinal_VAT_return_for_e-commerce_reporting.pdf",
+  "published_version": "July 2023, version 1.0.0.0; document control 11 July 2023",
+  "downloaded_pdf_bytes": 5403611,
+  "downloaded_pdf_sha256": "9a10743e65c47e8658cbf8200f451c8b561f5cc1c0e72273a78fe45a6f98c916",
+  "page_count": 40,
+  "visual_review": "Page 24 rendered locally and inspected: separate e-commerce/other-standard-rated rows with taxable amount, VAT and adjustment; total per emirate. Pages 23-25 text confirms component entry and calculated totals.",
+  "implemented_scope": "Explicit split comparison and arithmetic for assessed seven-emirate Box 1 allocations, alongside the existing twenty-row operational layout",
+  "not_qualified": [
+    "Current portal and offline template schema",
+    "Qualifying-registrant threshold and reporting-duration assessment",
+    "Customer receipt-location or tax-group legal allocation",
+    "Final-return deregistration obligations and complete filing process",
+    "Representative client or independent professional expected schedules"
+  ]
+}

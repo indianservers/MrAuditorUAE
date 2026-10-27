@@ -32,6 +32,8 @@ def manifest(identifier):
     layout = identifier[len(PREFIX) : -2]
     if layout not in LAYOUTS:
         raise ValueError("Unknown operational report preset")
+    from app.modules.country_workflows.vat201_arithmetic import ECOMMERCE_SOURCE
+
     body = {
         "id": identifier,
         "country": "AE",
@@ -41,8 +43,10 @@ def manifest(identifier):
         "not_applicable_keys": [],
         "layout": layout,
         "title": "VAT201 reviewed comparison — " + str(LAYOUTS[layout]["label"]),
-        "source_url": SOURCE,
-        "source_version": "FTA VAT Returns User Guide, May 2018; operational layout only",
+        "source_url": ECOMMERCE_SOURCE if layout == "ecommerce-20" else SOURCE,
+        "source_version": "FTA Final VAT201 e-commerce user manual, July 2023 v1.0; assessed operational breakdown only"
+        if layout == "ecommerce-20"
+        else "FTA VAT Returns User Guide, May 2018; operational layout only",
         "required_boxes": list(LAYOUTS[layout]["boxes"]),
         "requirements": [
             {
@@ -58,7 +62,7 @@ def manifest(identifier):
         ],
         "statutory_completeness_qualified": False,
         "limitations": [
-            "Selected operational layout only; this is not a complete current filing schema, e-commerce breakdown or legal eligibility assessment",
+            "Selected operational layout only; qualifying-registrant status, legal allocation, reporting duration and current filing schema require separate assessment",
             "All selected boxes require reviewed comparison evidence; explicit zero is different from missing evidence or not applicable",
             "Report remains unsigned and unfiled; source qualification and professional scope assessment remain required",
         ],
@@ -122,7 +126,9 @@ def validate_source(pack, body, requirement_keys):
                 "Preset coverage requires exact book/return agreement, not a tolerated variance",
             )
     checks = body.get("vat201_arithmetic_checks", [])
-    if len(checks) != 30 or any(r["status"] != "MATCHED" for r in checks):
+    if len(checks) != (72 if pack["layout"] == "ecommerce-20" else 30) or any(
+        r["status"] != "MATCHED" for r in checks
+    ):
         raise HTTPException(
             409, "VAT201 preset requires both populations' retained arithmetic checks"
         )

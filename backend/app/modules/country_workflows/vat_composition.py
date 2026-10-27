@@ -2,6 +2,7 @@
 
 import uuid
 from decimal import Decimal, localcontext
+from types import SimpleNamespace
 
 from fastapi import HTTPException
 from pydantic import Field, field_validator, model_validator
@@ -60,10 +61,10 @@ def source_rows(sources, data):
             identities.add(identity)
             for original in body["rows"]:
                 row = ReturnBox.model_validate(
-                    {k: original[k] for k in ReturnBox.model_fields}
+                    {k: original[k] for k in ReturnBox.model_fields if k in original}
                 ).model_dump(mode="json")
                 box = row["box"]
-                if data.layout == "emirate-20" and any(
+                if data.layout in {"emirate-20", "ecommerce-20"} and any(
                     Decimal(row[field]) != Decimal(row[field]).quantize(Decimal("0.01"))
                     for field in ("taxable_amount", "tax", "adjustment")
                 ):
@@ -104,6 +105,12 @@ def source_rows(sources, data):
             raise ValueError(
                 "Independent whole-schedule taxable, tax and adjustment controls do not agree"
             )
+    if data.layout == "ecommerce-20":
+        from app.modules.country_workflows.vat201_layouts import validate_comparison
+
+        validate_comparison(
+            SimpleNamespace(vat201_layout=data.layout, currency="AED"), {"books": rows}
+        )
     return sorted(rows, key=lambda row: required.index(row["box"])), {"AED": str(totals["tax"])}
 
 
@@ -163,8 +170,10 @@ async def prepare(db, ctx, eng, data, request_id):
             "source_sha256": fingerprint({"rows": rows}),
             "contributors": sorted(contributors | {str(ctx.user_id)}),
             "native_metadata": data.model_dump(mode="json"),
-            "population_completeness": "DECLARED_DISJOINT_TWENTY_BOX_EMIRATE_BOOK_SCHEDULES"
-            if data.layout == "emirate-20"
+            "population_completeness": "DECLARED_ECOMMERCE_AND_OTHER_EMIRATE_BOOK_SCHEDULES"
+            if data.layout == "ecommerce-20"
+            else "DECLARED_DISJOINT_TWENTY_BOX_EMIRATE_BOOK_SCHEDULES"
+            if data.layout in {"emirate-20", "ecommerce-20"}
             else "DECLARED_DISJOINT_FOURTEEN_BOX_BOOK_SCHEDULES",
             "statutory_calculation_qualified": False,
             "limitations": [

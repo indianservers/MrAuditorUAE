@@ -9365,7 +9365,7 @@ export interface components {
              * @default aggregate-14
              * @enum {string}
              */
-            layout: "aggregate-14" | "emirate-20";
+            layout: "aggregate-14" | "emirate-20" | "ecommerce-20";
             /** Taxable Amount */
             taxable_amount: number | string;
             /** Tax */

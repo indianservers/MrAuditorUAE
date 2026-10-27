@@ -4006,7 +4006,9 @@ export function CountryWorkflows({
                                   (workflow === "india-gstr1-documents" &&
                                     r.invoice_direction === "sale")))) &&
                           (workflow !== "uae-vat-return" ||
-                            vatLayout !== "emirate-20" ||
+                            !["emirate-20", "ecommerce-20"].includes(
+                              vatLayout,
+                            ) ||
                             r.review_status === "REVIEWED") &&
                           (!arrearsOnly ||
                             r.table_type !== "obligations" ||
@@ -4190,13 +4192,24 @@ export function CountryWorkflows({
                       )}
                     </select>
                   </label>
-                  {vatLayout === "emirate-20" && (
+                  {["emirate-20", "ecommerce-20"].includes(vatLayout) && (
                     <p>
                       Compare all twenty explicit rows for one TRN and period in
                       AED, including zero-valued emirates. Independently review
                       both source populations. Missing emirate evidence blocks
                       approval; aggregate Box 1 cannot substitute for assessed
                       geographic allocations.
+                    </p>
+                  )}
+                  {vatLayout === "ecommerce-20" && (
+                    <p>
+                      For each Box 1a-1g retain ecommerce_taxable_amount,
+                      ecommerce_tax, ecommerce_adjustment,
+                      other_standard_taxable_amount, other_standard_tax and
+                      other_standard_adjustment in both sources, including
+                      explicit zero. Each split must sum to its emirate total.
+                      Applicability and customer-receipt location require
+                      separate professional assessment; no filing is performed.
                     </p>
                   )}
                   <label>

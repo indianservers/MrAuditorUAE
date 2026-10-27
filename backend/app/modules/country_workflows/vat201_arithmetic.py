@@ -4,7 +4,8 @@ from decimal import Decimal, localcontext
 
 from app.modules.country_workflows.vat201_layouts import EMIRATES
 
-CONTRACT = "uae-vat201-arithmetic/1"
+CONTRACT = "uae-vat201-arithmetic/2"
+ECOMMERCE_SOURCE = "https://tax.gov.ae/DownloadOpenTextFile?fileUrl=en%2FVAT_VAT_Guides%2FProcess_Final_VAT_return%2FFinal_VAT_return_for_e-commerce_reporting.pdf"
 SOURCE = "https://tax.gov.ae/-/media/Files/EN/PDF/Guides/VAT-Returns-User-Guide.pdf"
 
 
@@ -13,7 +14,7 @@ def checks(layout, tables):
         return []
     output = (
         [*EMIRATES, *map(str, range(2, 8))]
-        if layout == "emirate-20"
+        if layout in {"emirate-20", "ecommerce-20"}
         else list(map(str, range(1, 8)))
     )
     checks = []
@@ -58,6 +59,15 @@ def checks(layout, tables):
                     }
                 )
 
+            if layout == "ecommerce-20":
+                for box in EMIRATES:
+                    for field in ("taxable_amount", "tax", "adjustment"):
+                        check(
+                            box,
+                            field,
+                            [(box, "ecommerce_" + field, 1), (box, "other_standard_" + field, 1)],
+                            "e-commerce + other standard-rated supplies",
+                        )
             for field in ("taxable_amount", "tax", "adjustment"):
                 check("8", field, [(box, field, 1) for box in output], "SUM(output detail rows)")
                 check("11", field, [("9", field, 1), ("10", field, 1)], "Box 9 + Box 10")

@@ -529,9 +529,17 @@ def obligations(data, tables, country):
 
 
 def vat_return(data, tables):
-    from app.modules.country_workflows.vat201_layouts import EMIRATES, LAYOUTS, validate_comparison
+    from app.modules.country_workflows.vat201_layouts import (
+        EMIRATES,
+        LAYOUTS,
+        SPLIT_FIELDS,
+        validate_comparison,
+    )
 
     validate_comparison(data, tables)
+    compared_fields = ["taxable_amount", "tax", "adjustment"]
+    if data.vat201_layout == "ecommerce-20":
+        compared_fields += SPLIT_FIELDS
 
     def key(r):
         return (
@@ -606,13 +614,14 @@ def vat_return(data, tables):
             "taxable_amount": Decimal(0),
             "tax": Decimal(0),
             "adjustment": Decimal(0),
+            **{field: Decimal(0) for field in SPLIT_FIELDS},
             "ids": [],
         }
     )
     for r in included["books"]:
         group = books[key(r)]
-        for field in ["taxable_amount", "tax", "adjustment"]:
-            group[field] += amount(r, field)
+        for field in compared_fields:
+            group[field] += amount(r, field) if r.get(field) is not None else Decimal(0)
         group["ids"].append(r["id"])
     scopes = {key(r)[:3] + (r["currency"],) for rows in tables.values() for r in rows}
     if not scopes:
@@ -638,7 +647,8 @@ def vat_return(data, tables):
         b, r = books.get(k), filed.get(k)
         deltas = {
             field: str(b[field] - amount(r, field)) if b and r else None
-            for field in ["taxable_amount", "tax", "adjustment"]
+            for field in compared_fields
+            if field not in SPLIT_FIELDS or k[3] in EMIRATES
         }
         state = (
             "MISSING_BOX_EVIDENCE"
@@ -666,13 +676,23 @@ def vat_return(data, tables):
                 "return_source_id": r["id"] if r else None,
             }
         )
-    from app.modules.country_workflows.vat201_arithmetic import CONTRACT, SOURCE, checks
+    from app.modules.country_workflows.vat201_arithmetic import (
+        CONTRACT,
+        ECOMMERCE_SOURCE,
+        SOURCE,
+        checks,
+    )
 
     arithmetic = checks(data.vat201_layout, included)
     arithmetic_errors = sum(check["status"] != "MATCHED" for check in arithmetic)
     return {
         "vat201_arithmetic_contract": CONTRACT,
         "vat201_arithmetic_source": SOURCE,
+        **(
+            {"vat201_breakdown_source": ECOMMERCE_SOURCE}
+            if data.vat201_layout == "ecommerce-20"
+            else {}
+        ),
         "vat201_arithmetic_scope": "EXPLICIT_LAYOUT_ARITHMETIC_ONLY"
         if arithmetic
         else "NOT_ASSESSED_CUSTOM_LAYOUT",
@@ -999,8 +1019,8 @@ def calculate(
             verify_purchase(table["rows"], table["purchase_quantity_controls"])
         if (
             table.get("parser_version") == "uae-vat201-composition/1"
-            and table.get("native_metadata", {}).get("layout") == "emirate-20"
-            and data.vat201_layout != "emirate-20"
+            and table.get("native_metadata", {}).get("layout") in {"emirate-20", "ecommerce-20"}
+            and data.vat201_layout != table["native_metadata"]["layout"]
         ):
             raise ValueError(
                 "Select the explicit twenty-row emirate VAT201 layout for this composed source"

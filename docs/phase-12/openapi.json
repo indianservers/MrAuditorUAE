@@ -65676,7 +65676,8 @@
             "type": "string",
             "enum": [
               "aggregate-14",
-              "emirate-20"
+              "emirate-20",
+              "ecommerce-20"
             ],
             "title": "Layout",
             "default": "aggregate-14"

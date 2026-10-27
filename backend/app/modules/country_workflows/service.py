@@ -808,7 +808,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             )
         if (
             data.workflow == "uae-vat-return"
-            and data.vat201_layout == "emirate-20"
+            and data.vat201_layout in {"emirate-20", "ecommerce-20"}
             and source.body.get("review_status") != "REVIEWED"
         ):
             raise HTTPException(
