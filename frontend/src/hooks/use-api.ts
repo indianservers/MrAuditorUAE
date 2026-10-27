@@ -23,7 +23,12 @@ export function useAccess() {
 export function useCan(permission: string) {
   return useAccess().data?.permissions.includes(permission) || false;
 }
-export function useAPI<T>(path: string, enabled = true, poll = false) {
+export function useAPI<T>(
+  path: string,
+  enabled = true,
+  poll = false,
+  keepPageData = false,
+) {
   const tenant = useScope((s) => s.tenant);
   const country = useScope((s) => s.country);
   const requestPath = /^(entities|engagements|workspace\/directory)(\?|$)/.test(
@@ -35,6 +40,14 @@ export function useAPI<T>(path: string, enabled = true, poll = false) {
     queryKey: ["api", tenant, requestPath],
     enabled: !!tenant && enabled,
     queryFn: ({ signal }) => api<T>(requestPath, { signal }, tenant),
+    placeholderData: keepPageData
+      ? (previous, query) =>
+          query?.queryKey[1] === tenant &&
+          typeof query.queryKey[2] === "string" &&
+          query.queryKey[2].split("?")[0] === requestPath.split("?")[0]
+            ? previous
+            : undefined
+      : undefined,
     refetchInterval: poll
       ? (query) => {
           const status = String(

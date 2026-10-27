@@ -726,6 +726,10 @@ async def event_details(
 ):
     obj = await service.event(db, ctx, eid, identifier)
     body = dict(obj.body)
+    if obj.kind == "reconciliation":
+        from app.modules.intelligence.matching_review import review_summary
+
+        body["review_decision_summary"] = review_summary(obj.body)
     if body.get("workflow") == "payroll-ledger-rollforward" and payroll_view != "all":
         selected_kind = "account-rollforward" if payroll_view == "accounts" else "posting-comparison"
         body["rows"] = [row for row in body["rows"] if row["kind"] == selected_kind]
@@ -1099,13 +1103,9 @@ async def review(
                 "financial_impact": None,
                 "sources": source,
             }
-        import hashlib
-        import json
+        from app.modules.intelligence.matching_review import exception_reference
 
-        identity = json.dumps(
-            {"dependencies": obj.dependencies, "item": data.item_id, "kind": kind}, sort_keys=True
-        )
-        reference = "INT-" + hashlib.sha256(identity.encode()).hexdigest()[:24]
+        reference = exception_reference(obj.dependencies, data.item_id, kind)
         existing = await db.scalar(
             select(AuditRecord).where(
                 AuditRecord.tenant_id == ctx.tenant_id,
@@ -1194,10 +1194,10 @@ async def review(
         )
     else:
         if data.action == "approve":
-            from app.modules.intelligence.matching_review import saved_candidates_complete
+            if obj.kind == "reconciliation":
+                from app.modules.intelligence.matching_review import verify_review
 
-            if obj.kind == "reconciliation" and not saved_candidates_complete(obj.body):
-                raise HTTPException(409, "Regenerate matching with complete retained candidates before approval")
+                await verify_review(db, ctx, eid, obj)
             if obj.kind == "tax-connected-assessment" and obj.body.get("issues"):
                 raise HTTPException(
                     409, "Resolve connected tax issues and regenerate before approval"

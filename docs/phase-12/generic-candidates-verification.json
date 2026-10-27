@@ -1,0 +1,91 @@
+{
+  "verified_on": "2026-10-27",
+  "scope": "General immutable-ledger reconciliation; shared UAE then India review controls",
+  "implementation_sha256": "36b5984fe46118ec61f5dc98942e4c64fb304fadbff4b290b78286c9aa5ebc1a",
+  "country_implementation_sha256": "cdc7ef96195c9d6ab855fc9e1f46b23a1aaa18f102e3c910a322c9ae07ebf99c",
+  "regression_proof": {
+    "before": "HTTP reproduction approved 121 ambiguous source and 121 ambiguous destination transactions with no recorded dispositions (201)",
+    "after": "Approval rejected (409) until every proposed match is accepted and every unmatched transaction on both sides has a linked finding",
+    "requests_and_notes": "Do not satisfy unmatched disposition",
+    "live_validation": "Existing audit-record authorization plus finding kind, non-archived status and deterministic transaction/dependency reference",
+    "financial_status": "Approved documented exceptions remain unmatched; no financial clearance or audit opinion is inferred"
+  },
+  "backend": {
+    "unit_passed": 2552,
+    "existing_calculation_regressions_passed": 11,
+    "total_passed": 2563,
+    "skipped": 4,
+    "new_review_unit_cases": 17,
+    "selected_http_passed": 11,
+    "new_http_cases": 5,
+    "existing_http_cases": 6,
+    "new_http_scope": [
+      "UAE and India actual committed ledgers with 121 candidates per item, full candidate paging and workbook exports",
+      "UAE and India request-only and missing-last-finding approval rejection, all-findings recovery and contributor separation",
+      "Proposed match rejected until recorded preparer acceptance"
+    ],
+    "unit_scope": [
+      "Missing match actor/status/comments",
+      "Requests and notes do not count",
+      "Missing finding identity/actor/rationale",
+      "242-row review counts and final missing link",
+      "Archived, wrong-kind, wrong-item, wrong-population and invalid finding identifiers",
+      "One scoped read per distinct finding; access errors propagate"
+    ]
+  },
+  "frontend": {
+    "tests_passed": 230,
+    "files_passed": 49,
+    "new_integration_cases": 4,
+    "new_page_retention_cases": 4,
+    "typescript": "passed",
+    "production_build": "passed",
+    "scoped_eslint": "passed",
+    "page_retention": "Explicit opt-in; only exact endpoint resource and tenant. No prior result data across result or tenant changes; actual next page replaces retained data."
+  },
+  "browser": {
+    "tests_passed": 1,
+    "country_order": [
+      "AE",
+      "IN"
+    ],
+    "cases": 2,
+    "book_rows_per_country": 121,
+    "bank_rows_per_country": 121,
+    "candidate_links_per_country": 14641,
+    "unmatched_transactions_per_country": 242,
+    "last_candidate": "row-122",
+    "main_result_page_changed_while_final_candidate_page_preserved": true,
+    "full_xlsx_downloads_verified": 2,
+    "screenshots": 4,
+    "visual_review": "All four inspected; full review counts, Arabic/Hindi originals, exact amounts and last candidate remain visible",
+    "real_local_worker": true,
+    "implementation_and_country_fingerprints_checked_before_and_after": true
+  },
+  "xlsx": [
+    "Complete candidate links",
+    "Full-population recorded review counts",
+    "Every recorded finding/request/note link, reason and actor",
+    "Machine proposal acceptance actor/comments/timestamp"
+  ],
+  "test_corrections": [
+    "Initial supporting-file candidate expectation incorrectly used the 50-ID read preview instead of literal final row-122; corrected",
+    "India import fixture now explicitly selects INR instead of the default AED",
+    "Hook test harness uses the existing event-history stub",
+    "Browser label selectors corrected for nested option text",
+    "Browser main-page check reproduced a candidate-state reset; scoped page retention fixed it and the complete rerun passed"
+  ],
+  "scoped_ruff": "passed",
+  "mypy_source_files": 3,
+  "utf8": "passed",
+  "authored_catalogue_cases": 154,
+  "qualification": "Synthetic engineering evidence only",
+  "test_boundaries": "Owned disposable PostgreSQL, real controlled GL import/validation/commit and retained CSV evidence/source preparation with independent source review. Scanner and broker are explicit doubles during API/fixture preparation. Browser generation uses real local API and Celery worker. No live provider or malware-service qualification.",
+  "remaining": [
+    "Real client pilots and independently checked expected outcomes",
+    "Professional country/framework qualification",
+    "Native/live provider qualification",
+    "Higher-volume ingestion/matching and concurrency qualification",
+    "Hosted security, operations and release gates"
+  ]
+}

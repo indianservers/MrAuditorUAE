@@ -17,6 +17,10 @@ import { PageHeader, LineageDetail } from "./shared";
 import { ReactFlow, Background, Controls, MiniMap } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import type { Page, RecordRow } from "@/types/models";
+import {
+  BankMatchingCandidates,
+  type BankAmbiguity,
+} from "./bank-matching-candidates";
 import { CountryWorkflows } from "./country-workflows";
 import { PDFGridEditor, buildPDFGrid, emptyPDFGrid } from "./pdf-grid-editor";
 
@@ -188,12 +192,22 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
   const detail = useAPI<Result>(
     `${prefix}/events/${selected}?offset=${offset}&limit=100`,
     !!selected,
+    false,
+    true,
   );
   const accounts = useAPI<{
     items: { id: string; code: string; name: string }[];
   }>(`${prefix}/accounts?snapshot_id=${snapshot}`, !!snapshot);
   const action = useAction<Result>();
   const body = detail.data?.body;
+  const reconciliationReview = body?.review_decision_summary as
+    | {
+        proposed_matches: number;
+        accepted_matches: number;
+        unmatched_transactions: number;
+        unmatched_with_findings: number;
+      }
+    | undefined;
   const boxScope = body?.box_comparison_scope;
   const selectedVATScope =
     boxScope &&
@@ -1049,6 +1063,47 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
             {detail.data.kind === "flow" && body && (
               <TransactionGraph body={body} />
             )}
+            {detail.data.kind === "reconciliation" && reconciliationReview && (
+              <aside aria-label="Reconciliation review decisions">
+                <h3>Recorded decisions across the full result</h3>
+                <p>
+                  Accepted proposed matches:{" "}
+                  {reconciliationReview.accepted_matches} of{" "}
+                  {reconciliationReview.proposed_matches}. Unmatched
+                  transactions with findings:{" "}
+                  {reconciliationReview.unmatched_with_findings} of{" "}
+                  {reconciliationReview.unmatched_transactions}.
+                </p>
+                <p>
+                  Approval requires auditor acceptance of every proposed match
+                  and a linked finding for every unmatched transaction. Requests
+                  and notes do not dispose of an exception. Linked findings
+                  document differences; they do not clear the transactions.
+                  Finding scope and availability are checked again at approval.
+                </p>
+              </aside>
+            )}
+            {detail.data.kind === "reconciliation" &&
+              Array.isArray(body?.ambiguous) &&
+              (detail.data.collection_totals?.ambiguous ||
+                body.ambiguous.length) > 0 && (
+                <BankMatchingCandidates
+                  key={selected}
+                  prefix={prefix}
+                  selected={selected}
+                  initial={body.ambiguous as BankAmbiguity[]}
+                  total={
+                    detail.data.collection_totals?.ambiguous ??
+                    body.ambiguous.length
+                  }
+                  contract={
+                    typeof body.matching_contract === "string"
+                      ? body.matching_contract
+                      : undefined
+                  }
+                  label="Transaction matching candidates"
+                />
+              )}
             {tableRows?.map((key) => (
               <ResultTable
                 key={key}
@@ -1143,9 +1198,12 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
                 </pre>
               </details>
             )}
+            {detail.isPlaceholderData && (
+              <p role="status">Loading result page…</p>
+            )}
             <div className="toolbar">
               <Button
-                disabled={action.isPending || offset === 0}
+                disabled={action.isPending || detail.isFetching || offset === 0}
                 onClick={() => setOffset(Math.max(0, offset - 100))}
               >
                 Previous 100
@@ -1156,9 +1214,12 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
               <Button
                 disabled={
                   action.isPending ||
+                  detail.isFetching ||
                   !Object.entries(detail.data.collection_totals || {}).some(
                     ([collection, n]) =>
-                      collection !== "excluded_box_rows" && n > offset + 100,
+                      collection !== "excluded_box_rows" &&
+                      collection !== "ambiguous" &&
+                      n > offset + 100,
                   )
                 }
                 onClick={() => setOffset(offset + 100)}

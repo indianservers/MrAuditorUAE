@@ -2306,3 +2306,55 @@ One browser test exercised both countries in order, verified two downloaded
 workbooks with 14,641 candidate links each, and saved four inspected screenshots.
 The initial broad run encountered an existing document-extraction timeout; the
 focused extraction retry and complete repeat passed without extraction changes.
+
+
+## General reconciliation review and complete candidate access
+
+The ordinary Accounting intelligence → Transaction reconciliation workspace now
+reuses the complete candidate viewer, not just the country bank-BRS workflow.
+The original generic screen displayed matches and unmatched rows but hid the
+separate ambiguity population. Item and candidate pages are independent of the
+main result page, preserve original source text, and retain a candidate's existing
+machine-proposal context. Historical incomplete results show recalculation guidance.
+
+An HTTP reproduction also exposed approval without any transaction decisions:
+121 ambiguous book rows and 121 ambiguous bank rows could receive `REVIEWED`
+status directly. General reconciliation now requires recorded auditor acceptance
+of every proposed match and a linked documented finding for every unmatched row
+on both sides. A request for evidence or review note does not satisfy disposition.
+Every linked finding is reread through existing engagement authorization at
+approval; archived records, wrong record kinds and references belonging to a
+different transaction/source population are rejected. Duplicate links do not
+increase coverage. The reference derivation is unchanged for existing findings,
+requests and notes. Existing contributor separation and supporting-source review
+checks remain enforced.
+
+Review counts are computed over the complete immutable result before read
+pagination. They describe recorded decisions, not live finding validity or cleared
+financial differences. A finding records an exception; approving its documented
+disposition does not convert unmatched rows into matches. XLSX exports retain a
+Reconciliation decisions sheet with the full recorded links, reasons and actors,
+and the Matched proposals sheet includes acceptance actor, comments and timestamp.
+The full candidate-link sheet remains separate.
+
+Main-page fetching previously unmounted the candidate viewer and reset its
+position. The detail query now opts into keeping page data only for the exact
+same endpoint resource and tenant while the next page loads. Another result,
+engagement or tenant receives no previous-result placeholder. Main paging is
+disabled during a fetch and a loading message distinguishes retained page data
+from the newly requested page. Other callers retain their existing query behavior.
+
+Verification receipts: [general reconciliation](../phase-12/generic-candidates-verification.json)
+and [browser run](../phase-12/generic-candidates-browser-results.json).
+These are shared accounting review controls, not India GST/TDS qualification or
+a UAE statutory audit conclusion. The 154-scenario catalogue and the outstanding
+real-client, professional-policy, provider, high-volume and hosted-release gates
+are unchanged.
+
+Verification on 27 October 2026: 2,552 unit tests and 11 existing calculation
+regressions passed (2,563 total; four existing skips). Eleven selected HTTP cases
+passed, including five new general-reconciliation cases and six existing cases.
+All 230 frontend tests, TypeScript, scoped ESLint/Ruff, mypy across three changed
+source modules and the production build passed. One browser test exercised UAE
+then India, reached the final candidate after changing the main result page,
+verified two full workbooks and saved four visually inspected screenshots.

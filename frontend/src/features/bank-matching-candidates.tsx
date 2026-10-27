@@ -116,12 +116,14 @@ export function BankMatchingCandidates({
   initial,
   total,
   contract,
+  label = "Bank matching candidates",
 }: {
   prefix: string;
   selected: string;
   initial: BankAmbiguity[];
   total: number;
   contract?: string;
+  label?: string;
 }) {
   const [offset, setOffset] = useState(0);
   const [active, setActive] = useState(initial[0]?.left_id || "");
@@ -138,7 +140,7 @@ export function BankMatchingCandidates({
       </p>
     );
   return (
-    <section aria-label="Bank matching candidates">
+    <section aria-label={label}>
       <h3>Competing transaction candidates</h3>
       <p>
         Every retained candidate is available through these pages. These are

@@ -204,10 +204,21 @@ def render(event, format):
                 append(cover, [key, value])
             if body.get("matches") and (event["kind"] == "reconciliation" or body.get("workflow") == "bank-brs"):
                 proposals = workbook.create_sheet("Matched proposals")
-                fields = ["left_ids", "right_ids", "rule", "variance", "auditor_status", "limitation"]
+                fields = ["left_ids", "right_ids", "rule", "variance", "auditor_status", "limitation", "auditor", "auditor_comments", "auditor_at"]
                 append(proposals, fields)
                 for match in body["matches"]:
                     append(proposals, [match.get(field) for field in fields])
+            if event["kind"] == "reconciliation":
+                from app.modules.intelligence.matching_review import review_summary
+
+                decisions = workbook.create_sheet("Reconciliation decisions")
+                for key, value in review_summary(body).items():
+                    append(decisions, [key, value])
+                append(decisions, [])
+                fields = ["item_id", "record_id", "kind", "reason", "actor"]
+                append(decisions, fields)
+                for link in body.get("exceptions", []):
+                    append(decisions, [link.get(field) for field in fields])
             if body.get("ambiguous"):
                 from app.modules.intelligence.matching_review import saved_candidates_complete
 
