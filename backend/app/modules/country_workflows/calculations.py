@@ -666,10 +666,22 @@ def vat_return(data, tables):
                 "return_source_id": r["id"] if r else None,
             }
         )
+    from app.modules.country_workflows.vat201_arithmetic import CONTRACT, SOURCE, checks
+
+    arithmetic = checks(data.vat201_layout, included)
+    arithmetic_errors = sum(check["status"] != "MATCHED" for check in arithmetic)
     return {
+        "vat201_arithmetic_contract": CONTRACT,
+        "vat201_arithmetic_source": SOURCE,
+        "vat201_arithmetic_scope": "EXPLICIT_LAYOUT_ARITHMETIC_ONLY"
+        if arithmetic
+        else "NOT_ASSESSED_CUSTOM_LAYOUT",
+        "vat201_arithmetic_checks": arithmetic,
+        "vat201_arithmetic_error_count": arithmetic_errors,
         "rows": rows,
-        "exception_count": sum(r["state"] != "MATCHED" for r in rows),
-        "blocked": any(
+        "exception_count": sum(r["state"] != "MATCHED" for r in rows) + arithmetic_errors,
+        "blocked": bool(arithmetic_errors)
+        or any(
             r["state"] == "MISSING_BOX_EVIDENCE"
             or (data.vat201_layout != "custom" and r["state"] in {"BOOKS_ONLY", "RETURN_ONLY"})
             for r in rows
@@ -702,6 +714,7 @@ def vat_return(data, tables):
             "Selected-box comparison excludes only explicitly assessed box populations; no whole-return completeness conclusion is determined"
             if data.restrict_to_required_boxes
             else "All retained boxes are compared; source-file completeness is not whole-return completeness",
+            "Explicit VAT201 layouts check summary arithmetic exactly; scalar Boxes 12-14 must use tax only with zero base and adjustment. Custom layouts are not arithmetically assessed",
             "VAT201 box assignments and required-box scope must be independently assessed",
             "Taxable amounts, tax and adjustments compare separately; no tax rate or recovery entitlement is inferred",
             "Canonical source contracts do not imply a live FTA connection or native VAT201 parser",

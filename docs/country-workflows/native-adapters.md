@@ -3399,3 +3399,54 @@ Git. Country-law completeness, providers and release/security gaps remain open.
 Final frontend verification: all 269 tests passed, ESLint reported zero errors
 and one existing unused-variable warning, and the production build (including
 TypeScript) passed. Scoped Ruff and git diff whitespace checks passed.
+
+
+### UAE VAT201 summary arithmetic
+
+Explicit aggregate-14 and emirate-20 comparisons now check each retained books
+and filed-return population independently. Matching the same wrong summaries
+no longer allows approval. Box 8 sums output detail (including the seven emirate
+rows when selected), Box 11 sums Boxes 9 and 10, Box 12 includes output tax plus
+adjustments, Box 13 includes recoverable tax plus adjustments, and Box 14 is the
+signed difference. All three columns of Boxes 8 and 11 are checked separately.
+
+The canonical representation of scalar Boxes 12-14 is the tax column, with zero
+taxable amount and adjustment. Incorrect representation is a visible error,
+not silently remapped. Arithmetic uses exact Decimal amounts and zero tolerance;
+the reconciliation investigation tolerance cannot permit an incorrect total.
+Missing input rows remain missing; explicit nil rows remain valid. Negative
+adjustments and net recoverable balances retain their signs. Source row IDs,
+formulas, expected values, observed values and differences are retained for all
+30 checks (15 per source). Errors block independent approval. Custom box scopes
+remain available but explicitly do not assess summary arithmetic.
+
+The workflow UI displays the complete arithmetic table. XLSX exports include a
+VAT201 arithmetic sheet with every check and source identity. Paper exports
+identify the scope/error count and refer to full XLSX detail. The shared code
+fingerprint includes the new helper, so older results require regeneration
+under the changed implementation; history is preserved.
+
+Source: FTA [VAT Returns User Guide](https://tax.gov.ae/-/media/Files/EN/PDF/Guides/VAT-Returns-User-Guide.pdf),
+May 2018 edition currently served at this official URL, checked 27 October 2026,
+pages 16 and 22-23. This implements the stated summary relationships only. It
+does not assess transaction classification, recovery eligibility, amendments,
+portal authenticity, whole-return completeness, payment or filing. The canonical
+scalar-column convention is the software contract, not a claim about portal
+file columns. India workflows cannot activate these UAE layouts.
+
+Verification: 40 focused arithmetic/emirate/selected-box tests passed. Four API
+regressions passed, including two independent retained populations with the same
+wrong summary, approval refusal, complete XLSX checks, reviewed composition,
+missing emirate evidence, recursive source staleness and India exclusions.
+All 270 frontend tests and the production build passed. Scoped Ruff and mypy
+(three modules) passed; ESLint has zero errors and one existing warning. These
+are synthetic fixtures, not professionally qualified real-client VAT returns.
+
+The full backend unit regression passed: [2,832 tests](../phase-12/vat-arithmetic-backend.xml),
+with five skips and two existing warnings. The retained [four-case API receipt](../phase-12/vat-arithmetic-api.xml)
+records zero failures. No new full-app browser/screenshot qualification is claimed.
+Hosted CI for preceding commit 52a23db has successful ML, frontend, security and
+browser-smoke jobs; full verification remains running at this observation. The
+backend container Trivy HIGH/CRITICAL gate failed (run 40511763381, job
+122215234613); the frontend container scan completed successfully. Container
+release security remains open and its severity gate is unchanged.

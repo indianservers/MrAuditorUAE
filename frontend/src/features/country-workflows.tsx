@@ -191,6 +191,21 @@ type Result = {
     currency_scope?: string[];
     review_window?: { from: string; through: string };
     vat201_layout?: string;
+    vat201_arithmetic_scope?: string;
+    vat201_arithmetic_error_count?: number;
+    vat201_arithmetic_checks?: {
+      id: string;
+      source_role: string;
+      box: string;
+      field: string;
+      formula: string;
+      expected: string | null;
+      observed: string | null;
+      difference: string | null;
+      status: string;
+      missing_boxes: string[];
+      source_row_ids: string[];
+    }[];
     currency?: string;
     expected_total?: string;
     reported_total?: string;
@@ -4662,6 +4677,63 @@ export function CountryWorkflows({
               register compared with invoice evidence. This comparison does not
               establish GST return filing or IRP authenticity.
             </p>
+          )}
+          {body.vat201_arithmetic_scope && (
+            <section aria-label="VAT201 arithmetic checks">
+              <h3>VAT201 summary arithmetic</h3>
+              <p>
+                Arithmetic checks only. Recovery eligibility, transaction
+                classification and filing completeness require separate
+                assessment. Scalar Boxes 12–14 use the tax column with zero base
+                and adjustment.
+              </p>
+              {body.vat201_arithmetic_scope === "NOT_ASSESSED_CUSTOM_LAYOUT" ? (
+                <p>Custom box scope: summary arithmetic was not assessed.</p>
+              ) : (
+                <>
+                  <p>
+                    {body.vat201_arithmetic_error_count ?? 0} arithmetic checks
+                    need correction. Each source is checked independently with
+                    exact fils amounts; matching errors cannot cancel each
+                    other.
+                  </p>
+                  <div style={{ overflowX: "auto" }}>
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Source</th>
+                          <th>Box / field</th>
+                          <th>Formula</th>
+                          <th>Expected</th>
+                          <th>Observed</th>
+                          <th>Difference</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {body.vat201_arithmetic_checks?.map((check) => (
+                          <tr key={check.id}>
+                            <td>{check.source_role}</td>
+                            <td>
+                              {check.box} / {check.field}
+                            </td>
+                            <td>{check.formula}</td>
+                            <td>{check.expected ?? "Missing"}</td>
+                            <td>{check.observed ?? "Missing"}</td>
+                            <td>{check.difference ?? "Not calculated"}</td>
+                            <td>
+                              {check.status}
+                              {check.missing_boxes.length > 0 &&
+                                `: missing ${check.missing_boxes.join(", ")}`}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              )}
+            </section>
           )}
           {body.box_comparison_scope?.mode === "SELECTED_REQUIRED_BOXES" && (
             <section aria-label="Selected VAT201 comparison scope">

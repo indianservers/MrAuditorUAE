@@ -130,6 +130,33 @@ async def test_emirate_composition_review_mismatch_missing_zero_export_and_stale
     )
     assert incomplete["body"]["blocked"] is True
     assert (await decision(c, reviewer[0], eid, incomplete)).status_code == 409
+    # The same wrong summary in independent books and filed populations must block.
+    bad_ids = {}
+    for role in ("books", "return"):
+        wrong = detailed_rows("ARITHMETIC-" + role)
+        next(row for row in wrong if row["box"] == "8")["tax"] = "55.01"
+        imported = await source(
+            c,
+            h,
+            eid,
+            wrong,
+            "SYNTHETIC wrong " + role + " totals",
+            "return-boxes",
+            {"AED": "230.01"},
+        )
+        checked = await decision(c, reviewer[0], eid, imported)
+        assert checked.status_code == 201, checked.text
+        bad_ids[role] = checked.json()["id"]
+    invalid = await execute(c, h, eid, "country-workflow", {**compare, "source_ids": bad_ids})
+    assert all(row["state"] == "MATCHED" for row in invalid["body"]["rows"])
+    assert invalid["body"]["blocked"]
+    assert invalid["body"]["vat201_arithmetic_error_count"] == 4
+    assert (await decision(c, reviewer[0], eid, invalid)).status_code == 409
+    exported = await c.get(path + f"/events/{invalid['id']}/export?format=xlsx", headers=h)
+    assert exported.status_code == 200
+    arithmetic = list(load_workbook(io.BytesIO(exported.content))["VAT201 arithmetic"].values)
+    assert len(arithmetic) == 31
+    assert any("ARITHMETIC_ERROR" in row for row in arithmetic)
     original = await c.get(path + "/events/" + components[0], headers=h)
     rejected = await decision(c, reviewer[0], eid, original.json(), "reject")
     assert rejected.status_code == 201, rejected.text

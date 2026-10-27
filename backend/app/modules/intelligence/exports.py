@@ -169,12 +169,21 @@ def render(event, format):
             "assessment_contract_version",
             "box_comparison_scope",
             "vat201_layout",
+            "vat201_arithmetic_contract",
+            "vat201_arithmetic_scope",
+            "vat201_arithmetic_source",
+            "vat201_arithmetic_error_count",
             "invoice_evidence_scope",
             "outward_gst_scope",
             "excluded_box_controls",
             "included_box_controls",
         }
     }
+
+    if body.get("vat201_arithmetic_checks"):
+        metadata["VAT201 arithmetic detail"] = (
+            f"{len(body['vat201_arithmetic_checks'])} independent checks retained in the VAT201 arithmetic XLSX sheet and original result; scalar Boxes 12-14 use tax only, with zero base and adjustment."
+        )
 
     if isinstance(body.get("count_bridges"), list):
         summary["count_bridges"] = (
@@ -307,6 +316,24 @@ def render(event, format):
                 append(documents, fields)
                 for document in body.get("retained_grant_documents", []):
                     append(documents, [document.get(field) for field in fields])
+            if body.get("vat201_arithmetic_checks"):
+                arithmetic = workbook.create_sheet("VAT201 arithmetic")
+                fields = [
+                    "id",
+                    "source_role",
+                    "box",
+                    "field",
+                    "formula",
+                    "expected",
+                    "observed",
+                    "difference",
+                    "status",
+                    "missing_boxes",
+                    "source_row_ids",
+                ]
+                append(arithmetic, fields)
+                for check in body["vat201_arithmetic_checks"]:
+                    append(arithmetic, [check.get(field) for field in fields])
             source = workbook.create_sheet("Rows")
             keys = list(dict.fromkeys(key for row in rows for key in row))
             append(source, keys)

@@ -3350,3 +3350,45 @@ it("queues independently controlled inventory response quantities with retained 
   await waitFor(()=>expect(state.mutate).toHaveBeenCalled());
   expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({table_type:"inventory-custody-confirmations",custody_quantity_controls:controls,confirmation_request_document_version_id:"context-clean",control_totals:{}});
 });
+
+it("shows independent VAT201 summary errors even when box comparisons match", () => {
+  state.result = {
+    id: "result",
+    kind: "country-workflow",
+    version: 1,
+    freshness: "CURRENT",
+    body: {
+      workflow: "uae-vat-return",
+      title: "Wrong matching totals",
+      review_status: "UNVERIFIED",
+      blocked: true,
+      exception_count: 1,
+      rows: [{ id: "box-eight", box: "8", state: "MATCHED" }],
+      vat201_arithmetic_scope: "EXPLICIT_LAYOUT_ARITHMETIC_ONLY",
+      vat201_arithmetic_error_count: 1,
+      vat201_arithmetic_checks: [
+        {
+          id: "books-8-tax",
+          source_role: "books",
+          box: "8",
+          field: "tax",
+          formula: "SUM(output detail rows)",
+          expected: "55",
+          observed: "55.01",
+          difference: "0.01",
+          status: "ARITHMETIC_ERROR",
+          missing_boxes: [],
+          source_row_ids: ["BOOK-8"],
+        },
+      ],
+    },
+  };
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Saved source or result"), {
+    target: { value: "result" },
+  });
+  const section = screen.getByLabelText("VAT201 arithmetic checks");
+  expect(within(section).getByText("ARITHMETIC_ERROR")).toBeVisible();
+  expect(within(section).getByRole("cell", { name: "55.01" })).toBeVisible();
+  expect(within(section).getByText(/Recovery eligibility/)).toBeVisible();
+});
