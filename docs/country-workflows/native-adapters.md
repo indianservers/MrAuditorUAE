@@ -2782,3 +2782,28 @@ its startup marker. Those failed private logs are preserved; reruns used unchang
 assertions and deadline bounds. A prior pre-format run on the upgraded libraries
 also passed 2,679 backend and 21 API cases. Hosted CI for the remediation commit
 and the broader professional/client/release gates remain open.
+
+The remediation commit `3553f04` subsequently passed the hosted security, frontend,
+ML and browser-smoke jobs in
+[run 40479138230](https://github.com/indianservers/MrAuditorUAE/actions/runs/40479138230).
+The verify job cleared migrations, full lint/format and Linux mypy and reached its
+full coverage run. These passes do not qualify the unexecuted country-specific
+rescan/workbook browser scenarios. Trivy 0.76.1 installed successfully and scanned
+both images; both image gates correctly failed on retained HIGH/CRITICAL findings.
+The [container reports](https://github.com/indianservers/MrAuditorUAE/actions/runs/40479138230/artifacts/12721942416)
+identify Debian 12 runtime packages and the frontend image's bundled global npm
+dependencies, separately from the now-clean application lockfile audits.
+
+The backend image now uses the official Python 3.12 slim Trixie base and applies
+available distribution upgrades before installing runtime libraries. This follows
+Debian's tracked fixed Trixie packages, including
+[util-linux](https://security-tracker.debian.org/tracker/CVE-2026-53613) and
+[zlib](https://security-tracker.debian.org/tracker/CVE-2023-45853), rather than adding
+scan exceptions. The build also imports the actual PDF/image/OCR runtime libraries
+to catch native loading failures in that image. The frontend standalone runtime
+removes its unused global npm/npx installation, which is where all five reported
+frontend image findings reside; dependency installation remains in its build
+stages. Its existing runtime command uses Node directly. Both image-scan gates
+remain unchanged in severity/failure policy. Successful builds, native imports
+and image scans for these Dockerfile changes require the next hosted run; no local
+Docker execution is claimed.
