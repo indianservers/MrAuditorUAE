@@ -1,0 +1,50 @@
+{
+  "source_revision": "8d96253c6ef3466def879ce4683480f3cc0d2217",
+  "run_id": 40535235796,
+  "job_id": 122298583144,
+  "conclusion": "success",
+  "tests_passed": 3,
+  "duration_seconds": 23.5,
+  "scope": "Synthetic UAE/India report coverage, GL books and reviewed composition through real BFF/browser; existing authentication/logout smoke",
+  "artifact_id": 12747807501,
+  "artifact_zip_sha256": "a25393cdff3daba51c5270916cdbb98311af26b37787783e08dba4784b0d912a",
+  "screenshot_review": "All four PNGs visually inspected: full form headings, controls, country registration/currency, source selections and limitations readable; no notification or sticky-header obstruction",
+  "images": [
+    {
+      "path": "docs/country-workflows/screenshots/turnover/AE-turnover-ledger.png",
+      "sha256": "17cc57af5c8b32edb42d025ddad2d7ad24cedbcdeee6a9c79545415376857f9c"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/turnover/AE-turnover-composition.png",
+      "sha256": "d298837f2ff8974e0a0a71ab2a49dbbf05e898ed536be096f0b8660bdf1b5861"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/turnover/IN-turnover-ledger.png",
+      "sha256": "4b145dbb153c36571e0eb6d6ed28d4148661e723b5b206d4ca071f1aaf11d9f3"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/turnover/IN-turnover-composition.png",
+      "sha256": "b9baabaf60986c9e5c90517c735dfffe886c6689273d426a70f3636fdfb56d0d"
+    }
+  ],
+  "limitations": [
+    "Synthetic fixtures only",
+    "No complete legal corpus or real-client qualification",
+    "Full backend hosted verification still running at checkpoint"
+  ],
+  "job_url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40535235796/job/122298583144",
+  "cases": [
+    {
+      "name": "synthetic AE report coverage, separate reviewer and generated draft",
+      "seconds": 10.9
+    },
+    {
+      "name": "synthetic IN report coverage, separate reviewer and generated draft",
+      "seconds": 10.5
+    },
+    {
+      "name": "release smoke uses real BFF authentication, client writes and logout revocation",
+      "seconds": 1.1
+    }
+  ]
+}

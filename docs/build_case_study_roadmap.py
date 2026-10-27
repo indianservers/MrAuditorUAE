@@ -1,6 +1,8 @@
 """Generate a durable planning report; does not modify application behavior."""
 import json
 import html
+import xml.etree.ElementTree as ET
+from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -181,25 +183,115 @@ sources = [
 ('GST9C self-certification change — GST Council material','https://gstcouncil.gov.in/node/3908'),
 ('SOX404(a)/(b) distinctions — SEC Financial Reporting Manual','https://www.sec.gov/about/divisions-offices/division-corporation-finance/financial-reporting-manual/frm-topic-10')]
 evidence = ['backend/app/modules/intelligence/service.py: statutory adapter rejection, CSV source-table support and source receipts', 'backend/app/modules/intelligence/matching.py: deterministic matching and 20,000-row bound', 'backend/app/modules/jurisdictions/packages.py and profiles.py: country package/context and readiness metadata', 'backend/app/modules/regulatory/evaluation.py and models.py: bounded rule evaluation and version/action records; uncommitted work', 'backend/app/modules/regulatory/india_reporting.py: source-reconciled ScheduleIII drafts with explicit limitations; uncommitted work', 'backend/app/modules/vat/ and tax/: existing bounded UAE workbenches', 'docs/global-platform/README.md: immutable bindings, freshness and country capability boundaries', 'docs/phase3/baseline-and-gap-analysis.md: existing gaps and source retrieval limitations; work in progress', 'docs/phase-12/production-readiness.md and README.md: historical release NO-GO and later QA caveats']
-data = dict(date='24 October 2026',cases=cases,sections=sections,sources=sources,evidence=evidence)
+checkpoint = json.loads((OUT / 'implementation-checkpoint.json').read_text(encoding='utf-8'))
+repository = ROOT.parent
+assert {c['id'] for c in checkpoint['cases']} == {c['title'][:2] for c in cases}
+assert len(checkpoint['cases']) == 13
+for item in checkpoint['cases']:
+    for relative in item['evidence']:
+        target = (repository / relative).resolve()
+        assert target.is_relative_to(repository.resolve()) and target.is_file(), relative
+for item in checkpoint['verification']:
+    assert (repository / item['path']).is_file(), item['path']
+
+def receipt_summary(relative):
+    root = ET.parse(repository / relative).getroot()
+    records = list(root.iter('testcase'))
+    failed = sum(record.find('failure') is not None for record in records)
+    errors = sum(record.find('error') is not None for record in records)
+    skipped = sum(record.find('skipped') is not None for record in records)
+    assert records and not failed and not errors, relative
+    return dict(tests=len(records), passed=len(records)-skipped-failed-errors, skipped=skipped, failures=failed, errors=errors)
+
+checkpoint['unit_summary'] = receipt_summary('docs/phase-12/turnover-composition-backend.xml')
+checkpoint['database_summary'] = receipt_summary('docs/phase-12/turnover-composition-api.xml')
+scenarios = json.loads((repository / 'backend/app/modules/country_workflows/scenarios.json').read_text(encoding='utf-8'))
+assert len({row['id'] for row in scenarios}) == len(scenarios)
+unit_records = list(ET.parse(repository / 'docs/phase-12/turnover-composition-backend.xml').getroot().iter('testcase'))
+for scenario in scenarios:
+    matches = [r for r in unit_records if r.attrib.get('name', '').startswith('test_real_world_evidence_scenario[' + scenario['id'] + '-')]
+    assert len(matches) == 1 and not any(matches[0].find(tag) is not None for tag in ('failure', 'error', 'skipped')), scenario['id']
+checkpoint['synthetic_scenarios'] = dict(count=len(scenarios), by_country=dict(sorted(Counter(r['country'] for r in scenarios).items())), interpretation='Authored synthetic operational scenarios with retained passing unit cases; not real-client or legal qualification')
+current = {c['id']: c for c in checkpoint['cases']}
+for item in cases:
+    item['current'] = current[item['title'][:2]]
+data = dict(date='24 October 2026',cases=cases,sections=sections,sources=sources,evidence=evidence,checkpoint=checkpoint)
 (OUT/'analysis-data.json').write_text(json.dumps(data,indent=2,ensure_ascii=False),encoding='utf-8')
 esc=html.escape
-body='<h1>TheAuditor: global use-case roadmap</h1><p>UAE first · India second · Research snapshot 24 October 2026</p><nav>'+''.join(f'<a href="#s{i}">{esc(t)}</a>' for i,(t,_) in enumerate(sections))+'</nav>'
+body='<h1>TheAuditor: global use-case roadmap</h1><p>UAE first · India second · Implementation checkpoint 27 October 2026 · Original research 24 October 2026</p><nav><a href="#implementation">Current implementation</a><a href="#open-gates">Remaining gates</a><a href="#case-details">All 13 cases</a>'+''.join(f'<a href="#s{i}">{esc(t)}</a>' for i,(t,_) in enumerate(sections))+'</nav>'
+body += f'<section id="implementation"><h2>Current implementation — {esc(checkpoint["as_of"])}</h2><p><strong>{esc(checkpoint["release_status"].replace("_", " "))}</strong></p><p>{esc(checkpoint["scope"])}</p><p>Source revision: <code>{esc(checkpoint["source_revision"])}</code></p><p>{checkpoint["synthetic_scenarios"]["count"]} authored synthetic scenarios · {checkpoint["unit_summary"]["passed"]:,} backend unit tests passed ({checkpoint["unit_summary"]["skipped"]} skipped) · {checkpoint["database_summary"]["passed"]} focused database cases passed.</p><p>{esc(checkpoint["synthetic_scenarios"]["interpretation"])}</p><ul>'
+for item in checkpoint['verification']:
+    body += f'<li><strong>{esc(item["label"])}</strong>: {esc(item["result"])}. <a href="../../{esc(item["path"])}">Repository evidence</a>. {esc(item["limit"])}</li>'
+body += '</ul><h3>Source-pinned hosted checks</h3><ul>'
+for item in checkpoint['hosted_runs']:
+    body += f'<li><a href="{esc(item["url"])}">{esc(item["label"])}</a>: {esc(item["status_at_checkpoint"])}</li>'
+body += '</ul></section><section id="open-gates"><h2>Remaining work and completion evidence</h2>'
+for item in checkpoint['open_gates']:
+    body += f'<h3>{esc(item["priority"])}</h3><p>{esc(item["work"])}</p><p><strong>Required proof:</strong> {esc(item["proof"])}</p>'
+body += '</section><h2>Original discovery and planned acceptance — 24 October 2026</h2><p>The following planning sections retain the discovery snapshot. Read each use case’s current implementation checkpoint before interpreting an original missing/partial label.</p>'
 for i,(title,paras) in enumerate(sections):
     body+=f'<section id="s{i}"><h2>{esc(title)}</h2>'+''.join(f'<p>{esc(p)}</p>' for p in paras)+'</section>'
-body+='<h2>All 13 use cases: coverage and build specifications</h2>'
+body+='<h2 id="case-details">All 13 use cases: current coverage and original specifications</h2>'
 for c in cases:
     body+=f'<section><h3><a href="{esc(c["url"])}">{esc(c["title"])}</a></h3><p class="meta">{esc(c["scope"])} · {esc(c["phase"])}</p>'
-    for key,label in [('reference','Reference content and evidence'),('baseline','TheAuditor baseline'),('shared','Shared engine'),('UAE','UAE treatment'),('India','India treatment'),('acceptance','Acceptance criteria')]:
+    entry = c['current']
+    body += f'<h4>Current implementation checkpoint</h4><p><strong>{esc(entry["status"].replace("_", " "))}</strong></p>'
+    for key, label in [('shared', 'Shared implementation'), ('UAE', 'UAE now'), ('India', 'India now'), ('remaining', 'Still required')]:
+        body += f'<h4>{label}</h4><p>{esc(entry[key])}</p>'
+    body += '<ul>' + ''.join(f'<li><a href="../../{esc(p)}">{esc(p)}</a></li>' for p in entry['evidence']) + '</ul><details><summary>Original discovery and acceptance specification — 24 October 2026</summary>'
+    for key,label in [('reference','Reference content and evidence'),('baseline','Discovery baseline — 24 October 2026'),('shared','Shared engine'),('UAE','UAE treatment'),('India','India treatment'),('acceptance','Acceptance criteria')]:
         body+=f'<h4>{label}</h4><p>{esc(c[key])}</p>'
-    body+='</section>'
+    body+='</details></section>'
 body+='<h2>Authoritative sources and verification scope</h2><p>Sources support the identified legal distinctions. This is a product plan, not a complete approved rule corpus. Additional rules and every production legal conclusion need scoped professional qualification. Publication dates and old official tutorials can conflict with current rules; retain the applicable version.</p><ul>'+''.join(f'<li><a href="{esc(u)}">{esc(t)}</a></li>' for t,u in sources)+'</ul><h2>Repository evidence inspected</h2><ul>'+''.join(f'<li>{esc(x)}</li>' for x in evidence)+'</ul>'
 page='<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>TheAuditor UAE and India roadmap</title><style>body{max-width:1050px;margin:40px auto;padding:0 24px;font:16px/1.65 system-ui;color:#17252c;background:#fafbf9}h1{font-size:30px}h2{margin-top:48px;border-bottom:1px solid #cbd4d3;padding-bottom:8px}h3{font-size:23px}h4{margin-bottom:0;color:#245b60}p{margin-top:9px}a{color:#1c6470}nav{display:flex;flex-wrap:wrap;gap:8px 20px;padding:20px;background:#edf2ef}section{break-inside:avoid}.meta{color:#526568}@media print{nav{display:none}body{max-width:none;font-size:11pt}}</style>'+body+'</html>'
 (OUT/'uae-india-roadmap.html').write_text(page,encoding='utf-8')
-canvas='''import {useState,useHostTheme,H1,H2,H3,Text,Stack} from "cursor/canvas";
+canvas = """import {useState,useHostTheme,H1,H2,H3,Text} from "cursor/canvas";
 const data = DATA as const;
-export default function Roadmap(){const t=useHostTheme();const [country,setCountry]=useState("All");const [q,setQ]=useState("");return <main style={{padding:24,maxWidth:1100,margin:"auto",color:t.text.primary,background:t.bg.editor,fontSize:14,lineHeight:1.6}}><H1>TheAuditor · UAE and India roadmap</H1><Text>24 October 2026 · 13 references · Static repository review · Planning estimates</Text><p style={{fontSize:18,color:t.accent.primary}}>All 13 business needs are feasible. Build shared engines, then qualify country-specific obligations.</p><div style={{display:"flex",gap:12,margin:"24px 0"}}><select aria-label="Country filter" value={country} onChange={e=>setCountry(e.target.value)}>{["All","UAE","India","Shared"].map(x=><option key={x}>{x}</option>)}</select><input aria-label="Search use cases" placeholder="Search all use cases" value={q} onChange={e=>setQ(e.target.value)} style={{flex:1}}/></div><H2>Use-case specifications</H2>{data.cases.filter(c=>(country==="All"||country==="India"||country==="UAE"||c.scope==="Shared")&&JSON.stringify(c).toLowerCase().includes(q.toLowerCase())).map(c=><details key={c.title} style={{borderBottom:`1px solid ${t.stroke.secondary}`,padding:"14px 0"}}><summary style={{cursor:"pointer",fontWeight:600}}>{c.title} · {c.phase} · {c.scope}</summary><p><a href={c.url} style={{color:t.text.link}}>Reference page</a></p>{[["Reference evidence",c.reference],["Current baseline",c.baseline],["Shared implementation",c.shared],...(country==="UAE"?[["UAE",c.UAE]]:country==="India"?[["India",c.India]]:[["UAE",c.UAE],["India",c.India]]),["Acceptance criteria",c.acceptance]].map(([label,text])=><div key={label}><H3>{label}</H3><p>{text}</p></div>)}</details>)}{data.sections.map(([title,paras])=><section key={title} style={{marginTop:32}}><H2>{title}</H2>{paras.map((p,i)=><p key={i}>{p}</p>)}</section>)}<H2>Authoritative sources</H2><ul>{data.sources.map(([title,url])=><li key={url}><a href={url} style={{color:t.text.link}}>{title}</a></li>)}</ul><H2>Repository evidence</H2><ul>{data.evidence.map(e=><li key={e}>{e}</li>)}</ul><p>Sources identify important legal distinctions; this plan is not a complete professionally approved rule corpus. No competitor authenticated product tests or new application tests were performed.</p></main>}
-'''.replace('DATA',json.dumps(data,ensure_ascii=False))
+export default function Roadmap() {
+  const t = useHostTheme();
+  const [country, setCountry] = useState("Both");
+  const [query, setQuery] = useState("");
+  const [discovery, setDiscovery] = useState(false);
+  const checkpoint = data.checkpoint;
+  return <main style={{padding:24,maxWidth:1100,margin:"auto",color:t.text.primary,background:t.bg.editor,fontSize:14,lineHeight:1.6}}>
+    <H1>TheAuditor · implementation and remaining work</H1>
+    <Text>{checkpoint.as_of} · UAE first · India second · 13 reference use cases</Text>
+    <p style={{fontSize:18,color:t.accent.primary}}>Operational workflows implemented; complete country-law and client qualification remain open.</p>
+    <p>{checkpoint.scope}</p>
+    <p><strong>{checkpoint.release_status.replaceAll("_", " ")}</strong></p>
+    <div style={{display:"flex",gap:24,flexWrap:"wrap",margin:"24px 0",padding:"16px 0",borderTop:`1px solid ${t.stroke.secondary}`,borderBottom:`1px solid ${t.stroke.secondary}`}}>
+      <div><strong>{checkpoint.synthetic_scenarios.count}</strong><br/>Authored synthetic scenarios</div>
+      <div><strong>{checkpoint.unit_summary.passed.toLocaleString()}</strong><br/>Backend units passed · {checkpoint.unit_summary.skipped} skipped</div>
+      <div><strong>{checkpoint.database_summary.passed}</strong><br/>Latest focused database cases passed</div>
+    </div>
+    <Text>{checkpoint.synthetic_scenarios.interpretation}</Text>
+    <p>Source revision: <code>{checkpoint.source_revision}</code>. These counts do not establish 154 qualified clients or a complete legal corpus.</p>
+    <H2>Verification scope</H2>
+    <ul>{checkpoint.verification.map(v => <li key={v.label}><strong>{v.label}: {v.result}.</strong> {v.limit} <code>{v.path}</code></li>)}</ul>
+    <ul>{checkpoint.hosted_runs.map(r => <li key={r.url}><a href={r.url} style={{color:t.text.link}}>{r.label}</a> — {r.status_at_checkpoint}</li>)}</ul>
+    <H2>All 13 use cases</H2>
+    <div style={{display:"flex",gap:16,flexWrap:"wrap",margin:"16px 0"}}>
+      <label>Country treatment <select value={country} onChange={e => setCountry(e.target.value)}>{["Both","UAE","India"].map(c => <option key={c}>{c}</option>)}</select></label>
+      <label style={{flex:1}}>Search current scope <input value={query} onChange={e => setQuery(e.target.value)} style={{width:"100%"}}/></label>
+      <label><input type="checkbox" checked={discovery} onChange={e => setDiscovery(e.target.checked)}/> Show original discovery and plan</label>
+    </div>
+    {data.cases.filter(c => JSON.stringify(c).toLowerCase().includes(query.toLowerCase())).map(c => <details key={c.title} style={{borderBottom:`1px solid ${t.stroke.secondary}`,padding:"16px 0"}}>
+      <summary style={{cursor:"pointer",fontWeight:600}}>{c.title} · {c.current.status.toLowerCase().replaceAll("_", " ")}</summary>
+      <p><a href={c.url} style={{color:t.text.link}}>Original reference page</a> · discovery reviewed 24 October 2026</p>
+      <H3>Shared implementation</H3><p>{c.current.shared}</p>
+      {country !== "India" && <><H3>UAE now</H3><p>{c.current.UAE}</p></>}
+      {country !== "UAE" && <><H3>India now</H3><p>{c.current.India}</p></>}
+      <H3>Still required</H3><p>{c.current.remaining}</p>
+      <H3>Repository evidence</H3><ul>{c.current.evidence.map(p => <li key={p}><code>{p}</code></li>)}</ul>
+      {discovery && <><H3>Original discovery — {data.date}</H3><p>{c.reference}</p><p>{c.baseline}</p><H3>Original shared build specification</H3><p>{c.shared}</p>{country !== "India" && <p>UAE: {c.UAE}</p>}{country !== "UAE" && <p>India: {c.India}</p>}<H3>Acceptance criteria</H3><p>{c.acceptance}</p></>}
+    </details>)}
+    <H2>Remaining work and proof required</H2>
+    {checkpoint.open_gates.map(g => <section key={g.priority} style={{marginTop:24}}><H3>{g.priority}</H3><p>{g.work}</p><p><strong>Completion evidence:</strong> {g.proof}</p></section>)}
+    {discovery && <><H2>Original planning sections — {data.date}</H2>{data.sections.map(([title,paras]) => <section key={title} style={{marginTop:24}}><H3>{title}</H3>{paras.map((p,i) => <p key={i}>{p}</p>)}</section>)}<H2>Original authoritative source ledger</H2><ul>{data.sources.map(([title,url]) => <li key={url}><a href={url} style={{color:t.text.link}}>{title}</a></li>)}</ul></>}
+    <p>Discovery observations, implementation evidence, synthetic checks and professional release qualification are separate claims. No signed opinion, filed return, live registry verification or real-client qualification is established by this roadmap.</p>
+  </main>;
+}
+""".replace('DATA',json.dumps(data,ensure_ascii=False,indent=2))
 (OUT/'global-use-case-roadmap.canvas.tsx').write_text(canvas,encoding='utf-8')
 print(f'Created report, canvas and structured data in {OUT}; {len(cases)} cases; {len(sections)} planning sections')
 

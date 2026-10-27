@@ -168,3 +168,15 @@ Missing values or unreviewed findings remain unresolved. See
 The shared [turnover bridge](native-adapters.md#book-revenue-to-vatgst-turnover-by-registration-and-period)
 adds declared registration-period coverage, signed adjustments, separate
 books/return evidence and full adjustment review/export for UAE and India.
+
+## Current implementation checkpoint — 27 October 2026
+
+The [13-case roadmap](../case-study-roadmap/uae-india-roadmap.html) now separates
+current implemented scope and evidence from the original discovery baselines.
+It includes UAE/India treatment and remaining completion proof for every case,
+154 authored synthetic scenarios tied to retained passing unit cases, current
+turnover/close additions and explicit professional/client/release limits.
+The [hosted turnover browser receipt](../phase-12/turnover-browser-8d96253.json)
+and [four inspected screenshots](screenshots/turnover/) cover the committed-GL
+and reviewed-composition forms for both countries. They do not qualify all
+statutory requirements or real-client pilots.

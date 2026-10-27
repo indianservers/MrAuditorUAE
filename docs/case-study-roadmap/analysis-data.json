@@ -11,7 +11,20 @@
       "shared": "Create a collection/withholding register with separate collector and collectee roles, transaction dates, receipt dates, cumulative counterparty totals, certificates, payments and amended returns. Preserve gross base and each tax component.",
       "UAE": "No direct India-style TCS equivalent to activate. Show this workflow as not applicable to domestic UAE entities. Cross-border collections require the relevant foreign obligation pack; a UAE entity can have foreign obligations without becoming an Indian entity.",
       "India": "Build historical 27EQ/26AS adapters and qualified current-period successor adapters. Apply historical 206C rules by transaction/receipt period; disable 206C(1H) from 1 April 2025. Maintain old/new Act section and form crosswalks. Handle PAN status, certificates, specified goods, LRS purpose and amendments using approved rules, not page thresholds.",
-      "acceptance": "Boundary fixtures straddling 31 March/1 April 2025; no new 1H liability after withdrawal; duplicate returns cannot duplicate collections; missing PAN or legal inputs yield pending review; collector and collectee figures never net together."
+      "acceptance": "Boundary fixtures straddling 31 March/1 April 2025; no new 1H liability after withdrawal; duplicate returns cannot duplicate collections; missing PAN or legal inputs yield pending review; collector and collectee figures never net together.",
+      "current": {
+        "id": "01",
+        "status": "PARTIAL_SPECIALIST_COVERAGE",
+        "shared": "Separate deductor/deductee and collector/collectee evidence, assessed rule/certificate references, pooled certificate limits, amendments/status and settlement linkage.",
+        "UAE": "India TCS is unavailable for domestic UAE obligations. Use the common evidence/settlement foundations under an explicitly applicable obligation.",
+        "India": "Withholding liability and credit workflows now accept controlled assessed TCS populations; historical 1H date guards and role isolation are implemented.",
+        "remaining": "Native 27EQ/current-successor, 26AS/AIS/TRACES completeness, full legal rate/threshold/certificate corpus and representative client qualification.",
+        "evidence": [
+          "backend/app/modules/country_workflows/withholding_schemas.py",
+          "backend/app/modules/country_workflows/withholding_calculations.py",
+          "backend/tests/qa_crud/test_withholding_workflows.py"
+        ]
+      }
     },
     {
       "title": "02 · Bank reconciliation",
@@ -23,7 +36,21 @@
       "shared": "Add account ownership/IBAN or account-number verification; opening/closing statement controls; exact reference/date/amount matches then bounded splits and settlement groups; partial payments, reversals, fees and interest; outstanding cheque/deposit classifications; aging, carry-forward and subsequent clearance. Generate a signed-balance bridge with zero unexplained residual.",
       "UAE": "Support AED and foreign-currency accounts, bank fees/VAT documents and FX differences separately. Add UAE bank CSV/XLSX templates first, then qualified English/Arabic PDF formats. Local payment rails are adapters, not matching assumptions.",
       "India": "Add Indian bank templates, UTR/NEFT/RTGS/IMPS/UPI identifiers, cheque clearing and payment-gateway settlements. Preserve value date and posting date independently. Tax effects of fees remain in the India pack.",
-      "acceptance": "Each statement row accounted for once; correct opening-to-closing equation; duplicate statement prevention; ambiguous same-amount transactions remain unresolved; no cross-account or cross-currency auto-match. Benchmark 100k and 1m rows before expanding the existing bound; report ingestion and matching performance separately."
+      "acceptance": "Each statement row accounted for once; correct opening-to-closing equation; duplicate statement prevention; ambiguous same-amount transactions remain unresolved; no cross-account or cross-currency auto-match. Benchmark 100k and 1m rows before expanding the existing bound; report ingestion and matching performance separately.",
+      "current": {
+        "id": "02",
+        "status": "OPERATIONAL_WORKFLOWS_IMPLEMENTED",
+        "shared": "Controlled BRS, account/owner evidence, ambiguity, opening/closing bridge, dates, outstanding carry-forward, subsequent clearance and cross-engagement cash-allocation checks.",
+        "UAE": "Authorized committed GL plus bounded reviewed CSV/XLSX/PDF and native bank profiles; account/currency scope remains explicit.",
+        "India": "Reuses the same reviewed account, statement, identifier/date and residual controls; no cross-account or currency auto-netting.",
+        "remaining": "Qualify representative bank-specific files and extraction accuracy; supported profiles do not imply every bank or every PDF layout.",
+        "evidence": [
+          "backend/app/modules/country_workflows/bank_accounts.py",
+          "backend/app/modules/country_workflows/bank_consumption.py",
+          "backend/tests/qa_crud/test_bank_matching_scope.py",
+          "backend/tests/qa_crud/test_pdf_bank_tables.py"
+        ]
+      }
     },
     {
       "title": "03 · PF / ESI / professional-tax reconciliation",
@@ -35,7 +62,21 @@
       "shared": "A reusable statutory-dues subledger: employee cohort, wage month, obligation month, filing and payment dates, challan identifiers, employer registration, allocation and unallocated receipts. Compare payroll accrual → return → challan → bank settlement.",
       "UAE": "Use separate WPS/pension workflows where applicable, rather than relabeling PF/ESI/PT. Nationality, pension authority, prior membership and employment jurisdiction determine the pension scheme. No UAE professional-tax default.",
       "India": "Import ECR/EPFO, ESIC and state PT returns/challans; split EPF/EPS/EDLI/admin components; support arrears, supplementary challans and reversals. PT needs state, establishment, employee category and effective-date packs. Deposit timing and tax deductibility are separate tests.",
-      "acceptance": "One challan allocated across multiple months without double counting; partial and late settlement explained; employee and employer balances reconcile independently; missing months are missing, never zero; state changes select the right PT rule."
+      "acceptance": "One challan allocated across multiple months without double counting; partial and late settlement explained; employee and employer balances reconcile independently; missing months are missing, never zero; state changes select the right PT rule.",
+      "current": {
+        "id": "03",
+        "status": "PARTIAL_SPECIALIST_COVERAGE",
+        "shared": "Assessed contribution bases/rules, employer and employee component separation, expected obligation derivation and explicit split bank settlement.",
+        "UAE": "Separate WPS settlement and reviewed pension/benefit workflows; authority, cohort, eligibility and source documents are explicit.",
+        "India": "Monthly/arrear ECR and bounded ESIC population profiles, source-bound payroll rules and distinct PF/EPS/ESI/PT assessments are implemented.",
+        "remaining": "Complete qualified state/cohort packs, native challan coverage and representative portal/client files; administration/EDLI and legal deductibility must not be inferred from the current contribution workflow.",
+        "evidence": [
+          "backend/app/modules/country_workflows/pension_schemas.py",
+          "backend/app/modules/country_workflows/payroll_schemas.py",
+          "backend/tests/qa_crud/test_india_ecr_source.py",
+          "backend/tests/qa_crud/test_payroll_rule_workflow.py"
+        ]
+      }
     },
     {
       "title": "04 · GST reconciliation",
@@ -47,7 +88,22 @@
       "shared": "Create canonical tax documents with immutable source-file versions, registration, document type, signed amounts, original-note reference, filing period, tax period, supply location and tax components. Keep every registration separate before controlled entity aggregation.",
       "UAE": "Reuse document matching for VAT, but do not create a fake GSTR-2B equivalent. UAE return reconciliation compares transaction registers, VAT201, customs/import records and payment evidence; supplier invoice evidence and input-tax recovery tests are separate.",
       "India": "Prioritize purchase register vs 2B, then sales vs GSTR-1, books vs 3B, 2A historical movements, IMS status, RCM, cess and 9/9C bridges. Handle amendments and delayed credits, blocked/conditional credits, reversals/reclaims, imports, exports and ISD where in scope. Validate current GST rules independently; do not copy the page’s provisional-credit language or link GST variances indiscriminately to TDS Clause 34.",
-      "acceptance": "Invoices and credit/debit notes match as separate records; rejected records remain visible; GSTIN-month control totals balance; multiple return versions are never summed; legally unavailable credits stay distinct from timing differences; authoritative schema fixture for each supported return version."
+      "acceptance": "Invoices and credit/debit notes match as separate records; rejected records remain visible; GSTIN-month control totals balance; multiple return versions are never summed; legally unavailable credits stay distinct from timing differences; authoritative schema fixture for each supported return version.",
+      "current": {
+        "id": "04",
+        "status": "PARTIAL_SPECIALIST_COVERAGE",
+        "shared": "Versioned controlled tax documents, notes, independent source totals, registration/component/period separation and explicit missing/rejected evidence.",
+        "UAE": "VAT document comparison, VAT201 layouts/arithmetic, customs/import box bridge and reviewed book schedule composition reuse the UAE VAT workbench.",
+        "India": "Bounded GSTR-1 document/summary/series and GSTR-2B profiles, notes/amendments and controlled retrieval parts supplement canonical GST comparisons.",
+        "remaining": "Complete portal/schema qualification, legally assessed credit/recovery eligibility, full annual-return scope and authorized filing/action execution.",
+        "evidence": [
+          "backend/app/modules/country_workflows/gstr1_schemas.py",
+          "backend/app/modules/country_workflows/gstr2b_parts.py",
+          "backend/tests/qa_crud/test_india_gstr1_source.py",
+          "backend/tests/qa_crud/test_india_gstr2b_source.py",
+          "backend/tests/qa_crud/test_vat_composition.py"
+        ]
+      }
     },
     {
       "title": "05 · TDS reconciliation",
@@ -59,7 +115,20 @@
       "shared": "Keep withheld tax receivable separate from withholding payable. Match by legal counterparty identifiers, section/rule, transaction, assessment/tax year and certificate/return version. Add expected vs deducted vs deposited vs reported columns and cause codes.",
       "UAE": "Do not require Indian 26AS/AIS/24Q/26Q or domestic TDS filing. The current UAE CT withholding rate is 0% under the cited FTA guidance. Track foreign-source withholding and treaty/credit evidence through a separately scoped cross-border workflow.",
       "India": "Import books, 26AS/AIS/TRACES, 24Q/26Q/27Q and challans as applicable to historical periods; qualify current successor forms. Include cumulative thresholds, timing, non-resident cases, certificates, invalid identifiers and amended filings. Reconcile overlapping AIS/26AS observations without duplicating credit.",
-      "acceptance": "Deductee credit never clears deductor liability; return correction supersedes prior values; certificates apply only within their dates and amounts; March and other due-date exceptions use legal versions; credit mismatch is not an automatic recoverable-tax conclusion."
+      "acceptance": "Deductee credit never clears deductor liability; return correction supersedes prior values; certificates apply only within their dates and amounts; March and other due-date exceptions use legal versions; credit mismatch is not an automatic recoverable-tax conclusion.",
+      "current": {
+        "id": "05",
+        "status": "PARTIAL_SPECIALIST_COVERAGE",
+        "shared": "Distinct expected, withheld, reported, deposited and credit populations; source-bound assessments, pooled certificate controls and separate bank allocations.",
+        "UAE": "Indian domestic TDS workflows stay unavailable. Applicable UAE CT/obligation assessments use their own source-linked workbenches.",
+        "India": "Controlled deductor/deductee TDS liability/credit reconciliation and derived payment obligations are implemented, with no inferred legal entitlement.",
+        "remaining": "Native 24Q/26Q/27Q and successor forms, complete 26AS/AIS/TRACES profiles, current legal rate/threshold rules and professional expected schedules.",
+        "evidence": [
+          "backend/app/modules/country_workflows/withholding_obligations.py",
+          "backend/tests/qa_crud/test_withholding_workflows.py",
+          "backend/tests/qa_crud/test_withholding_obligations.py"
+        ]
+      }
     },
     {
       "title": "06 · Indian tax audit / historical Section 44AB",
@@ -71,7 +140,22 @@
       "shared": "Build a report/obligation graph: each disclosure has applicability, required inputs, calculation receipt, supporting schedules, exception disposition and independent approval. Clearly separate generated, prepared, reviewed and issued states.",
       "UAE": "No Form 3CD clone. The corresponding business need is source-linked CT computation, accounting-to-tax adjustments and audited-financial-statement applicability. Reuse existing UAE CT/QFZP/TP workbenches and the common report composer.",
       "India": "Support legacy 3CA/3CB/3CD for FY2025–26 and earlier applicable periods, and the 2025 Act/2026 Rules Form 26 regime for Tax Year2026–27. Maintain clause crosswalks. Add depreciation blocks, payment/disallowance schedules, cash rules, related parties, ICDS/145A historical requirements, MSME payment rules and supporting GST/TDS/TCS schedules in validated increments.",
-      "acceptance": "Wrong-period form selection blocked; each derived field links to evidence; no blanket claim that all clauses come from GL; stamp values, contracts, related-party registers and declarations explicitly requested; unresolved mandatory clauses prevent issuance."
+      "acceptance": "Wrong-period form selection blocked; each derived field links to evidence; no blanket claim that all clauses come from GL; stamp values, contracts, related-party registers and declarations explicitly requested; unresolved mandatory clauses prevent issuance.",
+      "current": {
+        "id": "06",
+        "status": "PARTIAL_SPECIALIST_COVERAGE",
+        "shared": "Declared report requirements, applicability, evidence-backed non-applicability, current-source validation, authorship separation and unsigned generated drafts.",
+        "UAE": "Source-linked CT workbench and audited-financial-statement obligation assessment; nonresident scoped revenue requires retained reviewed evidence.",
+        "India": "Tax-period-based legacy/current form selection and assessed applicability are enforced. The actual Form 26 and historical-form distinctions are retained in the source research.",
+        "remaining": "Complete independently approved clause/form manifests, statutory schedules and legal mappings. Declared requirements are not a complete official Form 26/3CD pack.",
+        "evidence": [
+          "backend/app/modules/regulatory/tax_forms.py",
+          "backend/app/modules/regulatory/report_requirements.py",
+          "backend/app/modules/tax/audit_revenue.py",
+          "backend/tests/qa_crud/test_tax_audit_scope.py",
+          "backend/tests/qa_crud/test_report_requirements.py"
+        ]
+      }
     },
     {
       "title": "07 · GST and tax audit orchestration",
@@ -83,7 +167,21 @@
       "shared": "Create a tax-close workspace with registration/obligation calendar, source readiness, turnover bridges, missing evidence, exposure summaries, client questions and linked tax schedules. One normalized source powers multiple workpapers with stale-input propagation.",
       "UAE": "UAE tax close joins VAT201, CT, QFZP, transfer pricing and DMTT only when applicable. Corporate-tax, VAT-group and accounting-group boundaries must remain distinct.",
       "India": "Join GST turnover, financial turnover, income-tax turnover and tax-audit disclosures with explained differences. Keep filing period distinct from financial year. Assess GSTR-9/9C applicability and current self-certification requirements; avoid treating every annual reconciliation as a mandatory CA-certified GST audit.",
-      "acceptance": "No duplicated tax exposure when the same finding appears in several workpapers; changed source invalidates dependent draft figures; each registration and statutory period is covered or explicitly missing; all source control totals tie."
+      "acceptance": "No duplicated tax exposure when the same finding appears in several workpapers; changed source invalidates dependent draft figures; each registration and statutory period is covered or explicitly missing; all source control totals tie.",
+      "current": {
+        "id": "07",
+        "status": "OPERATIONAL_WORKFLOWS_IMPLEMENTED",
+        "shared": "Tax-close evidence/readiness and exact finding-ID exposure deduplication. Currency/sign and unknown exposure remain distinct; stale sources cannot support current conclusions.",
+        "UAE": "Reviewed VAT/CT schedules plus registration-period turnover bridge, committed-GL books and reviewed multi-source book composition.",
+        "India": "GST/withholding/payroll evidence joins the same source-linked close. Turnover scope, return and adjustments remain independently reviewed inputs.",
+        "remaining": "Qualify complete country obligation/report packs and annual applicability; a reconciled close does not establish legal filing completeness.",
+        "evidence": [
+          "backend/app/modules/regulatory/exposure_rollup.py",
+          "backend/app/modules/country_workflows/turnover_composition.py",
+          "backend/tests/qa_crud/test_tax_close_rollup.py",
+          "backend/tests/qa_crud/test_turnover_composition.py"
+        ]
+      }
     },
     {
       "title": "08 · Statutory audit",
@@ -95,7 +193,21 @@
       "shared": "Strengthen assertion-to-risk-to-procedure-to-evidence-to-conclusion traceability; confirmations, subsequent events, going concern, component work, estimates and management representations. Full-population analytics do not replace sufficient appropriate evidence.",
       "UAE": "Select framework and audit requirements by legal form, licensing authority, mainland/free zone, regulated status and group. Assess CT audited-statement obligations separately: MD84/2025 addresses >AED50m non-tax-group persons, QFZPs and tax-group special-purpose statements, with period transition. Free-zone company audit requirements are not identical to CT requirements.",
       "India": "Build Companies Act applicability, CARO2020, IFC applicability, Schedule III division, AS/Ind AS reporting and related-party disclosures as separate qualified modules. Inventory visits, title evidence, fraud inquiries and approvals require actual evidence. Do not equate IFRS output with Ind AS compliance.",
-      "acceptance": "Exemption test cases; no CARO for UAE engagement; correct report version/period; unresolved clauses cannot be masked by an overall Completed label; opinion issuance requires authorized professional approval and current evidence."
+      "acceptance": "Exemption test cases; no CARO for UAE engagement; correct report version/period; unresolved clauses cannot be masked by an overall Completed label; opinion issuance requires authorized professional approval and current evidence.",
+      "current": {
+        "id": "08",
+        "status": "PARTIAL_SPECIALIST_COVERAGE",
+        "shared": "Audit execution, retained evidence/workpapers, reviewed requirements, confirmations, cutoff, inventory/asset procedures and source-linked draft reporting.",
+        "UAE": "Country/framework binding and CT audit-obligation checks remain separate from licensing/free-zone/sector audit requirements.",
+        "India": "Schedule III/reporting foundations and form/applicability controls exist; India clauses are not reused as UAE requirements.",
+        "remaining": "Complete qualified Companies Act/CARO/IFC and UAE authority/sector reporting packs, actual physical/confirmation evidence and authorized professional issuance.",
+        "evidence": [
+          "backend/app/modules/regulatory/india_reporting.py",
+          "backend/app/modules/regulatory/reporting.py",
+          "backend/tests/qa_crud/test_statutory_reporting.py",
+          "backend/tests/qa_crud/test_report_requirements.py"
+        ]
+      }
     },
     {
       "title": "09 · SOX and internal controls",
@@ -107,7 +219,20 @@
       "shared": "Extend process/control/assertion ownership, design vs operating effectiveness, population completeness, frequency/sample rationale, deficiency evaluation, compensating controls, retesting and management certification. Ingest user-role assignments, permissions, privileged changes and workflow approvals; GL alone cannot test SoD/ITGC.",
       "UAE": "Provide UAE internal controls/ICFR methodology by entity/regulator. Enable SOX only for an applicable issuer, group reporting instruction or contractual scope, not because the client selects UAE.",
       "India": "Provide Indian IFC/ICFR scope using applicable Companies Act requirements. Enable SOX separately when applicable to issuer/group; it is not the Indian default. Assess sector requirements independently.",
-      "acceptance": "Known conflicting access creates explainable findings; revoked access and compensating controls retain history; failed connector means incomplete monitoring; SOX404(a) and auditor404(b) applicability stay separate; no claim that analytics removes all sampling or proves control effectiveness."
+      "acceptance": "Known conflicting access creates explainable findings; revoked access and compensating controls retain history; failed connector means incomplete monitoring; SOX404(a) and auditor404(b) applicability stay separate; no claim that analytics removes all sampling or proves control effectiveness.",
+      "current": {
+        "id": "09",
+        "status": "COMMON_CONTROLS_IMPLEMENTED",
+        "shared": "GRC risk/control/testing foundations plus retained SoD permission/assignment populations, reviewed policy, interval checks, paging, reporting and historical evidence.",
+        "UAE": "Common control review can be scoped to the entity; SOX remains an issuer/group/contractual overlay rather than a UAE default.",
+        "India": "Common control and SoD review can be scoped to IFC/ICFR or SOX as actually applicable; a country selection does not decide legal applicability.",
+        "remaining": "Authorized live enterprise-access/event connectors, complete framework-specific methods and professional design/operating-effectiveness conclusions.",
+        "evidence": [
+          "backend/app/modules/grc/service.py",
+          "backend/tests/qa_crud/test_sod_reporting.py",
+          "frontend/tests/sod-results.test.tsx"
+        ]
+      }
     },
     {
       "title": "10 · Nonprofit / implementing-partner due diligence",
@@ -119,7 +244,21 @@
       "shared": "Add entity and ownership identity, document validity/expiry, grant restrictions, utilization, related-party conflicts, board/governance evidence, adverse-media references, risk rationale and periodic revalidation. Separate document authenticity, registry verification and professional attestation.",
       "UAE": "Check authorized legal form, charity/fundraising permissions, relevant federal/emirate authority, grant restrictions and sanctions. India CSR-1/80G/FCRA labels have no UAE default equivalent. Public-benefit CT exemption is a separate applicability assessment.",
       "India": "Assess CSR implementing-agency eligibility, CSR-1, applicable 12AB/80G status, FCRA only when relevant, audited accounts/10B/10BB, utilization and governance. Registry availability and access vary; a user-uploaded certificate is not a live registry verification.",
-      "acceptance": "Expired or unavailable registry evidence yields pending, not verified; adverse-media identity collisions require review; every risk grade has rationale and sources; only authorized qualified humans sign attestation; insurance is excluded unless separately contracted."
+      "acceptance": "Expired or unavailable registry evidence yields pending, not verified; adverse-media identity collisions require review; every risk grade has rationale and sources; only authorized qualified humans sign attestation; insurance is excluded unless separately contracted.",
+      "current": {
+        "id": "10",
+        "status": "COMMON_CONTROLS_IMPLEMENTED",
+        "shared": "Diligence subjects, document validity, ownership look-through, uploaded-list screening, adverse-media adjudication and grant mandate/utilisation controls.",
+        "UAE": "Uses explicit country/date policy and retained mandate, identity, ownership and governance evidence; no live registry or professional attestation is inferred.",
+        "India": "Reuses the same controls with separately assessed legal/grant context; uploaded evidence does not establish registration authenticity or eligibility.",
+        "remaining": "Licensed live registry/PEP/sanctions services, qualified local legal requirements, professional validators, consented partner pilots and any insurance/service arrangement.",
+        "evidence": [
+          "backend/app/modules/country_workflows/diligence_schemas.py",
+          "backend/app/modules/country_workflows/grant_utilisation.py",
+          "backend/tests/qa_crud/test_ownership_paths.py",
+          "backend/tests/qa_crud/test_screening_candidates.py"
+        ]
+      }
     },
     {
       "title": "11 · Vendor due diligence",
@@ -131,7 +270,21 @@
       "shared": "Introduce vendor legal entities, beneficial-owner relationships, identifier verification, bank-account ownership evidence, conflict declarations, financial metrics, watchlist matches, service criticality and revalidation schedules. Add explainable risk dimensions and documented procurement disposition.",
       "UAE": "Trade licence and issuing authority, TRN verification where applicable, ownership/UBO evidence, sanctions and local regulator requirements. Assess free-zone registry availability individually. Use licensed screening feeds where needed.",
       "India": "CIN/LLPIN/PAN/GSTIN and applicable ownership, tax/filing history, MSME status with evidence and effective dates. Separate invalid tax registration from insolvency, sanctions and procurement policy risk.",
-      "acceptance": "Name-only sanctions hits never auto-reject a vendor; unavailable registry is not a clean result; changed bank details require controlled review; source licence and query timestamp retained; recurring review is off until explicitly configured."
+      "acceptance": "Name-only sanctions hits never auto-reject a vendor; unavailable registry is not a clean result; changed bank details require controlled review; source licence and query timestamp retained; recurring review is off until explicitly configured.",
+      "current": {
+        "id": "11",
+        "status": "COMMON_CONTROLS_IMPLEMENTED",
+        "shared": "Vendor identity/diligence, ownership and conflicts, uploaded-list screening, adverse-media evidence and separate procurement/payment controls.",
+        "UAE": "UAE entity/policy scope is retained; unsupported or unavailable external searches remain unresolved evidence.",
+        "India": "India entity/policy scope is retained; registry/tax registration authenticity is not inferred from document syntax or uploaded declarations.",
+        "remaining": "Authorized provider integrations, complete country diligence criteria and independently checked vendor cases; software cannot manufacture authenticity or professional attestation.",
+        "evidence": [
+          "backend/app/modules/country_workflows/adverse_media.py",
+          "backend/app/modules/country_workflows/ownership_paths.py",
+          "backend/tests/qa_crud/test_ownership_paths.py",
+          "backend/tests/qa_crud/test_screening_candidates.py"
+        ]
+      }
     },
     {
       "title": "12 · Stock / inventory audit",
@@ -143,7 +296,21 @@
       "shared": "Add SKU/site/lot/UOM master, stock rollforward, physical count sheets, count date and movements to reporting date, test counts, ownership/consignment and third-party confirmations. Distinguish count quantity, monetary coverage and evidence completeness; test cost and NRV with supporting sales/purchase data.",
       "UAE": "Use approved IFRS/other applicable framework and inventory audit methodology. Treat customs/designated-zone facts as tax inputs, not proof of title. Add Arabic document extraction qualification.",
       "India": "Select AS2 or IndAS2 independently; map evidence to SA501 and applicable CARO inventory reporting. If lender stock audit/drawing power is later requested, build a separately specified mandate using sanctioned margins, eligible receivables and lender rules.",
-      "acceptance": "Count coverage denominator disclosed; absence of inventory is separately evidenced; movement from count date reconciles; quantities cannot be summed across incompatible UOMs; third-party stock not silently included; no claim that GL analytics verifies existence or condition."
+      "acceptance": "Count coverage denominator disclosed; absence of inventory is separately evidenced; movement from count date reconciles; quantities cannot be summed across incompatible UOMs; third-party stock not silently included; no claim that GL analytics verifies existence or condition.",
+      "current": {
+        "id": "12",
+        "status": "OPERATIONAL_WORKFLOWS_IMPLEMENTED",
+        "shared": "Stock quantities/site/UOM, controlled count-date movement bridge, custody confirmations, cost/NRV evidence, GL valuation controls and missing monetary coverage.",
+        "UAE": "Shared stock procedures use explicit ownership/custody, framework and valuation evidence; no physical attendance or automatic customs ownership conclusion.",
+        "India": "The same controlled quantities and valuation procedures support separately assessed audit/tax requirements; local statutory disclosures remain country-pack work.",
+        "remaining": "Actual count attendance, title/condition/third-party evidence, industry-specific valuation methods and representative client qualification.",
+        "evidence": [
+          "backend/app/modules/country_workflows/inventory_valuation.py",
+          "backend/app/modules/country_workflows/inventory_custody.py",
+          "backend/tests/qa_crud/test_inventory_controlled_bridge.py",
+          "backend/tests/unit/test_inventory_valuation.py"
+        ]
+      }
     },
     {
       "title": "13 · Payroll audit",
@@ -155,7 +322,21 @@
       "shared": "Employee-employment-contract history, pay components, leave/attendance, payroll runs, amendments, joiner/leaver calculations, approved master changes and bank settlements. Add duplicate employee/bank checks, unexpected adjustments, benefits and GL-to-payroll-to-bank bridge. Restrict employee data by role.",
       "UAE": "Prioritize payroll register → WPS/SIF → bank → GL. Assess MOHRE/WPS applicability and exclusions with effective-dated Resolution340/2026 rather than hardcoding 2022 rules. Add gratuity/end-of-service, leave and pension authority/cohort checks; DIFC/ADGM/other special regimes need distinct packs and applicable benefit schemes.",
       "India": "Prioritize payroll → ECR/ESIC → challans → bank/GL, salary withholding/24Q/Form16 historical and current successor formats. Membership continuity, excluded employees, pension eligibility, wage definitions, state PT, bonus/gratuity and salary-tax elections need versioned facts. EPFO guidance says existing membership may continue above the ceiling; never infer membership from salary alone.",
-      "acceptance": "Joiners/leavers and arrears reconcile by employee and month; no double-booking corrected payroll; correct pension/membership cohort; UAE employee never gets PF/PT by default; sensitive fields stay out of unrelated audit exports; timing failures retain actual payment evidence."
+      "acceptance": "Joiners/leavers and arrears reconcile by employee and month; no double-booking corrected payroll; correct pension/membership cohort; UAE employee never gets PF/PT by default; sensitive fields stay out of unrelated audit exports; timing failures retain actual payment evidence.",
+      "current": {
+        "id": "13",
+        "status": "PARTIAL_SPECIALIST_COVERAGE",
+        "shared": "Payroll accrual/posting controls, employee/channel settlement, contributions, assessed expected remittances and split payment allocation with retained rule/source lineage.",
+        "UAE": "WPS, pension/cohort and benefit reviews remain separate purpose-bound workflows with independently reviewed published rule profiles and supporting evidence.",
+        "India": "PF/EPS/ESI/PT assessed component calculations, ECR/ESIC member/day/wage population checks and payroll-to-GL controls are implemented.",
+        "remaining": "Complete legal cohort/state/schema qualification, representative payroll clients, statutory charges not covered by current formulas and actual filing/payment execution.",
+        "evidence": [
+          "backend/app/modules/country_workflows/payroll_ledger_schemas.py",
+          "backend/tests/qa_crud/test_payroll_ledger.py",
+          "backend/tests/qa_crud/test_published_pension_source.py",
+          "backend/tests/qa_crud/test_published_payroll_source.py"
+        ]
+      }
     }
   ],
   "sections": [
@@ -312,5 +493,292 @@
     "docs/global-platform/README.md: immutable bindings, freshness and country capability boundaries",
     "docs/phase3/baseline-and-gap-analysis.md: existing gaps and source retrieval limitations; work in progress",
     "docs/phase-12/production-readiness.md and README.md: historical release NO-GO and later QA caveats"
-  ]
+  ],
+  "checkpoint": {
+    "as_of": "27 October 2026",
+    "source_revision": "8d96253c6ef3466def879ce4683480f3cc0d2217",
+    "release_status": "NOT_QUALIFIED_FOR_PRODUCTION_STATUTORY_USE",
+    "scope": "Implemented operational workflows with synthetic verification. Original 24 October discovery baselines are retained below as historical observations, not current missing-feature labels.",
+    "verification": [
+      {
+        "label": "Backend units",
+        "result": "2,877 passed; five skipped",
+        "path": "docs/phase-12/turnover-composition-backend.xml",
+        "limit": "Includes the 154 authored operational scenarios; does not independently qualify legal rules or clients."
+      },
+      {
+        "label": "Latest focused database regression",
+        "result": "Eight passed",
+        "path": "docs/phase-12/turnover-composition-api.xml",
+        "limit": "Turnover ledger, composition, bridge and tax-close rollup. This receipt does not cover every workflow API."
+      },
+      {
+        "label": "Frontend",
+        "result": "276 tests passed; production build and TypeScript passed",
+        "path": "frontend/tests/turnover-books-composition.test.tsx",
+        "limit": "Local execution recorded in the implementation log; a test definition alone is not a hosted pass receipt."
+      },
+      {
+        "label": "Latest implementation log",
+        "result": "Scope, provenance, checks and limits retained",
+        "path": "docs/country-workflows/native-adapters.md",
+        "limit": "Hosted jobs and screenshot observations are tied to the source revision named in each entry."
+      },
+      {
+        "label": "Hosted turnover/composition browser",
+        "result": "Three passed; four screenshots visually inspected",
+        "path": "docs/phase-12/turnover-browser-8d96253.json",
+        "limit": "Synthetic real BFF/browser flows on 8d96253, not all 154 catalogue cases or a complete statutory qualification."
+      }
+    ],
+    "hosted_runs": [
+      {
+        "label": "Current revision CI",
+        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40535235796",
+        "status_at_checkpoint": "Frontend, browser, containers, ML and security PASSED; full backend verification RUNNING. Inspect the live run for subsequent results."
+      },
+      {
+        "label": "Current turnover/composition browser proof",
+        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40535235796/job/122298583144",
+        "status_at_checkpoint": "PASSED: three cases in 23.5 seconds on 8d96253. Four refined UAE/India form screenshots visually inspected."
+      },
+      {
+        "label": "Earlier committed-GL browser proof",
+        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40532881703/job/122290174736",
+        "status_at_checkpoint": "PASSED: three cases in 18.6 seconds on 1dc535f; composition and refined captures require the newer run"
+      }
+    ],
+    "open_gates": [
+      {
+        "priority": "UAE first",
+        "work": "Qualify representative bank/PDF, VAT201/customs and WPS inputs, employment/pension cohorts and complete reporting obligations against retained authoritative versions and independently checked schedules.",
+        "proof": "Approved country/rule/parser versions, boundary fixtures and independent expected results for every claimed cohort and layout."
+      },
+      {
+        "priority": "India second",
+        "work": "Complete native withholding-return/26AS/AIS coverage, state/cohort payroll packs and legacy/current tax-audit clause mappings; retain the existing GST and ECR profiles as explicitly bounded adapters.",
+        "proof": "Source-bound applicable form/rule versions, exact clause coverage, representative amendments and professional approval."
+      },
+      {
+        "priority": "Shared integrations",
+        "work": "Qualify authorized registry, sanctions/PEP and enterprise-access providers. Uploaded documents/lists and declared access populations do not establish live external verification.",
+        "proof": "Authorized provider connectivity, completeness/error handling, licensing scope and measured representative inputs."
+      },
+      {
+        "priority": "Client pilots",
+        "work": "Populate the UAE and India pilot folders with consented redacted inputs and independently checked results. Folders and templates exist; no real-client result is claimed.",
+        "proof": "Representative pilot manifests, original hashes, independent expected schedules and reviewer records."
+      },
+      {
+        "priority": "Release",
+        "work": "Finish current hosted verification and production deployment/rollback, recovery, monitoring, privacy and professional sign-off gates.",
+        "proof": "Passing source-pinned jobs plus actual provider/runtime drills and named approvals. Local/container checks alone do not prove production readiness."
+      }
+    ],
+    "cases": [
+      {
+        "id": "01",
+        "status": "PARTIAL_SPECIALIST_COVERAGE",
+        "shared": "Separate deductor/deductee and collector/collectee evidence, assessed rule/certificate references, pooled certificate limits, amendments/status and settlement linkage.",
+        "UAE": "India TCS is unavailable for domestic UAE obligations. Use the common evidence/settlement foundations under an explicitly applicable obligation.",
+        "India": "Withholding liability and credit workflows now accept controlled assessed TCS populations; historical 1H date guards and role isolation are implemented.",
+        "remaining": "Native 27EQ/current-successor, 26AS/AIS/TRACES completeness, full legal rate/threshold/certificate corpus and representative client qualification.",
+        "evidence": [
+          "backend/app/modules/country_workflows/withholding_schemas.py",
+          "backend/app/modules/country_workflows/withholding_calculations.py",
+          "backend/tests/qa_crud/test_withholding_workflows.py"
+        ]
+      },
+      {
+        "id": "02",
+        "status": "OPERATIONAL_WORKFLOWS_IMPLEMENTED",
+        "shared": "Controlled BRS, account/owner evidence, ambiguity, opening/closing bridge, dates, outstanding carry-forward, subsequent clearance and cross-engagement cash-allocation checks.",
+        "UAE": "Authorized committed GL plus bounded reviewed CSV/XLSX/PDF and native bank profiles; account/currency scope remains explicit.",
+        "India": "Reuses the same reviewed account, statement, identifier/date and residual controls; no cross-account or currency auto-netting.",
+        "remaining": "Qualify representative bank-specific files and extraction accuracy; supported profiles do not imply every bank or every PDF layout.",
+        "evidence": [
+          "backend/app/modules/country_workflows/bank_accounts.py",
+          "backend/app/modules/country_workflows/bank_consumption.py",
+          "backend/tests/qa_crud/test_bank_matching_scope.py",
+          "backend/tests/qa_crud/test_pdf_bank_tables.py"
+        ]
+      },
+      {
+        "id": "03",
+        "status": "PARTIAL_SPECIALIST_COVERAGE",
+        "shared": "Assessed contribution bases/rules, employer and employee component separation, expected obligation derivation and explicit split bank settlement.",
+        "UAE": "Separate WPS settlement and reviewed pension/benefit workflows; authority, cohort, eligibility and source documents are explicit.",
+        "India": "Monthly/arrear ECR and bounded ESIC population profiles, source-bound payroll rules and distinct PF/EPS/ESI/PT assessments are implemented.",
+        "remaining": "Complete qualified state/cohort packs, native challan coverage and representative portal/client files; administration/EDLI and legal deductibility must not be inferred from the current contribution workflow.",
+        "evidence": [
+          "backend/app/modules/country_workflows/pension_schemas.py",
+          "backend/app/modules/country_workflows/payroll_schemas.py",
+          "backend/tests/qa_crud/test_india_ecr_source.py",
+          "backend/tests/qa_crud/test_payroll_rule_workflow.py"
+        ]
+      },
+      {
+        "id": "04",
+        "status": "PARTIAL_SPECIALIST_COVERAGE",
+        "shared": "Versioned controlled tax documents, notes, independent source totals, registration/component/period separation and explicit missing/rejected evidence.",
+        "UAE": "VAT document comparison, VAT201 layouts/arithmetic, customs/import box bridge and reviewed book schedule composition reuse the UAE VAT workbench.",
+        "India": "Bounded GSTR-1 document/summary/series and GSTR-2B profiles, notes/amendments and controlled retrieval parts supplement canonical GST comparisons.",
+        "remaining": "Complete portal/schema qualification, legally assessed credit/recovery eligibility, full annual-return scope and authorized filing/action execution.",
+        "evidence": [
+          "backend/app/modules/country_workflows/gstr1_schemas.py",
+          "backend/app/modules/country_workflows/gstr2b_parts.py",
+          "backend/tests/qa_crud/test_india_gstr1_source.py",
+          "backend/tests/qa_crud/test_india_gstr2b_source.py",
+          "backend/tests/qa_crud/test_vat_composition.py"
+        ]
+      },
+      {
+        "id": "05",
+        "status": "PARTIAL_SPECIALIST_COVERAGE",
+        "shared": "Distinct expected, withheld, reported, deposited and credit populations; source-bound assessments, pooled certificate controls and separate bank allocations.",
+        "UAE": "Indian domestic TDS workflows stay unavailable. Applicable UAE CT/obligation assessments use their own source-linked workbenches.",
+        "India": "Controlled deductor/deductee TDS liability/credit reconciliation and derived payment obligations are implemented, with no inferred legal entitlement.",
+        "remaining": "Native 24Q/26Q/27Q and successor forms, complete 26AS/AIS/TRACES profiles, current legal rate/threshold rules and professional expected schedules.",
+        "evidence": [
+          "backend/app/modules/country_workflows/withholding_obligations.py",
+          "backend/tests/qa_crud/test_withholding_workflows.py",
+          "backend/tests/qa_crud/test_withholding_obligations.py"
+        ]
+      },
+      {
+        "id": "06",
+        "status": "PARTIAL_SPECIALIST_COVERAGE",
+        "shared": "Declared report requirements, applicability, evidence-backed non-applicability, current-source validation, authorship separation and unsigned generated drafts.",
+        "UAE": "Source-linked CT workbench and audited-financial-statement obligation assessment; nonresident scoped revenue requires retained reviewed evidence.",
+        "India": "Tax-period-based legacy/current form selection and assessed applicability are enforced. The actual Form 26 and historical-form distinctions are retained in the source research.",
+        "remaining": "Complete independently approved clause/form manifests, statutory schedules and legal mappings. Declared requirements are not a complete official Form 26/3CD pack.",
+        "evidence": [
+          "backend/app/modules/regulatory/tax_forms.py",
+          "backend/app/modules/regulatory/report_requirements.py",
+          "backend/app/modules/tax/audit_revenue.py",
+          "backend/tests/qa_crud/test_tax_audit_scope.py",
+          "backend/tests/qa_crud/test_report_requirements.py"
+        ]
+      },
+      {
+        "id": "07",
+        "status": "OPERATIONAL_WORKFLOWS_IMPLEMENTED",
+        "shared": "Tax-close evidence/readiness and exact finding-ID exposure deduplication. Currency/sign and unknown exposure remain distinct; stale sources cannot support current conclusions.",
+        "UAE": "Reviewed VAT/CT schedules plus registration-period turnover bridge, committed-GL books and reviewed multi-source book composition.",
+        "India": "GST/withholding/payroll evidence joins the same source-linked close. Turnover scope, return and adjustments remain independently reviewed inputs.",
+        "remaining": "Qualify complete country obligation/report packs and annual applicability; a reconciled close does not establish legal filing completeness.",
+        "evidence": [
+          "backend/app/modules/regulatory/exposure_rollup.py",
+          "backend/app/modules/country_workflows/turnover_composition.py",
+          "backend/tests/qa_crud/test_tax_close_rollup.py",
+          "backend/tests/qa_crud/test_turnover_composition.py"
+        ]
+      },
+      {
+        "id": "08",
+        "status": "PARTIAL_SPECIALIST_COVERAGE",
+        "shared": "Audit execution, retained evidence/workpapers, reviewed requirements, confirmations, cutoff, inventory/asset procedures and source-linked draft reporting.",
+        "UAE": "Country/framework binding and CT audit-obligation checks remain separate from licensing/free-zone/sector audit requirements.",
+        "India": "Schedule III/reporting foundations and form/applicability controls exist; India clauses are not reused as UAE requirements.",
+        "remaining": "Complete qualified Companies Act/CARO/IFC and UAE authority/sector reporting packs, actual physical/confirmation evidence and authorized professional issuance.",
+        "evidence": [
+          "backend/app/modules/regulatory/india_reporting.py",
+          "backend/app/modules/regulatory/reporting.py",
+          "backend/tests/qa_crud/test_statutory_reporting.py",
+          "backend/tests/qa_crud/test_report_requirements.py"
+        ]
+      },
+      {
+        "id": "09",
+        "status": "COMMON_CONTROLS_IMPLEMENTED",
+        "shared": "GRC risk/control/testing foundations plus retained SoD permission/assignment populations, reviewed policy, interval checks, paging, reporting and historical evidence.",
+        "UAE": "Common control review can be scoped to the entity; SOX remains an issuer/group/contractual overlay rather than a UAE default.",
+        "India": "Common control and SoD review can be scoped to IFC/ICFR or SOX as actually applicable; a country selection does not decide legal applicability.",
+        "remaining": "Authorized live enterprise-access/event connectors, complete framework-specific methods and professional design/operating-effectiveness conclusions.",
+        "evidence": [
+          "backend/app/modules/grc/service.py",
+          "backend/tests/qa_crud/test_sod_reporting.py",
+          "frontend/tests/sod-results.test.tsx"
+        ]
+      },
+      {
+        "id": "10",
+        "status": "COMMON_CONTROLS_IMPLEMENTED",
+        "shared": "Diligence subjects, document validity, ownership look-through, uploaded-list screening, adverse-media adjudication and grant mandate/utilisation controls.",
+        "UAE": "Uses explicit country/date policy and retained mandate, identity, ownership and governance evidence; no live registry or professional attestation is inferred.",
+        "India": "Reuses the same controls with separately assessed legal/grant context; uploaded evidence does not establish registration authenticity or eligibility.",
+        "remaining": "Licensed live registry/PEP/sanctions services, qualified local legal requirements, professional validators, consented partner pilots and any insurance/service arrangement.",
+        "evidence": [
+          "backend/app/modules/country_workflows/diligence_schemas.py",
+          "backend/app/modules/country_workflows/grant_utilisation.py",
+          "backend/tests/qa_crud/test_ownership_paths.py",
+          "backend/tests/qa_crud/test_screening_candidates.py"
+        ]
+      },
+      {
+        "id": "11",
+        "status": "COMMON_CONTROLS_IMPLEMENTED",
+        "shared": "Vendor identity/diligence, ownership and conflicts, uploaded-list screening, adverse-media evidence and separate procurement/payment controls.",
+        "UAE": "UAE entity/policy scope is retained; unsupported or unavailable external searches remain unresolved evidence.",
+        "India": "India entity/policy scope is retained; registry/tax registration authenticity is not inferred from document syntax or uploaded declarations.",
+        "remaining": "Authorized provider integrations, complete country diligence criteria and independently checked vendor cases; software cannot manufacture authenticity or professional attestation.",
+        "evidence": [
+          "backend/app/modules/country_workflows/adverse_media.py",
+          "backend/app/modules/country_workflows/ownership_paths.py",
+          "backend/tests/qa_crud/test_ownership_paths.py",
+          "backend/tests/qa_crud/test_screening_candidates.py"
+        ]
+      },
+      {
+        "id": "12",
+        "status": "OPERATIONAL_WORKFLOWS_IMPLEMENTED",
+        "shared": "Stock quantities/site/UOM, controlled count-date movement bridge, custody confirmations, cost/NRV evidence, GL valuation controls and missing monetary coverage.",
+        "UAE": "Shared stock procedures use explicit ownership/custody, framework and valuation evidence; no physical attendance or automatic customs ownership conclusion.",
+        "India": "The same controlled quantities and valuation procedures support separately assessed audit/tax requirements; local statutory disclosures remain country-pack work.",
+        "remaining": "Actual count attendance, title/condition/third-party evidence, industry-specific valuation methods and representative client qualification.",
+        "evidence": [
+          "backend/app/modules/country_workflows/inventory_valuation.py",
+          "backend/app/modules/country_workflows/inventory_custody.py",
+          "backend/tests/qa_crud/test_inventory_controlled_bridge.py",
+          "backend/tests/unit/test_inventory_valuation.py"
+        ]
+      },
+      {
+        "id": "13",
+        "status": "PARTIAL_SPECIALIST_COVERAGE",
+        "shared": "Payroll accrual/posting controls, employee/channel settlement, contributions, assessed expected remittances and split payment allocation with retained rule/source lineage.",
+        "UAE": "WPS, pension/cohort and benefit reviews remain separate purpose-bound workflows with independently reviewed published rule profiles and supporting evidence.",
+        "India": "PF/EPS/ESI/PT assessed component calculations, ECR/ESIC member/day/wage population checks and payroll-to-GL controls are implemented.",
+        "remaining": "Complete legal cohort/state/schema qualification, representative payroll clients, statutory charges not covered by current formulas and actual filing/payment execution.",
+        "evidence": [
+          "backend/app/modules/country_workflows/payroll_ledger_schemas.py",
+          "backend/tests/qa_crud/test_payroll_ledger.py",
+          "backend/tests/qa_crud/test_published_pension_source.py",
+          "backend/tests/qa_crud/test_published_payroll_source.py"
+        ]
+      }
+    ],
+    "unit_summary": {
+      "tests": 2882,
+      "passed": 2877,
+      "skipped": 5,
+      "failures": 0,
+      "errors": 0
+    },
+    "database_summary": {
+      "tests": 8,
+      "passed": 8,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    "synthetic_scenarios": {
+      "count": 154,
+      "by_country": {
+        "AE": 101,
+        "IN": 53
+      },
+      "interpretation": "Authored synthetic operational scenarios with retained passing unit cases; not real-client or legal qualification"
+    }
+  }
 }

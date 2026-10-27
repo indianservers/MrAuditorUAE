@@ -3846,3 +3846,38 @@ actual imported GL June movements and assessed nil July, rejects overlapping
 same-account selections and verifies recursive source independence and staleness.
 These remain synthetic fixtures; consented real-client pilots and professionally
 qualified complete country-law/form packs are still open.
+
+## Current 13-case roadmap and final turnover screenshots — 27 October 2026
+
+The hosted [browser job 122298583144](https://github.com/indianservers/MrAuditorUAE/actions/runs/40535235796/job/122298583144)
+on source `8d96253c6ef3466def879ce4683480f3cc0d2217` passed all three cases in
+23.5 seconds. UAE and India cases exercised actual BFF GL import, controlled book
+source preparation, independent source reviews, explicit nil July, composition,
+preparer rejection and independent combined-source approval, as well as the
+existing declared report flow. The third case covers authentication/logout.
+The source-revision frontend, container, ML and security jobs passed; its full
+backend verification remains live at this observation.
+
+Artifact 12747807501 was retrieved with verified archive SHA-256
+`a25393cdff3daba51c5270916cdbb98311af26b37787783e08dba4784b0d912a`.
+All four refined turnover screenshots were visually inspected and saved under
+[screenshots/turnover](screenshots/turnover/). Full headings, account selections,
+TRN/GSTIN and AED/INR labels, independent controls, scope assessments and limits
+are readable without sticky-header or notification obstruction. The
+[retained browser receipt](../phase-12/turnover-browser-8d96253.json) includes
+source/job/artifact IDs and the SHA-256 of each PNG. These are synthetic workflows,
+not complete legal or client qualification.
+
+The original case-study roadmap now adds a dated implementation checkpoint for
+all 13 reference cases, country-specific current treatment, remaining work and
+repository evidence. Original 24 October discovery baselines and planning
+estimates remain explicitly historical. The generator validates all evidence
+paths, reads actual unit/database JUnit outcomes and verifies that each of the
+154 authored scenario IDs has exactly one passing retained unit case. It does
+not turn those fixtures into real clients or independently approved legal rules.
+The existing canvas passes TypeScript against the installed cursor/canvas SDK;
+the generated HTML was opened directly in headless Chromium without a local
+server, checked for the current checkpoint and all 13 dated baselines, and its
+overview/tax-close sections visually inspected. Complete country packs, authorized
+external providers, real-client pilots and professional/production release gates
+remain open in the refreshed roadmap.
