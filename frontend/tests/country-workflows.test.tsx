@@ -829,6 +829,23 @@ beforeEach(() => {
   state.result = null;
 });
 describe("country workflows", () => {
+  it.each(["AE", "IN"])("offers every export format and actionable errors in %s", async country => {
+    state.country = country;
+    state.result = {id: "result", kind: "workflow-source", version: 1, freshness: "CURRENT",
+      body: {title: "SYNTHETIC export source", review_status: "UNVERIFIED", rows: []}};
+    const requested = vi.spyOn(globalThis, "fetch").mockResolvedValue(new Response(
+      JSON.stringify({error: {message: "Unsupported PDF text; use the complete XLSX export", request_id: "export-ref"}}),
+      {status: 422},
+    ));
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), {target: {value: "result"}});
+    for (const format of ["XLSX", "PDF", "DOCX"])
+      expect(screen.getByRole("button", {name: `Export ${format}`})).toBeEnabled();
+    fireEvent.click(screen.getByRole("button", {name: "Export PDF"}));
+    await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("use the complete XLSX export"));
+    expect(requested.mock.calls[0][0]).toBe("/api/backend/intelligence/engagements/engagement/events/result/export?format=pdf");
+    expect(new Headers(requested.mock.calls[0][1]?.headers).get("X-Tenant-ID")).toBe("tenant");
+  });
   it("opens a linked retained review even outside the first source-history page", () => {
     state.result = { id: "result-older", kind: "country-workflow", version: 2,
       freshness: "CURRENT", body: { title: "Retained older review", workflow: "bank-brs",

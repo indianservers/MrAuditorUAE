@@ -2937,3 +2937,35 @@ regressions. Full app mypy, lint/format and API-contract checks passed. No Pytho
 dependency or frontend changes were needed. Client identities, language semantics,
 legal qualification, provider access and release/security gates remain separate
 open requirements; the authored scenario catalogue remains 154.
+
+### Exports available from the country workflow screen (27 October 2026)
+
+The country workflow/source result screen previously offered only XLSX, despite
+the backend already supporting PDF and DOCX. It now exposes all three formats
+through the same download controls used by accounting intelligence. Both screens
+retain complete-source XLSX guidance and describe PDF/DOCX as potentially
+abbreviated views. Exporting does not change a result's review/freshness status or
+produce signing/filing authority.
+
+Binary downloads now reuse the ordinary authenticated API request implementation:
+same-origin credentials, no-store responses, tenant headers, shared session
+refresh and normalized server errors with request references. Unsupported PDF
+characters therefore show the actual XLSX recovery guidance rather than only a
+status code. JSON/204 API behavior remains unchanged. While an export is pending,
+all format buttons are disabled; changing result/tenant scope unmounts the keyed
+controls and aborts the old request. An abort check also prevents a late response
+from an abort-ignoring transport from initiating the old download. Temporary
+anchors are removed and object URLs are released after the download starts.
+
+The [frontend regression receipt](../phase-12/intelligence-exports-frontend.json)
+records 250 passing tests. New cases verify exact downloaded bytes, format and
+filename selection, tenant/credential/cache headers, shared JSON/download session
+refresh, pending-request controls, cancellation on scope change, server errors
+without fake attachments, and both UAE/India country screen wiring. Typecheck,
+production build, generated API-type check and scoped lint passed. Full lint had
+zero errors and one existing unused-variable warning in uae-business-cases.tsx.
+No backend contract or dependency changes were needed for this increment. The
+earlier backend export/API receipts apply to the unchanged server implementation;
+these component tests do not replace complete application browser verification.
+The previously rejected local preview-server start was not retried, and no new
+application screenshots or full browser run are claimed for these controls.

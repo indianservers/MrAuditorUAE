@@ -16,6 +16,7 @@ import { useEventHistory } from "@/hooks/use-event-history";
 import { useScope } from "@/stores/workspace";
 import { Button, ErrorState, Status } from "@/components/ui/primitives";
 import { PageHeader } from "./shared";
+import { IntelligenceExports } from "./intelligence-exports";
 import { BankCarryforwardSource } from "./bank-carryforward-source";
 import { BankCashReview } from "./bank-cash-review";
 import { ScreeningCandidates } from "./screening-candidates";
@@ -1718,23 +1719,6 @@ export function CountryWorkflows({
     a.download = `${tableType}-headers.csv`;
     a.click();
     URL.revokeObjectURL(url);
-  }
-  async function exportFile() {
-    try {
-      const response = await fetch(
-        `/api/backend/${prefix}/events/${selected}/export?format=xlsx`,
-        { headers: { "X-Tenant-ID": tenant } },
-      );
-      if (!response.ok) throw new Error(`Export failed (${response.status})`);
-      const url = URL.createObjectURL(await response.blob());
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `country-workflow-${selected}.xlsx`;
-      a.click();
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      setLocalError(error as Error);
-    }
   }
   return (
     <div className="intelligence-workspace">
@@ -5048,7 +5032,13 @@ export function CountryWorkflows({
             <Status value={body.review_status} />
             <Status value={detail.data.freshness} />
             <span>{body.exception_count ?? 0} exceptions</span>
-            <Button onClick={exportFile}>Export XLSX</Button>
+            <IntelligenceExports
+              key={`${tenant}:${prefix}:${selected}`}
+              prefix={prefix}
+              eventId={selected}
+              tenant={tenant}
+              filename={`country-workflow-${selected}`}
+            />
           </div>
           {body.blocked && (
             <p role="alert">

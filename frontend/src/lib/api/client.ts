@@ -8,11 +8,11 @@ export class ApiError extends Error {
   }
 }
 let refreshing: Promise<Response> | undefined;
-export async function api<T>(
+export async function apiResponse(
   path: string,
   init: RequestInit = {},
   tenant?: string,
-): Promise<T> {
+): Promise<Response> {
   const headers = new Headers(init.headers);
   if (tenant) headers.set("X-Tenant-ID", tenant);
   if (
@@ -55,6 +55,14 @@ export async function api<T>(
       data.error?.request_id,
     );
   }
+  return response;
+}
+export async function api<T>(
+  path: string,
+  init: RequestInit = {},
+  tenant?: string,
+): Promise<T> {
+  const response = await apiResponse(path, init, tenant);
   return response.status === 204 ? (undefined as T) : response.json();
 }
 export function qs(values: Record<string, unknown>) {

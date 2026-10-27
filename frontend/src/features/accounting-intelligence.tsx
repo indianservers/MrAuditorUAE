@@ -22,6 +22,7 @@ import {
   type BankAmbiguity,
 } from "./bank-matching-candidates";
 import { CountryWorkflows } from "./country-workflows";
+import { IntelligenceExports } from "./intelligence-exports";
 import { PDFGridEditor, buildPDFGrid, emptyPDFGrid } from "./pdf-grid-editor";
 
 type Choice = { id: string; label: string; scan_status?: string };
@@ -161,7 +162,6 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
   const [pdfMode, setPDFMode] = useState(false);
   const [pdfGrid, setPDFGrid] = useState(emptyPDFGrid);
   const [localError, setLocalError] = useState<Error | null>(null);
-  const [downloadBusy, setDownloadBusy] = useState(false);
   const inputs = useAPI<{
     snapshots: Choice[];
     evidence: Choice[];
@@ -350,27 +350,6 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
       })
       .catch(() => null);
     if (result?.id) choose(result.id);
-  }
-  async function exportFile(format: string) {
-    setDownloadBusy(true);
-    setLocalError(null);
-    try {
-      const response = await fetch(
-        `/api/backend/${prefix}/events/${selected}/export?format=${format}`,
-        { headers: { "X-Tenant-ID": scope.tenant } },
-      );
-      if (!response.ok) throw new Error(`Export failed (${response.status})`);
-      const url = URL.createObjectURL(await response.blob());
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${area}-${selected}.${format}`;
-      link.click();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
-    } catch (error) {
-      setLocalError(error as Error);
-    } finally {
-      setDownloadBusy(false);
-    }
   }
   const sourceChoices = choices.filter(
     (r) => r.kind === "source-table" && r.freshness === "CURRENT",
@@ -1006,15 +985,13 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
               )}
               <Status value={body?.review_status} />
               <span>Version {detail.data.version}</span>
-              {["xlsx", "pdf", "docx"].map((f) => (
-                <Button
-                  disabled={downloadBusy}
-                  key={f}
-                  onClick={() => exportFile(f)}
-                >
-                  Export {f.toUpperCase()}
-                </Button>
-              ))}
+              <IntelligenceExports
+                key={`${scope.tenant}:${prefix}:${selected}`}
+                prefix={prefix}
+                eventId={selected}
+                tenant={scope.tenant}
+                filename={`${area}-${selected}`}
+              />
             </div>
             <p className="subtle">SHA-256: {detail.data.sha256}</p>
             {body?.fields && typeof body.fields === "object" ? (
