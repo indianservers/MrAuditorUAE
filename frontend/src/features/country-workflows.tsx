@@ -40,6 +40,7 @@ import { BankTransactionDates } from "./bank-transaction-dates";
 import { PayrollPostingLinks } from "./payroll-posting-links";
 import { InventoryEvidenceTable } from "./inventory-evidence-table";
 import { VATCompositionSource } from "./vat-composition-source";
+import { TurnoverLedgerSource } from "./turnover-ledger-source";
 import {
   PublishedBenefitSource,
   PublishedPayrollSource,
@@ -1915,6 +1916,16 @@ export function CountryWorkflows({
           onCreated={setSelected}
         />
       )}
+      {mode === "workflow-source" &&
+        ["AE", "IN"].includes(config.data?.country || "") && (
+          <TurnoverLedgerSource
+            key={`${eid}-${config.data?.country}`}
+            eid={eid}
+            country={config.data?.country || ""}
+            snapshots={inputs.data?.snapshots || []}
+            onCreated={setSelected}
+          />
+        )}
       <section className="main-panel" style={{ padding: 20 }}>
         <h2>
           {mode === "workflow-source" ? "Source controls" : "Workflow scope"}

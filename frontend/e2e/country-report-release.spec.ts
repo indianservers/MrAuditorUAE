@@ -345,6 +345,119 @@ for (const code of ["AE", "IN"] as const) {
     );
     expect(download.status()).toBe(200);
     expect((await download.body()).subarray(0, 2).toString()).toBe("PK");
+    // Reuse the same isolated country scope to exercise the committed GL source form.
+    const csv =
+      "Account Code,Account Name,Journal Number,Posting Date,Debit,Credit,Source ID,Opening,Manual,Narration\n400,Revenue,SALE,2026-06-15,0,100.20,T1,false,false,Sale\n100,Cash,SALE,2026-06-15,100.20,0,T2,false,false,Sale\n";
+    const imported = await page.request.post(
+      "/api/backend/accounting/imports",
+      {
+        headers: {
+          "X-Tenant-ID": identities.tenant_id,
+          Origin: process.env.AUDITOS_E2E_ORIGIN!,
+        },
+        multipart: {
+          options: JSON.stringify({
+            client_id: client.id,
+            entity_id: entity.id,
+            period_id: period.id,
+            currency: code === "AE" ? "AED" : "INR",
+            expected_rows: 2,
+            expected_debit: "100.20",
+            expected_credit: "100.20",
+            source_complete: true,
+          }),
+          file: {
+            name: "synthetic-turnover.csv",
+            mimeType: "text/csv",
+            buffer: Buffer.from(csv),
+          },
+        },
+      },
+    );
+    expect(imported.status(), await imported.text()).toBe(201);
+    const batch = await imported.json();
+    const validated = await post(
+      page.request,
+      `accounting/imports/${batch.id}/validate`,
+      {},
+      200,
+    );
+    expect(validated.status).toBe("validated");
+    await post(page.request, `accounting/imports/${batch.id}/commit`, {}, 200);
+    const details = await page.request.get(
+      `/api/backend/accounting/imports/${batch.id}`,
+      {
+        headers: { "X-Tenant-ID": identities.tenant_id },
+      },
+    );
+    expect(details.status()).toBe(200);
+    const snapshot = (await details.json()).snapshot_id;
+    await page.goto(`/intelligence/${engagement.id}/workflow-source`);
+    await page
+      .getByText("Prepare book turnover from committed GL", { exact: true })
+      .click();
+    await page
+      .getByRole("combobox", {
+        name: "Turnover committed snapshot",
+        exact: true,
+      })
+      .selectOption(snapshot);
+    const revenue = page.getByRole("listbox", {
+      name: "Turnover revenue accounts",
+      exact: true,
+    });
+    await expect(
+      revenue.getByRole("option", { name: "400 · Revenue", exact: true }),
+    ).toHaveCount(1);
+    await revenue.selectOption({ label: "400 · Revenue" });
+    for (const [name, value] of [
+      [
+        `Turnover registration (${code === "AE" ? "TRN" : "GSTIN"})`,
+        code === "AE" ? "100000000000001" : "27ABCDE1234F1Z5",
+      ],
+      ["Turnover period start", "2026-06-01"],
+      ["Turnover period end", "2026-06-30"],
+      [
+        `Independent signed book turnover (${code === "AE" ? "AED" : "INR"})`,
+        "100.20",
+      ],
+      [
+        "Revenue account and registration allocation assessment",
+        "SYNTHETIC explicit revenue account and registration allocation",
+      ],
+      ["Turnover book source title", "SYNTHETIC browser committed turnover"],
+    ])
+      await page.getByLabel(name, { exact: true }).fill(value);
+    const prepareBooks = page.getByRole("button", {
+      name: "Prepare turnover books",
+      exact: true,
+    });
+    await expect(prepareBooks).toBeDisabled();
+    await page
+      .getByLabel("Independent GL movement line count", { exact: true })
+      .fill("1");
+    const preparedResponse = page.waitForResponse(
+      (r) =>
+        r.url().endsWith("/turnover-ledger-source") &&
+        r.request().method() === "POST",
+    );
+    await prepareBooks.click();
+    const preparedBooks = await preparedResponse;
+    expect(preparedBooks.status(), await preparedBooks.text()).toBe(201);
+    const books = await preparedBooks.json();
+    expect(books.body.review_status).toBe("UNVERIFIED");
+    expect(books.body.allowed_source_roles).toEqual(["books"]);
+    expect(books.body.ledger_line_count).toBe(1);
+    const turnoverForm = page
+      .locator("details")
+      .filter({
+        has: page.getByText("Prepare book turnover from committed GL", {
+          exact: true,
+        }),
+      });
+    await turnoverForm.screenshot({
+      path: `${screenshots}/${code}-turnover-ledger.png`,
+    });
     await reviewerContext.close();
   });
 }

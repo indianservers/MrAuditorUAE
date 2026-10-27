@@ -3731,3 +3731,51 @@ receipts; complete country-law/form qualification remains open. The next inspect
 reuse gap is that turnover book populations still require a canonical manual
 source: the existing committed-GL reader can support a future purpose-bound book
 source with explicit account, period, registration, sign and control assessment.
+
+## Committed GL book turnover — 27 October 2026
+
+`POST /intelligence/engagements/{eid}/turnover-ledger-source` now reuses the
+existing authorized snapshot/account ledger reader for UAE and India book
+turnover. Select 1–100 distinct accounts in one active committed GL/journal
+snapshot, one registration and an explicit period within the engagement. The
+entity functional currency must already be AED/INR respectively. UAE TRN and
+India GSTIN checks validate syntax only; ownership and revenue classification
+remain explicit assessed selections.
+
+Credit-minus-debit movements retain debit reversals and original journal line,
+source record, account code, reference and posting date. Opening lines are
+excluded. Independent line-count and signed-amount controls must match exactly;
+there is no absolute-value conversion, rounding tolerance or inferred FX.
+Selections above 5,000 lines must be partitioned. Trial balance snapshots cannot
+establish turnover movements. Zero-line selections require explicit zero controls
+and a meaningful nil assessment; the retained source distinguishes its declared
+zero row from actual ledger lines.
+
+The source starts UNVERIFIED and is restricted to the books role of the turnover
+bridge. Importer and preparer provenance is retained: neither can independently
+approve it. The existing source/review/dependency infrastructure provides current
+snapshot/context validation and historical lineage. Independent scope, return and
+signed adjustment sources remain mandatory; this adapter cannot establish filed
+return evidence or complete statutory coverage.
+
+The source-preparation page provides country-specific registration/currency
+controls, snapshot and multiple-account selection, bounded account search,
+explicit period/count/amount inputs and nil assessment. A blank count cannot
+become an implicit zero. Changing snapshot or account search clears the selected
+accounts. A truncated account result is visibly disclosed.
+
+Local verification: 2,863 backend unit tests passed, five skipped; all 274 frontend
+tests passed, production Next build and TypeScript checks passed, application
+Ruff/format and focused backend mypy passed. The real-database regression includes
+both countries importing actual synthetic GL CSVs, excluding opening balances,
+retaining debit reversals/lineage, independent review and exact turnover matching,
+wrong-sign/count/out-of-period/unauthorized-account rejection, explicit nil,
+books-only role rejection and inherited importer/preparer review restrictions.
+Receipts are saved under `docs/phase-12/turnover-ledger-*.xml`.
+
+The existing hosted browser cases now also import a synthetic GL through the BFF,
+prepare turnover books through the actual UAE/India form, assert that blank counts
+block submission, and capture both forms. Browser execution/screenshots for this
+addition remain pending until the corresponding hosted job passes. No local
+preview-server start or relaxed review/coverage gate is introduced. Actual pilot
+inputs and independently checked client results are still awaited in `pilot-data`.

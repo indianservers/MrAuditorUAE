@@ -23,6 +23,7 @@ from app.modules.country_workflows.benefit_source import BenefitSourceInput
 from app.modules.country_workflows.contribution_source import ContributionSourceInput
 from app.modules.country_workflows.import_vat_source import ImportVATSourceInput
 from app.modules.country_workflows.payroll_source import PayrollSourceInput, PensionSourceInput
+from app.modules.country_workflows.turnover_ledger import TurnoverLedgerInput
 from app.modules.country_workflows.vat_composition import VATCompositionInput
 from app.modules.country_workflows.withholding_obligations import WithholdingObligationInput
 from app.modules.intelligence import jobs, service
@@ -111,6 +112,16 @@ async def withholding_obligation_source(
     eng = await service.scope(db, ctx, eid, "country-workflow", True)
     parent = await service.event(db, ctx, eid, identifier, True)
     return audit.serialize(await prepare(db, ctx, eng, parent, data, request.state.request_id))
+
+
+@router.post("/engagements/{eid}/turnover-ledger-source", status_code=201)
+async def turnover_ledger_source(
+    eid: uuid.UUID, data: TurnoverLedgerInput, db: DB, ctx: Actor, request: Request
+):
+    from app.modules.country_workflows.turnover_ledger import prepare
+
+    eng = await service.scope(db, ctx, eid, "workflow-ledger", True)
+    return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))
 
 
 @router.post("/engagements/{eid}/vat201-composition-source", status_code=201)
