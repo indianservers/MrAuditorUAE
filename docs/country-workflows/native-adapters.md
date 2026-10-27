@@ -3599,3 +3599,10 @@ findings, with no vulnerability exclusions. Promotion requires actual hosted
 build, capability and scan results; local Python/YAML checks do not prove Linux
 runtime compatibility. Docker and a Linux runtime are unavailable on this host.
 The full roadmap and production release remain unqualified while this test runs.
+
+The first hosted candidate build (job 122240462214) completed dependency and
+library bundling, then rejected copying a copyright directory over the base
+image's existing libgcc-s1 documentation symlink. Additional library copyrights
+now use /usr/share/auditos/licenses/<package>/copyright; Debian status metadata
+remains in status.d. Native capability and scan gates were not reached by that
+failed build, so no compatibility or security pass is inferred.

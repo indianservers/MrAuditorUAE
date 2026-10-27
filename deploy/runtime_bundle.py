@@ -59,7 +59,7 @@ def main():
         metadata.write_text(status, encoding="utf-8")
         copyright = Path("/usr/share/doc") / package / "copyright"
         if copyright.is_file():
-            target = root / copyright.relative_to("/")
+            target = root / "usr/share/auditos/licenses" / package / "copyright"
             target.parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(copyright, target)
         packages.append({"package": package, "libraries": sorted(set(copied))})
