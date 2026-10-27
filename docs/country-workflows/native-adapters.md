@@ -3708,3 +3708,26 @@ also remains live. No restart, cancellation, relaxed assertions or new local
 preview server is used to replace those pending results. The original broader
 roadmap remains unfinished, including real-client pilot evidence and independently
 qualified complete country-rule/form content.
+
+
+The final screenshot refinement completed successfully in hosted
+[job 122268842754](https://github.com/indianservers/MrAuditorUAE/actions/runs/40526906485/job/122268842754)
+on source 4962084: all three real BFF/browser tests passed in 17.8 seconds.
+The lengthy frontend/browser installation step completed without cancellation
+or restart. Artifact 12744189068 was retrieved and archive SHA-256 verified:
+e1c3eedbf5823acaf2fdcd937a0fe8a2d233a6e757343f5b7516614918f3f553.
+All six final PNGs were visually inspected: route country labels are correct,
+coverage-gap controls are disabled, the complete unsigned/unfiled disclaimer is
+unobscured, and approved retained coverage shows
+CURRENT_REVIEWED_SOURCES_RECHECKED with the declared narrative and legal-scope
+limitations readable. The screenshots are preserved under
+[screenshots/report-requirements](screenshots/report-requirements/).
+
+This completes browser/visual verification of these two synthetic declared
+communication report flows. It does not qualify all statutory clauses, legally
+complete form packs, source/calculation report content, real-client pilots or
+all 154 catalogue scenarios. Source/calculation report paths have separate API
+receipts; complete country-law/form qualification remains open. The next inspected
+reuse gap is that turnover book populations still require a canonical manual
+source: the existing committed-GL reader can support a future purpose-bound book
+source with explicit account, period, registration, sign and control assessment.
