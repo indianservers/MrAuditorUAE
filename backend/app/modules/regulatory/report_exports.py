@@ -82,7 +82,15 @@ def render(event, format):
                 "Operational report preset": pack["id"],
                 "Preset SHA-256": pack["sha256"],
                 "Preset source": pack["source_url"],
-                "Preset scope": "Operational layout only; not a complete filing schema or legal qualification",
+                "Preset source version": pack["source_version"],
+                "Preset source verification": pack.get(
+                    "source_status",
+                    "Operational reference only; not a complete filing schema or eligibility qualification",
+                ),
+                "Preset scope": pack.get(
+                    "scope_label",
+                    "Operational layout only; not a complete filing schema or legal qualification",
+                ),
             }
         )
     basis_by_key = {item["key"]: item.get("basis", "") for item in body.get("requirements", [])}

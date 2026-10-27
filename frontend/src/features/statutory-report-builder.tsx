@@ -98,10 +98,20 @@ function ReportBuilderForm() {
     items: {
       id: string;
       title: string;
+      category: string;
+      kind: string;
+      allow_not_applicable: boolean;
+      not_applicable_keys?: string[];
       requirements: ReportRequirement[];
       limitations: string[];
     }[];
   }>(`regulatory/engagements/${eid}/report-presets`, !!eid);
+  const availablePresets = (presets.data?.items || []).filter(
+    (p) => p.category === category,
+  );
+  const selectedPreset = availablePresets.find(
+    (p) => p.id === requirementsPack,
+  );
   const sources = useEventHistory<{
     id: string;
     kind: string;
@@ -252,14 +262,14 @@ function ReportBuilderForm() {
                 Load older sources and templates
               </Button>
             )}
-            {category === "vat" && !!presets.data?.items.length && (
+            {!!availablePresets.length && (
               <>
                 <label>
                   Operational report preset
                   <select
                     value={requirementsPack || ""}
                     onChange={(e) => {
-                      const preset = presets.data?.items.find(
+                      const preset = availablePresets.find(
                         (p) => p.id === e.target.value,
                       );
                       setRequirementsPack(preset?.id || null);
@@ -273,13 +283,21 @@ function ReportBuilderForm() {
                         old.map((b) => ({ ...b, requirement_keys: [] })),
                       );
                       if (preset) {
-                        setKind("reconciliation");
-                        setSourceKind("intelligence");
+                        setKind(
+                          preset.kind === "form26-index"
+                            ? "working_paper_reference"
+                            : "reconciliation",
+                        );
+                        setSourceKind(
+                          preset.kind === "form26-index"
+                            ? "record"
+                            : "intelligence",
+                        );
                       }
                     }}
                   >
                     <option value="">Manually declared requirements</option>
-                    {presets.data.items.map((p) => (
+                    {availablePresets.map((p) => (
                       <option key={p.id} value={p.id}>
                         {p.title}
                       </option>
@@ -288,15 +306,22 @@ function ReportBuilderForm() {
                 </label>
                 <p>
                   Changing preset resets requirement assessments and block
-                  mappings. Every preset box needs exact reviewed comparison
-                  evidence; nil is not missing or not applicable. This is an
-                  unsigned review report, not a complete filing schema or legal
-                  eligibility conclusion.
+                  mappings. All items still need explicit assessment and current
+                  independently reviewed sources.
                 </p>
+                {selectedPreset && (
+                  <ul>
+                    {selectedPreset.limitations.map((limit) => (
+                      <li key={limit}>{limit}</li>
+                    ))}
+                  </ul>
+                )}
               </>
             )}
             <ReportRequirementsEditor
               locked={!!requirementsPack}
+              allowNotApplicable={selectedPreset?.allow_not_applicable === true}
+              notApplicableKeys={selectedPreset?.not_applicable_keys}
               items={requirements}
               assessed={requirementsAssessed}
               basis={requirementsBasis}

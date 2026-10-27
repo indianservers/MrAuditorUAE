@@ -284,8 +284,94 @@ async def test_period_form_review_export_and_source_correction(
     assert metadata["Selected tax-audit form"] == form
     assert metadata["Tax period start"] == start and metadata["Tax period end"] == end
     book.close()
+    indexed_report = None
+    if modern:
+        catalogue = await c.get(prefix + "/report-presets", headers=h)
+        assert catalogue.status_code == 200, catalogue.text
+        pack = next(p for p in catalogue.json()["items"] if p["report_part"] == part)
+        assert len(pack["requirements"]) == 65
+        # Consolidated synthetic workpaper mappings exercise controls, not substantive legal coverage.
+        indexed = {
+            **data,
+            "requirements_pack": pack["id"],
+            "requirements": [{**r, "disposition": "REQUIRED"} for r in pack["requirements"]],
+            "requirements_basis": "Synthetic numbered-item mapping mechanics only; not substantive form completion",
+            "blocks": [
+                {
+                    "key": "index",
+                    "title": "Synthetic consolidated workpaper mapping",
+                    "kind": "working_paper_reference",
+                    "source_kind": "record",
+                    "source_id": paper["id"],
+                    "requirement_keys": [r["key"] for r in pack["requirements"]],
+                }
+            ],
+        }
+        next(r for r in indexed["requirements"] if r["key"] == "form26.schedule.quantities")[
+            "disposition"
+        ] = "NOT_APPLICABLE"
+        omitted = await c.post(
+            prefix + "/report-templates",
+            headers=h,
+            json={**indexed, "requirements": indexed["requirements"][:-1]},
+        )
+        assert omitted.status_code == 422
+        generic = await c.post(
+            prefix + "/report-templates",
+            headers=h,
+            json={
+                **indexed,
+                "blocks": [
+                    {
+                        **indexed["blocks"][0],
+                        "kind": "regulatory_checklist",
+                        "source_kind": "intelligence",
+                        "source_id": reviewed_case.json()["id"],
+                    }
+                ],
+            },
+        )
+        assert generic.status_code == 201, generic.text
+        assert (await decision(c, reviewer[0], eid, generic.json())).status_code == 409
+        prepared = await c.post(prefix + "/report-templates", headers=h, json=indexed)
+        assert prepared.status_code == 201, prepared.text
+        assert (await decision(c, h, eid, prepared.json())).status_code == 403
+        reviewed = await decision(c, reviewer[0], eid, prepared.json())
+        assert reviewed.status_code == 201, reviewed.text
+        output = await c.post(
+            prefix + "/reports",
+            headers=h,
+            json={
+                "template_id": reviewed.json()["id"],
+                "rationale": "Synthetic numbered-item evidence index mechanics only",
+            },
+        )
+        assert output.status_code == 201, output.text
+        indexed_report = output.json()
+        assert len(indexed_report["body"]["requirements_coverage"]["items"]) == 65
+        assert (
+            indexed_report["body"]["requirements_coverage"]["requirements_pack"]["sha256"]
+            == pack["sha256"]
+        )
+        assert not indexed_report["body"]["tax_form_content_qualified"]
+        export = await c.get(
+            f"/api/v1/intelligence/engagements/{eid}/events/{indexed_report['id']}/export?format=xlsx",
+            headers=h,
+        )
+        assert export.status_code == 200
+        index_book = load_workbook(io.BytesIO(export.content), read_only=True)
+        assert len(list(index_book["Requirements coverage"].values)) == 66
+        index_book.close()
     historical = deepcopy(saved["body"])
     await action(c, partner[0], base, paper, "reopen")
     stale = await c.get(endpoint, headers=h)
     assert stale.status_code == 200 and stale.json()["freshness"] == "STALE"
     assert stale.json()["body"] == historical
+    if indexed_report:
+        stale_index = await c.get(
+            f"/api/v1/intelligence/engagements/{eid}/events/{indexed_report['id']}", headers=h
+        )
+        assert (
+            stale_index.json()["freshness"] == "STALE"
+            and stale_index.json()["body"] == indexed_report["body"]
+        )

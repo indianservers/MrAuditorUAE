@@ -182,6 +182,9 @@ it("loads an unassessed operational preset, locks mandatory source coverage and 
       {
         id: "uae-vat201-review:aggregate-14/1",
         title: "VAT201 operational test preset",
+        category: "vat",
+        kind: "vat201-comparison",
+        allow_not_applicable: false,
         requirements: [1, 2].map((n) => ({
           key: `vat201.box.${n}`,
           title: `VAT201 Box ${n}`,
@@ -273,4 +276,76 @@ it("shows retained requirement gaps to reviewers and blocks approval without edi
       name: "Record independent template approval",
     }),
   ).toBeDisabled();
+});
+
+it("offers the India index only for tax audit and retains evidence for not-applicable items", () => {
+  state.presets = {
+    country: "IN",
+    items: [
+      {
+        id: "india-form26-index:A/1",
+        title: "Form 26 draft evidence index",
+        category: "india-tax-audit",
+        kind: "form26-index",
+        allow_not_applicable: true,
+        not_applicable_keys: ["form26.schedule.gst"],
+        limitations: ["Draft evidence index only"],
+        requirements: [
+          {
+            key: "form26.report.A",
+            title: "Report part A",
+            disposition: "UNASSESSED",
+            source_required: true,
+            basis: "Assess the retained report workpaper",
+          },
+          {
+            key: "form26.schedule.gst",
+            title: "GST schedule group",
+            disposition: "UNASSESSED",
+            source_required: true,
+            basis: "Assess the retained GST workpaper",
+          },
+        ],
+      },
+    ],
+  };
+  render(<StatutoryReportBuilder />);
+  fireEvent.change(screen.getByLabelText("Engagement"), {
+    target: { value: "one" },
+  });
+  fireEvent.change(screen.getByLabelText("Report category"), {
+    target: { value: "india-tax-audit" },
+  });
+  fireEvent.change(screen.getByLabelText("Operational report preset"), {
+    target: { value: "india-form26-index:A/1" },
+  });
+  const disposition = screen.getByLabelText("Requirement disposition 2");
+  expect(
+    within(screen.getByLabelText("Requirement disposition 1")).getByRole(
+      "option",
+      { name: "Not applicable with reviewed basis" },
+    ),
+  ).toBeDisabled();
+  expect(
+    within(disposition).getByRole("option", {
+      name: "Not applicable with reviewed basis",
+    }),
+  ).toBeEnabled();
+  fireEvent.change(disposition, { target: { value: "NOT_APPLICABLE" } });
+  expect(
+    screen.getByLabelText("Evidence/calculation source required for item 2"),
+  ).toBeChecked();
+  expect(
+    screen.getByLabelText("Evidence/calculation source required for item 2"),
+  ).toBeDisabled();
+  expect(screen.getByLabelText("Source type")).toHaveValue("record");
+  expect(screen.getByLabelText("Content type")).toHaveValue(
+    "working_paper_reference",
+  );
+  fireEvent.change(screen.getByLabelText("Report category"), {
+    target: { value: "vat" },
+  });
+  expect(
+    screen.queryByLabelText("Operational report preset"),
+  ).not.toBeInTheDocument();
 });

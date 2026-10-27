@@ -12,12 +12,21 @@ PREFIX = "uae-vat201-review:"
 
 
 def catalogue(country):
+    if country == "IN":
+        from app.modules.regulatory.form26_index import PREFIX as INDIA_PREFIX
+
+        return [manifest(INDIA_PREFIX + part + "/1") for part in ("A", "B")]
     if country != "AE":
         return []
     return [manifest(PREFIX + layout + "/1") for layout in LAYOUTS]
 
 
 def manifest(identifier):
+    from app.modules.regulatory.form26_index import PREFIX as INDIA_PREFIX
+    from app.modules.regulatory.form26_index import manifest as india_manifest
+
+    if identifier.startswith(INDIA_PREFIX):
+        return india_manifest(identifier)
     if not identifier.startswith(PREFIX) or not identifier.endswith("/1"):
         raise ValueError("Unknown operational report preset")
     layout = identifier[len(PREFIX) : -2]
@@ -27,6 +36,9 @@ def manifest(identifier):
         "id": identifier,
         "country": "AE",
         "category": "vat",
+        "kind": "vat201-comparison",
+        "allow_not_applicable": False,
+        "not_applicable_keys": [],
         "layout": layout,
         "title": "VAT201 reviewed comparison — " + str(LAYOUTS[layout]["label"]),
         "source_url": SOURCE,
@@ -59,12 +71,22 @@ def validate_config(config):
         return
     pack = manifest(config.requirements_pack)
     if config.category != pack["category"]:
-        raise ValueError("VAT201 review preset requires the VAT report category")
+        raise ValueError("Report category must match the selected operational preset")
     if {r.key for r in config.requirements} != {r["key"] for r in pack["requirements"]}:
-        raise ValueError("Retain every requirement of the selected VAT201 review preset")
-    if any(not r.source_required or r.disposition == "NOT_APPLICABLE" for r in config.requirements):
+        raise ValueError("Retain every requirement of the selected operational preset")
+    if pack["kind"] == "form26-index":
+        scope = config.tax_audit_scope
+        if scope is None or scope.form != "26" or scope.audit_report_part != pack["report_part"]:
+            raise ValueError(
+                "Form 26 index requires its matching assessed tax-period and report-part scope"
+            )
+    if any(
+        not r.source_required
+        or (r.disposition == "NOT_APPLICABLE" and r.key not in pack["not_applicable_keys"])
+        for r in config.requirements
+    ):
         raise ValueError(
-            "Every VAT201 preset box needs source evidence; nil boxes are not not-applicable"
+            "Every preset item needs source evidence; mandatory VAT201 boxes cannot be not-applicable"
         )
 
 

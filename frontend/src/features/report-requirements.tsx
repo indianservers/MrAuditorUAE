@@ -15,6 +15,8 @@ export function ReportRequirementsEditor({
   onAssessed,
   onBasis,
   locked = false,
+  allowNotApplicable = false,
+  notApplicableKeys,
 }: {
   items: ReportRequirement[];
   assessed: boolean;
@@ -23,6 +25,8 @@ export function ReportRequirementsEditor({
   onAssessed: (value: boolean) => void;
   onBasis: (value: string) => void;
   locked?: boolean;
+  allowNotApplicable?: boolean;
+  notApplicableKeys?: string[];
 }) {
   function change(index: number, field: Partial<ReportRequirement>) {
     onItems(
@@ -87,7 +91,15 @@ export function ReportRequirementsEditor({
             >
               <option value="UNASSESSED">Unassessed</option>
               <option value="REQUIRED">Required</option>
-              <option value="NOT_APPLICABLE" disabled={locked}>
+              <option
+                value="NOT_APPLICABLE"
+                disabled={
+                  locked &&
+                  (!allowNotApplicable ||
+                    (!!notApplicableKeys &&
+                      !notApplicableKeys.includes(item.key)))
+                }
+              >
                 Not applicable with reviewed basis
               </option>
             </select>

@@ -24,7 +24,13 @@ class ReportRequirement(Strict):
 def implementation_hash():
     root = Path(__file__).parent
     digest = hashlib.sha256(CONTRACT.encode())
-    for name in ("report_requirements.py", "reporting.py", "schemas.py", "report_packs.py"):
+    for name in (
+        "report_requirements.py",
+        "reporting.py",
+        "schemas.py",
+        "report_packs.py",
+        "form26_index.py",
+    ):
         digest.update(name.encode() + b"\0" + hashlib.sha256((root / name).read_bytes()).digest())
     return digest.hexdigest()
 
@@ -137,8 +143,12 @@ async def require_ready(db, ctx, eng, config):
     pack = manifest(config.requirements_pack) if config.requirements_pack else None
     if pack and (await resolved(db, ctx, eng))[0].country != pack["country"]:
         raise HTTPException(422, "Report preset is unavailable for this engagement country")
-    period = await db.get(FinancialPeriod, eng.period_id) if pack else None
-    if pack and len({block.source_id for block in config.blocks if block.requirement_keys}) != 1:
+    vat_pack = pack and pack["kind"] == "vat201-comparison"
+    period = await db.get(FinancialPeriod, eng.period_id) if vat_pack else None
+    if (
+        vat_pack
+        and len({block.source_id for block in config.blocks if block.requirement_keys}) != 1
+    ):
         raise HTTPException(409, "All VAT201 preset boxes must reference one reviewed comparison")
 
     result = coverage(config)
@@ -149,10 +159,15 @@ async def require_ready(db, ctx, eng, config):
         )
     for block in config.blocks:
         if block.source_kind == "intelligence":
+            if pack and pack["kind"] == "form26-index" and block.requirement_keys:
+                raise HTTPException(
+                    409,
+                    "Form 26 index items require current reviewed workpapers, not generic intelligence/checklist output",
+                )
             source = await intelligence.event(db, ctx, eng.id, block.source_id, True)
             if source.body.get("review_status") != "REVIEWED":
                 raise HTTPException(409, "Required report sources need current independent review")
-            if pack and block.requirement_keys:
+            if vat_pack and block.requirement_keys:
                 validate_source(pack, source.body, block.requirement_keys)
                 from datetime import date
 
@@ -168,11 +183,20 @@ async def require_ready(db, ctx, eng, config):
                         "VAT201 report period must be covered by the engagement financial period",
                     )
         elif block.source_kind == "record":
-            if pack and block.requirement_keys:
+            if vat_pack and block.requirement_keys:
                 raise HTTPException(
                     409, "VAT201 preset coverage requires the reviewed comparison result"
                 )
             source = await audit.get_record(db, ctx, eng.id, block.source_id, lock=False)
+            if (
+                pack
+                and pack["kind"] == "form26-index"
+                and block.requirement_keys
+                and source.kind != "working-papers"
+            ):
+                raise HTTPException(
+                    409, "Form 26 index coverage requires reviewed workpaper records"
+                )
             allowed = {"APPROVED", "LOCKED", "RESOLVED", "CLOSED"}
             if source.kind == "findings":
                 allowed.add("ACCEPTED_UNRESOLVED")

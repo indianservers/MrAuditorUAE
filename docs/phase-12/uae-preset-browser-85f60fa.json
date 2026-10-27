@@ -1,0 +1,17 @@
+{
+  "source_revision": "85f60fa1a9a6411b9127c8dc01d0878d6b2139b5",
+  "run_id": 40540575364,
+  "job_id": 122317534732,
+  "conclusion": "success",
+  "tests_passed": 3,
+  "duration_seconds": 21.1,
+  "artifact_id": 12752025101,
+  "artifact_zip_sha256": "4b4fe2791a65520cab910f99993e9b2af825708f176e1ca75726023c50ea3aeb",
+  "screenshot": {
+    "path": "docs/country-workflows/screenshots/report-presets/AE-vat201-report-preset-85f60fa.png",
+    "sha256": "c6e3d8a5e81523eff3c5780cb98fd2378d30bf8f16a8a6cc8ae6dcc69a58bf23",
+    "review": "Country/template, selected emirate preset, unassessed scope, locked references, required source and removal controls, and unsigned/unqualified description readable."
+  },
+  "scope": "Synthetic UAE preset selection/mandatory draft controls, India absence of UAE VAT preset, existing report/turnover and authentication smoke. Not full preset generation through browser or India Form 26 coverage.",
+  "job_url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40540575364/job/122317534732"
+}

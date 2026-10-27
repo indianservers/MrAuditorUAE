@@ -207,6 +207,49 @@ for (const code of ["AE", "IN"] as const) {
           exact: true,
         }),
       ).toHaveCount(0);
+      await page
+        .getByRole("combobox", { name: "Report category", exact: true })
+        .selectOption("india-tax-audit");
+      await page
+        .getByRole("combobox", {
+          name: "Operational report preset",
+          exact: true,
+        })
+        .selectOption("india-form26-index:A/1");
+      await expect(
+        page.getByLabel("Requirement reference 65", { exact: true }),
+      ).toHaveValue("form26.schedule.quantities");
+      await expect(
+        page.getByLabel("Requirement reference 65", { exact: true }),
+      ).toBeDisabled();
+      await expect(
+        page.getByLabel("Evidence/calculation source required for item 1", {
+          exact: true,
+        }),
+      ).toBeDisabled();
+      await expect(
+        page.getByRole("button", {
+          name: "Remove requirement 65",
+          exact: true,
+        }),
+      ).toBeDisabled();
+      await expect(
+        page.getByRole("button", {
+          name: "Save template version",
+          exact: true,
+        }),
+      ).toBeDisabled();
+      await page.setViewportSize({ width: 1440, height: 1600 });
+      await page
+        .getByRole("combobox", {
+          name: "Operational report preset",
+          exact: true,
+        })
+        .scrollIntoViewIfNeeded();
+      await page.screenshot({
+        path: `${screenshots}/IN-form26-evidence-index.png`,
+      });
+      await page.setViewportSize({ width: 1440, height: 1000 });
     }
     await page
       .getByRole("combobox", { name: "Report category", exact: true })

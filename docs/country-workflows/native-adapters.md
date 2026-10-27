@@ -3953,3 +3953,82 @@ actual two-source comparison, independent template review, generated XLSX
 metadata, wrong-layout rejection, source-withdrawal staleness and India rejection.
 These are synthetic operational checks, not a complete statutory rule/form pack
 or independent client/professional qualification.
+
+## India Form 26 numbered-item evidence index — 27 October 2026
+
+The country preset registry now supplies two India-only draft evidence indexes,
+for report Parts A and B. They reuse the existing assessed tax-period/form
+contract, retained report requirements, approved workpapers, independent review,
+generation/export and recursive staleness infrastructure. The UAE presets remain
+available only for UAE VAT reporting; India indexes appear only in the India
+tax-audit category.
+
+The [published 33-page Form 26](https://www.incometaxindia.gov.in/documents/20117/16172450/Form-No-26.pdf/6b6807ee-0a0e-ad6c-0c14-1064ff523fef)
+and [Rule 47](https://www.incometaxindia.gov.in/w/rule-47-5) were checked again.
+The index covers the selected report part, numbered particulars 1–8 in Part C,
+9–53 in Part D and eleven schedule groups: 65 requirements in total. It does not
+claim full subfield/calculation coverage, official form completion, signing,
+UDIN or filing. Fresh direct PDF archival returned HTTP 403 and page-image
+retrieval failed; the official indexed text was available for structural review.
+The manifest explicitly records pending original-source archival, visual and
+professional verification. No original PDF hash or complete legal qualification
+is fabricated, and no official opinion text is generated from this index.
+
+All 65 items start UNASSESSED and source-required. The selected report part,
+identity particulars and audit basis cannot be marked not-applicable. Other
+index items can retain an explicit, independently reviewed not-applicable
+assessment with current workpaper evidence; a missing source is never a nil or
+not-applicable decision. Omitting an indexed item/schedule or weakening its
+source requirement is rejected. Existing form/period logic rejects legacy
+3CA/3CB/3CD scope and mismatched report parts for these presets.
+
+Current independently reviewed workpaper records are required for indexed
+mappings. A generic applicability checklist or unrelated intelligence output
+cannot establish substantive clause evidence. The engine checks retained source
+status/freshness and mapping completeness; professional review must establish
+whether a mapped workpaper actually supports every subfield and conclusion.
+One consolidated workpaper may map multiple requirements without claiming that
+its contents were legally interpreted by software. Generated documents retain
+the manifest hash, tax period/part, source-version/verification status and
+index-only scope. Reopening a workpaper stales dependent templates and reports
+without altering their historical bodies. Statutory/form-content qualification
+remains false even when the structural index is covered.
+
+The report designer filters presets by both engagement country and category,
+sets workpaper-reference inputs for India, keeps mandatory references/source
+flags locked and permits evidenced not-applicable choices only for the allowed
+index items. Changing context clears earlier requirements/mappings. Its hosted
+smoke definition additionally selects the actual 65-item index, checks mandatory
+controls and draft blocking, and captures the initial form; that new browser
+execution remains pending its own hosted result.
+
+### Earlier UAE preset browser receipt
+
+[Hosted job 122317534732](https://github.com/indianservers/MrAuditorUAE/actions/runs/40540575364/job/122317534732)
+passed all three cases in 21.1 seconds on source
+`85f60fa1a9a6411b9127c8dc01d0878d6b2139b5`, including UAE emirate-preset selection,
+locked mandatory controls/draft blocking and absence of a UAE VAT preset for
+India. Existing report, turnover and BFF authentication/logout checks also passed.
+Artifact 12752025101 was retrieved after verifying archive SHA-256
+`4b4fe2791a65520cab910f99993e9b2af825708f176e1ca75726023c50ea3aeb`.
+The [UAE preset screenshot](screenshots/report-presets/AE-vat201-report-preset-85f60fa.png)
+was visually inspected: the selected layout, unassessed scope, locked source and
+removal controls, and draft/qualification limits are readable. The
+[source-pinned receipt](../phase-12/uae-preset-browser-85f60fa.json) records that
+scope; it does not prove the newer India index or full preset generation through
+the browser. Full backend verification remains separate, pending source-specific
+jobs; no missing job output is substituted by a new run or inferred pass.
+
+Local verification of the India index increment: 2,902 backend unit tests passed
+(five skipped), ten real-database report/form-scope regression cases passed,
+all 278 frontend tests passed, and production build, TypeScript, scoped ESLint,
+application Ruff/format, focused backend mypy and API contract checks passed.
+[Unit receipt](../phase-12/form26-index-backend.xml) and
+[API receipt](../phase-12/form26-index-api.xml) are retained. Eleven new focused
+index unit cases verify the 65-entry structure, report-part/legacy boundaries,
+omissions, source requirements and constrained not-applicable decisions. The
+modern-period API cases exercise both report parts, reject a generic checklist
+as clause support, generate/export all 65 structural mappings, and preserve
+source-withdrawal staleness and unqualified historical report content. The source
+workpapers and mappings are synthetic mechanics fixtures, not independent legal
+expected results or completed client tax-audit particulars.
