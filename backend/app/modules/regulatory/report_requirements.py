@@ -9,7 +9,7 @@ from pydantic import Field
 
 from app.modules.jurisdictions.profiles import Strict
 
-CONTRACT = "declared-report-requirements/1"
+CONTRACT = "declared-report-requirements/2"
 
 
 class ReportRequirement(Strict):
@@ -21,7 +21,11 @@ class ReportRequirement(Strict):
 
 
 def implementation_hash():
-    return hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+    root = Path(__file__).parent
+    digest = hashlib.sha256(CONTRACT.encode())
+    for name in ("report_requirements.py", "reporting.py", "schemas.py"):
+        digest.update(name.encode() + b"\0" + hashlib.sha256((root / name).read_bytes()).digest())
+    return digest.hexdigest()
 
 
 def coverage(config):
@@ -65,6 +69,35 @@ def coverage(config):
         "source_validation": "RECHECK_BEFORE_REVIEW_OR_GENERATION",
         "statutory_completeness_qualified": False,
     }
+
+
+def preparers(source, *, record=False):
+    """Inherit declared preparers, not the latest independent review event's creator."""
+    contributors = {str(value) for value in source.body.get("contributors", []) if value}
+    if record or not contributors:
+        if source.created_by is not None:
+            contributors.add(str(source.created_by))
+    return contributors
+
+
+async def record_preparers(db, ctx, source):
+    from sqlalchemy import select
+
+    from app.modules.audit_execution.models import AuditRevision
+
+    # Select only distinct preparer identities, not potentially large paper bodies.
+    authors = (
+        await db.scalars(
+            select(AuditRevision.snapshot["prepared_by"].astext)
+            .where(AuditRevision.tenant_id == ctx.tenant_id, AuditRevision.record_id == source.id)
+            .distinct()
+        )
+    ).all()
+    result = preparers(source, record=True)
+    result.update(str(author) for author in authors if author)
+    if source.prepared_by is not None:
+        result.add(str(source.prepared_by))
+    return result
 
 
 def current_contract(body):

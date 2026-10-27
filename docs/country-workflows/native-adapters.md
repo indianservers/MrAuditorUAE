@@ -3450,3 +3450,53 @@ browser-smoke jobs; full verification remains running at this observation. The
 backend container Trivy HIGH/CRITICAL gate failed (run 40511763381, job
 122215234613); the frontend container scan completed successfully. Container
 release security remains open and its severity gate is unchanged.
+
+
+### Report preparer provenance across template and generation
+
+Generated reports previously retained only the generating user as a contributor.
+A different user could generate a reviewed template and its original author could
+then attempt to approve their own authored content. The shared UAE/India report
+path now inherits template authors and declared source preparers. Template
+amendment preserves prior contributors; direct audit records also retain their
+original creator. India tax-audit applicability source preparers are inherited,
+and generated calculation blocks retain the calculation creator as well.
+
+Independent review event creators are not automatically treated as preparers
+when an event already declares its contributors. For older sources without a
+contributor population, the source creator is conservatively retained. The
+existing reviewer gate now refuses template/source authors and the generating
+user, while allowing an otherwise authorized independent reviewer. No author
+identities are accepted from client-supplied report payloads.
+
+The report requirement contract is now declared-report-requirements/2. Its
+implementation fingerprint includes report_requirements.py, reporting.py and
+schemas.py, so changes to preparation, generation and input validation invalidate
+prior current results. Earlier templates and reports remain readable history;
+amendment, independent review and regeneration are required for current use.
+
+API regression covers both UAE and India with distinct source/template authors,
+generator and independent reviewer. A source preparer cannot approve a template
+created by another user. Neither the original template preparer nor the later
+generator can approve the generated report. The independent reviewer can do so.
+Existing complete-source, historical/Unicode export and India tax-period tests
+remain in the regression. This strengthens preparation/review separation; it
+does not supply a signed opinion, statutory completeness or professional
+real-client qualification.
+
+Audit-record contributors additionally include the distinct prepared_by identities
+from all immutable revision snapshots, plus the current preparer and original
+creator. Only identities are selected, not complete historical paper bodies. The
+regression includes an earlier editor followed by a different final editor, then
+separate Audit Manager and Audit Partner source approvals. Source reviewers are
+not confused with the body editors retained in those snapshots.
+
+Verification: the [full unit suite](../phase-12/report-authorship-backend.xml)
+passed 2,838 tests with five skips before the final record-editor query was
+added. After that addition, [76 focused requirement, tax-scope and report-export
+tests](../phase-12/report-authorship-focused.xml) and the [final 13 API
+regressions](../phase-12/report-authorship-api.xml) passed. Scoped Ruff, mypy
+(two modules) and whitespace checks passed. No frontend code or API schema changed
+in this increment; no new full-app browser qualification is claimed. Catalogue
+coverage remains 154 authored synthetic scenarios, with real-client, complete
+country-rule/form qualification and release/security work still outstanding.

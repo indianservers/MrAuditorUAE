@@ -14,12 +14,14 @@ from app.modules.regulatory.report_requirements import (
     coverage,
     implementation_hash,
     parse_template,
+    preparers,
+    record_preparers,
     require_ready,
 )
 from app.modules.regulatory.tax_forms import SCOPE_CONTRACT, require_assessed_tax_scope
 
 
-async def tax_scope_receipt(db, ctx, eng, config):
+async def tax_scope_receipt(db, ctx, eng, config, contributors=None):
     if config.tax_audit_scope is None:
         return []
     period = await db.get(FinancialPeriod, eng.period_id) if eng.period_id else None
@@ -36,6 +38,8 @@ async def tax_scope_receipt(db, ctx, eng, config):
         require_assessed_tax_scope(config.tax_audit_scope, source.body)
     except ValueError as error:
         raise HTTPException(409, str(error)) from error
+    if contributors is not None:
+        contributors.update(preparers(source))
     return [intelligence.event_receipt(source)]
 
 
@@ -66,7 +70,8 @@ async def template(db, ctx, eng, data, request_id):
             )
     if data.category.startswith("uae-") and binding.country != "AE":
         raise HTTPException(422, "UAE report template requires the approved UAE engagement context")
-    dependencies = await tax_scope_receipt(db, ctx, eng, data)
+    contributors = {str(ctx.user_id)}
+    dependencies = await tax_scope_receipt(db, ctx, eng, data, contributors)
     for block in data.blocks:
         if block.source_kind == "intelligence":
             source = await intelligence.event(db, ctx, eng.id, block.source_id, True)
@@ -75,13 +80,17 @@ async def template(db, ctx, eng, data, request_id):
                     422,
                     "Choose underlying source results; nested report/template content is not a calculation source",
                 )
+            contributors.update(preparers(source))
             dependencies.append(intelligence.event_receipt(source))
         elif block.source_kind == "record":
             source = await audit.get_record(db, ctx, eng.id, block.source_id, lock=False)
             if source.status == "ARCHIVED":
                 raise HTTPException(409, "Archived sources cannot be placed in a report")
+            contributors.update(await record_preparers(db, ctx, source))
             dependencies.append({"type": "record", "id": str(source.id), "version": source.version})
     prior = await intelligence.event(db, ctx, eng.id, data.prior_id) if data.prior_id else None
+    if prior:
+        contributors.update(preparers(prior))
     if not prior and data.expected_version != 0:
         raise HTTPException(409, "New template must start with version zero")
     if prior and (prior.kind != "report-template" or prior.version != data.expected_version):
@@ -94,9 +103,7 @@ async def template(db, ctx, eng, data, request_id):
         {
             **data.model_dump(mode="json", exclude={"prior_id", "expected_version"}),
             "review_status": "UNVERIFIED",
-            "contributors": sorted(
-                {str(ctx.user_id), *(prior.body.get("contributors", []) if prior else [])}
-            ),
+            "contributors": sorted(contributors),
             "document_status": "DRAFT",
             "report_requirements_contract": CONTRACT,
             "report_requirements_implementation": implementation_hash(),
@@ -123,7 +130,8 @@ async def generate(db, ctx, eng, data, request_id):
         raise HTTPException(409, "Current independently reviewed template required")
     config = parse_template(stored.body)
     requirements_coverage = await require_ready(db, ctx, eng, config)
-    scope_dependencies = await tax_scope_receipt(db, ctx, eng, config)
+    contributors = {str(ctx.user_id), *preparers(stored)}
+    scope_dependencies = await tax_scope_receipt(db, ctx, eng, config, contributors)
     blocks, dependencies = [], [intelligence.event_receipt(stored), *scope_dependencies]
     for index, block in enumerate(config.blocks, 1):
         source_body = None
@@ -132,6 +140,7 @@ async def generate(db, ctx, eng, data, request_id):
             source = await intelligence.event(db, ctx, eng.id, block.source_id, True)
             if source.body.get("review_status") != "REVIEWED":
                 raise HTTPException(409, "Report input result is not independently reviewed")
+            contributors.update(preparers(source))
             dependencies.append(intelligence.event_receipt(source))
             source_body = source.body
             provenance = {"id": str(source.id), "version": source.version, "sha256": source.sha256}
@@ -144,6 +153,7 @@ async def generate(db, ctx, eng, data, request_id):
             from app.modules.lineage.working_papers import require_current
 
             await require_current(db, ctx, source)
+            contributors.update(await record_preparers(db, ctx, source))
             dependencies.append({"type": "record", "id": str(source.id), "version": source.version})
             source_body = source.body
             provenance = {"id": str(source.id), "version": source.version, "status": source.status}
@@ -161,6 +171,8 @@ async def generate(db, ctx, eng, data, request_id):
                     )
                 if not await check(db, ctx, eng.id, calculated):
                     raise HTTPException(409, "Calculation dependencies changed")
+                if calculated.created_by is not None:
+                    contributors.add(str(calculated.created_by))
                 source_body = calculated.results
                 provenance.update(
                     calculation_id=str(calculated.id), calculation_sha256=calculated.sha256
@@ -207,7 +219,7 @@ async def generate(db, ctx, eng, data, request_id):
             "rationale": data.rationale,
             "document_status": "DRAFT — NOT SIGNED OR FILED",
             "review_status": "UNVERIFIED",
-            "contributors": [str(ctx.user_id)],
+            "contributors": sorted(contributors),
             "missing_disclosures_fabricated": False,
             **(
                 {

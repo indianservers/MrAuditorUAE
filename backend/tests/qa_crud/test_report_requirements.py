@@ -8,7 +8,7 @@ import pytest
 from openpyxl import load_workbook
 
 from tests.integration.test_platform import environment as environment
-from tests.phase4.test_workflows import actor, create, grant, setup
+from tests.phase4.test_workflows import action, actor, create, grant, setup
 from tests.qa_crud.report_requirement_fixtures import declared_requirements
 from tests.qa_crud.test_country_workflows import decision, double_boundaries
 from tests.qa_crud.test_india_ecr_source import india_context
@@ -29,6 +29,8 @@ async def test_required_items_need_assessment_mapping_and_reviewed_sources(
         h, eid, base = await india_context(c)
     reviewer = await actor(h, "Firm Administrator", "requirements-reviewer")
     await grant(c, h, base, reviewer)
+    generator = await actor(h, "Firm Administrator", "requirements-generator")
+    await grant(c, h, base, generator)
     source, _, _ = await retained_allocations(c, h, eid, reviewer, country)
     prefix = f"/api/v1/regulatory/engagements/{eid}"
     data = {
@@ -95,6 +97,39 @@ async def test_required_items_need_assessment_mapping_and_reviewed_sources(
     raw["blocks"][0].update(source_kind="record", source_id=paper["id"])
     unreviewed = await save(raw)
     assert (await decision(c, reviewer[0], eid, unreviewed)).status_code == 409
+    editor = await actor(h, "Firm Administrator", "requirements-older-editor")
+    await grant(c, h, base, editor)
+    for who in (editor, generator):
+        updated = await c.patch(
+            base + "/records/" + paper["id"],
+            headers=who[0],
+            json={
+                "version": paper["version"],
+                "reference": paper["reference"],
+                "title": paper["title"],
+                "body": {**paper["body"], "conclusion": "Synthetic material edit by " + who[1]},
+            },
+        )
+        assert updated.status_code == 200, updated.text
+        paper = updated.json()
+    paper = await action(c, generator[0], base, paper, "submit")
+    manager = await actor(h, "Audit Manager", "requirements-source-manager")
+    partner = await actor(h, "Audit Partner", "requirements-source-partner")
+    for who in (manager, partner):
+        await grant(c, h, base, who)
+        paper = await action(c, who[0], base, paper, "approve")
+    record_data = deepcopy(data)
+    record_data["blocks"][0].update(source_kind="record", source_id=paper["id"])
+    record_template = await save(record_data)
+    # Include the earlier editor, not merely the record's creator and latest preparer.
+    assert (await decision(c, editor[0], eid, record_template)).status_code == 403
+    assert (await decision(c, generator[0], eid, record_template)).status_code == 403
+    assert (await decision(c, reviewer[0], eid, record_template)).status_code == 201
+    alternative = await c.post(prefix + "/report-templates", headers=generator[0], json=data)
+    assert alternative.status_code == 201, alternative.text
+    # The report author is different, but the retained source preparer cannot review.
+    assert (await decision(c, h, eid, alternative.json())).status_code == 403
+    assert (await decision(c, reviewer[0], eid, alternative.json())).status_code == 201
     template = await save(data)
     assert (await decision(c, h, eid, template)).status_code == 403
     reviewed = await decision(c, reviewer[0], eid, template)
@@ -105,7 +140,7 @@ async def test_required_items_need_assessment_mapping_and_reviewed_sources(
     )
     generated = await c.post(
         prefix + "/reports",
-        headers=h,
+        headers=generator[0],
         json={
             "template_id": reviewed.json()["id"],
             "rationale": "Synthetic declared scope and sources rechecked",
@@ -113,6 +148,11 @@ async def test_required_items_need_assessment_mapping_and_reviewed_sources(
     )
     assert generated.status_code == 201, generated.text
     saved = generated.json()
+    assert set(reviewed.json()["body"]["contributors"]) <= set(saved["body"]["contributors"])
+    assert (await decision(c, h, eid, saved)).status_code == 403
+    assert (await decision(c, generator[0], eid, saved)).status_code == 403
+    report_review = await decision(c, reviewer[0], eid, saved)
+    assert report_review.status_code == 201, report_review.text
     assert saved["body"]["requirements_coverage"]["complete"]
     assert saved["body"]["requirements_coverage"]["statutory_completeness_qualified"] is False
     assert saved["body"]["blocks"][0]["requirement_keys"] == ["source"]

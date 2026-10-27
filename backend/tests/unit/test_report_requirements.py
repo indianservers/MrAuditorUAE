@@ -1,3 +1,4 @@
+import uuid
 from copy import deepcopy
 
 import pytest
@@ -132,3 +133,59 @@ def test_legacy_or_changed_implementation_is_stale_without_rewriting_history():
     assert current_contract(body)
     body["report_requirements_implementation"] = "outdated"
     assert not current_contract(body)
+
+
+@pytest.mark.parametrize("record", [False, True])
+def test_report_preparers_preserve_authors_without_conflating_event_reviewer(record):
+    from types import SimpleNamespace
+
+    from app.modules.regulatory.report_requirements import preparers
+
+    source = SimpleNamespace(
+        body={"contributors": ["source-author", "source-author"]}, created_by="latest-creator"
+    )
+    expected = {"source-author", "latest-creator"} if record else {"source-author"}
+    assert preparers(source, record=record) == expected
+    source.body = {}
+    assert preparers(source, record=record) == {"latest-creator"}
+
+
+def test_old_requirements_contract_does_not_preserve_incomplete_author_provenance():
+    body = {
+        "report_requirements_contract": "declared-report-requirements/1",
+        "report_requirements_implementation": implementation_hash(),
+    }
+    assert not current_contract(body)
+
+
+@pytest.mark.parametrize("changed", ["report_requirements.py", "reporting.py", "schemas.py"])
+def test_implementation_contract_tracks_all_report_semantics(monkeypatch, changed):
+    from pathlib import Path
+
+    original = Path.read_bytes
+    before = implementation_hash()
+    monkeypatch.setattr(
+        Path,
+        "read_bytes",
+        lambda path: original(path) + (b" changed" if path.name == changed else b""),
+    )
+    assert implementation_hash() != before
+
+
+@pytest.mark.asyncio
+async def test_audit_record_preparers_include_all_immutable_editor_snapshots():
+    from types import SimpleNamespace
+    from unittest.mock import AsyncMock, Mock
+
+    from app.modules.regulatory.report_requirements import record_preparers
+
+    db = SimpleNamespace(
+        scalars=AsyncMock(
+            return_value=Mock(all=Mock(return_value=["older-editor", "latest-editor", None]))
+        )
+    )
+    source = SimpleNamespace(
+        id=uuid.uuid4(), body={}, created_by="original-author", prepared_by="latest-editor"
+    )
+    result = await record_preparers(db, SimpleNamespace(tenant_id=uuid.uuid4()), source)
+    assert result == {"original-author", "older-editor", "latest-editor"}
