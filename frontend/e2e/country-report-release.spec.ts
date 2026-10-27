@@ -186,6 +186,11 @@ for (const code of ["AE", "IN"] as const) {
         name: "Record independent template approval",
       }),
     ).toBeDisabled();
+    if (
+      await page.getByRole("button", { name: "Dismiss notification" }).count()
+    ) {
+      await page.getByRole("button", { name: "Dismiss notification" }).click();
+    }
     await page
       .getByRole("heading", { name: "Review and controlled generation" })
       .locator("..")
@@ -270,9 +275,6 @@ for (const code of ["AE", "IN"] as const) {
     ).toBeVisible();
     await coverage.locator("summary").click();
     await expect(coverage.getByText(/No statutory opinion/)).toBeVisible();
-    await coverage.screenshot({
-      path: `${screenshots}/${code}-reviewed-coverage.png`,
-    });
     await reviewer
       .getByLabel("Template / review rationale")
       .fill("SYNTHETIC independent scope and authored content review");
@@ -285,6 +287,26 @@ for (const code of ["AE", "IN"] as const) {
     const approval = await approved;
     expect(approval.status()).toBe(201);
     const reviewed = await approval.json();
+    await expect(
+      coverage.getByText(/CURRENT_REVIEWED_SOURCES_RECHECKED/),
+    ).toBeVisible();
+    if ((await coverage.locator("details").getAttribute("open")) === null) {
+      await coverage.locator("summary").click();
+    }
+    await expect(coverage.getByText(/No statutory opinion/)).toBeVisible();
+    if (
+      await reviewer
+        .getByRole("button", { name: "Dismiss notification" })
+        .count()
+    ) {
+      await reviewer
+        .getByRole("button", { name: "Dismiss notification" })
+        .click();
+    }
+    await coverage.screenshot({
+      path: `${screenshots}/${code}-reviewed-coverage.png`,
+    });
+
     await page.reload();
     await page
       .getByRole("combobox", { name: "Engagement", exact: true })

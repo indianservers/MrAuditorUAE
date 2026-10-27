@@ -3674,3 +3674,17 @@ on a wrapped select also considers its option text, while the accessible
 combobox name is Engagement. The smoke test now uses exact combobox-role
 selectors for engagement, category, template and requirement disposition. This
 changes the test interaction, not application authorization or report rules.
+
+
+The corrected hosted [browser job 122262052673](https://github.com/indianservers/MrAuditorUAE/actions/runs/40525003438/job/122262052673)
+passed all three cases in 16 seconds: UAE declared report review/generation,
+India declared report review/generation and existing BFF authentication/logout.
+Artifact 12743472202 (ZIP SHA-256
+2e9196be0a347f787f06789cf1b0952a6745213436d93f3a59b12d600192ff43)
+was retrieved and all six PNGs visually inspected. Route country labels, covered
+rows, narrative disclaimers and disabled gap controls were readable. A temporary
+success toast covered part of the gap footer; the capture now dismisses that
+notification. The reviewer screenshot is also taken after independent approval
+and a visible CURRENT_REVIEWED_SOURCES_RECHECKED status, with the retained block
+open. These capture refinements require a new hosted result before claiming the
+final images; no financial or review gate is relaxed.
