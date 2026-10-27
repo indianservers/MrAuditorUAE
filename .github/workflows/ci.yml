@@ -132,8 +132,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - run: docker build -f deploy/backend.Dockerfile -t auditos-backend:ci .
+        id: backend_image
       - run: docker build -t auditos-frontend:ci frontend
+      - name: Exercise offline document and ML capabilities as nonroot
+        run: docker run --rm --network none --read-only --tmpfs /tmp:rw,noexec,nosuid,size=512m --cap-drop ALL --security-opt no-new-privileges --memory=4g --cpus=2 auditos-backend:ci /srv/backend/.venv/bin/python /srv/backend/runtime_smoke.py
       - name: Install checksum-verified Trivy 0.76.1
+        if: ${{ !cancelled() && steps.backend_image.outcome == 'success' }}
         id: trivy
         shell: bash
         run: |
@@ -145,6 +149,7 @@ jobs:
           "$RUNNER_TEMP/trivy-bin/trivy" --version
           echo "$RUNNER_TEMP/trivy-bin" >> "$GITHUB_PATH"
       - name: Scan backend image
+        if: ${{ !cancelled() && steps.trivy.outcome == 'success' }}
         run: trivy image --severity CRITICAL,HIGH --exit-code 1 --ignore-unfixed=false --format json --output backend-image-audit.json auditos-backend:ci
       - name: Scan frontend image
         if: ${{ !cancelled() && steps.trivy.outcome == 'success' }}
@@ -211,35 +216,3 @@ jobs:
           exit 1
       - run: npx playwright test --config playwright.smoke.config.ts
         working-directory: frontend
-
-
-  minimal-runtime:
-    runs-on: ubuntu-latest
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@v4
-      - name: Build candidate Debian 13 runtime
-        id: candidate
-        run: docker build --target minimal-runtime -f deploy/backend.Dockerfile -t auditos-backend-minimal:ci .
-      - name: Exercise offline document and ML capabilities as nonroot
-        run: docker run --rm --network none --read-only --tmpfs /tmp:rw,noexec,nosuid,size=512m --cap-drop ALL --security-opt no-new-privileges --memory=4g --cpus=2 auditos-backend-minimal:ci /srv/backend/.venv/bin/python /srv/backend/runtime_smoke.py
-      - name: Install checksum-verified Trivy 0.76.1
-        if: ${{ !cancelled() && steps.candidate.outcome == 'success' }}
-        id: trivy
-        shell: bash
-        run: |
-          archive="$RUNNER_TEMP/trivy_0.76.1_Linux-64bit.tar.gz"
-          curl --fail --location --connect-timeout 15 --max-time 120 --retry 3 https://github.com/aquasecurity/trivy/releases/download/v0.76.1/trivy_0.76.1_Linux-64bit.tar.gz --output "$archive"
-          echo "c7cbe3137fb8a48a17574bede3dd6beb16742d1e9772929940fc90082c39d9c0  $archive" | sha256sum --check --strict
-          mkdir -p "$RUNNER_TEMP/trivy-bin"
-          tar -xzf "$archive" -C "$RUNNER_TEMP/trivy-bin" trivy
-          "$RUNNER_TEMP/trivy-bin/trivy" --version
-          echo "$RUNNER_TEMP/trivy-bin" >> "$GITHUB_PATH"
-      - name: Scan candidate runtime without exclusions
-        if: ${{ !cancelled() && steps.trivy.outcome == 'success' }}
-        run: trivy image --severity CRITICAL,HIGH --exit-code 1 --ignore-unfixed=false --format json --output minimal-runtime-image-audit.json auditos-backend-minimal:ci
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: minimal-runtime-evidence
-          path: minimal-runtime-image-audit.json

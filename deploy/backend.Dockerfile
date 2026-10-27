@@ -25,7 +25,7 @@ HEALTHCHECK --interval=30s --timeout=10s --retries=3 CMD ["python","-c","import 
 CMD ["uvicorn","app.main:app","--host","0.0.0.0","--port","8000","--no-access-log"]
 
 
-# Candidate target: default runtime remains unchanged until CI qualifies it.
+# Debian 13 runtime qualified by offline native/ML checks and image scanning.
 FROM runtime-build AS minimal-assets
 USER root
 RUN apt-get update && apt-get upgrade -y && apt-get install -y --no-install-recommends libbz2-1.0 libexpat1 libffi8 libgcc-s1 libgomp1 liblzma5 libsqlite3-0 libssl3t64 libstdc++6 libzstd1 zlib1g && rm -rf /var/lib/apt/lists/*
@@ -46,4 +46,4 @@ ENV PATH="/srv/backend/.venv/bin:/usr/local/bin:/usr/bin:/bin" LD_LIBRARY_PATH="
 HEALTHCHECK --interval=30s --timeout=10s --retries=3 CMD ["python","-c","import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health/ready')"]
 CMD ["/srv/backend/.venv/bin/uvicorn","app.main:app","--host","0.0.0.0","--port","8000","--no-access-log"]
 
-FROM runtime-build AS runtime
+FROM minimal-runtime AS runtime

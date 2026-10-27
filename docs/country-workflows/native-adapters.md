@@ -3613,3 +3613,26 @@ the required database URL. The script now supplies unreachable loopback test
 URLs without making database/Redis connections; Docker networking remains off.
 The candidate scanner now runs independently after a successful build even if
 the capability step fails, while either failure still fails the job.
+
+
+The corrected candidate passed hosted [job 122243335678](https://github.com/indianservers/MrAuditorUAE/actions/runs/40519761329/job/122243335678)
+on source 895f189: image build, all offline capability assertions and the unchanged
+HIGH/CRITICAL scanner gate. Trivy recognized Debian 13.7, 20 distribution packages
+and three language-specific files. The retained scan contains zero HIGH/CRITICAL
+findings; this does not claim zero findings at lower severities or a penetration
+test. Its [raw report](../phase-12/minimal-runtime-image-audit-895f189.json) was
+retrieved from artifact 12740573685 and checked against the artifact ZIP SHA-256
+fac874fac02f40e9633933b58bdb65640cda41d0cf1a8c5444d28bece2b00a86.
+
+The tested minimal-runtime target is now the default backend image target. The
+same offline capability command is part of the ordinary containers job; the
+one-off candidate job has been removed. Capability and scan failures independently
+fail the job. No application financial formulas, legal rules, dependency lockfile
+or severity exclusions changed. The runtime retains UID/GID 10001 and documented
+health/migration/worker command paths. OS package-management payloads are omitted;
+Python environment tooling remains in the copied interpreter environment.
+
+The pinned base and additional-library package metadata remain scanner-visible.
+The promoted default target still needs its own hosted result. Broader real-client,
+professional, deployment/account/backup and release gates are not established by
+this image-level capability and vulnerability result.
