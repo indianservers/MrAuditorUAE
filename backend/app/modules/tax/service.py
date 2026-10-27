@@ -71,6 +71,22 @@ async def evidence(db, ctx, eid, rid):
     return obj
 
 
+async def nonresident_audit_source(db, ctx, eid, profile):
+    scoped = profile.nonresident_audit_revenue
+    if scoped is None:
+        return
+    source = await evidence(db, ctx, eid, scoped.evidence_id)
+    if source.kind != "working-papers":
+        raise HTTPException(422, "Select a reviewed nonresident revenue scope working paper")
+    from app.modules.lineage.working_papers import require_current
+
+    await require_current(db, ctx, source)
+    try:
+        scoped.verify_body(source.body)
+    except ValueError as error:
+        raise HTTPException(422, str(error)) from error
+
+
 async def financial_source(db, ctx, eid, rid):
     result = await ifrs.run(db, ctx, eid, rid)
     if result.kind != "financials" or not await ifrs.current_dependencies(db, ctx, eid, result):
@@ -207,6 +223,7 @@ async def validate_body(db, ctx, eng, kind, data, record_id=None):
             )
         if data.audited_financials_evidence_id:
             await evidence(db, ctx, eng.id, data.audited_financials_evidence_id)
+        await nonresident_audit_source(db, ctx, eng.id, data)
     if hasattr(data, "profile_id"):
         obj = await record(db, ctx, eng.id, data.profile_id, "profile")
         profile = s.TaxProfile.model_validate(clean(obj.body))
@@ -562,6 +579,7 @@ async def save_run(db, ctx, eid, kind, inputs, deps, results, record_id=None):
 async def profile_inputs(db, ctx, eid, pid):
     obj = await record(db, ctx, eid, pid, "profile", True)
     profile = s.TaxProfile.model_validate(clean(obj.body))
+    await nonresident_audit_source(db, ctx, eid, profile)
     financial, deps = await financial_source(db, ctx, eid, profile.financial_run_id)
     deps.extend(await evidence_dependencies(db, ctx, eid, [obj]))
     rules = {}

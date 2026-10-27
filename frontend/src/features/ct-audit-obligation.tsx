@@ -16,6 +16,11 @@ export function CTAuditObligationNotice({
         declared_required: boolean;
         evidence_record_id: string | null;
         issues: string[];
+        nonresident_revenue_scope?: {
+          evidence_id: string;
+          assessment: string;
+          population_complete: boolean;
+        } | null;
       }
     | undefined;
   if (!value) return null;
@@ -43,6 +48,17 @@ export function CTAuditObligationNotice({
         <dt>Supporting reviewed record</dt>
         <dd>{value.evidence_record_id || "Not supplied"}</dd>
       </dl>
+      {value.nonresident_revenue_scope && (
+        <p>
+          Retained UAE PE/nexus revenue scope:{" "}
+          {value.nonresident_revenue_scope.evidence_id}.{" "}
+          {value.nonresident_revenue_scope.assessment} Population:{" "}
+          {value.nonresident_revenue_scope.population_complete
+            ? "assessed complete"
+            : "incomplete"}
+          .
+        </p>
+      )}
       {value.issues.length > 0 && (
         <ul>
           {value.issues.map((issue) => (

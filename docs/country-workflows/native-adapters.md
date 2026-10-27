@@ -3226,3 +3226,63 @@ passed. ESLint passed with the pre-existing unused-variable warning. No new
 full-app browser or screenshot qualification is claimed. Authored scenarios
 remain 154 synthetic cases. The broader official-form content, independent legal
 review, real-client, external-provider and release/security gates remain open.
+
+
+### UAE nonresident PE/nexus audit-revenue scope (27 October 2026)
+
+Nonresident and PE profiles can now adopt separately reviewed UAE PE/nexus
+revenue for the CT audit-documentation threshold under MD84/2025 article 2(4).
+The optional source contract requires AED, the exact profile tax period, explicit
+PE/nexus scope, a strict Boolean completeness decision and a meaningful assessment.
+The assessed amount, currency, dates, scope, completeness and assessment must
+agree to an authorized current approved/locked working-paper object. Boolean
+coercion, floating-point source amounts, unsafe source paths, other record kinds,
+resident profiles, historical periods and unrelated tax periods are rejected.
+Amounts use exact Decimal comparison; quoted decimal scale differences do not
+change numeric value.
+
+A complete scoped amount of zero is retained as zero. An incomplete population,
+even with zero supplied, remains unresolved with no threshold amount inferred.
+Worldwide/profile revenue is not substituted. At exactly AED50m no threshold
+obligation is inferred; the first supported precision increment above it creates
+the CT documentation requirement. A required declaration/document cannot be
+silenced by a false profile flag. This scope selects only the documentation
+threshold; it does not establish nonresident taxable income, PE/nexus legal
+existence, complete tax treatment, other audit requirements or filing eligibility.
+Those remain independently assessed profile/source matters.
+
+The profile editor presents reviewed papers and their named financial tables,
+including pagination and retained choices outside the current page. Adopting a
+table binds its actual source location without asking users to type a source
+path. It preserves explicit zero/incomplete values and blocks unreviewed choices
+and string Booleans. Changing the adopted table retains the selected paper.
+The result displays the retained scope, source and completeness assessment;
+existing complete exports include that assessment object. Source validation runs
+on profile save and again before calculations. The source is a direct dependency;
+reopening it makes the result stale, preserves historical results and blocks
+new computation. Audit-obligation contract version 2 and CT/QFZP implementation
+fingerprints include the new source-binding code, requiring older runs to be
+regenerated before reuse.
+
+Verification: [2,791 backend unit tests](../phase-12/nonresident-audit-backend.xml)
+passed with five existing skips and two warnings. The
+[16-case API regression](../phase-12/nonresident-audit-api.xml) passed the four
+new population/threshold cases, preceding audit-obligation cases and the complete
+phase6 CT workflows. Every new source case rejects unreviewed support, different
+amounts, unrelated records and periods; it retains source dependencies and
+becomes stale after reopening. All 264 frontend tests passed with two workers.
+The initial run during overlapping local jobs hit five-second timeouts in the
+existing matching-candidate and inventory-pagination tests; the complete rerun
+retained the same assertions/timeouts. TypeScript, production build, Ruff and tax
+mypy (12 files) passed; ESLint retained its existing unused-variable warning.
+No full-app browser or real-client qualification is claimed. Authored catalogue
+coverage remains 154 synthetic scenarios.
+
+The separately frozen b203201 local full integration run has also completed:
+[3,562 passed, eight skipped](../phase-12/b203201-local-full.xml), 85.73% overall
+coverage and 89.35% core coverage (831/930), with both enforced coverage gates
+passing. [Its receipt](../phase-12/b203201-local-full.json) identifies the exact
+baseline commit and exit codes. This does not verify subsequent increments or
+close legal/client/provider/security gates. Its generated historical demo files
+were preserved privately and restored before the primary checkout was fast-forwarded;
+pre-existing temporary files were left intact. The goal remains unfinished.

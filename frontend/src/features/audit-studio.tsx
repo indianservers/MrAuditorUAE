@@ -3,6 +3,7 @@ import {
   CompletionControls,
   type CompletionCheck,
 } from "./completion-controls";
+import { NonresidentAuditRevenueEditor } from "./nonresident-audit-revenue";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -537,6 +538,15 @@ export function AuditEditor({
               const s = inputType(raw, schema.$defs),
                 required = schema.required?.includes(key);
               const val = body[key];
+              if (key === "nonresident_audit_revenue" && area === "tax-profile")
+                return (
+                  <NonresidentAuditRevenueEditor
+                    key={`${base}:${record?.id || "new"}:${key}`}
+                    base={base}
+                    value={val}
+                    onChange={(v) => set(key, v)}
+                  />
+                );
               return (
                 <label key={key} className="audit-field">
                   <span>

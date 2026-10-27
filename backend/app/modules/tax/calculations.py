@@ -368,7 +368,7 @@ def sample_size(population: int):
     )
 
 
-AUDIT_OBLIGATION_CONTRACT = "uae-ct-audit-obligation/1"
+AUDIT_OBLIGATION_CONTRACT = "uae-ct-audit-obligation/2"
 MD84_AUDIT_SOURCE = "https://mof.gov.ae/wp-content/uploads/2025/04/Ministerial-Decision-No.-84-of-2025-on-Audited-Financial-Statements.pdf"
 MD82_AUDIT_SOURCE = "https://mof.gov.ae/wp-content/uploads/2023/04/Ministerial-Decision-No.-82-of-2023-for-the-Purposes-of-Federal-Decree-Law-No.-47-of-2022.pdf"
 
@@ -403,10 +403,17 @@ def audit_statement_obligation(profile):
         profile.classification in {"nonresident_juridical", "permanent_establishment"}
         or not profile.resident
     ):
-        reasons.append("NONRESIDENT_REVENUE_SCOPE_UNASSESSED")
-        issues.append(
-            "Assess retained UAE PE/nexus revenue for the nonresident audit threshold; total profile revenue is not an established scoped amount"
-        )
+        scoped = getattr(profile, "nonresident_audit_revenue", None)
+        if modern and scoped is not None and scoped.population_complete:
+            threshold_revenue = scoped.amount
+            required = threshold_revenue > D("50000000")
+            reasons.append("RETAINED_UAE_PE_NEXUS_REVENUE")
+            reasons.append("REVENUE_EXCEEDS_50M" if required else "REVENUE_DOES_NOT_EXCEED_50M")
+        else:
+            reasons.append("NONRESIDENT_REVENUE_SCOPE_UNASSESSED")
+            issues.append(
+                "Assess retained UAE PE/nexus revenue for the nonresident audit threshold; total profile revenue is not an established scoped amount"
+            )
     elif profile.classification in {"resident_juridical", "natural_person", "free_zone"}:
         threshold_revenue = profile.revenue
         required = profile.revenue > D("50000000")
@@ -428,6 +435,9 @@ def audit_statement_obligation(profile):
         "period_end": str(profile.tax_end),
         "legal_as_of": str(profile.legal_as_of),
         "classification": profile.classification,
+        "nonresident_revenue_scope": profile.nonresident_audit_revenue.model_dump(mode="json")
+        if getattr(profile, "nonresident_audit_revenue", None) is not None
+        else None,
         "required_for_ct": required,
         "statement_kind": statement_kind,
         "currency": "AED",

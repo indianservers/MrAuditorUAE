@@ -1,0 +1,22 @@
+{
+  "pytest_exit": 0,
+  "completed_at": "2026-10-27T12:23:23.8653343Z",
+  "head": "b203201941a3e993b9e821015db3c45b8ca384be",
+  "core_coverage_exit": 0,
+  "status": "completed",
+  "testsuite": {
+    "name": "pytest",
+    "errors": "0",
+    "failures": "0",
+    "skipped": "8",
+    "tests": "3570",
+    "time": "5251.856",
+    "timestamp": "2026-10-27T16:25:46.163047+05:30",
+    "hostname": "DESKTOP-B3SR465"
+  },
+  "overall_coverage_percent": 85.72968490878938,
+  "core_coverage_percent": 89.35483870967742,
+  "core_covered_statements": 831,
+  "core_statements": 930,
+  "qualification": "Full synthetic integration regression of b203201 only; not later commits, client data or professional qualification"
+}

@@ -48,11 +48,10 @@ class TaxExecution(Contract):
 def implementation_hash(tax_type):
     module = {"CT": "tax", "QFZP": "tax", "VAT": "vat", "TP": "tp", "DMTT": "dmtt"}[tax_type]
     root = Path(__file__).resolve().parent.parent / module
-    return hashlib.sha256(
-        b"".join(
-            (root / name).read_bytes() for name in ["calculations.py", "schemas.py", "service.py"]
-        )
-    ).hexdigest()
+    files = ["calculations.py", "schemas.py", "service.py"]
+    if module == "tax":
+        files.append("audit_revenue.py")
+    return hashlib.sha256(b"".join((root / name).read_bytes() for name in files)).hexdigest()
 
 
 async def snapshots(db, tenant, entity, period):

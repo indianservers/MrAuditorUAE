@@ -7,6 +7,7 @@ from pydantic import Field, model_validator
 
 from app.modules.audit_execution.schemas import Body, Strict
 from app.modules.ifrs.schemas import Money, Nonnegative, Positive, Rate
+from app.modules.tax.audit_revenue import NonresidentAuditRevenue
 
 Assessment = Literal["PASS", "FAIL", "REVIEW_REQUIRED", "NOT_APPLICABLE", "INSUFFICIENT_DATA"]
 
@@ -104,11 +105,22 @@ class TaxProfile(Body):
     pillar_two_in_scope: bool
     audited_financials_required: bool
     audited_financials_evidence_id: uuid.UUID | None = None
+    nonresident_audit_revenue: NonresidentAuditRevenue | None = None
 
     @model_validator(mode="after")
     def dates(self):
         if self.tax_end < self.tax_start:
             raise ValueError("Invalid tax period/as-of date")
+        scoped = self.nonresident_audit_revenue
+        if scoped is not None and (
+            self.classification not in {"nonresident_juridical", "permanent_establishment"}
+            or self.resident
+            or self.tax_start < date(2025, 1, 1)
+            or (scoped.period_start, scoped.period_end) != (self.tax_start, self.tax_end)
+        ):
+            raise ValueError(
+                "Scoped audit revenue requires a nonresident MD84 profile and its exact tax period"
+            )
         return self
 
 
