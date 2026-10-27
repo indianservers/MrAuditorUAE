@@ -29,7 +29,7 @@ describe("tax audit scope selection", () => {
       selectedTaxScope({
         ...draft,
         audited_under_other_law: false,
-        audit_report_part: "D",
+        audit_report_part: "B",
       }),
     ).toMatchObject({
       audited_under_other_law: false,
@@ -45,10 +45,22 @@ describe("tax audit scope selection", () => {
       audited_under_other_law: true,
       form: "26" as const,
     };
-    expect(() => selectedTaxScope(draft)).toThrow("Part C or D");
+    expect(() => selectedTaxScope(draft)).toThrow("Part A or B");
     expect(
-      selectedTaxScope({ ...draft, audit_report_part: "C" }).audit_report_part,
-    ).toBe("C");
+      selectedTaxScope({ ...draft, audit_report_part: "A" }).audit_report_part,
+    ).toBe("A");
+  });
+  it("requires reselection when loading obsolete report-part letters", () => {
+    const retained = {
+      ...emptyTaxScope,
+      applicability_id: "case",
+      tax_period_start: "2026-04-01",
+      tax_period_end: "2027-03-31",
+      audited_under_other_law: true,
+      form: "26",
+      audit_report_part: "C",
+    } as unknown as Parameters<typeof selectedTaxScope>[0];
+    expect(() => selectedTaxScope(retained)).toThrow("Part A or B");
   });
   it("offers only current reviewed tax cases and retains a selected older case", () => {
     fixtures.items = [

@@ -11,7 +11,11 @@ from app.modules.jurisdictions.profiles import Strict
 INDIA_TRANSITION = date(2026, 4, 1)
 FORM_GUIDANCE = "https://www.incometax.gov.in/iec/foportal/help/all-topics/e-filing-services/income-tax-forms?mobile-app=1"
 FORM_26_GUIDANCE = "https://www.incometaxindia.gov.in/documents/d/guest/fn-26"
-SCOPE_CONTRACT = "assessed-tax-period-form/1"
+# Rule 47 and the published form disagree with the department's older guidance
+# note about report-part letters. Report selection follows the rule/form.
+FORM_26_RULE = "https://www.incometaxindia.gov.in/w/rule-47-5"
+FORM_26_PUBLISHED = "https://www.incometaxindia.gov.in/documents/20117/16172450/Form-No-26.pdf/6b6807ee-0a0e-ad6c-0c14-1064ff523fef"
+SCOPE_CONTRACT = "assessed-tax-period-form/2"
 
 
 def india_tax_regime(start):
@@ -24,7 +28,7 @@ class IndiaTaxAuditScope(Strict):
     tax_period_end: date
     audited_under_other_law: bool = Field(strict=True)
     form: Literal["3CA-3CD", "3CB-3CD", "26"]
-    audit_report_part: Literal["C", "D"] | None = None
+    audit_report_part: Literal["A", "B"] | None = None
 
     @model_validator(mode="after")
     def selected_form(self):
@@ -36,12 +40,15 @@ class IndiaTaxAuditScope(Strict):
             raise ValueError("A tax-audit period cannot span two Indian tax years")
         modern = india_tax_regime(start) == "2025-ACT"
         expected = "26" if modern else "3CA-3CD" if self.audited_under_other_law else "3CB-3CD"
-        part = ("C" if self.audited_under_other_law else "D") if modern else None
+        part = ("A" if self.audited_under_other_law else "B") if modern else None
         if self.form != expected or self.audit_report_part != part:
             raise ValueError(
                 "Tax-audit form/report part differs from the selected tax period and other-law audit basis"
             )
         return self
+
+    def selection_sources(self):
+        return [FORM_GUIDANCE, *([FORM_26_RULE, FORM_26_PUBLISHED] if self.form == "26" else [])]
 
     def facts(self):
         return {

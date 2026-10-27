@@ -63,7 +63,7 @@ describe("tax audit report builder", () => {
     change("Tax period end", "2027-03-31");
     change("Accounts audited under another law", "no");
     change("Selected tax-audit form", "26");
-    change("Form 26 audit-report part", "D");
+    change("Form 26 audit-report part", "B");
     fireEvent.click(
       screen.getByRole("button", { name: "Save template version" }),
     );
@@ -78,7 +78,7 @@ describe("tax audit report builder", () => {
           tax_period_end: "2027-03-31",
           audited_under_other_law: false,
           form: "26",
-          audit_report_part: "D",
+          audit_report_part: "B",
         },
       },
     });

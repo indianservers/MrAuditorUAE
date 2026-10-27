@@ -10,7 +10,7 @@ export type TaxAuditScope = {
   tax_period_end: string;
   audited_under_other_law: boolean;
   form: "3CA-3CD" | "3CB-3CD" | "26";
-  audit_report_part: "C" | "D" | null;
+  audit_report_part: "A" | "B" | null;
 };
 export type TaxScopeDraft = Omit<
   TaxAuditScope,
@@ -38,8 +38,11 @@ export function selectedTaxScope(value: TaxScopeDraft): TaxAuditScope {
     throw new Error(
       "Select the reviewed applicability case, tax period, form and other-law audit basis",
     );
-  if (value.form === "26" && !value.audit_report_part)
-    throw new Error("Select Form 26 audit-report Part C or D");
+  if (
+    value.form === "26" &&
+    !["A", "B"].includes(value.audit_report_part || "")
+  )
+    throw new Error("Select Form 26 audit-report Part A or B");
   return {
     ...value,
     audited_under_other_law: value.audited_under_other_law,
@@ -207,11 +210,24 @@ export function TaxAuditScopeForm({
             }
           >
             <option value="">Select the assessed report part</option>
-            <option value="C">Part C — audited under another law</option>
-            <option value="D">Part D — not audited under another law</option>
+            <option value="A">Part A — audited under another law</option>
+            <option value="B">Part B — not audited under another law</option>
           </select>
         </label>
       )}
+      <p>
+        Form 26 report parts follow{" "}
+        <a
+          href="https://www.incometaxindia.gov.in/w/rule-47-5"
+          target="_blank"
+          rel="noreferrer"
+        >
+          Rule 47
+        </a>
+        : Part A where another law requires an audit, otherwise Part B. The
+        older guidance note uses different part letters; it is not the
+        report-part selection basis.
+      </p>
       <p>
         The period/form guard does not qualify every tax-audit clause or produce
         an official e-filing form. Generated outputs remain working drafts.

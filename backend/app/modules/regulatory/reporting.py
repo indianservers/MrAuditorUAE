@@ -94,7 +94,14 @@ async def template(db, ctx, eng, data, request_id):
             ),
             "document_status": "DRAFT",
             "scope": "Engagement-bound template; reuse requires an authorized copy with revalidated sources",
-            **({"tax_form_scope_contract": SCOPE_CONTRACT} if data.tax_audit_scope else {}),
+            **(
+                {
+                    "tax_form_scope_contract": SCOPE_CONTRACT,
+                    "tax_form_selection_sources": data.tax_audit_scope.selection_sources(),
+                }
+                if data.tax_audit_scope
+                else {}
+            ),
         },
         dependencies,
         request_id,
@@ -204,6 +211,7 @@ async def generate(db, ctx, eng, data, request_id):
                     else "1961-ACT",
                     "tax_form_content_qualified": False,
                     "tax_form_scope_contract": SCOPE_CONTRACT,
+                    "tax_form_selection_sources": config.tax_audit_scope.selection_sources(),
                 }
                 if config.tax_audit_scope
                 else {}

@@ -3086,9 +3086,10 @@ audit basis, selected form/report part and a current independently reviewed
 India tax-audit applicability case. The period must be contained in the actual
 engagement financial period. Report creation date does not choose the tax regime.
 Legacy periods select 3CA with 3CD or 3CB with 3CD; tax years beginning on or after
-1 April 2026 select Form 26, Part C or D respectively. These designation facts
+1 April 2026 select Form 26, Part A or B respectively. These designation facts
 follow the Income Tax Department's [forms guidance, questions 29–30](https://www.incometax.gov.in/iec/foportal/help/all-topics/e-filing-services/income-tax-forms?mobile-app=1)
-and the [official Form 26](https://www.incometaxindia.gov.in/documents/d/guest/fn-26).
+and [Rule 47](https://www.incometaxindia.gov.in/w/rule-47-5), read with the
+[published Form 26](https://www.incometaxindia.gov.in/documents/20117/16172450/Form-No-26.pdf/6b6807ee-0a0e-ad6c-0c14-1064ff523fef).
 
 Dates, form identifiers and Boolean audit facts must agree exactly, including
 type, to authorized retained sources. An opt-in `comparison: "exact"` source
@@ -3135,3 +3136,35 @@ coverage (831/930). Hosted frontend, browser smoke, ML and security jobs passed.
 The container job failed; this is not an entirely green release. The isolated
 scope increment requires its own hosted verification after push. The separate
 local full baseline run stays on its frozen source until it finishes.
+
+
+### Form 26 source conflict corrected (27 October 2026)
+
+The initial scope increment 8091ca9 followed the department's eight-page
+[guidance note](https://www.incometaxindia.gov.in/documents/d/guest/fn-26), which
+calls the audit reports Parts C/D. Further source review found that
+[Rule 47(1)](https://www.incometaxindia.gov.in/w/rule-47-5) and the actual
+[33-page published Form 26](https://www.incometaxindia.gov.in/documents/20117/16172450/Form-No-26.pdf/6b6807ee-0a0e-ad6c-0c14-1064ff523fef)
+use Part A for an audit under another law and Part B otherwise. The published
+form's report headings on pages 1 and 3 agree with the rule. Its particulars
+appear in Parts C/D. The eight-page note is guidance, not the actual form.
+
+The backend model, report-part selection, frontend options and generated API
+types now follow Rule 47 and the published form. The UI requires explicit
+reselection of obsolete C/D values; the API rejects them. New templates and
+drafts retain the selection-source URLs, including the rule and actual form
+for modern periods. Scope contract version 2 makes earlier version-1 templates
+and reports stale while preserving their historical bodies. No stored C/D value
+is silently mapped to A/B, and amendment still requires retained exact facts
+and independent review.
+
+Verification: [2,748 backend unit tests](../phase-12/tax-form-parts-backend.xml)
+passed with five existing skips and two warnings; 258 frontend tests passed.
+[Seven API regression cases](../phase-12/tax-form-parts-api.xml) passed across the
+four period/other-law combinations, source staleness and UAE/India complete
+exports. They reject obsolete modern report parts, wrong forms, out-of-engagement
+periods and unbound dates; generated drafts carry contract version 2 and the
+modern rule URL. Ruff, regulatory mypy, TypeScript, scoped ESLint and production
+build passed. The test scanner/broker boundaries remain explicit doubles.
+These checks correct the working-draft guard; complete official form contents,
+statutory qualification, real-client evidence and release gates remain open.

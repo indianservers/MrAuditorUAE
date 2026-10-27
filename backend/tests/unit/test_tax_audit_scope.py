@@ -54,7 +54,7 @@ def test_legacy_form_depends_on_period_and_other_law_basis(other, form, part):
     assert selected.tax_period_start.year == 2025
 
 
-@pytest.mark.parametrize("other,part", [(True, "C"), (False, "D")])
+@pytest.mark.parametrize("other,part", [(True, "A"), (False, "B")])
 def test_modern_form_keeps_audit_report_parts_separate(other, part):
     selected = scope(
         tax_period_start="2026-04-01",
@@ -69,9 +69,9 @@ def test_modern_form_keeps_audit_report_parts_separate(other, part):
 @pytest.mark.parametrize(
     "changes",
     [
-        {"form": "26", "audit_report_part": "C"},
+        {"form": "26", "audit_report_part": "A"},
         {"form": "3CB-3CD"},
-        {"audit_report_part": "C"},
+        {"audit_report_part": "A"},
         {"tax_period_end": "2026-04-01"},
         {"tax_period_end": "2025-03-31"},
         {"audited_under_other_law": "true"},
@@ -81,7 +81,7 @@ def test_modern_form_keeps_audit_report_parts_separate(other, part):
             "tax_period_start": "2026-04-01",
             "tax_period_end": "2027-03-31",
             "form": "26",
-            "audit_report_part": "D",
+            "audit_report_part": "B",
         },
     ],
 )
@@ -263,3 +263,27 @@ def test_documented_adverse_clause_does_not_prevent_working_draft():
     exception["evidence_ids"] = []
     with pytest.raises(ValueError, match="documented exceptions"):
         require_assessed_tax_scope(selected, body)
+
+
+@pytest.mark.parametrize("part", ["C", "D"])
+def test_outdated_guidance_report_parts_cannot_be_used(part):
+    with pytest.raises(ValidationError):
+        scope(
+            tax_period_start="2026-04-01",
+            tax_period_end="2027-03-31",
+            form="26",
+            audit_report_part=part,
+        )
+
+
+def test_old_scope_contract_is_stale_without_rewriting_history():
+    from app.modules.regulatory.tax_forms import has_tax_scope_contract
+
+    body = {
+        "category": "india-tax-audit",
+        "tax_form_scope_contract": "assessed-tax-period-form/1",
+        "tax_audit_scope": {"audit_report_part": "C"},
+    }
+    original = deepcopy(body)
+    assert not has_tax_scope_contract(body, [{"type": "event", "id": CASE}])
+    assert body == original

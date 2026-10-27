@@ -7809,7 +7809,7 @@ export interface components {
              */
             form: "3CA-3CD" | "3CB-3CD" | "26";
             /** Audit Report Part */
-            audit_report_part?: ("C" | "D") | null;
+            audit_report_part?: ("A" | "B") | null;
         };
         /** Inference */
         Inference: {

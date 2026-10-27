@@ -27,7 +27,7 @@ async def test_period_form_review_export_and_source_correction(
     h, opts, _, _ = await setup(c)
     start, end = ("2026-04-01", "2027-03-31") if modern else ("2025-04-01", "2026-03-31")
     form = "26" if modern else "3CA-3CD" if other else "3CB-3CD"
-    part = ("C" if other else "D") if modern else None
+    part = ("A" if other else "B") if modern else None
     facts = {
         "tax_period_start": start,
         "tax_period_end": end,
@@ -233,6 +233,12 @@ async def test_period_form_review_export_and_source_correction(
     assert reviewed_case.status_code == 201, reviewed_case.text
     data["tax_audit_scope"]["applicability_id"] = reviewed_case.json()["id"]
     data["blocks"][0]["source_id"] = reviewed_case.json()["id"]
+    if modern:
+        outdated = deepcopy(data)
+        outdated["tax_audit_scope"]["audit_report_part"] = "C" if other else "D"
+        assert (
+            await c.post(prefix + "/report-templates", headers=h, json=outdated)
+        ).status_code == 422
     wrong = deepcopy(data)
     wrong["tax_audit_scope"]["form"] = "3CB-3CD" if modern else "26"
     assert (await c.post(prefix + "/report-templates", headers=h, json=wrong)).status_code == 422
@@ -261,6 +267,12 @@ async def test_period_form_review_export_and_source_correction(
     saved = generated.json()
     assert saved["body"]["tax_audit_scope"] == data["tax_audit_scope"]
     assert saved["body"]["tax_form_content_qualified"] is False
+    assert saved["body"]["tax_form_scope_contract"] == "assessed-tax-period-form/2"
+    if modern:
+        assert (
+            "https://www.incometaxindia.gov.in/w/rule-47-5"
+            in saved["body"]["tax_form_selection_sources"]
+        )
     endpoint = f"/api/v1/intelligence/engagements/{eid}/events/{saved['id']}"
     exported = await c.get(endpoint + "/export?format=xlsx", headers=h)
     assert exported.status_code == 200
