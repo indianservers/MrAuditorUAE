@@ -888,6 +888,23 @@ function EvidenceFiles({
           <small>
             Version {String(v.number)} · SHA-256 {String(v.sha256)}
           </small>
+          {v.id === q.data?.items[0]?.id &&
+            v.scan_status === "QUARANTINED" &&
+            !["APPROVED", "LOCKED", "REVIEW_REQUIRED"].includes(
+              record.status,
+            ) && (
+              <Button
+                disabled={action.isPending}
+                onClick={() =>
+                  action.mutate({
+                    path: `${base}/evidence-files/${record.id}/${v.id}/rescan`,
+                    body: {},
+                  })
+                }
+              >
+                Rescan retained original
+              </Button>
+            )}
           {v.scan_status === "CLEAN" && (
             <Button
               onClick={async () => {
@@ -920,6 +937,8 @@ function EvidenceFiles({
       <p className="audit-notice">
         Files remain quarantined until the configured malware scanner reports
         clean. Document existence does not establish evidence sufficiency.
+        Rescanning the latest quarantined original saves a new evidence version
+        and preserves the previous scan result.
       </p>
     </section>
   );

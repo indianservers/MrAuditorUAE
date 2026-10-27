@@ -2559,3 +2559,49 @@ cases verify exact-byte download after a fragmented clean verdict, quarantine
 persistence with download refusal after an unterminated verdict, and no retained
 version after rejection. Scoped Ruff and mypy passed. No frontend behavior or
 country-specific legal rule changed in this increment.
+
+## Retry quarantined originals without replacing history
+
+`POST /engagements/{eid}/audit/evidence-files/{rid}/{vid}/rescan` now retries the
+latest quarantined original of an editable evidence record. It uses the existing
+upload permission and locked record access. Older versions, clean or rejected
+versions, unassigned actors and protected record states cannot invoke this retry.
+The server copies the retained original into a private temporary snapshot while
+checking its exact size and SHA-256, then scans those verified bytes. A changed
+original is refused before any scanner transfer.
+
+Every completed attempt appends a new evidence version with the same retained
+object reference, byte hash, filename and size, and its new scan classification.
+The prior evidence version and classification remain unchanged. Audit history
+links the prior version to the new verdict; the parent record revision advances
+through the existing revision/invalidation infrastructure. No document is marked
+clean merely because a rescan was requested. An unavailable scanner produces
+another quarantined version; a rejected verdict is retained as a rejected new
+version and cannot be downloaded. A new clean version can be downloaded after
+the existing independent integrity check. Historical quarantined versions remain
+unavailable for download.
+
+The Evidence Review Studio offers **Rescan retained original** only for the latest
+quarantined version of an editable record, and disables the action while pending.
+It explains that the new version preserves the prior scan result. This is a retry
+workflow, not a retrospective rescan of every historical clean classification.
+
+The [API receipt](../phase-12/evidence-rescan-api.xml) records 30 passing cases:
+13 new rescan cases, six scanner-framing cases and 11 native document-worker cases.
+They cover UAE/India clean, unavailable and rejected outcomes; preserved original
+bytes and old verdicts; refusal of older versions and changed originals; unassigned
+actors; and all three protected record states. Scanner transport is an explicit
+synthetic socket double, not a live malware engine. All 236 frontend tests across
+49 files, the production build, scoped Ruff/ESLint and API mypy passed. The first
+build hit a Windows lock held by the owned preview server; stopping that verified
+server allowed the subsequent build to complete.
+
+The browser fixture script and Playwright test are saved as
+`scripts/evidence_rescan_preview.py`, `frontend/e2e/evidence-rescan.spec.ts` and
+`frontend/playwright.evidence-rescan.config.ts`. The fixture uses only the owned
+disposable database and explicitly unconfigured scanner to exercise continued
+quarantine in UAE then India. The browser test has **not run**: automatic approval
+review rejected starting the preview server with “blocked by policy.” No browser
+receipt or screenshot is claimed for this increment. Live scanner qualification,
+historical population reassessment and the broader country release gates remain
+open.

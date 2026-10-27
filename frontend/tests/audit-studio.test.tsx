@@ -32,6 +32,89 @@ beforeEach(() => {
   });
 });
 describe("structured audit editor", () => {
+  it("rescans only the latest quarantined original and preserves its version ID", () => {
+    mock.useAPI.mockReturnValue({
+      data: {
+        items: [
+          {
+            id: "latest",
+            number: 2,
+            filename: "invoice.pdf",
+            scan_status: "QUARANTINED",
+          },
+          {
+            id: "older",
+            number: 1,
+            filename: "invoice.pdf",
+            scan_status: "QUARANTINED",
+          },
+        ],
+      },
+    });
+    render(
+      <AuditEditor
+        base="engagements/E/audit"
+        area="evidence"
+        schema={{ properties: {} }}
+        onSaved={() => {}}
+        record={{
+          id: "R",
+          reference: "EV-1",
+          title: "Invoice",
+          status: "DRAFT",
+          version: 2,
+          kind: "evidence",
+          body: {},
+        }}
+      />,
+    );
+    const buttons = screen.getAllByRole("button", {
+      name: "Rescan retained original",
+    });
+    expect(buttons).toHaveLength(1);
+    fireEvent.click(buttons[0]);
+    expect(mock.mutate).toHaveBeenCalledWith({
+      path: "engagements/E/audit/evidence-files/R/latest/rescan",
+      body: {},
+    });
+  });
+  it.each(["APPROVED", "LOCKED", "REVIEW_REQUIRED"])(
+    "does not rescan a %s record",
+    (status) => {
+      mock.useAPI.mockReturnValue({
+        data: {
+          items: [
+            {
+              id: "latest",
+              number: 1,
+              filename: "invoice.pdf",
+              scan_status: "QUARANTINED",
+            },
+          ],
+        },
+      });
+      render(
+        <AuditEditor
+          base="engagements/E/audit"
+          area="evidence"
+          schema={{ properties: {} }}
+          onSaved={() => {}}
+          record={{
+            id: "R",
+            reference: "EV-1",
+            title: "Invoice",
+            status,
+            version: 2,
+            kind: "evidence",
+            body: {},
+          }}
+        />,
+      );
+      expect(
+        screen.queryByRole("button", { name: "Rescan retained original" }),
+      ).not.toBeInTheDocument();
+    },
+  );
   it("saves structured sections and preserves source references", async () => {
     mock.mutateAsync.mockResolvedValue({ reference: "WP-01" });
     render(

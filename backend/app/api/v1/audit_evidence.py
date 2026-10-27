@@ -1,4 +1,5 @@
 import hashlib
+import tempfile
 import uuid
 import zipfile
 from pathlib import Path
@@ -100,6 +101,57 @@ async def versions(eid: uuid.UUID, rid: uuid.UUID, db: DB, ctx: Actor):
             for r in rows
         ]
     }
+
+
+@router.post("/{rid}/{vid}/rescan", status_code=201)
+async def rescan(eid: uuid.UUID, rid: uuid.UUID, vid: uuid.UUID, db: DB, ctx: Actor, request: Request):
+    obj = await s.get_record(db, ctx, eid, rid, "audit.evidence.upload", True)
+    if obj.kind != "evidence" or obj.status in {"APPROVED", "LOCKED", "REVIEW_REQUIRED"}:
+        raise HTTPException(409, "Editable evidence record required")
+    current = await db.scalar(select(EvidenceVersion).where(
+        EvidenceVersion.tenant_id == ctx.tenant_id, EvidenceVersion.record_id == rid,
+    ).order_by(EvidenceVersion.number.desc()).limit(1))
+    if current is None or current.id != vid or current.scan_status != "QUARANTINED":
+        raise HTTPException(409, "Select the latest quarantined evidence version")
+
+    def inspect_original():
+        with ObjectStore().local(current.object_key, current.object_version) as path:
+            # Scan the exact bytes checked, even if the backing file changes later.
+            with path.open("rb") as original, tempfile.TemporaryFile() as snapshot:
+                digest, size = hashlib.sha256(), 0
+                while chunk := original.read(1024 * 1024):
+                    size += len(chunk)
+                    if size > current.size:
+                        raise ValueError("Evidence integrity verification failed")
+                    digest.update(chunk)
+                    snapshot.write(chunk)
+                if size != current.size or digest.hexdigest() != current.sha256:
+                    raise ValueError("Evidence integrity verification failed")
+                snapshot.seek(0)
+                return scan(snapshot)
+
+    try:
+        status = await run_in_threadpool(inspect_original)
+    except (ValueError, OSError):
+        raise HTTPException(409, "Evidence integrity verification failed") from None
+    if status not in {"CLEAN", "QUARANTINED", "REJECTED"}:
+        raise HTTPException(409, "Scanner returned an unsupported verdict")
+    version = EvidenceVersion(
+        tenant_id=ctx.tenant_id, created_by=ctx.user_id, record_id=rid,
+        number=current.number + 1, filename=current.filename, media_type=current.media_type,
+        object_key=current.object_key, object_version=current.object_version,
+        sha256=current.sha256, size=current.size, scan_status=status,
+    )
+    db.add(version)
+    await db.flush()
+    record(db, ctx, "evidence.rescanned", version.id, request.state.request_id, {
+        "engagement_id": str(eid), "record_id": str(rid),
+        "prior_evidence_version_id": str(current.id), "sha256": current.sha256,
+        "scan_status": status,
+    })
+    obj.version += 1
+    await s.revision(db, ctx, obj, request.state.request_id, "evidence.rescanned")
+    return s.serialize(version)
 
 
 @router.get("/{rid}/{vid}/download")
