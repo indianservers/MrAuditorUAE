@@ -1,0 +1,401 @@
+{
+  "synthetic": true,
+  "platform": "Windows",
+  "python": "3.12.10",
+  "contract": "bounded-document-subprocess/1",
+  "expected_extractions": 30,
+  "completed": 30,
+  "observations": [
+    {
+      "iteration": 1,
+      "country": "AE",
+      "kind": "digital",
+      "daemon": false,
+      "seconds": 1.060456,
+      "original_sha256": "8017797f1f2d6c6852f084360ccc24b7368db44b27e8b623abf1559d69107e42",
+      "pages": 1,
+      "providers": [
+        "pdfium-text"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 1,
+      "country": "AE",
+      "kind": "pdf-ocr",
+      "daemon": false,
+      "seconds": 5.680921,
+      "original_sha256": "8017797f1f2d6c6852f084360ccc24b7368db44b27e8b623abf1559d69107e42",
+      "pages": 1,
+      "providers": [
+        "rapidocr-local"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 1,
+      "country": "AE",
+      "kind": "scan",
+      "daemon": false,
+      "seconds": 3.768072,
+      "original_sha256": "a1266ba06a1ae5e26107f3e4575dc808d72b96fb32950c3ed597e27b452ee7f8",
+      "pages": 1,
+      "providers": [
+        "rapidocr-local"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 1,
+      "country": "AE",
+      "kind": "zip-selected",
+      "daemon": false,
+      "seconds": 0.629685,
+      "original_sha256": "1ec707eda035a122e4a8cef6ddc13cba8fc558497ee392f902acde6ebb45ade5",
+      "pages": 1,
+      "providers": [
+        "pdfium-text"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 1,
+      "country": "AE",
+      "kind": "zip-batch",
+      "daemon": false,
+      "seconds": 0.658152,
+      "original_sha256": "1ec707eda035a122e4a8cef6ddc13cba8fc558497ee392f902acde6ebb45ade5",
+      "pages": 2,
+      "providers": [
+        "pdfium-text"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 1,
+      "country": "IN",
+      "kind": "digital",
+      "daemon": false,
+      "seconds": 0.710139,
+      "original_sha256": "d03440c29e6d16ac704002b20fc5d12fcd28ddabb484171cd2b35d6461b57672",
+      "pages": 1,
+      "providers": [
+        "pdfium-text"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 1,
+      "country": "IN",
+      "kind": "pdf-ocr",
+      "daemon": false,
+      "seconds": 5.669118,
+      "original_sha256": "d03440c29e6d16ac704002b20fc5d12fcd28ddabb484171cd2b35d6461b57672",
+      "pages": 1,
+      "providers": [
+        "rapidocr-local"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 1,
+      "country": "IN",
+      "kind": "scan",
+      "daemon": false,
+      "seconds": 4.35633,
+      "original_sha256": "feff69bbbd4a0644b7c27776aac846416d991033885dad553693eefc8c511509",
+      "pages": 1,
+      "providers": [
+        "rapidocr-local"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 1,
+      "country": "IN",
+      "kind": "zip-selected",
+      "daemon": false,
+      "seconds": 0.801821,
+      "original_sha256": "8953e4129df8d7ecc60b06ab1a1633d31d336bf90d10587ebd38d7faf1e7f171",
+      "pages": 1,
+      "providers": [
+        "pdfium-text"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 1,
+      "country": "IN",
+      "kind": "zip-batch",
+      "daemon": false,
+      "seconds": 0.847262,
+      "original_sha256": "8953e4129df8d7ecc60b06ab1a1633d31d336bf90d10587ebd38d7faf1e7f171",
+      "pages": 2,
+      "providers": [
+        "pdfium-text"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 2,
+      "country": "AE",
+      "kind": "digital",
+      "daemon": true,
+      "seconds": 0.719415,
+      "original_sha256": "8017797f1f2d6c6852f084360ccc24b7368db44b27e8b623abf1559d69107e42",
+      "pages": 1,
+      "providers": [
+        "pdfium-text"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 2,
+      "country": "AE",
+      "kind": "pdf-ocr",
+      "daemon": true,
+      "seconds": 5.803658,
+      "original_sha256": "8017797f1f2d6c6852f084360ccc24b7368db44b27e8b623abf1559d69107e42",
+      "pages": 1,
+      "providers": [
+        "rapidocr-local"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 2,
+      "country": "AE",
+      "kind": "scan",
+      "daemon": true,
+      "seconds": 4.821959,
+      "original_sha256": "a1266ba06a1ae5e26107f3e4575dc808d72b96fb32950c3ed597e27b452ee7f8",
+      "pages": 1,
+      "providers": [
+        "rapidocr-local"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 2,
+      "country": "AE",
+      "kind": "zip-selected",
+      "daemon": true,
+      "seconds": 0.802833,
+      "original_sha256": "1ec707eda035a122e4a8cef6ddc13cba8fc558497ee392f902acde6ebb45ade5",
+      "pages": 1,
+      "providers": [
+        "pdfium-text"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 2,
+      "country": "AE",
+      "kind": "zip-batch",
+      "daemon": true,
+      "seconds": 0.660253,
+      "original_sha256": "1ec707eda035a122e4a8cef6ddc13cba8fc558497ee392f902acde6ebb45ade5",
+      "pages": 2,
+      "providers": [
+        "pdfium-text"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 2,
+      "country": "IN",
+      "kind": "digital",
+      "daemon": true,
+      "seconds": 0.677128,
+      "original_sha256": "d03440c29e6d16ac704002b20fc5d12fcd28ddabb484171cd2b35d6461b57672",
+      "pages": 1,
+      "providers": [
+        "pdfium-text"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 2,
+      "country": "IN",
+      "kind": "pdf-ocr",
+      "daemon": true,
+      "seconds": 6.216371,
+      "original_sha256": "d03440c29e6d16ac704002b20fc5d12fcd28ddabb484171cd2b35d6461b57672",
+      "pages": 1,
+      "providers": [
+        "rapidocr-local"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 2,
+      "country": "IN",
+      "kind": "scan",
+      "daemon": true,
+      "seconds": 4.256739,
+      "original_sha256": "feff69bbbd4a0644b7c27776aac846416d991033885dad553693eefc8c511509",
+      "pages": 1,
+      "providers": [
+        "rapidocr-local"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 2,
+      "country": "IN",
+      "kind": "zip-selected",
+      "daemon": true,
+      "seconds": 0.66417,
+      "original_sha256": "8953e4129df8d7ecc60b06ab1a1633d31d336bf90d10587ebd38d7faf1e7f171",
+      "pages": 1,
+      "providers": [
+        "pdfium-text"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 2,
+      "country": "IN",
+      "kind": "zip-batch",
+      "daemon": true,
+      "seconds": 0.668374,
+      "original_sha256": "8953e4129df8d7ecc60b06ab1a1633d31d336bf90d10587ebd38d7faf1e7f171",
+      "pages": 2,
+      "providers": [
+        "pdfium-text"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 3,
+      "country": "AE",
+      "kind": "digital",
+      "daemon": false,
+      "seconds": 0.749981,
+      "original_sha256": "8017797f1f2d6c6852f084360ccc24b7368db44b27e8b623abf1559d69107e42",
+      "pages": 1,
+      "providers": [
+        "pdfium-text"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 3,
+      "country": "AE",
+      "kind": "pdf-ocr",
+      "daemon": false,
+      "seconds": 6.074164,
+      "original_sha256": "8017797f1f2d6c6852f084360ccc24b7368db44b27e8b623abf1559d69107e42",
+      "pages": 1,
+      "providers": [
+        "rapidocr-local"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 3,
+      "country": "AE",
+      "kind": "scan",
+      "daemon": false,
+      "seconds": 4.127735,
+      "original_sha256": "a1266ba06a1ae5e26107f3e4575dc808d72b96fb32950c3ed597e27b452ee7f8",
+      "pages": 1,
+      "providers": [
+        "rapidocr-local"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 3,
+      "country": "AE",
+      "kind": "zip-selected",
+      "daemon": false,
+      "seconds": 0.657659,
+      "original_sha256": "1ec707eda035a122e4a8cef6ddc13cba8fc558497ee392f902acde6ebb45ade5",
+      "pages": 1,
+      "providers": [
+        "pdfium-text"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 3,
+      "country": "AE",
+      "kind": "zip-batch",
+      "daemon": false,
+      "seconds": 0.65002,
+      "original_sha256": "1ec707eda035a122e4a8cef6ddc13cba8fc558497ee392f902acde6ebb45ade5",
+      "pages": 2,
+      "providers": [
+        "pdfium-text"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 3,
+      "country": "IN",
+      "kind": "digital",
+      "daemon": false,
+      "seconds": 0.669417,
+      "original_sha256": "d03440c29e6d16ac704002b20fc5d12fcd28ddabb484171cd2b35d6461b57672",
+      "pages": 1,
+      "providers": [
+        "pdfium-text"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 3,
+      "country": "IN",
+      "kind": "pdf-ocr",
+      "daemon": false,
+      "seconds": 5.999552,
+      "original_sha256": "d03440c29e6d16ac704002b20fc5d12fcd28ddabb484171cd2b35d6461b57672",
+      "pages": 1,
+      "providers": [
+        "rapidocr-local"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 3,
+      "country": "IN",
+      "kind": "scan",
+      "daemon": false,
+      "seconds": 4.15032,
+      "original_sha256": "feff69bbbd4a0644b7c27776aac846416d991033885dad553693eefc8c511509",
+      "pages": 1,
+      "providers": [
+        "rapidocr-local"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 3,
+      "country": "IN",
+      "kind": "zip-selected",
+      "daemon": false,
+      "seconds": 0.705137,
+      "original_sha256": "8953e4129df8d7ecc60b06ab1a1633d31d336bf90d10587ebd38d7faf1e7f171",
+      "pages": 1,
+      "providers": [
+        "pdfium-text"
+      ],
+      "status": "PASSED"
+    },
+    {
+      "iteration": 3,
+      "country": "IN",
+      "kind": "zip-batch",
+      "daemon": false,
+      "seconds": 0.690734,
+      "original_sha256": "8953e4129df8d7ecc60b06ab1a1633d31d336bf90d10587ebd38d7faf1e7f171",
+      "pages": 2,
+      "providers": [
+        "pdfium-text"
+      ],
+      "status": "PASSED"
+    }
+  ],
+  "scope": "Serial extraction only; no concurrency, hosted pool, capacity, malware-service or professional/client accuracy qualification"
+}

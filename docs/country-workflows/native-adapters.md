@@ -2417,3 +2417,73 @@ the existing digital-PDF extraction timeout; both focused extraction tests and
 the complete repeat passed without extraction changes. Its intermittent failure
 still needs investigation. A confirmed-stopped local frontend was restarted
 before the final passing browser run; this does not qualify a hosted release.
+
+
+## Bounded local document workers and native process cleanup
+
+The previous PDF/image extractor used a spawned `multiprocessing` child and a
+queue. Its generic error hid startup, child-exit and transport failures behind
+the same 120-second timeout. A direct baseline reproduction under a daemonic
+process condition raised `AssertionError`: the restriction is documented in
+[Python multiprocessing](https://docs.python.org/3.12/library/multiprocessing.html).
+That reproduction establishes a definite unsupported-worker defect; it does not
+establish the precise cause of every earlier intermittent broad-suite timeout.
+
+Extraction now uses a fresh OS subprocess and contract
+`bounded-document-subprocess/1`. The deadline remains 120 seconds. A private
+UTF-8 JSON request is limited to 1 MiB; a separate atomic JSON receipt is limited
+to 20 MiB. Native stdout/stderr cannot corrupt that result channel. The parent
+rejects missing, partial, oversized, duplicate-key, non-finite, incorrectly bound
+or incorrectly reviewed results. A successful receipt must retain UNVERIFIED
+status, mandatory human review and the no-document-transfer flag. Different
+startup, process-exit, timeout and receipt errors remain distinguishable.
+
+The source is hashed with a bounded read in the parent, then checked again inside
+the worker. The worker extracts from one verified byte snapshot, including all
+selected ZIP members, and uses that snapshot's hash in its receipt. The publishing
+handler compares it with the retained evidence version's hash before creating a
+result. Every image/text/page/ZIP, provider-version and model-artifact record is
+still preserved. Independent review and source replacement staleness are unchanged.
+
+A real timeout test exposed a second defect: killing the Windows virtualenv
+redirector left its Python child running. The shared supervisor now creates a
+suspended worker, assigns it to a private Windows Job Object without breakaway,
+then resumes it. Job termination and active-process checks cover its descendants;
+kill-on-close also applies. See Microsoft's [Job Objects](https://learn.microsoft.com/en-us/windows/win32/procthread/job-objects)
+and [assignment rules](https://learn.microsoft.com/en-us/windows/win32/api/jobapi2/nf-jobapi2-assignprocesstojobobject).
+Failure to assign the job kills the still-suspended worker. POSIX uses a separate
+process session/group. Startup failure, timeout, ordinary completion and exception
+paths release process/pipe/job handles. The existing 45-second PDF-grid reader
+uses the same supervisor, retaining its bounded stdout JSON interface. Its
+Windows-only creation flag is now guarded by the explicit platform condition.
+
+This is process lifecycle control, not an OS security sandbox or proof of hosted
+pool behavior. Windows process-tree behavior is exercised locally. Linux-targeted
+static checks do not establish native Linux execution. Process creation and OS
+cleanup are outside the worker's computation deadline; normal cleanup waits are
+separately bounded. No automatic retry or larger deadline hides a failed attempt.
+
+The extraction preview also resets when a different immutable result is selected.
+Browser tests warm both detail-query caches, view a ZIP's second page, and return
+to a single-page extraction without losing the original preview. This covers the
+cached-data case where an empty fetch would otherwise have incidentally reset the
+component. Each source remains viewable as its own raster original.
+
+Saved [synthetic PDF, scan and ZIP examples](sample-inputs/SYNTHETIC-document-worker/README.md)
+record literal fields and byte hashes. Tax amounts are arithmetic fixtures, not
+country tax calculations. Scanned Arabic/Hindi accuracy, real-client populations,
+live malware/provider services, hosted resource limits and professional conclusions
+remain unqualified. The authored catalogue stays at 154. See the
+[baseline failure](../phase-12/document-worker-baseline.json),
+[verification receipt](../phase-12/document-worker-verification.json),
+[serial observations](../phase-12/document-worker-stress.json) and
+[browser receipt](../phase-12/document-worker-browser-results.json).
+
+Final verification on 27 October 2026 passed 2,629 backend tests twice consecutively
+(four skips each), 16 HTTP API cases, and 232 frontend tests across 49 files. The
+production frontend build, scoped lint and Windows/Linux-targeted static checks
+passed. The actual browser run exercised eight native extraction flows in UAE
+then India, plus two cached-result switching regressions; all 20 saved screenshots
+were inspected. Thirty fresh serial native extractions passed, including forced
+PDF OCR and the public daemon context. These results qualify the tested local
+synthetic paths only; the remaining qualification limits above still apply.

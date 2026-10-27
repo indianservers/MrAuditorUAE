@@ -1,0 +1,22 @@
+{
+  "synthetic": true,
+  "country": "AE",
+  "fields": {
+    "invoice_number": "SYN-AE-WORKER",
+    "document_date": "2026-06-01",
+    "net_amount": "100.00",
+    "tax_amount": "5.00",
+    "gross_amount": "105.00",
+    "currency": "AED"
+  },
+  "sha256": {
+    "digital.pdf": "8017797f1f2d6c6852f084360ccc24b7368db44b27e8b623abf1559d69107e42",
+    "scan.png": "a1266ba06a1ae5e26107f3e4575dc808d72b96fb32950c3ed597e27b452ee7f8",
+    "documents.zip": "1ec707eda035a122e4a8cef6ddc13cba8fc558497ee392f902acde6ebb45ade5"
+  },
+  "zip_member": "invoice.pdf",
+  "batch_invoice_numbers": [
+    "SYN-AE-WORKER",
+    "SYN-AE-OTHER"
+  ]
+}

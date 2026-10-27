@@ -12,6 +12,11 @@ from app.core import operations_contracts as contracts
         "modules/intelligence/transaction_candidates.py",
         "modules/intelligence/matching_review.py",
         "modules/intelligence/reconciliation_scope.py",
+        "modules/intelligence/documents.py",
+        "modules/intelligence/extraction_runtime.py",
+        "modules/intelligence/extraction_process.py",
+        "modules/intelligence/document_worker.py",
+        "modules/intelligence/service.py",
     ],
 )
 def test_matching_helper_rollout_invalidates_both_execution_contracts(monkeypatch, helper):

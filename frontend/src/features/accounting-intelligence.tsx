@@ -1089,7 +1089,7 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
               />
             )}
             {detail.data.kind === "ocr" && body && (
-              <EvidencePreview prefix={prefix} body={body} />
+              <EvidencePreview key={selected} prefix={prefix} body={body} />
             )}
             {detail.data.kind === "foundation-validation" && body && (
               <section>

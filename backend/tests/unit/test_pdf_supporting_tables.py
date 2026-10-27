@@ -120,7 +120,7 @@ def test_worker_timeout_fails_closed_without_a_table_result(tmp_path, monkeypatc
         assert args[0][1:3] == ["-m", "app.modules.intelligence.pdf_tables"]
         raise subprocess.TimeoutExpired(args[0], 45)
 
-    monkeypatch.setattr(subprocess, "run", timeout)
+    monkeypatch.setattr("app.modules.intelligence.pdf_tables.run_worker", timeout)
     with pytest.raises(ValueError, match="45-second"):
         extract(tmp_path)
 

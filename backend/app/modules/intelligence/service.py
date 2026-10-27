@@ -687,12 +687,15 @@ async def compute(db, ctx, eng, operation, payload):
             with ObjectStore().local(version.object_key, version.object_version) as path:
                 if hash_file(path) != version.sha256:
                     raise ValueError("Evidence hash mismatch")
-                return extract_document(
+                extracted = extract_document(
                     path,
                     version.media_type,
                     package.country,
                     data.model_dump(mode="json", exclude={"evidence_version_id"}),
                 )
+                if extracted.get("original_sha256") != version.sha256:
+                    raise ValueError("Extraction receipt differs from the retained evidence version")
+                return extracted
 
         result = await run_in_threadpool(extract)
         return {

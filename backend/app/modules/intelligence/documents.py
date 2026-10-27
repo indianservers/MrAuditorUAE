@@ -4,7 +4,6 @@ import hashlib
 import importlib.metadata
 import importlib.util
 import io
-import multiprocessing
 import re
 import threading
 import zipfile
@@ -173,10 +172,14 @@ def _image_blocks(image, engine, page):
     return blocks
 
 
-def _worker(path, media_type, country, options, queue):
+def _extract(path, media_type, country, options, expected_sha256):
     try:
         from PIL import Image
 
+        with Path(path).open("rb") as source:
+            original = source.read(options["max_bytes"] + 1)
+        if len(original) > options["max_bytes"] or hashlib.sha256(original).hexdigest() != expected_sha256:
+            raise ValueError("Original extraction document changed or exceeds its configured byte limit")
         Image.MAX_IMAGE_PIXELS = 20_000_000
         max_pages = options.get("max_pages", 20)
         engine = None
@@ -278,7 +281,7 @@ def _worker(path, media_type, country, options, queue):
                 raise ValueError("Document batch exceeds page limit")
 
         if media_type == "application/zip":
-            with zipfile.ZipFile(path) as archive:
+            with zipfile.ZipFile(io.BytesIO(original)) as archive:
                 entries = [e for e in archive.infolist() if not e.is_dir()]
                 if len(entries) > 20 or sum(e.file_size for e in entries) > 100 * 1024 * 1024:
                     raise ValueError("ZIP limits exceeded")
@@ -302,7 +305,7 @@ def _worker(path, media_type, country, options, queue):
                         name,
                     )
         else:
-            extract(Path(path).read_bytes(), media_type)
+            extract(original, media_type)
         if sum(len(b["text"]) for p in pages for b in p["blocks"]) > 200000:
             raise ValueError("Extracted text limit exceeded")
         if not any(p["blocks"] for p in pages):
@@ -318,7 +321,7 @@ def _worker(path, media_type, country, options, queue):
                 options.get("date_format", "iso"),
             ),
             "pages": pages,
-            "original_sha256": hashlib.sha256(Path(path).read_bytes()).hexdigest(),
+            "original_sha256": expected_sha256,
             "provider_versions": {
                 name: importlib.metadata.version(name)
                 for name in ["rapidocr", "onnxruntime", "pypdfium2"]
@@ -348,9 +351,9 @@ def _worker(path, media_type, country, options, queue):
             output["validation_messages"] = [
                 "Multiple documents retained separately. Select a ZIP member for a separately reviewed vouching extraction."
             ]
-        queue.put({"result": output})
+        return {"result": output}
     except Exception as exc:
-        queue.put({"error": type(exc).__name__, "message": str(exc)[:300]})
+        return {"error": type(exc).__name__, "message": str(exc)[:300]}
 
 
 def extract_document(path, media_type, country, options=None):
@@ -359,27 +362,10 @@ def extract_document(path, media_type, country, options=None):
     config = settings()
     if Path(path).stat().st_size > config.document_max_bytes:
         raise ValueError("OCR document exceeds configured byte limit")
-    options = {**(options or {}), "max_pages": config.document_max_pages}
-    context = multiprocessing.get_context("spawn")
-    queue = context.Queue(maxsize=1)
-    process = context.Process(
-        target=_worker, args=(str(path), media_type, country, options or {}, queue), daemon=True
-    )
-    process.start()
-    try:
-        try:
-            result = queue.get(timeout=120)
-        except Exception:
-            raise ValueError("Local extraction timed out or worker failed") from None
-        if "error" in result:
-            raise ValueError("Local extraction failed: " + result["message"])
-        return result["result"]
-    finally:
-        process.join(timeout=0.5)
-        if process.is_alive():
-            process.terminate()
-            process.join(timeout=2)
-        queue.close()
+    from app.modules.intelligence.extraction_runtime import extract
+
+    options = {**(options or {}), "max_pages": config.document_max_pages, "max_bytes": config.document_max_bytes}
+    return extract(path, media_type, country, options)
 
 
 def preview_page(path, media_type, page_number, member=None):

@@ -1,0 +1,8 @@
+{
+  "baseline_commit": "3b09fa1",
+  "synthetic": true,
+  "daemon_context": true,
+  "status": "REPRODUCED_FAILURE",
+  "error_type": "AssertionError",
+  "message": "daemonic processes are not allowed to have children"
+}

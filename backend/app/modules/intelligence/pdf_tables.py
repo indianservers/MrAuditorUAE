@@ -4,7 +4,6 @@ import hashlib
 import io
 import json
 import math
-import os
 import subprocess
 import sys
 from decimal import Decimal, localcontext
@@ -13,6 +12,7 @@ from typing import Any, Literal
 
 from pydantic import Field, model_validator
 
+from app.modules.intelligence.extraction_process import run_worker
 from app.modules.jurisdictions.profiles import Strict
 
 PDF_FIELDS = Literal[
@@ -372,8 +372,11 @@ def read_pdf_grid(path, profile, separator, date_format, sha256):
         "date_format": date_format,
         "expected_sha256": sha256,
     }
+    creationflags = 0
+    if sys.platform == "win32":
+        creationflags = subprocess.CREATE_NO_WINDOW
     try:
-        result = subprocess.run(
+        result = run_worker(
             [sys.executable, "-m", "app.modules.intelligence.pdf_tables", "--worker"],
             input=json.dumps(payload),
             text=True,
@@ -383,7 +386,7 @@ def read_pdf_grid(path, profile, separator, date_format, sha256):
             timeout=45,
             check=False,
             cwd=Path(__file__).resolve().parents[3],
-            creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0,
+            creationflags=creationflags,
         )
     except subprocess.TimeoutExpired:
         raise ValueError("PDF table extraction exceeded its 45-second bound") from None

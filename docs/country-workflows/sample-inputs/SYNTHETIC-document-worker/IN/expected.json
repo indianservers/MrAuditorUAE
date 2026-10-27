@@ -1,0 +1,22 @@
+{
+  "synthetic": true,
+  "country": "IN",
+  "fields": {
+    "invoice_number": "SYN-IN-WORKER",
+    "document_date": "2026-06-01",
+    "net_amount": "100.00",
+    "tax_amount": "5.00",
+    "gross_amount": "105.00",
+    "currency": "INR"
+  },
+  "sha256": {
+    "digital.pdf": "d03440c29e6d16ac704002b20fc5d12fcd28ddabb484171cd2b35d6461b57672",
+    "scan.png": "feff69bbbd4a0644b7c27776aac846416d991033885dad553693eefc8c511509",
+    "documents.zip": "8953e4129df8d7ecc60b06ab1a1633d31d336bf90d10587ebd38d7faf1e7f171"
+  },
+  "zip_member": "invoice.pdf",
+  "batch_invoice_numbers": [
+    "SYN-IN-WORKER",
+    "SYN-IN-OTHER"
+  ]
+}

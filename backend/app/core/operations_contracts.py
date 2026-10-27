@@ -19,6 +19,9 @@ SUPPORTING_TABLE_PATHS = (
     "modules/intelligence/reconciliation_scope.py",
     "modules/intelligence/pdf_tables.py",
     "modules/intelligence/documents.py",
+    "modules/intelligence/extraction_runtime.py",
+    "modules/intelligence/extraction_process.py",
+    "modules/intelligence/document_worker.py",
     "modules/ingestion/parser.py",
     "modules/accounting/schemas.py",
     "modules/lineage/storage.py",
@@ -143,7 +146,12 @@ def implementation_hash():
     app = Path(__file__).resolve().parents[1]
     paths = [
         "core/operations_contracts.py",
+        "modules/intelligence/service.py",
         "modules/intelligence/matching.py",
+        "modules/intelligence/documents.py",
+        "modules/intelligence/extraction_runtime.py",
+        "modules/intelligence/extraction_process.py",
+        "modules/intelligence/document_worker.py",
         "modules/intelligence/transaction_candidates.py",
         "modules/intelligence/matching_review.py",
         "modules/intelligence/reconciliation_scope.py",

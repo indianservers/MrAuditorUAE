@@ -1,0 +1,59 @@
+{
+  "date": "2026-10-27",
+  "baseline_commit": "3b09fa1b34166f9219f7bc12fa7a1b35be7c102e",
+  "synthetic": true,
+  "country_order": ["AE", "IN"],
+  "platform": "Windows",
+  "implementation_sha256": "683b4182e4e9ff385def7397a28124cb89fff35432a2b1774786ffb116b53c70",
+  "country_implementation_sha256": "02e7a7dd86dedda2befe6b8ad1f954ba81fd5175738fa0f0704e198efa7e724d",
+  "checks": {
+    "backend_full_runs": [
+      {"passed": 2629, "skipped": 4, "warnings": 2, "seconds": 101.75},
+      {"passed": 2629, "skipped": 4, "warnings": 2, "seconds": 89.37}
+    ],
+    "new_native_worker_unit_cases": 33,
+    "additional_implementation_fingerprint_cases": 5,
+    "http_api_cases_passed": 16,
+    "new_document_http_api_cases": 11,
+    "frontend_tests_passed": 232,
+    "frontend_test_files": 49,
+    "production_frontend_build": "PASSED",
+    "scoped_ruff_and_eslint": "PASSED",
+    "windows_mypy_source_files_passed": 7,
+    "linux_targeted_mypy_source_files_passed": 6,
+    "browser_tests_passed": 1,
+    "browser_native_extraction_cases": 8,
+    "browser_cached_result_switch_regressions": 2,
+    "screenshots_visually_inspected": 20,
+    "fresh_serial_native_extractions_passed": 30
+  },
+  "coverage": [
+    "Digital PDF, forced PDF OCR, raster PNG, selected ZIP member and multi-document ZIP extraction",
+    "Public daemon context, Arabic/Hindi filesystem paths and non-UTF8 inherited console encoding",
+    "Bounded private UTF8 JSON receipts, malformed receipts, original byte replacement and retained-version hash mismatch",
+    "Real Windows venv child cleanup on deadline, cleanup of descendants after launcher success and fail-closed job assignment",
+    "Independent review authorization and staleness after retained source replacement",
+    "PDF-grid reader shares process lifecycle supervisor and retains its 45-second deadline",
+    "Cached multi-page result switch restores the single-page original preview"
+  ],
+  "observed_failures_and_corrections": [
+    "Old multiprocessing implementation reproducibly rejects a public daemon context. This does not establish the exact cause of every earlier opaque intermittent timeout.",
+    "A real timeout test exposed a surviving Windows venv Python child; suspended launch plus a kill-on-close Job Object now contains and terminates the worker tree.",
+    "A process-exit race in the lifecycle test was corrected by waiting on a known process or accepting NoSuchProcess/zombie, rather than assuming pid_exists and status are atomic."
+  ],
+  "qualification_limits": [
+    "All saved examples and expected fields are authored synthetic fixtures; tax amounts are arithmetic examples, not legal rate validation.",
+    "The authored catalogue remains 154 scenarios. This increment does not establish 154 independently validated real-client use cases.",
+    "Thirty serial extractions do not establish concurrent load, production capacity or hosted pool behavior.",
+    "Windows lifecycle containment is not an OS security sandbox. Linux static checks are not native Linux execution.",
+    "Scanned Arabic/Hindi accuracy, live malware/provider services, real-client populations, hosted resource limits and professional conclusions remain unqualified."
+  ],
+  "artifacts": {
+    "baseline": "document-worker-baseline.json",
+    "serial_observations": "document-worker-stress.json",
+    "browser": "document-worker-browser-results.json",
+    "fixtures": "../country-workflows/sample-inputs/SYNTHETIC-document-worker/",
+    "screenshots": "../country-workflows/screenshots/document-worker/",
+    "pilot_data": "../../pilot-data/"
+  }
+}

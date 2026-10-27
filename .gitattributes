@@ -3,3 +3,8 @@
 
 # Preserve the literal bytes of hashed bank-statement fixtures.
 docs/country-workflows/sample-inputs/SYNTHETIC-bank-account-labels/*/statement.csv -text
+
+# Local extraction fixtures are verified by their original byte hashes.
+docs/country-workflows/sample-inputs/SYNTHETIC-document-worker/*/*.pdf binary
+docs/country-workflows/sample-inputs/SYNTHETIC-document-worker/*/*.png -text
+docs/country-workflows/sample-inputs/SYNTHETIC-document-worker/*/*.zip -text
