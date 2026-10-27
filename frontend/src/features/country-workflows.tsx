@@ -15,6 +15,7 @@ import { useAPI, useAction, useCan } from "@/hooks/use-api";
 import { useEventHistory } from "@/hooks/use-event-history";
 import { useScope } from "@/stores/workspace";
 import { Button, ErrorState, Status } from "@/components/ui/primitives";
+import { TaxCloseExposures } from "./tax-close-exposures";
 import { PageHeader } from "./shared";
 import { IntelligenceExports } from "./intelligence-exports";
 import { BankCarryforwardSource } from "./bank-carryforward-source";
@@ -1759,6 +1760,9 @@ export function CountryWorkflows({
           localError
         }
       />
+      {mode === "country-workflow" && workflow === "tax-close" && (
+        <TaxCloseExposures eid={eid} />
+      )}
       <details style={{ margin: "16px 0" }}>
         <summary>
           {config.data?.scenarios.length || 0} synthetic reference scenarios

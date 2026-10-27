@@ -158,3 +158,9 @@ Engagement completion now rechecks source freshness for every approved or locked
 audit record. Replacing a ledger can block release while historical approval
 labels remain intact; the completion screen identifies the affected records.
 See [completion gates and verification](native-adapters.md#engagement-completion-requires-current-reviewed-sources).
+
+
+Tax close now rolls up exact linked audit finding IDs across reviewed workpapers,
+counting a repeated finding once and keeping currencies and impact signs separate.
+Missing values or unreviewed findings remain unresolved. See
+[source, review and regression scope](native-adapters.md#shared-tax-close-finding-roll-up-27-october-2026).

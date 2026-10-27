@@ -862,6 +862,8 @@ async def action(db, ctx, eid, rid, data, request_id):
 
 
 async def completion(db, ctx, eid):
+    from app.modules.audit_execution.impact_register import misstatement_register
+
     await engagement(db, ctx, eid)
     rows = (
         await db.scalars(
@@ -992,42 +994,7 @@ async def completion(db, ctx, eid):
     return {
         "checks": checks,
         "ready": all(c["passed"] for c in checks),
-        "misstatement_register": {
-            "corrected_gross": str(
-                sum(
-                    (
-                        abs(Decimal(str(r.body["financial_impact"])))
-                        for r in rows
-                        if r.kind == "findings"
-                        and r.body.get("finding_type") == "misstatement"
-                        and r.body.get("correction_status") == "corrected"
-                        and r.body.get("financial_impact") is not None
-                    ),
-                    Decimal(0),
-                )
-            ),
-            "uncorrected_gross": str(
-                sum(
-                    (
-                        abs(Decimal(str(r.body["financial_impact"])))
-                        for r in rows
-                        if r.kind == "findings"
-                        and r.body.get("finding_type") == "misstatement"
-                        and r.body.get("correction_status") != "corrected"
-                        and r.body.get("financial_impact") is not None
-                    ),
-                    Decimal(0),
-                )
-            ),
-            "unquantified_ids": [
-                str(r.id)
-                for r in rows
-                if r.kind == "findings"
-                and r.body.get("finding_type") == "misstatement"
-                and r.body.get("financial_impact") is None
-            ],
-            "qualitative_review": "Amounts do not determine reporting implications; qualified assessment required",
-        },
+        "misstatement_register": misstatement_register(rows),
         "audit_opinion": "Human professional judgment required; no opinion generated",
     }
 

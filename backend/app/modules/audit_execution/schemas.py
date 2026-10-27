@@ -3,7 +3,7 @@ from datetime import date, datetime
 from decimal import Decimal
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from app.modules.audit_execution.catalogue import ASSERTIONS
 
@@ -217,11 +217,21 @@ class Finding(Body):
     ]
     severity: Literal["low", "medium", "high", "critical"]
     financial_impact: Decimal | None = Field(default=None, max_digits=28, decimal_places=8)
+    financial_impact_currency: str | None = Field(default=None, pattern=r"^[A-Z]{3}$")
     management_response: str = Field(default="", max_length=4000)
     correction_status: Literal["not_applicable", "uncorrected", "corrected"] = "not_applicable"
     qualitative_considerations: str = Field(default="", max_length=4000)
     follow_up: str = Field(default="", max_length=4000)
     correction_evidence_id: uuid.UUID | None = None
+
+    @field_validator("financial_impact_currency")
+    @classmethod
+    def impact_currency_known(cls, value):
+        import pycountry
+
+        if value is not None and pycountry.currencies.get(alpha_3=value) is None:
+            raise ValueError("Select a recognized impact currency")
+        return value
 
 
 class ReviewNote(Body):

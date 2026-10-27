@@ -15,6 +15,7 @@ from app.modules.intelligence import service as intelligence
 from app.modules.regulatory import schemas as s
 from app.modules.regulatory import service, source_documents
 from app.modules.regulatory.conversion import ConversionInput
+from app.modules.regulatory.exposure_rollup import ExposureRollupInput
 from app.modules.regulatory.models import RuleSourceDocument, RuleVersion
 from app.modules.regulatory.validation_schemas import ValidationInput
 
@@ -399,3 +400,13 @@ async def impact(identifier: uuid.UUID, db: DB, ctx: Actor, offset: int = Query(
         "next_offset": offset + 100 if len(rows) > 100 else None,
         "policy": "Historical outputs stay immutable; regeneration requires an explicit authorized action",
     }
+
+
+@router.post("/engagements/{eid}/tax-close-rollups", status_code=201)
+async def tax_close_rollup(
+    eid: uuid.UUID, data: ExposureRollupInput, db: DB, ctx: Actor, request: Request
+):
+    from app.modules.regulatory.exposure_rollup import prepare
+
+    eng = await audit.engagement(db, ctx, eid, "workingpaper.create", True)
+    return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))

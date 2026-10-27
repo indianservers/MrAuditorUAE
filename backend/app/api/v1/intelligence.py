@@ -1314,6 +1314,11 @@ async def review(
                 from app.modules.intelligence.matching_review import verify_review
 
                 await verify_review(db, ctx, eid, obj)
+            if obj.kind == "tax-close-rollup" and obj.body.get("blocked"):
+                raise HTTPException(
+                    409,
+                    "Resolve the tax-close finding scope, quantification and review issues before approval",
+                )
             if obj.kind == "tax-connected-assessment" and obj.body.get("issues"):
                 raise HTTPException(
                     409, "Resolve connected tax issues and regenerate before approval"

@@ -3286,3 +3286,69 @@ baseline commit and exit codes. This does not verify subsequent increments or
 close legal/client/provider/security gates. Its generated historical demo files
 were preserved privately and restored before the primary checkout was fast-forwarded;
 pre-existing temporary files were left intact. The goal remains unfinished.
+
+
+### Shared tax-close finding roll-up (27 October 2026)
+
+The tax-close workspace now has a source-linked finding roll-up alongside its
+existing country readiness checklist. Select up to 50 current independently
+reviewed workpapers; the service discovers their explicitly linked audit finding
+records in the same tenant/engagement. At most 100 distinct linked findings are
+supported. One finding referenced by GST/VAT and tax-audit/CT papers contributes
+once, retaining every distinct workpaper/finding pair. Different finding IDs are
+not merged by name, amount or inferred transaction similarity. This closes the
+case07 same-finding/multiple-workpapers duplication gap for the selected scope;
+it does not establish completeness of all client tax exposures.
+
+Findings now support an optional recognized ISO impact currency. Legacy missing
+currency remains unassessed; no country/functional-currency default is inserted.
+The roll-up retains source amounts, statuses and correction classifications.
+Positive and negative impacts stay separate within each currency, with no FX,
+net tax liability, recovery conclusion or automatic correction offset. Explicit
+zero is counted only with known currency and a reviewed finding disposition.
+Unquantified amounts, missing currency and findings without a completed review
+remain unresolved. An empty selected paper is a scope gap. Analytics-finding
+links require a separately assessed audit finding and remain an explicit blocker,
+even where the same paper also has a supported reviewed finding.
+
+Every selected paper and included finding is a direct immutable dependency;
+current permissions and source freshness are checked on read and preparation.
+Preparers/source authors cannot approve their roll-up. Outstanding issues block
+approval, while documented accepted-unresolved findings can remain adverse
+findings rather than being relabelled clean. Source reopening invalidates the
+result without rewriting its historical body. Algorithm contract and source
+fingerprint checks require regeneration after implementation changes. Shared
+exact-text exports retain rows, currency totals, issues and reference counts.
+
+The UI is available when selecting the tax-close workflow. It retains selected
+papers across pages, excludes unreviewed choices, resets drafts on firm/country/
+engagement changes, loads older retained results and gates independent review on
+source freshness and resolved preparation issues. It displays distinct finding
+counts and repeated references eliminated, with original identities and complete
+exports. The 50-paper/100-finding bounds are explicit; they are not universal
+population coverage or a filing adapter.
+
+Adding explicit currency exposed a compatibility problem in the existing
+completion register: corrected and uncorrected misstatement impacts were summed
+without separating units. It now reports gross absolute quantified impacts by
+explicit currency. Legacy single totals are present only for a complete
+single-currency population, or genuine empty populations; mixed or unassessed
+populations yield null summaries with separate unknown amount/currency IDs.
+No amount is converted, netted across currencies or silently assumed functional.
+
+Verification: [2,807 backend unit tests](../phase-12/tax-close-backend.xml) passed,
+with five existing skips and two warnings. The
+[seven-case API regression](../phase-12/tax-close-api.xml) passed UAE and India
+roll-ups plus existing statutory reporting/country workflows. The two complete
+country cases verify same-ID deduplication, exact precision, repeatable result
+hashes, pending unknowns and approval rejection, self-review separation, XLSX,
+cross-engagement rejection, source-change staleness, preserved history and
+currency-separated completion summaries. All 267 frontend tests passed with two
+workers, including cross-page selection, pending review and country resets.
+TypeScript, ESLint (one pre-existing unused-variable warning), production build,
+Ruff, scoped mypy (21 files) and generated API contracts/types passed.
+
+These fixtures are synthetic and do not qualify real client exposures, complete
+country laws, all mandatory statutory form content, providers or release/security.
+No new full-app browser/screenshot qualification is claimed. Catalogue coverage
+remains 154 authored synthetic scenarios; the broader goal remains unfinished.

@@ -101,6 +101,10 @@ async def event(db, ctx, eid, identifier, require_current=False, auth_seen=None)
         for dependency in obj.dependencies:
             if dependency["type"] == "record":
                 await audit.get_record(db, ctx, eid, uuid.UUID(dependency["id"]), lock=False)
+    if obj.kind == "tax-close-rollup":
+        for dependency in obj.dependencies:
+            if dependency["type"] == "record":
+                await audit.get_record(db, ctx, eid, uuid.UUID(dependency["id"]), lock=False)
     if obj.kind == "tax-connected-assessment":
         from app.modules.regulatory.reporting import engines
 
@@ -118,6 +122,7 @@ async def event(db, ctx, eid, identifier, require_current=False, auth_seen=None)
         "report-template",
         "statutory-report",
         "tax-connected-assessment",
+        "tax-close-rollup",
     }:
         await engagement_permissions(db, ctx, eid, "accounting.read")
     for dependency in obj.dependencies:
@@ -189,6 +194,14 @@ async def _head(db, ctx, obj):
 async def current(db, ctx, obj, visited=None):
     if obj.tenant_id != ctx.tenant_id:
         return False
+    if getattr(obj, "kind", None) == "tax-close-rollup":
+        from app.modules.regulatory.exposure_rollup import CONTRACT, implementation_hash
+
+        if (
+            obj.body.get("contract") != CONTRACT
+            or obj.body.get("implementation_sha256") != implementation_hash()
+        ):
+            return False
     if getattr(obj, "kind", None) in {"report-template", "statutory-report"}:
         from app.modules.regulatory.tax_forms import IndiaTaxAuditScope, has_tax_scope_contract
 
