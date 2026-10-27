@@ -30,6 +30,7 @@ def implementation_hash():
         "schemas.py",
         "report_packs.py",
         "form26_index.py",
+        "workpaper_report_scope.py",
     ):
         digest.update(name.encode() + b"\0" + hashlib.sha256((root / name).read_bytes()).digest())
     return digest.hexdigest()
@@ -203,4 +204,8 @@ async def require_ready(db, ctx, eng, config):
             if source.status not in allowed:
                 raise HTTPException(409, "Required report source records need professional review")
             await require_current(db, ctx, source)
+            if pack and pack["kind"] == "form26-index" and block.requirement_keys:
+                from app.modules.regulatory.workpaper_report_scope import require_mapping
+
+                require_mapping(config, block, source.body)
     return {**result, "source_validation": "CURRENT_REVIEWED_SOURCES_RECHECKED"}

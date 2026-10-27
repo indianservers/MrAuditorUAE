@@ -115,6 +115,28 @@ async def test_period_form_review_export_and_source_correction(
     assert uploaded.status_code == 201, uploaded.text
     evidence = (await c.get(base + "/records/" + evidence["id"], headers=h)).json()
     evidence = await approve(c, h, reviewer[0], base, evidence)
+    from app.modules.regulatory.report_packs import manifest
+
+    source_scope = None
+    if modern:
+        item_pack = manifest(f"india-form26-index:{part}/1")
+        source_scope = {
+            "preset_id": item_pack["id"],
+            "period_start": start,
+            "period_end": end,
+            "items": [
+                {
+                    "key": r["key"],
+                    "disposition": "NOT_APPLICABLE"
+                    if r["key"] == "form26.schedule.quantities"
+                    else "REQUIRED",
+                    "section_index": 0,
+                    "supporting_sources": [{"kind": "record", "id": evidence["id"]}],
+                    "assessment": "SYNTHETIC mapping control mechanics only; no substantive legal evidence qualification",
+                }
+                for r in item_pack["requirements"]
+            ],
+        }
     paper = await create(
         c,
         h,
@@ -122,6 +144,7 @@ async def test_period_form_review_export_and_source_correction(
         "working-papers",
         {
             "folder": "SYNTHETIC tax scope",
+            "report_requirement_scope": source_scope,
             "sections": [
                 {
                     "heading": "Assessed source facts",
@@ -290,6 +313,29 @@ async def test_period_form_review_export_and_source_correction(
         assert catalogue.status_code == 200, catalogue.text
         pack = next(p for p in catalogue.json()["items"] if p["report_part"] == part)
         assert len(pack["requirements"]) == 65
+        invalid_scope = deepcopy(source_scope)
+        invalid_scope["items"][0]["section_index"] = 5
+        invalid_paper = await c.post(
+            base + "/working-papers",
+            headers=h,
+            json={
+                "reference": "SYNTHETIC-invalid-item-scope",
+                "title": "SYNTHETIC invalid section declaration",
+                "body": {
+                    "folder": "SYNTHETIC scope validation",
+                    "sections": [
+                        {
+                            "heading": "One section",
+                            "text": "Synthetic substantive text and source assessment",
+                        }
+                    ],
+                    "sources": [{"kind": "record", "id": evidence["id"]}],
+                    "report_requirement_scope": invalid_scope,
+                    "conclusion": "Synthetic invalid item section rejection fixture",
+                },
+            },
+        )
+        assert invalid_paper.status_code == 422, invalid_paper.text
         # Consolidated synthetic workpaper mappings exercise controls, not substantive legal coverage.
         indexed = {
             **data,
@@ -333,6 +379,34 @@ async def test_period_form_review_export_and_source_correction(
         )
         assert generic.status_code == 201, generic.text
         assert (await decision(c, reviewer[0], eid, generic.json())).status_code == 409
+        unscoped = await create(
+            c,
+            h,
+            base,
+            "working-papers",
+            {
+                "folder": "SYNTHETIC no item declaration",
+                "sections": [
+                    {
+                        "heading": "General procedures",
+                        "text": "Synthetic approved paper without report item declarations",
+                    }
+                ],
+                "sources": [{"kind": "record", "id": evidence["id"]}],
+                "conclusion": "Synthetic source without declared clause coverage",
+            },
+        )
+        unscoped = await action(c, h, base, unscoped, "submit")
+        unscoped = await action(c, manager[0], base, unscoped, "approve")
+        unscoped = await action(c, partner[0], base, unscoped, "approve")
+        undeclared = await c.post(
+            prefix + "/report-templates",
+            headers=h,
+            json={**indexed, "blocks": [{**indexed["blocks"][0], "source_id": unscoped["id"]}]},
+        )
+        assert undeclared.status_code == 201, undeclared.text
+        rejected = await decision(c, reviewer[0], eid, undeclared.json())
+        assert rejected.status_code == 409 and "Declare item coverage" in rejected.text
         prepared = await c.post(prefix + "/report-templates", headers=h, json=indexed)
         assert prepared.status_code == 201, prepared.text
         assert (await decision(c, h, eid, prepared.json())).status_code == 403

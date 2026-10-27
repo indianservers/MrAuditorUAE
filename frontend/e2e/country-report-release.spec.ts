@@ -679,6 +679,121 @@ for (const code of ["AE", "IN"] as const) {
     await compositionForm.screenshot({
       path: `${screenshots}/${code}-turnover-composition.png`,
     });
+    if (code === "IN") {
+      const supporting = await post(
+        page.request,
+        `engagements/${engagement.id}/audit/evidence`,
+        {
+          reference: `SYNTHETIC-ITEM-SUPPORT-${Date.now()}`,
+          title: "SYNTHETIC source metadata only",
+          body: {
+            category: "Other",
+            retain_until: "2036-12-31",
+            narrative:
+              "SYNTHETIC metadata for draft mapping controls; no client or legal evidence qualification",
+          },
+        },
+      );
+      await page.goto(`/engagements/${engagement.id}/working-papers`);
+      await page
+        .getByRole("button", { name: "New record", exact: true })
+        .click();
+      await page
+        .getByLabel("Reference", { exact: true })
+        .fill(`SYNTHETIC-ITEM-WP-${Date.now()}`);
+      await page
+        .getByLabel("Title", { exact: true })
+        .fill("SYNTHETIC workpaper item mapping draft");
+      await page
+        .getByRole("textbox", { name: /^Folder/ })
+        .fill("SYNTHETIC report mappings");
+      await page
+        .getByLabel("Section 1 text", { exact: true })
+        .fill(
+          "SYNTHETIC substantive mapping mechanics and source assessment; no legal conclusion",
+        );
+      await page
+        .getByRole("textbox", { name: /^Conclusion/ })
+        .fill("SYNTHETIC draft controls only; not reviewed client findings");
+      await page
+        .getByRole("combobox", { name: "Link source record", exact: true })
+        .selectOption(supporting.id);
+      await page
+        .getByRole("combobox", {
+          name: "Declare Form 26 item coverage",
+          exact: true,
+        })
+        .selectOption("yes");
+      await page
+        .getByRole("combobox", { name: "Workpaper report preset", exact: true })
+        .selectOption("india-form26-index:A/1");
+      await page
+        .getByLabel("Workpaper report period start", { exact: true })
+        .fill("2026-04-01");
+      await page
+        .getByLabel("Workpaper report period end", { exact: true })
+        .fill("2027-03-31");
+      await page
+        .getByRole("listbox", {
+          name: "Report items supported by this section",
+          exact: true,
+        })
+        .selectOption("form26.C.1");
+      await page
+        .getByRole("combobox", {
+          name: "Supporting workpaper section",
+          exact: true,
+        })
+        .selectOption("0");
+      await page
+        .getByRole("listbox", {
+          name: "Existing protected supporting sources",
+          exact: true,
+        })
+        .selectOption(`record:${supporting.id}`);
+      await page
+        .getByLabel("Item support and applicability assessment", {
+          exact: true,
+        })
+        .fill(
+          "SYNTHETIC explicit source mapping only, awaiting independent workpaper review",
+        );
+      await page
+        .getByRole("button", {
+          name: "Add declared item mappings",
+          exact: true,
+        })
+        .click();
+      await page.setViewportSize({ width: 1440, height: 1800 });
+      const itemForm = page.getByRole("group", {
+        name: "Report item coverage declared in this workpaper",
+        exact: true,
+      });
+      await itemForm.scrollIntoViewIfNeeded();
+      await itemForm.screenshot({
+        path: `${screenshots}/IN-workpaper-item-mapping.png`,
+      });
+      const savedPaper = page.waitForResponse(
+        (r) =>
+          r
+            .url()
+            .endsWith(`/engagements/${engagement.id}/audit/working-papers`) &&
+          r.request().method() === "POST",
+      );
+      await page
+        .getByRole("button", { name: "Save version", exact: true })
+        .click();
+      const saved = await savedPaper;
+      expect(saved.status(), await saved.text()).toBe(201);
+      const paper = await saved.json();
+      expect(paper.status).toBe("DRAFT");
+      expect(paper.body.report_requirement_scope.items[0].key).toBe(
+        "form26.C.1",
+      );
+      expect(
+        paper.body.report_requirement_scope.items[0].supporting_sources,
+      ).toEqual([{ kind: "record", id: supporting.id }]);
+    }
     await reviewerContext.close();
   });
 }

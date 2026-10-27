@@ -4,6 +4,7 @@ import {
   type CompletionCheck,
 } from "./completion-controls";
 import { NonresidentAuditRevenueEditor } from "./nonresident-audit-revenue";
+import { WorkpaperReportScopeEditor } from "./workpaper-report-scope";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -544,6 +545,20 @@ export function AuditEditor({
                     key={`${base}:${record?.id || "new"}:${key}`}
                     base={base}
                     value={val}
+                    onChange={(v) => set(key, v)}
+                  />
+                );
+              if (
+                key === "report_requirement_scope" &&
+                area === "working-papers"
+              )
+                return (
+                  <WorkpaperReportScopeEditor
+                    key={`${base}:${record?.id || "new"}:${key}`}
+                    base={base}
+                    value={val}
+                    sections={body.sections}
+                    sources={body.sources}
                     onChange={(v) => set(key, v)}
                   />
                 );

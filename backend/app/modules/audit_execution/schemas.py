@@ -6,6 +6,7 @@ from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 from app.modules.audit_execution.catalogue import ASSERTIONS
+from app.modules.regulatory.workpaper_report_scope import WorkpaperReportScope, validate_bindings
 
 
 class Strict(BaseModel):
@@ -147,6 +148,14 @@ class Section(Strict):
 
 
 class WorkingPaper(Body):
+    report_requirement_scope: WorkpaperReportScope | None = None
+
+    @model_validator(mode="after")
+    def report_item_bindings(self):
+        if self.report_requirement_scope:
+            validate_bindings(self.report_requirement_scope, self.sections, self.sources)
+        return self
+
     factual_findings_only: bool = False
     inherit_source_permissions: bool = False
     advanced_input: dict | None = None

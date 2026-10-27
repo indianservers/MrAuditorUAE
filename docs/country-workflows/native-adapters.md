@@ -4032,3 +4032,42 @@ as clause support, generate/export all 65 structural mappings, and preserve
 source-withdrawal staleness and unqualified historical report content. The source
 workpapers and mappings are synthetic mechanics fixtures, not independent legal
 expected results or completed client tax-audit particulars.
+
+### Reviewed Form 26 item declarations in source workpapers
+
+The India evidence index now checks explicit declarations in each source
+workpaper, rather than allowing report authors to attribute any item to an
+otherwise approved workpaper. The optional structured declaration names the
+report preset/part, tax period, item applicability, substantive section and
+existing protected supporting links. Unknown/duplicate items, invalid sections,
+unlinked or wrong-kind sources, unsupported not-applicable claims and legacy
+periods are rejected. Report review and generation require exact agreement with
+the current independently reviewed source workpaper. Editing that workpaper
+continues to invalidate dependent review through the existing source lifecycle.
+
+The workpaper editor supplies preset, section and protected-source selectors;
+no copied source UUID or hand-authored JSON is needed. Declarations are retained
+with the source body and complete source chunks in exports. This establishes
+reviewed attribution, not semantic evidence sufficiency, completed subfields,
+statutory calculations, signed opinions or filing qualification.
+
+The earlier India index browser job passed all three cases on source `dac4a4e`.
+Its [source-pinned receipt](../phase-12/india-index-browser-dac4a4e.json) and
+[visually inspected screenshot](screenshots/report-presets/IN-form26-evidence-index-dac4a4e.png)
+are retained. The newly extended browser smoke authors and saves a synthetic
+item-declared draft workpaper; its source-specific hosted execution is pending.
+Actual client inputs and independently checked results remain awaited in the
+country folders under `pilot-data/`; their creation does not qualify a pilot.
+
+Local verification of this increment: all 2,916 backend unit cases passed (five
+skipped) in the serial rerun; all 14 focused declaration unit cases plus ten
+real-database report/form-scope regression cases passed; all 280 frontend tests
+and the production build passed. Application-wide Ruff/format and mypy (387
+source files), TypeScript, scoped ESLint and current API/payload contract checks
+passed. [Backend receipt](../phase-12/workpaper-scope-backend.xml) and
+[focused/API receipt](../phase-12/workpaper-scope-api.xml) are retained.
+The [initial unit run](../phase-12/workpaper-scope-backend-initial.xml) had one
+existing worker-start timing failure while frontend/API jobs ran concurrently:
+the one-second timeout expired before its PID marker was written. All 33 worker
+cases passed in an [isolated recheck](../phase-12/workpaper-scope-worker-recheck.xml),
+and the full serial rerun passed without test or production timeout changes.

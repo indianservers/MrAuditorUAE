@@ -1,0 +1,14 @@
+{
+  "source_commit": "dac4a4eab950cb25bbe251188891789894265015",
+  "run_id": 40543839079,
+  "job_id": 122329019855,
+  "job_conclusion": "success",
+  "browser_cases_passed": 3,
+  "duration_seconds": 20.5,
+  "artifact_id": 12751957493,
+  "archive_sha256": "e8101cc367f752cd30dce3b763b5795371a0bfcdcb39ac37cb45539159da93fe",
+  "screenshot": "docs/country-workflows/screenshots/report-presets/IN-form26-evidence-index-dac4a4e.png",
+  "screenshot_sha256": "32c0fce4d6d3e52f118ee9a9517449557197dc8faa5e930ce23f193a862a2f5e",
+  "visual_inspection": "Readable India category, Form 26 preset, explicit tax-period/report-part controls, unassessed mandatory items and draft qualification limits",
+  "limits": "Synthetic draft index controls only; does not qualify legal fields, real-client results or the newer workpaper item declaration editor"
+}
