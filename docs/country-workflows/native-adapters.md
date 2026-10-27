@@ -3636,3 +3636,28 @@ The pinned base and additional-library package metadata remain scanner-visible.
 The promoted default target still needs its own hosted result. Broader real-client,
 professional, deployment/account/backup and release gates are not established by
 this image-level capability and vulnerability result.
+
+
+### Hosted browser coverage for declared reports
+
+The existing isolated release-smoke job now includes country-report-release.spec.ts
+for UAE and India. Its guarded disposable-database seed creates distinct synthetic
+preparer and reviewer identities and writes only public test identity IDs to an
+ignored local fixture. Passwords remain generated/masked CI environment values;
+no user invitation or external message is sent.
+
+The real BFF/browser flow creates country entities and periods, grants engagement
+access, independently approves the reporting context, saves an incomplete report
+draft, verifies approval is disabled, maps a declared narrative requirement,
+verifies author self-review returns 403, independently reviews the declared scope,
+generates an unsigned draft and downloads XLSX through the authenticated BFF.
+The narrative explicitly disables its evidence requirement; this is a controlled
+synthetic communication case, not a source-backed statutory pack or legal scope
+qualification. Source/calculation provenance remains separately covered by API
+regressions. Screenshots capture the known coverage gap and retained coverage
+review, with country-specific synthetic titles, through the normal CI artifact.
+
+No new local preview service is started. The test reuses the existing guarded CI
+services and credentials. Local TypeScript, lint (one existing warning), seed Ruff,
+Python/YAML syntax and whitespace checks passed. Actual browser results and visual
+inspection remain pending the hosted run; test definitions are not pass evidence.

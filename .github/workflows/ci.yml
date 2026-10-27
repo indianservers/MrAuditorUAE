@@ -181,6 +181,7 @@ jobs:
       DATABASE_URL: postgresql+asyncpg://auditos@localhost:5432/auditos_smoke_test
       REDIS_URL: redis://localhost:6379/0
       AUDITOS_SMOKE_EMAIL: release-smoke@example.com
+      AUDITOS_SMOKE_REVIEWER_EMAIL: release-reviewer@synthetic.example
       AUDITOS_E2E_ORIGIN: http://127.0.0.1:3005
     steps:
       - uses: actions/checkout@v4
@@ -216,3 +217,8 @@ jobs:
           exit 1
       - run: npx playwright test --config playwright.smoke.config.ts
         working-directory: frontend
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: country-report-browser-evidence
+          path: frontend/test-results/country-reports/
