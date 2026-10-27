@@ -3564,3 +3564,38 @@ passes without exemptions. No new full-app browser/screenshot qualification is
 claimed. Catalogue coverage remains 154 authored synthetic scenarios, not
 qualified real-client cases; professional rule/form qualification, live providers,
 consented pilot evidence and release/security gates remain open.
+
+
+### Minimal runtime qualification candidate
+
+The retained container artifact for source 7789ccb (run 40514422843, artifact
+12739230633; ZIP SHA-256 7222dbe5c374ebd5e0d56cd0439fdd5b50c74839896b4434c14946902820dd80)
+reports 44 HIGH findings across eight CVEs in backend Debian runtime packages.
+No fixed versions are listed in that scan. The frontend image has no
+HIGH/CRITICAL findings. The existing backend release gate remains failed.
+
+A separate minimal-runtime Docker target and CI job now test a supported
+[Distroless Debian 13 C++ base](https://github.com/GoogleContainerTools/distroless)
+while retaining the existing CPython 3.12 build/ABI. Its base OCI index digest is
+pinned from the registry response. The existing default runtime target remains
+unchanged during qualification. The candidate copies selected native runtime
+libraries with their Debian package/version/source status and copyright records,
+so vulnerability scanning still sees those components. Package manifests are
+not stripped or rewritten. Application dependencies remain locked as before.
+
+The candidate omits shell/package-manager/mount/system-service payloads and four
+optional CPython extensions for terminal UI and libuuid. Python UUID fallback,
+compression, SQLite, cryptography, DuckDB, DOCX, exact XLSX, shaped Arabic/Hindi PDF,
+PDF rasterization, isolated real offline OCR, Node TensorFlow CPU, API/worker
+imports and the migration CLI are exercised inside the final non-root image.
+CI runs with no network, a read-only root filesystem, temporary bounded storage,
+no capabilities and no privilege escalation. Real OCR must recognize a synthetic
+invoice reference using packaged local models; import success alone is not the
+OCR assertion. This is synthetic runtime capability evidence, not client or OCR
+accuracy qualification.
+
+The candidate uses the same HIGH/CRITICAL Trivy threshold, including unfixed
+findings, with no vulnerability exclusions. Promotion requires actual hosted
+build, capability and scan results; local Python/YAML checks do not prove Linux
+runtime compatibility. Docker and a Linux runtime are unavailable on this host.
+The full roadmap and production release remain unqualified while this test runs.
