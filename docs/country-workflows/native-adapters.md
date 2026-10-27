@@ -2358,3 +2358,62 @@ All 230 frontend tests, TypeScript, scoped ESLint/Ruff, mypy across three change
 source modules and the production build passed. One browser test exercised UAE
 then India, reached the final candidate after changing the main result page,
 verified two full workbooks and saved four visually inspected screenshots.
+
+
+## Single-account scope for general bank matching
+
+The general bank matcher previously admitted several selected GL accounts and
+passed them to identity/amount/date matching without a bank account check.
+An equal reference and amount could therefore propose a transaction from the
+wrong selected account. The bank request now selects exactly one GL account.
+A snapshot comparison must select that same account on the other side; duplicate
+account selections are rejected. Other explicitly selected reconciliation types
+retain their existing accounting comparison scope.
+
+Every bank supporting row must identify the selected GL code, and the whole
+statement must use one currency consistent with the functional-currency GL rows.
+Missing, different, mixed or partially identified account populations cannot be
+matched as one bank scope. There is no automatic account alias, account-number
+normalization or currency translation. An independently reviewed bank supporting
+table is required before calculation, including its declared mapping.
+
+A source preparer can explicitly supply `bank_account_label` and a meaningful
+`bank_account_mapping_rationale`. A declaration maps one uniform original account
+column to one GL code, or supplies a file-level label when every original row lacks
+an account identifier. It cannot merge two accounts or infer the missing labels
+in a partially identified source. Each mapped row retains `original_account_code`;
+the immutable source retains the original file, mapping assessment, contributors
+and separate independent review. The bank result verifies the retained mapping
+against every source row and saves contract `single-bank-account-scope/1`.
+Historical bank results without that account-scope contract require recalculation
+before approval. A helper rollout invalidates supporting-table, generic and country
+execution fingerprints.
+
+The source and result screens show the original statement label, matching GL code
+and assessment. XLSX retains both the prepared source binding and result scope.
+Leading zeros and Unicode labels remain text. These are declared matching labels,
+not authenticated bank identity or verified ownership. This ordinary GL matcher
+uses functional-currency amounts and does not create an opening-to-closing BRS.
+The existing country Bank balance reconciliation workflow supplies original-
+currency transaction sources, signed closing-balance controls and separately
+reviewed account-ownership evidence where requested.
+
+Saved [synthetic UAE and India examples](sample-inputs/SYNTHETIC-bank-account-labels/README.md)
+include original CSVs, hashes and literal mapping expectations. The mapped HTTP
+cases verify that those exact bytes entered the retained evidence pipeline.
+These are engineering fixtures, not bank-issued files or independently qualified
+client results. See the [verification receipt](../phase-12/bank-account-scope-verification.json)
+and [browser receipt](../phase-12/bank-account-scope-browser-results.json).
+The authored catalogue remains 154. Real pilots, professional qualification,
+live providers, higher-volume capacity and hosted release gates remain open.
+
+Verification on 27 October 2026: 2,580 unit tests and 11 existing calculation
+regressions passed (2,591 total; four existing skips). Fifteen selected HTTP cases
+passed, including seven new account-scope cases. All 232 frontend tests, the
+production build, scoped ESLint/Ruff and mypy across six changed/related source
+modules passed. The real-worker browser flow verified UAE then India, two full
+workbooks and eight inspected screenshots. The initial broad run encountered
+the existing digital-PDF extraction timeout; both focused extraction tests and
+the complete repeat passed without extraction changes. Its intermittent failure
+still needs investigation. A confirmed-stopped local frontend was restarted
+before the final passing browser run; this does not qualify a hosted release.

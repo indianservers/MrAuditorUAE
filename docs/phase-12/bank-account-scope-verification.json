@@ -1,0 +1,101 @@
+{
+  "verified_on": "2026-10-27",
+  "contract": "single-bank-account-scope/1",
+  "implementation_sha256": "05d68b6ba2b93ad2ee08fc710f797f2ccc022c4863cc3984fab320b2567eb671",
+  "country_implementation_sha256": "981769c4620a0918e1a49e7311f16c1902135a5b4a079c5ce4fa2855cde97f50",
+  "scope": "General bank matching account isolation; shared UAE then India",
+  "changes": [
+    "One selected GL account for bank matching; same account for snapshot comparisons; duplicate selections rejected",
+    "Every statement row must identify the selected GL label",
+    "Explicit single-original-account-to-GL mapping, or a declaration when the whole file lacks identifiers",
+    "Mixed and partially identified source accounts cannot be merged",
+    "Original account identifiers retained in every mapped row; no fuzzy account normalization",
+    "Independent supporting-source review required before matching",
+    "One consistent currency; no automatic FX translation",
+    "Retained account binding checked against every source row",
+    "Historical bank results without the new scope contract cannot be approved",
+    "Account scope retained in source/result screens and XLSX",
+    "New helper covered by supporting-table, generic and country implementation fingerprints"
+  ],
+  "backend": {
+    "unit_passed": 2580,
+    "existing_calculation_regressions_passed": 11,
+    "total_passed": 2591,
+    "skipped": 4,
+    "new_scope_unit_cases": 27,
+    "additional_fingerprint_case": 1,
+    "selected_http_passed": 15,
+    "new_scope_http_cases": 7,
+    "existing_http_cases": 8,
+    "new_http_scope": [
+      "Mapped original account in UAE and India, including literal saved CSV hashes",
+      "Missing, different and mixed accounts publish no matching result",
+      "Multiple GL accounts rejected at job admission",
+      "Declared mapping cannot merge mixed original accounts"
+    ],
+    "existing_fixture_update": "Legacy bank test now selects Cash alone, uses its signed credit movement and requires independent source review before calculation; an unreviewed source produces no result",
+    "retry_note": "Initial broad run: 2590 passed, one existing digital-PDF extraction timeout, four skipped. Focused extraction retry passed both tests; the complete repeat passed all 2591 tests without extraction changes."
+  },
+  "frontend": {
+    "tests_passed": 232,
+    "files_passed": 49,
+    "new_mapping_cases": 2,
+    "typescript": "passed",
+    "scoped_eslint": "passed",
+    "production_build": "passed",
+    "mapping_rationale_without_label": "Sent for schema validation rather than silently omitted"
+  },
+  "browser": {
+    "tests_passed": 1,
+    "country_order": [
+      "AE",
+      "IN"
+    ],
+    "cases": 2,
+    "book_rows_per_country": 121,
+    "statement_rows_per_country": 121,
+    "candidate_links_per_country": 14641,
+    "original_account": "00000123",
+    "matching_gl_account": "100",
+    "source_review_mapping_visible": true,
+    "result_mapping_visible": true,
+    "full_xlsx_downloads_verified": 2,
+    "xlsx_account_metadata_verified": true,
+    "main_page_and_candidate_paging_independent": true,
+    "screenshots": 8,
+    "visual_review": "All eight inspected; original and matching labels, AED/INR, complete review counts and final Arabic/Hindi candidate pages are visible",
+    "implementation_fingerprints_verified_before_and_after": true,
+    "real_local_worker": true,
+    "runtime_retry": "The final local frontend process exited with code 1 and its port was absent during an initial rerun. Only that confirmed-stopped owned frontend was restarted; the API remained live, and the complete final browser rerun passed."
+  },
+  "saved_examples": {
+    "countries": [
+      "AE",
+      "IN"
+    ],
+    "count": 2,
+    "literal_expected_mapping": true,
+    "original_bytes_verified_in_http_evidence_receipts": true,
+    "independent_client_results": false,
+    "git_line_ending_conversion_disabled": true,
+    "staged_blob_hashes_verified": true
+  },
+  "scoped_ruff": "passed",
+  "mypy_source_files": 6,
+  "utf8": "passed",
+  "authored_catalogue_cases": 154,
+  "qualification": "Synthetic engineering evidence only",
+  "limits": [
+    "Account declaration and document comparison do not authenticate a bank or establish ownership",
+    "General GL matching uses functional-currency amounts; original-currency transaction sources and closing-balance BRS use the existing country workflow",
+    "Source/matching population bounds are unchanged"
+  ],
+  "test_boundaries": "Owned disposable PostgreSQL, controlled GL import/validation/commit, retained original CSVs, private object storage and independent source review. Scanner/broker doubles during API and fixture preparation; actual local API/Celery worker in the production-browser flow.",
+  "remaining": [
+    "Real-client pilot inputs and independently checked outcomes",
+    "Professional country/framework and live-provider qualification",
+    "Higher-volume ingestion/matching and concurrency qualification",
+    "Intermittent local document-extraction worker timeout investigation",
+    "Hosted security, operations and release gates"
+  ]
+}

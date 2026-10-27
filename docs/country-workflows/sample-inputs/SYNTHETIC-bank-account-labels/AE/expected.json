@@ -1,0 +1,13 @@
+{
+  "synthetic": true,
+  "source_sha256": "16d13fa1937849f5df1158a33dc3d976d79c25c0ff495caee46b0ce71c130fe1",
+  "table_kind": "bank",
+  "bank_account_label": "100",
+  "bank_account_mapping_rationale": "SYNTHETIC reviewed single original account 00000123 mapped to GL 100; not bank authentication",
+  "expected": {
+    "matching_account_code": "100",
+    "statement_original_account_code": "00000123",
+    "currency": "AED",
+    "bank_authentication": "NOT_ESTABLISHED"
+  }
+}

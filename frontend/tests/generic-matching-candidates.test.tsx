@@ -7,6 +7,7 @@ const state = vi.hoisted(() => ({
   legacy: false,
   unmatched: 1,
   findings: 0,
+  binding: false,
   mutate: vi.fn().mockResolvedValue({ id: "job" }),
 }));
 vi.mock("next/navigation", () => ({
@@ -69,6 +70,14 @@ vi.mock("@/hooks/use-api", () => ({
           version: 1,
           freshness: "CURRENT",
           body: {
+            bank_account_binding: state.binding
+              ? {
+                  matching_account_code: "100",
+                  original_account_code: "00000123",
+                  assessment:
+                    "Reviewed single original account mapped to the GL",
+                }
+              : undefined,
             review_decision_summary: {
               proposed_matches: 0,
               accepted_matches: 0,
@@ -100,7 +109,19 @@ vi.mock("@/hooks/use-api", () => ({
       };
     }
     if (path.endsWith("inputs"))
-      return { data: { snapshots: [], evidence: [], samples: [] } };
+      return {
+        data: {
+          snapshots: [],
+          evidence: [
+            {
+              id: "source-original",
+              label: "Synthetic original bank file",
+              scan_status: "CLEAN",
+            },
+          ],
+          samples: [],
+        },
+      };
     if (path.includes("capabilities")) return { data: { lead_sections: [] } };
     return { data: { items: [], total: 0 } };
   },
@@ -110,6 +131,7 @@ beforeEach(() => {
   state.legacy = false;
   state.unmatched = 1;
   state.findings = 0;
+  state.binding = false;
   state.mutate.mockClear();
 });
 it("connects complete generic reconciliation candidates with independent item and candidate pagination", () => {
@@ -182,4 +204,75 @@ it("shows full-population review counts even when a result page contains fewer r
     }),
   ).toHaveTextContent("17 of 242");
   expect(screen.getByRole("button", { name: "Next 100" })).toBeEnabled();
+});
+
+it("retains the original account identity and mapping assessment in source review", () => {
+  state.kind = "source-table";
+  state.binding = true;
+  render(<AccountingIntelligence eid="e" area="source-table" />);
+  const scope = screen.getByRole("complementary", {
+    name: "Bank account matching scope",
+  });
+  expect(scope).toHaveTextContent("00000123");
+  expect(scope).toHaveTextContent("Matching GL account: 100");
+  expect(scope).toHaveTextContent("Reviewed single original account");
+  expect(
+    within(scope).getByRole("link", { name: "Bank balance reconciliation" }),
+  ).toHaveAttribute("href", "/intelligence/e/country-workflow");
+});
+it("queues an explicit source account declaration without changing the original file", async () => {
+  state.kind = "source-table";
+  render(<AccountingIntelligence eid="e" area="source-table" />);
+  fireEvent.change(screen.getByLabelText("Evidence version"), {
+    target: { value: "source-original" },
+  });
+  fireEvent.change(
+    screen.getByLabelText("Bank matching GL account label (optional)"),
+    { target: { value: "100" } },
+  );
+  fireEvent.change(screen.getByLabelText("Bank account mapping assessment"), {
+    target: {
+      value:
+        "Reviewed the single original statement account against this GL code",
+    },
+  });
+  fireEvent.click(
+    screen.getByRole("button", { name: "Queue supporting tables" }),
+  );
+  await vi.waitFor(() =>
+    expect(state.mutate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        body: {
+          operation: "source-table",
+          payload: expect.objectContaining({
+            evidence_version_id: "source-original",
+            bank_account_label: "100",
+            bank_account_mapping_rationale:
+              "Reviewed the single original statement account against this GL code",
+          }),
+        },
+      }),
+    ),
+  );
+  fireEvent.change(
+    screen.getByLabelText("Bank matching GL account label (optional)"),
+    { target: { value: "" } },
+  );
+  fireEvent.click(
+    screen.getByRole("button", { name: "Queue supporting tables" }),
+  );
+  await vi.waitFor(() =>
+    expect(state.mutate).toHaveBeenLastCalledWith(
+      expect.objectContaining({
+        body: {
+          operation: "source-table",
+          payload: expect.objectContaining({
+            bank_account_label: "",
+            bank_account_mapping_rationale:
+              "Reviewed the single original statement account against this GL code",
+          }),
+        },
+      }),
+    ),
+  );
 });

@@ -73,6 +73,13 @@ async def verify_review(db, ctx, eid, obj):
 
     from app.modules.audit_execution import service as audit
 
+    if obj.body.get("reconciliation_type") == "bank":
+        from app.modules.intelligence.reconciliation_scope import CONTRACT
+
+        if (obj.body.get("bank_account_scope") or {}).get("contract") != CONTRACT:
+            raise HTTPException(
+                409, "Regenerate bank matching with a single independently reviewed account scope"
+            )
     links = review_requirements(obj.body)
     checked = {}
     for link in links:

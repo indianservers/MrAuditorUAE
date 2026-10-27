@@ -69,11 +69,28 @@ class TableInput(OCRInput):
     table_kind: Literal["bank", "open-items"]
     worksheet: str | None = Field(default=None, min_length=1, max_length=128)
     pdf_layout: PDFGrid | None = None
+    bank_account_label: str = Field(default="", max_length=120)
+    bank_account_mapping_rationale: str = Field(default="", max_length=2000)
 
     @model_validator(mode="after")
     def pdf_scope(self):
-        if self.pdf_layout and (self.table_kind != "bank" or self.worksheet or self.force_image or self.zip_member):
-            raise ValueError("PDF text grids require a bank table without worksheet, image OCR or ZIP selection")
+        if self.bank_account_label or self.bank_account_mapping_rationale:
+            if (
+                self.table_kind != "bank"
+                or not self.bank_account_label.strip()
+                or len(self.bank_account_mapping_rationale.strip()) < 10
+            ):
+                raise ValueError(
+                    "A bank account mapping needs a nonblank GL label and a meaningful assessment for a bank table"
+                )
+            if self.bank_account_label != self.bank_account_label.strip():
+                raise ValueError("Bank account labels cannot have surrounding spaces")
+        if self.pdf_layout and (
+            self.table_kind != "bank" or self.worksheet or self.force_image or self.zip_member
+        ):
+            raise ValueError(
+                "PDF text grids require a bank table without worksheet, image OCR or ZIP selection"
+            )
         return self
 
 
@@ -125,6 +142,17 @@ class ReconcileInput(Strict):
 
     @model_validator(mode="after")
     def one_destination(self):
+        if len(set(self.account_ids)) != len(self.account_ids) or len(
+            set(self.comparison_account_ids)
+        ) != len(self.comparison_account_ids):
+            raise ValueError("Duplicate account selection")
+        if self.reconciliation_type == "bank" and (
+            len(self.account_ids) != 1
+            or (self.comparison_snapshot_id and self.comparison_account_ids != self.account_ids)
+        ):
+            raise ValueError(
+                "Bank reconciliation requires one GL account and the same account in a comparison snapshot"
+            )
         if bool(self.statement_source_id) == bool(self.comparison_snapshot_id):
             raise ValueError("Select exactly one destination source")
         if self.comparison_snapshot_id and not self.comparison_account_ids:

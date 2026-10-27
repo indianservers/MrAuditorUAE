@@ -104,6 +104,8 @@ def render(event, format):
             "exception_count",
             "blocked",
             "parameters",
+            "bank_account_binding",
+            "bank_account_scope",
             "nil_population",
             "nil_declarations",
             "execution_mode",

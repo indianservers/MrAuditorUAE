@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "backend"))
 
 
-async def main():
+async def main(*, bank_scope=False):
     from app.core.config import settings
     from app.core.operations_contracts import country_workflow_hash, implementation_hash
 
@@ -41,7 +41,19 @@ async def main():
             h, options, eid, audit = (
                 existing if country == "AE" else await context(c, country, existing)
             )
-            payload, _ = await prepare(c, h, options, eid, audit, country)
+            payload, _ = await prepare(
+                c,
+                h,
+                options,
+                eid,
+                audit,
+                country,
+                **(
+                    dict(source_account_codes=("00000123",), bank_account_label="100")
+                    if bank_scope
+                    else {}
+                ),
+            )
             saved["countries"][country] = dict(
                 engagement=eid,
                 payload=payload,
@@ -49,7 +61,8 @@ async def main():
                 candidates_per_item=121,
                 candidate_links=14641,
             )
-        (ROOT / ".local-runtime/country-workflows/generic-candidates-fixture.json").write_text(
+        filename = "bank-scope-fixture.json" if bank_scope else "generic-candidates-fixture.json"
+        (ROOT / ".local-runtime/country-workflows" / filename).write_text(
             json.dumps(saved, indent=2) + "\n", encoding="utf-8"
         )
         print(

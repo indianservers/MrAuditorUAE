@@ -156,6 +156,8 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
   const [zipMember, setZipMember] = useState("");
   const [tableKind, setTableKind] = useState("bank");
   const [worksheet, setWorksheet] = useState("");
+  const [bankAccountLabel, setBankAccountLabel] = useState("");
+  const [bankAccountAssessment, setBankAccountAssessment] = useState("");
   const [pdfMode, setPDFMode] = useState(false);
   const [pdfGrid, setPDFGrid] = useState(emptyPDFGrid);
   const [localError, setLocalError] = useState<Error | null>(null);
@@ -206,6 +208,17 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
         accepted_matches: number;
         unmatched_transactions: number;
         unmatched_with_findings: number;
+      }
+    | undefined;
+  const bankAccountScope = (body?.bank_account_scope ||
+    body?.bank_account_binding) as
+    | {
+        matching_account_code: string;
+        original_account_code?: string | null;
+        statement_original_account_code?: string | null;
+        currency?: string;
+        mapping_assessment?: string | null;
+        assessment?: string;
       }
     | undefined;
   const boxScope = body?.box_comparison_scope;
@@ -275,6 +288,13 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
         ...(area === "source-table"
           ? {
               table_kind: tableKind,
+              ...(tableKind === "bank" &&
+              (bankAccountLabel || bankAccountAssessment)
+                ? {
+                    bank_account_label: bankAccountLabel,
+                    bank_account_mapping_rationale: bankAccountAssessment,
+                  }
+                : {}),
               ...(pdfMode
                 ? { pdf_layout: pdfLayout }
                 : worksheet
@@ -444,17 +464,26 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
           )}
           {financial && area !== "flow" && area !== "foundation-validation" && (
             <label>
-              Explicit account selection (first 1,000)
+              {area === "reconciliation"
+                ? "Bank GL account"
+                : "Explicit account selection (first 1,000)"}
               <select
-                multiple
-                size={5}
-                value={accountIds}
+                multiple={area !== "reconciliation"}
+                size={area === "reconciliation" ? 1 : 5}
+                value={
+                  area === "reconciliation" ? accountIds[0] || "" : accountIds
+                }
                 onChange={(e) =>
                   setAccounts(
-                    Array.from(e.target.selectedOptions, (o) => o.value),
+                    Array.from(e.target.selectedOptions, (o) => o.value).filter(
+                      Boolean,
+                    ),
                   )
                 }
               >
+                {area === "reconciliation" && (
+                  <option value="">Select bank GL account</option>
+                )}
                 {accounts.data?.items.map((a) => (
                   <option key={a.id} value={a.id}>
                     {a.code} — {a.name}
@@ -614,6 +643,38 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
                       </small>
                     )}
                   </label>
+                  {tableKind === "bank" && (
+                    <>
+                      <label>
+                        Bank matching GL account label (optional)
+                        <input
+                          value={bankAccountLabel}
+                          onChange={(event) =>
+                            setBankAccountLabel(event.target.value)
+                          }
+                          maxLength={120}
+                        />
+                      </label>
+                      <label>
+                        Bank account mapping assessment
+                        <textarea
+                          value={bankAccountAssessment}
+                          onChange={(event) =>
+                            setBankAccountAssessment(event.target.value)
+                          }
+                          maxLength={2000}
+                        />
+                      </label>
+                      <p>
+                        A declaration can map one original statement account to
+                        one GL code, or supply a label when the file has none.
+                        Mixed or partly identified accounts cannot be merged.
+                        Original labels are retained; source review is required
+                        before bank matching. This does not verify account
+                        ownership or create a closing-balance BRS.
+                      </p>
+                    </>
+                  )}
                   {tableKind === "bank" && (
                     <label
                       style={{
@@ -1062,6 +1123,36 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
             )}
             {detail.data.kind === "flow" && body && (
               <TransactionGraph body={body} />
+            )}
+            {bankAccountScope && (
+              <aside aria-label="Bank account matching scope">
+                <h3>Single bank account scope</h3>
+                <p>
+                  Matching GL account: {bankAccountScope.matching_account_code}.
+                  Original statement account:{" "}
+                  {bankAccountScope.statement_original_account_code ||
+                    bankAccountScope.original_account_code ||
+                    "No identifier supplied in the file"}
+                  .
+                  {bankAccountScope.currency && (
+                    <> Currency: {bankAccountScope.currency}.</>
+                  )}
+                </p>
+                <p>
+                  {bankAccountScope.mapping_assessment ||
+                    bankAccountScope.assessment ||
+                    "Original account column agrees to the selected GL code."}
+                </p>
+                <p>
+                  This is a declared matching scope, not bank authentication.
+                  Use{" "}
+                  <Link href={`/intelligence/${eid}/country-workflow`}>
+                    Bank balance reconciliation
+                  </Link>{" "}
+                  for a closing-balance bridge and supporting account-ownership
+                  evidence.
+                </p>
+              </aside>
             )}
             {detail.data.kind === "reconciliation" && reconciliationReview && (
               <aside aria-label="Reconciliation review decisions">

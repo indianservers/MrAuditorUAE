@@ -8,11 +8,16 @@ from app.core import operations_contracts as contracts
 
 @pytest.mark.parametrize(
     "helper",
-    ["modules/intelligence/transaction_candidates.py", "modules/intelligence/matching_review.py"],
+    [
+        "modules/intelligence/transaction_candidates.py",
+        "modules/intelligence/matching_review.py",
+        "modules/intelligence/reconciliation_scope.py",
+    ],
 )
 def test_matching_helper_rollout_invalidates_both_execution_contracts(monkeypatch, helper):
     original_global = contracts.implementation_hash()
     original_country = contracts.country_workflow_hash()
+    original_supporting = contracts.supporting_table_hash()
     read_bytes = contracts.Path.read_bytes
 
     def changed(path):
@@ -22,6 +27,8 @@ def test_matching_helper_rollout_invalidates_both_execution_contracts(monkeypatc
     monkeypatch.setattr(contracts.Path, "read_bytes", changed)
     assert contracts.implementation_hash() != original_global
     assert contracts.country_workflow_hash() != original_country
+    if helper in contracts.SUPPORTING_TABLE_PATHS:
+        assert contracts.supporting_table_hash() != original_supporting
 
 
 def test_reader_fingerprint_isolated_from_unrelated_calculations(tmp_path, monkeypatch):

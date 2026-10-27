@@ -173,8 +173,9 @@ async def event(db, ctx, eid, identifier, require_current=False, auth_seen=None)
 async def head(db, ctx, obj):
     from app.core.read_projection import read_once
 
-    return await read_once(db, ctx, "intelligence-head", str(obj.root_id),
-                           lambda: _head(db, ctx, obj))
+    return await read_once(
+        db, ctx, "intelligence-head", str(obj.root_id), lambda: _head(db, ctx, obj)
+    )
 
 
 async def _head(db, ctx, obj):
@@ -208,21 +209,46 @@ async def current(db, ctx, obj, visited=None):
             return False
         if obj.body.get("use_case_id", 0) >= 51:
             from app.modules.jurisdictions.ae.advanced import contract_sha256
+
             if obj.body.get("advanced_contract_sha256") != contract_sha256():
                 return False
-        if obj.body.get("action")=="inspect-provenance":
+        if obj.body.get("action") == "inspect-provenance":
             from app.modules.jurisdictions.ae.provenance import corpus
-            if digest(await corpus(db,ctx,obj.engagement_id))!=obj.body["output"]["population_sha256"]:
+
+            if (
+                digest(await corpus(db, ctx, obj.engagement_id))
+                != obj.body["output"]["population_sha256"]
+            ):
                 return False
-        if obj.body.get("action")=="rule-impact":
+        if obj.body.get("action") == "rule-impact":
             from app.modules.jurisdictions.ae.rule_impact import fingerprint as impact_fingerprint
-            if await impact_fingerprint(db,ctx,obj.engagement_id)!=obj.body["output"]["population_sha256"]:
+
+            if (
+                await impact_fingerprint(db, ctx, obj.engagement_id)
+                != obj.body["output"]["population_sha256"]
+            ):
                 return False
         if obj.body.get("action") == "file-readiness":
-            rows = (await db.scalars(select(AuditRecord).where(AuditRecord.tenant_id == ctx.tenant_id, AuditRecord.engagement_id == obj.engagement_id).order_by(AuditRecord.id).limit(2001))).all()
-            if digest([[str(r.id), r.version, r.status] for r in rows]) != obj.body["output"]["file_population_sha256"]:
+            rows = (
+                await db.scalars(
+                    select(AuditRecord)
+                    .where(
+                        AuditRecord.tenant_id == ctx.tenant_id,
+                        AuditRecord.engagement_id == obj.engagement_id,
+                    )
+                    .order_by(AuditRecord.id)
+                    .limit(2001)
+                )
+            ).all()
+            if (
+                digest([[str(r.id), r.version, r.status] for r in rows])
+                != obj.body["output"]["file_population_sha256"]
+            ):
                 return False
-            if digest(await audit.completion(db, ctx, obj.engagement_id)) != obj.body["output"]["completion_sha256"]:
+            if (
+                digest(await audit.completion(db, ctx, obj.engagement_id))
+                != obj.body["output"]["completion_sha256"]
+            ):
                 return False
     from app.core.operations_contracts import current as operations_current
 
@@ -270,13 +296,25 @@ async def current(db, ctx, obj, visited=None):
                 if dependency.get("span_start") and dependency.get("span_end"):
                     from app.modules.regulatory.rule_spans import selection_over_span
 
-                    chosen = await selection_over_span(db, ctx, dependency["rule_key"],
-                        period.start_date, period.end_date, date.fromisoformat(dependency["span_start"]),
-                        date.fromisoformat(dependency["span_end"]))
+                    chosen = await selection_over_span(
+                        db,
+                        ctx,
+                        dependency["rule_key"],
+                        period.start_date,
+                        period.end_date,
+                        date.fromisoformat(dependency["span_start"]),
+                        date.fromisoformat(dependency["span_end"]),
+                    )
                 else:
                     chosen = await selection(
-                        db, ctx, dependency["rule_key"], period.start_date, period.end_date,
-                        date.fromisoformat(dependency["transaction_date"]) if dependency.get("transaction_date") else None,
+                        db,
+                        ctx,
+                        dependency["rule_key"],
+                        period.start_date,
+                        period.end_date,
+                        date.fromisoformat(dependency["transaction_date"])
+                        if dependency.get("transaction_date")
+                        else None,
                     )
             except HTTPException as error:
                 if error.status_code == 409:
@@ -495,14 +533,22 @@ async def evidence(db, ctx, eng, identifier):
     }
 
 
-def read_table(version, kind, separator, date_format, worksheet=None, metadata=None, pdf_layout=None):
+def read_table(
+    version, kind, separator, date_format, worksheet=None, metadata=None, pdf_layout=None
+):
     from app.modules.ingestion.parser import spreadsheet_rows
     from app.modules.intelligence.supporting_tables import headers, normalize
 
     metadata = {} if metadata is None else metadata
-    supported = {"text/csv", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/pdf"}
+    supported = {
+        "text/csv",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "application/pdf",
+    }
     if version.media_type not in supported:
-        raise ValueError("Supporting tables require CSV, macro-free XLSX or explicitly mapped bank PDF text")
+        raise ValueError(
+            "Supporting tables require CSV, macro-free XLSX or explicitly mapped bank PDF text"
+        )
     with ObjectStore().local(version.object_key, version.object_version) as path:
         if path.stat().st_size > 10 * 1024 * 1024 or hash_file(path) != version.sha256:
             raise ValueError("Original evidence exceeds 10 MiB or failed hash verification")
@@ -614,12 +660,22 @@ async def compute(db, ctx, eng, operation, payload):
                 table_metadata,
                 data.pdf_layout,
             )
+            from app.modules.intelligence.reconciliation_scope import prepare as prepare_bank_scope
+
+            rows, account_binding = prepare_bank_scope(
+                rows, data.bank_account_label, data.bank_account_mapping_rationale
+            )
             return {
+                "bank_account_binding": account_binding,
                 "evidence_version_id": str(version.id),
                 "table_kind": data.table_kind,
                 "table_metadata": table_metadata,
-                "table_reader_version": "pdf-text-grid/1" if data.pdf_layout else "supporting-table-2",
-                "contributors": sorted({str(ctx.user_id), *([str(version.created_by)] if version.created_by else [])}),
+                "table_reader_version": "pdf-text-grid/1"
+                if data.pdf_layout
+                else "supporting-table-2",
+                "contributors": sorted(
+                    {str(ctx.user_id), *([str(version.created_by)] if version.created_by else [])}
+                ),
                 "rows": rows,
                 "row_count": len(rows),
                 "review_status": "UNVERIFIED",
@@ -792,6 +848,20 @@ async def compute(db, ctx, eng, operation, payload):
             deps.append(orr)
             right = await ledger(db, ctx, eng, other, data.comparison_account_ids)
         right = [{**r, "amount": str(Decimal(r["amount"]) * data.right_sign)} for r in right]
+        bank_scope = None
+        if data.reconciliation_type == "bank":
+            from app.modules.intelligence.reconciliation_scope import validate as bank_scope_check
+
+            selected_code = await db.scalar(
+                select(Account.code).where(
+                    Account.tenant_id == ctx.tenant_id,
+                    Account.entity_id == eng.entity_id,
+                    Account.id == data.account_ids[0],
+                )
+            )
+            bank_scope = bank_scope_check(
+                selected_code, left, right, other.body if data.statement_source_id else None
+            )
         result = await run_in_threadpool(
             reconcile_transactions,
             left,
@@ -803,6 +873,7 @@ async def compute(db, ctx, eng, operation, payload):
         return {
             **result,
             "reconciliation_type": data.reconciliation_type,
+            "bank_account_scope": bank_scope,
             "parameters": data.model_dump(mode="json"),
             "review_status": "UNVERIFIED",
             "source_rows": left,

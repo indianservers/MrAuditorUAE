@@ -56,7 +56,7 @@ test("generic ledger reconciliation exposes every alternative in UAE then India"
       .getByLabel("Committed snapshot")
       .selectOption(input.payload.snapshot_id);
     await page
-      .getByLabel("Explicit account selection (first 1,000)")
+      .getByLabel("Bank GL account")
       .selectOption(input.payload.account_ids);
     await page
       .getByLabel("Supporting table")

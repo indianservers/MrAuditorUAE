@@ -16,6 +16,7 @@ SUPPORTING_TABLE_PATHS = (
     "modules/intelligence/service.py",
     "modules/intelligence/schemas.py",
     "modules/intelligence/supporting_tables.py",
+    "modules/intelligence/reconciliation_scope.py",
     "modules/intelligence/pdf_tables.py",
     "modules/intelligence/documents.py",
     "modules/ingestion/parser.py",
@@ -145,6 +146,7 @@ def implementation_hash():
         "modules/intelligence/matching.py",
         "modules/intelligence/transaction_candidates.py",
         "modules/intelligence/matching_review.py",
+        "modules/intelligence/reconciliation_scope.py",
         "modules/country_workflows/operations.py",
         "modules/audit_analytics/service.py",
     ]

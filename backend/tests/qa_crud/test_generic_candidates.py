@@ -56,7 +56,17 @@ async def context(c, country, existing=None):
     return h, options, eid, audit
 
 
-async def prepare(c, h, options, eid, audit, country, count=121):
+async def prepare(
+    c,
+    h,
+    options,
+    eid,
+    audit,
+    country,
+    count=121,
+    source_account_codes=("100",),
+    bank_account_label="",
+):
     currency = "INR" if country == "IN" else "AED"
     # One balanced journal, 121 indistinguishable cash postings and one equity line.
     header = "Account Code,Account Name,Journal Number,Posting Date,Debit,Credit,Source ID,Opening,Manual,Narration\n"
@@ -83,8 +93,9 @@ async def prepare(c, h, options, eid, audit, country, count=121):
         c, h, audit, "evidence", dict(category="Other", retain_until="2036-12-31")
     )
     party = "SYNTHETIC شركة ألف" if currency == "AED" else "SYNTHETIC भारत आपूर्तिकर्ता"
-    csv = "reference,date,currency,amount,counterparty\n" + "".join(
-        f"SYN-SHARED,2026-06-01,{currency},1,{party}\n" for _ in range(count)
+    csv = "reference,date,currency,amount,counterparty,account_code\n" + "".join(
+        f"SYN-SHARED,2026-06-01,{currency},1,{party},{source_account_codes[i % len(source_account_codes)]}\n"
+        for i in range(count)
     )
     uploaded = await c.post(
         audit + "/evidence-files/" + evidence["id"],
@@ -97,7 +108,14 @@ async def prepare(c, h, options, eid, audit, country, count=121):
         h,
         eid,
         "source-table",
-        dict(evidence_version_id=uploaded.json()["id"], table_kind="bank"),
+        dict(
+            evidence_version_id=uploaded.json()["id"],
+            table_kind="bank",
+            bank_account_label=bank_account_label,
+            bank_account_mapping_rationale="Independently assessed single original bank account mapped to this GL code"
+            if bank_account_label
+            else "",
+        ),
     )
     reviewer = await actor(h, "Firm Administrator", f"generic-candidate-reviewer-{country}")
     await grant(c, h, audit, reviewer)

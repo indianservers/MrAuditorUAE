@@ -217,10 +217,19 @@ async def test_reconciliation_source_rows_and_recorded_auditor_decisions(environ
                     {
                         "id": "statement-1",
                         "currency": "AED",
-                        "amount": "100.20",
+                        "amount": "-100.20",
+                        "account_code": "100",
                         "date": "2026-12-26",
                         "reference": "1",
-                    }
+                    },
+                    {
+                        "id": "statement-2",
+                        "currency": "AED",
+                        "amount": "-5",
+                        "date": "2026-12-26",
+                        "reference": "UNMATCHED",
+                        "account_code": "100",
+                    },
                 ],
             },
             [],
@@ -238,8 +247,37 @@ async def test_reconciliation_source_rows_and_recorded_auditor_decisions(environ
             "operation": "reconciliation",
             "payload": {
                 "snapshot_id": snapshot,
-                "account_ids": [a["id"] for a in accounts],
+                "account_ids": [a["id"] for a in accounts if a["code"] == "100"],
                 "statement_source_id": source_id,
+            },
+        },
+    )
+    assert job.status_code == 202, job.text
+    await process(job.json()["id"], h["X-Tenant-ID"])
+    final = (await c.get(prefix + "/jobs/" + job.json()["id"], headers=h)).json()
+    assert final["status"] == "failed" and final["result_id"] is None, final
+    assert "independent review before matching" in final["error_details"]["message"]
+    reviewer = await actor(h, "Firm Administrator", "reconciliation-independent-reviewer")
+    await grant(c, h, base, reviewer)
+    reviewed_source = await c.post(
+        prefix + "/events/" + source_id + "/review",
+        headers=reviewer[0],
+        json={
+            "expected_version": 1,
+            "action": "approve",
+            "comments": "Independent source and single-account evidence review",
+        },
+    )
+    assert reviewed_source.status_code == 201, reviewed_source.text
+    job = await c.post(
+        prefix + "/jobs",
+        headers={**h, "Idempotency-Key": "reconcile-reviewed"},
+        json={
+            "operation": "reconciliation",
+            "payload": {
+                "snapshot_id": snapshot,
+                "account_ids": [a["id"] for a in accounts if a["code"] == "100"],
+                "statement_source_id": reviewed_source.json()["id"],
             },
         },
     )
@@ -248,16 +286,14 @@ async def test_reconciliation_source_rows_and_recorded_auditor_decisions(environ
     final = (await c.get(prefix + "/jobs/" + job.json()["id"], headers=h)).json()
     assert final["status"] == "completed", final
     result = (await c.get(prefix + "/events/" + final["result_id"], headers=h)).json()
-    assert len(result["body"]["matches"]) == 1 and len(result["body"]["unmatched_left"]) == 1
-    reviewer = await actor(h, "Firm Administrator", "reconciliation-independent-reviewer")
-    await grant(c, h, base, reviewer)
+    assert len(result["body"]["matches"]) == 1 and len(result["body"]["unmatched_right"]) == 1
     blocked = await c.post(
         prefix + "/events/" + result["id"] + "/review",
         headers=reviewer[0],
         json={
             "expected_version": 1,
             "action": "approve",
-            "comments": "Synthetic supporting-table review must be enforced first",
+            "comments": "Synthetic individual match decisions must be enforced first",
         },
     )
     assert blocked.status_code == 409, blocked.text
@@ -278,7 +314,7 @@ async def test_reconciliation_source_rows_and_recorded_auditor_decisions(environ
         json={
             "expected_version": 2,
             "action": "finding",
-            "item_id": result["body"]["unmatched_left"][0]["id"],
+            "item_id": result["body"]["unmatched_right"][0]["id"],
             "comments": "Synthetic unresolved source posting retained as a reconciliation exception",
         },
     )

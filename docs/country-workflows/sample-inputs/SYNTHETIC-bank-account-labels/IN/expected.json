@@ -1,0 +1,13 @@
+{
+  "synthetic": true,
+  "source_sha256": "6213ec9e5f2a3f94b0d0a94150c1d7be67910960f04c34c750f2904294a95167",
+  "table_kind": "bank",
+  "bank_account_label": "100",
+  "bank_account_mapping_rationale": "SYNTHETIC reviewed single original account 00000123 mapped to GL 100; not bank authentication",
+  "expected": {
+    "matching_account_code": "100",
+    "statement_original_account_code": "00000123",
+    "currency": "INR",
+    "bank_authentication": "NOT_ESTABLISHED"
+  }
+}
