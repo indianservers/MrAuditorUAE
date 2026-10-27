@@ -2663,3 +2663,28 @@ All 237 frontend tests across 49 files and the production build passed, includin
 the new worksheet/assessment payload check. Browser interaction for this addition
 remains unverified: the earlier automatic approval review rejected starting the
 preview server. No new screenshot or passing browser receipt is claimed.
+
+### Workbook scope in review and exports
+
+A follow-up regression reproduced missing `workbook_metadata` in the export
+summary. The shared export summary now retains that complete object in XLSX,
+DOCX and PDF. The XLSX Source and review sheet includes the selected worksheet,
+excluded-sheet names, original hash, population assessment, original headers and
+date/numeric basis through the existing exact-text/continuation writer. Source
+rows continue to retain physical row and cell-storage provenance.
+
+The reviewer screen now shows the selected worksheet, assessed population,
+excluded-sheet count and whole-workbook completeness limitation before approval.
+An expandable section exposes excluded sheet names, original headers/hash and date
+epoch. It explains that stored numbers do not reconstruct displayed leading zeros.
+Workbook sources label their column mappings as worksheet mappings; CSV labels
+remain available for CSV sources.
+
+Verification: [20 export/continuation unit cases](../phase-12/workbook-review-export-unit.xml)
+passed, including three new workbook-metadata checks for XLSX, DOCX and PDF content.
+The [eight UAE/India workbook API cases](../phase-12/workbook-review-export-api.xml)
+now read back the complete exported workbook scope and compare it with the retained
+source metadata. All 238 frontend tests across 49 files, the production build and
+scoped Ruff/ESLint passed. This follow-up verifies export content and component
+behavior; it does not establish browser rendering or PDF layout quality. The
+earlier preview-server startup rejection still leaves browser verification open.

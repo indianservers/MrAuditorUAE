@@ -2,6 +2,7 @@
 
 import hashlib
 import io
+import json
 import os
 from decimal import Decimal
 
@@ -87,6 +88,8 @@ async def test_retained_workbook_source_review_export_and_consumption(
         rows = list(book["Rows"].values)
         assert len(rows) == 2
         assert "source_worksheet" in rows[0] and "source_row" in rows[0]
+        summary = {r[0]: r[1] for r in book["Source and review"].values if len(r) >= 2}
+        assert json.loads(summary["workbook_metadata"]) == body["workbook_metadata"]
     finally:
         book.close()
     downloaded = await c.get(

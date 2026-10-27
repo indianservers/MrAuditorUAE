@@ -285,6 +285,16 @@ type Result = {
     included_box_controls?: Record<string, unknown>[];
     metric_controls?: Record<string, string>;
     native_metadata?: Record<string, unknown>;
+    workbook_metadata?: {
+      worksheet: string;
+      original_sha256: string;
+      original_headers: string[];
+      unselected_worksheets: string[];
+      excel_epoch: string;
+      assessment: string;
+      numeric_basis: string;
+      population_basis: string;
+    };
     supporting_table_id?: string;
     supporting_scope_assessment?: string;
     supporting_side?: string;
@@ -5745,9 +5755,48 @@ export function CountryWorkflows({
               )}
             </details>
           )}
+          {body.workbook_metadata && (
+            <section aria-label="Workbook source scope">
+              <h3>Selected workbook population</h3>
+              <p>
+                Worksheet: <strong>{body.workbook_metadata.worksheet}</strong>
+              </p>
+              <p>{body.workbook_metadata.assessment}</p>
+              <p>
+                {body.workbook_metadata.unselected_worksheets.length} other
+                worksheets excluded from this population. This selection does
+                not establish completeness of the whole workbook.
+              </p>
+              <p>
+                Numbers use stored cell values. Formatting such as displayed
+                leading zeros is not reconstructed. Check the original cell
+                identity before approving.
+              </p>
+              <details>
+                <summary>Original workbook scope and headers</summary>
+                <p>
+                  Original SHA-256: {body.workbook_metadata.original_sha256}
+                </p>
+                <p>
+                  Excluded worksheets:{" "}
+                  {body.workbook_metadata.unselected_worksheets.join(", ") ||
+                    "None"}
+                </p>
+                <p>
+                  Original headers:{" "}
+                  {body.workbook_metadata.original_headers.join(", ")}
+                </p>
+                <p>Workbook date epoch: {body.workbook_metadata.excel_epoch}</p>
+              </details>
+            </section>
+          )}
           {body.csv_mapping && (
             <details>
-              <summary>Original CSV column mapping and exclusions</summary>
+              <summary>
+                {body.workbook_metadata
+                  ? "Original worksheet column mapping and exclusions"
+                  : "Original CSV column mapping and exclusions"}
+              </summary>
               <dl>
                 {Object.entries(body.csv_mapping.applied_columns).map(
                   ([field, heading]) => (

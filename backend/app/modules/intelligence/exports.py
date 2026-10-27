@@ -117,6 +117,7 @@ def render(event, format):
             "payroll_ledger_scope",
             "native_format",
             "native_metadata",
+            "workbook_metadata",
             "csv_mapping",
             "supporting_table_id",
             "supporting_table_metadata",

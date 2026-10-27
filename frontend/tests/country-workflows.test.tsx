@@ -8,6 +8,26 @@ import {
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { CountryWorkflows } from "@/features/country-workflows";
 
+it("shows the selected workbook population and excluded scope before approval", () => {
+  state.result = { id: "result", kind: "workflow-source", version: 1, freshness: "CURRENT",
+    body: { title: "Workbook scope", review_status: "UNVERIFIED", rows: [],
+      workbook_metadata: { worksheet: "Invoices", original_sha256: "a".repeat(64),
+        original_headers: ["Document", "Tax amount"], unselected_worksheets: ["Archive", "Payroll"],
+        excel_epoch: "1899-12-30T00:00:00", assessment: "Only the current-period invoice population was selected" },
+      csv_mapping: { applied_columns: { reference: "Document" }, ignored_columns: [], rationale: "Explicit mapped invoice reference" },
+    } };
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Saved source or result"), { target: { value: "result" } });
+  const scope = screen.getByRole("region", { name: "Workbook source scope" });
+  expect(scope).toHaveTextContent("Invoices");
+  expect(within(scope).getByText("Only the current-period invoice population was selected")).toBeVisible();
+  expect(within(scope).getByText(/2 other worksheets excluded/)).toBeVisible();
+  fireEvent.click(within(scope).getByText("Original workbook scope and headers"));
+  expect(within(scope).getByText(/Archive, Payroll/)).toBeVisible();
+  expect(within(scope).getByText(/Original headers: Document, Tax amount/)).toBeVisible();
+  expect(screen.getByText("Original worksheet column mapping and exclusions")).toBeVisible();
+});
+
 it("retains the explicit worksheet and population assessment in a workbook source", async () => {
   render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
   for (const [label, value] of [
