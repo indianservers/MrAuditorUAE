@@ -1310,6 +1310,12 @@ async def review(
         )
     else:
         if data.action == "approve":
+            if obj.kind == "report-template":
+                from app.modules.regulatory.report_requirements import parse_template, require_ready
+
+                body["requirements_coverage"] = await require_ready(
+                    db, ctx, eng, parse_template(obj.body)
+                )
             if obj.kind == "reconciliation":
                 from app.modules.intelligence.matching_review import verify_review
 

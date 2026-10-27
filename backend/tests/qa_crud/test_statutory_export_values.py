@@ -12,6 +12,7 @@ from openpyxl import load_workbook
 from app.modules.intelligence import xlsx_values
 from tests.integration.test_platform import environment as environment
 from tests.phase4.test_workflows import actor, grant, setup
+from tests.qa_crud.report_requirement_fixtures import declared_requirements
 from tests.qa_crud.test_country_workflows import csv_bytes, decision, double_boundaries
 from tests.qa_crud.test_india_ecr_source import india_context
 from tests.qa_crud.test_lossless_exports import retained_allocations
@@ -39,10 +40,12 @@ async def test_statutory_current_and_historical_complete_sources(
     data = {
         "title": "SYNTHETIC complete source reporting pack",
         "category": category,
+        **declared_requirements("cash"),
         "rationale": "Synthetic source-bound reporting output, not legal form qualification",
         "blocks": [
             {
                 "key": "cash",
+                "requirement_keys": ["cash"],
                 "title": "Reviewed settlement source",
                 "kind": "financial_table",
                 "source_kind": "intelligence",

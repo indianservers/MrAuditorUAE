@@ -3352,3 +3352,50 @@ These fixtures are synthetic and do not qualify real client exposures, complete
 country laws, all mandatory statutory form content, providers or release/security.
 No new full-app browser/screenshot qualification is claimed. Catalogue coverage
 remains 154 authored synthetic scenarios; the broader goal remains unfinished.
+
+
+### Declared report requirements and source coverage
+
+Report templates now retain an explicitly assessed scope, required items,
+applicability decisions and mappings to content blocks. Unassessed or incomplete
+templates can be saved as drafts. Independent approval and report generation
+require all declared items to have coverage and all referenced sources to be
+current and professionally reviewed. An item marked not applicable still needs
+a reviewed source supporting that decision. Authored narrative can cover a
+required item only when its source requirement was explicitly turned off.
+
+The designer supports mapping both new and retained blocks. Reviewers see the
+retained scope basis, coverage gaps, mapped block content and source links;
+approval is disabled for known structural gaps and the API rechecks sources.
+Older templates and reports remain historical records, but their old contract
+requires amendment and review before reuse. Reviewed adverse findings remain
+visible as adverse evidence; this does not issue a clean opinion.
+
+XLSX exports include a dedicated Requirements coverage sheet with full values.
+DOCX and PDF use separate coverage and supporting-basis tables with explicit
+paper cell limits (2,000 and 600 characters respectively). A synthetic 45-item
+layout check produced seven PDF pages; pages 1, 2, 4 and 7 were rendered and
+visually inspected for readable wrapping, repeated headers and unclipped final
+rows. These arbitrary items are not statutory clauses. No new full-app browser
+or screenshot qualification is claimed.
+
+Verification: [2,820 backend unit tests](../phase-12/report-requirements-backend.xml)
+passed (five skips); after the export layout refinement,
+[78 focused export/PDF/XLSX/requirement unit tests](../phase-12/report-requirements-export-unit.xml)
+and [13 API regressions](../phase-12/report-requirements-api.xml) passed. API cases
+cover UAE and India assessment gaps, unmapped items, unsupported exclusions,
+unreviewed sources, independent review, generation and retained export coverage,
+plus existing statutory reports, Unicode exports and tax-audit applicability.
+Scoped mypy passed for 20 files.
+
+This is a manually declared scope contract, not a qualified complete official
+Form 26, Form 3CD or other country statutory manifest. All generated reports
+remain drafts; signing and filing are not implemented by this change. The
+catalogue remains 154 authored synthetic scenarios. Real-client pilot inputs
+and independently checked results remain outstanding; the UAE and India
+pilot-data folders are ready to receive them and exclude client contents from
+Git. Country-law completeness, providers and release/security gaps remain open.
+
+Final frontend verification: all 269 tests passed, ESLint reported zero errors
+and one existing unused-variable warning, and the production build (including
+TypeScript) passed. Scoped Ruff and git diff whitespace checks passed.

@@ -8,6 +8,7 @@ from tests.integration.test_platform import environment as environment
 from tests.phase2.test_pipeline import committed
 from tests.phase4.test_workflows import actor, setup
 from tests.qa_crud.regulatory_validation_fixtures import cases as validation_cases
+from tests.qa_crud.report_requirement_fixtures import declared_requirements
 from tests.unit.test_regulatory_evaluation import fixture
 
 pytestmark = pytest.mark.skipif(os.getenv("INTEGRATION_TESTS") != "1", reason="Disposable database")
@@ -162,9 +163,11 @@ async def test_india_reviewed_mapping_reporting_template_and_historical_sources(
         json={
             "title": "SYNTHETIC source-reconciled Indian draft",
             "category": "schedule-iii",
+            **declared_requirements("balances"),
             "blocks": [
                 {
                     "key": "balances",
+                    "requirement_keys": ["balances"],
                     "title": "Source balances",
                     "kind": "financial_table",
                     "source_kind": "intelligence",

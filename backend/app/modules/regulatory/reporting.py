@@ -3,14 +3,19 @@
 import json
 
 from fastapi import HTTPException
-from pydantic import ValidationError
 
 from app.db.models.platform import FinancialPeriod
 from app.modules.audit_execution import service as audit
 from app.modules.audit_execution.access import engagement_permissions
 from app.modules.intelligence import service as intelligence
 from app.modules.jurisdictions.workspace import resolved
-from app.modules.regulatory.schemas import ReportTemplate
+from app.modules.regulatory.report_requirements import (
+    CONTRACT,
+    coverage,
+    implementation_hash,
+    parse_template,
+    require_ready,
+)
 from app.modules.regulatory.tax_forms import SCOPE_CONTRACT, require_assessed_tax_scope
 
 
@@ -93,6 +98,9 @@ async def template(db, ctx, eng, data, request_id):
                 {str(ctx.user_id), *(prior.body.get("contributors", []) if prior else [])}
             ),
             "document_status": "DRAFT",
+            "report_requirements_contract": CONTRACT,
+            "report_requirements_implementation": implementation_hash(),
+            "requirements_coverage": coverage(data),
             "scope": "Engagement-bound template; reuse requires an authorized copy with revalidated sources",
             **(
                 {
@@ -113,18 +121,8 @@ async def generate(db, ctx, eng, data, request_id):
     stored = await intelligence.event(db, ctx, eng.id, data.template_id, True)
     if stored.kind != "report-template" or stored.body.get("review_status") != "REVIEWED":
         raise HTTPException(409, "Current independently reviewed template required")
-    try:
-        config = ReportTemplate.model_validate(
-            {
-                **{k: stored.body[k] for k in ["title", "category", "blocks", "rationale"]},
-                "tax_audit_scope": stored.body.get("tax_audit_scope"),
-            }
-        )
-    except ValidationError:
-        raise HTTPException(
-            409,
-            "Amend and independently review the report template with a valid report/tax-period scope",
-        ) from None
+    config = parse_template(stored.body)
+    requirements_coverage = await require_ready(db, ctx, eng, config)
     scope_dependencies = await tax_scope_receipt(db, ctx, eng, config)
     blocks, dependencies = [], [intelligence.event_receipt(stored), *scope_dependencies]
     for index, block in enumerate(config.blocks, 1):
@@ -139,7 +137,9 @@ async def generate(db, ctx, eng, data, request_id):
             provenance = {"id": str(source.id), "version": source.version, "sha256": source.sha256}
         elif block.source_kind == "record":
             source = await audit.get_record(db, ctx, eng.id, block.source_id, lock=False)
-            if source.status not in {"APPROVED", "LOCKED", "RESOLVED", "CLOSED"}:
+            if source.status not in {"APPROVED", "LOCKED", "RESOLVED", "CLOSED"} and not (
+                source.kind == "findings" and source.status == "ACCEPTED_UNRESOLVED"
+            ):
                 raise HTTPException(409, "Report input audit record is not reviewed")
             from app.modules.lineage.working_papers import require_current
 
@@ -194,6 +194,12 @@ async def generate(db, ctx, eng, data, request_id):
         {
             "title": config.title,
             "category": config.category,
+            "requirements": [item.model_dump(mode="json") for item in config.requirements],
+            "requirements_assessed": config.requirements_assessed,
+            "requirements_basis": config.requirements_basis,
+            "requirements_coverage": requirements_coverage,
+            "report_requirements_contract": CONTRACT,
+            "report_requirements_implementation": implementation_hash(),
             "blocks": blocks,
             "template_id": str(stored.id),
             "template_version": stored.version,

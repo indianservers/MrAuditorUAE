@@ -1,10 +1,17 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { StatutoryReportBuilder } from "@/features/statutory-report-builder";
 const state = vi.hoisted(() => ({
   mutate: vi.fn(),
   tenant: "tenant",
   country: "IN",
+  detail: undefined as unknown,
 }));
 vi.mock("@/features/shared", () => ({
   PageHeader: () => <h1>Report designer</h1>,
@@ -23,7 +30,9 @@ vi.mock("@/hooks/use-api", () => ({
               { id: "two", name: "Second" },
             ],
           }
-        : undefined,
+        : path.endsWith("/events/template")
+          ? state.detail
+          : undefined,
   }),
   useAction: () => ({ mutateAsync: state.mutate, isPending: false }),
 }));
@@ -31,6 +40,12 @@ vi.mock("@/hooks/use-event-history", () => ({
   useEventHistory: () => ({
     data: {
       items: [
+        {
+          id: "template",
+          label: "Retained template",
+          kind: "report-template",
+          review_status: "UNVERIFIED",
+        },
         {
           id: "case",
           label: "Reviewed case",
@@ -96,4 +111,106 @@ describe("tax audit report builder", () => {
       screen.getByRole("button", { name: "Save template version" }),
     ).toBeDisabled();
   });
+});
+
+it("maps a declared authored requirement to a retained draft block and sends its explicit scope", async () => {
+  state.mutate.mockReset().mockResolvedValue({ id: "saved" });
+  render(<StatutoryReportBuilder />);
+  const change = (label: string, value: string) =>
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  change("Engagement", "one");
+  change("Report title", "Management communication");
+  change("Block title", "Draft communication");
+  change(
+    "User-authored narrative / commentary",
+    "Synthetic authored management communication",
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Add content block" }));
+  fireEvent.click(
+    screen.getByRole("button", { name: "Add declared requirement" }),
+  );
+  change("Requirement title 1", "Communication requirement");
+  change("Requirement disposition 1", "REQUIRED");
+  change(
+    "Applicability and source basis 1",
+    "Synthetic authored communication; external evidence not required for this item",
+  );
+  fireEvent.click(
+    screen.getByLabelText("Evidence/calculation source required for item 1"),
+  );
+  const existing = screen.getByRole("group", {
+    name: "Coverage for Draft communication",
+  });
+  fireEvent.click(within(existing).getByLabelText("Communication requirement"));
+  change("Requirement scope completeness assessment", "assessed");
+  change(
+    "Requirement scope basis",
+    "Synthetic explicit communication scope independently assessed",
+  );
+  fireEvent.click(
+    screen.getByRole("button", { name: "Save template version" }),
+  );
+  await waitFor(() => expect(state.mutate).toHaveBeenCalledOnce());
+  expect(state.mutate.mock.calls[0][0].body).toMatchObject({
+    requirements_assessed: true,
+    requirements_basis:
+      "Synthetic explicit communication scope independently assessed",
+    requirements: [
+      {
+        key: "item-1",
+        title: "Communication requirement",
+        disposition: "REQUIRED",
+        source_required: false,
+      },
+    ],
+    blocks: [{ requirement_keys: ["item-1"] }],
+  });
+});
+
+beforeEach(() => {
+  state.detail = undefined;
+});
+it("shows retained requirement gaps to reviewers and blocks approval without editing a draft", () => {
+  state.detail = {
+    id: "template",
+    version: 1,
+    freshness: "CURRENT",
+    body: {
+      title: "Source report",
+      category: "management-letter",
+      blocks: [],
+      review_status: "UNVERIFIED",
+      requirements_basis: "Synthetic requirement basis",
+      requirements_coverage: {
+        complete: false,
+        source_validation: "RECHECK_BEFORE_REVIEW_OR_GENERATION",
+        items: [
+          {
+            key: "mandatory",
+            title: "Source documentation",
+            disposition: "REQUIRED",
+            status: "MISSING_COVERAGE",
+            block_keys: [],
+          },
+        ],
+      },
+    },
+  };
+  render(<StatutoryReportBuilder />);
+  fireEvent.change(screen.getByLabelText("Engagement"), {
+    target: { value: "one" },
+  });
+  fireEvent.change(screen.getByLabelText("Saved template version"), {
+    target: { value: "template" },
+  });
+  expect(
+    within(screen.getByLabelText("Retained requirement coverage")).getByText(
+      "MISSING_COVERAGE",
+    ),
+  ).toBeTruthy();
+  expect(
+    screen.getByRole("button", {
+      name: "Record independent template approval",
+    }),
+  ).toBeDisabled();
 });

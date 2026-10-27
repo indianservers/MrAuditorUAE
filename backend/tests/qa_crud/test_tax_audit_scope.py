@@ -10,6 +10,7 @@ from openpyxl import load_workbook
 from tests.integration.test_platform import environment as environment
 from tests.phase4.test_workflows import action, actor, approve, create, grant, setup
 from tests.qa_crud.regulatory_source_fixtures import retain
+from tests.qa_crud.report_requirement_fixtures import declared_requirements
 from tests.qa_crud.test_country_workflows import decision, double_boundaries
 from tests.unit.test_regulatory_evaluation import fixture
 
@@ -215,10 +216,12 @@ async def test_period_form_review_export_and_source_correction(
     data = {
         "title": "SYNTHETIC source-linked tax working draft",
         "category": "india-tax-audit",
+        **declared_requirements("scope"),
         "tax_audit_scope": scope,
         "blocks": [
             {
                 "key": "scope",
+                "requirement_keys": ["scope"],
                 "title": "Retained scope assessment",
                 "kind": "regulatory_checklist",
                 "source_kind": "intelligence",

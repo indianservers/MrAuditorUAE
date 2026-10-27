@@ -6,6 +6,10 @@ import { useAPI, useAction } from "@/hooks/use-api";
 import { useEventHistory } from "@/hooks/use-event-history";
 import { useScope } from "@/stores/workspace";
 import type { Page, RecordRow } from "@/types/models";
+import {
+  ReportRequirementsEditor,
+  type ReportRequirement,
+} from "./report-requirements";
 import { PageHeader } from "./shared";
 import {
   TaxAuditScopeForm,
@@ -22,6 +26,7 @@ type Block = {
   source_kind?: string;
   source_id?: string;
   text: string;
+  requirement_keys?: string[];
 };
 type Result = {
   id: string;
@@ -33,6 +38,20 @@ type Result = {
     blocks: Block[];
     review_status: string;
     tax_audit_scope?: TaxAuditScope | null;
+    requirements?: ReportRequirement[];
+    requirements_assessed?: boolean;
+    requirements_basis?: string;
+    requirements_coverage?: {
+      complete: boolean;
+      source_validation: string;
+      items: {
+        key: string;
+        title: string;
+        disposition: string;
+        status: string;
+        block_keys: string[];
+      }[];
+    };
   };
 };
 const kinds = [
@@ -54,6 +73,10 @@ export function StatutoryReportBuilder() {
 }
 function ReportBuilderForm() {
   const [eid, setEid] = useState("");
+  const [requirements, setRequirements] = useState<ReportRequirement[]>([]);
+  const [requirementsAssessed, setRequirementsAssessed] = useState(false);
+  const [requirementsBasis, setRequirementsBasis] = useState("");
+  const [requirementKeys, setRequirementKeys] = useState<string[]>([]);
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("management-letter");
   const [comments, setComments] = useState("");
@@ -108,6 +131,10 @@ function ReportBuilderForm() {
             onChange={(e) => {
               setEid(e.target.value);
               setSelected("");
+              setRequirements([]);
+              setRequirementsAssessed(false);
+              setRequirementsBasis("");
+              setRequirementKeys([]);
               setBlocks([]);
               setTitle("");
               setComments("");
@@ -156,7 +183,17 @@ function ReportBuilderForm() {
               Report category
               <select
                 value={category}
-                onChange={(e) => setCategory(e.target.value)}
+                onChange={(e) => {
+                  setCategory(e.target.value);
+                  setRequirements([]);
+                  setRequirementsAssessed(false);
+                  setRequirementsBasis("");
+                  setRequirementKeys([]);
+                  setBlocks((old) =>
+                    old.map((block) => ({ ...block, requirement_keys: [] })),
+                  );
+                  setTaxScope(emptyTaxScope);
+                }}
               >
                 {[
                   "india-statutory",
@@ -201,6 +238,14 @@ function ReportBuilderForm() {
                 Load older sources and templates
               </Button>
             )}
+            <ReportRequirementsEditor
+              items={requirements}
+              assessed={requirementsAssessed}
+              basis={requirementsBasis}
+              onItems={setRequirements}
+              onAssessed={setRequirementsAssessed}
+              onBasis={setRequirementsBasis}
+            />
             <h3>Add source-linked block</h3>
             <label>
               Block title
@@ -259,6 +304,25 @@ function ReportBuilderForm() {
                 onChange={(e) => setText(e.target.value)}
               />
             </label>
+            <fieldset>
+              <legend>Requirements covered by this block</legend>
+              {requirements.map((item) => (
+                <label key={item.key}>
+                  <input
+                    type="checkbox"
+                    checked={requirementKeys.includes(item.key)}
+                    onChange={(e) =>
+                      setRequirementKeys((old) =>
+                        e.target.checked
+                          ? [...old, item.key]
+                          : old.filter((key) => key !== item.key),
+                      )
+                    }
+                  />
+                  {item.title || item.key}
+                </label>
+              ))}
+            </fieldset>
             <Button
               disabled={!blockTitle || (kind !== "narrative" && !sourceId)}
               onClick={() => {
@@ -266,6 +330,7 @@ function ReportBuilderForm() {
                   ...blocks,
                   {
                     key: crypto.randomUUID(),
+                    requirement_keys: requirementKeys,
                     title: blockTitle,
                     kind,
                     text,
@@ -275,6 +340,7 @@ function ReportBuilderForm() {
                   },
                 ]);
                 setBlockTitle("");
+                setRequirementKeys([]);
                 setText("");
               }}
             >
@@ -302,6 +368,45 @@ function ReportBuilderForm() {
                 >
                   <strong>{b.title}</strong> • {b.kind} •{" "}
                   {b.source_id || "Authored narrative"}
+                  <p>
+                    Requirement links:{" "}
+                    {b.requirement_keys?.join(", ") ||
+                      "None; review declared coverage"}
+                  </p>
+                  <fieldset>
+                    <legend>Coverage for {b.title}</legend>
+                    {requirements.map((requirement) => (
+                      <label key={requirement.key}>
+                        <input
+                          type="checkbox"
+                          checked={
+                            b.requirement_keys?.includes(requirement.key) ||
+                            false
+                          }
+                          onChange={(event) =>
+                            setBlocks((old) =>
+                              old.map((block) =>
+                                block.key !== b.key
+                                  ? block
+                                  : {
+                                      ...block,
+                                      requirement_keys: event.target.checked
+                                        ? [
+                                            ...(block.requirement_keys || []),
+                                            requirement.key,
+                                          ]
+                                        : (block.requirement_keys || []).filter(
+                                            (key) => key !== requirement.key,
+                                          ),
+                                    },
+                              ),
+                            )
+                          }
+                        />
+                        {requirement.title || requirement.key}
+                      </label>
+                    ))}
+                  </fieldset>
                   <div className="toolbar">
                     <Button
                       aria-label={`Move ${b.title} up`}
@@ -349,6 +454,9 @@ function ReportBuilderForm() {
                       category,
                       blocks,
                       rationale: comments,
+                      requirements,
+                      requirements_assessed: requirementsAssessed,
+                      requirements_basis: requirementsBasis,
                       ...(assessedScope
                         ? { tax_audit_scope: assessedScope }
                         : {}),
@@ -390,11 +498,85 @@ function ReportBuilderForm() {
                 <p>
                   {detail.data.body.title} • v{detail.data.version}
                 </p>
+                <section aria-label="Retained requirement coverage">
+                  <h3>Declared requirement coverage</h3>
+                  <p>
+                    {detail.data.body.requirements_basis ||
+                      "No scope basis recorded; amend this template before review."}
+                  </p>
+                  <p>
+                    Source validation:{" "}
+                    {detail.data.body.requirements_coverage
+                      ?.source_validation || "Not assessed"}
+                    . Statutory completeness is not qualified by this
+                    declaration.
+                  </p>
+                  <table>
+                    <caption>
+                      Required items and their report-block links
+                    </caption>
+                    <thead>
+                      <tr>
+                        <th>Reference</th>
+                        <th>Requirement</th>
+                        <th>Disposition</th>
+                        <th>Coverage</th>
+                        <th>Blocks</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {detail.data.body.requirements_coverage?.items.map(
+                        (item) => (
+                          <tr key={item.key}>
+                            <td>{item.key}</td>
+                            <td>{item.title}</td>
+                            <td>{item.disposition}</td>
+                            <td>{item.status}</td>
+                            <td>{item.block_keys.join(", ") || "Missing"}</td>
+                          </tr>
+                        ),
+                      )}
+                    </tbody>
+                  </table>
+                  {detail.data.body.blocks.map((block) => (
+                    <details key={block.key}>
+                      <summary>
+                        {block.title} · {block.key}
+                      </summary>
+                      <p>{block.text}</p>
+                      <p>
+                        {block.source_kind || "Authored narrative"}:{" "}
+                        {block.source_id || "No evidence source"}
+                      </p>
+                      {block.source_id && (
+                        <Link
+                          href={
+                            block.source_kind === "intelligence"
+                              ? `/intelligence/${eid}/lead?event=${block.source_id}`
+                              : `/engagements/${eid}/lifecycle`
+                          }
+                        >
+                          {block.source_kind === "intelligence"
+                            ? "Open source result"
+                            : "Open source evidence graph"}
+                        </Link>
+                      )}
+                    </details>
+                  ))}
+                </section>
                 <Button
                   onClick={() => {
                     setBlocks(detail.data!.body.blocks);
                     setTitle(detail.data!.body.title);
                     setCategory(detail.data!.body.category);
+                    setRequirements(detail.data!.body.requirements || []);
+                    setRequirementsAssessed(
+                      detail.data!.body.requirements_assessed || false,
+                    );
+                    setRequirementsBasis(
+                      detail.data!.body.requirements_basis || "",
+                    );
+                    setRequirementKeys([]);
                     setTaxScope(
                       detail.data!.body.tax_audit_scope || emptyTaxScope,
                     );
@@ -403,7 +585,11 @@ function ReportBuilderForm() {
                   Load retained blocks into new revision
                 </Button>
                 <Button
-                  disabled={action.isPending}
+                  disabled={
+                    action.isPending ||
+                    !detail.data.body.requirements_coverage?.complete ||
+                    detail.data.freshness !== "CURRENT"
+                  }
                   onClick={async () => {
                     const result = await action
                       .mutateAsync({

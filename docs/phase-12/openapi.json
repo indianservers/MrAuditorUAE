@@ -63213,6 +63213,14 @@
       },
       "ReportBlock": {
         "properties": {
+          "requirement_keys": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Requirement Keys"
+          },
           "key": {
             "type": "string",
             "pattern": "^[a-zA-Z0-9_-]{1,80}$",
@@ -63335,6 +63343,50 @@
         ],
         "title": "ReportGenerate"
       },
+      "ReportRequirement": {
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^[a-zA-Z0-9_.:-]{1,100}$",
+            "title": "Key"
+          },
+          "title": {
+            "type": "string",
+            "maxLength": 300,
+            "minLength": 3,
+            "title": "Title"
+          },
+          "disposition": {
+            "type": "string",
+            "enum": [
+              "REQUIRED",
+              "NOT_APPLICABLE",
+              "UNASSESSED"
+            ],
+            "title": "Disposition",
+            "default": "UNASSESSED"
+          },
+          "source_required": {
+            "type": "boolean",
+            "title": "Source Required",
+            "default": true
+          },
+          "basis": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 10,
+            "title": "Basis"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "key",
+          "title",
+          "basis"
+        ],
+        "title": "ReportRequirement"
+      },
       "ReportTemplate": {
         "properties": {
           "title": {
@@ -63388,6 +63440,25 @@
                 "type": "null"
               }
             ]
+          },
+          "requirements": {
+            "items": {
+              "$ref": "#/components/schemas/ReportRequirement"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "title": "Requirements"
+          },
+          "requirements_assessed": {
+            "type": "boolean",
+            "title": "Requirements Assessed",
+            "default": false
+          },
+          "requirements_basis": {
+            "type": "string",
+            "maxLength": 4000,
+            "title": "Requirements Basis",
+            "default": ""
           },
           "prior_id": {
             "anyOf": [

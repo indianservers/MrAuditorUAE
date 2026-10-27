@@ -74,6 +74,30 @@ def render(event, format):
         if event.get("freshness") == "CURRENT"
         else "FRESHNESS_NOT_EVALUATED",
     }
+    requirement_items = body.get("requirements_coverage", {}).get("items", [])
+    basis_by_key = {item["key"]: item.get("basis", "") for item in body.get("requirements", [])}
+    requirement_rows = [
+        {**item, "basis": basis_by_key.get(item["key"], "")} for item in requirement_items
+    ]
+    requirement_columns = [
+        "key",
+        "title",
+        "disposition",
+        "status",
+        "source_required",
+        "block_keys",
+        "basis",
+    ]
+    if body.get("requirements_coverage"):
+        metadata.update(
+            {
+                "Declared requirements covered": body["requirements_coverage"]["complete"],
+                "Declared requirement count": len(requirement_rows),
+                "Requirement source validation": body["requirements_coverage"]["source_validation"],
+                "Requirements scope basis": body.get("requirements_basis"),
+                "Statutory completeness qualified": False,
+            }
+        )
     if body.get("tax_audit_scope"):
         scope = body["tax_audit_scope"]
         metadata.update(
@@ -104,6 +128,14 @@ def render(event, format):
             cover.column_dimensions["B"].width = 120
             for key, item in metadata.items():
                 append(cover, [key, item])
+            if requirement_rows:
+                requirements = workbook.create_sheet("Requirements coverage")
+                requirements.freeze_panes = "A2"
+                for column in "ABCDEFG":
+                    requirements.column_dimensions[column].width = 36 if column != "G" else 100
+                append(requirements, requirement_columns)
+                for item in requirement_rows:
+                    append(requirements, [item.get(key) for key in requirement_columns])
             blocks = workbook.create_sheet("Ordered blocks")
             blocks.freeze_panes = "A2"
             for column, width in {"A": 10, "B": 36, "C": 24, "D": 80, "E": 80}.items():
@@ -185,6 +217,19 @@ def render(event, format):
         document.add_heading(body["title"], 0)
         for key, item in metadata.items():
             document.add_paragraph(f"{key}: {value(item)}")
+        if requirement_rows:
+            document.add_heading("Declared requirements coverage", 1)
+            for columns in [requirement_columns[:4], ["key", *requirement_columns[4:]]]:
+                grid = document.add_table(rows=1, cols=len(columns))
+                grid.style = "Table Grid"
+                for cell, key in zip(grid.rows[0].cells, columns):
+                    cell.text = key.replace("_", " ")
+                for item in requirement_rows:
+                    for cell, key in zip(grid.add_row().cells, columns):
+                        cell.text = value(item.get(key))[:2000]
+            document.add_paragraph(
+                "Declared scope only; not statutory completeness qualification. Long fields are abbreviated at 2,000 characters; XLSX retains full requirement values."
+            )
         for block in body["blocks"]:
             document.add_heading(f"{block['number']}. {block['title']}", 1)
             document.add_paragraph(block["text"])
@@ -215,6 +260,23 @@ def render(event, format):
 
     sections: list[tuple[str, bool] | PDFTable] = [(body["title"], True)]
     sections.extend((f"{key}: {value(item)}", False) for key, item in metadata.items())
+    if requirement_rows:
+        sections.append(("Declared requirements coverage", True))
+        for columns in [requirement_columns[:4], ["key", *requirement_columns[4:]]]:
+            sections.append(
+                PDFTable(
+                    headers=[key.replace("_", " ") for key in columns],
+                    rows=[
+                        [value(item.get(key))[:600] for key in columns] for item in requirement_rows
+                    ],
+                )
+            )
+        sections.append(
+            (
+                "Declared scope only; not statutory completeness qualification. Long fields are abbreviated at 600 characters; XLSX retains full requirement values.",
+                False,
+            )
+        )
     for block in body["blocks"]:
         sections.extend(
             [

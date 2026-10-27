@@ -8627,6 +8627,8 @@ export interface components {
         };
         /** ReportBlock */
         ReportBlock: {
+            /** Requirement Keys */
+            requirement_keys?: string[];
             /** Key */
             key: string;
             /** Title */
@@ -8660,6 +8662,26 @@ export interface components {
             /** Rationale */
             rationale: string;
         };
+        /** ReportRequirement */
+        ReportRequirement: {
+            /** Key */
+            key: string;
+            /** Title */
+            title: string;
+            /**
+             * Disposition
+             * @default UNASSESSED
+             * @enum {string}
+             */
+            disposition: "REQUIRED" | "NOT_APPLICABLE" | "UNASSESSED";
+            /**
+             * Source Required
+             * @default true
+             */
+            source_required: boolean;
+            /** Basis */
+            basis: string;
+        };
         /** ReportTemplate */
         ReportTemplate: {
             /** Title */
@@ -8674,6 +8696,18 @@ export interface components {
             /** Rationale */
             rationale: string;
             tax_audit_scope?: components["schemas"]["IndiaTaxAuditScope"] | null;
+            /** Requirements */
+            requirements?: components["schemas"]["ReportRequirement"][];
+            /**
+             * Requirements Assessed
+             * @default false
+             */
+            requirements_assessed: boolean;
+            /**
+             * Requirements Basis
+             * @default
+             */
+            requirements_basis: string;
             /** Prior Id */
             prior_id?: string | null;
             /**

@@ -203,6 +203,10 @@ async def current(db, ctx, obj, visited=None):
         ):
             return False
     if getattr(obj, "kind", None) in {"report-template", "statutory-report"}:
+        from app.modules.regulatory.report_requirements import current_contract
+
+        if not current_contract(obj.body):
+            return False
         from app.modules.regulatory.tax_forms import IndiaTaxAuditScope, has_tax_scope_contract
 
         if not has_tax_scope_contract(obj.body, obj.dependencies):

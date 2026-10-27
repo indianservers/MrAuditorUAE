@@ -9,6 +9,7 @@ from app.modules.jurisdictions.profiles import Strict
 from app.modules.regulatory.benefit_profiles import BenefitParameters
 from app.modules.regulatory.payroll_profiles import PayrollParameters
 from app.modules.regulatory.pension_profiles import PensionParameters
+from app.modules.regulatory.report_requirements import ReportRequirement
 from app.modules.regulatory.tax_forms import IndiaTaxAuditScope
 from app.modules.regulatory.validation_schemas import RuleFixture
 
@@ -245,6 +246,7 @@ class IndiaStatements(Strict):
 
 
 class ReportBlock(Strict):
+    requirement_keys: list[str] = Field(default_factory=list, max_length=100)
     key: str = Field(pattern="^[a-zA-Z0-9_-]{1,80}$")
     title: str = Field(min_length=1, max_length=200)
     kind: Literal[
@@ -301,6 +303,9 @@ class ReportTemplate(Strict):
     blocks: list[ReportBlock] = Field(min_length=1, max_length=50)
     rationale: str = Field(min_length=10, max_length=4000)
     tax_audit_scope: IndiaTaxAuditScope | None = None
+    requirements: list[ReportRequirement] = Field(default_factory=list, max_length=100)
+    requirements_assessed: bool = Field(default=False, strict=True)
+    requirements_basis: str = Field(default="", max_length=4000)
     prior_id: uuid.UUID | None = None
     expected_version: int = Field(default=0, ge=0)
 
@@ -310,6 +315,17 @@ class ReportTemplate(Strict):
             raise ValueError(
                 "India tax-audit templates require an explicit assessed tax scope; other report categories must not supply one"
             )
+        keys = {requirement.key for requirement in self.requirements}
+        if len(keys) != len(self.requirements):
+            raise ValueError("Report requirement identifiers must be unique")
+        if any(
+            len(set(block.requirement_keys)) != len(block.requirement_keys)
+            or not set(block.requirement_keys) <= keys
+            for block in self.blocks
+        ):
+            raise ValueError("Block coverage must name distinct declared report requirements")
+        if any(len(requirement.basis.strip()) < 10 for requirement in self.requirements):
+            raise ValueError("Each requirement needs a meaningful applicability/source basis")
         if len({b.key for b in self.blocks}) != len(self.blocks):
             raise ValueError("Report block identifiers must be unique")
         return self

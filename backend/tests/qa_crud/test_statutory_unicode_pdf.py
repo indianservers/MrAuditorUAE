@@ -10,6 +10,7 @@ from pypdf.generic import ContentStream
 
 from tests.integration.test_platform import environment as environment
 from tests.phase4.test_workflows import actor, grant
+from tests.qa_crud.report_requirement_fixtures import declared_requirements
 from tests.qa_crud.test_country_workflows import decision, double_boundaries, source
 from tests.qa_crud.test_generic_candidates import context
 from tests.unit.country_workflow_cases import transaction
@@ -53,10 +54,12 @@ async def test_reviewed_country_report_unicode_pdf_and_unsupported_text(
             json={
                 "title": title,
                 "category": category,
+                **declared_requirements("source"),
                 "rationale": "Synthetic independently reviewed source-bound draft",
                 "blocks": [
                     {
                         "key": "source",
+                        "requirement_keys": ["source"],
                         "title": party,
                         "kind": "financial_table",
                         "source_kind": "intelligence",
