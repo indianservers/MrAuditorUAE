@@ -3168,3 +3168,61 @@ modern rule URL. Ruff, regulatory mypy, TypeScript, scoped ESLint and production
 build passed. The test scanner/broker boundaries remain explicit doubles.
 These checks correct the working-draft guard; complete official form contents,
 statutory qualification, real-client evidence and release gates remain open.
+
+
+### UAE CT audited-statements obligation and source freshness (27 October 2026)
+
+The CT computation now retains a separate audited-statements assessment using
+approved profile facts. Tax-period commencement selects
+[MD82/2023](https://mof.gov.ae/wp-content/uploads/2023/04/Ministerial-Decision-No.-82-of-2023-for-the-Purposes-of-Federal-Decree-Law-No.-47-of-2022.pdf)
+or [MD84/2025, articles 2–4](https://mof.gov.ae/wp-content/uploads/2025/04/Ministerial-Decision-No.-84-of-2025-on-Audited-Financial-Statements.pdf),
+with the latter applying to periods starting from 1 January 2025. The resident
+threshold is strictly greater than AED50m, not greater than or equal. QFZPs require
+audited statements regardless of revenue. Modern Tax Groups require their
+separate special-purpose package; a standalone document cannot satisfy it.
+
+The result distinguishes derived CT requirements, the profile's declaration,
+statement type, threshold revenue, supporting reviewed record, source URL and
+unresolved issues. Nonresident PE/nexus revenue is not inferred from a worldwide
+ledger; that case remains unresolved pending separately established scoped
+revenue. Special classifications and historical group cases also require their
+separate assessment. A legal as-of date before MD84's issuance cannot apply that
+instrument as already known. Company-law, licensing and regulator audit
+requirements remain separate; a below-threshold CT result is not an audit
+exemption under those regimes. QFZP distribution procedures remain separately
+assessed in the existing QFZP workflow.
+
+Previously the generic profile checkbox controlled whether a missing audit file
+was flagged, and supporting profile evidence was not included directly in the
+calculation dependency list. The calculation now blocks an inconsistent false
+declaration when its supported CT facts require audit documentation. Profile
+support, including audit and revenue-bridge records, is revalidated and retained
+as direct dependencies. Reopening that support makes the calculation stale and
+blocks reuse. Historical corporate-tax runs without the new audit-obligation
+contract require regeneration; their stored results are preserved. Existing
+implementation fingerprints also detect the changed CT/QFZP calculation code.
+
+The CT workspace displays the assessment, including unknown revenue and unresolved
+cases. PDF/Word workpapers include the retained assessment section; XLSX also
+contains a dedicated CT audit obligation sheet. A reviewed support record does
+not certify an actual audit opinion, document authenticity, auditor eligibility,
+complete legal qualification or filing readiness.
+
+Verification: [2,764 backend unit cases](../phase-12/ct-audit-backend.xml) passed
+with five existing skips and two warnings. An [18-case focused run](../phase-12/ct-audit-focused.xml)
+includes two subsequently added legacy-contract regressions. The
+[12-case database/API regression](../phase-12/ct-audit-api.xml) covers the four
+new obligation/source cases plus the existing complete phase6 CT workflows.
+The [stronger QFZP case](../phase-12/ct-audit-qfzp.xml) passes its reviewed QFZP
+conditions yet remains blocked solely by missing audit documentation/declaration.
+The [source-isolation case](../phase-12/ct-audit-source.xml) proves that reopening
+a separately reviewed audit-support record leaves the IFRS source current but
+makes CT stale, preserves historical results and rejects a new computation.
+XLSX retains the decision in its dedicated sheet. Inputs and professional actors
+are explicitly synthetic; these are not qualified client audits.
+
+All 260 frontend tests, TypeScript, production build, Ruff and tax mypy (11 files)
+passed. ESLint passed with the pre-existing unused-variable warning. No new
+full-app browser or screenshot qualification is claimed. Authored scenarios
+remain 154 synthetic cases. The broader official-form content, independent legal
+review, real-client, external-provider and release/security gates remain open.

@@ -53,6 +53,7 @@ def render(run, format, released=False, reviewers=()):
         )
     for section in [
         "exceptions",
+        "audit_statement_obligation",
         "interest",
         "sbr",
         "qfzp",
@@ -125,6 +126,7 @@ def render(run, format, released=False, reviewers=()):
             ("Interest schedule", data.get("interest")),
             ("Loss utilization", data.get("loss_allocations", [])),
             ("QFZP assessment", data.get("qfzp")),
+            ("CT audit obligation", data.get("audit_statement_obligation")),
             ("Group members", data.get("members", [])),
             ("Legal rule snapshots", data.get("rules", {})),
         ]:

@@ -366,3 +366,84 @@ def sample_size(population: int):
             rounding=ROUND_CEILING
         )
     )
+
+
+AUDIT_OBLIGATION_CONTRACT = "uae-ct-audit-obligation/1"
+MD84_AUDIT_SOURCE = "https://mof.gov.ae/wp-content/uploads/2025/04/Ministerial-Decision-No.-84-of-2025-on-Audited-Financial-Statements.pdf"
+MD82_AUDIT_SOURCE = "https://mof.gov.ae/wp-content/uploads/2023/04/Ministerial-Decision-No.-82-of-2023-for-the-Purposes-of-Federal-Decree-Law-No.-47-of-2022.pdf"
+
+
+def audit_statement_obligation(profile):
+    """CT documentation guard over approved profile facts, not an audit opinion.
+
+    MD84 articles 2-4 select by tax-period commencement. Nonresident scoped
+    revenue and special classifications are not inferred from a global ledger.
+    Other company/licensing obligations remain separate assessments.
+    """
+    modern = profile.tax_start >= date(2025, 1, 1)
+    required = None
+    statement_kind = "AUDITED_FINANCIAL_STATEMENTS"
+    reasons, issues = [], []
+    threshold_revenue = None
+    if profile.tax_start < date(2023, 6, 1):
+        issues.append("Assess CT audit obligations for the unsupported pre-CT period")
+    elif modern and profile.legal_as_of < date(2025, 3, 25):
+        issues.append("MD84 audit obligation was not yet issued at the selected legal as-of date")
+    elif profile.classification == "tax_group":
+        statement_kind = "AUDITED_SPECIAL_PURPOSE_FINANCIAL_STATEMENTS"
+        required = True if modern else None
+        reasons.append("TAX_GROUP_SEPARATE_BOUNDARY")
+        issues.append(
+            "Use the separately approved Tax Group special-purpose statements package; a standalone audit file does not establish group compliance"
+        )
+    elif profile.classification == "qfzp":
+        required = True
+        reasons.append("QFZP_REGARDLESS_OF_REVENUE")
+    elif (
+        profile.classification in {"nonresident_juridical", "permanent_establishment"}
+        or not profile.resident
+    ):
+        reasons.append("NONRESIDENT_REVENUE_SCOPE_UNASSESSED")
+        issues.append(
+            "Assess retained UAE PE/nexus revenue for the nonresident audit threshold; total profile revenue is not an established scoped amount"
+        )
+    elif profile.classification in {"resident_juridical", "natural_person", "free_zone"}:
+        threshold_revenue = profile.revenue
+        required = profile.revenue > D("50000000")
+        reasons.append("REVENUE_EXCEEDS_50M" if required else "REVENUE_DOES_NOT_EXCEED_50M")
+    else:
+        reasons.append("SPECIAL_CLASSIFICATION_UNASSESSED")
+        issues.append("Assess the CT audit obligation for this special taxpayer classification")
+    if required and not profile.audited_financials_required:
+        issues.append("Derived CT audit requirement differs from the approved profile declaration")
+    if (
+        required or profile.audited_financials_required
+    ) and not profile.audited_financials_evidence_id:
+        issues.append("Required audited financial statements evidence missing")
+    return {
+        "contract": AUDIT_OBLIGATION_CONTRACT,
+        "decision": "MD84-2025" if modern else "MD82-2023",
+        "source_url": MD84_AUDIT_SOURCE if modern else MD82_AUDIT_SOURCE,
+        "period_start": str(profile.tax_start),
+        "period_end": str(profile.tax_end),
+        "legal_as_of": str(profile.legal_as_of),
+        "classification": profile.classification,
+        "required_for_ct": required,
+        "statement_kind": statement_kind,
+        "currency": "AED",
+        "threshold": "50000000",
+        "threshold_revenue": str(threshold_revenue) if threshold_revenue is not None else None,
+        "declared_required": profile.audited_financials_required,
+        "evidence_record_id": str(profile.audited_financials_evidence_id)
+        if profile.audited_financials_evidence_id
+        else None,
+        "reasons": reasons,
+        "issues": issues,
+        "assessment": "REVIEW_REQUIRED" if issues else "CT_DOCUMENTATION_CHECK_RESOLVED",
+        "limitations": [
+            "Approved profile classification and revenue are inputs, not independent legal qualification",
+            "No company-law, licensing-authority or regulator audit exemption is inferred",
+            "Supporting evidence is subject to current independent review; no audit opinion or document authenticity is certified",
+            "QFZP distribution additional procedures require their separate assessment",
+        ],
+    }

@@ -493,6 +493,11 @@ async def dependencies_current(db, ctx, eid, result):
             if not await tp.current(db, ctx, source.engagement_id, linked):
                 return False
     if result.kind == "corporate-tax":
+        if (
+            result.results.get("audit_statement_obligation", {}).get("contract")
+            != calc.AUDIT_OBLIGATION_CONTRACT
+        ):
+            return False
         financial = await ifrs.run(db, ctx, eid, uuid.UUID(result.inputs["financial_run_id"]))
         if not await ifrs.current_dependencies(db, ctx, eid, financial):
             return False
@@ -558,7 +563,7 @@ async def profile_inputs(db, ctx, eid, pid):
     obj = await record(db, ctx, eid, pid, "profile", True)
     profile = s.TaxProfile.model_validate(clean(obj.body))
     financial, deps = await financial_source(db, ctx, eid, profile.financial_run_id)
-    deps.append(ifrs.dependency(obj))
+    deps.extend(await evidence_dependencies(db, ctx, eid, [obj]))
     rules = {}
     snapshots = {}
     for category, rid in profile.rules.items():
@@ -853,10 +858,8 @@ async def compute(db, ctx, eid, pid):
             issues.append("Special taxpayer computation requires a separately validated treatment")
         if profile.pillar_two_in_scope:
             issues.append("Pillar Two top-up computation outside Phase6 scope")
-        if profile.audited_financials_required and not profile.audited_financials_evidence_id:
-            issues.append("Required audited financial statements evidence missing")
-        if profile.revenue > D("50000000") and not profile.audited_financials_required:
-            issues.append("Revenue audit requirement must be assessed")
+        audit_obligation = calc.audit_statement_obligation(profile)
+        issues.extend(audit_obligation["issues"])
         entity = await db.get(LegalEntity, eng.entity_id)
         due = calc.filing_deadline(profile.tax_end, rules["deadline"].parameters.filing_months)
         gross_tax = current
@@ -925,6 +928,7 @@ async def compute(db, ctx, eid, pid):
             "interest": interest_result,
             "sbr": sbr_result,
             "qfzp": qfzp_result,
+            "audit_statement_obligation": audit_obligation,
             "rules": rule_snapshots,
             "financial_run_id": str(financial.id),
             "financial_sha256": financial.sha256,

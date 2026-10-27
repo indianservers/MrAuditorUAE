@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import { CTAuditObligationNotice } from "./ct-audit-obligation";
 import { TaxExecutionNotice } from "./tax-execution-notice";
 import { ConnectedTaxReview } from "./connected-tax-review";
 import Link from "next/link";
@@ -407,6 +408,7 @@ function TaxWorkspace({
               value={run.data?.dependencies_current ? "CURRENT" : "STALE"}
             />
             <TaxExecutionNotice result={data} />
+            <CTAuditObligationNotice result={data} />
             <Button onClick={() => run.refetch()}>Validate dependencies</Button>
             {["pdf", "xlsx", "json"].map((f) => (
               <Button key={f} onClick={() => download(f)}>
