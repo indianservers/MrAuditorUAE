@@ -849,6 +849,7 @@ export function CountryWorkflows({
                           "membership_cohort",
                           "currency",
                           "assessed_base",
+                          "eligibility_outcome",
                           "esic_payroll_wages",
                           "esic_reported_wages",
                           "esic_base_minus_payroll_wages",

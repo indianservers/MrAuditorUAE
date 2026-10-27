@@ -77,6 +77,15 @@ def pension(data, tables):
         if amount < Decimal(rule["minimum_basis"]):
             problems[key] = "ASSESSED_SALARY_BELOW_REVIEWED_MINIMUM"
             continue
+        ceiling = rule.get("exclusive_eligibility_ceiling")
+        if ceiling is not None and amount >= Decimal(ceiling):
+            expected[key] = Decimal(0)
+            details[key] = {
+                "eligibility_outcome": "AT_OR_ABOVE_REVIEWED_EXCLUSIVE_SALARY_CEILING",
+                "eligibility_basis": str(amount),
+                "exclusive_eligibility_ceiling": str(ceiling),
+            }
+            continue
         capped = min(amount, Decimal(rule["salary_cap"])) if rule["salary_cap"] else amount
         unrounded = (
             Decimal(rule["fixed_amount"])
@@ -171,6 +180,9 @@ def pension(data, tables):
                 "formula": rule["formula"] if rule else None,
                 "rate": rule["rate"] if rule else None,
                 "rounding": rule["rounding"] if rule else None,
+                "exclusive_eligibility_ceiling": rule.get("exclusive_eligibility_ceiling")
+                if rule
+                else None,
                 **details.get(key, {}),
                 "expected_amount": str(wanted) if wanted is not None else None,
                 "reported_amount": actual["amount"] if actual else None,

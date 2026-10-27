@@ -8268,6 +8268,8 @@ export interface components {
             minimum_basis: number | string;
             /** Salary Cap */
             salary_cap?: number | string | null;
+            /** Exclusive Eligibility Ceiling */
+            exclusive_eligibility_ceiling?: number | string | null;
             /**
              * Formula
              * @enum {string}

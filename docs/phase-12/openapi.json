@@ -62177,6 +62177,21 @@
             ],
             "title": "Salary Cap"
           },
+          "exclusive_eligibility_ceiling": {
+            "anyOf": [
+              {
+                "type": "number",
+                "exclusiveMinimum": 0.0
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Exclusive Eligibility Ceiling"
+          },
           "formula": {
             "type": "string",
             "enum": [

@@ -18,7 +18,16 @@ pytestmark = pytest.mark.skipif(
 
 
 async def publish(
-    c, h, reviewer, component="EMPLOYEE", *, sequence=0, start="2026-01-01", end="2026-12-31"
+    c,
+    h,
+    reviewer,
+    component="EMPLOYEE",
+    *,
+    sequence=0,
+    start="2026-01-01",
+    end="2026-12-31",
+    pension_overrides=None,
+    validation_fixtures=None,
 ):
     payload = profile(
         component,
@@ -29,6 +38,7 @@ async def publish(
         professional_review_status="REVIEWED",
         last_reviewed="2026-10-25",
     ).model_dump(mode="json")
+    payload["pension_parameters"].update(pension_overrides or {})
     payload["citations"][0]["url"] = "https://gpssa.gov.ae/"
     document = await retain(c, h, payload)
     identifier = await propose(c, h, payload)
@@ -38,7 +48,7 @@ async def publish(
         changes["government_amount"] = "300.00"
     if start == "2026-06-10":
         changes.update(expected_state="RULE_MISSING_OR_SPLIT_PERIOD", expected_amount=None)
-    fixtures = [vector(component, **changes).model_dump(mode="json")]
+    fixtures = validation_fixtures or [vector(component, **changes).model_dump(mode="json")]
     approved = await c.post(
         f"/api/v1/regulatory/rules/{identifier}/decisions",
         headers=reviewer,

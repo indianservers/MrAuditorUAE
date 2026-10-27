@@ -2969,3 +2969,64 @@ earlier backend export/API receipts apply to the unchanged server implementation
 these component tests do not replace complete application browser verification.
 The previously rejected local preview-server start was not retried, and no new
 application screenshots or full browser run are claimed for these controls.
+
+### Pension eligibility ceilings versus salary caps (27 October 2026)
+
+Reviewed pension profiles and canonical pension-rule sources now support the
+optional `exclusive_eligibility_ceiling`. It is distinct from `salary_cap`: a cap
+limits the contribution base, while the new ceiling resolves expected contribution
+to zero when the original assessed component salary is at or above the limit.
+The eligibility check happens before capping. No ceiling, statutory rate, authority
+or cohort is selected by default. Existing profiles that omit the field retain
+their previous calculation behavior. The ceiling must exceed the reviewed minimum
+basis. Membership, salary definition, authority, scheme, nationality, sector,
+cohort and whole-month rule selection remain separately assessed prerequisites.
+
+Excluded rows retain the original eligibility basis, selected ceiling and explicit
+eligibility outcome; that outcome is visible in the compact pension result table.
+Employer-minus-government still needs a separately resolved government basis for
+the same contribution identity. A missing support population is not treated as
+zero, even when an actual retained support basis would resolve to zero. The
+reviewed result retains the selected rule/version and full source lineage, and
+XLSX includes the ceiling field.
+
+Publication of a profile with this ceiling requires independently expected,
+correct cases below, exactly at and above the boundary, plus an eligible in-band
+calculation. Declaring a fixture ineligible cannot stand in for a boundary check.
+An assessed short rule version with no complete wage month keeps the existing
+blocking-only validation path, but its fixture must be in band. Successful receipts
+retain boundary coverage. Calculator/schema/validation changes invalidate prior
+implementation fingerprints; affected existing published rule receipts require
+rechecking and the normal reviewed version/publication process. Historical bodies
+and hashes are retained. No prior professional approval is manufactured.
+
+The motivating country distinction appears in
+[GPSSA's contribution guidance](https://www.gpssa.gov.ae/pages/en/media-center/news/gpssa-insureds-contribution-payment-may-be-extended-15th-day-each-month):
+government support eligibility and contribution-base limits are separate facts.
+Official search results were inspected on 27 October; a direct page fetch returned
+a site rejection, and direct legislation/guideline PDF retrieval did not succeed.
+This increment does not claim a retained controlling-law copy, seed a GPSSA rate
+pack or establish legal qualification. Its fixtures use explicitly synthetic
+authority/scheme/cohort parameters and independently specified expected amounts.
+
+Verification: [2,712 backend tests passed](../phase-12/pension-ceiling-backend.xml),
+four existing skips and two warnings, in 176.65 seconds. Fourteen added unit cases
+cover uncapped eligibility at the boundary, independently conserved employer and
+government amounts, missing support, invalid intervals, publication boundary
+coverage and blocking-only short versions. [Three database/API cases](../phase-12/pension-ceiling-api.xml)
+passed in 19.00 seconds with explicit scanner/broker doubles. The new case amends
+a published government profile, reviews a nine-row population, prepares exact
+published rules, calculates/export-checks the boundary results and verifies that
+withdrawal stales the result without changing its historical body. Existing
+published-pension paths also pass.
+
+[252 frontend tests passed](../phase-12/pension-ceiling-frontend.json), including
+the blank proposal parameter and visible eligibility exclusion. Full app mypy,
+backend lint/format, frontend typecheck/build and API-contract checks passed.
+Frontend lint has zero errors and its existing unrelated unused-variable warning.
+OpenAPI, source/job contracts and generated TypeScript types were refreshed.
+The local preview-server rejection was not retried; no full browser qualification
+is claimed. For parent a7d8a4c, hosted frontend, browser-smoke, security and ML jobs
+passed in [run 40487939733](https://github.com/indianservers/MrAuditorUAE/actions/runs/40487939733);
+verify remains live and the container gate remains failed. Professional/client,
+provider and release gates remain open; authored scenarios remain 154.

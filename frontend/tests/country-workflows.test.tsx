@@ -829,6 +829,17 @@ beforeEach(() => {
   state.result = null;
 });
 describe("country workflows", () => {
+  it("shows an explicit salary eligibility exclusion alongside zero pension contributions", () => {
+    state.result = {id: "result", kind: "country-workflow", version: 1, freshness: "CURRENT",
+      body: {workflow: "uae-pension-review", title: "SYNTHETIC salary ceiling", review_status: "UNVERIFIED",
+        rows: [{id: "gov-1", subject: "SYNTHETIC-EMPLOYEE", period: "2026-06", component: "PENSION:GOVERNMENT",
+          assessed_base: "20000", expected_amount: "0", reported_amount: "0", state: "MATCHED",
+          eligibility_outcome: "AT_OR_ABOVE_REVIEWED_EXCLUSIVE_SALARY_CEILING"}]}};
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), {target: {value: "result"}});
+    expect(screen.getByRole("columnheader", {name: "eligibility outcome"})).toBeVisible();
+    expect(screen.getByText("AT_OR_ABOVE_REVIEWED_EXCLUSIVE_SALARY_CEILING")).toBeVisible();
+  });
   it.each(["AE", "IN"])("offers every export format and actionable errors in %s", async country => {
     state.country = country;
     state.result = {id: "result", kind: "workflow-source", version: 1, freshness: "CURRENT",

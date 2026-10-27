@@ -306,6 +306,7 @@ export function RegulatoryLibrary() {
                       component: "",
                       minimum_basis: null,
                       salary_cap: null,
+                      exclusive_eligibility_ceiling: null,
                       formula: "rate",
                       rate: null,
                       fixed_amount: null,
@@ -497,6 +498,15 @@ export function RegulatoryLibrary() {
             {detail.data.validation_blockers?.join("; ") ||
               "No metadata blockers. Independent professional review still applies."}
           </p>
+          {detail.data.body.method === "pension_profile" && (
+            <p>
+              A salary cap limits the contribution base. An exclusive
+              eligibility ceiling makes the expected contribution zero at or
+              above the assessed salary limit, before any cap is applied. When
+              configured, approval requires independently checked salary cases
+              below, exactly at and above that limit.
+            </p>
+          )}
           <details>
             <summary>Full effective-dated rule and provenance</summary>
             <pre style={{ whiteSpace: "pre-wrap" }}>

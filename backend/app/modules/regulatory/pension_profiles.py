@@ -37,6 +37,7 @@ class PensionParameters(PensionScope):
     component: Component
     minimum_basis: Money = Field(default=Decimal(0), ge=0)
     salary_cap: Money | None = Field(default=None, gt=0)
+    exclusive_eligibility_ceiling: Money | None = Field(default=None, gt=0)
     formula: Literal["rate", "fixed", "employer-minus-government"]
     rate: Decimal | None = Field(default=None, ge=0, le=1, max_digits=18, decimal_places=12)
     fixed_amount: Money | None = Field(default=None, ge=0)
@@ -46,6 +47,11 @@ class PensionParameters(PensionScope):
     def consistent_parameters(self):
         if self.salary_cap is not None and self.salary_cap < self.minimum_basis:
             raise ValueError("Salary cap cannot be below the reviewed minimum basis")
+        if (
+            self.exclusive_eligibility_ceiling is not None
+            and self.exclusive_eligibility_ceiling <= self.minimum_basis
+        ):
+            raise ValueError("Exclusive eligibility ceiling must exceed the reviewed minimum basis")
         if self.formula == "fixed":
             if self.fixed_amount is None or self.rate is not None or self.salary_cap is not None:
                 raise ValueError("Fixed pension amounts require no rate or salary cap")

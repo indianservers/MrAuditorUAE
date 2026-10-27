@@ -282,6 +282,7 @@ def evaluate_pension_case(rule, case):
                 "rate": None,
                 "minimum_basis": "0",
                 "salary_cap": None,
+                "exclusive_eligibility_ceiling": None,
                 "fixed_amount": str(case.government_amount),
                 "rounding": "nearest-fils",
             }
@@ -302,6 +303,10 @@ def evaluate_pension_case(rule, case):
         row["expected_amount"] is not None
         and case.pension_basis.amount > 0
         and case.pension_basis.eligible
+        and (
+            params.exclusive_eligibility_ceiling is None
+            or case.pension_basis.amount < params.exclusive_eligibility_ceiling
+        )
     )
 
 
@@ -314,6 +319,7 @@ def run(rule, rule_sha256, cases):
     demonstrated = False
     calculation_count = 0
     blocking_contract = False
+    eligibility_boundaries = set()
     if rule.method in {"payroll_profile", "pension_profile"} and rule.effective_to is not None:
         first = rule.effective_from
         if first.day != 1:
@@ -357,6 +363,22 @@ def run(rule, rule_sha256, cases):
         demonstrated |= positive and agrees
         calculation_count += int(positive and agrees)
         reviewed_basis = case.pension_basis if rule.method == "pension_profile" else case.basis
+        ceiling = (
+            rule.pension_parameters.exclusive_eligibility_ceiling
+            if rule.pension_parameters is not None
+            else None
+        )
+        if (
+            ceiling is not None
+            and case.pension_basis is not None
+            and case.pension_basis.eligible
+            and agrees
+            and actual_amount is not None
+        ):
+            amount = case.pension_basis.amount
+            eligibility_boundaries.add(
+                "below" if amount < ceiling else "at" if amount == ceiling else "above"
+            )
         if (
             blocking_contract
             and reviewed_basis is not None
@@ -379,6 +401,11 @@ def run(rule, rule_sha256, cases):
                 in_band = (
                     rule.pension_parameters is not None
                     and reviewed_basis.amount >= rule.pension_parameters.minimum_basis
+                    and (
+                        rule.pension_parameters.exclusive_eligibility_ceiling is None
+                        or reviewed_basis.amount
+                        < rule.pension_parameters.exclusive_eligibility_ceiling
+                    )
                 )
             else:
                 fields = ("component", "rule_group", "jurisdiction")
@@ -398,6 +425,16 @@ def run(rule, rule_sha256, cases):
                 and last_day >= rule.effective_from
             ):
                 demonstrated = True
+    if (
+        rule.pension_parameters is not None
+        and rule.pension_parameters.exclusive_eligibility_ceiling is not None
+        and not blocking_contract
+        and eligibility_boundaries != {"below", "at", "above"}
+    ):
+        raise FixtureMismatch(
+            "Pension eligibility ceilings require correct below, at and above boundary fixtures",
+            outcomes,
+        )
     if not demonstrated or not all(item["passed"] for item in outcomes):
         raise FixtureMismatch(
             "Validation fixtures disagree with the implementation or contain no applicable calculation",
@@ -417,6 +454,11 @@ def run(rule, rule_sha256, cases):
         else "APPLICABLE_CASE_DEMONSTRATED",
         "passed": True,
         "scope": "SUPPLIED_FIXTURES_ONLY_NOT_LEGAL_QUALIFICATION",
+        **(
+            {"eligibility_boundary_coverage": sorted(eligibility_boundaries)}
+            if eligibility_boundaries
+            else {}
+        ),
     }
     return {**payload, "receipt_sha256": fingerprint(payload)}
 
