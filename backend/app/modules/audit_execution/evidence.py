@@ -2,6 +2,7 @@
 
 import socket
 import struct
+import time
 import zipfile
 from pathlib import Path
 
@@ -133,20 +134,42 @@ def validate_file(stream, filename):
 
 
 def scan(stream):
-    config = settings()
-    if not config.evidence_clamav_host:
-        return "QUARANTINED"
     try:
+        config = settings()
+        if not config.evidence_clamav_host:
+            return "QUARANTINED"
+        deadline = time.monotonic() + 20
         with socket.create_connection(
             (config.evidence_clamav_host, config.evidence_clamav_port), timeout=20
         ) as client:
+
+            def remaining():
+                seconds = deadline - time.monotonic()
+                if seconds <= 0:
+                    raise TimeoutError("Scanner network deadline exceeded")
+                client.settimeout(seconds)
+
+            remaining()
             client.sendall(b"zINSTREAM\x00")
             stream.seek(0)
             while chunk := stream.read(65536):
+                remaining()
                 client.sendall(struct.pack("!I", len(chunk)) + chunk)
+            remaining()
             client.sendall(struct.pack("!I", 0))
-            reply = client.recv(4096)
-            return "CLEAN" if reply.rstrip(b"\x00\n").endswith(b": OK") else "REJECTED"
+            reply = bytearray()
+            while len(reply) < 4096:
+                remaining()
+                part = client.recv(4096 - len(reply))
+                if not part:
+                    return "QUARANTINED"
+                reply.extend(part)
+                if b"\x00" in reply:
+                    # zINSTREAM has one NUL-terminated reply, not a suffix match.
+                    if reply.find(b"\x00") != len(reply) - 1 or len(reply) > 4096:
+                        return "QUARANTINED"
+                    return "CLEAN" if reply == b"stream: OK\x00" else "REJECTED"
+            return "QUARANTINED"
     except OSError:
         return "QUARANTINED"
     finally:

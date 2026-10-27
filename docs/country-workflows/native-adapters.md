@@ -2523,3 +2523,39 @@ Repeat against the owned disposable database:
 ```powershell
 backend/.venv/Scripts/python.exe scripts/country_workflows_run.py .venv/Scripts/python.exe -m pytest tests/qa_crud/test_bank_population_capacity.py -q --tb=short -o junit_family=xunit1 --junitxml=../docs/phase-12/bank-population-capacity-api.xml
 ```
+
+## Complete scanner verdicts — shared UAE/India evidence boundary
+
+The shared evidence scanner previously classified the first TCP receive buffer
+with a suffix check. A deterministic pre-fix run of 15 synthetic protocol cases
+produced 11 failures: fragmented clean replies were misclassified, and incomplete
+or unrelated replies ending in `: OK` could be accepted as clean. A network read
+does not establish a complete scan verdict.
+
+The client now assembles one NUL-terminated reply for its `zINSTREAM` command,
+within a 4,096-byte response bound. Only the exact `stream: OK` record is clean.
+Incomplete, oversized or malformed framing and transport failures quarantine the
+upload; other complete verdicts retain the existing rejected classification.
+The connection, writes and reply reads share a 20-second network deadline rather
+than resetting the allowance for every fragment. The input stream rewinds on
+success, failure and missing configuration. File-read and OS scheduling latency
+are not independently interruptible deadlines. The framing and chunk format
+follow the official [ClamD protocol](https://docs.clamav.net/manual/Usage/ClamdProtocol.html).
+
+Protocol tests use explicit socket doubles, not a live malware engine. API cases
+exercise actual upload, evidence-version persistence, private storage and download
+controls in UAE then India, with synthetic scanner replies. These checks do not
+qualify malware detection, signature freshness, production scanner availability
+or hosted network behavior. Existing stored scan classifications are not
+retroactively rescanned by this change; retained pilot/production populations
+still require the operational scanner qualification already listed as a gate.
+
+Verification on 27 October 2026: [backend receipt](../phase-12/scanner-protocol-backend.xml)
+records 2,649 passing tests, four existing skips and two warnings, including all
+20 new protocol cases. The [API receipt](../phase-12/scanner-protocol-api.xml)
+records 19 passing cases: six new UAE/India scanner-boundary cases, 11 native
+document-worker cases and both full bounded bank-population cases. The scanner
+cases verify exact-byte download after a fragmented clean verdict, quarantine
+persistence with download refusal after an unterminated verdict, and no retained
+version after rejection. Scoped Ruff and mypy passed. No frontend behavior or
+country-specific legal rule changed in this increment.
