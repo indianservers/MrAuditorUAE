@@ -264,7 +264,20 @@ def test_document_boundaries_and_source_review_flags(defect):
     elif defect == "delink_flag":
         payload = {"cdnr": all_sections()["cdnr"]}
         payload["cdnr"][0]["nt"][0]["d_flag"] = "Y"
-        data.update(control_totals={"INR":"-9"}, gstr1_section_controls=[{"section":"cdnr","document_count":1,"taxable_base":"-50","igst":"-9","cgst":"0","sgst":"0","cess":"0"}])
+        data.update(
+            control_totals={"INR": "-9"},
+            gstr1_section_controls=[
+                {
+                    "section": "cdnr",
+                    "document_count": 1,
+                    "taxable_base": "-50",
+                    "igst": "-9",
+                    "cgst": "0",
+                    "sgst": "0",
+                    "cess": "0",
+                }
+            ],
+        )
     elif defect == "gross_difference":
         doc["val"] = 119
     if defect in {"delink_flag", "gross_difference"}:

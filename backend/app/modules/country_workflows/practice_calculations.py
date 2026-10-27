@@ -203,7 +203,16 @@ def procurement(data, tables):
     blocked = False
     for index, (k, group) in enumerate(sorted(grouped.items()), 1):
         exceptions = []
-        observations = [{"source_role": role, "source_row_id": r["id"], "uom": r.get("uom"), "quantity": r["quantity"]} for role in ("orders", "receipts", "invoices") for r in group[role]]
+        observations = [
+            {
+                "source_role": role,
+                "source_row_id": r["id"],
+                "uom": r.get("uom"),
+                "quantity": r["quantity"],
+            }
+            for role in ("orders", "receipts", "invoices")
+            for r in group[role]
+        ]
         units = {observation["uom"] for observation in observations}
         units_valid = len(units) == 1 and None not in units and "" not in units
         if not units_valid:
@@ -215,7 +224,14 @@ def procurement(data, tables):
         for role in ("receipts", "invoices", "payments"):
             if not group[role]:
                 exceptions.append("MISSING_" + role.upper())
-        qty = {role: sum((money(r, "quantity") for r in group[role]), Decimal(0)) for role in ("orders", "receipts", "invoices")} if units_valid else {}
+        qty = (
+            {
+                role: sum((money(r, "quantity") for r in group[role]), Decimal(0))
+                for role in ("orders", "receipts", "invoices")
+            }
+            if units_valid
+            else {}
+        )
         amounts = {role: sum((money(r) for r in group[role]), Decimal(0)) for role in types}
         for role in ("orders", "receipts", "invoices"):
             if any(
@@ -227,9 +243,13 @@ def procurement(data, tables):
             exceptions.append("RECEIPT_EXCEEDS_ORDER")
         if units_valid and qty["invoices"] > qty["receipts"]:
             exceptions.append("INVOICE_EXCEEDS_RECEIPT")
-        if units_valid and group["orders"] and any(
-            money(r, "unit_price") != money(group["orders"][0], "unit_price")
-            for r in group["invoices"]
+        if (
+            units_valid
+            and group["orders"]
+            and any(
+                money(r, "unit_price") != money(group["orders"][0], "unit_price")
+                for r in group["invoices"]
+            )
         ):
             exceptions.append("PRICE_DIFFERENCE")
         if abs(amounts["invoices"] - amounts["payments"]) > data.tolerance:
@@ -246,7 +266,12 @@ def procurement(data, tables):
                     holds.append("SOURCE_PAYMENT_HOLD")
                 if not document.get("bank_change_verified"):
                     holds.append("INDEPENDENT_BANK_DETAILS_VERIFICATION_REQUIRED")
-                if not document.get("prepared_by", "").strip() or not document.get("approved_by", "").strip() or document.get("approved_by", "").strip() == document.get("prepared_by", "").strip():
+                if (
+                    not document.get("prepared_by", "").strip()
+                    or not document.get("approved_by", "").strip()
+                    or document.get("approved_by", "").strip()
+                    == document.get("prepared_by", "").strip()
+                ):
                     holds.append("SEGREGATION_OF_DUTIES_NOT_ESTABLISHED")
             proposals.append(
                 {
@@ -270,7 +295,9 @@ def procurement(data, tables):
                 "vendor": k[2],
                 "currency": k[3],
                 "uom": next(iter(units)) if units_valid else None,
-                "quantity_comparison_status": "EXPLICIT_SAME_UNIT" if units_valid else "NOT_COMPARABLE",
+                "quantity_comparison_status": "EXPLICIT_SAME_UNIT"
+                if units_valid
+                else "NOT_COMPARABLE",
                 "source_unit_observations": observations,
                 "quantities": {r: str(v) for r, v in qty.items()},
                 "amounts": {r: str(v) for r, v in amounts.items()},
@@ -608,14 +635,23 @@ def stock_bridge(data, tables):
     seen = set()
     for movement in tables["movements"]:
         count = counts.get(key(movement))
-        first, last = sorted([count["count_date"], data.as_of.isoformat()]) if count else (None, None)
+        first, last = (
+            sorted([count["count_date"], data.as_of.isoformat()]) if count else (None, None)
+        )
         if not count or not first < movement["date"] <= last:
             raise ValueError(
                 "Stock movement has no count or lies outside its count-to-reporting bridge"
             )
-        identity = (key(movement), movement["date"], movement["evidence_reference"], money(movement, "quantity"))
+        identity = (
+            key(movement),
+            movement["date"],
+            movement["evidence_reference"],
+            money(movement, "quantity"),
+        )
         if controlled and identity in seen:
-            raise ValueError("Duplicate stock movement observation; retain distinct line evidence references")
+            raise ValueError(
+                "Duplicate stock movement observation; retain distinct line evidence references"
+            )
         seen.add(identity)
         movements[key(movement)].append(movement)
     derived = []
@@ -637,9 +673,16 @@ def stock_bridge(data, tables):
                 "original_count_date": count["count_date"],
                 "movement_source_ids": [r["id"] for r in movements[k]],
                 "movement_quantity": str(delta),
-                "site": count["site"], "sku": count["sku"], "lot": count.get("lot", ""),
-                "uom": count["uom"], "currency": count["currency"],
-                "direction": "ROLL_BACK" if backward else "ROLL_FORWARD" if count["count_date"] < data.as_of.isoformat() else "ALREADY_AT_REPORTING_DATE",
+                "site": count["site"],
+                "sku": count["sku"],
+                "lot": count.get("lot", ""),
+                "uom": count["uom"],
+                "currency": count["currency"],
+                "direction": "ROLL_BACK"
+                if backward
+                else "ROLL_FORWARD"
+                if count["count_date"] < data.as_of.isoformat()
+                else "ALREADY_AT_REPORTING_DATE",
                 "original_count_quantity": count["quantity"],
                 "applied_movement_quantity": str(signed_delta),
                 "reporting_date_quantity": str(money(count, "quantity") + signed_delta),
@@ -652,7 +695,10 @@ def stock_bridge(data, tables):
     return {
         **computed,
         "count_bridges": bridges,
-        "coverage": {**computed["coverage"], "basis": "Uploaded book monetary value supported by calculated reporting-date quantities from retained counts and movements; not reporting-date physical verification"},
+        "coverage": {
+            **computed["coverage"],
+            "basis": "Uploaded book monetary value supported by calculated reporting-date quantities from retained counts and movements; not reporting-date physical verification",
+        },
         "calculation_engine": "country_workflows.inventory",
         "count_bridge_mode": data.stock_bridge_mode,
         "cutoff_assessment": data.stock_cutoff_assessment.strip(),

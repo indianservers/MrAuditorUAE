@@ -50,7 +50,17 @@ async def test_one_entity_vat_reconciliation_to_current_tax_and_connected_review
     # Establish the chart before preparing/reviewing IFRS and tax inputs. A later
     # chart change correctly invalidates the earlier approved financial package.
     (
-        h, eid, base, manager, partner, tax_profile, adj, evidence, tax_rules, ready, financial,
+        h,
+        eid,
+        base,
+        manager,
+        partner,
+        tax_profile,
+        adj,
+        evidence,
+        tax_rules,
+        ready,
+        financial,
     ) = await prepared(c, scope_data=(h, options, eid, base))
     async with Session() as db, db.begin():
         await tenant_context(db, h["X-Tenant-ID"])
@@ -142,9 +152,18 @@ async def test_one_entity_vat_reconciliation_to_current_tax_and_connected_review
     assert vat_response.status_code == 201, vat_response.text
     vat_run = vat_response.json()
     assert vat_run["results"]["validation"]["ready"] and Decimal(vat_run["results"]["net_vat"]) == 0
-    vat_return = await create(c, h, base, "vat-return", {
-        "run_id": vat_run["id"], "filing_state": "PREPARED", "checklist_complete": True,
-        "rationale": "Synthetic reviewed export evidence, ledger and zero-control reconciliation; draft only"})
+    vat_return = await create(
+        c,
+        h,
+        base,
+        "vat-return",
+        {
+            "run_id": vat_run["id"],
+            "filing_state": "PREPARED",
+            "checklist_complete": True,
+            "rationale": "Synthetic reviewed export evidence, ledger and zero-control reconciliation; draft only",
+        },
+    )
     vat_return = await action(c, h, base, vat_return, "submit")
     vat_return = await action(c, manager[0], base, vat_return, "approve")
     vat_return = await action(c, partner[0], base, vat_return, "approve")

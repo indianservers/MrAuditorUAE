@@ -97,7 +97,9 @@ def settlement(legal_role="deductor"):
     for index, allocation in enumerate(population["allocations"]):
         target = 0 if index == 0 else 1
         allocation["evidence_reference"] = "SYNTHETIC-TAX-CHALLAN-ADVICE"
-        allocation["rationale"] = "Independently assessed fictional pooled tax-challan cash allocation"
+        allocation["rationale"] = (
+            "Independently assessed fictional pooled tax-challan cash allocation"
+        )
         allocation.update(
             expected_id=population["expected"][target]["id"],
             reported_id=population["reported"][target]["id"],

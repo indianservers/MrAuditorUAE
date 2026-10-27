@@ -124,10 +124,15 @@ def test_physical_row_bound_is_not_bypassed_by_blank_rows():
         parse(content, data())
 
 
-@pytest.mark.parametrize("changes", [
-    {"workbook_assessment": ""}, {"workbook_sheet": None},
-    {"file_format": "camt053"}, {"delimiter": ";"},
-])
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"workbook_assessment": ""},
+        {"workbook_sheet": None},
+        {"file_format": "camt053"},
+        {"delimiter": ";"},
+    ],
+)
 def test_workbook_scope_cannot_be_mixed_or_unassessed(changes):
     values = data().model_dump(mode="json")
     with pytest.raises(ValueError):

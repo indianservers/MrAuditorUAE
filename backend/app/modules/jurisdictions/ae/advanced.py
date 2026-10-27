@@ -173,10 +173,14 @@ class Schedule(Strict):
                     "Policy must cover the procedure assessment date as well as the reporting period"
                 )
             if self.use_case_id == 161 and not (
-                self.period_start <= values["capitalization_start"] <= values["capitalization_end"]
+                self.period_start
+                <= values["capitalization_start"]
+                <= values["capitalization_end"]
                 <= self.period_end + timedelta(days=1)
             ):
-                raise ValueError("Capitalization interval must fit the reporting period; end date is exclusive")
+                raise ValueError(
+                    "Capitalization interval must fit the reporting period; end date is exclusive"
+                )
 
             if self.use_case_id == 124 and values["foreign_currency"] == self.currency:
                 raise ValueError("Forward currency pair must contain distinct ISO currencies")
@@ -234,9 +238,10 @@ class Schedule(Strict):
                 ):
                     if not 0 <= value <= 1:
                         raise ValueError(f"{key} must be a fraction between zero and one")
-        if self.use_case_id>=151:
+        if self.use_case_id >= 151:
             from .assurance import validate
-            validate(self.use_case_id,[r.model_dump() for r in parsed])
+
+            validate(self.use_case_id, [r.model_dump() for r in parsed])
         if self.use_case_id >= 101:
             from .continuation import check_rows
 
@@ -667,9 +672,12 @@ def calculate(data: Schedule):
         ):
             raise ValueError("Segment allocation fractions must total one for a shared pool")
         summary = {}
-        if data.use_case_id>=151:
+        if data.use_case_id >= 151:
             from .assurance import evaluate as evaluate_assurance
-            results,summary=evaluate_assurance(data.use_case_id,rows,data.rounding_precision,data.rounding_mode)
+
+            results, summary = evaluate_assurance(
+                data.use_case_id, rows, data.rounding_precision, data.rounding_mode
+            )
         elif data.use_case_id >= 101:
             from .continuation import evaluate
 

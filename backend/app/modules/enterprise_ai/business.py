@@ -60,11 +60,20 @@ async def case_scope(db, ctx, eid, identifier, permission="ai.investigation.read
 
 async def advanced_read_permissions(db, ctx, eid, case):
     from app.modules.audit_execution.access import engagement_permissions
-    if case.id >= 101 and set(case.engines) & {"E12","E13","E14","E15","E17","E18"}:
+
+    if case.id >= 101 and set(case.engines) & {"E12", "E13", "E14", "E15", "E17", "E18"}:
         await engagement_permissions(db, ctx, eid, "accounting.read")
     if "E16" in case.engines:
         await engagement_permissions(db, ctx, eid, "audit.evidence.review")
-    for engine, permission in {"E03":"accounting.read", "E04":"vat.read", "E05":"tax.profile.read", "E06":"tax.profile.read", "E07":"tp.read", "E08":"dmtt.read", "E09":"ifrs.read"}.items():
+    for engine, permission in {
+        "E03": "accounting.read",
+        "E04": "vat.read",
+        "E05": "tax.profile.read",
+        "E06": "tax.profile.read",
+        "E07": "tp.read",
+        "E08": "dmtt.read",
+        "E09": "ifrs.read",
+    }.items():
         if engine in case.engines:
             await engagement_permissions(db, ctx, eid, permission)
 
@@ -82,7 +91,13 @@ async def inputs(db, ctx, eid, identifier, limit=20):
                 AuditRecord.kind.in_(case.input_kinds),
                 AuditRecord.status != "ARCHIVED",
             )
-            .order_by((AuditRecord.body["advanced_input"]["use_case_id"].astext == str(identifier)).desc().nullslast(), AuditRecord.updated_at.desc(), AuditRecord.id.desc())
+            .order_by(
+                (AuditRecord.body["advanced_input"]["use_case_id"].astext == str(identifier))
+                .desc()
+                .nullslast(),
+                AuditRecord.updated_at.desc(),
+                AuditRecord.id.desc(),
+            )
             .limit(limit)
         )
     ).all()
@@ -108,9 +123,22 @@ async def inputs(db, ctx, eid, identifier, limit=20):
     if identifier >= 101:
         from app.modules.intelligence.models import IntelligenceEvent
         from app.modules.intelligence.service import current
+
         for row in rows:
-            preview = await db.scalar(select(IntelligenceEvent).where(IntelligenceEvent.tenant_id==ctx.tenant_id,IntelligenceEvent.engagement_id==eid,IntelligenceEvent.kind=="business-action",IntelligenceEvent.body["action"].astext=="draft-auto-recalculation",IntelligenceEvent.body["output"]["input_record_id"].astext==row["id"]).order_by(IntelligenceEvent.created_at.desc()).limit(1))
-            if preview and await current(db,ctx,preview):row["draft_preview_id"]=str(preview.id)
+            preview = await db.scalar(
+                select(IntelligenceEvent)
+                .where(
+                    IntelligenceEvent.tenant_id == ctx.tenant_id,
+                    IntelligenceEvent.engagement_id == eid,
+                    IntelligenceEvent.kind == "business-action",
+                    IntelligenceEvent.body["action"].astext == "draft-auto-recalculation",
+                    IntelligenceEvent.body["output"]["input_record_id"].astext == row["id"],
+                )
+                .order_by(IntelligenceEvent.created_at.desc())
+                .limit(1)
+            )
+            if preview and await current(db, ctx, preview):
+                row["draft_preview_id"] = str(preview.id)
     return {
         "use_case": case.model_dump(),
         "items": rows,
@@ -207,28 +235,49 @@ async def execute(db, ctx, eid, identifier, data: Execute, request_id):
     contributors = {str(ctx.user_id)}
     if data.action == "file-readiness":
         if identifier not in {99, 100} or data.payload or data.record_id:
-            raise HTTPException(422, "File-readiness uses the current authorized engagement population only")
-        rows = (await db.scalars(select(AuditRecord).where(AuditRecord.tenant_id == ctx.tenant_id, AuditRecord.engagement_id == eid).order_by(AuditRecord.id).limit(2001))).all()
+            raise HTTPException(
+                422, "File-readiness uses the current authorized engagement population only"
+            )
+        rows = (
+            await db.scalars(
+                select(AuditRecord)
+                .where(AuditRecord.tenant_id == ctx.tenant_id, AuditRecord.engagement_id == eid)
+                .order_by(AuditRecord.id)
+                .limit(2001)
+            )
+        ).all()
         if len(rows) > 2000:
-            raise HTTPException(422, "File population exceeds the bounded 2000-record review; qualified queued assembly required")
+            raise HTTPException(
+                422,
+                "File population exceeds the bounded 2000-record review; qualified queued assembly required",
+            )
         from app.modules.lineage.working_papers import freshness
+
         stale = []
         for row in rows:
             await audit.get_record(db, ctx, eid, row.id, lock=False)
-            dependencies.append({"type":"record", "id":str(row.id), "version":row.version})
+            dependencies.append({"type": "record", "id": str(row.id), "version": row.version})
             if row.kind == "working-papers" and await freshness(db, ctx, row) != "CURRENT":
                 stale.append(str(row.id))
         checks = await audit.completion(db, ctx, eid)
-        output = {"engine":"audit-file-readiness/1", "checks":checks, "stale_paper_ids":stale,
-                  "file_population_sha256":digest([[str(r.id), r.version, r.status] for r in rows]),
-                  "completion_sha256":digest(checks), "ready_for_professional_review":checks["ready"] and not stale,
-                  "file_sealed":False, "audit_opinion":None, "publication":"NOT_SIGNED_NOT_SENT_NOT_SUBMITTED"}
+        output = {
+            "engine": "audit-file-readiness/1",
+            "checks": checks,
+            "stale_paper_ids": stale,
+            "file_population_sha256": digest([[str(r.id), r.version, r.status] for r in rows]),
+            "completion_sha256": digest(checks),
+            "ready_for_professional_review": checks["ready"] and not stale,
+            "file_sealed": False,
+            "audit_opinion": None,
+            "publication": "NOT_SIGNED_NOT_SENT_NOT_SUBMITTED",
+        }
     elif data.action == "workbook-integrity":
-        from app.modules.enterprise_ai.documents import latest_evidence
-        from app.modules.lineage.storage import ObjectStore, hash_file
+        from starlette.concurrency import run_in_threadpool
+
         from app.modules.audit_analytics.workbooks import inspect
         from app.modules.audit_execution.access import engagement_permissions
-        from starlette.concurrency import run_in_threadpool
+        from app.modules.enterprise_ai.documents import latest_evidence
+        from app.modules.lineage.storage import ObjectStore, hash_file
 
         if identifier != 97 or not data.record_id or data.payload:
             raise HTTPException(422, "Select case 97 and approved original XLSX evidence")
@@ -240,36 +289,60 @@ async def execute(db, ctx, eid, identifier, data: Execute, request_id):
             if hash_file(path) != version.sha256:
                 raise HTTPException(409, "Original workbook integrity differs")
             output = await run_in_threadpool(inspect, path.read_bytes())
-        dependencies.append({"type":"record", "id":str(proof.id), "version":proof.version})
-        dependencies.append({"type":"evidence", "id":str(version.id), "record_id":str(proof.id), "number":version.number, "sha256":version.sha256})
-        output.update(evidence_version_id=str(version.id), entity_id=str(eng.entity_id), period_id=str(eng.period_id) if eng.period_id else None)
-    elif data.action=="inspect-provenance":
-        if identifier!=192 or not data.record_id or data.payload:raise HTTPException(422,"Select original evidence for case192")
+        dependencies.append({"type": "record", "id": str(proof.id), "version": proof.version})
+        dependencies.append(
+            {
+                "type": "evidence",
+                "id": str(version.id),
+                "record_id": str(proof.id),
+                "number": version.number,
+                "sha256": version.sha256,
+            }
+        )
+        output.update(
+            evidence_version_id=str(version.id),
+            entity_id=str(eng.entity_id),
+            period_id=str(eng.period_id) if eng.period_id else None,
+        )
+    elif data.action == "inspect-provenance":
+        if identifier != 192 or not data.record_id or data.payload:
+            raise HTTPException(422, "Select original evidence for case192")
         from app.modules.audit_execution.access import engagement_permissions
         from app.modules.jurisdictions.ae.provenance import assess as assess_provenance
-        await engagement_permissions(db,ctx,eid,"audit.evidence.review")
-        output,dependencies=await assess_provenance(db,ctx,eid,data.record_id)
+
+        await engagement_permissions(db, ctx, eid, "audit.evidence.review")
+        output, dependencies = await assess_provenance(db, ctx, eid, data.record_id)
     elif data.action == "rule-impact":
-        if identifier!=151 or not data.record_id or data.payload:
-            raise HTTPException(422,"Select an independently approved rule-change input paper")
+        if identifier != 151 or not data.record_id or data.payload:
+            raise HTTPException(422, "Select an independently approved rule-change input paper")
         from app.modules.enterprise_ai.security import source as approved_impact_source
         from app.modules.jurisdictions.ae.advanced import Schedule
         from app.modules.jurisdictions.ae.rule_impact import assess as assess_rule_impact
-        proof=await approved_impact_source(db,ctx,eid,data.record_id)
-        plan=Schedule.model_validate(proof.body.get("advanced_input",{}))
-        if plan.use_case_id!=151:raise HTTPException(422,"Input is not a rule-change plan")
-        if not all(r["verified_change"] for r in plan.rows):raise HTTPException(409,"Verify the amendment and sources before impact assessment")
-        for rid in {str(proof.id),*(r["old_source_id"] for r in plan.rows),*(r["new_source_id"] for r in plan.rows)}:
-            item=await approved_impact_source(db,ctx,eid,uuid.UUID(rid))
-            dependencies.append({"type":"record","id":str(item.id),"version":item.version})
-        output=await assess_rule_impact(db,ctx,eid,plan)
+
+        proof = await approved_impact_source(db, ctx, eid, data.record_id)
+        plan = Schedule.model_validate(proof.body.get("advanced_input", {}))
+        if plan.use_case_id != 151:
+            raise HTTPException(422, "Input is not a rule-change plan")
+        if not all(r["verified_change"] for r in plan.rows):
+            raise HTTPException(409, "Verify the amendment and sources before impact assessment")
+        for rid in {
+            str(proof.id),
+            *(r["old_source_id"] for r in plan.rows),
+            *(r["new_source_id"] for r in plan.rows),
+        }:
+            item = await approved_impact_source(db, ctx, eid, uuid.UUID(rid))
+            dependencies.append({"type": "record", "id": str(item.id), "version": item.version})
+        output = await assess_rule_impact(db, ctx, eid, plan)
     elif data.action == "advanced-review":
-        from app.modules.jurisdictions.ae.advanced import Schedule, calculate
         from app.modules.audit_execution.access import engagement_permissions
         from app.modules.enterprise_ai.security import source as approved_source
+        from app.modules.jurisdictions.ae.advanced import Schedule, calculate
 
         if identifier < 51 or not data.record_id or data.payload:
-            raise HTTPException(422, "Select an approved case-specific schedule; runtime input overrides are forbidden")
+            raise HTTPException(
+                422,
+                "Select an approved case-specific schedule; runtime input overrides are forbidden",
+            )
         await engagement_permissions(db, ctx, eid, "audit.testing.execute")
         proof = await approved_source(db, ctx, eid, data.record_id)
         if proof.kind != "working-papers" or not proof.body.get("advanced_input"):
@@ -279,21 +352,59 @@ async def execute(db, ctx, eid, identifier, data: Execute, request_id):
         if advanced_schedule.use_case_id != identifier:
             raise HTTPException(422, "Schedule belongs to a different use case")
         from app.db.models.platform import FinancialPeriod
+
         period = await db.get(FinancialPeriod, eng.period_id) if eng.period_id else None
-        if not period or not (period.start_date <= advanced_schedule.period_start <= advanced_schedule.period_end <= period.end_date):
+        if not period or not (
+            period.start_date
+            <= advanced_schedule.period_start
+            <= advanced_schedule.period_end
+            <= period.end_date
+        ):
             raise HTTPException(422, "Schedule must fit the engagement's reporting period")
-        for engine, permission in {"E04":"vat.calculate", "E05":"tax.computation.prepare", "E06":"tax.computation.prepare", "E07":"tp.calculate", "E08":"dmtt.calculate", "E09":"ifrs.calculation.execute"}.items():
+        for engine, permission in {
+            "E04": "vat.calculate",
+            "E05": "tax.computation.prepare",
+            "E06": "tax.computation.prepare",
+            "E07": "tp.calculate",
+            "E08": "dmtt.calculate",
+            "E09": "ifrs.calculation.execute",
+        }.items():
             if engine in case.engines:
                 await engagement_permissions(db, ctx, eid, permission)
-        for source_id in {str(proof.id), str(advanced_schedule.policy.source_id), *(r["evidence_id"] for r in advanced_schedule.rows), *(str(value) for row in advanced_schedule.rows for key,value in row.items() if key.endswith("_source_id")), *(str(v) for row in advanced_schedule.rows for key in ("supporting_sources","contrary_sources") for v in row.get(key,[]))}:
+        for source_id in {
+            str(proof.id),
+            str(advanced_schedule.policy.source_id),
+            *(r["evidence_id"] for r in advanced_schedule.rows),
+            *(
+                str(value)
+                for row in advanced_schedule.rows
+                for key, value in row.items()
+                if key.endswith("_source_id")
+            ),
+            *(
+                str(v)
+                for row in advanced_schedule.rows
+                for key in ("supporting_sources", "contrary_sources")
+                for v in row.get(key, [])
+            ),
+        }:
             evidence = await approved_source(db, ctx, eid, uuid.UUID(source_id))
-            dependencies.append({"type":"record", "id":str(evidence.id), "version":evidence.version})
+            dependencies.append(
+                {"type": "record", "id": str(evidence.id), "version": evidence.version}
+            )
         from app.modules.jurisdictions.ae.continuation_controls import validate_parameters
+
         await validate_parameters(db, ctx, eid, advanced_schedule)
-        output = {"engine":"uae-advanced-schedules", "results":calculate(advanced_schedule),
-                  "entity_id":str(eng.entity_id), "period_id":str(eng.period_id) if eng.period_id else None,
-                  "input_record_id":str(proof.id), "input_version":proof.version,
-                  "preparer_id":str(ctx.user_id), "input_assurance":"Independently approved supplied schedule; automatic source extraction/tie-out is not asserted"}
+        output = {
+            "engine": "uae-advanced-schedules",
+            "results": calculate(advanced_schedule),
+            "entity_id": str(eng.entity_id),
+            "period_id": str(eng.period_id) if eng.period_id else None,
+            "input_record_id": str(proof.id),
+            "input_version": proof.version,
+            "preparer_id": str(ctx.user_id),
+            "input_assurance": "Independently approved supplied schedule; automatic source extraction/tie-out is not asserted",
+        }
     elif data.action == "workflow":
         from app.modules.intelligence.jobs import submit
         from app.modules.intelligence.schemas import JobInput
@@ -542,9 +653,11 @@ async def execute(db, ctx, eid, identifier, data: Execute, request_id):
         if kind is None:
             raise HTTPException(422, "Unsupported action")
         draft = RecordInput.model_validate(data.payload)
-        if identifier==198 and kind=="working-papers":
-            draft.body["factual_findings_only"]=True
-            draft.body["conclusion"]="Agreed-upon procedures factual findings only; no audit opinion or assurance conclusion."
+        if identifier == 198 and kind == "working-papers":
+            draft.body["factual_findings_only"] = True
+            draft.body["conclusion"] = (
+                "Agreed-upon procedures factual findings only; no audit opinion or assurance conclusion."
+            )
 
         if kind == "working-papers":
             draft.body["inherit_source_permissions"] = True
@@ -603,6 +716,7 @@ async def execute(db, ctx, eid, identifier, data: Execute, request_id):
     advanced_contract_digest = None
     if identifier >= 51:
         from app.modules.jurisdictions.ae.advanced import contract_sha256
+
         advanced_contract_digest = contract_sha256()
     obj = await intelligence.append(
         db,

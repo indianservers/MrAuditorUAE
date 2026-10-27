@@ -44,7 +44,9 @@ async def bank_cash_status(eid: uuid.UUID, identifier: uuid.UUID, db: DB, ctx: A
 
 
 @router.post("/engagements/{eid}/events/{identifier}/withdraw-bank-cash", status_code=201)
-async def withdraw_bank_cash(eid: uuid.UUID, identifier: uuid.UUID, data: s.Review, db: DB, ctx: Actor, request: Request):
+async def withdraw_bank_cash(
+    eid: uuid.UUID, identifier: uuid.UUID, data: s.Review, db: DB, ctx: Actor, request: Request
+):
     from app.modules.country_workflows.bank_consumption import (
         WITHDRAWN,
         WORKFLOW,
@@ -56,7 +58,11 @@ async def withdraw_bank_cash(eid: uuid.UUID, identifier: uuid.UUID, data: s.Revi
     eng = await service.scope(db, ctx, eid, mutable=True)
     await engagement_permissions(db, ctx, eid, "workingpaper.approve")
     obj = await service.event(db, ctx, eid, identifier, False)
-    if obj.kind != "country-workflow" or obj.body.get("workflow") != WORKFLOW or data.action != "reject":
+    if (
+        obj.kind != "country-workflow"
+        or obj.body.get("workflow") != WORKFLOW
+        or data.action != "reject"
+    ):
         raise HTTPException(422, "Explicit rejection of an obligation cash review is required")
     if obj.version != data.expected_version or await service.head(db, ctx, obj) != obj.version:
         raise HTTPException(409, "Result version conflict")
@@ -69,15 +75,36 @@ async def withdraw_bank_cash(eid: uuid.UUID, identifier: uuid.UUID, data: s.Revi
     if prior_decision is None or not is_active(prior_decision.body):
         raise HTTPException(409, "No active approved bank cash claim to withdraw")
     body = dict(obj.body)
-    body.update(review_status="REJECTED", reviewer=str(ctx.user_id), reviewed_at=datetime.now(UTC).isoformat(), review_comments=data.comments.strip(),
-        bank_consumption_review={"status": WITHDRAWN, "withdrawn_at": datetime.now(UTC).isoformat(), "withdrawn_by": str(ctx.user_id), "reason": data.comments.strip(), "historical_cash_values_not_revalidated": True})
-    return audit.serialize(await service.append(db, ctx, eng, obj.kind, body, obj.dependencies, request.state.request_id, obj))
+    body.update(
+        review_status="REJECTED",
+        reviewer=str(ctx.user_id),
+        reviewed_at=datetime.now(UTC).isoformat(),
+        review_comments=data.comments.strip(),
+        bank_consumption_review={
+            "status": WITHDRAWN,
+            "withdrawn_at": datetime.now(UTC).isoformat(),
+            "withdrawn_by": str(ctx.user_id),
+            "reason": data.comments.strip(),
+            "historical_cash_values_not_revalidated": True,
+        },
+    )
+    return audit.serialize(
+        await service.append(
+            db, ctx, eng, obj.kind, body, obj.dependencies, request.state.request_id, obj
+        )
+    )
 
 
-@router.post("/engagements/{eid}/events/{identifier}/withholding-obligation-source", status_code=201)
+@router.post(
+    "/engagements/{eid}/events/{identifier}/withholding-obligation-source", status_code=201
+)
 async def withholding_obligation_source(
-    eid: uuid.UUID, identifier: uuid.UUID, data: WithholdingObligationInput,
-    db: DB, ctx: Actor, request: Request,
+    eid: uuid.UUID,
+    identifier: uuid.UUID,
+    data: WithholdingObligationInput,
+    db: DB,
+    ctx: Actor,
+    request: Request,
 ):
     from app.modules.country_workflows.withholding_obligations import prepare
 
@@ -87,7 +114,9 @@ async def withholding_obligation_source(
 
 
 @router.post("/engagements/{eid}/vat201-composition-source", status_code=201)
-async def vat201_composition_source(eid: uuid.UUID, data: VATCompositionInput, db: DB, ctx: Actor, request: Request):
+async def vat201_composition_source(
+    eid: uuid.UUID, data: VATCompositionInput, db: DB, ctx: Actor, request: Request
+):
     from app.modules.country_workflows.vat_composition import prepare
 
     eng = await service.scope(db, ctx, eid, "country-workflow", True)
@@ -95,7 +124,9 @@ async def vat201_composition_source(eid: uuid.UUID, data: VATCompositionInput, d
 
 
 @router.post("/engagements/{eid}/contribution-obligation-source", status_code=201)
-async def contribution_obligation_source(eid: uuid.UUID, data: ContributionSourceInput, db: DB, ctx: Actor, request: Request):
+async def contribution_obligation_source(
+    eid: uuid.UUID, data: ContributionSourceInput, db: DB, ctx: Actor, request: Request
+):
     from app.modules.country_workflows.contribution_source import prepare
 
     eng = await service.scope(db, ctx, eid, "country-workflow", True)
@@ -103,7 +134,9 @@ async def contribution_obligation_source(eid: uuid.UUID, data: ContributionSourc
 
 
 @router.post("/engagements/{eid}/payroll-rule-source", status_code=201)
-async def payroll_rule_source(eid: uuid.UUID, data: PayrollSourceInput, db: DB, ctx: Actor, request: Request):
+async def payroll_rule_source(
+    eid: uuid.UUID, data: PayrollSourceInput, db: DB, ctx: Actor, request: Request
+):
     from app.modules.country_workflows.payroll_source import prepare
 
     eng = await service.scope(db, ctx, eid, "country-workflow", True)
@@ -111,11 +144,15 @@ async def payroll_rule_source(eid: uuid.UUID, data: PayrollSourceInput, db: DB, 
 
 
 @router.post("/engagements/{eid}/pension-rule-source", status_code=201)
-async def pension_rule_source(eid: uuid.UUID, data: PensionSourceInput, db: DB, ctx: Actor, request: Request):
+async def pension_rule_source(
+    eid: uuid.UUID, data: PensionSourceInput, db: DB, ctx: Actor, request: Request
+):
     from app.modules.country_workflows.payroll_source import prepare
 
     eng = await service.scope(db, ctx, eid, "country-workflow", True)
-    return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id, profile_kind="pension"))
+    return audit.serialize(
+        await prepare(db, ctx, eng, data, request.state.request_id, profile_kind="pension")
+    )
 
 
 @router.post("/engagements/{eid}/benefit-rule-source", status_code=201)
@@ -134,8 +171,12 @@ async def benefit_rule_source(
 
 @router.post("/engagements/{eid}/events/{identifier}/bank-carryforward-source", status_code=201)
 async def bank_carryforward_source(
-    eid: uuid.UUID, identifier: uuid.UUID, data: CarryforwardInput,
-    db: DB, ctx: Actor, request: Request,
+    eid: uuid.UUID,
+    identifier: uuid.UUID,
+    data: CarryforwardInput,
+    db: DB,
+    ctx: Actor,
+    request: Request,
 ):
     from app.modules.country_workflows.bank_carryforward import prepare
 
@@ -146,8 +187,12 @@ async def bank_carryforward_source(
 
 @router.post("/engagements/{eid}/events/{identifier}/bank-outstanding-source", status_code=201)
 async def bank_outstanding_source(
-    eid: uuid.UUID, identifier: uuid.UUID, data: BankOutstandingSourceInput,
-    db: DB, ctx: Actor, request: Request,
+    eid: uuid.UUID,
+    identifier: uuid.UUID,
+    data: BankOutstandingSourceInput,
+    db: DB,
+    ctx: Actor,
+    request: Request,
 ):
     from app.modules.country_workflows.bank_outstanding_source import source_rows
 
@@ -156,40 +201,63 @@ async def bank_outstanding_source(
     if parent.kind != "country-workflow" or parent.body.get("workflow") != "bank-brs":
         raise HTTPException(422, "Select a bank reconciliation")
     if parent.body.get("review_status") != "REVIEWED" or parent.body.get("blocked"):
-        raise HTTPException(409, "Independently review and resolve the BRS before preparing outstanding items")
+        raise HTTPException(
+            409, "Independently review and resolve the BRS before preparing outstanding items"
+        )
     source_ids = parent.body.get("parameters", {}).get("source_ids", {})
     if set(source_ids) != {"books", "statement"}:
         raise HTTPException(409, "BRS source roles are incomplete")
     sources = {}
     for role, source_id in source_ids.items():
         original = await service.event(db, ctx, eid, uuid.UUID(source_id), True)
-        if original.kind != "workflow-source" or original.body.get("table_type") != "transactions" or original.body.get("review_status") != "REVIEWED":
+        if (
+            original.kind != "workflow-source"
+            or original.body.get("table_type") != "transactions"
+            or original.body.get("review_status") != "REVIEWED"
+        ):
             raise HTTPException(409, "Independently review every retained BRS source")
         sources[role] = original
     try:
         rows, totals = source_rows(parent.body, sources["books"].body, data)
     except ValueError as error:
         raise HTTPException(422, str(error)) from None
-    created = await service.append(db, ctx, eng, "workflow-source", {
-        "table_type": "bank-outstanding", "rows": rows, "row_count": len(rows),
-        "control_totals": totals, "title": data.label, "review_status": "UNVERIFIED",
-        "parser_version": "brs-outstanding-bridge/1",
-        "source_identity": "brs-outstanding:" + str(parent.root_id),
-        "source_sha256": parent.sha256,
-        "contributors": sorted({*parent.body.get("contributors", [str(parent.created_by)]), str(ctx.user_id)}),
-        "population_completeness": "SELECTED_REVIEWED_BRS_BOOK_EXCEPTIONS_ONLY",
-        "native_metadata": {
-            "source_brs_id": str(parent.id), "source_books_id": str(sources["books"].id),
-            "selected_exception_ids": data.exception_ids, "scope_assessment": data.assessment,
-            "expected_rows": data.expected_rows, "signed_total": str(data.signed_total),
-            "clearance_status": "NOT_DETERMINED_BY_BRS_EXCEPTION",
+    created = await service.append(
+        db,
+        ctx,
+        eng,
+        "workflow-source",
+        {
+            "table_type": "bank-outstanding",
+            "rows": rows,
+            "row_count": len(rows),
+            "control_totals": totals,
+            "title": data.label,
+            "review_status": "UNVERIFIED",
+            "parser_version": "brs-outstanding-bridge/1",
+            "source_identity": "brs-outstanding:" + str(parent.root_id),
+            "source_sha256": parent.sha256,
+            "contributors": sorted(
+                {*parent.body.get("contributors", [str(parent.created_by)]), str(ctx.user_id)}
+            ),
+            "population_completeness": "SELECTED_REVIEWED_BRS_BOOK_EXCEPTIONS_ONLY",
+            "native_metadata": {
+                "source_brs_id": str(parent.id),
+                "source_books_id": str(sources["books"].id),
+                "selected_exception_ids": data.exception_ids,
+                "scope_assessment": data.assessment,
+                "expected_rows": data.expected_rows,
+                "signed_total": str(data.signed_total),
+                "clearance_status": "NOT_DETERMINED_BY_BRS_EXCEPTION",
+            },
+            "limitations": [
+                "Selected book exceptions only; statement-side unbooked entries are excluded",
+                "BRS candidate causes and documented dispositions do not establish later clearance",
+                "Independently review this derived population before subsequent clearance assessment",
+            ],
         },
-        "limitations": [
-            "Selected book exceptions only; statement-side unbooked entries are excluded",
-            "BRS candidate causes and documented dispositions do not establish later clearance",
-            "Independently review this derived population before subsequent clearance assessment",
-        ],
-    }, [service.event_receipt(parent)], request.state.request_id)
+        [service.event_receipt(parent)],
+        request.state.request_id,
+    )
     return audit.serialize(created)
 
 
@@ -611,7 +679,9 @@ async def events(
         query = query.where(IntelligenceEvent.kind == kind)
     if before:
         if not newest or after:
-            raise HTTPException(422, "An older-result cursor requires newest ordering without after")
+            raise HTTPException(
+                422, "An older-result cursor requires newest ordering without after"
+            )
         anchor = await db.scalar(query.where(IntelligenceEvent.id == before))
         if anchor is None:
             raise HTTPException(404, "Result cursor not found in this engagement and filter")
@@ -654,14 +724,27 @@ async def events(
                     "workflow": row.body.get("workflow"),
                     "blocked": bool(row.body.get("blocked")),
                     "as_of": row.body.get("as_of"),
-                    "bank_account_scope": {key:row.body["bank_account_scope"].get(key) for key in ("account","currency")} if row.body.get("workflow") == "bank-account-evidence" else None,
+                    "bank_account_scope": {
+                        key: row.body["bank_account_scope"].get(key)
+                        for key in ("account", "currency")
+                    }
+                    if row.body.get("workflow") == "bank-account-evidence"
+                    else None,
                     "native_format": row.body.get("native_format"),
                     "allowed_source_roles": row.body.get("allowed_source_roles"),
                     "allowed_workflows": row.body.get("allowed_workflows"),
-                    "invoice_direction": row.body.get("native_metadata", {}).get("direction") if row.body.get("native_format") == "india-inv01-json" else None,
-                    "inventory_controls_verified": row.body.get("inventory_controls_verified") is True,
-                    "purchase_controls_verified": row.body.get("purchase_controls_verified") is True,
-                    "obligation_populations": sorted({item.get("population", "unspecified") for item in row.body.get("rows", [])}) if row.body.get("table_type") == "obligations" else None,
+                    "invoice_direction": row.body.get("native_metadata", {}).get("direction")
+                    if row.body.get("native_format") == "india-inv01-json"
+                    else None,
+                    "inventory_controls_verified": row.body.get("inventory_controls_verified")
+                    is True,
+                    "purchase_controls_verified": row.body.get("purchase_controls_verified")
+                    is True,
+                    "obligation_populations": sorted(
+                        {item.get("population", "unspecified") for item in row.body.get("rows", [])}
+                    )
+                    if row.body.get("table_type") == "obligations"
+                    else None,
                     "evidence_version_id": row.body.get("evidence_version_id"),
                     "table_kind": row.body.get("table_kind"),
                     "version": row.version,
@@ -731,7 +814,9 @@ async def event_details(
 
         body["review_decision_summary"] = review_summary(obj.body)
     if body.get("workflow") == "payroll-ledger-rollforward" and payroll_view != "all":
-        selected_kind = "account-rollforward" if payroll_view == "accounts" else "posting-comparison"
+        selected_kind = (
+            "account-rollforward" if payroll_view == "accounts" else "posting-comparison"
+        )
         body["rows"] = [row for row in body["rows"] if row["kind"] == selected_kind]
     if body.get("workflow") == "inventory-valuation-control" and inventory_view != "all":
         selected_kind = "valuation-test" if inventory_view == "valuations" else "gl-control"
@@ -756,14 +841,36 @@ async def event_details(
             body[key] = body[key][offset : offset + limit]
     if isinstance(body.get("excluded_box_rows"), list):
         totals["excluded_box_rows"] = len(body["excluded_box_rows"])
-        body["excluded_box_rows"] = body["excluded_box_rows"][excluded_offset : excluded_offset + excluded_limit]
-    for key, start, size in [("custody_quantity_controls", custody_control_offset, custody_control_limit), ("ownership_paths", ownership_path_offset, ownership_path_limit), ("ownership_path_steps", ownership_step_offset, ownership_step_limit), ("cutoff_document_controls", cutoff_control_offset, cutoff_control_limit), ("cutoff_posting_links", cutoff_posting_offset, cutoff_posting_limit), ("confirmation_coverage_links", confirmation_link_offset, confirmation_link_limit), ("purchase_quantity_controls", purchase_offset, purchase_limit), ("inventory_quantity_controls", inventory_offset, inventory_limit), ("count_bridges", bridge_offset, bridge_limit), ("payroll_posting_links", posting_offset, posting_limit), ("transaction_dates", date_offset, date_limit)]:
+        body["excluded_box_rows"] = body["excluded_box_rows"][
+            excluded_offset : excluded_offset + excluded_limit
+        ]
+    for key, start, size in [
+        ("custody_quantity_controls", custody_control_offset, custody_control_limit),
+        ("ownership_paths", ownership_path_offset, ownership_path_limit),
+        ("ownership_path_steps", ownership_step_offset, ownership_step_limit),
+        ("cutoff_document_controls", cutoff_control_offset, cutoff_control_limit),
+        ("cutoff_posting_links", cutoff_posting_offset, cutoff_posting_limit),
+        ("confirmation_coverage_links", confirmation_link_offset, confirmation_link_limit),
+        ("purchase_quantity_controls", purchase_offset, purchase_limit),
+        ("inventory_quantity_controls", inventory_offset, inventory_limit),
+        ("count_bridges", bridge_offset, bridge_limit),
+        ("payroll_posting_links", posting_offset, posting_limit),
+        ("transaction_dates", date_offset, date_limit),
+    ]:
         if isinstance(body.get(key), list):
             totals[key] = len(body[key])
             body[key] = body[key][start : start + size]
     if isinstance(body.get("ambiguous"), list):
         totals["ambiguous"] = len(body["ambiguous"])
-        body["ambiguous"] = [{**row, "candidate_ids": row.get("candidate_ids", [])[:50], "candidate_preview_truncated": row.get("candidate_preview_truncated", False) or len(row.get("candidate_ids", [])) > 50} for row in body["ambiguous"][ambiguity_offset:ambiguity_offset+ambiguity_limit]]
+        body["ambiguous"] = [
+            {
+                **row,
+                "candidate_ids": row.get("candidate_ids", [])[:50],
+                "candidate_preview_truncated": row.get("candidate_preview_truncated", False)
+                or len(row.get("candidate_ids", [])) > 50,
+            }
+            for row in body["ambiguous"][ambiguity_offset : ambiguity_offset + ambiguity_limit]
+        ]
     return {
         **audit.serialize(obj),
         "body": body,
@@ -779,7 +886,15 @@ async def event_details(
 
 
 @router.get("/engagements/{eid}/events/{identifier}/bank-candidates")
-async def bank_candidates(eid: uuid.UUID, identifier: uuid.UUID, db: DB, ctx: Actor, left_id: str = Query(..., min_length=1, max_length=120), offset: int = Query(0, ge=0), limit: int = Query(25, ge=1, le=100)):
+async def bank_candidates(
+    eid: uuid.UUID,
+    identifier: uuid.UUID,
+    db: DB,
+    ctx: Actor,
+    left_id: str = Query(..., min_length=1, max_length=120),
+    offset: int = Query(0, ge=0),
+    limit: int = Query(25, ge=1, le=100),
+):
     from app.modules.intelligence.matching_review import candidate_page
 
     obj = await service.event(db, ctx, eid, identifier)
@@ -1270,7 +1385,10 @@ async def review(
                     raise HTTPException(
                         409, "Accepted supporting extraction needs independent field review"
                     )
-        if obj.kind == "country-workflow" and obj.body.get("workflow") == "obligation-bank-allocations":
+        if (
+            obj.kind == "country-workflow"
+            and obj.body.get("workflow") == "obligation-bank-allocations"
+        ):
             from app.modules.country_workflows.bank_consumption import (
                 WITHDRAWN,
                 approve,
@@ -1279,10 +1397,17 @@ async def review(
 
             if data.action == "approve":
                 cash_manifest, cash_review = await approve(db, ctx, obj)
-                body.update(bank_consumption_manifest=cash_manifest, bank_consumption_review=cash_review)
+                body.update(
+                    bank_consumption_manifest=cash_manifest, bank_consumption_review=cash_review
+                )
             else:
                 await entity_scope(db, ctx, eid, lock=True)
-                body["bank_consumption_review"] = {"status": WITHDRAWN, "withdrawn_at": datetime.now(UTC).isoformat(), "withdrawn_by": str(ctx.user_id), "reason": data.comments}
+                body["bank_consumption_review"] = {
+                    "status": WITHDRAWN,
+                    "withdrawn_at": datetime.now(UTC).isoformat(),
+                    "withdrawn_by": str(ctx.user_id),
+                    "reason": data.comments,
+                }
         body.update(
             review_status="REVIEWED" if data.action == "approve" else "REJECTED",
             reviewer=str(ctx.user_id),
@@ -1368,7 +1493,14 @@ async def generate_paper(
             }
         )
     if obj.body.get("excluded_box_rows"):
-        tables.append({"title": "Rows excluded from selected VAT box scope", "rows": obj.body["excluded_box_rows"][:1000], "total_rows": len(obj.body["excluded_box_rows"]), "bounded": len(obj.body["excluded_box_rows"]) > 1000})
+        tables.append(
+            {
+                "title": "Rows excluded from selected VAT box scope",
+                "rows": obj.body["excluded_box_rows"][:1000],
+                "total_rows": len(obj.body["excluded_box_rows"]),
+                "bounded": len(obj.body["excluded_box_rows"]) > 1000,
+            }
+        )
     paper = RecordInput(
         reference=data.reference,
         title=data.title,
@@ -1378,7 +1510,21 @@ async def generate_paper(
             "sources": [{"kind": "intelligence", "id": str(obj.id)}],
             "sections": [
                 {"heading": "Objective — auditor authored", "text": data.objective},
-                *([{"heading": "Selected VAT201 comparison coverage", "text": "Machine comparison covers only VAT201 boxes " + ", ".join(obj.body["box_comparison_scope"]["required_boxes"]) + ". Whole-return completeness is not determined. " + str(len(obj.body.get("excluded_box_rows", []))) + " retained source rows were excluded from this comparison; their full detail remains in the source result and XLSX export."}] if obj.body.get("box_comparison_scope", {}).get("mode") == "SELECTED_REQUIRED_BOXES" else []),
+                *(
+                    [
+                        {
+                            "heading": "Selected VAT201 comparison coverage",
+                            "text": "Machine comparison covers only VAT201 boxes "
+                            + ", ".join(obj.body["box_comparison_scope"]["required_boxes"])
+                            + ". Whole-return completeness is not determined. "
+                            + str(len(obj.body.get("excluded_box_rows", [])))
+                            + " retained source rows were excluded from this comparison; their full detail remains in the source result and XLSX export.",
+                        }
+                    ]
+                    if obj.body.get("box_comparison_scope", {}).get("mode")
+                    == "SELECTED_REQUIRED_BOXES"
+                    else []
+                ),
                 {
                     "heading": "System-generated source information",
                     "text": f"Derived from immutable {obj.kind} result {obj.id}, version {obj.version}, SHA-256 {obj.sha256}. Machine output is not a performed audit procedure or reviewed conclusion.",
@@ -1546,7 +1692,14 @@ async def export_result(
 
     try:
         content, media = await run_in_threadpool(
-            render, {**audit.serialize(obj), "firm_name": tenant.name if tenant else "", "freshness": freshness, "exported_at": datetime.now(UTC).isoformat()}, format
+            render,
+            {
+                **audit.serialize(obj),
+                "firm_name": tenant.name if tenant else "",
+                "freshness": freshness,
+                "exported_at": datetime.now(UTC).isoformat(),
+            },
+            format,
         )
     except XlsxValueLimitError as error:
         raise HTTPException(422, str(error)) from error
@@ -1557,7 +1710,13 @@ async def export_result(
         "intelligence.exported",
         obj.id,
         request.state.request_id,
-        {"format": format, "sha256": obj.sha256, "freshness": freshness, "content_sha256": content_sha256, "content_bytes": len(content)},
+        {
+            "format": format,
+            "sha256": obj.sha256,
+            "freshness": freshness,
+            "content_sha256": content_sha256,
+            "content_bytes": len(content),
+        },
     )
     return Response(
         content,

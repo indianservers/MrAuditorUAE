@@ -14,21 +14,62 @@ from tests.unit.test_vat_box_scope import full_filed_boxes
 def detailed_rows(prefix="FILED"):
     base = full_filed_boxes()
     main = base[0]
-    emirates = [{**main, "id": prefix + "-" + box, "box": box, "taxable_amount": "100" if box in {"1a", "1b"} else "0", "tax": "5" if box in {"1a", "1b"} else "0"} for box in EMIRATES]
-    return emirates + [{**row, "id": prefix + "-" + row["box"]} for row in base if row["box"] != "1"]
+    emirates = [
+        {
+            **main,
+            "id": prefix + "-" + box,
+            "box": box,
+            "taxable_amount": "100" if box in {"1a", "1b"} else "0",
+            "tax": "5" if box in {"1a", "1b"} else "0",
+        }
+        for box in EMIRATES
+    ]
+    return emirates + [
+        {**row, "id": prefix + "-" + row["box"]} for row in base if row["box"] != "1"
+    ]
 
 
 def composition():
     ids = [str(uuid.uuid4()), str(uuid.uuid4())]
     rows = detailed_rows("BOOK")
-    sources = {ids[0]: {"table_type": "return-boxes", "source_identity": "emirate-books", "rows": rows[:7]}, ids[1]: {"table_type": "return-boxes", "source_identity": "other-books", "rows": rows[7:]}}
-    data = VATCompositionInput(source_ids=ids, layout="emirate-20", taxable_amount="2400", tax="230", adjustment="0", label="SYNTHETIC emirate books", assessment="Seven independently assessed emirate totals and thirteen other explicit book boxes")
+    sources = {
+        ids[0]: {
+            "table_type": "return-boxes",
+            "source_identity": "emirate-books",
+            "rows": rows[:7],
+        },
+        ids[1]: {"table_type": "return-boxes", "source_identity": "other-books", "rows": rows[7:]},
+    }
+    data = VATCompositionInput(
+        source_ids=ids,
+        layout="emirate-20",
+        taxable_amount="2400",
+        tax="230",
+        adjustment="0",
+        label="SYNTHETIC emirate books",
+        assessment="Seven independently assessed emirate totals and thirteen other explicit book boxes",
+    )
     return sources, data
 
 
 def compare(books=None, filed=None, **changes):
-    sources = {"books": parsed("return-boxes", detailed_rows("BOOK") if books is None else books), "return": parsed("return-boxes", detailed_rows() if filed is None else filed)}
-    data = WorkflowInput.model_validate({"workflow": "uae-vat-return", "source_ids": {role: uuid.uuid4() for role in sources}, "vat201_layout": "emirate-20", "required_boxes": LAYOUTS["emirate-20"]["boxes"], "as_of": "2026-06-30", "currency": "AED", "title": "SYNTHETIC emirate comparison", "rationale": "Retained emirate allocation and period applicability independently assessed", **changes})
+    sources = {
+        "books": parsed("return-boxes", detailed_rows("BOOK") if books is None else books),
+        "return": parsed("return-boxes", detailed_rows() if filed is None else filed),
+    }
+    data = WorkflowInput.model_validate(
+        {
+            "workflow": "uae-vat-return",
+            "source_ids": {role: uuid.uuid4() for role in sources},
+            "vat201_layout": "emirate-20",
+            "required_boxes": LAYOUTS["emirate-20"]["boxes"],
+            "as_of": "2026-06-30",
+            "currency": "AED",
+            "title": "SYNTHETIC emirate comparison",
+            "rationale": "Retained emirate allocation and period applicability independently assessed",
+            **changes,
+        }
+    )
     return calculate(data, "AE", sources)
 
 
@@ -71,7 +112,17 @@ def test_missing_emirate_blocks_approval_instead_of_becoming_nil(missing):
     assert row["state"] != "MATCHED" and row["differences"]["tax"] is None
 
 
-@pytest.mark.parametrize("change,message", [("aggregate", "disjoint boxes"), ("missing", "twenty"), ("overlap", "overlap"), ("fraction", "nearest fils"), ("tax", "controls"), ("adjustment", "controls")])
+@pytest.mark.parametrize(
+    "change,message",
+    [
+        ("aggregate", "disjoint boxes"),
+        ("missing", "twenty"),
+        ("overlap", "overlap"),
+        ("fraction", "nearest fils"),
+        ("tax", "controls"),
+        ("adjustment", "controls"),
+    ],
+)
 def test_composition_requires_complete_disjoint_assessed_layout(change, message):
     sources, data = composition()
     first, second = list(sources.values())
@@ -91,7 +142,16 @@ def test_composition_requires_complete_disjoint_assessed_layout(change, message)
         source_rows(sources, data)
 
 
-@pytest.mark.parametrize("field,value,message", [("currency", "USD", "AED"), ("registration", "OTHER", "TRN"), ("period_start", "2026-05-01", "one reporting period"), ("tax", "5.001", "nearest fils"), ("box", "1", "aggregate Box 1")])
+@pytest.mark.parametrize(
+    "field,value,message",
+    [
+        ("currency", "USD", "AED"),
+        ("registration", "OTHER", "TRN"),
+        ("period_start", "2026-05-01", "one reporting period"),
+        ("tax", "5.001", "nearest fils"),
+        ("box", "1", "aggregate Box 1"),
+    ],
+)
 def test_profile_never_mixes_scopes_or_aggregate_and_detail(field, value, message):
     rows = detailed_rows("BOOK")
     rows[0][field] = value
@@ -100,7 +160,14 @@ def test_profile_never_mixes_scopes_or_aggregate_and_detail(field, value, messag
 
 
 def test_layout_cannot_be_truncated_or_used_for_an_indian_workflow():
-    for changes in ({"restrict_to_required_boxes": True, "box_scope_assessment": "Independent selected scope assessment"}, {"required_boxes": ["1a"]}, {"workflow": "india-gst"}):
+    for changes in (
+        {
+            "restrict_to_required_boxes": True,
+            "box_scope_assessment": "Independent selected scope assessment",
+        },
+        {"required_boxes": ["1a"]},
+        {"workflow": "india-gst"},
+    ):
         with pytest.raises(ValueError, match="all its explicit boxes"):
             compare(**changes)
     with pytest.raises(ValueError, match="distinct"):
@@ -110,7 +177,12 @@ def test_layout_cannot_be_truncated_or_used_for_an_indian_workflow():
 
 
 def test_legacy_aggregate_layout_remains_separate_and_accepts_all_fourteen_rows():
-    result = compare(full_filed_boxes(), [{**row, "id": "SEPARATE-" + row["box"]} for row in full_filed_boxes()], vat201_layout="aggregate-14", required_boxes=LAYOUTS["aggregate-14"]["boxes"])
+    result = compare(
+        full_filed_boxes(),
+        [{**row, "id": "SEPARATE-" + row["box"]} for row in full_filed_boxes()],
+        vat201_layout="aggregate-14",
+        required_boxes=LAYOUTS["aggregate-14"]["boxes"],
+    )
     assert len(result["rows"]) == 14 and result["exception_count"] == 0
     with pytest.raises(ValueError, match="aggregate Box 1"):
         compare(books=full_filed_boxes())

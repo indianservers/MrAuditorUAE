@@ -51,7 +51,11 @@ def bank(data, tables):
     from app.modules.country_workflows.bank_dates import date_details
 
     left, right = tables["books"], tables["statement"]
-    transaction_dates = [{"source_role": role, "source_row_id": row["id"], **date_details(row)} for role in ("books", "statement") for row in tables[role]]
+    transaction_dates = [
+        {"source_role": role, "source_row_id": row["id"], **date_details(row)}
+        for role in ("books", "statement")
+        for row in tables[role]
+    ]
     uncertain_dates = sum(row["booking_date_review_required"] for row in transaction_dates)
     for row in [*left, *right]:
         if row["account"] != data.account or row["currency"] != data.currency:
@@ -121,7 +125,15 @@ def bank(data, tables):
         "rows": rows,
         "matches": matches["matches"],
         "ambiguous": matches["ambiguous"],
-        **{key: matches[key] for key in ("matching_contract", "candidate_checks", "candidate_check_limit", "ambiguity_link_count")},
+        **{
+            key: matches[key]
+            for key in (
+                "matching_contract",
+                "candidate_checks",
+                "candidate_check_limit",
+                "ambiguity_link_count",
+            )
+        },
         "control_comparison": {k: str(v) for k, v in controls.items()},
         "adjusted_book_balance": str(adjusted),
         "transaction_dates": transaction_dates,
@@ -336,7 +348,17 @@ def tax_documents(data, tables, right_role="return"):
             )
             totals[partition][role + "_tax"] += amount(r, "tax")
     return {
-        **({"invoice_evidence_scope": {"direction": data.invoice_direction, "filing_status": "NOT_ASSESSED_BY_INVOICE_COMPARISON", "irp_authenticity": "NOT_VERIFIED"}} if right_role == "invoices" else {}),
+        **(
+            {
+                "invoice_evidence_scope": {
+                    "direction": data.invoice_direction,
+                    "filing_status": "NOT_ASSESSED_BY_INVOICE_COMPARISON",
+                    "irp_authenticity": "NOT_VERIFIED",
+                }
+            }
+            if right_role == "invoices"
+            else {}
+        ),
         "rows": rows,
         "totals": {
             k: {s: str(v) for s, v in values.items()} for k, values in sorted(totals.items())
@@ -348,7 +370,9 @@ def tax_documents(data, tables, right_role="return"):
             "Canonical document comparison only; native government export adapters are not qualified",
             "No input-credit eligibility, reverse-charge liability, interest or filing conclusion is calculated",
             "UAE VAT returns contain aggregates; do not represent them as a supplier-matching portal",
-            "Invoice evidence does not establish filed GST returns, IRP authenticity or complete book population" if right_role == "invoices" else "Canonical return documents require independently prepared document schedules",
+            "Invoice evidence does not establish filed GST returns, IRP authenticity or complete book population"
+            if right_role == "invoices"
+            else "Canonical return documents require independently prepared document schedules",
         ],
     }
 
@@ -467,7 +491,17 @@ def obligations(data, tables, country):
                 "currency": k[4],
                 "state": state,
                 "amounts": amounts,
-                **({"pension_scope": next(value["pension_scope"] for value in present.values() if value and value.get("pension_scope"))} if k[5] else {}),
+                **(
+                    {
+                        "pension_scope": next(
+                            value["pension_scope"]
+                            for value in present.values()
+                            if value and value.get("pension_scope")
+                        )
+                    }
+                    if k[5]
+                    else {}
+                ),
                 "source_ids": {
                     role: value["ids"] if value else [] for role, value in present.items()
                 },
@@ -635,7 +669,11 @@ def vat_return(data, tables):
     return {
         "rows": rows,
         "exception_count": sum(r["state"] != "MATCHED" for r in rows),
-        "blocked": any(r["state"] == "MISSING_BOX_EVIDENCE" or (data.vat201_layout != "custom" and r["state"] in {"BOOKS_ONLY", "RETURN_ONLY"}) for r in rows),
+        "blocked": any(
+            r["state"] == "MISSING_BOX_EVIDENCE"
+            or (data.vat201_layout != "custom" and r["state"] in {"BOOKS_ONLY", "RETURN_ONLY"})
+            for r in rows
+        ),
         "vat201_layout": data.vat201_layout,
         "box_comparison_scope": {
             "mode": "SELECTED_REQUIRED_BOXES"
@@ -804,7 +842,15 @@ def checks(data, tables):
     }
 
 
-def calculate(data, country, sources, *, bank_account_review=None, import_nil_receipt=None, esic_population_review=None):
+def calculate(
+    data,
+    country,
+    sources,
+    *,
+    bank_account_review=None,
+    import_nil_receipt=None,
+    esic_population_review=None,
+):
     title, countries, roles = WORKFLOWS[data.workflow]
     if countries and country not in countries:
         raise ValueError("Workflow is unavailable for this engagement country")
@@ -816,63 +862,162 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
     if bank_account_review is not None:
         from app.modules.country_workflows.bank_binding import bind
 
-        sources, account_scope = bind(data,country,sources,*bank_account_review)
+        sources, account_scope = bind(data, country, sources, *bank_account_review)
     for role, table in sources.items():
-        if table.get("parser_version") == "withholding-obligations/1" and (role not in table.get("allowed_source_roles", []) or table.get("native_metadata", {}).get("controls", {}).get("cutoff_date") != data.as_of.isoformat()):
-            raise ValueError("Withholding obligation purpose and cutoff must match the allocation review")
+        if table.get("parser_version") == "withholding-obligations/1" and (
+            role not in table.get("allowed_source_roles", [])
+            or table.get("native_metadata", {}).get("controls", {}).get("cutoff_date")
+            != data.as_of.isoformat()
+        ):
+            raise ValueError(
+                "Withholding obligation purpose and cutoff must match the allocation review"
+            )
         if table.get("allowed_workflows") and data.workflow not in table["allowed_workflows"]:
             raise ValueError("Derived source is restricted to its assessed target workflows")
-        if any(row.get("withholding_scope") for row in table["rows"]) and data.workflow != "obligation-bank-allocations":
-            raise ValueError("Transaction-scoped withholding obligations require the bank allocation workflow")
-        if table.get("native_format") == "india-gstr1-document-series-json" and (data.workflow != "india-document-series" or role != "reported"):
-            raise ValueError("Native document series can establish only the reported role of India document-series comparison")
-        if table.get("parser_version") == "bank-clearance-carryforward/1" and (data.workflow != "bank-subsequent-clearance" or role != "outstanding"):
-            raise ValueError("Carried bank residuals can establish only the outstanding role of subsequent clearance")
-        if table.get("native_format") == "india-gstr1-documents-json" and (data.workflow != "india-gstr1-documents" or role != "return"):
-            raise ValueError("Native GSTR-1 invoices/notes may supply only the outward reconciliation return role")
-        if table.get("native_format") == "india-gstr1-summary-json" and (data.workflow != "india-gstr1-summary" or role != "return"):
-            raise ValueError("Native GSTR-1 summary can supply only the return role of summary reconciliation")
+        if (
+            any(row.get("withholding_scope") for row in table["rows"])
+            and data.workflow != "obligation-bank-allocations"
+        ):
+            raise ValueError(
+                "Transaction-scoped withholding obligations require the bank allocation workflow"
+            )
+        if table.get("native_format") == "india-gstr1-document-series-json" and (
+            data.workflow != "india-document-series" or role != "reported"
+        ):
+            raise ValueError(
+                "Native document series can establish only the reported role of India document-series comparison"
+            )
+        if table.get("parser_version") == "bank-clearance-carryforward/1" and (
+            data.workflow != "bank-subsequent-clearance" or role != "outstanding"
+        ):
+            raise ValueError(
+                "Carried bank residuals can establish only the outstanding role of subsequent clearance"
+            )
+        if table.get("native_format") == "india-gstr1-documents-json" and (
+            data.workflow != "india-gstr1-documents" or role != "return"
+        ):
+            raise ValueError(
+                "Native GSTR-1 invoices/notes may supply only the outward reconciliation return role"
+            )
+        if table.get("native_format") == "india-gstr1-summary-json" and (
+            data.workflow != "india-gstr1-summary" or role != "return"
+        ):
+            raise ValueError(
+                "Native GSTR-1 summary can supply only the return role of summary reconciliation"
+            )
         if table.get("native_format") == "india-inv01-json":
-            if (data.workflow, role) not in {("india-gst", "books"), ("india-invoice-register", "invoices"), ("india-gstr1-documents", "books")}:
-                raise ValueError("INV-01 supplies invoice evidence, not a filed GST return; use invoices in the register comparison or invoice-supported books against independent return evidence")
-            if data.workflow == "india-gstr1-documents" and table.get("native_metadata", {}).get("direction") != "sale":
-                raise ValueError("Outward GSTR-1 books require sales invoice evidence, not purchases")
-            if data.workflow == "india-invoice-register" and table.get("native_metadata", {}).get("direction") != data.invoice_direction:
-                raise ValueError("Native invoice direction differs from the declared purchase/sale comparison")
-        has_arrears = table.get("native_format") == "india-epfo-arrear-ecr-v2" or (table.get("table_type") == "obligations" and any(row.get("population") == "arrears" for row in table["rows"]))
+            if (data.workflow, role) not in {
+                ("india-gst", "books"),
+                ("india-invoice-register", "invoices"),
+                ("india-gstr1-documents", "books"),
+            }:
+                raise ValueError(
+                    "INV-01 supplies invoice evidence, not a filed GST return; use invoices in the register comparison or invoice-supported books against independent return evidence"
+                )
+            if (
+                data.workflow == "india-gstr1-documents"
+                and table.get("native_metadata", {}).get("direction") != "sale"
+            ):
+                raise ValueError(
+                    "Outward GSTR-1 books require sales invoice evidence, not purchases"
+                )
+            if (
+                data.workflow == "india-invoice-register"
+                and table.get("native_metadata", {}).get("direction") != data.invoice_direction
+            ):
+                raise ValueError(
+                    "Native invoice direction differs from the declared purchase/sale comparison"
+                )
+        has_arrears = table.get("native_format") == "india-epfo-arrear-ecr-v2" or (
+            table.get("table_type") == "obligations"
+            and any(row.get("population") == "arrears" for row in table["rows"])
+        )
         if has_arrears and not data.arrear_only:
-            raise ValueError("Select explicit arrear-only comparison scope; arrears cannot stand in for a complete monthly return")
-        if data.arrear_only and table.get("table_type") == "obligations" and any(row.get("population") != "arrears" for row in table["rows"]):
-            raise ValueError("Every expected, reported and payment obligation must be explicitly tagged as an arrear population")
+            raise ValueError(
+                "Select explicit arrear-only comparison scope; arrears cannot stand in for a complete monthly return"
+            )
+        if (
+            data.arrear_only
+            and table.get("table_type") == "obligations"
+            and any(row.get("population") != "arrears" for row in table["rows"])
+        ):
+            raise ValueError(
+                "Every expected, reported and payment obligation must be explicitly tagged as an arrear population"
+            )
         if table.get("native_format") == "india-epfo-arrear-ecr-v2" and data.currency != "INR":
-            raise ValueError("Native arrear ECR comparisons require INR; no currency conversion is inferred")
-        if table.get("native_format") == "india-epfo-arrear-ecr-v2" and (data.workflow, role) not in {("statutory-dues", "return"), ("india-payroll-rules", "reported"), ("obligation-bank-allocations", "reported")}:
-            raise ValueError("Native arrear ECR can establish only an assessed return/reported role, not expected dues or bank payment")
-        if data.workflow == "inventory-count-bridge" and data.stock_bridge_mode == "bidirectional-controlled":
+            raise ValueError(
+                "Native arrear ECR comparisons require INR; no currency conversion is inferred"
+            )
+        if table.get("native_format") == "india-epfo-arrear-ecr-v2" and (
+            data.workflow,
+            role,
+        ) not in {
+            ("statutory-dues", "return"),
+            ("india-payroll-rules", "reported"),
+            ("obligation-bank-allocations", "reported"),
+        }:
+            raise ValueError(
+                "Native arrear ECR can establish only an assessed return/reported role, not expected dues or bank payment"
+            )
+        if (
+            data.workflow == "inventory-count-bridge"
+            and data.stock_bridge_mode == "bidirectional-controlled"
+        ):
             from app.modules.country_workflows.inventory_controls import verify_quantity_controls
 
-            if table.get("inventory_controls_verified") is not True or table.get("inventory_quantity_controls") is None:
-                raise ValueError("Controlled inventory bridging requires independent partition quantity controls for every source")
+            if (
+                table.get("inventory_controls_verified") is not True
+                or table.get("inventory_quantity_controls") is None
+            ):
+                raise ValueError(
+                    "Controlled inventory bridging requires independent partition quantity controls for every source"
+                )
             verify_quantity_controls(table["rows"], table["inventory_quantity_controls"])
         if data.workflow == "procurement-match" and role != "payments":
             from app.modules.country_workflows.purchase_controls import verify as verify_purchase
 
-            if table.get("purchase_controls_verified") is not True or table.get("purchase_quantity_controls") is None:
-                raise ValueError("Procurement matching requires independently controlled purchase quantities and explicit units on orders, receipts and invoices")
+            if (
+                table.get("purchase_controls_verified") is not True
+                or table.get("purchase_quantity_controls") is None
+            ):
+                raise ValueError(
+                    "Procurement matching requires independently controlled purchase quantities and explicit units on orders, receipts and invoices"
+                )
             verify_purchase(table["rows"], table["purchase_quantity_controls"])
-        if table.get("parser_version") == "uae-vat201-composition/1" and table.get("native_metadata", {}).get("layout") == "emirate-20" and data.vat201_layout != "emirate-20":
-            raise ValueError("Select the explicit twenty-row emirate VAT201 layout for this composed source")
-        if table.get("parser_version") == "uae-vat201-composition/1" and (data.workflow != "uae-vat-return" or role != "books"):
-            raise ValueError("Composed VAT201 sources can establish only books, not filed-return evidence")
-        if table.get("native_format") == "india-gstr2b-json" and (data.workflow != "india-gst" or role != "return"):
-            raise ValueError("Native GSTR-2B can establish only the India GST return role, not independent books")
-        if table.get("parser_version") == "contribution-obligations/1" and (
-            data.workflow not in {"statutory-dues", "obligation-bank-allocations"} or role != "expected"
+        if (
+            table.get("parser_version") == "uae-vat201-composition/1"
+            and table.get("native_metadata", {}).get("layout") == "emirate-20"
+            and data.vat201_layout != "emirate-20"
         ):
-            raise ValueError("Derived contribution obligations can establish only expected remittances, not returns or payments")
+            raise ValueError(
+                "Select the explicit twenty-row emirate VAT201 layout for this composed source"
+            )
+        if table.get("parser_version") == "uae-vat201-composition/1" and (
+            data.workflow != "uae-vat-return" or role != "books"
+        ):
+            raise ValueError(
+                "Composed VAT201 sources can establish only books, not filed-return evidence"
+            )
+        if table.get("native_format") == "india-gstr2b-json" and (
+            data.workflow != "india-gst" or role != "return"
+        ):
+            raise ValueError(
+                "Native GSTR-2B can establish only the India GST return role, not independent books"
+            )
+        if table.get("parser_version") == "contribution-obligations/1" and (
+            data.workflow not in {"statutory-dues", "obligation-bank-allocations"}
+            or role != "expected"
+        ):
+            raise ValueError(
+                "Derived contribution obligations can establish only expected remittances, not returns or payments"
+            )
         # Instruction/return populations are not an independent payroll expectation
         # or evidence that money was settled, even when their totals agree.
-        if table.get("native_format") in {"uae-wps-sif", "uae-wps-sif-evp", "india-epfo-ecr"} and role not in {
+        if table.get("native_format") in {
+            "uae-wps-sif",
+            "uae-wps-sif-evp",
+            "india-epfo-ecr",
+        } and role not in {
             "channel",
             "return",
             "reported",
@@ -881,7 +1026,10 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
                 "Native WPS/ECR files may establish only a return/channel role; "
                 "select independent expected dues and confirmed payment evidence"
             )
-        if table.get("allowed_source_roles") is not None and role not in table["allowed_source_roles"]:
+        if (
+            table.get("allowed_source_roles") is not None
+            and role not in table["allowed_source_roles"]
+        ):
             raise ValueError("Source is restricted to its assessed source roles")
         if table["table_type"] != roles[role] or (
             not table["rows"] and not table.get("nil_reason")
@@ -891,7 +1039,12 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
             native = table["native_metadata"]
             prefix = "book" if role == "books" else "statement"
             if (
-                native["account"] != (account_scope["original_bank_source_account"] if account_scope is not None and role == account_scope["bank_source_role"] else data.account)
+                native["account"]
+                != (
+                    account_scope["original_bank_source_account"]
+                    if account_scope is not None and role == account_scope["bank_source_role"]
+                    else data.account
+                )
                 or native["currency"] != data.currency
                 or native["through"] != data.as_of.isoformat()
                 or Decimal(native["opening"]) != getattr(data, prefix + "_opening")
@@ -900,8 +1053,15 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
                 raise ValueError(
                     "BRS scope and balance controls must agree to the original native bank statement"
                 )
-    if data.workflow == "india-gst" and sources["return"].get("native_format") == "india-gstr2b-json" and sources["books"].get("native_format") == "india-inv01-json" and sources["books"].get("native_metadata", {}).get("direction") != "purchase":
-        raise ValueError("A sales invoice cannot establish purchase books against an inward GSTR-2B source")
+    if (
+        data.workflow == "india-gst"
+        and sources["return"].get("native_format") == "india-gstr2b-json"
+        and sources["books"].get("native_format") == "india-inv01-json"
+        and sources["books"].get("native_metadata", {}).get("direction") != "purchase"
+    ):
+        raise ValueError(
+            "A sales invoice cannot establish purchase books against an inward GSTR-2B source"
+        )
     tables = {role: source["rows"] for role, source in sources.items()}
     esic_links = esic_metadata = None
     with localcontext() as arithmetic:
@@ -910,7 +1070,9 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
             from app.modules.country_workflows.esic_binding import bind as bind_esic
 
             if esic_population_review is None:
-                raise ValueError("Verify the requested ESIC population review before contribution calculation")
+                raise ValueError(
+                    "Verify the requested ESIC population review before contribution calculation"
+                )
             esic_links, esic_metadata = bind_esic(data, tables, *esic_population_review)
         elif esic_population_review is not None:
             raise ValueError("An ESIC population receipt requires an explicit reviewed link")
@@ -947,8 +1109,13 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
         elif data.workflow == "obligation-bank-allocations":
             from app.modules.country_workflows.dues_allocations import allocate
 
-            if sources["bank"].get("native_format") in {"camt053", "swift-mt940"} and data.bank_payment_sign != "debit-negative":
-                raise ValueError("Native bank outflows use debit-negative amounts; credits cannot settle obligations")
+            if (
+                sources["bank"].get("native_format") in {"camt053", "swift-mt940"}
+                and data.bank_payment_sign != "debit-negative"
+            ):
+                raise ValueError(
+                    "Native bank outflows use debit-negative amounts; credits cannot settle obligations"
+                )
             result = allocate(data, tables, country)
         elif data.workflow in {"india-withholding-liability", "india-withholding-credit"}:
             result = withholding(data, tables)
@@ -989,13 +1156,37 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
             if data.workflow == "india-gstr1-documents":
                 from app.modules.country_workflows.india_gstr1_source import month_end
 
-                if any(month_end(row["period"]) > data.as_of for population in tables.values() for row in population):
-                    raise ValueError("Outward GSTR-1 reporting month extends beyond the reconciliation date")
+                if any(
+                    month_end(row["period"]) > data.as_of
+                    for population in tables.values()
+                    for row in population
+                ):
+                    raise ValueError(
+                        "Outward GSTR-1 reporting month extends beyond the reconciliation date"
+                    )
                 result["blocked"] = any(row["source_review_reasons"] for row in result["rows"])
                 native = sources["return"].get("native_metadata", {})
-                result["outward_gst_scope"] = {key: native.get(key) for key in ("supplier_gstin", "return_period", "declared_section_controls", "context_evidence_version_id", "context_sha256", "retrieval_scope_assessment", "source_population_scope")}
-                result["outward_gst_scope"]["filing_status"] = "NOT_ESTABLISHED_BY_DOCUMENT_COMPARISON"
-                result["limitations"] = ["Declared outward invoice/note sections only; aggregated B2CS, advances, HSN and full-return completeness require separate evidence", "Amendments, source status/de-link flags and unexplained invoice-value differences require corrected source populations before approval", "Unregistered/export category keys represent declared reporting categories, not verified customer identities", "Retained request context is independently assessed, not machine-authenticated GSTIN, period, provider, IRP or filing proof"]
+                result["outward_gst_scope"] = {
+                    key: native.get(key)
+                    for key in (
+                        "supplier_gstin",
+                        "return_period",
+                        "declared_section_controls",
+                        "context_evidence_version_id",
+                        "context_sha256",
+                        "retrieval_scope_assessment",
+                        "source_population_scope",
+                    )
+                }
+                result["outward_gst_scope"]["filing_status"] = (
+                    "NOT_ESTABLISHED_BY_DOCUMENT_COMPARISON"
+                )
+                result["limitations"] = [
+                    "Declared outward invoice/note sections only; aggregated B2CS, advances, HSN and full-return completeness require separate evidence",
+                    "Amendments, source status/de-link flags and unexplained invoice-value differences require corrected source populations before approval",
+                    "Unregistered/export category keys represent declared reporting categories, not verified customer identities",
+                    "Retained request context is independently assessed, not machine-authenticated GSTIN, period, provider, IRP or filing proof",
+                ]
 
         elif data.workflow == "uae-vat-return":
             result = vat_return(data, tables)
@@ -1009,12 +1200,19 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
         from app.modules.country_workflows.esic_binding import annotate
 
         result = annotate(result, esic_links, esic_metadata)
-    elif data.workflow == "india-payroll-rules" and any(row["component"].startswith("ESI:") for row in tables["bases"]):
-        result["esic_population_binding"] = {"status": "NOT_LINKED", "eligibility_status": "ASSESSED_SEPARATELY_NOT_INFERRED_FROM_ESIC_WAGES"}
-    if data.workflow in {"bank-brs","bank-subsequent-clearance","obligation-bank-allocations"}:
+    elif data.workflow == "india-payroll-rules" and any(
+        row["component"].startswith("ESI:") for row in tables["bases"]
+    ):
+        result["esic_population_binding"] = {
+            "status": "NOT_LINKED",
+            "eligibility_status": "ASSESSED_SEPARATELY_NOT_INFERRED_FROM_ESIC_WAGES",
+        }
+    if data.workflow in {"bank-brs", "bank-subsequent-clearance", "obligation-bank-allocations"}:
         result["bank_account_evidence"] = account_scope or {
-            "status":"LINK_REQUESTED_NOT_VERIFIED" if data.bank_account_review_id else "NOT_LINKED_ARITHMETIC_SCOPE_ONLY",
-            "bank_authentication_status":"NOT_ESTABLISHED_BY_DOCUMENT_COMPARISON",
+            "status": "LINK_REQUESTED_NOT_VERIFIED"
+            if data.bank_account_review_id
+            else "NOT_LINKED_ARITHMETIC_SCOPE_ONLY",
+            "bank_authentication_status": "NOT_ESTABLISHED_BY_DOCUMENT_COMPARISON",
         }
     return {
         **result,
@@ -1042,7 +1240,9 @@ def calculate(data, country, sources, *, bank_account_review=None, import_nil_re
         "country_guidance": country_guidance(country, data.as_of, data.tax_year_start),
         "statutory_calculation_qualified": False,
         "professional_conclusion": "NOT_DETERMINED",
-        "obligation_population_scope": "ARREARS_ONLY_NOT_COMPLETE_MONTHLY_RETURN" if data.arrear_only else "DECLARED_SOURCE_SCOPE",
+        "obligation_population_scope": "ARREARS_ONLY_NOT_COMPLETE_MONTHLY_RETURN"
+        if data.arrear_only
+        else "DECLARED_SOURCE_SCOPE",
         "execution_mode": "deterministic_engine",
         "ml_execution_mode": None,
         "language_model_dependency": False,

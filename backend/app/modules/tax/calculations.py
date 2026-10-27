@@ -312,7 +312,9 @@ def qfzp(data: QFZP, profile, parameters: RuleParameters):
                     "confirmed_nonqualifying": confirmed_nonqualifying,
                     "unresolved_revenue": uncertain_revenue,
                     "maximum_nonqualifying": confirmed_nonqualifying + uncertain_revenue,
-                    "all_unresolved_nonqualifying_passes": confirmed_nonqualifying + uncertain_revenue <= limit,
+                    "all_unresolved_nonqualifying_passes": confirmed_nonqualifying
+                    + uncertain_revenue
+                    <= limit,
                     "all_unresolved_qualifying_passes": confirmed_nonqualifying <= limit,
                     "conclusion": "UNRESOLVED" if uncertain_revenue else "CLASSIFIED_INPUTS_ONLY",
                 },

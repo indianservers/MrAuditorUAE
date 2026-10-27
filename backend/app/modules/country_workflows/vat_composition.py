@@ -63,8 +63,13 @@ def source_rows(sources, data):
                     {k: original[k] for k in ReturnBox.model_fields}
                 ).model_dump(mode="json")
                 box = row["box"]
-                if data.layout == "emirate-20" and any(Decimal(row[field]) != Decimal(row[field]).quantize(Decimal("0.01")) for field in ("taxable_amount", "tax", "adjustment")):
-                    raise ValueError("Emirate VAT201 row amounts must be stated to the nearest fils")
+                if data.layout == "emirate-20" and any(
+                    Decimal(row[field]) != Decimal(row[field]).quantize(Decimal("0.01"))
+                    for field in ("taxable_amount", "tax", "adjustment")
+                ):
+                    raise ValueError(
+                        "Emirate VAT201 row amounts must be stated to the nearest fils"
+                    )
                 if box not in required or box in seen:
                     raise ValueError(
                         "VAT201 composition requires disjoint boxes from the selected layout; overlap is not additive"
@@ -158,7 +163,9 @@ async def prepare(db, ctx, eng, data, request_id):
             "source_sha256": fingerprint({"rows": rows}),
             "contributors": sorted(contributors | {str(ctx.user_id)}),
             "native_metadata": data.model_dump(mode="json"),
-            "population_completeness": "DECLARED_DISJOINT_TWENTY_BOX_EMIRATE_BOOK_SCHEDULES" if data.layout == "emirate-20" else "DECLARED_DISJOINT_FOURTEEN_BOX_BOOK_SCHEDULES",
+            "population_completeness": "DECLARED_DISJOINT_TWENTY_BOX_EMIRATE_BOOK_SCHEDULES"
+            if data.layout == "emirate-20"
+            else "DECLARED_DISJOINT_FOURTEEN_BOX_BOOK_SCHEDULES",
             "statutory_calculation_qualified": False,
             "limitations": [
                 f"All {len(LAYOUTS[data.layout]['boxes'])} explicit assessed book boxes are retained; composition does not establish whole-return legal completeness",

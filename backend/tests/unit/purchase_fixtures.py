@@ -10,7 +10,14 @@ def quantity_controls(rows):
         if row["document_type"] == "payment":
             continue
         identity = tuple(row[field] for field in fields)
-        value = grouped.setdefault(identity, {**dict(zip(fields, identity, strict=True)), "expected_rows": 0, "quantity": Decimal(0)})
+        value = grouped.setdefault(
+            identity,
+            {
+                **dict(zip(fields, identity, strict=True)),
+                "expected_rows": 0,
+                "quantity": Decimal(0),
+            },
+        )
         value["expected_rows"] += 1
         value["quantity"] += Decimal(row["quantity"])
     return [{**value, "quantity": str(value["quantity"])} for value in grouped.values()]

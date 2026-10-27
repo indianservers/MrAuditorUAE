@@ -42,8 +42,8 @@ from app.api.v1 import (
 from app.core.config import settings
 from app.core.exceptions import ErrorResponse
 from app.core.logging import configure_logging
-from app.modules.connectors.zoho import ConnectorError
 from app.modules.connectors.operations import router as connector_operations
+from app.modules.connectors.zoho import ConnectorError
 
 config = settings()
 configure_logging()
@@ -91,7 +91,8 @@ async def safeguards(request: Request, call_next):
     )
     try:
         is_upload = (
-            request.url.path in {
+            request.url.path
+            in {
                 "/api/v1/accounting/imports",
                 "/api/v1/workspace/inspect-file",
                 "/api/v1/connectors/report-packages",

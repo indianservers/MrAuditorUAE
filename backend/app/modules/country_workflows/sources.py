@@ -73,8 +73,14 @@ def _parse_csv(content, data, defaults=None):
     ids = set()
     totals: defaultdict[str, Decimal] = defaultdict(Decimal)
     for index, raw in enumerate(reader, 2):
-        if data.table_type.startswith(("grant-", "media-")) and any(value is not None and value != value.strip() for value in raw.values() if isinstance(value, str)):
-            raise ValueError("Grant/media canonical values must be explicit without silently trimmed identities or numbers")
+        if data.table_type.startswith(("grant-", "media-")) and any(
+            value is not None and value != value.strip()
+            for value in raw.values()
+            if isinstance(value, str)
+        ):
+            raise ValueError(
+                "Grant/media canonical values must be explicit without silently trimmed identities or numbers"
+            )
         if (
             len(rows) >= 5000
             or None in raw
@@ -148,12 +154,16 @@ def _parse_csv(content, data, defaults=None):
             verify_controls as verify_values,
         )
 
-        verify_values(rows, [control.model_dump(mode="json") for control in data.inventory_valuation_controls])
+        verify_values(
+            rows, [control.model_dump(mode="json") for control in data.inventory_valuation_controls]
+        )
     esic_controls = None
     if data.table_type == "esic-members":
         from app.modules.country_workflows.esic_population import verify_controls as verify_esic
 
-        esic_controls = verify_esic(rows, data.esic_paid_days_control, data.esic_zero_wage_members_control)
+        esic_controls = verify_esic(
+            rows, data.esic_paid_days_control, data.esic_zero_wage_members_control
+        )
     series_controls = None
     if data.table_type == "gst-document-series":
         from app.modules.country_workflows.document_series import verify_controls as verify_series
@@ -171,7 +181,11 @@ def _parse_csv(content, data, defaults=None):
             verify_controls as verify_custody_controls,
         )
 
-        verify_custody_controls(rows, [control.model_dump(mode="json") for control in data.custody_quantity_controls], responses=data.table_type == "inventory-custody-confirmations")
+        verify_custody_controls(
+            rows,
+            [control.model_dump(mode="json") for control in data.custody_quantity_controls],
+            responses=data.table_type == "inventory-custody-confirmations",
+        )
     if data.table_type == "party-confirmations":
         from app.modules.country_workflows.party_confirmations import (
             verify_request_totals,
@@ -183,17 +197,24 @@ def _parse_csv(content, data, defaults=None):
     if data.inventory_quantity_controls is not None:
         from app.modules.country_workflows.inventory_controls import verify_quantity_controls
 
-        verify_quantity_controls(rows, [item.model_dump(mode="json") for item in data.inventory_quantity_controls])
+        verify_quantity_controls(
+            rows, [item.model_dump(mode="json") for item in data.inventory_quantity_controls]
+        )
     if data.purchase_quantity_controls is not None:
         from app.modules.country_workflows.purchase_controls import verify as verify_purchase
 
-        verify_purchase(rows, [item.model_dump(mode="json") for item in data.purchase_quantity_controls])
+        verify_purchase(
+            rows, [item.model_dump(mode="json") for item in data.purchase_quantity_controls]
+        )
     if not rows:
         if any(v != 0 for v in data.control_totals.values()):
             raise ValueError("A nil population cannot carry nonzero control totals")
         totals.update(data.control_totals)
     if data.table_type in {
-        "grant-budgets", "grant-expenses", "grant-allocations", "grant-utilisation-controls",
+        "grant-budgets",
+        "grant-expenses",
+        "grant-allocations",
+        "grant-utilisation-controls",
         "esic-members",
         "obligation-allocations",
         "bank-outstanding",
@@ -245,28 +266,100 @@ def _parse_csv(content, data, defaults=None):
     ):
         raise ValueError("Import taxable-base control does not agree to all retained source rows")
     return {
-        **({"custody_quantity_controls": [control.model_dump(mode="json") for control in data.custody_quantity_controls]} if data.custody_quantity_controls is not None else {}),
-        **({"confirmation_request_totals": {currency: str(value) for currency, value in data.confirmation_request_totals.items()}} if data.confirmation_request_totals is not None else {}),
-        **({"allowed_workflows": ["party-balance-confirmations"], "allowed_source_roles": ["coverage"]} if data.table_type == "confirmation-item-coverage" else {}),
-        **({"confirmation_response_totals": {currency: str(value) for currency, value in data.confirmation_response_totals.items()}} if data.confirmation_response_totals is not None else {}),
-        **({"inventory_valuation_controls": [control.model_dump(mode="json") for control in data.inventory_valuation_controls]} if data.inventory_valuation_controls is not None else {}),
+        **(
+            {
+                "custody_quantity_controls": [
+                    control.model_dump(mode="json") for control in data.custody_quantity_controls
+                ]
+            }
+            if data.custody_quantity_controls is not None
+            else {}
+        ),
+        **(
+            {
+                "confirmation_request_totals": {
+                    currency: str(value)
+                    for currency, value in data.confirmation_request_totals.items()
+                }
+            }
+            if data.confirmation_request_totals is not None
+            else {}
+        ),
+        **(
+            {
+                "allowed_workflows": ["party-balance-confirmations"],
+                "allowed_source_roles": ["coverage"],
+            }
+            if data.table_type == "confirmation-item-coverage"
+            else {}
+        ),
+        **(
+            {
+                "confirmation_response_totals": {
+                    currency: str(value)
+                    for currency, value in data.confirmation_response_totals.items()
+                }
+            }
+            if data.confirmation_response_totals is not None
+            else {}
+        ),
+        **(
+            {
+                "inventory_valuation_controls": [
+                    control.model_dump(mode="json") for control in data.inventory_valuation_controls
+                ]
+            }
+            if data.inventory_valuation_controls is not None
+            else {}
+        ),
         **({"esic_population_controls": esic_controls} if esic_controls is not None else {}),
         "table_type": data.table_type,
-        **({"allowed_workflows": ["obligation-bank-allocations"], "allowed_source_roles": ["expected", "reported"]} if any(row.get("withholding_scope") for row in rows) else {}),
+        **(
+            {
+                "allowed_workflows": ["obligation-bank-allocations"],
+                "allowed_source_roles": ["expected", "reported"],
+            }
+            if any(row.get("withholding_scope") for row in rows)
+            else {}
+        ),
         **({"document_series_controls": series_controls} if series_controls is not None else {}),
         **({"metric_controls": metric_controls} if metric_controls is not None else {}),
         "rows": rows,
         "row_count": len(rows),
         "control_totals": {k: str(v) for k, v in sorted(totals.items())},
-        **({"inventory_controls_verified": True, "inventory_quantity_controls": [item.model_dump(mode="json") for item in data.inventory_quantity_controls]} if data.inventory_quantity_controls is not None else {}),
-        **({"purchase_controls_verified": True, "purchase_quantity_controls": [item.model_dump(mode="json") for item in data.purchase_quantity_controls]} if data.purchase_quantity_controls is not None else {}),
+        **(
+            {
+                "inventory_controls_verified": True,
+                "inventory_quantity_controls": [
+                    item.model_dump(mode="json") for item in data.inventory_quantity_controls
+                ],
+            }
+            if data.inventory_quantity_controls is not None
+            else {}
+        ),
+        **(
+            {
+                "purchase_controls_verified": True,
+                "purchase_quantity_controls": [
+                    item.model_dump(mode="json") for item in data.purchase_quantity_controls
+                ],
+            }
+            if data.purchase_quantity_controls is not None
+            else {}
+        ),
         **(
             {"import_taxable_base_control": str(data.import_taxable_base_control)}
             if data.table_type == "import-vat-lines"
             else {}
         ),
         "population_completeness": "UPLOADED_FILE_CONTROLS_ONLY",
-        **({"source_amount_basis": "CATEGORY_CEILING_FILE_TOTAL_NOT_CASH"} if data.table_type == "grant-budgets" else {"source_amount_basis":"MIXED_LEDGER_CONTROL_ROWS_FILE_TOTAL_ONLY"} if data.table_type == "grant-utilisation-controls" else {}),
+        **(
+            {"source_amount_basis": "CATEGORY_CEILING_FILE_TOTAL_NOT_CASH"}
+            if data.table_type == "grant-budgets"
+            else {"source_amount_basis": "MIXED_LEDGER_CONTROL_ROWS_FILE_TOTAL_ONLY"}
+            if data.table_type == "grant-utilisation-controls"
+            else {}
+        ),
         "review_status": "UNVERIFIED",
         "nil_reason": data.nil_reason,
         "title": data.label,

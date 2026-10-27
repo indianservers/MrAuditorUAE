@@ -1,8 +1,10 @@
+import uuid
 from copy import deepcopy
 from decimal import Decimal
-import uuid
+
 import pytest
 from pydantic import ValidationError
+
 from app.modules.jurisdictions.ae.advanced import Schedule, calculate
 from app.modules.jurisdictions.ae.advanced_specs import spec
 
@@ -244,10 +246,13 @@ def test_netting_does_not_hide_gross_misstatements():
 
 
 def test_tiny_allocations_cannot_create_negative_final_obligation():
-    from app.modules.ifrs.schedule_math import relative_allocations
     from decimal import ROUND_HALF_EVEN
 
-    rounded = lambda value: value.quantize(Decimal("0.01"), rounding=ROUND_HALF_EVEN)
+    from app.modules.ifrs.schedule_math import relative_allocations
+
+    def rounded(value):
+        return value.quantize(Decimal("0.01"), rounding=ROUND_HALF_EVEN)
+
     amounts = relative_allocations(Decimal("2.50"), [Decimal("1")] * 500, rounded, round_total=True)
     assert sum(amounts) == Decimal("2.50") and min(amounts) >= 0 and max(amounts) == Decimal("0.01")
 

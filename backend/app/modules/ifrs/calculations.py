@@ -186,8 +186,6 @@ def ecl(data: s.ECL):
     }
 
 
-
-
 def instrument(data: s.Instrument):
     if data.classification != "amortised_cost":
         raise ValueError(

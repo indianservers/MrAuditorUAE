@@ -69,7 +69,11 @@ def render(event, format):
         "Created": event["created_at"],
         "Export timestamp": event.get("exported_at", "NOT_RECORDED"),
         "Source freshness at export": event.get("freshness", "NOT_EVALUATED"),
-        "Export status": "STALE_HISTORICAL_RESULT_REQUIRES_RECALCULATION" if event.get("freshness") == "STALE" else "CURRENT_RETAINED_RESULT" if event.get("freshness") == "CURRENT" else "FRESHNESS_NOT_EVALUATED",
+        "Export status": "STALE_HISTORICAL_RESULT_REQUIRES_RECALCULATION"
+        if event.get("freshness") == "STALE"
+        else "CURRENT_RETAINED_RESULT"
+        if event.get("freshness") == "CURRENT"
+        else "FRESHNESS_NOT_EVALUATED",
     }
     buffer = io.BytesIO()
     if format == "xlsx":
@@ -97,7 +101,14 @@ def render(event, format):
             source.freeze_panes = "A2"
             for column, width in {"A": 12, "B": 12, "C": 120}.items():
                 source.column_dimensions[column].width = width
-            append(source, ["Block", "Chunk", "JSON source (resolve Long values, then concatenate chunks per block)"])
+            append(
+                source,
+                [
+                    "Block",
+                    "Chunk",
+                    "JSON source (resolve Long values, then concatenate chunks per block)",
+                ],
+            )
             count = 0
             for block in body["blocks"]:
                 append(
@@ -112,7 +123,11 @@ def render(event, format):
                 )
                 raw = value(block.get("data"))
                 for index in range(0, len(raw), 30000):
-                    append(source, [block["number"], index // 30000 + 1, raw[index : index + 30000]], integer_columns=frozenset({2}))
+                    append(
+                        source,
+                        [block["number"], index // 30000 + 1, raw[index : index + 30000]],
+                        integer_columns=frozenset({2}),
+                    )
                 for title, rows in tables(block.get("data")):
                     count += 1
                     sheet = workbook.create_sheet(f"Table {count}")
@@ -128,7 +143,13 @@ def render(event, format):
                         ],
                     )
             if writer.long_values:
-                append(cover, ["Oversized cells", f"Full values retained: {len(writer.long_values)}. Long values contains original coordinates, ordered parts and UTF-8 checksums"])
+                append(
+                    cover,
+                    [
+                        "Oversized cells",
+                        f"Full values retained: {len(writer.long_values)}. Long values contains original coordinates, ordered parts and UTF-8 checksums",
+                    ],
+                )
             writer.finish()
             workbook.save(buffer)
             return (

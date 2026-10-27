@@ -118,12 +118,26 @@ async def test_india_native_invoice_retained_evidence_job_and_country_gating(
         "tax-documents",
         {"INR": "18"},
     )
-    await execute(c,h,eid,"country-workflow",{"workflow":"india-gst","source_ids":{"books":register["id"],"return":source["id"]},"as_of":"2026-06-30","currency":"INR","title":"SYNTHETIC invalid return role","rationale":"Invoice structure is not filed return evidence"},failed="not a filed GST return")
+    await execute(
+        c,
+        h,
+        eid,
+        "country-workflow",
+        {
+            "workflow": "india-gst",
+            "source_ids": {"books": register["id"], "return": source["id"]},
+            "as_of": "2026-06-30",
+            "currency": "INR",
+            "title": "SYNTHETIC invalid return role",
+            "rationale": "Invoice structure is not filed return evidence",
+        },
+        failed="not a filed GST return",
+    )
     reviewer = await actor(h, "Firm Administrator", "invoice-register-reviewer")
-    await grant(c,h,base,reviewer)
-    for role, obj in (("books",register),("invoices",source)):
-        approved = await decision(c,reviewer[0],eid,obj)
-        assert approved.status_code==201,approved.text
+    await grant(c, h, base, reviewer)
+    for role, obj in (("books", register), ("invoices", source)):
+        approved = await decision(c, reviewer[0], eid, obj)
+        assert approved.status_code == 201, approved.text
         if role == "books":
             register = approved.json()
         else:
@@ -147,7 +161,10 @@ async def test_india_native_invoice_retained_evidence_job_and_country_gating(
     assert reconciled["body"]["invoice_evidence_scope"]["direction"] == "purchase"
     assert "invoices_tax" in reconciled["body"]["rows"][0]
     assert "return_tax" not in reconciled["body"]["rows"][0]
-    exported = await c.get(f"/api/v1/intelligence/engagements/{eid}/events/{reconciled['id']}/export?format=xlsx", headers=h)
+    exported = await c.get(
+        f"/api/v1/intelligence/engagements/{eid}/events/{reconciled['id']}/export?format=xlsx",
+        headers=h,
+    )
     assert exported.status_code == 200
 
     assert (

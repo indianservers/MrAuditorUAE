@@ -147,7 +147,11 @@ async def direct_configuration(
 
 @router.post("/connectors/native/{identifier}/sync", response_model=dict)
 async def direct_sync(
-    identifier: uuid.UUID, db: DB, ctx: Manage, request: Request, background: bool = True,
+    identifier: uuid.UUID,
+    db: DB,
+    ctx: Manage,
+    request: Request,
+    background: bool = True,
     resume_session: uuid.UUID | None = None,
 ):
     from app.modules.connectors.native_config import NATIVE_PROVIDERS, configure
@@ -163,16 +167,24 @@ async def direct_sync(
         from app.workers.accounting import submit
 
         return await submit(
-            db, ctx, "connector.sync", {"connection_id": str(identifier),
+            db,
+            ctx,
+            "connector.sync",
+            {
+                "connection_id": str(identifier),
                 "resume_session": str(resume_session) if resume_session else None,
-                "request_key": request.headers.get("Idempotency-Key") or str(uuid.uuid4())}, request.state.request_id
+                "request_key": request.headers.get("Idempotency-Key") or str(uuid.uuid4()),
+            },
+            request.state.request_id,
         )
     await db.commit()  # Release admission lock before independent checkpoint transactions.
     from app.db.session import Session, tenant_context
 
     async with Session() as execution, execution.begin():
         await tenant_context(execution, str(ctx.tenant_id))
-        return await execute(execution, ctx, identifier, str(resume_session) if resume_session else None)
+        return await execute(
+            execution, ctx, identifier, str(resume_session) if resume_session else None
+        )
 
 
 @router.get("/connectors/native/sync-runs/{identifier}", response_model=dict)
@@ -444,19 +456,32 @@ async def choose_organization(identifier: uuid.UUID, data: Organization, db: DB,
         credentials.get("refresh_token", ""),
     )
     organizations = await adapter.get("organizations", {})
-    organization = next((o for o in organizations.get("organizations", []) if str(o["organization_id"]) == data.organization_id), None)
+    organization = next(
+        (
+            o
+            for o in organizations.get("organizations", [])
+            if str(o["organization_id"]) == data.organization_id
+        ),
+        None,
+    )
     if not organization:
         raise HTTPException(403, "Organization access not established")
     entity, _ = await check_scope(db, ctx, connection)
     if organization.get("currency_code") != entity.functional_currency:
-        raise HTTPException(422, "Zoho organization base currency differs from the selected legal entity")
+        raise HTTPException(
+            422, "Zoho organization base currency differs from the selected legal entity"
+        )
     connection.organization_id = data.organization_id
     return {"status": "organization_selected"}
 
 
 @router.post("/connectors/zoho/{identifier}/sync", response_model=dict)
 async def sync(
-    identifier: uuid.UUID, db: DB, ctx: Manage, request: Request, background: bool = True,
+    identifier: uuid.UUID,
+    db: DB,
+    ctx: Manage,
+    request: Request,
+    background: bool = True,
     resume_session: uuid.UUID | None = None,
 ):
     connection = await scoped(db, ctx, Connection, identifier)
@@ -466,16 +491,24 @@ async def sync(
         from app.workers.accounting import submit
 
         return await submit(
-            db, ctx, "zoho.sync", {"connection_id": str(identifier),
+            db,
+            ctx,
+            "zoho.sync",
+            {
+                "connection_id": str(identifier),
                 "resume_session": str(resume_session) if resume_session else None,
-                "request_key": request.headers.get("Idempotency-Key") or str(uuid.uuid4())}, request.state.request_id
+                "request_key": request.headers.get("Idempotency-Key") or str(uuid.uuid4()),
+            },
+            request.state.request_id,
         )
     await db.commit()  # Release admission lock before independent checkpoint transactions.
     from app.db.session import Session, tenant_context
 
     async with Session() as execution, execution.begin():
         await tenant_context(execution, str(ctx.tenant_id))
-        return await zoho_sync(execution, ctx, identifier, str(resume_session) if resume_session else None)
+        return await zoho_sync(
+            execution, ctx, identifier, str(resume_session) if resume_session else None
+        )
 
 
 @router.get("/connectors/tally", response_model=dict)

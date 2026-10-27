@@ -46,6 +46,7 @@ async def upload(
         if status == "REJECTED":
             raise HTTPException(422, "Evidence rejected by malware scanner")
         file.file.seek(0)
+
         def digest_upload():
             digest = hashlib.sha256()
             while chunk := file.file.read(1024 * 1024):
@@ -54,12 +55,21 @@ async def upload(
 
         digest = await run_in_threadpool(digest_upload)
         file.file.seek(0)
-        duplicate = await db.scalar(select(EvidenceVersion).where(
-            EvidenceVersion.tenant_id == ctx.tenant_id, EvidenceVersion.record_id == rid
-        ).order_by(EvidenceVersion.number.desc()).limit(1))
+        duplicate = await db.scalar(
+            select(EvidenceVersion)
+            .where(EvidenceVersion.tenant_id == ctx.tenant_id, EvidenceVersion.record_id == rid)
+            .order_by(EvidenceVersion.number.desc())
+            .limit(1)
+        )
         if duplicate and duplicate.sha256 == digest and duplicate.scan_status == status:
-            record(db, ctx, "evidence.duplicate_detected", duplicate.id, request.state.request_id,
-                   {"engagement_id": str(eid), "record_id": str(rid), "sha256": digest})
+            record(
+                db,
+                ctx,
+                "evidence.duplicate_detected",
+                duplicate.id,
+                request.state.request_id,
+                {"engagement_id": str(eid), "record_id": str(rid), "sha256": digest},
+            )
             return {**s.serialize(duplicate), "duplicate_detected": True}
         metadata = await put_private(db, ctx, file.file)
     except (ValueError, OSError, zipfile.BadZipFile) as exc:
@@ -104,13 +114,21 @@ async def versions(eid: uuid.UUID, rid: uuid.UUID, db: DB, ctx: Actor):
 
 
 @router.post("/{rid}/{vid}/rescan", status_code=201)
-async def rescan(eid: uuid.UUID, rid: uuid.UUID, vid: uuid.UUID, db: DB, ctx: Actor, request: Request):
+async def rescan(
+    eid: uuid.UUID, rid: uuid.UUID, vid: uuid.UUID, db: DB, ctx: Actor, request: Request
+):
     obj = await s.get_record(db, ctx, eid, rid, "audit.evidence.upload", True)
     if obj.kind != "evidence" or obj.status in {"APPROVED", "LOCKED", "REVIEW_REQUIRED"}:
         raise HTTPException(409, "Editable evidence record required")
-    current = await db.scalar(select(EvidenceVersion).where(
-        EvidenceVersion.tenant_id == ctx.tenant_id, EvidenceVersion.record_id == rid,
-    ).order_by(EvidenceVersion.number.desc()).limit(1))
+    current = await db.scalar(
+        select(EvidenceVersion)
+        .where(
+            EvidenceVersion.tenant_id == ctx.tenant_id,
+            EvidenceVersion.record_id == rid,
+        )
+        .order_by(EvidenceVersion.number.desc())
+        .limit(1)
+    )
     if current is None or current.id != vid or current.scan_status != "QUARANTINED":
         raise HTTPException(409, "Select the latest quarantined evidence version")
 
@@ -137,18 +155,34 @@ async def rescan(eid: uuid.UUID, rid: uuid.UUID, vid: uuid.UUID, db: DB, ctx: Ac
     if status not in {"CLEAN", "QUARANTINED", "REJECTED"}:
         raise HTTPException(409, "Scanner returned an unsupported verdict")
     version = EvidenceVersion(
-        tenant_id=ctx.tenant_id, created_by=ctx.user_id, record_id=rid,
-        number=current.number + 1, filename=current.filename, media_type=current.media_type,
-        object_key=current.object_key, object_version=current.object_version,
-        sha256=current.sha256, size=current.size, scan_status=status,
+        tenant_id=ctx.tenant_id,
+        created_by=ctx.user_id,
+        record_id=rid,
+        number=current.number + 1,
+        filename=current.filename,
+        media_type=current.media_type,
+        object_key=current.object_key,
+        object_version=current.object_version,
+        sha256=current.sha256,
+        size=current.size,
+        scan_status=status,
     )
     db.add(version)
     await db.flush()
-    record(db, ctx, "evidence.rescanned", version.id, request.state.request_id, {
-        "engagement_id": str(eid), "record_id": str(rid),
-        "prior_evidence_version_id": str(current.id), "sha256": current.sha256,
-        "scan_status": status,
-    })
+    record(
+        db,
+        ctx,
+        "evidence.rescanned",
+        version.id,
+        request.state.request_id,
+        {
+            "engagement_id": str(eid),
+            "record_id": str(rid),
+            "prior_evidence_version_id": str(current.id),
+            "sha256": current.sha256,
+            "scan_status": status,
+        },
+    )
     obj.version += 1
     await s.revision(db, ctx, obj, request.state.request_id, "evidence.rescanned")
     return s.serialize(version)

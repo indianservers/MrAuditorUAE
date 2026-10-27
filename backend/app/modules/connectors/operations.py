@@ -212,9 +212,17 @@ async def health(identifier: uuid.UUID, db: DB, ctx: Manage):
     connection = await scoped(db, ctx, Connection, identifier)
     from app.modules.connectors.health import summary
 
-    runs = (await db.scalars(select(SyncRun).where(
-        SyncRun.tenant_id == ctx.tenant_id, SyncRun.connection_id == identifier,
-    ).order_by(SyncRun.created_at.desc(), SyncRun.id.desc()).limit(100))).all()
+    runs = (
+        await db.scalars(
+            select(SyncRun)
+            .where(
+                SyncRun.tenant_id == ctx.tenant_id,
+                SyncRun.connection_id == identifier,
+            )
+            .order_by(SyncRun.created_at.desc(), SyncRun.id.desc())
+            .limit(100)
+        )
+    ).all()
     states = (
         await db.scalars(
             select(ConnectorState)

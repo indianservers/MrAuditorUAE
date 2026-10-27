@@ -282,7 +282,13 @@ async def diagnostics(db, ctx, eng):
     ).all()
     period = await db.get(FinancialPeriod, eng.period_id)
     if not period:
-        raise HTTPException(409, {"code": "invalid_input", "message": "Select an engagement reporting period before foundation diagnostics"})
+        raise HTTPException(
+            409,
+            {
+                "code": "invalid_input",
+                "message": "Select an engagement reporting period before foundation diagnostics",
+            },
+        )
     last = await db.scalar(
         select(IntelligenceJob)
         .where(

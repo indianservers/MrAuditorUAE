@@ -54,7 +54,9 @@ class AnalyticsRequest(SnapshotRequest):
     @model_validator(mode="after")
     def assessed_calendar(self):
         if self.weekend_days and len(self.calendar_rationale.strip()) < 10:
-            raise ValueError("Selected non-working weekdays require an operating-calendar assessment")
+            raise ValueError(
+                "Selected non-working weekdays require an operating-calendar assessment"
+            )
         return self
 
     @field_validator("timezone")

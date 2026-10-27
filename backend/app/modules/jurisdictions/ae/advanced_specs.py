@@ -1,5 +1,8 @@
 """Reviewed workstream contracts. Rates/classifications are supplied policy inputs, never defaults."""
 
+from .assurance_specs import RAW as ASSURANCE
+from .continuation_specs import RAW as CONTINUATION
+
 # Fields: n=nonnegative Decimal, d=signed Decimal, b=boolean, t=text, x=date.
 # Each row is a separately evidenced item. No executable formula is accepted from users.
 RAW = {
@@ -306,10 +309,7 @@ RAW = {
 }
 
 
-from .continuation_specs import RAW as CONTINUATION
-
 RAW.update(CONTINUATION)
-from .assurance_specs import RAW as ASSURANCE
 RAW.update(ASSURANCE)
 
 

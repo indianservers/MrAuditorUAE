@@ -155,21 +155,38 @@ class WorkingPaper(Body):
     def advanced_contract(self):
         if self.advanced_input is not None:
             from app.modules.jurisdictions.ae.advanced import Schedule
+
             schedule = Schedule.model_validate(self.advanced_input)
             linked = {str(s.id) for s in self.sources if s.kind == "record"}
             required = {str(schedule.policy.source_id), *(r["evidence_id"] for r in schedule.rows)}
-            required.update(str(value) for row in schedule.rows for key,value in row.items() if key.endswith("_source_id"))
+            required.update(
+                str(value)
+                for row in schedule.rows
+                for key, value in row.items()
+                if key.endswith("_source_id")
+            )
             if not required <= linked:
-                raise ValueError("Every schedule row and adopted policy must link to a source record")
-            required.update(str(v) for row in schedule.rows for key in ("supporting_sources","contrary_sources") for v in row.get(key,[]))
+                raise ValueError(
+                    "Every schedule row and adopted policy must link to a source record"
+                )
+            required.update(
+                str(v)
+                for row in schedule.rows
+                for key in ("supporting_sources", "contrary_sources")
+                for v in row.get(key, [])
+            )
             if not required <= linked:
-                raise ValueError("Every assertion support/contrary source must be a protected source link")
-            if schedule.use_case_id==198:self.factual_findings_only=True
+                raise ValueError(
+                    "Every assertion support/contrary source must be a protected source link"
+                )
+            if schedule.use_case_id == 198:
+                self.factual_findings_only = True
             self.advanced_input = schedule.model_dump(mode="json")
             self.inherit_source_permissions = True
         if self.factual_findings_only:
-            self.conclusion="Agreed-upon procedures factual findings only; no audit opinion or assurance conclusion."
+            self.conclusion = "Agreed-upon procedures factual findings only; no audit opinion or assurance conclusion."
         return self
+
     folder: str = Field(min_length=1, max_length=200)
     sections: list[Section] = Field(min_length=1, max_length=30)
     financial_tables: list[dict] = Field(default_factory=list, max_length=10)

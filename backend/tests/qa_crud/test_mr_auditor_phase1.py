@@ -120,9 +120,9 @@ async def test_lifecycle_real_edges_layout_conflicts_access_and_search(environme
     }
     assert (await c.patch(path + "/layout", headers=h, json=payload)).status_code == 200
     assert (await c.get(path + "/layout", headers=h)).json()["positions"] == payload["positions"]
-    colleague=await actor(h,"Audit Manager","layout-colleague")
-    await grant(c,h,base,colleague)
-    assert (await c.get(path+"/layout",headers=colleague[0])).json()["positions"]=={}
+    colleague = await actor(h, "Audit Manager", "layout-colleague")
+    await grant(c, h, base, colleague)
+    assert (await c.get(path + "/layout", headers=colleague[0])).json()["positions"] == {}
     assert (await c.patch(path + "/layout", headers=h, json=payload)).status_code == 409
     bad = {**payload, "version": 1, "positions": {str(uuid.uuid4()): {"x": 1, "y": 2}}}
     assert (await c.patch(path + "/layout", headers=h, json=bad)).status_code == 422

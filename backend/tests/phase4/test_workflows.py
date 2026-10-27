@@ -333,8 +333,11 @@ async def test_evidence_versions_quarantine_hash_and_isolation(environment, monk
         assert r.status_code == 201, r.text
         assert r.json()["sha256"] == hashlib.sha256(content).hexdigest() and r.json()["number"] == n
         assert r.json()["scan_status"] == "QUARANTINED"
-    duplicate = await c.post(base + "/evidence-files/" + obj["id"], headers=h,
-        files={"file": ("synthetic.csv", content, "text/csv")})
+    duplicate = await c.post(
+        base + "/evidence-files/" + obj["id"],
+        headers=h,
+        files={"file": ("synthetic.csv", content, "text/csv")},
+    )
     assert duplicate.status_code == 201
     assert duplicate.json()["id"] == r.json()["id"] and duplicate.json()["number"] == 2
     r = await c.get(

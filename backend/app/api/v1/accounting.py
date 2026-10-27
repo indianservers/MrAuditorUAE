@@ -233,12 +233,23 @@ async def mapping(data: MappingCreate, db: DB, ctx: Map, request: Request):
         from app.db.models.platform import FinancialPeriod
 
         # Account mappings are entity-wide today; do not let another period bypass a lock.
-        periods = (await db.scalars(select(FinancialPeriod).where(
-            FinancialPeriod.tenant_id == ctx.tenant_id,
-            FinancialPeriod.entity_id == data.entity_id
-        ).order_by(FinancialPeriod.id).with_for_update().execution_options(populate_existing=True))).all()
+        periods = (
+            await db.scalars(
+                select(FinancialPeriod)
+                .where(
+                    FinancialPeriod.tenant_id == ctx.tenant_id,
+                    FinancialPeriod.entity_id == data.entity_id,
+                )
+                .order_by(FinancialPeriod.id)
+                .with_for_update()
+                .execution_options(populate_existing=True)
+            )
+        ).all()
         if any(period.lock_state != "OPEN" for period in periods):
-            raise HTTPException(409, "Entity has a locked period; reopen before changing entity-wide account mappings")
+            raise HTTPException(
+                409,
+                "Entity has a locked period; reopen before changing entity-wide account mappings",
+            )
     if data.approved:
         try:
             for key in ["accounts", "groups"]:

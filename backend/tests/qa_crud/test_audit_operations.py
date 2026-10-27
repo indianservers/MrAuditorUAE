@@ -347,13 +347,21 @@ async def test_revenue_receipt_ecl_selection_evidence_review(environment, monkey
             "testing": testing,
         },
     )
-    await committed(c, h, opts, CSV.replace(b"Receipt allocation", b"SYN corrected receipt allocation"))
+    await committed(
+        c, h, opts, CSV.replace(b"Receipt allocation", b"SYN corrected receipt allocation")
+    )
     graph = (await c.get(base + "/graph", headers=h)).json()
     retained = next(row for row in graph["nodes"] if row["id"] == testing["id"])
     assert retained["freshness"] == "STALE"
     await action(c, partner[0], base, testing, "lock", expected=409)
-    save("audit-source-revision.json", {"historical_test": testing, "current_dependency_state": retained,
-                                      "stale_approval_http_status": 409})
+    save(
+        "audit-source-revision.json",
+        {
+            "historical_test": testing,
+            "current_dependency_state": retained,
+            "stale_approval_http_status": 409,
+        },
+    )
 
 
 async def test_procurement_bank_revision_and_reapproval(environment, monkeypatch):

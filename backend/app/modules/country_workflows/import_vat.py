@@ -169,14 +169,21 @@ def import_vat(data, tables, *, nil_receipt=None):
             "binding_status": "VERIFIED_RETAINED_CONTEXT" if nil_receipt else "NOT_VERIFIED",
             "context_receipt": nil_receipt,
             "basis": "EXPLICIT_EVIDENCED_NIL",
-        } if nil else None,
+        }
+        if nil
+        else None,
         "role_totals": {
             role: {
                 kind: {
-                    "net": str(total["net"]) if (total["count"] and complete[role]) or (nil and kind in nil.kinds) else None,
-                    "tax": str(total["tax"]) if (total["count"] and complete[role]) or (nil and kind in nil.kinds) else None,
+                    "net": str(total["net"])
+                    if (total["count"] and complete[role]) or (nil and kind in nil.kinds)
+                    else None,
+                    "tax": str(total["tax"])
+                    if (total["count"] and complete[role]) or (nil and kind in nil.kinds)
+                    else None,
                     "selected_rows": total["count"],
-                    "complete_for_selected_population": complete[role] or bool(nil and kind in nil.kinds),
+                    "complete_for_selected_population": complete[role]
+                    or bool(nil and kind in nil.kinds),
                 }
                 for kind, total in kinds.items()
             }

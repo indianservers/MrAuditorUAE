@@ -1,11 +1,15 @@
-import os, uuid, json
+import json
+import os
+import uuid
 from pathlib import Path
+
 import pytest
-from tests.integration.test_platform import environment as environment
-from tests.phase4.test_workflows import setup, actor, grant, create, approve, action
-from tests.unit.test_uae_continuation import fixture
-from app.modules.jurisdictions.ae.advanced import Schedule, calculate
+
 from app.modules.enterprise_ai.security import serial
+from app.modules.jurisdictions.ae.advanced import Schedule, calculate
+from tests.integration.test_platform import environment as environment
+from tests.phase4.test_workflows import action, actor, approve, create, grant, setup
+from tests.unit.test_uae_continuation import fixture
 
 pytestmark = pytest.mark.skipif(
     os.getenv("INTEGRATION_TESTS") != "1", reason="Disposable database only"
@@ -22,9 +26,10 @@ async def test_all_continuation_cases_approved_execution_source_invalidation_and
     partner = await actor(h, "Audit Partner", "advanced-partner")
     await grant(c, h, base, partner)
     # Synthetic reviewers are explicitly qualified for all specialist read scopes.
-    from app.db.session import Session, tenant_context
-    from app.db.models.platform import RolePermission, Permission
     from sqlalchemy import select
+
+    from app.db.models.platform import Permission, RolePermission
+    from app.db.session import Session, tenant_context
 
     async with Session() as db, db.begin():
         await tenant_context(db, h["X-Tenant-ID"])

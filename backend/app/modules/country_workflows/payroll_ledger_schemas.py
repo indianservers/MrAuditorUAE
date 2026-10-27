@@ -48,8 +48,16 @@ class PayrollLedgerLine(PayrollAccount):
             raise ValueError("Wage month cannot begin after the assessed posting date")
         if not self.amount:
             raise ValueError("Use an explicit nil population instead of zero payroll journal rows")
-        if any(not value.strip() or value != value.strip() for value in (self.component, self.subject, self.reference)) or len(self.assessment.strip()) < 10:
-            raise ValueError("Assess payroll allocation, subject, component and journal reference explicitly")
+        if (
+            any(
+                not value.strip() or value != value.strip()
+                for value in (self.component, self.subject, self.reference)
+            )
+            or len(self.assessment.strip()) < 10
+        ):
+            raise ValueError(
+                "Assess payroll allocation, subject, component and journal reference explicitly"
+            )
         return self
 
 
@@ -61,6 +69,11 @@ PAYROLL_LEDGER_WORKFLOWS = {
     "payroll-ledger-rollforward": (
         "Payroll account movements and GL balance bridge",
         ["AE", "IN"],
-        {"opening": "payroll-account-balances", "payroll": "payroll-ledger-lines", "posted": "payroll-ledger-lines", "closing": "payroll-account-balances"},
+        {
+            "opening": "payroll-account-balances",
+            "payroll": "payroll-ledger-lines",
+            "posted": "payroll-ledger-lines",
+            "closing": "payroll-account-balances",
+        },
     ),
 }

@@ -76,6 +76,6 @@ def recipe(case: UseCase):
         ]
     # A bounded reviewed collection graph, never executable text from a document/model.
     tools = list(dict.fromkeys(["uae.get_case_inputs", *(ENGINE_TOOLS[e] for e in case.engines)]))
-    if case.id>=151 and "E11" in case.engines:
+    if case.id >= 151 and "E11" in case.engines:
         tools = list(dict.fromkeys([*tools, "ml.get_predictions", "ml.get_model_evaluations"]))
     return tools  # Existing orchestrator appends its quality/source validation step.

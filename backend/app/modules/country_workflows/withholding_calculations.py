@@ -93,9 +93,7 @@ def select_records(records, legal_role, as_of, role):
         if date.fromisoformat(record["transaction_date"]) > as_of or record[
             "period"
         ] > as_of.strftime("%Y-%m"):
-            raise ValueError(
-                "Future withholding transaction or reporting month is outside cutoff"
-            )
+            raise ValueError("Future withholding transaction or reporting month is outside cutoff")
         if (
             role == "deposited"
             and record.get("payment_date")
@@ -114,9 +112,7 @@ def select_records(records, legal_role, as_of, role):
             and record.get("payment_date")
             and record["payment_date"] < record["transaction_date"]
         ):
-            raise ValueError(
-                "Deposit predates transaction; assess advance allocation separately"
-            )
+            raise ValueError("Deposit predates transaction; assess advance allocation separately")
         if record["record_status"] != "current":
             inactive.setdefault(key, []).append(record["id"])
             continue

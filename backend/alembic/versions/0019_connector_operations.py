@@ -26,7 +26,9 @@ def upgrade():
     op.execute("""CREATE FUNCTION protect_connector_evidence() RETURNS trigger LANGUAGE plpgsql AS $$
         BEGIN IF OLD.namespace IN ('profile','qualification','source_revision') THEN
         RAISE EXCEPTION 'connector evidence is immutable'; END IF; IF TG_OP = 'DELETE' THEN RETURN OLD; END IF; RETURN NEW; END $$""")
-    op.execute("CREATE TRIGGER immutable_connector_evidence BEFORE UPDATE OR DELETE ON connector_states FOR EACH ROW EXECUTE FUNCTION protect_connector_evidence()")
+    op.execute(
+        "CREATE TRIGGER immutable_connector_evidence BEFORE UPDATE OR DELETE ON connector_states FOR EACH ROW EXECUTE FUNCTION protect_connector_evidence()"
+    )
 
 
 def downgrade():

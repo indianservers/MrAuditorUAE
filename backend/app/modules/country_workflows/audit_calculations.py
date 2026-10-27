@@ -273,7 +273,10 @@ def single_date_cutoff(data, tables):
 
 
 def cutoff(data, tables):
-    if any(row.get("recognition_mode") == "explicit-schedule" for row in tables["documents"]) or {"recognitions", "postings"} & set(tables):
+    if any(row.get("recognition_mode") == "explicit-schedule" for row in tables["documents"]) or {
+        "recognitions",
+        "postings",
+    } & set(tables):
         from app.modules.country_workflows.cutoff_schedules import compare
 
         return compare(data, tables, single_date_cutoff)

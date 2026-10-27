@@ -2728,3 +2728,57 @@ checked for the configured private credential values; none were present. Hosted
 CI has not been claimed as executed by this local run. This refresh changes
 published contracts and CI checks, not runtime financial calculations or country
 release qualification.
+
+## Hosted CI failures and dependency remediation — 27 October 2026
+
+Hosted [backend run 40442376158](https://github.com/indianservers/MrAuditorUAE/actions/runs/40442376158)
+on source `f58b2d2` exposed failures that the earlier scoped local checks had not
+established as passing. Alembic found `financial_periods.lock_state` as database
+TEXT versus inferred model VARCHAR. The model now explicitly matches the existing
+TEXT migration; no destructive migration or stored-state conversion is added.
+The owned disposable database's Alembic check reports no new upgrade operations.
+
+The hosted Python audit reported 42 findings across three packages. Minimums and
+the lockfile now select certifi 2026.10.23, Pillow 13.0.0 and pypdf 6.21.2. See the
+upstream [certifi advisory](https://github.com/certifi/python-certifi/security/advisories/GHSA-6q48-6c7w-9gw2),
+[Pillow 13 notes](https://pillow.readthedocs.io/en/stable/releasenotes/13.0.0.html)
+and [pypdf 6.21.2 notes](https://pypdf.readthedocs.io/en/6.21.2/meta/CHANGELOG.html).
+The frontend audit separately flagged Zod; it is now locked to 4.6.7, following
+the [published advisory](https://github.com/advisories/GHSA-mrhx-c7xc-m3w5) and
+[migration guide](https://zod.dev/v4/changelog). The retained local
+[Python audit](../phase-12/dependency-remediation-audit.json) finds no known
+vulnerabilities among 117 installed Windows packages, and the
+[npm audit](../phase-12/frontend-dependency-remediation-audit.json) reports zero
+findings. This does not substitute for the next Linux/container audits.
+
+The full backend CI gates also exposed 72 lint errors, 125 files needing formatting
+and a workbook-reader local variable reused with incompatible types. Safe import
+fixes, formatting, top-level static spec imports, an ordinary test helper function
+and a distinct workbook byte variable resolve those checks. All 664 backend files
+pass Ruff and format checks, and all 374 application files pass Linux-targeted
+mypy. An AST comparison excluding imports found unchanged bodies in 130 modified
+Python files; the three remaining body changes are the explicit model TEXT type,
+workbook variable rename and lambda-to-function test helper. Financial formulas
+were not rewritten to satisfy these checks.
+
+The container scan had failed while installing Trivy, before scanning either
+image. CI now installs the fixed official 0.76.1 Linux archive, verifies its
+published SHA-256 before extraction, and retains both image audit reports.
+Connection/download limits and retries are bounded. HIGH/CRITICAL findings,
+including unfixed findings, still fail the gate. Shell syntax and workflow parsing
+passed locally. A direct local archive-download attempt timed out; successful
+hosted installation and image scans remain to be verified, rather than inferred
+from that attempt or the configured checksum.
+
+Final local [backend regression](../phase-12/dependency-remediation-backend.xml):
+2,679 passed, four existing skips and two warnings in 114.16 seconds. The
+[21 UAE/India API cases](../phase-12/dependency-remediation-api.xml) passed in
+102.58 seconds through actual PDF/image/ZIP extraction, PDF bank tables and
+workbook review/export, with explicit scanner/broker doubles. All 238 frontend
+tests, typecheck and production build passed after the Zod upgrade. Lockfile and
+API-contract checks passed. An interrupted earlier pair of runs contained a
+roughly 5.5-hour execution gap: one API read returned 401 and one worker test missed
+its startup marker. Those failed private logs are preserved; reruns used unchanged
+assertions and deadline bounds. A prior pre-format run on the upgraded libraries
+also passed 2,679 backend and 21 API cases. Hosted CI for the remediation commit
+and the broader professional/client/release gates remain open.

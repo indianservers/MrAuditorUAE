@@ -91,7 +91,11 @@ RECIPES = {
         "ml.get_predictions",
         "financial.get_general_ledger",
     ],
-    "reconciliation": ["audit.get_shared_workflows", "financial.get_reconciliation", "financial.get_general_ledger"],
+    "reconciliation": [
+        "audit.get_shared_workflows",
+        "financial.get_reconciliation",
+        "financial.get_general_ledger",
+    ],
     "evidence-request": ["audit.get_evidence", "documents.search"],
     "workpaper-review": ["audit.get_working_papers", "audit.get_risks"],
     "vat-exceptions": ["vat.get_reconciliation", "vat.get_invoice_exceptions"],

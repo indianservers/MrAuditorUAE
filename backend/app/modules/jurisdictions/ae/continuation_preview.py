@@ -27,7 +27,8 @@ async def refresh_draft(db, ctx, paper, request_id):
         await engagement_permissions(db, ctx, eng.id, "accounting.read")
         for engine, permission in {
             "E04": "vat.calculate",
-            "E05": "tax.computation.prepare", "E06":"tax.computation.prepare",
+            "E05": "tax.computation.prepare",
+            "E06": "tax.computation.prepare",
             "E07": "tp.calculate",
             "E08": "dmtt.calculate",
             "E09": "ifrs.calculation.execute",
@@ -49,7 +50,12 @@ async def refresh_draft(db, ctx, paper, request_id):
             *(r["evidence_id"] for r in data.rows),
             *(str(v) for r in data.rows for k, v in r.items() if k.endswith("_source_id")),
         }
-        refs.update(str(v) for row in data.rows for key in ("supporting_sources","contrary_sources") for v in row.get(key,[]))
+        refs.update(
+            str(v)
+            for row in data.rows
+            for key in ("supporting_sources", "contrary_sources")
+            for v in row.get(key, [])
+        )
         dependencies = [{"type": "record", "id": str(paper.id), "version": paper.version}]
         for rid in refs:
             proof = await source(db, ctx, eng.id, uuid.UUID(rid))

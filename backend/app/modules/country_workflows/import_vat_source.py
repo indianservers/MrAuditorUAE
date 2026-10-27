@@ -103,7 +103,9 @@ def source_rows(body, data):
             rows.append(
                 {
                     **canonical,
-                    "population_basis": "EXPLICIT_EVIDENCED_NIL" if evidenced_nil else "SELECTED_IMPORT_DETAIL",
+                    "population_basis": "EXPLICIT_EVIDENCED_NIL"
+                    if evidenced_nil
+                    else "SELECTED_IMPORT_DETAIL",
                     "nil_context_receipt": nil["context_receipt"] if evidenced_nil else None,
                     "source_import_row_ids": [row["id"] for row in selected],
                     "source_import_detail_ids": [

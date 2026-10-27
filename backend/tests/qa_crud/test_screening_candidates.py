@@ -14,18 +14,45 @@ from tests.qa_crud.test_india_ecr_source import india_context
 from tests.unit.test_diligence_audit_workflows import screening_sources
 from tests.unit.test_xlsx_values import originals
 
-pytestmark = pytest.mark.skipif(os.getenv("INTEGRATION_TESTS") != "1", reason="Owned disposable DB required")
+pytestmark = pytest.mark.skipif(
+    os.getenv("INTEGRATION_TESTS") != "1", reason="Owned disposable DB required"
+)
 
 
 async def prepare(c, h, eid):
-    populations = screening_sources(name="SYNTHETIC شركة الاختبار भारत", list_name="SYNTHETIC شركة الاختبار भारत")
-    populations["list"] = [{**populations["list"][0], "id": f"ENTRY-{index:04d}", "list_subject_id": f"PERSON-{index:04d}", "evidence_reference": f"SYNTHETIC-LIST-PAGE-{index:04d}"} for index in reversed(range(201))]
+    populations = screening_sources(
+        name="SYNTHETIC شركة الاختبار भारत", list_name="SYNTHETIC شركة الاختبار भारत"
+    )
+    populations["list"] = [
+        {
+            **populations["list"][0],
+            "id": f"ENTRY-{index:04d}",
+            "list_subject_id": f"PERSON-{index:04d}",
+            "evidence_reference": f"SYNTHETIC-LIST-PAGE-{index:04d}",
+        }
+        for index in reversed(range(201))
+    ]
     selected = {}
-    for role, table in (("subjects", "screening-subjects"), ("list", "sanctions-entries"), ("policy", "screening-policies")):
-        imported = await source(c, h, eid, populations[role], "SYNTHETIC complete screening " + role, table, {})
+    for role, table in (
+        ("subjects", "screening-subjects"),
+        ("list", "sanctions-entries"),
+        ("policy", "screening-policies"),
+    ):
+        imported = await source(
+            c, h, eid, populations[role], "SYNTHETIC complete screening " + role, table, {}
+        )
         selected[role] = imported["id"]
-    return {"engagement": eid, "sources": selected, "payload": {"workflow": "sanctions-name-review", "source_ids": selected,
-        "as_of": "2026-06-30", "title": "SYNTHETIC complete uploaded-list screening", "rationale": "Fictional name-list coverage and independent candidate adjudication required"}}
+    return {
+        "engagement": eid,
+        "sources": selected,
+        "payload": {
+            "workflow": "sanctions-name-review",
+            "source_ids": selected,
+            "as_of": "2026-06-30",
+            "title": "SYNTHETIC complete uploaded-list screening",
+            "rationale": "Fictional name-list coverage and independent candidate adjudication required",
+        },
+    }
 
 
 @pytest.mark.parametrize("country", ["AE", "IN"])
@@ -51,9 +78,18 @@ async def test_all_candidates_survive_http_and_complete_export(environment, monk
     values = list(book["Screening candidates"].values)
     records = [dict(zip(values[0], value, strict=True)) for value in values[1:]]
     assert len(records) == 201
-    assert records[-1]["source_id"] == "ENTRY-0200" and records[-1]["evidence_reference"] == "SYNTHETIC-LIST-PAGE-0200"
-    assert all(record["candidate_retention"] == "complete-screening-candidates/1" for record in records)
+    assert (
+        records[-1]["source_id"] == "ENTRY-0200"
+        and records[-1]["evidence_reference"] == "SYNTHETIC-LIST-PAGE-0200"
+    )
+    assert all(
+        record["candidate_retention"] == "complete-screening-candidates/1" for record in records
+    )
     # The nested original must also survive Excel's 32,767-character cell limit.
     reconstructed = originals(book)
-    assert any(json.loads(value) == row["candidates"] for value in reconstructed.values() if value.startswith("[{"))
+    assert any(
+        json.loads(value) == row["candidates"]
+        for value in reconstructed.values()
+        if value.startswith("[{")
+    )
     book.close()

@@ -24,7 +24,9 @@ class PurchaseQuantityControl(Strict):
     @classmethod
     def exact(cls, value):
         if not value.strip() or value != value.strip():
-            raise ValueError("Purchase quantity controls require exact nonblank identifiers and units")
+            raise ValueError(
+                "Purchase quantity controls require exact nonblank identifiers and units"
+            )
         return value
 
 
@@ -50,7 +52,9 @@ def verify(rows, controls):
             if row["document_type"] == "payment":
                 continue
             if not row.get("uom"):
-                raise ValueError("Controlled purchase quantities require an explicit unit on every non-payment row")
+                raise ValueError(
+                    "Controlled purchase quantities require an explicit unit on every non-payment row"
+                )
             identity = key(row)
             count, quantity = actual.get(identity, (0, Decimal(0)))
             actual[identity] = count + 1, quantity + Decimal(row["quantity"])
@@ -59,4 +63,6 @@ def verify(rows, controls):
         or values[1] != Decimal(declared[identity]["quantity"])
         for identity, values in actual.items()
     ):
-        raise ValueError("Independent purchase row and quantity controls do not agree for every order/line/vendor/currency/unit/document partition")
+        raise ValueError(
+            "Independent purchase row and quantity controls do not agree for every order/line/vendor/currency/unit/document partition"
+        )

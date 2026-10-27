@@ -62,7 +62,9 @@ async def check_scope(db: AsyncSession, ctx: Context, data: ScopeInput):
     if entity.client_id != client.id or period.entity_id != entity.id:
         raise HTTPException(422, "Client, entity and period scope mismatch")
     if client.status != "active" or entity.status != "active":
-        raise HTTPException(409, "Restore the archived client/entity before new accounting operations")
+        raise HTTPException(
+            409, "Restore the archived client/entity before new accounting operations"
+        )
     return entity, period
 
 
@@ -84,7 +86,11 @@ async def upload(
         ):
             raise HTTPException(422, "Source sync scope mismatch")
     if Path(filename).suffix.lower() not in (
-        {".csv", ".xlsx", ".xml", ".json", ".ndjson"} if data.source_system == "tally" else {".csv", ".xlsx", ".json"} if data.source_system == "quickbooks" else {".csv", ".xlsx"}
+        {".csv", ".xlsx", ".xml", ".json", ".ndjson"}
+        if data.source_system == "tally"
+        else {".csv", ".xlsx", ".json"}
+        if data.source_system == "quickbooks"
+        else {".csv", ".xlsx"}
     ):
         raise HTTPException(422, "Only CSV/XLSX accepted")
     if data.profile_id:
@@ -320,8 +326,15 @@ async def validate(db: AsyncSession, ctx: Context, batch_id: uuid.UUID, request_
             issue(
                 "journal_balance",
                 "failed",
-                "Unbalanced journal" if options.source_complete else "Incomplete extract: imbalance does not establish a ledger error",
-                evidence={"journal": ref, "difference": str(difference), "source_complete": options.source_complete, "accounting_error_conclusion": False},
+                "Unbalanced journal"
+                if options.source_complete
+                else "Incomplete extract: imbalance does not establish a ledger error",
+                evidence={
+                    "journal": ref,
+                    "difference": str(difference),
+                    "source_complete": options.source_complete,
+                    "accounting_error_conclusion": False,
+                },
             )
             errors += 1
         if not errors:

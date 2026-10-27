@@ -56,7 +56,9 @@ def clearances(data, tables):
                 "Clearance allocation references a missing outstanding or statement row"
             )
         if date_details(transaction)["booking_date_review_required"]:
-            raise ValueError("A value-date fallback cannot establish subsequent booking clearance; retain explicit booking-date evidence")
+            raise ValueError(
+                "A value-date fallback cannot establish subsequent booking clearance; retain explicit booking-date evidence"
+            )
         if transaction.get("is_reversal"):
             raise ValueError("A reversal bank movement cannot establish subsequent clearance")
         original, settled = Decimal(item["amount"]), Decimal(transaction["amount"])
@@ -120,7 +122,9 @@ def clearances(data, tables):
                 "unallocated_amount": str(residual),
                 "state": "REVERSAL_NOT_CLEARANCE"
                 if transaction.get("is_reversal")
-                else "MATCHED" if residual == 0 else "UNALLOCATED_STATEMENT_MOVEMENT",
+                else "MATCHED"
+                if residual == 0
+                else "UNALLOCATED_STATEMENT_MOVEMENT",
             }
         )
     return {

@@ -95,9 +95,14 @@ async def execute(db: AsyncSession, ctx: Context, data: Any, request_id: str):
         "output": result.output if result else None,
         "error_category": execution.error_category,
         "execution_mode": (
-            "unavailable" if result is None else
-            "diagnostic_mock" if provider_config.adapter == "mock" else "language_model"
+            "unavailable"
+            if result is None
+            else "diagnostic_mock"
+            if provider_config.adapter == "mock"
+            else "language_model"
         ),
-        "configured_execution_mode": "diagnostic_mock" if provider_config.adapter == "mock" else "language_model",
+        "configured_execution_mode": "diagnostic_mock"
+        if provider_config.adapter == "mock"
+        else "language_model",
         "provider_adapter": provider_config.adapter,
     }

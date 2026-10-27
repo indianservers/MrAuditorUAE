@@ -690,47 +690,120 @@ add(
 
 for bank_country, bank_currency in [("AE", "AED"), ("IN", "INR")]:
     bank_assertion = {
-        "id":"register-1", "account":"SYN-BANK", "bank_country":bank_country,
-        "account_scheme":"IBAN" if bank_country == "AE" else "LOCAL",
-        "account_number":"AE070331234567890123456" if bank_country == "AE" else "000123456789",
-        "routing_code":"033" if bank_country == "AE" else "SYNB0ABC123",
-        "currency":bank_currency, "owner_country":bank_country,
-        "owner_name":"SYNTHETIC Entity LLC", "owner_identifier_scheme":"SYNTHETIC-REGISTRY",
-        "owner_identifier":"00123", "valid_from":"2026-01-01", "valid_through":"2026-12-31",
-        "assertion_status":"confirmed", "evidence_reference":"SYNTHETIC register",
-        "assessment":"Independently specified synthetic account ownership evidence",
+        "id": "register-1",
+        "account": "SYN-BANK",
+        "bank_country": bank_country,
+        "account_scheme": "IBAN" if bank_country == "AE" else "LOCAL",
+        "account_number": "AE070331234567890123456" if bank_country == "AE" else "000123456789",
+        "routing_code": "033" if bank_country == "AE" else "SYNB0ABC123",
+        "currency": bank_currency,
+        "owner_country": bank_country,
+        "owner_name": "SYNTHETIC Entity LLC",
+        "owner_identifier_scheme": "SYNTHETIC-REGISTRY",
+        "owner_identifier": "00123",
+        "valid_from": "2026-01-01",
+        "valid_through": "2026-12-31",
+        "assertion_status": "confirmed",
+        "evidence_reference": "SYNTHETIC register",
+        "assessment": "Independently specified synthetic account ownership evidence",
     }
-    account_assertions = {role:[{**bank_assertion,"id":role+"-1","evidence_reference":"SYNTHETIC "+role}] for role in ("register","ledger","bank")}
+    account_assertions = {
+        role: [{**bank_assertion, "id": role + "-1", "evidence_reference": "SYNTHETIC " + role}]
+        for role in ("register", "ledger", "bank")
+    }
     if bank_country == "IN":
         account_assertions["bank"][0]["account_number"] = "123456789"
-    add("bank-account-evidence", "UAE register/ledger/bank owner evidence agrees without bank authentication" if bank_country == "AE" else "India leading-zero account mismatch cannot be approved as ownership evidence", account_assertions, {"exceptions":0 if bank_country == "AE" else 1,"blocked":bank_country == "IN"}, country=bank_country, account="SYN-BANK", currency=bank_currency, bank_owner_name="SYNTHETIC Entity LLC", bank_owner_identifier_scheme="SYNTHETIC-REGISTRY", bank_owner_identifier="00123")
+    add(
+        "bank-account-evidence",
+        "UAE register/ledger/bank owner evidence agrees without bank authentication"
+        if bank_country == "AE"
+        else "India leading-zero account mismatch cannot be approved as ownership evidence",
+        account_assertions,
+        {"exceptions": 0 if bank_country == "AE" else 1, "blocked": bank_country == "IN"},
+        country=bank_country,
+        account="SYN-BANK",
+        currency=bank_currency,
+        bank_owner_name="SYNTHETIC Entity LLC",
+        bank_owner_identifier_scheme="SYNTHETIC-REGISTRY",
+        bank_owner_identifier="00123",
+    )
 
 series_row = {
-    "id": "SYN-SERIES-1", "registration": "27ABCDE5678G1Z8", "period": "2026-06",
-    "doc_num": 1, "serial_from": "SYN/0001", "serial_to": "SYN/0010",
-    "issued": 10, "cancelled": 2, "net_issued": 8,
+    "id": "SYN-SERIES-1",
+    "registration": "27ABCDE5678G1Z8",
+    "period": "2026-06",
+    "doc_num": 1,
+    "serial_from": "SYN/0001",
+    "serial_to": "SYN/0010",
+    "issued": 10,
+    "cancelled": 2,
+    "net_issued": 8,
 }
 series_sources = {role: [{**series_row, "id": "SYN-" + role}] for role in ("books", "reported")}
-add("india-document-series", "India document-series issued and cancelled counts agree with independent reported ranges", series_sources, {"exceptions": 0, "blocked": False}, country="IN", currency="INR")
+add(
+    "india-document-series",
+    "India document-series issued and cancelled counts agree with independent reported ranges",
+    series_sources,
+    {"exceptions": 0, "blocked": False},
+    country="IN",
+    currency="INR",
+)
 series_variance = deepcopy(series_sources)
 series_variance["reported"][0].update(cancelled=1, net_issued=9)
-add("india-document-series", "India cancelled document count discrepancy survives a large money tolerance", series_variance, {"exceptions": 1, "blocked": False}, country="IN", currency="INR", tolerance="1000")
+add(
+    "india-document-series",
+    "India cancelled document count discrepancy survives a large money tolerance",
+    series_variance,
+    {"exceptions": 1, "blocked": False},
+    country="IN",
+    currency="INR",
+    tolerance="1000",
+)
 
 tax_dues = deepcopy(india_dues)
 for role in ("expected", "reported"):
     for index, tax_obligation in enumerate(tax_dues[role], 1):
-        tax_obligation.update(period="2026-05", component="TDS", due_date="2026-06-30", withholding_scope={
-            "legal_role": "deductor", "tax_kind": "TDS", "rule_reference": "SYN-ASSESSED-TDS-RULE",
-            "tax_year_start": "2026-04-01", "tax_year_end": "2027-03-31",
-            "transaction_reference": f"SYN-TAX-TX-{index}", "transaction_date": "2026-05-15",
-        })
+        tax_obligation.update(
+            period="2026-05",
+            component="TDS",
+            due_date="2026-06-30",
+            withholding_scope={
+                "legal_role": "deductor",
+                "tax_kind": "TDS",
+                "rule_reference": "SYN-ASSESSED-TDS-RULE",
+                "tax_year_start": "2026-04-01",
+                "tax_year_end": "2027-03-31",
+                "transaction_reference": f"SYN-TAX-TX-{index}",
+                "transaction_date": "2026-05-15",
+            },
+        )
 tax_dues["bank"][0]["amount"] = "-150"
-tax_dues["bank"].append({**tax_dues["bank"][0], "id": "BANK2", "amount": "-30", "date": "2026-06-02"})
+tax_dues["bank"].append(
+    {**tax_dues["bank"][0], "id": "BANK2", "amount": "-30", "date": "2026-06-02"}
+)
 tax_dues["allocations"][1]["amount"] = "50"
-tax_dues["allocations"].append({**tax_dues["allocations"][1], "id": "A3", "transaction_id": "BANK2", "amount": "30"})
-add("obligation-bank-allocations", "India split and pooled withholding cash settlements retain each assessed transaction", tax_dues, {"exceptions": 0}, country="IN", currency="INR", **{**dues_parameters, "obligation_month_end": "2026-05"})
+tax_dues["allocations"].append(
+    {**tax_dues["allocations"][1], "id": "A3", "transaction_id": "BANK2", "amount": "30"}
+)
+add(
+    "obligation-bank-allocations",
+    "India split and pooled withholding cash settlements retain each assessed transaction",
+    tax_dues,
+    {"exceptions": 0},
+    country="IN",
+    currency="INR",
+    **{**dues_parameters, "obligation_month_end": "2026-05"},
+)
 wrong_tax_scope = deepcopy(tax_dues)
 wrong_tax_scope["reported"][0]["withholding_scope"]["rule_reference"] = "SYN-DIFFERENT-TAX-SECTION"
-add("obligation-bank-allocations", "India withholding cash allocation cannot cross section scope despite matching amounts", wrong_tax_scope, {"error": "withholding scopes must also agree"}, country="IN", currency="INR", **{**dues_parameters, "obligation_month_end": "2026-05"})
+add(
+    "obligation-bank-allocations",
+    "India withholding cash allocation cannot cross section scope despite matching amounts",
+    wrong_tax_scope,
+    {"error": "withholding scopes must also agree"},
+    country="IN",
+    currency="INR",
+    **{**dues_parameters, "obligation_month_end": "2026-05"},
+)
 
 assert len(CASES) == 154

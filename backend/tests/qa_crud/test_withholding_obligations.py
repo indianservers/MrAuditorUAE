@@ -186,8 +186,11 @@ async def test_split_withholding_bank_settlement_review_export_and_proof_replace
     # Source staleness retains the earlier cash claim. An independent reviewer
     # explicitly withdraws it without pretending to revalidate stale amounts.
     withdraw_url = prefix + f"/events/{approved.json()['id']}/withdraw-bank-cash"
-    withdrawal = {"action": "reject", "expected_version": approved.json()["version"],
-                  "comments": "Synthetic evidence replaced; release the prior cash claim"}
+    withdrawal = {
+        "action": "reject",
+        "expected_version": approved.json()["version"],
+        "comments": "Synthetic evidence replaced; release the prior cash claim",
+    }
     assert (await c.post(withdraw_url, headers=h, json=withdrawal)).status_code == 403
     withdrawn = await c.post(withdraw_url, headers=reviewer[0], json=withdrawal)
     assert withdrawn.status_code == 201, withdrawn.text

@@ -73,14 +73,21 @@ async def test_subsequent_clearance_retained_sources_independent_review(
     approved = await decision(c, reviewer[0], eid, result)
     assert approved.status_code == 201, approved.text
     reversal = await source(
-        c, h, eid, [{**p["statement"][0], "is_reversal": True}],
-        "SYNTHETIC flagged reversal", totals={currency: "-100"},
+        c,
+        h,
+        eid,
+        [{**p["statement"][0], "is_reversal": True}],
+        "SYNTHETIC flagged reversal",
+        totals={currency: "-100"},
     )
     assert reversal["body"]["rows"][0]["is_reversal"] is True
     reviewed_reversal = await decision(c, reviewer[0], eid, reversal)
     assert reviewed_reversal.status_code == 201, reviewed_reversal.text
     await execute(
-        c, h, eid, "country-workflow",
+        c,
+        h,
+        eid,
+        "country-workflow",
         {**payload, "source_ids": {**selected, "statement": reviewed_reversal.json()["id"]}},
         failed="reversal bank movement",
     )

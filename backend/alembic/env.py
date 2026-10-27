@@ -7,9 +7,9 @@ from app.core.config import settings
 from app.db.base import Base
 from app.db.models import platform  # noqa: F401
 from app.modules.accounting import models as accounting_models  # noqa: F401
-from app.modules.connectors import models as connector_models  # noqa: F401
-from app.modules.collaboration import models as collaboration_models  # noqa: F401
 from app.modules.audit_execution import models as audit_models  # noqa: F401
+from app.modules.collaboration import models as collaboration_models  # noqa: F401
+from app.modules.connectors import models as connector_models  # noqa: F401
 from app.modules.enterprise_ai import models as enterprise_ai_models  # noqa: F401
 from app.modules.grc import models as grc_models  # noqa: F401
 from app.modules.ifrs import models as ifrs_models  # noqa: F401

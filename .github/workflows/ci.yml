@@ -120,19 +120,29 @@ jobs:
       - uses: actions/checkout@v4
       - run: docker build -f deploy/backend.Dockerfile -t auditos-backend:ci .
       - run: docker build -t auditos-frontend:ci frontend
-      - uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8 # v0.33.1
+      - name: Install checksum-verified Trivy 0.76.1
+        id: trivy
+        shell: bash
+        run: |
+          archive="$RUNNER_TEMP/trivy_0.76.1_Linux-64bit.tar.gz"
+          curl --fail --location --connect-timeout 15 --max-time 120 --retry 3 https://github.com/aquasecurity/trivy/releases/download/v0.76.1/trivy_0.76.1_Linux-64bit.tar.gz --output "$archive"
+          echo "c7cbe3137fb8a48a17574bede3dd6beb16742d1e9772929940fc90082c39d9c0  $archive" | sha256sum --check --strict
+          mkdir -p "$RUNNER_TEMP/trivy-bin"
+          tar -xzf "$archive" -C "$RUNNER_TEMP/trivy-bin" trivy
+          "$RUNNER_TEMP/trivy-bin/trivy" --version
+          echo "$RUNNER_TEMP/trivy-bin" >> "$GITHUB_PATH"
+      - name: Scan backend image
+        run: trivy image --severity CRITICAL,HIGH --exit-code 1 --ignore-unfixed=false --format json --output backend-image-audit.json auditos-backend:ci
+      - name: Scan frontend image
+        if: ${{ !cancelled() && steps.trivy.outcome == 'success' }}
+        run: trivy image --severity CRITICAL,HIGH --exit-code 1 --ignore-unfixed=false --format json --output frontend-image-audit.json auditos-frontend:ci
+      - uses: actions/upload-artifact@v4
+        if: always()
         with:
-          image-ref: auditos-backend:ci
-          severity: CRITICAL,HIGH
-          exit-code: '1'
-          ignore-unfixed: false
-
-      - uses: aquasecurity/trivy-action@b6643a29fecd7f34b3597bc6acb0a98b03d33ff8 # v0.33.1
-        with:
-          image-ref: auditos-frontend:ci
-          severity: CRITICAL,HIGH
-          exit-code: '1'
-          ignore-unfixed: false
+          name: container-security-evidence
+          path: |
+            backend-image-audit.json
+            frontend-image-audit.json
 
   browser-smoke:
     runs-on: ubuntu-latest

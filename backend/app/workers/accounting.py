@@ -240,11 +240,15 @@ async def process(job_id: str, tenant_id: str, user_id: str):
                 elif job.job_type == "connector.sync":
                     from app.modules.connectors.native_service import direct_sync
 
-                    result = await direct_sync(db, ctx, uuid.UUID(payload["connection_id"]), payload.get("resume_session"))
+                    result = await direct_sync(
+                        db, ctx, uuid.UUID(payload["connection_id"]), payload.get("resume_session")
+                    )
                 else:
                     from app.modules.connectors.service import zoho_sync
 
-                    result = await zoho_sync(db, ctx, uuid.UUID(payload["connection_id"]), payload.get("resume_session"))
+                    result = await zoho_sync(
+                        db, ctx, uuid.UUID(payload["connection_id"]), payload.get("resume_session")
+                    )
                 job.status = "failed" if result.get("status") == "failed" else "completed"
                 job.error_category = "source_extraction" if job.status == "failed" else None
                 job.progress = 100
@@ -255,7 +259,11 @@ async def process(job_id: str, tenant_id: str, user_id: str):
                         result.get("id", result.get("batch_id", result.get("suggestion_id", "")))
                     ),
                     "status": result.get("status", "completed"),
-                    **({"execution_mode": result["execution_mode"]} if "execution_mode" in result else {}),
+                    **(
+                        {"execution_mode": result["execution_mode"]}
+                        if "execution_mode" in result
+                        else {}
+                    ),
                 }
         except Exception as exc:
             async with factory() as db, db.begin():
@@ -268,9 +276,13 @@ async def process(job_id: str, tenant_id: str, user_id: str):
                         if type(exc).__name__ == "TrainingCancelled"
                         else "failed",
                         error_category=str(exc).split(":", 1)[0]
-                        if str(exc).split(":", 1)[0] in {
-                            "ML_MODEL_UNAVAILABLE", "ML_RUNTIME_UNAVAILABLE", "ML_ARTIFACT_INVALID",
-                            "ML_INPUT_INVALID", "ML_INFERENCE_FAILED",
+                        if str(exc).split(":", 1)[0]
+                        in {
+                            "ML_MODEL_UNAVAILABLE",
+                            "ML_RUNTIME_UNAVAILABLE",
+                            "ML_ARTIFACT_INVALID",
+                            "ML_INPUT_INVALID",
+                            "ML_INFERENCE_FAILED",
                         }
                         else "authorization"
                         if isinstance(exc, PermissionError)

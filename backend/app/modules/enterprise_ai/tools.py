@@ -96,40 +96,81 @@ async def invoke(db, ctx, eid, name, data: ToolInput):
     result = ToolResult(status="COMPLETED", agent=agent, tool=name)
     if operation == "case-inputs":
         from app.modules.enterprise_ai.business import inputs
+
         if data.use_case_id is None:
             raise HTTPException(422, "Select a UAE use case before collecting inputs")
         result.data = await inputs(db, ctx, eid, data.use_case_id, min(data.limit, 49))
-        result.sources = [{"id": row["id"], "type": "record", "version": row["version"]} for row in result.data["items"] if row["status"] in {"APPROVED", "LOCKED"}]
-        result.data["draft_metadata_count"] = sum(row["status"] not in {"APPROVED", "LOCKED"} for row in result.data["items"])
+        result.sources = [
+            {"id": row["id"], "type": "record", "version": row["version"]}
+            for row in result.data["items"]
+            if row["status"] in {"APPROVED", "LOCKED"}
+        ]
+        result.data["draft_metadata_count"] = sum(
+            row["status"] not in {"APPROVED", "LOCKED"} for row in result.data["items"]
+        )
         if not result.sources:
             result.status = "MISSING"
-        result.uncertainty.append("Required facts and approved specialist inputs must be verified; metadata collection is not calculation or legal advice")
+        result.uncertainty.append(
+            "Required facts and approved specialist inputs must be verified; metadata collection is not calculation or legal advice"
+        )
         result.sources.append(result.data["context_receipt"])
     elif operation == "connection-health":
-        connections = (await db.scalars(select(accounting.Connection).where(
-            accounting.Connection.tenant_id == ctx.tenant_id, accounting.Connection.entity_id == eng.entity_id,
-            accounting.Connection.period_id == eng.period_id,
-        ).order_by(accounting.Connection.created_at.desc()).limit(data.limit))).all()
+        connections = (
+            await db.scalars(
+                select(accounting.Connection)
+                .where(
+                    accounting.Connection.tenant_id == ctx.tenant_id,
+                    accounting.Connection.entity_id == eng.entity_id,
+                    accounting.Connection.period_id == eng.period_id,
+                )
+                .order_by(accounting.Connection.created_at.desc())
+                .limit(data.limit)
+            )
+        ).all()
         items = []
         for connection in connections:
-            sync = await db.scalar(select(accounting.SyncRun).where(
-                accounting.SyncRun.tenant_id == ctx.tenant_id, accounting.SyncRun.connection_id == connection.id,
-            ).order_by(accounting.SyncRun.created_at.desc()).limit(1))
-            successful = await db.scalar(select(accounting.SyncRun).where(
-                accounting.SyncRun.tenant_id == ctx.tenant_id, accounting.SyncRun.connection_id == connection.id,
-                accounting.SyncRun.status == "completed",
-            ).order_by(accounting.SyncRun.created_at.desc()).limit(1))
-            item = {"connection_id": str(connection.id), "provider": connection.provider,
-                          "configured_status": connection.status, "last_sync_status": sync.status if sync else None,
-                          "last_sync_at": sync.created_at.isoformat() if sync else None,
-                          "last_successful_sync_at": successful.created_at.isoformat() if successful else None,
-                          "completeness": sync.completeness if sync else "not_verified",
-                          "error_category": sync.error_category if sync else None,
-                          "live_authority_connection": False}
+            sync = await db.scalar(
+                select(accounting.SyncRun)
+                .where(
+                    accounting.SyncRun.tenant_id == ctx.tenant_id,
+                    accounting.SyncRun.connection_id == connection.id,
+                )
+                .order_by(accounting.SyncRun.created_at.desc())
+                .limit(1)
+            )
+            successful = await db.scalar(
+                select(accounting.SyncRun)
+                .where(
+                    accounting.SyncRun.tenant_id == ctx.tenant_id,
+                    accounting.SyncRun.connection_id == connection.id,
+                    accounting.SyncRun.status == "completed",
+                )
+                .order_by(accounting.SyncRun.created_at.desc())
+                .limit(1)
+            )
+            item = {
+                "connection_id": str(connection.id),
+                "provider": connection.provider,
+                "configured_status": connection.status,
+                "last_sync_status": sync.status if sync else None,
+                "last_sync_at": sync.created_at.isoformat() if sync else None,
+                "last_successful_sync_at": successful.created_at.isoformat()
+                if successful
+                else None,
+                "completeness": sync.completeness if sync else "not_verified",
+                "error_category": sync.error_category if sync else None,
+                "live_authority_connection": False,
+            }
             items.append(item)
             from app.modules.enterprise_ai.security import digest
-            result.sources.append({"type": "connector", "id": str(connection.id), "sha256": digest(item)})
-        result.data = {"items": items, "scope": "Stored connector status; no secrets or live authority probes"}
+
+            result.sources.append(
+                {"type": "connector", "id": str(connection.id), "sha256": digest(item)}
+            )
+        result.data = {
+            "items": items,
+            "scope": "Stored connector status; no secrets or live authority probes",
+        }
     elif operation in {"search", "excerpt"}:
         from app.modules.enterprise_ai.documents import authorized_chunk, search
 
@@ -147,11 +188,18 @@ async def invoke(db, ctx, eid, name, data: ToolInput):
         from app.modules.intelligence import service as intelligence
         from app.modules.intelligence.models import IntelligenceEvent
 
-        candidates = (await db.scalars(select(IntelligenceEvent).where(
-            IntelligenceEvent.tenant_id == ctx.tenant_id,
-            IntelligenceEvent.engagement_id == eid,
-            IntelligenceEvent.kind == "country-workflow",
-        ).order_by(IntelligenceEvent.created_at.desc(), IntelligenceEvent.id.desc()).limit(data.limit))).all()
+        candidates = (
+            await db.scalars(
+                select(IntelligenceEvent)
+                .where(
+                    IntelligenceEvent.tenant_id == ctx.tenant_id,
+                    IntelligenceEvent.engagement_id == eid,
+                    IntelligenceEvent.kind == "country-workflow",
+                )
+                .order_by(IntelligenceEvent.created_at.desc(), IntelligenceEvent.id.desc())
+                .limit(data.limit)
+            )
+        ).all()
         items = []
         for obj in candidates:
             try:
@@ -162,18 +210,30 @@ async def invoke(db, ctx, eid, name, data: ToolInput):
                 raise
             if not await intelligence.current(db, ctx, obj):
                 continue
-            items.append({"id": str(obj.id), "workflow": obj.body.get("workflow"),
-                          "execution_mode": "deterministic_engine", "ml_execution_mode": None,
-                          "calculation_mode": "deterministic_engine",
-                          "review_status": obj.body.get("review_status", "UNVERIFIED"),
-                          "blocked": obj.body.get("blocked"), "exception_count": obj.body.get("exception_count"),
-                          "rows_preview": obj.body.get("rows", [])[:5],
-                          "row_count": len(obj.body.get("rows", [])),
-                          "limitations": obj.body.get("limitations", [])})
+            items.append(
+                {
+                    "id": str(obj.id),
+                    "workflow": obj.body.get("workflow"),
+                    "execution_mode": "deterministic_engine",
+                    "ml_execution_mode": None,
+                    "calculation_mode": "deterministic_engine",
+                    "review_status": obj.body.get("review_status", "UNVERIFIED"),
+                    "blocked": obj.body.get("blocked"),
+                    "exception_count": obj.body.get("exception_count"),
+                    "rows_preview": obj.body.get("rows", [])[:5],
+                    "row_count": len(obj.body.get("rows", [])),
+                    "limitations": obj.body.get("limitations", []),
+                }
+            )
             result.sources.append({"id": str(obj.id), "type": "intelligence", "sha256": obj.sha256})
-        result.data = {"items": items, "language_model_dependency": False,
-                       "professional_conclusion": False}
-        result.uncertainty.append("Retained deterministic engine results; previews are bounded and review status is explicit")
+        result.data = {
+            "items": items,
+            "language_model_dependency": False,
+            "professional_conclusion": False,
+        }
+        result.uncertainty.append(
+            "Retained deterministic engine results; previews are bounded and review status is explicit"
+        )
     elif operation == "ledger":
         entity = await db.get(LegalEntity, eng.entity_id)
         from app.api.v1.accounting import page
@@ -313,7 +373,9 @@ async def invoke(db, ctx, eid, name, data: ToolInput):
                 except HTTPException as exc:
                     if exc.status_code != 409:
                         raise
-                    result.uncertainty.append("A stale ML result was omitted; regenerate from current sources")
+                    result.uncertainty.append(
+                        "A stale ML result was omitted; regenerate from current sources"
+                    )
                     continue
                 value = {
                     k: v

@@ -1,11 +1,13 @@
-from decimal import Decimal
-from copy import deepcopy
 import uuid
+from copy import deepcopy
+from decimal import Decimal
+
 import pytest
 from pydantic import ValidationError
-from app.modules.jurisdictions.ae.advanced import Schedule, calculate
-from app.modules.jurisdictions.ae.advanced_specs import RAW, spec
+
 from app.modules.audit_execution.schemas import WorkingPaper
+from app.modules.jurisdictions.ae.advanced import Schedule, calculate
+from app.modules.jurisdictions.ae.advanced_specs import spec
 
 SOURCE = str(uuid.UUID(int=1))
 
@@ -13,14 +15,20 @@ SOURCE = str(uuid.UUID(int=1))
 def fixture(i):
     row = {"reference": f"SYN-{i}", "evidence_id": SOURCE}
     for f in spec(i)["fields"]:
-        row[f["name"]] = {"n": "1", "d": "1", "b": True, "x": "2026-01-01", "y": None, "t": "SYNTHETIC"}[
-            f["type"]
-        ]
+        row[f["name"]] = {
+            "n": "1",
+            "d": "1",
+            "b": True,
+            "x": "2026-01-01",
+            "y": None,
+            "t": "SYNTHETIC",
+        }[f["type"]]
     if i == 56:
         row.update(transaction_date="2026-02-01", member_from="2026-01-01", member_to="2026-12-31")
     if i == 64:
         row.update(
-            foreign_tax="100", foreign_currency="USD",
+            foreign_tax="100",
+            foreign_currency="USD",
             fx_rate="3.67",
             domestic_attributable_tax="300",
             previously_credited="20",
@@ -52,7 +60,8 @@ def fixture(i):
         )
     if i == 88:
         row.update(
-            cash_flow="100", sensitivity_shift="0.01",
+            cash_flow="100",
+            sensitivity_shift="0.01",
             growth="0",
             discount_rate="0.1",
             terminal_growth="0",
@@ -61,7 +70,8 @@ def fixture(i):
         )
     if i == 91:
         row.update(
-            ordered_qty="10", order_currency="AED",
+            ordered_qty="10",
+            order_currency="AED",
             received_qty="8",
             returned_qty="1",
             invoiced_qty="8",

@@ -694,7 +694,9 @@ async def compute(db, ctx, eng, operation, payload):
                     data.model_dump(mode="json", exclude={"evidence_version_id"}),
                 )
                 if extracted.get("original_sha256") != version.sha256:
-                    raise ValueError("Extraction receipt differs from the retained evidence version")
+                    raise ValueError(
+                        "Extraction receipt differs from the retained evidence version"
+                    )
                 return extracted
 
         result = await run_in_threadpool(extract)

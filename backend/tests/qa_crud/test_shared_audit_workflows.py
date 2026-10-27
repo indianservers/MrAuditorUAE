@@ -19,9 +19,23 @@ pytestmark = pytest.mark.skipif(
 
 async def prepare(c, h, reviewer, eid, populations):
     from tests.unit.purchase_fixtures import quantity_controls
+
     sources = {}
     for role, kind, rows, totals in populations:
-        event = await source(c, h, eid, rows, "SYNTHETIC " + role, kind, totals, **({"purchase_quantity_controls": quantity_controls(rows)} if kind == "purchase-lines" else {}))
+        event = await source(
+            c,
+            h,
+            eid,
+            rows,
+            "SYNTHETIC " + role,
+            kind,
+            totals,
+            **(
+                {"purchase_quantity_controls": quantity_controls(rows)}
+                if kind == "purchase-lines"
+                else {}
+            ),
+        )
         reviewed = await decision(c, reviewer[0], eid, event)
         assert reviewed.status_code == 201, reviewed.text
         sources[role] = reviewed.json()["id"]
@@ -166,7 +180,9 @@ async def test_diligence_sources_require_professional_evidence_permission(enviro
     assert obj["id"] not in [r["id"] for r in listing.json()["items"]]
     admin_jobs = await c.get(f"/api/v1/intelligence/engagements/{eid}/jobs", headers=h)
     restricted_job = next(j for j in admin_jobs.json()["items"] if j["result_id"] == obj["id"])
-    denied_job = await c.get(f"/api/v1/intelligence/engagements/{eid}/jobs/{restricted_job['id']}", headers=ordinary[0])
+    denied_job = await c.get(
+        f"/api/v1/intelligence/engagements/{eid}/jobs/{restricted_job['id']}", headers=ordinary[0]
+    )
     assert denied_job.status_code == 403
     limited_jobs = await c.get(f"/api/v1/intelligence/engagements/{eid}/jobs", headers=ordinary[0])
     assert restricted_job["id"] not in [j["id"] for j in limited_jobs.json()["items"]]
@@ -175,9 +191,15 @@ async def test_diligence_sources_require_professional_evidence_permission(enviro
     await grant(c, h, base, reviewer)
     reviewed = await decision(c, reviewer[0], eid, obj)
     assert reviewed.status_code == 201
-    paper = await c.post(f"/api/v1/intelligence/engagements/{eid}/events/{reviewed.json()['id']}/working-paper",
-                         headers=h, json={"reference": "KYC-TEST", "title": "SYNTHETIC KYC paper",
-                                          "objective": "Verify restricted source cannot leak into a generic paper"})
+    paper = await c.post(
+        f"/api/v1/intelligence/engagements/{eid}/events/{reviewed.json()['id']}/working-paper",
+        headers=h,
+        json={
+            "reference": "KYC-TEST",
+            "title": "SYNTHETIC KYC paper",
+            "objective": "Verify restricted source cannot leak into a generic paper",
+        },
+    )
     assert paper.status_code == 409 and "restricted" in paper.text
 
 
@@ -190,16 +212,27 @@ async def test_gl_control_comes_from_committed_account_and_explicit_sign(environ
     double_boundaries(monkeypatch)
     h, options, eid, _ = await setup(c)
     _, snapshot = await committed(c, h, options)
-    choices = await c.get(f"/api/v1/intelligence/engagements/{eid}/accounts?snapshot_id={snapshot}", headers=h)
+    choices = await c.get(
+        f"/api/v1/intelligence/engagements/{eid}/accounts?snapshot_id={snapshot}", headers=h
+    )
     assert choices.status_code == 200
     cash = next(a for a in choices.json()["items"] if a["code"] == "100")
-    payload = {"source_kind": "balance-controls", "balance_side": "receivable", "snapshot_id": snapshot,
-               "account_ids": [cash["id"]], "bank_account": "SYNTHETIC-CONTROL", "currency": "AED",
-               "label": "SYNTHETIC committed GL control", "as_of": "2026-12-31"}
+    payload = {
+        "source_kind": "balance-controls",
+        "balance_side": "receivable",
+        "snapshot_id": snapshot,
+        "account_ids": [cash["id"]],
+        "bank_account": "SYNTHETIC-CONTROL",
+        "currency": "AED",
+        "label": "SYNTHETIC committed GL control",
+        "as_of": "2026-12-31",
+    }
     output = await execute(c, h, eid, "workflow-ledger", payload)
     assert output["kind"] == "workflow-source"
     assert Decimal(output["body"]["rows"][0]["amount"]) == Decimal("-90.10")
     assert output["body"]["source_snapshot_id"] == snapshot
     flipped = await execute(c, h, eid, "workflow-ledger", {**payload, "balance_side": "payable"})
     assert Decimal(flipped["body"]["rows"][0]["amount"]) == Decimal("90.10")
-    await execute(c, h, eid, "workflow-ledger", {**payload, "as_of": "2026-06-30"}, failed="period end")
+    await execute(
+        c, h, eid, "workflow-ledger", {**payload, "as_of": "2026-06-30"}, failed="period end"
+    )

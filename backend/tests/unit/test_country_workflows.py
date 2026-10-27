@@ -21,7 +21,17 @@ def parsed(table_type, rows):
     buffer = io.StringIO(newline="")
     writer = csv.DictWriter(buffer, fieldnames=fields)
     writer.writeheader()
-    writer.writerows([{key: json.dumps(value) if key == "withholding_scope" and isinstance(value, dict) else value for key, value in row.items()} for row in rows])
+    writer.writerows(
+        [
+            {
+                key: json.dumps(value)
+                if key == "withholding_scope" and isinstance(value, dict)
+                else value
+                for key, value in row.items()
+            }
+            for row in rows
+        ]
+    )
     totals = {}
     for r in rows:
         field = "amount" if "amount" in r else "tax" if "tax" in r else None
@@ -32,7 +42,16 @@ def parsed(table_type, rows):
         table_type=table_type,
         label="Synthetic controlled source",
         expected_rows=len(rows),
-        **({"document_series_controls": {field: sum(row[field] for row in rows) for field in ("issued", "cancelled", "net_issued")}} if table_type == "gst-document-series" else {}),
+        **(
+            {
+                "document_series_controls": {
+                    field: sum(row[field] for row in rows)
+                    for field in ("issued", "cancelled", "net_issued")
+                }
+            }
+            if table_type == "gst-document-series"
+            else {}
+        ),
         control_totals=totals,
     )
     return parse_csv(buffer.getvalue().encode(), source)

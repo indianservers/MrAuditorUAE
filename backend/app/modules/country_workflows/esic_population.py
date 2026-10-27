@@ -50,7 +50,10 @@ class ESICMember(Strict):
         for value in (self.id, self.member_name, self.evidence_reference, self.assessment):
             if not value.strip() or value != value.strip():
                 raise ValueError("Retain exact nonblank ESIC identifiers and assessments")
-        if self.zero_wage_reason != self.zero_wage_reason.strip() or self.zero_day_reason != self.zero_day_reason.strip():
+        if (
+            self.zero_wage_reason != self.zero_wage_reason.strip()
+            or self.zero_day_reason != self.zero_day_reason.strip()
+        ):
             raise ValueError("Retain the exact assessed zero-wage reason")
         return self
 
@@ -61,8 +64,10 @@ def month_bounds(period):
 
 
 def verify_controls(rows, paid_days, zero_members):
-    actual = {"paid_days": sum(row["paid_days"] for row in rows),
-              "zero_wage_members": sum(Decimal(row["amount"]) == 0 for row in rows)}
+    actual = {
+        "paid_days": sum(row["paid_days"] for row in rows),
+        "zero_wage_members": sum(Decimal(row["amount"]) == 0 for row in rows),
+    }
     if actual != {"paid_days": paid_days, "zero_wage_members": zero_members}:
         raise ValueError("Independent ESIC paid-day or zero-wage member controls do not agree")
     return actual
@@ -86,11 +91,21 @@ def compare(data, tables):
     if len(scopes) != 1:
         raise ValueError("Select one explicit ESIC employer and wage month across both populations")
     rows: list[dict[str, Any]] = []
-    for index, key in enumerate(sorted(populations["payroll"].keys() | populations["reported"].keys()), 1):
+    for index, key in enumerate(
+        sorted(populations["payroll"].keys() | populations["reported"].keys()), 1
+    ):
         payroll, reported = (populations[role].get(key) for role in ("payroll", "reported"))
-        issues = (["MISSING_PAYROLL_MEMBER"] if payroll is None else []) + (["MISSING_REPORTED_MEMBER"] if reported is None else [])
-        difference = Decimal(reported["amount"]) - Decimal(payroll["amount"]) if payroll and reported else None
-        day_difference = reported["paid_days"] - payroll["paid_days"] if payroll and reported else None
+        issues = (["MISSING_PAYROLL_MEMBER"] if payroll is None else []) + (
+            ["MISSING_REPORTED_MEMBER"] if reported is None else []
+        )
+        difference = (
+            Decimal(reported["amount"]) - Decimal(payroll["amount"])
+            if payroll and reported
+            else None
+        )
+        day_difference = (
+            reported["paid_days"] - payroll["paid_days"] if payroll and reported else None
+        )
         if payroll and reported:
             if difference is not None and abs(difference) > data.tolerance:
                 issues.append("WAGE_VARIANCE")
@@ -99,28 +114,58 @@ def compare(data, tables):
             for field in ("member_name", "zero_wage_reason", "zero_day_reason", "last_working_day"):
                 if payroll[field] != reported[field]:
                     issues.append(field.upper() + "_DIFFERENCE")
-        rows.append({
-            "id": f"esic-member:{index}", "registration": key[0], "period": key[1], "subject": key[2],
-            **{f"{role}_{field}": row[field] if row else None
-               for role, row in (("payroll", payroll), ("reported", reported))
-               for field in ("id", "member_name", "amount", "paid_days", "zero_wage_reason", "zero_day_reason", "last_working_day", "evidence_reference")},
-            "currency": "INR", "wage_difference": str(difference) if difference is not None else None,
-            "paid_day_difference": day_difference, "exceptions": issues,
-            "state": "EXCEPTIONS" if issues else "MATCHED",
-        })
+        rows.append(
+            {
+                "id": f"esic-member:{index}",
+                "registration": key[0],
+                "period": key[1],
+                "subject": key[2],
+                **{
+                    f"{role}_{field}": row[field] if row else None
+                    for role, row in (("payroll", payroll), ("reported", reported))
+                    for field in (
+                        "id",
+                        "member_name",
+                        "amount",
+                        "paid_days",
+                        "zero_wage_reason",
+                        "zero_day_reason",
+                        "last_working_day",
+                        "evidence_reference",
+                    )
+                },
+                "currency": "INR",
+                "wage_difference": str(difference) if difference is not None else None,
+                "paid_day_difference": day_difference,
+                "exceptions": issues,
+                "state": "EXCEPTIONS" if issues else "MATCHED",
+            }
+        )
     return {
-        **result(rows, blocked=any(any(issue.startswith("MISSING_") for issue in row["exceptions"]) for row in rows), limitations=[
-            "Controlled member/wage populations; native file structure checks do not establish current portal compatibility, retrieval, filing or payment evidence",
-            "Employer/IP identifiers and zero-wage reasons are assessed inputs; registry membership, reason-code applicability and employment status require independent verification",
-            "Wages are not contributions: eligibility, contribution bases, rates, rounding and challan/bank settlement remain separate reviewed procedures",
-            "Monetary tolerance never excuses member identity, paid-day, name, reason or leaving-date differences; supplementary returns are not automatically merged",
-        ]),
-        "esic_population_scope": dict(zip(("registration", "period"), next(iter(scopes)), strict=True)),
+        **result(
+            rows,
+            blocked=any(
+                any(issue.startswith("MISSING_") for issue in row["exceptions"]) for row in rows
+            ),
+            limitations=[
+                "Controlled member/wage populations; native file structure checks do not establish current portal compatibility, retrieval, filing or payment evidence",
+                "Employer/IP identifiers and zero-wage reasons are assessed inputs; registry membership, reason-code applicability and employment status require independent verification",
+                "Wages are not contributions: eligibility, contribution bases, rates, rounding and challan/bank settlement remain separate reviewed procedures",
+                "Monetary tolerance never excuses member identity, paid-day, name, reason or leaving-date differences; supplementary returns are not automatically merged",
+            ],
+        ),
+        "esic_population_scope": dict(
+            zip(("registration", "period"), next(iter(scopes)), strict=True)
+        ),
         "esic_population_contract": "india-esic-population/1",
         "esic_profile_reference": REFERENCE,
-        "esic_population_totals": {role: {
-            "members": len(records), "wages": str(sum((Decimal(row["amount"]) for row in records.values()), Decimal(0))),
-            "paid_days": sum(row["paid_days"] for row in records.values()),
-            "zero_wage_members": sum(Decimal(row["amount"]) == 0 for row in records.values()),
-        } for role, records in populations.items()},
+        "esic_population_totals": {
+            role: {
+                "members": len(records),
+                "wages": str(sum((Decimal(row["amount"]) for row in records.values()), Decimal(0))),
+                "paid_days": sum(row["paid_days"] for row in records.values()),
+                "zero_wage_members": sum(Decimal(row["amount"]) == 0 for row in records.values()),
+            }
+            for role, records in populations.items()
+        },
     }

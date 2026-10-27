@@ -28,5 +28,7 @@ class ImportNilScope(Strict):
     @model_validator(mode="after")
     def ordered(self):
         if self.period_start > self.period_end or len(set(self.kinds)) != len(self.kinds):
-            raise ValueError("Nil import scope requires ordered dates and distinct population kinds")
+            raise ValueError(
+                "Nil import scope requires ordered dates and distinct population kinds"
+            )
         return self

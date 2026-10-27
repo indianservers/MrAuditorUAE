@@ -96,7 +96,11 @@ DILIGENCE_ROW_TYPES: dict[str, type[Strict]] = {
     "screening-policies": ScreeningPolicy,
 }
 DILIGENCE_WORKFLOWS: dict[str, tuple[str, list[str], dict[str, str]]] = {
-    "adverse-media-review": ("Adverse-media search coverage and identity adjudication", [], MEDIA_ROLES),
+    "adverse-media-review": (
+        "Adverse-media search coverage and identity adjudication",
+        [],
+        MEDIA_ROLES,
+    ),
     "kyc-edd-review": (
         "KYC periodic review and enhanced-diligence evidence",
         [],

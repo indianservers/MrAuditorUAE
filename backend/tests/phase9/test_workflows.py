@@ -246,11 +246,20 @@ async def test_real_tensorflow_artifacts_approval_inference_rls_and_feedback(env
         model = await db.get(MLEvent, uuid.UUID(model_id))
         assert model.body["metrics"]["reload_max_delta"] <= 1e-6
         assert len(model.body["metrics"]["history"]) > 0
-        ledger_dataset = await service.execute_job(db, ctx, {"operation": "dataset", "engagement_id": eid})
-        ledger_scored = await service.execute_job(db, ctx, {
-            "operation": "infer", "source_id": deployment,
-            "dataset_id": ledger_dataset["id"], "offset": 0, "limit": 1000,
-        })
+        ledger_dataset = await service.execute_job(
+            db, ctx, {"operation": "dataset", "engagement_id": eid}
+        )
+        ledger_scored = await service.execute_job(
+            db,
+            ctx,
+            {
+                "operation": "infer",
+                "source_id": deployment,
+                "dataset_id": ledger_dataset["id"],
+                "offset": 0,
+                "limit": 1000,
+            },
+        )
         ledger_result = await db.get(MLEvent, uuid.UUID(ledger_scored["id"]))
         assert ledger_result.body["execution_mode"] == "trained_model"
         assert ledger_result.body["backend"] == "cpu"

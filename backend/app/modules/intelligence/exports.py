@@ -29,7 +29,11 @@ def render(event, format):
         "Review status": body.get("review_status", "UNVERIFIED"),
         "Export timestamp": event.get("exported_at", "NOT_RECORDED"),
         "Source freshness at export": event.get("freshness", "NOT_EVALUATED"),
-        "Export status": "STALE_HISTORICAL_RESULT_REQUIRES_RECALCULATION" if event.get("freshness") == "STALE" else "CURRENT_RETAINED_RESULT" if event.get("freshness") == "CURRENT" else "FRESHNESS_NOT_EVALUATED",
+        "Export status": "STALE_HISTORICAL_RESULT_REQUIRES_RECALCULATION"
+        if event.get("freshness") == "STALE"
+        else "CURRENT_RETAINED_RESULT"
+        if event.get("freshness") == "CURRENT"
+        else "FRESHNESS_NOT_EVALUATED",
         "Prepared by": ", ".join(body.get("contributors", [])),
         "Reviewed by": body.get("reviewer"),
         "Generated result timestamp": event["created_at"],
@@ -60,14 +64,29 @@ def render(event, format):
             f"{len(body['excluded_box_rows'])} outside the selected box scope; full details are retained in the XLSX Excluded VAT boxes sheet and original source result"
         )
     if body.get("obligation_population_scope") == "ARREARS_ONLY_NOT_COMPLETE_MONTHLY_RETURN":
-        metadata["Comparison scope"] = "Arrears only; regular monthly obligations, returns and payments are outside this comparison. Salary disbursement does not establish PF contribution payment."
+        metadata["Comparison scope"] = (
+            "Arrears only; regular monthly obligations, returns and payments are outside this comparison. Salary disbursement does not establish PF contribution payment."
+        )
     summary = {
         k: v
         for k, v in body.items()
         if k
         in {
-            "media_review_contract", "media_document_binding", "media_scope", "identity_authenticity_established", "media_clearance_issued", "automatic_rejection",
-            "grant_utilisation_contract", "grant_document_binding", "cash_availability_established", "legal_eligibility_established", "certificate_issued", "source_amount_basis", "population_basis", "currency_scope", "review_window",
+            "media_review_contract",
+            "media_document_binding",
+            "media_scope",
+            "identity_authenticity_established",
+            "media_clearance_issued",
+            "automatic_rejection",
+            "grant_utilisation_contract",
+            "grant_document_binding",
+            "cash_availability_established",
+            "legal_eligibility_established",
+            "certificate_issued",
+            "source_amount_basis",
+            "population_basis",
+            "currency_scope",
+            "review_window",
             "totals",
             "totals_basis",
             "totals_by_currency",
@@ -88,7 +107,10 @@ def render(event, format):
             "bank_consumption_manifest",
             "bank_consumption_review",
             "payment_scope",
-            "matching_contract", "candidate_checks", "candidate_check_limit", "ambiguity_link_count",
+            "matching_contract",
+            "candidate_checks",
+            "candidate_check_limit",
+            "ambiguity_link_count",
             "source_totals",
             "destination_totals",
             "section",
@@ -142,21 +164,29 @@ def render(event, format):
             "box_comparison_scope",
             "vat201_layout",
             "invoice_evidence_scope",
-        "outward_gst_scope",
+            "outward_gst_scope",
             "excluded_box_controls",
             "included_box_controls",
         }
     }
 
     if isinstance(body.get("count_bridges"), list):
-        summary["count_bridges"] = f"{len(body['count_bridges'])} bridge rows; complete original count details and individual movement links are retained in the XLSX Count date bridges and Inventory movement links sheets"
+        summary["count_bridges"] = (
+            f"{len(body['count_bridges'])} bridge rows; complete original count details and individual movement links are retained in the XLSX Count date bridges and Inventory movement links sheets"
+        )
     if isinstance(body.get("inventory_quantity_controls"), list):
-        summary["inventory_quantity_controls"] = f"{len(body['inventory_quantity_controls'])} controlled partitions; complete row and directional quantity controls are retained in the XLSX Inventory quantity controls sheet"
+        summary["inventory_quantity_controls"] = (
+            f"{len(body['inventory_quantity_controls'])} controlled partitions; complete row and directional quantity controls are retained in the XLSX Inventory quantity controls sheet"
+        )
 
     if isinstance(body.get("transaction_dates"), list):
-        summary["transaction_dates"] = f"{len(body['transaction_dates'])} retained transaction date records; complete detail is retained in the XLSX Bank transaction dates sheet"
+        summary["transaction_dates"] = (
+            f"{len(body['transaction_dates'])} retained transaction date records; complete detail is retained in the XLSX Bank transaction dates sheet"
+        )
     if isinstance(body.get("payroll_posting_links"), list):
-        summary["payroll_posting_links"] = f"{len(body['payroll_posting_links'])} individual source posting links; complete detail is retained in the XLSX Payroll posting links sheet"
+        summary["payroll_posting_links"] = (
+            f"{len(body['payroll_posting_links'])} individual source posting links; complete detail is retained in the XLSX Payroll posting links sheet"
+        )
 
     def text(value):
         return (
@@ -205,9 +235,21 @@ def render(event, format):
                 append(cover, [key, value])
             for key, value in summary.items():
                 append(cover, [key, value])
-            if body.get("matches") and (event["kind"] == "reconciliation" or body.get("workflow") == "bank-brs"):
+            if body.get("matches") and (
+                event["kind"] == "reconciliation" or body.get("workflow") == "bank-brs"
+            ):
                 proposals = workbook.create_sheet("Matched proposals")
-                fields = ["left_ids", "right_ids", "rule", "variance", "auditor_status", "limitation", "auditor", "auditor_comments", "auditor_at"]
+                fields = [
+                    "left_ids",
+                    "right_ids",
+                    "rule",
+                    "variance",
+                    "auditor_status",
+                    "limitation",
+                    "auditor",
+                    "auditor_comments",
+                    "auditor_at",
+                ]
                 append(proposals, fields)
                 for match in body["matches"]:
                     append(proposals, [match.get(field) for field in fields])
@@ -226,11 +268,27 @@ def render(event, format):
                 from app.modules.intelligence.matching_review import saved_candidates_complete
 
                 candidates = workbook.create_sheet("Matching candidates")
-                append(candidates, ["left_id", "candidate_id", "candidate_count", "retention", "reason"])
-                retention = "COMPLETE_RETAINED_CANDIDATES" if saved_candidates_complete(body) else "LEGACY_OR_INCOMPLETE_CANDIDATES_REGENERATE"
+                append(
+                    candidates,
+                    ["left_id", "candidate_id", "candidate_count", "retention", "reason"],
+                )
+                retention = (
+                    "COMPLETE_RETAINED_CANDIDATES"
+                    if saved_candidates_complete(body)
+                    else "LEGACY_OR_INCOMPLETE_CANDIDATES_REGENERATE"
+                )
                 for group in body["ambiguous"]:
                     for candidate in group["candidate_ids"]:
-                        append(candidates, [group["left_id"], candidate, group.get("candidate_count"), retention, group.get("reason")])
+                        append(
+                            candidates,
+                            [
+                                group["left_id"],
+                                candidate,
+                                group.get("candidate_count"),
+                                retention,
+                                group.get("reason"),
+                            ],
+                        )
             if body.get("workflow") == "adverse-media-review":
                 documents = workbook.create_sheet("Media documents")
                 fields = ["type", "id", "record_id", "number", "sha256"]
@@ -252,8 +310,37 @@ def render(event, format):
                 links = workbook.create_sheet("Confirmation item links")
                 documents = workbook.create_sheet("Confirmation documents")
                 identity_fields = ["id", "account", "counterparty", "side", "currency"]
-                append(links, ["result_row_id", *identity_fields[1:], "reply_scope_membership", "open_item_source_id"])
-                append(documents, ["result_row_id", *identity_fields[1:], "confirmation_status", "request_basis", "scope_balance", "requested_amount", "document_role", "document_date", "evidence_version_id", "source_sha256", "reference", "contact_verified_declaration", "independent_receipt_declaration", "scope_assessment", "followup_kind", "followup_assessment", "evidence_status"])
+                append(
+                    links,
+                    [
+                        "result_row_id",
+                        *identity_fields[1:],
+                        "reply_scope_membership",
+                        "open_item_source_id",
+                    ],
+                )
+                append(
+                    documents,
+                    [
+                        "result_row_id",
+                        *identity_fields[1:],
+                        "confirmation_status",
+                        "request_basis",
+                        "scope_balance",
+                        "requested_amount",
+                        "document_role",
+                        "document_date",
+                        "evidence_version_id",
+                        "source_sha256",
+                        "reference",
+                        "contact_verified_declaration",
+                        "independent_receipt_declaration",
+                        "scope_assessment",
+                        "followup_kind",
+                        "followup_assessment",
+                        "evidence_status",
+                    ],
+                )
                 for position in body.get("rows", []):
                     if position.get("kind") != "party-confirmation":
                         continue
@@ -262,26 +349,179 @@ def render(event, format):
                         membership = "FULL_BALANCE_SCOPE"
                         if position.get("confirmation_status") == "partially-received":
                             covered = position.get("covered_item_source_ids")
-                            membership = "UNASSESSED_PARTIAL_SCOPE" if covered is None else "DECLARED_REPLY_COVERED" if identifier in covered else "NOT_REPLY_COVERED"
+                            membership = (
+                                "UNASSESSED_PARTIAL_SCOPE"
+                                if covered is None
+                                else "DECLARED_REPLY_COVERED"
+                                if identifier in covered
+                                else "NOT_REPLY_COVERED"
+                            )
                         append(links, [*identity, membership, identifier])
                     evidence = position.get("confirmation_evidence") or {}
-                    for prefix, date_field in (("request", "requested_on"), ("response", "responded_on"), ("followup", "followup_on")):
+                    for prefix, date_field in (
+                        ("request", "requested_on"),
+                        ("response", "responded_on"),
+                        ("followup", "followup_on"),
+                    ):
                         if evidence.get(prefix + "_evidence_version_id"):
-                            append(documents, [*identity, position.get("confirmation_status"), evidence.get("request_basis"), evidence.get("scope_balance"), evidence.get("requested_amount"), prefix, evidence.get(date_field), evidence[prefix + "_evidence_version_id"], evidence[prefix + "_source_sha256"], evidence[prefix + "_reference"], evidence.get("contact_verified"), evidence.get("independently_received"), evidence.get("scope_assessment"), evidence.get("followup_kind") if prefix == "followup" else None, evidence.get("followup_assessment") if prefix == "followup" else None, "RETAINED_IDENTITY_ONLY"])
+                            append(
+                                documents,
+                                [
+                                    *identity,
+                                    position.get("confirmation_status"),
+                                    evidence.get("request_basis"),
+                                    evidence.get("scope_balance"),
+                                    evidence.get("requested_amount"),
+                                    prefix,
+                                    evidence.get(date_field),
+                                    evidence[prefix + "_evidence_version_id"],
+                                    evidence[prefix + "_source_sha256"],
+                                    evidence[prefix + "_reference"],
+                                    evidence.get("contact_verified"),
+                                    evidence.get("independently_received"),
+                                    evidence.get("scope_assessment"),
+                                    evidence.get("followup_kind") if prefix == "followup" else None,
+                                    evidence.get("followup_assessment")
+                                    if prefix == "followup"
+                                    else None,
+                                    "RETAINED_IDENTITY_ONLY",
+                                ],
+                            )
             if body.get("workflow") == "inventory-custody-confirmations":
                 documents = workbook.create_sheet("Custody documents")
-                append(documents, ["result_row_id", "position_source_id", "custodian", "site", "sku", "lot", "uom", "document_role", "document_date", "evidence_version_id", "source_sha256", "reference", "evidence_status"])
+                append(
+                    documents,
+                    [
+                        "result_row_id",
+                        "position_source_id",
+                        "custodian",
+                        "site",
+                        "sku",
+                        "lot",
+                        "uom",
+                        "document_role",
+                        "document_date",
+                        "evidence_version_id",
+                        "source_sha256",
+                        "reference",
+                        "evidence_status",
+                    ],
+                )
                 for position in body.get("rows", []):
                     evidence = position.get("confirmation_evidence") or {}
-                    for role, date_field in (("request", "requested_on"), ("response", "responded_on"), ("followup", "followup_on")):
+                    for role, date_field in (
+                        ("request", "requested_on"),
+                        ("response", "responded_on"),
+                        ("followup", "followup_on"),
+                    ):
                         if evidence.get(role + "_evidence_version_id"):
-                            append(documents, [*[position.get(field) for field in ("id", "position_source_id", "custodian", "site", "sku", "lot", "uom")], role, evidence.get(date_field), evidence[role + "_evidence_version_id"], evidence[role + "_source_sha256"], evidence[role + "_reference"], "RETAINED_IDENTITY_ONLY"])
+                            append(
+                                documents,
+                                [
+                                    *[
+                                        position.get(field)
+                                        for field in (
+                                            "id",
+                                            "position_source_id",
+                                            "custodian",
+                                            "site",
+                                            "sku",
+                                            "lot",
+                                            "uom",
+                                        )
+                                    ],
+                                    role,
+                                    evidence.get(date_field),
+                                    evidence[role + "_evidence_version_id"],
+                                    evidence[role + "_source_sha256"],
+                                    evidence[role + "_reference"],
+                                    "RETAINED_IDENTITY_ONLY",
+                                ],
+                            )
             for key, title, fields in (
-                ("custody_quantity_controls", "Custody quantity controls", ["source_role", "position_id", "custodian", "site", "sku", "lot", "uom", "quantity", "response_quantity"]),
-                ("ownership_paths", "Ownership paths", ["path_id", "subject_company", "person_id", "kind", "economic_fraction", "reach_fraction", "gap_reason", "gap_at_company", "observed_outgoing_fraction", "edge_count", "edge_source_ids", "company_owner_chain", "source_graph_complete"]),
-                ("ownership_path_steps", "Ownership path steps", ["path_id", "subject_company", "step", "edge_source_id", "company", "owner", "owner_kind", "fraction", "effective_from", "effective_to", "evidence_reference"]),
-                ("cutoff_document_controls", "Cutoff document controls", ["document_source_id", "counterparty", "reference", "currency", "document_kind", "document_amount", "allocated_amount", "difference", "allocation_rows", "state"]),
-                ("cutoff_posting_links", "Cutoff posting links", ["posting_source_id", "allocation_id", "document_id", "counterparty", "currency", "account", "amount", "posting_date", "journal_reference", "evidence_reference"]),
+                (
+                    "custody_quantity_controls",
+                    "Custody quantity controls",
+                    [
+                        "source_role",
+                        "position_id",
+                        "custodian",
+                        "site",
+                        "sku",
+                        "lot",
+                        "uom",
+                        "quantity",
+                        "response_quantity",
+                    ],
+                ),
+                (
+                    "ownership_paths",
+                    "Ownership paths",
+                    [
+                        "path_id",
+                        "subject_company",
+                        "person_id",
+                        "kind",
+                        "economic_fraction",
+                        "reach_fraction",
+                        "gap_reason",
+                        "gap_at_company",
+                        "observed_outgoing_fraction",
+                        "edge_count",
+                        "edge_source_ids",
+                        "company_owner_chain",
+                        "source_graph_complete",
+                    ],
+                ),
+                (
+                    "ownership_path_steps",
+                    "Ownership path steps",
+                    [
+                        "path_id",
+                        "subject_company",
+                        "step",
+                        "edge_source_id",
+                        "company",
+                        "owner",
+                        "owner_kind",
+                        "fraction",
+                        "effective_from",
+                        "effective_to",
+                        "evidence_reference",
+                    ],
+                ),
+                (
+                    "cutoff_document_controls",
+                    "Cutoff document controls",
+                    [
+                        "document_source_id",
+                        "counterparty",
+                        "reference",
+                        "currency",
+                        "document_kind",
+                        "document_amount",
+                        "allocated_amount",
+                        "difference",
+                        "allocation_rows",
+                        "state",
+                    ],
+                ),
+                (
+                    "cutoff_posting_links",
+                    "Cutoff posting links",
+                    [
+                        "posting_source_id",
+                        "allocation_id",
+                        "document_id",
+                        "counterparty",
+                        "currency",
+                        "account",
+                        "amount",
+                        "posting_date",
+                        "journal_reference",
+                        "evidence_reference",
+                    ],
+                ),
             ):
                 if body.get(key) is not None:
                     sheet = workbook.create_sheet(title)
@@ -290,53 +530,153 @@ def render(event, format):
                         append(sheet, [record.get(field) for field in fields])
             if body.get("confirmation_coverage_links") is not None:
                 coverage = workbook.create_sheet("Confirmation coverage links")
-                fields = ["source_row_id", "confirmation_source_row_id", "item_id", "as_of", "account", "counterparty", "side", "currency", "book_amount", "evidence_reference"]
+                fields = [
+                    "source_row_id",
+                    "confirmation_source_row_id",
+                    "item_id",
+                    "as_of",
+                    "account",
+                    "counterparty",
+                    "side",
+                    "currency",
+                    "book_amount",
+                    "evidence_reference",
+                ]
                 append(coverage, fields)
                 for link in body["confirmation_coverage_links"]:
                     append(coverage, [link.get(field) for field in fields])
             if body.get("workflow") == "sanctions-name-review":
                 candidates = workbook.create_sheet("Screening candidates")
-                candidate_fields = ["source_id", "list_subject_id", "list_name", "list_version", "published_on", "evidence_reference", "name_similarity"]
-                append(candidates, ["subject_id", "subject_name", "subject_evidence_reference", "candidate_retention", *candidate_fields])
+                candidate_fields = [
+                    "source_id",
+                    "list_subject_id",
+                    "list_name",
+                    "list_version",
+                    "published_on",
+                    "evidence_reference",
+                    "name_similarity",
+                ]
+                append(
+                    candidates,
+                    [
+                        "subject_id",
+                        "subject_name",
+                        "subject_evidence_reference",
+                        "candidate_retention",
+                        *candidate_fields,
+                    ],
+                )
                 for subject in body.get("rows", []):
-                    incomplete = subject.get("candidate_preview_truncated") or (subject.get("candidate_count") is not None and subject["candidate_count"] != len(subject.get("candidates", [])))
-                    retained = "LEGACY_TRUNCATED" if incomplete else body.get("candidate_retention_contract", "LEGACY_UNQUALIFIED")
+                    incomplete = subject.get("candidate_preview_truncated") or (
+                        subject.get("candidate_count") is not None
+                        and subject["candidate_count"] != len(subject.get("candidates", []))
+                    )
+                    retained = (
+                        "LEGACY_TRUNCATED"
+                        if incomplete
+                        else body.get("candidate_retention_contract", "LEGACY_UNQUALIFIED")
+                    )
                     for candidate in subject.get("candidates", []):
-                        append(candidates, [subject.get("id"), subject.get("subject_name"), subject.get("subject_evidence_reference"), retained, *[candidate.get(key) for key in candidate_fields]])
+                        append(
+                            candidates,
+                            [
+                                subject.get("id"),
+                                subject.get("subject_name"),
+                                subject.get("subject_evidence_reference"),
+                                retained,
+                                *[candidate.get(key) for key in candidate_fields],
+                            ],
+                        )
             if body.get("transaction_dates") is not None:
                 dates = workbook.create_sheet("Bank transaction dates")
-                date_fields = ["source_role", "source_row_id", "transaction_date", "bank_booking_date", "bank_value_date", "bank_date_basis", "booking_date_review_required"]
+                date_fields = [
+                    "source_role",
+                    "source_row_id",
+                    "transaction_date",
+                    "bank_booking_date",
+                    "bank_value_date",
+                    "bank_date_basis",
+                    "booking_date_review_required",
+                ]
                 append(dates, date_fields)
                 for record in body["transaction_dates"]:
                     append(dates, [record.get(key) for key in date_fields])
             if body.get("payroll_posting_links") is not None:
                 posting_links = workbook.create_sheet("Payroll posting links")
-                posting_fields = list(dict.fromkeys(key for row in body["payroll_posting_links"] for key in row))
+                posting_fields = list(
+                    dict.fromkeys(key for row in body["payroll_posting_links"] for key in row)
+                )
                 append(posting_links, posting_fields)
                 for link in body["payroll_posting_links"]:
                     append(posting_links, [link.get(key) for key in posting_fields])
             if body.get("inventory_quantity_controls") is not None:
                 controls = workbook.create_sheet("Inventory quantity controls")
-                fields = ["site", "sku", "lot", "uom", "currency", "expected_rows", "positive_quantity", "negative_quantity"]
+                fields = [
+                    "site",
+                    "sku",
+                    "lot",
+                    "uom",
+                    "currency",
+                    "expected_rows",
+                    "positive_quantity",
+                    "negative_quantity",
+                ]
                 append(controls, fields)
                 for control in body["inventory_quantity_controls"]:
                     append(controls, [control.get(key) for key in fields])
             if body.get("purchase_quantity_controls") is not None:
                 controls = workbook.create_sheet("Purchase quantity controls")
-                fields = ["order_id", "line_reference", "vendor", "currency", "uom", "document_type", "expected_rows", "quantity"]
+                fields = [
+                    "order_id",
+                    "line_reference",
+                    "vendor",
+                    "currency",
+                    "uom",
+                    "document_type",
+                    "expected_rows",
+                    "quantity",
+                ]
                 append(controls, fields)
                 for control in body["purchase_quantity_controls"]:
                     append(controls, [control.get(key) for key in fields])
             if body.get("count_bridges") is not None:
                 bridges = workbook.create_sheet("Count date bridges")
                 links = workbook.create_sheet("Inventory movement links")
-                bridge_keys = list(dict.fromkeys(key for bridge in body["count_bridges"] for key in bridge if key != "movement_source_ids"))
+                bridge_keys = list(
+                    dict.fromkeys(
+                        key
+                        for bridge in body["count_bridges"]
+                        for key in bridge
+                        if key != "movement_source_ids"
+                    )
+                )
                 append(bridges, bridge_keys)
-                append(links, ["count_source_id", "movement_source_id", "site", "sku", "lot", "uom", "currency"])
+                append(
+                    links,
+                    [
+                        "count_source_id",
+                        "movement_source_id",
+                        "site",
+                        "sku",
+                        "lot",
+                        "uom",
+                        "currency",
+                    ],
+                )
                 for bridge in body["count_bridges"]:
                     append(bridges, [bridge.get(key) for key in bridge_keys])
                     for movement_id in bridge.get("movement_source_ids", []):
-                        append(links, [bridge["count_source_id"], movement_id, *[bridge.get(key) for key in ["site", "sku", "lot", "uom", "currency"]]])
+                        append(
+                            links,
+                            [
+                                bridge["count_source_id"],
+                                movement_id,
+                                *[
+                                    bridge.get(key)
+                                    for key in ["site", "sku", "lot", "uom", "currency"]
+                                ],
+                            ],
+                        )
             if body.get("excluded_box_rows"):
                 excluded = workbook.create_sheet("Excluded VAT boxes")
                 excluded_keys = list(
@@ -362,12 +702,36 @@ def render(event, format):
             cash_manifest = body.get("bank_consumption_manifest")
             if isinstance(cash_manifest, dict) and isinstance(cash_manifest.get("rows"), list):
                 cash = workbook.create_sheet("Bank cash claims")
-                cash_keys = list(dict.fromkeys(["bank_source_row_id", "account", "account_basis", "currency", "capacity", "allocated", "source_sha256", "cash_key", "economic_key", "origin_key", *[key for claim in cash_manifest["rows"] for key in claim]]))
+                cash_keys = list(
+                    dict.fromkeys(
+                        [
+                            "bank_source_row_id",
+                            "account",
+                            "account_basis",
+                            "currency",
+                            "capacity",
+                            "allocated",
+                            "source_sha256",
+                            "cash_key",
+                            "economic_key",
+                            "origin_key",
+                            *[key for claim in cash_manifest["rows"] for key in claim],
+                        ]
+                    )
+                )
                 from openpyxl.utils import get_column_letter
 
                 cash.freeze_panes = "A2"
                 for index, key in enumerate(cash_keys, 1):
-                    cash.column_dimensions[get_column_letter(index)].width = 68 if key.endswith("key") or key.endswith("sha256") else 42 if key in {"capacity", "allocated"} else 36 if key in {"account", "account_basis"} else max(24, len(key) + 2)
+                    cash.column_dimensions[get_column_letter(index)].width = (
+                        68
+                        if key.endswith("key") or key.endswith("sha256")
+                        else 42
+                        if key in {"capacity", "allocated"}
+                        else 36
+                        if key in {"account", "account_basis"}
+                        else max(24, len(key) + 2)
+                    )
                 append(cash, cash_keys)
                 for claim in cash_manifest["rows"]:
                     append(cash, [claim.get(key) for key in cash_keys])
@@ -375,7 +739,13 @@ def render(event, format):
             for dep in event["dependencies"]:
                 append(receipts, [dep["type"], dep])
             if writer.long_values:
-                append(cover, ["Oversized cells", f"{len(writer.long_values)} exact values retained in ordered parts on Long values; source sheet/cell and UTF-8 SHA-256 identify each original value"])
+                append(
+                    cover,
+                    [
+                        "Oversized cells",
+                        f"{len(writer.long_values)} exact values retained in ordered parts on Long values; source sheet/cell and UTF-8 SHA-256 identify each original value",
+                    ],
+                )
             writer.finish()
             workbook.save(buffer)
             return (

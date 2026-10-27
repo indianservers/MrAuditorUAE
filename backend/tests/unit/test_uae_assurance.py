@@ -1,8 +1,10 @@
+import uuid
 from copy import deepcopy
 from decimal import Decimal
-import uuid
+
 import pytest
 from pydantic import ValidationError
+
 from app.modules.jurisdictions.ae.advanced import Schedule, calculate
 from app.modules.jurisdictions.ae.advanced_specs import spec
 

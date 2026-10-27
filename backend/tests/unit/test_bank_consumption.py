@@ -73,8 +73,9 @@ def test_original_positions_survive_selection_and_row_order_changes(kind):
             row["source_row"] = index
     original = manifest(data, source, result)
     source["rows"].reverse()
-    source.update(supporting_table_id="table-b" if kind == "supporting" else None,
-                  account_ids=["a", "b"])
+    source.update(
+        supporting_table_id="table-b" if kind == "supporting" else None, account_ids=["a", "b"]
+    )
     assert manifest(data, source, result)["cash_keys"] == original["cash_keys"]
 
 

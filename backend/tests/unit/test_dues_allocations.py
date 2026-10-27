@@ -236,8 +236,12 @@ def test_export_keeps_late_amount_allocations_and_residual_controls_exact():
     }
 
 
-@pytest.mark.parametrize("country,currency,component", [("AE", "AED", "SALARY"), ("IN", "INR", "PF:EMPLOYEE")])
-def test_canonical_reversal_flag_blocks_settlement_and_remains_visible(country, currency, component):
+@pytest.mark.parametrize(
+    "country,currency,component", [("AE", "AED", "SALARY"), ("IN", "INR", "PF:EMPLOYEE")]
+)
+def test_canonical_reversal_flag_blocks_settlement_and_remains_visible(
+    country, currency, component
+):
     rows = example(currency, component)
     for row in rows["bank"]:
         row["is_reversal"] = row["id"] == "B1"

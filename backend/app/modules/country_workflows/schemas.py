@@ -48,12 +48,22 @@ from app.modules.regulatory.pension_profiles import PensionScope
 Money = Annotated[Decimal, Field(max_digits=28, decimal_places=8)]
 Identifier = Annotated[str, Field(min_length=1, max_length=120)]
 WPSVariableComponent = Literal[
-    "housing_allowance", "conveyance_allowance", "medical_allowance",
-    "annual_passage_allowance", "overtime_allowance", "other_allowances", "leave_encashment",
+    "housing_allowance",
+    "conveyance_allowance",
+    "medical_allowance",
+    "annual_passage_allowance",
+    "overtime_allowance",
+    "other_allowances",
+    "leave_encashment",
 ]
 WPS_VARIABLE_FIELDS = (
-    "housing_allowance", "conveyance_allowance", "medical_allowance",
-    "annual_passage_allowance", "overtime_allowance", "other_allowances", "leave_encashment",
+    "housing_allowance",
+    "conveyance_allowance",
+    "medical_allowance",
+    "annual_passage_allowance",
+    "overtime_allowance",
+    "other_allowances",
+    "leave_encashment",
 )
 
 
@@ -66,18 +76,31 @@ class Transaction(Strict):
     amount: Money
     counterparty: str = Field(default="", max_length=120)
     is_reversal: bool = False
-    bank_booking_date: CalendarDate | None = Field(default=None, exclude_if=lambda value: value is None)
-    bank_value_date: CalendarDate | None = Field(default=None, exclude_if=lambda value: value is None)
-    bank_date_basis: Literal["BOOKING_DATE", "ENTRY_DATE_INFERRED_YEAR", "VALUE_DATE_FALLBACK"] | None = Field(default=None, exclude_if=lambda value: value is None)
+    bank_booking_date: CalendarDate | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
+    bank_value_date: CalendarDate | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
+    bank_date_basis: (
+        Literal["BOOKING_DATE", "ENTRY_DATE_INFERRED_YEAR", "VALUE_DATE_FALLBACK"] | None
+    ) = Field(default=None, exclude_if=lambda value: value is None)
 
     @model_validator(mode="after")
     def bank_dates(self):
         if self.bank_booking_date is not None and self.bank_booking_date != self.date:
             raise ValueError("Transaction date must equal the separately retained booking date")
-        if self.bank_date_basis in {"BOOKING_DATE", "ENTRY_DATE_INFERRED_YEAR"} and self.bank_booking_date is None:
+        if (
+            self.bank_date_basis in {"BOOKING_DATE", "ENTRY_DATE_INFERRED_YEAR"}
+            and self.bank_booking_date is None
+        ):
             raise ValueError("Booking-date basis requires an explicit booking date")
-        if self.bank_date_basis == "VALUE_DATE_FALLBACK" and (self.bank_value_date != self.date or self.bank_booking_date is not None):
-            raise ValueError("Value-date fallback requires the value date and cannot assert a booking date")
+        if self.bank_date_basis == "VALUE_DATE_FALLBACK" and (
+            self.bank_value_date != self.date or self.bank_booking_date is not None
+        ):
+            raise ValueError(
+                "Value-date fallback requires the value date and cannot assert a booking date"
+            )
         return self
 
 
@@ -115,7 +138,9 @@ class Obligation(Strict):
     amount: Money
     due_date: date | None = None
     payment_date: date | None = None
-    withholding_scope: WithholdingSettlementScope | None = Field(default=None, exclude_if=lambda value: value is None)
+    withholding_scope: WithholdingSettlementScope | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
     pension_scope: PensionScope | None = Field(default=None, exclude_if=lambda value: value is None)
 
     @field_validator("withholding_scope", mode="before")
@@ -146,9 +171,20 @@ class Obligation(Strict):
     def scope_component(self):
         if self.withholding_scope is not None:
             scope = self.withholding_scope
-            if self.pension_scope is not None or self.currency != "INR" or self.component != scope.tax_kind or self.population == "arrears":
-                raise ValueError("Withholding obligations require INR, the exact TDS/TCS component and a separate liability scope")
-            if not scope.tax_year_start.strftime("%Y-%m") <= self.period <= scope.tax_year_end.strftime("%Y-%m"):
+            if (
+                self.pension_scope is not None
+                or self.currency != "INR"
+                or self.component != scope.tax_kind
+                or self.population == "arrears"
+            ):
+                raise ValueError(
+                    "Withholding obligations require INR, the exact TDS/TCS component and a separate liability scope"
+                )
+            if (
+                not scope.tax_year_start.strftime("%Y-%m")
+                <= self.period
+                <= scope.tax_year_end.strftime("%Y-%m")
+            ):
                 raise ValueError("Withholding obligation period is outside its assessed tax year")
         if self.pension_scope is not None and not self.component.startswith("PENSION:"):
             raise ValueError("Pension scope applies only to pension components")
@@ -233,16 +269,22 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
 class SourceInput(Strict):
     workbook_sheet: str | None = Field(default=None, min_length=1, max_length=31)
     workbook_assessment: str = Field(default="", max_length=2000)
-    custody_quantity_controls: list[CustodyQuantityControl] | None = Field(default=None, max_length=5000)
+    custody_quantity_controls: list[CustodyQuantityControl] | None = Field(
+        default=None, max_length=5000
+    )
     confirmation_request_totals: dict[str, Money] | None = Field(default=None, max_length=20)
     confirmation_response_totals: dict[str, Money] | None = Field(default=None, max_length=20)
     confirmation_request_document_version_id: uuid.UUID | None = None
     confirmation_response_document_version_id: uuid.UUID | None = None
     confirmation_followup_document_version_id: uuid.UUID | None = None
-    purchase_quantity_controls: list[PurchaseQuantityControl] | None = Field(default=None, max_length=5000)
+    purchase_quantity_controls: list[PurchaseQuantityControl] | None = Field(
+        default=None, max_length=5000
+    )
     inventory_cost_document_version_id: uuid.UUID | None = None
     inventory_nrv_document_version_id: uuid.UUID | None = None
-    inventory_valuation_controls: list[InventoryValueControl] | None = Field(default=None, max_length=20)
+    inventory_valuation_controls: list[InventoryValueControl] | None = Field(
+        default=None, max_length=20
+    )
     esic_context_evidence_version_id: uuid.UUID | None = None
     esic_return_kind: Literal["monthly", "supplementary"] | None = None
     esic_scope_assessment: str = Field(default="", max_length=2000)
@@ -253,9 +295,13 @@ class SourceInput(Strict):
     arrear_context_evidence_version_id: uuid.UUID | None = None
     arrear_disbursement_date: date | None = None
     arrear_scope_assessment: str = Field(default="", max_length=2000)
-    inventory_quantity_controls: list[InventoryQuantityControl] | None = Field(default=None, max_length=5000)
+    inventory_quantity_controls: list[InventoryQuantityControl] | None = Field(
+        default=None, max_length=5000
+    )
     wps_variable_pay_count: int | None = Field(default=None, ge=0, le=5000, strict=True)
-    wps_variable_pay_totals: dict[WPSVariableComponent, Money] = Field(default_factory=dict, max_length=7)
+    wps_variable_pay_totals: dict[WPSVariableComponent, Money] = Field(
+        default_factory=dict, max_length=7
+    )
     gstr2b_parts: list[GSTR2BPart] = Field(default_factory=list, max_length=100)
     gstr2b_expected_files: int | None = Field(default=None, ge=1, le=100, strict=True)
     gstr2b_retrieval_assessment: str = Field(default="", max_length=2000)
@@ -305,8 +351,14 @@ class SourceInput(Strict):
     expected_documents: int | None = Field(default=None, ge=0, le=1250)
     rule_document_version_id: uuid.UUID | None = None
     table_type: Literal[
-        "media-subjects", "media-searches", "media-mentions", "media-policies",
-        "grant-budgets", "grant-expenses", "grant-allocations", "grant-utilisation-controls",
+        "media-subjects",
+        "media-searches",
+        "media-mentions",
+        "media-policies",
+        "grant-budgets",
+        "grant-expenses",
+        "grant-allocations",
+        "grant-utilisation-controls",
         "inventory-valuations",
         "esic-members",
         "gst-document-series",
@@ -381,102 +433,255 @@ class SourceInput(Strict):
     @model_validator(mode="after")
     def declared_nil(self):
         if self.workbook_sheet is not None:
-            if (self.file_format != "canonical-csv" or self.supporting_table_id
-                or self.delimiter != "," or len(self.workbook_assessment.strip()) < 10):
-                raise ValueError("Workbook input requires a canonical field contract, explicit worksheet assessment, comma serialization and no supporting-table bridge")
+            if (
+                self.file_format != "canonical-csv"
+                or self.supporting_table_id
+                or self.delimiter != ","
+                or len(self.workbook_assessment.strip()) < 10
+            ):
+                raise ValueError(
+                    "Workbook input requires a canonical field contract, explicit worksheet assessment, comma serialization and no supporting-table bridge"
+                )
         elif self.workbook_assessment:
             raise ValueError("A workbook assessment requires an explicit worksheet")
-        if (self.inventory_cost_document_version_id is not None or self.inventory_nrv_document_version_id is not None) and (self.table_type != "inventory-valuations" or self.file_format != "canonical-csv"):
-            raise ValueError("Shared inventory documents apply only to canonical valuation evidence sources")
+        if (
+            self.inventory_cost_document_version_id is not None
+            or self.inventory_nrv_document_version_id is not None
+        ) and (self.table_type != "inventory-valuations" or self.file_format != "canonical-csv"):
+            raise ValueError(
+                "Shared inventory documents apply only to canonical valuation evidence sources"
+            )
         if self.table_type == "inventory-valuations":
             if self.inventory_valuation_controls is None or self.control_totals:
-                raise ValueError("Inventory valuations require independent currency cost/NRV controls without mixed monetary totals")
+                raise ValueError(
+                    "Inventory valuations require independent currency cost/NRV controls without mixed monetary totals"
+                )
         elif self.inventory_valuation_controls is not None:
-            raise ValueError("Inventory valuation controls apply only to valuation evidence sources")
+            raise ValueError(
+                "Inventory valuation controls apply only to valuation evidence sources"
+            )
         if self.table_type == "esic-members":
-            if self.file_format not in {"canonical-csv", "india-esic-members-xls"} or self.esic_paid_days_control is None or self.esic_zero_wage_members_control is None or set(self.control_totals) != {"INR"}:
-                raise ValueError("ESIC populations require controlled CSV/XLS with independent paid-day and zero-wage member totals")
-        elif self.esic_paid_days_control is not None or self.esic_zero_wage_members_control is not None:
+            if (
+                self.file_format not in {"canonical-csv", "india-esic-members-xls"}
+                or self.esic_paid_days_control is None
+                or self.esic_zero_wage_members_control is None
+                or set(self.control_totals) != {"INR"}
+            ):
+                raise ValueError(
+                    "ESIC populations require controlled CSV/XLS with independent paid-day and zero-wage member totals"
+                )
+        elif (
+            self.esic_paid_days_control is not None
+            or self.esic_zero_wage_members_control is not None
+        ):
             raise ValueError("ESIC population controls apply only to ESIC member sources")
         if self.file_format == "india-esic-members-xls":
             registration = self.employer_registration or ""
-            if self.table_type != "esic-members" or not self.esic_context_evidence_version_id or self.esic_context_evidence_version_id == self.evidence_version_id or self.esic_return_kind is None or len(self.esic_scope_assessment.strip()) < 10 or not self.obligation_period or not registration.isascii() or not registration.isdigit() or len(registration) != 17:
-                raise ValueError("ESIC XLS requires one employer/month, declared return kind, distinct retained context and meaningful scope assessment")
+            if (
+                self.table_type != "esic-members"
+                or not self.esic_context_evidence_version_id
+                or self.esic_context_evidence_version_id == self.evidence_version_id
+                or self.esic_return_kind is None
+                or len(self.esic_scope_assessment.strip()) < 10
+                or not self.obligation_period
+                or not registration.isascii()
+                or not registration.isdigit()
+                or len(registration) != 17
+            ):
+                raise ValueError(
+                    "ESIC XLS requires one employer/month, declared return kind, distinct retained context and meaningful scope assessment"
+                )
             date.fromisoformat(f"{self.obligation_period}-01")
-        elif self.esic_context_evidence_version_id is not None or self.esic_return_kind is not None or self.esic_scope_assessment:
-            raise ValueError("ESIC workbook context applies only to the explicit native XLS profile")
+        elif (
+            self.esic_context_evidence_version_id is not None
+            or self.esic_return_kind is not None
+            or self.esic_scope_assessment
+        ):
+            raise ValueError(
+                "ESIC workbook context applies only to the explicit native XLS profile"
+            )
         if self.table_type == "gst-document-series":
-            if self.document_series_controls is None or self.control_totals or self.expected_rows < 1:
-                raise ValueError("Document series require explicit range rows and independent issued/cancelled/net count controls without money totals")
+            if (
+                self.document_series_controls is None
+                or self.control_totals
+                or self.expected_rows < 1
+            ):
+                raise ValueError(
+                    "Document series require explicit range rows and independent issued/cancelled/net count controls without money totals"
+                )
         elif self.document_series_controls is not None:
             raise ValueError("Document-series count controls apply only to document-series sources")
         if self.file_format == "india-gstr1-document-series-json":
-            if self.table_type != "gst-document-series" or not self.gst_registration or not self.gst_period or not self.gstr1_context_evidence_version_id or self.gstr1_context_evidence_version_id == self.evidence_version_id or len(self.gstr1_retrieval_assessment.strip()) < 10 or self.gstr1_section_controls:
-                raise ValueError("Native document series require distinct retained request context, assessed GSTIN/period and count controls")
+            if (
+                self.table_type != "gst-document-series"
+                or not self.gst_registration
+                or not self.gst_period
+                or not self.gstr1_context_evidence_version_id
+                or self.gstr1_context_evidence_version_id == self.evidence_version_id
+                or len(self.gstr1_retrieval_assessment.strip()) < 10
+                or self.gstr1_section_controls
+            ):
+                raise ValueError(
+                    "Native document series require distinct retained request context, assessed GSTIN/period and count controls"
+                )
         if self.file_format == "india-gstr1-documents-json":
             controls = self.gstr1_section_controls
             sections = [c.section for c in controls]
             with localcontext() as arithmetic:
                 arithmetic.prec = 80
                 tax = sum((c.igst + c.cgst + c.sgst + c.cess for c in controls), Decimal(0))
-            if not controls or len(set(sections)) != len(sections) or not self.gstr1_context_evidence_version_id or self.gstr1_context_evidence_version_id == self.evidence_version_id or len(self.gstr1_retrieval_assessment.strip()) < 10 or not self.gst_registration or not self.gst_period or self.table_type != "tax-documents" or self.expected_documents != sum(c.document_count for c in controls) or self.expected_rows != 4 * sum(c.document_count for c in controls) or self.control_totals != {"INR": tax}:
-                raise ValueError("GSTR-1 documents require distinct retained request context, assessed retrieval scope, unique section counts/base/component controls and agreeing whole-source controls")
-        elif self.file_format != "india-gstr1-document-series-json" and (self.gstr1_section_controls or self.gstr1_context_evidence_version_id is not None or self.gstr1_retrieval_assessment):
-            raise ValueError("GSTR-1 document controls/context apply only to the explicit invoice/note profile")
+            if (
+                not controls
+                or len(set(sections)) != len(sections)
+                or not self.gstr1_context_evidence_version_id
+                or self.gstr1_context_evidence_version_id == self.evidence_version_id
+                or len(self.gstr1_retrieval_assessment.strip()) < 10
+                or not self.gst_registration
+                or not self.gst_period
+                or self.table_type != "tax-documents"
+                or self.expected_documents != sum(c.document_count for c in controls)
+                or self.expected_rows != 4 * sum(c.document_count for c in controls)
+                or self.control_totals != {"INR": tax}
+            ):
+                raise ValueError(
+                    "GSTR-1 documents require distinct retained request context, assessed retrieval scope, unique section counts/base/component controls and agreeing whole-source controls"
+                )
+        elif self.file_format != "india-gstr1-document-series-json" and (
+            self.gstr1_section_controls
+            or self.gstr1_context_evidence_version_id is not None
+            or self.gstr1_retrieval_assessment
+        ):
+            raise ValueError(
+                "GSTR-1 document controls/context apply only to the explicit invoice/note profile"
+            )
         if self.table_type == "gst-summary-metrics":
-            if not self.gst_summary_metric_controls or set(self.gst_summary_metric_controls) - METRICS or self.control_totals or self.expected_rows < 1:
-                raise ValueError("GST summary sources require explicit rows and every independent metric control; do not use mixed currency totals")
+            if (
+                not self.gst_summary_metric_controls
+                or set(self.gst_summary_metric_controls) - METRICS
+                or self.control_totals
+                or self.expected_rows < 1
+            ):
+                raise ValueError(
+                    "GST summary sources require explicit rows and every independent metric control; do not use mixed currency totals"
+                )
         elif self.gst_summary_metric_controls:
             raise ValueError("GST summary metric controls apply only to summary metric sources")
         if self.file_format == "india-epfo-arrear-ecr-v2":
-            if self.ecr_arrear_controls is None or self.arrear_context_evidence_version_id is None or self.arrear_disbursement_date is None or len(self.arrear_scope_assessment.strip()) < 10:
-                raise ValueError("Arrear ECR requires independent wage/contribution controls, distinct retained context, disbursement date and month attribution assessment")
+            if (
+                self.ecr_arrear_controls is None
+                or self.arrear_context_evidence_version_id is None
+                or self.arrear_disbursement_date is None
+                or len(self.arrear_scope_assessment.strip()) < 10
+            ):
+                raise ValueError(
+                    "Arrear ECR requires independent wage/contribution controls, distinct retained context, disbursement date and month attribution assessment"
+                )
             if self.arrear_context_evidence_version_id == self.evidence_version_id:
                 raise ValueError("Retain arrear filing context separately from the member text")
-            if not self.obligation_period or not self.employer_registration or self.expected_members is None or self.expected_rows != 3 * self.expected_members:
-                raise ValueError("Arrear ECR requires one establishment, declared wage month, independent member count and three component rows per member")
+            if (
+                not self.obligation_period
+                or not self.employer_registration
+                or self.expected_members is None
+                or self.expected_rows != 3 * self.expected_members
+            ):
+                raise ValueError(
+                    "Arrear ECR requires one establishment, declared wage month, independent member count and three component rows per member"
+                )
             if self.arrear_disbursement_date < date.fromisoformat(self.obligation_period + "-01"):
                 raise ValueError("Arrear disbursement cannot precede the declared wage month")
-        elif self.ecr_arrear_controls is not None or self.arrear_context_evidence_version_id is not None or self.arrear_disbursement_date is not None or self.arrear_scope_assessment:
-            raise ValueError("Arrear controls and context apply only to the explicit eight-field arrear ECR profile")
+        elif (
+            self.ecr_arrear_controls is not None
+            or self.arrear_context_evidence_version_id is not None
+            or self.arrear_disbursement_date is not None
+            or self.arrear_scope_assessment
+        ):
+            raise ValueError(
+                "Arrear controls and context apply only to the explicit eight-field arrear ECR profile"
+            )
         if self.purchase_quantity_controls is not None and self.table_type != "purchase-lines":
             raise ValueError("Purchase quantity controls apply only to purchase-line sources")
-        if any((self.confirmation_request_document_version_id, self.confirmation_response_document_version_id, self.confirmation_followup_document_version_id)) and (self.table_type not in {"party-confirmations", "inventory-custody-confirmations"} or self.file_format != "canonical-csv"):
-            raise ValueError("Confirmation documents apply only to canonical party or custody confirmation sources")
+        if any(
+            (
+                self.confirmation_request_document_version_id,
+                self.confirmation_response_document_version_id,
+                self.confirmation_followup_document_version_id,
+            )
+        ) and (
+            self.table_type not in {"party-confirmations", "inventory-custody-confirmations"}
+            or self.file_format != "canonical-csv"
+        ):
+            raise ValueError(
+                "Confirmation documents apply only to canonical party or custody confirmation sources"
+            )
         if self.table_type in {"inventory-custody-positions", "inventory-custody-confirmations"}:
             if self.file_format != "canonical-csv" or self.custody_quantity_controls is None:
-                raise ValueError("Custody sources require canonical CSV and independent position/unit quantity controls")
+                raise ValueError(
+                    "Custody sources require canonical CSV and independent position/unit quantity controls"
+                )
         elif self.custody_quantity_controls is not None:
-            raise ValueError("Custody quantity controls apply only to custody position or confirmation sources")
+            raise ValueError(
+                "Custody quantity controls apply only to custody position or confirmation sources"
+            )
         if self.table_type == "party-confirmations":
-            if self.confirmation_request_totals is None or self.confirmation_response_totals is None or self.file_format != "canonical-csv":
-                raise ValueError("Party confirmations require canonical CSV and separate independent scope, written-request and written-response totals")
-        elif self.confirmation_response_totals is not None or self.confirmation_request_totals is not None:
-            raise ValueError("Written request/response totals apply only to party-confirmation sources")
-        if self.inventory_quantity_controls is not None and self.table_type not in {"stock", "stock-movements"}:
-            raise ValueError("Inventory quantity controls apply only to stock and stock-movement sources")
+            if (
+                self.confirmation_request_totals is None
+                or self.confirmation_response_totals is None
+                or self.file_format != "canonical-csv"
+            ):
+                raise ValueError(
+                    "Party confirmations require canonical CSV and separate independent scope, written-request and written-response totals"
+                )
+        elif (
+            self.confirmation_response_totals is not None
+            or self.confirmation_request_totals is not None
+        ):
+            raise ValueError(
+                "Written request/response totals apply only to party-confirmation sources"
+            )
+        if self.inventory_quantity_controls is not None and self.table_type not in {
+            "stock",
+            "stock-movements",
+        }:
+            raise ValueError(
+                "Inventory quantity controls apply only to stock and stock-movement sources"
+            )
         if self.file_format == "uae-wps-sif-evp":
-            if self.wps_variable_pay_count is None or set(self.wps_variable_pay_totals) != set(WPS_VARIABLE_FIELDS):
-                raise ValueError("Declare the EVP record count and every independent variable-pay component total")
+            if self.wps_variable_pay_count is None or set(self.wps_variable_pay_totals) != set(
+                WPS_VARIABLE_FIELDS
+            ):
+                raise ValueError(
+                    "Declare the EVP record count and every independent variable-pay component total"
+                )
             if any(value < 0 for value in self.wps_variable_pay_totals.values()):
                 raise ValueError("WPS variable-pay controls must be non-negative")
         elif self.wps_variable_pay_count is not None or self.wps_variable_pay_totals:
-            raise ValueError("Variable-pay controls apply only to the explicit EDR/EVP/SCR WPS profile")
+            raise ValueError(
+                "Variable-pay controls apply only to the explicit EDR/EVP/SCR WPS profile"
+            )
         if self.gstr2b_parts:
             numbers = [part.file_number for part in self.gstr2b_parts]
             identifiers = [part.evidence_version_id for part in self.gstr2b_parts]
             with localcontext() as arithmetic:
                 arithmetic.prec = 80
                 part_total = sum((part.tax_total for part in self.gstr2b_parts), Decimal(0))
-            if (self.file_format != "india-gstr2b-json" or self.table_type != "tax-documents"
-                or self.supporting_table_id or self.gstr2b_expected_files != len(numbers)
+            if (
+                self.file_format != "india-gstr2b-json"
+                or self.table_type != "tax-documents"
+                or self.supporting_table_id
+                or self.gstr2b_expected_files != len(numbers)
                 or sorted(numbers) != list(range(1, len(numbers) + 1))
-                or len(set(identifiers)) != len(identifiers) or self.evidence_version_id in identifiers
+                or len(set(identifiers)) != len(identifiers)
+                or self.evidence_version_id in identifiers
                 or len(self.gstr2b_retrieval_assessment.strip()) < 10
-                or self.expected_documents != sum(part.expected_documents for part in self.gstr2b_parts)
-                or self.expected_rows != 4 * sum(part.expected_documents for part in self.gstr2b_parts)
-                or self.control_totals != {"INR": part_total}):
-                raise ValueError("GSTR-2B assembly requires distinct original files numbered 1..count, independent per-part and whole-source controls, and a retrieval assessment")
+                or self.expected_documents
+                != sum(part.expected_documents for part in self.gstr2b_parts)
+                or self.expected_rows
+                != 4 * sum(part.expected_documents for part in self.gstr2b_parts)
+                or self.control_totals != {"INR": part_total}
+            ):
+                raise ValueError(
+                    "GSTR-2B assembly requires distinct original files numbered 1..count, independent per-part and whole-source controls, and a retrieval assessment"
+                )
         elif self.gstr2b_expected_files is not None or self.gstr2b_retrieval_assessment:
             raise ValueError("GSTR-2B assembly controls require numbered original response parts")
         if self.table_type == "import-vat-lines":
@@ -583,10 +788,13 @@ class WorkflowInput(Strict):
     @model_validator(mode="before")
     @classmethod
     def explicit_grant_calendar(cls, value):
-        if isinstance(value,dict) and value.get("workflow") in {"grant-utilisation", "adverse-media-review"}:
+        if isinstance(value, dict) and value.get("workflow") in {
+            "grant-utilisation",
+            "adverse-media-review",
+        }:
             from app.modules.country_workflows.grant_utilisation import calendar_day
 
-            for key in ("as_of","period_start"):
+            for key in ("as_of", "period_start"):
                 if value.get(key) is not None:
                     calendar_day(value[key])
         return value
@@ -595,7 +803,9 @@ class WorkflowInput(Strict):
     inventory_scope_assessment: str = Field(default="", max_length=2000)
     esic_population_review_id: uuid.UUID | None = None
     esic_basis_scope_assessment: str = Field(default="", max_length=2000)
-    esic_components: list[ESIComponent] = Field(default_factory=esi_components, min_length=1, max_length=2)
+    esic_components: list[ESIComponent] = Field(
+        default_factory=esi_components, min_length=1, max_length=2
+    )
     withholding_role: WithholdingRole | None = None
     allocation_basis: Literal["invoice_face_amounts", "pre_application_balances"] | None = None
     workflow: Literal[
@@ -674,7 +884,7 @@ class WorkflowInput(Strict):
     currency: str = Field(default="AED", pattern=r"^[A-Z]{3}$")
     import_nil_scope: ImportNilScope | None = None
     bank_account_review_id: uuid.UUID | None = None
-    bank_account_scope_assessment: str = Field(default="",max_length=2000)
+    bank_account_scope_assessment: str = Field(default="", max_length=2000)
     bank_owner_name: str = Field(default="", max_length=200)
     bank_owner_identifier_scheme: str = Field(default="", max_length=80)
     bank_owner_identifier: str = Field(default="", max_length=120)
@@ -695,50 +905,132 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
-        if self.workflow == "adverse-media-review" and (self.tolerance != 0 or self.date_tolerance != 0):
-            raise ValueError("Adverse media review uses exact source counts and policy dates, without money or fuzzy date tolerances")
-        if self.workflow == "grant-utilisation" and (self.period_start is None or self.period_start > self.as_of or self.period_start == date.min or self.tolerance != 0 or self.date_tolerance != 0):
-            raise ValueError("Grant utilisation requires an explicit ordered period and exact controls without netting tolerance")
+        if self.workflow == "adverse-media-review" and (
+            self.tolerance != 0 or self.date_tolerance != 0
+        ):
+            raise ValueError(
+                "Adverse media review uses exact source counts and policy dates, without money or fuzzy date tolerances"
+            )
+        if self.workflow == "grant-utilisation" and (
+            self.period_start is None
+            or self.period_start > self.as_of
+            or self.period_start == date.min
+            or self.tolerance != 0
+            or self.date_tolerance != 0
+        ):
+            raise ValueError(
+                "Grant utilisation requires an explicit ordered period and exact controls without netting tolerance"
+            )
         if self.workflow == "inventory-valuation-control":
-            if self.inventory_gl_basis is None or self.review_through is None or self.review_through < self.as_of or len(self.inventory_scope_assessment.strip()) < 10:
-                raise ValueError("Inventory valuation requires an explicit recorded GL basis, review-through date and source/framework scope assessment")
+            if (
+                self.inventory_gl_basis is None
+                or self.review_through is None
+                or self.review_through < self.as_of
+                or len(self.inventory_scope_assessment.strip()) < 10
+            ):
+                raise ValueError(
+                    "Inventory valuation requires an explicit recorded GL basis, review-through date and source/framework scope assessment"
+                )
         elif self.inventory_gl_basis is not None or self.inventory_scope_assessment:
-            raise ValueError("Inventory valuation basis and scope apply only to the valuation-control workflow")
+            raise ValueError(
+                "Inventory valuation basis and scope apply only to the valuation-control workflow"
+            )
         if self.esic_population_review_id is not None:
-            if self.workflow != "india-payroll-rules" or len(self.esic_basis_scope_assessment.strip()) < 10 or len(set(self.esic_components)) != len(self.esic_components):
-                raise ValueError("An ESIC population link requires India contribution review, explicit unique ESI components and a meaningful basis assessment")
-        elif self.esic_basis_scope_assessment or self.esic_components != ["ESI:EMPLOYEE", "ESI:EMPLOYER"]:
-            raise ValueError("ESIC basis assessment/component selection requires an explicit reviewed population link")
+            if (
+                self.workflow != "india-payroll-rules"
+                or len(self.esic_basis_scope_assessment.strip()) < 10
+                or len(set(self.esic_components)) != len(self.esic_components)
+            ):
+                raise ValueError(
+                    "An ESIC population link requires India contribution review, explicit unique ESI components and a meaningful basis assessment"
+                )
+        elif self.esic_basis_scope_assessment or self.esic_components != [
+            "ESI:EMPLOYEE",
+            "ESI:EMPLOYER",
+        ]:
+            raise ValueError(
+                "ESIC basis assessment/component selection requires an explicit reviewed population link"
+            )
         if self.import_nil_scope is not None:
             if self.workflow != "uae-import-vat" or self.import_nil_scope.period_end > self.as_of:
-                raise ValueError("Nil import scope requires the UAE import workflow and a closed assessed period")
+                raise ValueError(
+                    "Nil import scope requires the UAE import workflow and a closed assessed period"
+                )
         if self.bank_account_review_id is not None:
-            if self.workflow not in {"bank-brs","bank-subsequent-clearance","obligation-bank-allocations"} or len(self.bank_account_scope_assessment.strip())<10:
-                raise ValueError("A bank account evidence link requires a supported financial workflow and meaningful scope assessment")
+            if (
+                self.workflow
+                not in {"bank-brs", "bank-subsequent-clearance", "obligation-bank-allocations"}
+                or len(self.bank_account_scope_assessment.strip()) < 10
+            ):
+                raise ValueError(
+                    "A bank account evidence link requires a supported financial workflow and meaningful scope assessment"
+                )
         elif self.bank_account_scope_assessment:
-            raise ValueError("Account scope assessment requires an explicit reviewed bank account link")
+            raise ValueError(
+                "Account scope assessment requires an explicit reviewed bank account link"
+            )
         if self.workflow == "bank-account-evidence":
-            if not self.account or any(not value.strip() for value in (self.bank_owner_name,self.bank_owner_identifier_scheme,self.bank_owner_identifier)):
-                raise ValueError("Account evidence comparison requires account and explicit owner name/identifier scope")
-        elif any((self.bank_owner_name,self.bank_owner_identifier_scheme,self.bank_owner_identifier)):
+            if not self.account or any(
+                not value.strip()
+                for value in (
+                    self.bank_owner_name,
+                    self.bank_owner_identifier_scheme,
+                    self.bank_owner_identifier,
+                )
+            ):
+                raise ValueError(
+                    "Account evidence comparison requires account and explicit owner name/identifier scope"
+                )
+        elif any(
+            (self.bank_owner_name, self.bank_owner_identifier_scheme, self.bank_owner_identifier)
+        ):
             raise ValueError("Bank owner scope applies only to bank account evidence comparison")
         if self.workflow == "india-invoice-register":
             if self.invoice_direction is None:
                 raise ValueError("Select purchase or sale for the invoice evidence comparison")
         elif self.invoice_direction is not None:
-            raise ValueError("Invoice direction applies only to invoice evidence/register comparison")
+            raise ValueError(
+                "Invoice direction applies only to invoice evidence/register comparison"
+            )
         if self.vat201_layout != "custom":
-            if self.workflow != "uae-vat-return" or self.restrict_to_required_boxes or set(self.required_boxes) != set(LAYOUTS[self.vat201_layout]["boxes"]):
-                raise ValueError("A selected VAT201 layout requires all its explicit boxes without selected-box exclusion")
-        if self.workflow == "payroll-ledger-rollforward" and (self.period_start is None or self.period_start <= date.min or self.period_start > self.as_of):
-            raise ValueError("Payroll ledger bridge requires an ordered accounting period and prior-day opening balance")
-        if self.arrear_only and self.workflow not in {"statutory-dues", "india-payroll-rules", "obligation-bank-allocations"}:
-            raise ValueError("Arrear-only scope applies to statutory dues, India payroll rules or obligation bank allocations")
+            if (
+                self.workflow != "uae-vat-return"
+                or self.restrict_to_required_boxes
+                or set(self.required_boxes) != set(LAYOUTS[self.vat201_layout]["boxes"])
+            ):
+                raise ValueError(
+                    "A selected VAT201 layout requires all its explicit boxes without selected-box exclusion"
+                )
+        if self.workflow == "payroll-ledger-rollforward" and (
+            self.period_start is None
+            or self.period_start <= date.min
+            or self.period_start > self.as_of
+        ):
+            raise ValueError(
+                "Payroll ledger bridge requires an ordered accounting period and prior-day opening balance"
+            )
+        if self.arrear_only and self.workflow not in {
+            "statutory-dues",
+            "india-payroll-rules",
+            "obligation-bank-allocations",
+        }:
+            raise ValueError(
+                "Arrear-only scope applies to statutory dues, India payroll rules or obligation bank allocations"
+            )
         if self.stock_bridge_mode == "bidirectional-controlled":
-            if self.workflow != "inventory-count-bridge" or self.review_through is None or self.review_through < self.as_of or len(self.stock_cutoff_assessment.strip()) < 10:
-                raise ValueError("Controlled inventory bridging requires the inventory workflow, an ordered review-through date and explicit day-end cutoff assessment")
+            if (
+                self.workflow != "inventory-count-bridge"
+                or self.review_through is None
+                or self.review_through < self.as_of
+                or len(self.stock_cutoff_assessment.strip()) < 10
+            ):
+                raise ValueError(
+                    "Controlled inventory bridging requires the inventory workflow, an ordered review-through date and explicit day-end cutoff assessment"
+                )
         elif self.stock_cutoff_assessment:
-            raise ValueError("An inventory cutoff assessment requires explicit controlled bridge mode")
+            raise ValueError(
+                "An inventory cutoff assessment requires explicit controlled bridge mode"
+            )
         if self.workflow == "obligation-bank-allocations":
             if (
                 not self.account
@@ -801,8 +1093,13 @@ class WorkflowInput(Strict):
             raise ValueError(
                 "Ownership look-through requires an explicit company subject population"
             )
-        if self.workflow == "ownership-lookthrough" and (len(set(self.subjects)) != len(self.subjects) or any(not subject.strip() or subject != subject.strip() for subject in self.subjects)):
-            raise ValueError("Ownership subjects must be distinct exact nonblank company identifiers")
+        if self.workflow == "ownership-lookthrough" and (
+            len(set(self.subjects)) != len(self.subjects)
+            or any(not subject.strip() or subject != subject.strip() for subject in self.subjects)
+        ):
+            raise ValueError(
+                "Ownership subjects must be distinct exact nonblank company identifiers"
+            )
         if self.workflow in {
             "bank-subsequent-clearance",
             "subsequent-settlements",

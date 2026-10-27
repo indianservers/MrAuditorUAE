@@ -105,11 +105,14 @@ def transaction(data: Invoice, rule: Rule, invoice_rule: Rule):
             "document_processing": data.ocr_state,
             "legal_qualification_automated": False,
             "execution_mode": "deterministic",
-            "classification_reasons": {"treatment": data.treatment,
+            "classification_reasons": {
+                "treatment": data.treatment,
                 "place_of_supply": data.place_of_supply_assessment,
-                "rule_key": rule.rule_key, "rule_version": rule.rule_version,
+                "rule_key": rule.rule_key,
+                "rule_version": rule.rule_version,
                 "facts_reviewed": data.treatment_facts_complete,
-                "supply_type": data.supply_type},
+                "supply_type": data.supply_type,
+            },
         }
 
 

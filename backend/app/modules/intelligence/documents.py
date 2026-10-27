@@ -86,7 +86,11 @@ def structured(pages, country, decimal_separator=".", date_format="iso"):
                 candidates = [pattern]
                 if key in ARABIC_FIELDS:
                     candidates.append(ARABIC_FIELDS[key])
-                for match in (m for p in candidates for m in re.finditer(p, block["text"].translate(NUMERALS), re.I)):
+                for match in (
+                    m
+                    for p in candidates
+                    for m in re.finditer(p, block["text"].translate(NUMERALS), re.I)
+                ):
                     found.append(
                         (
                             match.group(1).strip(),
@@ -94,7 +98,7 @@ def structured(pages, country, decimal_separator=".", date_format="iso"):
                                 "page": page["page"],
                                 "block_id": block["id"],
                                 "bbox": block.get("bbox"),
-                                "raw_text": block["text"][match.start():match.end()],
+                                "raw_text": block["text"][match.start() : match.end()],
                                 "method": page.get("provider", "structured-text"),
                                 "confidence": None,
                             },
@@ -178,8 +182,13 @@ def _extract(path, media_type, country, options, expected_sha256):
 
         with Path(path).open("rb") as source:
             original = source.read(options["max_bytes"] + 1)
-        if len(original) > options["max_bytes"] or hashlib.sha256(original).hexdigest() != expected_sha256:
-            raise ValueError("Original extraction document changed or exceeds its configured byte limit")
+        if (
+            len(original) > options["max_bytes"]
+            or hashlib.sha256(original).hexdigest() != expected_sha256
+        ):
+            raise ValueError(
+                "Original extraction document changed or exceeds its configured byte limit"
+            )
         Image.MAX_IMAGE_PIXELS = 20_000_000
         max_pages = options.get("max_pages", 20)
         engine = None
@@ -364,7 +373,11 @@ def extract_document(path, media_type, country, options=None):
         raise ValueError("OCR document exceeds configured byte limit")
     from app.modules.intelligence.extraction_runtime import extract
 
-    options = {**(options or {}), "max_pages": config.document_max_pages, "max_bytes": config.document_max_bytes}
+    options = {
+        **(options or {}),
+        "max_pages": config.document_max_pages,
+        "max_bytes": config.document_max_bytes,
+    }
     return extract(path, media_type, country, options)
 
 

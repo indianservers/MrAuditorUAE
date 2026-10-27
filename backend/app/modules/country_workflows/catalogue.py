@@ -16,18 +16,60 @@ from app.modules.country_workflows.withholding_schemas import WITHHOLDING_WORKFL
 
 OPTIONAL_ROLES = {
     "party-balance-confirmations": {"coverage": "confirmation-item-coverage"},
-    "expense-cutoff": {"recognitions": "cutoff-recognition-lines", "postings": "cutoff-posting-lines"},
+    "expense-cutoff": {
+        "recognitions": "cutoff-recognition-lines",
+        "postings": "cutoff-posting-lines",
+    },
 }
 
 WORKFLOWS = {
-    "grant-utilisation": ("Grant mandates / opening utilisation / expenditure allocations", [], GRANT_ROLES),
-    "inventory-custody-confirmations": ("Offsite inventory custody quantities and condition evidence", [], {"positions": "inventory-custody-positions", "responses": "inventory-custody-confirmations"}),
-    "party-balance-confirmations": ("Positive customer/vendor balance confirmations", [], {"items": "audit-open-items", "controls": "balance-controls", "responses": "party-confirmations"}),
-    "inventory-valuation-control": ("Inventory cost / NRV evidence and recorded GL controls", [], {"books": "stock", "valuations": "inventory-valuations", "controls": "accounting-controls"}),
-    "india-esic-population": ("India ESIC member, paid-day and wage reconciliation", ["IN"], {"payroll": "esic-members", "reported": "esic-members"}),
-    "india-document-series": ("India GSTR-1 document series and cancellation counts", ["IN"], {"books": "gst-document-series", "reported": "gst-document-series"}),
-    "india-gstr1-documents": ("India GSTR-1 outward invoice/note reconciliation", ["IN"], {"books": "tax-documents", "return": "tax-documents"}),
-    "india-gstr1-summary": ("India GSTR-1 summary metric reconciliation", ["IN"], {"books": "gst-summary-metrics", "return": "gst-summary-metrics"}),
+    "grant-utilisation": (
+        "Grant mandates / opening utilisation / expenditure allocations",
+        [],
+        GRANT_ROLES,
+    ),
+    "inventory-custody-confirmations": (
+        "Offsite inventory custody quantities and condition evidence",
+        [],
+        {
+            "positions": "inventory-custody-positions",
+            "responses": "inventory-custody-confirmations",
+        },
+    ),
+    "party-balance-confirmations": (
+        "Positive customer/vendor balance confirmations",
+        [],
+        {
+            "items": "audit-open-items",
+            "controls": "balance-controls",
+            "responses": "party-confirmations",
+        },
+    ),
+    "inventory-valuation-control": (
+        "Inventory cost / NRV evidence and recorded GL controls",
+        [],
+        {"books": "stock", "valuations": "inventory-valuations", "controls": "accounting-controls"},
+    ),
+    "india-esic-population": (
+        "India ESIC member, paid-day and wage reconciliation",
+        ["IN"],
+        {"payroll": "esic-members", "reported": "esic-members"},
+    ),
+    "india-document-series": (
+        "India GSTR-1 document series and cancellation counts",
+        ["IN"],
+        {"books": "gst-document-series", "reported": "gst-document-series"},
+    ),
+    "india-gstr1-documents": (
+        "India GSTR-1 outward invoice/note reconciliation",
+        ["IN"],
+        {"books": "tax-documents", "return": "tax-documents"},
+    ),
+    "india-gstr1-summary": (
+        "India GSTR-1 summary metric reconciliation",
+        ["IN"],
+        {"books": "gst-summary-metrics", "return": "gst-summary-metrics"},
+    ),
     **WITHHOLDING_WORKFLOWS,
     **OPERATION_WORKFLOWS,
     **PAYROLL_WORKFLOWS,
@@ -41,7 +83,11 @@ WORKFLOWS = {
         ["AE"],
         {"books": "return-boxes", "return": "return-boxes"},
     ),
-    "bank-account-evidence": ("Bank account identity and owner evidence", ["AE", "IN"], {role:"bank-account-evidence" for role in ("register","ledger","bank")}),
+    "bank-account-evidence": (
+        "Bank account identity and owner evidence",
+        ["AE", "IN"],
+        {role: "bank-account-evidence" for role in ("register", "ledger", "bank")},
+    ),
     "bank-brs": (
         "Account-level bank reconciliation",
         [],

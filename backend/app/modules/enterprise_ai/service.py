@@ -74,6 +74,7 @@ async def history(db, ctx, run, validate=True):
 async def create(db, ctx, data):
     if data.task and data.task.startswith("uae-"):
         from app.modules.enterprise_ai.business import case_scope
+
         try:
             identifier = int(data.task.removeprefix("uae-"))
         except ValueError:

@@ -496,7 +496,9 @@ async def test_blank_requests_and_explicit_partial_coverage_persist_and_export(
         assert page.status_code == 200, page.text
         assert page.json()["body"]["confirmation_coverage_links"] == []
         assert page.json()["collection_totals"]["confirmation_coverage_links"] == 1
-        accepted = await decision(c, h, eid, result, action="accept", item_id="party-confirmation:1")
+        accepted = await decision(
+            c, h, eid, result, action="accept", item_id="party-confirmation:1"
+        )
         assert accepted.status_code == 201, accepted.text
         approved = await decision(c, final[0], eid, accepted.json())
         assert approved.status_code == 201, approved.text

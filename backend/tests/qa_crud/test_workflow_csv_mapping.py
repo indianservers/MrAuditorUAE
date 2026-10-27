@@ -108,7 +108,7 @@ async def test_explicit_debit_credit_csv_reconciles_with_independent_books(
                 "date": "2026-06-30",
                 "currency": "AED",
                 "amount": "100.25",
-                    "reference": "REF-1",
+                "reference": "REF-1",
             },
             {
                 "id": "BOOK-2",
@@ -116,7 +116,7 @@ async def test_explicit_debit_credit_csv_reconciles_with_independent_books(
                 "date": "2026-06-30",
                 "currency": "AED",
                 "amount": "-5",
-                    "reference": "REF-2",
+                "reference": "REF-2",
             },
         ],
         "Synthetic independently prepared cashbook",

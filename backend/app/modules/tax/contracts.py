@@ -180,7 +180,13 @@ async def current(db, ctx, eid, result):
     receipt = result.get("tax_execution")
     if receipt is None:
         return True  # Existing legacy adapters retain their prior checks; no invented receipts.
-    if not isinstance(receipt, dict) or receipt.get("tax_type") not in {"CT", "QFZP", "VAT", "TP", "DMTT"}:
+    if not isinstance(receipt, dict) or receipt.get("tax_type") not in {
+        "CT",
+        "QFZP",
+        "VAT",
+        "TP",
+        "DMTT",
+    }:
         return False
     eng = await db.get(Engagement, eid)
     if not eng or eng.tenant_id != ctx.tenant_id:

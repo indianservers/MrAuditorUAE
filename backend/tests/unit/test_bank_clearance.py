@@ -153,12 +153,19 @@ def test_native_statement_reversal_is_not_subsequent_clearance(file_format):
     else:
         # Reversal of credit is a debit; preserve the original signed -5 movement.
         content = MT940.replace(b"0602D5,00", b"0602RC5,00")
-    native = parse_native(content, options(file_format), "AE", "synthetic.xml" if file_format == "camt053" else "synthetic.mt940")
+    native = parse_native(
+        content,
+        options(file_format),
+        "AE",
+        "synthetic.xml" if file_format == "camt053" else "synthetic.mt940",
+    )
     reversed_row = next(row for row in native["rows"] if row["is_reversal"])
     p = population()
     p["outstanding"][0].update(date="2026-05-20", balance_date="2026-05-31", amount="-5")
     p["statement"] = native["rows"]
     p["allocations"][0].update(transaction_id=reversed_row["id"], amount="5")
-    scope = SimpleNamespace(account="BANK-1", currency="AED", as_of=date(2026, 5, 31), review_through=date(2026, 6, 30))
+    scope = SimpleNamespace(
+        account="BANK-1", currency="AED", as_of=date(2026, 5, 31), review_through=date(2026, 6, 30)
+    )
     with pytest.raises(ValueError, match="reversal bank movement"):
         clearances(scope, p)

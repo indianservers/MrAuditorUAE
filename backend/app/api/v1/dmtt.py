@@ -29,10 +29,21 @@ async def scope_assessment(eid: uuid.UUID, data: s.ScopeInput, db: DB, ctx: Acto
     for revenue in data.preceding_revenues:
         await service.evidence(db, ctx, eid, revenue.evidence_id)
     result = scope(data)
-    return audit.serialize(await event(db, ctx, eid, "dmtt_scope", {
-        "inputs": data.model_dump(mode="json"), "results": result,
-        "execution_mode": "deterministic", "professional_review": "DRAFT_REQUIRES_REVIEW",
-        "filing_status": "NOT_SUBMITTED"}))
+    return audit.serialize(
+        await event(
+            db,
+            ctx,
+            eid,
+            "dmtt_scope",
+            {
+                "inputs": data.model_dump(mode="json"),
+                "results": result,
+                "execution_mode": "deterministic",
+                "professional_review": "DRAFT_REQUIRES_REVIEW",
+                "filing_status": "NOT_SUBMITTED",
+            },
+        )
+    )
 
 
 @router.get("/legislation")
@@ -134,4 +145,12 @@ async def calculations(eid: uuid.UUID, db: DB, ctx: Actor):
             .limit(50)
         )
     ).all()
-    return {"items": [{**audit.serialize(x), "freshness": "CURRENT" if await service.current(db, ctx, eid, x) else "STALE"} for x in rows]}
+    return {
+        "items": [
+            {
+                **audit.serialize(x),
+                "freshness": "CURRENT" if await service.current(db, ctx, eid, x) else "STALE",
+            }
+            for x in rows
+        ]
+    }

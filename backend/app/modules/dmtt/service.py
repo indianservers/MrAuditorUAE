@@ -160,15 +160,23 @@ async def validate_action(db, ctx, eid, obj, action):
             memo = s.Memo.model_validate(clean(obj.body))
             if not memo.calculation_id:
                 raise HTTPException(409, "Select an immutable DMTT calculation before concluding")
-            calculation = await db.scalar(select(MLEvent).where(
-                MLEvent.tenant_id == ctx.tenant_id, MLEvent.engagement_id == eid,
-                MLEvent.id == memo.calculation_id, MLEvent.kind == "dmtt_calculation"))
+            calculation = await db.scalar(
+                select(MLEvent).where(
+                    MLEvent.tenant_id == ctx.tenant_id,
+                    MLEvent.engagement_id == eid,
+                    MLEvent.id == memo.calculation_id,
+                    MLEvent.kind == "dmtt_calculation",
+                )
+            )
             if not calculation or calculation.body.get("group_id") != str(memo.group_id):
                 raise HTTPException(422, "DMTT calculation outside selected group")
             if not await current(db, ctx, eid, calculation):
                 raise HTTPException(409, "DMTT sources changed; recalculate before review")
             if calculation.body["results"].get("uae_dmtt") is None:
-                raise HTTPException(409, "Incomplete or unsupported DMTT calculation cannot support a final conclusion")
+                raise HTTPException(
+                    409,
+                    "Incomplete or unsupported DMTT calculation cannot support a final conclusion",
+                )
 
 
 async def current(db, ctx, eid, calculation):
@@ -185,27 +193,43 @@ async def current(db, ctx, eid, calculation):
         return False
     for dependency in dependencies:
         if "version" in dependency:
-            obj = await db.scalar(select(AuditRecord).where(
-                AuditRecord.tenant_id == ctx.tenant_id, AuditRecord.id == dependency["id"]))
-            if not obj or obj.version != dependency["version"] or obj.status not in {"APPROVED", "LOCKED"}:
+            obj = await db.scalar(
+                select(AuditRecord).where(
+                    AuditRecord.tenant_id == ctx.tenant_id, AuditRecord.id == dependency["id"]
+                )
+            )
+            if (
+                not obj
+                or obj.version != dependency["version"]
+                or obj.status not in {"APPROVED", "LOCKED"}
+            ):
                 return False
             await audit.get_record(db, ctx, obj.engagement_id, obj.id, lock=False)
             if obj.kind == "ifrs-profile":
-                proxy = type("DependencySet", (), {"kind": "dmtt-source", "dependencies": [dependency]})()
+                proxy = type(
+                    "DependencySet", (), {"kind": "dmtt-source", "dependencies": [dependency]}
+                )()
                 if not await current_dependencies(db, ctx, obj.engagement_id, proxy):
                     return False
         else:
             # Existing IFRS dependency receipts are checked by their authoritative service.
-            proxy = type("DependencySet", (), {"kind": "dmtt-source", "dependencies": [dependency]})()
+            proxy = type(
+                "DependencySet", (), {"kind": "dmtt-source", "dependencies": [dependency]}
+            )()
             if not await current_dependencies(db, ctx, eid, proxy):
                 return False
     expected = {item["id"] for item in dependencies}
-    live = (await db.scalars(select(AuditRecord.id).where(
-        AuditRecord.tenant_id == ctx.tenant_id, AuditRecord.engagement_id == eid,
-        AuditRecord.kind.in_(["dmtt-entity", "dmtt-election"]),
-        AuditRecord.body["group_id"].astext == calculation.body.get("group_id"),
-        AuditRecord.status.in_(["APPROVED", "LOCKED"])
-    ))).all()
+    live = (
+        await db.scalars(
+            select(AuditRecord.id).where(
+                AuditRecord.tenant_id == ctx.tenant_id,
+                AuditRecord.engagement_id == eid,
+                AuditRecord.kind.in_(["dmtt-entity", "dmtt-election"]),
+                AuditRecord.body["group_id"].astext == calculation.body.get("group_id"),
+                AuditRecord.status.in_(["APPROVED", "LOCKED"]),
+            )
+        )
+    ).all()
     return all(str(identifier) in expected for identifier in live)
 
 
@@ -250,14 +274,19 @@ async def computation(db, ctx, eid, gid):
     try:
         results = serial(calculate(g, entities, elections))
     except (ValueError, ArithmeticError) as exc:
-        results = {"status": "UNSUPPORTED_CASE", "uae_dmtt": None,
-                   "blocking_issues": [str(exc)], "scope_assessed_separately": True,
-                   "supported_source_schedules_preserved": [str(obj.id) for obj in objects],
-                   "iir_utpr_included": False}
+        results = {
+            "status": "UNSUPPORTED_CASE",
+            "uae_dmtt": None,
+            "blocking_issues": [str(exc)],
+            "scope_assessed_separately": True,
+            "supported_source_schedules_preserved": [str(obj.id) for obj in objects],
+            "iir_utpr_included": False,
+        }
     from app.modules.tax.contracts import attach
 
-    results = await attach(db, ctx, eid, "DMTT", results,
-                           {"rules": SOURCES, "profile_id": str(gid)}, dependencies)
+    results = await attach(
+        db, ctx, eid, "DMTT", results, {"rules": SOURCES, "profile_id": str(gid)}, dependencies
+    )
     return await event(
         db,
         ctx,

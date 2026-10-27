@@ -131,7 +131,16 @@ def test_negative_cess_cannot_be_hidden_by_positive_non_ad_valorem_cess():
 
 def test_future_reporting_period_cannot_reconcile_even_with_an_earlier_invoice_date():
     native = parse(invoice(), options(gst_period="2026-07"))
-    sources = {"books": parsed("tax-documents", [{key: value for key, value in row.items() if key in TaxDocument.model_fields} for row in native["rows"]]), "invoices": native}
+    sources = {
+        "books": parsed(
+            "tax-documents",
+            [
+                {key: value for key, value in row.items() if key in TaxDocument.model_fields}
+                for row in native["rows"]
+            ],
+        ),
+        "invoices": native,
+    }
     data = WorkflowInput(
         workflow="india-invoice-register",
         invoice_direction="purchase",
@@ -260,32 +269,83 @@ def test_unsafe_json_evidence_rejected(content):
 
 def test_native_invoice_is_not_filed_return_evidence_even_when_amounts_agree():
     native = parse(invoice())
-    register = parsed("tax-documents", [{key: value for key, value in row.items() if key in TaxDocument.model_fields} for row in native["rows"]])
-    data = WorkflowInput(workflow="india-gst",source_ids={"books":uuid.uuid4(),"return":uuid.uuid4()},as_of="2026-06-30",currency="INR",title="SYNTHETIC wrong evidence role",rationale="Identical invoice amounts cannot establish a filed return")
+    register = parsed(
+        "tax-documents",
+        [
+            {key: value for key, value in row.items() if key in TaxDocument.model_fields}
+            for row in native["rows"]
+        ],
+    )
+    data = WorkflowInput(
+        workflow="india-gst",
+        source_ids={"books": uuid.uuid4(), "return": uuid.uuid4()},
+        as_of="2026-06-30",
+        currency="INR",
+        title="SYNTHETIC wrong evidence role",
+        rationale="Identical invoice amounts cannot establish a filed return",
+    )
     with pytest.raises(ValueError, match="not a filed GST return"):
-        calculate(data,"IN",{"books":register,"return":native})
+        calculate(data, "IN", {"books": register, "return": native})
 
 
 @pytest.mark.parametrize("direction", ["purchase", "sale"])
 def test_explicit_invoice_direction_and_invoice_labels_are_preserved(direction):
-    native = parse(invoice(), options(gst_direction=direction,gst_registration=BUYER if direction=="purchase" else SELLER))
-    register = parsed("tax-documents", [{key:value for key,value in row.items() if key in TaxDocument.model_fields} for row in native["rows"]])
-    data = WorkflowInput(workflow="india-invoice-register",invoice_direction=direction,source_ids={"books":uuid.uuid4(),"invoices":uuid.uuid4()},as_of="2026-06-30",currency="INR",title="SYNTHETIC invoice register",rationale="Independent register compared with retained invoice evidence")
-    result=calculate(data,"IN",{"books":register,"invoices":native})
-    assert result["exception_count"]==0
-    assert result["invoice_evidence_scope"]["direction"]==direction
-    assert result["invoice_evidence_scope"]["filing_status"]=="NOT_ASSESSED_BY_INVOICE_COMPARISON"
+    native = parse(
+        invoice(),
+        options(
+            gst_direction=direction, gst_registration=BUYER if direction == "purchase" else SELLER
+        ),
+    )
+    register = parsed(
+        "tax-documents",
+        [
+            {key: value for key, value in row.items() if key in TaxDocument.model_fields}
+            for row in native["rows"]
+        ],
+    )
+    data = WorkflowInput(
+        workflow="india-invoice-register",
+        invoice_direction=direction,
+        source_ids={"books": uuid.uuid4(), "invoices": uuid.uuid4()},
+        as_of="2026-06-30",
+        currency="INR",
+        title="SYNTHETIC invoice register",
+        rationale="Independent register compared with retained invoice evidence",
+    )
+    result = calculate(data, "IN", {"books": register, "invoices": native})
+    assert result["exception_count"] == 0
+    assert result["invoice_evidence_scope"]["direction"] == direction
+    assert result["invoice_evidence_scope"]["filing_status"] == "NOT_ASSESSED_BY_INVOICE_COMPARISON"
     assert "invoices_tax" in result["rows"][0] and "return_tax" not in result["rows"][0]
-    with pytest.raises(ValueError,match="direction differs"):
-        calculate(data.model_copy(update={"invoice_direction":"sale" if direction=="purchase" else "purchase"}),"IN",{"books":register,"invoices":native})
-    with pytest.raises(ValueError,match="not a filed GST return"):
-        calculate(data,"IN",{"books":native,"invoices":register})
+    with pytest.raises(ValueError, match="direction differs"):
+        calculate(
+            data.model_copy(
+                update={"invoice_direction": "sale" if direction == "purchase" else "purchase"}
+            ),
+            "IN",
+            {"books": register, "invoices": native},
+        )
+    with pytest.raises(ValueError, match="not a filed GST return"):
+        calculate(data, "IN", {"books": native, "invoices": register})
 
 
 def test_sale_invoice_cannot_clear_an_inward_gstr2b_document_with_matching_identifiers():
-    native = parse(invoice(),options(gst_direction="sale",gst_registration=SELLER))
-    inward = parsed("tax-documents", [{key:value for key,value in row.items() if key in TaxDocument.model_fields} for row in native["rows"]])
-    inward["native_format"]="india-gstr2b-json"
-    data=WorkflowInput(workflow="india-gst",source_ids={"books":uuid.uuid4(),"return":uuid.uuid4()},as_of="2026-06-30",currency="INR",title="SYNTHETIC dual-role counterparty",rationale="A customer may also be a supplier; matching IDs do not erase direction")
-    with pytest.raises(ValueError,match="sales invoice cannot establish purchase books"):
-        calculate(data,"IN",{"books":native,"return":inward})
+    native = parse(invoice(), options(gst_direction="sale", gst_registration=SELLER))
+    inward = parsed(
+        "tax-documents",
+        [
+            {key: value for key, value in row.items() if key in TaxDocument.model_fields}
+            for row in native["rows"]
+        ],
+    )
+    inward["native_format"] = "india-gstr2b-json"
+    data = WorkflowInput(
+        workflow="india-gst",
+        source_ids={"books": uuid.uuid4(), "return": uuid.uuid4()},
+        as_of="2026-06-30",
+        currency="INR",
+        title="SYNTHETIC dual-role counterparty",
+        rationale="A customer may also be a supplier; matching IDs do not erase direction",
+    )
+    with pytest.raises(ValueError, match="sales invoice cannot establish purchase books"):
+        calculate(data, "IN", {"books": native, "return": inward})

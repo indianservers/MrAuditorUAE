@@ -25,10 +25,10 @@ router = APIRouter(prefix="/tax", tags=["Corporate Tax"])
 Actor = Annotated[Context, Depends(require(""))]
 
 
-
-
 @router.post("/engagements/{eid}/connected-assessments", status_code=201)
-async def connected_assessment(eid: uuid.UUID, data: ConnectedInput, db: DB, ctx: Actor, request: Request):
+async def connected_assessment(
+    eid: uuid.UUID, data: ConnectedInput, db: DB, ctx: Actor, request: Request
+):
     from app.modules.tax.connected import assess
 
     eng = await audit.engagement(db, ctx, eid, "tax.computation.prepare", True)

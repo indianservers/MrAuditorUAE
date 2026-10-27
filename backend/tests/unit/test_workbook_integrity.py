@@ -1,5 +1,8 @@
-import io, hashlib
+import hashlib
+import io
+
 from openpyxl import Workbook
+
 from app.modules.audit_analytics.workbooks import inspect
 
 

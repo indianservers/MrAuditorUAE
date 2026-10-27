@@ -434,7 +434,12 @@ async def test_connector_metadata_and_encrypted_sync(environment, monkeypatch):
 
     async def get(self, resource, params):
         if resource == "organizations":
-            return {"code": 0, "organizations": [{"organization_id": "123", "name": "FICTIONAL", "currency_code": "AED"}]}
+            return {
+                "code": 0,
+                "organizations": [
+                    {"organization_id": "123", "name": "FICTIONAL", "currency_code": "AED"}
+                ],
+            }
         return {"code": 0, resource: [], "page_context": {"page": 1, "has_more_page": False}}
 
     async def token(self, code=None, redirect_uri=None):
@@ -653,23 +658,28 @@ async def test_zoho_native_journal_and_chart_staging(environment, monkeypatch):
 
     async def get(self, resource, params):
         if resource == "organizations":
-            return {"code": 0, "organizations": [{"organization_id": "123", "currency_code": "AED"}]}
+            return {
+                "code": 0,
+                "organizations": [{"organization_id": "123", "currency_code": "AED"}],
+            }
         if resource == "chartofaccounts/accounttransactions":
             account = params["account_id"]
             debit = account == "101"
             return {
                 "code": 0,
-                "transactions": [{
-                    "account_id": account,
-                    "transaction_id": "501",
-                    "transaction_type": "journal",
-                    "transaction_date": "2026-06-01",
-                    "categorized_transaction_id": account,
-                    "currency_code": "AED",
-                    "debit_or_credit": "debit" if debit else "credit",
-                    "debit_amount": "100" if debit else "0",
-                    "credit_amount": "0" if debit else "100",
-                }],
+                "transactions": [
+                    {
+                        "account_id": account,
+                        "transaction_id": "501",
+                        "transaction_type": "journal",
+                        "transaction_date": "2026-06-01",
+                        "categorized_transaction_id": account,
+                        "currency_code": "AED",
+                        "debit_or_credit": "debit" if debit else "credit",
+                        "debit_amount": "100" if debit else "0",
+                        "credit_amount": "0" if debit else "100",
+                    }
+                ],
                 "page_context": {"page": 1, "has_more_page": False},
             }
         if resource in {"journals/501", "journals/502"}:

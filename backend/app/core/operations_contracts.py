@@ -292,8 +292,13 @@ async def current(db, ctx, obj):
     )
     from app.core.read_projection import read_once
 
-    eng, entity, period = await read_once(db, ctx, "operations-scope", str(obj.engagement_id),
-                                         lambda: _scope_objects(db, obj.engagement_id))
+    eng, entity, period = await read_once(
+        db,
+        ctx,
+        "operations-scope",
+        str(obj.engagement_id),
+        lambda: _scope_objects(db, obj.engagement_id),
+    )
     return (
         implementation_current(saved, obj.kind, country_fingerprint=country_fingerprint)
         and saved.get("tenant_id") == str(ctx.tenant_id)

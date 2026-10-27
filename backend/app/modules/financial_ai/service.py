@@ -35,10 +35,14 @@ async def suggest(
     batch = await scoped(db, ctx, ImportBatch, snapshot.batch_id)
     if batch.status not in {"active", "superseded"}:
         raise HTTPException(409, "Committed accounting snapshot required")
-    configured_model = await db.scalar(select(AIModelConfiguration).where(
-        AIModelConfiguration.name == request.model, AIModelConfiguration.enabled.is_(True)
-    ))
-    provider = await db.get(AIProviderConfig, configured_model.provider_id) if configured_model else None
+    configured_model = await db.scalar(
+        select(AIModelConfiguration).where(
+            AIModelConfiguration.name == request.model, AIModelConfiguration.enabled.is_(True)
+        )
+    )
+    provider = (
+        await db.get(AIProviderConfig, configured_model.provider_id) if configured_model else None
+    )
     if not provider:
         raise HTTPException(422, "Approved AI model required")
     if provider.adapter != "mock" and not settings().audit_ai_external_approved:

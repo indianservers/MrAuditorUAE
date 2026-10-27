@@ -27,12 +27,25 @@ ASSETS = {
 
 def scope(group):
     if group.fiscal_start < date(2025, 1, 1):
-        return {"in_scope": None, "qualifying_years": None, "rule": "CD142/Article2",
-                "status": "OUTSIDE_EFFECTIVE_PERIOD"}
+        return {
+            "in_scope": None,
+            "qualifying_years": None,
+            "rule": "CD142/Article2",
+            "status": "OUTSIDE_EFFECTIVE_PERIOD",
+        }
     expected = set(range(group.fiscal_start.year - 4, group.fiscal_start.year))
-    if group.multinational is None or len(group.preceding_revenues) != 4 or {x.year for x in group.preceding_revenues} != expected:
-        return {"in_scope": None, "qualifying_years": None, "rule": "CD142/1.1",
-                "status": "INCOMPLETE_SCOPE", "missing_inputs": ["four distinct preceding revenue years"]}
+    if (
+        group.multinational is None
+        or len(group.preceding_revenues) != 4
+        or {x.year for x in group.preceding_revenues} != expected
+    ):
+        return {
+            "in_scope": None,
+            "qualifying_years": None,
+            "rule": "CD142/1.1",
+            "status": "INCOMPLETE_SCOPE",
+            "missing_inputs": ["four distinct preceding revenue years"],
+        }
     hits = sum(x.eur >= D(750000000) * D(x.months) / 12 for x in group.preceding_revenues)
     return {
         "in_scope": group.multinational and hits >= 2,
@@ -198,7 +211,11 @@ def calculate(group, entities, elections=()):
         return {
             **assessed,
             "status": "DRAFT_TECHNICAL_REVIEW",
-            "outcome": "SAFE_HARBOUR_APPLIED" if relief else "NO_TOPUP_CALCULATED" if rounded == 0 else "TOPUP_CALCULATED",
+            "outcome": "SAFE_HARBOUR_APPLIED"
+            if relief
+            else "NO_TOPUP_CALCULATED"
+            if rounded == 0
+            else "TOPUP_CALCULATED",
             "currency": group.calculation_currency,
             "net_globe_income": income,
             "covered_taxes": tax,

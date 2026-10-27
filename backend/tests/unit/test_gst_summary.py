@@ -184,7 +184,16 @@ def test_independent_csv_comparison_never_nets_metrics_or_treats_absent_zero_as_
     writer = csv.DictWriter(output, fieldnames=list(GSTSummaryMetric.model_fields))
     writer.writeheader()
     writer.writerows(rows)
-    books = parse_csv(output.getvalue().encode(), options(file_format="canonical-csv", expected_rows=len(rows), gst_summary_metric_controls={key: value for key, value in CONTROLS.items() if key != "ttl_nilsup_amt"}))
+    books = parse_csv(
+        output.getvalue().encode(),
+        options(
+            file_format="canonical-csv",
+            expected_rows=len(rows),
+            gst_summary_metric_controls={
+                key: value for key, value in CONTROLS.items() if key != "ttl_nilsup_amt"
+            },
+        ),
+    )
     missing = calculate(workflow(), "IN", {"books": books, "return": right})
     assert missing["blocked"]
     assert (

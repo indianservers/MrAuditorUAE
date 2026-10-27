@@ -77,8 +77,13 @@ async def engagement_permissions(db, ctx, engagement_id: uuid.UUID, permission: 
 
     if not permission.endswith("read"):
         return await _engagement_permissions(db, ctx, engagement_id, permission)
-    return await read_once(db, ctx, "engagement-permission", (str(engagement_id), permission),
-                           lambda: _engagement_permissions(db, ctx, engagement_id, permission))
+    return await read_once(
+        db,
+        ctx,
+        "engagement-permission",
+        (str(engagement_id), permission),
+        lambda: _engagement_permissions(db, ctx, engagement_id, permission),
+    )
 
 
 async def _engagement_permissions(db, ctx, engagement_id: uuid.UUID, permission: str):

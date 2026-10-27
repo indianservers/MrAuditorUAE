@@ -92,9 +92,10 @@ async def test_ecr_original_source_and_three_way_statutory_reconciliation(enviro
         headers=h,
     )
     assert listed.status_code == 200, listed.text
-    assert next(row for row in listed.json()["items"] if row["id"] == native["id"])[
-        "native_format"
-    ] == "india-epfo-ecr"
+    assert (
+        next(row for row in listed.json()["items"] if row["id"] == native["id"])["native_format"]
+        == "india-epfo-ecr"
+    )
     original = await c.get(
         base + "/evidence-files/" + evidence["id"] + "/" + uploaded.json()["id"] + "/download",
         headers=h,
@@ -136,7 +137,10 @@ async def test_ecr_original_source_and_three_way_statutory_reconciliation(enviro
         swapped = dict(payload["source_ids"])
         swapped["return"], swapped[wrong_role] = swapped[wrong_role], swapped["return"]
         await execute(
-            c, h, eid, "country-workflow",
+            c,
+            h,
+            eid,
+            "country-workflow",
             {**payload, "title": "Synthetic rejected ECR " + wrong_role, "source_ids": swapped},
             failed="return/channel role",
         )

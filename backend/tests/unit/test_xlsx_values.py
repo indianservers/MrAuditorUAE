@@ -51,8 +51,23 @@ def originals(book):
 
 @pytest.mark.parametrize("truncated_flag", [True, False])
 def test_historical_screening_export_never_relabels_truncated_candidates_complete(truncated_flag):
-    value = event(workflow="sanctions-name-review", rows=[{"id": "HISTORICAL-SUBJECT", "candidate_count": 121,
-        "candidate_preview_truncated": truncated_flag, "candidates": [{"source_id": "RETAINED-ENTRY", "list_subject_id": "PERSON-1", "name_similarity": 1}]}])
+    value = event(
+        workflow="sanctions-name-review",
+        rows=[
+            {
+                "id": "HISTORICAL-SUBJECT",
+                "candidate_count": 121,
+                "candidate_preview_truncated": truncated_flag,
+                "candidates": [
+                    {
+                        "source_id": "RETAINED-ENTRY",
+                        "list_subject_id": "PERSON-1",
+                        "name_similarity": 1,
+                    }
+                ],
+            }
+        ],
+    )
     book = workbook(value)
     values = list(book["Screening candidates"].values)
     row = dict(zip(values[0], values[1], strict=True))

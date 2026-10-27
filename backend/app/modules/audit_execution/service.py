@@ -41,8 +41,13 @@ async def engagement(db, ctx, identifier, permission="audit.read", mutable=False
 
     if mutable or lock or not permission.endswith("read"):
         return await _engagement(db, ctx, identifier, permission, mutable, lock=lock)
-    return await read_once(db, ctx, "read-engagement", (str(identifier), permission),
-                           lambda: _engagement(db, ctx, identifier, permission, mutable, lock=lock))
+    return await read_once(
+        db,
+        ctx,
+        "read-engagement",
+        (str(identifier), permission),
+        lambda: _engagement(db, ctx, identifier, permission, mutable, lock=lock),
+    )
 
 
 async def _engagement(db, ctx, identifier, permission="audit.read", mutable=False, *, lock=True):
@@ -131,7 +136,10 @@ async def get_record(db, ctx, eid, rid, permission="audit.read", mutable=False, 
         if obj.kind == "working-papers" and obj.body.get("advanced_input"):
             from app.modules.enterprise_ai.business import advanced_read_permissions
             from app.modules.jurisdictions.ae.use_cases import CASES
-            await advanced_read_permissions(db, ctx, eid, CASES[obj.body["advanced_input"]["use_case_id"]])
+
+            await advanced_read_permissions(
+                db, ctx, eid, CASES[obj.body["advanced_input"]["use_case_id"]]
+            )
         if obj.kind == "working-papers" and obj.body.get("inherit_source_permissions"):
             for reference in obj.body.get("sources", []):
                 identifier = uuid.UUID(str(reference["id"]))
@@ -235,6 +243,7 @@ async def validate_body(db, ctx, eng, kind, body, record_id=None):
         ) from None
     if kind == "working-papers" and record_id:
         from app.modules.lineage.source_links import acyclic_paper_links
+
         await acyclic_paper_links(db, ctx, eng.id, record_id, data.sources)
     if data.owner_id:
         owner = await db.scalar(
@@ -443,9 +452,11 @@ async def revision(db, ctx, obj, request_id, action):
     )
     await db.flush()
     from app.modules.jurisdictions.ae.continuation_preview import refresh_draft
+
     await refresh_draft(db, ctx, obj, request_id)
     if action != "created":
         from app.modules.jurisdictions.ae.advanced_lineage import source_changed
+
         await source_changed(db, ctx, obj, request_id)
 
 
@@ -477,7 +488,10 @@ async def update(db, ctx, eid, rid, data, request_id):
     if obj.kind == "working-papers" and obj.body.get("advanced_input"):
         proposed_case = (data.body.get("advanced_input") or {}).get("use_case_id")
         if proposed_case != obj.body["advanced_input"]["use_case_id"]:
-            raise HTTPException(409, "Structured schedule classification cannot be removed or reassigned; prepare a new reviewed paper")
+            raise HTTPException(
+                409,
+                "Structured schedule classification cannot be removed or reassigned; prepare a new reviewed paper",
+            )
     if obj.kind == "working-papers" and obj.body.get("inherit_source_permissions"):
         previous = {(s["kind"], str(s["id"])) for s in obj.body.get("sources", [])}
         proposed = {(s["kind"], str(s["id"])) for s in data.body.get("sources", [])}
@@ -862,17 +876,35 @@ async def completion(db, ctx, eid):
     checks = [await reviewed_source_control(db, ctx, rows)]
     # Approved consultation inputs can still contain unresolved release blockers.
     for paper in rows:
-        if (paper.body.get("advanced_input") or {}).get("use_case_id") not in {150,190} or paper.status == "ARCHIVED":
+        if (paper.body.get("advanced_input") or {}).get("use_case_id") not in {
+            150,
+            190,
+        } or paper.status == "ARCHIVED":
             continue
         from app.modules.jurisdictions.ae.advanced import Schedule, calculate
         from app.modules.lineage.working_papers import freshness
+
         current_input = await freshness(db, ctx, paper) == "CURRENT"
         try:
             assessment = calculate(Schedule.model_validate(paper.body["advanced_input"]))
-            blocked = any(row["metrics"]["release_blocked" if assessment["use_case_id"]==150 else "finalization_blocked"] for row in assessment["rows"])
+            blocked = any(
+                row["metrics"][
+                    "release_blocked"
+                    if assessment["use_case_id"] == 150
+                    else "finalization_blocked"
+                ]
+                for row in assessment["rows"]
+            )
         except (ValueError, ArithmeticError):
             blocked = True
-        checks.append({"code":"quality_consultation_"+str(paper.id),"passed":current_input and paper.status in {"APPROVED","LOCKED"} and not blocked,"description":"Current independently approved consultation with no outstanding required quality release blockers","record_ids":[str(paper.id)]})
+        checks.append(
+            {
+                "code": "quality_consultation_" + str(paper.id),
+                "passed": current_input and paper.status in {"APPROVED", "LOCKED"} and not blocked,
+                "description": "Current independently approved consultation with no outstanding required quality release blockers",
+                "record_ids": [str(paper.id)],
+            }
+        )
     for kind in [
         "acceptance",
         "planning",
