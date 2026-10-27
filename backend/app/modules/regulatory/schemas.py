@@ -282,6 +282,7 @@ class ReportBlock(Strict):
 
 
 class ReportTemplate(Strict):
+    requirements_pack: str | None = Field(default=None, max_length=100)
     title: str = Field(min_length=3, max_length=300)
     category: Literal[
         "india-statutory",
@@ -311,6 +312,9 @@ class ReportTemplate(Strict):
 
     @model_validator(mode="after")
     def unique_keys(self):
+        from app.modules.regulatory.report_packs import validate_config
+
+        validate_config(self)
         if (self.category == "india-tax-audit") != (self.tax_audit_scope is not None):
             raise ValueError(
                 "India tax-audit templates require an explicit assessed tax scope; other report categories must not supply one"

@@ -41,6 +41,7 @@ type Result = {
     requirements?: ReportRequirement[];
     requirements_assessed?: boolean;
     requirements_basis?: string;
+    requirements_pack?: string | null;
     requirements_coverage?: {
       complete: boolean;
       source_validation: string;
@@ -74,6 +75,7 @@ export function StatutoryReportBuilder() {
 function ReportBuilderForm() {
   const [eid, setEid] = useState("");
   const [requirements, setRequirements] = useState<ReportRequirement[]>([]);
+  const [requirementsPack, setRequirementsPack] = useState<string | null>(null);
   const [requirementsAssessed, setRequirementsAssessed] = useState(false);
   const [requirementsBasis, setRequirementsBasis] = useState("");
   const [requirementKeys, setRequirementKeys] = useState<string[]>([]);
@@ -91,6 +93,15 @@ function ReportBuilderForm() {
   const [taxScope, setTaxScope] = useState<TaxScopeDraft>(emptyTaxScope);
   const [error, setError] = useState<Error | null>(null);
   const engagements = useAPI<Page<RecordRow>>("engagements?limit=100");
+  const presets = useAPI<{
+    country: string;
+    items: {
+      id: string;
+      title: string;
+      requirements: ReportRequirement[];
+      limitations: string[];
+    }[];
+  }>(`regulatory/engagements/${eid}/report-presets`, !!eid);
   const sources = useEventHistory<{
     id: string;
     kind: string;
@@ -132,6 +143,7 @@ function ReportBuilderForm() {
               setEid(e.target.value);
               setSelected("");
               setRequirements([]);
+              setRequirementsPack(null);
               setRequirementsAssessed(false);
               setRequirementsBasis("");
               setRequirementKeys([]);
@@ -166,6 +178,7 @@ function ReportBuilderForm() {
           engagements.error ||
           sources.error ||
           papers.error ||
+          presets.error ||
           detail.error ||
           action.error ||
           error
@@ -186,6 +199,7 @@ function ReportBuilderForm() {
                 onChange={(e) => {
                   setCategory(e.target.value);
                   setRequirements([]);
+                  setRequirementsPack(null);
                   setRequirementsAssessed(false);
                   setRequirementsBasis("");
                   setRequirementKeys([]);
@@ -238,7 +252,51 @@ function ReportBuilderForm() {
                 Load older sources and templates
               </Button>
             )}
+            {category === "vat" && !!presets.data?.items.length && (
+              <>
+                <label>
+                  Operational report preset
+                  <select
+                    value={requirementsPack || ""}
+                    onChange={(e) => {
+                      const preset = presets.data?.items.find(
+                        (p) => p.id === e.target.value,
+                      );
+                      setRequirementsPack(preset?.id || null);
+                      setRequirements(
+                        preset?.requirements.map((r) => ({ ...r })) || [],
+                      );
+                      setRequirementsAssessed(false);
+                      setRequirementsBasis("");
+                      setRequirementKeys([]);
+                      setBlocks((old) =>
+                        old.map((b) => ({ ...b, requirement_keys: [] })),
+                      );
+                      if (preset) {
+                        setKind("reconciliation");
+                        setSourceKind("intelligence");
+                      }
+                    }}
+                  >
+                    <option value="">Manually declared requirements</option>
+                    {presets.data.items.map((p) => (
+                      <option key={p.id} value={p.id}>
+                        {p.title}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <p>
+                  Changing preset resets requirement assessments and block
+                  mappings. Every preset box needs exact reviewed comparison
+                  evidence; nil is not missing or not applicable. This is an
+                  unsigned review report, not a complete filing schema or legal
+                  eligibility conclusion.
+                </p>
+              </>
+            )}
             <ReportRequirementsEditor
+              locked={!!requirementsPack}
               items={requirements}
               assessed={requirementsAssessed}
               basis={requirementsBasis}
@@ -457,6 +515,7 @@ function ReportBuilderForm() {
                       requirements,
                       requirements_assessed: requirementsAssessed,
                       requirements_basis: requirementsBasis,
+                      requirements_pack: requirementsPack,
                       ...(assessedScope
                         ? { tax_audit_scope: assessedScope }
                         : {}),
@@ -570,6 +629,9 @@ function ReportBuilderForm() {
                     setTitle(detail.data!.body.title);
                     setCategory(detail.data!.body.category);
                     setRequirements(detail.data!.body.requirements || []);
+                    setRequirementsPack(
+                      detail.data!.body.requirements_pack || null,
+                    );
                     setRequirementsAssessed(
                       detail.data!.body.requirements_assessed || false,
                     );

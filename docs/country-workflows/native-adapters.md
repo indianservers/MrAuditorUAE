@@ -3881,3 +3881,75 @@ server, checked for the current checkpoint and all 13 dated baselines, and its
 overview/tax-close sections visually inspected. Complete country packs, authorized
 external providers, real-client pilots and professional/production release gates
 remain open in the refreshed roadmap.
+
+## UAE VAT201 operational report presets — 27 October 2026
+
+`GET /regulatory/engagements/{eid}/report-presets` now exposes two UAE-only
+operational review presets for the existing aggregate-14 and emirate-20 layouts.
+They reuse the existing source comparison, report requirements, independent
+review, generation, exports and stale-dependency infrastructure. India and other
+countries receive no UAE preset; direct wrong-country template creation is rejected.
+
+The [FTA VAT Returns User Guide](https://tax.gov.ae/-/media/Files/EN/PDF/Guides/VAT-Returns-User-Guide.pdf)
+currently served at this address is dated May 2018. Its mandatory-field/explicit
+zero and AED/fils instructions and box layout support the operational preset;
+the preset does not claim a complete current filing schema, e-commerce breakdown,
+input-tax eligibility or legal compliance. It has a stable identifier and manifest
+hash, retains this source/version reference, and remains explicitly unqualified.
+
+Selecting a preset retains every explicit box as an initially UNASSESSED,
+source-required requirement. Removing a box, replacing source evidence with an
+authored narrative requirement, selecting not-applicable for a mandatory box,
+using an unknown preset or changing report category is rejected. The form locks
+preset references, titles, mandatory-source flags and add/remove controls; scope
+and applicability assessments remain explicit. Changing engagement/category or
+preset clears prior scope/mappings, and retained template revisions preserve the
+preset selection. Manual declared requirements remain available separately.
+
+Review/generation requires one current independently reviewed VAT201 comparison
+using the exact layout, one TRN/period/AED scope covered by the engagement, all
+explicit rows (including assessed nil), both populations' 30 retained arithmetic
+checks and exact book/return agreement. A difference accepted only through
+comparison tolerance cannot satisfy preset coverage. A reviewed audit record or
+unrelated intelligence output cannot substitute for the required comparison.
+Existing source changes stale dependent templates/reports without changing their
+historical content. Manifest identity/hash and scope are retained in coverage and
+DOCX/XLSX/PDF export metadata; generated documents remain unsigned and unfiled.
+
+The hosted browser smoke definition now selects the 20-row UAE preset, checks
+locked mandatory coverage and draft blocking, captures its unassessed form, and
+checks that India does not offer it. This new browser addition remains pending
+until its own hosted result is available. Actual full preset review/generation,
+layout mismatch, omission, country isolation, export and stale history are covered
+by the new real-database regression cases; source fixtures remain synthetic.
+
+## Full hosted backend verification on source 4962084
+
+[Job 122268842847](https://github.com/indianservers/MrAuditorUAE/actions/runs/40526906485/job/122268842847)
+completed successfully: 3,729 passed, nine skipped and 54 warnings in 4,460.33
+seconds. Overall coverage was 85.90%; Phase 2 calculation/validation core coverage
+was 89.35% (831/930). Migration/drift, full backend lint/format/mypy, API contract
+checks, ML build and both coverage gates passed. This proves source
+`4962084eb14468a4decab6f48f8571d142f35c4b`, not every later addition.
+
+The original [JUnit receipt](../phase-12/4962084-hosted-full.xml) and
+[coverage JSON](../phase-12/4962084-hosted-coverage.json) were retrieved from artifact
+12749552469 after verifying archive SHA-256
+`93ac3ed68cdf14901498273e37c3d8dff985cdca419e7f72287ded44589aba4a`.
+All 3,738 JUnit records were parsed: zero failures/errors and nine explicit skips.
+Newer full backend runs remain separate evidence and are not inferred green from
+this earlier source revision.
+
+Local verification for the UAE preset increment: 2,891 backend unit tests passed
+(five skipped), ten real-database report/applicability regression cases passed,
+all 277 frontend tests passed, and production build, TypeScript, scoped ESLint,
+application Ruff/format, focused backend mypy and current API contract checks
+passed. [Unit receipt](../phase-12/report-packs-backend.xml) and
+[report API receipt](../phase-12/report-packs-api.xml) are retained. Fourteen
+focused preset unit cases cover both layouts, mandatory-item protection,
+country isolation, omitted rows, mixed scope, arithmetic requirements,
+one-sided evidence and tolerated variances. The three new API cases exercise
+actual two-source comparison, independent template review, generated XLSX
+metadata, wrong-layout rejection, source-withdrawal staleness and India rejection.
+These are synthetic operational checks, not a complete statutory rule/form pack
+or independent client/professional qualification.

@@ -12,6 +12,7 @@ const state = vi.hoisted(() => ({
   tenant: "tenant",
   country: "IN",
   detail: undefined as unknown,
+  presets: undefined as unknown,
 }));
 vi.mock("@/features/shared", () => ({
   PageHeader: () => <h1>Report designer</h1>,
@@ -30,9 +31,11 @@ vi.mock("@/hooks/use-api", () => ({
               { id: "two", name: "Second" },
             ],
           }
-        : path.endsWith("/events/template")
-          ? state.detail
-          : undefined,
+        : path.endsWith("/report-presets")
+          ? state.presets
+          : path.endsWith("/events/template")
+            ? state.detail
+            : undefined,
   }),
   useAction: () => ({ mutateAsync: state.mutate, isPending: false }),
 }));
@@ -169,6 +172,63 @@ it("maps a declared authored requirement to a retained draft block and sends its
 
 beforeEach(() => {
   state.detail = undefined;
+  state.presets = undefined;
+});
+
+it("loads an unassessed operational preset, locks mandatory source coverage and resets it on engagement change", () => {
+  state.presets = {
+    country: "AE",
+    items: [
+      {
+        id: "uae-vat201-review:aggregate-14/1",
+        title: "VAT201 operational test preset",
+        requirements: [1, 2].map((n) => ({
+          key: `vat201.box.${n}`,
+          title: `VAT201 Box ${n}`,
+          disposition: "UNASSESSED",
+          source_required: true,
+          basis: "Assess the retained reviewed comparison",
+        })),
+        limitations: [],
+      },
+    ],
+  };
+  render(<StatutoryReportBuilder />);
+  fireEvent.change(screen.getByLabelText("Engagement"), {
+    target: { value: "one" },
+  });
+  fireEvent.change(screen.getByLabelText("Report category"), {
+    target: { value: "vat" },
+  });
+  fireEvent.change(screen.getByLabelText("Operational report preset"), {
+    target: { value: "uae-vat201-review:aggregate-14/1" },
+  });
+  expect(screen.getByLabelText("Requirement reference 1")).toHaveValue(
+    "vat201.box.1",
+  );
+  expect(screen.getByLabelText("Requirement reference 1")).toBeDisabled();
+  expect(
+    screen.getByLabelText("Evidence/calculation source required for item 1"),
+  ).toBeDisabled();
+  expect(
+    screen.getByRole("button", { name: "Remove requirement 1" }),
+  ).toBeDisabled();
+  expect(
+    screen.getByRole("button", { name: "Add declared requirement" }),
+  ).toBeDisabled();
+  expect(
+    screen.getByLabelText("Requirement scope completeness assessment"),
+  ).toHaveValue("unassessed");
+  fireEvent.change(screen.getByLabelText("Engagement"), {
+    target: { value: "two" },
+  });
+  fireEvent.change(screen.getByLabelText("Report category"), {
+    target: { value: "vat" },
+  });
+  expect(screen.getByLabelText("Operational report preset")).toHaveValue("");
+  expect(
+    screen.queryByLabelText("Requirement reference 1"),
+  ).not.toBeInTheDocument();
 });
 it("shows retained requirement gaps to reviewers and blocks approval without editing a draft", () => {
   state.detail = {

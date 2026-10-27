@@ -8,6 +8,7 @@ from fastapi import HTTPException
 from pydantic import Field
 
 from app.modules.jurisdictions.profiles import Strict
+from app.modules.regulatory.report_packs import manifest
 
 CONTRACT = "declared-report-requirements/2"
 
@@ -23,7 +24,7 @@ class ReportRequirement(Strict):
 def implementation_hash():
     root = Path(__file__).parent
     digest = hashlib.sha256(CONTRACT.encode())
-    for name in ("report_requirements.py", "reporting.py", "schemas.py"):
+    for name in ("report_requirements.py", "reporting.py", "schemas.py", "report_packs.py"):
         digest.update(name.encode() + b"\0" + hashlib.sha256((root / name).read_bytes()).digest())
     return digest.hexdigest()
 
@@ -62,6 +63,9 @@ def coverage(config):
     )
     return {
         "contract": CONTRACT,
+        "requirements_pack": manifest(config.requirements_pack)
+        if config.requirements_pack
+        else None,
         "declared_scope_assessed": config.requirements_assessed,
         "scope_basis": config.requirements_basis,
         "items": rows,
@@ -123,9 +127,19 @@ def parse_template(body):
 
 
 async def require_ready(db, ctx, eng, config):
+    from app.db.models.platform import FinancialPeriod
     from app.modules.audit_execution import service as audit
     from app.modules.intelligence import service as intelligence
+    from app.modules.jurisdictions.workspace import resolved
     from app.modules.lineage.working_papers import require_current
+    from app.modules.regulatory.report_packs import manifest, validate_source
+
+    pack = manifest(config.requirements_pack) if config.requirements_pack else None
+    if pack and (await resolved(db, ctx, eng))[0].country != pack["country"]:
+        raise HTTPException(422, "Report preset is unavailable for this engagement country")
+    period = await db.get(FinancialPeriod, eng.period_id) if pack else None
+    if pack and len({block.source_id for block in config.blocks if block.requirement_keys}) != 1:
+        raise HTTPException(409, "All VAT201 preset boxes must reference one reviewed comparison")
 
     result = coverage(config)
     if not result["complete"]:
@@ -138,7 +152,26 @@ async def require_ready(db, ctx, eng, config):
             source = await intelligence.event(db, ctx, eng.id, block.source_id, True)
             if source.body.get("review_status") != "REVIEWED":
                 raise HTTPException(409, "Required report sources need current independent review")
+            if pack and block.requirement_keys:
+                validate_source(pack, source.body, block.requirement_keys)
+                from datetime import date
+
+                if not period or any(
+                    not period.start_date
+                    <= date.fromisoformat(row["period_start"])
+                    <= date.fromisoformat(row["period_end"])
+                    <= period.end_date
+                    for row in source.body["rows"]
+                ):
+                    raise HTTPException(
+                        409,
+                        "VAT201 report period must be covered by the engagement financial period",
+                    )
         elif block.source_kind == "record":
+            if pack and block.requirement_keys:
+                raise HTTPException(
+                    409, "VAT201 preset coverage requires the reviewed comparison result"
+                )
             source = await audit.get_record(db, ctx, eng.id, block.source_id, lock=False)
             allowed = {"APPROVED", "LOCKED", "RESOLVED", "CLOSED"}
             if source.kind == "findings":

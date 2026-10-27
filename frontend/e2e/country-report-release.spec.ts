@@ -157,6 +157,64 @@ for (const code of ["AE", "IN"] as const) {
       .getByRole("combobox", { name: "Report category", exact: true })
       .selectOption(code === "AE" ? "uae-ifrs" : "india-statutory");
     await page
+      .getByRole("combobox", { name: "Report category", exact: true })
+      .selectOption("vat");
+    if (code === "AE") {
+      await page
+        .getByRole("combobox", {
+          name: "Operational report preset",
+          exact: true,
+        })
+        .selectOption("uae-vat201-review:emirate-20/1");
+      await expect(
+        page.getByLabel("Requirement reference 1", { exact: true }),
+      ).toHaveValue("vat201.box.1a");
+      await expect(
+        page.getByLabel("Requirement reference 1", { exact: true }),
+      ).toBeDisabled();
+      await expect(
+        page.getByLabel("Evidence/calculation source required for item 1", {
+          exact: true,
+        }),
+      ).toBeDisabled();
+      await expect(
+        page.getByRole("button", {
+          name: "Remove requirement 20",
+          exact: true,
+        }),
+      ).toBeDisabled();
+      await expect(
+        page.getByRole("button", {
+          name: "Save template version",
+          exact: true,
+        }),
+      ).toBeDisabled();
+      await page.setViewportSize({ width: 1440, height: 1600 });
+      await page
+        .getByRole("combobox", {
+          name: "Operational report preset",
+          exact: true,
+        })
+        .scrollIntoViewIfNeeded();
+      await page.screenshot({
+        path: `${screenshots}/AE-vat201-report-preset.png`,
+      });
+      await page.setViewportSize({ width: 1440, height: 1000 });
+    } else {
+      await expect(
+        page.getByRole("combobox", {
+          name: "Operational report preset",
+          exact: true,
+        }),
+      ).toHaveCount(0);
+    }
+    await page
+      .getByRole("combobox", { name: "Report category", exact: true })
+      .selectOption(code === "AE" ? "uae-ifrs" : "india-statutory");
+    await page
+      .getByRole("combobox", { name: "Content type", exact: true })
+      .selectOption("narrative");
+    await page
       .getByLabel("Template / review rationale")
       .fill(
         "SYNTHETIC authored communication scope; not complete statutory content",
@@ -569,13 +627,11 @@ for (const code of ["AE", "IN"] as const) {
     ) {
       await page.getByRole("button", { name: "Dismiss notification" }).click();
     }
-    const compositionForm = page
-      .locator("details")
-      .filter({
-        has: page.getByText("Combine reviewed turnover book schedules", {
-          exact: true,
-        }),
-      });
+    const compositionForm = page.locator("details").filter({
+      has: page.getByText("Combine reviewed turnover book schedules", {
+        exact: true,
+      }),
+    });
     await compositionForm.scrollIntoViewIfNeeded();
     await compositionForm.screenshot({
       path: `${screenshots}/${code}-turnover-composition.png`,

@@ -62,6 +62,11 @@ def engines():
 
 
 async def template(db, ctx, eng, data, request_id):
+    if data.requirements_pack:
+        from app.modules.regulatory.report_packs import manifest
+
+        if (await resolved(db, ctx, eng))[0].country != manifest(data.requirements_pack)["country"]:
+            raise HTTPException(422, "Report preset is unavailable for this engagement country")
     binding, _ = await resolved(db, ctx, eng)
     if data.category.startswith("india-") or data.category in {"caro", "schedule-iii"}:
         if binding.country != "IN":

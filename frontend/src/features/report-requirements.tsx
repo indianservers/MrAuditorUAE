@@ -14,6 +14,7 @@ export function ReportRequirementsEditor({
   onItems,
   onAssessed,
   onBasis,
+  locked = false,
 }: {
   items: ReportRequirement[];
   assessed: boolean;
@@ -21,6 +22,7 @@ export function ReportRequirementsEditor({
   onItems: (items: ReportRequirement[]) => void;
   onAssessed: (value: boolean) => void;
   onBasis: (value: string) => void;
+  locked?: boolean;
 }) {
   function change(index: number, field: Partial<ReportRequirement>) {
     onItems(
@@ -60,6 +62,7 @@ export function ReportRequirementsEditor({
             Requirement reference {i + 1}
             <input
               value={item.key}
+              disabled={locked}
               onChange={(e) => change(i, { key: e.target.value })}
             />
           </label>
@@ -67,6 +70,7 @@ export function ReportRequirementsEditor({
             Requirement title {i + 1}
             <input
               value={item.title}
+              disabled={locked}
               onChange={(e) => change(i, { title: e.target.value })}
             />
           </label>
@@ -83,7 +87,7 @@ export function ReportRequirementsEditor({
             >
               <option value="UNASSESSED">Unassessed</option>
               <option value="REQUIRED">Required</option>
-              <option value="NOT_APPLICABLE">
+              <option value="NOT_APPLICABLE" disabled={locked}>
                 Not applicable with reviewed basis
               </option>
             </select>
@@ -92,6 +96,7 @@ export function ReportRequirementsEditor({
             <input
               type="checkbox"
               checked={item.source_required}
+              disabled={locked}
               onChange={(e) => change(i, { source_required: e.target.checked })}
             />
             Evidence/calculation source required for item {i + 1}
@@ -104,6 +109,7 @@ export function ReportRequirementsEditor({
             />
           </label>
           <Button
+            disabled={locked}
             onClick={() => onItems(items.filter((_, index) => index !== i))}
           >
             Remove requirement {i + 1}
@@ -111,7 +117,7 @@ export function ReportRequirementsEditor({
         </fieldset>
       ))}
       <Button
-        disabled={items.length >= 100}
+        disabled={locked || items.length >= 100}
         onClick={() =>
           onItems([
             ...items,

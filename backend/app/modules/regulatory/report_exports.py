@@ -75,6 +75,16 @@ def render(event, format):
         else "FRESHNESS_NOT_EVALUATED",
     }
     requirement_items = body.get("requirements_coverage", {}).get("items", [])
+    pack = body.get("requirements_coverage", {}).get("requirements_pack")
+    if pack:
+        metadata.update(
+            {
+                "Operational report preset": pack["id"],
+                "Preset SHA-256": pack["sha256"],
+                "Preset source": pack["source_url"],
+                "Preset scope": "Operational layout only; not a complete filing schema or legal qualification",
+            }
+        )
     basis_by_key = {item["key"]: item.get("basis", "") for item in body.get("requirements", [])}
     requirement_rows = [
         {**item, "basis": basis_by_key.get(item["key"], "")} for item in requirement_items

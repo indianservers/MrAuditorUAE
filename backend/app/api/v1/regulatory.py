@@ -315,6 +315,16 @@ async def india_statements(
     return audit.serialize(await statements(db, ctx, eng, data, request.state.request_id))
 
 
+@router.get("/engagements/{eid}/report-presets")
+async def report_presets(eid: uuid.UUID, db: DB, ctx: Actor):
+    from app.modules.jurisdictions.workspace import resolved
+    from app.modules.regulatory.report_packs import catalogue
+
+    eng = await intelligence.scope(db, ctx, eid)
+    country = (await resolved(db, ctx, eng))[0].country
+    return {"country": country, "items": catalogue(country)}
+
+
 @router.post("/engagements/{eid}/report-templates", status_code=201)
 async def report_template(
     eid: uuid.UUID, data: s.ReportTemplate, db: DB, ctx: Actor, request: Request
