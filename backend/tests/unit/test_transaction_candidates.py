@@ -109,14 +109,33 @@ def test_candidate_policy_cannot_be_silently_coerced_or_exceed_the_ceiling(limit
         reconcile_transactions([], [], max_candidate_checks=limit)
 
 
-def test_decimal_context_is_restored_after_matching():
-    from decimal import getcontext
+@pytest.mark.parametrize("dirty", [False, True])
+@pytest.mark.parametrize("failure", [False, True])
+def test_decimal_context_is_restored_after_matching(dirty, failure):
+    from decimal import ROUND_DOWN, DivisionByZero, InvalidOperation, getcontext, localcontext
 
-    before = getcontext()
-    state = (before.prec, before.rounding, before.flags.copy(), before.traps.copy())
-    reconcile_transactions([row("L", "1")], [row("R", "1")])
-    assert getcontext() is before
-    assert (before.prec, before.rounding, before.flags, before.traps) == state
+    original = getcontext()
+    with localcontext() as before:
+        before.prec = 7
+        before.rounding = ROUND_DOWN
+        before.traps[InvalidOperation] = False
+        before.traps[DivisionByZero] = False
+        before.clear_flags()
+        if dirty:
+            Decimal("invalid")
+            Decimal(1) / Decimal(3)
+        # CPython SignalDict equality can disagree with its copied dictionary
+        # for InvalidOperation sub-signals, even before any matching occurs.
+        # Compare each public signal value through ordinary dictionaries.
+        state = (before.prec, before.rounding, dict(before.flags), dict(before.traps))
+        if failure:
+            with pytest.raises(ValueError, match="search bound must be an integer"):
+                reconcile_transactions([row("L", "1")], [row("R", "1")], max_candidate_checks=0)
+        else:
+            reconcile_transactions([row("L", "1")], [row("R", "1")])
+        assert getcontext() is before
+        assert (before.prec, before.rounding, dict(before.flags), dict(before.traps)) == state
+    assert getcontext() is original
 
 
 @pytest.mark.parametrize("amounts", [(["10", "10"], ["10", "10"]), (["10", "20"], ["15", "15"])])

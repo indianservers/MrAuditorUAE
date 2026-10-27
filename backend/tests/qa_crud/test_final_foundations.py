@@ -18,7 +18,16 @@ pytestmark = pytest.mark.skipif(
 )
 
 
-async def test_unknown_obligation_filing_controls_and_runtime_health(environment):
+@pytest.fixture
+def operations_artifacts(tmp_path):
+    folder = Path(os.environ.get("OPERATIONS_ARTIFACT_DIR", str(tmp_path / "operations")))
+    folder.mkdir(parents=True, exist_ok=True)
+    return folder
+
+
+async def test_unknown_obligation_filing_controls_and_runtime_health(
+    environment, operations_artifacts
+):
     c = environment
     h, opts, eid, audit_base = await setup(c)
     reviewer = await actor(h, "Compliance Officer", "final-compliance-reviewer")
@@ -124,8 +133,7 @@ async def test_unknown_obligation_filing_controls_and_runtime_health(environment
     assert health.status_code == 200, health.text
     assert health.json()["operational_health"]["complete"] is False
     assert health.json()["operational_health"]["connection_type"] == "import_export_adapter"
-    folder = Path(os.environ.get("OPERATIONS_ARTIFACT_DIR", "../docs/engine-strengthening/phase5"))
-    folder.mkdir(parents=True, exist_ok=True)
+    folder = operations_artifacts
     (folder / "compliance-runtime-connector.json").write_text(
         json.dumps(
             {
@@ -141,7 +149,9 @@ async def test_unknown_obligation_filing_controls_and_runtime_health(environment
     )
 
 
-async def test_evidenced_filing_lifecycle_reminders_and_stale_receipt(environment, monkeypatch):
+async def test_evidenced_filing_lifecycle_reminders_and_stale_receipt(
+    environment, monkeypatch, operations_artifacts
+):
     from datetime import date
 
     from tests.phase4.test_workflows import approve, create
@@ -234,7 +244,7 @@ async def test_evidenced_filing_lifecycle_reminders_and_stale_receipt(environmen
     await action(c, reviewer[0], audit_base, evidences[0], "reopen")
     calendar = (await c.get(base + "/compliance-calendar", headers=h)).json()
     assert calendar["items"][0]["reassessment_required"] is True
-    folder = Path(os.environ["OPERATIONS_ARTIFACT_DIR"])
+    folder = operations_artifacts
     (folder / "filing-lifecycle.json").write_text(
         json.dumps(
             {
@@ -249,7 +259,9 @@ async def test_evidenced_filing_lifecycle_reminders_and_stale_receipt(environmen
     )
 
 
-async def test_expired_worker_claim_is_not_blindly_reexecuted(environment, monkeypatch):
+async def test_expired_worker_claim_is_not_blindly_reexecuted(
+    environment, monkeypatch, operations_artifacts
+):
     """Controlled crash condition: persisted expired claim, not a killed live worker."""
     from datetime import UTC, datetime, timedelta
 
@@ -287,7 +299,7 @@ async def test_expired_worker_claim_is_not_blindly_reexecuted(environment, monke
         abandoned = await db.get(IntelligenceJob, ids[0])
         assert abandoned.status == "failed" and abandoned.error_category == "abandoned_claim"
         assert abandoned.result_id is None
-    folder = Path(os.environ["OPERATIONS_ARTIFACT_DIR"])
+    folder = operations_artifacts
     (folder / "worker-recovery.json").write_text(
         json.dumps(
             {

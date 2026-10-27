@@ -28,6 +28,12 @@ os.environ.update(
     AI_API_KEY="",
     AUDIT_AI_EXTERNAL_APPROVED="false",
 )
+if not os.environ.get("CONNECTOR_ENCRYPTION_KEY"):
+    from cryptography.fernet import Fernet
+
+    # This runner owns a disposable DB; never supply a production/default key.
+    # Child jobs inherit the same ephemeral key within this verification run.
+    os.environ["CONNECTOR_ENCRYPTION_KEY"] = Fernet.generate_key().decode()
 
 
 async def prepare():

@@ -2,6 +2,7 @@
 
 import io
 import zipfile
+from pathlib import Path
 
 from PIL import Image, ImageDraw, ImageFont
 from reportlab.pdfgen.canvas import Canvas
@@ -22,7 +23,9 @@ def test_digital_pdf_and_scanned_image_are_real_and_traceable(tmp_path):
     assert preview_page(pdf, "application/pdf", 1).startswith(b"\x89PNG")
     image = Image.new("RGB", (1000, 500), "white")
     draw = ImageDraw.Draw(image)
-    font = ImageFont.truetype("arial.ttf", 32)
+    font = ImageFont.truetype(
+        str(Path(__file__).resolve().parents[2] / "app/assets/fonts/NotoSans-Regular.ttf"), 32
+    )
     for i, text in enumerate(
         [
             "Supplier: Example Trading LLC",

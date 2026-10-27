@@ -24,6 +24,7 @@ jobs:
       REDIS_URL: redis://localhost:6379/0
       INTEGRATION_TESTS: '1'
       ENVIRONMENT: test
+      OPERATIONS_ARTIFACT_DIR: ${{ github.workspace }}/.local-runtime/ci-verification/operations
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
@@ -35,7 +36,7 @@ jobs:
           node-version: 22
           cache: npm
           cache-dependency-path: ml-engine/package-lock.json
-      - name: Generate masked disposable signing and setup secrets
+      - name: Generate masked disposable application secrets
         shell: bash
         run: |
           for key in JWT_SECRET BOOTSTRAP_SECRET; do
@@ -43,6 +44,9 @@ jobs:
             echo "::add-mask::$value"
             echo "$key=$value" >> "$GITHUB_ENV"
           done
+          value=$(python -c 'import base64, secrets; print(base64.urlsafe_b64encode(secrets.token_bytes(32)).decode())')
+          echo "::add-mask::$value"
+          echo "CONNECTOR_ENCRYPTION_KEY=$value" >> "$GITHUB_ENV"
       - run: uv sync --frozen
         working-directory: backend
       - name: Verify current API and intelligence payload contracts
@@ -55,11 +59,20 @@ jobs:
         working-directory: backend
       - run: npm ci && npm run build
         working-directory: ml-engine
-      - run: uv run pytest --cov=app --cov-report=term-missing --cov-report=json:coverage.json --cov-fail-under=80
+      - run: uv run pytest --cov=app --cov-report=term-missing --cov-report=json:coverage.json --cov-fail-under=80 --junitxml=verification-results.xml
         working-directory: backend
 
       - run: uv run python ../scripts/check_core_coverage.py coverage.json
         working-directory: backend
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: verification-evidence
+          include-hidden-files: true
+          path: |
+            backend/verification-results.xml
+            backend/coverage.json
+            .local-runtime/ci-verification/operations/*.json
 
   frontend:
     runs-on: ubuntu-latest

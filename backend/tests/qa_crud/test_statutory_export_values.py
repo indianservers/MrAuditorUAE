@@ -121,6 +121,7 @@ async def test_statutory_current_and_historical_complete_sources(
                 / ".local-runtime/country-workflows"
                 / f"{country.lower()}-statutory-complete.xlsx"
             )
+            target.parent.mkdir(parents=True, exist_ok=True)
             target.write_bytes(response.content)
 
     await check("CURRENT")

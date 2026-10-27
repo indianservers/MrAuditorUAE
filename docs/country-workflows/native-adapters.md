@@ -3030,3 +3030,50 @@ is claimed. For parent a7d8a4c, hosted frontend, browser-smoke, security and ML 
 passed in [run 40487939733](https://github.com/indianservers/MrAuditorUAE/actions/runs/40487939733);
 verify remains live and the container gate remains failed. Professional/client,
 provider and release gates remain open; authored scenarios remain 154.
+
+### Full CI verification portability (27 October 2026)
+
+The verify job for 3553f04 in
+[run 40479138230](https://github.com/indianservers/MrAuditorUAE/actions/runs/40479138230)
+finished its full coverage run: 3,513 passed, nine skipped and seven failed in
+4,093.95 seconds. Overall reported coverage was 85%; the later core coverage step
+did not run because pytest failed. This is a failed full run, not release proof.
+Its failures exposed missing connector encryption configuration, two unset
+operations-artifact paths, two absent workbook-output directories, a Windows-only
+Arial fixture and a decimal-context test comparison issue.
+
+CI now generates a masked, correctly encoded ephemeral connector encryption key,
+alongside its existing disposable signing/setup secrets. The owned local runner
+generates an ephemeral key only when its isolated verification environment lacks
+one; it does not persist a default or alter production credential requirements.
+Child jobs inherit that run's key. Operations tests create an explicit artifact
+directory or their own pytest temporary directory. Statutory workbook receipts
+create their output parent. The real OCR fixture uses the checked-in OFL Noto Sans
+font and preserves its actual extraction assertions.
+
+The decimal matcher did not cause the reported flag difference. With an existing
+InvalidOperation sub-signal, CPython's native SignalDict can compare unequal to
+its copied ordinary dictionary even before matching is called; converting both
+to ordinary mappings agrees. The regression now compares every public flag and
+trap explicitly, with clean/dirty flags, non-default precision/rounding/traps and
+both successful and rejected matching. It still requires the original context
+object to be restored. No matching arithmetic was changed to accommodate a test.
+
+[333 focused matching/OCR cases](../phase-12/ci-portability-unit.xml) passed in
+11.96 seconds. [Eight integration cases](../phase-12/ci-portability-api.xml) passed
+in 31.53 seconds, including all formerly failing connector, filing/recovery and
+UAE/India complete-export paths, with the documented provider/scanner doubles.
+An additional [three operations cases](../phase-12/ci-portability-artifacts.xml)
+passed in 12.24 seconds with CI-style artifact configuration; all three expected
+JSON receipts were present and explicitly synthetic. The final
+[backend regression](../phase-12/ci-portability-backend.xml) passed 2,715 tests,
+with four existing skips and two warnings in 160.62 seconds. Lint/format, workflow
+parsing, Bash syntax and ephemeral Fernet-key format checks passed.
+
+The full hosted pytest command still enforces 80% aggregate coverage and the
+separate core checker still enforces 85%. Verification now retains JUnit, coverage
+JSON and only the dedicated synthetic operations JSON files, including on failure;
+the hidden directory is explicitly included in that narrow upload. No tests,
+coverage gates, image findings or external-provider qualifications were waived.
+A new full verification run remains required; focused local passes do not prove
+the complete hosted suite or close the existing container/professional/client gates.
