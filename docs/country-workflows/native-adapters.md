@@ -2250,3 +2250,59 @@ disposable database/private files with an explicit scanner double; no provider,
 malware-service, legal, professional or hosted-release qualification is claimed.
 See the [verification receipt](../phase-12/completion-freshness-verification.json)
 and [browser receipt](../phase-12/completion-freshness-browser-results.json).
+
+
+## Complete bank matching alternatives and controlled grouping
+
+The shared matcher now uses reference, counterparty, currency, amount and date
+indexes under `indexed-transaction-candidates/1`. Standalone decimal calculations
+use a local precision of 80 and restore the caller's context. Every ambiguity
+candidate is retained in the immutable result. The event read projection previews
+50 IDs per item with an explicit truncation flag; independent item and candidate
+pages expose the complete saved population. UAE and India reuse these controls.
+The candidate viewer preserves original identifiers, references, Unicode parties,
+currencies and exact amount text, and identifies candidates already proposed for
+another book item. Viewing alternatives does not select or approve a match.
+
+Historical review reads the original source event versions, including after source
+replacement. It does not make a stale conclusion current. Existing tenant,
+engagement, source freshness and independent approval controls still apply.
+Legacy incomplete ambiguity results must be recalculated before approval. XLSX
+exports retain all candidate links and a separate Matched proposals sheet when
+machine matches exist, even when the main Rows sheet contains exceptions.
+
+A reproduced legacy defect cleared ambiguous transactions by comparing group
+totals, including many-to-many populations. That fallback is now blocked for any
+group containing a contested transaction and for every many-to-many group.
+Uncontested one-to-many and many-to-one matching remains supported. Three hundred
+seeded differential cases compare individual decisions against the prior engine;
+unsafe historical group decisions are deliberately not a compatibility promise.
+Explicit regression cases cover both the removed netting and retained splits.
+
+Search admits at most 100,000 visited index entries per reconciliation and fails
+without publishing a partial result when that budget is exceeded. The matcher
+still admits at most 20,000 rows per side; canonical CSV ingestion still has its
+existing 5,000-row bound. Account/period scoping must preserve competing
+transactions together; arbitrarily splitting ambiguous groups is not a valid
+workaround. Synthetic 20,000-row matching measurements exercise equal amounts
+with distinct references and equal references with distinct parties. The 100,000-
+and one-million-row probes test size rejection only. Large-population ingestion,
+matching, concurrency and production capacity remain unqualified.
+
+See the [matching verification receipt](../phase-12/matching-candidates-verification.json),
+[browser receipt](../phase-12/matching-candidates-browser-results.json) and
+[isolated performance measurements](../phase-12/matching-performance.json).
+These checks use synthetic sources, with scanner/broker doubles during API fixture
+preparation and a real local worker for browser calculations. They do not qualify
+live providers, malware services, professional rules or a hosted release. The
+catalogue remains 154 authored scenarios; independently checked real-client
+pilots, professional country-policy review and release validation remain open.
+
+Verification on 27 October 2026: 2,535 unit tests plus 11 existing calculation
+regressions passed (2,546 total; four existing skips). A separate selection of
+31 API and Phase 5 reporting/calculation cases passed. All 222 frontend tests,
+the production build, scoped lint and mypy across eight source modules passed.
+One browser test exercised both countries in order, verified two downloaded
+workbooks with 14,641 candidate links each, and saved four inspected screenshots.
+The initial broad run encountered an existing document-extraction timeout; the
+focused extraction retry and complete repeat passed without extraction changes.

@@ -1,0 +1,146 @@
+{
+  "synthetic": true,
+  "scope": "In-process matching or explicit size rejection; excludes CSV/native ingestion, DB, worker queues, network, concurrency and professional accuracy",
+  "baseline_commit": "f547bb7",
+  "paired_1000_rows": [
+    {
+      "status": "CONTROLLED_SYNTHETIC_MATCHED",
+      "matching_executed": true,
+      "matches": 1000,
+      "candidate_checks": null,
+      "decision_sha256": "3860caa7e3f60b35be9113f28e0dc057fedc2737a0a4944b84aa63c4eefa7824",
+      "engine": "baseline",
+      "rows_per_side": 1000,
+      "distribution": "references",
+      "population_build_seconds": 0.00109,
+      "matching_or_bound_check_seconds": 13.86731,
+      "peak_process_rss_bytes": 24903680
+    },
+    {
+      "status": "CONTROLLED_SYNTHETIC_MATCHED",
+      "matching_executed": true,
+      "matches": 1000,
+      "candidate_checks": 2000,
+      "decision_sha256": "3860caa7e3f60b35be9113f28e0dc057fedc2737a0a4944b84aa63c4eefa7824",
+      "engine": "indexed",
+      "rows_per_side": 1000,
+      "distribution": "references",
+      "population_build_seconds": 0.002103,
+      "matching_or_bound_check_seconds": 0.069038,
+      "peak_process_rss_bytes": 29855744
+    },
+    {
+      "status": "CONTROLLED_SYNTHETIC_MATCHED",
+      "matching_executed": true,
+      "matches": 1000,
+      "candidate_checks": null,
+      "decision_sha256": "3860caa7e3f60b35be9113f28e0dc057fedc2737a0a4944b84aa63c4eefa7824",
+      "engine": "baseline",
+      "rows_per_side": 1000,
+      "distribution": "references",
+      "population_build_seconds": 0.001597,
+      "matching_or_bound_check_seconds": 13.393356,
+      "peak_process_rss_bytes": 24752128
+    },
+    {
+      "status": "CONTROLLED_SYNTHETIC_MATCHED",
+      "matching_executed": true,
+      "matches": 1000,
+      "candidate_checks": 2000,
+      "decision_sha256": "3860caa7e3f60b35be9113f28e0dc057fedc2737a0a4944b84aa63c4eefa7824",
+      "engine": "indexed",
+      "rows_per_side": 1000,
+      "distribution": "references",
+      "population_build_seconds": 0.003475,
+      "matching_or_bound_check_seconds": 0.06856,
+      "peak_process_rss_bytes": 29753344
+    },
+    {
+      "status": "CONTROLLED_SYNTHETIC_MATCHED",
+      "matching_executed": true,
+      "matches": 1000,
+      "candidate_checks": null,
+      "decision_sha256": "3860caa7e3f60b35be9113f28e0dc057fedc2737a0a4944b84aa63c4eefa7824",
+      "engine": "baseline",
+      "rows_per_side": 1000,
+      "distribution": "references",
+      "population_build_seconds": 0.001513,
+      "matching_or_bound_check_seconds": 11.193801,
+      "peak_process_rss_bytes": 24956928
+    },
+    {
+      "status": "CONTROLLED_SYNTHETIC_MATCHED",
+      "matching_executed": true,
+      "matches": 1000,
+      "candidate_checks": 2000,
+      "decision_sha256": "3860caa7e3f60b35be9113f28e0dc057fedc2737a0a4944b84aa63c4eefa7824",
+      "engine": "indexed",
+      "rows_per_side": 1000,
+      "distribution": "references",
+      "population_build_seconds": 0.001382,
+      "matching_or_bound_check_seconds": 0.061548,
+      "peak_process_rss_bytes": 29708288
+    }
+  ],
+  "paired_median_matching_seconds": {
+    "baseline": 13.393356,
+    "indexed": 0.06856
+  },
+  "supported_20000_rows": [
+    {
+      "status": "CONTROLLED_SYNTHETIC_MATCHED",
+      "matching_executed": true,
+      "matches": 20000,
+      "candidate_checks": 40000,
+      "decision_sha256": "6be8a2086227f7f31478ead41cef5201fef176e9fc74af255347f63cd7aaf7da",
+      "engine": "indexed",
+      "rows_per_side": 20000,
+      "distribution": "references",
+      "population_build_seconds": 0.025685,
+      "matching_or_bound_check_seconds": 1.382551,
+      "peak_process_rss_bytes": 129974272
+    },
+    {
+      "status": "CONTROLLED_SYNTHETIC_MATCHED",
+      "matching_executed": true,
+      "matches": 20000,
+      "candidate_checks": 40000,
+      "decision_sha256": "6be8a2086227f7f31478ead41cef5201fef176e9fc74af255347f63cd7aaf7da",
+      "engine": "indexed",
+      "rows_per_side": 20000,
+      "distribution": "parties",
+      "population_build_seconds": 0.027443,
+      "matching_or_bound_check_seconds": 1.841057,
+      "peak_process_rss_bytes": 128806912
+    }
+  ],
+  "unsupported_size_probes": [
+    {
+      "status": "REJECTED_BY_DECLARED_BOUND",
+      "matching_executed": false,
+      "decision_sha256": null,
+      "matches": null,
+      "candidate_checks": null,
+      "engine": "indexed",
+      "rows_per_side": 100000,
+      "distribution": "references",
+      "population_build_seconds": 0.143461,
+      "matching_or_bound_check_seconds": 0.027843,
+      "peak_process_rss_bytes": 103620608
+    },
+    {
+      "status": "REJECTED_BY_DECLARED_BOUND",
+      "matching_executed": false,
+      "decision_sha256": null,
+      "matches": null,
+      "candidate_checks": null,
+      "engine": "indexed",
+      "rows_per_side": 1000000,
+      "distribution": "references",
+      "population_build_seconds": 1.357346,
+      "matching_or_bound_check_seconds": 0.031557,
+      "peak_process_rss_bytes": 814284800
+    }
+  ],
+  "large_population_qualification": "100k and 1m matching/ingestion capacity remains NOT QUALIFIED; only the bound rejection was exercised"
+}

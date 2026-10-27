@@ -6,6 +6,24 @@ import pytest
 from app.core import operations_contracts as contracts
 
 
+@pytest.mark.parametrize(
+    "helper",
+    ["modules/intelligence/transaction_candidates.py", "modules/intelligence/matching_review.py"],
+)
+def test_matching_helper_rollout_invalidates_both_execution_contracts(monkeypatch, helper):
+    original_global = contracts.implementation_hash()
+    original_country = contracts.country_workflow_hash()
+    read_bytes = contracts.Path.read_bytes
+
+    def changed(path):
+        content = read_bytes(path)
+        return content + b"\n# synthetic rollout" if path.as_posix().endswith(helper) else content
+
+    monkeypatch.setattr(contracts.Path, "read_bytes", changed)
+    assert contracts.implementation_hash() != original_global
+    assert contracts.country_workflow_hash() != original_country
+
+
 def test_reader_fingerprint_isolated_from_unrelated_calculations(tmp_path, monkeypatch):
     # Use synthetic files, never edit the live implementation to simulate a rollout.
     app = tmp_path / "app"
@@ -148,6 +166,8 @@ def test_country_scope_covers_shared_readers_and_vat_but_ignores_unrelated_outpu
         "core/json_documents.py",
         "modules/vat/engine.py",
         "modules/intelligence/matching.py",
+        "modules/intelligence/transaction_candidates.py",
+        "modules/intelligence/matching_review.py",
         "modules/ingestion/parser.py",
         "modules/reconciliation/service.py",
         "modules/regulatory/conversion.py",

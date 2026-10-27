@@ -121,6 +121,7 @@ def bank(data, tables):
         "rows": rows,
         "matches": matches["matches"],
         "ambiguous": matches["ambiguous"],
+        **{key: matches[key] for key in ("matching_contract", "candidate_checks", "candidate_check_limit", "ambiguity_link_count")},
         "control_comparison": {k: str(v) for k, v in controls.items()},
         "adjusted_book_balance": str(adjusted),
         "transaction_dates": transaction_dates,

@@ -88,6 +88,7 @@ def render(event, format):
             "bank_consumption_manifest",
             "bank_consumption_review",
             "payment_scope",
+            "matching_contract", "candidate_checks", "candidate_check_limit", "ambiguity_link_count",
             "source_totals",
             "destination_totals",
             "section",
@@ -201,6 +202,21 @@ def render(event, format):
                 append(cover, [key, value])
             for key, value in summary.items():
                 append(cover, [key, value])
+            if body.get("matches") and (event["kind"] == "reconciliation" or body.get("workflow") == "bank-brs"):
+                proposals = workbook.create_sheet("Matched proposals")
+                fields = ["left_ids", "right_ids", "rule", "variance", "auditor_status", "limitation"]
+                append(proposals, fields)
+                for match in body["matches"]:
+                    append(proposals, [match.get(field) for field in fields])
+            if body.get("ambiguous"):
+                from app.modules.intelligence.matching_review import saved_candidates_complete
+
+                candidates = workbook.create_sheet("Matching candidates")
+                append(candidates, ["left_id", "candidate_id", "candidate_count", "retention", "reason"])
+                retention = "COMPLETE_RETAINED_CANDIDATES" if saved_candidates_complete(body) else "LEGACY_OR_INCOMPLETE_CANDIDATES_REGENERATE"
+                for group in body["ambiguous"]:
+                    for candidate in group["candidate_ids"]:
+                        append(candidates, [group["left_id"], candidate, group.get("candidate_count"), retention, group.get("reason")])
             if body.get("workflow") == "adverse-media-review":
                 documents = workbook.create_sheet("Media documents")
                 fields = ["type", "id", "record_id", "number", "sha256"]

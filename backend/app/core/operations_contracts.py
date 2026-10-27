@@ -35,6 +35,8 @@ COUNTRY_WORKFLOW_PATHS = (
     "core/json_documents.py",
     "api/v1/intelligence.py",
     "modules/intelligence/matching.py",
+    "modules/intelligence/transaction_candidates.py",
+    "modules/intelligence/matching_review.py",
     "modules/ifrs/calculations.py",
     "modules/ifrs/schemas.py",
     "modules/jurisdictions/profiles.py",
@@ -141,6 +143,8 @@ def implementation_hash():
     paths = [
         "core/operations_contracts.py",
         "modules/intelligence/matching.py",
+        "modules/intelligence/transaction_candidates.py",
+        "modules/intelligence/matching_review.py",
         "modules/country_workflows/operations.py",
         "modules/audit_analytics/service.py",
     ]

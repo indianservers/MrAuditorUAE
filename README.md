@@ -184,3 +184,5 @@ The campaign uses separate `auditos_qa_campaign_demo` and disposable `auditos_qa
 ## Advanced CRUD and dependency QA
 
 The evidence and remaining coverage gaps are in [docs/qa-crud/final-crud-qa-report.md](docs/qa-crud/final-crud-qa-report.md). The campaign remains PARTIAL / NO-GO: source freshness and representative client/working-paper lifecycle tests pass, while exhaustive specialist browser CRUD remains open. Reproduce isolated API regressions with `backend/.venv/Scripts/python.exe scripts/qa_crud_run.py test .venv/Scripts/python.exe -m pytest tests/qa_crud`; run browser checks with `npx playwright test --config playwright.crud.config.ts` from frontend against the synthetic QA services.
+
+Shared bank matching now retains every competing candidate, pages original source details and prevents ambiguous group netting. See [implementation and verification limits](docs/country-workflows/native-adapters.md#complete-bank-matching-alternatives-and-controlled-grouping).

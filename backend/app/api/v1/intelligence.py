@@ -721,6 +721,8 @@ async def event_details(
     cutoff_posting_limit: int = Query(100, ge=1, le=500),
     purchase_offset: int = Query(0, ge=0),
     purchase_limit: int = Query(100, ge=1, le=500),
+    ambiguity_offset: int = Query(0, ge=0),
+    ambiguity_limit: int = Query(100, ge=1, le=500),
 ):
     obj = await service.event(db, ctx, eid, identifier)
     body = dict(obj.body)
@@ -755,6 +757,9 @@ async def event_details(
         if isinstance(body.get(key), list):
             totals[key] = len(body[key])
             body[key] = body[key][start : start + size]
+    if isinstance(body.get("ambiguous"), list):
+        totals["ambiguous"] = len(body["ambiguous"])
+        body["ambiguous"] = [{**row, "candidate_ids": row.get("candidate_ids", [])[:50], "candidate_preview_truncated": row.get("candidate_preview_truncated", False) or len(row.get("candidate_ids", [])) > 50} for row in body["ambiguous"][ambiguity_offset:ambiguity_offset+ambiguity_limit]]
     return {
         **audit.serialize(obj),
         "body": body,
@@ -767,6 +772,14 @@ async def event_details(
         if any(d.get("type") != "context" for d in obj.dependencies)
         else "legacy provenance incomplete",
     }
+
+
+@router.get("/engagements/{eid}/events/{identifier}/bank-candidates")
+async def bank_candidates(eid: uuid.UUID, identifier: uuid.UUID, db: DB, ctx: Actor, left_id: str = Query(..., min_length=1, max_length=120), offset: int = Query(0, ge=0), limit: int = Query(25, ge=1, le=100)):
+    from app.modules.intelligence.matching_review import candidate_page
+
+    obj = await service.event(db, ctx, eid, identifier)
+    return await candidate_page(db, ctx, eid, obj, left_id, offset, limit)
 
 
 @router.post("/engagements/{eid}/events/{identifier}/corrections", status_code=201)
@@ -1181,6 +1194,10 @@ async def review(
         )
     else:
         if data.action == "approve":
+            from app.modules.intelligence.matching_review import saved_candidates_complete
+
+            if obj.kind == "reconciliation" and not saved_candidates_complete(obj.body):
+                raise HTTPException(409, "Regenerate matching with complete retained candidates before approval")
             if obj.kind == "tax-connected-assessment" and obj.body.get("issues"):
                 raise HTTPException(
                     409, "Resolve connected tax issues and regenerate before approval"

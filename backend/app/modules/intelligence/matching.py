@@ -1,10 +1,9 @@
 """Explainable Decimal matching. Machine proposals never imply auditor approval."""
 
 import unicodedata
-from bisect import bisect_left, bisect_right
 from collections import defaultdict
 from datetime import date
-from decimal import Decimal
+from decimal import Decimal, localcontext
 
 
 def normal(value):
@@ -113,7 +112,29 @@ def compare_voucher(transaction, document, amount_tolerance=Decimal(0), date_tol
     }
 
 
-def reconcile_transactions(left, right, tolerance=Decimal(0), date_tolerance=0, max_group_size=3):
+def reconcile_transactions(
+    left,
+    right,
+    tolerance=Decimal(0),
+    date_tolerance=0,
+    max_group_size=3,
+    *,
+    max_candidate_checks=100000,
+):
+    with localcontext() as arithmetic:
+        arithmetic.prec = 80
+        return _reconcile_transactions(
+            left, right, tolerance, date_tolerance, max_group_size, max_candidate_checks
+        )
+
+
+def _reconcile_transactions(
+    left, right, tolerance, date_tolerance, max_group_size, max_candidate_checks
+):
+    from app.modules.intelligence.transaction_candidates import SearchBudget, TransactionCandidates
+
+    if type(max_candidate_checks) is not int or not 1 <= max_candidate_checks <= 100000:
+        raise ValueError("Transaction candidate search bound must be an integer from 1 to 100,000")
     if (
         not tolerance.is_finite()
         or tolerance < 0
@@ -129,28 +150,11 @@ def reconcile_transactions(left, right, tolerance=Decimal(0), date_tolerance=0, 
     used_right = set()
     matches = []
     ambiguous = []
-    index = defaultdict(list)
-    left_index = defaultdict(list)
-    for row in right:
-        index[(row["currency"], Decimal(row["amount"]))].append(row)
-    for row in left:
-        left_index[(row["currency"], Decimal(row["amount"]))].append(row)
-    right_amounts = {
-        c: sorted({amount for currency, amount in index if currency == c})
-        for c in {r["currency"] for r in right}
-    }
-    left_amounts = {
-        c: sorted({amount for currency, amount in left_index if currency == c})
-        for c in {r["currency"] for r in left}
-    }
-
-    def amount_candidates(row, lookup, amounts):
-        currency, value = row["currency"], Decimal(row["amount"])
-        values = amounts.get(currency, [])
-        for amount in values[
-            bisect_left(values, value - tolerance) : bisect_right(values, value + tolerance)
-        ]:
-            yield from lookup[(currency, amount)]
+    contested_left: set[str] = set()
+    contested_right: set[str] = set()
+    budget = SearchBudget(max_candidate_checks)
+    index = TransactionCandidates(right, normal)
+    left_index = TransactionCandidates(left, normal)
 
     def compatible(a, b):
         return (
@@ -173,21 +177,27 @@ def reconcile_transactions(left, right, tolerance=Decimal(0), date_tolerance=0, 
         )
 
     for row in left:
-        # Exact amounts use an index; tolerances use a bounded candidate set.
-        candidates = amount_candidates(row, index, right_amounts)
-        candidates = [r for r in candidates if r["id"] not in used_right and compatible(row, r)]
+        if Decimal(row["amount"]) == 0:
+            continue
         referenced = [
             r
-            for r in candidates
-            if normal(row.get("reference"))
-            and normal(r.get("reference")) == normal(row["reference"])
+            for r in index.query(row, "reference", tolerance, date_tolerance, budget)
+            if r["id"] not in used_right and compatible(row, r)
         ]
-        candidates = referenced or candidates
+        candidates = referenced or [
+            r
+            for r in index.query(row, "party", tolerance, date_tolerance, budget)
+            if r["id"] not in used_right and compatible(row, r)
+        ]
         if len(candidates) > 1:
+            contested_left.add(row["id"])
+            contested_right.update(candidate["id"] for candidate in candidates)
             ambiguous.append(
                 {
                     "left_id": row["id"],
-                    "candidate_ids": [r["id"] for r in candidates[:50]],
+                    "candidate_ids": [r["id"] for r in candidates],
+                    "candidate_count": len(candidates),
+                    "candidate_preview_truncated": False,
                     "reason": "Multiple equally supported deterministic candidates",
                 }
             )
@@ -196,7 +206,9 @@ def reconcile_transactions(left, right, tolerance=Decimal(0), date_tolerance=0, 
             target = candidates[0]
             competitors = [
                 a
-                for a in amount_candidates(target, left_index, left_amounts)
+                for a in left_index.query(
+                    target, "reference" if referenced else "all", tolerance, date_tolerance, budget
+                )
                 if a["id"] not in used_left
                 and compatible(a, target)
                 and (
@@ -204,6 +216,9 @@ def reconcile_transactions(left, right, tolerance=Decimal(0), date_tolerance=0, 
                 )
             ]
             if len(competitors) != 1:
+                contested_left.add(row["id"])
+                contested_left.update(competitor["id"] for competitor in competitors)
+                contested_right.add(target["id"])
                 continue
             used_left.add(row["id"])
             used_right.add(target["id"])
@@ -227,6 +242,12 @@ def reconcile_transactions(left, right, tolerance=Decimal(0), date_tolerance=0, 
     for key, source in left_groups.items():
         target = right_groups.get(key, [])
         if not target or len(source) > max_group_size or len(target) > max_group_size:
+            continue
+        if (
+            (len(source) > 1 and len(target) > 1)
+            or any(row["id"] in contested_left for row in source)
+            or any(row["id"] in contested_right for row in target)
+        ):
             continue
         if not (
             all(Decimal(row["amount"]) > 0 for row in source + target)
@@ -266,6 +287,10 @@ def reconcile_transactions(left, right, tolerance=Decimal(0), date_tolerance=0, 
     return {
         "matches": matches,
         "ambiguous": ambiguous,
+        "matching_contract": "indexed-transaction-candidates/1",
+        "candidate_checks": budget.examined,
+        "candidate_check_limit": budget.limit,
+        "ambiguity_link_count": sum(len(row["candidate_ids"]) for row in ambiguous),
         "unmatched_left": [r for r in left if r["id"] not in used_left],
         "unmatched_right": [r for r in right if r["id"] not in used_right],
         "source_totals": totals(left),

@@ -1,0 +1,96 @@
+{
+  "verified_on": "2026-10-27",
+  "contract": "indexed-transaction-candidates/1",
+  "implementation_sha256": "3b338c079c8f32dc9be377af7e15db5dc1111107ac8c1b0131ce59deb786e4f7",
+  "shared_scope": [
+    "AE",
+    "IN",
+    "generic transaction reconciliation"
+  ],
+  "changes": [
+    "Retain every candidate link; distinguish the 50-ID event read preview from the immutable complete result",
+    "Independently page ambiguous items and their original source candidates with tenant/engagement authorization",
+    "Identify a candidate already proposed for another book item without selecting or approving it",
+    "Retain candidate links and machine proposals in separate XLSX sheets alongside unresolved exceptions",
+    "Reject legacy incomplete ambiguity results at approval",
+    "Block many-to-many group netting and group fallback containing individually contested transactions",
+    "Preserve uncontested one-to-many and many-to-one groups",
+    "Use a local Decimal precision of 80 and restore the caller context",
+    "Cover both new helpers in generic and country execution implementation fingerprints"
+  ],
+  "backend": {
+    "unit_passed": 2535,
+    "existing_calculation_regressions_passed": 11,
+    "total_passed": 2546,
+    "skipped": 4,
+    "new_matching_unit_cases": 328,
+    "new_fingerprint_unit_cases": 2,
+    "differential_seeds": 300,
+    "differential_scope": "Individual matching decisions and source conservation; unsafe historical group fallback is deliberately removed",
+    "selected_api_and_phase5_cases_passed": 31,
+    "selected_execution_scope": "Three new candidate HTTP tests, four existing country workflow cases, and 24 existing Phase 5 reporting/calculation regressions; not 31 new HTTP cases",
+    "retry_note": "Initial full run had an existing digital-PDF extraction timeout (2544 passed, one failed, four skipped). Extraction passed on focused retry without extraction changes. Final complete repeat passed after adding an export regression. An incomplete export test fixture was corrected to include dependencies.",
+    "bound_failure_no_partial_result": true
+  },
+  "frontend": {
+    "tests_passed": 222,
+    "files_passed": 47,
+    "production_build": "passed",
+    "typescript": "passed via production build",
+    "scoped_eslint": "passed"
+  },
+  "browser": {
+    "tests_passed": 1,
+    "country_order": [
+      "AE",
+      "IN"
+    ],
+    "cases": 2,
+    "book_items_per_country": 121,
+    "candidates_per_book_item": 121,
+    "retained_candidate_links_per_country": 14641,
+    "last_item_and_candidate_reached": "L120 and R120",
+    "downloaded_xlsx_files_verified": 2,
+    "screenshots": 4,
+    "visual_review": "All four inspected; Arabic/Hindi source text, final item and candidate pages, and disabled final-page controls are visible",
+    "worker": "Real local Celery intelligence worker",
+    "implementation_fingerprint_verified_before_and_after": true,
+    "initial_test_correction": "The form is a shared page layout, not an HTML form element; the locator was corrected before the passing browser run"
+  },
+  "bounds": {
+    "matching_rows_per_side": 20000,
+    "canonical_csv_rows": 5000,
+    "max_candidate_index_visits": 100000,
+    "budget_semantics": "Counts visited index entries, including overlapping families and previously consumed candidates; not unique financial transactions",
+    "preview_candidate_ids_per_item": 50,
+    "review_page_size": 25,
+    "large_population_matching": "100k and 1m matching/ingestion capacity NOT QUALIFIED; probes exercise rejection only",
+    "scope_partitioning": "Keep competing transactions together within independently controlled account/period scopes"
+  },
+  "mypy_source_files": 8,
+  "scoped_ruff": "passed",
+  "utf8": "passed",
+  "performance_receipt": "matching-performance.json",
+  "browser_receipt": "matching-candidates-browser-results.json",
+  "authored_catalogue_cases": 154,
+  "qualification": "Synthetic engineering evidence only",
+  "test_boundaries": "Owned disposable PostgreSQL/private objects and local production frontend; scanner and broker doubles during API/source preparation. Browser calculations use the actual local API and worker. No live provider or malware-service qualification.",
+  "remaining": [
+    "Real client pilot inputs and independent expected results",
+    "Professional country/framework rule qualification",
+    "Native/live provider qualification",
+    "Higher-volume ingestion/matching and concurrency qualification",
+    "Hosted security, operations and release gates"
+  ],
+  "performance_summary": {
+    "paired_1000_median_matching_seconds": {
+      "baseline": 13.393356,
+      "indexed": 0.06856
+    },
+    "matched_20000_cases": 2,
+    "rejected_only_sizes": [
+      100000,
+      1000000
+    ]
+  }
+}

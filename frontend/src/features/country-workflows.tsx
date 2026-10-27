@@ -1,6 +1,10 @@
 "use client";
 
 import {
+  BankMatchingCandidates,
+  type BankAmbiguity,
+} from "./bank-matching-candidates";
+import {
   AdverseMediaEvidence,
   MediaMentionAssessments,
   type MediaScope,
@@ -177,6 +181,8 @@ type Result = {
   collection_totals?: Record<string, number>;
   body: {
     workflow?: string;
+    ambiguous?: BankAmbiguity[];
+    matching_contract?: string;
     retained_grant_documents?: GrantDocument[];
     retained_media_documents?: GrantDocument[];
     media_scope?: MediaScope;
@@ -5900,6 +5906,23 @@ export function CountryWorkflows({
           {body.workflow === "adverse-media-review" && (
             <MediaMentionAssessments rows={rows} />
           )}
+          {body.workflow === "bank-brs" &&
+            !!(
+              detail.data.collection_totals?.ambiguous || body.ambiguous?.length
+            ) && (
+              <BankMatchingCandidates
+                key={selected}
+                prefix={prefix}
+                selected={selected}
+                initial={body.ambiguous || []}
+                total={
+                  detail.data.collection_totals?.ambiguous ??
+                  body.ambiguous?.length ??
+                  0
+                }
+                contract={body.matching_contract}
+              />
+            )}
           {body.workflow === "sanctions-name-review" && (
             <ScreeningCandidates key={`${selected}:${offset}`} rows={rows} />
           )}
