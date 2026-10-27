@@ -2,7 +2,6 @@
 
 import io
 import json
-from xml.sax.saxutils import escape
 
 
 def render(event, format):
@@ -784,25 +783,22 @@ def render(event, format):
             buffer.getvalue(),
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         )
-    from reportlab.lib.styles import getSampleStyleSheet
-    from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer
+    from app.core.pdf_text import render_text_schedule
 
-    styles = getSampleStyleSheet()
-    story = [Paragraph("Mr Auditor — reviewable audit schedule", styles["Title"])]
+    sections = [("Mr Auditor — reviewable audit schedule", True)]
     for key, value in {**metadata, **summary}.items():
-        story.extend([Paragraph(escape(f"{key}: {text(value)}"), styles["BodyText"]), Spacer(1, 6)])
-    story.append(Paragraph("System-generated source rows", styles["Heading2"]))
+        sections.append((f"{key}: {text(value)}", False))
+    sections.append(("System-generated source rows", True))
     for index, row in enumerate(rows[:500], 1):
-        story.extend([Paragraph(escape(f"{index}. {text(row)}"), styles["BodyText"]), Spacer(1, 6)])
+        sections.append((f"{index}. {text(row)}", False))
     if len(rows) > 500:
-        story.append(
-            Paragraph(
+        sections.append(
+            (
                 f"First 500 of {len(rows)} rows. Use the full XLSX export for the complete result.",
-                styles["BodyText"],
+                False,
             )
         )
-    story.append(Paragraph("Dependency receipts", styles["Heading2"]))
+    sections.append(("Dependency receipts", True))
     for dep in event["dependencies"]:
-        story.append(Paragraph(escape(text(dep)), styles["BodyText"]))
-    SimpleDocTemplate(buffer).build(story)
-    return buffer.getvalue(), "application/pdf"
+        sections.append((text(dep), False))
+    return render_text_schedule(sections), "application/pdf"

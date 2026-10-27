@@ -2807,3 +2807,49 @@ stages. Its existing runtime command uses Node directly. Both image-scan gates
 remain unchanged in severity/failure policy. Successful builds, native imports
 and image scans for these Dockerfile changes require the next hosted run; no local
 Docker execution is claimed.
+
+### Multilingual UAE/India workflow PDF exports (27 October 2026)
+
+Ordinary intelligence workflow PDF schedules now embed pinned, unmodified Noto
+Sans, Arabic and Devanagari fonts under SIL OFL 1.1. The checked-in manifest records
+upstream commit, source URLs and SHA-256; export verifies font integrity before
+use. HarfBuzz shaping retains Arabic joins and Hindi clusters. Unsupported
+characters fail with HTTP 422 and an XLSX alternative instead of silently
+omitting source text. Existing exact decimal strings, review/freshness metadata,
+dependency receipts and the 500-row PDF preview limit remain in place.
+
+Every rendered line carries hexadecimal ISO ActualText with the original logical
+Unicode. Tests verify exact source values and balanced marked spans across page
+boundaries, literal markup/PDF-operator input, unsupported characters and tampered
+fonts. Copy/search behavior still depends on the reader: PDFium can reorder mixed
+Arabic/English runs, and pypdf extraction does not honor this metadata. Use XLSX
+for canonical data round trips. This increment covers ordinary intelligence
+exports, not the separate statutory PDF renderer or every language used in India.
+
+Synthetic previews: [UAE PDF](../../output/pdf/unicode-review/AE.pdf),
+[India PDF](../../output/pdf/unicode-review/IN.pdf), and visually checked
+[UAE rendering](screenshots/unicode-pdf/AE.png) /
+[India rendering](screenshots/unicode-pdf/IN.png). Reproduce with
+`backend/.venv/Scripts/python.exe scripts/pdf_unicode_preview.py`.
+
+Validation: [2,684 backend tests passed](../phase-12/unicode-pdf-backend.xml),
+with four existing skips and two warnings; [eight workbook API tests passed](../phase-12/unicode-pdf-api.xml)
+using the owned database and explicit scanner/broker doubles. UAE/India source
+names and exact amounts survive the retained workbook -> review -> PDF path.
+[Dependency audit](../phase-12/unicode-pdf-dependency-audit.json) reports no known
+vulnerabilities in installed application packages. Lint, format, lockfile and
+runtime API-contract checks passed. Container build smoke now also imports fpdf2
+and HarfBuzz; its new hosted result remains pending.
+
+For baseline commit 3796ad7, hosted run
+[40479887089](https://github.com/indianservers/MrAuditorUAE/actions/runs/40479887089)
+passed frontend, browser-smoke, security and ML jobs. Both images built, and native
+backend imports succeeded. The frontend image has zero HIGH/CRITICAL findings;
+the backend image gate still fails on unfixed stable Debian 13 packages including
+util-linux, acl, ncurses, systemd and perl. No severity exceptions or unfixed-CVE
+suppression were added. Verify coverage was still running at this check.
+Real pilot files and independent expected results, professional country-rule
+qualification and country-specific browser/provider release gates remain open.
+Pilot folders exist; synthetic examples do not substitute for client evidence.
+Temporary PDF probes remain outside Git because automatic approval review
+rejected their cleanup; final synthetic PDFs and screenshots are retained above.

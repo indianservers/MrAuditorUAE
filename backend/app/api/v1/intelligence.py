@@ -1688,6 +1688,7 @@ async def export_result(
 
     tenant = await db.get(Tenant, ctx.tenant_id)
     freshness = "CURRENT" if await service.current(db, ctx, obj) else "STALE"
+    from app.core.pdf_text import PDFTextError
     from app.modules.intelligence.xlsx_values import XlsxValueLimitError
 
     try:
@@ -1701,7 +1702,7 @@ async def export_result(
             },
             format,
         )
-    except XlsxValueLimitError as error:
+    except (XlsxValueLimitError, PDFTextError) as error:
         raise HTTPException(422, str(error)) from error
     content_sha256 = hashlib.sha256(content).hexdigest()
     record(

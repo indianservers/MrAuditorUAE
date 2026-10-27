@@ -14,7 +14,7 @@ RUN node --version
 COPY --from=ml /srv/ml-engine /srv/ml-engine
 WORKDIR /srv/backend
 COPY backend/pyproject.toml backend/uv.lock ./
-RUN uv sync --frozen --no-dev && .venv/bin/python -c "from PIL import Image; import pypdf, pypdfium2, onnxruntime, rapidocr; image = Image.new('RGB', (2, 2)); image.close()"
+RUN uv sync --frozen --no-dev && .venv/bin/python -c "from PIL import Image; import pypdf, pypdfium2, onnxruntime, rapidocr, fpdf, uharfbuzz; image = Image.new('RGB', (2, 2)); image.close()"
 COPY backend/app/ ./app/
 COPY backend/alembic/ ./alembic/
 COPY backend/alembic.ini ./alembic.ini

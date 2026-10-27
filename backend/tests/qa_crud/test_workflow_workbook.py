@@ -33,6 +33,9 @@ async def test_retained_workbook_source_review_export_and_consumption(
     double_boundaries(monkeypatch)
     h, _, eid, audit = await context(c, country)
     row = dict(SAMPLES[kind][0], currency="AED" if country == "AE" else "INR")
+    party = "شركة النور للتجارة" if country == "AE" else "भारत आपूर्तिकर्ता"
+    if kind == "transactions":
+        row["counterparty"] = party
     if kind == "tax-documents" and country == "IN":
         row["component"] = "CGST"
     original = workbook(list(row), [list(row.values())], extra_sheet=True)
@@ -81,6 +84,21 @@ async def test_retained_workbook_source_review_export_and_consumption(
     assert approved.status_code == 201, approved.text
     result = approved.json()
     path = f"/api/v1/intelligence/engagements/{eid}/events/{result['id']}"
+    if kind == "transactions":
+        from pypdf import PdfReader
+        from pypdf.generic import ContentStream
+
+        pdf_export = await c.get(path + "/export?format=pdf", headers=h)
+        assert pdf_export.status_code == 200, pdf_export.text
+        reader = PdfReader(io.BytesIO(pdf_export.content))
+        logical = "\n".join(
+            str(args[1]["/ActualText"])
+            for page in reader.pages
+            for args, operator in ContentStream(page.get_contents(), reader).operations
+            if operator == b"BDC"
+        )
+        assert party in logical
+        assert str(row["amount"]) in logical
     exported = await c.get(path + "/export?format=xlsx", headers=h)
     assert exported.status_code == 200, exported.text
     book = load_workbook(io.BytesIO(exported.content), read_only=True)
