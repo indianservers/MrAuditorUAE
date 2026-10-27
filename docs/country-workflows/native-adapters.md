@@ -2487,3 +2487,39 @@ then India, plus two cached-result switching regressions; all 20 saved screensho
 were inspected. Thirty fresh serial native extractions passed, including forced
 PDF OCR and the public daemon context. These results qualify the tested local
 synthetic paths only; the remaining qualification limits above still apply.
+
+## Full bounded CSV population — UAE then India
+
+The [capacity regression receipt](../phase-12/bank-population-capacity-api.xml)
+records two passing country cases through actual HTTP, disposable PostgreSQL,
+private evidence storage, job processing, independent source approval, matching,
+all result pages and XLSX readback. Scanner and broker dispatch are explicit test
+doubles; job processing runs directly, so these measurements exclude queue delay.
+Each country retains two 5,000-row CSV sources with equal amounts, distinct
+references and Arabic or Hindi counterparties. Ten API pages and the exported
+Matched proposals sheet each contain exactly the independently expected 5,000
+left/right pairs, with no dropped or duplicated pair. Both source tails preserve
+the last 100 original IDs, currency and counterparty values. The balance bridge
+has no residual and the result has no exceptions. Machine proposals remain
+subject to the existing review controls; this run does not approve them on behalf
+of an auditor.
+
+A separate 5,001-row CSV in each case deliberately understates its declared row
+control as 5,000. Parsing rejects it, and the job has no published result. The
+parser neither truncates the population nor accepts the lower declaration.
+
+The final local run passed in 25.08 seconds including fixture setup/teardown.
+Measured upload-through-export/rejection phases totalled about 9.26 seconds for
+UAE and 9.39 seconds for India; per-phase timings are retained as JUnit properties.
+An initial test-helper failure used an unsupported Workbook context manager;
+explicit closing corrected it before the successful readback and boundary runs.
+This adds evidence for the existing 5,000-row ingestion bound. It does not raise
+that bound or qualify 100,000-row ingestion, colliding-reference populations,
+concurrency, hosted workers, final professional conclusions or client accuracy.
+The authored catalogue remains 154 synthetic scenarios.
+
+Repeat against the owned disposable database:
+
+```powershell
+backend/.venv/Scripts/python.exe scripts/country_workflows_run.py .venv/Scripts/python.exe -m pytest tests/qa_crud/test_bank_population_capacity.py -q --tb=short -o junit_family=xunit1 --junitxml=../docs/phase-12/bank-population-capacity-api.xml
+```
