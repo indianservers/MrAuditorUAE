@@ -60,8 +60,13 @@ for (const code of ["AE", "IN"] as const) {
     if (!preparerEmail || !reviewerEmail)
       throw new Error("Two explicit isolated identities required");
     await login(page, preparerEmail);
-    const reviewerContext = await browser.newContext();
+    page.setDefaultTimeout(20000);
+    const reviewerContext = await browser.newContext({
+      baseURL: process.env.AUDITOS_E2E_ORIGIN,
+      viewport: { width: 1440, height: 1000 },
+    });
     const reviewer = await reviewerContext.newPage();
+    reviewer.setDefaultTimeout(20000);
     await login(reviewer, reviewerEmail);
     const client = await post(page.request, "clients", {
       code: `REPORT-${code}-${Date.now()}`,
@@ -119,15 +124,37 @@ for (const code of ["AE", "IN"] as const) {
       },
     );
     await country(page, code);
+    const errors: string[] = [];
+    page.on("pageerror", (error) => errors.push(error.message));
     await page.goto("/reports/statutory");
+    const access = await page.request.get("/api/backend/workspace/access", {
+      headers: { "X-Tenant-ID": identities.tenant_id },
+    });
+    expect(access.status()).toBe(200);
+    expect((await access.json()).permissions).toContain("audit.read");
+    try {
+      await expect(
+        page.getByRole("heading", {
+          name: "Statutory Report Designer",
+          exact: true,
+        }),
+        errors.join("\n"),
+      ).toBeVisible({ timeout: 20000 });
+    } finally {
+      await page.screenshot({
+        path: `${screenshots}/${code}-designer-route.png`,
+        fullPage: true,
+      });
+    }
+
     await page
-      .getByLabel("Engagement", { exact: true })
+      .getByRole("combobox", { name: "Engagement", exact: true })
       .selectOption(engagement.id);
     await page
       .getByLabel("Report title", { exact: true })
       .fill(`SYNTHETIC ${code} declared report`);
     await page
-      .getByLabel("Report category", { exact: true })
+      .getByRole("combobox", { name: "Report category", exact: true })
       .selectOption(code === "AE" ? "uae-ifrs" : "india-statutory");
     await page
       .getByLabel("Template / review rationale")
@@ -176,7 +203,7 @@ for (const code of ["AE", "IN"] as const) {
       .getByLabel("Requirement title 1", { exact: true })
       .fill(`SYNTHETIC ${code} communication`);
     await page
-      .getByLabel("Requirement disposition 1", { exact: true })
+      .getByRole("combobox", { name: "Requirement disposition 1", exact: true })
       .selectOption("REQUIRED");
     await page
       .getByLabel("Evidence/calculation source required for item 1", {
@@ -229,10 +256,10 @@ for (const code of ["AE", "IN"] as const) {
     await country(reviewer, code);
     await reviewer.goto("/reports/statutory");
     await reviewer
-      .getByLabel("Engagement", { exact: true })
+      .getByRole("combobox", { name: "Engagement", exact: true })
       .selectOption(engagement.id);
     await reviewer
-      .getByLabel("Saved template version", { exact: true })
+      .getByRole("combobox", { name: "Saved template version", exact: true })
       .selectOption(template.id);
     const coverage = reviewer.getByRole("region", {
       name: "Retained requirement coverage",
@@ -260,10 +287,10 @@ for (const code of ["AE", "IN"] as const) {
     const reviewed = await approval.json();
     await page.reload();
     await page
-      .getByLabel("Engagement", { exact: true })
+      .getByRole("combobox", { name: "Engagement", exact: true })
       .selectOption(engagement.id);
     await page
-      .getByLabel("Saved template version", { exact: true })
+      .getByRole("combobox", { name: "Saved template version", exact: true })
       .selectOption(reviewed.id);
     await page
       .getByLabel("Template / review rationale")

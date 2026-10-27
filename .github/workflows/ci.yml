@@ -221,4 +221,4 @@ jobs:
         if: always()
         with:
           name: country-report-browser-evidence
-          path: frontend/test-results/country-reports/
+          path: frontend/test-results/**/*.png

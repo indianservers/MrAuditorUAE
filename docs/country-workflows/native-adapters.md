@@ -3661,3 +3661,16 @@ No new local preview service is started. The test reuses the existing guarded CI
 services and credentials. Local TypeScript, lint (one existing warning), seed Ruff,
 Python/YAML syntax and whitespace checks passed. Actual browser results and visual
 inspection remain pending the hosted run; test definitions are not pass evidence.
+
+The first expanded hosted run (job 122254328419) passed seed, build and the
+original authentication test, but both country cases timed out selecting the
+designer engagement. The browser test now verifies the route heading and actual
+audit.read access explicitly, captures route state, and retains all synthetic
+failure PNGs. Individual action timeouts are bounded to 20 seconds. No application
+permission or approval rule is relaxed, and no passing browser claim is made.
+
+A server-free Chromium probe reproduced the selector failure: exact getByLabel
+on a wrapped select also considers its option text, while the accessible
+combobox name is Engagement. The smoke test now uses exact combobox-role
+selectors for engagement, category, template and requirement disposition. This
+changes the test interaction, not application authorization or report rules.
