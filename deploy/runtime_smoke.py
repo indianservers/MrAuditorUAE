@@ -17,6 +17,10 @@ def main():
     os.environ["ENVIRONMENT"] = "test"
     os.environ["JWT_SECRET"] = "synthetic-runtime-smoke-not-a-production-secret"
     os.environ["SYNTHETIC_DATA_ENABLED"] = "false"
+    os.environ["DATABASE_URL"] = (
+        "postgresql+asyncpg://synthetic:synthetic@127.0.0.1:1/synthetic_runtime_test"
+    )
+    os.environ["REDIS_URL"] = "redis://127.0.0.1:1/0"
     assert uuid.uuid4().version == 4 and uuid.uuid1().version == 1
     assert bz2.decompress(bz2.compress(b"runtime")) == b"runtime"
     assert lzma.decompress(lzma.compress(b"runtime")) == b"runtime"

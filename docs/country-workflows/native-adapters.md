@@ -3606,3 +3606,10 @@ image's existing libgcc-s1 documentation symlink. Additional library copyrights
 now use /usr/share/auditos/licenses/<package>/copyright; Debian status metadata
 remains in status.d. Native capability and scan gates were not reached by that
 failed build, so no compatibility or security pass is inferred.
+
+The second candidate image built successfully (job 122241978065). The capability
+script then failed at API import because its isolated synthetic test setup omitted
+the required database URL. The script now supplies unreachable loopback test
+URLs without making database/Redis connections; Docker networking remains off.
+The candidate scanner now runs independently after a successful build even if
+the capability step fails, while either failure still fails the job.

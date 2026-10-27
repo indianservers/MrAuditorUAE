@@ -219,10 +219,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Build candidate Debian 13 runtime
+        id: candidate
         run: docker build --target minimal-runtime -f deploy/backend.Dockerfile -t auditos-backend-minimal:ci .
       - name: Exercise offline document and ML capabilities as nonroot
         run: docker run --rm --network none --read-only --tmpfs /tmp:rw,noexec,nosuid,size=512m --cap-drop ALL --security-opt no-new-privileges --memory=4g --cpus=2 auditos-backend-minimal:ci /srv/backend/.venv/bin/python /srv/backend/runtime_smoke.py
       - name: Install checksum-verified Trivy 0.76.1
+        if: ${{ !cancelled() && steps.candidate.outcome == 'success' }}
         id: trivy
         shell: bash
         run: |
@@ -234,6 +236,7 @@ jobs:
           "$RUNNER_TEMP/trivy-bin/trivy" --version
           echo "$RUNNER_TEMP/trivy-bin" >> "$GITHUB_PATH"
       - name: Scan candidate runtime without exclusions
+        if: ${{ !cancelled() && steps.trivy.outcome == 'success' }}
         run: trivy image --severity CRITICAL,HIGH --exit-code 1 --ignore-unfixed=false --format json --output minimal-runtime-image-audit.json auditos-backend-minimal:ci
       - uses: actions/upload-artifact@v4
         if: always()
