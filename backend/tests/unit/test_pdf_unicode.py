@@ -66,3 +66,24 @@ def test_font_integrity_is_verified(monkeypatch):
     monkeypatch.setattr(Path, "read_bytes", altered)
     with pytest.raises(ValueError, match="integrity"):
         render_text_schedule([("105.00", False)])
+
+
+def test_table_row_taller_than_page_continues_without_losing_cells():
+    from app.core.pdf_text import PDFTable
+
+    content = render_text_schedule(
+        [PDFTable(["Row", "Detail"], [["1", "\n".join(f"LINE-{i:03}" for i in range(200))]])],
+        draft=True,
+    )
+    reader = PdfReader(BytesIO(content))
+    assert len(reader.pages) > 2
+    lines = []
+    for page in reader.pages:
+        page_lines = [
+            str(args[1]["/ActualText"])
+            for args, operator in ContentStream(page.get_contents(), reader).operations
+            if operator == b"BDC"
+        ]
+        assert "Detail" in page_lines
+        lines.extend(line for line in page_lines if line.startswith("LINE-"))
+    assert lines == [f"LINE-{i:03}" for i in range(200)]

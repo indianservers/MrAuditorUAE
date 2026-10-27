@@ -2,7 +2,6 @@
 
 import io
 import json
-from xml.sax.saxutils import escape
 
 
 def value(item):
@@ -199,73 +198,36 @@ def render(event, format):
             buffer.getvalue(),
             "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         )
-    from reportlab.lib import colors
-    from reportlab.lib.pagesizes import A4, landscape
-    from reportlab.lib.styles import getSampleStyleSheet
-    from reportlab.platypus import LongTable, Paragraph, SimpleDocTemplate, Spacer, TableStyle
+    from app.core.pdf_text import PDFTable, render_text_schedule
 
-    styles = getSampleStyleSheet()
-    styles["BodyText"].fontSize = 8
-    styles["BodyText"].leading = 10
-
-    def paragraph(text):
-        return Paragraph(escape(value(text)), styles["BodyText"])
-
-    story = [Paragraph(escape(body["title"]), styles["Title"])]
-    for key, item in metadata.items():
-        story.extend([paragraph(f"{key}: {value(item)}"), Spacer(1, 5)])
+    sections: list[tuple[str, bool] | PDFTable] = [(body["title"], True)]
+    sections.extend((f"{key}: {value(item)}", False) for key, item in metadata.items())
     for block in body["blocks"]:
-        story.extend(
+        sections.extend(
             [
-                Paragraph(escape(f"{block['number']}. {block['title']}"), styles["Heading1"]),
-                paragraph(block["text"]),
-                paragraph("Source: " + value(block["source_receipt"])),
+                (f"{block['number']}. {block['title']}", True),
+                (block["text"], False),
+                ("Source: " + value(block["source_receipt"]), False),
             ]
         )
         for title, rows in tables(block.get("data")):
-            story.append(Paragraph(escape(title), styles["Heading2"]))
+            sections.append((title, True))
             keys = list(dict.fromkeys(k for row in rows for k in row))
             for offset in range(0, len(keys), 6):
                 columns = keys[offset : offset + 6]
-                matrix = [[paragraph("Row"), *[paragraph(k) for k in columns]]]
-                matrix.extend(
-                    [
-                        [paragraph(i), *[paragraph(value(row.get(k))[:600]) for k in columns]]
-                        for i, row in enumerate(rows[:500], 1)
-                    ]
-                )
-                table = LongTable(
-                    matrix,
-                    repeatRows=1,
-                    colWidths=[28, *[700 / max(1, len(columns)) for _ in columns]],
-                )
-                table.setStyle(
-                    TableStyle(
-                        [
-                            ("GRID", (0, 0), (-1, -1), 0.3, colors.lightgrey),
-                            ("VALIGN", (0, 0), (-1, -1), "TOP"),
-                        ]
+                sections.append(
+                    PDFTable(
+                        headers=["Row", *columns],
+                        rows=[
+                            [str(number), *[value(row.get(k))[:600] for k in columns]]
+                            for number, row in enumerate(rows[:500], 1)
+                        ],
                     )
                 )
-                story.append(table)
-            story.append(
-                paragraph(
-                    f"Paper view: first {min(500, len(rows))} of {len(rows)} rows; long text abbreviated at 600 characters. XLSX retains complete source JSON and exact monetary values."
+            sections.append(
+                (
+                    f"Paper view: first {min(500, len(rows))} of {len(rows)} rows; long text abbreviated at 600 characters. XLSX retains complete source JSON and exact monetary values.",
+                    False,
                 )
             )
-
-    def watermark(canvas, doc):
-        canvas.saveState()
-        canvas.setFillColor(colors.HexColor("#eeeeee"))
-        canvas.setFont("Helvetica-Bold", 60)
-        canvas.translate(420, 290)
-        canvas.rotate(30)
-        canvas.drawCentredString(0, 0, "DRAFT")
-        canvas.restoreState()
-        canvas.setFont("Helvetica", 8)
-        canvas.drawRightString(790, 20, f"Page {doc.page} • Not signed or filed")
-
-    SimpleDocTemplate(buffer, pagesize=landscape(A4), leftMargin=40, rightMargin=40).build(
-        story, onFirstPage=watermark, onLaterPages=watermark
-    )
-    return buffer.getvalue(), "application/pdf"
+    return render_text_schedule(sections, draft=True), "application/pdf"

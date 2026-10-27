@@ -2853,3 +2853,54 @@ qualification and country-specific browser/provider release gates remain open.
 Pilot folders exist; synthetic examples do not substitute for client evidence.
 Temporary PDF probes remain outside Git because automatic approval review
 rejected their cleanup; final synthetic PDFs and screenshots are retained above.
+
+### Multilingual statutory PDF tables (27 October 2026)
+
+The separate statutory-report PDF renderer now reuses the verified Noto/HarfBuzz
+renderer too. UAE Arabic and Indian Hindi source names are retained in cover
+metadata, narratives, source receipts and financial table cells. ActualText spans
+preserve logical source text independently of glyph shaping; the reader-dependent
+copy/search limitations above still apply. Unsupported characters return HTTP 422
+without a partial attachment, and the same report remains exportable as XLSX.
+Supported scripts remain Latin, Arabic and Devanagari; this does not qualify every
+Indian language or certify legal report content.
+
+Financial tables remain landscape grids with repeated column headings. Rows
+taller than one page continue across pages instead of failing or disappearing.
+Wide tables retain the existing six-source-column panels; the first 500 rows and
+600-character cell preview limits remain explicit. Exact digit sequences may wrap
+in narrow cells but are never converted to floats. Complete original data remains
+in XLSX. Every page carries the draft watermark behind content, its page number,
+and the not-signed-or-filed footer. No signing or filing behavior was introduced.
+
+Reproduce the two synthetic, 30-row, two-page reports with
+`backend/.venv/Scripts/python.exe scripts/statutory_unicode_preview.py`:
+[UAE PDF](../../output/pdf/statutory-unicode-review/AE.pdf),
+[India PDF](../../output/pdf/statutory-unicode-review/IN.pdf).
+All four rendered pages were visually checked:
+[UAE 1](screenshots/statutory-unicode-pdf/AE-1.png),
+[UAE 2](screenshots/statutory-unicode-pdf/AE-2.png),
+[India 1](screenshots/statutory-unicode-pdf/IN-1.png),
+[India 2](screenshots/statutory-unicode-pdf/IN-2.png).
+
+Final [backend regression](../phase-12/statutory-unicode-backend.xml): 2,688 passed,
+four existing skips and two warnings in 124.31 seconds. The first full invocation
+used the repository root and failed two migration checks that require the backend
+working directory; the final run used that directory and unchanged assertions.
+[Eleven API cases](../phase-12/statutory-unicode-api.xml) passed in 33.66 seconds
+using the owned database and explicit scanner/broker doubles, including retained
+UAE/India source -> independent review -> report template review -> draft report
+-> PDF. Unsupported source characters fail PDF export while XLSX succeeds, and
+successful PDF attachment hashes match the response receipt. Ordinary workbook
+exports and the existing Indian reporting path also passed. Unit regressions
+cover both countries, exact source digits, multi-panel tables, all 500 included
+rows versus the excluded 501st, cell truncation notices, repeated headers and a
+single row spanning several pages. Full lint/format, app mypy and API-contract
+snapshot checks passed; no dependency or frontend changes were needed.
+
+For parent commit fe56eb3, hosted frontend, security, ML and browser-smoke jobs
+passed in [run 40483830336](https://github.com/indianservers/MrAuditorUAE/actions/runs/40483830336).
+The verify job was still live at the last check; its unavailable log download is
+not a terminal failure. The container gate remained failed and is not waived.
+Real-client pilots, professional country qualification and remaining release
+gates remain open; these synthetic export checks do not establish those outcomes.

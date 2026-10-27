@@ -129,3 +129,76 @@ def test_statutory_paper_exports_show_historical_freshness_and_draft_status(form
             text = archive.read("word/document.xml").decode()
     assert "STALE" in text and "NOT SIGNED OR FILED" in text
     assert "2026-10-26T00:00:00Z" in text
+
+
+@pytest.mark.parametrize(
+    "country,framework,party",
+    [("AE", "IFRS", "شركة النور للتجارة"), ("IN", "Ind AS", "भारत आपूर्तिकर्ता")],
+)
+def test_statutory_pdf_preserves_unicode_tables_receipts_and_preview_bounds(
+    country, framework, party
+):
+    from copy import deepcopy
+
+    from pypdf.generic import ContentStream
+
+    event = report_event()
+    event["firm_name"] = party
+    event["body"].update(country=country, reporting_framework=framework)
+    block = event["body"]["blocks"][0]
+    block.update(title=party, text=party)
+    block["source_receipt"]["party"] = party
+    block["data"]["rows"] = [
+        {
+            "account": f"SOURCE-{i:03}",
+            "counterparty": party,
+            "amount": "12345678901234567890.12345678",
+            "extra_a": "A",
+            "extra_b": "B",
+            "extra_c": "C",
+            "extra_d": "SECOND-COLUMN-PANEL",
+            "note": "x" * 600 + "SHOULD-BE-ABBREVIATED",
+        }
+        for i in range(501)
+    ]
+    original = deepcopy(event)
+    content, media = render(event, "pdf")
+    assert media == "application/pdf" and event == original
+    reader = PdfReader(io.BytesIO(content))
+    assert len(reader.pages) > 2
+    logical = []
+    for page in reader.pages:
+        assert page.mediabox.width > page.mediabox.height
+        extracted = page.extract_text()
+        assert "DRAFT" in extracted and "Not signed or filed" in extracted
+        depth = 0
+        for args, operator in ContentStream(page.get_contents(), reader).operations:
+            if operator == b"BDC":
+                depth += 1
+                logical.append(str(args[1]["/ActualText"]))
+            elif operator == b"EMC":
+                depth -= 1
+                assert depth >= 0
+        assert depth == 0
+    text = "\n".join(logical)
+    assert party in text and "actual-source-fixture" in text
+    # Narrow table cells can wrap a figure, but must retain every digit.
+    assert "12345678901234567890.12345678" in text.replace("\n", "")
+    assert "SECOND-COLUMN-PANEL" in text
+    assert "SOURCE-499" in text and "SOURCE-500" not in text
+    assert [line for line in logical if line.startswith("SOURCE-")] == [
+        f"SOURCE-{i:03}" for i in range(500)
+    ]
+    assert "SHOULD-BE-ABBREVIATED" not in text
+    assert "first 500 of 501 rows" in text
+    # Table headings repeat after page breaks; this is a grid, not flattened JSON.
+    assert logical.count("account") > 1
+
+
+def test_statutory_pdf_rejects_unsupported_source_characters():
+    from app.core.pdf_text import PDFTextError
+
+    event = report_event()
+    event["body"]["blocks"][0]["data"]["rows"][0]["account"] = "中"
+    with pytest.raises(PDFTextError, match="U\\+4E2D"):
+        render(event, "pdf")
