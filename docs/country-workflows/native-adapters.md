@@ -3779,3 +3779,70 @@ block submission, and capture both forms. Browser execution/screenshots for this
 addition remain pending until the corresponding hosted job passes. No local
 preview-server start or relaxed review/coverage gate is introduced. Actual pilot
 inputs and independently checked client results are still awaited in `pilot-data`.
+
+## Reviewed turnover book composition — 27 October 2026
+
+The committed-GL addition on source `1dc535f546d40d3c6a6c636e9ff20003629176b4`
+passed the hosted [BFF/browser job 122290174736](https://github.com/indianservers/MrAuditorUAE/actions/runs/40532881703/job/122290174736):
+all three cases passed in 18.6 seconds, including UAE and India GL imports and
+source preparation through the actual form. The source-revision frontend,
+container, ML and security jobs also passed; the full backend job remains live.
+Artifact 12747495744 was retrieved with verified archive SHA-256
+`ebbcba63c368f96f04cfd672500bfee3c34ff907f3c8f630b32434ce25f62df6`.
+Both turnover screenshots were inspected: the account, period, registration,
+controls and assessments are readable, but the sticky header clipped the form
+heading and a notification covered part of the footer. The capture now waits
+for completed submission, dismisses the notification and uses a taller viewport.
+Those refined images require their own subsequent hosted result.
+
+`POST /intelligence/engagements/{eid}/turnover-books-composition` closes the next
+reuse gap: combine 2–50 current independently reviewed original book sources for
+multiple accounts, registrations or periods without manually merging/re-uploading
+their rows. Independent combined row count (at most 5,000) and exact signed amount
+are mandatory. Original journal/source fields, event IDs, component row IDs,
+registration periods, debit reversals and explicit nil declarations remain in the
+retained rows; generated row IDs remain unique even when component row IDs repeat.
+Only AED/UAE TRN or INR/India GSTIN syntax is accepted for the engagement country.
+
+Return-only and unrelated workflow sources, nested compositions, duplicate
+schedule roots, duplicate scoped references, overlapping account/date selections
+in one GL snapshot and reused journal lines are rejected. Disjoint accounts or
+closed periods within the same snapshot may be combined. A separate registration
+label cannot legitimize allocating one selected account/date population twice.
+The result is UNVERIFIED and books-only, requiring a separate independent review.
+The component authors and composition preparer cannot approve it; a component's
+reviewer is not automatically relabelled as its author.
+
+Consumption rederives composed rows/controls from current reviewed components and
+checks retained origin graphs against the scope, return and adjustment sources.
+Shared underlying evidence cannot be hidden behind a composed event's new hash.
+Withdrawal of a component stales both the combined source and dependent bridge,
+while historical bodies remain intact. The origin check is bounded to 200 events;
+exceeding that bound blocks verification instead of silently skipping ancestry.
+
+The preparation page filters eligible current reviewed original book schedules,
+requires explicit controls and assessment, and discloses the selected-population
+limits. Event-history choices now expose parser version so already composed
+sources are not offered again. The existing hosted browser cases additionally
+combine reviewed June movements and an independently reviewed explicit nil July
+selection, check preparer rejection and independent approval, and capture the
+composition form. Execution of this new browser addition remains pending until
+its own hosted job succeeds.
+
+This is a scoped accounting evidence workflow, not automatic revenue
+classification, registration ownership verification, legal tax treatment, FX
+conversion, filed-return evidence or proof of whole-entity completeness.
+
+Local verification of this increment: 2,877 backend unit tests passed (five
+skipped), eight real-database regression cases passed, all 276 frontend tests
+passed, and production build, TypeScript, scoped ESLint, application Ruff/format,
+focused backend mypy and API contract checks passed. The retained receipts are
+[backend units](../phase-12/turnover-composition-backend.xml) and
+[database regressions](../phase-12/turnover-composition-api.xml).
+The 14 new focused composition cases cover exact signed controls, two countries,
+disjoint account/period reuse, preserved origin IDs, duplicate journal lines and
+role/schedule/registration/control rejection. The database suite also combines
+actual imported GL June movements and assessed nil July, rejects overlapping
+same-account selections and verifies recursive source independence and staleness.
+These remain synthetic fixtures; consented real-client pilots and professionally
+qualified complete country-law/form packs are still open.

@@ -947,6 +947,25 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         sources[role] = source.body
         contributors.update(source.body.get("contributors", [str(source.created_by)]))
         dependencies.append(intelligence.event_receipt(source))
+    if (
+        data.workflow == "tax-turnover-bridge"
+        and sources.get("books", {}).get("parser_version") == "turnover-books-composition/1"
+    ):
+        from app.modules.country_workflows.turnover_composition import origins as turnover_origins
+        from app.modules.country_workflows.turnover_composition import (
+            verify as verify_turnover_books,
+        )
+
+        dependencies.extend(
+            await verify_turnover_books(db, ctx, eng, sources["books"], contributors)
+        )
+        book_origins = await turnover_origins(db, ctx, eng, data.source_ids["books"])
+        for role in ("scope", "return", "adjustments"):
+            if book_origins & await turnover_origins(db, ctx, eng, data.source_ids[role]):
+                raise HTTPException(
+                    422,
+                    "Composed books and independent turnover roles share underlying source evidence",
+                )
     media_documents_receipts = None
     if data.workflow == "adverse-media-review":
         from app.modules.country_workflows.adverse_media import documents as media_documents

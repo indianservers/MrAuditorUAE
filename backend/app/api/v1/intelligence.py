@@ -23,6 +23,7 @@ from app.modules.country_workflows.benefit_source import BenefitSourceInput
 from app.modules.country_workflows.contribution_source import ContributionSourceInput
 from app.modules.country_workflows.import_vat_source import ImportVATSourceInput
 from app.modules.country_workflows.payroll_source import PayrollSourceInput, PensionSourceInput
+from app.modules.country_workflows.turnover_composition import TurnoverCompositionInput
 from app.modules.country_workflows.turnover_ledger import TurnoverLedgerInput
 from app.modules.country_workflows.vat_composition import VATCompositionInput
 from app.modules.country_workflows.withholding_obligations import WithholdingObligationInput
@@ -121,6 +122,16 @@ async def turnover_ledger_source(
     from app.modules.country_workflows.turnover_ledger import prepare
 
     eng = await service.scope(db, ctx, eid, "workflow-ledger", True)
+    return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))
+
+
+@router.post("/engagements/{eid}/turnover-books-composition", status_code=201)
+async def turnover_books_composition(
+    eid: uuid.UUID, data: TurnoverCompositionInput, db: DB, ctx: Actor, request: Request
+):
+    from app.modules.country_workflows.turnover_composition import prepare
+
+    eng = await service.scope(db, ctx, eid, "country-workflow", True)
     return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))
 
 
@@ -743,6 +754,7 @@ async def events(
                     if row.body.get("workflow") == "bank-account-evidence"
                     else None,
                     "native_format": row.body.get("native_format"),
+                    "parser_version": row.body.get("parser_version"),
                     "allowed_source_roles": row.body.get("allowed_source_roles"),
                     "allowed_workflows": row.body.get("allowed_workflows"),
                     "invoice_direction": row.body.get("native_metadata", {}).get("direction")

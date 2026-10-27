@@ -448,15 +448,137 @@ for (const code of ["AE", "IN"] as const) {
     expect(books.body.review_status).toBe("UNVERIFIED");
     expect(books.body.allowed_source_roles).toEqual(["books"]);
     expect(books.body.ledger_line_count).toBe(1);
-    const turnoverForm = page
+    const turnoverForm = page.locator("details").filter({
+      has: page.getByText("Prepare book turnover from committed GL", {
+        exact: true,
+      }),
+    });
+    await expect(prepareBooks).toBeEnabled();
+    if (
+      await page.getByRole("button", { name: "Dismiss notification" }).count()
+    ) {
+      await page.getByRole("button", { name: "Dismiss notification" }).click();
+    }
+    await page.setViewportSize({ width: 1440, height: 1800 });
+    await turnoverForm.scrollIntoViewIfNeeded();
+    await turnoverForm.screenshot({
+      path: `${screenshots}/${code}-turnover-ledger.png`,
+    });
+    const reviewBooks = await post(
+      reviewer.request,
+      `intelligence/engagements/${engagement.id}/events/${books.id}/review`,
+      {
+        expected_version: books.version,
+        action: "approve",
+        comments: "SYNTHETIC independent book source review",
+      },
+    );
+    const nilBooks = await post(
+      page.request,
+      `intelligence/engagements/${engagement.id}/turnover-ledger-source`,
+      {
+        snapshot_id: snapshot,
+        account_ids: books.body.native_metadata.account_ids,
+        registration: books.body.native_metadata.registration,
+        period_start: "2026-07-01",
+        period_end: "2026-07-31",
+        currency: code === "AE" ? "AED" : "INR",
+        expected_rows: 0,
+        expected_amount: "0",
+        nil_reason: "SYNTHETIC no movements in the selected July accounts",
+        assessment:
+          "SYNTHETIC assessed registration and revenue account allocation",
+        label: "SYNTHETIC July nil book movements",
+      },
+    );
+    const reviewNil = await post(
+      reviewer.request,
+      `intelligence/engagements/${engagement.id}/events/${nilBooks.id}/review`,
+      {
+        expected_version: nilBooks.version,
+        action: "approve",
+        comments: "SYNTHETIC independent nil book source review",
+      },
+    );
+    await page.reload();
+    await page
+      .getByText("Combine reviewed turnover book schedules", { exact: true })
+      .click();
+    await page
+      .getByRole("listbox", {
+        name: "Reviewed turnover book components",
+        exact: true,
+      })
+      .selectOption([reviewBooks.id, reviewNil.id]);
+    for (const [name, value] of [
+      ["Independent combined book row count", "2"],
+      [
+        `Independent combined signed turnover (${code === "AE" ? "AED" : "INR"})`,
+        "100.20",
+      ],
+      [
+        "Combined books scope and disjointness assessment",
+        "SYNTHETIC independently reviewed June and July book scopes",
+      ],
+      [
+        "Combined turnover books title",
+        "SYNTHETIC browser combined turnover books",
+      ],
+    ])
+      await page.getByLabel(name, { exact: true }).fill(value);
+    const compositionResponse = page.waitForResponse(
+      (r) =>
+        r.url().endsWith("/turnover-books-composition") &&
+        r.request().method() === "POST",
+    );
+    const composeButton = page.getByRole("button", {
+      name: "Prepare combined turnover books",
+      exact: true,
+    });
+    await composeButton.click();
+    const composedResponse = await compositionResponse;
+    expect(composedResponse.status(), await composedResponse.text()).toBe(201);
+    const composed = await composedResponse.json();
+    expect(composed.body.rows).toHaveLength(2);
+    expect(
+      composed.body.rows.every(
+        (r: { source_component_event_id?: string }) =>
+          !!r.source_component_event_id,
+      ),
+    ).toBe(true);
+    expect(composed.body.review_status).toBe("UNVERIFIED");
+    const review = {
+      expected_version: composed.version,
+      action: "approve",
+      comments: "SYNTHETIC independent combined books review",
+    };
+    await post(
+      page.request,
+      `intelligence/engagements/${engagement.id}/events/${composed.id}/review`,
+      review,
+      403,
+    );
+    await post(
+      reviewer.request,
+      `intelligence/engagements/${engagement.id}/events/${composed.id}/review`,
+      review,
+    );
+    await expect(composeButton).toBeEnabled();
+    if (
+      await page.getByRole("button", { name: "Dismiss notification" }).count()
+    ) {
+      await page.getByRole("button", { name: "Dismiss notification" }).click();
+    }
+    const compositionForm = page
       .locator("details")
       .filter({
-        has: page.getByText("Prepare book turnover from committed GL", {
+        has: page.getByText("Combine reviewed turnover book schedules", {
           exact: true,
         }),
       });
-    await turnoverForm.screenshot({
-      path: `${screenshots}/${code}-turnover-ledger.png`,
+    await compositionForm.scrollIntoViewIfNeeded();
+    await compositionForm.screenshot({
+      path: `${screenshots}/${code}-turnover-composition.png`,
     });
     await reviewerContext.close();
   });

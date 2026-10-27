@@ -148,6 +148,32 @@ async def test_committed_turnover_authorization_controls_and_review(
     assert nil.status_code == 201, nil.text
     assert nil.json()["body"]["generated_nil_row"] is True
     assert nil.json()["body"]["rows"][0]["amount"] == "0"
+    reviewed_nil = await decision(c, reviewer[0], eid, nil.json())
+    assert reviewed_nil.status_code == 201, reviewed_nil.text
+    composition = dict(
+        source_ids=[checked.json()["id"], reviewed_nil.json()["id"]],
+        expected_rows=3,
+        expected_amount="95.20",
+        currency=payload["currency"],
+        label="SYNTHETIC June and July books",
+        assessment="Disjoint June movements and assessed July nil period",
+    )
+    combined = await c.post(
+        prefix + "/turnover-books-composition", headers=independent[0], json=composition
+    )
+    assert combined.status_code == 201, combined.text
+    assert combined.json()["body"]["row_count"] == 3
+    overlapping = await c.post(
+        prefix + "/turnover-books-composition",
+        headers=h,
+        json={
+            **composition,
+            "source_ids": [checked.json()["id"], duplicate_review.json()["id"]],
+            "expected_rows": 4,
+            "expected_amount": "190.40",
+        },
+    )
+    assert overlapping.status_code == 422 and "Overlapping ledger accounts" in overlapping.text
     tb = b"Account Code,Account Name,Opening Balance,Debit,Credit,Closing Balance\n400,Revenue,-10,5,100.20,-105.20\n100,Cash,10,100.20,5,105.20\n"
     _, tb_snapshot = await committed(
         c,

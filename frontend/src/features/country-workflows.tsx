@@ -41,6 +41,7 @@ import { PayrollPostingLinks } from "./payroll-posting-links";
 import { InventoryEvidenceTable } from "./inventory-evidence-table";
 import { VATCompositionSource } from "./vat-composition-source";
 import { TurnoverLedgerSource } from "./turnover-ledger-source";
+import { TurnoverBooksComposition } from "./turnover-books-composition";
 import {
   PublishedBenefitSource,
   PublishedPayrollSource,
@@ -241,6 +242,7 @@ type Choice = {
   bank_account_scope?: { account: string; currency: string } | null;
   table_type?: string;
   native_format?: string;
+  parser_version?: string;
   allowed_source_roles?: string[] | null;
   allowed_workflows?: string[] | null;
   invoice_direction?: string | null;
@@ -1916,6 +1918,16 @@ export function CountryWorkflows({
           onCreated={setSelected}
         />
       )}
+      {mode === "workflow-source" &&
+        ["AE", "IN"].includes(config.data?.country || "") && (
+          <TurnoverBooksComposition
+            key={`compose-${eid}-${config.data?.country}`}
+            eid={eid}
+            country={config.data?.country || ""}
+            sources={results.data?.items || []}
+            onCreated={setSelected}
+          />
+        )}
       {mode === "workflow-source" &&
         ["AE", "IN"].includes(config.data?.country || "") && (
           <TurnoverLedgerSource
