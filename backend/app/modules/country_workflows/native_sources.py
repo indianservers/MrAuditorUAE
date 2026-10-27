@@ -62,7 +62,7 @@ FORMATS: list[dict[str, Any]] = [
     },
     {
         "id": "canonical-csv",
-        "label": "Controlled canonical CSV",
+        "label": "Controlled CSV / value-only XLSX",
         "countries": [],
         "table_type": None,
         "description": "Explicit field contract with declared row counts and currency controls",

@@ -288,6 +288,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "india-gstr1-document-series-json": {"application/json"},
             "india-gstr2b-json": {"application/json"},
         }
+        if data.workbook_sheet is not None:
+            supported_media["canonical-csv"] = {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"}
         if evidence.media_type not in supported_media[data.file_format]:
             if evidence.media_type == "application/pdf" and supporting is None:
                 raise HTTPException(422, "Prepare and independently review a mapped PDF supporting table before using it in a workflow")
@@ -353,6 +355,12 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
 
                     return from_supporting_table(supporting.body, data)
                 if data.file_format == "canonical-csv":
+                    if data.workbook_sheet is not None:
+                        from app.modules.country_workflows.workbook_source import parse_workbook
+
+                        with path.open("rb") as original:
+                            content = original.read(MAX_BYTES + 1)
+                        return parse_workbook(content, data, defaults, expected_sha256=evidence.sha256)
                     return parse_csv(path.read_bytes(), data, defaults)
                 return parse_native(path.read_bytes(), data, package.country, evidence.filename)
 

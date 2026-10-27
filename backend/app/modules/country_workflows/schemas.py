@@ -231,6 +231,8 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
 
 
 class SourceInput(Strict):
+    workbook_sheet: str | None = Field(default=None, min_length=1, max_length=31)
+    workbook_assessment: str = Field(default="", max_length=2000)
     custody_quantity_controls: list[CustodyQuantityControl] | None = Field(default=None, max_length=5000)
     confirmation_request_totals: dict[str, Money] | None = Field(default=None, max_length=20)
     confirmation_response_totals: dict[str, Money] | None = Field(default=None, max_length=20)
@@ -378,6 +380,12 @@ class SourceInput(Strict):
 
     @model_validator(mode="after")
     def declared_nil(self):
+        if self.workbook_sheet is not None:
+            if (self.file_format != "canonical-csv" or self.supporting_table_id
+                or self.delimiter != "," or len(self.workbook_assessment.strip()) < 10):
+                raise ValueError("Workbook input requires a canonical field contract, explicit worksheet assessment, comma serialization and no supporting-table bridge")
+        elif self.workbook_assessment:
+            raise ValueError("A workbook assessment requires an explicit worksheet")
         if (self.inventory_cost_document_version_id is not None or self.inventory_nrv_document_version_id is not None) and (self.table_type != "inventory-valuations" or self.file_format != "canonical-csv"):
             raise ValueError("Shared inventory documents apply only to canonical valuation evidence sources")
         if self.table_type == "inventory-valuations":

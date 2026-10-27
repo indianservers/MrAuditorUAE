@@ -2605,3 +2605,61 @@ review rejected starting the preview server with “blocked by policy.” No bro
 receipt or screenshot is claimed for this increment. Live scanner qualification,
 historical population reassessment and the broader country release gates remain
 open.
+
+## Controlled workbooks across canonical source tables
+
+Country workflow sources now accept value-only XLSX worksheets through the same
+canonical field contracts as CSV. This reuses the existing strict ingestion
+reader rather than adding separate VAT, payroll and inventory spreadsheet parsers.
+In **Prepare sources**, choose **Controlled CSV / value-only XLSX**, select the
+retained clean workbook, enter its exact worksheet name and assess that worksheet's
+population. Existing source table selection, column mapping, excluded-column
+assessment, row counts, amount/quantity controls and supporting-document bindings
+still apply. A workbook does not become a government return or professionally
+qualified rule pack because its columns satisfy a canonical contract.
+
+The API retains the existing `file_format: canonical-csv` identifier for the shared
+canonical contract. `workbook_sheet` explicitly selects XLSX input and requires
+`workbook_assessment`; the accepted original media type then becomes XLSX only.
+CSV inputs leave those fields absent. Native government/bank formats and the
+separately reviewed supporting-table bridge cannot be mixed with these options.
+The selected worksheet starts with its header row at row 1. No worksheet, header,
+column mapping or omitted population is inferred. Other worksheet names are
+retained as excluded scope, not counted as covered data.
+
+The reader checks the retained original hash, parses a private snapshot and keeps
+the 10 MiB original/serialized-source and 5,000 physical data-row bounds. Reused
+workbook safeguards reject selected-sheet formulas, formula headers, error cells,
+macros, external links, unsafe archives and unsupported structure. Empty physical
+rows cannot evade the row bound. Canonical validation still rejects missing or
+unassessed columns and mismatched independent controls. Excel date cells normalize
+to ISO dates only when they contain no time or timezone. Numeric values come from
+the original worksheet XML rather than floating-point display formatting; numeric
+identifiers do not gain displayed leading zeros. Store identifiers as text when
+their original textual identity matters.
+
+Each normalized row retains its original worksheet, physical row number, and
+numeric/date storage columns. Source metadata retains original headers, epoch,
+unselected worksheet names, selected-population assessment and original byte hash.
+Existing independent review, download integrity, source freshness, lineage and
+export controls remain in force. The authored synthetic scenario catalogue is
+unchanged; this is an additional input path for existing workflows.
+
+The workbook tests cover nine existing canonical table types and unsafe/control
+failures. The [backend receipt](../phase-12/workflow-workbook-backend.xml) records
+2,671 passing tests, four existing skips and two warnings, including 22 new reader
+and scope checks. Scoped Ruff, ESLint and reader mypy passed. The
+[API receipt](../phase-12/workflow-workbook-api.xml) records 25 passing
+cases, including eight new UAE/India transaction, VAT/GST document, stock and
+salary-obligation workbook sources. Those eight exercise actual retained storage,
+independent review, original download and source export. Transaction cases also
+consume a reviewed workbook alongside an independently retained/reviewed CSV bank
+source. Reusing one source for both sides is explicitly refused. The other API
+cases cover existing country workflows and the retained-original rescan feature.
+Scanner and broker dispatch are explicit doubles; native queue/provider and
+professional accuracy qualification are not established by these tests.
+
+All 237 frontend tests across 49 files and the production build passed, including
+the new worksheet/assessment payload check. Browser interaction for this addition
+remains unverified: the earlier automatic approval review rejected starting the
+preview server. No new screenshot or passing browser receipt is claimed.

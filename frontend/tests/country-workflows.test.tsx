@@ -8,6 +8,21 @@ import {
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { CountryWorkflows } from "@/features/country-workflows";
 
+it("retains the explicit worksheet and population assessment in a workbook source", async () => {
+  render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+  for (const [label, value] of [
+    ["Clean retained evidence", "clean"], ["Schedule title", "SYN workbook population"],
+    ["Expected data rows", "1"], ["Independent totals by currency", "AED=100"],
+    ["XLSX worksheet (leave blank for CSV)", "Population"],
+    ["Worksheet population assessment", "Reviewed selected sheet and excluded other tabs"],
+  ]) fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+    workbook_sheet: "Population", workbook_assessment: "Reviewed selected sheet and excluded other tabs",
+  });
+});
+
 it("queues separate requested and written-response controls with retained party documents", async () => {
   render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
   for (const [label, value] of [["Source table type", "party-confirmations"], ["Clean retained evidence", "clean"], ["Schedule title", "SYN positive party assessments"], ["Expected data rows", "1"], ["Independent written-request totals (JSON)", '{"AED":"150"}'], ["Independent written-response totals (JSON)", '{"AED":"150"}'], ["Shared request document (optional)", "context-clean"], ["Shared response document (optional)", "context-clean"]])

@@ -439,6 +439,8 @@ export function CountryWorkflows({
     sourceOrigin === "vat" && canUseVAT,
   );
   const [sourceFormat, setSourceFormat] = useState("canonical-csv");
+  const [workbookSheet, setWorkbookSheet] = useState("");
+  const [workbookAssessment, setWorkbookAssessment] = useState("");
   const [inventoryControlsEnabled, setInventoryControlsEnabled] =
     useState(false);
   const [inventoryControls, setInventoryControls] = useState("[]");
@@ -1235,6 +1237,12 @@ export function CountryWorkflows({
           : {
               evidence_version_id: evidence,
               file_format: sourceFormat,
+              ...(sourceFormat === "canonical-csv" && workbookSheet
+                ? {
+                    workbook_sheet: workbookSheet,
+                    workbook_assessment: workbookAssessment,
+                  }
+                : {}),
               ...(tableType === "party-confirmations"
                 ? {
                     confirmation_request_totals: JSON.parse(
@@ -2128,6 +2136,39 @@ export function CountryWorkflows({
                   </label>
                   {sourceFormat !== "canonical-csv" && (
                     <p>{formatInfo?.description}</p>
+                  )}
+                  {sourceFormat === "canonical-csv" && (
+                    <>
+                      <label>
+                        XLSX worksheet (leave blank for CSV)
+                        <input
+                          value={workbookSheet}
+                          maxLength={31}
+                          onChange={(e) => setWorkbookSheet(e.target.value)}
+                        />
+                      </label>
+                      {workbookSheet && (
+                        <>
+                          <label>
+                            Worksheet population assessment
+                            <textarea
+                              value={workbookAssessment}
+                              onChange={(e) =>
+                                setWorkbookAssessment(e.target.value)
+                              }
+                            />
+                          </label>
+                          <p>
+                            Only the named worksheet is selected. Other sheets
+                            remain outside this population. Formulas are
+                            refused; export values first. Numeric cells use
+                            original numeric values, including identifiers
+                            stored as numbers; displayed leading zeros are not
+                            inferred.
+                          </p>
+                        </>
+                      )}
+                    </>
                   )}
                   <label>
                     Source table type
