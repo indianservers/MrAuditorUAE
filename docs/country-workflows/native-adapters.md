@@ -2688,3 +2688,43 @@ source metadata. All 238 frontend tests across 49 files, the production build an
 scoped Ruff/ESLint passed. This follow-up verifies export content and component
 behavior; it does not establish browser rendering or PDF layout quality. The
 earlier preview-server startup rejection still leaves browser verification open.
+
+## Current API and source-row contracts
+
+The saved OpenAPI snapshot and frontend API types were behind the implementation:
+the previous snapshot listed 246 paths, while the current application lists 358.
+The regenerated [OpenAPI contract](../phase-12/openapi.json) describes the existing
+398 HTTP operations and 186 component schemas, including retained-original
+rescanning. These are discovery counts, not newly implemented workflows or proof
+that every operation is functionally qualified.
+
+Intelligence jobs deliberately retain a generic JSON payload at their HTTP
+boundary and validate it against the selected operation's runtime model. The new
+[job and row contracts](job-input-contracts.json) export the actual structural
+schemas for all 13 registered job operations and 72 canonical source-row types.
+This includes worksheet selection/assessment and the existing 5,000-row source
+bound. Each schema retains its own local definitions, so its references resolve
+without guessing OpenAPI component names. Cross-field validators, country and
+period applicability, permissions, evidence integrity, source freshness, human
+review and statutory qualification still require runtime validation. A schema
+alone does not establish any of those conditions.
+
+`scripts/export_api_contracts.py` regenerates both JSON snapshots from current
+source without running jobs, connecting to the database or deploying services.
+Its `--check` mode refuses missing/changed snapshots without writing them.
+`npm run api:types` regenerates the frontend types, and
+`npm run api:types:check` uses the installed generator's non-writing check.
+CI now runs both drift checks. From a configured backend environment, run
+`python ../scripts/export_api_contracts.py`, then regenerate types from the
+frontend directory after changing API or payload models.
+
+Verification: [2,679 backend tests](../phase-12/api-contract-backend.xml) passed,
+with four existing skips and two warnings. Five new cases cover current snapshots,
+authenticated rescan discovery, workbook controls, exact operation/row model
+coverage, self-contained references and a fail-closed non-writing CLI check.
+The snapshot checker, generated-type checker, frontend typecheck, production
+build and scoped Ruff/format checks passed locally. Generated artifacts were also
+checked for the configured private credential values; none were present. Hosted
+CI has not been claimed as executed by this local run. This refresh changes
+published contracts and CI checks, not runtime financial calculations or country
+release qualification.
