@@ -13,6 +13,46 @@
     "NotoSansDevanagari-Regular.ttf": {
       "sha256": "385e78e6359a9d88a0f243d53b1209d7548361ba2194e2b9ec779bcaa7e8949d",
       "source": "https://raw.githubusercontent.com/notofonts/noto-fonts/ffebf8c1ee449e544955a7e813c54f9b73848eac/hinted/ttf/NotoSansDevanagari/NotoSansDevanagari-Regular.ttf"
+    },
+    "NotoSansBengali-Regular.ttf": {
+      "sha256": "6300c5370cd688b0641343de4c786de6d412bb6c578d129dae75e93a0322dcab",
+      "source": "https://raw.githubusercontent.com/notofonts/noto-fonts/ffebf8c1ee449e544955a7e813c54f9b73848eac/hinted/ttf/NotoSansBengali/NotoSansBengali-Regular.ttf"
+    },
+    "NotoSansGujarati-Regular.ttf": {
+      "sha256": "8d5c22d7b729ef2839e6d1fe2cde77b2d083907be3659bca63676baa76e01fd6",
+      "source": "https://raw.githubusercontent.com/notofonts/noto-fonts/ffebf8c1ee449e544955a7e813c54f9b73848eac/hinted/ttf/NotoSansGujarati/NotoSansGujarati-Regular.ttf"
+    },
+    "NotoSansGurmukhi-Regular.ttf": {
+      "sha256": "bbde4d85fdfb998eff6921cb2c7a9a7924a1c95560a6aa9a06172530e4f596da",
+      "source": "https://raw.githubusercontent.com/notofonts/noto-fonts/ffebf8c1ee449e544955a7e813c54f9b73848eac/hinted/ttf/NotoSansGurmukhi/NotoSansGurmukhi-Regular.ttf"
+    },
+    "NotoSansKannada-Regular.ttf": {
+      "sha256": "5c804033c57f2c2844b1cd425f45b9a78d81d2f71bf358351b24258ebe168aea",
+      "source": "https://raw.githubusercontent.com/notofonts/noto-fonts/ffebf8c1ee449e544955a7e813c54f9b73848eac/hinted/ttf/NotoSansKannada/NotoSansKannada-Regular.ttf"
+    },
+    "NotoSansMalayalam-Regular.ttf": {
+      "sha256": "42eb462ff13e820ebbeaaec4e7b426bd1de145d02cef8b634f5a3efd376b513c",
+      "source": "https://raw.githubusercontent.com/notofonts/noto-fonts/ffebf8c1ee449e544955a7e813c54f9b73848eac/hinted/ttf/NotoSansMalayalam/NotoSansMalayalam-Regular.ttf"
+    },
+    "NotoSansOriya-Regular.ttf": {
+      "sha256": "b8d8bd784b9d09c0668233437359913c93a3a83bf37d92ecde859e2bc728a0e0",
+      "source": "https://raw.githubusercontent.com/notofonts/noto-fonts/ffebf8c1ee449e544955a7e813c54f9b73848eac/hinted/ttf/NotoSansOriya/NotoSansOriya-Regular.ttf"
+    },
+    "NotoSansTamil-Regular.ttf": {
+      "sha256": "6532db33b8b264abe3a098a40619feb489b5ddf5ab1d2b46e72b51eeb548001b",
+      "source": "https://raw.githubusercontent.com/notofonts/noto-fonts/ffebf8c1ee449e544955a7e813c54f9b73848eac/hinted/ttf/NotoSansTamil/NotoSansTamil-Regular.ttf"
+    },
+    "NotoSansTelugu-Regular.ttf": {
+      "sha256": "2c05072e8018a9be1cb0582953d9edf9a0cf129cdfb74e611de763b09c411f7f",
+      "source": "https://raw.githubusercontent.com/notofonts/noto-fonts/ffebf8c1ee449e544955a7e813c54f9b73848eac/hinted/ttf/NotoSansTelugu/NotoSansTelugu-Regular.ttf"
+    },
+    "NotoSansMeeteiMayek-Regular.ttf": {
+      "sha256": "b68597a00e21d3ad873f937f36552d63f1cbad457f251ab1c3654e41d5dc24fa",
+      "source": "https://raw.githubusercontent.com/notofonts/noto-fonts/ffebf8c1ee449e544955a7e813c54f9b73848eac/hinted/ttf/NotoSansMeeteiMayek/NotoSansMeeteiMayek-Regular.ttf"
+    },
+    "NotoSansOlChiki-Regular.ttf": {
+      "sha256": "8aa3fe0d4cafc878023061ff4db4de90a4334153716d7b69d60e9a2c8e06e18d",
+      "source": "https://raw.githubusercontent.com/notofonts/noto-fonts/ffebf8c1ee449e544955a7e813c54f9b73848eac/hinted/ttf/NotoSansOlChiki/NotoSansOlChiki-Regular.ttf"
     }
   }
 }

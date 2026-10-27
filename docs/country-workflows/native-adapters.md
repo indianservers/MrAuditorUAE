@@ -2904,3 +2904,36 @@ The verify job was still live at the last check; its unavailable log download is
 not a terminal failure. The container gate remained failed and is not waived.
 Real-client pilots, professional country qualification and remaining release
 gates remain open; these synthetic export checks do not establish those outcomes.
+
+### Additional Indian source-name scripts (27 October 2026)
+
+Before this increment, actual export probes rejected all ten additional script
+samples. Both ordinary workflow and statutory PDF exports now embed fonts for
+Bengali, Gujarati, Gurmukhi, Kannada, Malayalam, Odia, Tamil, Telugu, Meetei Mayek
+and Ol Chiki alongside the existing Latin, Arabic and Devanagari fonts. These are
+original Unicode source-name checks, not translations or qualified legal text.
+The renderer loads the checked-in font manifest; all thirteen unmodified TTFs
+are pinned to the same upstream Noto commit, licensed under the retained SIL OFL,
+and checked against their recorded SHA-256 before use. Unsupported characters
+still fail PDF export explicitly; no universal language coverage is claimed.
+
+The [synthetic script PDF](../../output/pdf/indic-script-review.pdf) and its
+[visually checked rendering](screenshots/indic-pdf/names.png) include all twelve
+non-Latin script samples with exact currency/amount strings. Reproduce with
+`backend/.venv/Scripts/python.exe scripts/indic_pdf_preview.py`. The sample module
+under tests contains authored probes, not redacted pilot identities. PDF reader
+copy/search limitations described above remain applicable.
+
+Verification: [2,698 backend tests passed](../phase-12/indic-pdf-backend.xml), with
+four existing skips and two warnings in 127.60 seconds. The additional
+[sixteen focused PDF cases](../phase-12/indic-pdf-fonts.xml) passed in 4.96 seconds,
+including explicit embedded font-family checks for every new script in both
+ordinary workflow and statutory exports, not only checks of ActualText metadata.
+[Twelve API cases](../phase-12/indic-pdf-api.xml) passed in 35.30 seconds using the
+owned database and explicit scanner/broker doubles. Tamil and Telugu now exercise
+retained source -> independent review -> report template review -> statutory PDF,
+alongside Arabic, Hindi, unsupported-character refusal and ordinary workbook
+regressions. Full app mypy, lint/format and API-contract checks passed. No Python
+dependency or frontend changes were needed. Client identities, language semantics,
+legal qualification, provider access and release/security gates remain separate
+open requirements; the authored scenario catalogue remains 154.

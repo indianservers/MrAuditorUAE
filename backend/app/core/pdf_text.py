@@ -53,7 +53,7 @@ def render_text_schedule(
     pdf.set_margins(18, 18, 18)
     pdf.set_auto_page_break(auto=True, margin=18)
     coverage: set[int] = set()
-    families = ["NotoSans", "NotoSansArabic", "NotoSansDevanagari"]
+    families = [name.removesuffix("-Regular.ttf") for name in manifest["files"]]
     for family in families:
         name = family + "-Regular.ttf"
         path = root / name

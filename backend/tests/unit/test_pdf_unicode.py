@@ -8,6 +8,7 @@ from pypdf import PdfReader
 from pypdf.generic import ContentStream
 
 from app.core.pdf_text import PDFTextError, render_text_schedule
+from tests.unit.indic_pdf_samples import SAMPLES
 
 
 @pytest.mark.parametrize("party", ["شركة النور للتجارة", "भारत आपूर्तिकर्ता"])
@@ -87,3 +88,38 @@ def test_table_row_taller_than_page_continues_without_losing_cells():
         assert "Detail" in page_lines
         lines.extend(line for line in page_lines if line.startswith("LINE-"))
     assert lines == [f"LINE-{i:03}" for i in range(200)]
+
+
+@pytest.mark.parametrize("script,party", SAMPLES.items())
+def test_indian_scripts_survive_workflow_and_statutory_pdf_exports(script, party):
+    from app.modules.intelligence.exports import render
+    from tests.unit.test_statutory_report_exports import report_event
+
+    event = report_event()
+    event["firm_name"] = party
+    block = event["body"]["blocks"][0]
+    block.update(title=party, text=party)
+    block["source_receipt"]["party"] = party
+    block["data"]["rows"][0]["counterparty"] = party
+    for kind in ["workflow-source", "statutory-report"]:
+        event["kind"] = kind
+        event["body"]["rows"] = [{"counterparty": party, "amount": "105.00"}]
+        content, _ = render(event, "pdf")
+        reader = PdfReader(BytesIO(content))
+        actual = [
+            str(args[1]["/ActualText"])
+            for page in reader.pages
+            for args, operator in ContentStream(page.get_contents(), reader).operations
+            if operator == b"BDC"
+        ]
+        assert party in "\n".join(actual), (script, kind)
+        embedded_names = []
+        for page in reader.pages:
+            for font in page["/Resources"]["/Font"].values():
+                font = font.get_object()
+                if font["/Subtype"] == "/Type0":
+                    embedded_names.append(str(font["/BaseFont"]))
+                    desc = font["/DescendantFonts"][0].get_object()["/FontDescriptor"]
+                    assert "/FontFile2" in desc.get_object()
+        family = "NotoSans" + ("Oriya" if script == "Odia" else script.replace(" ", ""))
+        assert any(family in name for name in embedded_names), (script, kind)

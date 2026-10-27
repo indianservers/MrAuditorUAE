@@ -22,6 +22,8 @@ pytestmark = pytest.mark.skipif(os.getenv("INTEGRATION_TESTS") != "1", reason="O
     [
         ("AE", "uae-ifrs", "شركة النور للتجارة", "AED"),
         ("IN", "india-statutory", "भारत आपूर्तिकर्ता", "INR"),
+        ("IN", "india-statutory", "தமிழ் வணிகர்", "INR"),
+        ("IN", "india-statutory", "తెలుగు వ్యాపారి", "INR"),
     ],
 )
 async def test_reviewed_country_report_unicode_pdf_and_unsupported_text(
