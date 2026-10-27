@@ -3,12 +3,35 @@
 import json
 
 from fastapi import HTTPException
+from pydantic import ValidationError
 
+from app.db.models.platform import FinancialPeriod
 from app.modules.audit_execution import service as audit
 from app.modules.audit_execution.access import engagement_permissions
 from app.modules.intelligence import service as intelligence
 from app.modules.jurisdictions.workspace import resolved
 from app.modules.regulatory.schemas import ReportTemplate
+from app.modules.regulatory.tax_forms import SCOPE_CONTRACT, require_assessed_tax_scope
+
+
+async def tax_scope_receipt(db, ctx, eng, config):
+    if config.tax_audit_scope is None:
+        return []
+    period = await db.get(FinancialPeriod, eng.period_id) if eng.period_id else None
+    if period is None or not config.tax_audit_scope.covered_by(period.start_date, period.end_date):
+        raise HTTPException(
+            422, "The selected tax-audit period must be covered by the engagement financial period"
+        )
+    source = await intelligence.event(
+        db, ctx, eng.id, config.tax_audit_scope.applicability_id, True
+    )
+    if source.kind != "statutory-checklist":
+        raise HTTPException(409, "Select the reviewed India tax-audit applicability checklist")
+    try:
+        require_assessed_tax_scope(config.tax_audit_scope, source.body)
+    except ValueError as error:
+        raise HTTPException(409, str(error)) from error
+    return [intelligence.event_receipt(source)]
 
 
 def engines():
@@ -38,7 +61,7 @@ async def template(db, ctx, eng, data, request_id):
             )
     if data.category.startswith("uae-") and binding.country != "AE":
         raise HTTPException(422, "UAE report template requires the approved UAE engagement context")
-    dependencies = []
+    dependencies = await tax_scope_receipt(db, ctx, eng, data)
     for block in data.blocks:
         if block.source_kind == "intelligence":
             source = await intelligence.event(db, ctx, eng.id, block.source_id, True)
@@ -71,6 +94,7 @@ async def template(db, ctx, eng, data, request_id):
             ),
             "document_status": "DRAFT",
             "scope": "Engagement-bound template; reuse requires an authorized copy with revalidated sources",
+            **({"tax_form_scope_contract": SCOPE_CONTRACT} if data.tax_audit_scope else {}),
         },
         dependencies,
         request_id,
@@ -82,10 +106,20 @@ async def generate(db, ctx, eng, data, request_id):
     stored = await intelligence.event(db, ctx, eng.id, data.template_id, True)
     if stored.kind != "report-template" or stored.body.get("review_status") != "REVIEWED":
         raise HTTPException(409, "Current independently reviewed template required")
-    config = ReportTemplate.model_validate(
-        {k: stored.body[k] for k in ["title", "category", "blocks", "rationale"]}
-    )
-    blocks, dependencies = [], [intelligence.event_receipt(stored)]
+    try:
+        config = ReportTemplate.model_validate(
+            {
+                **{k: stored.body[k] for k in ["title", "category", "blocks", "rationale"]},
+                "tax_audit_scope": stored.body.get("tax_audit_scope"),
+            }
+        )
+    except ValidationError:
+        raise HTTPException(
+            409,
+            "Amend and independently review the report template with a valid report/tax-period scope",
+        ) from None
+    scope_dependencies = await tax_scope_receipt(db, ctx, eng, config)
+    blocks, dependencies = [], [intelligence.event_receipt(stored), *scope_dependencies]
     for index, block in enumerate(config.blocks, 1):
         source_body = None
         provenance = None
@@ -162,6 +196,18 @@ async def generate(db, ctx, eng, data, request_id):
             "review_status": "UNVERIFIED",
             "contributors": [str(ctx.user_id)],
             "missing_disclosures_fabricated": False,
+            **(
+                {
+                    "tax_audit_scope": config.tax_audit_scope.model_dump(mode="json"),
+                    "tax_form_regime": "2025-ACT"
+                    if config.tax_audit_scope.form == "26"
+                    else "1961-ACT",
+                    "tax_form_content_qualified": False,
+                    "tax_form_scope_contract": SCOPE_CONTRACT,
+                }
+                if config.tax_audit_scope
+                else {}
+            ),
         },
         dependencies,
         request_id,

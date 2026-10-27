@@ -700,11 +700,18 @@ async def validate_fact_sources(
                 if isinstance(segment, int) and (segment < 0 or segment > 10000):
                     raise ValueError("Index bound")
                 value = value[segment]
-            left, right = Decimal(str(facts[field])), Decimal(str(value))
-            if not left.is_finite() or not right.is_finite() or left != right:
-                raise ValueError("Source value mismatch")
+            if binding.comparison == "exact":
+                if type(facts[field]) is not type(value) or facts[field] != value:
+                    raise ValueError("Exact source value mismatch")
+            else:
+                left, right = Decimal(str(facts[field])), Decimal(str(value))
+                if not left.is_finite() or not right.is_finite() or left != right:
+                    raise ValueError("Source value mismatch")
         except (KeyError, IndexError, TypeError, InvalidOperation, ValueError):
             raise HTTPException(
-                422, "Numeric applicability fact does not agree to the selected source field"
+                422,
+                "Exact applicability fact does not agree to the selected source field"
+                if binding.comparison == "exact"
+                else "Numeric applicability fact does not agree to the selected source field",
             ) from None
     return missing

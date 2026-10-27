@@ -74,6 +74,19 @@ def render(event, format):
         if event.get("freshness") == "CURRENT"
         else "FRESHNESS_NOT_EVALUATED",
     }
+    if body.get("tax_audit_scope"):
+        scope = body["tax_audit_scope"]
+        metadata.update(
+            {
+                "Tax period start": scope["tax_period_start"],
+                "Tax period end": scope["tax_period_end"],
+                "Selected tax-audit form": scope["form"],
+                "Tax-audit report part": scope.get("audit_report_part") or "LEGACY COMBINED REPORT",
+                "Audited under another law": scope["audited_under_other_law"],
+                "Tax-audit applicability case": scope["applicability_id"],
+                "Output purpose": "Tax-audit working draft; not an official e-filing form",
+            }
+        )
     buffer = io.BytesIO()
     if format == "xlsx":
         from openpyxl import Workbook

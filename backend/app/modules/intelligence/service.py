@@ -189,6 +189,20 @@ async def _head(db, ctx, obj):
 async def current(db, ctx, obj, visited=None):
     if obj.tenant_id != ctx.tenant_id:
         return False
+    if getattr(obj, "kind", None) in {"report-template", "statutory-report"}:
+        from app.modules.regulatory.tax_forms import IndiaTaxAuditScope, has_tax_scope_contract
+
+        if not has_tax_scope_contract(obj.body, obj.dependencies):
+            return False
+        if obj.body.get("category") == "india-tax-audit":
+            from app.db.models.platform import Engagement
+
+            eng = await db.get(Engagement, obj.engagement_id)
+            period = await db.get(FinancialPeriod, eng.period_id) if eng and eng.period_id else None
+            if period is None or not IndiaTaxAuditScope.model_validate(
+                obj.body["tax_audit_scope"]
+            ).covered_by(period.start_date, period.end_date):
+                return False
     if (
         getattr(obj, "kind", None) == "country-workflow"
         and obj.body.get("workflow") in {"india-withholding-liability", "india-withholding-credit"}

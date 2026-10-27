@@ -13,6 +13,7 @@ from app.modules.country_workflows.payroll_schemas import PAYROLL_WORKFLOWS
 from app.modules.country_workflows.pension_schemas import PENSION_WORKFLOWS
 from app.modules.country_workflows.sector_schemas import SECTOR_WORKFLOWS
 from app.modules.country_workflows.withholding_schemas import WITHHOLDING_WORKFLOWS
+from app.modules.regulatory.tax_forms import india_tax_regime
 
 OPTIONAL_ROLES = {
     "party-balance-confirmations": {"coverage": "confirmation-item-coverage"},
@@ -160,7 +161,7 @@ def country_guidance(country, as_of, tax_year_start=None):
             "tax_reporting": "PENDING_TAX_YEAR_START"
             if tax_year_start is None
             else "Form 26 under 2025 Act / 2026 Rules"
-            if tax_year_start >= date(2026, 4, 1)
+            if india_tax_regime(tax_year_start) == "2025-ACT"
             else "Legacy 3CA/3CB/3CD under 1961 Act",
             "form_selection_basis": "Tax-year start, not run date: assess explicitly before issuing a report",
             "tcs_206c_1h": "WITHDRAWN"

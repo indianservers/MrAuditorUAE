@@ -720,6 +720,7 @@ async def events(
                     "id": str(row.id),
                     "root_id": str(row.root_id),
                     "kind": row.kind,
+                    "area": row.body.get("area"),
                     "table_type": row.body.get("table_type"),
                     "workflow": row.body.get("workflow"),
                     "blocked": bool(row.body.get("blocked")),

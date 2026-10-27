@@ -7389,6 +7389,12 @@ export interface components {
             id: string;
             /** Path */
             path: (string | number)[];
+            /**
+             * Comparison
+             * @default numeric
+             * @enum {string}
+             */
+            comparison: "numeric" | "exact";
         };
         /** Feedback */
         Feedback: {
@@ -7777,6 +7783,33 @@ export interface components {
             comparative_snapshot_id?: string | null;
             /** Rationale */
             rationale: string;
+        };
+        /** IndiaTaxAuditScope */
+        IndiaTaxAuditScope: {
+            /**
+             * Applicability Id
+             * Format: uuid
+             */
+            applicability_id: string;
+            /**
+             * Tax Period Start
+             * Format: date
+             */
+            tax_period_start: string;
+            /**
+             * Tax Period End
+             * Format: date
+             */
+            tax_period_end: string;
+            /** Audited Under Other Law */
+            audited_under_other_law: boolean;
+            /**
+             * Form
+             * @enum {string}
+             */
+            form: "3CA-3CD" | "3CB-3CD" | "26";
+            /** Audit Report Part */
+            audit_report_part?: ("C" | "D") | null;
         };
         /** Inference */
         Inference: {
@@ -8614,6 +8647,7 @@ export interface components {
             blocks: components["schemas"]["ReportBlock"][];
             /** Rationale */
             rationale: string;
+            tax_audit_scope?: components["schemas"]["IndiaTaxAuditScope"] | null;
             /** Prior Id */
             prior_id?: string | null;
             /**

@@ -3,8 +3,17 @@ import { useState } from "react";
 import Link from "next/link";
 import { Button, ErrorState, Status } from "@/components/ui/primitives";
 import { useAPI, useAction } from "@/hooks/use-api";
+import { useEventHistory } from "@/hooks/use-event-history";
+import { useScope } from "@/stores/workspace";
 import type { Page, RecordRow } from "@/types/models";
 import { PageHeader } from "./shared";
+import {
+  TaxAuditScopeForm,
+  emptyTaxScope,
+  selectedTaxScope,
+  type TaxAuditScope,
+  type TaxScopeDraft,
+} from "./tax-audit-scope";
 
 type Block = {
   key: string;
@@ -23,6 +32,7 @@ type Result = {
     category: string;
     blocks: Block[];
     review_status: string;
+    tax_audit_scope?: TaxAuditScope | null;
   };
 };
 const kinds = [
@@ -39,6 +49,10 @@ const kinds = [
   "audit_conclusion",
 ];
 export function StatutoryReportBuilder() {
+  const scopeKey = useScope((scope) => `${scope.tenant}:${scope.country}`);
+  return <ReportBuilderForm key={scopeKey} />;
+}
+function ReportBuilderForm() {
   const [eid, setEid] = useState("");
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("management-letter");
@@ -51,19 +65,21 @@ export function StatutoryReportBuilder() {
   const [sourceKind, setSourceKind] = useState("intelligence");
   const [sourceId, setSourceId] = useState("");
   const [text, setText] = useState("");
+  const [taxScope, setTaxScope] = useState<TaxScopeDraft>(emptyTaxScope);
+  const [error, setError] = useState<Error | null>(null);
   const engagements = useAPI<Page<RecordRow>>("engagements?limit=100");
-  const sources = useAPI<{
-    items: { id: string; label: string; review_status: string }[];
-  }>(`intelligence/engagements/${eid}/events?limit=100`, !!eid);
+  const sources = useEventHistory<{
+    id: string;
+    kind: string;
+    label: string;
+    review_status: string;
+  }>(`intelligence/engagements/${eid}`, !!eid);
   const papers = useAPI<{ items: RecordRow[] }>(
     `engagements/${eid}/audit/working-papers?limit=100`,
     !!eid,
   );
-  const templates = useAPI<{
-    items: { id: string; label: string; review_status: string }[];
-  }>(
-    `intelligence/engagements/${eid}/events?kind=report-template&limit=100`,
-    !!eid,
+  const templates = (sources.data?.items || []).filter(
+    (item) => item.kind === "report-template",
   );
   const detail = useAPI<Result>(
     `intelligence/engagements/${eid}/events/${selected}`,
@@ -93,6 +109,15 @@ export function StatutoryReportBuilder() {
               setEid(e.target.value);
               setSelected("");
               setBlocks([]);
+              setTitle("");
+              setComments("");
+              setBlockTitle("");
+              setText("");
+              setSourceId("");
+              setCategory("management-letter");
+              setTaxScope(emptyTaxScope);
+              setReportId("");
+              setError(null);
             }}
           >
             <option value="">Select engagement</option>
@@ -114,9 +139,9 @@ export function StatutoryReportBuilder() {
           engagements.error ||
           sources.error ||
           papers.error ||
-          templates.error ||
           detail.error ||
-          action.error
+          action.error ||
+          error
         }
       />
       {eid && (
@@ -154,6 +179,13 @@ export function StatutoryReportBuilder() {
                 ))}
               </select>
             </label>
+            {category === "india-tax-audit" && (
+              <TaxAuditScopeForm
+                eid={eid}
+                value={taxScope}
+                onChange={setTaxScope}
+              />
+            )}
             <label>
               Template / review rationale
               <textarea
@@ -161,6 +193,14 @@ export function StatutoryReportBuilder() {
                 onChange={(e) => setComments(e.target.value)}
               />
             </label>
+            {sources.hasOlder && (
+              <Button
+                disabled={sources.loadingOlder}
+                onClick={sources.loadOlder}
+              >
+                Load older sources and templates
+              </Button>
+            )}
             <h3>Add source-linked block</h3>
             <label>
               Block title
@@ -292,6 +332,15 @@ export function StatutoryReportBuilder() {
               primary
               disabled={action.isPending || !blocks.length}
               onClick={async () => {
+                setError(null);
+                let assessedScope: TaxAuditScope | undefined;
+                try {
+                  if (category === "india-tax-audit")
+                    assessedScope = selectedTaxScope(taxScope);
+                } catch (failure) {
+                  setError(failure as Error);
+                  return;
+                }
                 const result = await action
                   .mutateAsync({
                     path: `regulatory/engagements/${eid}/report-templates`,
@@ -300,6 +349,9 @@ export function StatutoryReportBuilder() {
                       category,
                       blocks,
                       rationale: comments,
+                      ...(assessedScope
+                        ? { tax_audit_scope: assessedScope }
+                        : {}),
                       ...(detail.data
                         ? {
                             prior_id: detail.data.id,
@@ -324,7 +376,7 @@ export function StatutoryReportBuilder() {
                 onChange={(e) => setSelected(e.target.value)}
               >
                 <option value="">Select template</option>
-                {templates.data?.items.map((t) => (
+                {templates.map((t) => (
                   <option key={t.id} value={t.id}>
                     {t.label} • {t.review_status}
                   </option>
@@ -343,6 +395,9 @@ export function StatutoryReportBuilder() {
                     setBlocks(detail.data!.body.blocks);
                     setTitle(detail.data!.body.title);
                     setCategory(detail.data!.body.category);
+                    setTaxScope(
+                      detail.data!.body.tax_audit_scope || emptyTaxScope,
+                    );
                   }}
                 >
                   Load retained blocks into new revision
@@ -368,7 +423,8 @@ export function StatutoryReportBuilder() {
                 <Button
                   disabled={
                     action.isPending ||
-                    detail.data.body.review_status !== "REVIEWED"
+                    detail.data.body.review_status !== "REVIEWED" ||
+                    detail.data.freshness !== "CURRENT"
                   }
                   onClick={async () => {
                     const result = await action

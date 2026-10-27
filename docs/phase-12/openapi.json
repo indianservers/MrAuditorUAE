@@ -60006,6 +60006,15 @@
             "maxItems": 8,
             "minItems": 1,
             "title": "Path"
+          },
+          "comparison": {
+            "type": "string",
+            "enum": [
+              "numeric",
+              "exact"
+            ],
+            "title": "Comparison",
+            "default": "numeric"
           }
         },
         "additionalProperties": false,
@@ -60918,6 +60927,63 @@
           "rationale"
         ],
         "title": "IndiaStatements"
+      },
+      "IndiaTaxAuditScope": {
+        "properties": {
+          "applicability_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Applicability Id"
+          },
+          "tax_period_start": {
+            "type": "string",
+            "format": "date",
+            "title": "Tax Period Start"
+          },
+          "tax_period_end": {
+            "type": "string",
+            "format": "date",
+            "title": "Tax Period End"
+          },
+          "audited_under_other_law": {
+            "type": "boolean",
+            "title": "Audited Under Other Law"
+          },
+          "form": {
+            "type": "string",
+            "enum": [
+              "3CA-3CD",
+              "3CB-3CD",
+              "26"
+            ],
+            "title": "Form"
+          },
+          "audit_report_part": {
+            "anyOf": [
+              {
+                "type": "string",
+                "enum": [
+                  "C",
+                  "D"
+                ]
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Audit Report Part"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "applicability_id",
+          "tax_period_start",
+          "tax_period_end",
+          "audited_under_other_law",
+          "form"
+        ],
+        "title": "IndiaTaxAuditScope"
       },
       "Inference": {
         "properties": {
@@ -63142,6 +63208,16 @@
             "maxLength": 4000,
             "minLength": 10,
             "title": "Rationale"
+          },
+          "tax_audit_scope": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/IndiaTaxAuditScope"
+              },
+              {
+                "type": "null"
+              }
+            ]
           },
           "prior_id": {
             "anyOf": [

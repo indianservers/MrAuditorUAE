@@ -208,13 +208,17 @@ export function StatutoryPractice({
               />
             </label>
             <label>
-              Numeric fact source bindings (JSON)
+              Fact source bindings (JSON)
               <textarea
                 value={factSources}
                 onChange={(e) => setFactSources(e.target.value)}
                 placeholder='{"turnover":{"kind":"intelligence","id":"reviewed-event-uuid","path":["totals","closing"]}}'
               />
             </label>
+            <p>
+              Use comparison: "exact" for retained dates, form identifiers and
+              Boolean facts. Amounts use numeric comparison by default.
+            </p>
             <label>
               Clause disposition
               <select value={state} onChange={(e) => setState(e.target.value)}>

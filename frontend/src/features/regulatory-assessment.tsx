@@ -344,13 +344,17 @@ export function RegulatoryAssessmentPanel({ eid }: { eid: string }) {
         />
       </label>
       <label>
-        Numeric fact source bindings (JSON)
+        Fact source bindings (JSON)
         <textarea
           value={factSources}
           onChange={(e) => setFactSources(e.target.value)}
           placeholder='{"turnover":{"kind":"record","id":"approved-record-uuid","path":["amount"]}}'
         />
       </label>
+      <p>
+        Use comparison: "exact" for retained dates, form identifiers and Boolean
+        facts. Amounts use numeric comparison by default.
+      </p>
       <label>
         Transaction date (for transaction-based rules)
         <input

@@ -9,6 +9,7 @@ from app.modules.jurisdictions.profiles import Strict
 from app.modules.regulatory.benefit_profiles import BenefitParameters
 from app.modules.regulatory.payroll_profiles import PayrollParameters
 from app.modules.regulatory.pension_profiles import PensionParameters
+from app.modules.regulatory.tax_forms import IndiaTaxAuditScope
 from app.modules.regulatory.validation_schemas import RuleFixture
 
 Fact = Annotated[str, Field(max_length=4000)] | bool | int | None
@@ -176,6 +177,7 @@ class FactSource(Strict):
     kind: Literal["record", "intelligence"]
     id: uuid.UUID
     path: list[Annotated[str, Field(max_length=100)] | int] = Field(min_length=1, max_length=8)
+    comparison: Literal["numeric", "exact"] = "numeric"
 
 
 class Assessment(Strict):
@@ -298,11 +300,16 @@ class ReportTemplate(Strict):
     ]
     blocks: list[ReportBlock] = Field(min_length=1, max_length=50)
     rationale: str = Field(min_length=10, max_length=4000)
+    tax_audit_scope: IndiaTaxAuditScope | None = None
     prior_id: uuid.UUID | None = None
     expected_version: int = Field(default=0, ge=0)
 
     @model_validator(mode="after")
     def unique_keys(self):
+        if (self.category == "india-tax-audit") != (self.tax_audit_scope is not None):
+            raise ValueError(
+                "India tax-audit templates require an explicit assessed tax scope; other report categories must not supply one"
+            )
         if len({b.key for b in self.blocks}) != len(self.blocks):
             raise ValueError("Report block identifiers must be unique")
         return self

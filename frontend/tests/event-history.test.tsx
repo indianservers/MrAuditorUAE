@@ -46,6 +46,23 @@ beforeEach(() => {
 });
 
 describe("event source history", () => {
+  it("does not fetch history or load older pages when disabled", async () => {
+    const { client, wrapper } = harness();
+    const { result } = renderHook(
+      () => useEventHistory("intelligence/engagements/", false),
+      { wrapper },
+    );
+    act(() => result.current.loadOlder());
+    expect(result.current.hasOlder).toBe(false);
+    expect(state.fetch).not.toHaveBeenCalled();
+    expect(
+      client
+        .getQueryCache()
+        .findAll()
+        .every((query) => query.state.fetchStatus === "idle"),
+    ).toBe(true);
+    client.clear();
+  });
   it("keeps the loaded boundary rows when live results push them off the newest page", async () => {
     state.fetch.mockResolvedValue({
       items: [{ id: "old" }],

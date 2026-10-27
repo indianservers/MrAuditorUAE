@@ -8,13 +8,16 @@ import { useScope } from "@/stores/workspace";
 type EventPage<T> = { items: T[]; next_before?: string | null };
 
 /** Keep a live head and a contiguous history; older pages refresh on invalidation. */
-export function useEventHistory<T extends { id: string }>(prefix: string) {
+export function useEventHistory<T extends { id: string }>(
+  prefix: string,
+  enabled = true,
+) {
   const tenant = useScope((state) => state.tenant);
   const path = `${prefix}/events?limit=100&newest=true`;
-  const latest = useAPI<EventPage<T>>(path, true, true);
+  const latest = useAPI<EventPage<T>>(path, enabled, true);
   const history = useInfiniteQuery({
     queryKey: ["api", tenant, `${prefix}/event-history`],
-    enabled: !!tenant,
+    enabled: !!tenant && enabled,
     initialPageParam: null as string | null,
     queryFn: ({ pageParam, signal }) =>
       api<EventPage<T>>(
@@ -37,9 +40,9 @@ export function useEventHistory<T extends { id: string }>(prefix: string) {
     data: first ? { ...first, items: [...byId.values()] } : undefined,
     error: latest.error || history.error || null,
     loadingOlder: history.isFetching,
-    hasOlder: history.isError || history.hasNextPage,
+    hasOlder: enabled && (history.isError || history.hasNextPage),
     loadOlder: () => {
-      if (history.isFetching) return;
+      if (!enabled || history.isFetching) return;
       if (history.isError && !history.isFetchNextPageError)
         void history.refetch();
       else void history.fetchNextPage();

@@ -3077,3 +3077,61 @@ the hidden directory is explicitly included in that narrow upload. No tests,
 coverage gates, image findings or external-provider qualifications were waived.
 A new full verification run remains required; focused local passes do not prove
 the complete hosted suite or close the existing container/professional/client gates.
+
+
+### Reviewed tax-period/form scope (27 October 2026)
+
+India tax-audit templates now require an explicit assessed tax period, other-law
+audit basis, selected form/report part and a current independently reviewed
+India tax-audit applicability case. The period must be contained in the actual
+engagement financial period. Report creation date does not choose the tax regime.
+Legacy periods select 3CA with 3CD or 3CB with 3CD; tax years beginning on or after
+1 April 2026 select Form 26, Part C or D respectively. These designation facts
+follow the Income Tax Department's [forms guidance, questions 29–30](https://www.incometax.gov.in/iec/foportal/help/all-topics/e-filing-services/income-tax-forms?mobile-app=1)
+and the [official Form 26](https://www.incometaxindia.gov.in/documents/d/guest/fn-26).
+
+Dates, form identifiers and Boolean audit facts must agree exactly, including
+type, to authorized retained sources. An opt-in `comparison: "exact"` source
+binding supports these facts while existing numeric comparisons retain their
+amount semantics. A declaration without retained source bindings cannot qualify
+the scope. The applicability case must resolve its provided clauses and retain
+evidence, procedures and conclusions for prepared clauses and documented adverse
+findings. Adverse findings remain possible; they are not silently treated as a
+clean audit opinion.
+
+Templates and generated drafts depend directly on the assessed case and its
+underlying evidence. Reopening a source makes downstream reports stale while
+preserving historical bodies. Earlier tax-audit templates without the scope
+contract remain readable historical records and require amendment and review
+before reuse. Other report categories retain their existing behavior. Tax scope
+appears in the shared workbook, Word and PDF metadata. The frontend requires
+explicit choices, can retrieve older reviewed cases and clears the draft on an
+engagement, country or firm change.
+
+This increment guards working-draft scope. It does not implement or qualify the
+complete mandatory clause content/layout of Form 26/3CD, establish statutory
+applicability thresholds or filing due dates, sign an opinion, or submit an
+official return. `tax_form_content_qualified` remains false. Roadmap form-content,
+professional review and real-client gates remain open. The 154 authored scenarios
+remain synthetic; creating `pilot-data/UAE/` and `pilot-data/India/` did not create
+independently checked client results.
+
+Verification in the isolated tax-form checkout: 2,745 backend unit tests passed,
+five skipped and two warnings; 257 frontend tests passed; TypeScript, ESLint
+(zero errors, one pre-existing unused-variable warning), production build,
+regulatory mypy (18 files), Ruff and contract/type generation passed. The
+[14-case API regression](../phase-12/tax-form-scope-regression.xml) covers reviewed
+source publication, report generation, current/historical exports and both
+countries. Scanner and broker dependencies use the existing explicit test
+doubles. The tax-form matrix additionally rejects unreviewed cases, wrong
+forms, periods outside the engagement and dates differing from the retained
+assessment; reopening the source preserves the report body and marks it stale.
+No new full-app browser or screenshot qualification is claimed.
+
+The preceding main commit b203201 completed hosted full verification in
+[run 40492147429](https://github.com/indianservers/MrAuditorUAE/actions/runs/40492147429):
+3,561 passed, nine skipped, 85.63% overall coverage and 89.35% calculation/core
+coverage (831/930). Hosted frontend, browser smoke, ML and security jobs passed.
+The container job failed; this is not an entirely green release. The isolated
+scope increment requires its own hosted verification after push. The separate
+local full baseline run stays on its frozen source until it finishes.
