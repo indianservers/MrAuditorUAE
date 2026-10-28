@@ -7,6 +7,7 @@ from pathlib import Path
 from app.modules.country_workflows.audit_schemas import AUDIT_WORKFLOWS
 from app.modules.country_workflows.diligence_schemas import DILIGENCE_WORKFLOWS
 from app.modules.country_workflows.grant_utilisation import ROLES as GRANT_ROLES
+from app.modules.country_workflows.msme_schemas import MSME_WORKFLOWS
 from app.modules.country_workflows.operations_schemas import OPERATION_WORKFLOWS
 from app.modules.country_workflows.payroll_ledger_schemas import PAYROLL_LEDGER_WORKFLOWS
 from app.modules.country_workflows.payroll_schemas import PAYROLL_WORKFLOWS
@@ -79,6 +80,7 @@ WORKFLOWS = {
     ),
     **WITHHOLDING_WORKFLOWS,
     **OPERATION_WORKFLOWS,
+    **MSME_WORKFLOWS,
     **PAYROLL_WORKFLOWS,
     **PAYROLL_LEDGER_WORKFLOWS,
     **PENSION_WORKFLOWS,

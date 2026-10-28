@@ -1,0 +1,53 @@
+{
+  "classification": "SYNTHETIC_ENGINE_FIXTURE_NOT_CLIENT_OR_LEGAL_QUALIFICATION",
+  "country": "IN",
+  "workflow": "india-msme-payment-timing",
+  "scope": {
+    "buyer_id": "SYNTHETIC-BUYER",
+    "account": "SYNTHETIC-ACCOUNT",
+    "currency": "INR",
+    "invoice_month_start": "2026-04",
+    "invoice_month_end": "2026-04",
+    "bank_from": "2026-04-01",
+    "as_of": "2026-04-30",
+    "bank_sign": "debit-negative"
+  },
+  "rows_per_source": 1,
+  "controls": {
+    "assessments": {},
+    "invoices": {
+      "INR": "100"
+    },
+    "bank": {
+      "INR": "-100"
+    },
+    "allocations": {
+      "INR": "100"
+    }
+  },
+  "matching_expected": {
+    "due_date": "2026-04-16",
+    "allocated_paid": "100",
+    "late_paid_amount": "0",
+    "overdue_unpaid_amount": "0",
+    "state": "MATCHED"
+  },
+  "partial_late_case": {
+    "replace_bank": "bank-late.csv",
+    "replace_allocations": "allocations-partial.csv",
+    "allocation_control": {
+      "INR": "40"
+    },
+    "expected_late_paid_amount": "40",
+    "expected_overdue_unpaid_amount": "60",
+    "expected_bank_unallocated_outflow": "60"
+  },
+  "sha256": {
+    "allocations-partial.csv": "6379dfa0a050c511f759002c539bc69f1a235349ae664a85defbc92c18e2a3b4",
+    "allocations.csv": "d268099eded91a97c193ebf7fa837be88af718c29a79a9bd5fdbadf739232269",
+    "assessments.csv": "91acc8dff8e52750e975fa99f4f596cfb07f7c978a3379c2efa03056a0b3d340",
+    "bank-late.csv": "05f7ca7c52cdb56fea9b0d3a0a82b2adaf749d69494e4572bf03d3c89f738640",
+    "bank.csv": "c804b5941c56c4b8725f7750867d438fc3ebc6cac58338cf315f9231158de281",
+    "invoices.csv": "4fd2e422e68e75b57099fed76cd9aba1987ace95e2d5ed9eac684e42523b6876"
+  }
+}

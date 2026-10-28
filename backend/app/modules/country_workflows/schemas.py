@@ -28,6 +28,7 @@ from app.modules.country_workflows.inventory_valuation import (
     InventoryValuation,
     InventoryValueControl,
 )
+from app.modules.country_workflows.msme_schemas import MSME_ROW_TYPES
 from app.modules.country_workflows.operations_schemas import OPERATION_ROW_TYPES
 from app.modules.country_workflows.party_confirmations import (
     ConfirmationItemCoverage,
@@ -259,6 +260,7 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
     "fx-rates": ExchangeRate,
     "withholding-records": WithholdingRecord,
     **OPERATION_ROW_TYPES,
+    **MSME_ROW_TYPES,
     **PAYROLL_ROW_TYPES,
     **PAYROLL_LEDGER_ROW_TYPES,
     **PENSION_ROW_TYPES,
@@ -360,6 +362,8 @@ class SourceInput(Strict):
     expected_documents: int | None = Field(default=None, ge=0, le=1250)
     rule_document_version_id: uuid.UUID | None = None
     table_type: Literal[
+        "msme-supplier-assessments",
+        "msme-invoices",
         "turnover-scope",
         "turnover-amounts",
         "turnover-adjustments",
@@ -802,11 +806,12 @@ class WorkflowInput(Strict):
     def explicit_grant_calendar(cls, value):
         if isinstance(value, dict) and value.get("workflow") in {
             "grant-utilisation",
+            "india-msme-payment-timing",
             "adverse-media-review",
         }:
             from app.modules.country_workflows.grant_utilisation import calendar_day
 
-            for key in ("as_of", "period_start"):
+            for key in ("as_of", "period_start", "settlement_start"):
                 if value.get(key) is not None:
                     calendar_day(value[key])
         return value
@@ -818,9 +823,11 @@ class WorkflowInput(Strict):
     esic_components: list[ESIComponent] = Field(
         default_factory=esi_components, min_length=1, max_length=2
     )
+    msme_buyer_id: Identifier | None = None
     withholding_role: WithholdingRole | None = None
     allocation_basis: Literal["invoice_face_amounts", "pre_application_balances"] | None = None
     workflow: Literal[
+        "india-msme-payment-timing",
         "tax-turnover-bridge",
         "adverse-media-review",
         "grant-utilisation",
@@ -972,7 +979,12 @@ class WorkflowInput(Strict):
         if self.bank_account_review_id is not None:
             if (
                 self.workflow
-                not in {"bank-brs", "bank-subsequent-clearance", "obligation-bank-allocations"}
+                not in {
+                    "bank-brs",
+                    "bank-subsequent-clearance",
+                    "obligation-bank-allocations",
+                    "india-msme-payment-timing",
+                }
                 or len(self.bank_account_scope_assessment.strip()) < 10
             ):
                 raise ValueError(
@@ -1044,7 +1056,21 @@ class WorkflowInput(Strict):
             raise ValueError(
                 "An inventory cutoff assessment requires explicit controlled bridge mode"
             )
-        if self.workflow == "obligation-bank-allocations":
+        if self.workflow == "india-msme-payment-timing":
+            if (
+                not self.msme_buyer_id
+                or not self.msme_buyer_id.strip()
+                or self.msme_buyer_id != self.msme_buyer_id.strip()
+                or self.currency != "INR"
+                or self.tolerance != 0
+                or self.date_tolerance != 0
+            ):
+                raise ValueError(
+                    "MSE payment timing requires explicit buyer, INR and exact monetary/calendar controls"
+                )
+        elif self.msme_buyer_id is not None:
+            raise ValueError("MSE buyer scope applies only to India MSE payment timing")
+        if self.workflow in {"obligation-bank-allocations", "india-msme-payment-timing"}:
             if (
                 not self.account
                 or not self.account.strip()

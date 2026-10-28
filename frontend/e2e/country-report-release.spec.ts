@@ -818,6 +818,53 @@ for (const code of ["AE", "IN"] as const) {
         paper.body.report_requirement_scope.items[0].supporting_sources,
       ).toEqual([{ kind: "record", id: supporting.id }]);
     }
+    await page.goto(`/intelligence/${engagement.id}/country-workflow`);
+    if (code === "IN") {
+      await page
+        .getByRole("combobox", { name: "Workflow", exact: true })
+        .selectOption("india-msme-payment-timing");
+      for (const role of ["assessments", "invoices", "bank", "allocations"]) {
+        await expect(
+          page.getByRole("combobox", { name: `${role} source`, exact: true }),
+        ).toHaveCount(1);
+      }
+      for (const [label, value] of [
+        ["Buyer identifier", "SYNTHETIC-BUYER"],
+        ["First invoice month", "2026-04"],
+        ["Last invoice month", "2026-06"],
+        ["Bank settlement window starts", "2026-04-01"],
+        ["Bank account identifier", "SYNTHETIC-ACCOUNT"],
+        ["Account currency", "INR"],
+      ]) {
+        await page.getByLabel(label, { exact: true }).fill(value);
+      }
+      await page
+        .getByRole("combobox", { name: "Bank payment sign", exact: true })
+        .selectOption("debit-negative");
+      await expect(
+        page.getByLabel("Buyer identifier", { exact: true }),
+      ).toHaveValue("SYNTHETIC-BUYER");
+      await expect(
+        page.getByLabel("First invoice month", { exact: true }),
+      ).toHaveValue("2026-04");
+      await expect(
+        page.getByRole("combobox", { name: "Bank payment sign", exact: true }),
+      ).toHaveValue("debit-negative");
+      await page.setViewportSize({ width: 1440, height: 1600 });
+      await page
+        .getByLabel("Buyer identifier", { exact: true })
+        .scrollIntoViewIfNeeded();
+      await page.screenshot({
+        path: `${screenshots}/IN-msme-payment-scope.png`,
+      });
+    } else {
+      await expect(
+        page
+          .getByRole("combobox", { name: "Workflow", exact: true })
+          .locator('option[value="india-msme-payment-timing"]'),
+      ).toHaveCount(0);
+    }
+    expect(errors).toEqual([]);
     await reviewerContext.close();
   });
 }

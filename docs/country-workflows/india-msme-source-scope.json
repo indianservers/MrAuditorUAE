@@ -1,0 +1,21 @@
+{
+  "research_date": "2026-10-28",
+  "law_reference": "MSMED Act 2006, sections 2(b) and 15",
+  "official_original_url": "https://www.indiacode.nic.in/bitstream/123456789/5872/1/a2006-27.pdf",
+  "official_original_capture": "TIMEOUT; no PDF bytes or archival hash claimed",
+  "text_reference": "https://www.wipo.int/wipolex/en/legislation/details/15841",
+  "text_reference_status": "Original Act text viewed in WIPO Lex, including acceptance/deemed acceptance and written-period cap. This does not qualify current consolidated applicability or classification rules.",
+  "additional_official_references": [
+    "https://www.indiacode.nic.in/bitstream/123456789/19412/1/msme_act_2006.pdf",
+    "https://dcmsme.gov.in/old/faq/faq.htm"
+  ],
+  "additional_capture_status": "Direct document/page retrieval timed out; no additional content archival claimed",
+  "implemented_scope": "Reviewed declared supplier eligibility, acceptance/objection/terms facts, bounded calendar-day counts and exact invoice-to-bank allocations",
+  "qualification_status": "UNQUALIFIED_FOR_PRODUCTION_LEGAL_USE",
+  "open_requirements": [
+    "Current authoritative consolidated source archival and professional review",
+    "Independent supplier registration/trade-eligibility and acceptance-document verification",
+    "Representative client and professional expected schedules",
+    "Separate tax-year deduction, interest and statutory disclosure calculations"
+  ]
+}

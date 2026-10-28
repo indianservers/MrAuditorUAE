@@ -517,6 +517,7 @@ async def country_workflows(eid: uuid.UUID, db: DB, ctx: Actor):
             }
             for name, model in ROW_TYPES.items()
             if name != "gst-summary-metrics" or package.country == "IN"
+            if not name.startswith("msme-") or package.country == "IN"
         },
         "max_rows_per_source": 5000,
         "statutory_calculation_qualified": False,

@@ -1095,6 +1095,13 @@ def calculate(
         raise ValueError(
             "A sales invoice cannot establish purchase books against an inward GSTR-2B source"
         )
+    if data.workflow == "india-msme-payment-timing" and (
+        sources["bank"].get("source_snapshot_id")
+        or sources["bank"].get("parser_version") == "committed-ledger-1"
+    ):
+        raise ValueError(
+            "Use independent bank movement evidence, not committed books, for MSE payment timing"
+        )
     tables = {role: source["rows"] for role, source in sources.items()}
     esic_links = esic_metadata = None
     with localcontext() as arithmetic:
@@ -1158,6 +1165,17 @@ def calculate(
             result = withholding(data, tables)
         elif data.workflow in OPERATION_CALCULATORS:
             result = OPERATION_CALCULATORS[data.workflow](data, tables)
+        elif data.workflow == "india-msme-payment-timing":
+            from app.modules.country_workflows.msme_payments import calculate as msme_payment_timing
+
+            if (
+                sources["bank"].get("native_format") in {"camt053", "swift-mt940"}
+                and data.bank_payment_sign != "debit-negative"
+            ):
+                raise ValueError(
+                    "Native bank outflows use debit-negative amounts; credits cannot settle MSE invoices"
+                )
+            result = msme_payment_timing(data, tables)
         elif data.workflow in PENSION_CALCULATORS:
             result = PENSION_CALCULATORS[data.workflow](data, tables)
         elif data.workflow in PAYROLL_CALCULATORS:
@@ -1244,7 +1262,12 @@ def calculate(
             "status": "NOT_LINKED",
             "eligibility_status": "ASSESSED_SEPARATELY_NOT_INFERRED_FROM_ESIC_WAGES",
         }
-    if data.workflow in {"bank-brs", "bank-subsequent-clearance", "obligation-bank-allocations"}:
+    if data.workflow in {
+        "bank-brs",
+        "bank-subsequent-clearance",
+        "obligation-bank-allocations",
+        "india-msme-payment-timing",
+    }:
         result["bank_account_evidence"] = account_scope or {
             "status": "LINK_REQUESTED_NOT_VERIFIED"
             if data.bank_account_review_id

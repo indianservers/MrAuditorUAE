@@ -73,7 +73,7 @@ def _parse_csv(content, data, defaults=None):
     ids = set()
     totals: defaultdict[str, Decimal] = defaultdict(Decimal)
     for index, raw in enumerate(reader, 2):
-        if data.table_type.startswith(("grant-", "media-")) and any(
+        if data.table_type.startswith(("grant-", "media-", "msme-")) and any(
             value is not None and value != value.strip()
             for value in raw.values()
             if isinstance(value, str)
@@ -211,6 +211,7 @@ def _parse_csv(content, data, defaults=None):
             raise ValueError("A nil population cannot carry nonzero control totals")
         totals.update(data.control_totals)
     if data.table_type in {
+        "msme-invoices",
         "turnover-amounts",
         "turnover-adjustments",
         "grant-budgets",

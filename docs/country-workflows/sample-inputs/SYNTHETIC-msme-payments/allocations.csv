@@ -1,0 +1,2 @@
+id,item_id,payment_id,currency,amount,evidence_reference,rationale
+LINK,INV,BANK,INR,100,SYNTHETIC allocation,Synthetic invoice payment allocation assessed

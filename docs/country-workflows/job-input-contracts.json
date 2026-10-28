@@ -184,6 +184,20 @@
             "title": "Esic Components",
             "type": "array"
           },
+          "msme_buyer_id": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "minLength": 1,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Msme Buyer Id"
+          },
           "withholding_role": {
             "anyOf": [
               {
@@ -220,6 +234,7 @@
           },
           "workflow": {
             "enum": [
+              "india-msme-payment-timing",
               "tax-turnover-bridge",
               "adverse-media-review",
               "grant-utilisation",
@@ -2807,6 +2822,8 @@
           },
           "table_type": {
             "enum": [
+              "msme-supplier-assessments",
+              "msme-invoices",
               "turnover-scope",
               "turnover-amounts",
               "turnover-adjustments",
@@ -7922,6 +7939,241 @@
         "evidence_reference"
       ],
       "title": "MetalLine",
+      "type": "object"
+    },
+    "msme-invoices": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "buyer_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Buyer Id",
+          "type": "string"
+        },
+        "supplier_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Supplier Id",
+          "type": "string"
+        },
+        "reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Reference",
+          "type": "string"
+        },
+        "invoice_date": {
+          "format": "date",
+          "title": "Invoice Date",
+          "type": "string"
+        },
+        "currency": {
+          "const": "INR",
+          "title": "Currency",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Amount"
+        },
+        "assessment_id": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Assessment Id"
+        },
+        "delivery_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Delivery Date"
+        },
+        "acceptance_evidence_reference": {
+          "default": "",
+          "maxLength": 120,
+          "title": "Acceptance Evidence Reference",
+          "type": "string"
+        },
+        "written_objection_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Written Objection Date"
+        },
+        "objection_removed_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Objection Removed Date"
+        },
+        "objection_evidence_reference": {
+          "default": "",
+          "maxLength": 120,
+          "title": "Objection Evidence Reference",
+          "type": "string"
+        },
+        "terms_written": {
+          "title": "Terms Written",
+          "type": "boolean"
+        },
+        "agreed_due_date": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Agreed Due Date"
+        },
+        "agreement_evidence_reference": {
+          "default": "",
+          "maxLength": 120,
+          "title": "Agreement Evidence Reference",
+          "type": "string"
+        },
+        "assessment": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Assessment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "buyer_id",
+        "supplier_id",
+        "reference",
+        "invoice_date",
+        "currency",
+        "amount",
+        "terms_written",
+        "assessment"
+      ],
+      "title": "MSMEInvoice",
+      "type": "object"
+    },
+    "msme-supplier-assessments": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "buyer_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Buyer Id",
+          "type": "string"
+        },
+        "supplier_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Supplier Id",
+          "type": "string"
+        },
+        "classification": {
+          "enum": [
+            "MICRO",
+            "SMALL",
+            "MEDIUM",
+            "OTHER",
+            "UNRESOLVED"
+          ],
+          "title": "Classification",
+          "type": "string"
+        },
+        "eligibility": {
+          "enum": [
+            "ELIGIBLE",
+            "INELIGIBLE",
+            "UNRESOLVED"
+          ],
+          "title": "Eligibility",
+          "type": "string"
+        },
+        "scope_start": {
+          "format": "date",
+          "title": "Scope Start",
+          "type": "string"
+        },
+        "scope_end": {
+          "format": "date",
+          "title": "Scope End",
+          "type": "string"
+        },
+        "evidence_reference": {
+          "default": "",
+          "maxLength": 120,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "assessment": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Assessment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "buyer_id",
+        "supplier_id",
+        "classification",
+        "eligibility",
+        "scope_start",
+        "scope_end",
+        "assessment"
+      ],
+      "title": "MSMESupplierAssessment",
       "type": "object"
     },
     "obligation-allocations": {

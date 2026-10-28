@@ -11,11 +11,12 @@ BANK_ROLES = {
     "bank-brs": "statement",
     "bank-subsequent-clearance": "statement",
     "obligation-bank-allocations": "bank",
+    "india-msme-payment-timing": "bank",
 }
 
 
 def financial_window(data, sources):
-    if data.workflow == "obligation-bank-allocations":
+    if data.workflow in {"obligation-bank-allocations", "india-msme-payment-timing"}:
         # The allocator separately checks every movement against this explicit
         # settlement window. Earlier statement-header dates are not payments.
         return data.settlement_start, data.as_of

@@ -202,6 +202,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "parser_version": "committed-ledger-1",
         }, [*dependencies, receipt]
     if operation == "workflow-source":
+        if data.table_type.startswith("msme-") and package.country != "IN":
+            raise HTTPException(422, "MSE supplier/invoice sources require an India engagement")
         if data.table_type == "esic-members" and package.country != "IN":
             raise HTTPException(422, "ESIC member sources require an India engagement")
         if (
@@ -656,6 +658,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             ),
         }, [*dependencies, receipt]
     period = await db.get(FinancialPeriod, eng.period_id)
+    if data.workflow == "india-msme-payment-timing" and package.country != "IN":
+        raise HTTPException(422, "MSE payment timing requires an India engagement")
     if not period or not period.start_date <= data.as_of <= period.end_date:
         raise HTTPException(422, "Reconciliation date must be within the engagement period")
     if data.tax_year_start and data.tax_year_start > data.as_of:
@@ -896,7 +900,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 "Independently review all pension bases, rules and reported sources before calculation",
             )
         if (
-            data.workflow == "obligation-bank-allocations"
+            data.workflow in {"obligation-bank-allocations", "india-msme-payment-timing"}
             and source.body.get("review_status") != "REVIEWED"
         ):
             raise HTTPException(

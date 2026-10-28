@@ -4180,3 +4180,69 @@ all 13 case evidence paths verified, regeneration was deterministic, and the
 updated existing canvas passed the installed SDK TypeScript check. Professional
 country qualification, real-client pilots, further statutory fields/adapters and
 production release gates remain open.
+
+### India assessed micro/small supplier payment timing
+
+The new `india-msme-payment-timing` workflow reuses controlled CSV source jobs,
+independent review, source freshness, bank date/account evidence binding, generic
+exception dispositions and XLSX export. It separates four populations: supplier
+eligibility assessments, invoice acceptance/objection/written-term facts, bank
+movements and explicit invoice-to-bank allocations. The workflow and its two
+new canonical source types are unavailable outside India. Buyer identity, INR,
+invoice issue-month scope, settlement window and debit convention are explicit;
+monetary/calendar tolerances cannot loosen these tests.
+
+The bounded day-count model uses assessed delivery/deemed acceptance rather
+than invoice date. A written objection within fifteen days uses actual removal;
+unresolved removal or missing underlying references remains pending. A later
+objection is retained without automatically deferring acceptance. With no written
+agreement the assessed acceptance starts the fifteen-day count; with written
+terms the explicit due date is subject to the forty-five-day cap. Longer written
+terms remain a visible review issue. Literal dates, ordered facts, calendar
+boundaries and overflow limits are enforced; the model does not infer business-day
+extensions or contemporary legal eligibility.
+
+Allocations retain each bank row, amount, date and evidence assessment. One bank
+movement can cover several invoices and an invoice can have partial/split
+payments. Invoice and movement capacities cannot be exceeded. On-time, late,
+pre-acceptance and overdue/unpaid amounts remain separate. Unknown qualification
+or acceptance does not become a zero delay or a compliance conclusion. Ordinary
+late-payment exceptions can be documented for independent review; missing facts
+continue to block approval. Known committed books cannot be relabelled as bank
+execution evidence, value-date fallback/reversals cannot settle invoices, and
+native CAMT/MT940 credit signs cannot be flipped into payments. An optional
+reviewed bank-account link covers the complete declared settlement window and
+its verification metadata is preserved in the result.
+
+The UI requires explicit buyer and bank/calendar controls, filters source choices
+to reviewed populations, offers a compact invoice table with reasons, retains
+full evidence on demand and shows bank allocation residuals. The newly extended
+hosted smoke checks the India form and UAE exclusion only; no browser MSE
+calculation is claimed from that definition before its hosted execution. Actual
+calculation/review/export/source-withdrawal mechanics are covered by DB/API tests.
+
+[Source scope](india-msme-source-scope.json) records government-original retrieval
+timeouts and the original Act text inspected in WIPO Lex. No government PDF hash
+or current consolidated/professional legal approval is invented. The six
+[synthetic CSV examples](sample-inputs/SYNTHETIC-msme-payments/README.txt) include
+matching and partial-late controls with stable file hashes. Raw reference strings
+are declarations to be checked against underlying documents, not live supplier
+registry verification. This is an analytical timing workpaper, not tax deduction
+under historical/current income-tax provisions, statutory interest, a complete
+statutory disclosure pack, an accounting posting or global cash reservation.
+These separate procedures and qualification requirements remain open. The
+catalogue remains 154 authored scenarios; new focused tests are not counted as
+additional qualified clients or a new legal corpus.
+
+Local verification: all 2,964 backend unit cases passed (five skipped), including
+36 focused MSE cases. Ten DB/API regression cases passed across MSE source/
+calculation/review/export/withdrawal and UAE exclusion, existing dues allocations
+and reviewed bank-account binding. All 283 frontend tests passed; production
+build, TypeScript and scoped ESLint passed. Application Ruff/format and mypy (389
+source files), and API/payload contract checks passed. The [full unit receipt](../phase-12/msme-payment-backend.xml),
+[focused receipt](../phase-12/msme-payment-focused.xml) and [API receipt](../phase-12/msme-payment-api.xml)
+are retained. An additional focused bank-link test found missing result metadata;
+that status is now preserved and covered in the final full suite. Source code was
+held stable during the final DB regressions. Source-specific hosted MSE checks
+remain pending their new commit/run; prior passing hosted runs do not substitute
+for them.

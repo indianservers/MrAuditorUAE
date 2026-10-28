@@ -273,6 +273,13 @@ type Result = {
   collection_totals?: Record<string, number>;
   body: {
     workflow?: string;
+    unallocated_bank_rows?: {
+      transaction_id: string;
+      original_amount: string;
+      allocated: string;
+      unallocated_outflow: string;
+      is_reversal: boolean;
+    }[];
     ambiguous?: BankAmbiguity[];
     matching_contract?: string;
     retained_grant_documents?: GrantDocument[];
@@ -441,6 +448,7 @@ type Result = {
 const text = (v: unknown) =>
   v == null ? "—" : typeof v === "object" ? JSON.stringify(v) : String(v);
 const moneyTables = [
+  "msme-invoices",
   "turnover-amounts",
   "turnover-adjustments",
   "payroll-account-balances",
@@ -660,6 +668,7 @@ export function CountryWorkflows({
   const [obligationMonthEnd, setObligationMonthEnd] = useState("");
   const [settlementStart, setSettlementStart] = useState("");
   const [bankPaymentSign, setBankPaymentSign] = useState("");
+  const [msmeBuyerId, setMSMEBuyerId] = useState("");
   const [periodStart, setPeriodStart] = useState("");
   const [taxYear, setTaxYear] = useState("");
   const [requiredChecks, setRequiredChecks] = useState("");
@@ -818,181 +827,194 @@ export function CountryWorkflows({
         row.assessment_issues.length > 0,
     );
   const standardColumns =
-    compactVAT && !showRuleProvenance
+    body?.workflow === "india-msme-payment-timing" && !showRuleProvenance
       ? [
-          "box",
-          "emirate",
-          "registration",
-          "period_start",
-          "period_end",
-          "currency",
-          "taxable_difference",
-          "tax_difference",
-          "adjustment_difference",
+          "supplier_id",
+          "reference",
+          "due_date",
+          "amount",
+          "allocated_paid",
+          "unpaid_amount",
+          "late_paid_amount",
+          "overdue_unpaid_amount",
+          "reasons",
           "state",
         ].filter((key) => allColumns.includes(key))
-      : compactBenefit && !showRuleProvenance
-        ? (body?.table_type === "benefit-rules"
+      : compactVAT && !showRuleProvenance
+        ? [
+            "box",
+            "emirate",
+            "registration",
+            "period_start",
+            "period_end",
+            "currency",
+            "taxable_difference",
+            "tax_difference",
+            "adjustment_difference",
+            "state",
+          ].filter((key) => allColumns.includes(key))
+        : compactBenefit && !showRuleProvenance
+          ? (body?.table_type === "benefit-rules"
+              ? [
+                  "regime",
+                  "cohort",
+                  "work_model",
+                  "source_version",
+                  "selected_service_end_dates",
+                  "first_tier_days",
+                  "later_tier_days",
+                ]
+              : [
+                  "id",
+                  "work_model",
+                  "currency",
+                  "service_years",
+                  "expected_benefit",
+                  "paid_benefit",
+                  "difference",
+                  "state",
+                ]
+            ).filter((key) => allColumns.includes(key))
+          : compactDues && !showRuleProvenance
             ? [
-                "regime",
-                "cohort",
-                "work_model",
-                "source_version",
-                "selected_service_end_dates",
-                "first_tier_days",
-                "later_tier_days",
-              ]
-            : [
-                "id",
-                "work_model",
+                "kind",
+                "subject",
+                "period",
+                "component",
+                "tax_section",
+                "tax_year",
+                "withholding_transaction",
+                "withholding_date",
                 "currency",
-                "service_years",
-                "expected_benefit",
-                "paid_benefit",
-                "difference",
-                "state",
-              ]
-          ).filter((key) => allColumns.includes(key))
-        : compactDues && !showRuleProvenance
-          ? [
-              "kind",
-              "subject",
-              "period",
-              "component",
-              "tax_section",
-              "tax_year",
-              "withholding_transaction",
-              "withholding_date",
-              "currency",
-              "source_amount",
-              "settled_or_allocated",
-              "remaining",
-              "state",
-            ].filter((key) => allColumns.includes(key))
-          : compactImport && !showRuleProvenance
-            ? [
-                "declaration",
-                "line_reference",
-                "entry_kind",
-                "adjustment_reference",
-                "vat201_box",
-                "amounts",
-                "differences",
-                "exceptions",
+                "source_amount",
+                "settled_or_allocated",
+                "remaining",
                 "state",
               ].filter((key) => allColumns.includes(key))
-            : compactWithholding && !showRuleProvenance
+            : compactImport && !showRuleProvenance
               ? [
-                  "transaction_reference",
-                  "counterparty",
-                  "legal_role",
-                  "tax_kind",
-                  "period",
-                  "currency",
+                  "declaration",
+                  "line_reference",
+                  "entry_kind",
+                  "adjustment_reference",
+                  "vat201_box",
                   "amounts",
-                  ...(assessmentAttention
-                    ? ["comparison_state", "assessment_issues"]
-                    : []),
-                  "differences_from_expected",
-                  "differences_from_books",
+                  "differences",
+                  "exceptions",
                   "state",
                 ].filter((key) => allColumns.includes(key))
-              : compactBankClearance && !showRuleProvenance
+              : compactWithholding && !showRuleProvenance
                 ? [
-                    "kind",
-                    "reference",
+                    "transaction_reference",
+                    "counterparty",
+                    "legal_role",
+                    "tax_kind",
+                    "period",
                     "currency",
-                    "reporting_date_amount",
-                    "subsequently_cleared",
-                    "remaining_after_review",
-                    "statement_amount",
-                    "allocated",
-                    "unallocated_amount",
+                    "amounts",
+                    ...(assessmentAttention
+                      ? ["comparison_state", "assessment_issues"]
+                      : []),
+                    "differences_from_expected",
+                    "differences_from_books",
                     "state",
                   ].filter((key) => allColumns.includes(key))
-                : compactCredit && !showRuleProvenance
+                : compactBankClearance && !showRuleProvenance
                   ? [
                       "kind",
-                      "item_id",
+                      "reference",
                       "currency",
-                      "amount",
-                      "original_balance",
-                      "applied",
-                      "remaining_balance",
-                      "control_amount",
-                      "difference",
+                      "reporting_date_amount",
+                      "subsequently_cleared",
+                      "remaining_after_review",
+                      "statement_amount",
+                      "allocated",
+                      "unallocated_amount",
                       "state",
                     ].filter((key) => allColumns.includes(key))
-                  : compactSource && !showRuleProvenance
-                    ? (body?.table_type === "transactions"
+                  : compactCredit && !showRuleProvenance
+                    ? [
+                        "kind",
+                        "item_id",
+                        "currency",
+                        "amount",
+                        "original_balance",
+                        "applied",
+                        "remaining_balance",
+                        "control_amount",
+                        "difference",
+                        "state",
+                      ].filter((key) => allColumns.includes(key))
+                    : compactSource && !showRuleProvenance
+                      ? (body?.table_type === "transactions"
+                          ? [
+                              "reference",
+                              "account",
+                              "date",
+                              "currency",
+                              "amount",
+                              "counterparty",
+                              "source_debit",
+                              "source_credit",
+                            ]
+                          : [
+                              "reference",
+                              "counterparty",
+                              "account",
+                              "side",
+                              "currency",
+                              "document_type",
+                              "document_date",
+                              "due_date",
+                              "balance_date",
+                              "amount",
+                              "supporting_reported_open_amount",
+                            ]
+                        ).filter((key) => allColumns.includes(key))
+                      : ["india-payroll-rules", "uae-pension-review"].includes(
+                            body?.workflow || "",
+                          ) && !showRuleProvenance
                         ? [
-                            "reference",
-                            "account",
-                            "date",
-                            "currency",
-                            "amount",
-                            "counterparty",
-                            "source_debit",
-                            "source_credit",
-                          ]
-                        : [
-                            "reference",
-                            "counterparty",
-                            "account",
-                            "side",
-                            "currency",
-                            "document_type",
-                            "document_date",
-                            "due_date",
-                            "balance_date",
-                            "amount",
-                            "supporting_reported_open_amount",
-                          ]
-                      ).filter((key) => allColumns.includes(key))
-                    : ["india-payroll-rules", "uae-pension-review"].includes(
-                          body?.workflow || "",
-                        ) && !showRuleProvenance
-                      ? [
-                          "subject",
-                          "period",
-                          "component",
-                          "authority",
-                          "scheme",
-                          "membership_cohort",
-                          "currency",
-                          "assessed_base",
-                          "eligibility_outcome",
-                          "esic_payroll_wages",
-                          "esic_reported_wages",
-                          "esic_base_minus_payroll_wages",
-                          "esic_base_minus_reported_wages",
-                          "expected_amount",
-                          "reported_amount",
-                          "difference",
-                          "state",
-                        ].filter((key) => allColumns.includes(key))
-                      : [
-                            "india-gst",
-                            "india-gstr1-documents",
-                            "uae-vat",
-                            "india-invoice-register",
-                          ].includes(body?.workflow || "") &&
-                          !showRuleProvenance
-                        ? [
-                            "counterparty",
-                            "reference",
-                            "document_type",
+                            "subject",
+                            "period",
                             "component",
+                            "authority",
+                            "scheme",
+                            "membership_cohort",
                             "currency",
-                            "books_tax",
-                            "return_tax",
-                            "invoices_tax",
-                            "tax_difference",
-                            "net_difference",
+                            "assessed_base",
+                            "eligibility_outcome",
+                            "esic_payroll_wages",
+                            "esic_reported_wages",
+                            "esic_base_minus_payroll_wages",
+                            "esic_base_minus_reported_wages",
+                            "expected_amount",
+                            "reported_amount",
+                            "difference",
                             "state",
-                            "source_review_reasons",
                           ].filter((key) => allColumns.includes(key))
-                        : allColumns;
+                        : [
+                              "india-gst",
+                              "india-gstr1-documents",
+                              "uae-vat",
+                              "india-invoice-register",
+                            ].includes(body?.workflow || "") &&
+                            !showRuleProvenance
+                          ? [
+                              "counterparty",
+                              "reference",
+                              "document_type",
+                              "component",
+                              "currency",
+                              "books_tax",
+                              "return_tax",
+                              "invoices_tax",
+                              "tax_difference",
+                              "net_difference",
+                              "state",
+                              "source_review_reasons",
+                            ].filter((key) => allColumns.includes(key))
+                          : allColumns;
   const defaultColumns =
     body?.workflow === "tax-turnover-bridge" && !showRuleProvenance
       ? [
@@ -1611,8 +1633,14 @@ export function CountryWorkflows({
           throw new Error(
             "Select an available workflow for the engagement country",
           );
+        if (workflow === "india-msme-payment-timing" && !msmeBuyerId.trim())
+          throw new Error(
+            "Declare the MSE buyer identifier before calculating payment timing.",
+          );
         if (
-          workflow === "obligation-bank-allocations" &&
+          ["obligation-bank-allocations", "india-msme-payment-timing"].includes(
+            workflow,
+          ) &&
           (!bankPaymentSign ||
             !obligationMonthStart ||
             !obligationMonthEnd ||
@@ -1627,6 +1655,7 @@ export function CountryWorkflows({
             "bank-brs",
             "bank-subsequent-clearance",
             "obligation-bank-allocations",
+            "india-msme-payment-timing",
           ].includes(workflow) &&
           bankAccountReview &&
           bankAccountAssessment.trim().length < 10
@@ -1698,6 +1727,7 @@ export function CountryWorkflows({
             "statutory-dues",
             "india-payroll-rules",
             "obligation-bank-allocations",
+            "india-msme-payment-timing",
           ].includes(workflow)
             ? { arrear_only: arrearsOnly }
             : {}),
@@ -1771,6 +1801,7 @@ export function CountryWorkflows({
             "bank-brs",
             "bank-subsequent-clearance",
             "obligation-bank-allocations",
+            "india-msme-payment-timing",
           ].includes(workflow) && bankAccountReview
             ? {
                 bank_account_review_id: bankAccountReview,
@@ -1779,9 +1810,15 @@ export function CountryWorkflows({
             : {}),
           ...(workflow === "bank-brs" ? { account, ...balances } : {}),
           ...(workflow === "bank-subsequent-clearance" ? { account } : {}),
-          ...(workflow === "obligation-bank-allocations"
+          ...([
+            "obligation-bank-allocations",
+            "india-msme-payment-timing",
+          ].includes(workflow)
             ? {
                 account,
+                ...(workflow === "india-msme-payment-timing"
+                  ? { msme_buyer_id: msmeBuyerId }
+                  : {}),
                 obligation_month_start: obligationMonthStart,
                 obligation_month_end: obligationMonthEnd,
                 settlement_start: settlementStart,
@@ -3872,6 +3909,7 @@ export function CountryWorkflows({
                 "statutory-dues",
                 "india-payroll-rules",
                 "obligation-bank-allocations",
+                "india-msme-payment-timing",
               ].includes(workflow) && (
                 <label style={{ flexDirection: "row", alignItems: "center" }}>
                   <input
@@ -3901,6 +3939,7 @@ export function CountryWorkflows({
                   "statutory-dues",
                   "india-payroll-rules",
                   "obligation-bank-allocations",
+                  "india-msme-payment-timing",
                 ].includes(workflow) && (
                   <p>
                     Every expected, reported and payment obligation row must
@@ -4010,6 +4049,9 @@ export function CountryWorkflows({
                               vatLayout,
                             ) ||
                             r.review_status === "REVIEWED") &&
+                          (workflow !== "india-msme-payment-timing" ||
+                            role !== "bank" ||
+                            r.parser_version !== "committed-ledger-1") &&
                           (!arrearsOnly ||
                             r.table_type !== "obligations" ||
                             (r.obligation_populations?.length === 1 &&
@@ -4050,6 +4092,7 @@ export function CountryWorkflows({
                             "bank-account-evidence",
                             "inventory-valuation-control",
                             "obligation-bank-allocations",
+                            "india-msme-payment-timing",
                             "payroll-ledger-rollforward",
                             "india-esic-population",
                             "india-document-series",
@@ -4250,10 +4293,24 @@ export function CountryWorkflows({
                   )}
                 </>
               )}
-              {workflow === "obligation-bank-allocations" && (
+              {[
+                "obligation-bank-allocations",
+                "india-msme-payment-timing",
+              ].includes(workflow) && (
                 <>
+                  {workflow === "india-msme-payment-timing" && (
+                    <label>
+                      Buyer identifier
+                      <input
+                        value={msmeBuyerId}
+                        onChange={(e) => setMSMEBuyerId(e.target.value)}
+                      />
+                    </label>
+                  )}
                   <label>
-                    First obligation month
+                    {workflow === "india-msme-payment-timing"
+                      ? "First invoice month"
+                      : "First obligation month"}
                     <input
                       type="month"
                       value={obligationMonthStart}
@@ -4261,7 +4318,9 @@ export function CountryWorkflows({
                     />
                   </label>
                   <label>
-                    Last obligation month
+                    {workflow === "india-msme-payment-timing"
+                      ? "Last invoice month"
+                      : "Last obligation month"}
                     <input
                       type="month"
                       value={obligationMonthEnd}
@@ -4310,13 +4369,25 @@ export function CountryWorkflows({
                       </option>
                     </select>
                   </label>
-                  <p>
-                    Select independently reviewed expected obligations, reported
-                    instructions/returns, bank movements and allocations. One
-                    bank movement may settle several obligations; partial
-                    payments and unallocated movements remain visible. Due dates
-                    come from the assessed expected source.
-                  </p>
+                  {workflow === "india-msme-payment-timing" ? (
+                    <p>
+                      Select separately reviewed supplier assessments, invoice
+                      acceptance/objection and written-term facts, bank
+                      movements and explicit item allocations. Unknown
+                      eligibility or unresolved timely objections remain
+                      pending. The assessed 15-day rule and 45-day written-term
+                      cap do not compute tax deductions or statutory interest.
+                    </p>
+                  ) : (
+                    <p>
+                      Select independently reviewed expected obligations,
+                      reported instructions/returns, bank movements and
+                      allocations. One bank movement may settle several
+                      obligations; partial payments and unallocated movements
+                      remain visible. Due dates come from the assessed expected
+                      source.
+                    </p>
+                  )}
                 </>
               )}
               {workflow === "bank-subsequent-clearance" && (
@@ -4431,6 +4502,7 @@ export function CountryWorkflows({
                 "bank-brs",
                 "bank-subsequent-clearance",
                 "obligation-bank-allocations",
+                "india-msme-payment-timing",
               ].includes(workflow) && (
                 <fieldset>
                   <legend>Account evidence scope</legend>
@@ -5392,6 +5464,49 @@ export function CountryWorkflows({
                 }}
               />
             )}
+          {body.workflow === "india-msme-payment-timing" && (
+            <section aria-label="MSE payment-timing scope">
+              <p>
+                Assessed supplier/acceptance facts and explicit bank links only.
+                Missing facts remain unresolved; tax deductibility, statutory
+                interest and global cash reservation are separate procedures.
+              </p>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={showRuleProvenance}
+                  onChange={(e) => setShowRuleProvenance(e.target.checked)}
+                />
+                Show complete MSE assessment, acceptance, warning and payment
+                evidence
+              </label>
+              {!!body.unallocated_bank_rows?.length && (
+                <details>
+                  <summary>Bank allocation residuals</summary>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Bank row</th>
+                        <th>Original amount</th>
+                        <th>Allocated</th>
+                        <th>Unallocated outflow</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {body.unallocated_bank_rows.map((r) => (
+                        <tr key={r.transaction_id}>
+                          <td>{r.transaction_id}</td>
+                          <td>{r.original_amount}</td>
+                          <td>{r.allocated}</td>
+                          <td>{r.unallocated_outflow}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </details>
+              )}
+            </section>
+          )}
           {body.workflow === "obligation-bank-allocations" && (
             <BankCashReview
               key={`${tenant}:${eid}:${selected}`}
