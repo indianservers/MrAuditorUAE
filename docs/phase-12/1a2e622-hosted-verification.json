@@ -1,0 +1,25 @@
+{
+  "source_commit": "1a2e622238bc1715df52fb9c3fc06c4d40267821",
+  "run_id": 40681529622,
+  "job_id": 122793162310,
+  "conclusion": "success",
+  "basis": "Completed GitHub job status and decoded job log summary; artifact identity/digest checked against GitHub metadata",
+  "pytest": {
+    "passed": 3852,
+    "skipped": 9,
+    "warnings": 54,
+    "duration_seconds": 4735.06
+  },
+  "coverage": {
+    "overall_percent": 86.08,
+    "calculation_validation_core_percent": 89.35,
+    "core_covered": 831,
+    "core_statements": 930
+  },
+  "artifact_id": 12817612594,
+  "artifact_size_bytes": 210498,
+  "archive_sha256_from_github_metadata_and_upload_log": "56c8c9bab7b043a9a00051677cf6fc87864be8b5471a809e5d45040cbc43f0d7",
+  "original_artifact_locally_archived": false,
+  "scope": "Initial India MSE payment-timing implementation and the complete configured backend verification job at 1a2e622",
+  "limits": "Predates retained MSE context binding, the pilot validator and the expanded scanner/worker browser flow. Does not substitute for current-head full backend verification. Synthetic inputs and provider doubles do not qualify real clients, current legal applicability or production deployment."
+}

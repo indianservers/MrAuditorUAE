@@ -4372,3 +4372,24 @@ combobox locator as the already passing form smoke. The
 unreached scope; it is not reported as a passing end-to-end calculation. Twenty
 existing scanner protocol unit cases also passed locally; their fake sockets do
 not qualify malware detection.
+
+The corrected run on 5b2d02b passed all three browser cases in 24.7 seconds.
+It reached UI calculation, blocked preparer self-approval, independent UI
+approval, the selected reviewed-version XLSX download and exact worksheet values,
+and document-replacement staleness with unchanged historical content and disabled
+approval. The [successful receipt](../phase-12/msme-browser-5b2d02b.json) records the
+source, seven real clean uploads, broker/worker checks and exact limits. Current
+frontend, containers, ML and security jobs also passed. Its full backend job was
+still running when checked. The earlier 1a2e622 full backend job passed 3,852
+tests with nine skips, at 86.08% overall and 89.35% calculation/validation core
+coverage. After an initial connector transport failure, its completed job log
+and artifact metadata were retrieved. The [source-specific summary](../phase-12/1a2e622-hosted-verification.json)
+retains those values and the artifact digest; original XML/coverage bytes have
+not been archived locally. This earlier source predates context binding, the
+pilot validator and the expanded browser flow, and does not replace current-head
+full backend verification.
+
+The new screenshot download also timed out. Artifact metadata and expected
+screenshot names are retained, but no local archive hash or visual inspection
+of these new result/stale images is claimed. This synthetic browser proof does
+not replace independent client expectations or production/scanner qualification.

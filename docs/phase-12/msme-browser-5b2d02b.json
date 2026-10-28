@@ -1,0 +1,32 @@
+{
+  "source_commit": "5b2d02be6af8fd464680c6d46715e246319ddf73",
+  "run_id": 40695601762,
+  "job_id": 122841410815,
+  "conclusion": "success",
+  "browser_cases_passed": 3,
+  "duration_seconds": 24.7,
+  "setup_boundary": "Authenticated APIs create six synthetic evidence/context uploads, four real broker/worker source jobs and independent source reviews. The configured official ClamAV service must return CLEAN; no scan status is seeded or bypassed.",
+  "browser_assertions": [
+    "India MSE calculation submitted through the UI using the four reviewed sources",
+    "Due date 2026-04-16; INR 100 allocated; unpaid, late and overdue amounts zero; statutory qualification remains false",
+    "Preparer self-approval returns HTTP 403",
+    "Independent UI approval creates the selected reviewed event version",
+    "UI XLSX download contains the exact due date and allocated amount, checked with openpyxl",
+    "A seventh clean upload replaces the supplier context; the approved result becomes STALE while its original body is unchanged",
+    "Stale result approval is disabled in the browser; no reviewer page errors"
+  ],
+  "services": {
+    "clamav": "clamav/clamav:1.5.4, preloaded signatures, background FreshClam disabled, loopback TCP",
+    "worker": "Real Celery worker; all configured queue subscriptions passed readiness",
+    "storage": "Real isolated filesystem objects and PostgreSQL/Redis"
+  },
+  "artifact_id": 12818424152,
+  "archive_sha256_from_github_metadata": "92428e2b12f4fafd0eec65c24d7e845add2b2fe1948e22477df15007f5439179",
+  "expected_screenshots_in_artifact": [
+    "country-reports/IN-msme-reviewed-payment-result.png",
+    "country-reports/IN-msme-context-replacement-stale.png"
+  ],
+  "local_artifact_verification": "Download timed out; no locally verified archive hash or screenshot pixels retained",
+  "visual_inspection": "NOT_PERFORMED_FOR_THIS_ARTIFACT",
+  "limits": "Synthetic mechanics only. Source setup/review uses APIs, not source-authoring UI. Known clean files do not qualify malicious-file detection or production signature freshness. Does not establish client/legal qualification, every catalogue case, signed issuance or deployment. Latest full backend verification is a separate live job."
+}
