@@ -4637,6 +4637,7 @@ export function CountryWorkflows({
                   <label>
                     Reviewed bank account evidence (optional)
                     <select
+                      aria-label="Reviewed bank account evidence (optional)"
                       value={bankAccountReview}
                       onChange={(event) => {
                         setBankAccountReview(event.target.value);

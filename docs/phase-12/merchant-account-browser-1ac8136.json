@@ -1,0 +1,26 @@
+{
+  "source_commit": "1ac81367dac64de867bda91d2c725728ddede21a",
+  "run_id": 40732266704,
+  "job_id": 122971420560,
+  "conclusion": "failure",
+  "browser_cases_passed": 1,
+  "browser_cases_failed": 2,
+  "duration_reported": "1.3m",
+  "artifact_id": 12836775454,
+  "archive_sha256": "5edf1467a0e6b0cc55a1fd145c14fab4c0858ca0e173766c8765216756d87e3f",
+  "local_archive_verification": "ZIP digest verified; exact UAE preparer failure screenshot extracted",
+  "failure": "Both country cases timed out resolving the exact label for the visibly present wrapped account select. Follow-up adds an explicit accessible name to the select.",
+  "unreached": [
+    "Linked merchant calculation through UI",
+    "Linked merchant independent UI approval and XLSX validation",
+    "Linked account withdrawal and dependent stale UI checks"
+  ],
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-merchant-account-selector-1ac8136.png",
+      "sha256": "275a3a8f36a0c4182e1f2a546886fad1a6a34c547e4537384914aa294f97ef86",
+      "visual_inspection": "UAE preparer form individually inspected. Merchant workflow and four sources are selected; account-evidence picker is visible and remains unselected. No linked result is shown."
+    }
+  ],
+  "limits": "Negative evidence, not a passing linked-account browser qualification. Source and account-review setup completed through real APIs/worker, but the linked merchant UI path was not reached. No India screenshot visual inspection claimed here."
+}

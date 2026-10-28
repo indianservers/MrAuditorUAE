@@ -173,7 +173,9 @@ it.each([
       screen.getByText(/UAE VAT and India GST are assessed fee-tax components/),
     ).toBeVisible();
     fireEvent.change(
-      screen.getByLabelText("Reviewed bank account evidence (optional)"),
+      screen.getByRole("combobox", {
+        name: "Reviewed bank account evidence (optional)",
+      }),
       { target: { value: "account-current" } },
     );
     fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
