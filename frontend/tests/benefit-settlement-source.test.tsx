@@ -37,7 +37,12 @@ function fill() {
       "Independently assessed service identities and retained due-date support",
     ],
   ])
-    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    fireEvent.change(
+      label === "Retained settlement scope and due-date evidence"
+        ? screen.getByRole("combobox", { name: label })
+        : screen.getByLabelText(label),
+      { target: { value } },
+    );
 }
 function select(id: string) {
   fireEvent.click(

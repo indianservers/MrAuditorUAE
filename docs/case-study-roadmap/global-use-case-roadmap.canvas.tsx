@@ -18,12 +18,14 @@ const data = {
         "status": "PARTIAL_SPECIALIST_COVERAGE",
         "shared": "Separate deductor/deductee and collector/collectee evidence, assessed rule/certificate references, pooled certificate limits, amendments/status and settlement linkage.",
         "UAE": "India TCS is unavailable for domestic UAE obligations. Use the common evidence/settlement foundations under an explicitly applicable obligation.",
-        "India": "Withholding liability and credit workflows now accept controlled assessed TCS populations; historical 1H date guards and role isolation are implemented.",
-        "remaining": "Native 27EQ/current-successor, 26AS/AIS/TRACES completeness, full legal rate/threshold/certificate corpus and representative client qualification.",
+        "India": "Withholding liability and credit workflows now accept controlled assessed TCS populations; historical 1H date guards and role isolation are implemented. Declared annual-credit statement headers now separate historical Form 26AS assessment years from Form 168 tax years, with PAN/period/snapshot consistency and scope retained in result/UI/XLSX.",
+        "remaining": "Native 27EQ/current-successor, 26AS/168/AIS/TRACES completeness, full legal rate/threshold/certificate corpus and representative client qualification.",
         "evidence": [
           "backend/app/modules/country_workflows/withholding_schemas.py",
           "backend/app/modules/country_workflows/withholding_calculations.py",
-          "backend/tests/qa_crud/test_withholding_workflows.py"
+          "backend/tests/qa_crud/test_withholding_workflows.py",
+          "backend/app/modules/country_workflows/annual_tax_statement.py",
+          "docs/phase-12/annual-statement-validation.json"
         ]
       }
     },
@@ -144,12 +146,14 @@ const data = {
         "status": "PARTIAL_SPECIALIST_COVERAGE",
         "shared": "Distinct expected, withheld, reported, deposited and credit populations; source-bound assessments, pooled certificate controls and separate bank allocations.",
         "UAE": "Indian domestic TDS workflows stay unavailable. Applicable UAE CT/obligation assessments use their own source-linked workbenches.",
-        "India": "Controlled deductor/deductee TDS liability/credit reconciliation and derived payment obligations are implemented, with no inferred legal entitlement.",
-        "remaining": "Native 24Q/26Q/27Q and successor forms, complete 26AS/AIS/TRACES profiles, current legal rate/threshold rules and professional expected schedules.",
+        "India": "Controlled deductor/deductee TDS liability/credit reconciliation and derived payment obligations are implemented, with no inferred legal entitlement. Declared annual-credit statement headers now separate historical Form 26AS assessment years from Form 168 tax years, with PAN/period/snapshot consistency and scope retained in result/UI/XLSX.",
+        "remaining": "Native 24Q/26Q/27Q and successor forms, complete 26AS/168/AIS/TRACES profiles, current legal rate/threshold rules and professional expected schedules.",
         "evidence": [
           "backend/app/modules/country_workflows/withholding_obligations.py",
           "backend/tests/qa_crud/test_withholding_workflows.py",
-          "backend/tests/qa_crud/test_withholding_obligations.py"
+          "backend/tests/qa_crud/test_withholding_obligations.py",
+          "backend/app/modules/country_workflows/annual_tax_statement.py",
+          "docs/phase-12/annual-statement-validation.json"
         ]
       }
     },
@@ -358,14 +362,17 @@ const data = {
         "id": "13",
         "status": "PARTIAL_SPECIALIST_COVERAGE",
         "shared": "Payroll accrual/posting controls, employee/channel settlement, contributions, assessed expected remittances and split payment allocation with retained rule/source lineage.",
-        "UAE": "WPS, pension/cohort and benefit reviews remain separate purpose-bound workflows with independently reviewed published rule profiles and supporting evidence.",
+        "UAE": "WPS, pension/cohort and benefit reviews remain separate purpose-bound workflows with independently reviewed published rule profiles and supporting evidence. Reviewed constant-model full-time/part-time gratuity now bridges to independently controlled expected settlements, with typed employment-service scopes and independent HR/bank allocation evidence; rule or supporting-context replacement stales dependent approvals.",
         "India": "PF/EPS/ESI/PT assessed component calculations, ECR/ESIC member/day/wage population checks and payroll-to-GL controls are implemented.",
         "remaining": "Complete legal cohort/state/schema qualification, representative payroll clients, statutory charges not covered by current formulas and actual filing/payment execution.",
         "evidence": [
           "backend/app/modules/country_workflows/payroll_ledger_schemas.py",
           "backend/tests/qa_crud/test_payroll_ledger.py",
           "backend/tests/qa_crud/test_published_pension_source.py",
-          "backend/tests/qa_crud/test_published_payroll_source.py"
+          "backend/tests/qa_crud/test_published_payroll_source.py",
+          "backend/app/modules/country_workflows/benefit_settlement_source.py",
+          "docs/country-workflows/benefit-settlement.md",
+          "docs/phase-12/benefit-settlement-validation.json"
         ]
       }
     }
@@ -527,46 +534,46 @@ const data = {
   ],
   "checkpoint": {
     "as_of": "28 October 2026",
-    "source_revision": "e119982cef2ba95a6c4b35b0038e5e33ba860b71",
+    "source_revision": "187157951b791aeb6fcde33ad73aeed73b7e8284",
     "release_status": "NOT_QUALIFIED_FOR_PRODUCTION_STATUTORY_USE",
-    "scope": "Operational implementation and source-specific synthetic verification through e119982. UAE/India merchant settlement now optionally links the existing independently reviewed account-document comparison over the entire financial window. Native account aliases require agreement to reviewed original account numbers; canonical ledger labels remain explicitly distinguished. Original source bytes are preserved and review withdrawal stales dependent results. Merchant contract 2 retains gross/net and booked/value-date controls. All three hosted cases passed; four linked merchant screenshots individually inspected. Retained complete hosted backend proof remains separately pinned to 07f61f1. Original discovery baselines are historical.",
+    "scope": "Operational implementation and source-specific synthetic verification through 1871579. UAE reviewed gratuity now derives controlled expected bank-settlement obligations with retained employee/service identity, independent employer/due-date support, separate HR and bank evidence, pooled/partial/late controls and recursive staleness. India manual annual-credit statements preserve declared 26AS/168, PAN, underlying period and AY/TY snapshot scope. Merchant contract 2 and linked account evidence remain implemented. First hosted gratuity browser execution on 1871579 failed at the wrapped support-selector label; its original negative screenshot was inspected. An explicit accessible-name fix passed focused tests/types/lint and awaits fresh hosted execution. The security job flagged a verified public source hash; receipt paths and digests were separated without suppressions. Retained complete hosted backend proof is separately pinned to 20ee29a. Original discovery baselines are historical.",
     "verification": [
       {
         "label": "Backend units",
-        "result": "3,090 passed; five skipped",
-        "path": "docs/phase-12/merchant-account-backend.xml",
-        "limit": "Includes all 154 authored scenarios, 45 merchant calculation/date cases and 12 account-binding cases. Four isolated connector DB/Redis checks and one CPU-worker check remain skipped in this suite. Synthetic mechanics do not establish independent real-client or legal qualification."
+        "result": "3,170 passed; five skipped",
+        "path": "docs/phase-12/benefit-settlement-backend.xml",
+        "limit": "Includes all 154 authored scenarios, 45 annual-statement-scope and 35 gratuity settlement cases alongside prior merchant/account tests. Four isolated connector DB/Redis checks and one CPU-worker check remain skipped. Synthetic mechanics do not establish real-client or full legal qualification."
       },
       {
         "label": "Focused database regressions",
-        "result": "Ten passed",
-        "path": "docs/phase-12/merchant-account-api.xml",
-        "limit": "UAE/India native merchant account mapping, original downloads and recursive review-withdrawal staleness plus shared account-binding and merchant regressions; scanner/dispatch are explicit doubles, not every API."
+        "result": "Four passed",
+        "path": "docs/phase-12/benefit-settlement-api.xml",
+        "limit": "Two new UAE full-time/part-time gratuity flows cover independent review, pooled bank allocation, export and rule/context replacement staleness; two existing UAE/India contribution regressions also passed. Scanner/dispatch are explicit doubles. Prior merchant and annual-statement API receipts remain separately retained; these are not all APIs."
       },
       {
         "label": "Full hosted backend",
-        "result": "3,925 passed; nine skipped; overall coverage 86.11%, core 89.35%",
-        "path": "docs/phase-12/07f61f1-hosted-verification.json",
-        "limit": "Original JUnit and coverage archived and hash verified for 07f61f1. Covers the bank proposal viewer, MSE context binding and pilot validator; predates merchant settlement and contract 2. Not a latest-source full backend result."
+        "result": "3,972 passed; nine skipped; overall coverage 86.16%, core 89.35%",
+        "path": "docs/phase-12/20ee29a-hosted-verification.json",
+        "limit": "Original JUnit and coverage archived with verified artifact digest for 20ee29a. Complete source-specific proof includes merchant contract 2 and predates linked merchant accounts, annual-statement scopes and the gratuity bridge; not a latest-source full backend result."
       },
       {
         "label": "Frontend",
-        "result": "293 tests passed; production build, TypeScript and scoped ESLint passed",
-        "path": "docs/country-workflows/native-adapters.md",
-        "limit": "All 293 local frontend tests and production build passed on 1ac8136. The subsequent accessible-name fix passed focused tests/types/lint; hosted frontend checks also passed on e119982."
+        "result": "302 tests passed; production build, TypeScript and scoped ESLint passed",
+        "path": "docs/phase-12/benefit-settlement-validation.json",
+        "limit": "64 local test files include explicit gratuity selection/controls, pagination, dated legacy guards, country/freshness gating and readable employment scopes. New gratuity browser assertions are type/lint checked; passing hosted execution and new screenshot inspection remain separate."
       },
       {
         "label": "Browser boundary",
         "result": "All three hosted cases passed on e119982; reported duration 1.1m; four screenshots visually inspected",
         "path": "docs/phase-12/merchant-account-browser-e119982.json",
-        "limit": "Three synthetic browser cases, not all 154 authored catalogue scenarios or independent real clients. Account/source setup and reviews use APIs. Browser fixtures use canonical bank labels; separate UAE/India real-API tests validate native CAMT account-number mapping and original byte preservation, with scan/dispatch doubles. Account document agreement is not bank authentication. Known clean browser files do not qualify malware coverage or production signature freshness. Current full-backend CI, complete legal/native packs, actual providers, real-client pilots and production qualification remain separate."
+        "limit": "Three synthetic browser cases on e119982, not all 154 catalogue scenarios or independent clients. API setup/reviews and canonical bank labels are explicitly scoped; separate native account-mapping APIs retain original bytes with scan/dispatch doubles. This passing receipt predates the annual-statement and new gratuity UI; the new source-specific browser job remains pending. Document agreement is not bank authentication, legal qualification or production scanning qualification."
       }
     ],
     "hosted_runs": [
       {
         "label": "Retained complete hosted backend proof",
-        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40716991360/job/122917264300",
-        "status_at_checkpoint": "PASSED on 07f61f1: 3,925 passed, nine skipped, 86.11% overall and 89.35% core coverage. All other jobs on this source also passed. Original JUnit and coverage retained; merchant workflow is later source."
+        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40728696415/job/122958808728",
+        "status_at_checkpoint": "PASSED on 20ee29a: 3,972 passed, nine skipped, 86.16% overall and 89.35% core coverage. All other jobs passed on this source. Exact JUnit and coverage retained; later account/annual-statement/gratuity changes are separate."
       },
       {
         "label": "Current linked-account merchant browser and CI",
@@ -574,9 +581,9 @@ const data = {
         "status_at_checkpoint": "Browser, frontend, security, ML and containers PASSED on e119982. Three cases include linked merchant UI selection, approval, XLSX and linked-review withdrawal staleness in both countries alongside existing native-bank/MSE flows. Four exact linked-merchant screenshots individually inspected."
       },
       {
-        "label": "Current full backend verification",
-        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40733634486/job/122976243859",
-        "status_at_checkpoint": "Last observed IN_PROGRESS on e119982; no completed current-source full backend result claimed. Complete retained proof is earlier 07f61f1."
+        "label": "Current gratuity bridge hosted checks",
+        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40744230031",
+        "status_at_checkpoint": "On 1871579: frontend, ML and containers PASSED; browser FAILED (two passed, one failed at exact selector label), security FAILED on a recomputed public source hash in the receipt, full backend last observed IN_PROGRESS. Explicit selector-name and receipt-structure fixes are prepared and locally checked; fresh hosted execution remains pending. Original failed screenshot and negative receipt are retained."
       }
     ],
     "open_gates": [
@@ -587,7 +594,7 @@ const data = {
       },
       {
         "priority": "India second",
-        "work": "Complete native withholding-return/26AS/AIS coverage, state/cohort payroll packs and legacy/current tax-audit clause mappings; retain the existing GST and ECR profiles as explicitly bounded adapters. Complete the separate MSE tax-deduction, statutory-interest and disclosure procedures with qualified legal versions and independent schedules.",
+        "work": "Complete native withholding-return/26AS/168/AIS formats, state/cohort payroll packs and legacy/current tax-audit clause mappings. Declared annual-statement period/form guards are implemented, not native portal readers. Complete MSE tax-deduction, statutory-interest and disclosure procedures with qualified legal versions and independent schedules.",
         "proof": "Source-bound applicable form/rule versions, exact clause coverage, representative amendments and professional approval."
       },
       {
@@ -602,7 +609,7 @@ const data = {
       },
       {
         "priority": "Release",
-        "work": "Complete current source-specific full backend CI and qualify production deployment/rollback, recovery, monitoring, privacy and professional sign-off. Linked merchant source e119982 has passing local units/API/frontend and hosted browser, frontend, security, ML and containers. Retained complete full backend proof is 07f61f1. Synthetic mechanics do not close real-client or production gates.",
+        "work": "Complete current source-specific full backend/browser CI and qualify actual production deployment/rollback, recovery, monitoring, privacy and professional sign-off. Latest local gratuity source has passing units/API/frontend/build; retained complete full backend proof is earlier 20ee29a. Synthetic mechanics do not close real-client or production gates.",
         "proof": "Passing source-pinned jobs plus actual provider/runtime drills and named approvals. Local/container checks alone do not prove production readiness."
       }
     ],
@@ -612,12 +619,14 @@ const data = {
         "status": "PARTIAL_SPECIALIST_COVERAGE",
         "shared": "Separate deductor/deductee and collector/collectee evidence, assessed rule/certificate references, pooled certificate limits, amendments/status and settlement linkage.",
         "UAE": "India TCS is unavailable for domestic UAE obligations. Use the common evidence/settlement foundations under an explicitly applicable obligation.",
-        "India": "Withholding liability and credit workflows now accept controlled assessed TCS populations; historical 1H date guards and role isolation are implemented.",
-        "remaining": "Native 27EQ/current-successor, 26AS/AIS/TRACES completeness, full legal rate/threshold/certificate corpus and representative client qualification.",
+        "India": "Withholding liability and credit workflows now accept controlled assessed TCS populations; historical 1H date guards and role isolation are implemented. Declared annual-credit statement headers now separate historical Form 26AS assessment years from Form 168 tax years, with PAN/period/snapshot consistency and scope retained in result/UI/XLSX.",
+        "remaining": "Native 27EQ/current-successor, 26AS/168/AIS/TRACES completeness, full legal rate/threshold/certificate corpus and representative client qualification.",
         "evidence": [
           "backend/app/modules/country_workflows/withholding_schemas.py",
           "backend/app/modules/country_workflows/withholding_calculations.py",
-          "backend/tests/qa_crud/test_withholding_workflows.py"
+          "backend/tests/qa_crud/test_withholding_workflows.py",
+          "backend/app/modules/country_workflows/annual_tax_statement.py",
+          "docs/phase-12/annual-statement-validation.json"
         ]
       },
       {
@@ -690,12 +699,14 @@ const data = {
         "status": "PARTIAL_SPECIALIST_COVERAGE",
         "shared": "Distinct expected, withheld, reported, deposited and credit populations; source-bound assessments, pooled certificate controls and separate bank allocations.",
         "UAE": "Indian domestic TDS workflows stay unavailable. Applicable UAE CT/obligation assessments use their own source-linked workbenches.",
-        "India": "Controlled deductor/deductee TDS liability/credit reconciliation and derived payment obligations are implemented, with no inferred legal entitlement.",
-        "remaining": "Native 24Q/26Q/27Q and successor forms, complete 26AS/AIS/TRACES profiles, current legal rate/threshold rules and professional expected schedules.",
+        "India": "Controlled deductor/deductee TDS liability/credit reconciliation and derived payment obligations are implemented, with no inferred legal entitlement. Declared annual-credit statement headers now separate historical Form 26AS assessment years from Form 168 tax years, with PAN/period/snapshot consistency and scope retained in result/UI/XLSX.",
+        "remaining": "Native 24Q/26Q/27Q and successor forms, complete 26AS/168/AIS/TRACES profiles, current legal rate/threshold rules and professional expected schedules.",
         "evidence": [
           "backend/app/modules/country_workflows/withholding_obligations.py",
           "backend/tests/qa_crud/test_withholding_workflows.py",
-          "backend/tests/qa_crud/test_withholding_obligations.py"
+          "backend/tests/qa_crud/test_withholding_obligations.py",
+          "backend/app/modules/country_workflows/annual_tax_statement.py",
+          "docs/phase-12/annual-statement-validation.json"
         ]
       },
       {
@@ -808,29 +819,32 @@ const data = {
         "id": "13",
         "status": "PARTIAL_SPECIALIST_COVERAGE",
         "shared": "Payroll accrual/posting controls, employee/channel settlement, contributions, assessed expected remittances and split payment allocation with retained rule/source lineage.",
-        "UAE": "WPS, pension/cohort and benefit reviews remain separate purpose-bound workflows with independently reviewed published rule profiles and supporting evidence.",
+        "UAE": "WPS, pension/cohort and benefit reviews remain separate purpose-bound workflows with independently reviewed published rule profiles and supporting evidence. Reviewed constant-model full-time/part-time gratuity now bridges to independently controlled expected settlements, with typed employment-service scopes and independent HR/bank allocation evidence; rule or supporting-context replacement stales dependent approvals.",
         "India": "PF/EPS/ESI/PT assessed component calculations, ECR/ESIC member/day/wage population checks and payroll-to-GL controls are implemented.",
         "remaining": "Complete legal cohort/state/schema qualification, representative payroll clients, statutory charges not covered by current formulas and actual filing/payment execution.",
         "evidence": [
           "backend/app/modules/country_workflows/payroll_ledger_schemas.py",
           "backend/tests/qa_crud/test_payroll_ledger.py",
           "backend/tests/qa_crud/test_published_pension_source.py",
-          "backend/tests/qa_crud/test_published_payroll_source.py"
+          "backend/tests/qa_crud/test_published_payroll_source.py",
+          "backend/app/modules/country_workflows/benefit_settlement_source.py",
+          "docs/country-workflows/benefit-settlement.md",
+          "docs/phase-12/benefit-settlement-validation.json"
         ]
       }
     ],
-    "unit_receipt": "docs/phase-12/merchant-account-backend.xml",
-    "database_receipt": "docs/phase-12/merchant-account-api.xml",
+    "unit_receipt": "docs/phase-12/benefit-settlement-backend.xml",
+    "database_receipt": "docs/phase-12/benefit-settlement-api.xml",
     "unit_summary": {
-      "tests": 3095,
-      "passed": 3090,
+      "tests": 3175,
+      "passed": 3170,
       "skipped": 5,
       "failures": 0,
       "errors": 0
     },
     "database_summary": {
-      "tests": 10,
-      "passed": 10,
+      "tests": 4,
+      "passed": 4,
       "skipped": 0,
       "failures": 0,
       "errors": 0

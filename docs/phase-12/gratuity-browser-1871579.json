@@ -1,0 +1,21 @@
+{
+  "source_commit": "187157951b791aeb6fcde33ad73aeed73b7e8284",
+  "run_id": 40744230031,
+  "job_id": 123013625324,
+  "conclusion": "failure",
+  "passed": 2,
+  "failed": 1,
+  "reported_duration": "1.4m",
+  "failure": "Exact-label locator did not resolve the wrapped settlement-support selector; UAE case timed out before creating the derived source through the new form. A subsequent explicit aria-label and exact-role unit assertion address accessible naming; no test step was removed.",
+  "artifact_id": 12841790621,
+  "archive_sha256": "312dc4de40dcf52301622ab0634dc6aba9e3935ccb5f83e9c88aa8eca450701e",
+  "artifact_locally_downloaded_and_digest_verified": true,
+  "inspected_images": [
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-gratuity-selector-unresolved-1871579.png",
+      "sha256": "0bf78d5a5101b9d079eedf3f10e786a0cb14f10d2e20924371fd994edd9cc52c",
+      "finding": "Reviewed synthetic benefit result and beginning of the actual gratuity form are present. Title and employer are filled; the support select is present and unselected. Lower form extends below the viewport. This is negative evidence, not complete form or settlement visual qualification."
+    }
+  ],
+  "limits": "UAE case failed before new bridge UI submission, final allocation, export or staleness. India and session tests passed but no new screenshot pixel claim is made for them in this receipt. Independently retained local API tests cover the backend bridge."
+}

@@ -105,6 +105,7 @@ export function BenefitSettlementSource({
       <label>
         Retained settlement scope and due-date evidence
         <select
+          aria-label="Retained settlement scope and due-date evidence"
           value={document}
           onChange={(event) => setDocument(event.target.value)}
         >

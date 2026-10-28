@@ -1,29 +1,8 @@
 {
-  "contract": "benefit-settlement-validation/1",
+  "contract": "benefit-settlement-validation/2",
   "date": "2026-10-28",
   "base_commit": "55728ada5c20ee4e55ac37aaabeece9a324dd5c2",
   "source_hash_basis": "UTF-8 source bytes with CRLF normalized to LF; JUnit receipt hashes use exact bytes",
-  "normalized_lf_source_sha256": {
-    "backend/app/api/v1/intelligence.py": "91900b021190752915fcb407857a0eefeb5c8e5220136b113333d49f8ad23e59",
-    "backend/app/modules/country_workflows/benefit_settlement_scope.py": "8bba5556ab9efbeaae6e7d7cd2f31f015b12c5e46adbbc219c2dcbf99cf2c573",
-    "backend/app/modules/country_workflows/benefit_settlement_source.py": "882ea38fbaa47e05abcfb942153e099bb420925cd7578bcc3642f12cf49cb23e",
-    "backend/app/modules/country_workflows/calculations.py": "0bc47e1a4d77ee1daf5df67fe80b67eca1d3f3aad55def3ddfdfed9cee5bdf14",
-    "backend/app/modules/country_workflows/dues_allocations.py": "0262312b3fcf4e66a2513c9417bc83e21e55df875668aea2dff10635e4ed32a4",
-    "backend/app/modules/country_workflows/obligation_scope.py": "a03dc6a3f7655d3c2bf0699d29e905bc20ac5a3aaaec700e987611088ea5b61e",
-    "backend/app/modules/country_workflows/practice_calculations.py": "ffb4bce2eb36ecd439f7d8059c134525b398c7407d264d606c4f87c4910c3bca",
-    "backend/app/modules/country_workflows/schemas.py": "ce3521e4ac34050d13629f72ad69395d59eb33ec69330f054d30560fb4b523ea",
-    "backend/app/modules/country_workflows/service.py": "7772e79981765b1ecdf031d9205ec6567619c1af0aad3e3da38bb5ab63ba9564",
-    "backend/tests/qa_crud/benefit_settlement_workflow.py": "9082950a9077da9f5fb04ad11ab3b52d140e381d9f88c8e5864a17a08ef73d59",
-    "backend/tests/qa_crud/test_benefit_rule_evidence.py": "58776ad23c3a5851babad3485fd7f06c21233aecfe966bb2e612fcd892d767ab",
-    "backend/tests/unit/test_benefit_settlement_source.py": "121d67685745d6672fe72894b26edbb14f229504135448486aaed07683e0e0f1",
-    "frontend/e2e/benefit-settlement-browser-workflow.ts": "3e09a81f8e6d6c54813beadd80b46a80f0aed3ccf31a39243c2452d4865cadb3",
-    "frontend/e2e/country-report-release.spec.ts": "93108ab94a6bd6fd468ca0b8e4e016b4ccf6f569c9504495afe1dc17243928c5",
-    "frontend/src/features/benefit-settlement-source.tsx": "b47e28894b6f0532b214c9556185f6bb104ae421671261444a2005bf9458ba33",
-    "frontend/src/features/country-workflows.tsx": "877d8a28c1aba1c041a3a5f419dc2dfb4aa7a1940325b0db188986c439d41e3b",
-    "frontend/src/types/api.generated.ts": "425874dacdf3f6400a0e6f1bbe2e49181030acb45b4d45c4805dbed967347295",
-    "frontend/tests/benefit-settlement-source.test.tsx": "04278ba616ca4e20a08bfb148e7ac665853592431f32101f6bc5ba304e7f8e32",
-    "frontend/tests/country-workflows.test.tsx": "e9a00c8a584d579346fc6dc14d5916498837055dbb31df3439df769d6fbc83d2"
-  },
   "receipts": {
     "backend_unit": {
       "path": "docs/phase-12/benefit-settlement-backend.xml",
@@ -51,7 +30,7 @@
     "typecheck": "passed",
     "scoped_eslint": "passed",
     "production_build": "passed",
-    "browser_extension": "Authored and type/lint checked; awaiting source-specific hosted execution and original image inspection"
+    "browser_extension": "First run on 1871579 failed at exact wrapped-selector labeling; see gratuity-browser-1871579.json. Explicit accessible-name fix passed three focused tests, type checking and lint; fresh hosted execution remains pending."
   },
   "backend_checks": {
     "mypy_app_files": 395,
@@ -71,5 +50,108 @@
     "Four isolated connector checks and one CPU worker check remain skipped in the unit run",
     "No complete legal/cohort/alternative-scheme qualification, real-client result, payment instruction, actuarial valuation or production deployment claim",
     "Counts overlap and must not be added to the 154 authored catalogue cases"
-  ]
+  ],
+  "normalized_lf_sources": [
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "sha256": "91900b021190752915fcb407857a0eefeb5c8e5220136b113333d49f8ad23e59"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/benefit_settlement_scope.py",
+      "sha256": "8bba5556ab9efbeaae6e7d7cd2f31f015b12c5e46adbbc219c2dcbf99cf2c573"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/benefit_settlement_source.py",
+      "sha256": "882ea38fbaa47e05abcfb942153e099bb420925cd7578bcc3642f12cf49cb23e"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/calculations.py",
+      "sha256": "0bc47e1a4d77ee1daf5df67fe80b67eca1d3f3aad55def3ddfdfed9cee5bdf14"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/dues_allocations.py",
+      "sha256": "0262312b3fcf4e66a2513c9417bc83e21e55df875668aea2dff10635e4ed32a4"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/obligation_scope.py",
+      "sha256": "a03dc6a3f7655d3c2bf0699d29e905bc20ac5a3aaaec700e987611088ea5b61e"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/practice_calculations.py",
+      "sha256": "ffb4bce2eb36ecd439f7d8059c134525b398c7407d264d606c4f87c4910c3bca"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/schemas.py",
+      "sha256": "ce3521e4ac34050d13629f72ad69395d59eb33ec69330f054d30560fb4b523ea"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/service.py",
+      "sha256": "7772e79981765b1ecdf031d9205ec6567619c1af0aad3e3da38bb5ab63ba9564"
+    },
+    {
+      "path": "backend/tests/qa_crud/benefit_settlement_workflow.py",
+      "sha256": "9082950a9077da9f5fb04ad11ab3b52d140e381d9f88c8e5864a17a08ef73d59"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_benefit_rule_evidence.py",
+      "sha256": "58776ad23c3a5851babad3485fd7f06c21233aecfe966bb2e612fcd892d767ab"
+    },
+    {
+      "path": "backend/tests/unit/test_benefit_settlement_source.py",
+      "sha256": "121d67685745d6672fe72894b26edbb14f229504135448486aaed07683e0e0f1"
+    },
+    {
+      "path": "frontend/e2e/benefit-settlement-browser-workflow.ts",
+      "sha256": "3e09a81f8e6d6c54813beadd80b46a80f0aed3ccf31a39243c2452d4865cadb3"
+    },
+    {
+      "path": "frontend/e2e/country-report-release.spec.ts",
+      "sha256": "93108ab94a6bd6fd468ca0b8e4e016b4ccf6f569c9504495afe1dc17243928c5"
+    },
+    {
+      "path": "frontend/src/features/benefit-settlement-source.tsx",
+      "sha256": "b47e28894b6f0532b214c9556185f6bb104ae421671261444a2005bf9458ba33"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "877d8a28c1aba1c041a3a5f419dc2dfb4aa7a1940325b0db188986c439d41e3b"
+    },
+    {
+      "path": "frontend/src/types/api.generated.ts",
+      "sha256": "425874dacdf3f6400a0e6f1bbe2e49181030acb45b4d45c4805dbed967347295"
+    },
+    {
+      "path": "frontend/tests/benefit-settlement-source.test.tsx",
+      "sha256": "04278ba616ca4e20a08bfb148e7ac665853592431f32101f6bc5ba304e7f8e32"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "e9a00c8a584d579346fc6dc14d5916498837055dbb31df3439df769d6fbc83d2"
+    }
+  ],
+  "security_receipt_note": "Hosted security job 123013625765 on 1871579 flagged the generated API-types source hash entry as generic-api-key at receipt line 23. The digest was recomputed against the public source file and verified to be a source identity, not a credential. Paths and digests are now separate fields; no scanner suppression or policy exclusion was added.",
+  "full_regression_source_commit": "187157951b791aeb6fcde33ad73aeed73b7e8284",
+  "accessible_selector_fix": {
+    "parent_source_commit": "187157951b791aeb6fcde33ad73aeed73b7e8284",
+    "normalized_lf_sources": [
+      {
+        "path": "frontend/src/features/benefit-settlement-source.tsx",
+        "sha256": "93f44fecb55bd957ff17eef342c94ed2bc60b2a639d76cb664564cae537f7b48"
+      },
+      {
+        "path": "frontend/tests/benefit-settlement-source.test.tsx",
+        "sha256": "c0859f6df70cfd432fe8aa02be396c4f7f677caac5e2d7cc52f16a17401d63b1"
+      }
+    ],
+    "focused_tests_passed": 3,
+    "typecheck": "passed",
+    "scoped_eslint": "passed",
+    "browser": "Pending fresh source-specific hosted execution"
+  },
+  "receipt_secret_scan": {
+    "version": "8.24.3",
+    "downloaded_archive_sha256": "3f1a35578631dbfe633cc5b49e6c906e55ff14a4bfd7336a10fb27fe33b6dcd2",
+    "scan_scope": "Restructured receipt file with repository configuration",
+    "result": "passed with no leaks; no suppression added"
+  }
 }
