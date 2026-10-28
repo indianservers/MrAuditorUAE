@@ -4430,3 +4430,22 @@ Ruff/format and mypy (391 files), and API snapshot/type checks passed. Retained
 [API](../phase-12/bank-proposal-api.xml) receipts describe their actual scope.
 Scanner/broker doubles in DB tests remain distinct from real-service browser
 verification. No client/legal/production qualification is inferred.
+
+The first UAE extended browser run reached the committed GL/native sources,
+strict incorrect-closing rejection and the valid one-match BRS. It then failed
+because a test regex treated exact decimal zero `0E-8` as nonzero. The corrected
+test accepts zero mantissas with exponent notation, preserving strict rejection
+of nonzero values and the original source controls. The
+[negative receipt](../phase-12/bank-browser-2ad31b4.json) records the unreached
+UAE UI inspection/review/export/staleness scope. The India flow passed in that run.
+
+Network recovery allowed retrieval and SHA verification of the earlier 5b2d02b
+MSE screenshot archive. Two original images are now retained and visually
+inspected in its [updated receipt](../phase-12/msme-browser-5b2d02b.json). Inspection
+found that a stale result still claimed current supporting versions. The UI now
+states that verification occurred for the retained calculation, and explicitly
+marks a non-current calculation before approval. Its provenance checkbox is
+aligned beside its label, and the next capture dismisses the approval toast.
+Two new status tests plus the existing suite passed (287 frontend tests), as did
+production build, TypeScript and scoped ESLint. These follow-up UI/test changes
+await their source-specific hosted browser result.

@@ -1,0 +1,20 @@
+{
+  "source_commit": "2ad31b4e96a128d0c0df2b238b73ff4cd1cdf5a1",
+  "run_id": 40714594151,
+  "job_id": 122908707448,
+  "conclusion": "failure",
+  "browser_cases_passed": 2,
+  "browser_cases_failed": 1,
+  "duration_seconds": 43.8,
+  "failure": "The UAE helper accepted only fixed-decimal zero text and rejected the valid exact zero 0E-8. The subsequent correction accepts zero mantissas in exponent notation without numeric rounding or nonzero tolerance.",
+  "verified_before_failure": [
+    "Real committed-GL source and native CAMT upload/preparation with reviewed sources",
+    "Incorrect native statement closing control rejected with no result",
+    "Valid BRS calculation returned unblocked with one match and no exception rows",
+    "India MSE calculation/review/export/replacement flow passed with the shared harness"
+  ],
+  "artifact_id": 12828550319,
+  "archive_sha256_from_upload_log": "72c2ebe7ed803b880f0b408008d25bbed448de6142f71296734b2454eb9db152",
+  "visual_inspection": "NOT_PERFORMED_FOR_THIS_ARTIFACT",
+  "limits": "UAE proposal inspection, UI result approval, XLSX and replacement staleness were not reached. Does not establish real clients, bank authentication, legal or production qualification."
+}

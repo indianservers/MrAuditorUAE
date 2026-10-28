@@ -8,13 +8,54 @@ import {
 import { beforeEach, expect, it, vi } from "vitest";
 import { CountryWorkflows } from "@/features/country-workflows";
 
-const state = vi.hoisted(() => ({ mutate: vi.fn(), country: "IN" }));
+const state = vi.hoisted(() => ({
+  mutate: vi.fn(),
+  country: "IN",
+  freshness: "CURRENT",
+}));
 const roles = {
   assessments: "msme-supplier-assessments",
   invoices: "msme-invoices",
   bank: "transactions",
   allocations: "item-allocations",
 };
+
+it.each(["CURRENT", "STALE"])(
+  "describes retained document verification honestly for a %s result",
+  (freshness) => {
+    state.freshness = freshness;
+    render(
+      <CountryWorkflows
+        eid="eng"
+        mode="country-workflow"
+        initialEvent="msme-result"
+      />,
+    );
+    const scope = screen.getByRole("region", {
+      name: "MSE payment-timing scope",
+    });
+    if (freshness === "STALE") {
+      expect(
+        within(scope).getByText(/This MSE calculation is not current/),
+      ).toBeVisible();
+      expect(
+        within(scope).queryByText(/retained versions were verified/),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: "Independent approval" }),
+      ).toBeDisabled();
+    } else {
+      expect(
+        within(scope).getByText(
+          /retained versions were verified for this calculation/,
+        ),
+      ).toBeVisible();
+      expect(
+        within(scope).queryByText(/This MSE calculation is not current/),
+      ).not.toBeInTheDocument();
+    }
+  },
+);
 vi.mock("@/stores/workspace", () => ({
   useScope: (select: (s: { tenant: string }) => unknown) =>
     select({ tenant: "tenant" }),
@@ -91,13 +132,28 @@ vi.mock("@/hooks/use-api", () => ({
           }
         : path.endsWith("jobs")
           ? { items: [] }
-          : undefined,
+          : path.includes("/events/msme-result")
+            ? {
+                id: "msme-result",
+                version: 1,
+                kind: "country-workflow",
+                freshness: state.freshness,
+                body: {
+                  title: "SYNTHETIC retained MSE result",
+                  workflow: "india-msme-payment-timing",
+                  review_status: "REVIEWED",
+                  msme_document_binding: "RETAINED_DOCUMENT_BYTES_VERIFIED",
+                  rows: [],
+                },
+              }
+            : undefined,
     error: null,
   }),
 }));
 
 beforeEach(() => {
   state.country = "IN";
+  state.freshness = "CURRENT";
   state.mutate.mockReset();
   state.mutate.mockResolvedValue({ id: "queued" });
 });

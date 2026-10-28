@@ -26,7 +26,20 @@
     "country-reports/IN-msme-reviewed-payment-result.png",
     "country-reports/IN-msme-context-replacement-stale.png"
   ],
-  "local_artifact_verification": "Download timed out; no locally verified archive hash or screenshot pixels retained",
-  "visual_inspection": "NOT_PERFORMED_FOR_THIS_ARTIFACT",
-  "limits": "Synthetic mechanics only. Source setup/review uses APIs, not source-authoring UI. Known clean files do not qualify malicious-file detection or production signature freshness. Does not establish client/legal qualification, every catalogue case, signed issuance or deployment. Latest full backend verification is a separate live job."
+  "local_artifact_verification": "Later retrieval succeeded; archive SHA-256 locally verified against GitHub metadata",
+  "visual_inspection": "PERFORMED 2026-10-28; historical UI issues recorded below",
+  "limits": "Synthetic mechanics only. Source setup/review uses APIs, not source-authoring UI. Known clean files do not qualify malicious-file detection or production signature freshness. Does not establish client/legal qualification, every catalogue case, signed issuance or deployment. Latest full backend verification is a separate live job.",
+  "locally_verified_archive_sha256": "92428e2b12f4fafd0eec65c24d7e845add2b2fe1948e22477df15007f5439179",
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-msme-reviewed-payment-result-5b2d02b.png",
+      "sha256": "b39b66f2410a3466e01c15462aac277812f43d6c1458612de69534c184a4620d",
+      "visual_inspection": "Reviewed/current result, due date and payment values visible. Toast partially overlays the row status; oversized provenance checkbox was identified and corrected later."
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-msme-context-replacement-stale-5b2d02b.png",
+      "sha256": "4ec7c31cf5dac462b49cb85f8a1be66c5a3ccc0629c879bb1ac5cc9e294dcce3",
+      "visual_inspection": "STALE badge and disabled approval visible. Historical wording incorrectly implied current supporting versions; the subsequent fix explicitly flags a non-current calculation."
+    }
+  ]
 }

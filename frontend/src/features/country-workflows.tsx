@@ -5561,12 +5561,14 @@ export function CountryWorkflows({
           {body.workflow === "india-msme-payment-timing" && (
             <section aria-label="MSE payment-timing scope">
               <p>
-                {body.msme_document_binding ===
-                "RETAINED_DOCUMENT_BYTES_VERIFIED"
-                  ? "Supporting document bytes and current versions verified; document meaning remains independently assessed."
-                  : body.msme_document_binding === "NO_RESOLVED_FACTS_CLAIMED"
-                    ? "No resolved supporting facts declared; pending assessments are not clearance."
-                    : "Supporting document links need updating before approval."}
+                {detail.data.freshness !== "CURRENT"
+                  ? "This MSE calculation is not current. Recheck supporting evidence and regenerate or select a current version before approval."
+                  : body.msme_document_binding ===
+                      "RETAINED_DOCUMENT_BYTES_VERIFIED"
+                    ? "Supporting document bytes and retained versions were verified for this calculation; document meaning remains independently assessed."
+                    : body.msme_document_binding === "NO_RESOLVED_FACTS_CLAIMED"
+                      ? "No resolved supporting facts declared; pending assessments are not clearance."
+                      : "Supporting document links need updating before approval."}
               </p>
               {body.retained_msme_contexts?.map((context, index) => (
                 <p key={`${context.evidence_version_id}:${index}`}>
@@ -5581,9 +5583,10 @@ export function CountryWorkflows({
                 Missing facts remain unresolved; tax deductibility, statutory
                 interest and global cash reservation are separate procedures.
               </p>
-              <label>
+              <label style={{ flexDirection: "row", alignItems: "center" }}>
                 <input
                   type="checkbox"
+                  style={{ width: 16, height: 16 }}
                   checked={showRuleProvenance}
                   onChange={(e) => setShowRuleProvenance(e.target.checked)}
                 />

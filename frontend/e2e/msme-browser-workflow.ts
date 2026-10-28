@@ -273,6 +273,11 @@ export async function runMSMEBrowserWorkflow(
   const approved: WorkflowEvent = await response.json();
   expect(approved.body.review_status).toBe("REVIEWED");
   await expect(
+    reviewer
+      .getByRole("region", { name: "MSE payment-timing scope" })
+      .getByText(/retained versions were verified for this calculation/),
+  ).toBeVisible();
+  await expect(
     reviewer.getByLabel("Saved source or result", { exact: true }),
   ).toHaveValue(approved.id);
   const downloadEvent = reviewer.waitForEvent("download");
@@ -302,6 +307,11 @@ export async function runMSMEBrowserWorkflow(
     ],
     { input: workbook, timeout: 15000 },
   );
+  const notice = reviewer.getByRole("button", {
+    name: "Dismiss notification",
+    exact: true,
+  });
+  if (await notice.count()) await notice.first().click();
   await reviewer
     .getByRole("heading", { name: title, exact: true })
     .locator("..")
@@ -326,6 +336,11 @@ export async function runMSMEBrowserWorkflow(
   await expect(
     reviewer.getByRole("button", { name: "Independent approval", exact: true }),
   ).toBeDisabled();
+  await expect(
+    reviewer
+      .getByRole("region", { name: "MSE payment-timing scope" })
+      .getByText(/This MSE calculation is not current/),
+  ).toBeVisible();
   await reviewer
     .getByRole("heading", { name: title, exact: true })
     .locator("..")

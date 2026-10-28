@@ -151,7 +151,7 @@ export async function runUAEBankBrowserWorkflow(
   for (const value of Object.values(
     result.body.control_comparison as Record<string, string>,
   ))
-    expect(value).toMatch(/^-?0(?:\.0+)?$/);
+    expect(value).toMatch(/^-?0(?:\.0+)?(?:[eE][+-]?\d+)?$/);
   expect(result.body.bank_account_evidence).toMatchObject({
     status: "NOT_LINKED_ARITHMETIC_SCOPE_ONLY",
   });
@@ -164,7 +164,7 @@ export async function runUAEBankBrowserWorkflow(
       .getByText("unexplained bridge residual", { exact: true })
       .locator("..")
       .locator("dd"),
-  ).toHaveText(/^-?0(?:\.0+)?$/);
+  ).toHaveText(/^-?0(?:\.0+)?(?:[eE][+-]?\d+)?$/);
   const proposals = page.getByRole("region", {
     name: "Bank matched proposals",
     exact: true,
