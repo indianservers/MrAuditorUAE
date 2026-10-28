@@ -1,0 +1,44 @@
+{
+  "source_commit": "20ee29a1c2717ab2e293b8282699d8aec56a0e30",
+  "run_id": 40728696415,
+  "job_id": 122958808559,
+  "conclusion": "success",
+  "browser_cases_passed": 3,
+  "duration_reported": "1.1m",
+  "artifact_id": 12835105129,
+  "archive_sha256": "9a253310d552802becbbe0c55df1f4e7f5fc42a797c7e3e99e6eb0196b33f3ed",
+  "local_archive_verification": "Downloaded ZIP SHA-256 verified against GitHub metadata; four exact known PNG entries retained",
+  "visual_inspection": "All four PNGs individually inspected 2026-10-28",
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-merchant-reviewed-settlement-20ee29a.png",
+      "sha256": "54f4a31b0b79230f381690e5da1576429b07fd40cf11ef8ec5a275d70ed87fb1",
+      "visual_inspection": "Reviewed/current state, all component values, country classification, original activity/allocation references and compact net/bank comparison readable without horizontal clipping."
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-merchant-withdrawn-source-stale-20ee29a.png",
+      "sha256": "d91df1356e97f08a4603ccc6aec5312258a2db77602a8e455b1387e3264b9cca",
+      "visual_inspection": "Reviewed historical result shows STALE, disabled independent approval and retained net/bank comparison; capture correctly frames the result card."
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-merchant-reviewed-settlement-20ee29a.png",
+      "sha256": "78d150d2269eee876996a60a1afa72cbe8b58bb08ba6692f24c6a42ee054b5b1",
+      "visual_inspection": "Reviewed/current state, all component values, country classification, original activity/allocation references and compact net/bank comparison readable without horizontal clipping."
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-merchant-withdrawn-source-stale-20ee29a.png",
+      "sha256": "f47f049174f33563d18aeb4412444c89099c7aa7dab07a68a475fe067365de0f",
+      "visual_inspection": "Reviewed historical result shows STALE, disabled independent approval and retained net/bank comparison; capture correctly frames the result card."
+    }
+  ],
+  "verified_behavior": [
+    "Real clean-file uploads, broker/worker source jobs and independent source review through authenticated APIs",
+    "UAE and India UI merchant calculation using four reviewed sources; current merchant contract 2 and declared bank-date provenance asserted",
+    "Compact result row and expanded component values inspected in the browser; processor reference and bank summary header asserted inside viewport",
+    "Preparer self-approval denied with HTTP 403; independent UI approval selects the reviewed immutable result",
+    "UI XLSX download filename and ZIP signature checked; exact calculated net, bank allocation and bank difference verified from bytes with openpyxl",
+    "Processor-source withdrawal leaves the reviewed body unchanged and STALE; browser approval disabled; stale badge inside capture viewport",
+    "Reviewer page-error arrays empty; existing UAE native-bank and India MSE workflows also pass in the same country cases"
+  ],
+  "limits": "Three synthetic browser cases, not all 154 catalogue scenarios or real clients. Source setup/review is API-driven. Known clean files do not qualify malicious-file detection or production signature freshness. Fee tax/withholding remain assessed source facts; no bank authentication, statutory completeness, filing, professional issuance or production deployment qualification. Current full backend verification is separately running; retained complete full proof is earlier 07f61f1."
+}

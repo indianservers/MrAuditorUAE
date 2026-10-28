@@ -1,0 +1,23 @@
+{
+  "source_commit": "07f61f174280574b8fc8883af70967e2d5c21880",
+  "run_id": 40716991360,
+  "job_id": 122917264300,
+  "conclusion": "success",
+  "passed": 3925,
+  "skipped": 9,
+  "warnings": 54,
+  "duration_seconds": 2649.86,
+  "overall_coverage_percent": 86.11,
+  "core_coverage_percent": 89.35,
+  "core_covered_lines": 831,
+  "core_total_lines": 930,
+  "artifact_id": 12831283955,
+  "archive_sha256": "199b84df95666c341f8f098150c25aa7615cfc80c480a8c0163e357fcc36bbe3",
+  "original_artifact_locally_archived": true,
+  "retained_originals_sha256": {
+    "docs/phase-12/07f61f1-hosted-full.xml": "b77d3f3cc6f551077a556c37d4cf8383fb91a0f7f1b69a2a571e09dbb2fd75ac",
+    "docs/phase-12/07f61f1-hosted-coverage.json": "f2cd1fdaaa3d91de9a4f03d248a042b3c3e93520c05edf9ed2a951800ac9bdba"
+  },
+  "other_jobs": "Frontend, security, ML, containers and browser-smoke all completed successfully on this source",
+  "limits": "Source-specific complete hosted proof predates merchant settlement and merchant contract 2. Provider doubles, synthetic fixtures and CI containers do not qualify actual providers, real clients, legal completeness or production deployment. Other operation JSONs in the artifact were not inspected or archived here."
+}
