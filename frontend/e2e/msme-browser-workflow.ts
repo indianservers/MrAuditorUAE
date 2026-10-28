@@ -187,7 +187,7 @@ export async function runMSMEBrowserWorkflow(
   ])
     await page.getByLabel(label, { exact: true }).fill(value);
   await page
-    .getByLabel("Bank payment sign", { exact: true })
+    .getByRole("combobox", { name: "Bank payment sign", exact: true })
     .selectOption("debit-negative");
   const submission = page.waitForResponse(
     (response) =>

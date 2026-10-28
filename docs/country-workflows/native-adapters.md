@@ -4362,3 +4362,13 @@ This is not a claim about production signature freshness, malicious-file detecti
 coverage, deployment or recovery. The official [ClamAV Docker documentation](https://docs.clamav.net/manual/Installing/Docker.html)
 describes the preloaded-image and daemon controls. Local TypeScript, scoped
 ESLint and YAML parsing checks passed; no local preview/server was started.
+
+The first extended hosted run passed container initialization, actual worker
+subscription checks, six clean uploads and four prepared/independently reviewed
+sources. Two browser cases passed; the India case stopped at a helper locator
+timeout before calculation. The bank-sign picker now uses the same accessible
+combobox locator as the already passing form smoke. The
+[negative receipt](../phase-12/msme-browser-bfbbed9.json) preserves the failure and
+unreached scope; it is not reported as a passing end-to-end calculation. Twenty
+existing scanner protocol unit cases also passed locally; their fake sockets do
+not qualify malware detection.

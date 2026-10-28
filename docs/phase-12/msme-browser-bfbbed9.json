@@ -1,0 +1,20 @@
+{
+  "source_commit": "bfbbed9702294838e17409469de21897810800e9",
+  "run_id": 40694406564,
+  "job_id": 122837227323,
+  "conclusion": "failure",
+  "browser_cases_passed": 2,
+  "browser_cases_failed": 1,
+  "duration_seconds": 55.7,
+  "failure": "New helper used getByLabel for Bank payment sign; it timed out. Existing passing form smoke uses the accessible combobox role. The subsequent correction reuses that locator without changing assertions or application behavior.",
+  "verified_before_failure": [
+    "Official ClamAV service container initialized successfully",
+    "Real Celery worker queue subscription readiness passed",
+    "Six synthetic source/context uploads asserted CLEAN",
+    "Four source jobs completed through the real broker/worker and were independently reviewed through authenticated APIs"
+  ],
+  "artifact_id": 12819256268,
+  "archive_sha256_from_upload_log": "2c1aefa48df124b6f0913bc5a8931fea6c99f1f1e6206fccb321bfdd840417b2",
+  "visual_inspection": "NOT_PERFORMED_FOR_THIS_ARTIFACT",
+  "limits": "Calculation, UI result approval, XLSX and replacement staleness were not reached. Known clean fixtures do not qualify malicious-file detection or production signature freshness."
+}
