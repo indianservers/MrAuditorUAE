@@ -176,6 +176,13 @@ jobs:
       redis:
         image: redis:7-alpine
         ports: ["6379:6379"]
+      clamav:
+        image: clamav/clamav:1.5.4
+        env:
+          CLAMAV_NO_FRESHCLAMD: "true"
+        ports: ["127.0.0.1:3310:3310"]
+        options: >-
+          --health-interval 10s --health-timeout 10s --health-retries 30 --health-start-period 60s
     env:
       ENVIRONMENT: test
       DATABASE_URL: postgresql+asyncpg://auditos@localhost:5432/auditos_smoke_test
@@ -183,6 +190,8 @@ jobs:
       AUDITOS_SMOKE_EMAIL: release-smoke@example.com
       AUDITOS_SMOKE_REVIEWER_EMAIL: release-reviewer@synthetic.example
       AUDITOS_E2E_ORIGIN: http://127.0.0.1:3005
+      EVIDENCE_CLAMAV_HOST: 127.0.0.1
+      EVIDENCE_CLAMAV_PORT: "3310"
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
@@ -208,10 +217,20 @@ jobs:
         run: |
           cd backend
           nohup .venv/bin/uvicorn app.main:app --host 127.0.0.1 --port 58008 --no-access-log > /tmp/auditos-api.log 2>&1 &
+          nohup .venv/bin/celery -A app.workers.celery_app:celery_app worker --pool=solo --queues=celery,grc,enterprise-ai,intelligence --hostname=country-smoke@isolated --loglevel=WARNING --without-gossip --without-mingle --without-heartbeat > /tmp/auditos-smoke-worker.log 2>&1 &
           cd ../frontend
           nohup node scripts/start.mjs --port 3005 --api-origin http://127.0.0.1:58008 --web-origin http://127.0.0.1:3005 > /tmp/auditos-web.log 2>&1 &
           for i in $(seq 1 30); do
             if curl --fail --silent http://127.0.0.1:58008/health/ready && curl --fail --silent http://127.0.0.1:3005/login > /dev/null; then exit 0; fi
+            sleep 2
+          done
+          exit 1
+      - name: Verify isolated worker queue subscriptions
+        working-directory: backend
+        shell: bash
+        run: |
+          for i in $(seq 1 20); do
+            if .venv/bin/python -m app.workers.queue_health --node country-smoke@isolated --timeout 2; then exit 0; fi
             sleep 2
           done
           exit 1

@@ -5,6 +5,7 @@ import {
   type Page,
 } from "@playwright/test";
 import { readFileSync, mkdirSync } from "node:fs";
+import { runMSMEBrowserWorkflow } from "./msme-browser-workflow";
 
 const identities = JSON.parse(
   readFileSync("../.local-runtime/release-smoke/identities.json", "utf8"),
@@ -52,7 +53,7 @@ for (const code of ["AE", "IN"] as const) {
     page,
     browser,
   }) => {
-    test.setTimeout(150000);
+    test.setTimeout(code === "IN" ? 240000 : 150000);
     expect(identities.synthetic_only).toBe(true);
     mkdirSync(screenshots, { recursive: true });
     const preparerEmail = process.env.AUDITOS_SMOKE_EMAIL;
@@ -900,6 +901,14 @@ for (const code of ["AE", "IN"] as const) {
         sourceType.locator('option[value="msme-supplier-assessments"]'),
       ).toHaveCount(0);
     }
+    if (code === "IN")
+      await runMSMEBrowserWorkflow(
+        page,
+        reviewer,
+        engagement.id,
+        identities.tenant_id,
+        screenshots,
+      );
     expect(errors).toEqual([]);
     await reviewerContext.close();
   });

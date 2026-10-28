@@ -4335,3 +4335,30 @@ adding that workflow and changing schemas, service and API was rejected by
 automatic approval review as "blocked by policy". No implementation file was
 created and no new workflow is claimed. Current legal versions, assessed annual
 populations, group changes and independent schedules remain required.
+
+### Browser MSE execution and real service boundaries
+
+The browser smoke definition now prepares the existing synthetic MSE CSV and
+separate context files through real authenticated upload/source APIs. All upload
+versions must be CLEAN; source preparation uses the real broker and Celery worker,
+and each source is independently reviewed. The browser then queues the MSE
+calculation, checks the literal due/payment values, verifies self-approval fails,
+performs independent approval through the UI, downloads XLSX through the UI and
+checks its retained row values with openpyxl. Replacing the supplier context must
+make the approved historical result stale without changing its original body;
+the browser checks approval is disabled and captures reviewed/stale screenshots.
+
+This extends the existing India smoke case rather than adding qualified clients
+or changing the 154 authored engine scenarios. Source setup/review is API-driven;
+calculation submission, result rendering, independent result approval and export
+are exercised through the browser. The definition awaits hosted execution before
+any passing runtime claim.
+
+The isolated browser CI job now starts the existing Celery worker, verifies all
+configured queue subscriptions and connects the API to the official
+`clamav/clamav:1.5.4` service on loopback. The image contains its signature database;
+FreshClam background updates are disabled for this disposable known-fixture job.
+This is not a claim about production signature freshness, malicious-file detection
+coverage, deployment or recovery. The official [ClamAV Docker documentation](https://docs.clamav.net/manual/Installing/Docker.html)
+describes the preloaded-image and daemon controls. Local TypeScript, scoped
+ESLint and YAML parsing checks passed; no local preview/server was started.
