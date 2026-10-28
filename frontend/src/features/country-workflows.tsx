@@ -15,6 +15,7 @@ import {
   type BankProposal,
 } from "./bank-matched-proposals";
 import { useState } from "react";
+import { MerchantSettlementDetails } from "./merchant-settlement-details";
 import { useAPI, useAction, useCan } from "@/hooks/use-api";
 import { useEventHistory } from "@/hooks/use-event-history";
 import { useScope } from "@/stores/workspace";
@@ -1037,25 +1038,12 @@ export function CountryWorkflows({
     body?.workflow === "merchant-settlement-bridge" && !showRuleProvenance
       ? [
           "kind",
-          "merchant",
-          "processor",
           "batch",
           "currency",
-          "sales",
-          "refunds",
-          "chargebacks",
-          "fees",
-          "fee_tax",
-          "withholding",
-          "reserve_held",
-          "reserve_released",
-          "amount",
           "expected_net",
-          "net_arithmetic_difference",
+          "amount",
           "bank_allocated",
           "bank_difference",
-          "book_differences",
-          "issues",
           "state",
         ].filter((key) => allColumns.includes(key))
       : body?.workflow === "tax-turnover-bridge" && !showRuleProvenance
@@ -5860,6 +5848,9 @@ export function CountryWorkflows({
                 </dl>
               </details>
             </section>
+          )}
+          {body.workflow === "merchant-settlement-bridge" && (
+            <MerchantSettlementDetails rows={body.rows} />
           )}
           {body.control_comparison && (
             <dl>

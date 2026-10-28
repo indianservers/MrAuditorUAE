@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import { beforeEach, expect, it, vi } from "vitest";
 import { CountryWorkflows } from "@/features/country-workflows";
 
@@ -205,14 +211,15 @@ it("shows gross-to-net components and the bank residual separately", () => {
       initialEvent="merchant-result"
     />,
   );
-  for (const label of [
-    "sales",
-    "refunds",
-    "fees",
-    "fee tax",
-    "expected net",
-    "bank allocated",
-    "bank difference",
-  ])
+  for (const label of ["expected net", "bank allocated", "bank difference"])
     expect(screen.getByRole("columnheader", { name: label })).toBeVisible();
+  const details = screen.getByRole("region", {
+    name: "Merchant settlement components",
+  });
+  fireEvent.click(
+    within(details).getByText("Batch BATCH-1 · SHOP · PSP · AED"),
+  );
+  expect(within(details).getByText("Gross sales")).toBeVisible();
+  expect(within(details).getByText("Less refunds")).toBeVisible();
+  expect(within(details).getByText("Less assessed fee tax")).toBeVisible();
 });

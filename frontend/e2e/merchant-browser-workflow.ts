@@ -162,9 +162,18 @@ export async function runMerchantBrowserWorkflow(
     .getByRole("row")
     .filter({ hasText: "BATCH-1" });
   await expect(settlementRow).toHaveCount(1);
+  const components = reviewer.getByRole("region", {
+    name: "Merchant settlement components",
+    exact: true,
+  });
+  await components
+    .getByText("Batch BATCH-1 · SHOP · PSP · " + manifest.currency, {
+      exact: true,
+    })
+    .click();
   await expect(
-    settlementRow.getByRole("cell", { name: "1000", exact: true }),
-  ).toHaveCount(1);
+    components.getByRole("cell", { name: "1000", exact: true }),
+  ).toBeVisible();
   await expect(
     settlementRow.getByRole("cell", { name: "800", exact: true }),
   ).toHaveCount(3);
@@ -204,9 +213,12 @@ export async function runMerchantBrowserWorkflow(
     exact: true,
   });
   if (await notification.count()) await notification.last().click();
-  await reviewer.screenshot({
-    path: `${screenshots}/${country}-merchant-reviewed-settlement.png`,
-  });
+  await reviewer
+    .getByRole("heading", { name: title, exact: true })
+    .locator("..")
+    .screenshot({
+      path: `${screenshots}/${country}-merchant-reviewed-settlement.png`,
+    });
   expect(processorSource).toBeTruthy();
   await post(
     reviewer.request,

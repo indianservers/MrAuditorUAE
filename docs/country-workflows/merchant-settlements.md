@@ -55,6 +55,11 @@ are reported facts, not calculated statutory rates, recovery eligibility or
 withholding-credit entitlement. The workflow does not assume that a processor's
 reported tax treatment is legally correct.
 
+The result screen keeps net and bank comparison amounts in a compact summary.
+Expand each batch to inspect component amounts, country tax assessment, book
+differences and exact original reference IDs. Missing values display as not
+supplied, separately from an explicit zero.
+
 Results preserve original book and allocation IDs, component amounts,
 book-component differences, calculated net, arithmetic variance, bank allocations
 and bank residuals. The existing review separation, history, working-paper and

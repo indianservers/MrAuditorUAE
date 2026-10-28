@@ -14,5 +14,13 @@
     "Merchant reviewed screenshot",
     "Merchant processor withdrawal and stale approval checks"
   ],
-  "limits": "Negative evidence, not a passing merchant browser qualification. One session smoke passed; both country cases failed. No screenshot visual inspection claimed in this receipt."
+  "limits": "Negative browser evidence, not a completed passing merchant browser qualification. One session smoke passed; both country cases failed at export content checking. The exact UAE failure screenshot was visually inspected; no India screenshot inspection is claimed here.",
+  "locally_verified_archive_sha256": "46fd912a98cd43dd4b1fef40923223036f45ee9f9f2b72a9e514f812a2bdc992",
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-merchant-reviewed-wide-table-d8198c0.png",
+      "sha256": "74b2c35c9a5fc8c3bbbdfce3598af6379a05be251a3e5c5c7a9c8154b5f9036a",
+      "visual_inspection": "Individually inspected 2026-10-28. UAE result is REVIEWED/CURRENT and component values are readable, but bank comparison columns are off-screen in the wide table. Subsequent UI correction uses a compact bank summary and expandable components."
+    }
+  ]
 }
