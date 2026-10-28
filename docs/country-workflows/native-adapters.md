@@ -4148,3 +4148,35 @@ cases and all 281 frontend tests passed; production build, TypeScript and
 scoped ESLint passed. The API-label file passed focused Ruff/format and mypy.
 The full hosted backend receipt above remains pinned to 0b37a91; these small
 later changes are not retroactively included in that result.
+
+### Corrected browser pass and current roadmap
+
+[Browser job 122768679895](https://github.com/indianservers/MrAuditorUAE/actions/runs/40674302751/job/122768679895)
+passed all three cases in 28.2 seconds on `bbc16a9`. The India flow now reaches
+and passes its post-save assertions for `IN_PROGRESS`, item `form26.C.1` and the
+exact protected record kind/id. This proves synthetic authoring/save mechanics;
+manager/partner review of that new declaration remains covered by API tests,
+not by this browser increment. UAE preset draft controls, earlier report and
+turnover foundations, independent reviewer flow and BFF session checks passed.
+
+Artifact 12808919229 was downloaded after verifying archive SHA-256
+`6ef5ebc3f554638a88d3b58743412e1bed35c6cf5a7068b0a1cb80f8530287a7`.
+The [India item editor](screenshots/report-presets/IN-workpaper-item-mapping-bbc16a9.png)
+and [UAE e-commerce preset](screenshots/report-presets/AE-vat201-ecommerce-report-preset-bbc16a9.png)
+were visually inspected and retained with the [source-specific receipt](../phase-12/workpaper-ecommerce-browser-bbc16a9.json).
+The item/source lists display multiple rows; the selected source name wraps and
+its malformed separator is gone. Country, period, source and draft limits are
+readable. Frontend, containers, security and ML passed on this source; full
+backend job 122768680001 remains live at this checkpoint. The earlier complete
+backend pass remains pinned to 0b37a91 rather than claimed for bbc16a9.
+
+The 28 October roadmap checkpoint now includes the three UAE VAT presets,
+e-commerce arithmetic, the 65-entry India structural index and reviewed source
+item declarations. Unit/database counts are derived from explicitly selected
+retained receipts; all 154 authored scenario IDs are still checked against their
+individual passing unit records. Original 24 October discovery observations stay
+historical. Offline HTML overview/tax-section rendering was visually inspected,
+all 13 case evidence paths verified, regeneration was deterministic, and the
+updated existing canvas passed the installed SDK TypeScript check. Professional
+country qualification, real-client pilots, further statutory fields/adapters and
+production release gates remain open.

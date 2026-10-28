@@ -93,7 +93,7 @@
         "id": "04",
         "status": "PARTIAL_SPECIALIST_COVERAGE",
         "shared": "Versioned controlled tax documents, notes, independent source totals, registration/component/period separation and explicit missing/rejected evidence.",
-        "UAE": "VAT document comparison, VAT201 layouts/arithmetic, customs/import box bridge and reviewed book schedule composition reuse the UAE VAT workbench.",
+        "UAE": "VAT201 aggregate-14, emirate-20 and ecommerce-20 comparisons, 72 e-commerce split/summary checks, reviewed book composition and source-bound operational report presets. Receipt-location and qualifying-status assessments are separate.",
         "India": "Bounded GSTR-1 document/summary/series and GSTR-2B profiles, notes/amendments and controlled retrieval parts supplement canonical GST comparisons.",
         "remaining": "Complete portal/schema qualification, legally assessed credit/recovery eligibility, full annual-return scope and authorized filing/action execution.",
         "evidence": [
@@ -101,7 +101,12 @@
           "backend/app/modules/country_workflows/gstr2b_parts.py",
           "backend/tests/qa_crud/test_india_gstr1_source.py",
           "backend/tests/qa_crud/test_india_gstr2b_source.py",
-          "backend/tests/qa_crud/test_vat_composition.py"
+          "backend/tests/qa_crud/test_vat_composition.py",
+          "backend/app/modules/country_workflows/vat201_arithmetic.py",
+          "backend/app/modules/regulatory/report_packs.py",
+          "backend/tests/unit/test_vat_ecommerce.py",
+          "backend/tests/qa_crud/test_vat_emirates.py",
+          "docs/country-workflows/uae-vat201-ecommerce-source.json"
         ]
       }
     },
@@ -146,14 +151,18 @@
         "status": "PARTIAL_SPECIALIST_COVERAGE",
         "shared": "Declared report requirements, applicability, evidence-backed non-applicability, current-source validation, authorship separation and unsigned generated drafts.",
         "UAE": "Source-linked CT workbench and audited-financial-statement obligation assessment; nonresident scoped revenue requires retained reviewed evidence.",
-        "India": "Tax-period-based legacy/current form selection and assessed applicability are enforced. The actual Form 26 and historical-form distinctions are retained in the source research.",
-        "remaining": "Complete independently approved clause/form manifests, statutory schedules and legal mappings. Declared requirements are not a complete official Form 26/3CD pack.",
+        "India": "Tax-period-based legacy/current form selection plus a 65-entry Form 26 numbered-item/schedule-group evidence index for report A/B and particulars C/D. Every covered item must match an exact-period/preset/applicability declaration in a current independently reviewed workpaper, with substantive section and protected source links.",
+        "remaining": "Full independently approved Form 26/legacy 3CD subfields, statutory schedules/calculations and legal mappings; original Form 26 PDF archival/visual/professional qualification and client expected results. The 65-entry structural index is not a completed official tax-audit form or filing.",
         "evidence": [
           "backend/app/modules/regulatory/tax_forms.py",
           "backend/app/modules/regulatory/report_requirements.py",
           "backend/app/modules/tax/audit_revenue.py",
           "backend/tests/qa_crud/test_tax_audit_scope.py",
-          "backend/tests/qa_crud/test_report_requirements.py"
+          "backend/tests/qa_crud/test_report_requirements.py",
+          "backend/app/modules/regulatory/form26_index.py",
+          "backend/app/modules/regulatory/workpaper_report_scope.py",
+          "frontend/src/features/workpaper-report-scope.tsx",
+          "backend/tests/unit/test_workpaper_report_scope.py"
         ]
       }
     },
@@ -172,7 +181,7 @@
         "id": "07",
         "status": "OPERATIONAL_WORKFLOWS_IMPLEMENTED",
         "shared": "Tax-close evidence/readiness and exact finding-ID exposure deduplication. Currency/sign and unknown exposure remain distinct; stale sources cannot support current conclusions.",
-        "UAE": "Reviewed VAT/CT schedules plus registration-period turnover bridge, committed-GL books and reviewed multi-source book composition.",
+        "UAE": "Reviewed VAT/CT schedules, exact-layout VAT201 report presets (including e-commerce components), registration-period turnover bridge, committed-GL books and reviewed multi-source composition. Operational agreement does not establish legal completeness.",
         "India": "GST/withholding/payroll evidence joins the same source-linked close. Turnover scope, return and adjustments remain independently reviewed inputs.",
         "remaining": "Qualify complete country obligation/report packs and annual applicability; a reconciled close does not establish legal filing completeness.",
         "evidence": [
@@ -495,57 +504,57 @@
     "docs/phase-12/production-readiness.md and README.md: historical release NO-GO and later QA caveats"
   ],
   "checkpoint": {
-    "as_of": "27 October 2026",
-    "source_revision": "8d96253c6ef3466def879ce4683480f3cc0d2217",
+    "as_of": "28 October 2026",
+    "source_revision": "bbc16a9d88dc46ee229686aab2ca9a56058a7fe6",
     "release_status": "NOT_QUALIFIED_FOR_PRODUCTION_STATUTORY_USE",
-    "scope": "Implemented operational workflows with synthetic verification. Original 24 October discovery baselines are retained below as historical observations, not current missing-feature labels.",
+    "scope": "Operational implementation and source-specific synthetic verification through bbc16a9. UAE/India/BFF browser cases passed after the workpaper assertion/readability correction. Full hosted backend passed on earlier 0b37a91; the later full backend run is separately pending. Original 24 October discovery baselines remain historical observations.",
     "verification": [
       {
         "label": "Backend units",
-        "result": "2,877 passed; five skipped",
-        "path": "docs/phase-12/turnover-composition-backend.xml",
-        "limit": "Includes the 154 authored operational scenarios; does not independently qualify legal rules or clients."
+        "result": "2,928 passed; five skipped",
+        "path": "docs/phase-12/vat-ecommerce-backend.xml",
+        "limit": "Source-specific local receipt includes all 154 authored scenarios; not independent legal/client qualification."
       },
       {
-        "label": "Latest focused database regression",
-        "result": "Eight passed",
-        "path": "docs/phase-12/turnover-composition-api.xml",
-        "limit": "Turnover ledger, composition, bridge and tax-close rollup. This receipt does not cover every workflow API."
+        "label": "Focused database regressions",
+        "result": "15 passed",
+        "path": "docs/phase-12/vat-ecommerce-api.xml",
+        "limit": "Three UAE VAT preset layouts, composition/review/withdrawal/export, India exclusion, Form 26 scope and statutory-report regressions; not every API."
+      },
+      {
+        "label": "Full hosted backend",
+        "result": "3,814 passed; nine skipped; overall coverage 86.05%, core 89.35%",
+        "path": "docs/phase-12/0b37a91-hosted-verification.json",
+        "limit": "Original JUnit and coverage retained for 0b37a91. Provider doubles and synthetic inputs do not establish production or legal qualification."
       },
       {
         "label": "Frontend",
-        "result": "276 tests passed; production build and TypeScript passed",
-        "path": "frontend/tests/turnover-books-composition.test.tsx",
-        "limit": "Local execution recorded in the implementation log; a test definition alone is not a hosted pass receipt."
-      },
-      {
-        "label": "Latest implementation log",
-        "result": "Scope, provenance, checks and limits retained",
+        "result": "281 tests passed; production build, TypeScript and scoped ESLint passed",
         "path": "docs/country-workflows/native-adapters.md",
-        "limit": "Hosted jobs and screenshot observations are tied to the source revision named in each entry."
+        "limit": "Full frontend CI passed on 0b37a91 and bbc16a9; local checks of the assertion/readability correction also passed."
       },
       {
-        "label": "Hosted turnover/composition browser",
-        "result": "Three passed; four screenshots visually inspected",
-        "path": "docs/phase-12/turnover-browser-8d96253.json",
-        "limit": "Synthetic real BFF/browser flows on 8d96253, not all 154 catalogue cases or a complete statutory qualification."
+        "label": "Browser boundary",
+        "result": "All three hosted cases passed on bbc16a9; two screenshots visually inspected",
+        "path": "docs/phase-12/workpaper-ecommerce-browser-bbc16a9.json",
+        "limit": "Real BFF/browser synthetic flows cover report/turnover foundations, UAE e-commerce preset draft controls and India workpaper item authoring/save. They do not exercise all 154 catalogue scenarios, complete legal fields or professional issuance."
       }
     ],
     "hosted_runs": [
       {
-        "label": "Current revision CI",
-        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40535235796",
-        "status_at_checkpoint": "Frontend, browser, containers, ML and security PASSED; full backend verification RUNNING. Inspect the live run for subsequent results."
+        "label": "Latest full backend proof",
+        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40552754909/job/122360606974",
+        "status_at_checkpoint": "PASSED on 0b37a91: 3,814 tests, nine skips; contracts, migrations/drift, lint/types, coverage gates passed. Frontend, containers, ML and security also passed."
       },
       {
-        "label": "Current turnover/composition browser proof",
-        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40535235796/job/122298583144",
-        "status_at_checkpoint": "PASSED: three cases in 23.5 seconds on 8d96253. Four refined UAE/India form screenshots visually inspected."
+        "label": "Corrected workpaper/e-commerce browser proof",
+        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40674302751/job/122768679895",
+        "status_at_checkpoint": "PASSED on bbc16a9: all three cases in 28.2 seconds. India workpaper saved IN_PROGRESS with its item key and exact protected-source references asserted; two screenshots visually inspected."
       },
       {
-        "label": "Earlier committed-GL browser proof",
-        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40532881703/job/122290174736",
-        "status_at_checkpoint": "PASSED: three cases in 18.6 seconds on 1dc535f; composition and refined captures require the newer run"
+        "label": "Assertion and readability follow-up",
+        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40674302751",
+        "status_at_checkpoint": "Browser, frontend, containers, security and ML PASSED on bbc16a9. Full backend verification RUNNING at checkpoint; later results must be read from the run."
       }
     ],
     "open_gates": [
@@ -571,7 +580,7 @@
       },
       {
         "priority": "Release",
-        "work": "Finish current hosted verification and production deployment/rollback, recovery, monitoring, privacy and professional sign-off gates.",
+        "work": "Complete latest source-specific CI and qualify production deployment/rollback, recovery, monitoring, privacy and professional sign-off. Corrected India browser authoring passed on bbc16a9; full backend passed on earlier 0b37a91. These do not close the separate production gates.",
         "proof": "Passing source-pinned jobs plus actual provider/runtime drills and named approvals. Local/container checks alone do not prove production readiness."
       }
     ],
@@ -621,7 +630,7 @@
         "id": "04",
         "status": "PARTIAL_SPECIALIST_COVERAGE",
         "shared": "Versioned controlled tax documents, notes, independent source totals, registration/component/period separation and explicit missing/rejected evidence.",
-        "UAE": "VAT document comparison, VAT201 layouts/arithmetic, customs/import box bridge and reviewed book schedule composition reuse the UAE VAT workbench.",
+        "UAE": "VAT201 aggregate-14, emirate-20 and ecommerce-20 comparisons, 72 e-commerce split/summary checks, reviewed book composition and source-bound operational report presets. Receipt-location and qualifying-status assessments are separate.",
         "India": "Bounded GSTR-1 document/summary/series and GSTR-2B profiles, notes/amendments and controlled retrieval parts supplement canonical GST comparisons.",
         "remaining": "Complete portal/schema qualification, legally assessed credit/recovery eligibility, full annual-return scope and authorized filing/action execution.",
         "evidence": [
@@ -629,7 +638,12 @@
           "backend/app/modules/country_workflows/gstr2b_parts.py",
           "backend/tests/qa_crud/test_india_gstr1_source.py",
           "backend/tests/qa_crud/test_india_gstr2b_source.py",
-          "backend/tests/qa_crud/test_vat_composition.py"
+          "backend/tests/qa_crud/test_vat_composition.py",
+          "backend/app/modules/country_workflows/vat201_arithmetic.py",
+          "backend/app/modules/regulatory/report_packs.py",
+          "backend/tests/unit/test_vat_ecommerce.py",
+          "backend/tests/qa_crud/test_vat_emirates.py",
+          "docs/country-workflows/uae-vat201-ecommerce-source.json"
         ]
       },
       {
@@ -650,21 +664,25 @@
         "status": "PARTIAL_SPECIALIST_COVERAGE",
         "shared": "Declared report requirements, applicability, evidence-backed non-applicability, current-source validation, authorship separation and unsigned generated drafts.",
         "UAE": "Source-linked CT workbench and audited-financial-statement obligation assessment; nonresident scoped revenue requires retained reviewed evidence.",
-        "India": "Tax-period-based legacy/current form selection and assessed applicability are enforced. The actual Form 26 and historical-form distinctions are retained in the source research.",
-        "remaining": "Complete independently approved clause/form manifests, statutory schedules and legal mappings. Declared requirements are not a complete official Form 26/3CD pack.",
+        "India": "Tax-period-based legacy/current form selection plus a 65-entry Form 26 numbered-item/schedule-group evidence index for report A/B and particulars C/D. Every covered item must match an exact-period/preset/applicability declaration in a current independently reviewed workpaper, with substantive section and protected source links.",
+        "remaining": "Full independently approved Form 26/legacy 3CD subfields, statutory schedules/calculations and legal mappings; original Form 26 PDF archival/visual/professional qualification and client expected results. The 65-entry structural index is not a completed official tax-audit form or filing.",
         "evidence": [
           "backend/app/modules/regulatory/tax_forms.py",
           "backend/app/modules/regulatory/report_requirements.py",
           "backend/app/modules/tax/audit_revenue.py",
           "backend/tests/qa_crud/test_tax_audit_scope.py",
-          "backend/tests/qa_crud/test_report_requirements.py"
+          "backend/tests/qa_crud/test_report_requirements.py",
+          "backend/app/modules/regulatory/form26_index.py",
+          "backend/app/modules/regulatory/workpaper_report_scope.py",
+          "frontend/src/features/workpaper-report-scope.tsx",
+          "backend/tests/unit/test_workpaper_report_scope.py"
         ]
       },
       {
         "id": "07",
         "status": "OPERATIONAL_WORKFLOWS_IMPLEMENTED",
         "shared": "Tax-close evidence/readiness and exact finding-ID exposure deduplication. Currency/sign and unknown exposure remain distinct; stale sources cannot support current conclusions.",
-        "UAE": "Reviewed VAT/CT schedules plus registration-period turnover bridge, committed-GL books and reviewed multi-source book composition.",
+        "UAE": "Reviewed VAT/CT schedules, exact-layout VAT201 report presets (including e-commerce components), registration-period turnover bridge, committed-GL books and reviewed multi-source composition. Operational agreement does not establish legal completeness.",
         "India": "GST/withholding/payroll evidence joins the same source-linked close. Turnover scope, return and adjustments remain independently reviewed inputs.",
         "remaining": "Qualify complete country obligation/report packs and annual applicability; a reconciled close does not establish legal filing completeness.",
         "evidence": [
@@ -758,16 +776,18 @@
         ]
       }
     ],
+    "unit_receipt": "docs/phase-12/vat-ecommerce-backend.xml",
+    "database_receipt": "docs/phase-12/vat-ecommerce-api.xml",
     "unit_summary": {
-      "tests": 2882,
-      "passed": 2877,
+      "tests": 2933,
+      "passed": 2928,
       "skipped": 5,
       "failures": 0,
       "errors": 0
     },
     "database_summary": {
-      "tests": 8,
-      "passed": 8,
+      "tests": 15,
+      "passed": 15,
       "skipped": 0,
       "failures": 0,
       "errors": 0

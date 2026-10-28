@@ -203,11 +203,11 @@ def receipt_summary(relative):
     assert records and not failed and not errors, relative
     return dict(tests=len(records), passed=len(records)-skipped-failed-errors, skipped=skipped, failures=failed, errors=errors)
 
-checkpoint['unit_summary'] = receipt_summary('docs/phase-12/turnover-composition-backend.xml')
-checkpoint['database_summary'] = receipt_summary('docs/phase-12/turnover-composition-api.xml')
+checkpoint['unit_summary'] = receipt_summary(checkpoint['unit_receipt'])
+checkpoint['database_summary'] = receipt_summary(checkpoint['database_receipt'])
 scenarios = json.loads((repository / 'backend/app/modules/country_workflows/scenarios.json').read_text(encoding='utf-8'))
 assert len({row['id'] for row in scenarios}) == len(scenarios)
-unit_records = list(ET.parse(repository / 'docs/phase-12/turnover-composition-backend.xml').getroot().iter('testcase'))
+unit_records = list(ET.parse(repository / checkpoint['unit_receipt']).getroot().iter('testcase'))
 for scenario in scenarios:
     matches = [r for r in unit_records if r.attrib.get('name', '').startswith('test_real_world_evidence_scenario[' + scenario['id'] + '-')]
     assert len(matches) == 1 and not any(matches[0].find(tag) is not None for tag in ('failure', 'error', 'skipped')), scenario['id']
@@ -218,7 +218,7 @@ for item in cases:
 data = dict(date='24 October 2026',cases=cases,sections=sections,sources=sources,evidence=evidence,checkpoint=checkpoint)
 (OUT/'analysis-data.json').write_text(json.dumps(data,indent=2,ensure_ascii=False),encoding='utf-8')
 esc=html.escape
-body='<h1>TheAuditor: global use-case roadmap</h1><p>UAE first · India second · Implementation checkpoint 27 October 2026 · Original research 24 October 2026</p><nav><a href="#implementation">Current implementation</a><a href="#open-gates">Remaining gates</a><a href="#case-details">All 13 cases</a>'+''.join(f'<a href="#s{i}">{esc(t)}</a>' for i,(t,_) in enumerate(sections))+'</nav>'
+body='<h1>TheAuditor: global use-case roadmap</h1><p>UAE first · India second · Implementation checkpoint '+esc(checkpoint['as_of'])+' · Original research 24 October 2026</p><nav><a href="#implementation">Current implementation</a><a href="#open-gates">Remaining gates</a><a href="#case-details">All 13 cases</a>'+''.join(f'<a href="#s{i}">{esc(t)}</a>' for i,(t,_) in enumerate(sections))+'</nav>'
 body += f'<section id="implementation"><h2>Current implementation — {esc(checkpoint["as_of"])}</h2><p><strong>{esc(checkpoint["release_status"].replace("_", " "))}</strong></p><p>{esc(checkpoint["scope"])}</p><p>Source revision: <code>{esc(checkpoint["source_revision"])}</code></p><p>{checkpoint["synthetic_scenarios"]["count"]} authored synthetic scenarios · {checkpoint["unit_summary"]["passed"]:,} backend unit tests passed ({checkpoint["unit_summary"]["skipped"]} skipped) · {checkpoint["database_summary"]["passed"]} focused database cases passed.</p><p>{esc(checkpoint["synthetic_scenarios"]["interpretation"])}</p><ul>'
 for item in checkpoint['verification']:
     body += f'<li><strong>{esc(item["label"])}</strong>: {esc(item["result"])}. <a href="../../{esc(item["path"])}">Repository evidence</a>. {esc(item["limit"])}</li>'

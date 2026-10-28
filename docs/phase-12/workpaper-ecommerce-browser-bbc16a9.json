@@ -1,0 +1,25 @@
+{
+  "source_commit": "bbc16a9d88dc46ee229686aab2ca9a56058a7fe6",
+  "run_id": 40674302751,
+  "job_id": 122768679895,
+  "job_conclusion": "success",
+  "browser_cases_passed": 3,
+  "duration_seconds": 28.2,
+  "artifact_id": 12808919229,
+  "archive_sha256": "6ef5ebc3f554638a88d3b58743412e1bed35c6cf5a7068b0a1cb80f8530287a7",
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/report-presets/IN-workpaper-item-mapping-bbc16a9.png",
+      "sha256": "95282edf0fe34046120f3886b04fa4e1246dae2a53ff2f1e4c734f4a5fa2fa87",
+      "visual_inspection": "Readable Form 26 part/period, multi-row item/source selectors, wrapped selected source label, applicability, assessment and retained item summary. No malformed separator."
+    },
+    {
+      "path": "docs/country-workflows/screenshots/report-presets/AE-vat201-ecommerce-report-preset-bbc16a9.png",
+      "sha256": "bbecd3f90109eb301029afaed4875c0ea4b82d9534004f85a5aa672e26f9e49e",
+      "visual_inspection": "UAE context, selected e-commerce/other-supply preset, explicit qualification limits and unassessed locked mandatory item controls are readable."
+    }
+  ],
+  "india_assertions": "HTTP 201; initial status IN_PROGRESS; retained item key form26.C.1 and exact protected record kind/id asserted after save",
+  "scope": "Synthetic real BFF/browser report coverage, independent reviewer and generated-draft foundations; turnover forms; UAE preset selection/draft blocking; India item-declared workpaper authoring; session/logout boundary",
+  "limits": "Does not qualify all catalogue cases, full Form 26 fields, browser manager/partner review of the new item declaration, signed reports, filing, real clients or current legal rules. Full backend verification is a separate job."
+}
