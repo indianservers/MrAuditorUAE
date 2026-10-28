@@ -1,0 +1,41 @@
+{
+  "source_commit": "07f61f174280574b8fc8883af70967e2d5c21880",
+  "run_id": 40716991360,
+  "job_id": 122917264074,
+  "conclusion": "success",
+  "browser_cases_passed": 3,
+  "duration_seconds": 48.9,
+  "artifact_id": 12829526194,
+  "archive_sha256": "c8e666a86f571a6879c12461d36ee4735b6258ff9e264cd7a915d90e7d27a860",
+  "local_artifact_verification": "Downloaded archive SHA-256 verified against metadata; exact PNG entries retained",
+  "visual_inspection": "All four PNGs individually inspected 2026-10-28",
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-native-bank-reviewed-proposal-07f61f1.png",
+      "sha256": "3eb6f35cd55b7bec1409f13c337c96dd56b51d2cbb6fd954e588152e42ece1d7",
+      "visual_inspection": "Original book and statement references, amounts, dates and booking-date evidence readable; REVIEWED/CURRENT and zero controls visible. Notification remains below transaction tables."
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-native-bank-replacement-stale-07f61f1.png",
+      "sha256": "2512f0f250c81f6013ab94077350009f3701fa30a44b0945571a9c57ebe75a89",
+      "visual_inspection": "STALE badge, retained zero controls and disabled independent approval visible."
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-msme-reviewed-payment-result-07f61f1.png",
+      "sha256": "2f2be032d7c296b45ccbcb3fb65429ab5f32e34cebb7265b191eaf27deedff5e",
+      "visual_inspection": "REVIEWED/CURRENT, qualified supporting-version wording, due date and INR 100 payment visible without notification covering result row."
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-msme-context-replacement-stale-07f61f1.png",
+      "sha256": "49a36c25631857b4dc48d2e1a51bd16841f67144b565877e0cc5ecc08d27c70f",
+      "visual_inspection": "Explicit non-current calculation warning, STALE badge and disabled independent approval visible; retained result row readable."
+    }
+  ],
+  "browser_assertions": [
+    "UAE committed GL and native CAMT source preparation uses real broker/worker; source reviews use authenticated APIs",
+    "UAE incorrect closing rejected; correct closing yields one match, zero exceptions and exact-zero controls, including decimal exponent representation",
+    "UAE UI original transaction inspection, independent result approval, XLSX matched-proposal values and replacement staleness",
+    "India MSE UI calculation, independent review, exact XLSX values, context replacement staleness and honest current/stale wording"
+  ],
+  "limits": "Three synthetic browser cases, not all 154 scenarios or real clients. Source setup/review is API-driven. Clean-file scanning does not qualify malicious-file coverage or production signature freshness. No legal completeness, bank authentication, filing, professional issuance or production deployment qualification. Full backend proof is separately source-pinned."
+}

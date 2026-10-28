@@ -4449,3 +4449,10 @@ aligned beside its label, and the next capture dismisses the approval toast.
 Two new status tests plus the existing suite passed (287 frontend tests), as did
 production build, TypeScript and scoped ESLint. These follow-up UI/test changes
 await their source-specific hosted browser result.
+
+
+## Source-specific checkpoint: 07f61f1
+
+Protected bank match inspection now exposes original book and statement rows with independent paging. UAE committed-GL/native-CAMT and India MSE browser workflows passed all three cases in 48.9 seconds. Four exact screenshots were individually inspected and hashed in `docs/phase-12/bank-msme-browser-07f61f1.json`. India stale calculations now explicitly warn that retained evidence must be rechecked before approval.
+
+Local checks: 3,033 backend units passed (five skipped), 12 focused database/API cases passed, 287 frontend tests passed; production build, TypeScript, scoped ESLint, backend lint/types and API contracts passed. Full hosted backend originals are separately pinned to 1a2e622: 3,852 passed, nine skipped, 86.08% overall and 89.35% core coverage. Latest full backend remains separately tracked. The 154 authored scenarios are synthetic; native/legal completeness, actual providers, independent client pilots and deployment qualification remain open.

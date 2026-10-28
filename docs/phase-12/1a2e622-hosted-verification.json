@@ -19,7 +19,12 @@
   "artifact_id": 12817612594,
   "artifact_size_bytes": 210498,
   "archive_sha256_from_github_metadata_and_upload_log": "56c8c9bab7b043a9a00051677cf6fc87864be8b5471a809e5d45040cbc43f0d7",
-  "original_artifact_locally_archived": false,
+  "original_artifact_locally_archived": true,
   "scope": "Initial India MSE payment-timing implementation and the complete configured backend verification job at 1a2e622",
-  "limits": "Predates retained MSE context binding, the pilot validator and the expanded scanner/worker browser flow. Does not substitute for current-head full backend verification. Synthetic inputs and provider doubles do not qualify real clients, current legal applicability or production deployment."
+  "limits": "Predates retained MSE context binding, the pilot validator and the expanded scanner/worker browser flow. Does not substitute for current-head full backend verification. Synthetic inputs and provider doubles do not qualify real clients, current legal applicability or production deployment.",
+  "locally_verified_archive_sha256": "56c8c9bab7b043a9a00051677cf6fc87864be8b5471a809e5d45040cbc43f0d7",
+  "retained_originals_sha256": {
+    "docs/phase-12/1a2e622-hosted-full.xml": "c8b686bd6c9634b05b3d56de21fcc3eeb9834ac678fdeb2466d22a0d8da8c1be",
+    "docs/phase-12/1a2e622-hosted-coverage.json": "11efcfaad5ed5aec8e73dcd07df4ca7cbd23813ae9211dcbb3981f8d97fd6154"
+  }
 }

@@ -41,15 +41,20 @@ const data = {
       "current": {
         "id": "02",
         "status": "OPERATIONAL_WORKFLOWS_IMPLEMENTED",
-        "shared": "Controlled BRS, account/owner evidence, ambiguity, opening/closing bridge, dates, outstanding carry-forward, subsequent clearance and cross-engagement cash-allocation checks.",
-        "UAE": "Authorized committed GL plus bounded reviewed CSV/XLSX/PDF and native bank profiles; account/currency scope remains explicit.",
+        "shared": "Controlled BRS, account/owner evidence, ambiguity, opening/closing bridge, dates, outstanding carry-forward, subsequent clearance and cross-engagement cash-allocation checks. Retained matched groups now expose protected original transactions through separately paged read-only inspection.",
+        "UAE": "Authorized committed GL plus bounded reviewed CSV/XLSX/PDF and native bank profiles; account/currency scope remains explicit. Hosted browser verifies committed-GL/native-CAMT matching, invalid-closing rejection, independent review, XLSX and replacement staleness.",
         "India": "Reuses the same reviewed account, statement, identifier/date and residual controls; no cross-account or currency auto-netting.",
         "remaining": "Qualify representative bank-specific files and extraction accuracy; supported profiles do not imply every bank or every PDF layout.",
         "evidence": [
           "backend/app/modules/country_workflows/bank_accounts.py",
           "backend/app/modules/country_workflows/bank_consumption.py",
           "backend/tests/qa_crud/test_bank_matching_scope.py",
-          "backend/tests/qa_crud/test_pdf_bank_tables.py"
+          "backend/tests/qa_crud/test_pdf_bank_tables.py",
+          "backend/app/modules/intelligence/bank_matches.py",
+          "frontend/src/features/bank-matched-proposals.tsx",
+          "backend/tests/qa_crud/test_bank_matched_proposals.py",
+          "frontend/e2e/bank-browser-workflow.ts",
+          "docs/phase-12/bank-msme-browser-07f61f1.json"
         ]
       }
     },
@@ -510,61 +515,56 @@ const data = {
   ],
   "checkpoint": {
     "as_of": "28 October 2026",
-    "source_revision": "f45522789a02fd2b942de2d1302e1aebe9e16c19",
+    "source_revision": "07f61f174280574b8fc8883af70967e2d5c21880",
     "release_status": "NOT_QUALIFIED_FOR_PRODUCTION_STATUTORY_USE",
-    "scope": "Operational implementation and source-specific synthetic verification through f455227. India MSE invoice payment timing now binds assessed facts to distinct retained context documents, propagates contributor separation and staleness. Three hosted browser cases passed; screenshots were visually reviewed. Full hosted backend remains separately pending; the retained complete hosted proof is the earlier 0b37a91. Original 24 October discovery baselines remain historical observations.",
+    "scope": "Operational implementation and source-specific synthetic verification through 07f61f1. UAE committed-GL/native-CAMT reconciliation now exposes original matched transactions with independent paging. India MSE current/stale evidence wording corrected. Three hosted browser cases passed; four screenshots individually inspected. Full hosted backend proof remains separately pinned to 1a2e622. Original discovery baselines are historical.",
     "verification": [
       {
         "label": "Backend units",
-        "result": "2,987 passed; five skipped",
-        "path": "docs/phase-12/msme-context-backend.xml",
-        "limit": "Source-specific local receipt includes all 154 authored scenarios; not independent legal/client qualification."
+        "result": "3,033 passed; five skipped",
+        "path": "docs/phase-12/bank-proposal-backend.xml",
+        "limit": "Includes all 154 authored synthetic scenarios; not independent legal/client qualification."
       },
       {
         "label": "Focused database regressions",
         "result": "12 passed",
-        "path": "docs/phase-12/msme-context-api.xml",
-        "limit": "MSE calculation/review/export, context identity/current bytes, copied-source rejection, author separation and replacement/withdrawal staleness, UAE exclusion, bank binding and dues allocation regressions; not every API."
+        "path": "docs/phase-12/bank-proposal-api.xml",
+        "limit": "UAE/India retained bank-proposal authorization and original rows, native source profiles and account binding; not every API."
       },
       {
         "label": "Full hosted backend",
-        "result": "3,814 passed; nine skipped; overall coverage 86.05%, core 89.35%",
-        "path": "docs/phase-12/0b37a91-hosted-verification.json",
-        "limit": "Original JUnit and coverage retained for 0b37a91. Provider doubles and synthetic inputs do not establish production or legal qualification."
+        "result": "3,852 passed; nine skipped; overall coverage 86.08%, core 89.35%",
+        "path": "docs/phase-12/1a2e622-hosted-verification.json",
+        "limit": "Original JUnit and coverage archived and hash verified for 1a2e622. Predates context binding, pilot validator and bank proposal viewer; not the latest source full backend result."
       },
       {
         "label": "Frontend",
-        "result": "284 tests passed; production build, TypeScript and scoped ESLint passed",
+        "result": "287 tests passed; production build, TypeScript and scoped ESLint passed",
         "path": "docs/country-workflows/native-adapters.md",
-        "limit": "Local checks cover f455227; hosted frontend is separately tracked by its source-specific run. Screenshot-driven removal of extraneous MSE controls is a subsequent UI-only correction."
+        "limit": "Local source-specific frontend checks; synthetic controls do not establish professional qualification."
       },
       {
         "label": "Browser boundary",
-        "result": "All three hosted cases passed on f455227; two MSE screenshots visually inspected",
-        "path": "docs/phase-12/msme-browser-f455227.json",
-        "limit": "MSE screens are draft form checks, not a browser calculation or context upload. Does not establish every scenario, legal completeness, real-client qualification, professional issuance or production readiness. Full backend verification is separate. Screenshots predate subsequent removal of extraneous MSE controls."
+        "result": "All three hosted cases passed in 48.9 seconds on 07f61f1; four screenshots visually inspected",
+        "path": "docs/phase-12/bank-msme-browser-07f61f1.json",
+        "limit": "Three synthetic browser cases, not all 154 scenarios or real clients. Source setup/review is API-driven. Clean-file scanning does not qualify malicious-file coverage or production signature freshness. No legal completeness, bank authentication, filing, professional issuance or production deployment qualification. Full backend proof is separately source-pinned."
       }
     ],
     "hosted_runs": [
       {
-        "label": "Latest full backend proof",
-        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40552754909/job/122360606974",
-        "status_at_checkpoint": "PASSED on 0b37a91: 3,814 tests, nine skips; contracts, migrations/drift, lint/types, coverage gates passed. Frontend, containers, ML and security also passed."
+        "label": "Retained full backend proof",
+        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40681529622/job/122793162310",
+        "status_at_checkpoint": "PASSED on 1a2e622: 3,852 passed, nine skipped; original JUnit and coverage retained."
       },
       {
-        "label": "Corrected workpaper/e-commerce browser proof",
-        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40674302751/job/122768679895",
-        "status_at_checkpoint": "PASSED on bbc16a9: all three cases in 28.2 seconds. India workpaper saved IN_PROGRESS with its item key and exact protected-source references asserted; two screenshots visually inspected."
+        "label": "UAE native bank and India MSE browser proof",
+        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40716991360/job/122917264074",
+        "status_at_checkpoint": "PASSED on 07f61f1: three cases in 48.9 seconds. Four original screenshots visually inspected. Frontend, security, containers and ML also passed."
       },
       {
-        "label": "Assertion and readability follow-up",
-        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40674302751",
-        "status_at_checkpoint": "Browser, frontend, containers, security and ML PASSED on bbc16a9. Full backend verification RUNNING at checkpoint; later results must be read from the run."
-      },
-      {
-        "label": "MSE context and payment forms browser proof",
-        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40686206612/job/122809087126",
-        "status_at_checkpoint": "PASSED on f455227: all three cases in 24.2 seconds. India MSE context and parameter forms and UAE exclusion checked. Full backend verification remains a separate live job."
+        "label": "Latest full backend verification",
+        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40716991360/job/122917264300",
+        "status_at_checkpoint": "Last observed IN_PROGRESS; no completed full-backend result claimed for 07f61f1."
       }
     ],
     "open_gates": [
@@ -590,7 +590,7 @@ const data = {
       },
       {
         "priority": "Release",
-        "work": "Complete latest source-specific CI and qualify production deployment/rollback, recovery, monitoring, privacy and professional sign-off. MSE browser forms passed on f455227; the retained complete backend proof is earlier 0b37a91. These do not close production gates.",
+        "work": "Complete latest source-specific full CI and qualify production deployment/rollback, recovery, monitoring, privacy and professional sign-off. Browser proof is 07f61f1; retained complete backend proof is earlier 1a2e622. These do not close production gates.",
         "proof": "Passing source-pinned jobs plus actual provider/runtime drills and named approvals. Local/container checks alone do not prove production readiness."
       }
     ],
@@ -611,15 +611,20 @@ const data = {
       {
         "id": "02",
         "status": "OPERATIONAL_WORKFLOWS_IMPLEMENTED",
-        "shared": "Controlled BRS, account/owner evidence, ambiguity, opening/closing bridge, dates, outstanding carry-forward, subsequent clearance and cross-engagement cash-allocation checks.",
-        "UAE": "Authorized committed GL plus bounded reviewed CSV/XLSX/PDF and native bank profiles; account/currency scope remains explicit.",
+        "shared": "Controlled BRS, account/owner evidence, ambiguity, opening/closing bridge, dates, outstanding carry-forward, subsequent clearance and cross-engagement cash-allocation checks. Retained matched groups now expose protected original transactions through separately paged read-only inspection.",
+        "UAE": "Authorized committed GL plus bounded reviewed CSV/XLSX/PDF and native bank profiles; account/currency scope remains explicit. Hosted browser verifies committed-GL/native-CAMT matching, invalid-closing rejection, independent review, XLSX and replacement staleness.",
         "India": "Reuses the same reviewed account, statement, identifier/date and residual controls; no cross-account or currency auto-netting.",
         "remaining": "Qualify representative bank-specific files and extraction accuracy; supported profiles do not imply every bank or every PDF layout.",
         "evidence": [
           "backend/app/modules/country_workflows/bank_accounts.py",
           "backend/app/modules/country_workflows/bank_consumption.py",
           "backend/tests/qa_crud/test_bank_matching_scope.py",
-          "backend/tests/qa_crud/test_pdf_bank_tables.py"
+          "backend/tests/qa_crud/test_pdf_bank_tables.py",
+          "backend/app/modules/intelligence/bank_matches.py",
+          "frontend/src/features/bank-matched-proposals.tsx",
+          "backend/tests/qa_crud/test_bank_matched_proposals.py",
+          "frontend/e2e/bank-browser-workflow.ts",
+          "docs/phase-12/bank-msme-browser-07f61f1.json"
         ]
       },
       {
@@ -790,11 +795,11 @@ const data = {
         ]
       }
     ],
-    "unit_receipt": "docs/phase-12/msme-context-backend.xml",
-    "database_receipt": "docs/phase-12/msme-context-api.xml",
+    "unit_receipt": "docs/phase-12/bank-proposal-backend.xml",
+    "database_receipt": "docs/phase-12/bank-proposal-api.xml",
     "unit_summary": {
-      "tests": 2992,
-      "passed": 2987,
+      "tests": 3038,
+      "passed": 3033,
       "skipped": 5,
       "failures": 0,
       "errors": 0
