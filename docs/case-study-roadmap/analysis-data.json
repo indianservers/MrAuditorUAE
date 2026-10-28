@@ -40,7 +40,7 @@
       "current": {
         "id": "02",
         "status": "OPERATIONAL_WORKFLOWS_IMPLEMENTED",
-        "shared": "Controlled BRS, account/owner evidence, ambiguity, opening/closing bridge, dates, outstanding carry-forward, subsequent clearance and cross-engagement cash-allocation checks. Retained matched groups now expose protected original transactions through separately paged read-only inspection. Explicit merchant batches now bridge gross sales, separately checked refunds/chargebacks, fees, assessed tax/withholding and reserves to net signed bank allocations. Partial and pooled payouts retain exact links; residuals block approval. Merchant results also retain separately paged booking/value-date provenance, reject reversed/value-date-only settlements and require regeneration of earlier result contracts.",
+        "shared": "Controlled BRS, account/owner evidence, ambiguity, opening/closing bridge, dates, outstanding carry-forward, subsequent clearance and cross-engagement cash-allocation checks. Retained matched groups now expose protected original transactions through separately paged read-only inspection. Explicit merchant batches now bridge gross sales, separately checked refunds/chargebacks, fees, assessed tax/withholding and reserves to net signed bank allocations. Partial and pooled payouts retain exact links; residuals block approval. Merchant results also retain separately paged booking/value-date provenance, reject reversed/value-date-only settlements and require regeneration of earlier result contracts. Merchant settlement can now retain a current independent account-document review covering the entire selected period, with unchanged originals and recursive withdrawal staleness.",
         "UAE": "Authorized committed GL plus bounded reviewed CSV/XLSX/PDF and native bank profiles; account/currency scope remains explicit. Hosted browser verifies committed-GL/native-CAMT matching, invalid-closing rejection, independent review, XLSX and replacement staleness. Merchant component arithmetic uses assessed UAE/foreign fee-tax labels without inferring VAT rates or recovery.",
         "India": "Reuses the same reviewed account, statement, identifier/date and residual controls; no cross-account or currency auto-netting. The same merchant arithmetic uses separately assessed India/foreign fee-tax labels without inferring GST or withholding entitlement.",
         "remaining": "Qualify representative bank-specific files and extraction accuracy; supported profiles do not imply every bank or every PDF layout. Qualify processor-specific native files, independent client schedules, reserve liability roll-forward and any cross-workflow reservation integration.",
@@ -62,7 +62,10 @@
           "frontend/src/features/merchant-settlement-details.tsx",
           "frontend/tests/merchant-settlement-details.test.tsx",
           "backend/app/modules/country_workflows/review.py",
-          "docs/phase-12/merchant-browser-20ee29a.json"
+          "docs/phase-12/merchant-browser-20ee29a.json",
+          "backend/tests/unit/test_merchant_bank_binding.py",
+          "backend/tests/qa_crud/test_merchant_bank_binding.py",
+          "docs/phase-12/merchant-account-browser-e119982.json"
         ]
       }
     },
@@ -523,21 +526,21 @@
   ],
   "checkpoint": {
     "as_of": "28 October 2026",
-    "source_revision": "20ee29a1c2717ab2e293b8282699d8aec56a0e30",
+    "source_revision": "e119982cef2ba95a6c4b35b0038e5e33ba860b71",
     "release_status": "NOT_QUALIFIED_FOR_PRODUCTION_STATUTORY_USE",
-    "scope": "Operational implementation and source-specific synthetic verification through 20ee29a. UAE and India merchant gross-to-net settlement uses independently reviewed books, processor batches, signed bank movements and exact allocation links. The compact UI exposes full components and bank comparison; merchant contract 2 rejects reversal/value-date settlement evidence and makes earlier merchant results stale. Country fee-tax labels remain assessed source facts, not statutory calculations. All three hosted browser cases passed on the current merchant contract; four exact merchant screenshots were individually inspected. Retained complete hosted backend originals remain separately pinned to 07f61f1. Original discovery baselines are historical.",
+    "scope": "Operational implementation and source-specific synthetic verification through e119982. UAE/India merchant settlement now optionally links the existing independently reviewed account-document comparison over the entire financial window. Native account aliases require agreement to reviewed original account numbers; canonical ledger labels remain explicitly distinguished. Original source bytes are preserved and review withdrawal stales dependent results. Merchant contract 2 retains gross/net and booked/value-date controls. All three hosted cases passed; four linked merchant screenshots individually inspected. Retained complete hosted backend proof remains separately pinned to 07f61f1. Original discovery baselines are historical.",
     "verification": [
       {
         "label": "Backend units",
-        "result": "3,078 passed; five skipped",
-        "path": "docs/phase-12/merchant-dates-backend.xml",
-        "limit": "Includes all 154 authored scenarios and 45 merchant-specific unit cases. Four isolated connector DB/Redis checks and one CPU-worker check are skipped in this suite; synthetic mechanics do not establish independent legal/client qualification."
+        "result": "3,090 passed; five skipped",
+        "path": "docs/phase-12/merchant-account-backend.xml",
+        "limit": "Includes all 154 authored scenarios, 45 merchant calculation/date cases and 12 account-binding cases. Four isolated connector DB/Redis checks and one CPU-worker check remain skipped in this suite. Synthetic mechanics do not establish independent real-client or legal qualification."
       },
       {
         "label": "Focused database regressions",
-        "result": "Eight passed",
-        "path": "docs/phase-12/merchant-dates-api.xml",
-        "limit": "UAE/India merchant source review, reversal rejection without a result, approval, XLSX and withdrawal staleness plus bank inspection and MSE regressions; not every API."
+        "result": "Ten passed",
+        "path": "docs/phase-12/merchant-account-api.xml",
+        "limit": "UAE/India native merchant account mapping, original downloads and recursive review-withdrawal staleness plus shared account-binding and merchant regressions; scanner/dispatch are explicit doubles, not every API."
       },
       {
         "label": "Full hosted backend",
@@ -549,13 +552,13 @@
         "label": "Frontend",
         "result": "293 tests passed; production build, TypeScript and scoped ESLint passed",
         "path": "docs/country-workflows/native-adapters.md",
-        "limit": "293 local frontend tests/build checks passed on f08cce7; application code unchanged through 20ee29a. Hosted frontend checks also passed on 20ee29a. Current E2E helper passes TypeScript/scoped lint and all three hosted cases."
+        "limit": "All 293 local frontend tests and production build passed on 1ac8136. The subsequent accessible-name fix passed focused tests/types/lint; hosted frontend checks also passed on e119982."
       },
       {
         "label": "Browser boundary",
-        "result": "All three hosted cases passed on 20ee29a; reported duration 1.1m; four screenshots visually inspected",
-        "path": "docs/phase-12/merchant-browser-20ee29a.json",
-        "limit": "Three synthetic browser cases, not all 154 catalogue scenarios or real clients. Source setup/review is API-driven. Known clean files do not qualify malicious-file detection or production signature freshness. Fee tax/withholding remain assessed source facts; no bank authentication, statutory completeness, filing, professional issuance or production deployment qualification. Current full backend verification is separately running; retained complete full proof is earlier 07f61f1."
+        "result": "All three hosted cases passed on e119982; reported duration 1.1m; four screenshots visually inspected",
+        "path": "docs/phase-12/merchant-account-browser-e119982.json",
+        "limit": "Three synthetic browser cases, not all 154 authored catalogue scenarios or independent real clients. Account/source setup and reviews use APIs. Browser fixtures use canonical bank labels; separate UAE/India real-API tests validate native CAMT account-number mapping and original byte preservation, with scan/dispatch doubles. Account document agreement is not bank authentication. Known clean browser files do not qualify malware coverage or production signature freshness. Current full-backend CI, complete legal/native packs, actual providers, real-client pilots and production qualification remain separate."
       }
     ],
     "hosted_runs": [
@@ -565,14 +568,14 @@
         "status_at_checkpoint": "PASSED on 07f61f1: 3,925 passed, nine skipped, 86.11% overall and 89.35% core coverage. All other jobs on this source also passed. Original JUnit and coverage retained; merchant workflow is later source."
       },
       {
-        "label": "Current merchant contract browser and CI",
-        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40728696415/job/122958808559",
-        "status_at_checkpoint": "Browser, frontend, security, ML and containers PASSED on 20ee29a. Browser includes both country merchant flows, existing UAE native bank and India MSE paths; three cases reported in 1.1m. Four exact merchant screenshots visually inspected."
+        "label": "Current linked-account merchant browser and CI",
+        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40733634486/job/122976244121",
+        "status_at_checkpoint": "Browser, frontend, security, ML and containers PASSED on e119982. Three cases include linked merchant UI selection, approval, XLSX and linked-review withdrawal staleness in both countries alongside existing native-bank/MSE flows. Four exact linked-merchant screenshots individually inspected."
       },
       {
         "label": "Current full backend verification",
-        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40728696415/job/122958808728",
-        "status_at_checkpoint": "Last observed IN_PROGRESS on 20ee29a. No completed current-source full backend result claimed. Retained full proof is separately pinned to 07f61f1."
+        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40733634486/job/122976243859",
+        "status_at_checkpoint": "Last observed IN_PROGRESS on e119982; no completed current-source full backend result claimed. Complete retained proof is earlier 07f61f1."
       }
     ],
     "open_gates": [
@@ -598,7 +601,7 @@
       },
       {
         "priority": "Release",
-        "work": "Complete current source-specific full backend CI and qualify production deployment/rollback, recovery, monitoring, privacy and professional sign-off. Merchant contract 2 on 20ee29a has passing local units/API/frontend and hosted browser, frontend, security, ML and containers. Retained complete hosted backend proof is 07f61f1. These synthetic checks do not close real-client or production gates.",
+        "work": "Complete current source-specific full backend CI and qualify production deployment/rollback, recovery, monitoring, privacy and professional sign-off. Linked merchant source e119982 has passing local units/API/frontend and hosted browser, frontend, security, ML and containers. Retained complete full backend proof is 07f61f1. Synthetic mechanics do not close real-client or production gates.",
         "proof": "Passing source-pinned jobs plus actual provider/runtime drills and named approvals. Local/container checks alone do not prove production readiness."
       }
     ],
@@ -619,7 +622,7 @@
       {
         "id": "02",
         "status": "OPERATIONAL_WORKFLOWS_IMPLEMENTED",
-        "shared": "Controlled BRS, account/owner evidence, ambiguity, opening/closing bridge, dates, outstanding carry-forward, subsequent clearance and cross-engagement cash-allocation checks. Retained matched groups now expose protected original transactions through separately paged read-only inspection. Explicit merchant batches now bridge gross sales, separately checked refunds/chargebacks, fees, assessed tax/withholding and reserves to net signed bank allocations. Partial and pooled payouts retain exact links; residuals block approval. Merchant results also retain separately paged booking/value-date provenance, reject reversed/value-date-only settlements and require regeneration of earlier result contracts.",
+        "shared": "Controlled BRS, account/owner evidence, ambiguity, opening/closing bridge, dates, outstanding carry-forward, subsequent clearance and cross-engagement cash-allocation checks. Retained matched groups now expose protected original transactions through separately paged read-only inspection. Explicit merchant batches now bridge gross sales, separately checked refunds/chargebacks, fees, assessed tax/withholding and reserves to net signed bank allocations. Partial and pooled payouts retain exact links; residuals block approval. Merchant results also retain separately paged booking/value-date provenance, reject reversed/value-date-only settlements and require regeneration of earlier result contracts. Merchant settlement can now retain a current independent account-document review covering the entire selected period, with unchanged originals and recursive withdrawal staleness.",
         "UAE": "Authorized committed GL plus bounded reviewed CSV/XLSX/PDF and native bank profiles; account/currency scope remains explicit. Hosted browser verifies committed-GL/native-CAMT matching, invalid-closing rejection, independent review, XLSX and replacement staleness. Merchant component arithmetic uses assessed UAE/foreign fee-tax labels without inferring VAT rates or recovery.",
         "India": "Reuses the same reviewed account, statement, identifier/date and residual controls; no cross-account or currency auto-netting. The same merchant arithmetic uses separately assessed India/foreign fee-tax labels without inferring GST or withholding entitlement.",
         "remaining": "Qualify representative bank-specific files and extraction accuracy; supported profiles do not imply every bank or every PDF layout. Qualify processor-specific native files, independent client schedules, reserve liability roll-forward and any cross-workflow reservation integration.",
@@ -641,7 +644,10 @@
           "frontend/src/features/merchant-settlement-details.tsx",
           "frontend/tests/merchant-settlement-details.test.tsx",
           "backend/app/modules/country_workflows/review.py",
-          "docs/phase-12/merchant-browser-20ee29a.json"
+          "docs/phase-12/merchant-browser-20ee29a.json",
+          "backend/tests/unit/test_merchant_bank_binding.py",
+          "backend/tests/qa_crud/test_merchant_bank_binding.py",
+          "docs/phase-12/merchant-account-browser-e119982.json"
         ]
       },
       {
@@ -812,18 +818,18 @@
         ]
       }
     ],
-    "unit_receipt": "docs/phase-12/merchant-dates-backend.xml",
-    "database_receipt": "docs/phase-12/merchant-dates-api.xml",
+    "unit_receipt": "docs/phase-12/merchant-account-backend.xml",
+    "database_receipt": "docs/phase-12/merchant-account-api.xml",
     "unit_summary": {
-      "tests": 3083,
-      "passed": 3078,
+      "tests": 3095,
+      "passed": 3090,
       "skipped": 5,
       "failures": 0,
       "errors": 0
     },
     "database_summary": {
-      "tests": 8,
-      "passed": 8,
+      "tests": 10,
+      "passed": 10,
       "skipped": 0,
       "failures": 0,
       "errors": 0

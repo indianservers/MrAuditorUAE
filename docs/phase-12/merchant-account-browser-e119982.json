@@ -1,0 +1,45 @@
+{
+  "source_commit": "e119982cef2ba95a6c4b35b0038e5e33ba860b71",
+  "backend_implementation_revision": "1ac81367dac64de867bda91d2c725728ddede21a",
+  "run_id": 40733634486,
+  "job_id": 122976244121,
+  "conclusion": "success",
+  "browser_cases_passed": 3,
+  "duration_reported": "1.1m",
+  "artifact_id": 12836851335,
+  "archive_sha256": "8f745585898c52864d35d8c2644826ed968f5f3070ef7e8fb5d7366d8d547018",
+  "local_archive_verification": "Downloaded archive SHA-256 verified against metadata; four exact PNG entries retained",
+  "visual_inspection": "All four individually inspected 2026-10-28",
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-merchant-reviewed-settlement-e119982.png",
+      "sha256": "37eedd07a9e3a45b0fa69613cab7e6d23b65e922a366cb58c185bae3d1848ca3",
+      "visual_inspection": "Reviewed/current components, full June account-review window, explicit canonical-label limitation, linked-review button and net/bank comparison are readable."
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-merchant-withdrawn-source-stale-e119982.png",
+      "sha256": "616f780b976c6341458a62f659e4e1124bb81d13011e3a596abd40b8291a9a7a",
+      "visual_inspection": "Historical linked account details remain readable while STALE badge and disabled independent approval clearly mark the withdrawn-review dependency."
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-merchant-reviewed-settlement-e119982.png",
+      "sha256": "44c760537f18658e9361dff53ab9025f2807155e2210d175dfbf6772bba36c18",
+      "visual_inspection": "Reviewed/current components, full June account-review window, explicit canonical-label limitation, linked-review button and net/bank comparison are readable."
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-merchant-withdrawn-source-stale-e119982.png",
+      "sha256": "6b5098cbc1c8607cd14fc234cf1a2b4c1ae7619a23c293629d14dcce009e3a78",
+      "visual_inspection": "Historical linked account details remain readable while STALE badge and disabled independent approval clearly mark the withdrawn-review dependency."
+    }
+  ],
+  "verified_behavior": [
+    "Real clean-file uploads and worker jobs prepare four merchant sources and three account-document sources per country; source and account-comparison approvals use authenticated APIs",
+    "UAE and India UI select the reviewed account comparison and submit a meaningful full-window scope assessment",
+    "Merchant contract 2 and explicit declared bank-date provenance asserted; account linkage status and full June window checked",
+    "Browser linkage correctly reports DECLARED_LEDGER_ACCOUNT_LABEL_ONLY rather than claiming native account-number agreement",
+    "Preparer self-approval denied; independent UI approval selects the reviewed result; XLSX net/bank values verified from downloaded bytes",
+    "Withdrawal of the linked account comparison makes the reviewed merchant result STALE without changing its original body; UI approval disabled",
+    "Existing UAE native-bank and India MSE flows pass in the same cases; reviewer page errors empty"
+  ],
+  "limits": "Three synthetic browser cases, not all 154 authored catalogue scenarios or independent real clients. Account/source setup and reviews use APIs. Browser fixtures use canonical bank labels; separate UAE/India real-API tests validate native CAMT account-number mapping and original byte preservation, with scan/dispatch doubles. Account document agreement is not bank authentication. Known clean browser files do not qualify malware coverage or production signature freshness. Current full-backend CI, complete legal/native packs, actual providers, real-client pilots and production qualification remain separate."
+}
