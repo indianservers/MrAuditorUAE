@@ -210,7 +210,7 @@ async def linkable_sources(
         )
     ).all()
     result.extend(
-        {"id": str(r.id), "kind": "record", "label": r.reference + " â€” " + r.title}
+        {"id": str(r.id), "kind": "record", "label": r.reference + ": " + r.title}
         for r in rows
         if "ifrs.read" in source_permissions or not r.kind.startswith("ifrs-")
         if "tax.profile.read" in source_permissions or not r.kind.startswith("tax-")

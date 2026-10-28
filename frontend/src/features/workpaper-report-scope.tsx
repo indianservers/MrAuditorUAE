@@ -176,6 +176,7 @@ export function WorkpaperReportScopeEditor({
             <select
               multiple
               size={5}
+              style={{ height: 140 }}
               value={keys}
               onChange={(e) =>
                 setKeys(Array.from(e.target.selectedOptions, (o) => o.value))
@@ -209,6 +210,7 @@ export function WorkpaperReportScopeEditor({
             <select
               multiple
               size={5}
+              style={{ height: 120 }}
               value={refs}
               onChange={(e) =>
                 setRefs(Array.from(e.target.selectedOptions, (o) => o.value))
@@ -223,6 +225,13 @@ export function WorkpaperReportScopeEditor({
               ))}
             </select>
           </label>
+          {selectedRefs.map((source) => (
+            <p key={keyFor(source)} style={{ overflowWrap: "anywhere" }}>
+              {labels.data?.items.find(
+                (l) => l.kind === source.kind && l.id === source.id,
+              )?.label || `Linked source (${source.kind})`}
+            </p>
+          ))}
           <label>
             Workpaper item applicability
             <select

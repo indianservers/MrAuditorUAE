@@ -810,7 +810,7 @@ for (const code of ["AE", "IN"] as const) {
       const saved = await savedPaper;
       expect(saved.status(), await saved.text()).toBe(201);
       const paper = await saved.json();
-      expect(paper.status).toBe("DRAFT");
+      expect(paper.status).toBe("IN_PROGRESS");
       expect(paper.body.report_requirement_scope.items[0].key).toBe(
         "form26.C.1",
       );

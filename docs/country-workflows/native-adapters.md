@@ -4116,3 +4116,35 @@ current API/payload contract checks passed. The retained [backend receipt](../ph
 and [API receipt](../phase-12/vat-ecommerce-api.xml) document these local checks.
 The catalogue remains 154 authored synthetic scenarios; this increment adds
 operational coverage and tests without claiming additional qualified clients.
+
+### Full hosted verification and workpaper-browser correction
+
+[Hosted run 40552754909](https://github.com/indianservers/MrAuditorUAE/actions/runs/40552754909)
+on source `0b37a915fb9472ba6752ccac664a59510179c57f` completed full backend
+verification: 3,814 passed, nine skipped, 54 warnings, 4,424.46 seconds;
+overall coverage 86.05% and calculation/validation core 89.35% (831/930).
+Migration/drift, contracts, Ruff/format, mypy and the required coverage floors
+passed. Frontend, containers, security and ML also passed. Artifact 12762775885
+was retrieved with archive SHA-256 verified; the original [JUnit](../phase-12/0b37a91-hosted-full.xml),
+[coverage](../phase-12/0b37a91-hosted-coverage.json) and [receipt](../phase-12/0b37a91-hosted-verification.json)
+are retained. The JUnit has 3,823 case records, zero failures/errors and nine skips.
+
+The browser job is separately FAILED, not folded into the backend pass. UAE
+and BFF cases passed. India saved the new workpaper with HTTP 201, then failed
+an incorrect test expectation of `DRAFT`; audit workpapers start `IN_PROGRESS`
+under the existing API lifecycle. The assertion now checks that actual state
+and continues to check the retained item key and exact protected source IDs.
+The earlier source's workpaper and UAE e-commerce images were downloaded with
+archive SHA-256 verification and inspected. They are intermediate evidence of
+rendering before the failing assertion, not a passing authoring receipt.
+
+Visual inspection also exposed a pre-existing malformed separator in linkable
+source labels and the global select height constraining multiple-choice lists.
+Labels now use an ASCII colon, item/source lists have explicit usable heights,
+and selected source names wrap fully below the source selector. These display
+changes and the corrected assertion need a new source-specific browser run.
+Local verification of the assertion/display correction: both focused editor
+cases and all 281 frontend tests passed; production build, TypeScript and
+scoped ESLint passed. The API-label file passed focused Ruff/format and mypy.
+The full hosted backend receipt above remains pinned to 0b37a91; these small
+later changes are not retroactively included in that result.
