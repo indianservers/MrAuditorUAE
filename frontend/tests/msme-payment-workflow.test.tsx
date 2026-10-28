@@ -107,6 +107,12 @@ it("requires explicit buyer and bank/calendar scope, and offers only reviewed ro
   fireEvent.change(screen.getByLabelText("Workflow"), {
     target: { value: "india-msme-payment-timing" },
   });
+  expect(
+    screen.queryByLabelText(/Compare arrears only/),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.queryByLabelText("Tax-year start (for form guidance)"),
+  ).not.toBeInTheDocument();
   for (const role of Object.keys(roles)) {
     const picker = screen.getByLabelText(`${role} source`);
     expect(

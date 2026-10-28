@@ -1,0 +1,14 @@
+{
+  "country": "AE",
+  "workflow": null,
+  "client_reference": null,
+  "period_start": null,
+  "period_end": null,
+  "input_sha256": {},
+  "expected_result_sha256": null,
+  "actual_result_sha256": null,
+  "independent_reviewer": null,
+  "decision": "NOT_REVIEWED",
+  "review_date": null,
+  "assessment": null
+}

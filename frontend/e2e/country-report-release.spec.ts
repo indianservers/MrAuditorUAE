@@ -823,6 +823,10 @@ for (const code of ["AE", "IN"] as const) {
       await page
         .getByRole("combobox", { name: "Workflow", exact: true })
         .selectOption("india-msme-payment-timing");
+      await expect(page.getByLabel(/Compare arrears only/)).toHaveCount(0);
+      await expect(
+        page.getByLabel("Tax-year start (for form guidance)", { exact: true }),
+      ).toHaveCount(0);
       for (const role of ["assessments", "invoices", "bank", "allocations"]) {
         await expect(
           page.getByRole("combobox", { name: `${role} source`, exact: true }),

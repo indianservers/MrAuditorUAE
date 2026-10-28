@@ -1,20 +1,20 @@
 {
   "as_of": "28 October 2026",
-  "source_revision": "bbc16a9d88dc46ee229686aab2ca9a56058a7fe6",
+  "source_revision": "f45522789a02fd2b942de2d1302e1aebe9e16c19",
   "release_status": "NOT_QUALIFIED_FOR_PRODUCTION_STATUTORY_USE",
-  "scope": "Operational implementation and source-specific synthetic verification through bbc16a9. UAE/India/BFF browser cases passed after the workpaper assertion/readability correction. Full hosted backend passed on earlier 0b37a91; the later full backend run is separately pending. Original 24 October discovery baselines remain historical observations.",
+  "scope": "Operational implementation and source-specific synthetic verification through f455227. India MSE invoice payment timing now binds assessed facts to distinct retained context documents, propagates contributor separation and staleness. Three hosted browser cases passed; screenshots were visually reviewed. Full hosted backend remains separately pending; the retained complete hosted proof is the earlier 0b37a91. Original 24 October discovery baselines remain historical observations.",
   "verification": [
     {
       "label": "Backend units",
-      "result": "2,928 passed; five skipped",
-      "path": "docs/phase-12/vat-ecommerce-backend.xml",
+      "result": "2,987 passed; five skipped",
+      "path": "docs/phase-12/msme-context-backend.xml",
       "limit": "Source-specific local receipt includes all 154 authored scenarios; not independent legal/client qualification."
     },
     {
       "label": "Focused database regressions",
-      "result": "15 passed",
-      "path": "docs/phase-12/vat-ecommerce-api.xml",
-      "limit": "Three UAE VAT preset layouts, composition/review/withdrawal/export, India exclusion, Form 26 scope and statutory-report regressions; not every API."
+      "result": "12 passed",
+      "path": "docs/phase-12/msme-context-api.xml",
+      "limit": "MSE calculation/review/export, context identity/current bytes, copied-source rejection, author separation and replacement/withdrawal staleness, UAE exclusion, bank binding and dues allocation regressions; not every API."
     },
     {
       "label": "Full hosted backend",
@@ -24,15 +24,15 @@
     },
     {
       "label": "Frontend",
-      "result": "281 tests passed; production build, TypeScript and scoped ESLint passed",
+      "result": "284 tests passed; production build, TypeScript and scoped ESLint passed",
       "path": "docs/country-workflows/native-adapters.md",
-      "limit": "Full frontend CI passed on 0b37a91 and bbc16a9; local checks of the assertion/readability correction also passed."
+      "limit": "Local checks cover f455227; hosted frontend is separately tracked by its source-specific run. Screenshot-driven removal of extraneous MSE controls is a subsequent UI-only correction."
     },
     {
       "label": "Browser boundary",
-      "result": "All three hosted cases passed on bbc16a9; two screenshots visually inspected",
-      "path": "docs/phase-12/workpaper-ecommerce-browser-bbc16a9.json",
-      "limit": "Real BFF/browser synthetic flows cover report/turnover foundations, UAE e-commerce preset draft controls and India workpaper item authoring/save. They do not exercise all 154 catalogue scenarios, complete legal fields or professional issuance."
+      "result": "All three hosted cases passed on f455227; two MSE screenshots visually inspected",
+      "path": "docs/phase-12/msme-browser-f455227.json",
+      "limit": "MSE screens are draft form checks, not a browser calculation or context upload. Does not establish every scenario, legal completeness, real-client qualification, professional issuance or production readiness. Full backend verification is separate. Screenshots predate subsequent removal of extraneous MSE controls."
     }
   ],
   "hosted_runs": [
@@ -50,6 +50,11 @@
       "label": "Assertion and readability follow-up",
       "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40674302751",
       "status_at_checkpoint": "Browser, frontend, containers, security and ML PASSED on bbc16a9. Full backend verification RUNNING at checkpoint; later results must be read from the run."
+    },
+    {
+      "label": "MSE context and payment forms browser proof",
+      "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40686206612/job/122809087126",
+      "status_at_checkpoint": "PASSED on f455227: all three cases in 24.2 seconds. India MSE context and parameter forms and UAE exclusion checked. Full backend verification remains a separate live job."
     }
   ],
   "open_gates": [
@@ -60,7 +65,7 @@
     },
     {
       "priority": "India second",
-      "work": "Complete native withholding-return/26AS/AIS coverage, state/cohort payroll packs and legacy/current tax-audit clause mappings; retain the existing GST and ECR profiles as explicitly bounded adapters.",
+      "work": "Complete native withholding-return/26AS/AIS coverage, state/cohort payroll packs and legacy/current tax-audit clause mappings; retain the existing GST and ECR profiles as explicitly bounded adapters. Complete the separate MSE tax-deduction, statutory-interest and disclosure procedures with qualified legal versions and independent schedules.",
       "proof": "Source-bound applicable form/rule versions, exact clause coverage, representative amendments and professional approval."
     },
     {
@@ -75,7 +80,7 @@
     },
     {
       "priority": "Release",
-      "work": "Complete latest source-specific CI and qualify production deployment/rollback, recovery, monitoring, privacy and professional sign-off. Corrected India browser authoring passed on bbc16a9; full backend passed on earlier 0b37a91. These do not close the separate production gates.",
+      "work": "Complete latest source-specific CI and qualify production deployment/rollback, recovery, monitoring, privacy and professional sign-off. MSE browser forms passed on f455227; the retained complete backend proof is earlier 0b37a91. These do not close production gates.",
       "proof": "Passing source-pinned jobs plus actual provider/runtime drills and named approvals. Local/container checks alone do not prove production readiness."
     }
   ],
@@ -159,8 +164,8 @@
       "status": "PARTIAL_SPECIALIST_COVERAGE",
       "shared": "Declared report requirements, applicability, evidence-backed non-applicability, current-source validation, authorship separation and unsigned generated drafts.",
       "UAE": "Source-linked CT workbench and audited-financial-statement obligation assessment; nonresident scoped revenue requires retained reviewed evidence.",
-      "India": "Tax-period-based legacy/current form selection plus a 65-entry Form 26 numbered-item/schedule-group evidence index for report A/B and particulars C/D. Every covered item must match an exact-period/preset/applicability declaration in a current independently reviewed workpaper, with substantive section and protected source links.",
-      "remaining": "Full independently approved Form 26/legacy 3CD subfields, statutory schedules/calculations and legal mappings; original Form 26 PDF archival/visual/professional qualification and client expected results. The 65-entry structural index is not a completed official tax-audit form or filing.",
+      "India": "Tax-period-based legacy/current form selection plus a 65-entry Form 26 numbered-item/schedule-group evidence index for report A/B and particulars C/D. Every covered item must match an exact-period/preset/applicability declaration in a current independently reviewed workpaper, with substantive section and protected source links. Assessed micro/small supplier invoice payment timing now retains supplier eligibility, acceptance/objection/written terms and exact split bank allocations; separate context document bytes, current versions and independent contributor review are required.",
+      "remaining": "Full independently approved Form 26/legacy 3CD subfields, statutory schedules/calculations and legal mappings; original Form 26 PDF archival/visual/professional qualification and client expected results. The 65-entry structural index is not a completed official tax-audit form or filing. MSE tax deductibility, statutory interest and complete disclosure packs remain separate unimplemented procedures; timing output is not a tax deduction.",
       "evidence": [
         "backend/app/modules/regulatory/tax_forms.py",
         "backend/app/modules/regulatory/report_requirements.py",
@@ -170,7 +175,11 @@
         "backend/app/modules/regulatory/form26_index.py",
         "backend/app/modules/regulatory/workpaper_report_scope.py",
         "frontend/src/features/workpaper-report-scope.tsx",
-        "backend/tests/unit/test_workpaper_report_scope.py"
+        "backend/tests/unit/test_workpaper_report_scope.py",
+        "backend/app/modules/country_workflows/msme_payments.py",
+        "backend/app/modules/country_workflows/msme_evidence.py",
+        "backend/tests/qa_crud/test_msme_payments.py",
+        "docs/country-workflows/india-msme-source-scope.json"
       ]
     },
     {
@@ -233,7 +242,7 @@
       "status": "COMMON_CONTROLS_IMPLEMENTED",
       "shared": "Vendor identity/diligence, ownership and conflicts, uploaded-list screening, adverse-media evidence and separate procurement/payment controls.",
       "UAE": "UAE entity/policy scope is retained; unsupported or unavailable external searches remain unresolved evidence.",
-      "India": "India entity/policy scope is retained; registry/tax registration authenticity is not inferred from document syntax or uploaded declarations.",
+      "India": "India entity/policy scope is retained; registry/tax registration authenticity is not inferred from document syntax or uploaded declarations. India supplier-payment review additionally supports source-assessed micro/small eligibility and acceptance-based due dates with retained document dependencies.",
       "remaining": "Authorized provider integrations, complete country diligence criteria and independently checked vendor cases; software cannot manufacture authenticity or professional attestation.",
       "evidence": [
         "backend/app/modules/country_workflows/adverse_media.py",
@@ -271,6 +280,6 @@
       ]
     }
   ],
-  "unit_receipt": "docs/phase-12/vat-ecommerce-backend.xml",
-  "database_receipt": "docs/phase-12/vat-ecommerce-api.xml"
+  "unit_receipt": "docs/phase-12/msme-context-backend.xml",
+  "database_receipt": "docs/phase-12/msme-context-api.xml"
 }

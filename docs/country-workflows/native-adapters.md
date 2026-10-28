@@ -4276,3 +4276,43 @@ is defined but awaits hosted execution for this commit. See the retained
 The final full backend unit run passed 2,987 tests with five skipped (including
 23 context-contract cases). This is local synthetic/regression evidence, not
 independent professional or real-client qualification.
+
+### MSE browser evidence and workflow-specific controls
+
+All three hosted browser cases passed on f455227 in 24.2 seconds. Two MSE
+screenshots were downloaded from a SHA-verified artifact and visually inspected;
+[the receipt](../phase-12/msme-browser-f455227.json) pins the source and scope.
+These checks cover the parameter and supporting-context forms, not a browser
+MSE calculation. The screenshot review found unrelated payroll-arrears and
+tax-year guidance controls in the MSE form. The subsequent UI correction hides
+these and omits their payload fields for MSE timing, including when a user
+switches from a different workflow with populated state. Existing payroll/dues
+controls remain in their applicable workflows. All 284 frontend tests and the
+production build, TypeScript and scoped ESLint passed after that correction.
+Its updated browser assertions await the next source-specific hosted run.
+
+### Local UAE/India pilot evidence comparison
+
+`scripts/validate_country_pilot.py` checks submitted manifest country/workflow
+scope against the existing catalogue, declared independent preparer/reviewer
+records, retained input/result/review SHA-256 hashes and exact JSON equality.
+It rejects path traversal, linked evidence roles, duplicate JSON keys, non-finite
+numbers, missing facts and bounded-file/population violations. It is read-only,
+does not execute workflows/providers and does not convert a match into statutory,
+professional or production qualification. Matching separate result files may
+legitimately have identical bytes; shared hard links cannot establish independent
+roles. The output omits client names, paths and result values.
+
+Both country folders now have expanded manifest and review templates. They remain
+explicitly incomplete and contain no real client files. See
+[the pilot instructions](../../pilot-data/README.md). Consent, authentic identity,
+independence and document meaning still require verification by authorized people.
+
+Thirty-two focused synthetic temporary-file cases passed, including actual CLI
+exit codes for UAE/India, mismatch/invalid cases, changed hashes, scope/date and
+identity checks, exact data types/order, hard links and per-file/total byte bounds.
+The final full backend suite passed 3,019 cases with five skips. The
+[focused receipt](../phase-12/pilot-validator-focused.xml) and
+[full unit receipt](../phase-12/pilot-validator-backend.xml) are retained; Ruff/format
+and script mypy passed. These tests do not add real-client qualification or change
+the 154 authored scenario catalogue.

@@ -1756,7 +1756,6 @@ export function CountryWorkflows({
             "statutory-dues",
             "india-payroll-rules",
             "obligation-bank-allocations",
-            "india-msme-payment-timing",
           ].includes(workflow)
             ? { arrear_only: arrearsOnly }
             : {}),
@@ -1817,7 +1816,9 @@ export function CountryWorkflows({
           ].includes(workflow)
             ? { period_start: periodStart }
             : {}),
-          ...(taxYear ? { tax_year_start: taxYear } : {}),
+          ...(taxYear && workflow !== "india-msme-payment-timing"
+            ? { tax_year_start: taxYear }
+            : {}),
           ...(workflow === "bank-account-evidence"
             ? {
                 account,
@@ -3983,7 +3984,6 @@ export function CountryWorkflows({
                 "statutory-dues",
                 "india-payroll-rules",
                 "obligation-bank-allocations",
-                "india-msme-payment-timing",
               ].includes(workflow) && (
                 <label style={{ flexDirection: "row", alignItems: "center" }}>
                   <input
@@ -4013,7 +4013,6 @@ export function CountryWorkflows({
                   "statutory-dues",
                   "india-payroll-rules",
                   "obligation-bank-allocations",
-                  "india-msme-payment-timing",
                 ].includes(workflow) && (
                   <p>
                     Every expected, reported and payment obligation row must
@@ -4077,16 +4076,17 @@ export function CountryWorkflows({
                   />
                 </label>
               )}
-              {config.data?.country === "IN" && (
-                <label>
-                  Tax-year start (for form guidance)
-                  <input
-                    type="date"
-                    value={taxYear}
-                    onChange={(e) => setTaxYear(e.target.value)}
-                  />
-                </label>
-              )}
+              {config.data?.country === "IN" &&
+                workflow !== "india-msme-payment-timing" && (
+                  <label>
+                    Tax-year start (for form guidance)
+                    <input
+                      type="date"
+                      value={taxYear}
+                      onChange={(e) => setTaxYear(e.target.value)}
+                    />
+                  </label>
+                )}
               {Object.entries(chosen?.roles || {}).map(([role, type]) => (
                 <label key={role}>
                   {role} source

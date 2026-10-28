@@ -12,5 +12,12 @@
   "expected_prepared_by": null,
   "independent_reviewer": null,
   "review_status": "NOT_REVIEWED",
-  "consent_or_authorized_use_reference": null
+  "consent_or_authorized_use_reference": null,
+  "expected_result_sha256": null,
+  "expected_basis": null,
+  "actual_result_file": null,
+  "actual_result_sha256": null,
+  "actual_prepared_by": null,
+  "review_record_file": null,
+  "review_record_sha256": null
 }

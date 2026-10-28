@@ -1,0 +1,24 @@
+{
+  "source_commit": "f45522789a02fd2b942de2d1302e1aebe9e16c19",
+  "run_id": 40686206612,
+  "job_id": 122809087126,
+  "job_conclusion": "success",
+  "browser_cases_passed": 3,
+  "duration_seconds": 24.2,
+  "artifact_id": 12815071375,
+  "archive_sha256": "4dcf5dfa357a937bd14830f01495bd6607b9ea4b419d057d8ef7383b9a7b1321",
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/report-presets/IN-msme-payment-scope-f455227.png",
+      "sha256": "9f730ed0c1dd23dcb4775bdfdd46cc10e8113ede30dfaeb877261c66657b29d4",
+      "visual_inspection": "India MSE four source roles, buyer, invoice months, bank window/account/currency/sign and review limits are readable. Payroll-arrears and tax-year guidance controls were found extraneous and removed in the subsequent UI correction; this screenshot is historical source f455227."
+    },
+    {
+      "path": "docs/country-workflows/screenshots/report-presets/IN-msme-supporting-context-f455227.png",
+      "sha256": "cc3b79842ad67e73295c1cbf993229c68762e0d7169a2817ec4f1eaeb21677e7",
+      "visual_inspection": "Retained context selector, disabled assessment without a selection and document-integrity/independent-content assessment limits are readable."
+    }
+  ],
+  "scope": "Real BFF/browser synthetic report and review foundations, UAE VAT preset draft controls, India workpaper item save, MSE workflow parameters and supporting-context source form; India-only availability.",
+  "limits": "MSE screens are draft form checks, not a browser calculation or context upload. Does not establish every scenario, legal completeness, real-client qualification, professional issuance or production readiness. Full backend verification is separate. Screenshots predate subsequent removal of extraneous MSE controls."
+}
