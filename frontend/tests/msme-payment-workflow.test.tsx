@@ -60,13 +60,35 @@ vi.mock("@/hooks/use-api", () => ({
               roles,
             },
           ],
-          source_contracts: {},
+          source_contracts:
+            state.country === "IN"
+              ? {
+                  transactions: {},
+                  "msme-supplier-assessments": {},
+                  "msme-invoices": {},
+                }
+              : { transactions: {} },
           source_formats: [],
           check_templates: {},
           scenarios: [],
         }
       : path.endsWith("inputs")
-        ? { evidence: [], snapshots: [] }
+        ? {
+            evidence: [
+              { id: "csv", label: "SYNTHETIC MSE CSV", scan_status: "CLEAN" },
+              {
+                id: "packet",
+                label: "SYNTHETIC retained context",
+                scan_status: "CLEAN",
+              },
+              {
+                id: "unsafe",
+                label: "Quarantined packet",
+                scan_status: "PENDING",
+              },
+            ],
+            snapshots: [],
+          }
         : path.endsWith("jobs")
           ? { items: [] }
           : undefined,
@@ -151,4 +173,49 @@ it("does not offer the India workflow for a UAE engagement", () => {
       name: "India MSE payment timing",
     }),
   ).not.toBeInTheDocument();
+});
+
+it("selects a distinct clean MSE context and requires a document-scope assessment without manual IDs", async () => {
+  render(<CountryWorkflows eid="eng" mode="workflow-source" />);
+  for (const [label, value] of [
+    ["Source table type", "msme-supplier-assessments"],
+    ["Clean retained evidence", "csv"],
+    ["Schedule title", "SYNTHETIC supplier evidence"],
+    ["Expected data rows", "1"],
+  ])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  const context = screen.getByLabelText("MSE context document");
+  expect(
+    within(context).queryByRole("option", { name: "SYNTHETIC MSE CSV" }),
+  ).not.toBeInTheDocument();
+  expect(
+    within(context).queryByRole("option", { name: "Quarantined packet" }),
+  ).not.toBeInTheDocument();
+  fireEvent.change(context, { target: { value: "packet" } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  expect(
+    await screen.findByText(
+      "Assess which supplier or invoice facts the retained MSE context document supports.",
+    ),
+  ).toBeVisible();
+  expect(state.mutate).not.toHaveBeenCalled();
+  fireEvent.change(screen.getByLabelText("MSE context scope assessment"), {
+    target: {
+      value:
+        "Synthetic retained supplier registration and eligibility packet scope",
+    },
+  });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+    evidence_version_id: "csv",
+    table_type: "msme-supplier-assessments",
+    msme_context_evidence_version_id: "packet",
+    msme_context_assessment:
+      "Synthetic retained supplier registration and eligibility packet scope",
+  });
+  fireEvent.change(screen.getByLabelText("Source table type"), {
+    target: { value: "msme-invoices" },
+  });
+  expect(screen.getByLabelText("MSE context document")).toHaveValue("");
 });

@@ -194,6 +194,14 @@ async def _head(db, ctx, obj):
 async def current(db, ctx, obj, visited=None):
     if obj.tenant_id != ctx.tenant_id:
         return False
+    if getattr(obj, "kind", None) in {"workflow-source", "country-workflow"} and (
+        obj.body.get("workflow") == "india-msme-payment-timing"
+        or str(obj.body.get("table_type") or "").startswith("msme-")
+    ):
+        from app.modules.country_workflows.msme_evidence import current_contract as msme_current
+
+        if not msme_current(obj.body, obj.dependencies):
+            return False
     if getattr(obj, "kind", None) == "tax-close-rollup":
         from app.modules.regulatory.exposure_rollup import CONTRACT, implementation_hash
 

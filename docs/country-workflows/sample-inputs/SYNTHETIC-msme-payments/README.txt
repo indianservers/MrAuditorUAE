@@ -9,6 +9,11 @@ invoices.csv as msme-invoices, bank.csv as transactions, and allocations.csv as
 item-allocations. Each file has one data row. The currency controls are empty
 for assessments, INR=100 for invoices/allocations, and INR=-100 for bank.
 Retain clean original evidence and independently review each source before use.
+Resolved assessment/invoice facts also require a distinct clean retained context
+document and a meaningful scope assessment in the source form. These CSV files
+do not include supporting client documents. Select the actual redacted supplier,
+acceptance or agreement packet; a copy of the source CSV cannot corroborate itself.
+Unresolved facts may remain without context and continue to block conclusions.
 
 Choose India assessed micro/small supplier invoice and bank payment timing.
 Buyer: SYNTHETIC-BUYER; account: SYNTHETIC-ACCOUNT; currency: INR; first/last

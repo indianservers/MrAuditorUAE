@@ -864,6 +864,38 @@ for (const code of ["AE", "IN"] as const) {
           .locator('option[value="india-msme-payment-timing"]'),
       ).toHaveCount(0);
     }
+    await page.goto(`/intelligence/${engagement.id}/workflow-source`);
+    const sourceType = page.getByRole("combobox", {
+      name: "Source table type",
+      exact: true,
+    });
+    if (code === "IN") {
+      await sourceType.selectOption("msme-supplier-assessments");
+      const contextForm = page.getByRole("group", {
+        name: "MSE supporting document context",
+        exact: true,
+      });
+      await expect(
+        contextForm.getByRole("combobox", {
+          name: "MSE context document",
+          exact: true,
+        }),
+      ).toHaveValue("");
+      await expect(
+        contextForm.getByRole("textbox", {
+          name: "MSE context scope assessment",
+          exact: true,
+        }),
+      ).toBeDisabled();
+      await contextForm.scrollIntoViewIfNeeded();
+      await contextForm.screenshot({
+        path: `${screenshots}/IN-msme-supporting-context.png`,
+      });
+    } else {
+      await expect(
+        sourceType.locator('option[value="msme-supplier-assessments"]'),
+      ).toHaveCount(0);
+    }
     expect(errors).toEqual([]);
     await reviewerContext.close();
   });

@@ -619,8 +619,24 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                     db, ctx, eng, result["rows"], contributors=supporting_contributors
                 )
             )
+        msme_context = None
+        if data.table_type.startswith("msme-"):
+            from app.modules.country_workflows.msme_evidence import prepare as prepare_msme_context
+
+            msme_context, context_receipts = await prepare_msme_context(
+                db, ctx, eng, data, evidence, result["rows"], supporting_contributors
+            )
+            dependencies.extend(context_receipts)
         return {
             **result,
+            **(
+                {
+                    "msme_evidence_contract": "retained-msme-context/1",
+                    "msme_evidence_context": msme_context,
+                }
+                if data.table_type.startswith("msme-")
+                else {}
+            ),
             "evidence_version_id": str(evidence.id),
             "evidence_sha256": evidence.sha256,
             "source_sha256": fingerprint(
@@ -970,6 +986,17 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                     422,
                     "Composed books and independent turnover roles share underlying source evidence",
                 )
+    msme_contexts = None
+    if data.workflow == "india-msme-payment-timing":
+        from app.modules.country_workflows.msme_evidence import verify as verify_msme_context
+
+        msme_contexts = []
+        for role in ("assessments", "invoices"):
+            dependencies.extend(
+                await verify_msme_context(db, ctx, eng, sources[role], contributors)
+            )
+            if sources[role].get("msme_evidence_context"):
+                msme_contexts.append(sources[role]["msme_evidence_context"])
     media_documents_receipts = None
     if data.workflow == "adverse-media-review":
         from app.modules.country_workflows.adverse_media import documents as media_documents
@@ -1198,6 +1225,12 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
     if media_documents_receipts is not None:
         result["media_document_binding"] = "RETAINED_DOCUMENT_BYTES_VERIFIED"
         result["retained_media_documents"] = media_documents_receipts
+    if msme_contexts is not None:
+        from app.modules.country_workflows.msme_evidence import CONTRACT, UNRESOLVED, VERIFIED
+
+        result["msme_evidence_contract"] = CONTRACT
+        result["retained_msme_contexts"] = msme_contexts
+        result["msme_document_binding"] = VERIFIED if msme_contexts else UNRESOLVED
     if grant_documents_receipts is not None:
         result["grant_document_binding"] = "RETAINED_DOCUMENT_BYTES_VERIFIED"
         result["retained_grant_documents"] = grant_documents_receipts

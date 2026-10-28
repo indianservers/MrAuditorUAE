@@ -273,6 +273,13 @@ type Result = {
   collection_totals?: Record<string, number>;
   body: {
     workflow?: string;
+    msme_document_binding?: string;
+    retained_msme_contexts?: {
+      evidence_version_id: string;
+      sha256: string;
+      assessment: string;
+      filename?: string;
+    }[];
     unallocated_bank_rows?: {
       transaction_id: string;
       original_amount: string;
@@ -638,6 +645,8 @@ export function CountryWorkflows({
     items: { id: string; code: string; name: string }[];
   }>(`${prefix}/accounts?snapshot_id=${ledgerSnapshot}`, !!ledgerSnapshot);
   const [evidence, setEvidence] = useState("");
+  const [msmeContext, setMSMEContext] = useState("");
+  const [msmeContextAssessment, setMSMEContextAssessment] = useState("");
   const [label, setLabel] = useState("");
   const [expectedRows, setExpectedRows] = useState("1");
   const [esicDaysControl, setEsicDaysControl] = useState("");
@@ -1326,6 +1335,20 @@ export function CountryWorkflows({
             : mode;
       if (
         operation === "workflow-source" &&
+        tableType.startsWith("msme-") &&
+        msmeContext
+      ) {
+        if (msmeContext === evidence)
+          throw new Error(
+            "Select a distinct retained MSE context document, not the source file itself.",
+          );
+        if (msmeContextAssessment.trim().length < 10)
+          throw new Error(
+            "Assess which supplier or invoice facts the retained MSE context document supports.",
+          );
+      }
+      if (
+        operation === "workflow-source" &&
         sourceFormat === "canonical-csv" &&
         sourceOrigin === "evidence" &&
         customColumns &&
@@ -1582,6 +1605,12 @@ export function CountryWorkflows({
                   }
                 : {}),
               table_type: tableType,
+              ...(tableType.startsWith("msme-") && msmeContext
+                ? {
+                    msme_context_evidence_version_id: msmeContext,
+                    msme_context_assessment: msmeContextAssessment,
+                  }
+                : {}),
               ...(tableType === "inventory-valuations"
                 ? {
                     inventory_valuation_controls: JSON.parse(
@@ -2360,6 +2389,8 @@ export function CountryWorkflows({
                       value={tableType}
                       onChange={(e) => {
                         setTableType(e.target.value);
+                        setMSMEContext("");
+                        setMSMEContextAssessment("");
                         if (e.target.value === "gst-document-series")
                           setTotals("");
                         setRuleDocument("");
@@ -3278,6 +3309,49 @@ export function CountryWorkflows({
                         need separate evidence.
                       </p>
                     </>
+                  )}
+                  {tableType.startsWith("msme-") && (
+                    <fieldset>
+                      <legend>MSE supporting document context</legend>
+                      <label>
+                        MSE context document
+                        <select
+                          value={msmeContext === evidence ? "" : msmeContext}
+                          onChange={(e) => setMSMEContext(e.target.value)}
+                        >
+                          <option value="">
+                            No resolved facts / context pending
+                          </option>
+                          {inputs.data?.evidence
+                            .filter(
+                              (e) =>
+                                e.scan_status === "CLEAN" && e.id !== evidence,
+                            )
+                            .map((e) => (
+                              <option key={e.id} value={e.id}>
+                                {e.label}
+                              </option>
+                            ))}
+                        </select>
+                      </label>
+                      <label>
+                        MSE context scope assessment
+                        <textarea
+                          value={msmeContextAssessment}
+                          disabled={!msmeContext}
+                          onChange={(e) =>
+                            setMSMEContextAssessment(e.target.value)
+                          }
+                        />
+                      </label>
+                      <p>
+                        Resolved supplier eligibility and
+                        acceptance/objection/term facts require a separate
+                        retained supporting document. Checks verify current file
+                        bytes and preserve the link; reviewers assess document
+                        meaning and coverage. Unresolved facts can stay pending.
+                      </p>
+                    </fieldset>
                   )}
                   <label>
                     Clean retained evidence
@@ -5466,6 +5540,22 @@ export function CountryWorkflows({
             )}
           {body.workflow === "india-msme-payment-timing" && (
             <section aria-label="MSE payment-timing scope">
+              <p>
+                {body.msme_document_binding ===
+                "RETAINED_DOCUMENT_BYTES_VERIFIED"
+                  ? "Supporting document bytes and current versions verified; document meaning remains independently assessed."
+                  : body.msme_document_binding === "NO_RESOLVED_FACTS_CLAIMED"
+                    ? "No resolved supporting facts declared; pending assessments are not clearance."
+                    : "Supporting document links need updating before approval."}
+              </p>
+              {body.retained_msme_contexts?.map((context, index) => (
+                <p key={`${context.evidence_version_id}:${index}`}>
+                  <strong>
+                    {context.filename || "Retained supporting document"}
+                  </strong>
+                  : {context.assessment}
+                </p>
+              ))}
               <p>
                 Assessed supplier/acceptance facts and explicit bank links only.
                 Missing facts remain unresolved; tax deductibility, statutory

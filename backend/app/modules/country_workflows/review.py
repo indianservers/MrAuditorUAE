@@ -1,6 +1,12 @@
 def approval_error(body):
     from app.modules.intelligence.matching_review import saved_candidates_complete
 
+    if body.get("workflow") == "india-msme-payment-timing" and (
+        body.get("msme_evidence_contract") != "retained-msme-context/1"
+        or body.get("msme_document_binding")
+        not in {"RETAINED_DOCUMENT_BYTES_VERIFIED", "NO_RESOLVED_FACTS_CLAIMED"}
+    ):
+        return "Regenerate MSE timing with current retained context documents before independent approval"
     if body.get("workflow") == "bank-brs" and not saved_candidates_complete(body):
         return (
             "Regenerate bank matching with complete retained ambiguity candidates before approval"

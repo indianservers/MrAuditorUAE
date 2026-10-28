@@ -445,9 +445,27 @@ class SourceInput(Strict):
     nil_reason: str | None = Field(default=None, min_length=10, max_length=2000)
     control_totals: dict[str, Money] = Field(default_factory=dict, max_length=20)
     import_taxable_base_control: Money | None = None
+    msme_context_evidence_version_id: uuid.UUID | None = None
+    msme_context_assessment: str = Field(default="", max_length=2000)
 
     @model_validator(mode="after")
     def declared_nil(self):
+        if self.msme_context_evidence_version_id is not None:
+            if (
+                not self.table_type.startswith("msme-")
+                or len(self.msme_context_assessment.strip()) < 10
+            ):
+                raise ValueError(
+                    "MSE context selection requires an MSE source and meaningful document-scope assessment"
+                )
+            if self.msme_context_evidence_version_id == self.evidence_version_id:
+                raise ValueError(
+                    "Select a distinct supporting context document, not the MSE source itself"
+                )
+        elif self.msme_context_assessment:
+            raise ValueError(
+                "MSE context assessment requires an explicit retained document selection"
+            )
         if self.workbook_sheet is not None:
             if (
                 self.file_format != "canonical-csv"

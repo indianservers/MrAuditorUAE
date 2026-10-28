@@ -2958,6 +2958,25 @@
             ],
             "default": null,
             "title": "Import Taxable Base Control"
+          },
+          "msme_context_evidence_version_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Msme Context Evidence Version Id"
+          },
+          "msme_context_assessment": {
+            "default": "",
+            "maxLength": 2000,
+            "title": "Msme Context Assessment",
+            "type": "string"
           }
         },
         "required": [

@@ -4246,3 +4246,33 @@ that status is now preserved and covered in the final full suite. Source code wa
 held stable during the final DB regressions. Source-specific hosted MSE checks
 remain pending their new commit/run; prior passing hosted runs do not substitute
 for them.
+
+### Retained MSE context documents
+
+Resolved supplier eligibility and invoice acceptance, objection or agreement
+facts now require a separate clean retained context document with a scope
+assessment. Source preparation and calculation check the current authorized
+file version and stored byte hash; the source CSV and a copy of its bytes cannot
+corroborate themselves. Context uploaders are contributors and cannot independently
+approve the resulting source or workflow. The UI uses retained-document choices
+and records the file and assessment in the result. This verifies document
+identity and integrity; professional assessment of its contents remains required.
+
+Replacing a context document makes dependent sources/results stale. Legacy MSE
+sources/results without the current context contract must be regenerated; original
+historical content remains available. Truly unresolved facts may omit context
+but retain the existing pending-fact approval restrictions. No live registry
+verification or legal qualification is claimed.
+
+Twelve DB/API cases passed, including distinct-document enforcement, copied-file
+rejection, context-author approval separation, replacement staleness, exports,
+source withdrawal, UAE exclusion and bank/dues regressions. All 284 frontend tests,
+production build, TypeScript, scoped ESLint, application Ruff/format and mypy
+(390 files), and API contract checks passed. The new browser context-form smoke
+is defined but awaits hosted execution for this commit. See the retained
+[API receipt](../phase-12/msme-context-api.xml) and
+[unit receipt](../phase-12/msme-context-backend.xml) for local outcomes.
+
+The final full backend unit run passed 2,987 tests with five skipped (including
+23 context-contract cases). This is local synthetic/regression evidence, not
+independent professional or real-client qualification.

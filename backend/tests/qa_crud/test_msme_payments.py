@@ -8,8 +8,14 @@ import pytest
 from openpyxl import load_workbook
 
 from tests.integration.test_platform import environment as environment
-from tests.phase4.test_workflows import actor, grant, setup
-from tests.qa_crud.test_country_workflows import decision, double_boundaries, execute, source
+from tests.phase4.test_workflows import actor, create, grant, setup
+from tests.qa_crud.test_country_workflows import (
+    csv_bytes,
+    decision,
+    double_boundaries,
+    execute,
+    source,
+)
 from tests.qa_crud.test_india_ecr_source import india_context
 from tests.unit.test_msme_payments import TYPES, config, populations
 
@@ -18,12 +24,17 @@ pytestmark = pytest.mark.skipif(
 )
 
 
-async def test_msme_reviewed_sources_payment_result_export_and_withdrawal(environment, monkeypatch):
+@pytest.mark.parametrize("change", ["withdraw-source", "replace-context"])
+async def test_msme_reviewed_sources_payment_result_export_and_withdrawal(
+    environment, monkeypatch, change
+):
     c = environment
     double_boundaries(monkeypatch)
     h, eid, base = await india_context(c)
     reviewer = await actor(h, "Firm Administrator", "msme-independent-reviewer")
     await grant(c, h, base, reviewer)
+    context_author = await actor(h, "Firm Administrator", "msme-context-author")
+    await grant(c, h, base, context_author)
     prefix = f"/api/v1/intelligence/engagements/{eid}"
     catalogue = (await c.get(prefix + "/country-workflows", headers=h)).json()
     assert next(w for w in catalogue["items"] if w["id"] == "india-msme-payment-timing")[
@@ -33,7 +44,7 @@ async def test_msme_reviewed_sources_payment_result_export_and_withdrawal(enviro
     rows = populations()
     rows["invoices"][0].update(invoice_date="2026-04-01", delivery_date="2026-04-01")
     rows["bank"][0]["date"] = "2026-04-16"
-    sources = {}
+    sources, contexts = {}, {}
     for role, records in rows.items():
         totals = (
             {"INR": "-100"}
@@ -42,9 +53,50 @@ async def test_msme_reviewed_sources_payment_result_export_and_withdrawal(enviro
             if role in {"invoices", "allocations"}
             else {}
         )
+        context_options = {}
+        if role in {"assessments", "invoices"}:
+            context_record = await create(
+                c,
+                context_author[0],
+                base,
+                "evidence",
+                {"category": "Other", "retain_until": "2036-12-31"},
+            )
+            uploaded = await c.post(
+                base + "/evidence-files/" + context_record["id"],
+                headers=context_author[0],
+                files={
+                    "file": (
+                        "SYNTHETIC-" + role + "-packet.txt",
+                        (
+                            "SYNTHETIC supporting packet for "
+                            + role
+                            + "; no legal/client qualification"
+                        ).encode(),
+                        "text/plain",
+                    )
+                },
+            )
+            assert uploaded.status_code == 201, uploaded.text
+            contexts[role] = {
+                "record_id": context_record["id"],
+                "version_id": uploaded.json()["id"],
+            }
+            context_options = {
+                "msme_context_evidence_version_id": uploaded.json()["id"],
+                "msme_context_assessment": "SYNTHETIC supporting "
+                + role
+                + " facts in this retained packet, independent review still required",
+            }
         sources[role] = await source(
-            c, h, eid, records, "SYNTHETIC MSE " + role, TYPES[role], totals
+            c, h, eid, records, "SYNTHETIC MSE " + role, TYPES[role], totals, **context_options
         )
+        if role in contexts:
+            assert (
+                sources[role]["body"]["msme_evidence_context"]["evidence_version_id"]
+                == contexts[role]["version_id"]
+            )
+            assert (await decision(c, context_author[0], eid, sources[role])).status_code == 403
     payload = {
         **config(),
         "as_of": "2026-04-30",
@@ -60,6 +112,9 @@ async def test_msme_reviewed_sources_payment_result_export_and_withdrawal(enviro
         sources[role] = reviewed.json()
     payload["source_ids"] = {role: r["id"] for role, r in sources.items()}
     result = await execute(c, h, eid, "country-workflow", payload)
+    assert result["body"]["msme_document_binding"] == "RETAINED_DOCUMENT_BYTES_VERIFIED"
+    assert len(result["body"]["retained_msme_contexts"]) == 2
+    assert (await decision(c, context_author[0], eid, result)).status_code == 403
     row = result["body"]["rows"][0]
     assert row["due_date"] == "2026-04-16" and row["state"] == "MATCHED"
     assert row["late_paid_amount"] == row["overdue_unpaid_amount"] == "0"
@@ -76,8 +131,26 @@ async def test_msme_reviewed_sources_payment_result_export_and_withdrawal(enviro
     assert exported_rows[1][due_column] == "2026-04-16"
     assert any("SYNTHETIC" in str(cell) for line in exported_rows for cell in line)
     original = deepcopy(result["body"])
-    rejected = await decision(c, reviewer[0], eid, sources["assessments"], "reject")
-    assert rejected.status_code == 201, rejected.text
+    if change == "withdraw-source":
+        rejected = await decision(c, reviewer[0], eid, sources["assessments"], "reject")
+        assert rejected.status_code == 201, rejected.text
+    else:
+        replaced = await c.post(
+            base + "/evidence-files/" + contexts["assessments"]["record_id"],
+            headers=context_author[0],
+            files={
+                "file": (
+                    "SYNTHETIC-packet-v2.txt",
+                    b"SYNTHETIC changed eligibility packet",
+                    "text/plain",
+                )
+            },
+        )
+        assert replaced.status_code == 201, replaced.text
+        stale_source = (
+            await c.get(prefix + "/events/" + sources["assessments"]["id"], headers=h)
+        ).json()
+        assert stale_source["freshness"] == "STALE"
     stale = (await c.get(prefix + "/events/" + result["id"], headers=h)).json()
     assert stale["freshness"] == "STALE" and stale["body"] == original
 
@@ -109,4 +182,42 @@ async def test_msme_sources_and_workflow_are_not_available_for_uae(environment, 
         "country-workflow",
         {**config(), "as_of": "2026-06-30"},
         failed="India engagement",
+    )
+
+
+async def test_resolved_msme_source_requires_distinct_context_bytes(environment, monkeypatch):
+    c = environment
+    double_boundaries(monkeypatch)
+    h, eid, base = await india_context(c)
+    rows = populations()["assessments"]
+    await source(
+        c,
+        h,
+        eid,
+        rows,
+        "SYNTHETIC missing context",
+        "msme-supplier-assessments",
+        {},
+        failed="retained context document",
+    )
+    copy_record = await create(
+        c, h, base, "evidence", {"category": "Other", "retain_until": "2036-12-31"}
+    )
+    copied = await c.post(
+        base + "/evidence-files/" + copy_record["id"],
+        headers=h,
+        files={"file": ("SYNTHETIC copied packet.txt", csv_bytes(rows), "text/plain")},
+    )
+    assert copied.status_code == 201, copied.text
+    await source(
+        c,
+        h,
+        eid,
+        rows,
+        "SYNTHETIC duplicate context",
+        "msme-supplier-assessments",
+        {},
+        msme_context_evidence_version_id=copied.json()["id"],
+        msme_context_assessment="SYNTHETIC deliberate copy must not corroborate its own facts",
+        failed="cannot corroborate itself",
     )
