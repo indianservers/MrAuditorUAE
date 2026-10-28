@@ -30,7 +30,16 @@
     "typecheck": "passed",
     "scoped_eslint": "passed",
     "production_build": "passed",
-    "browser_extension": "First run on 1871579 failed at exact wrapped-selector labeling; see gratuity-browser-1871579.json. Explicit accessible-name fix passed three focused tests, type checking and lint; fresh hosted execution remains pending."
+    "browser_extension": "On 8131dca the form, independent review, worker allocation, XLSX and STALE freshness passed; the overall UAE case failed at JSON string key-order equality. Complete parsed objects were structurally identical. The test now uses full deep-object equality; no values or array-order checks are dropped. See gratuity-browser-8131dca.json.",
+    "hosted_verification": {
+      "source_commit": "8131dca87e990ee2620aa1470d8bf2a49b71c29b",
+      "run_id": 40745633106,
+      "job_id": 123018540901,
+      "conclusion": "success",
+      "tests_passed": 302,
+      "test_files_passed": 64,
+      "build_types_and_lint": "passed"
+    }
   },
   "backend_checks": {
     "mypy_app_files": 395,
@@ -153,5 +162,24 @@
     "downloaded_archive_sha256": "3f1a35578631dbfe633cc5b49e6c906e55ff14a4bfd7336a10fb27fe33b6dcd2",
     "scan_scope": "Restructured receipt file with repository configuration",
     "result": "passed with no leaks; no suppression added"
+  },
+  "latest_frontend_delta": {
+    "parent_source_commit": "8131dca87e990ee2620aa1470d8bf2a49b71c29b",
+    "checked_on": "2026-10-29",
+    "normalized_lf_sources": [
+      {
+        "path": "frontend/src/features/benefit-settlement-source.tsx",
+        "sha256": "83efd97ef30f328637812033470ce652bc70d1aeb72ee8ae4fefca91c989983c"
+      },
+      {
+        "path": "frontend/e2e/benefit-settlement-browser-workflow.ts",
+        "sha256": "bd3b776d30c9c01d32d8340dcaf38954530d0fbcb6ad013514702c32305f7a11"
+      }
+    ],
+    "focused_tests_passed": 3,
+    "typecheck": "passed",
+    "scoped_eslint": "passed",
+    "changes": "Align employee checkboxes, compare complete immutable JSON objects independent of key order, dismiss capture notification",
+    "browser": "Pending fresh hosted execution"
   }
 }

@@ -315,6 +315,11 @@ export async function runBenefitSettlementBrowserWorkflow(
     { input: readFileSync(path!), timeout: 15000 },
   );
   await reviewer.setViewportSize({ width: 1800, height: 1500 });
+  const notification = reviewer.getByRole("button", {
+    name: "Dismiss notification",
+    exact: true,
+  });
+  if (await notification.count()) await notification.last().click();
   let card = reviewer
     .getByRole("heading", { name: title, exact: true })
     .locator("..");
@@ -322,7 +327,7 @@ export async function runBenefitSettlementBrowserWorkflow(
   await card.screenshot({
     path: `${screenshots}/AE-gratuity-reviewed-bank-settlement.png`,
   });
-  const original = JSON.stringify(reviewed.body);
+  const original = structuredClone(reviewed.body);
   await upload(
     support.record,
     "SYNTHETIC-gratuity-context-v2.txt",
@@ -341,7 +346,7 @@ export async function runBenefitSettlementBrowserWorkflow(
   expect(stale.status()).toBe(200);
   const staleBody = await stale.json();
   expect(staleBody.freshness).toBe("STALE");
-  expect(JSON.stringify(staleBody.body)).toBe(original);
+  expect(staleBody.body).toEqual(original);
   card = reviewer
     .getByRole("heading", { name: title, exact: true })
     .locator("..");

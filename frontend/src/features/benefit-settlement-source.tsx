@@ -125,9 +125,12 @@ export function BenefitSettlementSource({
         return (
           <fieldset key={id} style={{ marginTop: 12, padding: 12 }}>
             <legend>Employee {id}</legend>
-            <label>
+            <label
+              style={{ flexDirection: "row", alignItems: "center", gap: 8 }}
+            >
               <input
                 type="checkbox"
+                style={{ width: 16, height: 16, flexShrink: 0 }}
                 aria-label={`Select gratuity ${id}`}
                 checked={choice?.selected || false}
                 onChange={(event) =>

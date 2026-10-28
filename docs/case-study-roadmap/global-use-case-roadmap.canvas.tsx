@@ -533,10 +533,10 @@ const data = {
     "docs/phase-12/production-readiness.md and README.md: historical release NO-GO and later QA caveats"
   ],
   "checkpoint": {
-    "as_of": "28 October 2026",
-    "source_revision": "187157951b791aeb6fcde33ad73aeed73b7e8284",
+    "as_of": "29 October 2026",
+    "source_revision": "8131dca87e990ee2620aa1470d8bf2a49b71c29b",
     "release_status": "NOT_QUALIFIED_FOR_PRODUCTION_STATUTORY_USE",
-    "scope": "Operational implementation and source-specific synthetic verification through 1871579. UAE reviewed gratuity now derives controlled expected bank-settlement obligations with retained employee/service identity, independent employer/due-date support, separate HR and bank evidence, pooled/partial/late controls and recursive staleness. India manual annual-credit statements preserve declared 26AS/168, PAN, underlying period and AY/TY snapshot scope. Merchant contract 2 and linked account evidence remain implemented. First hosted gratuity browser execution on 1871579 failed at the wrapped support-selector label; its original negative screenshot was inspected. An explicit accessible-name fix passed focused tests/types/lint and awaits fresh hosted execution. The security job flagged a verified public source hash; receipt paths and digests were separated without suppressions. Retained complete hosted backend proof is separately pinned to 20ee29a. Original discovery baselines are historical.",
+    "scope": "Operational implementation and source-specific synthetic verification through 8131dca. UAE reviewed gratuity derives controlled expected bank settlements with employee/service identity, retained employer/due-date support, separate HR/bank evidence, pooled/partial/late controls and recursive staleness. India manual annual-credit statements preserve declared 26AS/168, PAN, underlying periods and AY/TY scope. The new gratuity form, final review, XLSX and STALE freshness executed in the hosted browser; the case failed only at serialized JSON key-order equality. Parsed complete bodies were identical; deep-object equality and checkbox alignment fixes are prepared. Two original form/result images were individually inspected. Security, frontend, ML and container jobs passed on 8131dca. Retained complete hosted backend proof is separately pinned to 20ee29a; full latest-source verification and independent qualification remain open.",
     "verification": [
       {
         "label": "Backend units",
@@ -560,13 +560,13 @@ const data = {
         "label": "Frontend",
         "result": "302 tests passed; production build, TypeScript and scoped ESLint passed",
         "path": "docs/phase-12/benefit-settlement-validation.json",
-        "limit": "64 local test files include explicit gratuity selection/controls, pagination, dated legacy guards, country/freshness gating and readable employment scopes. New gratuity browser assertions are type/lint checked; passing hosted execution and new screenshot inspection remain separate."
+        "limit": "All302 tests and production build/types/lint passed locally on1871579 and hosted on8131dca. The subsequent checkbox/test fix passed three focused tests, types and lint. Full new browser completion remains separate."
       },
       {
         "label": "Browser boundary",
-        "result": "All three hosted cases passed on e119982; reported duration 1.1m; four screenshots visually inspected",
-        "path": "docs/phase-12/merchant-account-browser-e119982.json",
-        "limit": "Three synthetic browser cases on e119982, not all 154 catalogue scenarios or independent clients. API setup/reviews and canonical bank labels are explicitly scoped; separate native account-mapping APIs retain original bytes with scan/dispatch doubles. This passing receipt predates the annual-statement and new gratuity UI; the new source-specific browser job remains pending. Document agreement is not bank authentication, legal qualification or production scanning qualification."
+        "result": "Two passed; one failed on8131dca after successful form/review/XLSX/STale-freshness steps; two original images inspected",
+        "path": "docs/phase-12/gratuity-browser-8131dca.json",
+        "limit": "Overall UAE case failed on JSON.stringify key order, not changed field values: parsed complete bodies had zero structural differences. The full-object comparison fix remains pending a fresh hosted run. No completed stale-image/disabled-approval assertion is claimed. Earlier all-three merchant proof remains pinned to e119982. These synthetic cases are not all154 scenarios or real-client qualification."
       }
     ],
     "hosted_runs": [
@@ -581,9 +581,9 @@ const data = {
         "status_at_checkpoint": "Browser, frontend, security, ML and containers PASSED on e119982. Three cases include linked merchant UI selection, approval, XLSX and linked-review withdrawal staleness in both countries alongside existing native-bank/MSE flows. Four exact linked-merchant screenshots individually inspected."
       },
       {
-        "label": "Current gratuity bridge hosted checks",
-        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40744230031",
-        "status_at_checkpoint": "On 1871579: frontend, ML and containers PASSED; browser FAILED (two passed, one failed at exact selector label), security FAILED on a recomputed public source hash in the receipt, full backend last observed IN_PROGRESS. Explicit selector-name and receipt-structure fixes are prepared and locally checked; fresh hosted execution remains pending. Original failed screenshot and negative receipt are retained."
+        "label": "Latest gratuity bridge hosted checks",
+        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40745633106",
+        "status_at_checkpoint": "On8131dca frontend (302 tests/build/types/lint), security, ML and containers PASSED. Browser: two passed, one failed after successful form, review, XLSX and STALE-freshness steps because serialized JSON key order differed; complete objects were independently verified equal. Full backend remains IN_PROGRESS. Deep-object test fix and checkbox alignment are locally checked and await fresh hosted execution."
       }
     ],
     "open_gates": [
