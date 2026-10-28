@@ -1,6 +1,11 @@
 def approval_error(body):
     from app.modules.intelligence.matching_review import saved_candidates_complete
 
+    if body.get("workflow") == "merchant-settlement-bridge":
+        from app.modules.country_workflows.merchant_settlements import CONTRACT
+
+        if body.get("merchant_settlement_contract") != CONTRACT:
+            return "Regenerate merchant settlement with unreversed booked-date evidence before approval"
     if body.get("workflow") == "india-msme-payment-timing" and (
         body.get("msme_evidence_contract") != "retained-msme-context/1"
         or body.get("msme_document_binding")

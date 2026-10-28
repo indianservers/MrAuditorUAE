@@ -40,6 +40,12 @@ pairs, excessive allocation and inconsistent direction are rejected. Book activi
 must fall within its batch period. Bank movements cannot predate the declared
 processor settlement and must be within the selected review window.
 
+Reversed entries and value-date-only fallbacks cannot establish a settlement.
+The shared bank-date reader retains booking and value dates separately, including
+legacy MT940 fallback detection. Results under the earlier merchant contract are
+stale and require regeneration before approval; retained historical bodies are
+not rewritten.
+
 One batch may settle through multiple bank movements, and multiple batches may
 share a bank movement through explicit nonduplicated allocations. Negative net
 settlements can link only to negative bank movements. Every bank remainder is a

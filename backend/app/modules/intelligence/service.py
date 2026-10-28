@@ -202,6 +202,14 @@ async def current(db, ctx, obj, visited=None):
 
         if not msme_current(obj.body, obj.dependencies):
             return False
+    if (
+        getattr(obj, "kind", None) == "country-workflow"
+        and obj.body.get("workflow") == "merchant-settlement-bridge"
+    ):
+        from app.modules.country_workflows.merchant_settlements import CONTRACT
+
+        if obj.body.get("merchant_settlement_contract") != CONTRACT:
+            return False
     if getattr(obj, "kind", None) == "tax-close-rollup":
         from app.modules.regulatory.exposure_rollup import CONTRACT, implementation_hash
 

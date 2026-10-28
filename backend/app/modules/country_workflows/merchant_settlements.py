@@ -8,7 +8,10 @@ from typing import Literal
 from pydantic import Field, field_validator, model_validator
 
 from app.modules.country_workflows.audit_schemas import Currency, Identifier, Money
+from app.modules.country_workflows.bank_dates import date_details
 from app.modules.jurisdictions.profiles import Strict
+
+CONTRACT = "explicit-gross-net-bank/2"
 
 COMPONENTS = (
     "sales",
@@ -198,6 +201,10 @@ def compare(data, sources, country):
             raise ValueError(
                 "Merchant allocation references a missing exact settlement or bank row"
             )
+        if movement.get("is_reversal") or date_details(movement)["booking_date_review_required"]:
+            raise ValueError(
+                "Merchant settlement requires unreversed booked-date evidence, not value-date fallback"
+            )
         pair = (row["settlement_id"], row["bank_transaction_id"])
         amount = Decimal(row["amount"])
         if (
@@ -293,6 +300,10 @@ def compare(data, sources, country):
             "Uploaded source controls do not establish complete merchant populations or authenticate processor/bank evidence",
         ],
     )
-    receipt["merchant_settlement_contract"] = "explicit-gross-net-bank/1"
+    receipt["merchant_settlement_contract"] = CONTRACT
+    receipt["transaction_dates"] = [
+        {"source_role": "bank", "source_row_id": movement["id"], **date_details(movement)}
+        for movement in tables["bank"]
+    ]
     receipt["bank_authentication_status"] = "NOT_ESTABLISHED_BY_DOCUMENT_COMPARISON"
     return receipt

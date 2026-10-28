@@ -54,7 +54,30 @@ async def test_merchant_sources_review_export_and_withdrawal(
         assert reviewed.status_code == 201, reviewed.text
         retained[role] = reviewed.json()
     params["source_ids"] = {role: obj["id"] for role, obj in retained.items()}
+    reversed_rows = populations(country)["bank"]
+    reversed_rows[0]["is_reversal"] = True
+    reversed_source = await source(
+        c,
+        h,
+        eid,
+        reversed_rows,
+        "SYNTHETIC reversed merchant bank movement",
+        "transactions",
+        {currency: "800"},
+    )
+    approved_reversal = await decision(c, reviewer[0], eid, reversed_source)
+    assert approved_reversal.status_code == 201, approved_reversal.text
+    await execute(
+        c,
+        h,
+        eid,
+        "country-workflow",
+        {**params, "source_ids": {**params["source_ids"], "bank": approved_reversal.json()["id"]}},
+        failed="unreversed booked-date evidence",
+    )
     result = await execute(c, h, eid, "country-workflow", params)
+    assert result["body"]["merchant_settlement_contract"] == "explicit-gross-net-bank/2"
+    assert result["body"]["transaction_dates"][0]["bank_date_basis"] == "DECLARED_TRANSACTION_DATE"
     assert result["body"]["rows"][0]["expected_net"] == "800"
     assert result["body"]["rows"][0]["bank_difference"] == "0"
     assert not result["body"]["blocked"]

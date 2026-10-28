@@ -104,6 +104,20 @@ export async function runMerchantBrowserWorkflow(
   expect(response.status(), await response.text()).toBe(202);
   const result = await completed((await response.json()).id);
   expect(result.body.blocked).toBe(false);
+  expect(result.body.merchant_settlement_contract).toBe(
+    "explicit-gross-net-bank/2",
+  );
+  expect(result.body.transaction_dates).toEqual([
+    {
+      source_role: "bank",
+      source_row_id: "BANK",
+      transaction_date: "2026-06-03",
+      bank_booking_date: null,
+      bank_value_date: null,
+      bank_date_basis: "DECLARED_TRANSACTION_DATE",
+      booking_date_review_required: false,
+    },
+  ]);
   expect(result.body.rows).toHaveLength(1);
   expect(result.body.rows[0]).toMatchObject({
     sales: "1000",

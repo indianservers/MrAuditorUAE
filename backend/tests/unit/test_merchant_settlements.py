@@ -159,7 +159,7 @@ def test_gross_refunds_chargebacks_fees_tax_reserves_and_net(country, currency):
     assert row["book_differences"] == {"sales": "0", "refunds": "0", "chargebacks": "0"}
     assert row["state"] == "MATCHED" and not result["blocked"]
     assert result["statutory_calculation_qualified"] is False
-    assert result["merchant_settlement_contract"] == "explicit-gross-net-bank/1"
+    assert result["merchant_settlement_contract"] == "explicit-gross-net-bank/2"
 
 
 def test_two_partial_bank_receipts_preserve_exact_links():
@@ -292,6 +292,62 @@ def test_balanced_gross_and_refund_inflation_cannot_hide_behind_correct_net():
     result = run(p)
     assert result["blocked"] and result["rows"][0]["expected_net"] == "800"
     assert result["rows"][0]["issues"] == ["BOOK_SALE_DIFFERENCE", "BOOK_REFUND_DIFFERENCE"]
+
+
+@pytest.mark.parametrize("fault", ["reversal", "value-date", "legacy-mt940"])
+def test_bank_reversals_and_undated_bookings_cannot_establish_settlement(fault):
+    s = sources(populations())
+    movement = s["bank"]["rows"][0]
+    if fault == "reversal":
+        movement["is_reversal"] = True
+    elif fault == "value-date":
+        movement.update(bank_date_basis="VALUE_DATE_FALLBACK", bank_value_date="2026-06-03")
+    else:
+        movement["source_mt940_entry"] = "260603C800,00NTRFPSP"
+    with pytest.raises(ValueError, match="unreversed booked-date evidence"):
+        calculate(WorkflowInput(**payload()), "AE", s)
+
+
+def test_booked_and_value_dates_are_preserved_separately():
+    p = populations()
+    p["bank"][0].update(
+        bank_date_basis="BOOKING_DATE", bank_booking_date="2026-06-03", bank_value_date="2026-06-04"
+    )
+    row = run(p)["transaction_dates"][0]
+    assert row == {
+        "source_role": "bank",
+        "source_row_id": "BANK",
+        "transaction_date": "2026-06-03",
+        "bank_booking_date": "2026-06-03",
+        "bank_value_date": "2026-06-04",
+        "bank_date_basis": "BOOKING_DATE",
+        "booking_date_review_required": False,
+    }
+
+
+@pytest.mark.parametrize("contract", [None, "explicit-gross-net-bank/1"])
+async def test_legacy_merchant_results_are_stale_and_cannot_be_approved(contract):
+    from types import SimpleNamespace
+    from unittest.mock import AsyncMock
+
+    from app.modules.country_workflows.review import approval_error
+    from app.modules.intelligence.service import current
+
+    tenant = uuid.uuid4()
+    body = {
+        "workflow": "merchant-settlement-bridge",
+        "merchant_settlement_contract": contract,
+        "rows": [],
+        "review_status": "REVIEWED",
+    }
+    db = AsyncMock()
+    assert not await current(
+        db,
+        SimpleNamespace(tenant_id=tenant),
+        SimpleNamespace(tenant_id=tenant, kind="country-workflow", body=body),
+    )
+    assert "unreversed booked-date evidence" in approval_error(body)
+    db.get.assert_not_awaited()
 
 
 @pytest.mark.parametrize(
