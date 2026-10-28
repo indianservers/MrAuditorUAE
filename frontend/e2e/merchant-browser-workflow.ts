@@ -16,6 +16,8 @@ export async function runMerchantBrowserWorkflow(
   country: "AE" | "IN",
   screenshots: string,
 ) {
+  const reviewerErrors: string[] = [];
+  reviewer.on("pageerror", (error) => reviewerErrors.push(error.message));
   const { prefix, headers, post, evidence, prepare, completed } =
     makeWorkflowHarness(page, eid, tenant);
   const root =
@@ -176,6 +178,7 @@ export async function runMerchantBrowserWorkflow(
   const downloaded = await downloadWait;
   const path = await downloaded.path();
   expect(path).toBeTruthy();
+  expect(downloaded.suggestedFilename()).toMatch(/\.xlsx$/);
   await expect(
     reviewer.getByLabel("Saved source or result", { exact: true }),
   ).toHaveValue(reviewed.id);
@@ -183,11 +186,16 @@ export async function runMerchantBrowserWorkflow(
     process.platform === "win32"
       ? "../backend/.venv/Scripts/python.exe"
       : "../backend/.venv/bin/python";
-  execFileSync(python, [
-    "-c",
-    "import sys;from openpyxl import load_workbook;r=list(load_workbook(sys.argv[1])['Rows'].values);assert r[1][r[0].index('expected_net')]=='800';assert r[1][r[0].index('bank_allocated')]=='800';assert r[1][r[0].index('bank_difference')]=='0'",
-    path!,
-  ]);
+  const workbook = readFileSync(path!);
+  expect(workbook.subarray(0, 2).toString()).toBe("PK");
+  execFileSync(
+    python,
+    [
+      "-c",
+      "import io,sys;from openpyxl import load_workbook;r=list(load_workbook(io.BytesIO(sys.stdin.buffer.read()))['Rows'].values);assert r[1][r[0].index('expected_net')]=='800';assert r[1][r[0].index('bank_allocated')]=='800';assert r[1][r[0].index('bank_difference')]=='0'",
+    ],
+    { input: workbook, timeout: 15000 },
+  );
   await reviewer
     .getByRole("heading", { name: title, exact: true })
     .scrollIntoViewIfNeeded();
@@ -223,4 +231,8 @@ export async function runMerchantBrowserWorkflow(
   await expect(
     reviewer.getByRole("button", { name: "Independent approval", exact: true }),
   ).toBeDisabled();
+  await reviewer.screenshot({
+    path: `${screenshots}/${country}-merchant-withdrawn-source-stale.png`,
+  });
+  expect(reviewerErrors).toEqual([]);
 }

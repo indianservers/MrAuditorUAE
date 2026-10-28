@@ -1,0 +1,18 @@
+{
+  "source_commit": "d8198c03a686558610f390401b5c86b51104550a",
+  "run_id": 40723825425,
+  "job_id": 122941608833,
+  "conclusion": "failure",
+  "browser_cases_passed": 1,
+  "browser_cases_failed": 2,
+  "duration_seconds": 52.9,
+  "artifact_id": 12830349435,
+  "archive_sha256_from_metadata": "46fd912a98cd43dd4b1fef40923223036f45ee9f9f2b72a9e514f812a2bdc992",
+  "failure": "Both country merchant helpers passed real source setup, UI calculation and result approval, then failed when openpyxl rejected an extensionless Playwright temporary path. The follow-up reads verified ZIP bytes through BytesIO.",
+  "unreached": [
+    "Merchant XLSX content assertions",
+    "Merchant reviewed screenshot",
+    "Merchant processor withdrawal and stale approval checks"
+  ],
+  "limits": "Negative evidence, not a passing merchant browser qualification. One session smoke passed; both country cases failed. No screenshot visual inspection claimed in this receipt."
+}
