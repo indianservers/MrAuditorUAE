@@ -3,11 +3,12 @@ import { execFileSync } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import { readFileSync } from "node:fs";
 
-type Event = {
+export type WorkflowEvent = {
   id: string;
   version: number;
   freshness: string;
   body: {
+    [key: string]: unknown;
     review_status: string;
     blocked?: boolean;
     msme_document_binding?: string;
@@ -17,21 +18,13 @@ type Event = {
 };
 
 /** Synthetic setup uses real upload/source APIs; calculation/review/export use UI. */
-export async function runMSMEBrowserWorkflow(
-  page: Page,
-  reviewer: Page,
-  eid: string,
-  tenant: string,
-  screenshots: string,
-) {
+export function makeWorkflowHarness(page: Page, eid: string, tenant: string) {
   const headers = {
     "X-Tenant-ID": tenant,
     Origin: process.env.AUDITOS_E2E_ORIGIN!,
   };
   const audit = `engagements/${eid}/audit`;
   const prefix = `intelligence/engagements/${eid}`;
-  const reviewerErrors: string[] = [];
-  reviewer.on("pageerror", (error) => reviewerErrors.push(error.message));
 
   async function post(request: APIRequestContext, path: string, data: unknown) {
     const response = await request.post(`/api/backend/${path}`, {
@@ -50,7 +43,11 @@ export async function runMSMEBrowserWorkflow(
         multipart: {
           file: {
             name,
-            mimeType: name.endsWith(".csv") ? "text/csv" : "text/plain",
+            mimeType: name.endsWith(".csv")
+              ? "text/csv"
+              : name.endsWith(".xml")
+                ? "application/xml"
+                : "text/plain",
             buffer,
           },
         },
@@ -65,7 +62,7 @@ export async function runMSMEBrowserWorkflow(
 
   async function evidence(name: string, buffer: Buffer) {
     const record = await post(page.request, `${audit}/evidence`, {
-      reference: `SYNTHETIC-MSE-${randomUUID()}`,
+      reference: `SYNTHETIC-WORKFLOW-${randomUUID()}`,
       title: `SYNTHETIC ${name}`,
       body: { category: "Other", retain_until: "2036-12-31" },
     });
@@ -75,7 +72,7 @@ export async function runMSMEBrowserWorkflow(
     };
   }
 
-  async function completed(jobId: string): Promise<Event> {
+  async function completed(jobId: string): Promise<WorkflowEvent> {
     let resultId = "";
     await expect
       .poll(
@@ -88,7 +85,7 @@ export async function runMSMEBrowserWorkflow(
           const job = await response.json();
           if (job.status === "failed")
             throw new Error(
-              `Synthetic MSE job failed: ${job.error_details?.message}`,
+              `Synthetic country workflow job failed: ${job.error_details?.message}`,
             );
           resultId = job.result_id || "";
           return job.status;
@@ -105,14 +102,32 @@ export async function runMSMEBrowserWorkflow(
     return response.json();
   }
 
-  async function prepare(payload: Record<string, unknown>) {
+  async function prepare(
+    payload: Record<string, unknown>,
+    operation: "workflow-source" | "workflow-ledger" = "workflow-source",
+  ) {
     const response = await page.request.post(`/api/backend/${prefix}/jobs`, {
       headers: { ...headers, "Idempotency-Key": randomUUID() },
-      data: { operation: "workflow-source", payload },
+      data: { operation, payload },
     });
     expect(response.status(), await response.text()).toBe(202);
     return completed((await response.json()).id);
   }
+
+  return { headers, prefix, post, upload, evidence, completed, prepare };
+}
+
+export async function runMSMEBrowserWorkflow(
+  page: Page,
+  reviewer: Page,
+  eid: string,
+  tenant: string,
+  screenshots: string,
+) {
+  const { headers, prefix, post, upload, evidence, completed, prepare } =
+    makeWorkflowHarness(page, eid, tenant);
+  const reviewerErrors: string[] = [];
+  reviewer.on("pageerror", (error) => reviewerErrors.push(error.message));
 
   const sourceIds: Record<string, string> = {};
   let assessmentContext = "";
@@ -255,7 +270,7 @@ export async function runMSMEBrowserWorkflow(
     .click();
   const response = await decision;
   expect(response.status(), await response.text()).toBe(201);
-  const approved: Event = await response.json();
+  const approved: WorkflowEvent = await response.json();
   expect(approved.body.review_status).toBe("REVIEWED");
   await expect(
     reviewer.getByLabel("Saved source or result", { exact: true }),
@@ -302,7 +317,7 @@ export async function runMSMEBrowserWorkflow(
     { headers },
   );
   expect(stale.status()).toBe(200);
-  const historical: Event = await stale.json();
+  const historical: WorkflowEvent = await stale.json();
   expect(historical.freshness).toBe("STALE");
   expect(historical.body).toEqual(original);
   await reviewer.goto(

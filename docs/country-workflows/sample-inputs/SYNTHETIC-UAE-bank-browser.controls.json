@@ -1,0 +1,19 @@
+{
+  "dataset_kind": "SYNTHETIC_NATIVE_BROWSER_FIXTURE_NOT_CLIENT_DATA",
+  "sha256": "5c0d3f5157dbfc5ec9dbbc23c5fb46aec554c5736d479804bdba9f88abd95dd8",
+  "file": "SYNTHETIC-UAE-bank-browser.xml",
+  "country": "AE",
+  "account": "SYNTHETIC-UAE-BANK",
+  "currency": "AED",
+  "period_start": "2026-06-01",
+  "as_of": "2026-06-30",
+  "expected_booked_rows": 1,
+  "expected_signed_movement": "100.20",
+  "expected_opening": "0.00",
+  "expected_closing": "100.20",
+  "reference": "SALE",
+  "booking_date": "2026-06-15",
+  "expected_matches": 1,
+  "bank_authentication": "NOT_ESTABLISHED",
+  "legal_or_client_qualification": "NOT_ESTABLISHED"
+}

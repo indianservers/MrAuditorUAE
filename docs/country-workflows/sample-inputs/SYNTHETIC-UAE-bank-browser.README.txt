@@ -1,0 +1,26 @@
+SYNTHETIC UAE native bank browser example
+
+This is an authored bounded CAMT.053.001.08 example, not a real bank statement,
+bank authentication, current complete ISO/bank schema qualification or client
+expected result. Its controls JSON records the literal LF-stable file hash.
+
+The browser smoke's existing committed GL has cash account 100, journal SALE,
+debit AED 100.20 dated 15 June 2026. Prepare that account as a transaction source
+for 1-30 June using the explicit label SYNTHETIC-UAE-BANK. Prepare this independent
+XML as camt053/transactions, one row and an AED 100.20 signed control. Review both
+sources independently. The statement has opening AED 0, closing AED 100.20 and one
+booked credit; transaction detail is not added a second time to entry amount.
+
+Use bank-brs at 30 June, that same account label and AED. Book and statement
+openings are 0 and closings 100.20. This fictional case has one match and zero
+balance/bridge controls. A declared statement closing of 100.21 must fail the
+native-source control rather than produce a reconciliation result. No reviewed
+bank-account ownership link is supplied, so its arithmetic-only scope remains
+explicit. Matching is not payment confirmation or an accounting posting.
+
+The smoke inspects original matched transactions, independently approves the
+result, checks the UI XLSX export and then replaces the XML evidence. The prior
+result must become stale without changing its original content. Source setup
+uses real APIs, scanner and queue services; browser execution is separately
+reported by its source-specific hosted run. This example does not add a qualified
+client or change the 154 authored scenario catalogue.

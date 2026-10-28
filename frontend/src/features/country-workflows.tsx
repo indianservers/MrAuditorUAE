@@ -10,6 +10,10 @@ import {
   type MediaScope,
 } from "./adverse-media-evidence";
 import Link from "next/link";
+import {
+  BankMatchedProposals,
+  type BankProposal,
+} from "./bank-matched-proposals";
 import { useState } from "react";
 import { useAPI, useAction, useCan } from "@/hooks/use-api";
 import { useEventHistory } from "@/hooks/use-event-history";
@@ -289,6 +293,7 @@ type Result = {
     }[];
     ambiguous?: BankAmbiguity[];
     matching_contract?: string;
+    matches?: BankProposal[];
     retained_grant_documents?: GrantDocument[];
     retained_media_documents?: GrantDocument[];
     media_scope?: MediaScope;
@@ -5112,6 +5117,21 @@ export function CountryWorkflows({
               />
             </section>
           )}
+          {body.workflow === "bank-brs" &&
+            !!(
+              detail.data.collection_totals?.matches || body.matches?.length
+            ) && (
+              <BankMatchedProposals
+                key={selected}
+                prefix={prefix}
+                selected={selected}
+                total={
+                  detail.data.collection_totals?.matches ??
+                  body.matches?.length ??
+                  0
+                }
+              />
+            )}
           {body.workflow === "bank-brs" &&
             body.review_status === "REVIEWED" &&
             !body.blocked &&

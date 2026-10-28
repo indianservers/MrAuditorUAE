@@ -1,5 +1,6 @@
 * text=auto
 *.sh text eol=lf
+docs/country-workflows/sample-inputs/SYNTHETIC-UAE-bank-browser.xml text eol=lf
 backend/app/assets/fonts/*.ttf binary
 
 # Preserve the literal bytes of hashed bank-statement fixtures.

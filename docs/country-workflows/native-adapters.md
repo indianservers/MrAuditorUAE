@@ -4393,3 +4393,40 @@ The new screenshot download also timed out. Artifact metadata and expected
 screenshot names are retained, but no local archive hash or visual inspection
 of these new result/stale images is claimed. This synthetic browser proof does
 not replace independent client expectations or production/scanner qualification.
+
+### Bank matched-proposal inspection and UAE native browser flow
+
+Bank BRS results now show every retained matched proposal through independent
+25-group pages, alongside the existing exception and balance controls. Selecting
+a proposal reads its original book/statement identities in saved order and shows
+references, dates, signed amounts, currencies, counterparties and separate booked/
+value-date evidence. The read-only inspector does not accept proposals, change
+decisions, authenticate documents or post entries. It uses its own page request
+so paging exception rows cannot relabel an unrelated proposal preview.
+
+The protected matched-proposal endpoint supports saved BRS and transaction
+reconciliation results. It checks event/engagement scope and original transaction
+sources, rejects incomplete/duplicate identities and missing/oversized groups,
+and returns a bounded selected group rather than whole source populations. A
+historical result can still be inspected; freshness and independent-approval
+gates remain separate. Unknown or absent original data is not reconstructed.
+
+The extended UAE smoke reuses the real upload/job harness from the India MSE flow,
+the already committed GL and the [synthetic native statement](sample-inputs/SYNTHETIC-UAE-bank-browser.README.txt).
+It checks a deliberately incorrect closing control produces no result, then
+queues a valid BRS through the UI, inspects original matched transactions,
+independently approves, validates the UI XLSX and checks replacement staleness.
+That new runtime definition awaits its source-specific hosted execution; prior
+India or form-only browser passes do not establish it passed.
+
+Final local verification passed 3,033 backend units with five skips, including
+14 focused group/boundary/native-fixture cases. Twelve DB/API regressions passed,
+including exact group inspection, invalid indices, wrong-kind/engagement guards
+in both UAE/AED and India/INR, native sources and existing account mappings.
+All 285 frontend tests, production build, TypeScript, scoped ESLint, application
+Ruff/format and mypy (391 files), and API snapshot/type checks passed. Retained
+[unit](../phase-12/bank-proposal-backend.xml),
+[focused](../phase-12/bank-proposal-focused.xml) and
+[API](../phase-12/bank-proposal-api.xml) receipts describe their actual scope.
+Scanner/broker doubles in DB tests remain distinct from real-service browser
+verification. No client/legal/production qualification is inferred.

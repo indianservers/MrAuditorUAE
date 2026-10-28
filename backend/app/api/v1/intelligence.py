@@ -929,6 +929,20 @@ async def bank_candidates(
     return await candidate_page(db, ctx, eid, obj, left_id, offset, limit)
 
 
+@router.get("/engagements/{eid}/events/{identifier}/bank-matched-proposal")
+async def bank_matched_proposal(
+    eid: uuid.UUID,
+    identifier: uuid.UUID,
+    db: DB,
+    ctx: Actor,
+    index: int = Query(..., ge=0),
+):
+    from app.modules.intelligence.bank_matches import detail
+
+    obj = await service.event(db, ctx, eid, identifier)
+    return await detail(db, ctx, eid, obj, index)
+
+
 @router.post("/engagements/{eid}/events/{identifier}/corrections", status_code=201)
 async def correct(
     eid: uuid.UUID, identifier: uuid.UUID, data: s.Correction, db: DB, ctx: Actor, request: Request
