@@ -2,6 +2,17 @@
 
 Implementation checkpoint: 25 October 2026. These additions extend the existing evidence, intelligence job, immutable event, review and lineage infrastructure.
 
+## India annual statement scope — 28 October 2026
+
+[Annual tax statement scope](annual-tax-statements.md) preserves explicitly
+declared Form 26AS / Form 168 headers in the existing controlled beneficiary-credit
+workflow. It separates underlying April–March periods from displayed assessment
+or tax years, binds the declared PAN and snapshot date to each row, rejects
+misrouted or mixed populations, and retains amendment-version headers in the
+result, UI and XLSX. This is manually normalized CSV evidence; native Form 26AS
+and Form 168 readers, complete portal-format qualification and independently
+checked client pilots remain open. It adds no Indian domestic workflow to UAE.
+
 ## Reviewed contributions to expected remittances
 
 `POST /intelligence/engagements/{eid}/contribution-obligation-source` prepares

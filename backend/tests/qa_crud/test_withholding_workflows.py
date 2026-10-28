@@ -1,4 +1,5 @@
 import io
+import json
 import os
 from decimal import Decimal
 
@@ -9,6 +10,7 @@ from tests.integration.test_platform import environment as environment
 from tests.phase4.test_workflows import actor, create, grant
 from tests.qa_crud.test_country_workflows import decision, double_boundaries, execute, source
 from tests.qa_crud.test_india_ecr_source import india_context
+from tests.unit.test_annual_tax_statement import PAN, header
 from tests.unit.test_withholding_workflows import pooled_certificate_population, population
 
 pytestmark = pytest.mark.skipif(
@@ -16,7 +18,9 @@ pytestmark = pytest.mark.skipif(
 )
 
 
-@pytest.mark.parametrize("legal_role", ["deductor", "collectee", "collectee-cap"])
+@pytest.mark.parametrize(
+    "legal_role", ["deductor", "collectee", "collectee-cap", "collectee-26AS", "collectee-168"]
+)
 async def test_separate_withholding_sources_review_export_workpaper_and_supersession(
     environment, monkeypatch, legal_role
 ):
@@ -36,6 +40,24 @@ async def test_separate_withholding_sources_review_export_workpaper_and_superses
     for rows in records.values():
         for row in rows:
             row.update(legal_role=legal_role, tax_kind="TDS" if legal_role == "deductor" else "TCS")
+            if scope in {"collectee-26AS", "collectee-168"}:
+                row["registration"] = PAN
+                if scope == "collectee-26AS":
+                    for field in (
+                        "tax_year_start",
+                        "tax_year_end",
+                        "transaction_date",
+                        "period",
+                        "due_date",
+                        "payment_date",
+                        "assessment_period_start",
+                        "assessment_period_end",
+                    ):
+                        if row.get(field):
+                            row[field] = row[field].replace("2026", "2025").replace("2027", "2026")
+    if scope in {"collectee-26AS", "collectee-168"}:
+        year = 2025 if scope == "collectee-26AS" else 2026
+        records["statement"][0]["annual_statement"] = json.dumps(header(year))
     document_record = await create(
         c, h, base, "evidence", {"category": "Other", "retain_until": "2036-12-31"}
     )
@@ -113,6 +135,9 @@ async def test_separate_withholding_sources_review_export_workpaper_and_superses
     row = result["body"]["rows"][0]
     assert row["amounts"][statement_role] == "100"
     assert row["excluded_source_ids"][statement_role] == ["superseded"]
+    if scope in {"collectee-26AS", "collectee-168"}:
+        assert row["annual_statement"] == header(year)
+        assert result["body"]["annual_statement_scope_contract"] == "india-annual-statement-scope/1"
     if scope == "collectee-cap":
         assert result["body"]["blocked"] and row["comparison_state"] == "MATCHED"
         assert row["state"] == "ASSESSMENT_NOT_SUPPORTED"
@@ -143,6 +168,15 @@ async def test_separate_withholding_sources_review_export_workpaper_and_superses
     assert "superseded" in exported_row["excluded_source_ids"]
     assert exported_row["credit_entitlement"] == "NOT_DETERMINED"
     assert assessment_upload.json()["id"] in exported_row["assessment_provenance"]
+    if scope in {"collectee-26AS", "collectee-168"}:
+        assert json.loads(exported_row["annual_statement"]) == header(year)
+        assert json.loads(cover["annual_statement_scopes"]) == [
+            {"source_version": "0", **header(year)},
+            {"source_version": "1", **header(year)},
+        ]
+        assert cover["annual_statement_scope_basis"] == (
+            "DECLARED_NORMALIZATION_NOT_NATIVE_HEADER_VERIFICATION"
+        )
     paper = await c.post(
         f"{prefix}/{identifier}/working-paper",
         headers=h,

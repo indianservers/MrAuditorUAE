@@ -1,0 +1,67 @@
+{
+  "contract": "india-annual-statement-validation/1",
+  "date": "2026-10-28",
+  "base_commit": "8f90da3402e6cc863a1b7299a75d3aa7e5915bef",
+  "receipts": {
+    "backend_unit": {
+      "path": "docs/phase-12/annual-statement-backend.xml",
+      "sha256": "65b6ea8cc5cfc6951d40122d4a7002e492b5351a9d919a7cbe25e18d777cbc73",
+      "tests": 3140,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 5,
+      "passed": 3135
+    },
+    "database_api": {
+      "path": "docs/phase-12/annual-statement-api.xml",
+      "sha256": "4f0064884b1c45fdf87105d06e9d400c9928218f198bdf13318baa02540dab1b",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 5
+    }
+  },
+  "frontend": {
+    "tests_passed": 295,
+    "test_files_passed": 63,
+    "typecheck": "passed",
+    "scoped_eslint": "passed",
+    "production_build": "passed",
+    "evidence": "Local command outputs; no new statement browser screenshot or hosted completion is claimed"
+  },
+  "backend_checks": {
+    "mypy_app_files": 393,
+    "mypy": "passed",
+    "scoped_ruff_and_format": "passed",
+    "api_contract_snapshot_check": "passed"
+  },
+  "new_unit_cases": 45,
+  "scope": [
+    "Explicitly declared manually normalized beneficiary statement headers",
+    "April-March underlying year, 26AS/168 transition, AY/TY display and PAN consistency",
+    "Snapshot dates, scoped population completeness and source-role restrictions",
+    "Current/superseded snapshots, independent source/result review, XLSX scope export and assessment-document staleness"
+  ],
+  "limitations": [
+    "Not a native Form 26AS or Form 168 reader; native part/booking-status grammar remains unqualified",
+    "No registry authenticity, credit entitlement, tax rate, filing or payment conclusion",
+    "Database/HTTP/storage/processor tests use explicit scanner and broker dispatch doubles",
+    "Four connector-operation tests and one CPU worker test remain skipped in this unit run",
+    "No new professional/client validation, provider integration or production deployment claim",
+    "Counts overlap and must not be added to the authored 154-scenario catalogue"
+  ],
+  "source_hash_basis": "UTF-8 source bytes with CRLF normalized to LF; JUnit receipt hashes use exact original bytes",
+  "normalized_lf_source_sha256": {
+    "backend/app/modules/country_workflows/annual_tax_statement.py": "be841c6345342ce302df9685896fa8124ff8253910aadec7a3d44ce9e8badb9e",
+    "backend/app/modules/country_workflows/withholding_schemas.py": "34aaa332d7805f42c5cc23f7a3f60096f4f49aaa8dec606cb6a8fdce9c8188cc",
+    "backend/app/modules/country_workflows/withholding_calculations.py": "cc695dbdecb475a7f8669d3caf37a3a1bafd719a2dab07abdfedf4acd77508f5",
+    "backend/app/modules/country_workflows/sources.py": "2bf3e83fa1b6c63f3ce76f9e3f9fa1f1a90c30d1fb00fdf1ee8ebe7d56fb6b19",
+    "backend/app/modules/intelligence/exports.py": "a81ebbfc55c5e4979d4b0a7dd74f391fcfe4f61bc15cb83a35c78fdffdbf1bca",
+    "backend/tests/unit/test_annual_tax_statement.py": "24e2578f18e36d11d09741cd699d3b43ae8bd0901c9aa73f35464b24f10edb7e",
+    "backend/tests/qa_crud/test_withholding_workflows.py": "592a7e0781a0232c482963b711fe231322dd45ef2236cfc501d9eaf35aa62f62",
+    "frontend/src/features/country-workflows.tsx": "4dac2966d5980fda870dbb301399c416db5dfa801f0fe4db75a35eecda3cf9f6",
+    "frontend/tests/country-workflows.test.tsx": "5c8438aafef5253b34dd48f0d70c96ebd2d192d9e7309bb83699b73ac0730ed1",
+    "docs/country-workflows/job-input-contracts.json": "b2cb0f446bb531069210ba7180faad31ba826d04aa8b46fb6ec7b41b7dc772bb"
+  }
+}

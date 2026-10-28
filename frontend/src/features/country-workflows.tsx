@@ -416,6 +416,16 @@ type Result = {
     included_box_controls?: Record<string, unknown>[];
     metric_controls?: Record<string, string>;
     native_metadata?: Record<string, unknown>;
+    annual_statement_scopes?: {
+      source_version: string;
+      form: string;
+      pan: string;
+      period_start: string;
+      period_end: string;
+      displayed_year_basis: string;
+      displayed_year: string;
+      generated_on: string;
+    }[];
     workbook_metadata?: {
       worksheet: string;
       original_sha256: string;
@@ -5624,6 +5634,29 @@ export function CountryWorkflows({
               </label>
             </>
           )}
+          {body.workflow === "india-withholding-credit" &&
+            !!body.annual_statement_scopes?.length && (
+              <section aria-label="Declared annual tax statement scope">
+                <h3>Declared annual tax statement scope</h3>
+                <p>
+                  These headers describe manually normalized evidence. Native
+                  portal headers and credit entitlement have not been verified.
+                </p>
+                <ul>
+                  {body.annual_statement_scopes.map((scope) => (
+                    <li key={scope.source_version}>
+                      Form {scope.form} · PAN {scope.pan} · Underlying period{" "}
+                      {scope.period_start} to {scope.period_end} ·{" "}
+                      {scope.displayed_year_basis === "ASSESSMENT_YEAR"
+                        ? "Assessment year"
+                        : "Tax year"}{" "}
+                      {scope.displayed_year} · Snapshot {scope.generated_on} ·
+                      Source version {scope.source_version}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
           {body.table_type === "withholding-records" &&
             config.data?.country === "IN" &&
             body.review_status === "REVIEWED" &&

@@ -182,6 +182,10 @@ def _parse_csv(content, data, defaults=None):
         verify_merchant(rows, data.merchant_component_controls)
     if len(rows) != data.expected_rows:
         raise ValueError("Source row-count control does not agree")
+    if data.table_type == "withholding-records":
+        from app.modules.country_workflows.annual_tax_statement import validate_population
+
+        validate_population({"statement": rows})
     if data.table_type in {"inventory-custody-positions", "inventory-custody-confirmations"}:
         from app.modules.country_workflows.inventory_custody import (
             verify_controls as verify_custody_controls,

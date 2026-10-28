@@ -4,6 +4,7 @@ from datetime import date
 from decimal import Decimal
 from typing import Any
 
+from app.modules.country_workflows.annual_tax_statement import CONTRACT, validate_population
 from app.modules.country_workflows.audit_calculations import result
 
 KEY_FIELDS = (
@@ -125,6 +126,7 @@ def select_records(records, legal_role, as_of, role):
 
 
 def withholding(data, tables):
+    statement_scopes = validate_population(tables)
     liability = data.workflow == "india-withholding-liability"
     allowed = {"deductor", "collector"} if liability else {"deductee", "collectee"}
     if data.withholding_role not in allowed:
@@ -191,6 +193,8 @@ def withholding(data, tables):
                 (assessed.get("assessment_evidence_version_id"), assessed["source_reference"])
             )
             provenance["certificate_scope_used_amount"] = str(pool["amount"]) if pool else None
+        statement = present.get("statement")
+        annual_statement = statement.get("annual_statement") if statement is not None else None
         rows.append(
             {
                 "id": f"withholding-{index}",
@@ -225,6 +229,7 @@ def withholding(data, tables):
                 if liability
                 else "NOT_APPLICABLE",
                 "credit_entitlement": "NOT_DETERMINED",
+                **({"annual_statement": annual_statement} if annual_statement is not None else {}),
             }
         )
     return {
@@ -243,6 +248,15 @@ def withholding(data, tables):
         "withholding_role": data.withholding_role,
         "assessment_contract_version": "withholding-assessment/1",
         "comparison_basis": "LIABILITY" if liability else "BENEFICIARY_CREDIT",
+        **(
+            {
+                "annual_statement_scope_contract": CONTRACT,
+                "annual_statement_scopes": statement_scopes,
+                "annual_statement_scope_basis": "DECLARED_NORMALIZATION_NOT_NATIVE_HEADER_VERIFICATION",
+            }
+            if statement_scopes
+            else {}
+        ),
         "selected_current_totals": {
             role: str(sum((Decimal(record["amount"]) for record in records.values()), Decimal(0)))
             for role, records in selected.items()

@@ -1200,6 +1200,49 @@ describe("country workflows", () => {
       screen.getByRole("button", { name: "Independent approval" }),
     ).toBeDisabled();
   });
+  it.each(["26AS", "168"])("shows the correct displayed year basis for Form %s", (form) => {
+    const historical = form === "26AS";
+    state.result = {
+      id: "result",
+      kind: "country-workflow",
+      version: 1,
+      freshness: "CURRENT",
+      body: {
+        title: "Declared statement scope",
+        workflow: "india-withholding-credit",
+        review_status: "UNVERIFIED",
+        rows: [],
+        annual_statement_scopes: [
+          {
+            source_version: "1",
+            form,
+            pan: "ABCDE1234F",
+            period_start: historical ? "2025-04-01" : "2026-04-01",
+            period_end: historical ? "2026-03-31" : "2027-03-31",
+            displayed_year_basis: historical ? "ASSESSMENT_YEAR" : "TAX_YEAR",
+            displayed_year: "2026-27",
+            generated_on: "2026-06-30",
+          },
+        ],
+      },
+    };
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), {
+      target: { value: "result" },
+    });
+    const scope = screen.getByRole("region", {
+      name: "Declared annual tax statement scope",
+    });
+    expect(scope).toHaveTextContent(`Form ${form}`);
+    expect(scope).toHaveTextContent(
+      `${historical ? "Assessment year" : "Tax year"} 2026-27`,
+    );
+    expect(scope).toHaveTextContent(historical ? "2025-04-01 to 2026-03-31" : "2026-04-01 to 2027-03-31");
+    expect(scope).toHaveTextContent("manually normalized evidence");
+    expect(scope).toHaveTextContent(
+      "credit entitlement have not been verified",
+    );
+  });
   it("renders withholding amounts as labelled values with readable differences", () => {
     state.result = {
       id: "result",

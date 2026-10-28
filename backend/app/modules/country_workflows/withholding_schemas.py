@@ -5,8 +5,9 @@ from decimal import Decimal
 from typing import Annotated, Literal
 from uuid import UUID
 
-from pydantic import Field, model_validator
+from pydantic import Field, field_validator, model_validator
 
+from app.modules.country_workflows.annual_tax_statement import AnnualTaxStatement
 from app.modules.jurisdictions.profiles import Strict
 
 Identifier = Annotated[str, Field(min_length=1, max_length=120, pattern=r"^\S(?:.*\S)?$")]
@@ -32,6 +33,9 @@ class WithholdingRecord(Strict):
     source_version: Identifier
     due_date: date | None = None
     payment_date: date | None = None
+    annual_statement: AnnualTaxStatement | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
     assessment_evidence_version_id: UUID | None = None
     assessment_sha256: str | None = Field(default=None, pattern=r"^[a-f0-9]{64}$")
     assessment_kind: Literal["rule", "certificate"] | None = None
@@ -41,8 +45,25 @@ class WithholdingRecord(Strict):
         default=None, ge=0, max_digits=28, decimal_places=8, allow_inf_nan=False
     )
 
+    @field_validator("annual_statement", mode="before")
+    @classmethod
+    def statement_csv(cls, value):
+        if isinstance(value, str):
+            import json
+
+            try:
+                decoded = json.loads(value)
+            except ValueError:
+                raise ValueError("Annual statement CSV scope requires a JSON object") from None
+            if not isinstance(decoded, dict):
+                raise ValueError("Annual statement CSV scope requires a JSON object")
+            return decoded
+        return value
+
     @model_validator(mode="after")
     def assessed_scope(self):
+        if self.annual_statement is not None:
+            self.annual_statement.check_record(self.model_dump(mode="json"))
         binding = (self.assessment_evidence_version_id, self.assessment_sha256)
         if any(value is not None for value in binding) and not all(binding):
             raise ValueError("Assessment evidence ID and SHA-256 must be provided together")
