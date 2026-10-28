@@ -8656,6 +8656,58 @@
     },
     "obligations": {
       "$defs": {
+        "BenefitSettlementScope": {
+          "additionalProperties": false,
+          "properties": {
+            "service_start": {
+              "format": "date",
+              "title": "Service Start",
+              "type": "string"
+            },
+            "service_end": {
+              "format": "date",
+              "title": "Service End",
+              "type": "string"
+            },
+            "regime": {
+              "maxLength": 120,
+              "minLength": 1,
+              "pattern": "^\\S(?:.*\\S)?$",
+              "title": "Regime",
+              "type": "string"
+            },
+            "cohort": {
+              "maxLength": 120,
+              "minLength": 1,
+              "pattern": "^\\S(?:.*\\S)?$",
+              "title": "Cohort",
+              "type": "string"
+            },
+            "work_model": {
+              "enum": [
+                "full-time",
+                "part-time"
+              ],
+              "title": "Work Model",
+              "type": "string"
+            },
+            "scheme": {
+              "const": "gratuity",
+              "title": "Scheme",
+              "type": "string"
+            }
+          },
+          "required": [
+            "service_start",
+            "service_end",
+            "regime",
+            "cohort",
+            "work_model",
+            "scheme"
+          ],
+          "title": "BenefitSettlementScope",
+          "type": "object"
+        },
         "PensionScope": {
           "additionalProperties": false,
           "properties": {
@@ -8879,6 +8931,17 @@
           "anyOf": [
             {
               "$ref": "#/$defs/PensionScope"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "benefit_scope": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/BenefitSettlementScope"
             },
             {
               "type": "null"

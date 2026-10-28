@@ -1,4 +1,5 @@
 import { runMerchantBrowserWorkflow } from "./merchant-browser-workflow";
+import { runBenefitSettlementBrowserWorkflow } from "./benefit-settlement-browser-workflow";
 import {
   test,
   expect,
@@ -918,6 +919,14 @@ for (const code of ["AE", "IN"] as const) {
         engagement.id,
         identities.tenant_id,
         snapshot,
+        screenshots,
+      );
+    if (code === "AE")
+      await runBenefitSettlementBrowserWorkflow(
+        page,
+        reviewer,
+        engagement.id,
+        identities.tenant_id,
         screenshots,
       );
     await runMerchantBrowserWorkflow(

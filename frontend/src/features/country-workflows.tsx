@@ -35,6 +35,7 @@ import {
 } from "./grant-utilisation-evidence";
 import { WithholdingObligationSource } from "./withholding-obligation-source";
 import { ContributionObligationSource } from "./contribution-obligation-source";
+import { BenefitSettlementSource } from "./benefit-settlement-source";
 import {
   BankAccountLinkReview,
   type BankAccountLink,
@@ -770,6 +771,16 @@ export function CountryWorkflows({
         ? (body.rows || []).map((row) => ({
             ...row,
             subject: row.subject ?? row.reference,
+            ...(row.benefit_scope
+              ? {
+                  benefit_service_start: (
+                    row.benefit_scope as Record<string, string>
+                  ).service_start,
+                  benefit_service_end: (
+                    row.benefit_scope as Record<string, string>
+                  ).service_end,
+                }
+              : {}),
             ...(row.withholding_scope
               ? {
                   tax_section: (row.withholding_scope as Record<string, string>)
@@ -914,6 +925,8 @@ export function CountryWorkflows({
                 "tax_year",
                 "withholding_transaction",
                 "withholding_date",
+                "benefit_service_start",
+                "benefit_service_end",
                 "currency",
                 "source_amount",
                 "settled_or_allocated",
@@ -5804,6 +5817,20 @@ export function CountryWorkflows({
                 eid={eid}
                 resultId={selected}
                 pension={body.workflow === "uae-pension-review"}
+                evidence={inputs.data?.evidence || []}
+                onCreated={setSelected}
+              />
+            )}
+          {body.workflow === "uae-benefit-review" &&
+            config.data?.country === "AE" &&
+            detail.data.freshness === "CURRENT" &&
+            body.review_status === "REVIEWED" &&
+            !body.blocked && (
+              <BenefitSettlementSource
+                key={`${tenant}:${eid}:${selected}`}
+                eid={eid}
+                resultId={selected}
+                rows={body.rows || []}
                 evidence={inputs.data?.evidence || []}
                 onCreated={setSelected}
               />

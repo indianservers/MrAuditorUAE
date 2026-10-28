@@ -6,6 +6,7 @@ import pytest
 
 from tests.integration.test_platform import environment as environment
 from tests.phase4.test_workflows import actor, create, grant, setup
+from tests.qa_crud.benefit_settlement_workflow import verify_settlement
 from tests.qa_crud.test_country_workflows import decision, double_boundaries, execute, source
 from tests.unit.test_practice_audit_workflows import (
     benefit_employee,
@@ -18,8 +19,9 @@ pytestmark = pytest.mark.skipif(
 )
 
 
+@pytest.mark.parametrize("withdrawal", ["rule", "settlement-context"])
 async def test_benefit_rule_document_binding_review_export_and_replacement(
-    environment, monkeypatch
+    environment, monkeypatch, withdrawal
 ):
     c = environment
     double_boundaries(monkeypatch)
@@ -104,6 +106,9 @@ async def test_benefit_rule_document_binding_review_export_and_replacement(
     assert final.status_code == 201, final.text
     result = final.json()
     assert result["body"]["review_status"] == "REVIEWED"
+    support, bridge, settlement, original_body = await verify_settlement(
+        c, h, eid, base, result, reviewer
+    )
     exported = await c.get(
         f"/api/v1/intelligence/engagements/{eid}/events/{result['id']}/export?format=xlsx",
         headers=h,
@@ -125,7 +130,7 @@ async def test_benefit_rule_document_binding_review_export_and_replacement(
         failed="document hash differs",
     )
     replaced = await c.post(
-        base + "/evidence-files/" + record["id"],
+        base + "/evidence-files/" + (record["id"] if withdrawal == "rule" else support["id"]),
         headers=h,
         files={
             "file": (
@@ -136,8 +141,13 @@ async def test_benefit_rule_document_binding_review_export_and_replacement(
         },
     )
     assert replaced.status_code == 201, replaced.text
-    for identifier in (approved.json()["id"], result["id"]):
+    stale = [bridge["id"], settlement["id"]]
+    if withdrawal == "rule":
+        stale.extend([approved.json()["id"], result["id"]])
+    for identifier in stale:
         detail = await c.get(
             f"/api/v1/intelligence/engagements/{eid}/events/{identifier}", headers=h
         )
         assert detail.status_code == 200 and detail.json()["freshness"] == "STALE"
+        if identifier == settlement["id"]:
+            assert detail.json()["body"] == original_body

@@ -2,6 +2,17 @@
 
 Implementation checkpoint: 25 October 2026. These additions extend the existing evidence, intelligence job, immutable event, review and lineage infrastructure.
 
+## UAE gratuity to bank settlement — 28 October 2026
+
+[The gratuity settlement bridge](benefit-settlement.md) reuses an independently
+reviewed benefit calculation as a controlled expected settlement source. Employee
+service spans, supplied regime/cohort, rule provenance and separately retained
+settlement-scope/due-date support remain bound to the result. The existing bank
+allocation workflow preserves partial and pooled payments without treating
+declared paid benefits as independent cash. The UI collects explicit employee
+selections and independent controls. This closes a workflow re-entry gap; legal
+rule packs, alternative schemes and real-client qualification remain open.
+
 ## India annual statement scope — 28 October 2026
 
 [Annual tax statement scope](annual-tax-statements.md) preserves explicitly

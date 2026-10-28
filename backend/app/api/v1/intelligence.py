@@ -19,6 +19,7 @@ from app.modules.audit_execution.schemas import RecordInput, RecordPatch, Source
 from app.modules.audit_log.service import record
 from app.modules.country_workflows.bank_carryforward import CarryforwardInput
 from app.modules.country_workflows.bank_outstanding_source import BankOutstandingSourceInput
+from app.modules.country_workflows.benefit_settlement_source import BenefitSettlementInput
 from app.modules.country_workflows.benefit_source import BenefitSourceInput
 from app.modules.country_workflows.contribution_source import ContributionSourceInput
 from app.modules.country_workflows.import_vat_source import ImportVATSourceInput
@@ -150,6 +151,16 @@ async def contribution_obligation_source(
     eid: uuid.UUID, data: ContributionSourceInput, db: DB, ctx: Actor, request: Request
 ):
     from app.modules.country_workflows.contribution_source import prepare
+
+    eng = await service.scope(db, ctx, eid, "country-workflow", True)
+    return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))
+
+
+@router.post("/engagements/{eid}/benefit-settlement-source", status_code=201)
+async def benefit_settlement_source(
+    eid: uuid.UUID, data: BenefitSettlementInput, db: DB, ctx: Actor, request: Request
+):
+    from app.modules.country_workflows.benefit_settlement_source import prepare
 
     eng = await service.scope(db, ctx, eid, "country-workflow", True)
     return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))

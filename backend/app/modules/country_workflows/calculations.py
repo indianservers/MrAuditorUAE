@@ -907,6 +907,17 @@ def calculate(
             )
         if table.get("allowed_workflows") and data.workflow not in table["allowed_workflows"]:
             raise ValueError("Derived source is restricted to its assessed target workflows")
+        if table.get("parser_version") == "benefit-settlement-obligations/1" and (
+            data.workflow != "obligation-bank-allocations" or role != "expected"
+        ):
+            raise ValueError(
+                "Derived gratuity can establish only expected bank-allocation obligations"
+            )
+        if (
+            any(row.get("benefit_scope") for row in table["rows"])
+            and data.workflow != "obligation-bank-allocations"
+        ):
+            raise ValueError("Service-scoped gratuity requires the bank allocation workflow")
         if (
             any(row.get("withholding_scope") for row in table["rows"])
             and data.workflow != "obligation-bank-allocations"

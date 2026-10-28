@@ -1243,6 +1243,33 @@ describe("country workflows", () => {
       "credit entitlement have not been verified",
     );
   });
+  it.each([
+    ["AE", "CURRENT", true], ["AE", "STALE", false], ["IN", "CURRENT", false],
+  ])("offers the gratuity bridge only for a reviewed current UAE result: %s %s", (country, freshness, available) => {
+    state.country = country as string;
+    state.result = { id: "result", kind: "country-workflow", version: 1, freshness,
+      body: { title: "Reviewed gratuity", workflow: "uae-benefit-review", review_status: "REVIEWED", blocked: false,
+        rows: [{id: "E1", service_start: "2025-07-01", service_end: "2026-06-30", scheme: "gratuity", expected_benefit: "2100", work_model: "full-time"}],
+      },
+    };
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), {target: {value: "result"}});
+    const button = screen.queryByRole("button", {name: "Prepare expected gratuity source"});
+    if (available) expect(button).toBeVisible();
+    else expect(button).not.toBeInTheDocument();
+  });
+  it("shows employment service dates in the compact gratuity settlement comparison", () => {
+    state.result = {id: "result", kind: "country-workflow", version: 1, freshness: "CURRENT",
+      body: { title: "Gratuity bank comparison", workflow: "obligation-bank-allocations", review_status: "UNVERIFIED",
+        rows: [{id: "O1", kind: "obligation", subject: "E1", currency: "AED", component: "BENEFIT:GRATUITY", expected_amount: "2100", bank_settled: "2100", outstanding_amount: "0", state: "MATCHED", benefit_scope: {service_start: "2025-07-01", service_end: "2026-06-30"}}],
+      },
+    };
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), {target: {value: "result"}});
+    expect(screen.getByRole("columnheader", {name: "benefit service start"})).toBeVisible();
+    expect(screen.getByRole("cell", {name: "2025-07-01"})).toBeVisible();
+    expect(screen.getByRole("cell", {name: "2026-06-30"})).toBeVisible();
+  });
   it("renders withholding amounts as labelled values with readable differences", () => {
     state.result = {
       id: "result",

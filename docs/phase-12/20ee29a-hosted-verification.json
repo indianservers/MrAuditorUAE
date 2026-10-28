@@ -1,0 +1,22 @@
+{
+  "source_commit": "20ee29a1c2717ab2e293b8282699d8aec56a0e30",
+  "run_id": 40728696415,
+  "job_id": 122958808728,
+  "conclusion": "success",
+  "passed": 3972,
+  "skipped": 9,
+  "junit_suite_seconds": 3583.653,
+  "overall_coverage_percent": 86.16,
+  "core_coverage_percent": 89.35,
+  "core_covered_lines": 831,
+  "core_total_lines": 930,
+  "artifact_id": 12838272264,
+  "archive_sha256": "0e5a796bd039adc9292d27a4c5cffa792ab54042ec4cd883212a9618494e7790",
+  "original_artifact_locally_archived": true,
+  "retained_originals_sha256": {
+    "docs/phase-12/20ee29a-hosted-full.xml": "464eab048ce422dee1c5d9541944dc6bb0674b36c4acb5c6bdaa3f1a93521612",
+    "docs/phase-12/20ee29a-hosted-coverage.json": "66345adc8b537a12f1404721423763ac950a6dd6a83c2fb39121c83c6505f2b8"
+  },
+  "other_jobs": "Frontend, security, ML, containers and browser-smoke all completed successfully on this source",
+  "limits": "Complete source-specific hosted proof includes merchant contract 2; predates linked merchant accounts, annual-statement scopes and the gratuity settlement bridge. Synthetic/doubled providers and CI containers do not qualify actual providers, real-client data, full legal/native coverage or production deployment. Other operation JSONs in the artifact were not inspected or archived here."
+}

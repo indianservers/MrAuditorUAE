@@ -891,6 +891,15 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(
                 409, "Independently review the assembled GSTR-2B retrieval batch before matching"
             )
+        if source.body.get("parser_version") == "benefit-settlement-obligations/1":
+            if data.workflow != "obligation-bank-allocations" or role != "expected":
+                raise HTTPException(
+                    422, "Derived gratuity can establish only expected settlement obligations"
+                )
+            if source.body.get("review_status") != "REVIEWED":
+                raise HTTPException(
+                    409, "Independently review derived gratuity obligations before allocation"
+                )
         if source.body.get("parser_version") == "contribution-obligations/1":
             if (
                 data.workflow not in {"statutory-dues", "obligation-bank-allocations"}
@@ -1105,6 +1114,12 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                     db, ctx, eng, source_body, data, source_role, contributors
                 )
             )
+    if sources.get("expected", {}).get("parser_version") == "benefit-settlement-obligations/1":
+        from app.modules.country_workflows.benefit_settlement_source import (
+            verify as verify_benefits,
+        )
+
+        dependencies.extend(await verify_benefits(db, ctx, eng, sources["expected"], contributors))
     if sources.get("expected", {}).get("parser_version") == "contribution-obligations/1":
         from app.modules.country_workflows.contribution_source import verify as verify_contributions
 

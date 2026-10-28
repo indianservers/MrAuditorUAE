@@ -8,6 +8,7 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 
 from app.modules.country_workflows.audit_schemas import AUDIT_ROW_TYPES
 from app.modules.country_workflows.bank_accounts import BankAccountEvidence
+from app.modules.country_workflows.benefit_settlement_scope import BenefitSettlementScope
 from app.modules.country_workflows.cutoff_schedules import CutoffPosting, CutoffRecognition
 from app.modules.country_workflows.diligence_schemas import DILIGENCE_ROW_TYPES
 from app.modules.country_workflows.document_series import DocumentSeries, SeriesCounts
@@ -145,6 +146,24 @@ class Obligation(Strict):
         default=None, exclude_if=lambda value: value is None
     )
     pension_scope: PensionScope | None = Field(default=None, exclude_if=lambda value: value is None)
+    benefit_scope: BenefitSettlementScope | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
+
+    @field_validator("benefit_scope", mode="before")
+    @classmethod
+    def csv_benefit_scope(cls, value):
+        if isinstance(value, str):
+            import json
+
+            try:
+                decoded = json.loads(value)
+            except ValueError:
+                raise ValueError("Benefit scope CSV requires a JSON object") from None
+            if not isinstance(decoded, dict):
+                raise ValueError("Benefit scope CSV requires a JSON object")
+            return decoded
+        return value
 
     @field_validator("withholding_scope", mode="before")
     @classmethod
@@ -172,6 +191,20 @@ class Obligation(Strict):
 
     @model_validator(mode="after")
     def scope_component(self):
+        if self.component == "BENEFIT:GRATUITY" and self.benefit_scope is None:
+            raise ValueError("Final gratuity obligations require an explicit benefit service scope")
+        if self.benefit_scope is not None:
+            if (
+                self.pension_scope is not None
+                or self.withholding_scope is not None
+                or self.currency != "AED"
+                or self.component != "BENEFIT:GRATUITY"
+                or self.population != "unspecified"
+                or self.period != self.benefit_scope.service_end.strftime("%Y-%m")
+            ):
+                raise ValueError("Gratuity requires separate AED service-end-month benefit scope")
+            if self.due_date and self.due_date < self.benefit_scope.service_end:
+                raise ValueError("Final gratuity due date cannot predate the service end")
         if self.withholding_scope is not None:
             scope = self.withholding_scope
             if (

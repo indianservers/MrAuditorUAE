@@ -54,6 +54,16 @@ def allocate(data, tables, country):
             }:
                 raise ValueError("Indian domestic statutory component cannot run in a UAE workflow")
             scope = row.get("withholding_scope")
+            benefit = row.get("benefit_scope")
+            if benefit is not None and (
+                country != "AE"
+                or row["currency"] != "AED"
+                or row["component"] != "BENEFIT:GRATUITY"
+                or row["period"] != benefit["service_end"][:7]
+            ):
+                raise ValueError(
+                    "Gratuity settlement scopes require UAE/AED and the service-end month"
+                )
             if scope is not None and (
                 country != "IN" or row["currency"] != "INR" or row["component"] != scope["tax_kind"]
             ):
@@ -99,11 +109,15 @@ def allocate(data, tables, country):
             raise ValueError("Allocation references a missing obligation, reported or bank row")
         if identity(e) != identity(r) or allocation["currency"] != data.currency:
             raise ValueError(
-                "Allocation crosses registration, subject, component, month or currency; pension scope must also agree; withholding scopes must also agree"
+                "Allocation crosses registration, subject, component, month or currency; pension scope must also agree; withholding scopes must also agree; benefit service scopes must also agree"
             )
         if e.get("withholding_scope") and b["date"] < e["withholding_scope"]["transaction_date"]:
             raise ValueError(
                 "Bank movement predates withholding transaction; assess advance challans separately"
+            )
+        if e.get("benefit_scope") and b["date"] < e["benefit_scope"]["service_end"]:
+            raise ValueError(
+                "Bank movement predates service end; assess gratuity advances separately"
             )
         if date_details(b)["booking_date_review_required"]:
             raise ValueError(
@@ -180,6 +194,7 @@ def allocate(data, tables, country):
                     for field in ("registration", "subject", "period", "component", "currency")
                 },
                 "expected_amount": str(original),
+                **({"benefit_scope": e["benefit_scope"]} if e.get("benefit_scope") else {}),
                 **({"pension_scope": e["pension_scope"]} if e.get("pension_scope") else {}),
                 **(
                     {"withholding_scope": e["withholding_scope"]}
@@ -219,6 +234,7 @@ def allocate(data, tables, country):
                     for field in ("registration", "subject", "period", "component", "currency")
                 },
                 "reported_amount": r["amount"],
+                **({"benefit_scope": r["benefit_scope"]} if r.get("benefit_scope") else {}),
                 **({"pension_scope": r["pension_scope"]} if r.get("pension_scope") else {}),
                 **(
                     {"withholding_scope": r["withholding_scope"]}
