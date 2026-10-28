@@ -1,0 +1,18 @@
+{
+  "source_commit": "f54e7dbf51f4af6040582c28c554c49171b784b2",
+  "run_id": 40724722517,
+  "job_id": 122944777776,
+  "conclusion": "success",
+  "browser_cases_passed": 3,
+  "duration_seconds": 54.2,
+  "artifact_id": 12831882889,
+  "archive_sha256_from_metadata": "b3b945f19c9750f5f2412d01da3f4ffeb4c9111199dd4d4b79200991bfd81fd4",
+  "verified_behavior": [
+    "UAE native bank and India MSE browser workflows plus merchant helpers in both country cases",
+    "Merchant source setup/review through real upload and source APIs, broker/worker and scanner",
+    "UI merchant calculation, original displayed net values and independent approval",
+    "Downloaded XLSX bytes verified with openpyxl through BytesIO",
+    "Processor source withdrawal leaves reviewed body unchanged and stale; browser approval disabled; reviewer page errors empty"
+  ],
+  "limits": "Synthetic mechanics only. This source predates the compact summary/expandable component UI. Artifact metadata retained; archive not locally downloaded or screenshots visually inspected for this source. Three cases do not qualify all 154 scenarios, real clients, statutory correctness or production."
+}

@@ -1,0 +1,43 @@
+{
+  "source_commit": "f08cce79b1470667eed0dbd994718a8a10709bae",
+  "run_id": 40725472457,
+  "job_id": 122947436882,
+  "conclusion": "success",
+  "browser_cases_passed": 3,
+  "duration_reported": "1.1m",
+  "artifact_id": 12832842469,
+  "archive_sha256": "858dae5f4db8e96e05d775cddd7f72c43e4e17869f015e42ef650b770442559e",
+  "local_archive_verification": "SHA-256 verified; four exact PNG entries extracted privately",
+  "visual_inspection": "All four individually inspected 2026-10-28",
+  "screenshots": [
+    {
+      "name": "AE-merchant-reviewed-settlement-f08cce7.png",
+      "sha256": "fd322fe238486e9e63afb89d794f0560b5aed02e3ca39cb901a1b2a132fbaee4",
+      "finding": "Reviewed component values and bank zero are readable, but lower source details are clipped by the capture viewport."
+    },
+    {
+      "name": "AE-merchant-withdrawn-source-stale-f08cce7.png",
+      "sha256": "feb737f4f178191a6d83136a9e79121af349df822d56f4f12d1ad8271860b6d6",
+      "finding": "Capture shows the form above the selected result; it does not visually establish the stale badge. API freshness and disabled browser approval assertions passed."
+    },
+    {
+      "name": "IN-merchant-reviewed-settlement-f08cce7.png",
+      "sha256": "c2f7fdb3446b4534a448acf9ed07c0e897059eeda5e74dbb3f8665abf213fc40",
+      "finding": "Reviewed component values and bank zero are readable, but lower source details are clipped by the capture viewport."
+    },
+    {
+      "name": "IN-merchant-withdrawn-source-stale-f08cce7.png",
+      "sha256": "1f2b205427fd8ae2a44e87070df92c63f72428a9c0f6022026f800b79abc2885",
+      "finding": "Capture shows the form above the selected result; it does not visually establish the stale badge. API freshness and disabled browser approval assertions passed."
+    }
+  ],
+  "verified_behavior": [
+    "Real source setup/independent review through APIs, scanner, broker and worker",
+    "Both country merchant UI calculations and independent approval",
+    "Compact summary row and expandable component values present in the browser",
+    "Exact XLSX net/bank values checked from downloaded ZIP bytes",
+    "Processor withdrawal leaves reviewed body unchanged and stale; browser approval disabled; reviewer page errors empty",
+    "Existing UAE native-bank and India MSE flows passed in the same cases"
+  ],
+  "limits": "Passing synthetic mechanics with inadequate screenshot framing. A follow-up adds explicit result-card viewport checks before captures. No current-source full backend, real-client, statutory or deployment qualification claimed."
+}

@@ -205,20 +205,30 @@ export async function runMerchantBrowserWorkflow(
     ],
     { input: workbook, timeout: 15000 },
   );
-  await reviewer
+  await reviewer.setViewportSize({ width: 1440, height: 2200 });
+  const resultCard = reviewer
     .getByRole("heading", { name: title, exact: true })
-    .scrollIntoViewIfNeeded();
+    .locator("..");
+  await resultCard.scrollIntoViewIfNeeded();
+  await expect(
+    components.getByText("Processor evidence: SYNTHETIC statement.", {
+      exact: true,
+    }),
+  ).toBeInViewport();
+  await expect(
+    resultCard.getByRole("columnheader", {
+      name: "bank difference",
+      exact: true,
+    }),
+  ).toBeInViewport();
   const notification = reviewer.getByRole("button", {
     name: "Dismiss notification",
     exact: true,
   });
   if (await notification.count()) await notification.last().click();
-  await reviewer
-    .getByRole("heading", { name: title, exact: true })
-    .locator("..")
-    .screenshot({
-      path: `${screenshots}/${country}-merchant-reviewed-settlement.png`,
-    });
+  await resultCard.screenshot({
+    path: `${screenshots}/${country}-merchant-reviewed-settlement.png`,
+  });
   expect(processorSource).toBeTruthy();
   await post(
     reviewer.request,
@@ -243,7 +253,10 @@ export async function runMerchantBrowserWorkflow(
   await expect(
     reviewer.getByRole("button", { name: "Independent approval", exact: true }),
   ).toBeDisabled();
-  await reviewer.screenshot({
+  await reviewer.setViewportSize({ width: 1440, height: 1600 });
+  await resultCard.scrollIntoViewIfNeeded();
+  await expect(resultCard.getByText("STALE", { exact: true })).toBeInViewport();
+  await resultCard.screenshot({
     path: `${screenshots}/${country}-merchant-withdrawn-source-stale.png`,
   });
   expect(reviewerErrors).toEqual([]);
