@@ -1020,6 +1020,7 @@ class WorkflowInput(Strict):
             if (
                 self.workflow
                 not in {
+                    "merchant-settlement-bridge",
                     "bank-brs",
                     "bank-subsequent-clearance",
                     "obligation-bank-allocations",

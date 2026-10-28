@@ -25,15 +25,31 @@ vi.mock("@/features/shared", () => ({
 vi.mock("@/hooks/use-event-history", () => ({
   useEventHistory: () => ({
     data: {
-      items: Object.entries(roles).map(([role, table_type]) => ({
-        id: role,
-        label: role + " reviewed",
-        kind: "workflow-source",
-        table_type,
-        freshness: "CURRENT",
-        review_status: "REVIEWED",
-        version: 1,
-      })),
+      items: [
+        ...Object.entries(roles).map(([role, table_type]) => ({
+          id: role,
+          label: role + " reviewed",
+          kind: "workflow-source",
+          table_type,
+          freshness: "CURRENT",
+          review_status: "REVIEWED",
+          version: 1,
+        })),
+        {
+          id: "account-current",
+          label: "SYNTHETIC reviewed account",
+          kind: "country-workflow",
+          workflow: "bank-account-evidence",
+          review_status: "REVIEWED",
+          freshness: "CURRENT",
+          version: 2,
+          as_of: "2026-06-30",
+          bank_account_scope: {
+            account: "ACCT",
+            currency: state.country === "AE" ? "AED" : "INR",
+          },
+        },
+      ],
     },
     error: null,
     hasOlder: false,
@@ -156,6 +172,23 @@ it.each([
     expect(
       screen.getByText(/UAE VAT and India GST are assessed fee-tax components/),
     ).toBeVisible();
+    fireEvent.change(
+      screen.getByLabelText("Reviewed bank account evidence (optional)"),
+      { target: { value: "account-current" } },
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    expect(
+      await screen.findByText(
+        "Assess the linked bank account, original bank identifier and complete review window before calculation.",
+      ),
+    ).toBeVisible();
+    expect(state.mutate).not.toHaveBeenCalled();
+    fireEvent.change(screen.getByLabelText("Linked account scope assessment"), {
+      target: {
+        value:
+          "SYNTHETIC original bank number and full June ownership scope assessed",
+      },
+    });
     fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
     await waitFor(() => expect(state.mutate).toHaveBeenCalled());
     expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
@@ -166,6 +199,9 @@ it.each([
       period_start: "2026-06-01",
       account: "ACCT",
       currency,
+      bank_account_review_id: "account-current",
+      bank_account_scope_assessment:
+        "SYNTHETIC original bank number and full June ownership scope assessed",
     });
   },
 );

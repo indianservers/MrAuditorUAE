@@ -15,6 +15,7 @@ export async function runMerchantBrowserWorkflow(
   tenant: string,
   country: "AE" | "IN",
   screenshots: string,
+  ownerName: string,
 ) {
   const reviewerErrors: string[] = [];
   reviewer.on("pageerror", (error) => reviewerErrors.push(error.message));
@@ -38,7 +39,6 @@ export async function runMerchantBrowserWorkflow(
     processor_component_controls: Record<string, string>;
   };
   const sourceIds: Record<string, string> = {};
-  let processorSource: WorkflowEvent | undefined;
   for (const [role, fixture] of Object.entries(manifest.files)) {
     const bytes = readFileSync(`${root}/${fixture.file}`);
     expect(createHash("sha256").update(bytes).digest("hex")).toBe(
@@ -70,8 +70,84 @@ export async function runMerchantBrowserWorkflow(
       },
     );
     sourceIds[role] = approved.id;
-    if (role === "processor") processorSource = approved;
   }
+  const accountSourceIds: Record<string, string> = {};
+  for (const role of ["register", "ledger", "bank"]) {
+    const row = {
+      id: `SYNTHETIC-${role}`,
+      account: "ACCT",
+      bank_country: country,
+      account_scheme: country === "AE" ? "IBAN" : "LOCAL",
+      account_number:
+        country === "AE" ? "AE070331234567890123456" : "000123456789",
+      routing_code: country === "AE" ? "033" : "SYNB0ABC123",
+      currency: manifest.currency,
+      owner_country: country,
+      owner_name: ownerName,
+      owner_identifier_scheme: "SYNTHETIC-REGISTRY",
+      owner_identifier: "00123",
+      valid_from: "2026-06-01",
+      valid_through: "2026-06-30",
+      assertion_status: "confirmed",
+      evidence_reference: `SYNTHETIC independent ${role} document`,
+      assessment:
+        "SYNTHETIC assessed original account and complete June validity only; no bank authentication",
+    };
+    const csv =
+      Object.keys(row).join(",") +
+      "\n" +
+      Object.values(row)
+        .map((value) => '"' + String(value).replaceAll('"', '""') + '"')
+        .join(",") +
+      "\n";
+    const file = await evidence(
+      `SYNTHETIC-${country}-${role}-account.csv`,
+      Buffer.from(csv),
+    );
+    const prepared = await prepare({
+      evidence_version_id: file.version.id,
+      table_type: "bank-account-evidence",
+      label: `SYNTHETIC ${country} merchant account ${role}`,
+      expected_rows: 1,
+      control_totals: {},
+    });
+    const approved = await post(
+      reviewer.request,
+      `${prefix}/events/${prepared.id}/review`,
+      {
+        expected_version: prepared.version,
+        action: "approve",
+        comments: "SYNTHETIC independent account-source assessment",
+      },
+    );
+    accountSourceIds[role] = approved.id;
+  }
+  const accountPrepared = await prepare(
+    {
+      workflow: "bank-account-evidence",
+      source_ids: accountSourceIds,
+      as_of: "2026-06-30",
+      account: "ACCT",
+      currency: manifest.currency,
+      bank_owner_name: ownerName,
+      bank_owner_identifier_scheme: "SYNTHETIC-REGISTRY",
+      bank_owner_identifier: "00123",
+      title: `SYNTHETIC ${country} reviewed merchant account`,
+      rationale:
+        "SYNTHETIC register ledger setup and bank account documents compared; no authentication",
+    },
+    "country-workflow",
+  );
+  const accountReview = (await post(
+    reviewer.request,
+    `${prefix}/events/${accountPrepared.id}/review`,
+    {
+      expected_version: accountPrepared.version,
+      action: "approve",
+      comments:
+        "SYNTHETIC independent full-period merchant account comparison assessment",
+    },
+  )) as WorkflowEvent;
   await page.goto(`/intelligence/${eid}/country-workflow`);
   await page
     .getByRole("combobox", { name: "Workflow", exact: true })
@@ -93,6 +169,14 @@ export async function runMerchantBrowserWorkflow(
     ["Settlement currency", manifest.currency],
   ])
     await page.getByLabel(label, { exact: true }).fill(value);
+  await page
+    .getByLabel("Reviewed bank account evidence (optional)", { exact: true })
+    .selectOption(accountReview.id);
+  await page
+    .getByLabel("Linked account scope assessment", { exact: true })
+    .fill(
+      "SYNTHETIC ACCT ledger label and reviewed account documents cover the entire June window; native account identity not established by this CSV",
+    );
   const submitted = page.waitForResponse(
     (r) =>
       r.url().endsWith(`/${prefix}/jobs`) && r.request().method() === "POST",
@@ -104,6 +188,14 @@ export async function runMerchantBrowserWorkflow(
   expect(response.status(), await response.text()).toBe(202);
   const result = await completed((await response.json()).id);
   expect(result.body.blocked).toBe(false);
+  expect(result.body.bank_account_evidence).toMatchObject({
+    status: "REVIEWED_ACCOUNT_DOCUMENTS_LINKED",
+    source_account_binding: "DECLARED_LEDGER_ACCOUNT_LABEL_ONLY",
+    account: "ACCT",
+    window_start: "2026-06-01",
+    window_end: "2026-06-30",
+    bank_authentication_status: "NOT_ESTABLISHED_BY_DOCUMENT_COMPARISON",
+  });
   expect(result.body.merchant_settlement_contract).toBe(
     "explicit-gross-net-bank/2",
   );
@@ -243,16 +335,11 @@ export async function runMerchantBrowserWorkflow(
   await resultCard.screenshot({
     path: `${screenshots}/${country}-merchant-reviewed-settlement.png`,
   });
-  expect(processorSource).toBeTruthy();
-  await post(
-    reviewer.request,
-    `${prefix}/events/${processorSource!.id}/review`,
-    {
-      expected_version: processorSource!.version,
-      action: "reject",
-      comments: "SYNTHETIC withdrawal of retained processor assessment",
-    },
-  );
+  await post(reviewer.request, `${prefix}/events/${accountReview.id}/review`, {
+    expected_version: accountReview.version,
+    action: "reject",
+    comments: "SYNTHETIC withdrawal of linked account-document review",
+  });
   const current = await reviewer.request.get(
     `/api/backend/${prefix}/events/${reviewed.id}`,
     { headers },

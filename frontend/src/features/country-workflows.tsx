@@ -1705,6 +1705,7 @@ export function CountryWorkflows({
           );
         if (
           [
+            "merchant-settlement-bridge",
             "bank-brs",
             "bank-subsequent-clearance",
             "obligation-bank-allocations",
@@ -1853,6 +1854,7 @@ export function CountryWorkflows({
               }
             : {}),
           ...([
+            "merchant-settlement-bridge",
             "bank-brs",
             "bank-subsequent-clearance",
             "obligation-bank-allocations",
@@ -4624,6 +4626,7 @@ export function CountryWorkflows({
                 </p>
               )}
               {[
+                "merchant-settlement-bridge",
                 "bank-brs",
                 "bank-subsequent-clearance",
                 "obligation-bank-allocations",

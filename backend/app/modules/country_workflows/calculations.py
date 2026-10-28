@@ -1269,6 +1269,7 @@ def calculate(
             "eligibility_status": "ASSESSED_SEPARATELY_NOT_INFERRED_FROM_ESIC_WAGES",
         }
     if data.workflow in {
+        "merchant-settlement-bridge",
         "bank-brs",
         "bank-subsequent-clearance",
         "obligation-bank-allocations",

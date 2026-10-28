@@ -23,6 +23,16 @@ independently declared totals for **every** component, including assessed zeros:
 from independently checked schedules; summing the imported file itself is not
 independent verification.
 
+Optionally select a current independently reviewed **bank-account-evidence** result
+and assess the account link. The comparison must cover the selected ledger label,
+currency, owner country and the entire reporting window, not just payout dates.
+For native CAMT/MT940 inputs, the original statement account must agree with the
+reviewed account number before its label can be mapped for calculation. Original
+source rows and file bytes remain unchanged. Canonical CSV ledger labels remain
+explicitly distinguished from verified agreement to a native account number.
+Withdrawing the linked review makes dependent merchant results stale. Account
+document comparison does not authenticate the bank, owner or payment authority.
+
 The bridge checks:
 
 ```

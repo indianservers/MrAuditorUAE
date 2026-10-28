@@ -927,6 +927,7 @@ for (const code of ["AE", "IN"] as const) {
       identities.tenant_id,
       code,
       screenshots,
+      entity.name,
     );
     expect(errors).toEqual([]);
     await reviewerContext.close();

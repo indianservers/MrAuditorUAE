@@ -104,7 +104,10 @@ export function makeWorkflowHarness(page: Page, eid: string, tenant: string) {
 
   async function prepare(
     payload: Record<string, unknown>,
-    operation: "workflow-source" | "workflow-ledger" = "workflow-source",
+    operation:
+      | "workflow-source"
+      | "workflow-ledger"
+      | "country-workflow" = "workflow-source",
   ) {
     const response = await page.request.post(`/api/backend/${prefix}/jobs`, {
       headers: { ...headers, "Idempotency-Key": randomUUID() },
