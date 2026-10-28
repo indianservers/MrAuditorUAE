@@ -234,6 +234,7 @@
           },
           "workflow": {
             "enum": [
+              "merchant-settlement-bridge",
               "india-msme-payment-timing",
               "tax-turnover-bridge",
               "adverse-media-review",
@@ -2823,6 +2824,9 @@
           "table_type": {
             "enum": [
               "msme-supplier-assessments",
+              "merchant-activity",
+              "merchant-settlements",
+              "merchant-bank-allocations",
               "msme-invoices",
               "turnover-scope",
               "turnover-amounts",
@@ -2958,6 +2962,24 @@
             ],
             "default": null,
             "title": "Import Taxable Base Control"
+          },
+          "merchant_component_controls": {
+            "additionalProperties": {
+              "additionalProperties": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ]
+              },
+              "type": "object"
+            },
+            "maxProperties": 20,
+            "title": "Merchant Component Controls",
+            "type": "object"
           },
           "msme_context_evidence_version_id": {
             "anyOf": [
@@ -7866,6 +7888,372 @@
         "assessment"
       ],
       "title": "MediaSubject",
+      "type": "object"
+    },
+    "merchant-activity": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "merchant": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Merchant",
+          "type": "string"
+        },
+        "processor": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Processor",
+          "type": "string"
+        },
+        "batch": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Batch",
+          "type": "string"
+        },
+        "reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Reference",
+          "type": "string"
+        },
+        "date": {
+          "format": "date",
+          "title": "Date",
+          "type": "string"
+        },
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "title": "Currency",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "SALE",
+            "REFUND",
+            "CHARGEBACK"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Amount"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "merchant",
+        "processor",
+        "batch",
+        "reference",
+        "date",
+        "currency",
+        "kind",
+        "amount",
+        "evidence_reference"
+      ],
+      "title": "MerchantActivity",
+      "type": "object"
+    },
+    "merchant-bank-allocations": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "settlement_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Settlement Id",
+          "type": "string"
+        },
+        "bank_transaction_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Bank Transaction Id",
+          "type": "string"
+        },
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "title": "Currency",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Amount"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "assessment": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Assessment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "settlement_id",
+        "bank_transaction_id",
+        "currency",
+        "amount",
+        "evidence_reference",
+        "assessment"
+      ],
+      "title": "MerchantAllocation",
+      "type": "object"
+    },
+    "merchant-settlements": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "merchant": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Merchant",
+          "type": "string"
+        },
+        "processor": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Processor",
+          "type": "string"
+        },
+        "batch": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Batch",
+          "type": "string"
+        },
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "title": "Currency",
+          "type": "string"
+        },
+        "period_start": {
+          "format": "date",
+          "title": "Period Start",
+          "type": "string"
+        },
+        "period_end": {
+          "format": "date",
+          "title": "Period End",
+          "type": "string"
+        },
+        "settlement_date": {
+          "format": "date",
+          "title": "Settlement Date",
+          "type": "string"
+        },
+        "sales": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Sales"
+        },
+        "refunds": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Refunds"
+        },
+        "chargebacks": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Chargebacks"
+        },
+        "fees": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Fees"
+        },
+        "fee_tax": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Fee Tax"
+        },
+        "withholding": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Withholding"
+        },
+        "reserve_held": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Reserve Held"
+        },
+        "reserve_released": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Reserve Released"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Amount"
+        },
+        "tax_country": {
+          "enum": [
+            "AE",
+            "IN"
+          ],
+          "title": "Tax Country",
+          "type": "string"
+        },
+        "fee_tax_kind": {
+          "enum": [
+            "UAE_VAT",
+            "INDIA_GST",
+            "FOREIGN_TAX",
+            "NO_TAX_ASSESSED"
+          ],
+          "title": "Fee Tax Kind",
+          "type": "string"
+        },
+        "tax_assessment_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Tax Assessment Reference",
+          "type": "string"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "assessment": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Assessment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "merchant",
+        "processor",
+        "batch",
+        "currency",
+        "period_start",
+        "period_end",
+        "settlement_date",
+        "sales",
+        "refunds",
+        "chargebacks",
+        "fees",
+        "fee_tax",
+        "withholding",
+        "reserve_held",
+        "reserve_released",
+        "amount",
+        "tax_country",
+        "fee_tax_kind",
+        "tax_assessment_reference",
+        "evidence_reference",
+        "assessment"
+      ],
+      "title": "MerchantSettlement",
       "type": "object"
     },
     "metal-lines": {

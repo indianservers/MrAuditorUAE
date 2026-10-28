@@ -26,6 +26,16 @@ OPTIONAL_ROLES = {
 }
 
 WORKFLOWS = {
+    "merchant-settlement-bridge": (
+        "Merchant gross / refunds / fees / net bank settlement",
+        ["AE", "IN"],
+        {
+            "books": "merchant-activity",
+            "processor": "merchant-settlements",
+            "bank": "transactions",
+            "allocations": "merchant-bank-allocations",
+        },
+    ),
     "tax-turnover-bridge": (
         "Book revenue to VAT/GST turnover by registration and period",
         ["AE", "IN"],

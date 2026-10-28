@@ -10,3 +10,5 @@ docs/country-workflows/sample-inputs/SYNTHETIC-bank-account-labels/*/statement.c
 docs/country-workflows/sample-inputs/SYNTHETIC-document-worker/*/*.pdf binary
 docs/country-workflows/sample-inputs/SYNTHETIC-document-worker/*/*.png -text
 docs/country-workflows/sample-inputs/SYNTHETIC-document-worker/*/*.zip -text
+
+docs/country-workflows/sample-inputs/SYNTHETIC-merchant-settlements/*.csv text eol=lf

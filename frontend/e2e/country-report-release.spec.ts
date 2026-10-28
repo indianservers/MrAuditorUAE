@@ -1,3 +1,4 @@
+import { runMerchantBrowserWorkflow } from "./merchant-browser-workflow";
 import {
   test,
   expect,
@@ -919,6 +920,14 @@ for (const code of ["AE", "IN"] as const) {
         snapshot,
         screenshots,
       );
+    await runMerchantBrowserWorkflow(
+      page,
+      reviewer,
+      engagement.id,
+      identities.tenant_id,
+      code,
+      screenshots,
+    );
     expect(errors).toEqual([]);
     await reviewerContext.close();
   });

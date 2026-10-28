@@ -1116,7 +1116,13 @@ def calculate(
             esic_links, esic_metadata = bind_esic(data, tables, *esic_population_review)
         elif esic_population_review is not None:
             raise ValueError("An ESIC population receipt requires an explicit reviewed link")
-        if data.workflow == "tax-turnover-bridge":
+        if data.workflow == "merchant-settlement-bridge":
+            from app.modules.country_workflows.merchant_settlements import (
+                compare as compare_merchant,
+            )
+
+            result = compare_merchant(data, sources, country)
+        elif data.workflow == "tax-turnover-bridge":
             from app.modules.country_workflows.turnover import compare as turnover_compare
 
             result = turnover_compare(data, tables, country)

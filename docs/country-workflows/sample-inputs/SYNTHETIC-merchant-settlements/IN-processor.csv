@@ -1,0 +1,2 @@
+merchant,processor,batch,currency,id,period_start,period_end,settlement_date,sales,refunds,chargebacks,fees,fee_tax,withholding,reserve_held,reserve_released,amount,tax_country,fee_tax_kind,tax_assessment_reference,evidence_reference,assessment
+SHOP,PSP,BATCH-1,INR,PAYOUT,2026-06-01,2026-06-02,2026-06-03,1000,100,20,30,2,3,50,5,800,IN,INDIA_GST,SYNTHETIC assessment,SYNTHETIC statement,Independently assessed synthetic component facts; no legal rate assertion

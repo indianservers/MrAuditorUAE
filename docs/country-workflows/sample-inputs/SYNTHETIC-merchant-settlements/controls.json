@@ -1,0 +1,94 @@
+{
+  "scope": "SYNTHETIC arithmetic and review mechanics only; not client, tax-rate, tax-eligibility or provider qualification",
+  "expected_net": "800",
+  "countries": {
+    "AE": {
+      "currency": "AED",
+      "files": {
+        "books": {
+          "file": "AE-books.csv",
+          "sha256": "5b966c33883c82f0a15275fcc16ad0cc42d707c1013d3882e32bb009efb823e5",
+          "table_type": "merchant-activity",
+          "row_count": 3,
+          "control_total": "1120"
+        },
+        "processor": {
+          "file": "AE-processor.csv",
+          "sha256": "d6160ebf884bbc02a1274695dd879f41caf89cee300e99be3583e36ebe6d91e8",
+          "table_type": "merchant-settlements",
+          "row_count": 1,
+          "control_total": "800"
+        },
+        "bank": {
+          "file": "AE-bank.csv",
+          "sha256": "344cd3687106b27f161d2ab7a114b25a4b4510cb10e7b500bc8b4eda0c8d9677",
+          "table_type": "transactions",
+          "row_count": 1,
+          "control_total": "800"
+        },
+        "allocations": {
+          "file": "AE-allocations.csv",
+          "sha256": "2dcded8f1aeaea744a9dc6c078c4d03d3c0f427448a8d4e0d254f94deaf5878d",
+          "table_type": "merchant-bank-allocations",
+          "row_count": 1,
+          "control_total": "800"
+        }
+      },
+      "processor_component_controls": {
+        "sales": "1000",
+        "refunds": "100",
+        "chargebacks": "20",
+        "fees": "30",
+        "fee_tax": "2",
+        "withholding": "3",
+        "reserve_held": "50",
+        "reserve_released": "5",
+        "amount": "800"
+      }
+    },
+    "IN": {
+      "currency": "INR",
+      "files": {
+        "books": {
+          "file": "IN-books.csv",
+          "sha256": "7cf136438342fca1ee926b47451a4e62efd461b08357f01d103f0b224c5d1051",
+          "table_type": "merchant-activity",
+          "row_count": 3,
+          "control_total": "1120"
+        },
+        "processor": {
+          "file": "IN-processor.csv",
+          "sha256": "eab6e1f8288be8b61c9b1f900b7fc2214bc4e796c14c1e22aad2b6556fc17917",
+          "table_type": "merchant-settlements",
+          "row_count": 1,
+          "control_total": "800"
+        },
+        "bank": {
+          "file": "IN-bank.csv",
+          "sha256": "f001966ba180a107520fb7c40a1e15528d90959a5c74c99ddc37f58b35e40409",
+          "table_type": "transactions",
+          "row_count": 1,
+          "control_total": "800"
+        },
+        "allocations": {
+          "file": "IN-allocations.csv",
+          "sha256": "14d2f95ab420e70910e8fe7a333d414704f0477e38833496782f67d16950d90c",
+          "table_type": "merchant-bank-allocations",
+          "row_count": 1,
+          "control_total": "800"
+        }
+      },
+      "processor_component_controls": {
+        "sales": "1000",
+        "refunds": "100",
+        "chargebacks": "20",
+        "fees": "30",
+        "fee_tax": "2",
+        "withholding": "3",
+        "reserve_held": "50",
+        "reserve_released": "5",
+        "amount": "800"
+      }
+    }
+  }
+}

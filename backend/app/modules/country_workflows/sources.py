@@ -73,7 +73,7 @@ def _parse_csv(content, data, defaults=None):
     ids = set()
     totals: defaultdict[str, Decimal] = defaultdict(Decimal)
     for index, raw in enumerate(reader, 2):
-        if data.table_type.startswith(("grant-", "media-", "msme-")) and any(
+        if data.table_type.startswith(("grant-", "media-", "msme-", "merchant-")) and any(
             value is not None and value != value.strip()
             for value in raw.values()
             if isinstance(value, str)
@@ -174,6 +174,12 @@ def _parse_csv(content, data, defaults=None):
         from app.modules.country_workflows.gst_summary import verify_controls
 
         metric_controls = verify_controls(rows, data.gst_summary_metric_controls)
+    if data.table_type == "merchant-settlements":
+        from app.modules.country_workflows.merchant_settlements import (
+            verify_controls as verify_merchant,
+        )
+
+        verify_merchant(rows, data.merchant_component_controls)
     if len(rows) != data.expected_rows:
         raise ValueError("Source row-count control does not agree")
     if data.table_type in {"inventory-custody-positions", "inventory-custody-confirmations"}:
@@ -211,6 +217,9 @@ def _parse_csv(content, data, defaults=None):
             raise ValueError("A nil population cannot carry nonzero control totals")
         totals.update(data.control_totals)
     if data.table_type in {
+        "merchant-activity",
+        "merchant-settlements",
+        "merchant-bank-allocations",
         "msme-invoices",
         "turnover-amounts",
         "turnover-adjustments",
@@ -317,6 +326,16 @@ def _parse_csv(content, data, defaults=None):
         ),
         **({"esic_population_controls": esic_controls} if esic_controls is not None else {}),
         "table_type": data.table_type,
+        **(
+            {
+                "merchant_component_controls": {
+                    currency: {field: str(value) for field, value in fields.items()}
+                    for currency, fields in data.merchant_component_controls.items()
+                }
+            }
+            if data.table_type == "merchant-settlements"
+            else {}
+        ),
         **(
             {
                 "allowed_workflows": ["obligation-bank-allocations"],

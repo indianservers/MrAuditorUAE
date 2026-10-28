@@ -1,0 +1,2 @@
+id,settlement_id,bank_transaction_id,currency,amount,evidence_reference,assessment
+LINK,PAYOUT,BANK,INR,800,SYNTHETIC remittance,Synthetic exact batch and bank movement evidence

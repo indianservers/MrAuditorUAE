@@ -28,6 +28,7 @@ from app.modules.country_workflows.inventory_valuation import (
     InventoryValuation,
     InventoryValueControl,
 )
+from app.modules.country_workflows.merchant_settlements import ROW_TYPES as MERCHANT_ROW_TYPES
 from app.modules.country_workflows.msme_schemas import MSME_ROW_TYPES
 from app.modules.country_workflows.operations_schemas import OPERATION_ROW_TYPES
 from app.modules.country_workflows.party_confirmations import (
@@ -261,6 +262,7 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
     "withholding-records": WithholdingRecord,
     **OPERATION_ROW_TYPES,
     **MSME_ROW_TYPES,
+    **MERCHANT_ROW_TYPES,
     **PAYROLL_ROW_TYPES,
     **PAYROLL_LEDGER_ROW_TYPES,
     **PENSION_ROW_TYPES,
@@ -363,6 +365,9 @@ class SourceInput(Strict):
     rule_document_version_id: uuid.UUID | None = None
     table_type: Literal[
         "msme-supplier-assessments",
+        "merchant-activity",
+        "merchant-settlements",
+        "merchant-bank-allocations",
         "msme-invoices",
         "turnover-scope",
         "turnover-amounts",
@@ -445,11 +450,16 @@ class SourceInput(Strict):
     nil_reason: str | None = Field(default=None, min_length=10, max_length=2000)
     control_totals: dict[str, Money] = Field(default_factory=dict, max_length=20)
     import_taxable_base_control: Money | None = None
+    merchant_component_controls: dict[str, dict[str, Money]] = Field(
+        default_factory=dict, max_length=20
+    )
     msme_context_evidence_version_id: uuid.UUID | None = None
     msme_context_assessment: str = Field(default="", max_length=2000)
 
     @model_validator(mode="after")
     def declared_nil(self):
+        if self.merchant_component_controls and self.table_type != "merchant-settlements":
+            raise ValueError("Merchant component controls apply only to processor settlements")
         if self.msme_context_evidence_version_id is not None:
             if (
                 not self.table_type.startswith("msme-")
@@ -845,6 +855,7 @@ class WorkflowInput(Strict):
     withholding_role: WithholdingRole | None = None
     allocation_basis: Literal["invoice_face_amounts", "pre_application_balances"] | None = None
     workflow: Literal[
+        "merchant-settlement-bridge",
         "india-msme-payment-timing",
         "tax-turnover-bridge",
         "adverse-media-review",
@@ -943,6 +954,17 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
+        if self.workflow == "merchant-settlement-bridge" and (
+            self.period_start is None
+            or self.period_start > self.as_of
+            or not self.account
+            or not self.account.strip()
+            or self.tolerance != 0
+            or self.date_tolerance != 0
+        ):
+            raise ValueError(
+                "Merchant settlement requires an account, ordered period and exact controls"
+            )
         if self.workflow == "adverse-media-review" and (
             self.tolerance != 0 or self.date_tolerance != 0
         ):

@@ -685,6 +685,11 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(
                 422, "Payroll accounting window must be within the engagement period"
             )
+    elif data.workflow == "merchant-settlement-bridge":
+        if data.period_start is None or not period.start_date <= data.period_start <= data.as_of:
+            raise HTTPException(
+                422, "Merchant settlement review window must be within the engagement period"
+            )
     elif data.workflow == "grant-utilisation":
         if data.period_start is None or not period.start_date <= data.period_start <= data.as_of:
             raise HTTPException(
@@ -739,6 +744,14 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(
                 409,
                 "Independently review all media subjects, searches, mentions and policy sources before comparison",
+            )
+        if (
+            data.workflow == "merchant-settlement-bridge"
+            and source.body.get("review_status") != "REVIEWED"
+        ):
+            raise HTTPException(
+                409,
+                "Independently review all merchant activity, processor, bank and allocation sources before comparison",
             )
         if data.workflow == "grant-utilisation" and source.body.get("review_status") != "REVIEWED":
             raise HTTPException(

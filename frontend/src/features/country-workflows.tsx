@@ -460,6 +460,9 @@ type Result = {
 const text = (v: unknown) =>
   v == null ? "—" : typeof v === "object" ? JSON.stringify(v) : String(v);
 const moneyTables = [
+  "merchant-activity",
+  "merchant-settlements",
+  "merchant-bank-allocations",
   "msme-invoices",
   "turnover-amounts",
   "turnover-adjustments",
@@ -626,6 +629,7 @@ export function CountryWorkflows({
   const [gstr1Controls, setGSTR1Controls] = useState("[]");
   const [gstr1Context, setGSTR1Context] = useState("");
   const [gstr1Assessment, setGSTR1Assessment] = useState("");
+  const [merchantControls, setMerchantControls] = useState("{}");
   const [gstSummaryControls, setGSTSummaryControls] = useState("{}");
   const [gstRegistration, setGSTRegistration] = useState("");
   const [gstDirection, setGSTDirection] = useState("purchase");
@@ -1030,21 +1034,45 @@ export function CountryWorkflows({
                             ].filter((key) => allColumns.includes(key))
                           : allColumns;
   const defaultColumns =
-    body?.workflow === "tax-turnover-bridge" && !showRuleProvenance
+    body?.workflow === "merchant-settlement-bridge" && !showRuleProvenance
       ? [
-          "registration",
-          "period_start",
-          "period_end",
+          "kind",
+          "merchant",
+          "processor",
+          "batch",
           "currency",
-          "book_revenue",
-          "signed_adjustments",
-          "expected_return_turnover",
-          "reported_turnover",
-          "difference",
-          "missing_roles",
+          "sales",
+          "refunds",
+          "chargebacks",
+          "fees",
+          "fee_tax",
+          "withholding",
+          "reserve_held",
+          "reserve_released",
+          "amount",
+          "expected_net",
+          "net_arithmetic_difference",
+          "bank_allocated",
+          "bank_difference",
+          "book_differences",
+          "issues",
           "state",
-        ]
-      : standardColumns;
+        ].filter((key) => allColumns.includes(key))
+      : body?.workflow === "tax-turnover-bridge" && !showRuleProvenance
+        ? [
+            "registration",
+            "period_start",
+            "period_end",
+            "currency",
+            "book_revenue",
+            "signed_adjustments",
+            "expected_return_turnover",
+            "reported_turnover",
+            "difference",
+            "missing_roles",
+            "state",
+          ]
+        : standardColumns;
   const baseColumns =
     (body?.workflow === "india-gstr1-summary" ||
       body?.table_type === "gst-summary-metrics") &&
@@ -1523,6 +1551,9 @@ export function CountryWorkflows({
                     gstr1_retrieval_assessment: gstr1Assessment,
                   }
                 : {}),
+              ...(tableType === "merchant-settlements"
+                ? { merchant_component_controls: JSON.parse(merchantControls) }
+                : {}),
               ...(tableType === "gst-summary-metrics"
                 ? {
                     gst_summary_metric_controls: JSON.parse(gstSummaryControls),
@@ -1812,6 +1843,7 @@ export function CountryWorkflows({
             ? { review_through: reviewThrough }
             : {}),
           ...([
+            "merchant-settlement-bridge",
             "grant-utilisation",
             "expense-cutoff",
             "excise-reconciliation",
@@ -1844,7 +1876,12 @@ export function CountryWorkflows({
               }
             : {}),
           ...(workflow === "bank-brs" ? { account, ...balances } : {}),
-          ...(workflow === "bank-subsequent-clearance" ? { account } : {}),
+          ...([
+            "bank-subsequent-clearance",
+            "merchant-settlement-bridge",
+          ].includes(workflow)
+            ? { account }
+            : {}),
           ...([
             "obligation-bank-allocations",
             "india-msme-payment-timing",
@@ -3035,6 +3072,26 @@ export function CountryWorkflows({
                       )}
                     </fieldset>
                   )}
+                  {tableType === "merchant-settlements" && (
+                    <fieldset style={{ gridColumn: "1 / -1", minWidth: 0 }}>
+                      <legend>
+                        Independent merchant component controls (JSON)
+                      </legend>
+                      <textarea
+                        aria-label="Independent merchant component controls (JSON)"
+                        value={merchantControls}
+                        onChange={(e) => setMerchantControls(e.target.value)}
+                        style={{ height: 200, width: "100%" }}
+                      />
+                      <p>
+                        For each currency, supply independently checked sales,
+                        refunds, chargebacks, fees, fee_tax, withholding,
+                        reserve_held, reserve_released and amount totals. Every
+                        component is explicit, including assessed zeros. These
+                        controls do not calculate tax eligibility or rates.
+                      </p>
+                    </fieldset>
+                  )}
                   {tableType === "gst-summary-metrics" && (
                     <fieldset style={{ gridColumn: "1 / -1", minWidth: 0 }}>
                       <legend>
@@ -4055,6 +4112,7 @@ export function CountryWorkflows({
                 </label>
               )}
               {[
+                "merchant-settlement-bridge",
                 "grant-utilisation",
                 "expense-cutoff",
                 "excise-reconciliation",
@@ -4679,6 +4737,36 @@ export function CountryWorkflows({
                       onChange={(e) => setBankOwnerIdentifier(e.target.value)}
                     />
                   </label>
+                </fieldset>
+              )}
+              {workflow === "merchant-settlement-bridge" && (
+                <fieldset>
+                  <legend>Merchant net settlement scope</legend>
+                  <label>
+                    Bank account identifier
+                    <input
+                      value={account}
+                      onChange={(e) => setAccount(e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    Settlement currency
+                    <input
+                      value={currency}
+                      onChange={(e) =>
+                        setCurrency(e.target.value.toUpperCase())
+                      }
+                    />
+                  </label>
+                  <p>
+                    Use independently reviewed books, processor batches,
+                    credit-positive signed bank movements and explicit
+                    allocation links. Sales, refunds and chargebacks stay
+                    separate. UAE VAT and India GST are assessed fee-tax
+                    components; rates and recovery eligibility are not inferred.
+                    This comparison does not reserve cash across other workflows
+                    or post journals.
+                  </p>
                 </fieldset>
               )}
               {workflow === "bank-brs" && (
