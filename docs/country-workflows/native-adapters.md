@@ -4316,3 +4316,22 @@ The final full backend suite passed 3,019 cases with five skips. The
 [full unit receipt](../phase-12/pilot-validator-backend.xml) are retained; Ruff/format
 and script mypy passed. These tests do not add real-client qualification or change
 the 154 authored scenario catalogue.
+
+### Subsequent hosted browser result and UAE rule research
+
+The three hosted browser cases passed on adca81a in 29.6 seconds, including
+assertions that the MSE form omits payroll-arrears and tax-year controls. The
+[source-specific receipt](../phase-12/msme-browser-adca81a.json) records the
+GitHub artifact metadata. Local artifact retrieval timed out; no inspection of
+those new screenshot pixels or locally computed archive hash is claimed. The
+earlier f455227 visual evidence remains separately identified. Hosted frontend,
+container, ML and security jobs passed; full backend verification was still live
+when checked.
+
+The existing [UAE source record](uae-vat201-ecommerce-source.json) now identifies
+the official three-page FTA reporting infographic and the taxpayer-stagger
+boundary needed for future reporting-window calculations. A proposed bulk edit
+adding that workflow and changing schemas, service and API was rejected by
+automatic approval review as "blocked by policy". No implementation file was
+created and no new workflow is claimed. Current legal versions, assessed annual
+populations, group changes and independent schedules remain required.

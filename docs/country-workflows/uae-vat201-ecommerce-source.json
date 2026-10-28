@@ -9,6 +9,20 @@
   "page_count": 40,
   "visual_review": "Page 24 rendered locally and inspected: separate e-commerce/other-standard-rated rows with taxable amount, VAT and adjustment; total per emirate. Pages 23-25 text confirms component entry and calculated totals.",
   "implemented_scope": "Explicit split comparison and arithmetic for assessed seven-emirate Box 1 allocations, alongside the existing twenty-row operational layout",
+  "reporting_window_research": {
+    "review_date": "2026-10-28",
+    "authority_url": "https://tax.gov.ae/Datafolder/Files/Pdf/2023/Electronic%20Commerce%20Reporting-Infographic%20English%201.pdf",
+    "access": "Three-page official PDF text inspected through web retrieval; no local PDF bytes or archival hash claimed",
+    "facts": [
+      "Annual taxable e-commerce supplies must exceed AED 100 million; equality is not an exceedance",
+      "The 2022-based window lasts 18 months from the first tax period commencing on or after 1 July 2023",
+      "Later qualifying years use two-year windows tied to the actual first reporting tax period",
+      "Page 3 illustrates February, March, April and January 2024 starts, so the software must not assume 1 January",
+      "Portal questionnaire prompts based on prior tax-year standard/zero-rated totals are distinct from the calendar-year taxable e-commerce threshold"
+    ],
+    "implementation_status": "NOT_IMPLEMENTED; proposed bulk schema/service/API edit was rejected by automatic approval review as blocked by policy",
+    "required_before_qualification": "Retain current applicable legal versions, independently assess supply classification, complete annual history, actual tax-period stagger, tax-group changes and deregistration; validate against independent schedules"
+  },
   "not_qualified": [
     "Current portal and offline template schema",
     "Qualifying-registrant threshold and reporting-duration assessment",

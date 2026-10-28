@@ -1,0 +1,16 @@
+{
+  "source_commit": "adca81a8440a98820a96b59aaba2579171a60926",
+  "run_id": 40689501162,
+  "job_id": 122820384316,
+  "job_conclusion": "success",
+  "browser_cases_passed": 3,
+  "duration_seconds": 29.6,
+  "artifact_id": 12816437863,
+  "archive_sha256_from_github_metadata": "64ac3a04a451ae991151d9de3e47423c8c80fae01498120648110179c4796291",
+  "artifact_download_status": "LOCAL_HTTPS_CONNECTION_TIMED_OUT; no local archive hash or screenshot inspection claimed",
+  "visual_inspection": "NOT_PERFORMED_FOR_THIS_ARTIFACT",
+  "assertions": "India MSE form has no payroll-arrears or tax-year guidance controls; buyer, invoice months, bank scope and sign remain. Supporting-context form and India-only availability are checked alongside existing report/workpaper and session flows.",
+  "prior_visual_evidence": "docs/phase-12/msme-browser-f455227.json",
+  "scope": "Source-specific synthetic browser/BFF smoke; draft MSE parameter and context forms, not MSE calculation or client qualification",
+  "limits": "Full backend verification is separate and was still running when inspected. Passing browser cases do not prove all catalogue scenarios, legal completeness, signed professional issuance or production readiness."
+}
