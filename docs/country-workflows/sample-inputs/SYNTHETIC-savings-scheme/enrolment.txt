@@ -1,0 +1,5 @@
+SYNTHETIC enrolment assessment, not a real fund record.
+SYN-E1, SYN-E3: SYN-FUND-1, enrolled 2026-01-01.
+SYN-E4: SYN-FUND-1, enrolled 2026-06-16.
+SYN-E2: SYN-FUND-2, enrolled 2026-01-01.
+Membership references SYN-MEMBER-1 through SYN-MEMBER-4 bind the corresponding employee.

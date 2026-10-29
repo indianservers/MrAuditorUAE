@@ -82,6 +82,7 @@ def _parse_csv(content, data, defaults=None):
                 "benefit-service-",
                 "payroll-basis-",
                 "payroll-cap-",
+                "savings-",
             )
         ) and any(
             value is not None and value != value.strip()
@@ -282,6 +283,8 @@ def _parse_csv(content, data, defaults=None):
         "expense-claims",
         "benefit-employees",
         "payroll-bases",
+        "savings-bases",
+        "savings-reported",
         "payroll-basis-segments",
         "pension-bases",
         "pension-reported",

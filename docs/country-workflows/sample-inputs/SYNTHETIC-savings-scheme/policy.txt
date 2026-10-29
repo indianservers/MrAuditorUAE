@@ -1,0 +1,6 @@
+SYNTHETIC supplied parameters only, not operative legal advice or a published country pack.
+SYN-FUND-1/SYN-LOW: full-time and part-time supplied rate 0.0583.
+SYN-FUND-2/SYN-HIGH: supplied full-time rate 0.0833.
+Effective 2026-01-01 through 2026-12-31. Regime SYN-REGIME; cohort SYN-COHORT.
+Part-time amount is an assessed full-time comparator; apply annual hours 1040/2080 once.
+Covered-period basic wage 5000 for SYN-E4 is explicitly supplied, not an automatic day-proration rule.

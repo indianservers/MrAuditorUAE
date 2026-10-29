@@ -4,6 +4,8 @@ from app.modules.jurisdictions.packages import fingerprint
 
 
 def scope_key(row):
+    if row.get("savings_scope") is not None:
+        return "savings:" + fingerprint(row["savings_scope"])
     if row.get("benefit_scope") is not None:
         return "benefit:" + fingerprint(row["benefit_scope"])
     if row.get("withholding_scope") is not None:

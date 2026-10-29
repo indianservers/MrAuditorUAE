@@ -897,6 +897,19 @@ def calculate(
 
         sources, account_scope = bind(data, country, sources, *bank_account_review)
     for role, table in sources.items():
+        if table.get("parser_version") == "savings-fund-observations/1" and (
+            data.workflow != "obligation-bank-allocations" or role != "reported"
+        ):
+            raise ValueError(
+                "Derived fund observations establish only reported bank-allocation amounts"
+            )
+        if (
+            any(row.get("savings_scope") for row in table["rows"])
+            and data.workflow != "obligation-bank-allocations"
+        ):
+            raise ValueError(
+                "Fund/enrolment-scoped savings obligations require bank allocation review"
+            )
         if table.get("parser_version") == "prorated-payroll-bases/1" and (
             data.workflow != "india-payroll-rules" or role != "bases"
         ):
@@ -1205,6 +1218,10 @@ def calculate(
             result = msme_payment_timing(data, tables)
         elif data.workflow in PENSION_CALCULATORS:
             result = PENSION_CALCULATORS[data.workflow](data, tables)
+        elif data.workflow == "uae-savings-review":
+            from app.modules.country_workflows.savings_scheme import calculate as savings
+
+            result = savings(data, tables)
         elif data.workflow == "india-payroll-basis-proration":
             from app.modules.country_workflows.payroll_basis_proration import (
                 calculate as prorate_basis,

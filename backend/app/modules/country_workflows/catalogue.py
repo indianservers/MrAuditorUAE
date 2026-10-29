@@ -14,6 +14,7 @@ from app.modules.country_workflows.payroll_basis_proration import ROLES as PRORA
 from app.modules.country_workflows.payroll_ledger_schemas import PAYROLL_LEDGER_WORKFLOWS
 from app.modules.country_workflows.payroll_schemas import PAYROLL_WORKFLOWS
 from app.modules.country_workflows.pension_schemas import PENSION_WORKFLOWS
+from app.modules.country_workflows.savings_scheme import ROLES as SAVINGS_ROLES
 from app.modules.country_workflows.sector_schemas import SECTOR_WORKFLOWS
 from app.modules.country_workflows.turnover import ROLES as TURNOVER_ROLES
 from app.modules.country_workflows.withholding_schemas import WITHHOLDING_WORKFLOWS
@@ -29,6 +30,11 @@ OPTIONAL_ROLES = {
 }
 
 WORKFLOWS = {
+    "uae-savings-review": (
+        "UAE savings-scheme basic contribution and fund statement review",
+        ["AE"],
+        SAVINGS_ROLES,
+    ),
     "india-payroll-basis-proration": (
         "India dated PF wage bases / assessed ceilings / monthly controls",
         ["IN"],

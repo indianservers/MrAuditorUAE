@@ -8,6 +8,47 @@ import {
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { CountryWorkflows } from "@/features/country-workflows";
 
+it.each([["AE",true],["IN",false]])("offers MOHRE savings source contracts only for UAE (%s)",(country,available)=>{
+  state.country=String(country);
+  render(<CountryWorkflows eid="engagement" mode="workflow-source"/>);
+  expect(screen.queryByRole("option",{name:"savings-bases"})!==null).toBe(available);
+});
+
+it("binds separate retained enrolment evidence and independent wage controls for savings sources",async()=>{
+  render(<CountryWorkflows eid="engagement" mode="workflow-source"/>);
+  for(const [label,value] of [["Source table type","savings-bases"],["Clean retained evidence","clean"],["Retained savings enrolment document (optional shared document)","context-clean"],["Schedule title","Synthetic controlled savings wages"],["Expected data rows","4"],["Independent totals by currency","AED=28000"]])fireEvent.change(screen.getByLabelText(label),{target:{value}});
+  fireEvent.click(screen.getByRole("button",{name:"Queue calculation"}));
+  await waitFor(()=>expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({table_type:"savings-bases",evidence_version_id:"clean",savings_enrolment_document_version_id:"context-clean",expected_rows:4,control_totals:{AED:"28000"}});
+});
+
+it.each([
+  ["CURRENT","REVIEWED",false,"RETAINED_DOCUMENT_BYTES_VERIFIED",true],
+  ["STALE","REVIEWED",false,"RETAINED_DOCUMENT_BYTES_VERIFIED",false],
+  ["CURRENT","UNVERIFIED",false,"RETAINED_DOCUMENT_BYTES_VERIFIED",false],
+  ["CURRENT","REVIEWED",true,"RETAINED_DOCUMENT_BYTES_VERIFIED",false],
+  ["CURRENT","REVIEWED",false,"NOT_VERIFIED",false],
+])("gates savings expectations by current independent review and retained documents (%s/%s/%s/%s)",(freshness,review_status,blocked,binding,allowed)=>{
+  state.result={id:"result",kind:"country-workflow",version:1,freshness,body:{workflow:"uae-savings-review",title:"Enrolled savings contributions",review_status,blocked,
+    savings_contribution_contract:"uae-savings-basic-contributions/1",savings_document_binding:binding,expected_total_complete:true,expected_total:"583.00",
+    rows:[{id:"E1",registration:"EMP",subject:"E1",fund_id:"FUND",membership_reference:"MEMBER",period:"2026-06",coverage_start:"2026-06-01",coverage_end:"2026-06-30",work_model:"full-time",assessed_basic_wage:"10000",hours_ratio:"1",expected_amount:"583.00",reported_amount:"583.00",difference:"0.00",state:"MATCHED"}]}};
+  render(<CountryWorkflows eid="engagement" mode="country-workflow"/>);
+  fireEvent.change(screen.getByLabelText("Saved source or result"),{target:{value:"result"}});
+  expect(screen.getByRole("region",{name:"Savings contribution scope"})).toHaveTextContent("Pre-enrolment gratuity, pension, voluntary savings and fund returns remain separate");
+  expect(screen.getByRole("columnheader",{name:"fund id"})).toBeVisible();
+  expect(screen.queryByRole("region",{name:"Expected savings basic remittances"})!==null).toBe(allowed);
+});
+
+it("keeps savings fund and membership identity visible in compact bank allocations",()=>{
+  state.result={id:"result",kind:"country-workflow",version:1,freshness:"CURRENT",body:{workflow:"obligation-bank-allocations",title:"Savings bank links",rows:[{
+    id:"B1",kind:"obligation",subject:"E1",period:"2026-06",component:"SAVINGS:EMPLOYER_BASIC",fund_id:"FUND-1",membership_reference:"MEMBER-1",coverage_start:"2026-06-01",coverage_end:"2026-06-30",currency:"AED",state:"MATCHED",
+  }]}};
+  render(<CountryWorkflows eid="engagement" mode="country-workflow"/>);
+  fireEvent.change(screen.getByLabelText("Saved source or result"),{target:{value:"result"}});
+  expect(screen.getByRole("cell",{name:"FUND-1"})).toBeVisible();
+  expect(screen.getByRole("cell",{name:"MEMBER-1"})).toBeVisible();
+});
+
 it.each([
   ["CURRENT", "REVIEWED", false, "india-payroll-basis-proration/1", true],
   ["STALE", "REVIEWED", false, "india-payroll-basis-proration/1", false],
@@ -394,6 +435,9 @@ vi.mock("@/hooks/use-api", () => ({
               },
             ],
             source_contracts: {
+              "savings-bases": {id:{required:true,type:"str"},amount:{required:true,type:"Decimal"}},
+              "savings-rules": {id:{required:true,type:"str"}},
+              "savings-reported": {id:{required:true,type:"str"},amount:{required:true,type:"Decimal"}},
               "benefit-service-exclusions": { id: { required: true, type: "str" } },
               "merchant-reserve-movements": { id: { required: true, type: "str" } },
               "merchant-reserve-balances": { id: { required: true, type: "str" } },

@@ -202,6 +202,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "parser_version": "committed-ledger-1",
         }, [*dependencies, receipt]
     if operation == "workflow-source":
+        if data.table_type.startswith("savings-") and package.country != "AE":
+            raise HTTPException(422, "MOHRE savings sources require a UAE engagement")
         if (
             data.table_type in {"payroll-basis-segments", "payroll-cap-rules"}
             and package.country != "IN"
@@ -386,6 +388,14 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 422, "Retained evidence media type does not match the selected source format"
             )
         defaults = None
+        if data.savings_enrolment_document_version_id:
+            enrolment_document, _ = await intelligence.evidence(
+                db, ctx, eng, data.savings_enrolment_document_version_id
+            )
+            defaults = {
+                "enrolment_evidence_version_id": str(enrolment_document.id),
+                "enrolment_sha256": enrolment_document.sha256,
+            }
         if data.file_format != "canonical-csv" and (
             data.column_mapping
             or data.ignored_columns
@@ -398,6 +408,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 data.table_type
                 not in {
                     "payroll-rules",
+                    "savings-rules",
                     "payroll-cap-rules",
                     "pension-rules",
                     "benefit-rules",
@@ -612,6 +623,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             )
         if data.table_type in {
             "payroll-rules",
+            "savings-rules",
             "payroll-cap-rules",
             "pension-rules",
             "benefit-rules",
@@ -625,6 +637,19 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                     result["rows"],
                     contributors=supporting_contributors,
                     label="Exchange rate" if data.table_type == "fx-rates" else "Payroll rule",
+                )
+            )
+        if data.table_type == "savings-bases":
+            from app.modules.country_workflows.savings_scheme import enrolment_documents
+
+            dependencies.extend(
+                await payroll_rule_documents(
+                    db,
+                    ctx,
+                    eng,
+                    enrolment_documents(result["rows"]),
+                    contributors=supporting_contributors,
+                    label="Savings enrolment",
                 )
             )
         if data.table_type == "withholding-records":
@@ -725,6 +750,21 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
     contributors = {str(ctx.user_id)}
     for role, identifier in data.source_ids.items():
         source = await intelligence.event(db, ctx, eng.id, identifier, True)
+        if data.workflow == "uae-savings-review":
+            if source.body.get("review_status") != "REVIEWED":
+                raise HTTPException(
+                    409, "Independently review every savings wage, rate and fund statement source"
+                )
+            if role in {"bases", "reported"} and any(
+                not period.start_date
+                <= date.fromisoformat(row["coverage_start"])
+                <= date.fromisoformat(row["coverage_end"])
+                <= data.as_of
+                for row in source.body.get("rows", [])
+            ):
+                raise HTTPException(
+                    422, "Savings coverage must lie within the engagement reporting window"
+                )
         if data.workflow == "india-payroll-basis-proration" and role in {"segments", "controls"}:
             from app.modules.country_workflows.payroll_basis_proration import month_span
 
@@ -1136,10 +1176,24 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         "india-payroll-basis-proration",
         "uae-benefit-review",
         "uae-pension-review",
+        "uae-savings-review",
     }:
         dependencies.extend(
             await payroll_rule_documents(
                 db, ctx, eng, sources["rules"]["rows"], contributors=contributors
+            )
+        )
+    if data.workflow == "uae-savings-review":
+        from app.modules.country_workflows.savings_scheme import enrolment_documents
+
+        dependencies.extend(
+            await payroll_rule_documents(
+                db,
+                ctx,
+                eng,
+                enrolment_documents(sources["bases"]["rows"]),
+                contributors=contributors,
+                label="Savings enrolment",
             )
         )
     if data.workflow in {"india-withholding-liability", "india-withholding-credit"}:
@@ -1175,6 +1229,10 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         dependencies.extend(
             await verify_contributions(db, ctx, eng, sources["expected"], contributors)
         )
+    if sources.get("reported", {}).get("parser_version") == "savings-fund-observations/1":
+        from app.modules.country_workflows.savings_reported_source import verify as verify_fund
+
+        dependencies.extend(await verify_fund(db, ctx, eng, sources["reported"], contributors))
     if sources.get("bases", {}).get("parser_version") == "prorated-payroll-bases/1":
         from app.modules.country_workflows.payroll_proration_source import (
             verify as verify_proration,
@@ -1321,4 +1379,6 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         from app.modules.country_workflows.bank_consumption import manifest
 
         result["bank_consumption_manifest"] = manifest(data, sources["bank"], result)
+    if data.workflow == "uae-savings-review":
+        result["savings_document_binding"] = "RETAINED_DOCUMENT_BYTES_VERIFIED"
     return {**result, "contributors": sorted(contributors)}, dependencies

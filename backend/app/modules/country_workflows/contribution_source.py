@@ -10,6 +10,8 @@ from fastapi import HTTPException
 from pydantic import Field, model_validator
 from starlette.concurrency import run_in_threadpool
 
+from app.modules.country_workflows.savings_scheme import CONTRACT as SAVINGS_CONTRACT
+from app.modules.country_workflows.savings_scheme import SavingsScope
 from app.modules.country_workflows.schemas import Obligation
 from app.modules.jurisdictions.packages import fingerprint
 from app.modules.jurisdictions.profiles import Strict
@@ -27,6 +29,7 @@ class ContributionControl(Strict):
     amount: AMOUNT
     due_date: date
     due_date_reference: str = Field(min_length=3, max_length=200)
+    fund_id: Identifier | None = Field(default=None, exclude_if=lambda value: value is None)
 
     @model_validator(mode="after")
     def referenced(self):
@@ -45,7 +48,9 @@ class ContributionSourceInput(Strict):
 
     @model_validator(mode="after")
     def controlled(self):
-        keys = [(item.registration, item.period, item.component) for item in self.groups]
+        keys = [
+            (item.registration, item.period, item.component, item.fund_id) for item in self.groups
+        ]
         if len(keys) != len(set(keys)):
             raise ValueError("Select each registration, wage month and component only once")
         if len(self.assessment.strip()) < 10:
@@ -55,31 +60,49 @@ class ContributionSourceInput(Strict):
 
 def source_rows(body, data):
     workflow = body.get("workflow")
-    if workflow not in {"uae-pension-review", "india-payroll-rules"}:
+    if workflow not in {"uae-pension-review", "india-payroll-rules", "uae-savings-review"}:
         raise ValueError("Select a pension or India payroll contribution review")
     if body.get("blocked") or body.get("expected_total_complete") is not True:
         raise ValueError("Resolve the full contribution calculation before preparing remittances")
     pension = workflow == "uae-pension-review"
-    currency = "AED" if pension else "INR"
+    savings = workflow == "uae-savings-review"
+    if savings and (
+        body.get("savings_contribution_contract") != SAVINGS_CONTRACT
+        or body.get("savings_document_binding") != "RETAINED_DOCUMENT_BYTES_VERIFIED"
+    ):
+        raise ValueError(
+            "Regenerate savings contributions with retained enrolment and rule evidence"
+        )
+    if any((control.fund_id is not None) != savings for control in data.groups):
+        raise ValueError(
+            "An explicit fund control applies to each savings group and only savings groups"
+        )
+    currency = "AED" if pension or savings else "INR"
     if body.get("currency") != currency:
         raise ValueError("Contribution result currency differs from its country workflow")
     if pension != (data.pension_scope is not None):
         raise ValueError("Select one explicit pension scope for UAE only")
     scope = data.pension_scope.model_dump(mode="json") if data.pension_scope else None
     allowed = (
-        {"PENSION:EMPLOYEE", "PENSION:EMPLOYER"}
-        if pension
-        else {
-            "PF:EMPLOYEE",
-            "PF:EPS",
-            "PF:EMPLOYER",
-            "PF:ADVANCE_REFUND",
-            "ESI:EMPLOYEE",
-            "ESI:EMPLOYER",
-            "PT",
-        }
+        {"SAVINGS:EMPLOYER_BASIC"}
+        if savings
+        else (
+            {"PENSION:EMPLOYEE", "PENSION:EMPLOYER"}
+            if pension
+            else {
+                "PF:EMPLOYEE",
+                "PF:EPS",
+                "PF:EMPLOYER",
+                "PF:ADVANCE_REFUND",
+                "ESI:EMPLOYEE",
+                "ESI:EMPLOYER",
+                "PT",
+            }
+        )
     )
-    controls = {(item.registration, item.period, item.component): item for item in data.groups}
+    controls = {
+        (item.registration, item.period, item.component, item.fund_id): item for item in data.groups
+    }
     if any(control.component not in allowed for control in data.groups):
         raise ValueError(
             "Select supported employer-remitted components; government support is a separate payer"
@@ -87,7 +110,9 @@ def source_rows(body, data):
     grouped = defaultdict(list)
     excluded = []
     for row in body["rows"]:
-        key = tuple(row[field] for field in ("registration", "period", "component"))
+        key = tuple(row[field] for field in ("registration", "period", "component")) + (
+            row.get("fund_id") if savings else None,
+        )
         reason = (
             "SEPARATE_GOVERNMENT_PAYER"
             if row["component"] == "PENSION:GOVERNMENT"
@@ -133,10 +158,22 @@ def source_rows(body, data):
             if amount != control.amount:
                 raise ValueError("Independent contribution group amount control does not agree")
             for row in selected:
+                savings_scope = (
+                    SavingsScope.model_validate(row["savings_scope"]).model_dump(mode="json")
+                    if savings
+                    else None
+                )
+                if savings_scope is not None and (
+                    savings_scope["fund_id"] != control.fund_id
+                    or any(row.get(field) != value for field, value in savings_scope.items())
+                ):
+                    raise ValueError(
+                        "Selected savings scope differs from its original fund, enrolment or coverage"
+                    )
                 identity = tuple(
                     row[field]
                     for field in ("registration", "subject", "period", "component", "currency")
-                )
+                ) + ((fingerprint(savings_scope),) if savings_scope is not None else ())
                 if identity in identities:
                     raise ValueError(
                         "Contribution rows collide in the settlement identity; split the scope explicitly"
@@ -152,6 +189,7 @@ def source_rows(body, data):
                     amount=row["expected_amount"],
                     due_date=control.due_date,
                     pension_scope=scope,
+                    savings_scope=savings_scope,
                 ).model_dump(mode="json")
                 rows.append(
                     {
@@ -178,9 +216,11 @@ async def derive(db, ctx, eng, data):
     if parent.kind != "country-workflow" or parent.body.get("review_status") != "REVIEWED":
         raise HTTPException(409, "Select a current independently reviewed contribution result")
     binding, _ = await resolved(db, ctx, eng)
-    required_country = {"uae-pension-review": "AE", "india-payroll-rules": "IN"}.get(
-        parent.body.get("workflow")
-    )
+    required_country = {
+        "uae-pension-review": "AE",
+        "india-payroll-rules": "IN",
+        "uae-savings-review": "AE",
+    }.get(parent.body.get("workflow"))
     if not required_country or binding.country != required_country:
         raise HTTPException(422, "Contribution workflow does not match the engagement country")
     try:

@@ -25,6 +25,7 @@ from app.modules.country_workflows.contribution_source import ContributionSource
 from app.modules.country_workflows.import_vat_source import ImportVATSourceInput
 from app.modules.country_workflows.payroll_proration_source import ProratedBasisInput
 from app.modules.country_workflows.payroll_source import PayrollSourceInput, PensionSourceInput
+from app.modules.country_workflows.savings_reported_source import SavingsReportedInput
 from app.modules.country_workflows.turnover_composition import TurnoverCompositionInput
 from app.modules.country_workflows.turnover_ledger import TurnoverLedgerInput
 from app.modules.country_workflows.vat_composition import VATCompositionInput
@@ -152,6 +153,16 @@ async def contribution_obligation_source(
     eid: uuid.UUID, data: ContributionSourceInput, db: DB, ctx: Actor, request: Request
 ):
     from app.modules.country_workflows.contribution_source import prepare
+
+    eng = await service.scope(db, ctx, eid, "country-workflow", True)
+    return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))
+
+
+@router.post("/engagements/{eid}/savings-reported-obligation-source", status_code=201)
+async def savings_reported_obligation_source(
+    eid: uuid.UUID, data: SavingsReportedInput, db: DB, ctx: Actor, request: Request
+):
+    from app.modules.country_workflows.savings_reported_source import prepare
 
     eng = await service.scope(db, ctx, eid, "country-workflow", True)
     return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))

@@ -1,5 +1,9 @@
 # Country workflows — first implementation increment
 
+[UAE savings basic contributions](savings-scheme.md) now has a separate enrolled
+fund review and typed bridges to expected remittances, original fund observations
+and bank allocation. Gratuity, pension and investment balances remain separate.
+
 The [India dated PF wage-basis bridge](payroll-basis-proration.md) adds reviewed
 mid-month wage segments, effective-dated assessed ceiling policies and independent
 monthly controls. Its reviewed output feeds the existing contribution/remittance/

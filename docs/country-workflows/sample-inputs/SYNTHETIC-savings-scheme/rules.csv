@@ -1,0 +1,4 @@
+id,authority,scheme,fund_id,regime,cohort,work_model,rate_band,rate,rounding,effective_from,effective_to,source_url,source_version,evidence_reference,applicability_review
+SYN-R1,MOHRE,MOHRE_SAVINGS,SYN-FUND-1,SYN-REGIME,SYN-COHORT,full-time,SYN-LOW,0.0583,nearest-fils,2026-01-01,2026-12-31,https://synthetic.invalid/savings-policy,SYNTHETIC-1,SYN-RULE,"Synthetic assessed rate, regime and comparator applicability"
+SYN-R2,MOHRE,MOHRE_SAVINGS,SYN-FUND-2,SYN-REGIME,SYN-COHORT,full-time,SYN-HIGH,0.0833,nearest-fils,2026-01-01,2026-12-31,https://synthetic.invalid/savings-policy,SYNTHETIC-1,SYN-RULE,"Synthetic assessed rate, regime and comparator applicability"
+SYN-R3,MOHRE,MOHRE_SAVINGS,SYN-FUND-1,SYN-REGIME,SYN-COHORT,part-time,SYN-LOW,0.0583,nearest-fils,2026-01-01,2026-12-31,https://synthetic.invalid/savings-policy,SYNTHETIC-1,SYN-RULE,"Synthetic assessed rate, regime and comparator applicability"

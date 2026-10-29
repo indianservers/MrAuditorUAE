@@ -1,0 +1,76 @@
+{
+  "dataset_kind": "SYNTHETIC_AUTHORED_MECHANICAL_EXAMPLE",
+  "as_of": "2026-06-30",
+  "files": {
+    "bases": {
+      "file": "bases.csv",
+      "sha256": "0943b3434a39cd0cef7145b198be2496e6da2ea72ca886e0f822c6f096e410c9",
+      "table_type": "savings-bases",
+      "expected_rows": 4,
+      "control_totals": {
+        "AED": "28000"
+      }
+    },
+    "rules": {
+      "file": "rules.csv",
+      "sha256": "dd6da9cd2cf5e2efe5d1faebc144398c885ba4a1031c5dd47ce6859632b4f404",
+      "table_type": "savings-rules",
+      "expected_rows": 3,
+      "control_totals": {}
+    },
+    "reported": {
+      "file": "reported.csv",
+      "sha256": "a878e9d79ee56cf3a450c315f0debe208871925db8e089e8b07084aff6873506",
+      "table_type": "savings-reported",
+      "expected_rows": 4,
+      "control_totals": {
+        "AED": "1415.90"
+      }
+    }
+  },
+  "documents": {
+    "enrolment.txt": {
+      "sha256": "b77cd715fa09a5728a2c87acce804788e935394e74b124d2cc9b979fc6df2b23",
+      "size_bytes": 276
+    },
+    "policy.txt": {
+      "sha256": "2f695d56ea672002069a48d75247afe79eb35f1c01780079edf7d86c877c245e",
+      "size_bytes": 482
+    },
+    "due-date.txt": {
+      "sha256": "ac7a58831eac48f4bcdd9a37cca16f48bae56e41d68d3b9a88a9d1a53186edbd",
+      "size_bytes": 179
+    }
+  },
+  "authored_expected": [
+    {
+      "subject": "SYN-E1",
+      "expected_amount": "583.00"
+    },
+    {
+      "subject": "SYN-E2",
+      "expected_amount": "249.90"
+    },
+    {
+      "subject": "SYN-E3",
+      "expected_amount": "291.50"
+    },
+    {
+      "subject": "SYN-E4",
+      "expected_amount": "291.50"
+    }
+  ],
+  "expected_total": "1415.90",
+  "remittance_groups": [
+    {
+      "fund_id": "SYN-FUND-1",
+      "expected_rows": 3,
+      "amount": "1166.00"
+    },
+    {
+      "fund_id": "SYN-FUND-2",
+      "expected_rows": 1,
+      "amount": "249.90"
+    }
+  ]
+}

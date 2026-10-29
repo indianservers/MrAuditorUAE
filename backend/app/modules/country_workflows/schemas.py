@@ -46,6 +46,8 @@ from app.modules.country_workflows.payroll_ledger_schemas import PAYROLL_LEDGER_
 from app.modules.country_workflows.payroll_schemas import PAYROLL_ROW_TYPES
 from app.modules.country_workflows.pension_schemas import PENSION_ROW_TYPES
 from app.modules.country_workflows.purchase_controls import PurchaseQuantityControl
+from app.modules.country_workflows.savings_scheme import ROW_TYPES as SAVINGS_ROW_TYPES
+from app.modules.country_workflows.savings_scheme import SavingsScope
 from app.modules.country_workflows.sector_schemas import SECTOR_ROW_TYPES
 from app.modules.country_workflows.turnover import ROW_TYPES as TURNOVER_ROW_TYPES
 from app.modules.country_workflows.vat201_layouts import LAYOUTS, VAT201Layout
@@ -155,6 +157,22 @@ class Obligation(Strict):
     benefit_scope: BenefitSettlementScope | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
+    savings_scope: SavingsScope | None = Field(default=None, exclude_if=lambda value: value is None)
+
+    @field_validator("savings_scope", mode="before")
+    @classmethod
+    def csv_savings_scope(cls, value):
+        if isinstance(value, str):
+            import json
+
+            try:
+                decoded = json.loads(value)
+            except ValueError:
+                raise ValueError("Savings scope CSV requires a JSON object") from None
+            if not isinstance(decoded, dict):
+                raise ValueError("Savings scope CSV requires a JSON object")
+            return decoded
+        return value
 
     @field_validator("benefit_scope", mode="before")
     @classmethod
@@ -197,6 +215,22 @@ class Obligation(Strict):
 
     @model_validator(mode="after")
     def scope_component(self):
+        if self.component == "SAVINGS:EMPLOYER_BASIC" and self.savings_scope is None:
+            raise ValueError(
+                "Savings basic remittances require an explicit fund/enrolment/coverage scope"
+            )
+        if self.savings_scope is not None and (
+            self.pension_scope is not None
+            or self.withholding_scope is not None
+            or self.benefit_scope is not None
+            or self.currency != "AED"
+            or self.component != "SAVINGS:EMPLOYER_BASIC"
+            or self.population != "unspecified"
+            or self.period != self.savings_scope.coverage_start.strftime("%Y-%m")
+        ):
+            raise ValueError(
+                "Savings remittances require separate AED fund and covered-month scope"
+            )
         if self.component == "BENEFIT:GRATUITY" and self.benefit_scope is None:
             raise ValueError("Final gratuity obligations require an explicit benefit service scope")
         if self.benefit_scope is not None:
@@ -305,6 +339,7 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
     **RESERVE_ROW_TYPES,
     "benefit-service-exclusions": ServiceExclusion,
     **PAYROLL_ROW_TYPES,
+    **SAVINGS_ROW_TYPES,
     **PRORATION_ROW_TYPES,
     **PAYROLL_LEDGER_ROW_TYPES,
     **PENSION_ROW_TYPES,
@@ -442,6 +477,9 @@ class SourceInput(Strict):
         "pension-rules",
         "pension-reported",
         "payroll-bases",
+        "savings-bases",
+        "savings-rules",
+        "savings-reported",
         "payroll-basis-segments",
         "payroll-cap-rules",
         "payroll-rules",
@@ -505,10 +543,23 @@ class SourceInput(Strict):
     )
     msme_context_evidence_version_id: uuid.UUID | None = None
     benefit_service_controls: ServiceDayControls | None = None
+    savings_enrolment_document_version_id: uuid.UUID | None = None
     msme_context_assessment: str = Field(default="", max_length=2000)
 
     @model_validator(mode="after")
     def declared_nil(self):
+        if self.savings_enrolment_document_version_id is not None and (
+            self.table_type != "savings-bases"
+            or self.file_format != "canonical-csv"
+            or self.savings_enrolment_document_version_id == self.evidence_version_id
+        ):
+            raise ValueError(
+                "Select separate retained enrolment evidence only for canonical savings wage bases"
+            )
+        if self.table_type in {"savings-bases", "savings-rules"} and self.expected_rows < 1:
+            raise ValueError(
+                "Savings wages and rule policies require explicit nonempty populations"
+            )
         if self.table_type == "benefit-service-exclusions":
             if (
                 self.expected_rows < 1
@@ -949,6 +1000,7 @@ class WorkflowInput(Strict):
         "india-payroll-rules",
         "india-payroll-basis-proration",
         "uae-pension-review",
+        "uae-savings-review",
         "subledger-control",
         "subsequent-settlements",
         "balance-confirmations",
@@ -1029,6 +1081,12 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
+        if self.workflow == "uae-savings-review" and (
+            self.currency != "AED" or self.tolerance != 0 or self.date_tolerance != 0
+        ):
+            raise ValueError(
+                "Savings review requires AED and exact source amount/calendar controls"
+            )
         if self.workflow == "india-payroll-basis-proration" and (
             self.currency != "INR" or self.tolerance != 0 or self.date_tolerance != 0
         ):

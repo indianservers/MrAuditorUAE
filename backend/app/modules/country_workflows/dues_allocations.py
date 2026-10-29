@@ -54,6 +54,16 @@ def allocate(data, tables, country):
             }:
                 raise ValueError("Indian domestic statutory component cannot run in a UAE workflow")
             scope = row.get("withholding_scope")
+            savings = row.get("savings_scope")
+            if savings is not None and (
+                country != "AE"
+                or row["currency"] != "AED"
+                or row["component"] != "SAVINGS:EMPLOYER_BASIC"
+                or row["period"] != savings["coverage_start"][:7]
+            ):
+                raise ValueError(
+                    "Savings settlements require UAE/AED and an exact fund/enrolment/coverage scope"
+                )
             benefit = row.get("benefit_scope")
             if benefit is not None and (
                 country != "AE"
@@ -196,6 +206,20 @@ def allocate(data, tables, country):
                 "expected_amount": str(original),
                 **({"benefit_scope": e["benefit_scope"]} if e.get("benefit_scope") else {}),
                 **({"pension_scope": e["pension_scope"]} if e.get("pension_scope") else {}),
+                **({"savings_scope": e["savings_scope"]} if e.get("savings_scope") else {}),
+                **(
+                    {
+                        field: e["savings_scope"][field]
+                        for field in (
+                            "fund_id",
+                            "membership_reference",
+                            "coverage_start",
+                            "coverage_end",
+                        )
+                    }
+                    if e.get("savings_scope")
+                    else {}
+                ),
                 **(
                     {"withholding_scope": e["withholding_scope"]}
                     if e.get("withholding_scope")
@@ -236,6 +260,20 @@ def allocate(data, tables, country):
                 "reported_amount": r["amount"],
                 **({"benefit_scope": r["benefit_scope"]} if r.get("benefit_scope") else {}),
                 **({"pension_scope": r["pension_scope"]} if r.get("pension_scope") else {}),
+                **({"savings_scope": r["savings_scope"]} if r.get("savings_scope") else {}),
+                **(
+                    {
+                        field: r["savings_scope"][field]
+                        for field in (
+                            "fund_id",
+                            "membership_reference",
+                            "coverage_start",
+                            "coverage_end",
+                        )
+                    }
+                    if r.get("savings_scope")
+                    else {}
+                ),
                 **(
                     {"withholding_scope": r["withholding_scope"]}
                     if r.get("withholding_scope")

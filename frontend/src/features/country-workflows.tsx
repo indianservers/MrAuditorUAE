@@ -48,6 +48,11 @@ import { WithholdingObligationSource } from "./withholding-obligation-source";
 import { ContributionObligationSource } from "./contribution-obligation-source";
 import { BenefitSettlementSource } from "./benefit-settlement-source";
 import {
+  SavingsContributionExpectations,
+  SavingsEnrolmentDocument,
+  SavingsFundReportedSource,
+} from "./savings-scheme";
+import {
   PayrollBasisSegments,
   ProratedPayrollSource,
 } from "./payroll-basis-proration";
@@ -294,6 +299,8 @@ type Result = {
   collection_totals?: Record<string, number>;
   body: {
     workflow?: string;
+    savings_contribution_contract?: string;
+    savings_document_binding?: string;
     monthly_basis_complete?: boolean;
     payroll_proration_contract?: string;
     msme_document_binding?: string;
@@ -516,6 +523,8 @@ const moneyTables = [
   "bank-clearances",
   "withholding-records",
   "payroll-bases",
+  "savings-bases",
+  "savings-reported",
   "payroll-basis-segments",
   "pension-bases",
   "pension-reported",
@@ -661,6 +670,7 @@ export function CountryWorkflows({
   const [expectedMembers, setExpectedMembers] = useState("");
   const [expectedDocuments, setExpectedDocuments] = useState("");
   const [ruleDocument, setRuleDocument] = useState("");
+  const [savingsEnrolmentDocument, setSavingsEnrolmentDocument] = useState("");
   const [seriesControls, setSeriesControls] = useState({
     issued: "",
     cancelled: "",
@@ -959,6 +969,10 @@ export function CountryWorkflows({
                 "subject",
                 "period",
                 "component",
+                "fund_id",
+                "membership_reference",
+                "coverage_start",
+                "coverage_end",
                 "tax_section",
                 "tax_year",
                 "withholding_transaction",
@@ -1108,6 +1122,24 @@ export function CountryWorkflows({
           "state",
         ].filter((key) => allColumns.includes(key))
       : standardColumns;
+  const savingsColumns =
+    body?.workflow === "uae-savings-review" && !showRuleProvenance
+      ? [
+          "subject",
+          "fund_id",
+          "membership_reference",
+          "period",
+          "coverage_start",
+          "coverage_end",
+          "work_model",
+          "assessed_basic_wage",
+          "hours_ratio",
+          "expected_amount",
+          "reported_amount",
+          "difference",
+          "state",
+        ].filter((key) => allColumns.includes(key))
+      : prorationColumns;
   const reserveColumns =
     compactReserve && !showRuleProvenance
       ? [
@@ -1126,7 +1158,7 @@ export function CountryWorkflows({
           "differences",
           "state",
         ].filter((key) => allColumns.includes(key))
-      : prorationColumns;
+      : savingsColumns;
   const serviceColumns =
     body?.table_type === "benefit-service-exclusions" && !showRuleProvenance
       ? [
@@ -1627,12 +1659,19 @@ export function CountryWorkflows({
                 "grant-budgets",
                 "fx-rates",
                 "payroll-rules",
+                "savings-rules",
                 "payroll-cap-rules",
                 "pension-rules",
                 "benefit-rules",
                 "withholding-records",
               ].includes(tableType) && ruleDocument
                 ? { rule_document_version_id: ruleDocument }
+                : {}),
+              ...(tableType === "savings-bases" && savingsEnrolmentDocument
+                ? {
+                    savings_enrolment_document_version_id:
+                      savingsEnrolmentDocument,
+                  }
                 : {}),
               ...(tableType === "gst-document-series"
                 ? { document_series_controls: seriesControls }
@@ -1941,7 +1980,7 @@ export function CountryWorkflows({
             "india-withholding-credit",
           ].includes(workflow)
             ? "INR"
-            : workflow === "uae-pension-review"
+            : ["uae-pension-review", "uae-savings-review"].includes(workflow)
               ? "AED"
               : currency,
           ...([
@@ -2558,15 +2597,20 @@ export function CountryWorkflows({
                         if (e.target.value === "gst-document-series")
                           setTotals("");
                         setRuleDocument("");
+                        setSavingsEnrolmentDocument("");
                         setCSVColumns({});
                         setAmountDerivation("none");
                       }}
                     >
-                      {Object.keys(config.data?.source_contracts || {}).map(
-                        (k) => (
+                      {Object.keys(config.data?.source_contracts || {})
+                        .filter(
+                          (type) =>
+                            !type.startsWith("savings-") ||
+                            config.data?.country === "AE",
+                        )
+                        .map((k) => (
                           <option key={k}>{k}</option>
-                        ),
-                      )}
+                        ))}
                     </select>
                   </label>
                   {sourceFormat === "canonical-csv" && (
@@ -2714,6 +2758,13 @@ export function CountryWorkflows({
                       )}
                     </>
                   )}
+                  {tableType === "savings-bases" && (
+                    <SavingsEnrolmentDocument
+                      value={savingsEnrolmentDocument}
+                      onChange={setSavingsEnrolmentDocument}
+                      evidence={inputs.data?.evidence || []}
+                    />
+                  )}
                   {["payroll-bases", "pension-bases"].includes(tableType) && (
                     <p>
                       Payroll base controls sum assessed bases across component
@@ -2726,6 +2777,7 @@ export function CountryWorkflows({
                     "grant-budgets",
                     "fx-rates",
                     "payroll-rules",
+                    "savings-rules",
                     "payroll-cap-rules",
                     "pension-rules",
                     "benefit-rules",
@@ -2739,7 +2791,7 @@ export function CountryWorkflows({
                             ? "Retained exchange-rate quote (optional shared document)"
                             : tableType === "withholding-records"
                               ? "Withholding assessment document (optional shared document)"
-                              : `${tableType === "benefit-rules" ? "Benefit" : tableType === "pension-rules" ? "Pension" : "Payroll"} rule source document (optional shared document)`}
+                              : `${tableType === "savings-rules" ? "Savings contribution" : tableType === "benefit-rules" ? "Benefit" : tableType === "pension-rules" ? "Pension" : "Payroll"} rule source document (optional shared document)`}
                         <select
                           value={ruleDocument}
                           onChange={(e) => setRuleDocument(e.target.value)}
@@ -2785,6 +2837,23 @@ export function CountryWorkflows({
                             Expected liability and certificate-credit records
                             need this support before approval. Selection does
                             not establish legal applicability.
+                          </>
+                        ) : tableType === "savings-rules" ? (
+                          <>
+                            Bind the retained contribution policy to its exact
+                            fund, regime, cohort, work model and assessed
+                            service-rate band. One policy must cover each
+                            complete wage-coverage interval. No membership,
+                            statutory rate, fund approval or gratuity
+                            entitlement is inferred.
+                          </>
+                        ) : tableType === "payroll-cap-rules" ? (
+                          <>
+                            Bind the retained ceiling policy to its explicit
+                            dated PF wage segments. A policy may cover part of a
+                            wage month; split a segment at any policy change.
+                            Monthly contribution rates remain a separate
+                            reviewed source.
                           </>
                         ) : (
                           <>
@@ -4377,6 +4446,7 @@ export function CountryWorkflows({
                             "india-gstr1-summary",
                             "india-invoice-register",
                             "uae-pension-review",
+                            "uae-savings-review",
                           ].includes(workflow) ||
                             r.review_status === "REVIEWED") &&
                           (![
@@ -5957,6 +6027,51 @@ export function CountryWorkflows({
             Population basis: {body.population_completeness}. Calculations do
             not determine a statutory compliance conclusion.
           </p>
+          {body.workflow === "uae-savings-review" && (
+            <section aria-label="Savings contribution scope">
+              <h3>Enrolled basic contributions and fund observations</h3>
+              <p>
+                Expected contributions: AED {body.expected_total}. Fund
+                observations do not establish bank payment. Pre-enrolment
+                gratuity, pension, voluntary savings and fund returns remain
+                separate.
+              </p>
+              <p>
+                Enrolment/rule documents:{" "}
+                {body.savings_document_binding || "Not verified"}. Service bands
+                and covered-period salary comparators are explicitly assessed;
+                no legal rate is supplied automatically.
+              </p>
+            </section>
+          )}
+          {body.workflow === "uae-savings-review" &&
+            detail.data.freshness === "CURRENT" &&
+            body.review_status === "REVIEWED" &&
+            !body.blocked &&
+            body.expected_total_complete === true &&
+            body.savings_contribution_contract ===
+              "uae-savings-basic-contributions/1" &&
+            body.savings_document_binding ===
+              "RETAINED_DOCUMENT_BYTES_VERIFIED" && (
+              <SavingsContributionExpectations
+                key={`${tenant}:${eid}:${selected}`}
+                eid={eid}
+                resultId={selected}
+                rows={rows}
+                evidence={inputs.data?.evidence || []}
+                onCreated={setSelected}
+              />
+            )}
+          {body.table_type === "savings-reported" &&
+            detail.data.freshness === "CURRENT" &&
+            body.review_status === "REVIEWED" && (
+              <SavingsFundReportedSource
+                key={`${tenant}:${eid}:${selected}`}
+                eid={eid}
+                sourceId={selected}
+                onCreated={setSelected}
+              />
+            )}
           {body.workflow === "india-payroll-basis-proration" && (
             <PayrollBasisSegments rows={rows} />
           )}
@@ -6885,6 +7000,7 @@ export function CountryWorkflows({
               compactCredit ||
               compactWithholding ||
               compactReserve ||
+              body.workflow === "uae-savings-review" ||
               body.workflow === "india-payroll-basis-proration" ||
               body.table_type === "benefit-service-exclusions" ||
               compactImport) && (

@@ -255,6 +255,7 @@
               "india-payroll-rules",
               "india-payroll-basis-proration",
               "uae-pension-review",
+              "uae-savings-review",
               "subledger-control",
               "subsequent-settlements",
               "balance-confirmations",
@@ -2884,6 +2885,9 @@
               "pension-rules",
               "pension-reported",
               "payroll-bases",
+              "savings-bases",
+              "savings-rules",
+              "savings-reported",
               "payroll-basis-segments",
               "payroll-cap-rules",
               "payroll-rules",
@@ -3054,6 +3058,19 @@
               }
             ],
             "default": null
+          },
+          "savings_enrolment_document_version_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Savings Enrolment Document Version Id"
           },
           "msme_context_assessment": {
             "default": "",
@@ -9151,6 +9168,87 @@
           "title": "PensionScope",
           "type": "object"
         },
+        "SavingsScope": {
+          "additionalProperties": false,
+          "properties": {
+            "authority": {
+              "const": "MOHRE",
+              "default": "MOHRE",
+              "title": "Authority",
+              "type": "string"
+            },
+            "scheme": {
+              "const": "MOHRE_SAVINGS",
+              "default": "MOHRE_SAVINGS",
+              "title": "Scheme",
+              "type": "string"
+            },
+            "fund_id": {
+              "maxLength": 120,
+              "minLength": 1,
+              "pattern": "^\\S(?:.*\\S)?$",
+              "title": "Fund Id",
+              "type": "string"
+            },
+            "membership_reference": {
+              "maxLength": 120,
+              "minLength": 1,
+              "pattern": "^\\S(?:.*\\S)?$",
+              "title": "Membership Reference",
+              "type": "string"
+            },
+            "enrolled_on": {
+              "format": "date",
+              "title": "Enrolled On",
+              "type": "string"
+            },
+            "coverage_start": {
+              "format": "date",
+              "title": "Coverage Start",
+              "type": "string"
+            },
+            "coverage_end": {
+              "format": "date",
+              "title": "Coverage End",
+              "type": "string"
+            },
+            "regime": {
+              "maxLength": 120,
+              "minLength": 1,
+              "pattern": "^\\S(?:.*\\S)?$",
+              "title": "Regime",
+              "type": "string"
+            },
+            "cohort": {
+              "maxLength": 120,
+              "minLength": 1,
+              "pattern": "^\\S(?:.*\\S)?$",
+              "title": "Cohort",
+              "type": "string"
+            },
+            "work_model": {
+              "enum": [
+                "full-time",
+                "part-time",
+                "job-share"
+              ],
+              "title": "Work Model",
+              "type": "string"
+            }
+          },
+          "required": [
+            "fund_id",
+            "membership_reference",
+            "enrolled_on",
+            "coverage_start",
+            "coverage_end",
+            "regime",
+            "cohort",
+            "work_model"
+          ],
+          "title": "SavingsScope",
+          "type": "object"
+        },
         "WithholdingSettlementScope": {
           "additionalProperties": false,
           "properties": {
@@ -9322,6 +9420,17 @@
           "anyOf": [
             {
               "$ref": "#/$defs/BenefitSettlementScope"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "savings_scope": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SavingsScope"
             },
             {
               "type": "null"
@@ -11536,6 +11645,552 @@
         "evidence_reference"
       ],
       "title": "SanctionsEntry",
+      "type": "object"
+    },
+    "savings-bases": {
+      "additionalProperties": false,
+      "properties": {
+        "authority": {
+          "const": "MOHRE",
+          "default": "MOHRE",
+          "title": "Authority",
+          "type": "string"
+        },
+        "scheme": {
+          "const": "MOHRE_SAVINGS",
+          "default": "MOHRE_SAVINGS",
+          "title": "Scheme",
+          "type": "string"
+        },
+        "fund_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Fund Id",
+          "type": "string"
+        },
+        "membership_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Membership Reference",
+          "type": "string"
+        },
+        "enrolled_on": {
+          "format": "date",
+          "title": "Enrolled On",
+          "type": "string"
+        },
+        "coverage_start": {
+          "format": "date",
+          "title": "Coverage Start",
+          "type": "string"
+        },
+        "coverage_end": {
+          "format": "date",
+          "title": "Coverage End",
+          "type": "string"
+        },
+        "regime": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Regime",
+          "type": "string"
+        },
+        "cohort": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Cohort",
+          "type": "string"
+        },
+        "work_model": {
+          "enum": [
+            "full-time",
+            "part-time",
+            "job-share"
+          ],
+          "title": "Work Model",
+          "type": "string"
+        },
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Id",
+          "type": "string"
+        },
+        "registration": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Registration",
+          "type": "string"
+        },
+        "subject": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Subject",
+          "type": "string"
+        },
+        "period": {
+          "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+          "title": "Period",
+          "type": "string"
+        },
+        "component": {
+          "const": "SAVINGS:EMPLOYER_BASIC",
+          "default": "SAVINGS:EMPLOYER_BASIC",
+          "title": "Component",
+          "type": "string"
+        },
+        "currency": {
+          "const": "AED",
+          "default": "AED",
+          "title": "Currency",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Amount"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "employment_start": {
+          "format": "date",
+          "title": "Employment Start",
+          "type": "string"
+        },
+        "employment_end": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Employment End"
+        },
+        "eligible": {
+          "title": "Eligible",
+          "type": "boolean"
+        },
+        "rate_band": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Rate Band",
+          "type": "string"
+        },
+        "rate_band_assessment": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Rate Band Assessment",
+          "type": "string"
+        },
+        "salary_basis_kind": {
+          "enum": [
+            "CONTRACT_BASIC",
+            "ASSESSED_FULL_TIME_COMPARATOR"
+          ],
+          "title": "Salary Basis Kind",
+          "type": "string"
+        },
+        "annual_contract_hours": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Annual Contract Hours"
+        },
+        "annual_full_time_hours": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Annual Full Time Hours"
+        },
+        "basis_method": {
+          "enum": [
+            "FULL_MONTH_BASIC",
+            "ASSESSED_COVERED_PERIOD_BASIC"
+          ],
+          "title": "Basis Method",
+          "type": "string"
+        },
+        "period_basis_assessment": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Period Basis Assessment",
+          "type": "string"
+        },
+        "enrolment_evidence_version_id": {
+          "format": "uuid",
+          "title": "Enrolment Evidence Version Id",
+          "type": "string"
+        },
+        "enrolment_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Enrolment Sha256",
+          "type": "string"
+        }
+      },
+      "required": [
+        "fund_id",
+        "membership_reference",
+        "enrolled_on",
+        "coverage_start",
+        "coverage_end",
+        "regime",
+        "cohort",
+        "work_model",
+        "id",
+        "registration",
+        "subject",
+        "period",
+        "amount",
+        "evidence_reference",
+        "employment_start",
+        "eligible",
+        "rate_band",
+        "rate_band_assessment",
+        "salary_basis_kind",
+        "basis_method",
+        "period_basis_assessment",
+        "enrolment_evidence_version_id",
+        "enrolment_sha256"
+      ],
+      "title": "SavingsBasis",
+      "type": "object"
+    },
+    "savings-reported": {
+      "additionalProperties": false,
+      "properties": {
+        "authority": {
+          "const": "MOHRE",
+          "default": "MOHRE",
+          "title": "Authority",
+          "type": "string"
+        },
+        "scheme": {
+          "const": "MOHRE_SAVINGS",
+          "default": "MOHRE_SAVINGS",
+          "title": "Scheme",
+          "type": "string"
+        },
+        "fund_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Fund Id",
+          "type": "string"
+        },
+        "membership_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Membership Reference",
+          "type": "string"
+        },
+        "enrolled_on": {
+          "format": "date",
+          "title": "Enrolled On",
+          "type": "string"
+        },
+        "coverage_start": {
+          "format": "date",
+          "title": "Coverage Start",
+          "type": "string"
+        },
+        "coverage_end": {
+          "format": "date",
+          "title": "Coverage End",
+          "type": "string"
+        },
+        "regime": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Regime",
+          "type": "string"
+        },
+        "cohort": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Cohort",
+          "type": "string"
+        },
+        "work_model": {
+          "enum": [
+            "full-time",
+            "part-time",
+            "job-share"
+          ],
+          "title": "Work Model",
+          "type": "string"
+        },
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Id",
+          "type": "string"
+        },
+        "registration": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Registration",
+          "type": "string"
+        },
+        "subject": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Subject",
+          "type": "string"
+        },
+        "period": {
+          "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+          "title": "Period",
+          "type": "string"
+        },
+        "component": {
+          "const": "SAVINGS:EMPLOYER_BASIC",
+          "default": "SAVINGS:EMPLOYER_BASIC",
+          "title": "Component",
+          "type": "string"
+        },
+        "currency": {
+          "const": "AED",
+          "default": "AED",
+          "title": "Currency",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Amount"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Evidence Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "fund_id",
+        "membership_reference",
+        "enrolled_on",
+        "coverage_start",
+        "coverage_end",
+        "regime",
+        "cohort",
+        "work_model",
+        "id",
+        "registration",
+        "subject",
+        "period",
+        "amount",
+        "evidence_reference"
+      ],
+      "title": "SavingsObservation",
+      "type": "object"
+    },
+    "savings-rules": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Id",
+          "type": "string"
+        },
+        "authority": {
+          "const": "MOHRE",
+          "default": "MOHRE",
+          "title": "Authority",
+          "type": "string"
+        },
+        "scheme": {
+          "const": "MOHRE_SAVINGS",
+          "default": "MOHRE_SAVINGS",
+          "title": "Scheme",
+          "type": "string"
+        },
+        "fund_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Fund Id",
+          "type": "string"
+        },
+        "regime": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Regime",
+          "type": "string"
+        },
+        "cohort": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Cohort",
+          "type": "string"
+        },
+        "work_model": {
+          "enum": [
+            "full-time",
+            "part-time",
+            "job-share"
+          ],
+          "title": "Work Model",
+          "type": "string"
+        },
+        "rate_band": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Rate Band",
+          "type": "string"
+        },
+        "rate": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Rate"
+        },
+        "rounding": {
+          "enum": [
+            "nearest-fils",
+            "next-fils",
+            "floor-fils"
+          ],
+          "title": "Rounding",
+          "type": "string"
+        },
+        "effective_from": {
+          "format": "date",
+          "title": "Effective From",
+          "type": "string"
+        },
+        "effective_to": {
+          "format": "date",
+          "title": "Effective To",
+          "type": "string"
+        },
+        "source_url": {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "title": "Source Url",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "source_evidence_version_id": {
+          "format": "uuid",
+          "title": "Source Evidence Version Id",
+          "type": "string"
+        },
+        "source_version": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Source Version",
+          "type": "string"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "applicability_review": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Applicability Review",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "fund_id",
+        "regime",
+        "cohort",
+        "work_model",
+        "rate_band",
+        "rate",
+        "rounding",
+        "effective_from",
+        "effective_to",
+        "source_url",
+        "source_sha256",
+        "source_evidence_version_id",
+        "source_version",
+        "evidence_reference",
+        "applicability_review"
+      ],
+      "title": "SavingsRule",
       "type": "object"
     },
     "screening-policies": {
