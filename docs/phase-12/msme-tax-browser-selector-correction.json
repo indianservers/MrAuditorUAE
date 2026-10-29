@@ -1,0 +1,39 @@
+{
+  "contract": "source-bound-browser-selector-correction/1",
+  "source_commit": "a376d84cc7bc3ab75b17282a353102d14032a580",
+  "run_id": 40961762495,
+  "job_id": 123756067980,
+  "conclusion": "failure",
+  "artifact": {
+    "id": 12936900966,
+    "size_bytes": 6464400,
+    "sha256": "921761ba443aa0240e2c7b5ee77429190b8df2ade08ffcb17fafb3649c77de1b",
+    "download_digest_verified": true
+  },
+  "capture": {
+    "path": "docs/country-workflows/screenshots/browser-workflows/IN-msme-tax-failed-after-approval-a376d84.png",
+    "artifact_entry": "country-report-release-syn-cd438-eviewer-and-generated-draft/test-failed-2.png",
+    "sha256": "3163d0d88c2a3b55f28b0abd6433d636c59bda26d1d0cb06310439fe782d8ded",
+    "original_unmodified": true,
+    "visually_inspected": true
+  },
+  "failure": "Strict text selector matched the visible definition-list term and a closed trace table header for opening previously allowed unpaid",
+  "observed": [
+    "Eight source roles queued and independently reviewed through APIs",
+    "UI calculation completed and reported six matched metrics, net income adjustment -35",
+    "Independent UI result approval completed; current reviewed state, separate adjustments 15/100/150 and prior opening already-allowed value 50 visible"
+  ],
+  "not_completed": [
+    "Tax settlement trace browser assertions",
+    "XLSX UI download and validation",
+    "Support replacement and stale browser assertions",
+    "Final source-bound success captures"
+  ],
+  "correction": "Use the semantic term role, assert its visible definition is 50; also require the final financial comparison row in capture viewport",
+  "financial_logic_changed": false,
+  "hosted_rerun": "PENDING",
+  "limits": [
+    "Failure image has expanded prior details and does not show the final comparison row completely",
+    "Earlier backend/API and frontend unit receipts remain source-bound; this is not full browser success or client qualification"
+  ]
+}

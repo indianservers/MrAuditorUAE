@@ -164,9 +164,13 @@ export async function runMSMETaxBrowserWorkflow(
     })
     .first();
   await prior.locator(":scope > summary").click();
-  await expect(
-    prior.getByText("opening previously allowed unpaid", { exact: true }),
-  ).toBeVisible();
+  const openingAllowed = prior
+    .getByRole("term")
+    .filter({ hasText: /^opening previously allowed unpaid$/ });
+  await expect(openingAllowed).toBeVisible();
+  await expect(openingAllowed.locator("..").getByRole("definition")).toHaveText(
+    "50",
+  );
   await prior
     .getByText("Tax settlements and original bank links (2)", { exact: true })
     .click();
@@ -212,6 +216,13 @@ export async function runMSMETaxBrowserWorkflow(
         totals
           .getByRole("row")
           .filter({ hasText: "Release of earlier disallowance" }),
+      ).toBeInViewport();
+      await expect(
+        reviewer
+          .getByRole("table", { name: /^Source-linked schedule/ })
+          .getByRole("row")
+          .filter({ hasText: "SYN-PRIOR" })
+          .filter({ hasText: "PRIOR_PRINCIPAL_RELEASE" }),
       ).toBeInViewport();
       await reviewer.screenshot({
         path: `${screenshots}/${name}.png`,

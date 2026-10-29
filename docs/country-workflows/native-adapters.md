@@ -4812,3 +4812,28 @@ receipts and exact staged-source hashes are in
 its seeded release-smoke identities are absent in this worktree. New hosted
 browser and full-backend execution remain pending for this source; earlier
 interest captures do not prove the annual-tax UI flow.
+
+
+WPS boundary source `92f1465` has now completed all six hosted CI jobs
+successfully. Its full backend receipt records 4,342 passed, nine skipped and
+86.52851048792185% overall line coverage. Unchanged original JUnit/coverage
+bytes, exact artifact digest and synthetic operational scope are recorded in
+`../phase-12/92f1465-hosted-verification.json`. This source includes WPS
+record-boundary handling and the earlier assessed interest implementation. It
+predates the original PDF archive and annual-tax implementation. Browser smoke
+also passed, but this backend-only WPS change adds no new UI capture or client
+qualification claim.
+
+
+The first annual-tax browser run on `a376d84` passed API source setup, UI
+calculation and independent UI result approval, then failed on an ambiguous
+text assertion for opening previously allowed unpaid: both a visible definition
+term and a closed trace table header matched. The correction selects the
+semantic definition term and verifies its paired value 50. It changes no tax
+or application logic. Capture checks also now require the final financial
+comparison row in the viewport. The original inspected failure image and exact
+artifact digest are retained in
+`../phase-12/msme-tax-browser-selector-correction.json`. XLSX, settlement trace,
+stale support and final success captures were not reached in that first run;
+the corrected source requires a new hosted browser run. The full backend job
+on `a376d84` is still separately pending.
