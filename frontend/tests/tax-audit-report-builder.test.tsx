@@ -349,3 +349,75 @@ it("offers the India index only for tax audit and retains evidence for not-appli
     screen.queryByLabelText("Operational report preset"),
   ).not.toBeInTheDocument();
 });
+
+it("saves every expanded field after searching and editing the last field", async () => {
+  state.mutate.mockReset().mockResolvedValue({ id: "saved" });
+  const requirements = Array.from({ length: 877 }, (_, i) => ({
+    key: `form26.field.synthetic.${i + 1}`,
+    title: `Synthetic field ${i + 1}`,
+    disposition: "UNASSESSED",
+    source_required: true,
+    basis: "Synthetic retained source mapping assessment",
+  }));
+  state.presets = {
+    country: "IN",
+    items: [
+      {
+        id: "india-form26-index:B/2",
+        title: "Published-field inventory part B",
+        category: "india-tax-audit",
+        kind: "form26-index",
+        allow_not_applicable: true,
+        not_applicable_keys: [],
+        limitations: ["Unqualified source field inventory"],
+        requirements,
+      },
+    ],
+  };
+  render(<StatutoryReportBuilder />);
+  const change = (label: string, value: string) =>
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  for (const [label, value] of [
+    ["Engagement", "one"],
+    ["Report title", "SYNTHETIC complete inventory"],
+    ["Report category", "india-tax-audit"],
+    ["Operational report preset", "india-form26-index:B/2"],
+    ["Reviewed tax-audit applicability case", "case"],
+    ["Tax period start", "2026-04-01"],
+    ["Tax period end", "2027-03-31"],
+    ["Accounts audited under another law", "no"],
+    ["Selected tax-audit form", "26"],
+    ["Form 26 audit-report part", "B"],
+    ["Search report requirements", "form26.field.synthetic.877"],
+    [
+      "Applicability and source basis 877",
+      "Independently assessed final field evidence scope",
+    ],
+    ["Search requirements for this block", "Synthetic field 877"],
+  ])
+    change(label, value);
+  const group = screen.getByRole("group", {
+    name: "Requirements covered by this block",
+  });
+  fireEvent.click(within(group).getByLabelText("Synthetic field 877"));
+  change("Content type", "narrative");
+  change("Block title", "SYNTHETIC field draft");
+  change(
+    "User-authored narrative / commentary",
+    "Synthetic draft awaiting source workpaper review",
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Add content block" }));
+  fireEvent.click(
+    screen.getByRole("button", { name: "Save template version" }),
+  );
+  await waitFor(() => expect(state.mutate).toHaveBeenCalledOnce());
+  const body = state.mutate.mock.calls[0][0].body;
+  expect(body.requirements).toHaveLength(877);
+  expect(body.requirements.slice(0, 876)).toEqual(requirements.slice(0, 876));
+  expect(body.requirements[876].basis).toBe(
+    "Independently assessed final field evidence scope",
+  );
+  expect(body.blocks[0].requirement_keys).toEqual([
+    "form26.field.synthetic.877",
+  ]);
+});

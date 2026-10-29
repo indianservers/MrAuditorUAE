@@ -304,7 +304,7 @@ class ReportTemplate(Strict):
     blocks: list[ReportBlock] = Field(min_length=1, max_length=50)
     rationale: str = Field(min_length=10, max_length=4000)
     tax_audit_scope: IndiaTaxAuditScope | None = None
-    requirements: list[ReportRequirement] = Field(default_factory=list, max_length=100)
+    requirements: list[ReportRequirement] = Field(default_factory=list, max_length=2000)
     requirements_assessed: bool = Field(default=False, strict=True)
     requirements_basis: str = Field(default="", max_length=4000)
     prior_id: uuid.UUID | None = None
@@ -315,6 +315,13 @@ class ReportTemplate(Strict):
         from app.modules.regulatory.report_packs import validate_config
 
         validate_config(self)
+        if len(self.requirements) > 100 and self.requirements_pack not in {
+            "india-form26-index:A/2",
+            "india-form26-index:B/2",
+        }:
+            raise ValueError(
+                "Only exact published-field presets may exceed 100 report requirements"
+            )
         if (self.category == "india-tax-audit") != (self.tax_audit_scope is not None):
             raise ValueError(
                 "India tax-audit templates require an explicit assessed tax scope; other report categories must not supply one"

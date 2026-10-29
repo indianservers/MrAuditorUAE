@@ -8,6 +8,7 @@ import { useScope } from "@/stores/workspace";
 import type { Page, RecordRow } from "@/types/models";
 import {
   ReportRequirementsEditor,
+  ReportRequirementSelector,
   type ReportRequirement,
 } from "./report-requirements";
 import { PageHeader } from "./shared";
@@ -387,25 +388,13 @@ function ReportBuilderForm() {
                 onChange={(e) => setText(e.target.value)}
               />
             </label>
-            <fieldset>
-              <legend>Requirements covered by this block</legend>
-              {requirements.map((item) => (
-                <label key={item.key}>
-                  <input
-                    type="checkbox"
-                    checked={requirementKeys.includes(item.key)}
-                    onChange={(e) =>
-                      setRequirementKeys((old) =>
-                        e.target.checked
-                          ? [...old, item.key]
-                          : old.filter((key) => key !== item.key),
-                      )
-                    }
-                  />
-                  {item.title || item.key}
-                </label>
-              ))}
-            </fieldset>
+            <ReportRequirementSelector
+              items={requirements}
+              selected={requirementKeys}
+              onChange={setRequirementKeys}
+              label="Requirements covered by this block"
+              searchLabel="Search requirements for this block"
+            />
             <Button
               disabled={!blockTitle || (kind !== "narrative" && !sourceId)}
               onClick={() => {
@@ -456,40 +445,20 @@ function ReportBuilderForm() {
                     {b.requirement_keys?.join(", ") ||
                       "None; review declared coverage"}
                   </p>
-                  <fieldset>
-                    <legend>Coverage for {b.title}</legend>
-                    {requirements.map((requirement) => (
-                      <label key={requirement.key}>
-                        <input
-                          type="checkbox"
-                          checked={
-                            b.requirement_keys?.includes(requirement.key) ||
-                            false
-                          }
-                          onChange={(event) =>
-                            setBlocks((old) =>
-                              old.map((block) =>
-                                block.key !== b.key
-                                  ? block
-                                  : {
-                                      ...block,
-                                      requirement_keys: event.target.checked
-                                        ? [
-                                            ...(block.requirement_keys || []),
-                                            requirement.key,
-                                          ]
-                                        : (block.requirement_keys || []).filter(
-                                            (key) => key !== requirement.key,
-                                          ),
-                                    },
-                              ),
-                            )
-                          }
-                        />
-                        {requirement.title || requirement.key}
-                      </label>
-                    ))}
-                  </fieldset>
+                  <ReportRequirementSelector
+                    items={requirements}
+                    selected={b.requirement_keys || []}
+                    label={`Coverage for ${b.title}`}
+                    onChange={(keys) =>
+                      setBlocks((old) =>
+                        old.map((block) =>
+                          block.key === b.key
+                            ? { ...block, requirement_keys: keys }
+                            : block,
+                        ),
+                      )
+                    }
+                  />
                   <div className="toolbar">
                     <Button
                       aria-label={`Move ${b.title} up`}

@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { WorkpaperReportScopeEditor } from "@/features/workpaper-report-scope";
 
-const data = vi.hoisted(() => ({ available: true }));
+const data = vi.hoisted(() => ({ available: true, count: 1 }));
 vi.mock("@/hooks/use-api", () => ({
   useAPI: (path: string) => ({
     data: {
@@ -15,9 +15,13 @@ vi.mock("@/hooks/use-api", () => ({
                 title: "Form 26 report part A",
                 kind: "form26-index",
                 not_applicable_keys: [],
-                requirements: [
-                  { key: "form26.C.1", title: "Identity particulars" },
-                ],
+                requirements: Array.from({ length: data.count }, (_, i) => ({
+                  key: `form26.C.${i + 1}`,
+                  title:
+                    i === 0
+                      ? "Identity particulars"
+                      : `Synthetic field ${i + 1}`,
+                })),
               },
             ]
           : []
@@ -129,4 +133,32 @@ describe("Workpaper report item declarations", () => {
       screen.queryByText("Declare Form 26 item coverage"),
     ).not.toBeInTheDocument();
   });
+});
+
+it("searches a large inventory while retaining selected fields across searches", () => {
+  data.available = true;
+  data.count = 877;
+  render(<Editor />);
+  fireEvent.change(screen.getByLabelText("Declare Form 26 item coverage"), {
+    target: { value: "yes" },
+  });
+  fireEvent.change(screen.getByLabelText("Workpaper report preset"), {
+    target: { value: "india-form26-index:A/1" },
+  });
+  fireEvent.change(screen.getByLabelText("Search workpaper report items"), {
+    target: { value: "Synthetic field 877" },
+  });
+  const select = screen.getByLabelText(
+    "Report items supported by this section",
+  ) as HTMLSelectElement;
+  expect(select.options).toHaveLength(1);
+  select.options[0].selected = true;
+  fireEvent.change(select);
+  fireEvent.change(screen.getByLabelText("Search workpaper report items"), {
+    target: { value: "Identity particulars" },
+  });
+  expect(select.options).toHaveLength(2);
+  expect(select.selectedOptions[0].value).toBe("form26.C.877");
+  expect(screen.getByText(/1 selected; 0 of 100 mappings/)).toBeInTheDocument();
+  data.count = 1;
 });

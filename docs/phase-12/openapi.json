@@ -64622,7 +64622,7 @@
               "$ref": "#/components/schemas/ReportRequirement"
             },
             "type": "array",
-            "maxItems": 100,
+            "maxItems": 2000,
             "title": "Requirements"
           },
           "requirements_assessed": {

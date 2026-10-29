@@ -124,10 +124,13 @@ async def safeguards(request: Request, call_next):
 
             request._receive = limited_receive
         elif request.method in {"POST", "PATCH", "PUT"}:
+            from app.modules.regulatory.request_limits import json_body_limit
+
+            maximum = json_body_limit(request.url.path, request.method, config.max_request_bytes)
             body = bytearray()
             async for chunk in request.stream():
                 body.extend(chunk)
-                if len(body) > config.max_request_bytes:
+                if len(body) > maximum:
                     raise HTTPException(413, "Request body too large")
             request._body = bytes(body)
         if (

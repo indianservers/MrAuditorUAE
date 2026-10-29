@@ -15,7 +15,11 @@ def catalogue(country):
     if country == "IN":
         from app.modules.regulatory.form26_index import PREFIX as INDIA_PREFIX
 
-        return [manifest(INDIA_PREFIX + part + "/1") for part in ("A", "B")]
+        return [
+            manifest(INDIA_PREFIX + part + "/" + version)
+            for version in ("1", "2")
+            for part in ("A", "B")
+        ]
     if country != "AE":
         return []
     return [manifest(PREFIX + layout + "/1") for layout in LAYOUTS]

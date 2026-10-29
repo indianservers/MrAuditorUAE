@@ -1,0 +1,170 @@
+{
+  "contract": "form26-published-field-inventory-validation/1",
+  "presets": [
+    "india-form26-index:A/2",
+    "india-form26-index:B/2"
+  ],
+  "inventory": {
+    "A": {
+      "requirements": 877,
+      "source_fields": 822,
+      "population_controls": 50,
+      "source_review_controls": 5,
+      "sha256": "97113b8cc8c72396a319c062995232adcc6a5ab00e0aaac8ce3b0752930eca80"
+    },
+    "B": {
+      "requirements": 877,
+      "source_fields": 823,
+      "population_controls": 49,
+      "source_review_controls": 5,
+      "sha256": "84f49a46a95760c71aacf91c8878818c9d96ae7f806b0e95730865dc2bca748b"
+    }
+  },
+  "tests": {
+    "regression": {
+      "tests": 3514,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4,
+      "passed": 3510
+    },
+    "context": {
+      "tests": 81,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 81
+    },
+    "frontend": {
+      "tests": 369,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 369
+    }
+  },
+  "regression_scope": "All backend units plus five tax-audit HTTP cases, before final inventory metadata clarification; final 81 targeted cases include that clarification and both complete 877-item API flows",
+  "checks": {
+    "ruff_check": "passed",
+    "ruff_format_files": 410,
+    "mypy_files": 410,
+    "frontend_production_build": "passed",
+    "frontend_typecheck": "passed",
+    "frontend_lint": "passed with existing unused-variable warning",
+    "api_contracts": "matched",
+    "generated_frontend_types": "matched"
+  },
+  "api_flow": [
+    "Both report parts retain all 877 keys across nine bounded independently reviewed workpapers",
+    "Templates reject missing fields and author self-approval",
+    "Generated report and XLSX retain all 877 coverage rows",
+    "Reopening last contributing paper marks report stale with complete historical body unchanged",
+    "Report-template JSON allowance is bounded at 8 MiB; ordinary 64 KiB route limit and authentication remain enforced"
+  ],
+  "limits": [
+    "Semantic evidence inventory, not official input schema, full legal field qualification, calculations, signature or filing",
+    "Original A/1 and B/1 65-item scopes are retained separately; no automatic scope upgrade",
+    "Source category/income numbering/column and withholding cross-reference conflicts require explicit assessment",
+    "Repeated columns require complete-population workpapers; synthetic mapping controls do not qualify substantive evidence",
+    "New inventory browser capture and real-client validation remain open",
+    "Hosted 81a448d receipts are older-source evidence and do not qualify this new inventory"
+  ],
+  "staged_sources": [
+    {
+      "path": ".gitattributes",
+      "sha256": "5c5e297c6ef0a373892f8a68ed4f76442fda52b4ba55528d3e879345355fdea2"
+    },
+    {
+      "path": "backend/app/main.py",
+      "sha256": "a9298cc851d71f62e011871a881e6c4f0261713ca20e67250bb474a1d756ec86"
+    },
+    {
+      "path": "backend/app/modules/regulatory/form26_fields.py",
+      "sha256": "99cdd9a9f15a57185f4acde7756e416d147652bb61c5051f9d803a58e057799c"
+    },
+    {
+      "path": "backend/app/modules/regulatory/form26_index.py",
+      "sha256": "cfe6720a55f72acb166b7b724a2dd1d6dd5ee6c0e9b43b2f96ea6c5ae7d0e046"
+    },
+    {
+      "path": "backend/app/modules/regulatory/report_packs.py",
+      "sha256": "96deeb45d3afdf3ce9e9d4cf137142fa6a843e13f7f5422388d75defd9bf1caa"
+    },
+    {
+      "path": "backend/app/modules/regulatory/report_requirements.py",
+      "sha256": "41a743bd6debf32c56dde00eff29b157188ff51390ef0b65c22005ba745081db"
+    },
+    {
+      "path": "backend/app/modules/regulatory/request_limits.py",
+      "sha256": "9a493ea3e66eb115dc97b079a731837f445f1a911b31b848a16813a36934a597"
+    },
+    {
+      "path": "backend/app/modules/regulatory/schemas.py",
+      "sha256": "396722239dda4c442cc6def773fb1f041fbfc03344868874790a499c8cc4f020"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_tax_audit_scope.py",
+      "sha256": "898d51e894491ed22837cf958e5e26f80494a612c1df5f6df6e5e24b882d5fe3"
+    },
+    {
+      "path": "backend/tests/unit/test_form26_fields.py",
+      "sha256": "2878b02db0a627c54e79e92efc5d31796319cd03ad906afd7ea90958a129c242"
+    },
+    {
+      "path": "backend/tests/unit/test_report_packs.py",
+      "sha256": "97a487f68bbb1df332965b78e729175856d8a177aca77c74ecbdd4196a52eb8b"
+    },
+    {
+      "path": "docs/phase-12/81a448d-hosted-coverage.json",
+      "sha256": "642191a8534bdb73bc7003f7d21fe26b6c6715fa14cae738b5f2d8f9546aba46"
+    },
+    {
+      "path": "docs/phase-12/81a448d-hosted-full.xml",
+      "sha256": "dd8dcbae253d6cb1cde95d8876efcaa951ac65ffa5ac72381a6353ff521be8ba"
+    },
+    {
+      "path": "docs/phase-12/81a448d-hosted-verification.json",
+      "sha256": "8af136442b7cdc475e9481b240e623f189bfbeb4e8e6097be0a52e3d9c79aa51"
+    },
+    {
+      "path": "docs/phase-12/form26-fields-context.xml",
+      "sha256": "70fc5bf399a1d69e1bc4e2d4037c00b0e72c8deadecf6f153684b13d5e42c29f"
+    },
+    {
+      "path": "docs/phase-12/form26-fields-frontend.xml",
+      "sha256": "ebad6ccebfbcc1282d227e7b5393c21a970a502af86dc47aca58880e8bed9986"
+    },
+    {
+      "path": "docs/phase-12/form26-fields-regression.xml",
+      "sha256": "0347400d2f83ad6d0da930acf6d5aa0dd2524fd2f136d7b56c8307689248a57e"
+    },
+    {
+      "path": "docs/phase-12/openapi.json",
+      "sha256": "fc4ee6ece5b4a36a2d2fbd2352866ddc5db09c79f96de42d972eb0a593b97424"
+    },
+    {
+      "path": "frontend/src/features/report-requirements.tsx",
+      "sha256": "180551c9283857339cb735142a0877b8de3025a5d1cd0627627b855dd537e618"
+    },
+    {
+      "path": "frontend/src/features/statutory-report-builder.tsx",
+      "sha256": "fd62bd6aa52ecb2c31ba6d189f4515babb9d31f08db00386c30e2ed46933b026"
+    },
+    {
+      "path": "frontend/src/features/workpaper-report-scope.tsx",
+      "sha256": "3e422efc250d366a630d618e4cd7a83eb561834000fd6161d889c7cea9ec2520"
+    },
+    {
+      "path": "frontend/tests/report-requirements.test.tsx",
+      "sha256": "06d58def75f378a90d1ca4d6995a1d5989b230a58e0ab802932e30217bfb70bf"
+    },
+    {
+      "path": "frontend/tests/tax-audit-report-builder.test.tsx",
+      "sha256": "d0286d06cc00457541f51b7372903866e7f1674aa7755617319c5d291078bc41"
+    },
+    {
+      "path": "frontend/tests/workpaper-report-scope.test.tsx",
+      "sha256": "06caf57747e8175bba3ed6e6aff45610c607c2941ef557e38275796a0fc65126"
+    }
+  ]
+}

@@ -436,6 +436,10 @@ async def test_period_form_review_export_and_source_correction(
         index_book = load_workbook(io.BytesIO(export.content), read_only=True)
         assert len(list(index_book["Requirements coverage"].values)) == 66
         index_book.close()
+    if modern:
+        await expanded_field_report(
+            c, h, eid, base, reviewer, manager, partner, evidence, data, part, start, end
+        )
     historical = deepcopy(saved["body"])
     await action(c, partner[0], base, paper, "reopen")
     stale = await c.get(endpoint, headers=h)
@@ -449,3 +453,121 @@ async def test_period_form_review_export_and_source_correction(
             stale_index.json()["freshness"] == "STALE"
             and stale_index.json()["body"] == indexed_report["body"]
         )
+
+
+async def expanded_field_report(
+    c, h, eid, base, reviewer, manager, partner, evidence, data, part, start, end
+):
+    """Full retained field population across bounded papers; synthetic control evidence only."""
+    from app.modules.regulatory.report_packs import manifest
+
+    pack = manifest(f"india-form26-index:{part}/2")
+    blocks, papers = [], []
+    for offset in range(0, len(pack["requirements"]), 100):
+        group = pack["requirements"][offset : offset + 100]
+        paper = await create(
+            c,
+            h,
+            base,
+            "working-papers",
+            {
+                "folder": "SYNTHETIC expanded field mapping controls",
+                "sections": [
+                    {
+                        "heading": "Synthetic source and field scope",
+                        "text": "SYNTHETIC mapping mechanics; no substantive professional field sufficiency or legal coverage is established",
+                    }
+                ],
+                "sources": [{"kind": "record", "id": evidence["id"]}],
+                "conclusion": "Synthetic exact field mapping control test only",
+                "report_requirement_scope": {
+                    "preset_id": pack["id"],
+                    "period_start": start,
+                    "period_end": end,
+                    "items": [
+                        {
+                            "key": r["key"],
+                            "disposition": "REQUIRED",
+                            "section_index": 0,
+                            "supporting_sources": [{"kind": "record", "id": evidence["id"]}],
+                            "assessment": "Synthetic declaration plumbing only, no substantive client or statutory qualification",
+                        }
+                        for r in group
+                    ],
+                },
+            },
+        )
+        paper = await action(c, h, base, paper, "submit")
+        paper = await action(c, manager[0], base, paper, "approve")
+        paper = await action(c, partner[0], base, paper, "approve")
+        papers.append(paper)
+        blocks.append(
+            {
+                "key": f"fields-{offset}",
+                "title": "SYNTHETIC field coverage chunk",
+                "kind": "working_paper_reference",
+                "source_kind": "record",
+                "source_id": paper["id"],
+                "requirement_keys": [r["key"] for r in group],
+            }
+        )
+    raw = {
+        **data,
+        "requirements_pack": pack["id"],
+        "requirements": [{**r, "disposition": "REQUIRED"} for r in pack["requirements"]],
+        "requirements_basis": "Synthetic full inventory plumbing, not professional assessment of statutory content",
+        "blocks": blocks,
+    }
+    prefix = f"/api/v1/regulatory/engagements/{eid}"
+    invalid = deepcopy(raw)
+    invalid["requirements"].pop()
+    assert (await c.post(prefix + "/report-templates", headers=h, json=invalid)).status_code == 422
+    response = await c.post(prefix + "/report-templates", headers=h, json=raw)
+    assert response.status_code == 201, response.text
+    assert (await decision(c, h, eid, response.json())).status_code == 403
+    reviewed = await decision(c, reviewer[0], eid, response.json())
+    assert reviewed.status_code == 201, reviewed.text
+    output = await c.post(
+        prefix + "/reports",
+        headers=h,
+        json={
+            "template_id": reviewed.json()["id"],
+            "rationale": "Synthetic complete published inventory, not statutory calculations",
+        },
+    )
+    assert output.status_code == 201, output.text
+    saved = output.json()
+    body = deepcopy(saved["body"])
+    coverage = body["requirements_coverage"]
+    assert len(coverage["items"]) == 877 and coverage["complete"]
+    assert coverage["requirements_pack"]["sha256"] == pack["sha256"]
+    assert (
+        not coverage["statutory_completeness_qualified"] and not body["tax_form_content_qualified"]
+    )
+    endpoint = f"/api/v1/intelligence/engagements/{eid}/events/{saved['id']}"
+    export = await c.get(endpoint + "/export?format=xlsx", headers=h)
+    assert export.status_code == 200, export.text
+    book = load_workbook(io.BytesIO(export.content), read_only=True)
+    rows = list(book["Requirements coverage"].values)
+    assert len(rows) == 878
+    assert {row[0] for row in rows[1:]} == {r["key"] for r in pack["requirements"]}
+    book.close()
+    await action(c, partner[0], base, papers[-1], "reopen")
+    stale = await c.get(endpoint, headers=h)
+    assert stale.status_code == 200 and stale.json()["freshness"] == "STALE"
+    assert stale.json()["body"] == body
+
+
+async def test_large_template_allowance_does_not_relax_other_routes_or_authentication(environment):
+    c = environment
+    path = "/api/v1/regulatory/engagements/00000000-0000-0000-0000-000000000001/report-templates"
+    ordinary = await c.post(
+        "/api/v1/entities", content=b" " * 65537, headers={"Content-Type": "application/json"}
+    )
+    assert ordinary.status_code == 413
+    oversized = await c.post(
+        path, content=b" " * (8 * 1024 * 1024 + 1), headers={"Content-Type": "application/json"}
+    )
+    assert oversized.status_code == 413
+    unauthorized = await c.post(path, json={"title": "No authentication"})
+    assert unauthorized.status_code == 401

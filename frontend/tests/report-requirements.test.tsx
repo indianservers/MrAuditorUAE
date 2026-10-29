@@ -3,6 +3,7 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import {
   ReportRequirementsEditor,
+  ReportRequirementSelector,
   type ReportRequirement,
 } from "@/features/report-requirements";
 
@@ -149,4 +150,45 @@ describe("report requirement navigation", () => {
     );
     expect(save.mock.calls[0][0]).toHaveLength(21);
   });
+});
+
+it("preserves hidden block selections and enforces the 100-item block limit", () => {
+  const items = Array.from({ length: 877 }, (_, i) => ({
+    key: `field.${i + 1}`,
+    title: `Source field ${i + 1}`,
+  }));
+  function Selector() {
+    const [selected, setSelected] = useState(
+      items.slice(0, 100).map((item) => item.key),
+    );
+    return (
+      <>
+        <ReportRequirementSelector
+          items={items}
+          selected={selected}
+          onChange={setSelected}
+          label="Synthetic block coverage"
+        />
+        <output data-testid="selected-keys">{JSON.stringify(selected)}</output>
+      </>
+    );
+  }
+  render(<Selector />);
+  fireEvent.change(screen.getByLabelText("Search Synthetic block coverage"), {
+    target: { value: "field.877" },
+  });
+  expect(screen.getByLabelText("Source field 877")).toBeDisabled();
+  fireEvent.change(screen.getByLabelText("Search Synthetic block coverage"), {
+    target: { value: "" },
+  });
+  fireEvent.click(screen.getByLabelText("Source field 1"));
+  fireEvent.change(screen.getByLabelText("Search Synthetic block coverage"), {
+    target: { value: "field.877" },
+  });
+  fireEvent.click(screen.getByLabelText("Source field 877"));
+  const selected = JSON.parse(screen.getByTestId("selected-keys").textContent!);
+  expect(selected).toEqual([
+    ...items.slice(1, 100).map((item) => item.key),
+    "field.877",
+  ]);
 });

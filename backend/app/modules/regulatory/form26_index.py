@@ -27,6 +27,10 @@ GROUPS = [
 
 
 def manifest(identifier):
+    if identifier in {PREFIX + "A/2", PREFIX + "B/2"}:
+        from app.modules.regulatory.form26_fields import manifest as field_manifest
+
+        return field_manifest(identifier)
     if identifier not in {PREFIX + "A/1", PREFIX + "B/1"}:
         raise ValueError("Unknown Form 26 evidence index")
     part = identifier[len(PREFIX)]

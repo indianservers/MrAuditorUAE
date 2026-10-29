@@ -30,6 +30,7 @@ def implementation_hash():
         "schemas.py",
         "report_packs.py",
         "form26_index.py",
+        "form26_fields.py",
         "workpaper_report_scope.py",
     ):
         digest.update(name.encode() + b"\0" + hashlib.sha256((root / name).read_bytes()).digest())

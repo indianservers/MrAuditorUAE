@@ -65,6 +65,7 @@ export function WorkpaperReportScopeEditor({
   const protectedLinks = list(sources) as Link[];
   const sectionRows = list(sections) as { heading: string; text: string }[];
   const [keys, setKeys] = useState<string[]>([]);
+  const [itemSearch, setItemSearch] = useState("");
   const [section, setSection] = useState("");
   const [refs, setRefs] = useState<string[]>([]);
   const [disposition, setDisposition] =
@@ -76,6 +77,7 @@ export function WorkpaperReportScopeEditor({
     !saved ||
     !preset ||
     !keys.length ||
+    saved.items.length + keys.length > 100 ||
     section === "" ||
     (sectionRows[Number(section)]?.text || "").trim().length < 10 ||
     !selectedRefs.length ||
@@ -172,6 +174,18 @@ export function WorkpaperReportScopeEditor({
             />
           </label>
           <label>
+            Search workpaper report items
+            <input
+              value={itemSearch}
+              onChange={(e) => setItemSearch(e.target.value)}
+            />
+          </label>
+          <p>
+            {keys.length} selected; {saved.items.length} of 100 mappings in this
+            workpaper. Use additional independently reviewed workpapers for the
+            remaining fields.
+          </p>
+          <label>
             Report items supported by this section
             <select
               multiple
@@ -184,6 +198,13 @@ export function WorkpaperReportScopeEditor({
             >
               {preset?.requirements
                 .filter((r) => !saved.items.some((i) => i.key === r.key))
+                .filter(
+                  (r) =>
+                    keys.includes(r.key) ||
+                    `${r.key} ${r.title}`
+                      .toLocaleLowerCase()
+                      .includes(itemSearch.trim().toLocaleLowerCase()),
+                )
                 .map((r) => (
                   <option key={r.key} value={r.key}>
                     {r.title}

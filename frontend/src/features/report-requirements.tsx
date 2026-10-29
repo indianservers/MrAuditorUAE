@@ -223,3 +223,78 @@ export function ReportRequirementsEditor({
     </fieldset>
   );
 }
+
+export function ReportRequirementSelector({
+  items,
+  selected,
+  onChange,
+  label,
+  searchLabel,
+}: {
+  items: Pick<ReportRequirement, "key" | "title">[];
+  selected: string[];
+  onChange: (keys: string[]) => void;
+  label: string;
+  searchLabel?: string;
+}) {
+  const [search, setSearch] = useState("");
+  const [page, setPage] = useState(0);
+  const filtered = items.filter((item) =>
+    `${item.key} ${item.title}`
+      .toLocaleLowerCase()
+      .includes(search.trim().toLocaleLowerCase()),
+  );
+  const pages = Math.max(1, Math.ceil(filtered.length / 20));
+  const current = Math.min(page, pages - 1);
+  return (
+    <fieldset>
+      <legend>{label}</legend>
+      <label>
+        {searchLabel || `Search ${label}`}
+        <input
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(0);
+          }}
+        />
+      </label>
+      <p>
+        {selected.length} of 100 requirements selected. {filtered.length} match;
+        page {current + 1} of {pages}. Hidden selections remain linked.
+      </p>
+      <Button
+        type="button"
+        disabled={current === 0}
+        onClick={() => setPage(current - 1)}
+      >
+        Previous coverage items
+      </Button>
+      <Button
+        type="button"
+        disabled={current + 1 >= pages}
+        onClick={() => setPage(current + 1)}
+      >
+        Next coverage items
+      </Button>
+      {filtered.slice(current * 20, (current + 1) * 20).map((item) => (
+        <label key={item.key}>
+          <input
+            type="checkbox"
+            checked={selected.includes(item.key)}
+            disabled={!selected.includes(item.key) && selected.length >= 100}
+            onChange={(e) =>
+              onChange(
+                e.target.checked
+                  ? [...selected, item.key]
+                  : selected.filter((key) => key !== item.key),
+              )
+            }
+          />
+          {item.title || item.key}
+        </label>
+      ))}
+      {!filtered.length && <p>No coverage items match this search.</p>}
+    </fieldset>
+  );
+}
