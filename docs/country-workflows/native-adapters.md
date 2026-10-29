@@ -4594,3 +4594,14 @@ hosted jobs, including 4,254 passed and nine skipped backend tests, 86.44% overa
 coverage and 89.35% core coverage. Exact source-bound originals and scope are in
 `../phase-12/f0fab8b-hosted-verification.json`. That run predates this interest
 implementation and is not its full-suite evidence.
+
+
+The initial interest browser run on `64b77c0` passed two cases and failed the India
+case before queuing the interest calculation. Its new helper used an exact label
+selector for the bank-sign dropdown; the original MSE flow uses the combobox
+role and exact accessible name. The captured screen confirms all nine reviewed
+sources and scope fields were selected, with the bank sign still unselected.
+The helper now reuses that existing role selector. No application code, financial
+logic, timeouts or assertions changed. Original failure capture, artifact digest
+and limits are retained in `../phase-12/msme-interest-browser-selector-correction.json`.
+The corrected hosted run remains pending until recorded separately.

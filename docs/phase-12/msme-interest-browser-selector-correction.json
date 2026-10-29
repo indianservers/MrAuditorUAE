@@ -1,0 +1,38 @@
+{
+  "recorded_at": "2026-10-29T19:55:27.217582+00:00",
+  "source_commit": "64b77c05541859a2c2ee0c5a96fba0e93c859d54",
+  "run_id": 40943075809,
+  "job_id": 123691212476,
+  "conclusion": "failure",
+  "passed": 2,
+  "failed": 1,
+  "pytest_scope": "Not applicable: Playwright browser run",
+  "elapsed": "2.9 minutes",
+  "failure": "New helper timed out on getByLabel Bank payment sign before queuing the interest calculation; all nine reviewed source selections and the form values were visible",
+  "artifact": {
+    "id": 12927933659,
+    "size_bytes": 5595553,
+    "sha256": "b0022d8ed9a4ca346c829ab42810753a0b8c3bbd2b2a56c31d2d0adae15c6aa5",
+    "digest_verified": true
+  },
+  "original_capture": {
+    "path": "docs/country-workflows/screenshots/browser-workflows/IN-msme-interest-failed-before-bank-sign-64b77c0.png",
+    "sha256": "f12d9ab09d1e245b5ef611a47272ddf2788b84e62eaec83c30c5effd0cf4d1e9",
+    "size_bytes": 251398,
+    "width": 1440,
+    "height": 1600,
+    "visually_inspected": true,
+    "scope": "Source selections and entered form scope; no MSE interest calculation or approval occurred in this browser attempt"
+  },
+  "correction": "Use the existing MSE browser helper contract: getByRole combobox with exact Bank payment sign name. No application or financial calculation code changed. No timeout or assertion weakened.",
+  "rerun": "Pending new source-bound hosted browser execution; prior local 3411 backend / 353 frontend passes remain separate",
+  "corrected_source": {
+    "path": "frontend/e2e/msme-interest-browser-workflow.ts",
+    "sha256": "4c0ec7811bda5cb0c495bd99c68724d0bf2cdb88b0672342c30d3007e7f654d9",
+    "basis": "EXACT_STAGED_GIT_BLOB"
+  },
+  "checks": {
+    "typecheck": "passed",
+    "eslint": "passed with same pre-existing unused-variable warning"
+  }
+}
