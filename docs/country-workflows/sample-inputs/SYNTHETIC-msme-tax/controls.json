@@ -1,0 +1,123 @@
+{
+  "synthetic": true,
+  "qualified_real_client": false,
+  "workflow": "india-msme-annual-tax",
+  "net_expected_tax_adjustment": "-35",
+  "tax_totals": {
+    "INTEREST_PNL_DISALLOWANCE": {
+      "expected_amount": "15",
+      "expected_complete": true,
+      "reported_amount": "15",
+      "reported_complete": true
+    },
+    "CURRENT_PRINCIPAL_DISALLOWANCE": {
+      "expected_amount": "100",
+      "expected_complete": true,
+      "reported_amount": "100",
+      "reported_complete": true
+    },
+    "PRIOR_PRINCIPAL_RELEASE": {
+      "expected_amount": "150",
+      "expected_complete": true,
+      "reported_amount": "150",
+      "reported_complete": true
+    }
+  },
+  "parameters": {
+    "msme_buyer_id": "SYNTHETIC-BUYER",
+    "account": "SYNTHETIC-ACCOUNT",
+    "currency": "INR",
+    "as_of": "2027-03-31",
+    "tax_year_start": "2026-04-01",
+    "tax_observed_through": "2027-04-05",
+    "obligation_month_start": "2026-03",
+    "obligation_month_end": "2027-03",
+    "settlement_start": "2026-03-01",
+    "bank_payment_sign": "debit-negative",
+    "tolerance": "0",
+    "date_tolerance": "0"
+  },
+  "files": {
+    "assessments": {
+      "file": "assessments.csv",
+      "sha256": "3531af0aada1e544d902eb205ac25726a54d12c286545ef9e6d8dc0991f17c09",
+      "table_type": "msme-supplier-assessments",
+      "expected_rows": 1,
+      "control_totals": {}
+    },
+    "invoices": {
+      "file": "invoices.csv",
+      "sha256": "9c06512c519ea13b7de49a89ffc8af0ac15cf2c377e94fc28855162c52aa32a8",
+      "table_type": "msme-invoices",
+      "expected_rows": 2,
+      "control_totals": {
+        "INR": "300"
+      }
+    },
+    "bank": {
+      "file": "bank.csv",
+      "sha256": "a9e41d2d7993083104ea8f30bbc4db0e243ac5323e52ca59fe3971c81e9dd60f",
+      "table_type": "transactions",
+      "expected_rows": 3,
+      "control_totals": {
+        "INR": "-300"
+      }
+    },
+    "allocations": {
+      "file": "allocations.csv",
+      "sha256": "bc4743449978b892ac4a19b371f5616f341000e55684866b055a6ba1f21db6f6",
+      "table_type": "item-allocations",
+      "expected_rows": 3,
+      "control_totals": {
+        "INR": "300"
+      }
+    },
+    "tax_bases": {
+      "file": "tax-bases.csv",
+      "sha256": "3b56a04f62aae9b40ea510ff98f8f5f6497e56af0277b34109aec71c1d33d0fa",
+      "table_type": "msme-tax-bases",
+      "expected_rows": 2,
+      "control_totals": {
+        "INR": "300"
+      }
+    },
+    "tax_settlements": {
+      "file": "tax-settlements.csv",
+      "sha256": "5be266c53834991c6d013339aafd2f290970f365d791965fcb2a5f85203d11b3",
+      "table_type": "msme-tax-settlements",
+      "expected_rows": 3,
+      "control_totals": {
+        "INR": "300"
+      }
+    },
+    "interest_pnl": {
+      "file": "interest-pnl.csv",
+      "sha256": "bfcde6124ce5926f5279b80098211042e59708dd71837c7f86f7432d548e7ca5",
+      "table_type": "msme-interest-pnl",
+      "expected_rows": 2,
+      "control_totals": {
+        "INR": "15"
+      }
+    },
+    "reported": {
+      "file": "reported.csv",
+      "sha256": "6389ee13cdff146db8cb938fb9c637df0c76827a17f82150b6c6c3519a34cce9",
+      "table_type": "msme-tax-reported",
+      "expected_rows": 6,
+      "control_totals": {
+        "INR": "265"
+      }
+    }
+  },
+  "documents": {
+    "facts.txt": {
+      "sha256": "7bff25634653f336230f03159465f55d05008bf05bfd1258bfabb17d2f810c1f"
+    },
+    "basis.txt": {
+      "sha256": "830a7ef6e09d5261db66208caadd101c015b5546244e02851d28133e3033b8cc"
+    },
+    "pnl.txt": {
+      "sha256": "62c1b772afa3c9978649885cc6d3d79f9e3e6b0a0c9d41d4bb62671f99fe0dea"
+    }
+  }
+}

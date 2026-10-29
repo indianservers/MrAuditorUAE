@@ -53,7 +53,11 @@ def current_contract(body, dependencies):
             if context
             else not needs_context(table, body.get("rows", []))
         )
-    if body.get("workflow") in {"india-msme-payment-timing", "india-msme-interest"}:
+    if body.get("workflow") in {
+        "india-msme-payment-timing",
+        "india-msme-interest",
+        "india-msme-annual-tax",
+    }:
         if body.get("msme_evidence_contract") != CONTRACT:
             return False
         contexts = body.get("retained_msme_contexts", [])
@@ -65,7 +69,12 @@ def current_contract(body, dependencies):
                 and not needs_context(
                     "msme-supplier-assessments", [r.get("retained_supplier_assessment") or {}]
                 )
-                for r in body.get("rows", [])
+                for r in body.get(
+                    "invoice_tax_details"
+                    if body.get("workflow") == "india-msme-annual-tax"
+                    else "rows",
+                    [],
+                )
             )
         return False
     return True

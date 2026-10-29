@@ -1,0 +1,349 @@
+{
+  "recorded_at": "2026-10-29T21:54:46.102956+00:00",
+  "feature": "India assessed annual MSE expense / P&L interest / prior-disallowance tax bridge",
+  "base_commit": "549cd3d9720c56d3ebc9b41ff176e7761036be17",
+  "contract": "india-msme-annual-tax/1",
+  "receipts": [
+    {
+      "path": "docs/phase-12/msme-tax-final.xml",
+      "sha256": "2ee67d76fc0871b092f9104a2ebee604f3fc0e0561688aab9b7e34060abebecc",
+      "size_bytes": 537202,
+      "counts": {
+        "tests": 3482,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 4,
+        "passed": 3478
+      }
+    },
+    {
+      "path": "docs/phase-12/msme-tax-context-final.xml",
+      "sha256": "f406ebb4bbc116f7b96fdc7ae90edb36aea578894b3d264570436b6c08994dc9",
+      "size_bytes": 10369,
+      "counts": {
+        "tests": 67,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 67
+      }
+    },
+    {
+      "path": "docs/phase-12/msme-tax-frontend.xml",
+      "sha256": "ba75842062ab65a80abfa82c24aab42b2143521efab624fc1de004cff9d8cda9",
+      "size_bytes": 85797,
+      "counts": {
+        "tests": 359,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 359
+      }
+    }
+  ],
+  "sources": [
+    {
+      "path": ".gitattributes",
+      "sha256": "f0c3da55306ae2124b5bf059d919ab6c3aeeb53c9494185601982a8dbb4911d2",
+      "size_bytes": 2436,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "sha256": "8227e91ef478f149057b10a5e731cf0fdaa9c504d7c26e4cfd4f35868fafb6b8",
+      "size_bytes": 76337,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/bank_binding.py",
+      "sha256": "d9ab8ba0ed5c6e69d2bf9551060c18a2bcaf5cf4629f6b7079743bb21a573598",
+      "size_bytes": 6307,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/calculations.py",
+      "sha256": "fb4132c51b11f72c090d3e08254963babd5ca5c807e438236f0ffe8e455508cd",
+      "size_bytes": 63026,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/catalogue.py",
+      "sha256": "7710e684da05b5aa7981af634e7fd3fc17e34d5cfd01dc7660ee51680a735d31",
+      "size_bytes": 12395,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/msme_evidence.py",
+      "sha256": "5b7d87a32eaaa7c2638565500a87acb5a68802ee41e68d703d1bf2dccb53f9e5",
+      "size_bytes": 4832,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/msme_tax.py",
+      "sha256": "6acfa9e4f5cfb27bc811249add89a90ec3029d4c85a6a61d9a9c52312e20c1b7",
+      "size_bytes": 22932,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/msme_tax_schemas.py",
+      "sha256": "95b3cdeb977e993a25517d201140c40a2100faaa3cab9d96c32bf72187311891",
+      "size_bytes": 6896,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/review.py",
+      "sha256": "92a16250703c0adda9deb7b84946d05587d64d80a6775a63b6176d3796655d2a",
+      "size_bytes": 6889,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/schemas.py",
+      "sha256": "cf8f3053a84c79c2c78cdf4207b53182d27b686b7380a5053a6f3cc4cc65f4ee",
+      "size_bytes": 65303,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/service.py",
+      "sha256": "28708f89a9a3e5f331b624179a01157136159d2be9e2f0745adbbf1320d08373",
+      "size_bytes": 68252,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/sources.py",
+      "sha256": "2222acbe923b087f9feb96cc0f6c070ebeb0954f58f92cd7750239162f8ea537",
+      "size_bytes": 18785,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "sha256": "249929d476844e2e3d0a5bb5901120ab61ecd07793b2d070af9ceb85bb4dd666",
+      "size_bytes": 50884,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/intelligence/service.py",
+      "sha256": "1460d3bc9671785287be7f924315eba1798c745ba5db612d6be7f6300d088f5f",
+      "size_bytes": 50686,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_msme_tax.py",
+      "sha256": "c3f3a564a87c62cb1584f85b168574c6dbd6d0b927940996042853304c31fbd4",
+      "size_bytes": 9183,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/tests/unit/test_msme_evidence.py",
+      "sha256": "58bbb9c56d0eaedfac4c5a717c8f20afbf3bb66afddf5f06a224de46fafc1108",
+      "size_bytes": 6877,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/tests/unit/test_msme_tax.py",
+      "sha256": "5726516532046d30c9df24f7d1e5148166dbc20c8089b268710d24dd8405c9d3",
+      "size_bytes": 23692,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/job-input-contracts.json",
+      "sha256": "55e3e3b35ea2c5b73685d979b5e6a16285b7ab74ca00c0743c9222662459461a",
+      "size_bytes": 368254,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/native-adapters.md",
+      "sha256": "1dbf87970aac39d3c3f3b51e123a1787ddbc431aba37683dc12e3ead30fd97cf",
+      "size_bytes": 440367,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-tax/README.txt",
+      "sha256": "4c64c2ce767e01d00c81d239c04781f27aa0bc06dff169bcee9b66a8c820af65",
+      "size_bytes": 812,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-tax/allocations.csv",
+      "sha256": "bc4743449978b892ac4a19b371f5616f341000e55684866b055a6ba1f21db6f6",
+      "size_bytes": 372,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-tax/assessments.csv",
+      "sha256": "3531af0aada1e544d902eb205ac25726a54d12c286545ef9e6d8dc0991f17c09",
+      "size_bytes": 290,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-tax/bank.csv",
+      "sha256": "a9e41d2d7993083104ea8f30bbc4db0e243ac5323e52ca59fe3971c81e9dd60f",
+      "size_bytes": 280,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-tax/basis.txt",
+      "sha256": "830a7ef6e09d5261db66208caadd101c015b5546244e02851d28133e3033b8cc",
+      "size_bytes": 405,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-tax/controls.json",
+      "sha256": "847520d5526b8f6c59dca1e61e6530bfd05bcebf38ba0f3220c0413b428979a1",
+      "size_bytes": 3558,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-tax/facts.txt",
+      "sha256": "7bff25634653f336230f03159465f55d05008bf05bfd1258bfabb17d2f810c1f",
+      "size_bytes": 238,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-tax/interest-pnl.csv",
+      "sha256": "bfcde6124ce5926f5279b80098211042e59708dd71837c7f86f7432d548e7ca5",
+      "size_bytes": 768,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-tax/invoices.csv",
+      "sha256": "9c06512c519ea13b7de49a89ffc8af0ac15cf2c377e94fc28855162c52aa32a8",
+      "size_bytes": 616,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-tax/pnl.txt",
+      "sha256": "62c1b772afa3c9978649885cc6d3d79f9e3e6b0a0c9d41d4bb62671f99fe0dea",
+      "size_bytes": 265,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-tax/reported.csv",
+      "sha256": "6389ee13cdff146db8cb938fb9c637df0c76827a17f82150b6c6c3519a34cce9",
+      "size_bytes": 1039,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-tax/tax-bases.csv",
+      "sha256": "3b56a04f62aae9b40ea510ff98f8f5f6497e56af0277b34109aec71c1d33d0fa",
+      "size_bytes": 1236,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-tax/tax-settlements.csv",
+      "sha256": "5be266c53834991c6d013339aafd2f290970f365d791965fcb2a5f85203d11b3",
+      "size_bytes": 913,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/phase-12/393b414-hosted-coverage.json",
+      "sha256": "9afb76259a0b0d915316b255cc2651fbbee072cafb937cdf3c56876df48327f2",
+      "size_bytes": 1787956,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/phase-12/393b414-hosted-full.xml",
+      "sha256": "17a5140e86a72bb2398b08261da8e502626d9a45a1fef593df7b15da342edfb3",
+      "size_bytes": 658897,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/phase-12/393b414-hosted-verification.json",
+      "sha256": "904148ccbfd8e72c934e1b9a6b83727e38687bb345e6023cecb0becc10ae4f4b",
+      "size_bytes": 5740,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/phase-12/msme-tax-context-final.xml",
+      "sha256": "f406ebb4bbc116f7b96fdc7ae90edb36aea578894b3d264570436b6c08994dc9",
+      "size_bytes": 10369,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/phase-12/msme-tax-final.xml",
+      "sha256": "2ee67d76fc0871b092f9104a2ebee604f3fc0e0561688aab9b7e34060abebecc",
+      "size_bytes": 537202,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/phase-12/msme-tax-frontend.xml",
+      "sha256": "ba75842062ab65a80abfa82c24aab42b2143521efab624fc1de004cff9d8cda9",
+      "size_bytes": 85797,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/phase-12/openapi.json",
+      "sha256": "59724f2e66c44e7cd09c365a0d38a51ab3b2b071934a4184b9cd40e1342d9b81",
+      "size_bytes": 1770043,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/e2e/country-report-release.spec.ts",
+      "sha256": "b713c862fc4bb40b8d316f9979c14388e1db5e30c167c5c84429eeccd4e0c431",
+      "size_bytes": 34363,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/e2e/msme-tax-browser-workflow.ts",
+      "sha256": "72cc9d5b36b5e711b11a0bf0dee029c9c17c66ee70e28481f1f2c1e2afd54a13",
+      "size_bytes": 9709,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "c9d45b8b993bda66f7bffd1c22836aae14a51c883ddef6376166f0f7a34cc196",
+      "size_bytes": 309975,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/src/features/msme-interest.tsx",
+      "sha256": "4853c361c3e8dd697d733892757c5efaee3ab998edaff0d34312aaabbc2cdc29",
+      "size_bytes": 6026,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/src/features/msme-tax.tsx",
+      "sha256": "f569d7249809c504cad72e7c4dc8239a433158352ed1c45de07a100752253436",
+      "size_bytes": 7779,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/src/types/api.generated.ts",
+      "sha256": "355fbc9a54f1d3efb3e4a8eba2faa0bace6260f1655fb0c814e1cd596a22c39d",
+      "size_bytes": 1547726,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/tests/msme-payment-workflow.test.tsx",
+      "sha256": "554108ee3aa0298f7f5f2dbe7356cc84a4357694843a134f7d1223c2f2f8c845",
+      "size_bytes": 14745,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/tests/msme-tax.test.tsx",
+      "sha256": "6042cd10fe758338009e002000f973bd4eb6d3d2c103b2211dd8cc28ec87a1db",
+      "size_bytes": 5390,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    }
+  ],
+  "checks": {
+    "backend_unit_and_selected_http": "3478 passed, four existing infrastructure skips; final source after context guard",
+    "selected_http_cases": 16,
+    "focused_context_regression": "67 passed; overlaps broad suite",
+    "frontend": "359 passed in 70 files",
+    "ruff": "check passed; 755 files formatted",
+    "mypy": "407 source files passed",
+    "frontend_build": "passed",
+    "frontend_typecheck": "passed",
+    "api_types": "passed",
+    "runtime_contracts": "match",
+    "eslint": "zero errors; pre-existing unused-variable warning uae-business-cases.tsx:143"
+  },
+  "limits": [
+    "Synthetic authored evidence only; the existing 154-scenario catalogue is not promoted to real-client qualification",
+    "Complete hosted backend and annual-tax browser evidence pending for this source",
+    "Local browser test enumeration could not load absent .local-runtime/release-smoke/identities.json; no local browser run or preview server started",
+    "Earlier 393b414 hosted full suite and captures are separately source-bound, not annual-tax proof",
+    "Full statutory disclosures, professional qualification, actual client pilots, signing/filing and production readiness remain open",
+    "Optional reviewed account evidence cannot currently be created beyond a closed annual engagement; exact observed-end date checks remain enforced; ordinary bank allocations do not authenticate accounts"
+  ]
+}

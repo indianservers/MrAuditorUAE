@@ -1,0 +1,4 @@
+id,payment_id,item_id,currency,amount,evidence_reference,rationale
+LINK,BANK,INV,INR,100,SYNTHETIC allocation,Synthetic invoice payment allocation assessed
+LINK-PRIOR,BANK-PRIOR,PRIOR,INR,150,SYNTHETIC allocation,Synthetic invoice payment allocation assessed
+PRIOR-ALLOWED-LINK,PRIOR-ALLOWED,PRIOR,INR,50,SYNTHETIC allocation,Synthetic invoice payment allocation assessed

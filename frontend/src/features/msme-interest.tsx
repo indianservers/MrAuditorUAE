@@ -82,6 +82,8 @@ function Trace({ title, rows }: { title: string; rows: Row[] }) {
   );
 }
 
+export { Trace as MSMERecordTrace };
+
 export function MSMEInterestDetails({
   rows,
   expectedTotal,

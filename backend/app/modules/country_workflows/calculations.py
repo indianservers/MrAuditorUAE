@@ -1125,7 +1125,11 @@ def calculate(
         raise ValueError(
             "A sales invoice cannot establish purchase books against an inward GSTR-2B source"
         )
-    if data.workflow in {"india-msme-payment-timing", "india-msme-interest"} and (
+    if data.workflow in {
+        "india-msme-payment-timing",
+        "india-msme-interest",
+        "india-msme-annual-tax",
+    } and (
         sources["bank"].get("source_snapshot_id")
         or sources["bank"].get("parser_version") == "committed-ledger-1"
     ):
@@ -1205,7 +1209,11 @@ def calculate(
             result = withholding(data, tables)
         elif data.workflow in OPERATION_CALCULATORS:
             result = OPERATION_CALCULATORS[data.workflow](data, tables)
-        elif data.workflow in {"india-msme-payment-timing", "india-msme-interest"}:
+        elif data.workflow in {
+            "india-msme-payment-timing",
+            "india-msme-interest",
+            "india-msme-annual-tax",
+        }:
             from app.modules.country_workflows.msme_payments import calculate as msme_payment_timing
 
             if (
@@ -1215,7 +1223,11 @@ def calculate(
                 raise ValueError(
                     "Native bank outflows use debit-negative amounts; credits cannot settle MSE invoices"
                 )
-            if data.workflow == "india-msme-interest":
+            if data.workflow == "india-msme-annual-tax":
+                from app.modules.country_workflows.msme_tax import calculate as msme_tax
+
+                result = msme_tax(data, tables)
+            elif data.workflow == "india-msme-interest":
                 from app.modules.country_workflows.msme_interest import calculate as msme_interest
 
                 result = msme_interest(data, tables)
@@ -1346,6 +1358,7 @@ def calculate(
         "obligation-bank-allocations",
         "india-msme-payment-timing",
         "india-msme-interest",
+        "india-msme-annual-tax",
     }:
         result["bank_account_evidence"] = account_scope or {
             "status": "LINK_REQUESTED_NOT_VERIFIED"

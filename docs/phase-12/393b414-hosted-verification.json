@@ -1,0 +1,159 @@
+{
+  "contract": "hosted-backend-verification/1",
+  "source_commit": "393b414762ab1f4211196ea45e025c1a1a791d60",
+  "run_id": 40944523177,
+  "job_id": 123696245838,
+  "conclusion": "success",
+  "all_six_jobs": "success",
+  "jobs": [
+    {
+      "id": 123696245324,
+      "name": "frontend",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "393b414762ab1f4211196ea45e025c1a1a791d60"
+    },
+    {
+      "id": 123696245749,
+      "name": "security",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "393b414762ab1f4211196ea45e025c1a1a791d60"
+    },
+    {
+      "id": 123696245817,
+      "name": "containers",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "393b414762ab1f4211196ea45e025c1a1a791d60"
+    },
+    {
+      "id": 123696245827,
+      "name": "browser-smoke",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "393b414762ab1f4211196ea45e025c1a1a791d60"
+    },
+    {
+      "id": 123696245838,
+      "name": "verify",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "393b414762ab1f4211196ea45e025c1a1a791d60"
+    },
+    {
+      "id": 123696245975,
+      "name": "ml",
+      "status": "completed",
+      "conclusion": "success",
+      "head_sha": "393b414762ab1f4211196ea45e025c1a1a791d60"
+    }
+  ],
+  "artifact": {
+    "id": 12932540810,
+    "size_bytes": 225266,
+    "sha256": "71192a0c5b398270e2a84305b433a0a865b2b26fe7be93a0b8dd775b35e0f57a",
+    "download_digest_verified": true
+  },
+  "receipts": [
+    {
+      "path": "docs/phase-12/393b414-hosted-full.xml",
+      "sha256": "17a5140e86a72bb2398b08261da8e502626d9a45a1fef593df7b15da342edfb3",
+      "size_bytes": 658897
+    },
+    {
+      "path": "docs/phase-12/393b414-hosted-coverage.json",
+      "sha256": "9afb76259a0b0d915316b255cc2651fbbee072cafb937cdf3c56876df48327f2",
+      "size_bytes": 1787956
+    }
+  ],
+  "junit": {
+    "tests": 4329,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 9,
+    "passed": 4320
+  },
+  "junit_seconds": 3140.803,
+  "coverage_totals": {
+    "covered_lines": 34269,
+    "num_statements": 39611,
+    "percent_covered": 86.51384716366665,
+    "percent_covered_display": "87",
+    "missing_lines": 5342,
+    "excluded_lines": 5,
+    "percent_statements_covered": 86.51384716366665,
+    "percent_statements_covered_display": "87"
+  },
+  "skipped_cases": [
+    {
+      "classname": "tests.phase2.test_live_connectors",
+      "name": "test_live_zoho_organizations",
+      "reason": "Live Zoho requires explicit opt-in and authorized OAuth credentials"
+    },
+    {
+      "classname": "tests.phase2.test_live_connectors",
+      "name": "test_live_zoho_ledger_against_source_controls",
+      "reason": "Full ledger smoke needs authorized read-only access and independent source totals"
+    },
+    {
+      "classname": "tests.phase2.test_live_connectors",
+      "name": "test_live_tally_export",
+      "reason": "Live Tally requires an explicitly authorized local installation"
+    },
+    {
+      "classname": "tests.phase2.test_live_native",
+      "name": "test_live_direct_api_ledger",
+      "reason": "Requires explicit opt-in, vendor credentials and independently exported control totals"
+    },
+    {
+      "classname": "tests.unit.test_connector_operations_db",
+      "name": "test_rls_tenant_isolation_and_immutable_evidence",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "classname": "tests.unit.test_connector_operations_db",
+      "name": "test_parallel_grant_refresh_rotates_once_and_keeps_current_client_secret",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "classname": "tests.unit.test_connector_operations_db",
+      "name": "test_checkpoint_commits_outside_caller_and_rejects_tampered_bytes",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "classname": "tests.unit.test_connector_operations_db",
+      "name": "test_real_redis_org_budget_and_concurrency_are_shared_across_clients",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "classname": "tests.unit.test_document_worker_runtime",
+      "name": "test_job_assignment_failure_never_resumes_document_processing",
+      "reason": "Windows suspended-start and job-assignment control"
+    }
+  ],
+  "operation_scope": [
+    {
+      "artifact_path": ".local-runtime/ci-verification/operations/compliance-runtime-connector.json",
+      "sha256": "070c473b447aeaf3fa24fca0a455b856d750e09fa757c7cc217c895a789fb9bf",
+      "synthetic": true
+    },
+    {
+      "artifact_path": ".local-runtime/ci-verification/operations/filing-lifecycle.json",
+      "sha256": "1f42be0c1cd356287072d8a4b9104f1ca6263c2277e3a0a0477d6fdf78e1f5b0",
+      "synthetic": true
+    },
+    {
+      "artifact_path": ".local-runtime/ci-verification/operations/worker-recovery.json",
+      "sha256": "1f87e67f62c237062a9d3655c9f0257257ad6b8333d3ec8e627fa11fd92318db",
+      "synthetic": true
+    }
+  ],
+  "observed_at_utc": "2026-10-29T21:45:31.163371+00:00",
+  "limits": [
+    "Full hosted suite includes assessed MSE interest and browser-selector correction; predates WPS boundary fix, PDF archive and annual MSE tax implementation",
+    "Original browser captures are separately recorded in msme-interest-browser-393b414.json; synthetic setup, not real-client qualification",
+    "Operational receipts are synthetic: no external requests or filing submits; injected expired worker claim, one outbox dispatch and no automatic abandoned-job rerun",
+    "Live providers, professional qualification and actual client pilots remain open"
+  ]
+}

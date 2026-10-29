@@ -1,0 +1,3 @@
+source_url,source_version,evidence_reference,applicability_review,id,buyer_id,supplier_id,invoice_id,currency,amount,tax_year_start,section23_applies,pnl_assessment
+https://synthetic.example/tax-assessment,SYNTHETIC tax basis,SYNTHETIC retained assessment,"Independent synthetic applicability and tax treatment, not legal qualification",PNL,SYNTHETIC-BUYER,SYNTHETIC-SUPPLIER,INV,INR,0,2026-04-01,True,"Assessed current P&L charge, not closing accrued interest"
+https://synthetic.example/tax-assessment,SYNTHETIC tax basis,SYNTHETIC retained assessment,"Independent synthetic applicability and tax treatment, not legal qualification",PNL-PRIOR,SYNTHETIC-BUYER,SYNTHETIC-SUPPLIER,PRIOR,INR,15,2026-04-01,True,"Assessed current P&L charge, not closing accrued interest"

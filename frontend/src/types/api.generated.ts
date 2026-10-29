@@ -30371,6 +30371,8 @@ export interface operations {
                 purchase_limit?: number;
                 ambiguity_offset?: number;
                 ambiguity_limit?: number;
+                tax_invoice_offset?: number;
+                tax_invoice_limit?: number;
             };
             header: {
                 "x-tenant-id": string;

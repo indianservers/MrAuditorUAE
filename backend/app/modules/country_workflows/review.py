@@ -1,6 +1,19 @@
 def approval_error(body):
     from app.modules.intelligence.matching_review import saved_candidates_complete
 
+    if body.get("workflow") == "india-msme-annual-tax":
+        from app.modules.country_workflows.msme_tax_schemas import CONTRACT
+
+        if body.get("msme_tax_contract") != CONTRACT or body.get(
+            "msme_tax_document_binding"
+        ) not in {"RETAINED_DOCUMENT_BYTES_VERIFIED", "NO_TAX_FACTS_CLAIMED"}:
+            return "Regenerate MSE annual tax with retained expense, opening-tax and settlement support"
+        if body.get("msme_tax_document_binding") == "NO_TAX_FACTS_CLAIMED" and any(
+            row.get("tax_basis") or row.get("interest_pnl_assessment")
+            for row in body.get("invoice_tax_details", [])
+        ):
+            return "Bind the declared MSE annual tax supporting documents before approval"
+
     if body.get("workflow") == "india-msme-interest":
         from app.modules.country_workflows.msme_interest_schemas import CONTRACT
 
@@ -57,7 +70,11 @@ def approval_error(body):
 
         if body.get("merchant_settlement_contract") != CONTRACT:
             return "Regenerate merchant settlement with unreversed booked-date evidence before approval"
-    if body.get("workflow") in {"india-msme-payment-timing", "india-msme-interest"} and (
+    if body.get("workflow") in {
+        "india-msme-payment-timing",
+        "india-msme-interest",
+        "india-msme-annual-tax",
+    } and (
         body.get("msme_evidence_contract") != "retained-msme-context/1"
         or body.get("msme_document_binding")
         not in {"RETAINED_DOCUMENT_BYTES_VERIFIED", "NO_RESOLVED_FACTS_CLAIMED"}

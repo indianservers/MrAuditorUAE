@@ -1,0 +1,1 @@
+SYNTHETIC ONLY. Current invoice has no current-year P&L interest debit (deadline after year end). Prior overdue invoice has authored current P&L interest INR 15 with separately assessed section 23 treatment. Not closing interest or a verified RBI rate calculation.

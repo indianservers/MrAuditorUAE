@@ -1,0 +1,4 @@
+id,buyer_id,supplier_id,invoice_id,currency,mode,amount,bucket,principal_allocation_id,day,qualifies_as_payment,settlement_kind,source_url,source_evidence_version_id,source_sha256,source_version,applicability_review,evidence_reference,rationale
+PORTION,SYNTHETIC-BUYER,SYNTHETIC-SUPPLIER,INV,INR,BANK_ALLOCATION_PORTION,100,CURRENT_EXPENSE,LINK,,True,,,,,,,SYNTHETIC original bank portion,Assessed tax basis portion of the original gross bank payment
+PORTION-PRIOR,SYNTHETIC-BUYER,SYNTHETIC-SUPPLIER,PRIOR,INR,BANK_ALLOCATION_PORTION,150,PRIOR_DISALLOWED,LINK-PRIOR,,True,,,,,,,SYNTHETIC original bank portion,Assessed tax basis portion of the original gross bank payment
+PRIOR-ALLOWED-PORTION,SYNTHETIC-BUYER,SYNTHETIC-SUPPLIER,PRIOR,INR,BANK_ALLOCATION_PORTION,50,PRIOR_ALREADY_ALLOWED,PRIOR-ALLOWED-LINK,,True,,,,,,,SYNTHETIC original bank portion,Assessed tax basis portion of the original gross bank payment

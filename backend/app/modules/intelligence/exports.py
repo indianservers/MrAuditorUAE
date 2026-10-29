@@ -163,6 +163,12 @@ def render(event, format):
             "msme_evidence_contract",
             "msme_document_binding",
             "principal_timing_exception_count",
+            "msme_tax_contract",
+            "msme_tax_document_binding",
+            "tax_reference",
+            "tax_year_start",
+            "tax_observed_through",
+            "net_expected_tax_adjustment",
             "trace_record_count",
             "expected_total_basis",
             "rule_document_binding",
@@ -438,6 +444,70 @@ def render(event, format):
                 append(members_sheet, fields)
                 for record in records:
                     append(members_sheet, [record.get(field) for field in fields])
+            if body.get("workflow") == "india-msme-annual-tax":
+                populations = {
+                    "MSE annual tax totals": [
+                        {"metric": metric, **values}
+                        for metric, values in body.get("tax_totals", {}).items()
+                    ],
+                    "MSE tax bank residuals": body.get("unallocated_bank_rows", []),
+                }
+                for title, key in (
+                    ("MSE tax bases", "tax_basis"),
+                    ("MSE tax PNL interest", "interest_pnl_assessment"),
+                ):
+                    populations[title] = [
+                        {"invoice_id": invoice["id"], **invoice[key]}
+                        for invoice in body.get("invoice_tax_details", [])
+                        if invoice.get(key)
+                    ]
+                populations["MSE tax invoice scope"] = [
+                    {
+                        key: value
+                        for key, value in invoice.items()
+                        if not isinstance(value, (dict, list))
+                    }
+                    for invoice in body.get("invoice_tax_details", [])
+                ]
+                for title, key in (
+                    ("MSE tax settlements", "tax_settlements"),
+                    ("MSE tax principal links", "allocations"),
+                ):
+                    records = []
+                    for invoice in body.get("invoice_tax_details", []):
+                        for record in invoice.get(key, []):
+                            records.append(
+                                {
+                                    "result_invoice_id": invoice["id"],
+                                    **{
+                                        field: value
+                                        for field, value in record.items()
+                                        if field != "original_bank_allocation"
+                                    },
+                                    **{
+                                        "original_" + field: value
+                                        for field, value in record.get(
+                                            "original_bank_allocation", {}
+                                        ).items()
+                                    },
+                                }
+                            )
+                    populations[title] = records
+                for title, key in (
+                    ("MSE tax invoice facts", "retained_invoice_facts"),
+                    ("MSE tax supplier facts", "retained_supplier_assessment"),
+                ):
+                    populations[title] = [
+                        {"result_invoice_id": invoice["id"], **invoice[key]}
+                        for invoice in body.get("invoice_tax_details", [])
+                        if invoice.get(key)
+                    ]
+                for title, records in populations.items():
+                    sheet = workbook.create_sheet(title)
+                    fields = list(dict.fromkeys(field for record in records for field in record))
+                    append(sheet, fields)
+                    for record in records:
+                        append(sheet, [record.get(field) for field in fields])
             if body.get("workflow") == "india-msme-interest":
                 for key, title in (
                     ("segments", "MSE interest intervals"),

@@ -10,6 +10,7 @@ from app.modules.country_workflows.grant_utilisation import ROLES as GRANT_ROLES
 from app.modules.country_workflows.merchant_reserves import ROLES as RESERVE_ROLES
 from app.modules.country_workflows.msme_interest_schemas import ROLES as MSME_INTEREST_ROLES
 from app.modules.country_workflows.msme_schemas import MSME_WORKFLOWS
+from app.modules.country_workflows.msme_tax_schemas import ROLES as MSME_TAX_ROLES
 from app.modules.country_workflows.operations_schemas import OPERATION_WORKFLOWS
 from app.modules.country_workflows.payroll_basis_proration import ROLES as PRORATION_ROLES
 from app.modules.country_workflows.payroll_establishment_charges import ROLES as CHARGE_ROLES
@@ -32,6 +33,11 @@ OPTIONAL_ROLES = {
 }
 
 WORKFLOWS = {
+    "india-msme-annual-tax": (
+        "India assessed MSE annual tax / P&L interest / prior disallowance release",
+        ["IN"],
+        MSME_TAX_ROLES,
+    ),
     "india-msme-interest": (
         "India assessed MSE compound interest / principal changes / interest settlement",
         ["IN"],

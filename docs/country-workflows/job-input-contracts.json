@@ -238,6 +238,7 @@
               "merchant-settlement-bridge",
               "india-msme-payment-timing",
               "india-msme-interest",
+              "india-msme-annual-tax",
               "tax-turnover-bridge",
               "adverse-media-review",
               "grant-utilisation",
@@ -430,6 +431,19 @@
             ],
             "default": null,
             "title": "Tax Year Start"
+          },
+          "tax_observed_through": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Tax Observed Through"
           },
           "title": {
             "maxLength": 200,
@@ -2858,6 +2872,10 @@
               "merchant-settlements",
               "merchant-bank-allocations",
               "msme-invoices",
+              "msme-tax-bases",
+              "msme-tax-settlements",
+              "msme-interest-pnl",
+              "msme-tax-reported",
               "msme-interest-policies",
               "msme-bank-rates",
               "msme-principal-changes",
@@ -8937,6 +8955,128 @@
       "title": "MSMEInterestAllocation",
       "type": "object"
     },
+    "msme-interest-pnl": {
+      "additionalProperties": false,
+      "properties": {
+        "source_url": {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "title": "Source Url",
+          "type": "string"
+        },
+        "source_evidence_version_id": {
+          "format": "uuid",
+          "title": "Source Evidence Version Id",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "source_version": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Source Version",
+          "type": "string"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "applicability_review": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Applicability Review",
+          "type": "string"
+        },
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "buyer_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Buyer Id",
+          "type": "string"
+        },
+        "supplier_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Supplier Id",
+          "type": "string"
+        },
+        "invoice_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Invoice Id",
+          "type": "string"
+        },
+        "currency": {
+          "const": "INR",
+          "default": "INR",
+          "title": "Currency",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "description": "Assessed current net P&L interest basis; net credits are retained for separate tax treatment, not a negative disallowance",
+          "title": "Amount"
+        },
+        "tax_year_start": {
+          "format": "date",
+          "title": "Tax Year Start",
+          "type": "string"
+        },
+        "section23_applies": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Section23 Applies"
+        },
+        "pnl_assessment": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Pnl Assessment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_url",
+        "source_evidence_version_id",
+        "source_sha256",
+        "source_version",
+        "evidence_reference",
+        "applicability_review",
+        "id",
+        "buyer_id",
+        "supplier_id",
+        "invoice_id",
+        "amount",
+        "tax_year_start",
+        "pnl_assessment"
+      ],
+      "title": "MSMEInterestPNL",
+      "type": "object"
+    },
     "msme-interest-policies": {
       "additionalProperties": false,
       "properties": {
@@ -9693,6 +9833,519 @@
         "assessment"
       ],
       "title": "MSMESupplierAssessment",
+      "type": "object"
+    },
+    "msme-tax-bases": {
+      "additionalProperties": false,
+      "properties": {
+        "source_url": {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "title": "Source Url",
+          "type": "string"
+        },
+        "source_evidence_version_id": {
+          "format": "uuid",
+          "title": "Source Evidence Version Id",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "source_version": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Source Version",
+          "type": "string"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "applicability_review": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Applicability Review",
+          "type": "string"
+        },
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "buyer_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Buyer Id",
+          "type": "string"
+        },
+        "supplier_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Supplier Id",
+          "type": "string"
+        },
+        "invoice_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Invoice Id",
+          "type": "string"
+        },
+        "currency": {
+          "const": "INR",
+          "default": "INR",
+          "title": "Currency",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "description": "Assessed otherwise-deductible principal basis, not inferred gross invoice value",
+          "title": "Amount"
+        },
+        "liability_tax_year_start": {
+          "format": "date",
+          "title": "Liability Tax Year Start",
+          "type": "string"
+        },
+        "otherwise_allowable": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Otherwise Allowable"
+        },
+        "history_from": {
+          "format": "date",
+          "title": "History From",
+          "type": "string"
+        },
+        "history_assessment": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "History Assessment",
+          "type": "string"
+        },
+        "opening_paid_basis": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Opening Paid Basis"
+        },
+        "opening_disallowed_basis": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Opening Disallowed Basis"
+        },
+        "opening_previously_allowed_unpaid": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Opening Previously Allowed Unpaid"
+        },
+        "tax_reference": {
+          "enum": [
+            "1961:43B(h)",
+            "2025:37(2)(g)"
+          ],
+          "title": "Tax Reference",
+          "type": "string"
+        },
+        "prior_disallowance_reference": {
+          "anyOf": [
+            {
+              "enum": [
+                "1961:43B(h)",
+                "2025:37(2)(g)"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Prior Disallowance Reference"
+        },
+        "effective_from": {
+          "format": "date",
+          "title": "Effective From",
+          "type": "string"
+        },
+        "effective_to": {
+          "format": "date",
+          "title": "Effective To",
+          "type": "string"
+        },
+        "basis_assessment": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Basis Assessment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_url",
+        "source_evidence_version_id",
+        "source_sha256",
+        "source_version",
+        "evidence_reference",
+        "applicability_review",
+        "id",
+        "buyer_id",
+        "supplier_id",
+        "invoice_id",
+        "amount",
+        "liability_tax_year_start",
+        "history_from",
+        "history_assessment",
+        "opening_paid_basis",
+        "opening_disallowed_basis",
+        "opening_previously_allowed_unpaid",
+        "tax_reference",
+        "effective_from",
+        "effective_to",
+        "basis_assessment"
+      ],
+      "title": "MSMETaxBasis",
+      "type": "object"
+    },
+    "msme-tax-reported": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "buyer_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Buyer Id",
+          "type": "string"
+        },
+        "supplier_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Supplier Id",
+          "type": "string"
+        },
+        "invoice_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Invoice Id",
+          "type": "string"
+        },
+        "currency": {
+          "const": "INR",
+          "default": "INR",
+          "title": "Currency",
+          "type": "string"
+        },
+        "metric": {
+          "enum": [
+            "INTEREST_PNL_DISALLOWANCE",
+            "CURRENT_PRINCIPAL_DISALLOWANCE",
+            "PRIOR_PRINCIPAL_RELEASE"
+          ],
+          "title": "Metric",
+          "type": "string"
+        },
+        "tax_year_start": {
+          "format": "date",
+          "title": "Tax Year Start",
+          "type": "string"
+        },
+        "as_of": {
+          "format": "date",
+          "title": "As Of",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Amount"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "buyer_id",
+        "supplier_id",
+        "invoice_id",
+        "metric",
+        "tax_year_start",
+        "as_of",
+        "amount",
+        "evidence_reference"
+      ],
+      "title": "MSMETaxReported",
+      "type": "object"
+    },
+    "msme-tax-settlements": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "buyer_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Buyer Id",
+          "type": "string"
+        },
+        "supplier_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Supplier Id",
+          "type": "string"
+        },
+        "invoice_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Invoice Id",
+          "type": "string"
+        },
+        "currency": {
+          "const": "INR",
+          "default": "INR",
+          "title": "Currency",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "BANK_ALLOCATION_PORTION",
+            "ASSESSED_BANK_ADVANCE_APPLICATION",
+            "ASSESSED_OTHER_SETTLEMENT"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Amount"
+        },
+        "bucket": {
+          "enum": [
+            "CURRENT_EXPENSE",
+            "HISTORICAL_PAID",
+            "PRIOR_DISALLOWED",
+            "PRIOR_ALREADY_ALLOWED"
+          ],
+          "title": "Bucket",
+          "type": "string"
+        },
+        "principal_allocation_id": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Principal Allocation Id"
+        },
+        "day": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Day"
+        },
+        "qualifies_as_payment": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Qualifies As Payment"
+        },
+        "settlement_kind": {
+          "anyOf": [
+            {
+              "enum": [
+                "WITHHOLDING",
+                "NETTING",
+                "ADVANCE_APPROPRIATION",
+                "OTHER"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Settlement Kind"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "format": "uri",
+              "maxLength": 2083,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        },
+        "source_evidence_version_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Evidence Version Id"
+        },
+        "source_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Sha256"
+        },
+        "source_version": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Version"
+        },
+        "applicability_review": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "minLength": 10,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Applicability Review"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "rationale": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Rationale",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "buyer_id",
+        "supplier_id",
+        "invoice_id",
+        "mode",
+        "amount",
+        "bucket",
+        "evidence_reference",
+        "rationale"
+      ],
+      "title": "MSMETaxSettlement",
       "type": "object"
     },
     "obligation-allocations": {

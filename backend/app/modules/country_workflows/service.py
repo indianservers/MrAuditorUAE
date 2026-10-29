@@ -203,9 +203,10 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         }, [*dependencies, receipt]
     if operation == "workflow-source":
         from app.modules.country_workflows.msme_interest_schemas import ROW_TYPES as interest_types
+        from app.modules.country_workflows.msme_tax_schemas import ROW_TYPES as tax_types
 
-        if data.table_type in interest_types and package.country != "IN":
-            raise HTTPException(422, "MSE interest source populations require an India engagement")
+        if data.table_type in {*interest_types, *tax_types} and package.country != "IN":
+            raise HTTPException(422, "MSE source populations require an India engagement")
         if data.table_type.startswith("savings-") and package.country != "AE":
             raise HTTPException(422, "MOHRE savings sources require a UAE engagement")
         if data.table_type.startswith("payroll-charge-") and package.country != "IN":
@@ -418,6 +419,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                     "payroll-rules",
                     "msme-interest-policies",
                     "msme-bank-rates",
+                    "msme-tax-bases",
+                    "msme-interest-pnl",
                     "payroll-charge-rules",
                     "savings-rules",
                     "payroll-cap-rules",
@@ -636,6 +639,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "payroll-rules",
             "msme-interest-policies",
             "msme-bank-rates",
+            "msme-tax-bases",
+            "msme-interest-pnl",
             "payroll-charge-rules",
             "savings-rules",
             "payroll-cap-rules",
@@ -694,6 +699,17 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                         label="MSE principal reductions",
                     )
                 )
+        if data.table_type == "msme-tax-settlements":
+            dependencies.extend(
+                await payroll_rule_documents(
+                    db,
+                    ctx,
+                    eng,
+                    [row for row in result["rows"] if row["mode"] != "BANK_ALLOCATION_PORTION"],
+                    contributors=supporting_contributors,
+                    label="MSE assessed other tax settlements",
+                )
+            )
         msme_context = None
         if data.table_type.startswith("msme-"):
             from app.modules.country_workflows.msme_evidence import prepare as prepare_msme_context
@@ -750,7 +766,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         }, [*dependencies, receipt]
     period = await db.get(FinancialPeriod, eng.period_id)
     if (
-        data.workflow in {"india-msme-payment-timing", "india-msme-interest"}
+        data.workflow
+        in {"india-msme-payment-timing", "india-msme-interest", "india-msme-annual-tax"}
         and package.country != "IN"
     ):
         raise HTTPException(422, "MSE payment timing requires an India engagement")
@@ -1082,7 +1099,12 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             )
         if (
             data.workflow
-            in {"obligation-bank-allocations", "india-msme-payment-timing", "india-msme-interest"}
+            in {
+                "obligation-bank-allocations",
+                "india-msme-payment-timing",
+                "india-msme-interest",
+                "india-msme-annual-tax",
+            }
             and source.body.get("review_status") != "REVIEWED"
         ):
             raise HTTPException(
@@ -1153,7 +1175,11 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                     "Composed books and independent turnover roles share underlying source evidence",
                 )
     msme_contexts = None
-    if data.workflow in {"india-msme-payment-timing", "india-msme-interest"}:
+    if data.workflow in {
+        "india-msme-payment-timing",
+        "india-msme-interest",
+        "india-msme-annual-tax",
+    }:
         from app.modules.country_workflows.msme_evidence import verify as verify_msme_context
 
         msme_contexts = []
@@ -1172,6 +1198,19 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             db, ctx, eng, copies, contributors=contributors, label="MSE interest support"
         )
         dependencies.extend(interest_documents_receipts)
+    tax_documents_receipts = None
+    if data.workflow == "india-msme-annual-tax":
+        from app.modules.country_workflows.msme_tax import supporting_documents as tax_documents
+
+        tax_documents_receipts = await payroll_rule_documents(
+            db,
+            ctx,
+            eng,
+            tax_documents({role: source["rows"] for role, source in sources.items()}),
+            contributors=contributors,
+            label="MSE annual tax support",
+        )
+        dependencies.extend(tax_documents_receipts)
     media_documents_receipts = None
     if data.workflow == "adverse-media-review":
         from app.modules.country_workflows.adverse_media import documents as media_documents
@@ -1448,6 +1487,11 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "RETAINED_DOCUMENT_BYTES_VERIFIED"
             if interest_documents_receipts
             else "NO_INTEREST_FACTS_CLAIMED"
+        )
+    if tax_documents_receipts is not None:
+        result["retained_tax_documents"] = tax_documents_receipts
+        result["msme_tax_document_binding"] = (
+            "RETAINED_DOCUMENT_BYTES_VERIFIED" if tax_documents_receipts else "NO_TAX_FACTS_CLAIMED"
         )
     if grant_documents_receipts is not None:
         result["grant_document_binding"] = "RETAINED_DOCUMENT_BYTES_VERIFIED"

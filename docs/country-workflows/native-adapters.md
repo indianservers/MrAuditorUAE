@@ -4711,3 +4711,104 @@ and tax-scope HTTP cases remain passing. Ruff and mypy also pass. Exact original
 artifacts and staged source hashes are recorded in
 `../phase-12/form26-original-validation.json`. No frontend or tax calculation
 logic changed in this source-archive increment.
+
+
+### India annual MSE tax bridge (assessed evidence)
+
+`india-msme-annual-tax` adds an India-only annual tax comparison on the retained
+invoice/supplier timing foundation. It requires eight independently reviewed
+sources: supplier assessments, invoices, bank transactions, principal allocations,
+assessed tax bases, tax settlement portions, current P&L interest assessments,
+and separately reported tax amounts. UAE does not inherit Indian tax provisions.
+The shared source/review/storage, precision, bank allocation, export and
+staleness infrastructure is reused.
+
+The three adjustments remain distinct: current P&L interest disallowance,
+current expense disallowance and release of earlier disallowances. The net
+income adjustment adds the first two and subtracts the third; it is not tax
+payable, a refund or the sum of all reported source control totals. Closing
+interest from the interest workflow is not substituted for the P&L charge.
+Net P&L credits stay unresolved for separate treatment, rather than creating a
+negative Form 26 item 33(a). Positive interest that contradicts the invoice's
+known deadline or full timely principal payment is also routed for review.
+
+The selected Indian tax year runs April 1 to March 31 from 2023-24 onward.
+Legacy years use an explicit 1961:43B(h) reference; years beginning April 2026
+use 2025:37(2)(g). Earlier disallowed balances retain their original year's
+reference. The archived Form 26 page 9 targets 33(a), 33(b), and 33(c), and
+amended Act page 73 separates actual-payment treatment, the exclusion from the
+filing-date extension and the prohibition on a second deduction. These sources
+are targeted, source-assessed references; professional legal qualification and
+complete statutory disclosures remain pending. No legacy report clause is
+inferred from the new Form 26 mapping.
+
+Year-end and settlement observation cutoffs are separate. Actual payments by
+year-end or within an eligible post-year statutory deadline are recognized for
+this assessed bridge. An overdue post-year payment is not rescued by the
+return-filing date. An unpaid deadline not yet resolved by observation remains
+unknown. Prior paid, disallowed and already-allowed opening balances reconcile
+to the separately assessed expense basis. Only payments from the disallowed
+bucket can release a prior disallowance. Post-2023 already-allowed balances need
+timely payment evidence; inconsistent prior tax treatment is routed for review.
+
+Each original bank allocation needs an explicit tax-basis portion, including
+zero where appropriate. Portions cannot exceed original gross allocations or
+hide payments beyond the invoice amount outside the assessed tax basis. Advance
+applications retain both original cash date and a separately documented
+appropriation date. Withholding, netting and other settlements require retained
+evidence and an explicit qualifies-as-payment assessment; cash equivalence is
+never inferred. Missing basis, timing, support, classification or complete
+history yields an unresolved adjustment, not zero.
+
+Actual retained document bytes are verified for tax bases, P&L assessments and
+nonstandard settlements. Authors cannot independently approve their own
+support. All eight parsed sources require review. Replacing support or
+withdrawing a source review makes saved dependent calculations stale while
+preserving their original financial bodies. Reapproval requires regeneration.
+The interface keeps exact server amounts and pages invoice details separately
+from comparison rows. XLSX exports all populations and original payment traces.
+
+`sample-inputs/SYNTHETIC-msme-tax/` contains eight nonempty CSV populations,
+three supporting documents and original-byte controls. The authored example
+has interest 15, current disallowance 100 and prior release 150: net adjustment
+-35 INR. It includes a 50 INR timely payment already allowed in the earlier
+year, which is not deducted again. Its 265 INR reported CSV control is not a
+net income adjustment. This is synthetic mechanics, not real-client or legal
+qualification. The browser exercise uses APIs for source setup and review,
+and the UI for calculation, independent result approval, export and stale
+support display; hosted execution evidence must be recorded separately after
+that source runs. Full tax-audit subfields, section 22 disclosure completeness,
+professional sign-off, signing/filing and real-client pilots remain open.
+
+
+The optional reviewed bank-account link still requires an exact observation-end
+comparison and complete document coverage of the bank window. Existing
+engagement-period bounds prevent creating a post-year account comparison in a
+closed annual engagement. That optional post-year linkage remains an explicit
+integration limitation; this procedure can retain and allocate bank source
+payments without claiming bank-account authentication. It does not relax the
+account comparison's date checks to make the link appear verified.
+
+Earlier assessed-interest source `393b414` now has all six hosted CI jobs in
+terminal success. Its original full receipt records 4,320 passed and nine
+skipped tests, with 86.51384716366665% overall line coverage. Original JUnit,
+coverage and source-bound scope are saved in `../phase-12/393b414-hosted-*`.
+Those results predate this annual-tax implementation and the WPS boundary
+update; they are not verification of later source. Operational receipts remain
+synthetic, with no external request or filing submission, and explicitly
+injected worker-claim recovery rather than a production incident.
+
+
+Final local annual-tax verification passed 3,478 backend tests with four
+pre-existing connector-infrastructure skips, including all unit cases and
+sixteen selected HTTP regressions across annual tax, interest, original MSE
+timing and WPS boundary handling. A separate final context-guard run passed
+67 focused cases. All 359 frontend tests in 70 files passed, as did the
+production build, TypeScript, API type/snapshot checks, Ruff (755 formatted
+files) and mypy (407 application files). ESLint has no errors and retains the
+pre-existing unused-variable warning in uae-business-cases.tsx. Original XML
+receipts and exact staged-source hashes are in
+`../phase-12/msme-tax-validation.json`. The local browser suite was not started:
+its seeded release-smoke identities are absent in this worktree. New hosted
+browser and full-backend execution remain pending for this source; earlier
+interest captures do not prove the annual-tax UI flow.

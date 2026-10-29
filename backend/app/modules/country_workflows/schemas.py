@@ -37,6 +37,7 @@ from app.modules.country_workflows.merchant_reserves import ROW_TYPES as RESERVE
 from app.modules.country_workflows.merchant_settlements import ROW_TYPES as MERCHANT_ROW_TYPES
 from app.modules.country_workflows.msme_interest_schemas import ROW_TYPES as MSME_INTEREST_ROW_TYPES
 from app.modules.country_workflows.msme_schemas import MSME_ROW_TYPES
+from app.modules.country_workflows.msme_tax_schemas import ROW_TYPES as MSME_TAX_ROW_TYPES
 from app.modules.country_workflows.operations_schemas import OPERATION_ROW_TYPES
 from app.modules.country_workflows.party_confirmations import (
     ConfirmationItemCoverage,
@@ -339,6 +340,7 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
     "withholding-records": WithholdingRecord,
     **OPERATION_ROW_TYPES,
     **MSME_ROW_TYPES,
+    **MSME_TAX_ROW_TYPES,
     **MSME_INTEREST_ROW_TYPES,
     **MERCHANT_ROW_TYPES,
     **RESERVE_ROW_TYPES,
@@ -454,6 +456,10 @@ class SourceInput(Strict):
         "merchant-settlements",
         "merchant-bank-allocations",
         "msme-invoices",
+        "msme-tax-bases",
+        "msme-tax-settlements",
+        "msme-interest-pnl",
+        "msme-tax-reported",
         "msme-interest-policies",
         "msme-bank-rates",
         "msme-principal-changes",
@@ -974,11 +980,15 @@ class WorkflowInput(Strict):
             "grant-utilisation",
             "india-msme-payment-timing",
             "india-msme-interest",
+            "india-msme-annual-tax",
             "adverse-media-review",
         }:
             from app.modules.country_workflows.grant_utilisation import calendar_day
 
-            for key in ("as_of", "period_start", "settlement_start"):
+            keys: tuple[str, ...] = ("as_of", "period_start", "settlement_start")
+            if value.get("workflow") == "india-msme-annual-tax":
+                keys += ("tax_year_start", "tax_observed_through")
+            for key in keys:
                 if value.get(key) is not None:
                     calendar_day(value[key])
         return value
@@ -998,6 +1008,7 @@ class WorkflowInput(Strict):
         "merchant-settlement-bridge",
         "india-msme-payment-timing",
         "india-msme-interest",
+        "india-msme-annual-tax",
         "tax-turnover-bridge",
         "adverse-media-review",
         "grant-utilisation",
@@ -1071,6 +1082,7 @@ class WorkflowInput(Strict):
     stock_cutoff_assessment: str = Field(default="", max_length=2000)
     period_start: date | None = None
     tax_year_start: date | None = None
+    tax_observed_through: date | None = None
     title: str = Field(min_length=3, max_length=200)
     rationale: str = Field(min_length=10, max_length=4000)
     account: str | None = Field(default=None, max_length=120)
@@ -1098,8 +1110,21 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
-        if self.workflow != "india-msme-interest" and len(self.source_ids) > 4:
+        if (
+            self.workflow not in {"india-msme-interest", "india-msme-annual-tax"}
+            and len(self.source_ids) > 4
+        ):
             raise ValueError("This workflow supports at most four source roles")
+        if self.workflow == "india-msme-annual-tax":
+            from app.modules.country_workflows.msme_tax import period
+
+            if len(self.source_ids) != 8:
+                raise ValueError(
+                    "MSE annual tax requires all eight independently controlled source roles"
+                )
+            period(self)
+        elif self.tax_observed_through is not None:
+            raise ValueError("Tax settlement observation applies only to MSE annual tax")
         if self.workflow == "india-msme-interest" and len(self.source_ids) != 9:
             raise ValueError("MSE interest requires all nine independently controlled source roles")
         if self.workflow == "india-establishment-charges" and (
@@ -1188,6 +1213,7 @@ class WorkflowInput(Strict):
                     "obligation-bank-allocations",
                     "india-msme-payment-timing",
                     "india-msme-interest",
+                    "india-msme-annual-tax",
                 }
                 or len(self.bank_account_scope_assessment.strip()) < 10
             ):
@@ -1260,7 +1286,11 @@ class WorkflowInput(Strict):
             raise ValueError(
                 "An inventory cutoff assessment requires explicit controlled bridge mode"
             )
-        if self.workflow in {"india-msme-payment-timing", "india-msme-interest"}:
+        if self.workflow in {
+            "india-msme-payment-timing",
+            "india-msme-interest",
+            "india-msme-annual-tax",
+        }:
             if (
                 not self.msme_buyer_id
                 or not self.msme_buyer_id.strip()
@@ -1278,6 +1308,7 @@ class WorkflowInput(Strict):
             "obligation-bank-allocations",
             "india-msme-payment-timing",
             "india-msme-interest",
+            "india-msme-annual-tax",
         }:
             if (
                 not self.account

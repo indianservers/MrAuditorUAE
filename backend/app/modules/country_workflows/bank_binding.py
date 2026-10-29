@@ -13,11 +13,14 @@ BANK_ROLES = {
     "obligation-bank-allocations": "bank",
     "india-msme-payment-timing": "bank",
     "india-msme-interest": "bank",
+    "india-msme-annual-tax": "bank",
     "merchant-settlement-bridge": "bank",
 }
 
 
 def financial_window(data, sources):
+    if data.workflow == "india-msme-annual-tax":
+        return data.settlement_start, data.tax_observed_through
     if data.workflow == "merchant-settlement-bridge":
         return data.period_start, data.as_of
     if data.workflow in {

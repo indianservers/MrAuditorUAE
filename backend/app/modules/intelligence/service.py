@@ -216,7 +216,8 @@ async def current(db, ctx, obj, visited=None):
         if obj.body.get("payroll_rule_selection_contract") != CONTRACT:
             return False
     if getattr(obj, "kind", None) in {"workflow-source", "country-workflow"} and (
-        obj.body.get("workflow") in {"india-msme-payment-timing", "india-msme-interest"}
+        obj.body.get("workflow")
+        in {"india-msme-payment-timing", "india-msme-interest", "india-msme-annual-tax"}
         or str(obj.body.get("table_type") or "").startswith("msme-")
     ):
         from app.modules.country_workflows.msme_evidence import current_contract as msme_current
@@ -232,6 +233,16 @@ async def current(db, ctx, obj, visited=None):
         if obj.body.get("msme_interest_contract") != CONTRACT or obj.body.get(
             "msme_interest_document_binding"
         ) not in {"RETAINED_DOCUMENT_BYTES_VERIFIED", "NO_INTEREST_FACTS_CLAIMED"}:
+            return False
+    if (
+        getattr(obj, "kind", None) == "country-workflow"
+        and obj.body.get("workflow") == "india-msme-annual-tax"
+    ):
+        from app.modules.country_workflows.msme_tax_schemas import CONTRACT
+
+        if obj.body.get("msme_tax_contract") != CONTRACT or obj.body.get(
+            "msme_tax_document_binding"
+        ) not in {"RETAINED_DOCUMENT_BYTES_VERIFIED", "NO_TAX_FACTS_CLAIMED"}:
             return False
     if (
         getattr(obj, "kind", None) == "country-workflow"

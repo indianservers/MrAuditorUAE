@@ -29,6 +29,20 @@ const interestRoles = {
   reported: "msme-reported-interest",
 };
 
+const taxRoles = {
+  ...roles,
+  tax_bases: "msme-tax-bases",
+  tax_settlements: "msme-tax-settlements",
+  interest_pnl: "msme-interest-pnl",
+  reported: "msme-tax-reported",
+};
+const historyRoles = [
+  ...Object.entries(interestRoles),
+  ...Object.entries(taxRoles)
+    .filter(([, type]) => !Object.values(interestRoles).includes(type))
+    .map(([role, type]) => [role + "-tax", type]),
+];
+
 it.each(["CURRENT", "STALE"])(
   "describes retained document verification honestly for a %s result",
   (freshness) => {
@@ -75,7 +89,7 @@ vi.mock("@/features/shared", () => ({
 vi.mock("@/hooks/use-event-history", () => ({
   useEventHistory: () => ({
     data: {
-      items: Object.entries(interestRoles).flatMap(([role, table_type]) =>
+      items: historyRoles.flatMap(([role, table_type]) =>
         [true, false].map((reviewed) => ({
           id: role + (reviewed ? "-reviewed" : "-unreviewed"),
           label: role + (reviewed ? " reviewed" : " unreviewed"),
@@ -104,6 +118,12 @@ vi.mock("@/hooks/use-api", () => ({
           country: state.country,
           items: [
             {
+              id: "india-msme-annual-tax",
+              title: "India annual MSE tax",
+              available: state.country === "IN",
+              roles: taxRoles,
+            },
+            {
               id: "india-msme-interest",
               title: "India assessed MSE interest",
               available: state.country === "IN",
@@ -120,7 +140,10 @@ vi.mock("@/hooks/use-api", () => ({
             state.country === "IN"
               ? {
                   ...Object.fromEntries(
-                    Object.values(interestRoles).map((type) => [type, {}]),
+                    [
+                      ...Object.values(interestRoles),
+                      ...Object.values(taxRoles),
+                    ].map((type) => [type, {}]),
                   ),
                   "msme-supplier-assessments": {},
                   "msme-invoices": {},
@@ -175,38 +198,103 @@ beforeEach(() => {
   state.mutate.mockResolvedValue({ id: "queued" });
 });
 
-it.each(["msme-interest-policies", "msme-bank-rates"])(
-  "binds a clean retained supporting document for %s",
-  async (tableType) => {
-    render(<CountryWorkflows eid="eng" mode="workflow-source" />);
-    for (const [label, value] of [
-      ["Source table type", tableType],
-      ["Clean retained evidence", "csv"],
-      ["Schedule title", "SYNTHETIC assessed interest source"],
-      ["Expected data rows", "1"],
-      ["MSE interest supporting document (optional shared document)", "packet"],
-    ])
-      fireEvent.change(screen.getByLabelText(label), { target: { value } });
-    if (tableType === "msme-interest-policies")
-      fireEvent.change(
-        screen.getByLabelText("Independent totals by currency"),
-        { target: { value: "INR=36500" } },
-      );
-    const document = screen.getByLabelText(
-      "MSE interest supporting document (optional shared document)",
-    );
+it("queues eight reviewed tax sources with separate annual and post-year observation scope", async () => {
+  render(<CountryWorkflows eid="eng" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Workflow"), {
+    target: { value: "india-msme-annual-tax" },
+  });
+  for (const role of Object.keys(taxRoles)) {
+    const picker = screen.getByLabelText(`${role} source`);
+    const key = role in roles ? role : role + "-tax";
     expect(
-      within(document).queryByRole("option", { name: "Quarantined packet" }),
+      within(picker).queryByRole("option", {
+        name: new RegExp(`^${key} unreviewed`),
+      }),
     ).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
-    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
-    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
-      table_type: tableType,
-      evidence_version_id: "csv",
-      rule_document_version_id: "packet",
+    fireEvent.change(picker, { target: { value: key + "-reviewed" } });
+  }
+  for (const [label, value] of [
+    ["Schedule title", "SYNTHETIC annual tax"],
+    [
+      "Scope and source rationale",
+      "Separate current P&L and previous tax balances with original bank observations",
+    ],
+    ["Reconciliation date", "2027-03-31"],
+  ])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  expect(
+    await screen.findByText(
+      "Declare the annual tax-year start and the settlement observation cutoff.",
+    ),
+  ).toBeVisible();
+  expect(state.mutate).not.toHaveBeenCalled();
+  for (const [label, value] of [
+    ["Annual tax year starts (April 1)", "2026-04-01"],
+    ["Settlement observations through", "2027-04-05"],
+    ["Buyer identifier", "SYNTHETIC-BUYER"],
+    ["First invoice month", "2026-03"],
+    ["Last invoice month", "2027-03"],
+    ["Bank settlement window starts", "2026-03-01"],
+    ["Bank account identifier", "SYNTHETIC-ACCOUNT"],
+    ["Account currency", "INR"],
+    ["Bank payment sign", "debit-negative"],
+  ])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+    workflow: "india-msme-annual-tax",
+    tax_year_start: "2026-04-01",
+    as_of: "2027-03-31",
+    tax_observed_through: "2027-04-05",
+    currency: "INR",
+    msme_buyer_id: "SYNTHETIC-BUYER",
+    source_ids: Object.fromEntries(
+      Object.keys(taxRoles).map((role) => [
+        role,
+        (role in roles ? role : role + "-tax") + "-reviewed",
+      ]),
+    ),
+  });
+});
+
+it.each([
+  "msme-interest-policies",
+  "msme-bank-rates",
+  "msme-tax-bases",
+  "msme-interest-pnl",
+])("binds a clean retained supporting document for %s", async (tableType) => {
+  const documentLabel = ["msme-tax-bases", "msme-interest-pnl"].includes(
+    tableType,
+  )
+    ? "MSE annual tax supporting document (optional shared document)"
+    : "MSE interest supporting document (optional shared document)";
+  render(<CountryWorkflows eid="eng" mode="workflow-source" />);
+  for (const [label, value] of [
+    ["Source table type", tableType],
+    ["Clean retained evidence", "csv"],
+    ["Schedule title", "SYNTHETIC assessed interest source"],
+    ["Expected data rows", "1"],
+    [documentLabel, "packet"],
+  ])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  if (tableType !== "msme-bank-rates")
+    fireEvent.change(screen.getByLabelText("Independent totals by currency"), {
+      target: { value: "INR=36500" },
     });
-  },
-);
+  const document = screen.getByLabelText(documentLabel);
+  expect(
+    within(document).queryByRole("option", { name: "Quarantined packet" }),
+  ).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+    table_type: tableType,
+    evidence_version_id: "csv",
+    rule_document_version_id: "packet",
+  });
+});
 
 it.each(["india-msme-payment-timing", "india-msme-interest"])(
   "requires explicit buyer and bank/calendar scope, with reviewed sources for %s",

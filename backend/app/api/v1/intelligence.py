@@ -866,6 +866,8 @@ async def event_details(
     purchase_limit: int = Query(100, ge=1, le=500),
     ambiguity_offset: int = Query(0, ge=0),
     ambiguity_limit: int = Query(100, ge=1, le=500),
+    tax_invoice_offset: int = Query(0, ge=0),
+    tax_invoice_limit: int = Query(100, ge=1, le=500),
 ):
     obj = await service.event(db, ctx, eid, identifier)
     body = dict(obj.body)
@@ -917,6 +919,7 @@ async def event_details(
         ("count_bridges", bridge_offset, bridge_limit),
         ("payroll_posting_links", posting_offset, posting_limit),
         ("transaction_dates", date_offset, date_limit),
+        ("invoice_tax_details", tax_invoice_offset, tax_invoice_limit),
     ]:
         if isinstance(body.get(key), list):
             totals[key] = len(body[key])

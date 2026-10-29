@@ -129,6 +129,24 @@ def test_no_context_exemption_cannot_hide_resolved_facts():
     assert current_contract({"workflow": "some-other-workflow", "table_type": None}, [])
 
 
+def test_annual_tax_context_guard_reads_invoice_details_not_metric_comparison_rows():
+    body = {
+        "workflow": "india-msme-annual-tax",
+        "msme_tax_contract": "india-msme-annual-tax/1",
+        "msme_tax_document_binding": "NO_TAX_FACTS_CLAIMED",
+        "msme_evidence_contract": CONTRACT,
+        "msme_document_binding": UNRESOLVED,
+        "retained_msme_contexts": [],
+        "rows": [{"state": "MATCHED"}],
+        "invoice_tax_details": [{"retained_supplier_assessment": {"eligibility": "ELIGIBLE"}}],
+    }
+    assert not current_contract(body, [])
+    body["invoice_tax_details"][0]["retained_supplier_assessment"]["eligibility"] = "UNRESOLVED"
+    assert current_contract(body, [])
+    body.pop("msme_evidence_contract")
+    assert "retained context" in approval_error(body)
+
+
 @pytest.mark.parametrize(
     "kind,body",
     [
