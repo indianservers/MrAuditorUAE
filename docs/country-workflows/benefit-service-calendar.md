@@ -107,10 +107,16 @@ summary, controls for two employees/five days, eligible-day counts of 725/365 an
 benefits of 4,171.23/1,050.00. The visible preparation form in the reviewed image is
 unfilled and is not evidence of a new expected settlement for these employees.
 The earlier passing `2d108f6` receipt retains its obscured heading and long-decimal
-display as explicit visual shortcomings. Full current hosted backend regression
-remains pending; the complete passing reserve suite on `9ba08d4` predates this
-calendar feature. See the source-specific validation and browser receipts under
-`docs/phase-12/` for hashes and scope limits.
+display as explicit visual shortcomings. All six hosted jobs passed on `2cbb680`.
+Its full backend suite passed 4,135 tests with nine skips in 2,775.88 seconds;
+overall coverage is 86.30% and the existing calculation/validation core is 89.35%.
+[The full backend receipt](../phase-12/2cbb680-hosted-verification.json) binds the
+source, successful jobs and exact original JUnit/coverage files to the verified
+artifact digest. The nine hosted skips comprise four authorized live-provider
+checks, four opt-in isolated connector cases and one Windows-only runtime case.
+Synthetic operational records performed no external requests or filing
+submissions. These results establish application regression coverage, not
+independent clients, qualified legal cohorts or production deployment.
 
 The five cases skipped by the original local full-unit run also passed in
 separate opt-in executions: four connector PostgreSQL/Redis checks in a fresh

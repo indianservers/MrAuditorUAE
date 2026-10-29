@@ -209,7 +209,7 @@
       }
     ],
     "browser_receipt": "docs/phase-12/benefit-service-calendar-browser-2cbb680.json",
-    "conclusion": "Three hosted browser cases passed, original ZIP digest verified and two corrected captures individually inspected. Full current backend pending.",
+    "conclusion": "Three hosted browser cases passed, original ZIP digest verified and two corrected captures individually inspected. All six current hosted jobs passed; exact full backend JUnit/coverage retained separately.",
     "hosted_frontend": {
       "job_id": 123496142943,
       "source_commit": "2cbb680827ea9e28d5ddc07298189afc344cf593",
@@ -220,41 +220,41 @@
     "hosted_checkpoint": {
       "run_id": 40887813173,
       "source_commit": "2cbb680827ea9e28d5ddc07298189afc344cf593",
-      "observed_at_utc": "2026-10-29T14:33:13.275778+00:00",
+      "observed_at_utc": "2026-10-29T15:05:54.236836+00:00",
       "jobs": [
         {
-          "name": "containers",
           "id": 123496142653,
+          "name": "containers",
           "status": "completed",
           "conclusion": "success"
         },
         {
-          "name": "security",
           "id": 123496142801,
+          "name": "security",
           "status": "completed",
           "conclusion": "success"
         },
         {
-          "name": "browser-smoke",
           "id": 123496142868,
+          "name": "browser-smoke",
           "status": "completed",
           "conclusion": "success"
         },
         {
-          "name": "frontend",
           "id": 123496142943,
+          "name": "frontend",
           "status": "completed",
           "conclusion": "success"
         },
         {
-          "name": "verify",
           "id": 123496143019,
-          "status": "in_progress",
-          "conclusion": null
+          "name": "verify",
+          "status": "completed",
+          "conclusion": "success"
         },
         {
-          "name": "ml",
           "id": 123496143088,
+          "name": "ml",
           "status": "completed",
           "conclusion": "success"
         }
@@ -264,8 +264,9 @@
         "job_id": 123496141796,
         "conclusion": "success"
       },
-      "interpretation": "Source-specific observed states; re-query pending jobs before relying on them"
-    }
+      "interpretation": "All six current-source jobs completed successfully; original full-suite evidence archived in the linked receipt"
+    },
+    "hosted_backend_receipt": "docs/phase-12/2cbb680-hosted-verification.json"
   },
   "supplemental_infrastructure": {
     "source_commit": "2cbb680827ea9e28d5ddc07298189afc344cf593",

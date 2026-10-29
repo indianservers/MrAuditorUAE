@@ -1,0 +1,158 @@
+{
+  "contract": "hosted-backend-verification/1",
+  "date": "2026-10-29",
+  "source_commit": "2cbb680827ea9e28d5ddc07298189afc344cf593",
+  "run_id": 40887813173,
+  "job_id": 123496143019,
+  "job_url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40887813173/job/123496143019",
+  "conclusion": "success",
+  "all_six_jobs": "success",
+  "artifact": {
+    "id": 12906632334,
+    "size_bytes": 217405,
+    "sha256": "a75d09c6fff9f447ecfd5009da9399189062436a506dd1c5a234ede0a50b1357",
+    "download_digest_verified": true
+  },
+  "receipts": [
+    {
+      "path": "docs/phase-12/2cbb680-hosted-full.xml",
+      "sha256": "0073600d6be99b8b5095d6227b254041422db699fc50cd01ab01876d16c5e3d7",
+      "size_bytes": 631266
+    },
+    {
+      "path": "docs/phase-12/2cbb680-hosted-coverage.json",
+      "sha256": "20a03ba5e1258d21b3722efc0ed619fc29df7a1d05bd3b43dbd8bb9b6cfd7336",
+      "size_bytes": 1736601
+    }
+  ],
+  "junit": {
+    "tests": 4144,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 9,
+    "passed": 4135
+  },
+  "pytest_seconds": 2775.88,
+  "junit_seconds": 2775.858,
+  "overall_coverage": 86.29883499700279,
+  "core_coverage": {
+    "percent": 89.35,
+    "covered_lines": 831,
+    "total_lines": 930
+  },
+  "skipped_cases": [
+    {
+      "class": "tests.phase2.test_live_connectors",
+      "name": "test_live_zoho_organizations",
+      "reason": "Live Zoho requires explicit opt-in and authorized OAuth credentials"
+    },
+    {
+      "class": "tests.phase2.test_live_connectors",
+      "name": "test_live_zoho_ledger_against_source_controls",
+      "reason": "Full ledger smoke needs authorized read-only access and independent source totals"
+    },
+    {
+      "class": "tests.phase2.test_live_connectors",
+      "name": "test_live_tally_export",
+      "reason": "Live Tally requires an explicitly authorized local installation"
+    },
+    {
+      "class": "tests.phase2.test_live_native",
+      "name": "test_live_direct_api_ledger",
+      "reason": "Requires explicit opt-in, vendor credentials and independently exported control totals"
+    },
+    {
+      "class": "tests.unit.test_connector_operations_db",
+      "name": "test_rls_tenant_isolation_and_immutable_evidence",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "class": "tests.unit.test_connector_operations_db",
+      "name": "test_parallel_grant_refresh_rotates_once_and_keeps_current_client_secret",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "class": "tests.unit.test_connector_operations_db",
+      "name": "test_checkpoint_commits_outside_caller_and_rejects_tampered_bytes",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "class": "tests.unit.test_connector_operations_db",
+      "name": "test_real_redis_org_budget_and_concurrency_are_shared_across_clients",
+      "reason": "Run scripts/connector_operations_run.py for isolated real DB tests"
+    },
+    {
+      "class": "tests.unit.test_document_worker_runtime",
+      "name": "test_job_assignment_failure_never_resumes_document_processing",
+      "reason": "Windows suspended-start and job-assignment control"
+    }
+  ],
+  "operation_scope": [
+    {
+      "artifact_path": ".local-runtime/ci-verification/operations/compliance-runtime-connector.json",
+      "sha256": "3f002e10571080cdc4155dcb5e0403bfb86297b4242bbaedc37aba4127b939e4",
+      "synthetic": true,
+      "external_requests_performed": false
+    },
+    {
+      "artifact_path": ".local-runtime/ci-verification/operations/filing-lifecycle.json",
+      "sha256": "9218e9437d3bda4101db38bffe0820b81a071b380b8a77a01e44c88bf9782ee6",
+      "synthetic": true,
+      "duplicate_reminders_suppressed": true,
+      "external_submission_performed": false
+    },
+    {
+      "artifact_path": ".local-runtime/ci-verification/operations/worker-recovery.json",
+      "sha256": "1f87e67f62c237062a9d3655c9f0257257ad6b8333d3ec8e627fa11fd92318db",
+      "synthetic": true,
+      "failure_injection": "persisted expired worker claim",
+      "pending_outbox_dispatched": 1,
+      "abandoned_job_automatically_reexecuted": false
+    }
+  ],
+  "limits": [
+    "Complete source-specific synthetic/application suite, not independent client or legal/native-format qualification",
+    "Operational artifact records are synthetic, with no external requests or filing submission; worker recovery has an injected expired claim and no automatic abandoned-job rerun",
+    "This source includes merchant reserves and dated benefit service calendars; later application changes require source-specific proof",
+    "Production deployment/rollback, real provider connectivity, actual client pilots and professional approval remain open"
+  ],
+  "jobs": [
+    {
+      "id": 123496142653,
+      "name": "containers",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 123496142801,
+      "name": "security",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 123496142868,
+      "name": "browser-smoke",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 123496142943,
+      "name": "frontend",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 123496143019,
+      "name": "verify",
+      "status": "completed",
+      "conclusion": "success"
+    },
+    {
+      "id": 123496143088,
+      "name": "ml",
+      "status": "completed",
+      "conclusion": "success"
+    }
+  ],
+  "observed_at_utc": "2026-10-29T15:05:54.236836+00:00"
+}

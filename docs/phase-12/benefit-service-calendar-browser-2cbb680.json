@@ -46,6 +46,6 @@
     "New source-control upload widgets have unit/integrated UI tests; source preparation in this hosted flow uses APIs",
     "Synthetic supplied parameters and HR facts only; not independent clients, legal leave classification, pension exclusions or India entitlement",
     "Three browser cases do not establish 154 browser scenarios",
-    "Current full hosted backend regression remains pending; earlier reserve full proof predates calendar changes"
+    "Full hosted backend proof is retained separately in docs/phase-12/2cbb680-hosted-verification.json; browser tests remain three bounded synthetic cases"
   ]
 }

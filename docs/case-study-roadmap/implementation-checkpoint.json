@@ -2,7 +2,7 @@
   "as_of": "29 October 2026",
   "source_revision": "2cbb680827ea9e28d5ddc07298189afc344cf593",
   "release_status": "NOT_QUALIFIED_FOR_PRODUCTION_STATUTORY_USE",
-  "scope": "Operational implementation and bounded synthetic verification through 2cbb680. UAE gratuity verifies declared excluded days against reviewed dated service calendars, with exact scope, independent employee/day controls, explicit zeros, overlap rejection and complete XLSX. Missing or different calendars block benefits; source withdrawal stales dependent expectations/bank comparisons without changing saved rows. No calendar leaves an explicit employee-declaration basis. India and UAE pension treatment are not inferred. Local proof: 3,232 backend units/five skips, four focused API workflows and 316 frontend tests, production build/types/lint, Ruff and mypy. All five locally skipped unit cases also passed in separate isolated connector/Redis and real CPU-worker runs. Five current hosted jobs passed, including all three browser cases in 1.8m; two corrected original calendar captures were inspected. Current full backend is still running. Prior reserve source 9ba08d4 completed all six jobs, including 4,104 backend passes/nine skips, 86.27% overall and 89.35% core coverage with original JUnit/coverage archived. Full legal/native/provider/client and production qualification remain open.",
+  "scope": "Operational implementation and bounded synthetic verification through 2cbb680. UAE gratuity verifies declared excluded days against reviewed dated service calendars, with exact scope, independent employee/day controls, explicit zeros, overlap rejection and complete XLSX. Missing or different calendars block benefits; source withdrawal stales dependent expectations/bank comparisons without changing saved rows. No calendar leaves an explicit employee-declaration basis. India and UAE pension treatment are not inferred. Local proof: 3,232 backend units/five skips, four focused API workflows and 316 frontend tests, production build/types/lint, Ruff and mypy. All five locally skipped unit cases also passed in separate isolated connector/Redis and real CPU-worker runs. All six hosted jobs passed on 2cbb680, including 4,135 backend tests/nine skips with 86.30% overall and 89.35% core coverage, and all three browser cases in 1.8m. Exact full-suite JUnit/coverage and two corrected original calendar captures are archived and inspected. Prior reserve source 9ba08d4 completed all six jobs, including 4,104 backend passes/nine skips, 86.27% overall and 89.35% core coverage with original JUnit/coverage archived. Full legal/native/provider/client and production qualification remain open.",
   "verification": [
     {
       "label": "Backend units",
@@ -23,10 +23,16 @@
       "limit": "Four real connector PostgreSQL/Redis cases use a fresh UUID database/NOBYPASSRLS role and owned UUID Redis keys. A separate built TensorFlow CPU worker test verifies actual training/inference, process reuse, corrupt-weight rejection and shutdown. These exercise all five local unit skips, without rewriting the original full-suite count or establishing live vendor access."
     },
     {
+      "label": "Current complete hosted backend",
+      "result": "4,135 passed; nine skipped; overall coverage 86.30%, core 89.35%",
+      "path": "docs/phase-12/2cbb680-hosted-verification.json",
+      "limit": "All six source-specific jobs passed on 2cbb680. Original full JUnit and coverage are archived after verifying artifact size and SHA-256. Four live vendor checks, four isolated connector cases and one Windows-only case were skipped there; separate local receipts remain distinct. Operational records are synthetic and performed no external requests or filing submissions. This is application evidence, not legal, native-format, independent client or production qualification."
+    },
+    {
       "label": "Prior complete hosted backend",
       "result": "4,104 passed; nine skipped; overall coverage 86.27%, core 89.35%",
       "path": "docs/phase-12/9ba08d4-hosted-verification.json",
-      "limit": "Complete original JUnit/coverage archived with verified artifact digest for reserve source 9ba08d4; all six jobs passed. Four live vendor checks, four isolated connector cases and one Windows-only case were skipped there. Local Windows coverage and separate connector/CPU receipts remain distinct. This source predates the calendar; current full backend remains running. Operations in the artifact are synthetic with no external requests or filing submission."
+      "limit": "Complete original JUnit/coverage archived with verified artifact digest for reserve source 9ba08d4; all six jobs passed. Four live vendor checks, four isolated connector cases and one Windows-only case were skipped there. Local Windows coverage and separate connector/CPU receipts remain distinct. This source predates the calendar; complete current-source proof is retained separately. Operations in the artifact are synthetic with no external requests or filing submission."
     },
     {
       "label": "Frontend",
@@ -51,7 +57,7 @@
     {
       "label": "Current calendar presentation source CI",
       "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40887813173",
-      "status_at_checkpoint": "2cbb680: browser-smoke, frontend, security, ML and containers passed; verify/full backend observed in progress. Three browser cases passed in 1.8m; two corrected exact images inspected. Both frontend jobs passed, with 316 tests/66 files and production build verified in logs. Backend is identical to 2d108f6, whose full run also remains pending."
+      "status_at_checkpoint": "2cbb680: all six jobs passed. Full backend: 4,135 passed/nine skipped, 86.30% overall and 89.35% core coverage; original JUnit and coverage archived with verified artifact digest. Three browser cases passed in 1.8m, two corrected original captures inspected, 316 frontend tests across 66 files and production build verified."
     },
     {
       "label": "Initial dated-service browser proof with visual limits",
@@ -102,7 +108,7 @@
     },
     {
       "priority": "Release",
-      "work": "Qualify actual production deployment/rollback, recovery, monitoring, privacy and professional sign-off. Reserve source 9ba08d4 has all six jobs passed with complete original JUnit/coverage. Current calendar source 2cbb680 has five jobs passed and corrected browser proof; current full backend remains running. Separate isolated connector/CPU tests close local mechanics skips but not live Zoho/Tally/direct-API access or independent client control totals. Synthetic CI does not close production gates.",
+      "work": "Qualify actual production deployment/rollback, recovery, monitoring, privacy and professional sign-off. Reserve source 9ba08d4 has all six jobs passed with complete original JUnit/coverage. Current calendar source 2cbb680 has all six jobs passed, complete archived backend proof and corrected browser proof. Separate isolated connector/CPU tests close local mechanics skips but not live Zoho/Tally/direct-API access or independent client control totals. Synthetic CI does not close production gates.",
       "proof": "Passing source-pinned jobs plus actual provider/runtime drills and named approvals. Local/container checks alone do not prove production readiness."
     }
   ],
@@ -322,7 +328,7 @@
       "shared": "Payroll accrual/posting controls, employee/channel settlement, contributions, assessed expected remittances and split payment allocation with retained rule/source lineage.",
       "UAE": "WPS, pension/cohort and benefit reviews remain separate purpose-bound workflows with independently reviewed published rule profiles and supporting evidence. Reviewed constant-model full-time/part-time gratuity now bridges to independently controlled expected settlements, with typed employment-service scopes and independent HR/bank allocation evidence; rule or supporting-context replacement stales dependent approvals. Optional dated service calendars now verify each employee/service scope against independently controlled inclusive exclusion intervals or an explicit zero record. Missing/day-different rows block the benefit; source withdrawal propagates through current expected and bank settlement descendants. No selected calendar leaves an explicit employee-declaration basis rather than a dated-evidence claim. Compact result tables now show exact eligible-day counts; full service-year precision remains in provenance and XLSX. Current-source UI calculation, independent approval, export and calendar withdrawal passed hosted browser checks with two corrected original images inspected.",
       "India": "PF/EPS/ESI/PT assessed component calculations, ECR/ESIC member/day/wage population checks and payroll-to-GL controls are implemented.",
-      "remaining": "Complete legal cohort/state/schema qualification, representative payroll clients, statutory charges not covered by current formulas and actual filing/payment execution. Dated exclusions do not determine paid/unpaid legal eligibility, pension service treatment, changing work models or alternative-scheme entitlements. Current service-calendar browser proof passed on 2cbb680; full current hosted backend remains pending.",
+      "remaining": "Complete legal cohort/state/schema qualification, representative payroll clients, statutory charges not covered by current formulas and actual filing/payment execution. Dated exclusions do not determine paid/unpaid legal eligibility, pension service treatment, changing work models or alternative-scheme entitlements. All six service-calendar jobs passed on 2cbb680; complete current backend and browser proof are archived.",
       "evidence": [
         "backend/app/modules/country_workflows/payroll_ledger_schemas.py",
         "backend/tests/qa_crud/test_payroll_ledger.py",
