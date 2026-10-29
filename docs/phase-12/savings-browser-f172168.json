@@ -1,0 +1,52 @@
+{
+  "contract": "country-workflow-browser-proof/1",
+  "date": "2026-10-29",
+  "source_commit": "f172168248258b6a06bb3c95b8cfc40c1ce965aa",
+  "run_id": 40913605695,
+  "job_id": 123587834291,
+  "job_url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40913605695/job/123587834291",
+  "conclusion": "success",
+  "browser_cases_passed": 3,
+  "browser_duration_minutes": 2.2,
+  "artifact": {
+    "id": 12915770805,
+    "size_bytes": 4314304,
+    "sha256": "17150d4602d02dfbdf88f2e04acfd49979506cfb295be8f59193690c4f8564ad",
+    "download_digest_verified": true
+  },
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-savings-contributions-reviewed-f172168.png",
+      "size_bytes": 204620,
+      "sha256": "ce19a63312bb43398f46ba7d98960a16c2bfea8477441857fa62c74f4d105421",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-savings-contributions-withdrawn-stale-f172168.png",
+      "size_bytes": 129101,
+      "sha256": "31b41926bc1a20b7383e5a3a6748c9975500285c8882755d84e7b29ea90c6f6a",
+      "visually_inspected": true
+    }
+  ],
+  "verified_behavior": [
+    "All three hosted cases passed, preserving existing UAE/India reports, separate reviewers, bank, MSE, gratuity/calendar, merchant/reserve and India dated PF source preparation checks",
+    "New UAE setup uploads exact original synthetic wages, enrolment/policy/due-date documents and fund observations through APIs with the real scanner, broker and worker; source reviews remain separate",
+    "UI queues savings calculation and independently approves; exact XLSX asserts four rows, typed MOHRE savings scopes and the part-time 0.5 ratio/291.50 result",
+    "The reviewed original image has an unobstructed title, REVIEWED/CURRENT, expected AED 1415.90, original fund and membership identities and four matching contribution rows",
+    "Filled visible independent expectation controls remain separate: fund 1 has three rows/AED 1166.00 and fund 2 has one row/AED 249.90, each with selected retained due-date evidence and an assessed 15 July date",
+    "The browser executes the expectation form and asserts a four-row UNVERIFIED source with no payment dates; the separate original-fund form begins with blank count/amount controls and executes reported-source preparation with its reported-only purpose asserted",
+    "Withdrawing the reviewed original fund source makes the contribution result and both prepared sources STALE; whole saved financial bodies remain equal",
+    "The stale original image retains AED 1415.90 and four unchanged matching rows, disables independent approval and removes the expectation-preparation form"
+  ],
+  "prior_failure_receipt": "docs/phase-12/savings-document-label-correction.json",
+  "local_validation_receipt": "docs/phase-12/savings-validation.json",
+  "frontend_followup_receipt": "docs/phase-12/savings-label-frontend.xml",
+  "limits": [
+    "The reviewed image is captured after independent controls are filled but before clicking preparation; later successful form execution is a test assertion, not a prepared-source screenshot",
+    "Original source setup/reviews use APIs. Separate enrolment-upload widget behavior is covered by frontend tests, not this browser source-preparation path",
+    "Bank settlement for the new savings scopes is verified in actual API/database tests; the new savings browser portion ends after both source preparations and withdrawal staleness",
+    "Synthetic supplied wages, funds, dates, membership and rates are not independent clients or qualified legal cohorts",
+    "Three browser cases are not 154 independently executed browser scenarios",
+    "Full source-specific hosted backend remains running; no whole-release or production qualification is claimed"
+  ]
+}

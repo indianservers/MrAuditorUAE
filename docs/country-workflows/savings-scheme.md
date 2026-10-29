@@ -90,3 +90,32 @@ independent client expectations. Fund-provider layouts, live approval/registry
 verification, pre-enrolment gratuity preservation, voluntary contributions,
 investment/NAV, withdrawal entitlements and actual remittance execution remain
 separate work. DIFC/other schemes are not silently treated as MOHRE savings.
+
+## Retained application verification
+
+The [local receipt](../phase-12/savings-validation.json) retains the original
+3,306-pass/four-skip backend unit run, including 39 savings cases, nine API
+workflows and 338 frontend tests across 68 files. TypeScript, lint, production
+build and current API contracts passed. Four API cases verify scoped dependency
+staleness; five prior payroll/contribution flows remain passing. Scanner and
+dispatch are explicit doubles in those API tests.
+
+The first hosted savings attempt passed calculation, independent approval and
+XLSX but failed locating a document select. The
+[correction receipt](../phase-12/savings-document-label-correction.json) retains
+the original failure image and an offline browser reproduction: adding explicit
+accessible selector names changed an exact label match from zero to one. The
+follow-up passed all 338 frontend tests, types, lint and production build.
+
+All three hosted browser cases then passed on `f172168` in 2.2 minutes, using
+the real scanner, broker and worker. The original artifact digest and both
+captures were verified and visually inspected:
+
+- [Reviewed contributions with filled separate fund controls](screenshots/browser-workflows/AE-savings-contributions-reviewed-f172168.png)
+- [Withdrawn source and stale approval](screenshots/browser-workflows/AE-savings-contributions-withdrawn-stale-f172168.png)
+
+The [browser receipt](../phase-12/savings-browser-f172168.json) distinguishes the
+filled-form image from later executed source preparation, API source setup from
+UI actions, and API bank-allocation proof from browser scope. Full current hosted
+backend verification remains running. None of these receipts establish actual
+client data, live fund verification or professional legal qualification.
