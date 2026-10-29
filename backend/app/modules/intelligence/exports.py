@@ -364,6 +364,12 @@ def render(event, format):
             append(source, keys)
             for row in rows:
                 exported_row = row
+                if body.get("workflow") == "india-establishment-charges":
+                    exported_row = {
+                        **row,
+                        "member_trace": f"{len(row.get('member_trace', []))} records; complete detail in Establishment charge members sheet",
+                        "member_source_ids": f"{len(row.get('member_source_ids', []))} IDs; complete detail in Establishment charge members sheet",
+                    }
                 if body.get("workflow") == "india-payroll-basis-proration":
                     exported_row = {
                         **row,
@@ -400,6 +406,17 @@ def render(event, format):
                 append(segment_sheet, fields)
                 for record in records:
                     append(segment_sheet, [record.get(field) for field in fields])
+            if body.get("workflow") == "india-establishment-charges":
+                members_sheet = workbook.create_sheet("Establishment charge members")
+                records = [
+                    {"result_row_id": result["id"], **member}
+                    for result in body.get("rows", [])
+                    for member in result.get("member_trace", [])
+                ]
+                fields = list(dict.fromkeys(field for record in records for field in record))
+                append(members_sheet, fields)
+                for record in records:
+                    append(members_sheet, [record.get(field) for field in fields])
             if (
                 body.get("workflow") == "uae-benefit-review"
                 and body.get("service_calendar_basis") == "DATED_CONTROLLED_SOURCE"

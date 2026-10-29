@@ -35,9 +35,9 @@ export function ContributionObligationSource({
       <h3>Prepare expected contributions for settlement review</h3>
       <p>
         Supply independent row counts, amounts and evidenced due dates for each
-        registration, wage month and component. Employee rows remain separate.
-        The prepared source needs independent review and can establish only
-        expected remittances; authority returns and bank payments require
+        registration, wage month and component. Each assessed row remains
+        separate. The prepared source needs independent review and can establish
+        only expected remittances; authority returns and bank payments require
         separate evidence.
       </p>
       {pension && (

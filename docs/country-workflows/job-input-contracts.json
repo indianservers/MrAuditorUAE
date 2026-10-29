@@ -253,6 +253,7 @@
               "credit-note-applications",
               "open-item-allocations",
               "india-payroll-rules",
+              "india-establishment-charges",
               "india-payroll-basis-proration",
               "uae-pension-review",
               "uae-savings-review",
@@ -2886,6 +2887,9 @@
               "pension-reported",
               "payroll-bases",
               "savings-bases",
+              "payroll-charge-members",
+              "payroll-charge-controls",
+              "payroll-charge-rules",
               "savings-rules",
               "savings-reported",
               "payroll-basis-segments",
@@ -10361,6 +10365,365 @@
         "applicability_review"
       ],
       "title": "PayrollCapRule",
+      "type": "object"
+    },
+    "payroll-charge-controls": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "registration": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Registration",
+          "type": "string"
+        },
+        "period": {
+          "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+          "title": "Period",
+          "type": "string"
+        },
+        "component": {
+          "enum": [
+            "PF:ADMINISTRATION",
+            "PF:INSPECTION",
+            "PF:EDLI",
+            "PF:EDLI_INSPECTION"
+          ],
+          "title": "Component",
+          "type": "string"
+        },
+        "currency": {
+          "const": "INR",
+          "default": "INR",
+          "title": "Currency",
+          "type": "string"
+        },
+        "rule_group": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Rule Group",
+          "type": "string"
+        },
+        "jurisdiction": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Jurisdiction",
+          "type": "string"
+        },
+        "expected_members": {
+          "maximum": 5000,
+          "minimum": 0,
+          "title": "Expected Members",
+          "type": "integer"
+        },
+        "expected_contributors": {
+          "maximum": 5000,
+          "minimum": 0,
+          "title": "Expected Contributors",
+          "type": "integer"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "description": "Independent sum of assessed member wage bases",
+          "title": "Amount"
+        },
+        "establishment_state": {
+          "enum": [
+            "NON_FUNCTIONAL_NO_CONTRIBUTORS",
+            "OTHER"
+          ],
+          "title": "Establishment State",
+          "type": "string"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "assessment": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Assessment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "registration",
+        "period",
+        "component",
+        "rule_group",
+        "jurisdiction",
+        "expected_members",
+        "expected_contributors",
+        "amount",
+        "establishment_state",
+        "evidence_reference",
+        "assessment"
+      ],
+      "title": "ChargeControl",
+      "type": "object"
+    },
+    "payroll-charge-members": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "registration": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Registration",
+          "type": "string"
+        },
+        "subject": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Subject",
+          "type": "string"
+        },
+        "period": {
+          "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+          "title": "Period",
+          "type": "string"
+        },
+        "component": {
+          "enum": [
+            "PF:ADMINISTRATION",
+            "PF:INSPECTION",
+            "PF:EDLI",
+            "PF:EDLI_INSPECTION"
+          ],
+          "title": "Component",
+          "type": "string"
+        },
+        "currency": {
+          "const": "INR",
+          "default": "INR",
+          "title": "Currency",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Amount"
+        },
+        "contributing": {
+          "title": "Contributing",
+          "type": "boolean"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "registration",
+        "subject",
+        "period",
+        "component",
+        "amount",
+        "contributing",
+        "evidence_reference"
+      ],
+      "title": "ChargeMember",
+      "type": "object"
+    },
+    "payroll-charge-rules": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "component": {
+          "enum": [
+            "PF:ADMINISTRATION",
+            "PF:INSPECTION",
+            "PF:EDLI",
+            "PF:EDLI_INSPECTION"
+          ],
+          "title": "Component",
+          "type": "string"
+        },
+        "rule_group": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Rule Group",
+          "type": "string"
+        },
+        "jurisdiction": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Jurisdiction",
+          "type": "string"
+        },
+        "rate": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Rate"
+        },
+        "salary_cap": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Salary Cap"
+        },
+        "rounding": {
+          "enum": [
+            "nearest-rupee",
+            "next-rupee",
+            "floor-rupee",
+            "paise"
+          ],
+          "title": "Rounding",
+          "type": "string"
+        },
+        "effective_from": {
+          "format": "date",
+          "title": "Effective From",
+          "type": "string"
+        },
+        "effective_to": {
+          "format": "date",
+          "title": "Effective To",
+          "type": "string"
+        },
+        "source_url": {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "title": "Source Url",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "source_evidence_version_id": {
+          "format": "uuid",
+          "title": "Source Evidence Version Id",
+          "type": "string"
+        },
+        "source_version": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Source Version",
+          "type": "string"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "applicability_review": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Applicability Review",
+          "type": "string"
+        },
+        "aggregation": {
+          "enum": [
+            "ROUND_MEMBERS_THEN_SUM",
+            "SUM_BASES_THEN_ROUND"
+          ],
+          "title": "Aggregation",
+          "type": "string"
+        },
+        "minimum_other": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Minimum Other"
+        },
+        "minimum_non_functional": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Minimum Non Functional"
+        }
+      },
+      "required": [
+        "id",
+        "component",
+        "rule_group",
+        "jurisdiction",
+        "rate",
+        "rounding",
+        "effective_from",
+        "effective_to",
+        "source_url",
+        "source_sha256",
+        "source_evidence_version_id",
+        "source_version",
+        "evidence_reference",
+        "applicability_review",
+        "aggregation",
+        "minimum_other",
+        "minimum_non_functional"
+      ],
+      "title": "ChargeRule",
       "type": "object"
     },
     "payroll-ledger-lines": {

@@ -300,6 +300,8 @@ type Result = {
   body: {
     workflow?: string;
     savings_contribution_contract?: string;
+    establishment_charge_contract?: string;
+    establishment_charge_document_binding?: string;
     savings_document_binding?: string;
     monthly_basis_complete?: boolean;
     payroll_proration_contract?: string;
@@ -523,6 +525,8 @@ const moneyTables = [
   "bank-clearances",
   "withholding-records",
   "payroll-bases",
+  "payroll-charge-members",
+  "payroll-charge-controls",
   "savings-bases",
   "savings-reported",
   "payroll-basis-segments",
@@ -1158,7 +1162,21 @@ export function CountryWorkflows({
           "differences",
           "state",
         ].filter((key) => allColumns.includes(key))
-      : savingsColumns;
+      : body?.workflow === "india-establishment-charges" && !showRuleProvenance
+        ? [
+            "registration",
+            "period",
+            "component",
+            "assessed_wage_total",
+            "aggregation",
+            "charge_before_minimum",
+            "applied_establishment_minimum",
+            "expected_amount",
+            "reported_amount",
+            "difference",
+            "state",
+          ].filter((key) => allColumns.includes(key))
+        : savingsColumns;
   const serviceColumns =
     body?.table_type === "benefit-service-exclusions" && !showRuleProvenance
       ? [
@@ -1659,6 +1677,7 @@ export function CountryWorkflows({
                 "grant-budgets",
                 "fx-rates",
                 "payroll-rules",
+                "payroll-charge-rules",
                 "savings-rules",
                 "payroll-cap-rules",
                 "pension-rules",
@@ -1972,6 +1991,7 @@ export function CountryWorkflows({
             "india-gstr1-documents",
             "india-gstr1-summary",
             "india-payroll-basis-proration",
+            "india-establishment-charges",
             "india-payroll-rules",
             "india-gst",
             "india-invoice-register",
@@ -2605,8 +2625,10 @@ export function CountryWorkflows({
                       {Object.keys(config.data?.source_contracts || {})
                         .filter(
                           (type) =>
-                            !type.startsWith("savings-") ||
-                            config.data?.country === "AE",
+                            (!type.startsWith("savings-") ||
+                              config.data?.country === "AE") &&
+                            (!type.startsWith("payroll-charge-") ||
+                              config.data?.country === "IN"),
                         )
                         .map((k) => (
                           <option key={k}>{k}</option>
@@ -2765,6 +2787,17 @@ export function CountryWorkflows({
                       evidence={inputs.data?.evidence || []}
                     />
                   )}
+                  {tableType.startsWith("payroll-charge-") && (
+                    <p className="text-sm text-muted-foreground">
+                      Separate establishment charges from employee
+                      contributions. Supply assessed component wage populations,
+                      independent member/contributor counts and wage totals.
+                      Minima apply once per establishment, month and component.
+                      Rates, exemptions, wage caps and non-functional status
+                      require independent assessment; no statutory defaults are
+                      supplied.
+                    </p>
+                  )}
                   {["payroll-bases", "pension-bases"].includes(tableType) && (
                     <p>
                       Payroll base controls sum assessed bases across component
@@ -2777,6 +2810,7 @@ export function CountryWorkflows({
                     "grant-budgets",
                     "fx-rates",
                     "payroll-rules",
+                    "payroll-charge-rules",
                     "savings-rules",
                     "payroll-cap-rules",
                     "pension-rules",
@@ -4439,6 +4473,7 @@ export function CountryWorkflows({
                             "obligation-bank-allocations",
                             "india-msme-payment-timing",
                             "india-payroll-basis-proration",
+                            "india-establishment-charges",
                             "payroll-ledger-rollforward",
                             "india-esic-population",
                             "india-document-series",
@@ -6089,13 +6124,20 @@ export function CountryWorkflows({
                 onCreated={setSelected}
               />
             )}
-          {["uae-pension-review", "india-payroll-rules"].includes(
-            body.workflow || "",
-          ) &&
+          {[
+            "uae-pension-review",
+            "india-payroll-rules",
+            "india-establishment-charges",
+          ].includes(body.workflow || "") &&
             detail.data.freshness === "CURRENT" &&
             body.review_status === "REVIEWED" &&
             !body.blocked &&
-            body.expected_total_complete === true && (
+            body.expected_total_complete === true &&
+            (body.workflow !== "india-establishment-charges" ||
+              (body.establishment_charge_contract ===
+                "india-establishment-charges/1" &&
+                body.establishment_charge_document_binding ===
+                  "RETAINED_DOCUMENT_BYTES_VERIFIED")) && (
               <ContributionObligationSource
                 key={`${tenant}:${eid}:${selected}`}
                 eid={eid}

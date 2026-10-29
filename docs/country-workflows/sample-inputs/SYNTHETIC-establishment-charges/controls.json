@@ -1,0 +1,78 @@
+{
+  "dataset_kind": "SYNTHETIC_ONLY_NOT_CLIENT_OR_LEGAL_QUALIFICATION",
+  "expected_total": "1750",
+  "authored_expected": [
+    {
+      "registration": "SYN-EST-A",
+      "component": "PF:ADMINISTRATION",
+      "expected_amount": "500"
+    },
+    {
+      "registration": "SYN-EST-A",
+      "component": "PF:EDLI",
+      "expected_amount": "100"
+    },
+    {
+      "registration": "SYN-EST-B",
+      "component": "PF:ADMINISTRATION",
+      "expected_amount": "1000"
+    },
+    {
+      "registration": "SYN-EST-B",
+      "component": "PF:EDLI",
+      "expected_amount": "75"
+    },
+    {
+      "registration": "SYN-EST-C",
+      "component": "PF:ADMINISTRATION",
+      "expected_amount": "75"
+    },
+    {
+      "registration": "SYN-EST-C",
+      "component": "PF:EDLI",
+      "expected_amount": "0"
+    }
+  ],
+  "files": {
+    "members": {
+      "file": "members.csv",
+      "sha256": "43a2653a2a3d6b07132d4361cc9dadc1947e64e5d5bf3dbdc568fcc64f95d751",
+      "table_type": "payroll-charge-members",
+      "expected_rows": 6,
+      "control_totals": {
+        "INR": "440000"
+      }
+    },
+    "controls": {
+      "file": "controls.csv",
+      "sha256": "26e1963232b0dae7e846cdba0b6c3eb5b4f287f9cb8a887197c0f8acbbce4750",
+      "table_type": "payroll-charge-controls",
+      "expected_rows": 6,
+      "control_totals": {
+        "INR": "440000"
+      }
+    },
+    "rules": {
+      "file": "rules.csv",
+      "sha256": "69e0aa8810af5f30882304b72d654eba5ed61e9e4ad8e36db2d9329a34d03da3",
+      "table_type": "payroll-charge-rules",
+      "expected_rows": 2,
+      "control_totals": {}
+    },
+    "reported": {
+      "file": "reported.csv",
+      "sha256": "e82edf61276fc8a061b68985562702cec9838767fe0fe4fd39ada3b51ffd3184",
+      "table_type": "obligations",
+      "expected_rows": 6,
+      "control_totals": {
+        "INR": "1750"
+      }
+    }
+  },
+  "documents": {
+    "policy.txt": {
+      "sha256": "edc1181352be06c1a6fc2b9638c2942eb95da11091eb5301ca7df3988e93d599",
+      "size_bytes": 322
+    }
+  }
+}

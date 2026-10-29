@@ -42,6 +42,9 @@ from app.modules.country_workflows.party_confirmations import (
     PartyConfirmation,
 )
 from app.modules.country_workflows.payroll_basis_proration import ROW_TYPES as PRORATION_ROW_TYPES
+from app.modules.country_workflows.payroll_establishment_charges import (
+    ROW_TYPES as CHARGE_ROW_TYPES,
+)
 from app.modules.country_workflows.payroll_ledger_schemas import PAYROLL_LEDGER_ROW_TYPES
 from app.modules.country_workflows.payroll_schemas import PAYROLL_ROW_TYPES
 from app.modules.country_workflows.pension_schemas import PENSION_ROW_TYPES
@@ -341,6 +344,7 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
     **PAYROLL_ROW_TYPES,
     **SAVINGS_ROW_TYPES,
     **PRORATION_ROW_TYPES,
+    **CHARGE_ROW_TYPES,
     **PAYROLL_LEDGER_ROW_TYPES,
     **PENSION_ROW_TYPES,
     **AUDIT_ROW_TYPES,
@@ -478,6 +482,9 @@ class SourceInput(Strict):
         "pension-reported",
         "payroll-bases",
         "savings-bases",
+        "payroll-charge-members",
+        "payroll-charge-controls",
+        "payroll-charge-rules",
         "savings-rules",
         "savings-reported",
         "payroll-basis-segments",
@@ -998,6 +1005,7 @@ class WorkflowInput(Strict):
         "credit-note-applications",
         "open-item-allocations",
         "india-payroll-rules",
+        "india-establishment-charges",
         "india-payroll-basis-proration",
         "uae-pension-review",
         "uae-savings-review",
@@ -1081,6 +1089,10 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
+        if self.workflow == "india-establishment-charges" and (
+            self.currency != "INR" or self.tolerance != 0 or self.date_tolerance != 0
+        ):
+            raise ValueError("Establishment charges require INR and exact amount/calendar controls")
         if self.workflow == "uae-savings-review" and (
             self.currency != "AED" or self.tolerance != 0 or self.date_tolerance != 0
         ):

@@ -82,6 +82,7 @@ def _parse_csv(content, data, defaults=None):
                 "benefit-service-",
                 "payroll-basis-",
                 "payroll-cap-",
+                "payroll-charge-",
                 "savings-",
             )
         ) and any(
@@ -283,6 +284,8 @@ def _parse_csv(content, data, defaults=None):
         "expense-claims",
         "benefit-employees",
         "payroll-bases",
+        "payroll-charge-members",
+        "payroll-charge-controls",
         "savings-bases",
         "savings-reported",
         "payroll-basis-segments",

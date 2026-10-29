@@ -1,0 +1,7 @@
+id,registration,period,component,currency,rule_group,jurisdiction,expected_members,expected_contributors,amount,establishment_state,evidence_reference,assessment
+SYN-EST-A:PF:ADMINISTRATION:C,SYN-EST-A,2026-06,PF:ADMINISTRATION,INR,synthetic,IN-SYNTHETIC,2,2,20000,OTHER,SYNTHETIC independent HR total,Synthetic reviewed establishment wage population and status
+SYN-EST-A:PF:EDLI:C,SYN-EST-A,2026-06,PF:EDLI,INR,synthetic,IN-SYNTHETIC,2,2,20000,OTHER,SYNTHETIC independent HR total,Synthetic reviewed establishment wage population and status
+SYN-EST-B:PF:ADMINISTRATION:C,SYN-EST-B,2026-06,PF:ADMINISTRATION,INR,synthetic,IN-SYNTHETIC,1,1,200000,OTHER,SYNTHETIC independent HR total,Synthetic reviewed establishment wage population and status
+SYN-EST-B:PF:EDLI:C,SYN-EST-B,2026-06,PF:EDLI,INR,synthetic,IN-SYNTHETIC,1,1,200000,OTHER,SYNTHETIC independent HR total,Synthetic reviewed establishment wage population and status
+SYN-EST-C:PF:ADMINISTRATION:C,SYN-EST-C,2026-06,PF:ADMINISTRATION,INR,synthetic,IN-SYNTHETIC,0,0,0,NON_FUNCTIONAL_NO_CONTRIBUTORS,SYNTHETIC independent HR total,Synthetic reviewed establishment wage population and status
+SYN-EST-C:PF:EDLI:C,SYN-EST-C,2026-06,PF:EDLI,INR,synthetic,IN-SYNTHETIC,0,0,0,NON_FUNCTIONAL_NO_CONTRIBUTORS,SYNTHETIC independent HR total,Synthetic reviewed establishment wage population and status

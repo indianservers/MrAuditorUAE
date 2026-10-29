@@ -1,0 +1,224 @@
+{
+  "recorded_at": "2026-10-29T17:22:56.501660+00:00",
+  "feature": "india-establishment-charges",
+  "contract": "india-establishment-charges/1",
+  "base_commit": "d1cfdfca2b335b3831e79651be3e38f8c94c1f19",
+  "evidence_kind": "LOCAL_EXECUTION_ORIGINAL_JUNIT_AND_SOURCE_BINDING",
+  "receipts": [
+    {
+      "path": "docs/phase-12/establishment-charges-final.xml",
+      "sha256": "2c3059b0ce8b322a96963e10d83096acd8d3703801882b10eb3b1b8733e4c6ac",
+      "size_bytes": 516092,
+      "counts": {
+        "tests": 3344,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 4
+      }
+    },
+    {
+      "path": "docs/phase-12/establishment-charges-frontend.xml",
+      "sha256": "4bf6e2a161d93c2ccce7588c0dcc6a90b8ab1ee5989e1eef1fc846d84cd98ca7",
+      "size_bytes": 82702,
+      "counts": {
+        "tests": 345,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "sources": [
+    {
+      "path": ".gitattributes",
+      "sha256": "24323bc4a5cea0a20166b9e6f6f60779006664875e6b670c8e150991e86948bb",
+      "size_bytes": 1580,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/calculations.py",
+      "sha256": "7cf60d867cbc8e1150f893f6ed15739271c6dbd9d46dd7e39c608c028f523771",
+      "size_bytes": 62357,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/catalogue.py",
+      "sha256": "4d24f8a5f8bb49927bc3de7ad2f2b69869559ef0663d4d2bd2caead42f53d58d",
+      "size_bytes": 11885,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/contribution_source.py",
+      "sha256": "acdb8491c211217fca037aa2fd721ac0cb778fbe69fa40baf853fc5bdb7ed1d8",
+      "size_bytes": 13728,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/payroll_establishment_charges.py",
+      "sha256": "800cab58f833c5cb9a7d56a59b1b63c819fc67f0724f257cf416ed4ff6e3020b",
+      "size_bytes": 14822,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/schemas.py",
+      "sha256": "5c6a8239d3f636726214eb6209c81f6c5a9f8db919adf0aaf134cd2c2d50b8fe",
+      "size_bytes": 63237,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/service.py",
+      "sha256": "19cff06424e1862a75429cbbe38cf141b1b4697778ddb87256df6d23be364450",
+      "size_bytes": 64341,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/sources.py",
+      "sha256": "cd25ff2b9737f936cc40dd5f06d65f561b02924b7b9d57e2fa106705b122d1c3",
+      "size_bytes": 18530,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "sha256": "2ef9ed6f8d54cdf655007716aa806edb1e465ae336fdb0636feddbd0bd8e7226",
+      "size_bytes": 43779,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_payroll_establishment_charges.py",
+      "sha256": "1620ae9b8f996b47a1ebbc691b70c54d2bf2ed575b2a67c349711cb9bb93445c",
+      "size_bytes": 8442,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/tests/unit/test_payroll_establishment_charges.py",
+      "sha256": "b17e4d800fc2e0c44848469f606cf21599ea4cb0cc26f266cc1ab2c8a9717886",
+      "size_bytes": 10991,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/job-input-contracts.json",
+      "sha256": "16b459ad31245df442c6787063cf8267268d0e61817cf5981f7ced328f124cd2",
+      "size_bytes": 335454,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/payroll-rules.md",
+      "sha256": "aa10f2a2825c22097b933e388feb5a60d4e06312ac84a346f2f23ddded2e7013",
+      "size_bytes": 9022,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-establishment-charges/README.txt",
+      "sha256": "9565043694718054ef9fdeedc60d38131e2c191913f231f822a81bb7c4c3b998",
+      "size_bytes": 1332,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-establishment-charges/controls.csv",
+      "sha256": "26e1963232b0dae7e846cdba0b6c3eb5b4f287f9cb8a887197c0f8acbbce4750",
+      "size_bytes": 1346,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-establishment-charges/controls.json",
+      "sha256": "2f89f6f959d03236efd56545805c9a5b9eaed052e93279149549145e52dd49b4",
+      "size_bytes": 2007,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-establishment-charges/members.csv",
+      "sha256": "43a2653a2a3d6b07132d4361cc9dadc1947e64e5d5bf3dbdc568fcc64f95d751",
+      "size_bytes": 703,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-establishment-charges/policy.txt",
+      "sha256": "edc1181352be06c1a6fc2b9638c2942eb95da11091eb5301ca7df3988e93d599",
+      "size_bytes": 322,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-establishment-charges/reported.csv",
+      "sha256": "e82edf61276fc8a061b68985562702cec9838767fe0fe4fd39ada3b51ffd3184",
+      "size_bytes": 498,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-establishment-charges/rules.csv",
+      "sha256": "69e0aa8810af5f30882304b72d654eba5ed61e9e4ad8e36db2d9329a34d03da3",
+      "size_bytes": 801,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/e2e/country-report-release.spec.ts",
+      "sha256": "003ea91e406f59c84aa88ce9c5c8aeeb77e816c6c98b7ba3cf6ff3f6ddc07302",
+      "size_bytes": 33848,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/e2e/establishment-charges-browser-workflow.ts",
+      "sha256": "0f7985a622d628b52a10bfec616cf9810a098c5d8383794ced061f1b7e3af000",
+      "size_bytes": 8122,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/src/features/contribution-obligation-source.tsx",
+      "sha256": "71a3a3a9d7546e4df2a63732ca35d98f36158865abcc8e84bd4fb34ec3902e7f",
+      "size_bytes": 6433,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "fe3f9136a9cf25ebd34a6294f3a901a0712d328c56ed888da3a9b6acea4b3e4e",
+      "size_bytes": 297387,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "c473d7bd29b77db3c170792b259edc041ac6ca927e2f004f217b1fceb83ef683",
+      "size_bytes": 161472,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    }
+  ],
+  "backend_scope": {
+    "passed": 3340,
+    "skipped": 4,
+    "population": "All current backend unit tests plus 2 establishment-charge, 3 India dated-PF-proration, and 4 UAE savings HTTP/database/storage/processor scenarios",
+    "new_charge_unit_cases": 25,
+    "new_charge_api_cases": 2,
+    "boundaries": "Owned disposable PostgreSQL/Redis and object storage; antivirus and dispatch explicitly doubled in API scenarios. Not live filing or client qualification."
+  },
+  "frontend_scope": {
+    "passed": 345,
+    "files": 68,
+    "new_integrated_cases": 7,
+    "production_build": "PASSED",
+    "typecheck": "PASSED",
+    "lint": "PASSED_WITH_ONE_PREEXISTING_UNUSED_VARIABLE_WARNING"
+  },
+  "checks": {
+    "ruff": "PASSED, 743 files formatted",
+    "mypy": "PASSED, 402 app source files",
+    "api_contracts": "CURRENT_RUNTIME_SNAPSHOTS_MATCH",
+    "frontend_api_types": "MATCH_CURRENT_OPENAPI",
+    "git_diff_check": "PASSED"
+  },
+  "synthetic_examples": {
+    "establishments": 3,
+    "result_rows": 6,
+    "expected_total_INR": "1750",
+    "classification": "AUTHORED_SYNTHETIC_EXPECTATIONS_ONLY"
+  },
+  "hosted_browser": {
+    "status": "ADDED_NOT_YET_EXECUTED_ON_THIS_SOURCE",
+    "scope": "UI calculation, independent approval, remittance preparation, source-document replacement and stale UI; real API/scanner/worker setup",
+    "bank_scope": "Bank allocation covered by local HTTP scenarios; not by this new browser helper"
+  },
+  "limitations": [
+    "No statutory rates, minima, exemptions, wage ceilings or due dates installed as qualified defaults",
+    "Retained document-byte binding does not establish legal source applicability or semantic correctness",
+    "Employee PF/EPS, interest, damages, native challan/portal layouts and payment/filing execution remain separate",
+    "No real client pilot or independently approved client expectation supplied",
+    "The previously rejected global roadmap/checkpoint bulk update was not retried; this is source-specific implementation evidence"
+  ]
+}

@@ -10,6 +10,7 @@ from fastapi import HTTPException
 from pydantic import Field, model_validator
 from starlette.concurrency import run_in_threadpool
 
+from app.modules.country_workflows.payroll_establishment_charges import CONTRACT as CHARGE_CONTRACT
 from app.modules.country_workflows.savings_scheme import CONTRACT as SAVINGS_CONTRACT
 from app.modules.country_workflows.savings_scheme import SavingsScope
 from app.modules.country_workflows.schemas import Obligation
@@ -60,12 +61,23 @@ class ContributionSourceInput(Strict):
 
 def source_rows(body, data):
     workflow = body.get("workflow")
-    if workflow not in {"uae-pension-review", "india-payroll-rules", "uae-savings-review"}:
+    if workflow not in {
+        "uae-pension-review",
+        "india-payroll-rules",
+        "uae-savings-review",
+        "india-establishment-charges",
+    }:
         raise ValueError("Select a pension or India payroll contribution review")
     if body.get("blocked") or body.get("expected_total_complete") is not True:
         raise ValueError("Resolve the full contribution calculation before preparing remittances")
     pension = workflow == "uae-pension-review"
     savings = workflow == "uae-savings-review"
+    charges = workflow == "india-establishment-charges"
+    if charges and (
+        body.get("establishment_charge_contract") != CHARGE_CONTRACT
+        or body.get("establishment_charge_document_binding") != "RETAINED_DOCUMENT_BYTES_VERIFIED"
+    ):
+        raise ValueError("Regenerate establishment charges with retained rule evidence")
     if savings and (
         body.get("savings_contribution_contract") != SAVINGS_CONTRACT
         or body.get("savings_document_binding") != "RETAINED_DOCUMENT_BYTES_VERIFIED"
@@ -89,6 +101,8 @@ def source_rows(body, data):
         else (
             {"PENSION:EMPLOYEE", "PENSION:EMPLOYER"}
             if pension
+            else {"PF:ADMINISTRATION", "PF:INSPECTION", "PF:EDLI", "PF:EDLI_INSPECTION"}
+            if charges
             else {
                 "PF:EMPLOYEE",
                 "PF:EPS",
@@ -219,6 +233,7 @@ async def derive(db, ctx, eng, data):
     required_country = {
         "uae-pension-review": "AE",
         "india-payroll-rules": "IN",
+        "india-establishment-charges": "IN",
         "uae-savings-review": "AE",
     }.get(parent.body.get("workflow"))
     if not required_country or binding.country != required_country:

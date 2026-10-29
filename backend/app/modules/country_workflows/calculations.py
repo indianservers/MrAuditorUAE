@@ -1218,6 +1218,12 @@ def calculate(
             result = msme_payment_timing(data, tables)
         elif data.workflow in PENSION_CALCULATORS:
             result = PENSION_CALCULATORS[data.workflow](data, tables)
+        elif data.workflow == "india-establishment-charges":
+            from app.modules.country_workflows.payroll_establishment_charges import (
+                calculate as charges,
+            )
+
+            result = charges(data, tables)
         elif data.workflow == "uae-savings-review":
             from app.modules.country_workflows.savings_scheme import calculate as savings
 

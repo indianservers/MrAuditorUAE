@@ -1,6 +1,7 @@
 import { runMerchantBrowserWorkflow } from "./merchant-browser-workflow";
 import { runPayrollProrationBrowserWorkflow } from "./payroll-proration-browser-workflow";
 import { runSavingsBrowserWorkflow } from "./savings-browser-workflow";
+import { runEstablishmentChargesBrowserWorkflow } from "./establishment-charges-browser-workflow";
 import { runBenefitSettlementBrowserWorkflow } from "./benefit-settlement-browser-workflow";
 import {
   test,
@@ -950,6 +951,14 @@ for (const code of ["AE", "IN"] as const) {
       );
     if (code === "IN")
       await runPayrollProrationBrowserWorkflow(
+        page,
+        reviewer,
+        engagement.id,
+        identities.tenant_id,
+        screenshots,
+      );
+    if (code === "IN")
+      await runEstablishmentChargesBrowserWorkflow(
         page,
         reviewer,
         engagement.id,

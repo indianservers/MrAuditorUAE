@@ -204,6 +204,10 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
     if operation == "workflow-source":
         if data.table_type.startswith("savings-") and package.country != "AE":
             raise HTTPException(422, "MOHRE savings sources require a UAE engagement")
+        if data.table_type.startswith("payroll-charge-") and package.country != "IN":
+            raise HTTPException(
+                422, "Establishment payroll charge sources require an India engagement"
+            )
         if (
             data.table_type in {"payroll-basis-segments", "payroll-cap-rules"}
             and package.country != "IN"
@@ -408,6 +412,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 data.table_type
                 not in {
                     "payroll-rules",
+                    "payroll-charge-rules",
                     "savings-rules",
                     "payroll-cap-rules",
                     "pension-rules",
@@ -623,6 +628,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             )
         if data.table_type in {
             "payroll-rules",
+            "payroll-charge-rules",
             "savings-rules",
             "payroll-cap-rules",
             "pension-rules",
@@ -750,6 +756,26 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
     contributors = {str(ctx.user_id)}
     for role, identifier in data.source_ids.items():
         source = await intelligence.event(db, ctx, eng.id, identifier, True)
+        if data.workflow == "india-establishment-charges":
+            if source.body.get("review_status") != "REVIEWED":
+                raise HTTPException(
+                    409,
+                    "Independently review every member, control, rule and reported charge source",
+                )
+            if role != "rules":
+                from app.modules.country_workflows.payroll_basis_proration import month_span
+
+                if any(
+                    not period.start_date
+                    <= month_span(row["period"])[0]
+                    <= month_span(row["period"])[1]
+                    <= data.as_of
+                    for row in source.body.get("rows", [])
+                ):
+                    raise HTTPException(
+                        422,
+                        "Establishment charge months must lie fully within the engagement period",
+                    )
         if data.workflow == "uae-savings-review":
             if source.body.get("review_status") != "REVIEWED":
                 raise HTTPException(
@@ -1173,6 +1199,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         )
     elif data.workflow in {
         "india-payroll-rules",
+        "india-establishment-charges",
         "india-payroll-basis-proration",
         "uae-benefit-review",
         "uae-pension-review",
@@ -1381,4 +1408,6 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         result["bank_consumption_manifest"] = manifest(data, sources["bank"], result)
     if data.workflow == "uae-savings-review":
         result["savings_document_binding"] = "RETAINED_DOCUMENT_BYTES_VERIFIED"
+    if data.workflow == "india-establishment-charges":
+        result["establishment_charge_document_binding"] = "RETAINED_DOCUMENT_BYTES_VERIFIED"
     return {**result, "contributors": sorted(contributors)}, dependencies

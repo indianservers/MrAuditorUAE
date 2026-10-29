@@ -8,6 +8,27 @@ import {
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { CountryWorkflows } from "@/features/country-workflows";
 
+it.each([["AE",false],["IN",true]])("offers establishment charge sources only for India (%s)",(country,available)=>{
+  state.country=String(country);
+  render(<CountryWorkflows eid="engagement" mode="workflow-source"/>);
+  expect(screen.queryByRole("option",{name:"payroll-charge-members"})!==null).toBe(available);
+});
+
+it.each([
+  ["CURRENT","REVIEWED",false,"RETAINED_DOCUMENT_BYTES_VERIFIED",true],
+  ["STALE","REVIEWED",false,"RETAINED_DOCUMENT_BYTES_VERIFIED",false],
+  ["CURRENT","UNVERIFIED",false,"RETAINED_DOCUMENT_BYTES_VERIFIED",false],
+  ["CURRENT","REVIEWED",true,"RETAINED_DOCUMENT_BYTES_VERIFIED",false],
+  ["CURRENT","REVIEWED",false,"NOT_VERIFIED",false],
+])("gates establishment charge remittances and shows one establishment minimum (%s/%s/%s/%s)",(freshness,review_status,blocked,binding,allowed)=>{
+  state.country="IN";
+  state.result={id:"result",kind:"country-workflow",version:1,freshness,body:{workflow:"india-establishment-charges",title:"Assessed establishment charges",review_status,blocked,establishment_charge_contract:"india-establishment-charges/1",establishment_charge_document_binding:binding,expected_total_complete:true,rows:[{id:"C1",registration:"ESTABLISHMENT-1",period:"2026-06",component:"PF:ADMINISTRATION",assessed_wage_total:"20000",aggregation:"SUM_BASES_THEN_ROUND",charge_before_minimum:"100",applied_establishment_minimum:"500",expected_amount:"500",reported_amount:"500",difference:"0",state:"MATCHED"}]}};
+  render(<CountryWorkflows eid="engagement" mode="country-workflow"/>);
+  fireEvent.change(screen.getByLabelText("Saved source or result"),{target:{value:"result"}});
+  expect(screen.getByRole("columnheader",{name:"applied establishment minimum"})).toBeVisible();
+  expect(screen.queryByRole("region",{name:"Expected contribution remittances"})!==null).toBe(allowed);
+});
+
 it.each([["AE",true],["IN",false]])("offers MOHRE savings source contracts only for UAE (%s)",(country,available)=>{
   state.country=String(country);
   render(<CountryWorkflows eid="engagement" mode="workflow-source"/>);
@@ -435,6 +456,9 @@ vi.mock("@/hooks/use-api", () => ({
               },
             ],
             source_contracts: {
+              "payroll-charge-members": {id:{required:true,type:"str"},amount:{required:true,type:"Decimal"}},
+              "payroll-charge-controls": {id:{required:true,type:"str"},amount:{required:true,type:"Decimal"}},
+              "payroll-charge-rules": {id:{required:true,type:"str"}},
               "savings-bases": {id:{required:true,type:"str"},amount:{required:true,type:"Decimal"}},
               "savings-rules": {id:{required:true,type:"str"}},
               "savings-reported": {id:{required:true,type:"str"},amount:{required:true,type:"Decimal"}},

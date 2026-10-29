@@ -11,6 +11,7 @@ from app.modules.country_workflows.merchant_reserves import ROLES as RESERVE_ROL
 from app.modules.country_workflows.msme_schemas import MSME_WORKFLOWS
 from app.modules.country_workflows.operations_schemas import OPERATION_WORKFLOWS
 from app.modules.country_workflows.payroll_basis_proration import ROLES as PRORATION_ROLES
+from app.modules.country_workflows.payroll_establishment_charges import ROLES as CHARGE_ROLES
 from app.modules.country_workflows.payroll_ledger_schemas import PAYROLL_LEDGER_WORKFLOWS
 from app.modules.country_workflows.payroll_schemas import PAYROLL_WORKFLOWS
 from app.modules.country_workflows.pension_schemas import PENSION_WORKFLOWS
@@ -30,6 +31,11 @@ OPTIONAL_ROLES = {
 }
 
 WORKFLOWS = {
+    "india-establishment-charges": (
+        "India assessed establishment administration / inspection / EDLI charges",
+        ["IN"],
+        CHARGE_ROLES,
+    ),
     "uae-savings-review": (
         "UAE savings-scheme basic contribution and fund statement review",
         ["AE"],
