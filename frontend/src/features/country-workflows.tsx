@@ -939,7 +939,7 @@ export function CountryWorkflows({
                   "id",
                   "work_model",
                   "currency",
-                  "service_years",
+                  "eligible_service_days",
                   "expected_benefit",
                   "paid_benefit",
                   "difference",

@@ -3533,3 +3533,16 @@ it("uploads dated benefit exclusions with independent day/count controls and cle
   expect(screen.getByLabelText("Independent service employee count")).toHaveValue("");
   expect(screen.getByLabelText("Independent excluded service days")).toHaveValue("");
 });
+
+it("shows exact eligible days in compact benefits while preserving full service-year precision in provenance", () => {
+  const exactYears = "1.9863013698630136986301369863013698630136986301369863";
+  state.result = { id: "result", kind: "country-workflow", version: 1, freshness: "CURRENT", body: { workflow: "uae-benefit-review", title: "Synthetic dated service days", review_status: "UNVERIFIED", rows: [{ id: "E1", work_model: "full-time", currency: "AED", eligible_service_days: 725, service_years: exactYears, expected_benefit: "4171.23", paid_benefit: "4171.23", difference: "0", state: "MATCHED" }] } };
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Saved source or result"), { target: { value: "result" } });
+  expect(screen.getByRole("columnheader", { name: "eligible service days" })).toBeVisible();
+  expect(screen.queryByRole("columnheader", { name: "service years" })).not.toBeInTheDocument();
+  expect(screen.getByRole("cell", { name: "725" })).toBeVisible();
+  fireEvent.click(screen.getByLabelText("Show source provenance and all columns"));
+  expect(screen.getByRole("columnheader", { name: "service years" })).toBeVisible();
+  expect(screen.getByRole("cell", { name: exactYears })).toBeVisible();
+});

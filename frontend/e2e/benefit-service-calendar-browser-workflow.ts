@@ -228,7 +228,7 @@ export async function runBenefitServiceCalendarBrowserWorkflow(
     ],
     { input: readFileSync(path!), timeout: 15000 },
   );
-  await reviewer.setViewportSize({ width: 1800, height: 1800 });
+  await reviewer.setViewportSize({ width: 1800, height: 2800 });
   const card = reviewer
     .getByRole("heading", { name: title, exact: true })
     .locator("..");
@@ -250,7 +250,18 @@ export async function runBenefitServiceCalendarBrowserWorkflow(
     ).toBeVisible();
   };
   await showDates();
-  await card.scrollIntoViewIfNeeded();
+  await card.evaluate((element) => element.scrollIntoView({ block: "center" }));
+  await expect(
+    card.getByRole("columnheader", {
+      name: "eligible service days",
+      exact: true,
+    }),
+  ).toBeVisible();
+  expect(
+    (await card
+      .getByRole("heading", { name: title, exact: true })
+      .boundingBox())!.y,
+  ).toBeGreaterThan(100);
   await expect(card.getByText("CURRENT", { exact: true })).toBeVisible();
   const notice = reviewer.getByRole("button", {
     name: "Dismiss notification",
@@ -280,7 +291,12 @@ export async function runBenefitServiceCalendarBrowserWorkflow(
     reviewer.getByRole("button", { name: "Independent approval", exact: true }),
   ).toBeDisabled();
   await showDates();
-  await card.scrollIntoViewIfNeeded();
+  await card.evaluate((element) => element.scrollIntoView({ block: "center" }));
+  expect(
+    (await card
+      .getByRole("heading", { name: title, exact: true })
+      .boundingBox())!.y,
+  ).toBeGreaterThan(100);
   await expect(card.getByText("STALE", { exact: true })).toBeVisible();
   await card.screenshot({
     path: `${screenshots}/AE-benefit-service-calendar-withdrawn-stale.png`,
