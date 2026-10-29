@@ -106,8 +106,12 @@ digest and individually inspected. The stale frame captures an ancillary
 cash-claim panel still loading; it does not visually qualify that panel's final
 status. Source setup/reviews use APIs and all fixtures are synthetic. The earlier
 selector and JSON-order test failures remain retained as negative receipts.
-Frontend302/build/types/lint, security, ML and containers passed on b315b53;
-latest-source full backend verification remains running.
+All six hosted jobs passed on b315b53. [The complete backend receipt](../phase-12/b315b53-hosted-verification.json)
+retains original JUnit and coverage: 4,069 passed, nine skipped, 86.21% overall
+and 89.35% core coverage. Browser, frontend 302/build/types/lint, security, ML
+and container checks passed on the same source. Subsequent commits contain
+documentation only. Native/legal/cohort packs, actual providers, independent
+client validation and production qualification remain separate open work.
 
 Original captures: [preparation](screenshots/browser-workflows/AE-gratuity-settlement-preparation-b315b53.png),
 [reviewed settlement](screenshots/browser-workflows/AE-gratuity-reviewed-bank-settlement-b315b53.png),

@@ -537,7 +537,7 @@ const data = {
     "as_of": "29 October 2026",
     "source_revision": "b315b5340de946270fca88294206ad01efd61eb5",
     "release_status": "NOT_QUALIFIED_FOR_PRODUCTION_STATUTORY_USE",
-    "scope": "Operational implementation and source-specific synthetic verification through b315b53. UAE reviewed gratuity now derives controlled expected bank settlements with employee/service identity, retained employer/due-date support, separate HR/bank evidence, pooled/partial/late controls and recursive staleness. India manual annual-credit statements preserve declared 26AS/168, PAN, underlying periods and AY/TY scope. All three hosted browser cases passed, including the new UAE form, independent review, exact XLSX and context-replacement staleness; three original gratuity images were individually inspected. Frontend 302/build/types/lint, security, ML and containers passed on this source. Retained complete hosted backend proof remains separately pinned to 20ee29a; latest full backend and complete legal/native/provider/client qualification remain open.",
+    "scope": "Operational implementation and source-specific synthetic verification through b315b53. UAE reviewed gratuity now derives controlled expected bank settlements with employee/service identity, retained employer/due-date support, separate HR/bank evidence, pooled/partial/late controls and recursive staleness. India manual annual-credit statements preserve declared 26AS/168, PAN, underlying periods and AY/TY scope. All three hosted browser cases passed, including the new UAE form, independent review, exact XLSX and context-replacement staleness; three original gratuity images were individually inspected. Frontend 302/build/types/lint, security, ML and containers passed on this source. The complete hosted backend suite also passed on this source: 4,069 passed, nine skipped, 86.21% overall and 89.35% core coverage; original JUnit and coverage are retained. Complete legal/native/provider/client and production qualification remain open.",
     "verification": [
       {
         "label": "Backend units",
@@ -553,9 +553,9 @@ const data = {
       },
       {
         "label": "Full hosted backend",
-        "result": "3,972 passed; nine skipped; overall coverage 86.16%, core 89.35%",
-        "path": "docs/phase-12/20ee29a-hosted-verification.json",
-        "limit": "Original JUnit and coverage archived with verified artifact digest for 20ee29a. Complete source-specific proof includes merchant contract 2 and predates linked merchant accounts, annual-statement scopes and the gratuity bridge; not a latest-source full backend result."
+        "result": "4,069 passed; nine skipped; overall coverage 86.21%, core 89.35%",
+        "path": "docs/phase-12/b315b53-hosted-verification.json",
+        "limit": "Complete original JUnit and coverage archived with verified artifact digest on b315b53, including linked merchant accounts, annual-statement scope and the gratuity bridge. Subsequent changes are documentation only. This proves the tested synthetic suite, not complete legal/native packs, live providers, independent clients or production deployment."
       },
       {
         "label": "Frontend",
@@ -572,9 +572,9 @@ const data = {
     ],
     "hosted_runs": [
       {
-        "label": "Retained complete hosted backend proof",
-        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40728696415/job/122958808728",
-        "status_at_checkpoint": "PASSED on 20ee29a: 3,972 passed, nine skipped, 86.16% overall and 89.35% core coverage. All other jobs passed on this source. Exact JUnit and coverage retained; later account/annual-statement/gratuity changes are separate."
+        "label": "Retained complete current application backend proof",
+        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40747196323/job/123024022320",
+        "status_at_checkpoint": "PASSED on b315b53: 4,069 passed, nine skipped, 86.21% overall and 89.35% core coverage. All six jobs passed on this source. Exact JUnit and coverage retained; subsequent commits contain documentation only."
       },
       {
         "label": "Current linked-account merchant browser and CI",
@@ -584,7 +584,7 @@ const data = {
       {
         "label": "Current gratuity bridge browser and CI",
         "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40747196323/job/123024022741",
-        "status_at_checkpoint": "Onb315b53 browser PASSED: all 3 cases in 1.3m; three exact gratuity images individually inspected. Frontend 302/build/types/lint, security, ML and containers PASSED. Full backend verification 123024022320 remains IN_PROGRESS; no completed latest-source full backend result is claimed."
+        "status_at_checkpoint": "All six jobs PASSED on b315b53: full backend 4,069 passed/nine skipped, all three browser cases in 1.3m with three original gratuity images individually inspected, frontend 302/build/types/lint, security, ML and containers. This is bounded synthetic/application proof, not independent client or professional qualification."
       }
     ],
     "open_gates": [
@@ -610,7 +610,7 @@ const data = {
       },
       {
         "priority": "Release",
-        "work": "Complete current full backend CI and qualify actual production deployment/rollback, recovery, monitoring, privacy and professional sign-off. Gratuity source b315b53 has passing local units/API and hosted browser/frontend/security/ML/containers; retained complete full backend proof is earlier 20ee29a. Synthetic mechanics do not close real-client or production gates.",
+        "work": "Qualify actual production deployment/rollback, recovery, monitoring, privacy and professional sign-off. All six hosted jobs passed on b315b53 and complete JUnit/coverage plus browser images are retained. Subsequent changes are documentation only. Synthetic CI mechanics do not close real-client or production gates.",
         "proof": "Passing source-pinned jobs plus actual provider/runtime drills and named approvals. Local/container checks alone do not prove production readiness."
       }
     ],

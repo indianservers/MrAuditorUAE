@@ -1,0 +1,24 @@
+{
+  "source_commit": "b315b5340de946270fca88294206ad01efd61eb5",
+  "run_id": 40747196323,
+  "job_id": 123024022320,
+  "conclusion": "success",
+  "passed": 4069,
+  "skipped": 9,
+  "warnings": 56,
+  "pytest_duration_seconds": 4620.62,
+  "junit_suite_seconds": 4620.601,
+  "overall_coverage_percent": 86.21,
+  "core_coverage_percent": 89.35,
+  "core_covered_lines": 831,
+  "core_total_lines": 930,
+  "artifact_id": 12846154421,
+  "archive_sha256": "466553f1ef1bf7c1c48701a523abfad3455bed37875c648586249be201e9aa40",
+  "original_artifact_locally_archived": true,
+  "retained_originals_sha256": {
+    "docs/phase-12/b315b53-hosted-full.xml": "5bcd4680a891b742022ad2b6813dbdcae042812e97686bb327a89222bc0d130e",
+    "docs/phase-12/b315b53-hosted-coverage.json": "6cbf8614acb95d03ad43d91a2ddf1e9999004dddc24c3519488f6f88cce198eb"
+  },
+  "other_jobs": "Frontend302/build/types/lint, all3 browser cases, security, ML and containers all passed on this source",
+  "limits": "Complete source-specific synthetic hosted proof includes merchant account links, annual-statement scope and the UAE gratuity settlement bridge. Nine skips are retained in original JUnit. It does not establish complete legal/native/cohort packs, actual authorized providers, independent client expected results or production deployment/rollback qualification. Other operation JSONs in this ZIP were not newly inspected or archived here."
+}

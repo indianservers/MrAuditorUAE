@@ -155,7 +155,7 @@
     "focused_tests_passed": 3,
     "typecheck": "passed",
     "scoped_eslint": "passed",
-    "browser": "Pending fresh source-specific hosted execution"
+    "browser": "Explicit accessible naming is covered by the complete passing b315b53 browser run; earlier failed source receipts remain retained."
   },
   "receipt_secret_scan": {
     "version": "8.24.3",
@@ -182,5 +182,16 @@
     "changes": "Align employee checkboxes, compare complete immutable JSON objects independent of key order, dismiss capture notification",
     "browser": "Passed on b315b53: three hosted cases, three original gratuity images individually inspected"
   },
-  "browser_receipt": "docs/phase-12/gratuity-browser-b315b53.json"
+  "browser_receipt": "docs/phase-12/gratuity-browser-b315b53.json",
+  "hosted_full_backend": {
+    "source_commit": "b315b5340de946270fca88294206ad01efd61eb5",
+    "run_id": 40747196323,
+    "job_id": 123024022320,
+    "conclusion": "success",
+    "passed": 4069,
+    "skipped": 9,
+    "overall_coverage_percent": 86.21,
+    "core_coverage_percent": 89.35,
+    "receipt": "docs/phase-12/b315b53-hosted-verification.json"
+  }
 }

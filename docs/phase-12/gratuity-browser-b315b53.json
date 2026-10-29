@@ -34,12 +34,13 @@
     "UI final approval, exact XLSX expected/allocated amounts and service scope",
     "Context replacement: STALE freshness, full cloned-object equality, disabled approval and captured stale state"
   ],
-  "other_jobs": "Frontend 302/build/types/lint, security, ML and containers passed on this source; full backend verification remains in progress",
+  "other_jobs": "All six jobs passed on this source, including full backend 4069/nine skipped, frontend302/build/types/lint, security, ML and containers",
   "limits": [
     "Three synthetic browser cases are not all 154 authored scenarios or independent clients",
     "Parent/source setup and source reviews use APIs; new form creation, final approval, XLSX export and stale-state checks use browser UI",
     "The bank fixture is a canonical declared transaction, not native bank authentication or receipt by an employee",
     "Known clean fixtures do not qualify malware detection/freshness or full WPS/legal/cohort/alternative-scheme packs",
     "Ancillary cash-claim status is loading in the stale image; the core event, table, stale badge and disabled approval are rendered and asserted"
-  ]
+  ],
+  "full_backend_receipt": "docs/phase-12/b315b53-hosted-verification.json"
 }
