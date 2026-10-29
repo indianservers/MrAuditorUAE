@@ -26,3 +26,5 @@ docs/country-workflows/sample-inputs/SYNTHETIC-establishment-charges/*.csv text 
 docs/country-workflows/sample-inputs/SYNTHETIC-establishment-charges/*.txt text eol=lf
 docs/phase-12/15c5d1c-hosted-full.xml -text
 docs/phase-12/15c5d1c-hosted-coverage.json -text
+docs/phase-12/f172168-hosted-full.xml -text
+docs/phase-12/f172168-hosted-coverage.json -text

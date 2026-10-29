@@ -116,6 +116,11 @@ captures were verified and visually inspected:
 
 The [browser receipt](../phase-12/savings-browser-f172168.json) distinguishes the
 filled-form image from later executed source preparation, API source setup from
-UI actions, and API bank-allocation proof from browser scope. Full current hosted
-backend verification remains running. None of these receipts establish actual
-client data, live fund verification or professional legal qualification.
+UI actions, and API bank-allocation proof from browser scope. All six hosted jobs
+on `f172168` have now passed, including the complete backend suite: 4,215 passed,
+nine skipped, 86.39% overall coverage and 89.35% core coverage. Exact original
+JUnit and coverage bytes, skip reasons, artifact digest and synthetic operational
+scope are retained in the [full hosted receipt](../phase-12/f172168-hosted-verification.json).
+This source predates the India establishment-charge addition; its full hosted
+proof remains separate. None of these receipts establish actual client data,
+live fund verification or professional legal qualification.

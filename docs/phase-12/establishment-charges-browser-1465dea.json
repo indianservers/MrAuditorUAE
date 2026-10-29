@@ -1,0 +1,54 @@
+{
+  "observed_at": "2026-10-29T17:45:51.311560+00:00",
+  "source_commit": "1465dea0392fd7a781d1ec901f72f210a11a295e",
+  "run_id": 40923514768,
+  "browser_job_id": 123622790658,
+  "browser_result": "SUCCESS: all three cases passed in 2.3 minutes",
+  "artifact": {
+    "id": 12918428935,
+    "size_bytes": 5014211,
+    "sha256": "8e534d820c61dd8479534ba81559565ab320017994e5a9c06c427b4ddd18b7a0"
+  },
+  "images": [
+    {
+      "archive_entry": "country-reports/IN-establishment-charges-reviewed.png",
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-establishment-charges-reviewed-1465dea.png",
+      "sha256": "b02de5be2104cb549db38a4040f6b70fa6e30b802e1b579794ae04aecc607a81",
+      "size_bytes": 464870
+    },
+    {
+      "archive_entry": "country-reports/IN-establishment-charges-withdrawn-stale.png",
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-establishment-charges-withdrawn-stale-1465dea.png",
+      "sha256": "7cf5926f3013ddbfcdc42334a5f61d1918536b7ad708299c5024ca6d9986d4db",
+      "size_bytes": 380751
+    }
+  ],
+  "individually_inspected": true,
+  "viewport": {
+    "width": 2200,
+    "height": 3400
+  },
+  "visual_scope": {
+    "reviewed": "Unobstructed title; REVIEWED/CURRENT badges and zero exceptions; filled controls for six establishment/month/components; retained due-date version and explicit synthetic July 15 dates; complete six-row financial schedule, including both nil-population rows and all financial columns.",
+    "stale": "Unobstructed title and STALE badge; remittance form removed; independent approval visibly disabled; complete unchanged six-row schedule, including both nil-population rows.",
+    "amounts": "SYN-EST-A administration 500 and EDLI 100; SYN-EST-B administration 1000 and EDLI 75; SYN-EST-C administration 75 and EDLI 0. Total INR 1750.",
+    "timing": "Reviewed image is captured before clicking Prepare; the later successful POST and six expected-only prepared rows are covered by executed assertions, not by a screenshot of the derived source."
+  },
+  "executed_assertions": [
+    "UI calculation: six matched rows and total INR 1750",
+    "Independent UI approval returns 201",
+    "Six independent remittance groups are filled and submitted through UI; endpoint returns 201 and preserves six rows restricted to expected obligations",
+    "Original retained policy document replacement returns 201",
+    "Parent calculation and prepared expected remittance both become STALE; complete saved financial bodies remain equal",
+    "Stale UI removes preparation and disables approval",
+    "Title and final SYN-EST-C EDLI row are in viewport at both screenshot captures"
+  ],
+  "limits": [
+    "Original source setup and source reviews use real APIs/scanner/broker/worker; upload widgets are not all exercised by this new helper",
+    "Bank allocation is verified by local HTTP/database cases, not by this browser helper",
+    "No client evidence, approved operative statutory profile, filing or payment execution is established",
+    "Full hosted backend suite still running at this observation; browser success is not all-six-jobs success"
+  ],
+  "prior_visual_limits_receipt": "docs/phase-12/establishment-charges-browser-3155b88.json",
+  "local_validation_receipt": "docs/phase-12/establishment-charges-validation.json"
+}
