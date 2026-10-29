@@ -1,0 +1,227 @@
+{
+  "contract": "dated-payroll-basis-validation/1",
+  "date": "2026-10-29",
+  "source_commit": "15c5d1cadc48189e850169030b16cc0b30328f81",
+  "observed_at_utc": "2026-10-29T15:36:11.050183+00:00",
+  "receipts": [
+    {
+      "path": "docs/phase-12/payroll-proration-backend.xml",
+      "sha256": "3df1a75dcf7d84711b8ed58915f9340aa490018d461b7b2eb5178a946de94106",
+      "size_bytes": 504945,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4,
+      "tests": 3270,
+      "passed": 3266
+    },
+    {
+      "path": "docs/phase-12/payroll-proration-focused.xml",
+      "sha256": "66ae68a56ffe23883d9e96c772d46cc8c2baa3142485ca3f47280f116508f0df",
+      "size_bytes": 5151,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "tests": 34,
+      "passed": 34
+    },
+    {
+      "path": "docs/phase-12/payroll-proration-api.xml",
+      "sha256": "0175ad6f9636256e4078ab84ed44580c33b71c8ff77458f064cedcda58812399",
+      "size_bytes": 778,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "tests": 3,
+      "passed": 3
+    },
+    {
+      "path": "docs/phase-12/payroll-proration-legacy-api.xml",
+      "sha256": "eab744fceb9bbbd18706471faf88acc8435f07bdafde46a2f52585ed13c7d2ba",
+      "size_bytes": 1057,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "tests": 5,
+      "passed": 5
+    },
+    {
+      "path": "docs/phase-12/payroll-proration-frontend.xml",
+      "sha256": "9299aaf7ecf78ba1b98bb0d4b0cd6cdaeaec8e40febf29114ba70830484256d5",
+      "size_bytes": 78336,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "tests": 325,
+      "passed": 325
+    }
+  ],
+  "source_files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "427378548aff2a795efc702bf9d1ba7a021ddd7321dd46dd3a4f139ca1710921"
+    },
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "sha256": "24d60926a185872ff69204236a16f0a5949d4f5828502bac02321f9d9880bc1e"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/calculations.py",
+      "sha256": "31243e7f88df7feb24901ad42c80ad98805a3d9af2e11b4385febc23e02e6f96"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/catalogue.py",
+      "sha256": "5247a0e9df3bca4ddc19e1a193bcc93ca64da7336ab38e0a980bc3e6bbe23add"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/payroll_basis_proration.py",
+      "sha256": "fe4883e81c597487ac866fd0322319567232434ca82e95cb4d4507d6111c1032"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/payroll_calculations.py",
+      "sha256": "88051008660fbca0bfd774437a00f0fa04d0df563e78729a74935c96d06cc98c"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/payroll_proration_source.py",
+      "sha256": "e58937372db1043ea629046aa55ffeee21a69e57580308cf4d383bd2a06ef27b"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/payroll_source.py",
+      "sha256": "78768190130baae92ecbb5c36ec5c1dd856594e9fa0eeb32e58e427b56438caa"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/review.py",
+      "sha256": "d4ead5cdde3b9f43152c1e1f0dd407c472ed6d6576dd022e5c7ce05aba6e9752"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/schemas.py",
+      "sha256": "f9f2a1d3aa1cacb048e292b92ccbaf131ffb3a27a3234729a021d451736bd45b"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/service.py",
+      "sha256": "ed3363095f03432d49128f79ff4abbd63f069bafbbacdd7ca94a799ac2d6acc9"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/sources.py",
+      "sha256": "eba67e6adb02246128da63c6d31ca3f14d238d76a1e4365b146094871725a4d6"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "sha256": "88a54cb1c900123890bda8e28e9f00d7d4841b716cb828d824e30be390ddeaa9"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_payroll_basis_proration.py",
+      "sha256": "171a940674a647b5fc9e1e328b4ecad62c6e8a7120fa5f48b5da0458948926ab"
+    },
+    {
+      "path": "backend/tests/unit/test_payroll_basis_proration.py",
+      "sha256": "2a99d272e17563627bf70a5b7075c3547d7c3297d000bf7f26a09a9e2fb0473a"
+    },
+    {
+      "path": "docs/country-workflows/README.md",
+      "sha256": "15457dfc121cdf5dfdb5977576d18b907a0aafe73e6d5e68ab905d61d26a3a66"
+    },
+    {
+      "path": "docs/country-workflows/job-input-contracts.json",
+      "sha256": "64930b7974dec0beb76a411be7bf3598afa2d9492214a7cd050a41cd2157d860"
+    },
+    {
+      "path": "docs/country-workflows/payroll-basis-proration.md",
+      "sha256": "2fa479aa505832ea4ea325ca2e71f01b3d344ae40594fcabad87b03afc758c53"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-payroll-proration/README.md",
+      "sha256": "3c6625e7eefeebb27ef08874bf5fbcb7efd68226312abd090b163d44e516a451"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-payroll-proration/controls.csv",
+      "sha256": "6dd782478644a45d086aa566c7390b84c118989514631828d5c915c31cee6ca4"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-payroll-proration/controls.json",
+      "sha256": "0a2fa584ccbba565116215daacaec88ae25577d06d750d9f78e0e45d4cf7a7eb"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-payroll-proration/rules.csv",
+      "sha256": "76d803e8b8ed8b172e4ab9bfbbc29cda6bbd4e7cf8e90a407e2d5f706e054db2"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-payroll-proration/segments.csv",
+      "sha256": "a30db0d2db119ac7f08667d054dc2acfda3cfc359e6607a20245f2761ed42a4b"
+    },
+    {
+      "path": "docs/phase-12/openapi.json",
+      "sha256": "bfb1b48fa9e33b7924aa0658b9a9676635913fa127894fdee016b67b41a15b9a"
+    },
+    {
+      "path": "frontend/e2e/country-report-release.spec.ts",
+      "sha256": "369de9d2af6b79f0bc0182e6453bcd4a801798b6b2bc321b38380657232a26ad"
+    },
+    {
+      "path": "frontend/e2e/payroll-proration-browser-workflow.ts",
+      "sha256": "89ba8edfdc361e44de5cbead9e72f625edcd3f70ab99784778a06a7f264dd326"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "69bdad4f7c7b867bd3f9909a7580493c990203d96c7f1466673bee5d6960b13d"
+    },
+    {
+      "path": "frontend/src/features/payroll-basis-proration.tsx",
+      "sha256": "a4c678418cc8021260030a5487c5929e9b2f47cd2ac6c017f798b958e4bd7d52"
+    },
+    {
+      "path": "frontend/src/types/api.generated.ts",
+      "sha256": "f347c06ba7fee976feddce89bd68c05e3e1e16fac71aa173afab6700c9979a60"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "bbb763d1d5d3df6fe82a197ae484cb7eab96f7aad312d109c20db778fe50e4e2"
+    },
+    {
+      "path": "frontend/tests/payroll-basis-proration.test.tsx",
+      "sha256": "c018b4efc1a35d31cac06486b4f00226d85f74a330e56c11a639da9d7edce2af"
+    }
+  ],
+  "frontend_checks": {
+    "tests_passed": 325,
+    "test_files": 67,
+    "typecheck": "passed",
+    "lint": "passed with one pre-existing unused-variable warning",
+    "production_build": "passed",
+    "final_type_fix_regression": "Five integrated workflow gate cases passed separately after replacing a runtime-ignored testing query option with a typed exact regex"
+  },
+  "backend_checks": {
+    "ruff_check": "passed",
+    "ruff_format_files": 736,
+    "mypy_app_files": 399,
+    "api_contract_snapshots": "current",
+    "generated_api_types": "current"
+  },
+  "verification_scope": [
+    "Full local unit receipt has 3266 passes and four isolated connector opt-in skips, including 33 new dated-basis tests; final application code is unchanged. One later added saved-byte fixture regression passed in the separate final 34-test focused receipt. Preserve these original counts rather than combining test populations.",
+    "Three new API workflows exercise actual HTTP/database/storage/job processing with explicit scanner and dispatch doubles. All three assessed synthetic cohorts flow through wages, contribution rates, remittance expectations and bank allocations.",
+    "Original segment review withdrawal, wage-file replacement and policy-document replacement each stale all five dependent results/sources without changing whole saved bodies.",
+    "Five existing payroll/contribution API regressions passed separately, including UAE pension remittance reuse.",
+    "325 frontend tests across 67 files passed, including five current/reviewed/blocked/stale/old-contract UI gates and four monthly-source/segment-preview tests.",
+    "Production build and final TypeScript check passed. Initial full frontend run exposed an editing-induced Unicode regression, repaired before the passing full run; a later test-only query typing issue was corrected and five affected cases rerun.",
+    "New hosted India browser calculation/final approval/XLSX/monthly-source preparation/staleness test is added; execution and screenshots require observed source-specific evidence."
+  ],
+  "limits": [
+    "Synthetic supplied wages, membership, ceiling options and rates do not qualify real client/legal cohorts",
+    "ESI/PT, EDLI/establishment administration minima, intra-month rate changes, interest, damages and native ECR filing remain separate",
+    "Live providers, independent clients, legal version qualification and production deployment/rollback remain open"
+  ],
+  "hosted_runs": [
+    {
+      "run_id": 40902878885,
+      "name": "backend",
+      "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40902878885",
+      "status": "observed in progress; re-query before relying on completion"
+    },
+    {
+      "run_id": 40902878951,
+      "name": "Frontend checks",
+      "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40902878951",
+      "status": "observed in progress; re-query before relying on completion"
+    }
+  ]
+}

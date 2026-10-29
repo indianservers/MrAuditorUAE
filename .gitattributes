@@ -15,3 +15,6 @@ docs/country-workflows/sample-inputs/SYNTHETIC-merchant-settlements/*.csv text e
 docs/country-workflows/sample-inputs/SYNTHETIC-merchant-reserves/*.csv text eol=lf
 docs/country-workflows/sample-inputs/SYNTHETIC-benefit-service-calendar/*.csv text eol=lf
 docs/country-workflows/sample-inputs/SYNTHETIC-payroll-proration/*.csv text eol=lf
+
+# Preserve the original hashed JUnit receipt bytes across Windows checkouts.
+docs/phase-12/payroll-proration-*.xml -text
