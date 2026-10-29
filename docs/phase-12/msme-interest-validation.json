@@ -1,0 +1,287 @@
+{
+  "recorded_at": "2026-10-29T19:45:52.775567+00:00",
+  "feature": "India assessed monthly compound MSE interest with separate original principal and bank controls",
+  "base_commit": "f0fab8bda12c6d62dd065c53921657d95a147c73",
+  "contracts": [
+    "assessed-event-interest/1",
+    "india-msme-assessed-interest/1"
+  ],
+  "receipts": [
+    {
+      "path": "docs/phase-12/msme-interest-final.xml",
+      "sha256": "25f030af2f13d0f86c595bf64dba4530a293c4b42d98ecfda441194d98223fa7",
+      "size_bytes": 526504,
+      "counts": {
+        "tests": 3415,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 4
+      }
+    },
+    {
+      "path": "docs/phase-12/msme-interest-frontend.xml",
+      "sha256": "88f7ceec7b9eb56c96eed24378be193a3f9af0046f3954b6aa70d8149d153b7e",
+      "size_bytes": 84489,
+      "counts": {
+        "tests": 353,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "sources": [
+    {
+      "path": ".gitattributes",
+      "sha256": "5ca3967f61dd085a21b469ca4756a69d0759a9ed7df34f82827eb787ac80b7e1",
+      "size_bytes": 2019,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/bank_binding.py",
+      "sha256": "e7bb7bf5c7194133a8073c5fe1e33c8be594f5e9fa8a02075568928b4051af7f",
+      "size_bytes": 6157,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/calculations.py",
+      "sha256": "121003a95b3d0126db9b67a23b153b9c1a246823697b015a92c8f6078e775f3f",
+      "size_bytes": 62668,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/catalogue.py",
+      "sha256": "35c01dc61a4dd4486e71ee0199d38c99253c1d822cd97880439531c8958e7dba",
+      "size_bytes": 12149,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/interest_accrual.py",
+      "sha256": "50d52fd51fccbb507516f37d318dfc11beb121c349c86142c83aa13e25e1a5d7",
+      "size_bytes": 12292,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/msme_evidence.py",
+      "sha256": "8bd2f1ec4e78e3b99069644eca6d8ef664027d5cdf4e6f5962b9a9221a365ad4",
+      "size_bytes": 4599,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/msme_interest.py",
+      "sha256": "ac52d9b13d9a473ab13da4a422c29ef767e57a1b763c320c5aa8a09d2e48dcf5",
+      "size_bytes": 18368,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/msme_interest_schemas.py",
+      "sha256": "0291e67dee60fe75d755ddb851cffd629ac7f7a0c797baea5b201dd400da3f9e",
+      "size_bytes": 6791,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/review.py",
+      "sha256": "274da9aabc5be1927062d541bb886dbc5bf43298b3f42902d27500d79f09347f",
+      "size_bytes": 6093,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/schemas.py",
+      "sha256": "44dfa35265cb955cd54f2a7a4b5e950e072df219d40a1233e175653b0edaefb9",
+      "size_bytes": 64082,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/service.py",
+      "sha256": "769ed3627bd96d197e412f2ca23af0cc405bf393b96b3df058b965eb7043a9c0",
+      "size_bytes": 66569,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/sources.py",
+      "sha256": "4300f709c58311a799b5c6f30b6fbeefd4125fa38387bd7be69c109a212d29a9",
+      "size_bytes": 18669,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "sha256": "0f4b0af95fd363d2c80d616eb930bc309f7275c1a9a12985cf459a3a16cffe93",
+      "size_bytes": 47402,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/intelligence/service.py",
+      "sha256": "35fb1f1bbb0ddb40fd2dfe26b17391d355b4a8a16ca9778e0e4104082d2d8caa",
+      "size_bytes": 49706,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_msme_interest.py",
+      "sha256": "d5088267d700f0bb5d6097ea3d0e2e6b79da3aafbf87c53e9ba93aea3642186f",
+      "size_bytes": 8816,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/tests/unit/test_interest_accrual.py",
+      "sha256": "c53a78a377b0672109b2c283dd6e816cae74294da041a2b7f82b33c28035fffa",
+      "size_bytes": 10095,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/tests/unit/test_msme_interest.py",
+      "sha256": "f2d43b411764a99260d8a332dada31317c88e4fcd1f6384ee3a3ca9768e088ce",
+      "size_bytes": 19288,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/job-input-contracts.json",
+      "sha256": "ee8633cc51a4db3bce24830072b61abf78baad8b7fd3da98548899633b297725",
+      "size_bytes": 352332,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-interest/README.txt",
+      "sha256": "becbbf9b4900a5567ff5fbff997303daaf25703db7814e2f8ede04f85bfe7f50",
+      "size_bytes": 941,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-interest/allocations.csv",
+      "sha256": "dbe8dee335378815076ccbea957b89250a46c1a617d4bbc03068ab280d0e26a6",
+      "size_bytes": 169,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-interest/assessments.csv",
+      "sha256": "91acc8dff8e52750e975fa99f4f596cfb07f7c978a3379c2efa03056a0b3d340",
+      "size_bytes": 290,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-interest/bank-rates.csv",
+      "sha256": "6197cb24f7f7476bdc84d91a6a4782b23f57819468022e7a9a542766cb4331ab",
+      "size_bytes": 374,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-interest/bank.csv",
+      "sha256": "aad6946251f476c509c4a01d882dfa6225c88ee427ed5e275f5ef767766256f2",
+      "size_bytes": 135,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-interest/controls.json",
+      "sha256": "03226913425e8bf5adce72d4b0fa721ec822bf2325deee981d8a5d9b22a0f507",
+      "size_bytes": 3035,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-interest/facts.txt",
+      "sha256": "3bb371824800f571b1f15dc68607d26452d193c9e78149123401409996e3f9d4",
+      "size_bytes": 215,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-interest/interest-allocations.csv",
+      "sha256": "df15d878975cba6940d9e2b3e29db3928e3bcfb3d1e0f6e25fce14a556355af6",
+      "size_bytes": 279,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-interest/interest-policies.csv",
+      "sha256": "348bba5f2940d5f4dfc8741a15e48905046485d66efe4449fe1ed31d32e80c51",
+      "size_bytes": 823,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-interest/invoices.csv",
+      "sha256": "e7c8795a9a326b0c0859fe9880fe915693dea8b83de4cf93409f4228a323d5c0",
+      "size_bytes": 443,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-interest/policy.txt",
+      "sha256": "aecb42fc0ca0b9dda3b140fbdff17bc8812fd9e16bc4370757b3af3ee0733cd2",
+      "size_bytes": 248,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-interest/principal-changes.csv",
+      "sha256": "7dabc931fc62a3be921692b2ec21658acf537e92bb2afeb6429e547184be80af",
+      "size_bytes": 383,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-interest/rate.txt",
+      "sha256": "44b25e54760c3cbeee00ba635be5b9e86a96a3961a498b2f0b400c7e1be2aaf9",
+      "size_bytes": 198,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-msme-interest/reported.csv",
+      "sha256": "f8e671ac2a6cc0cabac809c96732d253d22140418edeb3629fd7c4797b9fea45",
+      "size_bytes": 194,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/e2e/country-report-release.spec.ts",
+      "sha256": "d009a43fbfdf9ff71d2922a2c882594ccae41a98153a24417027f275501e1aa4",
+      "size_bytes": 34113,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/e2e/msme-interest-browser-workflow.ts",
+      "sha256": "7b3288f9070d190034897e27a6d0fb2fe08554ae9c3711ad6855723c2bd7fbda",
+      "size_bytes": 8988,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "b79b46e2fcd5cf87f419201b8ba7f2dae761648d1722eb997a12a7e3a4377c34",
+      "size_bytes": 304030,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/src/features/msme-interest.tsx",
+      "sha256": "082449d774b7f1491f661b6450496440e4d136bc70c05bb1ff32e08dd8246510",
+      "size_bytes": 5988,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/tests/msme-interest.test.tsx",
+      "sha256": "9a8eabc0393c34b659fc64a76d5014a077908f22e672f2dd2344c34f590dd4d5",
+      "size_bytes": 2970,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/tests/msme-payment-workflow.test.tsx",
+      "sha256": "331c2089c37f34778350f1cd875fc1378f28471c1644f13e805b24c5f924c56f",
+      "size_bytes": 11569,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    }
+  ],
+  "checks": {
+    "backend_units": "3403 passed, 4 skipped",
+    "selected_mse_http": "8 passed: four original timing/source and four interest",
+    "frontend": "353 passed in 69 files",
+    "mypy": "405 application source files passed",
+    "ruff": "All checks passed; 749 files already formatted",
+    "next_build": "passed",
+    "typecheck": "passed",
+    "eslint": "passed with pre-existing unused-variable warning in uae-business-cases.tsx:143",
+    "api_contracts": "current runtime payload snapshots match",
+    "api_generated_types": "check passed",
+    "git_diff_check": "passed"
+  },
+  "boundaries": [
+    "Synthetic authored cases and expected results; no real client or approved legal cohort",
+    "HTTP uses real API, DB, private storage and processor; scanner and dispatch are explicit doubles",
+    "Nine source roles, exact money/date controls and all-source independent review; original MSE payment-timing workflow remains separate",
+    "Policy, dated RBI_BANK_RATE and non-cash supporting document bytes retained and rechecked, with author conflict and recursive staleness guards",
+    "No actual RBI rate defaults or legal convention defaults installed; saved 1% rate is purely illustrative",
+    "Original gross-principal cash plus interest cannot exceed the bank outflow within this calculation; no global reservations",
+    "Prior complete hosted source f0fab8b is archived separately and predates this implementation",
+    "New browser definition and original screenshot inspection remain pending hosted execution",
+    "Real pilots, current professional statutory qualification, tax deductions, Section 22 disclosures, external providers, filings and production release remain open"
+  ]
+}

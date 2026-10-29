@@ -1125,7 +1125,7 @@ def calculate(
         raise ValueError(
             "A sales invoice cannot establish purchase books against an inward GSTR-2B source"
         )
-    if data.workflow == "india-msme-payment-timing" and (
+    if data.workflow in {"india-msme-payment-timing", "india-msme-interest"} and (
         sources["bank"].get("source_snapshot_id")
         or sources["bank"].get("parser_version") == "committed-ledger-1"
     ):
@@ -1205,7 +1205,7 @@ def calculate(
             result = withholding(data, tables)
         elif data.workflow in OPERATION_CALCULATORS:
             result = OPERATION_CALCULATORS[data.workflow](data, tables)
-        elif data.workflow == "india-msme-payment-timing":
+        elif data.workflow in {"india-msme-payment-timing", "india-msme-interest"}:
             from app.modules.country_workflows.msme_payments import calculate as msme_payment_timing
 
             if (
@@ -1215,7 +1215,12 @@ def calculate(
                 raise ValueError(
                     "Native bank outflows use debit-negative amounts; credits cannot settle MSE invoices"
                 )
-            result = msme_payment_timing(data, tables)
+            if data.workflow == "india-msme-interest":
+                from app.modules.country_workflows.msme_interest import calculate as msme_interest
+
+                result = msme_interest(data, tables)
+            else:
+                result = msme_payment_timing(data, tables)
         elif data.workflow in PENSION_CALCULATORS:
             result = PENSION_CALCULATORS[data.workflow](data, tables)
         elif data.workflow == "india-establishment-charges":
@@ -1340,6 +1345,7 @@ def calculate(
         "bank-subsequent-clearance",
         "obligation-bank-allocations",
         "india-msme-payment-timing",
+        "india-msme-interest",
     }:
         result["bank_account_evidence"] = account_scope or {
             "status": "LINK_REQUESTED_NOT_VERIFIED"

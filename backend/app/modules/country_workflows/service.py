@@ -202,6 +202,10 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "parser_version": "committed-ledger-1",
         }, [*dependencies, receipt]
     if operation == "workflow-source":
+        from app.modules.country_workflows.msme_interest_schemas import ROW_TYPES as interest_types
+
+        if data.table_type in interest_types and package.country != "IN":
+            raise HTTPException(422, "MSE interest source populations require an India engagement")
         if data.table_type.startswith("savings-") and package.country != "AE":
             raise HTTPException(422, "MOHRE savings sources require a UAE engagement")
         if data.table_type.startswith("payroll-charge-") and package.country != "IN":
@@ -412,6 +416,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 data.table_type
                 not in {
                     "payroll-rules",
+                    "msme-interest-policies",
+                    "msme-bank-rates",
                     "payroll-charge-rules",
                     "savings-rules",
                     "payroll-cap-rules",
@@ -628,6 +634,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             )
         if data.table_type in {
             "payroll-rules",
+            "msme-interest-policies",
+            "msme-bank-rates",
             "payroll-charge-rules",
             "savings-rules",
             "payroll-cap-rules",
@@ -664,6 +672,28 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                     db, ctx, eng, result["rows"], contributors=supporting_contributors
                 )
             )
+        if data.table_type in interest_types:
+            copies = (
+                result["rows"]
+                if data.table_type in {"msme-interest-policies", "msme-bank-rates"}
+                else [
+                    row
+                    for row in result["rows"]
+                    if data.table_type == "msme-principal-changes"
+                    and row["mode"] == "DOCUMENTED_PRINCIPAL_REDUCTION"
+                ]
+            )
+            if data.table_type == "msme-principal-changes":
+                dependencies.extend(
+                    await payroll_rule_documents(
+                        db,
+                        ctx,
+                        eng,
+                        copies,
+                        contributors=supporting_contributors,
+                        label="MSE principal reductions",
+                    )
+                )
         msme_context = None
         if data.table_type.startswith("msme-"):
             from app.modules.country_workflows.msme_evidence import prepare as prepare_msme_context
@@ -719,7 +749,10 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             ),
         }, [*dependencies, receipt]
     period = await db.get(FinancialPeriod, eng.period_id)
-    if data.workflow == "india-msme-payment-timing" and package.country != "IN":
+    if (
+        data.workflow in {"india-msme-payment-timing", "india-msme-interest"}
+        and package.country != "IN"
+    ):
         raise HTTPException(422, "MSE payment timing requires an India engagement")
     if not period or not period.start_date <= data.as_of <= period.end_date:
         raise HTTPException(422, "Reconciliation date must be within the engagement period")
@@ -1048,7 +1081,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 "Independently review all pension bases, rules and reported sources before calculation",
             )
         if (
-            data.workflow in {"obligation-bank-allocations", "india-msme-payment-timing"}
+            data.workflow
+            in {"obligation-bank-allocations", "india-msme-payment-timing", "india-msme-interest"}
             and source.body.get("review_status") != "REVIEWED"
         ):
             raise HTTPException(
@@ -1119,7 +1153,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                     "Composed books and independent turnover roles share underlying source evidence",
                 )
     msme_contexts = None
-    if data.workflow == "india-msme-payment-timing":
+    if data.workflow in {"india-msme-payment-timing", "india-msme-interest"}:
         from app.modules.country_workflows.msme_evidence import verify as verify_msme_context
 
         msme_contexts = []
@@ -1129,6 +1163,15 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             )
             if sources[role].get("msme_evidence_context"):
                 msme_contexts.append(sources[role]["msme_evidence_context"])
+    interest_documents_receipts = None
+    if data.workflow == "india-msme-interest":
+        from app.modules.country_workflows.msme_interest import supporting_documents
+
+        copies = supporting_documents({role: source["rows"] for role, source in sources.items()})
+        interest_documents_receipts = await payroll_rule_documents(
+            db, ctx, eng, copies, contributors=contributors, label="MSE interest support"
+        )
+        dependencies.extend(interest_documents_receipts)
     media_documents_receipts = None
     if data.workflow == "adverse-media-review":
         from app.modules.country_workflows.adverse_media import documents as media_documents
@@ -1399,6 +1442,13 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         result["msme_evidence_contract"] = CONTRACT
         result["retained_msme_contexts"] = msme_contexts
         result["msme_document_binding"] = VERIFIED if msme_contexts else UNRESOLVED
+    if interest_documents_receipts is not None:
+        result["retained_interest_documents"] = interest_documents_receipts
+        result["msme_interest_document_binding"] = (
+            "RETAINED_DOCUMENT_BYTES_VERIFIED"
+            if interest_documents_receipts
+            else "NO_INTEREST_FACTS_CLAIMED"
+        )
     if grant_documents_receipts is not None:
         result["grant_document_binding"] = "RETAINED_DOCUMENT_BYTES_VERIFIED"
         result["retained_grant_documents"] = grant_documents_receipts

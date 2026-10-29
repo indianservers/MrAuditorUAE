@@ -1,0 +1,2 @@
+SYNTHETIC rate support. Not operative law or client qualification.
+Illustrative RBI_BANK_RATE declaration 0.01 (1%) for this example. This is NOT an actual historical or current RBI rate assertion.

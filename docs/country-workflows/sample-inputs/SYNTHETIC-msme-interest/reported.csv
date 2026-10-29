@@ -1,0 +1,2 @@
+id,buyer_id,supplier_id,invoice_id,currency,as_of,amount,evidence_reference
+REPORTED,SYNTHETIC-BUYER,SYNTHETIC-SUPPLIER,INV,INR,2026-07-31,93.23,SYNTHETIC independently retained closing balance

@@ -4,6 +4,8 @@
 fund review and typed bridges to expected remittances, original fund observations
 and bank allocation. Gratuity, pension and investment balances remain separate.
 
+[India assessed MSE interest](native-adapters.md#india-assessed-mse-compound-interest) reuses original payment-timing sources with separate bank rates, principal portions, interest payments and closing balances. It preserves overdue-principal findings and requires retained assessed conventions; no current RBI rate is supplied.
+
 The [India dated PF wage-basis bridge](payroll-basis-proration.md) adds reviewed
 mid-month wage segments, effective-dated assessed ceiling policies and independent
 monthly controls. Its reviewed output feeds the existing contribution/remittance/

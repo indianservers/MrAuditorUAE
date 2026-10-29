@@ -1,0 +1,2 @@
+id,account,reference,date,currency,amount,counterparty,is_reversal
+BANK,SYNTHETIC-ACCOUNT,SYNTHETIC-BANK-1,2026-07-31,INR,-1000,,false

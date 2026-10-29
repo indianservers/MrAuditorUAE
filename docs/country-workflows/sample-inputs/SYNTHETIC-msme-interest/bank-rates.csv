@@ -1,0 +1,2 @@
+source_url,source_version,evidence_reference,applicability_review,id,effective_from,effective_to,annual_rate,rate_kind,rate_group
+https://synthetic.example/assessed-interest,"Synthetic reviewed conventions, not operative law",SYNTHETIC assessed support,Synthetic assessed principal and accrual interpretation only,RATE,2026-01-01,2026-12-31,0.01,RBI_BANK_RATE,SYNTHETIC-RBI

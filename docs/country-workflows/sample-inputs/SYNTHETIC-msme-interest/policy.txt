@@ -1,0 +1,2 @@
+SYNTHETIC policy support. Not operative law or client qualification.
+Assessed principal 36500; interest starts June 1. Calendar-month rests, ACT_365_FIXED, END_OF_DAY, ROUND_EACH_REST, HALF_UP, multiplier 3. Complete history assessed since May 16.

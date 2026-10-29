@@ -1,6 +1,19 @@
 def approval_error(body):
     from app.modules.intelligence.matching_review import saved_candidates_complete
 
+    if body.get("workflow") == "india-msme-interest":
+        from app.modules.country_workflows.msme_interest_schemas import CONTRACT
+
+        if body.get("msme_interest_contract") != CONTRACT or body.get(
+            "msme_interest_document_binding"
+        ) not in {"RETAINED_DOCUMENT_BYTES_VERIFIED", "NO_INTEREST_FACTS_CLAIMED"}:
+            return "Regenerate MSE interest with retained policies, bank rates and principal-change documents"
+        if body.get("msme_interest_document_binding") == "NO_INTEREST_FACTS_CLAIMED" and (
+            any(row.get("interest_policy") for row in body.get("rows", []))
+            or body.get("retained_interest_rate_rows")
+        ):
+            return "Bind the declared MSE interest policy and bank-rate documents before approval"
+
     if body.get("workflow") == "india-payroll-rules":
         from app.modules.country_workflows.payroll_calculations import CONTRACT
 
@@ -44,7 +57,7 @@ def approval_error(body):
 
         if body.get("merchant_settlement_contract") != CONTRACT:
             return "Regenerate merchant settlement with unreversed booked-date evidence before approval"
-    if body.get("workflow") == "india-msme-payment-timing" and (
+    if body.get("workflow") in {"india-msme-payment-timing", "india-msme-interest"} and (
         body.get("msme_evidence_contract") != "retained-msme-context/1"
         or body.get("msme_document_binding")
         not in {"RETAINED_DOCUMENT_BYTES_VERIFIED", "NO_RESOLVED_FACTS_CLAIMED"}

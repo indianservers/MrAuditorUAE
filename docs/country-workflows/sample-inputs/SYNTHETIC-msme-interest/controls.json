@@ -1,0 +1,102 @@
+{
+  "synthetic": true,
+  "qualified_real_client": false,
+  "expected_total": "93.23",
+  "principal_timing_exceptions": 1,
+  "bank_budget": {
+    "original_outflow": "1000",
+    "gross_principal_allocated": "900",
+    "interest_allocated": "90",
+    "unallocated_outflow": "10"
+  },
+  "files": {
+    "assessments": {
+      "file": "assessments.csv",
+      "sha256": "91acc8dff8e52750e975fa99f4f596cfb07f7c978a3379c2efa03056a0b3d340",
+      "table_type": "msme-supplier-assessments",
+      "expected_rows": 1,
+      "control_totals": {}
+    },
+    "invoices": {
+      "file": "invoices.csv",
+      "sha256": "e7c8795a9a326b0c0859fe9880fe915693dea8b83de4cf93409f4228a323d5c0",
+      "table_type": "msme-invoices",
+      "expected_rows": 1,
+      "control_totals": {
+        "INR": "36500"
+      }
+    },
+    "bank": {
+      "file": "bank.csv",
+      "sha256": "aad6946251f476c509c4a01d882dfa6225c88ee427ed5e275f5ef767766256f2",
+      "table_type": "transactions",
+      "expected_rows": 1,
+      "control_totals": {
+        "INR": "-1000"
+      }
+    },
+    "allocations": {
+      "file": "allocations.csv",
+      "sha256": "dbe8dee335378815076ccbea957b89250a46c1a617d4bbc03068ab280d0e26a6",
+      "table_type": "item-allocations",
+      "expected_rows": 1,
+      "control_totals": {
+        "INR": "900"
+      }
+    },
+    "interest_policies": {
+      "file": "interest-policies.csv",
+      "sha256": "348bba5f2940d5f4dfc8741a15e48905046485d66efe4449fe1ed31d32e80c51",
+      "table_type": "msme-interest-policies",
+      "expected_rows": 1,
+      "control_totals": {
+        "INR": "36500"
+      }
+    },
+    "bank_rates": {
+      "file": "bank-rates.csv",
+      "sha256": "6197cb24f7f7476bdc84d91a6a4782b23f57819468022e7a9a542766cb4331ab",
+      "table_type": "msme-bank-rates",
+      "expected_rows": 1,
+      "control_totals": {}
+    },
+    "principal_changes": {
+      "file": "principal-changes.csv",
+      "sha256": "7dabc931fc62a3be921692b2ec21658acf537e92bb2afeb6429e547184be80af",
+      "table_type": "msme-principal-changes",
+      "expected_rows": 1,
+      "control_totals": {
+        "INR": "900"
+      }
+    },
+    "interest_allocations": {
+      "file": "interest-allocations.csv",
+      "sha256": "df15d878975cba6940d9e2b3e29db3928e3bcfb3d1e0f6e25fce14a556355af6",
+      "table_type": "msme-interest-allocations",
+      "expected_rows": 1,
+      "control_totals": {
+        "INR": "90"
+      }
+    },
+    "reported": {
+      "file": "reported.csv",
+      "sha256": "f8e671ac2a6cc0cabac809c96732d253d22140418edeb3629fd7c4797b9fea45",
+      "table_type": "msme-reported-interest",
+      "expected_rows": 1,
+      "control_totals": {
+        "INR": "93.23"
+      }
+    }
+  },
+  "documents": {
+    "facts.txt": {
+      "sha256": "3bb371824800f571b1f15dc68607d26452d193c9e78149123401409996e3f9d4"
+    },
+    "policy.txt": {
+      "sha256": "aecb42fc0ca0b9dda3b140fbdff17bc8812fd9e16bc4370757b3af3ee0733cd2"
+    },
+    "rate.txt": {
+      "sha256": "44b25e54760c3cbeee00ba635be5b9e86a96a3961a498b2f0b400c7e1be2aaf9"
+    }
+  }
+}

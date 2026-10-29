@@ -1,0 +1,2 @@
+id,buyer_id,supplier_id,invoice_id,currency,payment_id,amount,bucket,evidence_reference,rationale
+INTEREST-PAYMENT,SYNTHETIC-BUYER,SYNTHETIC-SUPPLIER,INV,INR,BANK,90,CAPITALIZED_INTEREST,SYNTHETIC bank interest appropriation,Independent payment advice and unpaid interest bucket

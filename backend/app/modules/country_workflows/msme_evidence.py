@@ -53,7 +53,7 @@ def current_contract(body, dependencies):
             if context
             else not needs_context(table, body.get("rows", []))
         )
-    if body.get("workflow") == "india-msme-payment-timing":
+    if body.get("workflow") in {"india-msme-payment-timing", "india-msme-interest"}:
         if body.get("msme_evidence_contract") != CONTRACT:
             return False
         contexts = body.get("retained_msme_contexts", [])

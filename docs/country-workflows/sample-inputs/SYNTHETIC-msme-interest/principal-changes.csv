@@ -1,0 +1,2 @@
+id,buyer_id,supplier_id,invoice_id,currency,mode,amount,principal_allocation_id,day,evidence_reference,rationale,source_url,source_evidence_version_id,source_sha256,source_version,applicability_review
+PORTION,SYNTHETIC-BUYER,SYNTHETIC-SUPPLIER,INV,INR,BANK_PRINCIPAL_PORTION,900,LINK,,SYNTHETIC principal portion,"Independent full principal portion, not an inferred allocation",,,,,

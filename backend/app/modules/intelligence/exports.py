@@ -158,6 +158,12 @@ def render(event, format):
             "native_controls_verified",
             "expected_total",
             "expected_total_complete",
+            "msme_interest_contract",
+            "msme_interest_document_binding",
+            "msme_evidence_contract",
+            "msme_document_binding",
+            "principal_timing_exception_count",
+            "trace_record_count",
             "expected_total_basis",
             "rule_document_binding",
             "rule_document_version_id",
@@ -364,6 +370,21 @@ def render(event, format):
             append(source, keys)
             for row in rows:
                 exported_row = row
+                if body.get("workflow") == "india-msme-interest":
+                    exported_row = dict(row)
+                    for field, sheet in (
+                        ("segments", "MSE interest intervals"),
+                        ("balance_events", "MSE interest events"),
+                        ("monthly_rests", "MSE monthly rests"),
+                        ("allocations", "MSE gross principal links"),
+                    ):
+                        exported_row[field] = (
+                            f"{len(row.get(field, []))} records; complete detail in {sheet} sheet"
+                        )
+                    if row.get("interest_policy"):
+                        exported_row["interest_policy"] = (
+                            "Complete assessed convention in MSE interest policies sheet"
+                        )
                 if body.get("workflow") == "india-establishment-charges":
                     exported_row = {
                         **row,
@@ -417,6 +438,55 @@ def render(event, format):
                 append(members_sheet, fields)
                 for record in records:
                     append(members_sheet, [record.get(field) for field in fields])
+            if body.get("workflow") == "india-msme-interest":
+                for key, title in (
+                    ("segments", "MSE interest intervals"),
+                    ("balance_events", "MSE interest events"),
+                    ("monthly_rests", "MSE monthly rests"),
+                    ("allocations", "MSE gross principal links"),
+                ):
+                    sheet = workbook.create_sheet(title)
+                    records = []
+                    for result in body.get("rows", []):
+                        for record in result.get(key, []):
+                            flat = {
+                                "result_row_id": result["id"],
+                                **{
+                                    field: value
+                                    for field, value in record.items()
+                                    if field != "source_record"
+                                },
+                            }
+                            flat.update(
+                                {
+                                    "source_" + field: value
+                                    for field, value in record.get("source_record", {}).items()
+                                }
+                            )
+                            records.append(flat)
+                    fields = list(dict.fromkeys(field for record in records for field in record))
+                    append(sheet, fields)
+                    for record in records:
+                        append(sheet, [record.get(field) for field in fields])
+                for key, title in (
+                    ("retained_interest_rate_rows", "MSE interest rate sources"),
+                    ("interest_bank_controls", "MSE interest bank controls"),
+                    ("interest_policy", "MSE interest policies"),
+                ):
+                    records = (
+                        [
+                            {"result_row_id": row["id"], **row[key]}
+                            for row in body.get("rows", [])
+                            if row.get(key)
+                        ]
+                        if key == "interest_policy"
+                        else body.get(key, [])
+                    )
+                    sheet = workbook.create_sheet(title)
+                    fields = list(dict.fromkeys(field for record in records for field in record))
+                    append(sheet, fields)
+                    for record in records:
+                        append(sheet, [record.get(field) for field in fields])
             if (
                 body.get("workflow") == "uae-benefit-review"
                 and body.get("service_calendar_basis") == "DATED_CONTROLLED_SOURCE"

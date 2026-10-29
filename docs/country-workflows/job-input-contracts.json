@@ -237,6 +237,7 @@
               "merchant-reserve-rollforward",
               "merchant-settlement-bridge",
               "india-msme-payment-timing",
+              "india-msme-interest",
               "tax-turnover-bridge",
               "adverse-media-review",
               "grant-utilisation",
@@ -306,7 +307,7 @@
               "format": "uuid",
               "type": "string"
             },
-            "maxProperties": 4,
+            "maxProperties": 9,
             "minProperties": 1,
             "title": "Source Ids",
             "type": "object"
@@ -2857,6 +2858,11 @@
               "merchant-settlements",
               "merchant-bank-allocations",
               "msme-invoices",
+              "msme-interest-policies",
+              "msme-bank-rates",
+              "msme-principal-changes",
+              "msme-interest-allocations",
+              "msme-reported-interest",
               "turnover-scope",
               "turnover-amounts",
               "turnover-adjustments",
@@ -8749,6 +8755,467 @@
       "title": "MetalLine",
       "type": "object"
     },
+    "msme-bank-rates": {
+      "additionalProperties": false,
+      "properties": {
+        "source_url": {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "title": "Source Url",
+          "type": "string"
+        },
+        "source_evidence_version_id": {
+          "format": "uuid",
+          "title": "Source Evidence Version Id",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "source_version": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Source Version",
+          "type": "string"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "applicability_review": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Applicability Review",
+          "type": "string"
+        },
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "effective_from": {
+          "format": "date",
+          "title": "Effective From",
+          "type": "string"
+        },
+        "effective_to": {
+          "format": "date",
+          "title": "Effective To",
+          "type": "string"
+        },
+        "annual_rate": {
+          "anyOf": [
+            {
+              "maximum": 1.0,
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Annual Rate"
+        },
+        "rate_kind": {
+          "const": "RBI_BANK_RATE",
+          "title": "Rate Kind",
+          "type": "string"
+        },
+        "rate_group": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Rate Group",
+          "type": "string"
+        }
+      },
+      "required": [
+        "source_url",
+        "source_evidence_version_id",
+        "source_sha256",
+        "source_version",
+        "evidence_reference",
+        "applicability_review",
+        "id",
+        "effective_from",
+        "effective_to",
+        "annual_rate",
+        "rate_kind",
+        "rate_group"
+      ],
+      "title": "MSMEBankRate",
+      "type": "object"
+    },
+    "msme-interest-allocations": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "buyer_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Buyer Id",
+          "type": "string"
+        },
+        "supplier_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Supplier Id",
+          "type": "string"
+        },
+        "invoice_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Invoice Id",
+          "type": "string"
+        },
+        "currency": {
+          "const": "INR",
+          "default": "INR",
+          "title": "Currency",
+          "type": "string"
+        },
+        "payment_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Payment Id",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Amount"
+        },
+        "bucket": {
+          "enum": [
+            "UNCAPITALIZED_INTEREST",
+            "CAPITALIZED_INTEREST"
+          ],
+          "title": "Bucket",
+          "type": "string"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "rationale": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Rationale",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "buyer_id",
+        "supplier_id",
+        "invoice_id",
+        "payment_id",
+        "amount",
+        "bucket",
+        "evidence_reference",
+        "rationale"
+      ],
+      "title": "MSMEInterestAllocation",
+      "type": "object"
+    },
+    "msme-interest-policies": {
+      "additionalProperties": false,
+      "properties": {
+        "source_url": {
+          "format": "uri",
+          "maxLength": 2083,
+          "minLength": 1,
+          "title": "Source Url",
+          "type": "string"
+        },
+        "source_evidence_version_id": {
+          "format": "uuid",
+          "title": "Source Evidence Version Id",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "source_version": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Source Version",
+          "type": "string"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "applicability_review": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Applicability Review",
+          "type": "string"
+        },
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "buyer_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Buyer Id",
+          "type": "string"
+        },
+        "supplier_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Supplier Id",
+          "type": "string"
+        },
+        "invoice_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Invoice Id",
+          "type": "string"
+        },
+        "currency": {
+          "const": "INR",
+          "default": "INR",
+          "title": "Currency",
+          "type": "string"
+        },
+        "eligible": {
+          "title": "Eligible",
+          "type": "boolean"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "description": "Explicit assessed interest principal, not inferred gross invoice value",
+          "title": "Amount"
+        },
+        "effective_from": {
+          "format": "date",
+          "title": "Effective From",
+          "type": "string"
+        },
+        "effective_to": {
+          "format": "date",
+          "title": "Effective To",
+          "type": "string"
+        },
+        "history_from": {
+          "format": "date",
+          "title": "History From",
+          "type": "string"
+        },
+        "history_assessment": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "History Assessment",
+          "type": "string"
+        },
+        "interest_start": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Interest Start"
+        },
+        "start_basis": {
+          "anyOf": [
+            {
+              "enum": [
+                "TIMING_DUE_PLUS_ONE",
+                "SEPARATELY_ASSESSED_START"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Basis"
+        },
+        "start_assessment": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "minLength": 10,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Start Assessment"
+        },
+        "rate_group": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rate Group"
+        },
+        "bank_rate_multiplier": {
+          "anyOf": [
+            {
+              "const": "3",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Bank Rate Multiplier"
+        },
+        "rest_basis": {
+          "anyOf": [
+            {
+              "enum": [
+                "CALENDAR_MONTH_END",
+                "MONTHLY_ANNIVERSARY"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rest Basis"
+        },
+        "day_basis": {
+          "anyOf": [
+            {
+              "enum": [
+                "ACT_365_FIXED",
+                "ACT_ACT_YEAR"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Day Basis"
+        },
+        "event_timing": {
+          "anyOf": [
+            {
+              "enum": [
+                "BEGINNING_OF_DAY",
+                "END_OF_DAY"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Event Timing"
+        },
+        "rest_rounding": {
+          "anyOf": [
+            {
+              "enum": [
+                "ROUND_EACH_REST",
+                "CARRY_PRECISION"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rest Rounding"
+        },
+        "rounding": {
+          "anyOf": [
+            {
+              "enum": [
+                "HALF_UP",
+                "CEILING",
+                "FLOOR"
+              ],
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Rounding"
+        }
+      },
+      "required": [
+        "source_url",
+        "source_evidence_version_id",
+        "source_sha256",
+        "source_version",
+        "evidence_reference",
+        "applicability_review",
+        "id",
+        "buyer_id",
+        "supplier_id",
+        "invoice_id",
+        "eligible",
+        "amount",
+        "effective_from",
+        "effective_to",
+        "history_from",
+        "history_assessment"
+      ],
+      "title": "MSMEInterestPolicy",
+      "type": "object"
+    },
     "msme-invoices": {
       "additionalProperties": false,
       "properties": {
@@ -8905,6 +9372,250 @@
         "assessment"
       ],
       "title": "MSMEInvoice",
+      "type": "object"
+    },
+    "msme-principal-changes": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "buyer_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Buyer Id",
+          "type": "string"
+        },
+        "supplier_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Supplier Id",
+          "type": "string"
+        },
+        "invoice_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Invoice Id",
+          "type": "string"
+        },
+        "currency": {
+          "const": "INR",
+          "default": "INR",
+          "title": "Currency",
+          "type": "string"
+        },
+        "mode": {
+          "enum": [
+            "BANK_PRINCIPAL_PORTION",
+            "DOCUMENTED_PRINCIPAL_REDUCTION"
+          ],
+          "title": "Mode",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Amount"
+        },
+        "principal_allocation_id": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Principal Allocation Id"
+        },
+        "day": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Day"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "rationale": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Rationale",
+          "type": "string"
+        },
+        "source_url": {
+          "anyOf": [
+            {
+              "format": "uri",
+              "maxLength": 2083,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Url"
+        },
+        "source_evidence_version_id": {
+          "anyOf": [
+            {
+              "format": "uuid",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Evidence Version Id"
+        },
+        "source_sha256": {
+          "anyOf": [
+            {
+              "pattern": "^[a-f0-9]{64}$",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Sha256"
+        },
+        "source_version": {
+          "anyOf": [
+            {
+              "maxLength": 120,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Version"
+        },
+        "applicability_review": {
+          "anyOf": [
+            {
+              "maxLength": 2000,
+              "minLength": 10,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Applicability Review"
+        }
+      },
+      "required": [
+        "id",
+        "buyer_id",
+        "supplier_id",
+        "invoice_id",
+        "mode",
+        "amount",
+        "evidence_reference",
+        "rationale"
+      ],
+      "title": "MSMEPrincipalChange",
+      "type": "object"
+    },
+    "msme-reported-interest": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "buyer_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Buyer Id",
+          "type": "string"
+        },
+        "supplier_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Supplier Id",
+          "type": "string"
+        },
+        "invoice_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Invoice Id",
+          "type": "string"
+        },
+        "currency": {
+          "const": "INR",
+          "default": "INR",
+          "title": "Currency",
+          "type": "string"
+        },
+        "as_of": {
+          "format": "date",
+          "title": "As Of",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Amount"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "buyer_id",
+        "supplier_id",
+        "invoice_id",
+        "as_of",
+        "amount",
+        "evidence_reference"
+      ],
+      "title": "MSMEReportedInterest",
       "type": "object"
     },
     "msme-supplier-assessments": {

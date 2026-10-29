@@ -1,0 +1,2 @@
+id,buyer_id,supplier_id,classification,eligibility,scope_start,scope_end,evidence_reference,assessment
+SCOPE,SYNTHETIC-BUYER,SYNTHETIC-SUPPLIER,SMALL,ELIGIBLE,2026-01-01,2026-12-31,SYNTHETIC qualified supplier facts,"Synthetic assessed applicability only, not a legal/client qualification"

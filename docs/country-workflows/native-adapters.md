@@ -4500,3 +4500,97 @@ The newer retained complete hosted backend proof is source `07f61f1`: 3,925 pass
 Merchant settlement reuses reviewed account evidence for the full declared period. Native account numbers must agree to the reviewed documents before a ledger-label mapping is applied; original rows and downloaded bytes remain unchanged. Canonical labels are explicitly marked as labels, not native account-number verification. Linked-review withdrawal stales dependent merchant results and blocks approval. A linked account review does not waive reversal or booking-date requirements and does not authenticate a bank or payment.
 
 Verification: 3,090 backend units passed (five skipped); 12 focused binding cases and ten API/database regression cases passed. All 293 frontend tests and the production build passed; the accessible-name follow-up passed focused tests/types/lint. Hosted browser, frontend, security, ML and containers passed on e119982; all three browser cases reported 1.1m. Four exact result PNGs were individually inspected and retained with hashes in `docs/phase-12/merchant-account-browser-e119982.json`. Browser fixtures use canonical account labels; separate real API tests cover native CAMT account mapping in UAE and India with scan/dispatch doubles. Current full backend CI and the other country/client/production qualification gates remain separate.
+
+
+### India assessed MSE compound interest
+
+`india-msme-interest` reuses the original reviewed supplier assessment, invoice,
+bank and gross-principal allocation sources from the payment-timing workflow.
+Five separately reviewed populations add invoice-specific assessed interest
+policies, dated RBI bank rates, explicit principal portions/non-cash reductions,
+bank interest allocations and independently reported closing interest. This is
+an India-only INR workflow; other workflows retain their four-source bound.
+All nine roles are mandatory, including controlled, evidenced nil populations
+where appropriate. The original timing calculation remains unchanged.
+
+The common event-based accrual kernel has no country or rate defaults. The
+India policy explicitly declares multiplier `3` and `RBI_BANK_RATE`; repo rates
+are rejected. The first interest day can follow the retained timing due date or
+use a separately assessed and documented interpretation. Principal excludes
+amounts only when explicitly assessed. Full payment-history scope, policy
+validity, inclusive rate coverage, monthly-rest convention, day basis,
+payment-day timing and rounding must all be supplied. Partial or missing rate
+coverage and unresolved eligibility/acceptance become unknown, never zero.
+Competing rate windows, overdrawn interest buckets and excess allocations fail.
+No current or historical RBI rate series is installed.
+
+Each original gross-principal allocation needs an explicit interest-principal
+portion, including a zero portion. Its date comes from the original bank
+movement. Dated non-cash reductions need their own retained supporting document;
+they never become bank receipts. The original gross-principal cash allocation,
+not just its assessed interest-basis portion, consumes the bank budget.
+Principal plus interest allocations cannot exceed that same original outflow
+within this calculation. Global reservations across other calculations are not
+claimed. Capitalized and uncapitalized interest settlement buckets are explicit;
+principal payment alone never clears outstanding interest.
+
+Original supplier/invoice supporting context, policy, rate and non-cash document
+bytes are verified and retained as dependencies. Independent source and output
+review remain mandatory; evidence authors cannot approve their own output.
+Replacing evidence or withdrawing a source review makes the result stale without
+rewriting its stored financial body. Byte verification does not establish the
+legal meaning or present applicability of an uploaded document.
+
+The result view shows outstanding interest and principal timing exceptions
+separately. An interest match cannot clear an overdue-principal finding. Each
+invoice exposes the selected start and accrual conventions plus paged complete
+interval, event and rest traces without converting financial strings to browser
+floating-point numbers. XLSX adds seven complete sheets: accrual intervals,
+events, monthly rests, original gross-principal links, retained rate sources,
+bank allocation controls and assessed policies. PDF/DOCX remain abbreviated
+presentation exports; use XLSX for complete source values.
+
+The authored population in `sample-inputs/SYNTHETIC-msme-interest/` has nine
+nonempty CSV sources, three supporting TXT documents and byte-hashed independent
+controls. It uses an **illustrative 1% bank rate**, not a representation of any
+actual RBI rate. June interest is INR 90.00 and July interest INR 93.23; paying
+INR 90 from capitalized interest leaves INR 93.23 outstanding. One INR 1,000 bank
+outflow supports INR 900 original principal plus INR 90 interest, leaving INR 10.
+The principal timing exception remains. A separate HTTP scenario adds a dated
+INR 500 non-cash reduction and INR 50 interest payment, leaving INR 131.37;
+that credit case is not part of the saved/browser population.
+
+Research pointers are the original MSMED Act on India Code
+(https://www.indiacode.nic.in/bitstream/123456789/5872/1/a2006-27.pdf),
+the Income Tax Department's Section 16 page
+(https://www.incometaxindia.gov.in/w/section-16-185), and the official government
+summary https://www.pib.gov.in/PressReleaseIframePage.aspx?PRID=1906358&lang=2&reg=48.
+Search-indexed primary text describes three-times RBI bank rate and monthly
+rests. Direct original Act retrieval timed out and the department page redirected
+to an unavailable page; no archived authoritative bytes or consolidated current
+law qualification are claimed. These pointers are not a professionally approved
+country pack. Operative source archival, professional interpretation of the
+supported conventions, supplier cohorts, independently checked real-client
+schedules, Section 22 disclosures, tax deductibility and filing remain open.
+The new browser definition is pending hosted execution until a source-specific
+successful run and original captures are recorded; adding it is not execution
+proof.
+
+
+Local verification on this implementation passed 3,411 backend tests with four
+explicitly skipped connector-infrastructure unit cases: all 3,403 unit cases
+plus eight selected MSE HTTP cases (four original timing/source cases and four
+new interest cases). These are not the entire hosted backend suite. The HTTP
+boundary uses real API, database, private storage and processor with explicit
+scanner/broker doubles. The four new cases cover bank-rate document replacement,
+original supplier context replacement, principal-source review withdrawal and
+a separately retained non-cash reduction document replacement, preserving full
+historical financial bodies. Frontend verification passed 353 tests in 69 files.
+Original JUnit receipts are `../phase-12/msme-interest-final.xml` and
+`../phase-12/msme-interest-frontend.xml`.
+
+Separately, the preceding payroll/establishment source `f0fab8b` completed all six
+hosted jobs, including 4,254 passed and nine skipped backend tests, 86.44% overall
+coverage and 89.35% core coverage. Exact source-bound originals and scope are in
+`../phase-12/f0fab8b-hosted-verification.json`. That run predates this interest
+implementation and is not its full-suite evidence.

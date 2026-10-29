@@ -8,6 +8,7 @@ from app.modules.country_workflows.audit_schemas import AUDIT_WORKFLOWS
 from app.modules.country_workflows.diligence_schemas import DILIGENCE_WORKFLOWS
 from app.modules.country_workflows.grant_utilisation import ROLES as GRANT_ROLES
 from app.modules.country_workflows.merchant_reserves import ROLES as RESERVE_ROLES
+from app.modules.country_workflows.msme_interest_schemas import ROLES as MSME_INTEREST_ROLES
 from app.modules.country_workflows.msme_schemas import MSME_WORKFLOWS
 from app.modules.country_workflows.operations_schemas import OPERATION_WORKFLOWS
 from app.modules.country_workflows.payroll_basis_proration import ROLES as PRORATION_ROLES
@@ -31,6 +32,11 @@ OPTIONAL_ROLES = {
 }
 
 WORKFLOWS = {
+    "india-msme-interest": (
+        "India assessed MSE compound interest / principal changes / interest settlement",
+        ["IN"],
+        MSME_INTEREST_ROLES,
+    ),
     "india-establishment-charges": (
         "India assessed establishment administration / inspection / EDLI charges",
         ["IN"],

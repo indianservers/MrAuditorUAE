@@ -1,0 +1,2 @@
+id,buyer_id,supplier_id,reference,invoice_date,currency,amount,assessment_id,delivery_date,acceptance_evidence_reference,written_objection_date,objection_removed_date,objection_evidence_reference,terms_written,agreed_due_date,agreement_evidence_reference,assessment
+INV,SYNTHETIC-BUYER,SYNTHETIC-SUPPLIER,SYNTHETIC-1,2026-05-16,INR,36500,SCOPE,2026-05-16,SYNTHETIC delivery,,,,false,,,Synthetic delivery and no-written-terms evidence assessed

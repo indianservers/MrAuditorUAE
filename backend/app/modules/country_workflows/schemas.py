@@ -35,6 +35,7 @@ from app.modules.country_workflows.inventory_valuation import (
 )
 from app.modules.country_workflows.merchant_reserves import ROW_TYPES as RESERVE_ROW_TYPES
 from app.modules.country_workflows.merchant_settlements import ROW_TYPES as MERCHANT_ROW_TYPES
+from app.modules.country_workflows.msme_interest_schemas import ROW_TYPES as MSME_INTEREST_ROW_TYPES
 from app.modules.country_workflows.msme_schemas import MSME_ROW_TYPES
 from app.modules.country_workflows.operations_schemas import OPERATION_ROW_TYPES
 from app.modules.country_workflows.party_confirmations import (
@@ -338,6 +339,7 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
     "withholding-records": WithholdingRecord,
     **OPERATION_ROW_TYPES,
     **MSME_ROW_TYPES,
+    **MSME_INTEREST_ROW_TYPES,
     **MERCHANT_ROW_TYPES,
     **RESERVE_ROW_TYPES,
     "benefit-service-exclusions": ServiceExclusion,
@@ -452,6 +454,11 @@ class SourceInput(Strict):
         "merchant-settlements",
         "merchant-bank-allocations",
         "msme-invoices",
+        "msme-interest-policies",
+        "msme-bank-rates",
+        "msme-principal-changes",
+        "msme-interest-allocations",
+        "msme-reported-interest",
         "turnover-scope",
         "turnover-amounts",
         "turnover-adjustments",
@@ -966,6 +973,7 @@ class WorkflowInput(Strict):
         if isinstance(value, dict) and value.get("workflow") in {
             "grant-utilisation",
             "india-msme-payment-timing",
+            "india-msme-interest",
             "adverse-media-review",
         }:
             from app.modules.country_workflows.grant_utilisation import calendar_day
@@ -989,6 +997,7 @@ class WorkflowInput(Strict):
         "merchant-reserve-rollforward",
         "merchant-settlement-bridge",
         "india-msme-payment-timing",
+        "india-msme-interest",
         "tax-turnover-bridge",
         "adverse-media-review",
         "grant-utilisation",
@@ -1050,7 +1059,7 @@ class WorkflowInput(Strict):
         "nonprofit-diligence",
         "tax-close",
     ]
-    source_ids: dict[str, uuid.UUID] = Field(min_length=1, max_length=4)
+    source_ids: dict[str, uuid.UUID] = Field(min_length=1, max_length=9)
     as_of: date
     obligation_month_start: str | None = Field(default=None, pattern=r"^\d{4}-(0[1-9]|1[0-2])$")
     obligation_month_end: str | None = Field(default=None, pattern=r"^\d{4}-(0[1-9]|1[0-2])$")
@@ -1089,6 +1098,10 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
+        if self.workflow != "india-msme-interest" and len(self.source_ids) > 4:
+            raise ValueError("This workflow supports at most four source roles")
+        if self.workflow == "india-msme-interest" and len(self.source_ids) != 9:
+            raise ValueError("MSE interest requires all nine independently controlled source roles")
         if self.workflow == "india-establishment-charges" and (
             self.currency != "INR" or self.tolerance != 0 or self.date_tolerance != 0
         ):
@@ -1174,6 +1187,7 @@ class WorkflowInput(Strict):
                     "bank-subsequent-clearance",
                     "obligation-bank-allocations",
                     "india-msme-payment-timing",
+                    "india-msme-interest",
                 }
                 or len(self.bank_account_scope_assessment.strip()) < 10
             ):
@@ -1246,7 +1260,7 @@ class WorkflowInput(Strict):
             raise ValueError(
                 "An inventory cutoff assessment requires explicit controlled bridge mode"
             )
-        if self.workflow == "india-msme-payment-timing":
+        if self.workflow in {"india-msme-payment-timing", "india-msme-interest"}:
             if (
                 not self.msme_buyer_id
                 or not self.msme_buyer_id.strip()
@@ -1260,7 +1274,11 @@ class WorkflowInput(Strict):
                 )
         elif self.msme_buyer_id is not None:
             raise ValueError("MSE buyer scope applies only to India MSE payment timing")
-        if self.workflow in {"obligation-bank-allocations", "india-msme-payment-timing"}:
+        if self.workflow in {
+            "obligation-bank-allocations",
+            "india-msme-payment-timing",
+            "india-msme-interest",
+        }:
             if (
                 not self.account
                 or not self.account.strip()

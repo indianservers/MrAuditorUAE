@@ -20,6 +20,15 @@ const roles = {
   allocations: "item-allocations",
 };
 
+const interestRoles = {
+  ...roles,
+  interest_policies: "msme-interest-policies",
+  bank_rates: "msme-bank-rates",
+  principal_changes: "msme-principal-changes",
+  interest_allocations: "msme-interest-allocations",
+  reported: "msme-reported-interest",
+};
+
 it.each(["CURRENT", "STALE"])(
   "describes retained document verification honestly for a %s result",
   (freshness) => {
@@ -66,7 +75,7 @@ vi.mock("@/features/shared", () => ({
 vi.mock("@/hooks/use-event-history", () => ({
   useEventHistory: () => ({
     data: {
-      items: Object.entries(roles).flatMap(([role, table_type]) =>
+      items: Object.entries(interestRoles).flatMap(([role, table_type]) =>
         [true, false].map((reviewed) => ({
           id: role + (reviewed ? "-reviewed" : "-unreviewed"),
           label: role + (reviewed ? " reviewed" : " unreviewed"),
@@ -95,6 +104,12 @@ vi.mock("@/hooks/use-api", () => ({
           country: state.country,
           items: [
             {
+              id: "india-msme-interest",
+              title: "India assessed MSE interest",
+              available: state.country === "IN",
+              roles: interestRoles,
+            },
+            {
               id: "india-msme-payment-timing",
               title: "India MSE payment timing",
               available: state.country === "IN",
@@ -104,7 +119,9 @@ vi.mock("@/hooks/use-api", () => ({
           source_contracts:
             state.country === "IN"
               ? {
-                  transactions: {},
+                  ...Object.fromEntries(
+                    Object.values(interestRoles).map((type) => [type, {}]),
+                  ),
                   "msme-supplier-assessments": {},
                   "msme-invoices": {},
                 }
@@ -158,81 +175,119 @@ beforeEach(() => {
   state.mutate.mockResolvedValue({ id: "queued" });
 });
 
-it("requires explicit buyer and bank/calendar scope, and offers only reviewed role sources", async () => {
-  render(<CountryWorkflows eid="eng" mode="country-workflow" />);
-  fireEvent.change(screen.getByLabelText("Workflow"), {
-    target: { value: "india-msme-payment-timing" },
-  });
-  expect(
-    screen.queryByLabelText(/Compare arrears only/),
-  ).not.toBeInTheDocument();
-  expect(
-    screen.queryByLabelText("Tax-year start (for form guidance)"),
-  ).not.toBeInTheDocument();
-  for (const role of Object.keys(roles)) {
-    const picker = screen.getByLabelText(`${role} source`);
+it.each(["msme-interest-policies", "msme-bank-rates"])(
+  "binds a clean retained supporting document for %s",
+  async (tableType) => {
+    render(<CountryWorkflows eid="eng" mode="workflow-source" />);
+    for (const [label, value] of [
+      ["Source table type", tableType],
+      ["Clean retained evidence", "csv"],
+      ["Schedule title", "SYNTHETIC assessed interest source"],
+      ["Expected data rows", "1"],
+      ["MSE interest supporting document (optional shared document)", "packet"],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    if (tableType === "msme-interest-policies")
+      fireEvent.change(
+        screen.getByLabelText("Independent totals by currency"),
+        { target: { value: "INR=36500" } },
+      );
+    const document = screen.getByLabelText(
+      "MSE interest supporting document (optional shared document)",
+    );
     expect(
-      within(picker).getByRole("option", {
-        name: new RegExp(`^${role} reviewed`),
-      }),
-    ).toBeInTheDocument();
-    expect(
-      within(picker).queryByRole("option", {
-        name: new RegExp(`^${role} unreviewed`),
-      }),
+      within(document).queryByRole("option", { name: "Quarantined packet" }),
     ).not.toBeInTheDocument();
-    fireEvent.change(picker, { target: { value: role + "-reviewed" } });
-  }
-  for (const [label, value] of [
-    ["Schedule title", "SYNTHETIC MSE review"],
-    [
-      "Scope and source rationale",
-      "Explicit synthetic supplier and invoice acceptance assessment",
-    ],
-    ["Reconciliation date", "2026-04-30"],
-  ])
-    fireEvent.change(screen.getByLabelText(label), { target: { value } });
-  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
-  expect(
-    await screen.findByText(
-      "Declare the MSE buyer identifier before calculating payment timing.",
-    ),
-  ).toBeVisible();
-  expect(state.mutate).not.toHaveBeenCalled();
-  for (const [label, value] of [
-    ["Buyer identifier", "SYNTHETIC-BUYER"],
-    ["First invoice month", "2026-04"],
-    ["Last invoice month", "2026-04"],
-    ["Bank settlement window starts", "2026-04-01"],
-    ["Bank account identifier", "SYNTHETIC-ACCOUNT"],
-    ["Account currency", "INR"],
-    ["Bank payment sign", "debit-negative"],
-  ])
-    fireEvent.change(screen.getByLabelText(label), { target: { value } });
-  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
-  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
-  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
-    workflow: "india-msme-payment-timing",
-    msme_buyer_id: "SYNTHETIC-BUYER",
-    account: "SYNTHETIC-ACCOUNT",
-    currency: "INR",
-    as_of: "2026-04-30",
-    obligation_month_start: "2026-04",
-    obligation_month_end: "2026-04",
-    settlement_start: "2026-04-01",
-    bank_payment_sign: "debit-negative",
-    source_ids: Object.fromEntries(
-      Object.keys(roles).map((role) => [role, role + "-reviewed"]),
-    ),
-  });
-});
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+      table_type: tableType,
+      evidence_version_id: "csv",
+      rule_document_version_id: "packet",
+    });
+  },
+);
+
+it.each(["india-msme-payment-timing", "india-msme-interest"])(
+  "requires explicit buyer and bank/calendar scope, with reviewed sources for %s",
+  async (workflow) => {
+    const selectedRoles =
+      workflow === "india-msme-interest" ? interestRoles : roles;
+    render(<CountryWorkflows eid="eng" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Workflow"), {
+      target: { value: workflow },
+    });
+    expect(
+      screen.queryByLabelText(/Compare arrears only/),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByLabelText("Tax-year start (for form guidance)"),
+    ).not.toBeInTheDocument();
+    for (const role of Object.keys(selectedRoles)) {
+      const picker = screen.getByLabelText(`${role} source`);
+      expect(
+        within(picker).getByRole("option", {
+          name: new RegExp(`^${role} reviewed`),
+        }),
+      ).toBeInTheDocument();
+      expect(
+        within(picker).queryByRole("option", {
+          name: new RegExp(`^${role} unreviewed`),
+        }),
+      ).not.toBeInTheDocument();
+      fireEvent.change(picker, { target: { value: role + "-reviewed" } });
+    }
+    for (const [label, value] of [
+      ["Schedule title", "SYNTHETIC MSE review"],
+      [
+        "Scope and source rationale",
+        "Explicit synthetic supplier and invoice acceptance assessment",
+      ],
+      ["Reconciliation date", "2026-04-30"],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    expect(
+      await screen.findByText(
+        "Declare the MSE buyer identifier before calculating payment timing.",
+      ),
+    ).toBeVisible();
+    expect(state.mutate).not.toHaveBeenCalled();
+    for (const [label, value] of [
+      ["Buyer identifier", "SYNTHETIC-BUYER"],
+      ["First invoice month", "2026-04"],
+      ["Last invoice month", "2026-04"],
+      ["Bank settlement window starts", "2026-04-01"],
+      ["Bank account identifier", "SYNTHETIC-ACCOUNT"],
+      ["Account currency", "INR"],
+      ["Bank payment sign", "debit-negative"],
+    ])
+      fireEvent.change(screen.getByLabelText(label), { target: { value } });
+    fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+    await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+    expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+      workflow,
+      msme_buyer_id: "SYNTHETIC-BUYER",
+      account: "SYNTHETIC-ACCOUNT",
+      currency: "INR",
+      as_of: "2026-04-30",
+      obligation_month_start: "2026-04",
+      obligation_month_end: "2026-04",
+      settlement_start: "2026-04-01",
+      bank_payment_sign: "debit-negative",
+      source_ids: Object.fromEntries(
+        Object.keys(selectedRoles).map((role) => [role, role + "-reviewed"]),
+      ),
+    });
+  },
+);
 
 it("does not offer the India workflow for a UAE engagement", () => {
   state.country = "AE";
   render(<CountryWorkflows eid="eng" mode="country-workflow" />);
   expect(
     within(screen.getByLabelText("Workflow")).queryByRole("option", {
-      name: "India MSE payment timing",
+      name: /India.*MSE/,
     }),
   ).not.toBeInTheDocument();
 });
