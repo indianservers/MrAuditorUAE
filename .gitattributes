@@ -35,3 +35,5 @@ docs/phase-12/msme-interest-*.xml -text
 docs/phase-12/f0fab8b-hosted-full.xml -text
 docs/phase-12/f0fab8b-hosted-coverage.json -text
 docs/phase-12/wps-record-boundaries-*.xml -text
+docs/phase-12/form26-original-*.xml -text
+docs/country-workflows/legal-sources/*.pdf -text

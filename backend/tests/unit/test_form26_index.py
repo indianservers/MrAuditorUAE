@@ -10,6 +10,40 @@ from app.modules.regulatory.report_requirements import coverage
 from app.modules.regulatory.schemas import ReportTemplate
 
 
+def test_archived_form_original_and_targeted_capture_scope_remain_unqualified():
+    import hashlib
+    import json
+    from pathlib import Path
+
+    from pypdf import PdfReader
+
+    root = Path(__file__).resolve().parents[3]
+    archive = json.loads(
+        (root / "docs/country-workflows/legal-sources/india-msme-source-archive.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    assert archive["professional_approval"] is False
+    for original in archive["documents"]:
+        raw = (root / original["path"]).read_bytes()
+        assert len(raw) == original["size_bytes"]
+        assert hashlib.sha256(raw).hexdigest() == original["sha256"]
+        assert len(PdfReader(root / original["path"]).pages) == original["page_count"]
+        for capture in original["captures"]:
+            assert (
+                hashlib.sha256((root / capture["path"]).read_bytes()).hexdigest()
+                == capture["sha256"]
+            )
+    source = next(item for item in archive["documents"] if item["page_count"] == 33)
+    for part in ("A", "B"):
+        pack = manifest(f"india-form26-index:{part}/1")
+        assert pack["original_pdf"]["sha256"] == source["sha256"]
+        assert pack["original_pdf"]["targeted_visual_review_pages"] == [1, 5, 9]
+        assert not pack["statutory_completeness_qualified"]
+        assert len(pack["requirements"]) == 65
+        assert "TARGETED_VISUAL_REVIEW" in pack["source_capture_status"]
+
+
 def config(part="A"):
     pack = manifest(f"india-form26-index:{part}/1")
     return dict(

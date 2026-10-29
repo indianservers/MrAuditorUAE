@@ -1,0 +1,105 @@
+{
+  "contract": "official-india-msme-source-archive/1",
+  "documents": [
+    {
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-2026.pdf",
+      "url": "https://www.incometaxindia.gov.in/documents/20117/16172450/Form-No-26.pdf/6b6807ee-0a0e-ad6c-0c14-1064ff523fef",
+      "sha256": "03613f520b76f5e1de8194f08cce461fb863b57cd35bd0ca923cdd6df993f5a2",
+      "size_bytes": 1012809,
+      "page_count": 33,
+      "original_unmodified": true,
+      "retrieved_at": "2026-10-29T20:32:11.731646+00:00",
+      "targeted_review_pages": [
+        1,
+        5,
+        9
+      ],
+      "captures": [
+        {
+          "path": "docs/country-workflows/legal-sources/IN-Form-26-2026-page-1.png",
+          "page": 1,
+          "sha256": "7755b53c8e4d49f1f5bdc6fb04ade2546c2ba0552cbf3e0dc52e33b19f94c419",
+          "size_bytes": 198780,
+          "dimensions": [
+            953,
+            1348
+          ],
+          "visually_inspected": true,
+          "rendering": "pypdfium2 5.14.0 at scale 1.6; unaltered full page"
+        },
+        {
+          "path": "docs/country-workflows/legal-sources/IN-Form-26-2026-page-5.png",
+          "page": 5,
+          "sha256": "d17d75ecc6e576c415dd497cc45090eb77f66e152f9a92628b32768846931b2b",
+          "size_bytes": 171598,
+          "dimensions": [
+            953,
+            1348
+          ],
+          "visually_inspected": true,
+          "rendering": "pypdfium2 5.14.0 at scale 1.6; unaltered full page"
+        },
+        {
+          "path": "docs/country-workflows/legal-sources/IN-Form-26-2026-page-9.png",
+          "page": 9,
+          "sha256": "37888feb0dfe758f33d8ec7af2a863d21897d12895687ad3a2cfee7b661650e9",
+          "size_bytes": 298615,
+          "dimensions": [
+            953,
+            1348
+          ],
+          "visually_inspected": true,
+          "rendering": "pypdfium2 5.14.0 at scale 1.6; unaltered full page"
+        }
+      ]
+    },
+    {
+      "path": "docs/country-workflows/legal-sources/IN-income-tax-act-2025-amended-2026.pdf",
+      "url": "https://www.incometaxindia.gov.in/documents/d/guest/income_tax_act_2025_as_amended_by_fa_act_2026-pdf",
+      "sha256": "d54a0ed6a91673d1a4fbcef9b5e472c3efe441139fae38f85a5a0c5b2cfc998b",
+      "size_bytes": 3299341,
+      "page_count": 686,
+      "original_unmodified": true,
+      "retrieved_at": "2026-10-29T20:32:12.047433+00:00",
+      "targeted_review_pages": [
+        73
+      ],
+      "captures": [
+        {
+          "path": "docs/country-workflows/legal-sources/IN-income-tax-act-2025-amended-2026-page-73.png",
+          "page": 73,
+          "sha256": "8940aece026ec82821cd42a15421e52a36333ddaa1a5df3f02bb0495b9d0d317",
+          "size_bytes": 270683,
+          "dimensions": [
+            653,
+            999
+          ],
+          "visually_inspected": true,
+          "rendering": "pypdfium2 5.14.0 at scale 1.6; unaltered full page"
+        }
+      ]
+    }
+  ],
+  "qualification": "ORIGINAL_BYTES_ARCHIVED_TARGETED_VISUAL_REVIEW_ONLY",
+  "professional_approval": false,
+  "observations": [
+    "Form 26 page 5 confirms Part C items 1-8 and Part D starting at item 9",
+    "Form 26 page 9 separates item 33(a) interest, 33(b) current disallowance and 33(c) prior-year release; these must not be collapsed into closing interest",
+    "Amended Act page 73 shows section 37(2)(g), the exception in 37(3), and the no-second-deduction safeguard in 37(5)",
+    "Published Form 26 page 1 category instructions contain unexpected part combinations; these are retained as an unresolved source issue rather than silently rewritten. Report selection still follows separately assessed Rule 47 and report headings."
+  ],
+  "limits": [
+    "Only listed pages visually reviewed; no whole-document visual qualification or professional approval",
+    "Full form subfields, statutory deduction/disclosure computations, client expectations and filing remain incomplete",
+    "The original MSMED Act retrieval remains a separate attempt; these two documents do not replace its acceptance, interest or disclosure provisions",
+    "Archived originals are repository research sources, not a claim that uploaded client facts were verified"
+  ],
+  "unarchived_sources": [
+    {
+      "url": "https://www.indiacode.nic.in/bitstream/123456789/5872/1/a2006-27.pdf",
+      "retrieval_status": "READ_TIMEOUT",
+      "observed_at": "2026-10-29T20:34:31.760660+00:00",
+      "original_bytes_saved": false
+    }
+  ]
+}

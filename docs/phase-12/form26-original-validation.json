@@ -1,0 +1,74 @@
+{
+  "recorded_at": "2026-10-29T20:36:49.569755+00:00",
+  "base_commit": "92f14653cd7466d996a679f5a63b4e5123df69fe",
+  "feature": "Retained official Form 26 and amended 2025 Act, targeted visual inspection and truthful preset source status",
+  "receipts": [
+    {
+      "path": "docs/phase-12/form26-original-source.xml",
+      "sha256": "9f6abb2337b14aa8f04739640ed84a7ee75da92c5573757e0cb683715027d008",
+      "size_bytes": 4732,
+      "counts": {
+        "tests": 30,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "docs/phase-12/form26-original-scope.xml",
+      "sha256": "fd98e829c101162a0f1c39d09791e9f36025a540e21b5442141f1fac45717ea4",
+      "size_bytes": 7727,
+      "counts": {
+        "tests": 49,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "sources": [
+    {
+      "path": ".gitattributes",
+      "sha256": "c7a030131da0cbc0cf3342922101fe0667501351589d4220f5fab612af385dfd",
+      "size_bytes": 2158,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/regulatory/form26_index.py",
+      "sha256": "9ae96e646ed6ba2ea0784d736db352f26fb01cfe872efe25f80b4de46e9a70e5",
+      "size_bytes": 4535,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/tests/unit/test_form26_index.py",
+      "sha256": "b95dde53c132f39cf3c0d399c6abf4b5ea1b0683046cf0d375eccf88c42979e5",
+      "size_bytes": 5247,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/legal-sources/india-msme-source-archive.json",
+      "sha256": "a6cd45e334b4c63f359d8a09b79085c853899bfd4254e60489a9fc2b10ed4df0",
+      "size_bytes": 4437,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    }
+  ],
+  "checks": {
+    "targeted_tests": "79 passed, zero skips; original-source/preset and tax-period/report-scope checks",
+    "ruff": "passed",
+    "mypy": "405 application files passed",
+    "original_source_and_capture_bytes": "all hashes match exact staged blobs"
+  },
+  "scope": [
+    "Two unchanged original PDFs downloaded from official department URLs and archived with exact byte hashes and page counts",
+    "Form pages 1/5/9 and Act page 73 rendered as complete unaltered pages and individually inspected",
+    "Form 26 preset exposes the retained original and targeted review scope; 65 requirements and unqualified statutory completeness remain unchanged",
+    "Source-specific archive records the unresolved published category/report-part wording issue and the separate timed-out MSMED Act retrieval"
+  ],
+  "limits": [
+    "Not whole-document visual review or independent professional approval",
+    "No MSE tax-deduction/disclosure computation, full form subfields, official form filling, opinion, signing or filing added",
+    "No frontend implementation or new browser execution; earlier source-bound browser proof is not reused as new-source proof",
+    "Selected tests only, not the complete hosted backend suite; hosted runs remain separate",
+    "No actual client pilot data or independent client expectations supplied"
+  ]
+}

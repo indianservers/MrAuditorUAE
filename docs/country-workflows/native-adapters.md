@@ -4673,3 +4673,41 @@ and staged-source hashes are recorded in
 `../phase-12/wps-record-boundaries-validation.json`. Hosted verification of this
 source remains separate. Earlier MSE browser proof is not execution proof for
 this WPS parser update; no browser implementation changed in this increment.
+
+
+### Retained Form 26 original and amended 2025 Act
+
+The official 33-page Form 26 original and 686-page Income-tax Act, 2025 as
+amended by Finance Act, 2026 are now archived without byte changes under
+`legal-sources/`. The archive manifest records exact download URLs, byte hashes,
+page counts and unaltered full-page renders. Form pages 1, 5 and 9 and Act page
+73 were visually reviewed; this is targeted review, not whole-document or
+professional qualification. The separate original MSMED Act request still timed
+out and no bytes or archival hash are claimed for that document.
+
+The Form 26 preset now reports the retained original and the actual targeted
+review scope. Its 65 numbered-item/schedule requirements remain unchanged and
+statutory completeness remains false. It does not fill or sign the official PDF.
+Source page 1 contains unexpected category/report-part combinations; that source
+issue remains open. Existing report selection continues to follow separately
+assessed Rule 47 and report headings, without silently rewriting the original.
+
+Form page 9 distinguishes item 33(a), interest disallowance; 33(b), current-year
+MSE disallowance; and 33(c), prior-year release. Closing interest from the existing
+interest workflow cannot stand in for those three assessed P&L/tax amounts. Act
+page 73 identifies section 37(2)(g), excludes that clause from subsection (3)'s
+filing-date extension, and prevents a second deduction under subsection (5).
+These are source references for further implementation, not a completed tax
+calculation or disclosure pack. Primary source bytes and targeted capture scope
+are in `legal-sources/india-msme-source-archive.json`.
+
+
+Archive/preset and tax-period scope verification passed 79 selected tests across
+two original receipts: `../phase-12/form26-original-source.xml` (30) and
+`../phase-12/form26-original-scope.xml` (49). These selected checks are not a
+complete backend suite or a fresh browser run. The archive integrity test checks
+original PDF bytes/page counts and every retained render hash; existing report
+and tax-scope HTTP cases remain passing. Ruff and mypy also pass. Exact original
+artifacts and staged source hashes are recorded in
+`../phase-12/form26-original-validation.json`. No frontend or tax calculation
+logic changed in this source-archive increment.
