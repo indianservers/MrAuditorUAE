@@ -1,0 +1,51 @@
+{
+  "contract": "benefit-service-calendar-browser/2",
+  "date": "2026-10-29",
+  "source_commit": "2cbb680827ea9e28d5ddc07298189afc344cf593",
+  "run_id": 40887813173,
+  "job_id": 123496142868,
+  "job_url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40887813173/job/123496142868",
+  "conclusion": "success",
+  "reported_cases_passed": 3,
+  "reported_duration": "1.8m",
+  "artifact": {
+    "id": 12903182831,
+    "size_bytes": 3528085,
+    "sha256": "4a344a86f1888d1d51fc66917c52ef379e7a38dbed9c77b4074a313ca79faaca",
+    "download_digest_verified": true
+  },
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-benefit-service-calendar-reviewed-2cbb680.png",
+      "sha256": "234514b1268154d77ba4586f49deab91fb8094cdf19f5343f6d80879696d0299",
+      "size_bytes": 192890,
+      "width": 1563,
+      "height": 1910,
+      "individually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-benefit-service-calendar-withdrawn-stale-2cbb680.png",
+      "sha256": "5dac933e9c72097c24c34bfc7ec9256230d23958c2644f4b94c13554eeda086a",
+      "size_bytes": 125893,
+      "width": 1563,
+      "height": 1128,
+      "individually_inspected": true
+    }
+  ],
+  "verified_behavior": [
+    "All three hosted cases passed, retaining existing AE/IN report, bank, MSE, gratuity, merchant/reserve and session coverage",
+    "New AE flow reuses a reviewed rule source; dated full-time and explicit-zero part-time sources are prepared/reviewed via API with real scanner/broker/worker",
+    "UI queues calculation, independently approves and downloads exact XLSX; 725/365 eligible days, 4171.23/1050.00 benefits and the two original calendar records are asserted",
+    "Calendar source review withdrawal makes the result STALE; complete saved financial body remains structurally equal and approval is disabled",
+    "Both original inspected captures include the unobstructed title, June 1-5 dates/evidence, explicit-zero summary, 2-employee/5-day controls and exact eligible-day table",
+    "Compact service-year fraction was replaced by exact eligible days; full year precision remains available in source provenance and XLSX, verified by frontend test"
+  ],
+  "prior_receipt": "docs/phase-12/benefit-service-calendar-browser-2d108f6.json",
+  "limits": [
+    "The reviewed image includes an unfilled expected-settlement form; it does not prove a new expected source was prepared from these calendar employees",
+    "New source-control upload widgets have unit/integrated UI tests; source preparation in this hosted flow uses APIs",
+    "Synthetic supplied parameters and HR facts only; not independent clients, legal leave classification, pension exclusions or India entitlement",
+    "Three browser cases do not establish 154 browser scenarios",
+    "Current full hosted backend regression remains pending; earlier reserve full proof predates calendar changes"
+  ]
+}

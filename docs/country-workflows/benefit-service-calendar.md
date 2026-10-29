@@ -78,3 +78,43 @@ document separately. Under those supplied fixture parameters, E1 has 730 inclusi
 days less five assessed exclusions, giving 725 eligible days and AED 4,171.23;
 E2 has an explicit zero exclusion and AED 1,050.00. These values are authored
 mechanical examples, not independently approved client or legal results.
+
+## Retained verification
+
+Application source `2d108f6` passed 3,232 local backend unit tests (five skipped),
+four focused database/API workflows and 315 frontend tests. The API receipt covers
+the new zero/nonzero calendar cases and two prior gratuity bridge regressions,
+using real HTTP, storage, database and job processing with explicit scanner and
+dispatch doubles. It verifies that calendar review withdrawal makes a current
+benefit, derived expectation and bank comparison stale without changing financial
+bodies. Replacing original calendar evidence is also covered.
+
+The presentation follow-up `2cbb680` changes three frontend files; backend code is
+identical to `2d108f6`. All 316 frontend tests, TypeScript, lint and production build
+passed. Compact results now show exact eligible days. Full service-year precision
+remains in source provenance and XLSX, verified by a frontend test.
+
+All three hosted browser cases passed on `2cbb680` in 1.8 minutes, including the
+new UAE calculation, independent final approval, exact XLSX and calendar-source
+withdrawal. Source setup/reviews use APIs with the real scanner, broker and worker.
+The original artifact digest was verified and both exact images inspected:
+
+- [Reviewed dated calendar and benefit](screenshots/browser-workflows/AE-benefit-service-calendar-reviewed-2cbb680.png)
+- [Withdrawn calendar source and stale approval](screenshots/browser-workflows/AE-benefit-service-calendar-withdrawn-stale-2cbb680.png)
+
+Both titles are unobstructed. The images show June 1–5 evidence, an explicit zero
+summary, controls for two employees/five days, eligible-day counts of 725/365 and
+benefits of 4,171.23/1,050.00. The visible preparation form in the reviewed image is
+unfilled and is not evidence of a new expected settlement for these employees.
+The earlier passing `2d108f6` receipt retains its obscured heading and long-decimal
+display as explicit visual shortcomings. Full current hosted backend regression
+remains pending; the complete passing reserve suite on `9ba08d4` predates this
+calendar feature. See the source-specific validation and browser receipts under
+`docs/phase-12/` for hashes and scope limits.
+
+The five cases skipped by the original local full-unit run also passed in
+separate opt-in executions: four connector PostgreSQL/Redis checks in a fresh
+UUID database/role with owned quota keys, and one real built TensorFlow CPU-worker
+test. [The supplemental receipt](../phase-12/calendar-supplemental-infrastructure.json)
+retains their exact JUnit files. The original full-unit skip count is preserved;
+these runs do not establish live vendor authentication or client control totals.

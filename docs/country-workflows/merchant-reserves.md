@@ -112,5 +112,9 @@ These images show 100 opening, separate holds of 50 and releases of 5, closing 1
 the position/GL/batch rows and disabled stale approval. Individual dated movement
 details are retained in the body and export, but collapsed provenance is not
 visual evidence of those details. Five hosted CI jobs passed on this source;
-complete current backend regression is still running at this checkpoint. Prior
-full-suite proof on `b315b53` does not verify the reserve changes.
+the complete backend regression also passed: 4,104 passed, nine skipped, 86.27%
+overall and 89.35% core coverage. Exact original JUnit and coverage are retained in
+`docs/phase-12/9ba08d4-hosted-verification.json` with the verified artifact digest.
+The nine skipped cases include live vendor access and separate infrastructure or
+platform checks; this does not qualify real providers or clients. Later service
+calendar changes need their own full hosted proof.

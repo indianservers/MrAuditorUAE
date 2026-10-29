@@ -38,7 +38,7 @@
     "mypy": "397 app source files passed",
     "api_contracts": "runtime model snapshots current; frontend generated types checked"
   },
-  "browser": "AE hosted case extended to reuse reviewed rule source, review dated full-time and explicit-zero part-time calendars, calculate/approve/export via UI and verify withdrawal staleness with unchanged full body. Not executed on this new source yet.",
+  "browser": "All three hosted cases passed on 2d108f6 in 1.9m. Original artifact digest verified and two images individually inspected. Functional steps passed, but the reviewed title is obscured by the fixed header and the full service-year decimal needs compact presentation; see source-specific receipt. Follow-up presentation changes are not yet verified.",
   "coverage": [
     "Dated inclusive exclusions, leap days, adjacent intervals, overlap rejection and exact service identity",
     "Missing employee remains unknown; a zero needs its own explicit record; declared/day mismatch blocks benefit and settlement approval",
@@ -53,7 +53,7 @@
     "No leave eligibility, legal classification, statutory rate, year divisor or minimum-service rule is inferred by the calendar",
     "Consumer is UAE gratuity; it cannot establish India entitlements or pension-period exclusions",
     "Actual HR source completeness, original record meaning and independent professional/client validation remain open",
-    "Full hosted backend, browser, security and container checks on this new source still need observation; prior reserve proofs do not establish this source"
+    "Five current hosted jobs passed on 2d108f6; full verify remains running. Presentation changes after this source need separate proof."
   ],
   "normalized_lf_sources": [
     {
@@ -124,5 +124,153 @@
       "path": "frontend/tests/country-workflows.test.tsx",
       "sha256": "0e70db644c3e563da336cc298cf8ba6afa1a269528755b33cd80b97c8765526b"
     }
-  ]
+  ],
+  "source_commit": "2d108f6fbd30aecfa615b8dfe565ab14c9aa67a4",
+  "hosted_checkpoint": {
+    "run_id": 40885719451,
+    "source_commit": "2d108f6fbd30aecfa615b8dfe565ab14c9aa67a4",
+    "observed_at_utc": "2026-10-29T14:33:13.275778+00:00",
+    "jobs": [
+      {
+        "name": "ml",
+        "id": 123488753049,
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "security",
+        "id": 123488753646,
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "frontend",
+        "id": 123488753479,
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "browser-smoke",
+        "id": 123488753181,
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "containers",
+        "id": 123488753405,
+        "status": "completed",
+        "conclusion": "success"
+      },
+      {
+        "name": "verify",
+        "id": 123488753378,
+        "status": "in_progress",
+        "conclusion": null
+      }
+    ],
+    "interpretation": "Observed job handles; re-query run/jobs before using pending states as current"
+  },
+  "browser_receipt": "docs/phase-12/benefit-service-calendar-browser-2d108f6.json",
+  "hosted_frontend": {
+    "job_id": 123488753479,
+    "tests_passed": 315,
+    "files_passed": 66,
+    "production_build": "passed",
+    "source_commit": "2d108f6fbd30aecfa615b8dfe565ab14c9aa67a4"
+  },
+  "presentation_followup": {
+    "source_commit": "2cbb680827ea9e28d5ddc07298189afc344cf593",
+    "backend_identical_to": "2d108f6fbd30aecfa615b8dfe565ab14c9aa67a4",
+    "changed_files": [
+      "frontend/e2e/benefit-service-calendar-browser-workflow.ts",
+      "frontend/src/features/country-workflows.tsx",
+      "frontend/tests/country-workflows.test.tsx"
+    ],
+    "frontend": {
+      "tests_passed": 316,
+      "files_passed": 66,
+      "original_local_report_sha256": "d794c43e1d2d474b1442eee7a0cf3e9ed3006821a4023b1a9260942beb6bd485",
+      "typecheck": "passed",
+      "lint": "passed with one pre-existing warning",
+      "production_build": "passed"
+    },
+    "normalized_lf_sources": [
+      {
+        "path": "frontend/e2e/benefit-service-calendar-browser-workflow.ts",
+        "sha256": "cf764817e164048f353d7d002d75cbd3864adb011adaf0b72a1b64295cc8186f"
+      },
+      {
+        "path": "frontend/src/features/country-workflows.tsx",
+        "sha256": "fb9d7e260d48b32a63f4cc34440c71519ef6f9b6952effe83e98408cd37e8d0b"
+      },
+      {
+        "path": "frontend/tests/country-workflows.test.tsx",
+        "sha256": "c22cfa9a525a66845ef4f5955c6cd7712685d61acce7b4570c9a5fa129765f41"
+      }
+    ],
+    "browser_receipt": "docs/phase-12/benefit-service-calendar-browser-2cbb680.json",
+    "conclusion": "Three hosted browser cases passed, original ZIP digest verified and two corrected captures individually inspected. Full current backend pending.",
+    "hosted_frontend": {
+      "job_id": 123496142943,
+      "source_commit": "2cbb680827ea9e28d5ddc07298189afc344cf593",
+      "tests_passed": 316,
+      "files_passed": 66,
+      "production_build": "passed"
+    },
+    "hosted_checkpoint": {
+      "run_id": 40887813173,
+      "source_commit": "2cbb680827ea9e28d5ddc07298189afc344cf593",
+      "observed_at_utc": "2026-10-29T14:33:13.275778+00:00",
+      "jobs": [
+        {
+          "name": "containers",
+          "id": 123496142653,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "security",
+          "id": 123496142801,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "browser-smoke",
+          "id": 123496142868,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "frontend",
+          "id": 123496142943,
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "name": "verify",
+          "id": 123496143019,
+          "status": "in_progress",
+          "conclusion": null
+        },
+        {
+          "name": "ml",
+          "id": 123496143088,
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ],
+      "separate_frontend": {
+        "run_id": 40887813145,
+        "job_id": 123496141796,
+        "conclusion": "success"
+      },
+      "interpretation": "Source-specific observed states; re-query pending jobs before relying on them"
+    }
+  },
+  "supplemental_infrastructure": {
+    "source_commit": "2cbb680827ea9e28d5ddc07298189afc344cf593",
+    "passed": 5,
+    "receipt": "docs/phase-12/calendar-supplemental-infrastructure.json",
+    "interpretation": "Separate opt-in executions for the five local unit skips; original full-suite counts remain unchanged"
+  }
 }

@@ -1,0 +1,56 @@
+{
+  "contract": "benefit-service-calendar-browser/1",
+  "date": "2026-10-29",
+  "source_commit": "2d108f6fbd30aecfa615b8dfe565ab14c9aa67a4",
+  "run_id": 40885719451,
+  "job_id": 123488753181,
+  "job_url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40885719451/job/123488753181",
+  "conclusion": "success",
+  "reported_cases_passed": 3,
+  "reported_duration": "1.9m",
+  "artifact": {
+    "id": 12901623513,
+    "size_bytes": 3524585,
+    "sha256": "20e9048bb5ed2cee8c171c5ced1a07eba1e72434bd52059477bdf58b50f59a3e",
+    "download_digest_verified": true
+  },
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-benefit-service-calendar-reviewed-2d108f6.png",
+      "sha256": "d6bb58ae9b54cbe03a6d5e4ceea7b82aea07ae996adb2c965842a1f253e948b7",
+      "size_bytes": 191344,
+      "width": 1563,
+      "height": 1910,
+      "individually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-benefit-service-calendar-withdrawn-stale-2d108f6.png",
+      "sha256": "64cdeb5d55538e0761453d10fb4754bcb25d02046a0c09e967b3d8b69668a8e3",
+      "size_bytes": 125966,
+      "width": 1563,
+      "height": 1128,
+      "individually_inspected": true
+    }
+  ],
+  "verified_behavior": [
+    "Three hosted cases retained: AE report/native-bank/gratuity/calendar/merchant/reserve, IN report/MSE/merchant/reserve and session",
+    "Reused reviewed rule source; API prepares/reviews two employee and dated-calendar sources with real scanner/broker/worker",
+    "UI queues the benefit calculation and independently approves it; exact 725 eligible days/4171.23 full-time benefit and explicit-zero/1050.00 part-time benefit asserted from the saved result",
+    "UI downloads XLSX; complete two-record calendar sheet and exact benefit values read from original bytes",
+    "Calendar review withdrawal makes the result STALE, keeps the complete saved body structurally equal and disables independent approval in UI",
+    "Original inspected images show employee/day controls, June 1-5 exclusion dates/evidence, explicit-zero summary and the two benefit amounts"
+  ],
+  "visual_limits": [
+    "Reviewed capture is taller than the 1800px viewport; fixed header obscures its title. It is not proof of a fully unobstructed reviewed heading",
+    "Default compact table displays the full repeating service-year decimal, making the table unnecessarily wide. Exact values are retained, but presentation needs correction",
+    "The unfilled expected-settlement preparation form is visible; this image does not prove a new expected source was prepared from these calendar employees",
+    "Follow-up changes switch the compact display to exact eligible days and center a taller capture viewport; those new changes require separate tests/browser proof"
+  ],
+  "limits": [
+    "Authored synthetic parameters and HR facts only, not independent clients or legal qualification",
+    "Source setup/review/withdrawal uses APIs; calculation/final approval/download/stale UI are browser actions",
+    "No automatic leave eligibility, pension-period exclusion, India entitlement or legal gratuity rates inferred",
+    "Three browser cases do not mean all 154 scenarios were browser tested",
+    "Full hosted backend remains running and is not claimed as passing"
+  ]
+}

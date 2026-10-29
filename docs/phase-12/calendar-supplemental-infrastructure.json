@@ -1,0 +1,39 @@
+{
+  "contract": "calendar-supplemental-infrastructure/1",
+  "date": "2026-10-29",
+  "source_commit": "2cbb680827ea9e28d5ddc07298189afc344cf593",
+  "receipts": [
+    {
+      "path": "docs/phase-12/calendar-connector-isolated.xml",
+      "sha256": "da383eba30b8633ac26c5afcfd0839b6b12eb38170cf1ceaea54a12ad86a9648",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 4
+    },
+    {
+      "path": "docs/phase-12/calendar-real-cpu-worker.xml",
+      "sha256": "1bd72b7b9a4d5b61485a6ec41afd315e6201eb95ba060f68472d8372f7d80ed6",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 1
+    }
+  ],
+  "distinct_cases_passed": 5,
+  "scope": [
+    "Existing connector_operations_run.py created a fresh UUID-named connector database and NOBYPASSRLS role, ran four tests and removed only that generated database/role",
+    "Real Redis on the owned verification DB14 used UUID organization keys; tests delete only their own quota keys, not the database",
+    "Four cases cover RLS/immutable source evidence, serialized grant refresh, independently committed checkpoints with byte-tamper rejection and shared Redis organization concurrency/budget",
+    "Built the existing locked pure-JavaScript TensorFlow CPU worker; real model training/inference verifies process reuse, exact artifacts, corrupted-weight rejection and owned worker shutdown",
+    "ML dependencies installed with npm ci: 67 packages, audit reported zero vulnerabilities; npm run build passed; no application source or lockfile changes"
+  ],
+  "limits": [
+    "Separate opt-in verification, not a replacement or rewrite of full-suite receipts showing skips",
+    "Local full suite has 3,232 passes/five skips; these separate runs exercise those five local skipped unit cases",
+    "Hosted nine skips also include live Zoho/Tally/direct-API access and a Windows-specific assignment test; the Windows case passed in the local full suite",
+    "Connector token/page responses in these tests are synthetic; no live vendor authentication, independent client control totals or production qualification established"
+  ]
+}

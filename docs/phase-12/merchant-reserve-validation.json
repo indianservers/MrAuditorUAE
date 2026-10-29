@@ -44,7 +44,7 @@
     "API tests use real database, HTTP, storage and job processor with explicit scanner/dispatch doubles",
     "Focused API receipt has two new AE/IN reserve workflows plus two existing merchant workflows",
     "No processor authentication, bank receipt, FX, impairment, reserve ownership or payment instruction established",
-    "Five of six current hosted jobs passed; complete backend verify remains running and is not yet claimed as passing"
+    "All six jobs passed on 9ba08d4 with complete JUnit/coverage retained; later calendar changes require source-specific proof"
   ],
   "normalized_lf_sources": [
     {
@@ -148,7 +148,8 @@
       },
       "verify": {
         "id": 123467139159,
-        "status": "in_progress"
+        "status": "completed",
+        "conclusion": "success"
       }
     },
     "interpretation": "Observed live job handles; not final conclusions. Re-query run/jobs before using these states.",
@@ -163,5 +164,16 @@
       "audit": "zero reported vulnerabilities"
     }
   },
-  "browser_receipt": "docs/phase-12/merchant-reserve-browser-9ba08d4.json"
+  "browser_receipt": "docs/phase-12/merchant-reserve-browser-9ba08d4.json",
+  "full_hosted_backend": {
+    "source_commit": "9ba08d4920c598b1137761180e246858a71d1e1f",
+    "run_id": 40879567200,
+    "job_id": 123467139159,
+    "conclusion": "success",
+    "passed": 4104,
+    "skipped": 9,
+    "overall_coverage": 86.26538773163273,
+    "core_coverage_percent": 89.35,
+    "receipt": "docs/phase-12/9ba08d4-hosted-verification.json"
+  }
 }

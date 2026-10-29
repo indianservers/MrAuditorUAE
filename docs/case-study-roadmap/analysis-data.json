@@ -45,7 +45,7 @@
         "shared": "Controlled BRS, account/owner evidence, ambiguity, opening/closing bridge, dates, outstanding carry-forward, subsequent clearance and cross-engagement cash-allocation checks. Retained matched groups now expose protected original transactions through separately paged read-only inspection. Explicit merchant batches now bridge gross sales, separately checked refunds/chargebacks, fees, assessed tax/withholding and reserves to net signed bank allocations. Partial and pooled payouts retain exact links; residuals block approval. Merchant results also retain separately paged booking/value-date provenance, reject reversed/value-date-only settlements and require regeneration of earlier result contracts. Merchant settlement can now retain a current independent account-document review covering the entire selected period, with unchanged originals and recursive withdrawal staleness. Separate processor reserve continuity now checks dated gross holds/releases, position-level available balances, independently controlled opening/closing statements and assessed receivable GL accounts, reusing the original reviewed processor source. Large XLSX populations retain individual movement and balance links; source withdrawal makes results stale.",
         "UAE": "Authorized committed GL plus bounded reviewed CSV/XLSX/PDF and native bank profiles; account/currency scope remains explicit. Hosted browser verifies committed-GL/native-CAMT matching, invalid-closing rejection, independent review, XLSX and replacement staleness. Merchant component arithmetic uses assessed UAE/foreign fee-tax labels without inferring VAT rates or recovery. Reserve continuity uses explicitly selected original currency and exact receivable controls, without claiming bank receipt, reserve ownership or VAT recovery.",
         "India": "Reuses the same reviewed account, statement, identifier/date and residual controls; no cross-account or currency auto-netting. The same merchant arithmetic uses separately assessed India/foreign fee-tax labels without inferring GST or withholding entitlement. The same reserve engine uses independently assessed India processor facts and original currency, without inferring GST/withholding entitlement or FX.",
-        "remaining": "Qualify representative bank-specific files and extraction accuracy; supported profiles do not imply every bank or PDF layout. Qualify processor-native layouts, independent client schedules, reserve account classification/recoverability and any cross-workflow cash-reservation integration. Current reserve browser proof passed with four inspected original images; full current hosted regression remains pending.",
+        "remaining": "Qualify representative bank-specific files and extraction accuracy; supported profiles do not imply every bank or PDF layout. Qualify processor-native layouts, independent client schedules, reserve account classification/recoverability and any cross-workflow cash-reservation integration. Reserve source 9ba08d4 completed all six jobs, including full backend; later service-calendar source runs remain separate.",
         "evidence": [
           "backend/app/modules/country_workflows/bank_accounts.py",
           "backend/app/modules/country_workflows/bank_consumption.py",
@@ -74,7 +74,8 @@
           "frontend/e2e/merchant-reserve-browser-workflow.ts",
           "docs/country-workflows/merchant-reserves.md",
           "docs/phase-12/merchant-reserve-validation.json",
-          "docs/phase-12/merchant-reserve-browser-9ba08d4.json"
+          "docs/phase-12/merchant-reserve-browser-9ba08d4.json",
+          "docs/phase-12/9ba08d4-hosted-verification.json"
         ]
       }
     },
@@ -368,9 +369,9 @@
         "id": "13",
         "status": "PARTIAL_SPECIALIST_COVERAGE",
         "shared": "Payroll accrual/posting controls, employee/channel settlement, contributions, assessed expected remittances and split payment allocation with retained rule/source lineage.",
-        "UAE": "WPS, pension/cohort and benefit reviews remain separate purpose-bound workflows with independently reviewed published rule profiles and supporting evidence. Reviewed constant-model full-time/part-time gratuity now bridges to independently controlled expected settlements, with typed employment-service scopes and independent HR/bank allocation evidence; rule or supporting-context replacement stales dependent approvals.",
+        "UAE": "WPS, pension/cohort and benefit reviews remain separate purpose-bound workflows with independently reviewed published rule profiles and supporting evidence. Reviewed constant-model full-time/part-time gratuity now bridges to independently controlled expected settlements, with typed employment-service scopes and independent HR/bank allocation evidence; rule or supporting-context replacement stales dependent approvals. Optional dated service calendars now verify each employee/service scope against independently controlled inclusive exclusion intervals or an explicit zero record. Missing/day-different rows block the benefit; source withdrawal propagates through current expected and bank settlement descendants. No selected calendar leaves an explicit employee-declaration basis rather than a dated-evidence claim. Compact result tables now show exact eligible-day counts; full service-year precision remains in provenance and XLSX. Current-source UI calculation, independent approval, export and calendar withdrawal passed hosted browser checks with two corrected original images inspected.",
         "India": "PF/EPS/ESI/PT assessed component calculations, ECR/ESIC member/day/wage population checks and payroll-to-GL controls are implemented.",
-        "remaining": "Complete legal cohort/state/schema qualification, representative payroll clients, statutory charges not covered by current formulas and actual filing/payment execution.",
+        "remaining": "Complete legal cohort/state/schema qualification, representative payroll clients, statutory charges not covered by current formulas and actual filing/payment execution. Dated exclusions do not determine paid/unpaid legal eligibility, pension service treatment, changing work models or alternative-scheme entitlements. Current service-calendar browser proof passed on 2cbb680; full current hosted backend remains pending.",
         "evidence": [
           "backend/app/modules/country_workflows/payroll_ledger_schemas.py",
           "backend/tests/qa_crud/test_payroll_ledger.py",
@@ -379,7 +380,16 @@
           "backend/app/modules/country_workflows/benefit_settlement_source.py",
           "docs/country-workflows/benefit-settlement.md",
           "docs/phase-12/benefit-settlement-validation.json",
-          "docs/phase-12/gratuity-browser-b315b53.json"
+          "docs/phase-12/gratuity-browser-b315b53.json",
+          "backend/app/modules/country_workflows/benefit_service_calendar.py",
+          "backend/tests/unit/test_benefit_service_calendar.py",
+          "backend/tests/qa_crud/test_benefit_service_calendar.py",
+          "frontend/e2e/benefit-service-calendar-browser-workflow.ts",
+          "docs/country-workflows/benefit-service-calendar.md",
+          "docs/phase-12/benefit-service-calendar-validation.json",
+          "docs/phase-12/benefit-service-calendar-browser-2d108f6.json",
+          "docs/phase-12/benefit-service-calendar-browser-2cbb680.json",
+          "docs/phase-12/calendar-supplemental-infrastructure.json"
         ]
       }
     }
@@ -541,46 +551,68 @@
   ],
   "checkpoint": {
     "as_of": "29 October 2026",
-    "source_revision": "9ba08d4920c598b1137761180e246858a71d1e1f",
+    "source_revision": "2cbb680827ea9e28d5ddc07298189afc344cf593",
     "release_status": "NOT_QUALIFIED_FOR_PRODUCTION_STATUTORY_USE",
-    "scope": "Operational implementation and bounded synthetic verification through 9ba08d4. UAE-first processor reserve continuity now reuses reviewed merchant settlements, checks separate dated holds/releases and independent opening/closing balances, then exact receivable GL controls; the same workflow supports India in original currency with country-specific processor tax labels. It blocks omitted offsetting components, interim overdrafts and cross-merchant pooling and preserves complete XLSX movement details. Local proof: 3,203 backend units, four focused API workflows, 307 frontend tests, production build/types/lint and mypy passed. Current hosted browser, frontend, security, ML and containers passed. All three browser cases passed in 1.7m; four exact UAE/India reserve images were downloaded, digest verified and individually inspected. Full current hosted backend remains running and is not claimed as passing. Prior b315b53 complete hosted proof remains historical and does not verify new code. Legal/native/provider/client and production qualification remain open.",
+    "scope": "Operational implementation and bounded synthetic verification through 2cbb680. UAE gratuity verifies declared excluded days against reviewed dated service calendars, with exact scope, independent employee/day controls, explicit zeros, overlap rejection and complete XLSX. Missing or different calendars block benefits; source withdrawal stales dependent expectations/bank comparisons without changing saved rows. No calendar leaves an explicit employee-declaration basis. India and UAE pension treatment are not inferred. Local proof: 3,232 backend units/five skips, four focused API workflows and 316 frontend tests, production build/types/lint, Ruff and mypy. All five locally skipped unit cases also passed in separate isolated connector/Redis and real CPU-worker runs. Five current hosted jobs passed, including all three browser cases in 1.8m; two corrected original calendar captures were inspected. Current full backend is still running. Prior reserve source 9ba08d4 completed all six jobs, including 4,104 backend passes/nine skips, 86.27% overall and 89.35% core coverage with original JUnit/coverage archived. Full legal/native/provider/client and production qualification remain open.",
     "verification": [
       {
         "label": "Backend units",
-        "result": "3,203 passed; five skipped",
-        "path": "docs/phase-12/merchant-reserve-backend.xml",
-        "limit": "Includes 33 new reserve tests alongside all 154 authored scenarios and prior annual-statement/gratuity/merchant controls. Covers gross completeness, exact opening/closing, dated availability, shared-GL merchant isolation and complete 401-movement export. Skipped infrastructure checks and independent-client/legal qualification remain separate."
+        "result": "3,232 passed; five skipped",
+        "path": "docs/phase-12/service-calendar-backend.xml",
+        "limit": "3,232 passed/five skipped in the original full local run on 2d108f6; backend is identical on 2cbb680. Includes 29 new calendar cases and all 154 authored scenarios. Separate opt-in receipts now verify all five local skipped unit cases; original full-run counts are preserved. Synthetic inputs are not independent clients or legal qualification."
       },
       {
         "label": "Focused database regressions",
         "result": "Four passed",
-        "path": "docs/phase-12/merchant-reserve-api.xml",
-        "limit": "Two new UAE/India reserve workflows plus two existing merchant workflows. Real HTTP/database/storage/job processing verifies independent review, exact XLSX and GL-review withdrawal staleness with unchanged saved rows. Scanner/dispatch are explicit doubles; not all APIs or actual providers."
+        "path": "docs/phase-12/service-calendar-api.xml",
+        "limit": "Two new UAE calendar cases and two prior gratuity settlement flows. Real HTTP/database/storage/processor verifies reviewed full/part-time calendars, explicit zero, a supplied minimum-service boundary, exact XLSX and source review/file replacement staleness. A current calendar withdrawal stales parent, derived expectation and bank comparison without financial-body changes. Scanner/dispatch are explicit doubles."
+      },
+      {
+        "label": "Supplemental isolated infrastructure",
+        "result": "Five passed; zero skipped in these separate runs",
+        "path": "docs/phase-12/calendar-supplemental-infrastructure.json",
+        "limit": "Four real connector PostgreSQL/Redis cases use a fresh UUID database/NOBYPASSRLS role and owned UUID Redis keys. A separate built TensorFlow CPU worker test verifies actual training/inference, process reuse, corrupt-weight rejection and shutdown. These exercise all five local unit skips, without rewriting the original full-suite count or establishing live vendor access."
       },
       {
         "label": "Prior complete hosted backend",
-        "result": "4,069 passed; nine skipped; overall coverage 86.21%, core 89.35%",
-        "path": "docs/phase-12/b315b53-hosted-verification.json",
-        "limit": "Complete original JUnit/coverage archived for b315b53, before reserve code. This remains historical; the current 9ba08d4 full backend run is in progress and must be observed separately. Neither suite establishes actual clients, providers, a complete legal corpus or production deployment."
+        "result": "4,104 passed; nine skipped; overall coverage 86.27%, core 89.35%",
+        "path": "docs/phase-12/9ba08d4-hosted-verification.json",
+        "limit": "Complete original JUnit/coverage archived with verified artifact digest for reserve source 9ba08d4; all six jobs passed. Four live vendor checks, four isolated connector cases and one Windows-only case were skipped there. Local Windows coverage and separate connector/CPU receipts remain distinct. This source predates the calendar; current full backend remains running. Operations in the artifact are synthetic with no external requests or filing submission."
       },
       {
         "label": "Frontend",
-        "result": "307 tests across 65 files passed; production build, TypeScript and lint passed",
-        "path": "docs/phase-12/merchant-reserve-validation.json",
-        "limit": "Local current-source proof includes blank independent reserve controls, distinct held/released versus opening/closing payloads, explicit zeros and reset on source-type changes. One pre-existing unused-variable warning remains in uae-business-cases.tsx. Both hosted frontend jobs also passed on this source; exact 307 tests/65 files and production build confirmed from terminal logs."
+        "result": "316 tests across 66 files passed; production build, TypeScript and lint passed",
+        "path": "docs/phase-12/benefit-service-calendar-validation.json",
+        "limit": "Local presentation follow-up and both hosted frontend jobs passed on 2cbb680. One added test verifies exact eligible days in compact results and unchanged full service-year precision in provenance. One existing unused-variable warning remains. Initial 315-test proof on 2d108f6 remains separately retained."
       },
       {
-        "label": "Current reserve browser proof",
+        "label": "Prior reserve browser proof",
         "result": "All three cases passed on 9ba08d4 in 1.7m; four original UAE/India reserve images inspected",
         "path": "docs/phase-12/merchant-reserve-browser-9ba08d4.json",
-        "limit": "Both country cases reuse the original reviewed processor source and verify UI reserve calculation, independent final review, complete XLSX, withdrawn-GL staleness and whole saved-body equality. API source setup/reviews use real scanner/broker/worker. Exact images show separate 100/145 balances, 50/5 movements, three matched rows and STALE/disabled approval. Collapsed provenance is not a visual proof of dated movement detail. Synthetic mechanics, not independent clients or all 154 scenarios."
+        "limit": "Both country cases reuse the original reviewed processor source and verify UI reserve calculation, independent final review, complete XLSX, withdrawn-GL staleness and whole saved-body equality. API source setup/reviews use real scanner/broker/worker. Exact images show separate 100/145 balances, 50/5 movements, three matched rows and STALE/disabled approval. Collapsed provenance is not a visual proof of dated movement detail. Synthetic mechanics, not independent clients or all 154 scenarios. This source predates the new service-calendar code; current browser proof must be observed separately."
+      },
+      {
+        "label": "Current service-calendar browser proof",
+        "result": "All three cases passed on 2cbb680 in 1.8m; two original corrected captures inspected",
+        "path": "docs/phase-12/benefit-service-calendar-browser-2cbb680.json",
+        "limit": "Real scanner/broker/worker with API source setup/reviews and UI calculation/final approval/XLSX/stale assertions. Captures show unobstructed titles, two employees/five days, June 1-5 evidence, explicit-zero summary, exact eligible days 725/365 and benefits 4,171.23/1,050.00. Whole saved bodies are compared. Visible expected-settlement preparation is unfilled. Prior 2d108f6 functional pass and its visual limits are retained. Three synthetic cases are not 154 browser scenarios or independent clients."
       }
     ],
     "hosted_runs": [
       {
-        "label": "Current reserve source CI",
+        "label": "Current calendar presentation source CI",
+        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40887813173",
+        "status_at_checkpoint": "2cbb680: browser-smoke, frontend, security, ML and containers passed; verify/full backend observed in progress. Three browser cases passed in 1.8m; two corrected exact images inspected. Both frontend jobs passed, with 316 tests/66 files and production build verified in logs. Backend is identical to 2d108f6, whose full run also remains pending."
+      },
+      {
+        "label": "Initial dated-service browser proof with visual limits",
+        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40885719451/job/123488753181",
+        "status_at_checkpoint": "2d108f6: all three browser cases passed in 1.9m; five jobs passed, full backend still running. Two original images retained with the obscured reviewed title and long-decimal display noted. The later 2cbb680 run separately verifies corrected presentation."
+      },
+      {
+        "label": "Prior reserve source CI",
         "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40879567200",
-        "status_at_checkpoint": "9ba08d4: browser-smoke, frontend, security, ML and containers passed; verify/full backend observed in progress. Three browser cases passed in 1.7m and four original reserve images individually inspected. Separate Frontend checks run 40879567139 passed with 307 tests/65 files and production build. Full backend pending is not a pass."
+        "status_at_checkpoint": "9ba08d4: all six jobs passed, including 4,104 backend tests/nine skips, 86.27% overall and 89.35% core coverage. Complete JUnit/coverage archived with artifact digest verified. Three browser cases passed in 1.7m; four original reserve images inspected. This source predates service-calendar changes."
       },
       {
         "label": "Prior complete application backend proof",
@@ -601,7 +633,7 @@
     "open_gates": [
       {
         "priority": "UAE first",
-        "work": "Qualify representative bank/PDF, VAT201/customs and WPS inputs, employment/pension cohorts and complete reporting obligations against retained authoritative versions and independently checked schedules. Qualify merchant processor file layouts and independently checked component/reserve schedules; canonical gross-to-net arithmetic alone does not establish these.",
+        "work": "Qualify representative bank/PDF, VAT201/customs and WPS inputs, employment/pension cohorts and complete reporting obligations against retained authoritative versions and independently checked schedules. Qualify merchant processor file layouts and independently checked component/reserve schedules; canonical gross-to-net arithmetic alone does not establish these. The new dated gratuity exclusions verify assessed input days only; qualified leave eligibility, changing work models and alternative schemes remain separate.",
         "proof": "Approved country/rule/parser versions, boundary fixtures and independent expected results for every claimed cohort and layout."
       },
       {
@@ -621,7 +653,7 @@
       },
       {
         "priority": "Release",
-        "work": "Qualify actual production deployment/rollback, recovery, monitoring, privacy and professional sign-off. All six jobs passed on prior b315b53 with exact JUnit/coverage and browser images retained. Current reserve changes in 9ba08d4 have local tests/build and five hosted job passes including browser and containers; full current backend verification is still running. Synthetic CI mechanics do not close real-client or production gates.",
+        "work": "Qualify actual production deployment/rollback, recovery, monitoring, privacy and professional sign-off. Reserve source 9ba08d4 has all six jobs passed with complete original JUnit/coverage. Current calendar source 2cbb680 has five jobs passed and corrected browser proof; current full backend remains running. Separate isolated connector/CPU tests close local mechanics skips but not live Zoho/Tally/direct-API access or independent client control totals. Synthetic CI does not close production gates.",
         "proof": "Passing source-pinned jobs plus actual provider/runtime drills and named approvals. Local/container checks alone do not prove production readiness."
       }
     ],
@@ -647,7 +679,7 @@
         "shared": "Controlled BRS, account/owner evidence, ambiguity, opening/closing bridge, dates, outstanding carry-forward, subsequent clearance and cross-engagement cash-allocation checks. Retained matched groups now expose protected original transactions through separately paged read-only inspection. Explicit merchant batches now bridge gross sales, separately checked refunds/chargebacks, fees, assessed tax/withholding and reserves to net signed bank allocations. Partial and pooled payouts retain exact links; residuals block approval. Merchant results also retain separately paged booking/value-date provenance, reject reversed/value-date-only settlements and require regeneration of earlier result contracts. Merchant settlement can now retain a current independent account-document review covering the entire selected period, with unchanged originals and recursive withdrawal staleness. Separate processor reserve continuity now checks dated gross holds/releases, position-level available balances, independently controlled opening/closing statements and assessed receivable GL accounts, reusing the original reviewed processor source. Large XLSX populations retain individual movement and balance links; source withdrawal makes results stale.",
         "UAE": "Authorized committed GL plus bounded reviewed CSV/XLSX/PDF and native bank profiles; account/currency scope remains explicit. Hosted browser verifies committed-GL/native-CAMT matching, invalid-closing rejection, independent review, XLSX and replacement staleness. Merchant component arithmetic uses assessed UAE/foreign fee-tax labels without inferring VAT rates or recovery. Reserve continuity uses explicitly selected original currency and exact receivable controls, without claiming bank receipt, reserve ownership or VAT recovery.",
         "India": "Reuses the same reviewed account, statement, identifier/date and residual controls; no cross-account or currency auto-netting. The same merchant arithmetic uses separately assessed India/foreign fee-tax labels without inferring GST or withholding entitlement. The same reserve engine uses independently assessed India processor facts and original currency, without inferring GST/withholding entitlement or FX.",
-        "remaining": "Qualify representative bank-specific files and extraction accuracy; supported profiles do not imply every bank or PDF layout. Qualify processor-native layouts, independent client schedules, reserve account classification/recoverability and any cross-workflow cash-reservation integration. Current reserve browser proof passed with four inspected original images; full current hosted regression remains pending.",
+        "remaining": "Qualify representative bank-specific files and extraction accuracy; supported profiles do not imply every bank or PDF layout. Qualify processor-native layouts, independent client schedules, reserve account classification/recoverability and any cross-workflow cash-reservation integration. Reserve source 9ba08d4 completed all six jobs, including full backend; later service-calendar source runs remain separate.",
         "evidence": [
           "backend/app/modules/country_workflows/bank_accounts.py",
           "backend/app/modules/country_workflows/bank_consumption.py",
@@ -676,7 +708,8 @@
           "frontend/e2e/merchant-reserve-browser-workflow.ts",
           "docs/country-workflows/merchant-reserves.md",
           "docs/phase-12/merchant-reserve-validation.json",
-          "docs/phase-12/merchant-reserve-browser-9ba08d4.json"
+          "docs/phase-12/merchant-reserve-browser-9ba08d4.json",
+          "docs/phase-12/9ba08d4-hosted-verification.json"
         ]
       },
       {
@@ -838,9 +871,9 @@
         "id": "13",
         "status": "PARTIAL_SPECIALIST_COVERAGE",
         "shared": "Payroll accrual/posting controls, employee/channel settlement, contributions, assessed expected remittances and split payment allocation with retained rule/source lineage.",
-        "UAE": "WPS, pension/cohort and benefit reviews remain separate purpose-bound workflows with independently reviewed published rule profiles and supporting evidence. Reviewed constant-model full-time/part-time gratuity now bridges to independently controlled expected settlements, with typed employment-service scopes and independent HR/bank allocation evidence; rule or supporting-context replacement stales dependent approvals.",
+        "UAE": "WPS, pension/cohort and benefit reviews remain separate purpose-bound workflows with independently reviewed published rule profiles and supporting evidence. Reviewed constant-model full-time/part-time gratuity now bridges to independently controlled expected settlements, with typed employment-service scopes and independent HR/bank allocation evidence; rule or supporting-context replacement stales dependent approvals. Optional dated service calendars now verify each employee/service scope against independently controlled inclusive exclusion intervals or an explicit zero record. Missing/day-different rows block the benefit; source withdrawal propagates through current expected and bank settlement descendants. No selected calendar leaves an explicit employee-declaration basis rather than a dated-evidence claim. Compact result tables now show exact eligible-day counts; full service-year precision remains in provenance and XLSX. Current-source UI calculation, independent approval, export and calendar withdrawal passed hosted browser checks with two corrected original images inspected.",
         "India": "PF/EPS/ESI/PT assessed component calculations, ECR/ESIC member/day/wage population checks and payroll-to-GL controls are implemented.",
-        "remaining": "Complete legal cohort/state/schema qualification, representative payroll clients, statutory charges not covered by current formulas and actual filing/payment execution.",
+        "remaining": "Complete legal cohort/state/schema qualification, representative payroll clients, statutory charges not covered by current formulas and actual filing/payment execution. Dated exclusions do not determine paid/unpaid legal eligibility, pension service treatment, changing work models or alternative-scheme entitlements. Current service-calendar browser proof passed on 2cbb680; full current hosted backend remains pending.",
         "evidence": [
           "backend/app/modules/country_workflows/payroll_ledger_schemas.py",
           "backend/tests/qa_crud/test_payroll_ledger.py",
@@ -849,15 +882,24 @@
           "backend/app/modules/country_workflows/benefit_settlement_source.py",
           "docs/country-workflows/benefit-settlement.md",
           "docs/phase-12/benefit-settlement-validation.json",
-          "docs/phase-12/gratuity-browser-b315b53.json"
+          "docs/phase-12/gratuity-browser-b315b53.json",
+          "backend/app/modules/country_workflows/benefit_service_calendar.py",
+          "backend/tests/unit/test_benefit_service_calendar.py",
+          "backend/tests/qa_crud/test_benefit_service_calendar.py",
+          "frontend/e2e/benefit-service-calendar-browser-workflow.ts",
+          "docs/country-workflows/benefit-service-calendar.md",
+          "docs/phase-12/benefit-service-calendar-validation.json",
+          "docs/phase-12/benefit-service-calendar-browser-2d108f6.json",
+          "docs/phase-12/benefit-service-calendar-browser-2cbb680.json",
+          "docs/phase-12/calendar-supplemental-infrastructure.json"
         ]
       }
     ],
-    "unit_receipt": "docs/phase-12/merchant-reserve-backend.xml",
-    "database_receipt": "docs/phase-12/merchant-reserve-api.xml",
+    "unit_receipt": "docs/phase-12/service-calendar-backend.xml",
+    "database_receipt": "docs/phase-12/service-calendar-api.xml",
     "unit_summary": {
-      "tests": 3208,
-      "passed": 3203,
+      "tests": 3237,
+      "passed": 3232,
       "skipped": 5,
       "failures": 0,
       "errors": 0
