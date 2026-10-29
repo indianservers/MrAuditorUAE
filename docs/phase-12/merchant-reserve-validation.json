@@ -1,0 +1,119 @@
+{
+  "contract": "merchant-reserve-validation/1",
+  "date": "2026-10-29",
+  "base_commit": "d38c6e21410984b65db4d38dbfb58ef7bf371da4",
+  "source_hash_basis": "UTF-8 source bytes with CRLF normalized to LF; JUnit receipt hashes use exact bytes",
+  "receipts": {
+    "backend_unit": {
+      "path": "docs/phase-12/merchant-reserve-backend.xml",
+      "sha256": "35ec0d19ec52e9667a3bad1fd535cd1ff2822b4b1834fe89a22b3c6308f4efdd",
+      "tests": 3208,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 5,
+      "passed": 3203
+    },
+    "database_api": {
+      "path": "docs/phase-12/merchant-reserve-api.xml",
+      "sha256": "dee0b77dab005acaaf290230c2334663c01914a164500ba2bfbdee5634f31896",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 4
+    }
+  },
+  "new_unit_cases": 33,
+  "frontend": {
+    "tests_passed": 307,
+    "files_passed": 65,
+    "original_local_report_sha256": "b6c39d3e40c1bb098bcccbad0835de895f90550b4fe0031b7167c755906605fa",
+    "typecheck": "passed",
+    "lint": "passed with one pre-existing unused-variable warning in uae-business-cases.tsx",
+    "production_build": "passed"
+  },
+  "quality": {
+    "ruff_check": "passed",
+    "ruff_format": "729 files formatted",
+    "mypy": "396 source files passed",
+    "api_contracts": "current runtime snapshots verified; frontend types regenerated"
+  },
+  "browser": "Extended both hosted country cases to reuse the reviewed processor source, calculate/review/export reserve continuity in UI and withdraw GL review; not executed on this source yet",
+  "limits": [
+    "Authored synthetic examples only; no independent client or statutory qualification",
+    "API tests use real database, HTTP, storage and job processor with explicit scanner/dispatch doubles",
+    "Focused API receipt has two new AE/IN reserve workflows plus two existing merchant workflows",
+    "No processor authentication, bank receipt, FX, impairment, reserve ownership or payment instruction established",
+    "Full hosted backend, browser, security and container checks must be observed for this source separately"
+  ],
+  "normalized_lf_sources": [
+    {
+      "path": "backend/app/modules/country_workflows/calculations.py",
+      "sha256": "be36971a3c87a7e704115351754d07ae4a4c9ee7192f6707aabc27a56c0803b1"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/catalogue.py",
+      "sha256": "6d28276390346bad7203ae7b0c0760fd15ab03fd503d852cb58e0f93442388fd"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/merchant_reserves.py",
+      "sha256": "8bbee67be82f2014eaa2df9b4976395483dd36d7f56c2d499dd17493c5ecbf00"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/merchant_settlements.py",
+      "sha256": "83b5b1d276fe4606c5af28b489a399fa82077575a5ee329c955dab60fc5f596d"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/review.py",
+      "sha256": "1917af017eb0ff0d2cd0de9ec7e85bc3bc20b81a00502332301dea02795f5504"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/schemas.py",
+      "sha256": "417c79565f50bb3de4afbf131509594511343be537509f4b2b1673a2012512ac"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/service.py",
+      "sha256": "5bb0403290f58d1938b11a5445c4502f48b857169c7ea9c7be922b7d5c11d7c5"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/sources.py",
+      "sha256": "5ce2675a1c811fcf7aac7876edc45cf21af70d57a0a6a4070f21f0c55731663b"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "sha256": "6230ee368d15fa21636e5fc9ca1270818ee4f2b009ba8e64333b7b6ef3d2c3c2"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_merchant_reserves.py",
+      "sha256": "abe68d1f7ae8a42de0a85597a0056ee7ae8ee47feeff9b2e1f5d0627ac766247"
+    },
+    {
+      "path": "backend/tests/unit/test_merchant_reserves.py",
+      "sha256": "26de9613a45c6307c8db1eac119a5350a548e24491423b039af283af3efe3fa5"
+    },
+    {
+      "path": "frontend/e2e/merchant-browser-workflow.ts",
+      "sha256": "6b60eca81c6d934b9f618f77471001b89b2b92843bc84c7fc98515f9aa9c3cec"
+    },
+    {
+      "path": "frontend/e2e/merchant-reserve-browser-workflow.ts",
+      "sha256": "d788de9f7f0865e6431b8d51e7a4724ddb3f968e6d3c708b8ee244f515f2e930"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "ca29aef75fa4cd2c2490d387c5f09fb86396d82bac751d8c2561bba4c62e2e41"
+    },
+    {
+      "path": "frontend/src/features/merchant-reserve-controls.tsx",
+      "sha256": "326880215f9cf64e84942a030d673f92f7392545a2d067537eac06693c1b64fd"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "7b0420d3da21f20f4d3d01926d776f06a3acd2083ef60bea5d6d0618371298ab"
+    },
+    {
+      "path": "frontend/tests/merchant-reserve-controls.test.tsx",
+      "sha256": "0e8b24f8c0fe08aa5f18ce28883e00a373c88a3d2038ad695fa61cc9132014ab"
+    }
+  ]
+}

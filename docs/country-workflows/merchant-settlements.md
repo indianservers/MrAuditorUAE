@@ -88,6 +88,10 @@ arithmetic example are in
 professionally qualified expected schedules. The separate India MSE timing and
 UAE native-bank browser checks remain separate capabilities.
 
+For separate opening/closing processor reserve continuity, dated holds/releases
+and receivable ledger controls, use [Processor reserve continuity](merchant-reserves.md).
+That linked procedure reuses the original processor source without inferring bank receipt.
+
 This procedure does not authenticate banks or processors, reserve cash across
 other workflows, post journals, execute payments, prove complete sales populations,
 roll forward reserve liabilities, calculate FX or qualify tax/filing obligations.

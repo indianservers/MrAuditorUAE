@@ -372,6 +372,8 @@ vi.mock("@/hooks/use-api", () => ({
               },
             ],
             source_contracts: {
+              "merchant-reserve-movements": { id: { required: true, type: "str" } },
+              "merchant-reserve-balances": { id: { required: true, type: "str" } },
               "turnover-scope": {id:{required:true,type:"str"}},
               "turnover-amounts": {id:{required:true,type:"str"}, amount:{required:true,type:"Decimal"}},
               "turnover-adjustments": {id:{required:true,type:"str"}, amount:{required:true,type:"Decimal"}},
@@ -3496,4 +3498,22 @@ it("retains independent signed monetary controls when preparing turnover amounts
   fireEvent.click(screen.getByRole("button", {name: "Queue calculation"}));
   await waitFor(() => expect(state.mutate).toHaveBeenCalled());
   expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({table_type: "turnover-amounts", control_totals: {AED: "-100.00000001"}});
+});
+
+it.each(["merchant-reserve-movements", "merchant-reserve-balances"])("uploads %s with distinct controls and no mixed generic total", async (table) => {
+  render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+  fireEvent.change(screen.getByLabelText("Source table type"), { target: { value: table } });
+  const movement = table.endsWith("movements");
+  expect(screen.queryByLabelText("Independent totals by currency")).not.toBeInTheDocument();
+  for (const [label, value] of [["Clean retained evidence", "clean"], ["Schedule title", "SYN reserve evidence"], ["Expected data rows", "1"], ["Reserve control currency", "INR"], [movement ? "Total held" : "Total opening balance", "100"], [movement ? "Total released" : "Total closing balance", "0"]])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({
+    table_type: table, control_totals: {},
+    merchant_reserve_controls: movement ? { INR: { held: "100", released: "0" } } : { INR: { opening_balance: "100", closing_balance: "0" } },
+  });
+  fireEvent.change(screen.getByLabelText("Source table type"), { target: { value: movement ? "merchant-reserve-balances" : "merchant-reserve-movements" } });
+  expect(screen.getByLabelText("Reserve control currency")).toHaveValue("");
+  expect(screen.getByLabelText(movement ? "Total opening balance" : "Total held")).toHaveValue("");
 });

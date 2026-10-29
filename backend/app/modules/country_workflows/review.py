@@ -1,6 +1,12 @@
 def approval_error(body):
     from app.modules.intelligence.matching_review import saved_candidates_complete
 
+    if body.get("workflow") == "merchant-reserve-rollforward":
+        from app.modules.country_workflows.merchant_reserves import CONTRACT
+
+        if body.get("merchant_reserve_contract") != CONTRACT:
+            return "Regenerate reserve continuity with dated components and exact ledger controls before approval"
+
     if body.get("workflow") == "merchant-settlement-bridge":
         from app.modules.country_workflows.merchant_settlements import CONTRACT
 

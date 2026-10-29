@@ -234,6 +234,7 @@
           },
           "workflow": {
             "enum": [
+              "merchant-reserve-rollforward",
               "merchant-settlement-bridge",
               "india-msme-payment-timing",
               "tax-turnover-bridge",
@@ -2825,6 +2826,8 @@
             "enum": [
               "msme-supplier-assessments",
               "merchant-activity",
+              "merchant-reserve-movements",
+              "merchant-reserve-balances",
               "merchant-settlements",
               "merchant-bank-allocations",
               "msme-invoices",
@@ -2979,6 +2982,26 @@
             },
             "maxProperties": 20,
             "title": "Merchant Component Controls",
+            "type": "object"
+          },
+          "merchant_reserve_controls": {
+            "maxProperties": 20,
+            "patternProperties": {
+              "^[A-Z]{3}$": {
+                "additionalProperties": {
+                  "anyOf": [
+                    {
+                      "type": "number"
+                    },
+                    {
+                      "type": "string"
+                    }
+                  ]
+                },
+                "type": "object"
+              }
+            },
+            "title": "Merchant Reserve Controls",
             "type": "object"
           },
           "msme_context_evidence_version_id": {
@@ -8036,6 +8059,200 @@
         "assessment"
       ],
       "title": "MerchantAllocation",
+      "type": "object"
+    },
+    "merchant-reserve-balances": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "merchant": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Merchant",
+          "type": "string"
+        },
+        "processor": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Processor",
+          "type": "string"
+        },
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "title": "Currency",
+          "type": "string"
+        },
+        "period_start": {
+          "format": "date",
+          "title": "Period Start",
+          "type": "string"
+        },
+        "period_end": {
+          "format": "date",
+          "title": "Period End",
+          "type": "string"
+        },
+        "opening_balance": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Opening Balance"
+        },
+        "closing_balance": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Closing Balance"
+        },
+        "ledger_account": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Ledger Account",
+          "type": "string"
+        },
+        "account_assessment": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Account Assessment",
+          "type": "string"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "merchant",
+        "processor",
+        "currency",
+        "period_start",
+        "period_end",
+        "opening_balance",
+        "closing_balance",
+        "ledger_account",
+        "account_assessment",
+        "evidence_reference"
+      ],
+      "title": "ReserveBalance",
+      "type": "object"
+    },
+    "merchant-reserve-movements": {
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "merchant": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Merchant",
+          "type": "string"
+        },
+        "processor": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Processor",
+          "type": "string"
+        },
+        "settlement_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Settlement Id",
+          "type": "string"
+        },
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "title": "Currency",
+          "type": "string"
+        },
+        "date": {
+          "format": "date",
+          "title": "Date",
+          "type": "string"
+        },
+        "sequence": {
+          "maximum": 2147483647,
+          "minimum": 1,
+          "title": "Sequence",
+          "type": "integer"
+        },
+        "kind": {
+          "enum": [
+            "HELD",
+            "RELEASED"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "amount": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Amount"
+        },
+        "reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Reference",
+          "type": "string"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "assessment": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Assessment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "id",
+        "merchant",
+        "processor",
+        "settlement_id",
+        "currency",
+        "date",
+        "sequence",
+        "kind",
+        "amount",
+        "reference",
+        "evidence_reference",
+        "assessment"
+      ],
+      "title": "ReserveMovement",
       "type": "object"
     },
     "merchant-settlements": {

@@ -6,7 +6,7 @@ from typing import Annotated, Literal
 
 from pydantic import BaseModel, Field, field_validator, model_validator
 
-from app.modules.country_workflows.audit_schemas import AUDIT_ROW_TYPES
+from app.modules.country_workflows.audit_schemas import AUDIT_ROW_TYPES, Currency
 from app.modules.country_workflows.bank_accounts import BankAccountEvidence
 from app.modules.country_workflows.benefit_settlement_scope import BenefitSettlementScope
 from app.modules.country_workflows.cutoff_schedules import CutoffPosting, CutoffRecognition
@@ -29,6 +29,7 @@ from app.modules.country_workflows.inventory_valuation import (
     InventoryValuation,
     InventoryValueControl,
 )
+from app.modules.country_workflows.merchant_reserves import ROW_TYPES as RESERVE_ROW_TYPES
 from app.modules.country_workflows.merchant_settlements import ROW_TYPES as MERCHANT_ROW_TYPES
 from app.modules.country_workflows.msme_schemas import MSME_ROW_TYPES
 from app.modules.country_workflows.operations_schemas import OPERATION_ROW_TYPES
@@ -296,6 +297,7 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
     **OPERATION_ROW_TYPES,
     **MSME_ROW_TYPES,
     **MERCHANT_ROW_TYPES,
+    **RESERVE_ROW_TYPES,
     **PAYROLL_ROW_TYPES,
     **PAYROLL_LEDGER_ROW_TYPES,
     **PENSION_ROW_TYPES,
@@ -399,6 +401,8 @@ class SourceInput(Strict):
     table_type: Literal[
         "msme-supplier-assessments",
         "merchant-activity",
+        "merchant-reserve-movements",
+        "merchant-reserve-balances",
         "merchant-settlements",
         "merchant-bank-allocations",
         "msme-invoices",
@@ -486,11 +490,25 @@ class SourceInput(Strict):
     merchant_component_controls: dict[str, dict[str, Money]] = Field(
         default_factory=dict, max_length=20
     )
+    merchant_reserve_controls: dict[Currency, dict[str, Money]] = Field(
+        default_factory=dict, max_length=20
+    )
     msme_context_evidence_version_id: uuid.UUID | None = None
     msme_context_assessment: str = Field(default="", max_length=2000)
 
     @model_validator(mode="after")
     def declared_nil(self):
+        if self.table_type in {"merchant-reserve-movements", "merchant-reserve-balances"}:
+            if not self.merchant_reserve_controls or self.control_totals:
+                raise ValueError(
+                    "Reserve sources need separate independent component/balance controls, not mixed monetary totals"
+                )
+            if self.table_type == "merchant-reserve-balances" and self.expected_rows < 1:
+                raise ValueError(
+                    "Supply explicit reserve opening/closing positions, including zero balances"
+                )
+        elif self.merchant_reserve_controls:
+            raise ValueError("Reserve controls apply only to reserve balance/movement sources")
         if self.merchant_component_controls and self.table_type != "merchant-settlements":
             raise ValueError("Merchant component controls apply only to processor settlements")
         if self.msme_context_evidence_version_id is not None:
@@ -888,6 +906,7 @@ class WorkflowInput(Strict):
     withholding_role: WithholdingRole | None = None
     allocation_basis: Literal["invoice_face_amounts", "pre_application_balances"] | None = None
     workflow: Literal[
+        "merchant-reserve-rollforward",
         "merchant-settlement-bridge",
         "india-msme-payment-timing",
         "tax-turnover-bridge",
@@ -1228,11 +1247,18 @@ class WorkflowInput(Strict):
             raise ValueError("Subsequent bank clearance requires an explicit account")
         if self.workflow in {
             "expense-cutoff",
+            "merchant-reserve-rollforward",
             "excise-reconciliation",
             "gold-reconciliation",
             "asset-register-review",
         } and (self.period_start is None or self.period_start > self.as_of):
             raise ValueError("This workflow requires an ordered reporting-period start")
+        if self.workflow == "merchant-reserve-rollforward" and (
+            self.period_start == date.min or self.tolerance != 0 or self.date_tolerance != 0
+        ):
+            raise ValueError(
+                "Reserve continuity requires a prior-day opening and exact date/amount controls"
+            )
         if len(set(self.source_ids.values())) != len(self.source_ids):
             raise ValueError("Each source role requires an independent source version")
         if len(set(self.required_checks)) != len(self.required_checks):

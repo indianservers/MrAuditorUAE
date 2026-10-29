@@ -2,6 +2,7 @@ import { createHash } from "node:crypto";
 import { expect, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
+import { runMerchantReserveBrowserWorkflow } from "./merchant-reserve-browser-workflow";
 import {
   makeWorkflowHarness,
   type WorkflowEvent,
@@ -335,6 +336,18 @@ export async function runMerchantBrowserWorkflow(
   await resultCard.screenshot({
     path: `${screenshots}/${country}-merchant-reviewed-settlement.png`,
   });
+  await runMerchantReserveBrowserWorkflow(
+    page,
+    reviewer,
+    eid,
+    tenant,
+    country,
+    screenshots,
+    sourceIds.processor,
+  );
+  await reviewer.goto(
+    `/intelligence/${eid}/country-workflow?event=${reviewed.id}`,
+  );
   await post(reviewer.request, `${prefix}/events/${accountReview.id}/review`, {
     expected_version: accountReview.version,
     action: "reject",

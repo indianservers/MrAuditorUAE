@@ -1,0 +1,3 @@
+id,account,currency,side,as_of,amount
+GL-OPEN,RESERVE-AR,AED,receivable,2026-05-31,100
+GL-CLOSE,RESERVE-AR,AED,receivable,2026-06-30,145

@@ -7,6 +7,7 @@ from pathlib import Path
 from app.modules.country_workflows.audit_schemas import AUDIT_WORKFLOWS
 from app.modules.country_workflows.diligence_schemas import DILIGENCE_WORKFLOWS
 from app.modules.country_workflows.grant_utilisation import ROLES as GRANT_ROLES
+from app.modules.country_workflows.merchant_reserves import ROLES as RESERVE_ROLES
 from app.modules.country_workflows.msme_schemas import MSME_WORKFLOWS
 from app.modules.country_workflows.operations_schemas import OPERATION_WORKFLOWS
 from app.modules.country_workflows.payroll_ledger_schemas import PAYROLL_LEDGER_WORKFLOWS
@@ -26,6 +27,11 @@ OPTIONAL_ROLES = {
 }
 
 WORKFLOWS = {
+    "merchant-reserve-rollforward": (
+        "Processor reserve holds / releases / opening-closing / ledger controls",
+        ["AE", "IN"],
+        RESERVE_ROLES,
+    ),
     "merchant-settlement-bridge": (
         "Merchant gross / refunds / fees / net bank settlement",
         ["AE", "IN"],

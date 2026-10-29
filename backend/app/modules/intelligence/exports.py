@@ -167,6 +167,9 @@ def render(event, format):
             "comparison_basis",
             "selected_current_totals",
             "assessment_contract_version",
+            "merchant_reserve_contract",
+            "merchant_reserve_controls",
+            "reserve_control_receipts",
             "annual_statement_scope_contract",
             "annual_statement_scope_basis",
             "annual_statement_scopes",
@@ -357,7 +360,51 @@ def render(event, format):
             keys = list(dict.fromkeys(key for row in rows for key in row))
             append(source, keys)
             for row in rows:
-                append(source, [row.get(key) for key in keys])
+                exported_row = row
+                if body.get("workflow") == "merchant-reserve-rollforward":
+                    exported_row = dict(row)
+                    for field, sheet in (
+                        ("movement_trace", "Reserve movements"),
+                        ("movement_ids", "Reserve movements"),
+                        ("source_balance_ids", "Reserve balance links"),
+                    ):
+                        if isinstance(row.get(field), list):
+                            exported_row[field] = (
+                                f"{len(row[field])} records; complete detail in {sheet} sheet"
+                            )
+                append(source, [exported_row.get(key) for key in keys])
+            if body.get("workflow") == "merchant-reserve-rollforward":
+                movements = workbook.create_sheet("Reserve movements")
+                identity = ["merchant", "processor", "currency", "source_balance_id"]
+                fields = [
+                    "id",
+                    "settlement_id",
+                    "date",
+                    "sequence",
+                    "kind",
+                    "amount",
+                    "reference",
+                    "evidence_reference",
+                    "balance_after",
+                ]
+                append(movements, ["result_row_id", *identity, *fields])
+                links = workbook.create_sheet("Reserve balance links")
+                append(links, ["result_row_id", "account", "currency", "source_balance_id"])
+                for position in body.get("rows", []):
+                    for movement in position.get("movement_trace", []):
+                        append(
+                            movements,
+                            [
+                                position["id"],
+                                *[position.get(field) for field in identity],
+                                *[movement.get(field) for field in fields],
+                            ],
+                        )
+                    for identifier in position.get("source_balance_ids", []):
+                        append(
+                            links,
+                            [position["id"], position["account"], position["currency"], identifier],
+                        )
             if body.get("workflow") == "party-balance-confirmations":
                 links = workbook.create_sheet("Confirmation item links")
                 documents = workbook.create_sheet("Confirmation documents")

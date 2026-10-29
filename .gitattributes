@@ -12,3 +12,4 @@ docs/country-workflows/sample-inputs/SYNTHETIC-document-worker/*/*.png -text
 docs/country-workflows/sample-inputs/SYNTHETIC-document-worker/*/*.zip -text
 
 docs/country-workflows/sample-inputs/SYNTHETIC-merchant-settlements/*.csv text eol=lf
+docs/country-workflows/sample-inputs/SYNTHETIC-merchant-reserves/*.csv text eol=lf

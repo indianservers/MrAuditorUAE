@@ -127,6 +127,27 @@ def identity(row):
     return row["merchant"], row["processor"], row["batch"], row["currency"]
 
 
+def expected_net(row):
+    return (
+        Decimal(row["sales"])
+        - sum(
+            (
+                Decimal(row[field])
+                for field in (
+                    "refunds",
+                    "chargebacks",
+                    "fees",
+                    "fee_tax",
+                    "withholding",
+                    "reserve_held",
+                )
+            ),
+            Decimal(0),
+        )
+        + Decimal(row["reserve_released"])
+    )
+
+
 def compare(data, sources, country):
     from app.modules.country_workflows.audit_calculations import result
 
@@ -229,24 +250,7 @@ def compare(data, sources, country):
     for batch in tables["processor"]:
         key = identity(batch)
         values = {field: Decimal(batch[field]) for field in COMPONENTS}
-        expected = (
-            values["sales"]
-            - sum(
-                (
-                    values[field]
-                    for field in (
-                        "refunds",
-                        "chargebacks",
-                        "fees",
-                        "fee_tax",
-                        "withholding",
-                        "reserve_held",
-                    )
-                ),
-                Decimal(0),
-            )
-            + values["reserve_released"]
-        )
+        expected = expected_net(batch)
         issues = []
         differences = {}
         for field, kind in (

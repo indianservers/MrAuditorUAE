@@ -141,6 +141,10 @@ def _parse_csv(content, data, defaults=None):
             )
         rows.append(row)
         amount = getattr(item, "amount", getattr(item, "tax", None))
+        if data.table_type == "merchant-reserve-movements":
+            amount = (
+                None  # Held and released are independently controlled, never a mixed/net total.
+            )
         if data.table_type == "grant-budgets":
             amount = getattr(item, "category_ceiling")
         if data.table_type in {"confirmations", "party-confirmations"}:
@@ -180,6 +184,12 @@ def _parse_csv(content, data, defaults=None):
         )
 
         verify_merchant(rows, data.merchant_component_controls)
+    if data.table_type in {"merchant-reserve-movements", "merchant-reserve-balances"}:
+        from app.modules.country_workflows.merchant_reserves import (
+            verify_controls as verify_reserves,
+        )
+
+        verify_reserves(rows, data.merchant_reserve_controls, data.table_type)
     if len(rows) != data.expected_rows:
         raise ValueError("Source row-count control does not agree")
     if data.table_type == "withholding-records":
@@ -330,6 +340,16 @@ def _parse_csv(content, data, defaults=None):
         ),
         **({"esic_population_controls": esic_controls} if esic_controls is not None else {}),
         "table_type": data.table_type,
+        **(
+            {
+                "merchant_reserve_controls": {
+                    currency: {field: str(value) for field, value in fields.items()}
+                    for currency, fields in data.merchant_reserve_controls.items()
+                }
+            }
+            if data.table_type in {"merchant-reserve-movements", "merchant-reserve-balances"}
+            else {}
+        ),
         **(
             {
                 "merchant_component_controls": {

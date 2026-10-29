@@ -1,0 +1,4 @@
+id,merchant,processor,currency,settlement_id,date,sequence,kind,amount,reference,evidence_reference,assessment
+H1,SHOP,PSP,AED,PAYOUT,2026-06-02,1,HELD,30,HOLD-1,SYN-STMT-1,Synthetic independently assessed reserve date and order
+H2,SHOP,PSP,AED,PAYOUT,2026-06-03,1,HELD,20,HOLD-2,SYN-STMT-1,Synthetic independently assessed reserve date and order
+R1,SHOP,PSP,AED,PAYOUT,2026-06-04,1,RELEASED,5,RELEASE-1,SYN-STMT-1,Synthetic independently assessed reserve date and order

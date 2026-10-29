@@ -1127,7 +1127,11 @@ def calculate(
             esic_links, esic_metadata = bind_esic(data, tables, *esic_population_review)
         elif esic_population_review is not None:
             raise ValueError("An ESIC population receipt requires an explicit reviewed link")
-        if data.workflow == "merchant-settlement-bridge":
+        if data.workflow == "merchant-reserve-rollforward":
+            from app.modules.country_workflows.merchant_reserves import compare as compare_reserves
+
+            result = compare_reserves(data, sources, country)
+        elif data.workflow == "merchant-settlement-bridge":
             from app.modules.country_workflows.merchant_settlements import (
                 compare as compare_merchant,
             )

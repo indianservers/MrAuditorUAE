@@ -1,0 +1,150 @@
+{
+  "dataset_kind": "SYNTHETIC_ENGINE_FIXTURE",
+  "qualification": "NOT_REAL_CLIENT_OR_LEGAL_QUALIFICATION",
+  "countries": {
+    "AE": {
+      "currency": "AED",
+      "period_start": "2026-06-01",
+      "as_of": "2026-06-30",
+      "files": {
+        "settlements": {
+          "file": "AE-settlements.csv",
+          "sha256": "d6160ebf884bbc02a1274695dd879f41caf89cee300e99be3583e36ebe6d91e8",
+          "table_type": "merchant-settlements",
+          "expected_rows": 1,
+          "control_totals": {
+            "AED": "800"
+          },
+          "merchant_component_controls": {
+            "AED": {
+              "sales": "1000",
+              "refunds": "100",
+              "chargebacks": "20",
+              "fees": "30",
+              "fee_tax": "2",
+              "withholding": "3",
+              "reserve_held": "50",
+              "reserve_released": "5",
+              "amount": "800"
+            }
+          }
+        },
+        "movements": {
+          "file": "AE-movements.csv",
+          "sha256": "a2cdc47768f441f8c49e1937f485983d5de0938b4de899d7ff213bd12bd94d5e",
+          "table_type": "merchant-reserve-movements",
+          "expected_rows": 3,
+          "control_totals": {},
+          "merchant_reserve_controls": {
+            "AED": {
+              "held": "50",
+              "released": "5"
+            }
+          }
+        },
+        "balances": {
+          "file": "AE-balances.csv",
+          "sha256": "e53585abeddb2ccfd9dc651930fae1feadc51cc4bfd5c700616f84028823abc1",
+          "table_type": "merchant-reserve-balances",
+          "expected_rows": 1,
+          "control_totals": {},
+          "merchant_reserve_controls": {
+            "AED": {
+              "opening_balance": "100",
+              "closing_balance": "145"
+            }
+          }
+        },
+        "ledger": {
+          "file": "AE-ledger.csv",
+          "sha256": "cbf9feb32ff8e39c4a9946a2ec82e05d27b1fc093a151e910395f1cf49fa0dcb",
+          "table_type": "balance-controls",
+          "expected_rows": 2,
+          "control_totals": {
+            "AED": "245"
+          }
+        }
+      },
+      "authored_expected": {
+        "opening": "100",
+        "held": "50",
+        "released": "5",
+        "closing": "145",
+        "ledger_opening": "100",
+        "ledger_closing": "145"
+      }
+    },
+    "IN": {
+      "currency": "INR",
+      "period_start": "2026-06-01",
+      "as_of": "2026-06-30",
+      "files": {
+        "settlements": {
+          "file": "IN-settlements.csv",
+          "sha256": "eab6e1f8288be8b61c9b1f900b7fc2214bc4e796c14c1e22aad2b6556fc17917",
+          "table_type": "merchant-settlements",
+          "expected_rows": 1,
+          "control_totals": {
+            "INR": "800"
+          },
+          "merchant_component_controls": {
+            "INR": {
+              "sales": "1000",
+              "refunds": "100",
+              "chargebacks": "20",
+              "fees": "30",
+              "fee_tax": "2",
+              "withholding": "3",
+              "reserve_held": "50",
+              "reserve_released": "5",
+              "amount": "800"
+            }
+          }
+        },
+        "movements": {
+          "file": "IN-movements.csv",
+          "sha256": "0b1fdfdf3fb50c6de79e2919fbb64b5fb6072347257f00c4a602339e5bdd5800",
+          "table_type": "merchant-reserve-movements",
+          "expected_rows": 3,
+          "control_totals": {},
+          "merchant_reserve_controls": {
+            "INR": {
+              "held": "50",
+              "released": "5"
+            }
+          }
+        },
+        "balances": {
+          "file": "IN-balances.csv",
+          "sha256": "6efbae755e4156eb1270fc4e3d0745ffe98ecd56f537f9dff38e01c3ce929d84",
+          "table_type": "merchant-reserve-balances",
+          "expected_rows": 1,
+          "control_totals": {},
+          "merchant_reserve_controls": {
+            "INR": {
+              "opening_balance": "100",
+              "closing_balance": "145"
+            }
+          }
+        },
+        "ledger": {
+          "file": "IN-ledger.csv",
+          "sha256": "4983f5cb098f66292a8a0b95b701ed64fef41395d647ae57231d1dcbaa8040c3",
+          "table_type": "balance-controls",
+          "expected_rows": 2,
+          "control_totals": {
+            "INR": "245"
+          }
+        }
+      },
+      "authored_expected": {
+        "opening": "100",
+        "held": "50",
+        "released": "5",
+        "closing": "145",
+        "ledger_opening": "100",
+        "ledger_closing": "145"
+      }
+    }
+  }
+}

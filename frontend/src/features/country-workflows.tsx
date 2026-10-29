@@ -1,6 +1,11 @@
 "use client";
 
 import {
+  MerchantReserveControls,
+  reserveControlPayload,
+} from "./merchant-reserve-controls";
+
+import {
   BankMatchingCandidates,
   type BankAmbiguity,
 } from "./bank-matching-candidates";
@@ -302,6 +307,11 @@ type Result = {
     currency_scope?: string[];
     review_window?: { from: string; through: string };
     turnover_contract?: string;
+    merchant_reserve_controls?: Record<string, Record<string, string>>;
+    reserve_control_receipts?: Record<
+      string,
+      Record<string, Record<string, string>>
+    >;
     turnover_quantification?: Record<string, unknown>;
     turnover_difference_totals?: Record<string, Record<string, string>>;
     turnover_adjustment_rows?: Record<string, unknown>[];
@@ -642,6 +652,11 @@ export function CountryWorkflows({
   const [gstr1Context, setGSTR1Context] = useState("");
   const [gstr1Assessment, setGSTR1Assessment] = useState("");
   const [merchantControls, setMerchantControls] = useState("{}");
+  const [reserveControls, setReserveControls] = useState({
+    currency: "",
+    first: "",
+    second: "",
+  });
   const [gstSummaryControls, setGSTSummaryControls] = useState("{}");
   const [gstRegistration, setGSTRegistration] = useState("");
   const [gstDirection, setGSTDirection] = useState("purchase");
@@ -849,6 +864,7 @@ export function CountryWorkflows({
       compactWPS ||
       compactArrear);
   const compactCredit = body?.workflow === "credit-note-applications";
+  const compactReserve = body?.workflow === "merchant-reserve-rollforward";
   const compactBankClearance = body?.workflow === "bank-subsequent-clearance";
   const compactDues = body?.workflow === "obligation-bank-allocations";
   const compactImport = body?.workflow === "uae-import-vat";
@@ -1057,6 +1073,25 @@ export function CountryWorkflows({
                               "source_review_reasons",
                             ].filter((key) => allColumns.includes(key))
                           : allColumns;
+  const reserveColumns =
+    compactReserve && !showRuleProvenance
+      ? [
+          "kind",
+          "merchant",
+          "processor",
+          "batch",
+          "ledger_account",
+          "account",
+          "currency",
+          "opening_balance",
+          "computed_closing",
+          "reported_closing",
+          "processor_opening",
+          "processor_closing",
+          "differences",
+          "state",
+        ].filter((key) => allColumns.includes(key))
+      : standardColumns;
   const defaultColumns =
     body?.workflow === "merchant-settlement-bridge" && !showRuleProvenance
       ? [
@@ -1083,7 +1118,7 @@ export function CountryWorkflows({
             "missing_roles",
             "state",
           ]
-        : standardColumns;
+        : reserveColumns;
   const baseColumns =
     (body?.workflow === "india-gstr1-summary" ||
       body?.table_type === "gst-summary-metrics") &&
@@ -1565,6 +1600,17 @@ export function CountryWorkflows({
               ...(tableType === "merchant-settlements"
                 ? { merchant_component_controls: JSON.parse(merchantControls) }
                 : {}),
+              ...([
+                "merchant-reserve-movements",
+                "merchant-reserve-balances",
+              ].includes(tableType)
+                ? {
+                    merchant_reserve_controls: reserveControlPayload(
+                      tableType,
+                      reserveControls,
+                    ),
+                  }
+                : {}),
               ...(tableType === "gst-summary-metrics"
                 ? {
                     gst_summary_metric_controls: JSON.parse(gstSummaryControls),
@@ -1862,6 +1908,7 @@ export function CountryWorkflows({
             "gold-reconciliation",
             "asset-register-review",
             "payroll-ledger-rollforward",
+            "merchant-reserve-rollforward",
           ].includes(workflow)
             ? { period_start: periodStart }
             : {}),
@@ -2445,6 +2492,11 @@ export function CountryWorkflows({
                       value={tableType}
                       onChange={(e) => {
                         setTableType(e.target.value);
+                        setReserveControls({
+                          currency: "",
+                          first: "",
+                          second: "",
+                        });
                         setMSMEContext("");
                         setMSMEContextAssessment("");
                         if (e.target.value === "gst-document-series")
@@ -3084,6 +3136,16 @@ export function CountryWorkflows({
                         </>
                       )}
                     </fieldset>
+                  )}
+                  {[
+                    "merchant-reserve-movements",
+                    "merchant-reserve-balances",
+                  ].includes(tableType) && (
+                    <MerchantReserveControls
+                      table={tableType}
+                      value={reserveControls}
+                      onChange={setReserveControls}
+                    />
                   )}
                   {tableType === "merchant-settlements" && (
                     <fieldset style={{ gridColumn: "1 / -1", minWidth: 0 }}>
@@ -4132,6 +4194,7 @@ export function CountryWorkflows({
                 "gold-reconciliation",
                 "asset-register-review",
                 "payroll-ledger-rollforward",
+                "merchant-reserve-rollforward",
               ].includes(workflow) && (
                 <label>
                   Reporting period start
@@ -4752,6 +4815,31 @@ export function CountryWorkflows({
                       onChange={(e) => setBankOwnerIdentifier(e.target.value)}
                     />
                   </label>
+                </fieldset>
+              )}
+              {workflow === "merchant-reserve-rollforward" && (
+                <fieldset>
+                  <legend>Reserve continuity and ledger scope</legend>
+                  <label>
+                    Reserve comparison currency
+                    <input
+                      aria-label="Reserve comparison currency"
+                      value={currency}
+                      maxLength={3}
+                      onChange={(event) =>
+                        setCurrency(event.target.value.toUpperCase())
+                      }
+                    />
+                  </label>
+                  <p>
+                    Compare dated holds and releases with independently
+                    controlled opening and closing reserves, then the assessed
+                    receivable ledger accounts. Opening ledger controls are
+                    dated the day before the reporting period; closing controls
+                    use the reconciliation date. All four sources need
+                    independent review. No bank receipt, FX conversion or legal
+                    entitlement is inferred.
+                  </p>
                 </fieldset>
               )}
               {workflow === "merchant-settlement-bridge" && (
@@ -5913,6 +6001,36 @@ export function CountryWorkflows({
               </details>
             </section>
           )}
+          {(body.merchant_reserve_controls ||
+            body.reserve_control_receipts) && (
+            <section aria-label="Retained reserve controls">
+              <h3>Independently declared reserve controls</h3>
+              {Object.entries(
+                body.reserve_control_receipts || {
+                  source: body.merchant_reserve_controls!,
+                },
+              ).map(([role, currencies]) => (
+                <div key={role}>
+                  <strong>{role}</strong>
+                  {Object.entries(currencies).map(([unit, fields]) => (
+                    <p key={unit}>
+                      {unit}:{" "}
+                      {Object.entries(fields)
+                        .map(
+                          ([name, amount]) =>
+                            `${name.replaceAll("_", " ")}: ${amount}`,
+                        )
+                        .join(" · ")}
+                    </p>
+                  ))}
+                </div>
+              ))}
+              <p>
+                Separate gross movement and opening/closing controls; bank
+                receipt is outside this comparison.
+              </p>
+            </section>
+          )}
           {body.workflow === "merchant-settlement-bridge" && (
             <MerchantSettlementDetails rows={body.rows} />
           )}
@@ -6663,6 +6781,7 @@ export function CountryWorkflows({
               compactDues ||
               compactCredit ||
               compactWithholding ||
+              compactReserve ||
               compactImport) && (
               <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <input
@@ -6745,8 +6864,9 @@ export function CountryWorkflows({
                                 </li>
                               ))}
                             </ul>
-                          ) : ((body.workflow === "procurement-match" &&
-                              ["quantities", "amounts"].includes(k)) ||
+                          ) : ((compactReserve && k === "differences") ||
+                              (body.workflow === "procurement-match" &&
+                                ["quantities", "amounts"].includes(k)) ||
                               (compactWithholding &&
                                 [
                                   "amounts",
