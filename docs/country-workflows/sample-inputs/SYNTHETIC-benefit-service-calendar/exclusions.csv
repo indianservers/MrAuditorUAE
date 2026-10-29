@@ -1,0 +1,3 @@
+service_start,service_end,regime,cohort,work_model,scheme,id,employee_id,kind,exclusion_start,exclusion_end,days,evidence_reference,assessment
+2024-07-01,2026-06-30,SYNTHETIC-REGIME,SYNTHETIC-COHORT,full-time,gratuity,CAL-E1,E1,EXCLUDED_CALENDAR_DAYS,2026-06-01,2026-06-05,5,SYNTHETIC-HR-E1,Synthetic independently assessed inclusive service exclusion; not a pension or legal determination
+2025-07-01,2026-06-30,SYNTHETIC-REGIME,SYNTHETIC-COHORT,part-time,gratuity,CAL-E2,E2,NO_EXCLUDED_DAYS_ASSESSED,,,0,SYNTHETIC-HR-E2,Synthetic independently assessed inclusive service exclusion; not a pension or legal determination

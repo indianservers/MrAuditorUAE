@@ -169,6 +169,9 @@ def render(event, format):
             "assessment_contract_version",
             "merchant_reserve_contract",
             "merchant_reserve_controls",
+            "benefit_service_controls",
+            "benefit_service_calendar_contract",
+            "service_calendar_basis",
             "reserve_control_receipts",
             "annual_statement_scope_contract",
             "annual_statement_scope_basis",
@@ -361,6 +364,14 @@ def render(event, format):
             append(source, keys)
             for row in rows:
                 exported_row = row
+                if body.get("workflow") == "uae-benefit-review" and isinstance(
+                    row.get("service_calendar_records"), list
+                ):
+                    exported_row = {
+                        **row,
+                        "service_calendar_records": f"{len(row['service_calendar_records'])} records; complete detail in Benefit service exclusions sheet",
+                        "service_calendar_source_row_ids": f"{len(row['service_calendar_records'])} source IDs retained in Benefit service exclusions sheet",
+                    }
                 if body.get("workflow") == "merchant-reserve-rollforward":
                     exported_row = dict(row)
                     for field, sheet in (
@@ -373,6 +384,31 @@ def render(event, format):
                                 f"{len(row[field])} records; complete detail in {sheet} sheet"
                             )
                 append(source, [exported_row.get(key) for key in keys])
+            if (
+                body.get("workflow") == "uae-benefit-review"
+                and body.get("service_calendar_basis") == "DATED_CONTROLLED_SOURCE"
+            ):
+                calendar = workbook.create_sheet("Benefit service exclusions")
+                fields = [
+                    "id",
+                    "employee_id",
+                    "service_start",
+                    "service_end",
+                    "regime",
+                    "cohort",
+                    "work_model",
+                    "scheme",
+                    "kind",
+                    "exclusion_start",
+                    "exclusion_end",
+                    "days",
+                    "evidence_reference",
+                    "assessment",
+                ]
+                append(calendar, ["result_row_id", *fields])
+                for employee in body.get("rows", []):
+                    for record in employee.get("service_calendar_records", []):
+                        append(calendar, [employee["id"], *[record.get(field) for field in fields]])
             if body.get("workflow") == "merchant-reserve-rollforward":
                 movements = workbook.create_sheet("Reserve movements")
                 identity = ["merchant", "processor", "currency", "source_balance_id"]

@@ -372,6 +372,7 @@ vi.mock("@/hooks/use-api", () => ({
               },
             ],
             source_contracts: {
+              "benefit-service-exclusions": { id: { required: true, type: "str" } },
               "merchant-reserve-movements": { id: { required: true, type: "str" } },
               "merchant-reserve-balances": { id: { required: true, type: "str" } },
               "turnover-scope": {id:{required:true,type:"str"}},
@@ -3516,4 +3517,19 @@ it.each(["merchant-reserve-movements", "merchant-reserve-balances"])("uploads %s
   fireEvent.change(screen.getByLabelText("Source table type"), { target: { value: movement ? "merchant-reserve-balances" : "merchant-reserve-movements" } });
   expect(screen.getByLabelText("Reserve control currency")).toHaveValue("");
   expect(screen.getByLabelText(movement ? "Total opening balance" : "Total held")).toHaveValue("");
+});
+
+it("uploads dated benefit exclusions with independent day/count controls and clears them when changing source type", async () => {
+  render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+  fireEvent.change(screen.getByLabelText("Source table type"), { target: { value: "benefit-service-exclusions" } });
+  expect(screen.queryByLabelText("Independent totals by currency")).not.toBeInTheDocument();
+  for (const [label, value] of [["Clean retained evidence", "clean"], ["Schedule title", "SYN service day evidence"], ["Expected data rows", "2"], ["Independent service employee count", "2"], ["Independent excluded service days", "5"]])
+    fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({ table_type: "benefit-service-exclusions", control_totals: {}, benefit_service_controls: { employee_count: 2, excluded_days: 5 } });
+  fireEvent.change(screen.getByLabelText("Source table type"), { target: { value: "transactions" } });
+  fireEvent.change(screen.getByLabelText("Source table type"), { target: { value: "benefit-service-exclusions" } });
+  expect(screen.getByLabelText("Independent service employee count")).toHaveValue("");
+  expect(screen.getByLabelText("Independent excluded service days")).toHaveValue("");
 });

@@ -73,13 +73,15 @@ def _parse_csv(content, data, defaults=None):
     ids = set()
     totals: defaultdict[str, Decimal] = defaultdict(Decimal)
     for index, raw in enumerate(reader, 2):
-        if data.table_type.startswith(("grant-", "media-", "msme-", "merchant-")) and any(
+        if data.table_type.startswith(
+            ("grant-", "media-", "msme-", "merchant-", "benefit-service-")
+        ) and any(
             value is not None and value != value.strip()
             for value in raw.values()
             if isinstance(value, str)
         ):
             raise ValueError(
-                "Grant/media canonical values must be explicit without silently trimmed identities or numbers"
+                "Canonical values must be explicit without silently trimmed identities or numbers"
             )
         if (
             len(rows) >= 5000
@@ -184,6 +186,10 @@ def _parse_csv(content, data, defaults=None):
         )
 
         verify_merchant(rows, data.merchant_component_controls)
+    if data.table_type == "benefit-service-exclusions":
+        from app.modules.country_workflows.benefit_service_calendar import verify
+
+        verify(rows, data.benefit_service_controls)
     if data.table_type in {"merchant-reserve-movements", "merchant-reserve-balances"}:
         from app.modules.country_workflows.merchant_reserves import (
             verify_controls as verify_reserves,
@@ -340,6 +346,16 @@ def _parse_csv(content, data, defaults=None):
         ),
         **({"esic_population_controls": esic_controls} if esic_controls is not None else {}),
         "table_type": data.table_type,
+        **(
+            {
+                "benefit_service_calendar_contract": "benefit-service-calendar/1",
+                "benefit_service_controls": data.benefit_service_controls.model_dump(mode="json"),
+                "allowed_workflows": ["uae-benefit-review"],
+                "allowed_source_roles": ["service_calendar"],
+            }
+            if data.benefit_service_controls is not None
+            else {}
+        ),
         **(
             {
                 "merchant_reserve_controls": {

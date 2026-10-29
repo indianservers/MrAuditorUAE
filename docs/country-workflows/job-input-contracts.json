@@ -2085,6 +2085,29 @@
             ],
             "title": "SeriesCounts",
             "type": "object"
+          },
+          "ServiceDayControls": {
+            "additionalProperties": false,
+            "properties": {
+              "employee_count": {
+                "maximum": 5000,
+                "minimum": 1,
+                "title": "Employee Count",
+                "type": "integer"
+              },
+              "excluded_days": {
+                "maximum": 182500000,
+                "minimum": 0,
+                "title": "Excluded Days",
+                "type": "integer"
+              }
+            },
+            "required": [
+              "employee_count",
+              "excluded_days"
+            ],
+            "title": "ServiceDayControls",
+            "type": "object"
           }
         },
         "additionalProperties": false,
@@ -2886,6 +2909,7 @@
               "expense-claims",
               "benefit-employees",
               "benefit-rules",
+              "benefit-service-exclusions",
               "trade-lines",
               "import-vat-lines",
               "price-bands",
@@ -3016,6 +3040,17 @@
             ],
             "default": null,
             "title": "Msme Context Evidence Version Id"
+          },
+          "benefit_service_controls": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/ServiceDayControls"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
           },
           "msme_context_assessment": {
             "default": "",
@@ -4205,6 +4240,131 @@
         "applicability_review"
       ],
       "title": "BenefitRule",
+      "type": "object"
+    },
+    "benefit-service-exclusions": {
+      "additionalProperties": false,
+      "properties": {
+        "service_start": {
+          "format": "date",
+          "title": "Service Start",
+          "type": "string"
+        },
+        "service_end": {
+          "format": "date",
+          "title": "Service End",
+          "type": "string"
+        },
+        "regime": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Regime",
+          "type": "string"
+        },
+        "cohort": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Cohort",
+          "type": "string"
+        },
+        "work_model": {
+          "enum": [
+            "full-time",
+            "part-time"
+          ],
+          "title": "Work Model",
+          "type": "string"
+        },
+        "scheme": {
+          "const": "gratuity",
+          "title": "Scheme",
+          "type": "string"
+        },
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Id",
+          "type": "string"
+        },
+        "employee_id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Employee Id",
+          "type": "string"
+        },
+        "kind": {
+          "enum": [
+            "EXCLUDED_CALENDAR_DAYS",
+            "NO_EXCLUDED_DAYS_ASSESSED"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "exclusion_start": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exclusion Start"
+        },
+        "exclusion_end": {
+          "anyOf": [
+            {
+              "format": "date",
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Exclusion End"
+        },
+        "days": {
+          "maximum": 36500,
+          "minimum": 0,
+          "title": "Days",
+          "type": "integer"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "pattern": "^\\S(?:.*\\S)?$",
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "assessment": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Assessment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "service_start",
+        "service_end",
+        "regime",
+        "cohort",
+        "work_model",
+        "scheme",
+        "id",
+        "employee_id",
+        "kind",
+        "days",
+        "evidence_reference",
+        "assessment"
+      ],
+      "title": "ServiceExclusion",
       "type": "object"
     },
     "billing-lines": {

@@ -1,6 +1,12 @@
 "use client";
 
 import {
+  BenefitServiceControls,
+  BenefitServiceCalendarDetails,
+  serviceControlPayload,
+} from "./benefit-service-calendar";
+
+import {
   MerchantReserveControls,
   reserveControlPayload,
 } from "./merchant-reserve-controls";
@@ -307,6 +313,11 @@ type Result = {
     currency_scope?: string[];
     review_window?: { from: string; through: string };
     turnover_contract?: string;
+    service_calendar_basis?: string;
+    benefit_service_controls?: {
+      employee_count: number;
+      excluded_days: number;
+    };
     merchant_reserve_controls?: Record<string, Record<string, string>>;
     reserve_control_receipts?: Record<
       string,
@@ -652,6 +663,10 @@ export function CountryWorkflows({
   const [gstr1Context, setGSTR1Context] = useState("");
   const [gstr1Assessment, setGSTR1Assessment] = useState("");
   const [merchantControls, setMerchantControls] = useState("{}");
+  const [serviceControls, setServiceControls] = useState({
+    employees: "",
+    days: "",
+  });
   const [reserveControls, setReserveControls] = useState({
     currency: "",
     first: "",
@@ -1092,6 +1107,18 @@ export function CountryWorkflows({
           "state",
         ].filter((key) => allColumns.includes(key))
       : standardColumns;
+  const serviceColumns =
+    body?.table_type === "benefit-service-exclusions" && !showRuleProvenance
+      ? [
+          "id",
+          "employee_id",
+          "kind",
+          "exclusion_start",
+          "exclusion_end",
+          "days",
+          "evidence_reference",
+        ].filter((key) => allColumns.includes(key))
+      : reserveColumns;
   const defaultColumns =
     body?.workflow === "merchant-settlement-bridge" && !showRuleProvenance
       ? [
@@ -1118,7 +1145,7 @@ export function CountryWorkflows({
             "missing_roles",
             "state",
           ]
-        : reserveColumns;
+        : serviceColumns;
   const baseColumns =
     (body?.workflow === "india-gstr1-summary" ||
       body?.table_type === "gst-summary-metrics") &&
@@ -1599,6 +1626,12 @@ export function CountryWorkflows({
                 : {}),
               ...(tableType === "merchant-settlements"
                 ? { merchant_component_controls: JSON.parse(merchantControls) }
+                : {}),
+              ...(tableType === "benefit-service-exclusions"
+                ? {
+                    benefit_service_controls:
+                      serviceControlPayload(serviceControls),
+                  }
                 : {}),
               ...([
                 "merchant-reserve-movements",
@@ -2492,6 +2525,7 @@ export function CountryWorkflows({
                       value={tableType}
                       onChange={(e) => {
                         setTableType(e.target.value);
+                        setServiceControls({ employees: "", days: "" });
                         setReserveControls({
                           currency: "",
                           first: "",
@@ -3145,6 +3179,12 @@ export function CountryWorkflows({
                       table={tableType}
                       value={reserveControls}
                       onChange={setReserveControls}
+                    />
+                  )}
+                  {tableType === "benefit-service-exclusions" && (
+                    <BenefitServiceControls
+                      value={serviceControls}
+                      onChange={setServiceControls}
                     />
                   )}
                   {tableType === "merchant-settlements" && (
@@ -6001,6 +6041,28 @@ export function CountryWorkflows({
               </details>
             </section>
           )}
+          {body.benefit_service_controls && (
+            <section aria-label="Retained service-calendar controls">
+              <h3>Independent service-calendar controls</h3>
+              <p>
+                {body.benefit_service_controls.employee_count} employees ·{" "}
+                {body.benefit_service_controls.excluded_days} excluded calendar
+                days
+              </p>
+            </section>
+          )}
+          {body.workflow === "uae-benefit-review" &&
+            body.service_calendar_basis === "DATED_CONTROLLED_SOURCE" && (
+              <BenefitServiceCalendarDetails rows={rows} />
+            )}
+          {body.workflow === "uae-benefit-review" &&
+            body.service_calendar_basis === "EMPLOYEE_DECLARATION_ONLY" && (
+              <p>
+                Excluded service days use the employee-source declaration.
+                Select a reviewed service calendar to verify dated exclusions
+                and explicit zero records.
+              </p>
+            )}
           {(body.merchant_reserve_controls ||
             body.reserve_control_receipts) && (
             <section aria-label="Retained reserve controls">
@@ -6782,6 +6844,7 @@ export function CountryWorkflows({
               compactCredit ||
               compactWithholding ||
               compactReserve ||
+              body.table_type === "benefit-service-exclusions" ||
               compactImport) && (
               <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
                 <input

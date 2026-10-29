@@ -711,6 +711,15 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
     contributors = {str(ctx.user_id)}
     for role, identifier in data.source_ids.items():
         source = await intelligence.event(db, ctx, eng.id, identifier, True)
+        if (
+            data.workflow == "uae-benefit-review"
+            and "service_calendar" in data.source_ids
+            and source.body.get("review_status") != "REVIEWED"
+        ):
+            raise HTTPException(
+                409,
+                "Independently review employees, rules and dated service-calendar sources before calculation",
+            )
         if source.body.get("parser_version") == "withholding-obligations/1" and (
             data.workflow != "obligation-bank-allocations"
             or role not in source.body.get("allowed_source_roles", [])

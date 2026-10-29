@@ -1201,6 +1201,22 @@ def calculate(
             result = PENSION_CALCULATORS[data.workflow](data, tables)
         elif data.workflow in PAYROLL_CALCULATORS:
             result = PAYROLL_CALCULATORS[data.workflow](data, tables)
+        elif data.workflow == "uae-benefit-review":
+            from app.modules.country_workflows.benefit_service_calendar import CONTRACT
+            from app.modules.country_workflows.benefit_service_calendar import bind as bind_calendar
+            from app.modules.country_workflows.practice_calculations import benefits
+
+            calendar = sources.get("service_calendar")
+            service_day_checks = (
+                bind_calendar(tables["employees"], calendar) if calendar is not None else None
+            )
+            result = benefits(data, tables, service_calendar=service_day_checks)
+            result["service_calendar_basis"] = (
+                "DATED_CONTROLLED_SOURCE" if calendar else "EMPLOYEE_DECLARATION_ONLY"
+            )
+            if calendar:
+                result["benefit_service_calendar_contract"] = CONTRACT
+                result["benefit_service_controls"] = calendar["benefit_service_controls"]
         elif data.workflow in AUDIT_CALCULATORS:
             result = AUDIT_CALCULATORS[data.workflow](data, tables)
         elif data.workflow in PRACTICE_CALCULATORS:

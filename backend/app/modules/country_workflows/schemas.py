@@ -8,6 +8,10 @@ from pydantic import BaseModel, Field, field_validator, model_validator
 
 from app.modules.country_workflows.audit_schemas import AUDIT_ROW_TYPES, Currency
 from app.modules.country_workflows.bank_accounts import BankAccountEvidence
+from app.modules.country_workflows.benefit_service_calendar import (
+    ServiceDayControls,
+    ServiceExclusion,
+)
 from app.modules.country_workflows.benefit_settlement_scope import BenefitSettlementScope
 from app.modules.country_workflows.cutoff_schedules import CutoffPosting, CutoffRecognition
 from app.modules.country_workflows.diligence_schemas import DILIGENCE_ROW_TYPES
@@ -298,6 +302,7 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
     **MSME_ROW_TYPES,
     **MERCHANT_ROW_TYPES,
     **RESERVE_ROW_TYPES,
+    "benefit-service-exclusions": ServiceExclusion,
     **PAYROLL_ROW_TYPES,
     **PAYROLL_LEDGER_ROW_TYPES,
     **PENSION_ROW_TYPES,
@@ -461,6 +466,7 @@ class SourceInput(Strict):
         "expense-claims",
         "benefit-employees",
         "benefit-rules",
+        "benefit-service-exclusions",
         "trade-lines",
         "import-vat-lines",
         "price-bands",
@@ -494,10 +500,22 @@ class SourceInput(Strict):
         default_factory=dict, max_length=20
     )
     msme_context_evidence_version_id: uuid.UUID | None = None
+    benefit_service_controls: ServiceDayControls | None = None
     msme_context_assessment: str = Field(default="", max_length=2000)
 
     @model_validator(mode="after")
     def declared_nil(self):
+        if self.table_type == "benefit-service-exclusions":
+            if (
+                self.expected_rows < 1
+                or self.benefit_service_controls is None
+                or self.control_totals
+            ):
+                raise ValueError(
+                    "Service exclusions require explicit employee records and independent day/count controls without money totals"
+                )
+        elif self.benefit_service_controls is not None:
+            raise ValueError("Service-day controls apply only to dated benefit exclusions")
         if self.table_type in {"merchant-reserve-movements", "merchant-reserve-balances"}:
             if not self.merchant_reserve_controls or self.control_totals:
                 raise ValueError(

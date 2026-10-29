@@ -1,6 +1,7 @@
 import { expect, type Page } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
+import { runBenefitServiceCalendarBrowserWorkflow } from "./benefit-service-calendar-browser-workflow";
 import {
   makeWorkflowHarness,
   type WorkflowEvent,
@@ -357,5 +358,13 @@ export async function runBenefitSettlementBrowserWorkflow(
   await card.screenshot({
     path: `${screenshots}/AE-gratuity-context-replaced-stale.png`,
   });
+  await runBenefitServiceCalendarBrowserWorkflow(
+    page,
+    reviewer,
+    eid,
+    tenant,
+    screenshots,
+    sourceIds.rules,
+  );
   expect(errors).toEqual([]);
 }

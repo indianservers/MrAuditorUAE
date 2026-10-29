@@ -1,6 +1,15 @@
 def approval_error(body):
     from app.modules.intelligence.matching_review import saved_candidates_complete
 
+    if (
+        body.get("workflow") == "uae-benefit-review"
+        and body.get("service_calendar_basis") == "DATED_CONTROLLED_SOURCE"
+    ):
+        from app.modules.country_workflows.benefit_service_calendar import CONTRACT
+
+        if body.get("benefit_service_calendar_contract") != CONTRACT:
+            return "Regenerate dated benefit service-day checks before approval"
+
     if body.get("workflow") == "merchant-reserve-rollforward":
         from app.modules.country_workflows.merchant_reserves import CONTRACT
 

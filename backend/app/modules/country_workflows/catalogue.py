@@ -19,6 +19,7 @@ from app.modules.country_workflows.withholding_schemas import WITHHOLDING_WORKFL
 from app.modules.regulatory.tax_forms import india_tax_regime
 
 OPTIONAL_ROLES = {
+    "uae-benefit-review": {"service_calendar": "benefit-service-exclusions"},
     "party-balance-confirmations": {"coverage": "confirmation-item-coverage"},
     "expense-cutoff": {
         "recognitions": "cutoff-recognition-lines",

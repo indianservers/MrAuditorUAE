@@ -1,0 +1,128 @@
+{
+  "contract": "benefit-service-calendar-validation/1",
+  "date": "2026-10-29",
+  "base_commit": "dd522f947b5c40c52fc00ce9f7992179510f7db6",
+  "source_hash_basis": "UTF-8 source bytes with CRLF normalized to LF; JUnit hashes identify exact receipt bytes",
+  "new_unit_cases": 29,
+  "receipts": {
+    "backend_unit": {
+      "path": "docs/phase-12/service-calendar-backend.xml",
+      "sha256": "5504ae1b41eac1b7e956aa5eaf4f003beb6a40786c7ef40704a6f177c1a1224c",
+      "tests": 3237,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 5,
+      "passed": 3232
+    },
+    "database_api": {
+      "path": "docs/phase-12/service-calendar-api.xml",
+      "sha256": "97b77d00a3e6ecf7232265de4e0d2674db0a9c370fa37020b3ed05a12d0e09ee",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "passed": 4
+    }
+  },
+  "frontend": {
+    "tests_passed": 315,
+    "files_passed": 66,
+    "original_local_report_sha256": "c829ff5ef826ba7a25dd90b0c463c45f55d8921af9a7f708c6c56e1f2a9e3c94",
+    "typecheck": "passed",
+    "production_build": "passed",
+    "lint": "passed with one pre-existing unused-variable warning in uae-business-cases.tsx"
+  },
+  "quality": {
+    "ruff_check": "passed",
+    "ruff_format": "732 files formatted",
+    "mypy": "397 app source files passed",
+    "api_contracts": "runtime model snapshots current; frontend generated types checked"
+  },
+  "browser": "AE hosted case extended to reuse reviewed rule source, review dated full-time and explicit-zero part-time calendars, calculate/approve/export via UI and verify withdrawal staleness with unchanged full body. Not executed on this new source yet.",
+  "coverage": [
+    "Dated inclusive exclusions, leap days, adjacent intervals, overlap rejection and exact service identity",
+    "Missing employee remains unknown; a zero needs its own explicit record; declared/day mismatch blocks benefit and settlement approval",
+    "Controls are independent integer employee/day counts, not monetary totals; original identifiers are not silently trimmed",
+    "Existing no-calendar calculations retain their amount and explicitly identify employee declarations",
+    "Large 400-record XLSX retains every date and original source record without modifying the saved body",
+    "Two new real API/database/storage/processor cases plus two prior gratuity bridge regressions; scanner and dispatch are explicit doubles",
+    "Calendar-review withdrawal makes current calculation/expected-source/bank comparison stale; replacing original calendar evidence makes its result stale; financial bodies remain unchanged",
+    "Two saved synthetic CSV byte hashes, input controls and authored expected values are verified by a passing unit case"
+  ],
+  "limits": [
+    "No leave eligibility, legal classification, statutory rate, year divisor or minimum-service rule is inferred by the calendar",
+    "Consumer is UAE gratuity; it cannot establish India entitlements or pension-period exclusions",
+    "Actual HR source completeness, original record meaning and independent professional/client validation remain open",
+    "Full hosted backend, browser, security and container checks on this new source still need observation; prior reserve proofs do not establish this source"
+  ],
+  "normalized_lf_sources": [
+    {
+      "path": "backend/app/modules/country_workflows/benefit_service_calendar.py",
+      "sha256": "94f072fec4ea4dbc30e6c9f40531320df01b52c583924a6dbe9428f24b76fb06"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/calculations.py",
+      "sha256": "45b55f772b0c6a11c9f53bc1674db3b48ee8a83a9e9b9b270f70b4d0ad28301c"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/catalogue.py",
+      "sha256": "e623f5a1f892432ff3be3d3766fa05ef6d9e4eb9524e0dc6ab13d1a4e738fa4f"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/practice_calculations.py",
+      "sha256": "d1d18a4c274690b208c4da21d103b8b31068501d6f645a4c30f8a7fee5636647"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/review.py",
+      "sha256": "3d74f991d217dc695e8225f4ccaa1bcc7f1a10649392b8790dceea156647b57b"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/schemas.py",
+      "sha256": "481a9681eca878e213681beee8e7128ce1a95875e6b59ac1e326f76d755efdd3"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/service.py",
+      "sha256": "186600a4cd71bb3299e8bcb0c41e96a0890fefac6579aa4469790f2707db6c48"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/sources.py",
+      "sha256": "0ff9c4ba58c66335870936828d8397a8750bed69642b688eee22f5c79261f384"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "sha256": "0bd2671358a74d6c976b03e7bc5a7cada7341e0f7f7de73d4d13282b3de9b906"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_benefit_service_calendar.py",
+      "sha256": "c357a271c954fd3d562174e25ef81eb07792c3f78c4cf2deb1d3368826d1412d"
+    },
+    {
+      "path": "backend/tests/unit/test_benefit_service_calendar.py",
+      "sha256": "4f0727d2266bc03d9c58ffb1ec3b9518115ccd11e547112f9ecb48b098e2ae4c"
+    },
+    {
+      "path": "frontend/e2e/benefit-service-calendar-browser-workflow.ts",
+      "sha256": "9eb5b4aacd57e03ac2432f3b6e0b85de1aa9cfe044e079bdfe246b2053a3fd54"
+    },
+    {
+      "path": "frontend/e2e/benefit-settlement-browser-workflow.ts",
+      "sha256": "d1cd7d04db14cf39aec43fde754cf0034f01065ec041485afd976b2e4b0f9a77"
+    },
+    {
+      "path": "frontend/src/features/benefit-service-calendar.tsx",
+      "sha256": "d934e513897b2037ca397d72fa560821496528a66b226f2c96ab8a5c5ca6b8d5"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "b90f3037fd2a954501ff0ac28fdc8b93d8a4668beaa60e35a0781bd96fe97c0d"
+    },
+    {
+      "path": "frontend/tests/benefit-service-calendar.test.tsx",
+      "sha256": "930992e4928760bcb8c38f6349953fe4944c6b04c7bea7e5dd9990665ec21af2"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "0e70db644c3e563da336cc298cf8ba6afa1a269528755b33cd80b97c8765526b"
+    }
+  ]
+}

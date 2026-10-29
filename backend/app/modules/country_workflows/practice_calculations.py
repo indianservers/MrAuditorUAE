@@ -393,10 +393,19 @@ def expenses(data, tables):
     )
 
 
-def benefits(data, tables):
+def benefits(data, tables, *, service_calendar=None):
     rows = []
     blocked = False
     for employee in tables["employees"]:
+        calendar = (
+            service_calendar[employee["id"]]
+            if service_calendar is not None
+            else {
+                "service_calendar_state": "EMPLOYEE_DECLARATION_ONLY",
+                "declared_excluded_service_days": employee["excluded_service_days"],
+                "calendar_excluded_service_days": None,
+            }
+        )
         end = date.fromisoformat(employee["service_end"])
         if end > data.as_of:
             raise ValueError("Service end is after the audit date")
@@ -415,7 +424,9 @@ def benefits(data, tables):
             <= date.fromisoformat(r["effective_to"])
         ]
         state = (
-            "ALTERNATIVE_SCHEME_REQUIRES_ASSESSMENT"
+            calendar["service_calendar_state"]
+            if service_calendar is not None and calendar["service_calendar_state"] != "MATCHED"
+            else "ALTERNATIVE_SCHEME_REQUIRES_ASSESSMENT"
             if employee["scheme"] != "gratuity"
             else "WORK_MODEL_CHANGE_REQUIRES_SEGMENTED_ASSESSMENT"
             if not employee["work_model_constant_for_service"]
@@ -432,6 +443,7 @@ def benefits(data, tables):
                     "regime": employee["regime"],
                     "cohort": employee["cohort"],
                     "work_model": employee["work_model"],
+                    **calendar,
                     "state": state,
                 }
             )
@@ -480,6 +492,7 @@ def benefits(data, tables):
                 "full_time_salary_basis": str(salary),
                 "full_time_equivalent_benefit": str(full_time_equivalent),
                 "eligible_service_days": days,
+                **calendar,
                 "service_years": str(years),
                 "rule_source_id": rule["id"],
                 "rule_document_version_id": rule["source_evidence_version_id"],
@@ -514,6 +527,8 @@ def benefits(data, tables):
             "Inclusive eligible days divided by the supplied year basis; rule applicability must be professionally validated",
             "Alternative schemes and unsupported transitional/contractual treatment block this bounded computation",
             "Part-time calculations use explicitly assessed full-time salary and annual contract-hour comparators; no work model, pension cohort or statutory applicability is inferred",
+            "Without a selected dated service calendar, excluded service remains an employee-source declaration only; a selected calendar requires explicit zero records, non-overlapping inclusive intervals and exact employment scope",
+            "Calendar exclusions are source-assessed gratuity inputs, not automatic unpaid-leave, pension, government-service or India eligibility rules",
         ],
     )
 

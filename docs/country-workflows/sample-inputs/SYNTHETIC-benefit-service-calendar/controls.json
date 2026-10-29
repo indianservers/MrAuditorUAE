@@ -1,0 +1,42 @@
+{
+  "dataset_kind": "SYNTHETIC_ENGINE_FIXTURE",
+  "qualification": "NOT_INDEPENDENT_CLIENT_OR_LEGAL_VALIDATION",
+  "country": "AE",
+  "as_of": "2026-06-30",
+  "files": {
+    "employees": {
+      "file": "employees.csv",
+      "sha256": "a8b2e88da1c5ba18ccc934b6013b094a48adb07100bd0762d0c5f391d2ee3b64",
+      "table_type": "benefit-employees",
+      "expected_rows": 2,
+      "control_totals": {
+        "AED": "5221.23"
+      }
+    },
+    "exclusions": {
+      "file": "exclusions.csv",
+      "sha256": "f388a03bc74ccfd0b59f228df9a5d637bfb60124604e236de8a798dda626f89b",
+      "table_type": "benefit-service-exclusions",
+      "expected_rows": 2,
+      "control_totals": {},
+      "benefit_service_controls": {
+        "employee_count": 2,
+        "excluded_days": 5
+      }
+    }
+  },
+  "authored_expected": [
+    {
+      "employee": "E1",
+      "eligible_service_days": 725,
+      "excluded_days": 5,
+      "expected_benefit": "4171.23"
+    },
+    {
+      "employee": "E2",
+      "eligible_service_days": 365,
+      "excluded_days": 0,
+      "expected_benefit": "1050.00"
+    }
+  ]
+}
