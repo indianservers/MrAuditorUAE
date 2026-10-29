@@ -51,3 +51,4 @@ docs/phase-12/92f1465-hosted-coverage.json -text
 docs/country-workflows/sample-inputs/SYNTHETIC-bank-observation/*.csv text eol=lf
 docs/country-workflows/sample-inputs/SYNTHETIC-bank-observation/*.txt text eol=lf
 docs/phase-12/bank-observation-*.xml -text
+docs/phase-12/report-navigation-frontend.xml -text

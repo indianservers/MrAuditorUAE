@@ -1,0 +1,41 @@
+{
+  "contract": "report-requirement-navigation-validation/1",
+  "scope": "Common report editor search and 20-item pages; complete original item array retained for save",
+  "frontend_tests": {
+    "passed": 366,
+    "failures": 0,
+    "files": 71,
+    "receipt": "docs/phase-12/report-navigation-frontend.xml"
+  },
+  "checks": {
+    "production_build": "passed",
+    "typescript": "passed",
+    "lint": "passed with pre-existing unused-variable warning in uae-business-cases.tsx:143"
+  },
+  "new_cases": [
+    "Later-page editing retains all hidden requirements and original indices",
+    "Locked identifiers, removal and not-applicable restrictions survive paging",
+    "Key/title/basis search combines with disposition without trimming save payload",
+    "Last-page deletion clamps navigation",
+    "Adding clears filters and opens the new item page"
+  ],
+  "limits": [
+    "No expanded Form 26 field preset or statutory calculation is introduced",
+    "Existing 100-item custom limit and exact 65-item Form 26 A/1 B/1 scopes are unchanged",
+    "No browser screenshot or real-client qualification is established by component tests"
+  ],
+  "staged_sources": [
+    {
+      "path": "frontend/src/features/report-requirements.tsx",
+      "sha256": "bc53f7bd7eaf4fa1ce5a6400fb27a750bf4aaa33422d93b2ab16509ed1b0ebee"
+    },
+    {
+      "path": "frontend/tests/report-requirements.test.tsx",
+      "sha256": "72f9d95b707bc08c088ca30c4a790109c57c3299569a8197d4adafdbf1fbffcb"
+    },
+    {
+      "path": "docs/phase-12/report-navigation-frontend.xml",
+      "sha256": "0efc7fa67915748b561969144350752b94986eebb44e8ff6e9dd46a165d3f8dd"
+    }
+  ]
+}

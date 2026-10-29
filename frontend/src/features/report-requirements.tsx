@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import { Button } from "@/components/ui/primitives";
 export type ReportRequirement = {
   key: string;
@@ -28,6 +29,27 @@ export function ReportRequirementsEditor({
   allowNotApplicable?: boolean;
   notApplicableKeys?: string[];
 }) {
+  const [query, setQuery] = useState("");
+  const [disposition, setDisposition] = useState("ALL");
+  const [page, setPage] = useState(0);
+  const pageSize = 20;
+  const needle = query.trim().toLocaleLowerCase();
+  const filtered = items
+    .map((item, index) => ({ item, index }))
+    .filter(
+      ({ item }) =>
+        (disposition === "ALL" || item.disposition === disposition) &&
+        (!needle ||
+          `${item.key} ${item.title} ${item.basis}`
+            .toLocaleLowerCase()
+            .includes(needle)),
+    );
+  const pages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const currentPage = Math.min(page, pages - 1);
+  const visible = filtered.slice(
+    currentPage * pageSize,
+    (currentPage + 1) * pageSize,
+  );
   function change(index: number, field: Partial<ReportRequirement>) {
     onItems(
       items.map((item, i) => (i === index ? { ...item, ...field } : item)),
@@ -59,7 +81,54 @@ export function ReportRequirementsEditor({
         Requirement scope basis
         <textarea value={basis} onChange={(e) => onBasis(e.target.value)} />
       </label>
-      {items.map((item, i) => (
+      <label>
+        Search report requirements
+        <input
+          value={query}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setPage(0);
+          }}
+        />
+      </label>
+      <label>
+        Filter requirement assessment
+        <select
+          value={disposition}
+          onChange={(e) => {
+            setDisposition(e.target.value);
+            setPage(0);
+          }}
+        >
+          <option value="ALL">All assessments</option>
+          <option value="UNASSESSED">Unassessed</option>
+          <option value="REQUIRED">Required</option>
+          <option value="NOT_APPLICABLE">Not applicable</option>
+        </select>
+      </label>
+      <p role="status">
+        {filtered.length} of {items.length} requirements match. Page{" "}
+        {currentPage + 1} of {pages}. All {items.length} requirements remain in
+        the report scope.
+      </p>
+      <nav aria-label="Report requirement pages">
+        <Button
+          type="button"
+          disabled={currentPage === 0}
+          onClick={() => setPage(currentPage - 1)}
+        >
+          Previous requirements
+        </Button>
+        <Button
+          type="button"
+          disabled={currentPage + 1 >= pages}
+          onClick={() => setPage(currentPage + 1)}
+        >
+          Next requirements
+        </Button>
+      </nav>
+      {visible.length === 0 && <p>No requirements match these filters.</p>}
+      {visible.map(({ item, index: i }) => (
         <fieldset key={i}>
           <legend>Requirement {i + 1}</legend>
           <label>
@@ -130,7 +199,10 @@ export function ReportRequirementsEditor({
       ))}
       <Button
         disabled={locked || items.length >= 100}
-        onClick={() =>
+        onClick={() => {
+          setQuery("");
+          setDisposition("ALL");
+          setPage(Math.floor(items.length / pageSize));
           onItems([
             ...items,
             {
@@ -143,8 +215,8 @@ export function ReportRequirementsEditor({
               source_required: true,
               basis: "",
             },
-          ])
-        }
+          ]);
+        }}
       >
         Add declared requirement
       </Button>
