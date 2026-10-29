@@ -1,0 +1,48 @@
+{
+  "contract": "form26-expanded-browser-correction/1",
+  "source_commit": "87045cda70f9a8acfbdff8ccc28248a66b7530ad",
+  "run_id": 40974252253,
+  "job_id": 123798255926,
+  "conclusion": "failure",
+  "passed_cases": 3,
+  "failed_cases": 2,
+  "artifact": {
+    "id": 12942296729,
+    "size_bytes": 9253798,
+    "sha256": "79cf9ff9ba8582de0dcb12a65b36c8a278179bbd694c87e7d2c80af781b17d9f",
+    "download_digest_verified": true
+  },
+  "observed_failure": "Both expanded cases completed API fixture setup, then timed out locating Engagement using getByLabel exact before selecting the engagement",
+  "visible": "Both original owner screenshots show the normal Statutory Report Designer route and its unselected engagement combobox",
+  "corrections": [
+    "Use actual combobox roles for engagement, saved-template and preset selectors, matching the passing baseline",
+    "Supply an explicit new-revision rationale; loading retained blocks does not silently copy it"
+  ],
+  "captures": [
+    {
+      "part": "B",
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-B-selector-failed-87045cd.png",
+      "sha256": "73ba421b5fa874c8f248a9b7a0341a4276d9107008424ed3d4929577ebc4c649",
+      "size_bytes": 90135,
+      "width": 1280,
+      "height": 720,
+      "original_unmodified": true,
+      "visually_inspected": true
+    },
+    {
+      "part": "A",
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-A-selector-failed-87045cd.png",
+      "sha256": "73ba421b5fa874c8f248a9b7a0341a4276d9107008424ed3d4929577ebc4c649",
+      "size_bytes": 90135,
+      "width": 1280,
+      "height": 720,
+      "original_unmodified": true,
+      "visually_inspected": true
+    }
+  ],
+  "limits": [
+    "Expanded UI revision, approval, report generation, export and staleness were not reached in this run",
+    "Original baseline UAE, India and release-login cases passed",
+    "Corrected expanded scenarios require a new hosted execution; no success or generated-report capture is claimed"
+  ]
+}

@@ -400,12 +400,14 @@ for (const part of ["A", "B"] as const) {
       const initial = await post(page.request, `${reg}/report-templates`, raw);
       await page.goto("/settings/countries");
       await page
-        .getByLabel("Working country", { exact: true })
+        .getByRole("combobox", { name: "Working country", exact: true })
         .selectOption("IN");
       await page.goto("/reports/statutory");
-      await page.getByLabel("Engagement", { exact: true }).selectOption(eid);
       await page
-        .getByLabel("Saved template version", { exact: true })
+        .getByRole("combobox", { name: "Engagement", exact: true })
+        .selectOption(eid);
+      await page
+        .getByRole("combobox", { name: "Saved template version", exact: true })
         .selectOption(initial.id);
       await page
         .getByRole("button", {
@@ -413,8 +415,16 @@ for (const part of ["A", "B"] as const) {
           exact: true,
         })
         .click();
+      await page
+        .getByLabel("Template / review rationale", { exact: true })
+        .fill(
+          "Synthetic browser amendment of retained field scope; no substantive legal qualification",
+        );
       await expect(
-        page.getByLabel("Operational report preset", { exact: true }),
+        page.getByRole("combobox", {
+          name: "Operational report preset",
+          exact: true,
+        }),
       ).toHaveValue(pack.id);
       const last = pack.requirements[876];
       await page
@@ -480,14 +490,14 @@ for (const part of ["A", "B"] as const) {
       const reviewer = actors.reviewer;
       await reviewer.goto("/settings/countries");
       await reviewer
-        .getByLabel("Working country", { exact: true })
+        .getByRole("combobox", { name: "Working country", exact: true })
         .selectOption("IN");
       await reviewer.goto("/reports/statutory");
       await reviewer
-        .getByLabel("Engagement", { exact: true })
+        .getByRole("combobox", { name: "Engagement", exact: true })
         .selectOption(eid);
       await reviewer
-        .getByLabel("Saved template version", { exact: true })
+        .getByRole("combobox", { name: "Saved template version", exact: true })
         .selectOption(template.id);
       const coverage = reviewer.getByRole("region", {
         name: "Retained requirement coverage",
