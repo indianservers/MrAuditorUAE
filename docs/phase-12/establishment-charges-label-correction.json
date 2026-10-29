@@ -1,0 +1,61 @@
+{
+  "source_commit": "1ff7adff502beaed7131496e28722d2b15917e90",
+  "run_id": 40920841262,
+  "browser_job_id": 123613309381,
+  "browser_result": "2 PASSED, 1 FAILED; not a passing browser qualification",
+  "failure": "Exact getByLabel for Independent contribution group controls (JSON) timed out before filling or submitting remittance controls",
+  "reached": [
+    "Real original synthetic source uploads and independent reviews",
+    "UI calculation with six matched establishment charge rows and expected total INR 1750",
+    "Independent UI result approval",
+    "Remittance source title and retained due-date document fields filled"
+  ],
+  "not_reached": [
+    "Remittance control population and submission",
+    "Policy replacement and recursive stale UI assertions in this browser scenario"
+  ],
+  "artifact": {
+    "id": 12918746477,
+    "size_bytes": 4875086,
+    "zip_sha256": "5a46ac6b16e09ca425baacb267057f09ce83b5fd565f2bef9dfae0cf12d74b6e"
+  },
+  "original_inspected_image": {
+    "path": "docs/country-workflows/screenshots/browser-workflows/IN-establishment-charges-failed-before-remittance-controls-1ff7adf.png",
+    "size_bytes": 422728,
+    "sha256": "8377f6621e11ea6f7489a13aa11fcb2b66451986219fc3f9c49302c3b0c4e577",
+    "scope": "Original full reviewer page at failure: approved six-row result and blank remittance form; no claim of completed remittance"
+  },
+  "offline_reproduction": {
+    "environment": "Installed Playwright Chromium, headless page.setContent; no HTTP server or network",
+    "html": "<label>Independent contribution group controls (JSON)<textarea>[]</textarea></label>",
+    "exact_label_matches_before": 0,
+    "mutation": "Set aria-label on textarea to the visible field label",
+    "exact_label_matches_after": 1,
+    "scope": "Minimal static DOM diagnosis only, not full app/browser workflow completion"
+  },
+  "correction": "Explicit matching aria-label on contribution controls, pension scope and scope-assessment textareas; no assertion removed or timeout extended",
+  "backend_scope": "No backend files or financial formulas changed by the label correction; full hosted backend jobs remain separate evidence",
+  "hosted_correction_status": "NOT_YET_RUN_ON_CORRECTED_SOURCE",
+  "local_frontend_receipt": {
+    "path": "docs/phase-12/establishment-charges-label-frontend.xml",
+    "sha256": "d845b131aade2a9d7ced46f36c23e8ee7759843d0571f9739db8d2efeafc24d5",
+    "size_bytes": 82710,
+    "counts": {
+      "tests": 345,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "correction_source": {
+    "path": "frontend/src/features/contribution-obligation-source.tsx",
+    "sha256": "0d5e135f362bc28fc7269cfe9e8053ec5b965fd161260a2b087631cbd826e1ed",
+    "basis": "EXACT_STAGED_GIT_BLOB"
+  },
+  "checks": {
+    "all_345_frontend_tests": "PASSED",
+    "typecheck": "PASSED",
+    "lint": "PASSED_WITH_PREEXISTING_UNUSED_VARIABLE_WARNING",
+    "production_build": "PASSED"
+  }
+}

@@ -78,6 +78,7 @@ export function ContributionObligationSource({
       <label>
         Independent contribution group controls (JSON)
         <textarea
+          aria-label="Independent contribution group controls (JSON)"
           rows={9}
           style={{
             height: Math.min(
@@ -118,6 +119,7 @@ export function ContributionObligationSource({
           <label>
             Assessed pension scope (JSON)
             <textarea
+              aria-label="Assessed pension scope (JSON)"
               rows={6}
               style={{
                 height: Math.min(
@@ -156,6 +158,7 @@ export function ContributionObligationSource({
       <label>
         Remittance scope and due-date assessment
         <textarea
+          aria-label="Remittance scope and due-date assessment"
           value={assessment}
           style={{ height: 80 }}
           onChange={(event) => setAssessment(event.target.value)}
