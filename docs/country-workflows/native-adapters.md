@@ -4605,3 +4605,20 @@ The helper now reuses that existing role selector. No application code, financia
 logic, timeouts or assertions changed. Original failure capture, artifact digest
 and limits are retained in `../phase-12/msme-interest-browser-selector-correction.json`.
 The corrected hosted run remains pending until recorded separately.
+
+
+The corrected source `393b414` passed all three hosted browser cases in 2.6
+minutes. The combined India case, including the new interest flow, took 1.3
+minutes. The new helper exercised nine reviewed source choices, explicit scope,
+UI calculation and separate reviewer approval, bank allocation controls and a
+real XLSX download. It checked two monthly-rest records and the INR 93.23 closing
+interest in the workbook. Replacing the retained rate document made the result
+stale, preserved its complete financial body and disabled approval after reload.
+Both original 2200 x 3400 result/stale captures were individually inspected:
+all financial columns and bank controls are visible, including INR 900 principal,
+INR 90 interest, INR 10 unused bank outflow and the separate principal timing
+exception. The invoice trace panels are closed in these images; separate frontend
+and HTTP tests cover those traces. Exact originals, artifact digest, assertions
+and limits are in `../phase-12/msme-interest-browser-393b414.json`. This is browser
+proof for that source; its full hosted backend suite was still running when
+recorded. The initial failed attempt remains preserved separately.

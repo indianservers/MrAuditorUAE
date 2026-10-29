@@ -1,0 +1,74 @@
+{
+  "recorded_at": "2026-10-29T20:03:38.493614+00:00",
+  "contract": "source-bound-browser-evidence/1",
+  "source_commit": "393b414762ab1f4211196ea45e025c1a1a791d60",
+  "run_id": 40944523177,
+  "job_id": 123696245827,
+  "job_url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40944523177/job/123696245827",
+  "conclusion": "success",
+  "passed_cases": 3,
+  "failed_cases": 0,
+  "elapsed": "2.6 minutes",
+  "india_combined_case": "1.3 minutes, including previous India procedures and new MSE interest flow",
+  "artifact": {
+    "id": 12927334903,
+    "size_bytes": 5756553,
+    "sha256": "871b48aa109d43765a9ee09f88db8b05858781d6e962df5f5698e362ef5e6dbe",
+    "digest_verified": true
+  },
+  "captures": [
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-msme-interest-reviewed-393b414.png",
+      "artifact_entry": "country-reports/IN-msme-interest-reviewed.png",
+      "sha256": "ff3b826d33c008539c43e14e43f09dbb7368b0ac6f58e2210420b136de288929",
+      "size_bytes": 444938,
+      "width": 2200,
+      "height": 3400,
+      "original_unmodified": true,
+      "visually_inspected": true,
+      "visible": [
+        "Complete result title and current/stale review state",
+        "INR 93.23 outstanding interest and separate one principal timing exception",
+        "Original bank -1000; principal 900 plus interest 90, total 990 and unallocated 10",
+        "Complete financial row: basis 36500, remaining principal 35600, interest charged 183.23, cash interest 90, expected/reported closing 93.23 and difference 0.00"
+      ],
+      "stale_capture": false
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-msme-interest-rate-replaced-stale-393b414.png",
+      "artifact_entry": "country-reports/IN-msme-interest-rate-replaced-stale.png",
+      "sha256": "29df9a9ae8359ae9b54f9005d0914cdebdb1ea58ceed0d3eda0b86f2b990ce15",
+      "size_bytes": 433418,
+      "width": 2200,
+      "height": 3400,
+      "original_unmodified": true,
+      "visually_inspected": true,
+      "visible": [
+        "Complete result title and current/stale review state",
+        "INR 93.23 outstanding interest and separate one principal timing exception",
+        "Original bank -1000; principal 900 plus interest 90, total 990 and unallocated 10",
+        "Complete financial row: basis 36500, remaining principal 35600, interest charged 183.23, cash interest 90, expected/reported closing 93.23 and difference 0.00"
+      ],
+      "stale_capture": true
+    }
+  ],
+  "executed_assertions": [
+    "Nine original saved CSV source hashes and three supporting document hashes verified before actual API setup; every source independently reviewed",
+    "Browser selects nine reviewed role sources and explicit buyer, account, INR, invoice-month, history and payment-sign scope",
+    "Actual UI calculation POST 202 completes unblocked with expected/reported 93.23, one separate principal timing exception and remaining assessed principal 35600",
+    "Different reviewer approves through UI with POST 201",
+    "UI bank controls show principal 900, interest 90 and unused outflow 10",
+    "UI XLSX download read with openpyxl; monthly rests has two data records, bank controls one, and result expected_amount exactly 93.23",
+    "Replace retained bank-rate document through evidence API; result becomes STALE and complete original financial body is unchanged",
+    "Reloaded stale result shows currentness notice and disabled approval; both original captures retain complete financial row and bank controls"
+  ],
+  "limits": [
+    "Synthetic assessed conventions and illustrative 1% bank rate, not a current or historical legal-rate assertion or real-client validation",
+    "Source upload/preparation/review setup uses actual APIs; those upload widgets are not exercised by this helper",
+    "Invoice interval/rest/event panels are closed in these captures; frontend paging and full HTTP/XLSX trace tests are separate proof",
+    "No separately assessed non-cash credit in this saved/browser population; that path is covered by a distinct HTTP scenario",
+    "No bank ownership authentication or global cash reservation is inferred; optional account-evidence review is not linked here",
+    "Five non-verify hosted jobs passed on this source; full backend verification was still running when recorded",
+    "Tax deductions, Section 22 disclosures, actual client pilots, professional statutory qualification and production deployment remain open"
+  ]
+}
