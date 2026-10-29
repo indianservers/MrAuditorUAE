@@ -94,6 +94,21 @@ retains original JUnit receipts: 3,170 unit tests passed with five known skips,
 including 35 new benefit-settlement cases; four database/API regressions passed.
 The frontend passed 302 tests, its production build, type checking and scoped
 lint. Python typing passed across 395 application files and current API contract
-snapshots matched. These counts overlap. The hosted UAE browser extension is
-authored and type/lint checked; its passing run and original screenshot inspection
-must be recorded separately.
+snapshots matched. These counts overlap.
+
+[Hosted browser proof on b315b53](../phase-12/gratuity-browser-b315b53.json)
+records all three cases passing in 1.3 minutes. The new UAE path uses real
+scanner/broker/worker services, the browser preparation form, independent source
+review, worker bank allocation, UI final review, exact XLSX values and service
+scope, and context-replacement staleness with complete object equality and
+disabled approval. Three original images were downloaded with a verified archive
+digest and individually inspected. The stale frame captures an ancillary
+cash-claim panel still loading; it does not visually qualify that panel's final
+status. Source setup/reviews use APIs and all fixtures are synthetic. The earlier
+selector and JSON-order test failures remain retained as negative receipts.
+Frontend302/build/types/lint, security, ML and containers passed on b315b53;
+latest-source full backend verification remains running.
+
+Original captures: [preparation](screenshots/browser-workflows/AE-gratuity-settlement-preparation-b315b53.png),
+[reviewed settlement](screenshots/browser-workflows/AE-gratuity-reviewed-bank-settlement-b315b53.png),
+and [stale result](screenshots/browser-workflows/AE-gratuity-context-replaced-stale-b315b53.png).

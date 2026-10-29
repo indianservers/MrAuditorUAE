@@ -372,7 +372,8 @@ const data = {
           "backend/tests/qa_crud/test_published_payroll_source.py",
           "backend/app/modules/country_workflows/benefit_settlement_source.py",
           "docs/country-workflows/benefit-settlement.md",
-          "docs/phase-12/benefit-settlement-validation.json"
+          "docs/phase-12/benefit-settlement-validation.json",
+          "docs/phase-12/gratuity-browser-b315b53.json"
         ]
       }
     }
@@ -534,9 +535,9 @@ const data = {
   ],
   "checkpoint": {
     "as_of": "29 October 2026",
-    "source_revision": "8131dca87e990ee2620aa1470d8bf2a49b71c29b",
+    "source_revision": "b315b5340de946270fca88294206ad01efd61eb5",
     "release_status": "NOT_QUALIFIED_FOR_PRODUCTION_STATUTORY_USE",
-    "scope": "Operational implementation and source-specific synthetic verification through 8131dca. UAE reviewed gratuity derives controlled expected bank settlements with employee/service identity, retained employer/due-date support, separate HR/bank evidence, pooled/partial/late controls and recursive staleness. India manual annual-credit statements preserve declared 26AS/168, PAN, underlying periods and AY/TY scope. The new gratuity form, final review, XLSX and STALE freshness executed in the hosted browser; the case failed only at serialized JSON key-order equality. Parsed complete bodies were identical; deep-object equality and checkbox alignment fixes are prepared. Two original form/result images were individually inspected. Security, frontend, ML and container jobs passed on 8131dca. Retained complete hosted backend proof is separately pinned to 20ee29a; full latest-source verification and independent qualification remain open.",
+    "scope": "Operational implementation and source-specific synthetic verification through b315b53. UAE reviewed gratuity now derives controlled expected bank settlements with employee/service identity, retained employer/due-date support, separate HR/bank evidence, pooled/partial/late controls and recursive staleness. India manual annual-credit statements preserve declared 26AS/168, PAN, underlying periods and AY/TY scope. All three hosted browser cases passed, including the new UAE form, independent review, exact XLSX and context-replacement staleness; three original gratuity images were individually inspected. Frontend 302/build/types/lint, security, ML and containers passed on this source. Retained complete hosted backend proof remains separately pinned to 20ee29a; latest full backend and complete legal/native/provider/client qualification remain open.",
     "verification": [
       {
         "label": "Backend units",
@@ -560,13 +561,13 @@ const data = {
         "label": "Frontend",
         "result": "302 tests passed; production build, TypeScript and scoped ESLint passed",
         "path": "docs/phase-12/benefit-settlement-validation.json",
-        "limit": "All302 tests and production build/types/lint passed locally on1871579 and hosted on8131dca. The subsequent checkbox/test fix passed three focused tests, types and lint. Full new browser completion remains separate."
+        "limit": "All 302 tests and production build/types/lint passed locally on 1871579 and hosted on b315b53. Three focused tests/types/lint also passed after the accessibility/alignment change. Source-pinned browser proof is separately retained."
       },
       {
         "label": "Browser boundary",
-        "result": "Two passed; one failed on8131dca after successful form/review/XLSX/STale-freshness steps; two original images inspected",
-        "path": "docs/phase-12/gratuity-browser-8131dca.json",
-        "limit": "Overall UAE case failed on JSON.stringify key order, not changed field values: parsed complete bodies had zero structural differences. The full-object comparison fix remains pending a fresh hosted run. No completed stale-image/disabled-approval assertion is claimed. Earlier all-three merchant proof remains pinned to e119982. These synthetic cases are not all154 scenarios or real-client qualification."
+        "result": "All three hosted cases passed on b315b53; reported 1.3m; three original gratuity screenshots individually inspected",
+        "path": "docs/phase-12/gratuity-browser-b315b53.json",
+        "limit": "Three synthetic browser cases cover AE report/native-bank/gratuity/merchant, IN report/MSE/merchant and session, not all 154 scenarios or independent clients. Source setup/reviews use APIs; the new form, final review, exact XLSX and stale-state assertions use UI with real scanner/broker/worker. Known clean files do not qualify malware coverage or production scanning freshness. Stale-frame ancillary cash claims are loading; core rows, STALE badge and disabled approval are visible. Negative1871579/8131dca receipts remain retained; all financial fields are compared as complete objects."
       }
     ],
     "hosted_runs": [
@@ -581,9 +582,9 @@ const data = {
         "status_at_checkpoint": "Browser, frontend, security, ML and containers PASSED on e119982. Three cases include linked merchant UI selection, approval, XLSX and linked-review withdrawal staleness in both countries alongside existing native-bank/MSE flows. Four exact linked-merchant screenshots individually inspected."
       },
       {
-        "label": "Latest gratuity bridge hosted checks",
-        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40745633106",
-        "status_at_checkpoint": "On8131dca frontend (302 tests/build/types/lint), security, ML and containers PASSED. Browser: two passed, one failed after successful form, review, XLSX and STALE-freshness steps because serialized JSON key order differed; complete objects were independently verified equal. Full backend remains IN_PROGRESS. Deep-object test fix and checkbox alignment are locally checked and await fresh hosted execution."
+        "label": "Current gratuity bridge browser and CI",
+        "url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40747196323/job/123024022741",
+        "status_at_checkpoint": "Onb315b53 browser PASSED: all 3 cases in 1.3m; three exact gratuity images individually inspected. Frontend 302/build/types/lint, security, ML and containers PASSED. Full backend verification 123024022320 remains IN_PROGRESS; no completed latest-source full backend result is claimed."
       }
     ],
     "open_gates": [
@@ -609,7 +610,7 @@ const data = {
       },
       {
         "priority": "Release",
-        "work": "Complete current source-specific full backend/browser CI and qualify actual production deployment/rollback, recovery, monitoring, privacy and professional sign-off. Latest local gratuity source has passing units/API/frontend/build; retained complete full backend proof is earlier 20ee29a. Synthetic mechanics do not close real-client or production gates.",
+        "work": "Complete current full backend CI and qualify actual production deployment/rollback, recovery, monitoring, privacy and professional sign-off. Gratuity source b315b53 has passing local units/API and hosted browser/frontend/security/ML/containers; retained complete full backend proof is earlier 20ee29a. Synthetic mechanics do not close real-client or production gates.",
         "proof": "Passing source-pinned jobs plus actual provider/runtime drills and named approvals. Local/container checks alone do not prove production readiness."
       }
     ],
@@ -829,7 +830,8 @@ const data = {
           "backend/tests/qa_crud/test_published_payroll_source.py",
           "backend/app/modules/country_workflows/benefit_settlement_source.py",
           "docs/country-workflows/benefit-settlement.md",
-          "docs/phase-12/benefit-settlement-validation.json"
+          "docs/phase-12/benefit-settlement-validation.json",
+          "docs/phase-12/gratuity-browser-b315b53.json"
         ]
       }
     ],

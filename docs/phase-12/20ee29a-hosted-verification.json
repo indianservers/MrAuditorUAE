@@ -18,5 +18,5 @@
     "docs/phase-12/20ee29a-hosted-coverage.json": "66345adc8b537a12f1404721423763ac950a6dd6a83c2fb39121c83c6505f2b8"
   },
   "other_jobs": "Frontend, security, ML, containers and browser-smoke all completed successfully on this source",
-  "limits": "Complete source-specific hosted proof includes merchant contract 2; predates linked merchant accounts, annual-statement scopes and the gratuity settlement bridge. Synthetic/doubled providers and CI containers do not qualify actual providers, real-client data, full legal/native coverage or production deployment. Other operation JSONs in the artifact were not inspected or archived here."
+  "limits": "Complete source-specific hosted proof includes merchant contract 2; predates linked merchant accounts, annual-statement scopes and the gratuity settlement bridge. Synthetic/doubled providers and CI containers do not qualify actual providers, real-client data, full legal/native coverage or production deployment. Other operation JSONs were later inspected only as synthetic guard evidence and are not separately archived: unresolved deadline/partial file-provider failure, acknowledged filing made stale by correction, and abandoned-worker claims requiring manual retry. They perform no external provider submission and do not establish actual production recovery or provider qualification."
 }

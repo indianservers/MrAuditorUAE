@@ -30,11 +30,11 @@
     "typecheck": "passed",
     "scoped_eslint": "passed",
     "production_build": "passed",
-    "browser_extension": "On 8131dca the form, independent review, worker allocation, XLSX and STALE freshness passed; the overall UAE case failed at JSON string key-order equality. Complete parsed objects were structurally identical. The test now uses full deep-object equality; no values or array-order checks are dropped. See gratuity-browser-8131dca.json.",
+    "browser_extension": "All three hosted cases passed on b315b53 in 1.3m. Three original gratuity images were downloaded, digest verified and individually inspected; see gratuity-browser-b315b53.json. Source-specific limits and prior failed receipts remain explicit.",
     "hosted_verification": {
-      "source_commit": "8131dca87e990ee2620aa1470d8bf2a49b71c29b",
-      "run_id": 40745633106,
-      "job_id": 123018540901,
+      "source_commit": "b315b5340de946270fca88294206ad01efd61eb5",
+      "run_id": 40747196323,
+      "job_id": 123024022729,
       "conclusion": "success",
       "tests_passed": 302,
       "test_files_passed": 64,
@@ -180,6 +180,7 @@
     "typecheck": "passed",
     "scoped_eslint": "passed",
     "changes": "Align employee checkboxes, compare complete immutable JSON objects independent of key order, dismiss capture notification",
-    "browser": "Pending fresh hosted execution"
-  }
+    "browser": "Passed on b315b53: three hosted cases, three original gratuity images individually inspected"
+  },
+  "browser_receipt": "docs/phase-12/gratuity-browser-b315b53.json"
 }

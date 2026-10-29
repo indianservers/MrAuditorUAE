@@ -1,0 +1,45 @@
+{
+  "source_commit": "b315b5340de946270fca88294206ad01efd61eb5",
+  "run_id": 40747196323,
+  "job_id": 123024022741,
+  "conclusion": "success",
+  "passed": 3,
+  "failed": 0,
+  "reported_duration": "1.3m",
+  "artifact_id": 12842916027,
+  "archive_sha256": "cbd7e69d648472a65a3a79a02fc216710a6db018e16c2bf3e6fe606d4116fb45",
+  "artifact_locally_downloaded_and_digest_verified": true,
+  "inspected_images": [
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-gratuity-settlement-preparation-b315b53.png",
+      "sha256": "20a0cd806ca28fd5584b694f1bbfcaf2cda48a3cd61728e8c2aa1c5729535443",
+      "finding": "Complete readable form with left-aligned selected full-time/part-time controls, assessed service dates, retained context, individual due dates/references and independently entered count2/AED3150."
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-gratuity-reviewed-bank-settlement-b315b53.png",
+      "sha256": "7d116dc4376ba747b8a382a024529261474ee7aa2766edef1ded4f01159f4055",
+      "finding": "Complete reviewed/current comparison with all five rows and employment dates visible; expected/allocated AED2100 and1050, pooled bank3150 and zero residuals. Cash-claim control is active; arithmetic/account-authentication and qualification limitations remain visible."
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-gratuity-context-replaced-stale-b315b53.png",
+      "sha256": "101c725468a479dff2506feb8527211bf4c3229080b5dabb8d43089b52cf0083",
+      "finding": "Readable STALE badge, disabled independent approval, unchanged five comparison rows/service dates and zero residuals after context replacement. The ancillary cash-claim panel still displays its loading text in this frame; no completed ancillary-panel visual claim is made."
+    }
+  ],
+  "scope": [
+    "Three hosted synthetic cases: AE report/native-bank/gratuity/merchant, IN report/MSE/merchant, authenticated session",
+    "Real clean-file scanner, upload/source APIs, broker and worker for bounded known-clean synthetic files",
+    "New gratuity form: original employee spans, retained scope support, independent count/total and explicit per-employee due dates",
+    "Preparer self-approval403; independent source setup/reviews and worker bank allocation",
+    "UI final approval, exact XLSX expected/allocated amounts and service scope",
+    "Context replacement: STALE freshness, full cloned-object equality, disabled approval and captured stale state"
+  ],
+  "other_jobs": "Frontend 302/build/types/lint, security, ML and containers passed on this source; full backend verification remains in progress",
+  "limits": [
+    "Three synthetic browser cases are not all 154 authored scenarios or independent clients",
+    "Parent/source setup and source reviews use APIs; new form creation, final approval, XLSX export and stale-state checks use browser UI",
+    "The bank fixture is a canonical declared transaction, not native bank authentication or receipt by an employee",
+    "Known clean fixtures do not qualify malware detection/freshness or full WPS/legal/cohort/alternative-scheme packs",
+    "Ancillary cash-claim status is loading in the stale image; the core event, table, stale badge and disabled approval are rendered and asserted"
+  ]
+}
