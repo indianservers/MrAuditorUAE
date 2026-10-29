@@ -1,0 +1,517 @@
+{
+  "contract": "official-form26-whole-document-visual-inventory/1",
+  "recorded_at": "2026-10-29T22:51:22.178664+00:00",
+  "source": {
+    "path": "docs/country-workflows/legal-sources/IN-Form-26-2026.pdf",
+    "sha256": "03613f520b76f5e1de8194f08cce461fb863b57cd35bd0ca923cdd6df993f5a2",
+    "size_bytes": 1012809,
+    "page_count": 33,
+    "original_unmodified": true
+  },
+  "visual_inventory_pages": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33
+  ],
+  "visual_inventory_review_complete": true,
+  "field_level_inventory_complete": false,
+  "professional_approval": false,
+  "filing_schema_qualified": false,
+  "statutory_calculations_qualified": false,
+  "renderer": {
+    "tool": "pdftoppm",
+    "resolution_dpi": 150,
+    "command": "pdftoppm -r 150 -png ORIGINAL_PDF OUTPUT_PREFIX",
+    "warnings": [
+      "No display font for 'Symbol'",
+      "No display font for 'ArialUnicode'"
+    ],
+    "limitations": [
+      "Some currency glyphs render as squares; extracted note 9 text identifies the rupee symbol. Original PDF is unchanged; visual-format fidelity is not professionally qualified."
+    ],
+    "version": "26.07.0"
+  },
+  "captures": [
+    {
+      "page": 1,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-01.png",
+      "sha256": "470c3ccfc1d4dcee8995a3a1be91fc1631c5532615904bb3b9bc6e9791d76d44",
+      "size_bytes": 252741,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Report category and Part A statutory audit/qualification impact"
+    },
+    {
+      "page": 2,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-02.png",
+      "sha256": "10b80eef05407a37977885cbb3627d7933bdc7cd375525633f9a780c6392aaf3",
+      "size_bytes": 175460,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Part A observations, accountant identification and notes"
+    },
+    {
+      "page": 3,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-03.png",
+      "sha256": "171545cd4e5926ed167554cb583f80ee9f29803ec72ea478ed96ccd45b9c6fac",
+      "size_bytes": 268510,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Part B examination, accounts and qualification impact"
+    },
+    {
+      "page": 4,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-04.png",
+      "sha256": "f8b2cdd5100b21febd10bc92d0ad0591eebb55bcf0076758585560b8ff1a52ce",
+      "size_bytes": 190436,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Part B observations, accountant identification and notes"
+    },
+    {
+      "page": 5,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-05.png",
+      "sha256": "9e68bd149b6ce53a8dbc68e73a9e06c5d3383af3f62b651e82a0274e7d969b63",
+      "size_bytes": 212892,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Part C assessee fields and Part D general items 9-12(a)"
+    },
+    {
+      "page": 6,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-06.png",
+      "sha256": "f2fd53e4363b142ec2014ab987ce5f539f40407dc4ddb6934a817d136e6b12dd",
+      "size_bytes": 302792,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "General items 12(b)-(d); books/accounting/inventory items 13-16(a)"
+    },
+    {
+      "page": 7,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-07.png",
+      "sha256": "e3bbdd699bedc266fe425f87978d5326058c9219f7a185f46aac382dec1353ee",
+      "size_bytes": 133879,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Accounting items 16(b)-19"
+    },
+    {
+      "page": 8,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-08.png",
+      "sha256": "4521125787dd1395540beea68dbd23eff32271970bb905a6eba9747a617273fe",
+      "size_bytes": 169940,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Income items 20-25"
+    },
+    {
+      "page": 9,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-09.png",
+      "sha256": "09012b0c08cb4ddb70b988d6dd37629b13bbbcd7980992e09995fc7d9c6d6960",
+      "size_bytes": 367326,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Expense items 26-34 including separate MSE adjustments"
+    },
+    {
+      "page": 10,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-10.png",
+      "sha256": "cc5bea675ed44aedd3392ad8af850b22e353ee6ced674cc40710c5d4bba34265",
+      "size_bytes": 379739,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Prior period, losses/deductions and international items 35-42"
+    },
+    {
+      "page": 11,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-11.png",
+      "sha256": "66de782ea82f6524ce15ae0fcd003e27fd4f2e96a95abc086e4a292eebacf13f",
+      "size_bytes": 388210,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "International 43, other parameters 44-48, TDS/TCS 49-51(b)"
+    },
+    {
+      "page": 12,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-12.png",
+      "sha256": "eb98bbfa5f37a0a4ef3cc0074cf1b98abd359a0d3c5c537577f0e44dc12369f8",
+      "size_bytes": 280010,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "TDS/TCS 51(c)-(d), GST 52, quantities 53; accountant fields and notes 1-6"
+    },
+    {
+      "page": 13,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-13.png",
+      "sha256": "46dfab3f0933db41e386a5890d49654d3566b9fd6658770ff090c08c68317b0f",
+      "size_bytes": 101559,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Notes 7-10, including visually present Note 8 transaction code table"
+    },
+    {
+      "page": 14,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-14.png",
+      "sha256": "84b6245e92d35742945286726ea90c3ea963b43f3b235b378645c62e820fa151",
+      "size_bytes": 118640,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "General schedules 11(b),12(a),12(b),12(c)(ii)"
+    },
+    {
+      "page": 15,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-15.png",
+      "sha256": "0778c7fc188c8b2d1560e87563297920fb4529487eda3eb7793f3d19e02295c8",
+      "size_bytes": 186613,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Accounting schedules 15(b),16(b),17 ICDS adjustments (continued)"
+    },
+    {
+      "page": 16,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-16.png",
+      "sha256": "9adb55341b7fe938f6cfba1f2c5d5c6eb4ffa5abc44ce01b81d5032f883fc3e8",
+      "size_bytes": 224007,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "ICDS continuation, disclosures 18, presumptive income 19 and receipt schedule 20"
+    },
+    {
+      "page": 17,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-17.png",
+      "sha256": "fb0856ad8d43ab97992efbfbd02703858419db350b7a15b68a21082f3cd09016",
+      "size_bytes": 159295,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Receipt schedule 20 continuation and schedules 21-23"
+    },
+    {
+      "page": 18,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-18.png",
+      "sha256": "8968c592fbb5602b670a9dfa8f48daa17e678ba35e6e3b5698c8c559861ab6e0",
+      "size_bytes": 257597,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Expense schedules 27(a),27(b),27(c) (continued)"
+    },
+    {
+      "page": 19,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-19.png",
+      "sha256": "6b8df6c01b702cb16d6b223a93a92a288051dd9218ce478b0eacc68b6ba7293d",
+      "size_bytes": 267294,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Expense 27(c) continuation and 27(d)"
+    },
+    {
+      "page": 20,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-20.png",
+      "sha256": "fec1f8438e33d39347599bee2bbf4bccdb9db4616c7e3bc1187b12f6ecc64a0c",
+      "size_bytes": 194677,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Expense schedules 28,29,30,31,32(a)"
+    },
+    {
+      "page": 21,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-21.png",
+      "sha256": "dc77c9fa61e2b1cb3b06f4fb426f8d41ac91ca8910b5395bdec5e92d950e954c",
+      "size_bytes": 171804,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Expense 32(b), deductions 34(a)-(b)"
+    },
+    {
+      "page": 22,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-22.png",
+      "sha256": "da5c5bf44ae6b03adb04a6ecf97886f2a64c94c0d2e2b790ad631b4777d5370b",
+      "size_bytes": 73211,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Prior period schedules 35(a)-(b)"
+    },
+    {
+      "page": 23,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-23.png",
+      "sha256": "8289454525811913dadb0880b272e97ed1035786bb819f86e7b804ba888d2310",
+      "size_bytes": 217166,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Plant/machinery depreciation 36 rows 1-18 (continued)"
+    },
+    {
+      "page": 24,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-24.png",
+      "sha256": "7c6214625b9c844d25a9276be4dd2fa62dc577108b2a63fce7a8cd591015f2c5",
+      "size_bytes": 208990,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Plant/machinery depreciation continuation and other assets rows 1-12 (continued)"
+    },
+    {
+      "page": 25,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-25.png",
+      "sha256": "d554fa9dea1ac33743e5a58c57d93f09115ef9384e81b787aa42c6ff60459cdb",
+      "size_bytes": 184218,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Other assets depreciation continuation; losses 37(a), deductions 38, MAT/AMT 39 heading"
+    },
+    {
+      "page": 26,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-26.png",
+      "sha256": "b074228361664967dd5310e8a7a859fdb583057a4ba4981455aa919731c4f4e8",
+      "size_bytes": 212884,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "MAT/AMT 39, international 40,41(a)-(c),43"
+    },
+    {
+      "page": 27,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-27.png",
+      "sha256": "ad8bf3a56dddc8840b81d97673fe5ba90bcad39139ff6aa1272c74466ee6a6f4",
+      "size_bytes": 8841,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Single blank continuation row from international schedule 43"
+    },
+    {
+      "page": 28,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-28.png",
+      "sha256": "ff69c8a47c8841df72dfbb347b9a004e37fef5659250e5d89871a65fe0cb0317",
+      "size_bytes": 265077,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Other parameter schedules 44,45(a)-(d)"
+    },
+    {
+      "page": 29,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-29.png",
+      "sha256": "94e484f0c98a8e385ff02683a9e59e796db6ddfa2eb9d2a253ca47866a312d5c",
+      "size_bytes": 201067,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "SFT 46, unquoted shares 47, loans/advances 48"
+    },
+    {
+      "page": 30,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-30.png",
+      "sha256": "0c400126b069545b301b574d289cccbfd27f5249d86951b69b0a2cda6c4e2704",
+      "size_bytes": 176717,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "TDS/TCS 50(a)-(c), 51(a) heading"
+    },
+    {
+      "page": 31,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-31.png",
+      "sha256": "92803e24abe5b5838ab3504b845ee8acf821146f94ed3f16573b43fc670904cc",
+      "size_bytes": 197667,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "TDS disallowance 51(a)-(d), continued"
+    },
+    {
+      "page": 32,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-32.png",
+      "sha256": "d061486e202df1185ada67e8fca3b0accd3a0ab3f332aec9e937b7758bdc24d9",
+      "size_bytes": 80704,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "TDS 51(d) continuation and GST 52(a)-(b)"
+    },
+    {
+      "page": 33,
+      "path": "docs/country-workflows/legal-sources/IN-Form-26-full-review/page-33.png",
+      "sha256": "dd16d3e986e59fb2ffa395963cd7a5ad6748f92ceb6acc4b8cefe2854996623c",
+      "size_bytes": 145088,
+      "width": 1241,
+      "height": 1754,
+      "original_full_page_render": true,
+      "visually_inspected": true,
+      "inventory": "Trading and manufacturing quantitative schedules 53(a),53(b)(i)-(ii)"
+    }
+  ],
+  "observations": [
+    {
+      "id": "note8-not-in-extraction",
+      "pages": [
+        13
+      ],
+      "status": "VISUALLY_CONFIRMED",
+      "finding": "The transaction-code table A-L is visible on page 13 but omitted from the pypdf extracted text used in this review. Text extraction alone is not a complete field inventory.",
+      "codes": {
+        "A": "Cash payment",
+        "B": "Cash receipt",
+        "C": "Payment through non-account payee cheque",
+        "D": "Receipt through non-account payee cheque",
+        "E": "Transfer of asset",
+        "F": "Transfer of liability",
+        "G": "Conversion of assets",
+        "H": "Conversion of liabilities",
+        "I": "Journal entry [Debit]",
+        "J": "Journal entry [Credit]",
+        "K": "Any other mode [Debit]",
+        "L": "Any other mode [Credit]"
+      }
+    },
+    {
+      "id": "income20-21-caption-conflict",
+      "pages": [
+        8,
+        16,
+        17
+      ],
+      "status": "SOURCE_CLARIFICATION_REQUIRED",
+      "finding": "Main item 20 refers to section 92(2)(m) and item 21 to other income, while schedule 20 lists other income sections and schedule 21 describes section 92(2)(m). Preserve separate main/schedule references; do not silently swap them."
+    },
+    {
+      "id": "report-category-instructions",
+      "pages": [
+        1,
+        3
+      ],
+      "status": "SOURCE_CLARIFICATION_REQUIRED",
+      "finding": "Page-one category instructions name both report parts and omit closing parentheses; report headings and separately assessed Rule 47 still govern existing selection."
+    },
+    {
+      "id": "printed-column-identifiers",
+      "pages": [
+        24,
+        33
+      ],
+      "status": "SOURCE_MAPPING_REVIEW_REQUIRED",
+      "finding": "Other-asset depreciation printed subcolumn indices skip an index, and quantitative-table printed letter rows do not consistently align with all semantic headers. Inventory both semantic headers and printed identifiers; do not generate a filing schema from letters alone."
+    },
+    {
+      "id": "page27-continuation",
+      "pages": [
+        26,
+        27
+      ],
+      "status": "VISUALLY_CONFIRMED",
+      "finding": "Page 27 contains one blank continuation row from the prior international table; it is not an unrendered content page."
+    },
+    {
+      "id": "source-dependent-totals",
+      "pages": [
+        15,
+        16,
+        19,
+        23,
+        24,
+        25,
+        30,
+        31,
+        32,
+        33
+      ],
+      "status": "IMPLEMENTATION_REMAINS_OPEN",
+      "finding": "Full field coverage needs fixed row/column cells, totals, repeated-party populations, unit/quantity/value separation and explicit source-specific evidence. The existing 65-item preset is not that implementation."
+    }
+  ],
+  "implementation_gaps": [
+    "ReportTemplate currently caps requirements at 100; a complete visible-field preset will require a deliberately bounded expansion and paged editing rather than truncation.",
+    "Current Form 26 A/1 and B/1 presets remain 65-item draft evidence indices; this source inventory does not upgrade their scope or approval.",
+    "Expanded field manifests, workpaper mappings, UI pagination, end-to-end report generation and professional/legal qualification remain required."
+  ],
+  "limits": [
+    "All 33 pages were visually inspected for inventory; this is not professional legal review or qualification of all statutory computations.",
+    "No client data, form filling, signature, UDIN issuance, filing or opinion is produced.",
+    "No conclusions about the complete 686-page amended Act are inferred from this Form 26 review."
+  ]
+}

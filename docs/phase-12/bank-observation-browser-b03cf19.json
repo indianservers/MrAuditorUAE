@@ -1,0 +1,105 @@
+{
+  "contract": "source-bound-browser-evidence/1",
+  "recorded_at": "2026-10-29T22:52:25.180199+00:00",
+  "source_commit": "b03cf19278ca726c1e823b8478f0c6adf4bc5aa6",
+  "run_id": 40967200865,
+  "job_id": 123774585888,
+  "conclusion": "success",
+  "passed_cases": 3,
+  "failed_cases": 0,
+  "elapsed": "3.4 minutes",
+  "uae_combined_case": "1.5 minutes",
+  "india_combined_case": "1.8 minutes",
+  "artifact": {
+    "id": 12939405492,
+    "size_bytes": 8081101,
+    "sha256": "12bb764c0c6be387b05fba33af96c8d1683922bdf4281e372379cdf254b4f13a",
+    "download_digest_verified": true
+  },
+  "captures": [
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-account-coverage-incomplete-blocked-b03cf19.png",
+      "artifact_entry": "country-reports/AE-account-coverage-incomplete-blocked.png",
+      "sha256": "308d0a1e32f1a84301fab14baaca1a6c52ec2e92d07849894ba31ec6ced87cb5",
+      "size_bytes": 417928,
+      "width": 2200,
+      "height": 3400,
+      "original_unmodified": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-account-coverage-reviewed-b03cf19.png",
+      "artifact_entry": "country-reports/AE-account-coverage-reviewed.png",
+      "sha256": "cced12706dadc97bd2a030ecbbd1a0b846f5a44668806dc90efad3988364f343",
+      "size_bytes": 424040,
+      "width": 2200,
+      "height": 3400,
+      "original_unmodified": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-account-coverage-incomplete-blocked-b03cf19.png",
+      "artifact_entry": "country-reports/IN-account-coverage-incomplete-blocked.png",
+      "sha256": "061f39754b7b6387c699bb843a424aeb6adb9025c41ab0db5b7e76b890a9c791",
+      "size_bytes": 419787,
+      "width": 2200,
+      "height": 3400,
+      "original_unmodified": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-account-coverage-reviewed-b03cf19.png",
+      "artifact_entry": "country-reports/IN-account-coverage-reviewed.png",
+      "sha256": "13df81d608ea94a12ec3df67a9961e4910f8ec6770a37275326522da7c3efa27",
+      "size_bytes": 426620,
+      "width": 2200,
+      "height": 3400,
+      "original_unmodified": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-msme-annual-tax-reviewed-b03cf19.png",
+      "artifact_entry": "country-reports/IN-msme-annual-tax-reviewed.png",
+      "sha256": "cc8cf65d0053c9c6a437a3a12d6d7c5496eac39e851fff543d450571562c4a5a",
+      "size_bytes": 537038,
+      "width": 2200,
+      "height": 3400,
+      "original_unmodified": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-msme-annual-tax-support-replaced-stale-b03cf19.png",
+      "artifact_entry": "country-reports/IN-msme-annual-tax-support-replaced-stale.png",
+      "sha256": "a40d1645247eb7dd2e372df0e1ebc638e8e6e633d4cfe45f3856685fe95ea1fb",
+      "size_bytes": 528730,
+      "width": 2200,
+      "height": 3400,
+      "original_unmodified": true,
+      "visually_inspected": true
+    }
+  ],
+  "executed": [
+    "Actual API source upload and independent source review, including three explicit account assertions in each country",
+    "UI account-window calculation in UAE and India with reporting cutoff retained and separate observation coverage",
+    "Each country incomplete window remains current with three source validity exceptions and disabled approval",
+    "Each country corrected full window calculates without blockers and receives independent UI result approval",
+    "India annual-tax UI explicitly selects reviewed cross-year account coverage and retains the verified link and original financial cutoff",
+    "India annual-tax six matched metric rows, 15/100/150 adjustments and net income adjustment -35",
+    "India annual-tax UI XLSX download validated and retained tax-basis document replacement marks calculation stale without changing its financial body"
+  ],
+  "visible": [
+    "All three account source columns and full rows through evidence reference in both countries",
+    "UAE IBAN/AED and India local-account/IFSC/INR; identifiers retain leading zeros",
+    "Separate financial cutoff and declared coverage dates; incomplete-window exceptions and disabled approval",
+    "India annual tax complete six-row comparison, three separate adjustment totals and net -35 income adjustment",
+    "Linked account review, original financial cutoff and later bank window plus scope assessment; no bank authentication claim",
+    "Stale annual-tax warning and disabled reapproval with saved figures preserved"
+  ],
+  "limits": [
+    "Source setup and source reviews use real APIs, not browser upload widgets",
+    "Account assertions are authored synthetic CSVs, not authenticated bank confirmations or client evidence",
+    "Original account source withdrawals and recursive account-link staleness are covered separately by HTTP tests; these captures show tax-basis replacement",
+    "Full hosted backend verification is a separate gate and remains pending at this receipt",
+    "Real client qualification, current legal/professional approval and production deployment remain open"
+  ]
+}
