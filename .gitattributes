@@ -21,3 +21,5 @@ docs/country-workflows/sample-inputs/SYNTHETIC-savings-scheme/*.txt text eol=lf
 # Preserve the original hashed JUnit receipt bytes across Windows checkouts.
 docs/phase-12/payroll-proration-*.xml -text
 docs/phase-12/savings-*.xml -text
+docs/phase-12/15c5d1c-hosted-full.xml -text
+docs/phase-12/15c5d1c-hosted-coverage.json -text

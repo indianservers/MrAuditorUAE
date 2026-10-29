@@ -83,3 +83,24 @@ ESI/PT, EDLI and establishment-level administration minima, contribution rates
 changing within a month, interest, damages, native ECR schema qualification and
 actual portal submission remain separate work. Real client pilots and
 professional country/cohort qualification remain open.
+
+## Complete hosted application regression
+
+All six hosted jobs passed on application source `15c5d1c`. The full backend
+suite passed 4,172 tests with nine skips in 3,737.43 seconds. Overall coverage
+is 86.35%; the existing calculation/validation core is 89.35% (831/930).
+The [full verification receipt](../phase-12/15c5d1c-hosted-verification.json)
+retains the original complete JUnit and coverage after verifying artifact size
+and SHA-256, along with each successful job and the exact skipped cases.
+
+Four skipped checks need authorized live providers, four need separate opt-in
+connector infrastructure, and one is Windows-specific. Operational artifact
+records are synthetic and performed no external requests or filing submission.
+This complete source proof includes the final saved-file regression omitted
+from the earlier local full-unit run and passed separately in its focused run.
+
+All three hosted browser cases also passed on the same source, with the
+[original dated-basis browser receipt](../phase-12/payroll-proration-browser-15c5d1c.json)
+retaining both inspected captures. The later UAE savings work changes application
+code and requires its own full source-specific hosted proof. These results do
+not establish independent client, legal/native-format or production qualification.
