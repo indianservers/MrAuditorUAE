@@ -1,0 +1,2 @@
+id,account,bank_country,account_scheme,account_number,routing_code,currency,owner_country,owner_name,owner_identifier_scheme,owner_identifier,valid_from,valid_through,assertion_status,evidence_reference,assessment
+ledger-1,SYN-BANK,AE,IBAN,AE070331234567890123456,033,AED,AE,SYNTHETIC Entity LLC,SYNTHETIC-REGISTRY,00123,2026-01-01,2027-01-05,confirmed,SYNTHETIC-ledger,Synthetic independently assessed account ownership assertion

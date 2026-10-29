@@ -21,7 +21,13 @@ pytestmark = pytest.mark.skipif(
 
 @pytest.mark.parametrize(
     "withdrawal",
-    ["basis-document", "settlement-review", "other-settlement-document", "advance-document"],
+    [
+        "basis-document",
+        "settlement-review",
+        "other-settlement-document",
+        "advance-document",
+        "account-review",
+    ],
 )
 async def test_annual_tax_source_review_yearend_observation_exports_and_staleness(
     environment, monkeypatch, withdrawal
@@ -133,6 +139,64 @@ async def test_annual_tax_source_review_yearend_observation_exports_and_stalenes
         assert review.status_code == 201, review.text
         retained[role] = review.json()
     parameters["source_ids"] = {role: item["id"] for role, item in retained.items()}
+    account_sources = {}
+    if withdrawal == "account-review":
+        from tests.unit.test_bank_accounts import parameters as account_parameters
+        from tests.unit.test_bank_accounts import population
+        from tests.unit.test_bank_observation_scope import coverage
+
+        for role, rows in population("IN").items():
+            rows[0].update(
+                account=data.account,
+                owner_name="SYNTHETIC ECR India entity",
+                valid_from="2026-03-01",
+                valid_through="2027-04-05",
+            )
+            prepared = await source(
+                c, h, eid, rows, "SYNTHETIC account coverage " + role, "bank-account-evidence", {}
+            )
+            response = await decision(c, checker[0], eid, prepared)
+            assert response.status_code == 201, response.text
+            account_sources[role] = response.json()
+        payload = account_parameters(
+            "IN", account=data.account, bank_owner_name="SYNTHETIC ECR India entity", **coverage()
+        ).model_dump(mode="json")
+        payload["source_ids"] = {role: obj["id"] for role, obj in account_sources.items()}
+        account = await execute(c, h, eid, "country-workflow", payload)
+        assert account["freshness"] == "CURRENT" and not account["body"]["blocked"]
+        exported_account = await c.get(
+            prefix + f"/events/{account['id']}/export?format=xlsx", headers=h
+        )
+        assert exported_account.status_code == 200
+        account_cover = {
+            r[0].value: r[1].value
+            for r in load_workbook(io.BytesIO(exported_account.content))["Source and review"]
+        }
+        assert "2027-04-05" in account_cover["bank_observation_scope"]
+        approved_account = await decision(c, checker[0], eid, account)
+        assert approved_account.status_code == 201, approved_account.text
+        account = approved_account.json()
+        parameters.update(
+            bank_account_review_id=account["id"],
+            bank_account_scope_assessment="Assessed all three account documents through the post-year payment observation cutoff",
+        )
+        legacy = await execute(
+            c,
+            h,
+            eid,
+            "country-workflow",
+            {k: v for k, v in payload.items() if not k.startswith("bank_observation_")},
+        )
+        reviewed_legacy = await decision(c, checker[0], eid, legacy)
+        assert reviewed_legacy.status_code == 201, reviewed_legacy.text
+        await execute(
+            c,
+            h,
+            eid,
+            "country-workflow",
+            {**parameters, "bank_account_review_id": reviewed_legacy.json()["id"]},
+            failed="window end",
+        )
     result = await execute(c, h, eid, "country-workflow", parameters)
     assert result["body"]["net_expected_tax_adjustment"] == (
         "-135" if advance else "-55" if other else "-35"
@@ -145,6 +209,11 @@ async def test_annual_tax_source_review_yearend_observation_exports_and_stalenes
     assert result["body"]["tax_totals"][METRICS[2]]["expected_amount"] == "150"
     assert result["body"]["tax_observed_through"] == "2027-04-05"
     assert result["body"]["as_of"] == "2027-03-31"
+    if withdrawal == "account-review":
+        link = result["body"]["bank_account_evidence"]
+        assert link["review_as_of"] == "2027-03-31" and link["window_end"] == "2027-04-05"
+        assert link["status"] == "REVIEWED_ACCOUNT_DOCUMENTS_LINKED"
+        assert link["bank_authentication_status"] == "NOT_ESTABLISHED_BY_DOCUMENT_COMPARISON"
     assert result["body"]["msme_document_binding"] == "RETAINED_DOCUMENT_BYTES_VERIFIED"
     assert result["body"]["msme_tax_document_binding"] == "RETAINED_DOCUMENT_BYTES_VERIFIED"
     assert not result["body"]["statutory_calculation_qualified"]
@@ -182,7 +251,9 @@ async def test_annual_tax_source_review_yearend_observation_exports_and_stalenes
     }.items():
         assert workbook[title].max_row == count, title
     financial_body = deepcopy(result["body"])
-    if withdrawal == "settlement-review":
+    if withdrawal == "account-review":
+        response = await decision(c, checker[0], eid, account_sources["bank"], "reject")
+    elif withdrawal == "settlement-review":
         response = await decision(c, checker[0], eid, retained["tax_settlements"], "reject")
     else:
         purpose = "other" if other or advance else "basis"

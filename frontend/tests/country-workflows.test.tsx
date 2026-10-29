@@ -3648,3 +3648,25 @@ it("shows exact eligible days in compact benefits while preserving full service-
   expect(screen.getByRole("columnheader", { name: "service years" })).toBeVisible();
   expect(screen.getByRole("cell", { name: exactYears })).toBeVisible();
 });
+
+
+it("requires explicit complete account coverage dates without changing the reporting cutoff", async () => {
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Workflow"), { target: { value: "bank-account-evidence" } });
+  for (const [label,value] of [
+    ["Schedule title","Synthetic cross-year account coverage"], ["Reconciliation date","2027-03-31"],
+    ["Bank account identifier","SYN-BANK"], ["Account currency","INR"],
+    ["Engagement legal entity name","Synthetic Entity"], ["Owner identifier scheme","SYNTHETIC-REGISTRY"],
+    ["Owner identifier","00123"], ["Scope and source rationale","Independent complete original and subsequent bank evidence"],
+    ["Account coverage starts (optional)","2026-03-01"],
+  ]) fireEvent.change(screen.getByLabelText(label),{target:{value}});
+  for (const role of ["register","ledger","bank"]) fireEvent.change(screen.getByLabelText(role+" source"),{target:{value:"account-"+role}});
+  fireEvent.click(screen.getByRole("button",{name:"Queue calculation"}));
+  expect(await screen.findByText("Declare both account coverage dates and assess the full observed window.")).toBeVisible();
+  expect(state.mutate).not.toHaveBeenCalled();
+  fireEvent.change(screen.getByLabelText("Account coverage through (optional)"),{target:{value:"2027-04-05"}});
+  fireEvent.change(screen.getByLabelText("Account coverage assessment"),{target:{value:"Reviewed all three source assertions for original and post-year payments"}});
+  fireEvent.click(screen.getByRole("button",{name:"Queue calculation"}));
+  await waitFor(()=>expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({workflow:"bank-account-evidence",as_of:"2027-03-31",bank_observation_from:"2026-03-01",bank_observation_through:"2027-04-05",bank_observation_assessment:"Reviewed all three source assertions for original and post-year payments"});
+});

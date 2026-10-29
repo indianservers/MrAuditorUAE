@@ -1,0 +1,2 @@
+id,account,bank_country,account_scheme,account_number,routing_code,currency,owner_country,owner_name,owner_identifier_scheme,owner_identifier,valid_from,valid_through,assertion_status,evidence_reference,assessment
+register-1,SYN-BANK,IN,LOCAL,000123456789,SYNB0ABC123,INR,IN,SYNTHETIC Entity LLC,SYNTHETIC-REGISTRY,00123,2026-03-01,2027-04-05,confirmed,SYNTHETIC-register,Synthetic independently assessed account ownership assertion

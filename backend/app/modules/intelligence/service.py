@@ -194,6 +194,16 @@ async def _head(db, ctx, obj):
 async def current(db, ctx, obj, visited=None):
     if obj.tenant_id != ctx.tenant_id:
         return False
+    if (
+        getattr(obj, "kind", None) == "country-workflow"
+        and obj.body.get("workflow") == "bank-account-evidence"
+    ):
+        from app.modules.country_workflows.bank_observation_scope import saved_scope
+
+        try:
+            saved_scope(obj.body)
+        except ValueError:
+            return False
     # EVP has enforced strict raw record boundaries since its introduction.
     if (
         getattr(obj, "kind", None) == "workflow-source"

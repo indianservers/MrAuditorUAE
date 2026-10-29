@@ -1,0 +1,266 @@
+{
+  "recorded_at": "2026-10-29T22:36:15.642327+00:00",
+  "feature": "Explicit UAE/India bank account document coverage across annual reporting cutoffs and subsequent observations",
+  "base_commit": "81a448dac160b31aeb70af295b3eaf325a920708",
+  "contract": "bank-account-observation-window/1",
+  "receipts": [
+    {
+      "path": "docs/phase-12/bank-observation-final.xml",
+      "sha256": "d74c8b933be7ffa5a8f9de65e8950b8218672c4b41520218d9b2037a65b4bf18",
+      "size_bytes": 540712,
+      "counts": {
+        "tests": 3506,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 4,
+        "passed": 3502
+      }
+    },
+    {
+      "path": "docs/phase-12/bank-observation-frontend.xml",
+      "sha256": "19db81ca5b6f0b924bc541cb9e0abb624723fee0caa6f53d435673fba39efb61",
+      "size_bytes": 86374,
+      "counts": {
+        "tests": 362,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "passed": 362
+      }
+    }
+  ],
+  "sources": [
+    {
+      "path": ".gitattributes",
+      "sha256": "678f2d6e75311ff1ee6e6aa28f8cf5632f5836c638554b17a710fbf1881c06c4",
+      "size_bytes": 2738,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/bank_accounts.py",
+      "sha256": "f5854762e916b90aff2f06bd1953629d8fee22297ef04ed9d6010e86f1106405",
+      "size_bytes": 8188,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/bank_binding.py",
+      "sha256": "1c8ea3c23482d61473a316f955999f543103d6b3db8df20a4cb409b8fdbe50e5",
+      "size_bytes": 6853,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/bank_observation_scope.py",
+      "sha256": "9c1273d9f33e1b8b68b7f691a006ad0800c494d349914bd117d40df0c4471b00",
+      "size_bytes": 3470,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/review.py",
+      "sha256": "9fef49d41a3c5b4fbec6f91bc1ca87bc0aa0b9dd69d271dc94547fe2e42503c0",
+      "size_bytes": 7188,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/schemas.py",
+      "sha256": "9ed0c46c199e99af769763a61ac6c1b833d730a59109a5606a16f4ea6e8d6e5a",
+      "size_bytes": 65770,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "sha256": "1303e1550e0f3f2b2eb8169e42f9374bfe7c8f3683bb755427d1021231fcd07c",
+      "size_bytes": 50922,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/intelligence/service.py",
+      "sha256": "d06529acf5f4227bdcc98fbaef0a01630c9f6822fe3aba0db1c454fe7e1825a3",
+      "size_bytes": 51008,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_msme_tax.py",
+      "sha256": "3bd418372daf3c74b916dc38acba57466b9327e3e148856dfaa46e04bd7485e6",
+      "size_bytes": 12427,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/tests/unit/test_bank_observation_scope.py",
+      "sha256": "9fd39226297b76150d1856244e7b46a9657d1f80abc6772a777320190465c77a",
+      "size_bytes": 10588,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/job-input-contracts.json",
+      "sha256": "37b2c208692517977ddf4ad8c39614b21be66346b434d3c4bf623b7c96e1edc1",
+      "size_bytes": 369105,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/native-adapters.md",
+      "sha256": "ff6c7dfb6836e97519eb5c96cf0c6bcfce9b0daf3bea5e42ea635648aebe0629",
+      "size_bytes": 446934,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-bank-observation/AE-bank.csv",
+      "sha256": "c48b47a97ee8e7c427273e85fdd2809862ba14e823ebf5d8845e347411442817",
+      "size_bytes": 427,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-bank-observation/AE-ledger.csv",
+      "sha256": "c700e289b77b2a33578d7ac0e08c4584b94049f8fd80d15b1827b0b9db5b0d05",
+      "size_bytes": 431,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-bank-observation/AE-register.csv",
+      "sha256": "e5af1106d0f34ae7c27a161338ae4f4a5f43e97c30b37f3deccfe8a6b67a3f4c",
+      "size_bytes": 435,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-bank-observation/IN-bank.csv",
+      "sha256": "670826475c8a8a00fd3586a78dc8249699fb0f09a267f7c19122b445b42d8526",
+      "size_bytes": 425,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-bank-observation/IN-ledger.csv",
+      "sha256": "698f77d678d4484ed289be5a9d3de0e4ae935faedf099e4f9ed0ade5457afe6e",
+      "size_bytes": 429,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-bank-observation/IN-register.csv",
+      "sha256": "f808fa0d3e7df1c8e6b15fe2d1662b50314d31b8ac398ae35c91cc78f56443db",
+      "size_bytes": 433,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-bank-observation/README.txt",
+      "sha256": "86f1d996ed99baf979becdf721ab46122c5e3d95e729ae0562b50fe00624dcfb",
+      "size_bytes": 628,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-bank-observation/controls.json",
+      "sha256": "6fa82b75e8ba06592bceb6c9ec5ca35342a9cc4352e25fd9249961e836014039",
+      "size_bytes": 6185,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-msme-annual-tax-reviewed-81a448d.png",
+      "sha256": "b38cc167b1d9f2bedd1684a7644d82dc4609a00452ec8fbfbca67924bf06b0b0",
+      "size_bytes": 502437,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-msme-annual-tax-support-replaced-stale-81a448d.png",
+      "sha256": "02b2b2c68acb12407a068e50f96c273868863ea808dab4afbd8fef5ce9698f30",
+      "size_bytes": 493583,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/phase-12/bank-observation-final.xml",
+      "sha256": "d74c8b933be7ffa5a8f9de65e8950b8218672c4b41520218d9b2037a65b4bf18",
+      "size_bytes": 540712,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/phase-12/bank-observation-frontend.xml",
+      "sha256": "19db81ca5b6f0b924bc541cb9e0abb624723fee0caa6f53d435673fba39efb61",
+      "size_bytes": 86374,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/phase-12/msme-tax-browser-81a448d.json",
+      "sha256": "3da925e39e6f07cca3e69d208cc7c6ab5a563e3dad938d6c072e9500a02cb241",
+      "size_bytes": 3101,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/e2e/bank-observation-browser-workflow.ts",
+      "sha256": "0e8822aaa5371295f9b67fbc823e48dce619e85f95bf9ae2872e6730049e9679",
+      "size_bytes": 7067,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/e2e/country-report-release.spec.ts",
+      "sha256": "d3f5b253fc8a91067236fc0299f4e5ce587f74d4396218a39a7e7525a302746a",
+      "size_bytes": 34681,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/e2e/msme-tax-browser-workflow.ts",
+      "sha256": "abfa5260ddbe51336688e304c3189fa5ea73904837a581105a340ef8ab368ad5",
+      "size_bytes": 10759,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/src/features/bank-account-evidence.tsx",
+      "sha256": "5d55363fd5b344f3087353f571a6fc1e7b230ad4d5cdd3c6df4186ddfd999ef1",
+      "size_bytes": 2889,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/src/features/bank-account-link.tsx",
+      "sha256": "2b0f8847f2a90f47c6f65740f2695be38cf91e45ae0affa2327a4ce7880acacd",
+      "size_bytes": 4064,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "fc2f1d410408bb388d76c76d887deccb1515f4922c252100770c1429436eb389",
+      "size_bytes": 312755,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/tests/bank-account-evidence.test.tsx",
+      "sha256": "0e4987e46039398f7baa67842b4b3413ead3a03bfc6923e689a9368e0e942fdc",
+      "size_bytes": 1895,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/tests/bank-account-link.test.tsx",
+      "sha256": "770ae656dc9b4e1a90565393ce6bcf44fbf575a9bb238dc398408a4f7c9aa5a7",
+      "size_bytes": 3143,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "5c41d1ce68edc47005e75e00cb8009bddf7258d4cc5efe7899aa2f9abe87991b",
+      "size_bytes": 164687,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    }
+  ],
+  "checks": {
+    "backend": "3502 passed; four existing connector infrastructure skips",
+    "unit_passed": 3489,
+    "selected_http_passed": 13,
+    "frontend": "362 passed in 70 files",
+    "production_build": "passed",
+    "typescript": "passed",
+    "ruff": "check passed; 757 files formatted",
+    "mypy": "408 application files passed",
+    "api_types": "match",
+    "runtime_contracts": "match",
+    "eslint": "no errors; pre-existing unused-variable warning uae-business-cases.tsx:143"
+  },
+  "verified_scope": [
+    "Both countries retain annual as_of cutoff while independently comparing full declared document coverage",
+    "Every source validity interval must cover the complete window; incomplete coverage remains CURRENT but blocked",
+    "Legacy point-in-time review cannot authorize post-year annual tax payments; explicit reviewed window can",
+    "Linked financial cutoff and later observation cutoff, exact scope in XLSX, preserved original source rows and no bank authentication claim",
+    "Withdrawal of account source review makes dependent annual-tax result stale without rewriting stored financial amounts",
+    "Missing, inconsistent or pre-contract saved window metadata is stale and cannot be approved",
+    "Separate original-byte controlled UAE/India examples; existing 154-case catalogue unchanged"
+  ],
+  "limits": [
+    "Full hosted backend and new coverage-window browser verification remain pending for this source",
+    "The separately archived 81a448d browser receipt and two inspected original images prove the earlier unlinked annual-tax source only",
+    "Canonical account assertions are assessed evidence; no live bank, registry or payment-authentication request is added",
+    "Actual client pilots, current professional/statutory qualification, provider access, complete disclosures and production readiness remain open"
+  ]
+}

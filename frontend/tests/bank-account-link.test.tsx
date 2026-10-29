@@ -16,6 +16,7 @@ describe("bank account evidence link", () => {
           window_start: "2026-06-01",
           window_end: "2026-06-30",
           assessment: "Independent synthetic scope assessment",
+          review_as_of: "2026-06-30",
           source_account_binding:
             "NATIVE_ACCOUNT_NUMBER_AGREES_TO_REVIEWED_DOCUMENTS",
           account_label_mapping_applied: true,
@@ -26,6 +27,9 @@ describe("bank account evidence link", () => {
     );
     expect(screen.getByText("AE070331234567890123456")).toBeVisible();
     expect(screen.getByText("BANK-1 · AED")).toBeVisible();
+    expect(
+      screen.getByText("Account comparison date").parentElement,
+    ).toHaveTextContent("2026-06-30");
     expect(screen.getByText("2026-06-01 through 2026-06-30")).toBeVisible();
     fireEvent.click(
       screen.getByRole("button", { name: "Open linked account review" }),
@@ -53,4 +57,31 @@ describe("bank account evidence link", () => {
       ).toBeVisible();
     },
   );
+});
+
+it("distinguishes the linked annual cutoff from post-year document coverage", () => {
+  render(
+    <BankAccountLinkReview
+      open={vi.fn()}
+      link={{
+        status: "REVIEWED_ACCOUNT_DOCUMENTS_LINKED",
+        review_as_of: "2027-03-31",
+        window_start: "2026-03-01",
+        window_end: "2027-04-05",
+        observation_scope: {
+          contract: "bank-account-observation-window/1",
+          from: "2026-03-01",
+          through: "2027-04-05",
+          assessment: "Assessed original and post-year account evidence",
+        },
+        bank_authentication_status: "NOT_ESTABLISHED_BY_DOCUMENT_COMPARISON",
+      }}
+    />,
+  );
+  expect(
+    screen.getByText("Financial cutoff of account review").parentElement,
+  ).toHaveTextContent("2027-03-31");
+  expect(
+    screen.getByText("Assessed document coverage").parentElement,
+  ).toHaveTextContent("2026-03-01 through 2027-04-05");
 });

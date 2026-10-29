@@ -1,0 +1,176 @@
+{
+  "synthetic": true,
+  "qualified_real_client": false,
+  "cases": {
+    "AE": {
+      "parameters": {
+        "inventory_gl_basis": null,
+        "inventory_scope_assessment": "",
+        "esic_population_review_id": null,
+        "esic_basis_scope_assessment": "",
+        "esic_components": [
+          "ESI:EMPLOYEE",
+          "ESI:EMPLOYER"
+        ],
+        "msme_buyer_id": null,
+        "withholding_role": null,
+        "allocation_basis": null,
+        "workflow": "bank-account-evidence",
+        "as_of": "2026-12-31",
+        "obligation_month_start": null,
+        "obligation_month_end": null,
+        "settlement_start": null,
+        "bank_payment_sign": null,
+        "review_through": null,
+        "stock_bridge_mode": "forward",
+        "arrear_only": false,
+        "stock_cutoff_assessment": "",
+        "period_start": null,
+        "tax_year_start": null,
+        "tax_observed_through": null,
+        "title": "SYNTHETIC bank account review",
+        "rationale": "Independent synthetic bank account scope controls",
+        "account": "SYN-BANK",
+        "currency": "AED",
+        "import_nil_scope": null,
+        "bank_account_review_id": null,
+        "bank_account_scope_assessment": "",
+        "bank_owner_name": "SYNTHETIC Entity LLC",
+        "bank_owner_identifier_scheme": "SYNTHETIC-REGISTRY",
+        "bank_owner_identifier": "00123",
+        "bank_observation_from": "2026-01-01",
+        "bank_observation_through": "2027-01-05",
+        "bank_observation_assessment": "SYNTHETIC separately assessed three-source coverage of original and subsequent payment dates",
+        "book_opening": null,
+        "book_closing": null,
+        "statement_opening": null,
+        "statement_closing": null,
+        "tolerance": "0",
+        "date_tolerance": 0,
+        "stale_days": 90,
+        "required_checks": [],
+        "invoice_direction": null,
+        "vat201_layout": "custom",
+        "required_boxes": [],
+        "restrict_to_required_boxes": false,
+        "box_scope_assessment": "",
+        "subjects": []
+      },
+      "files": {
+        "register": {
+          "file": "AE-register.csv",
+          "sha256": "e5af1106d0f34ae7c27a161338ae4f4a5f43e97c30b37f3deccfe8a6b67a3f4c",
+          "table_type": "bank-account-evidence",
+          "expected_rows": 1,
+          "control_totals": {}
+        },
+        "ledger": {
+          "file": "AE-ledger.csv",
+          "sha256": "c700e289b77b2a33578d7ac0e08c4584b94049f8fd80d15b1827b0b9db5b0d05",
+          "table_type": "bank-account-evidence",
+          "expected_rows": 1,
+          "control_totals": {}
+        },
+        "bank": {
+          "file": "AE-bank.csv",
+          "sha256": "c48b47a97ee8e7c427273e85fdd2809862ba14e823ebf5d8845e347411442817",
+          "table_type": "bank-account-evidence",
+          "expected_rows": 1,
+          "control_totals": {}
+        }
+      },
+      "expected": {
+        "blocked": false,
+        "exception_count": 0,
+        "as_of": "2026-12-31",
+        "coverage_through": "2027-01-05",
+        "bank_authentication_status": "NOT_ESTABLISHED_BY_DOCUMENT_COMPARISON"
+      }
+    },
+    "IN": {
+      "parameters": {
+        "inventory_gl_basis": null,
+        "inventory_scope_assessment": "",
+        "esic_population_review_id": null,
+        "esic_basis_scope_assessment": "",
+        "esic_components": [
+          "ESI:EMPLOYEE",
+          "ESI:EMPLOYER"
+        ],
+        "msme_buyer_id": null,
+        "withholding_role": null,
+        "allocation_basis": null,
+        "workflow": "bank-account-evidence",
+        "as_of": "2027-03-31",
+        "obligation_month_start": null,
+        "obligation_month_end": null,
+        "settlement_start": null,
+        "bank_payment_sign": null,
+        "review_through": null,
+        "stock_bridge_mode": "forward",
+        "arrear_only": false,
+        "stock_cutoff_assessment": "",
+        "period_start": null,
+        "tax_year_start": null,
+        "tax_observed_through": null,
+        "title": "SYNTHETIC bank account review",
+        "rationale": "Independent synthetic bank account scope controls",
+        "account": "SYN-BANK",
+        "currency": "INR",
+        "import_nil_scope": null,
+        "bank_account_review_id": null,
+        "bank_account_scope_assessment": "",
+        "bank_owner_name": "SYNTHETIC Entity LLC",
+        "bank_owner_identifier_scheme": "SYNTHETIC-REGISTRY",
+        "bank_owner_identifier": "00123",
+        "bank_observation_from": "2026-03-01",
+        "bank_observation_through": "2027-04-05",
+        "bank_observation_assessment": "SYNTHETIC separately assessed three-source coverage of original and subsequent payment dates",
+        "book_opening": null,
+        "book_closing": null,
+        "statement_opening": null,
+        "statement_closing": null,
+        "tolerance": "0",
+        "date_tolerance": 0,
+        "stale_days": 90,
+        "required_checks": [],
+        "invoice_direction": null,
+        "vat201_layout": "custom",
+        "required_boxes": [],
+        "restrict_to_required_boxes": false,
+        "box_scope_assessment": "",
+        "subjects": []
+      },
+      "files": {
+        "register": {
+          "file": "IN-register.csv",
+          "sha256": "f808fa0d3e7df1c8e6b15fe2d1662b50314d31b8ac398ae35c91cc78f56443db",
+          "table_type": "bank-account-evidence",
+          "expected_rows": 1,
+          "control_totals": {}
+        },
+        "ledger": {
+          "file": "IN-ledger.csv",
+          "sha256": "698f77d678d4484ed289be5a9d3de0e4ae935faedf099e4f9ed0ade5457afe6e",
+          "table_type": "bank-account-evidence",
+          "expected_rows": 1,
+          "control_totals": {}
+        },
+        "bank": {
+          "file": "IN-bank.csv",
+          "sha256": "670826475c8a8a00fd3586a78dc8249699fb0f09a267f7c19122b445b42d8526",
+          "table_type": "bank-account-evidence",
+          "expected_rows": 1,
+          "control_totals": {}
+        }
+      },
+      "expected": {
+        "blocked": false,
+        "exception_count": 0,
+        "as_of": "2027-03-31",
+        "coverage_through": "2027-04-05",
+        "bank_authentication_status": "NOT_ESTABLISHED_BY_DOCUMENT_COMPARISON"
+      }
+    }
+  }
+}

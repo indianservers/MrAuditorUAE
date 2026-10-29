@@ -1,6 +1,14 @@
 def approval_error(body):
     from app.modules.intelligence.matching_review import saved_candidates_complete
 
+    if body.get("workflow") == "bank-account-evidence":
+        from app.modules.country_workflows.bank_observation_scope import saved_scope
+
+        try:
+            saved_scope(body)
+        except ValueError:
+            return "Regenerate complete account observation coverage before approval"
+
     if body.get("workflow") == "india-msme-annual-tax":
         from app.modules.country_workflows.msme_tax_schemas import CONTRACT
 

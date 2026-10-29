@@ -70,7 +70,18 @@ def bind(data, country, sources, body, receipt):
             "Reviewed account, currency or owner country differs from the financial scope"
         )
     start, end = financial_window(data, sources)
-    if body.get("as_of") != end.isoformat():
+    from app.modules.country_workflows.bank_observation_scope import saved_scope
+
+    observations = saved_scope(body)
+    if observations and (
+        body.get("as_of") != data.as_of.isoformat()
+        or observations["through"] != end.isoformat()
+        or observations["from"] > start.isoformat()
+    ):
+        raise ValueError(
+            "Assessed account observation coverage must match the financial cutoff and entire window end"
+        )
+    if not observations and body.get("as_of") != end.isoformat():
         raise ValueError(
             "Bank account evidence comparison date must equal the financial review window end"
         )
@@ -125,6 +136,7 @@ def bind(data, country, sources, body, receipt):
         "status": "REVIEWED_ACCOUNT_DOCUMENTS_LINKED",
         "review_receipt": deepcopy(receipt),
         "review_as_of": body["as_of"],
+        **({"observation_scope": observations} if observations else {}),
         "account": data.account,
         "currency": data.currency,
         "bank_source_role": role,

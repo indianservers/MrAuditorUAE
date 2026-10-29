@@ -105,6 +105,7 @@ def render(event, format):
             "document_series_controls",
             "count_unit",
             "bank_account_contract",
+            "bank_observation_scope",
             "bank_account_evidence",
             "bank_account_scope",
             "bank_profile_references",

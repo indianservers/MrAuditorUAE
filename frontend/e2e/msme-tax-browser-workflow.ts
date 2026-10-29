@@ -14,6 +14,7 @@ export async function runMSMETaxBrowserWorkflow(
   eid: string,
   tenant: string,
   screenshots: string,
+  accountReviewId: string,
 ) {
   const { prefix, headers, post, evidence, prepare, completed } =
     makeWorkflowHarness(page, eid, tenant);
@@ -78,6 +79,14 @@ export async function runMSMETaxBrowserWorkflow(
     .selectOption("india-msme-annual-tax");
   for (const [role, id] of Object.entries(selected))
     await page.getByLabel(`${role} source`, { exact: true }).selectOption(id);
+  await page
+    .getByLabel("Reviewed bank account evidence (optional)", { exact: true })
+    .selectOption(accountReviewId);
+  await page
+    .getByLabel("Linked account scope assessment", { exact: true })
+    .fill(
+      "Assessed year-end account review with all original and post-year settlement observations covered by three reviewed documents",
+    );
   const title = "SYNTHETIC India annual MSE tax bridge";
   for (const [label, value] of [
     ["Schedule title", title],
@@ -110,6 +119,12 @@ export async function runMSMETaxBrowserWorkflow(
   expect(submission.status(), await submission.text()).toBe(202);
   const result = await completed((await submission.json()).id);
   expect(result.body.blocked).toBe(false);
+  expect(result.body.bank_account_evidence).toMatchObject({
+    status: "REVIEWED_ACCOUNT_DOCUMENTS_LINKED",
+    review_as_of: "2027-03-31",
+    window_end: "2027-04-05",
+    bank_authentication_status: "NOT_ESTABLISHED_BY_DOCUMENT_COMPARISON",
+  });
   expect(result.body.net_expected_tax_adjustment).toBe(
     manifest.net_expected_tax_adjustment,
   );

@@ -981,6 +981,7 @@ class WorkflowInput(Strict):
             "india-msme-payment-timing",
             "india-msme-interest",
             "india-msme-annual-tax",
+            "bank-account-evidence",
             "adverse-media-review",
         }:
             from app.modules.country_workflows.grant_utilisation import calendar_day
@@ -988,6 +989,8 @@ class WorkflowInput(Strict):
             keys: tuple[str, ...] = ("as_of", "period_start", "settlement_start")
             if value.get("workflow") == "india-msme-annual-tax":
                 keys += ("tax_year_start", "tax_observed_through")
+            if value.get("workflow") == "bank-account-evidence":
+                keys += ("bank_observation_from", "bank_observation_through")
             for key in keys:
                 if value.get(key) is not None:
                     calendar_day(value[key])
@@ -1093,6 +1096,9 @@ class WorkflowInput(Strict):
     bank_owner_name: str = Field(default="", max_length=200)
     bank_owner_identifier_scheme: str = Field(default="", max_length=80)
     bank_owner_identifier: str = Field(default="", max_length=120)
+    bank_observation_from: date | None = None
+    bank_observation_through: date | None = None
+    bank_observation_assessment: str = Field(default="", max_length=2000)
     book_opening: Money | None = None
     book_closing: Money | None = None
     statement_opening: Money | None = None
@@ -1110,6 +1116,9 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
+        from app.modules.country_workflows.bank_observation_scope import selected_scope
+
+        selected_scope(self)
         if (
             self.workflow not in {"india-msme-interest", "india-msme-annual-tax"}
             and len(self.source_ids) > 4

@@ -1,0 +1,61 @@
+{
+  "contract": "source-bound-browser-evidence/1",
+  "recorded_at": "2026-10-29T22:16:49.603701+00:00",
+  "source_commit": "81a448dac160b31aeb70af295b3eaf325a920708",
+  "run_id": 40963051756,
+  "job_id": 123760490004,
+  "conclusion": "success",
+  "passed_cases": 3,
+  "failed_cases": 0,
+  "elapsed": "2.8 minutes",
+  "india_combined_case": "1.6 minutes",
+  "artifact": {
+    "id": 12937705016,
+    "size_bytes": 6597288,
+    "sha256": "02b81388ce640b97da82b10ad77d7cdae3c1e3525edfe294b6e753efac025241",
+    "download_digest_verified": true
+  },
+  "captures": [
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-msme-annual-tax-reviewed-81a448d.png",
+      "artifact_entry": "country-reports/IN-msme-annual-tax-reviewed.png",
+      "sha256": "b38cc167b1d9f2bedd1684a7644d82dc4609a00452ec8fbfbca67924bf06b0b0",
+      "size_bytes": 502437,
+      "width": 2200,
+      "height": 3400,
+      "original_unmodified": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-msme-annual-tax-support-replaced-stale-81a448d.png",
+      "artifact_entry": "country-reports/IN-msme-annual-tax-support-replaced-stale.png",
+      "sha256": "02b2b2c68acb12407a068e50f96c273868863ea808dab4afbd8fef5ce9698f30",
+      "size_bytes": 493583,
+      "width": 2200,
+      "height": 3400,
+      "original_unmodified": true,
+      "visually_inspected": true
+    }
+  ],
+  "executed": [
+    "Actual API source upload, normalization and independent review of all eight source roles",
+    "UI annual calculation with year-end March 31 and separate April 5 settlement observations",
+    "Independent UI approval; six matched tax rows, three adjustment totals 15/100/150 and net income adjustment -35",
+    "Expanded prior invoice detail and original settlement trace, including already-allowed 50 and actual April 4 bank date",
+    "UI XLSX download with six complete metric rows, three totals and three settlement records validated",
+    "Replacement of retained tax-basis document makes saved result stale; complete stored financial body unchanged; UI reapproval disabled"
+  ],
+  "visible": [
+    "Complete result title and current or stale review state",
+    "Three expected/reported adjustments and six complete comparison rows including final prior release 150",
+    "Year-end and later observation cutoff, net -35 income adjustment and no tax-payable/refund claim",
+    "Separate timing exception count two, with no bank account authentication or linked account review claim",
+    "Stale warning and disabled approval after supporting-document replacement"
+  ],
+  "limits": [
+    "API source setup/reviews are not browser upload-widget proof",
+    "Expanded prior detail and settlement assertions executed, but both final captures close those panels",
+    "This source predates the new explicit bank observation-window implementation; no account-link window browser proof is claimed here",
+    "Full backend hosted verification is separately pending; synthetic fixture results are not real-client or professional qualification"
+  ]
+}

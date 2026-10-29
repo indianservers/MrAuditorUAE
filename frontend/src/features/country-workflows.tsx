@@ -62,7 +62,10 @@ import {
   BankAccountLinkReview,
   type BankAccountLink,
 } from "./bank-account-link";
-import { BankAccountEvidenceReview } from "./bank-account-evidence";
+import {
+  BankAccountEvidenceReview,
+  type BankObservationScope,
+} from "./bank-account-evidence";
 import { ImportNilScopeForm, type ImportNilDraft } from "./import-nil-scope";
 import { BankTransactionDates } from "./bank-transaction-dates";
 import { PayrollPostingLinks } from "./payroll-posting-links";
@@ -300,6 +303,7 @@ type Result = {
   freshness: string;
   collection_totals?: Record<string, number>;
   body: MSMETaxBody & {
+    bank_observation_scope?: BankObservationScope;
     workflow?: string;
     payroll_rule_selection_contract?: string;
     savings_contribution_contract?: string;
@@ -766,6 +770,10 @@ export function CountryWorkflows({
   const [sources, setSources] = useState<Record<string, string>>({});
   const [asOf, setAsOf] = useState("");
   const [reviewThrough, setReviewThrough] = useState("");
+  const [bankObservationFrom, setBankObservationFrom] = useState("");
+  const [bankObservationThrough, setBankObservationThrough] = useState("");
+  const [bankObservationAssessment, setBankObservationAssessment] =
+    useState("");
   const [obligationMonthStart, setObligationMonthStart] = useState("");
   const [obligationMonthEnd, setObligationMonthEnd] = useState("");
   const [settlementStart, setSettlementStart] = useState("");
@@ -1976,6 +1984,18 @@ export function CountryWorkflows({
           throw new Error(
             "Declare the account, engagement entity name and owner identifier before comparison.",
           );
+        if (
+          workflow === "bank-account-evidence" &&
+          (bankObservationFrom ||
+            bankObservationThrough ||
+            bankObservationAssessment) &&
+          (!bankObservationFrom ||
+            !bankObservationThrough ||
+            bankObservationAssessment.trim().length < 10)
+        )
+          throw new Error(
+            "Declare both account coverage dates and assess the full observed window.",
+          );
         if (workflow === "open-item-allocations" && !invoiceFaceAmounts)
           throw new Error(
             "Confirm that invoices contain face amounts before cash allocation.",
@@ -2107,6 +2127,15 @@ export function CountryWorkflows({
                 bank_owner_name: bankOwnerName,
                 bank_owner_identifier_scheme: bankOwnerScheme,
                 bank_owner_identifier: bankOwnerIdentifier,
+                ...(bankObservationFrom ||
+                bankObservationThrough ||
+                bankObservationAssessment
+                  ? {
+                      bank_observation_from: bankObservationFrom,
+                      bank_observation_through: bankObservationThrough,
+                      bank_observation_assessment: bankObservationAssessment,
+                    }
+                  : {}),
               }
             : {}),
           ...([
@@ -3012,10 +3041,14 @@ export function CountryWorkflows({
                             "msme-interest-pnl",
                           ].includes(tableType) ? (
                           <>
-                            {["msme-tax-bases", "msme-interest-pnl"].includes(tableType)
+                            {["msme-tax-bases", "msme-interest-pnl"].includes(
+                              tableType,
+                            )
                               ? "Select the retained annual tax or P&L assessment to fill blank document IDs and hashes. Declare the correct tax year, assessed bases and prior-tax references in the source."
                               : "Select the retained policy or RBI bank-rate document to fill blank document IDs and hashes. Declare explicit validity and applicability in the CSV."}{" "}
-                            Conflicting references are rejected. Source review and byte verification do not establish legal applicability.
+                            Conflicting references are rejected. Source review
+                            and byte verification do not establish legal
+                            applicability.
                           </>
                         ) : tableType === "withholding-records" ? (
                           <>
@@ -5138,6 +5171,39 @@ export function CountryWorkflows({
                 <fieldset>
                   <legend>Bank account and owner evidence scope</legend>
                   <p>
+                    Optional document coverage can extend beyond the
+                    reconciliation date for subsequent-payment reviews. All
+                    three source assertions must cover the full window. Keep the
+                    reconciliation date at the financial cutoff.
+                  </p>
+                  <label>
+                    Account coverage starts (optional)
+                    <input
+                      type="date"
+                      value={bankObservationFrom}
+                      onChange={(e) => setBankObservationFrom(e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    Account coverage through (optional)
+                    <input
+                      type="date"
+                      value={bankObservationThrough}
+                      onChange={(e) =>
+                        setBankObservationThrough(e.target.value)
+                      }
+                    />
+                  </label>
+                  <label>
+                    Account coverage assessment
+                    <textarea
+                      value={bankObservationAssessment}
+                      onChange={(e) =>
+                        setBankObservationAssessment(e.target.value)
+                      }
+                    />
+                  </label>
+                  <p>
                     Compare independently reviewed register, ledger setup and
                     bank evidence. UAE IBAN and India IFSC checks verify format
                     only. No bank ownership confirmation or payment is
@@ -6576,7 +6642,11 @@ export function CountryWorkflows({
             />
           )}
           {body.workflow === "bank-account-evidence" && (
-            <BankAccountEvidenceReview rows={rows} />
+            <BankAccountEvidenceReview
+              rows={rows}
+              observations={body.bank_observation_scope}
+              asOf={body.as_of}
+            />
           )}
           {body.transaction_dates && (
             <BankTransactionDates

@@ -4837,3 +4837,79 @@ artifact digest are retained in
 stale support and final success captures were not reached in that first run;
 the corrected source requires a new hosted browser run. The full backend job
 on `a376d84` is still separately pending.
+
+
+### Annual-tax browser proof and explicit account coverage
+
+The corrected `81a448d` source passed all three hosted browser cases in 2.8
+minutes, including the combined India case in 1.6 minutes. The annual MSE tax
+flow calculated and independently approved six matched tax rows, downloaded and
+validated XLSX, then replaced a retained tax-basis document and verified stale
+status, disabled reapproval and an unchanged complete financial body. Two
+original 2200-by-3400 captures were visually inspected: complete adjustment
+totals 15/100/150, net -35 income adjustment, year-end/observation dates and all
+six comparison rows are visible. Source setup/reviews used APIs. Expanded prior
+facts and original bank traces were asserted but closed in final captures.
+Exact artifact and capture hashes are in `../phase-12/msme-tax-browser-81a448d.json`.
+This proves the stated synthetic browser flow on that source only; full hosted
+backend verification remains separate. It predates the following account-window
+implementation and has no linked account review.
+
+`bank-account-evidence` now accepts an optional explicit document coverage
+window using `bank_observation_from`, `bank_observation_through` and a meaningful
+`bank_observation_assessment`. This shared UAE/India evidence control addresses
+the previously recorded post-year account linkage limitation. It preserves the
+financial `as_of` within the engagement period while separately comparing all
+three register/ledger/bank assertions across the complete declared coverage
+window. All three sources still require independent review, retained evidence
+and matching owner scope. A short validity range blocks the comparison; it
+remains a current exception rather than being mislabeled stale. New windows use
+`bank-account-observation-window/1`; existing point-in-time reviews retain their
+original behavior and are not automatically upgraded or extended.
+
+An explicitly scoped account review can link to a later payment-observation
+window only when its financial cutoff matches the consuming workflow cutoff,
+its coverage end exactly matches the consuming observation end, and its start
+and all three document-validity ranges cover every financial date. Legacy
+point-in-time results still require the original exact date match; a year-end
+point review cannot authorize post-year payments. Both linked metadata and XLSX
+retain original cutoff, coverage and reviewer assessment. Original bank source
+rows are preserved. Contract-invalid window results are stale and cannot be
+approved. Changing a reviewed account source invalidates dependent account and
+annual-tax results without rewriting saved amounts. This is retained document
+agreement, not account authentication, actual provider access or payment proof.
+
+`sample-inputs/SYNTHETIC-bank-observation/` saves separate UAE and India
+three-source examples with original-byte controls. Their synthetic entity name
+must agree to the engagement; do not relabel actual evidence to pass a fixture.
+The existing 154 authored scenario catalogue is unchanged and remains separate
+from real client qualification. New hosted coverage-window screenshots and
+execution receipts remain pending for this implementation.
+
+
+The coverage-window guard also checks saved declaration consistency: removing
+a scope that remains declared in parameters, changing its contract, or making
+its coverage dates disagree with those parameters makes the result stale and
+unapprovable. Only source-assessed document coverage is implemented; no actual
+bank/registry verification is added. The new browser harness exercises both
+countries through UI incomplete-window rejection, current-window approval and
+visible separate cutoff/coverage dates. India then selects that reviewed account
+window in the annual-tax UI calculation and checks the retained link. API source
+setup and source reviews remain explicit harness preparation. Execution and
+capture evidence for this new harness remain pending until hosted CI runs it.
+
+
+Final local account-window regression verification passed 3,502 backend tests
+with four existing connector-infrastructure skips: 3,489 passing unit cases and
+thirteen selected HTTP cases (five annual-tax, six bank-binding and two account
+comparisons). All 362 frontend tests in 70 files passed. The API case explicitly
+creates a year-end account comparison with later coverage, independently reviews
+it, exports that scope, rejects a legacy point-in-time review for the post-year
+link, and invalidates the saved annual-tax body recursively after withdrawal of
+a bank account source review. Original saved amounts remain unchanged. Unit
+coverage also checks UAE subsequent clearances, both country example hashes,
+canonical scope dates, missing/contradictory saved contracts and backward
+compatibility. Original receipts and staged source hashes are recorded in
+`../phase-12/bank-observation-validation.json`. New hosted scope-window browser
+execution and the complete hosted backend suite remain separate gates; the
+archived `81a448d` captures prove the earlier unlinked annual-tax source only.

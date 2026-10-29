@@ -81,6 +81,11 @@ def syntax(row):
 
 def compare(data, tables, country):
     from app.modules.country_workflows.audit_calculations import result
+    from app.modules.country_workflows.bank_observation_scope import selected_scope
+
+    observations = selected_scope(data)
+    start = date.fromisoformat(observations["from"]) if observations else data.as_of
+    end = date.fromisoformat(observations["through"]) if observations else data.as_of
 
     selected = {}
     for role in ROLES:
@@ -114,7 +119,8 @@ def compare(data, tables, country):
             issues.append("ACCOUNT_ASSERTION_NOT_CONFIRMED")
         if (
             not date.fromisoformat(row["valid_from"])
-            <= data.as_of
+            <= start
+            <= end
             <= date.fromisoformat(row["valid_through"])
         ):
             issues.append("ACCOUNT_EVIDENCE_OUTSIDE_VALIDITY")
@@ -163,6 +169,7 @@ def compare(data, tables, country):
             ],
         ),
         "bank_account_contract": PROFILE_VERSION,
+        **({"bank_observation_scope": observations} if observations else {}),
         "bank_account_scope": {
             "account": data.account,
             "currency": data.currency,

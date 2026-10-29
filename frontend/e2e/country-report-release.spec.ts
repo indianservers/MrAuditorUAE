@@ -4,6 +4,7 @@ import { runSavingsBrowserWorkflow } from "./savings-browser-workflow";
 import { runEstablishmentChargesBrowserWorkflow } from "./establishment-charges-browser-workflow";
 import { runMSMEInterestBrowserWorkflow } from "./msme-interest-browser-workflow";
 import { runMSMETaxBrowserWorkflow } from "./msme-tax-browser-workflow";
+import { runBankObservationBrowserWorkflow } from "./bank-observation-browser-workflow";
 import { runBenefitSettlementBrowserWorkflow } from "./benefit-settlement-browser-workflow";
 import {
   test,
@@ -975,6 +976,15 @@ for (const code of ["AE", "IN"] as const) {
         identities.tenant_id,
         screenshots,
       );
+    const coveredAccount = await runBankObservationBrowserWorkflow(
+      page,
+      reviewer,
+      engagement.id,
+      identities.tenant_id,
+      code,
+      entity.name,
+      screenshots,
+    );
     if (code === "IN")
       await runMSMETaxBrowserWorkflow(
         page,
@@ -982,6 +992,7 @@ for (const code of ["AE", "IN"] as const) {
         engagement.id,
         identities.tenant_id,
         screenshots,
+        coveredAccount.id,
       );
     expect(errors).toEqual([]);
     await reviewerContext.close();

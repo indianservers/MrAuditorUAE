@@ -524,6 +524,38 @@
             "title": "Bank Owner Identifier",
             "type": "string"
           },
+          "bank_observation_from": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Bank Observation From"
+          },
+          "bank_observation_through": {
+            "anyOf": [
+              {
+                "format": "date",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Bank Observation Through"
+          },
+          "bank_observation_assessment": {
+            "default": "",
+            "maxLength": 2000,
+            "title": "Bank Observation Assessment",
+            "type": "string"
+          },
           "book_opening": {
             "anyOf": [
               {

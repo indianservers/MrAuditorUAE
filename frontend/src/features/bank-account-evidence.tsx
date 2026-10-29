@@ -1,7 +1,21 @@
 "use client";
 
 type Row = Record<string, unknown>;
-export function BankAccountEvidenceReview({ rows }: { rows: Row[] }) {
+export type BankObservationScope = {
+  from: string;
+  through: string;
+  assessment: string;
+  contract: string;
+};
+export function BankAccountEvidenceReview({
+  rows,
+  observations,
+  asOf,
+}: {
+  rows: Row[];
+  observations?: BankObservationScope;
+  asOf?: string;
+}) {
   const roles = ["register", "ledger", "bank"];
   const fields = [
     "account",
@@ -32,6 +46,14 @@ export function BankAccountEvidenceReview({ rows }: { rows: Row[] }) {
   return (
     <section aria-label="Bank account evidence comparison">
       <h3>Bank account and owner evidence</h3>
+      {asOf && <p>Financial cutoff: {asOf}.</p>}
+      {observations && (
+        <p>
+          Assessed document coverage: {observations.from} through{" "}
+          {observations.through}. {observations.assessment} This coverage does
+          not change the financial reporting cutoff.
+        </p>
+      )}
       <p>
         Compare the approved register, ledger setup and retained bank evidence
         side by side. An asserted confirmation and a valid identifier format do

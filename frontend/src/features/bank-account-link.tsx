@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/primitives";
+import type { BankObservationScope } from "./bank-account-evidence";
 
 export type BankAccountLink = {
   status: string;
@@ -11,6 +12,8 @@ export type BankAccountLink = {
   window_start?: string;
   window_end?: string;
   assessment?: string;
+  review_as_of?: string;
+  observation_scope?: BankObservationScope;
   source_account_binding?: string;
   account_label_mapping_applied?: boolean;
   bank_authentication_status: string;
@@ -44,6 +47,28 @@ export function BankAccountLinkReview({
       `${link.window_start} through ${link.window_end}`,
     ],
     ["Scope assessment", link.assessment],
+    ...(link.review_as_of
+      ? [
+          [
+            link.observation_scope
+              ? "Financial cutoff of account review"
+              : "Account comparison date",
+            link.review_as_of,
+          ] as [string, string],
+        ]
+      : []),
+    ...(link.observation_scope
+      ? [
+          [
+            "Assessed document coverage",
+            `${link.observation_scope.from} through ${link.observation_scope.through}`,
+          ] as [string, string],
+          [
+            "Document coverage assessment",
+            link.observation_scope.assessment,
+          ] as [string, string],
+        ]
+      : []),
   ];
   return (
     <section aria-label="Linked bank account evidence">

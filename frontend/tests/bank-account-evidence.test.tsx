@@ -25,3 +25,24 @@ it("keeps three source identities and leading zeros visible without claiming ban
     within(table).getByRole("columnheader", { name: "Retained bank evidence" }),
   ).toBeVisible();
 });
+
+it("shows separately assessed account document coverage without moving the financial cutoff", () => {
+  render(
+    <BankAccountEvidenceReview
+      rows={[]}
+      observations={{
+        contract: "bank-account-observation-window/1",
+        from: "2026-03-01",
+        through: "2027-04-05",
+        assessment: "Independent all-source coverage assessment",
+      }}
+      asOf="2027-03-31"
+    />,
+  );
+  expect(
+    screen.getByText(
+      /Assessed document coverage: 2026-03-01 through 2027-04-05/,
+    ),
+  ).toHaveTextContent(/does not change the financial reporting cutoff/);
+  expect(screen.getByText("Financial cutoff: 2027-03-31.")).toBeVisible();
+});
