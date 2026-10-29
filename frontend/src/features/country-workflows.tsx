@@ -48,6 +48,10 @@ import { WithholdingObligationSource } from "./withholding-obligation-source";
 import { ContributionObligationSource } from "./contribution-obligation-source";
 import { BenefitSettlementSource } from "./benefit-settlement-source";
 import {
+  PayrollBasisSegments,
+  ProratedPayrollSource,
+} from "./payroll-basis-proration";
+import {
   BankAccountLinkReview,
   type BankAccountLink,
 } from "./bank-account-link";
@@ -290,6 +294,8 @@ type Result = {
   collection_totals?: Record<string, number>;
   body: {
     workflow?: string;
+    monthly_basis_complete?: boolean;
+    payroll_proration_contract?: string;
     msme_document_binding?: string;
     retained_msme_contexts?: {
       evidence_version_id: string;
@@ -510,6 +516,7 @@ const moneyTables = [
   "bank-clearances",
   "withholding-records",
   "payroll-bases",
+  "payroll-basis-segments",
   "pension-bases",
   "pension-reported",
   "transactions",
@@ -1088,6 +1095,19 @@ export function CountryWorkflows({
                               "source_review_reasons",
                             ].filter((key) => allColumns.includes(key))
                           : allColumns;
+  const prorationColumns =
+    body?.workflow === "india-payroll-basis-proration" && !showRuleProvenance
+      ? [
+          "subject",
+          "period",
+          "component",
+          "currency",
+          "computed_monthly_basis",
+          "controlled_monthly_basis",
+          "difference",
+          "state",
+        ].filter((key) => allColumns.includes(key))
+      : standardColumns;
   const reserveColumns =
     compactReserve && !showRuleProvenance
       ? [
@@ -1106,7 +1126,7 @@ export function CountryWorkflows({
           "differences",
           "state",
         ].filter((key) => allColumns.includes(key))
-      : standardColumns;
+      : prorationColumns;
   const serviceColumns =
     body?.table_type === "benefit-service-exclusions" && !showRuleProvenance
       ? [
@@ -1607,6 +1627,7 @@ export function CountryWorkflows({
                 "grant-budgets",
                 "fx-rates",
                 "payroll-rules",
+                "payroll-cap-rules",
                 "pension-rules",
                 "benefit-rules",
                 "withholding-records",
@@ -1911,6 +1932,7 @@ export function CountryWorkflows({
             "india-document-series",
             "india-gstr1-documents",
             "india-gstr1-summary",
+            "india-payroll-basis-proration",
             "india-payroll-rules",
             "india-gst",
             "india-invoice-register",
@@ -2704,6 +2726,7 @@ export function CountryWorkflows({
                     "grant-budgets",
                     "fx-rates",
                     "payroll-rules",
+                    "payroll-cap-rules",
                     "pension-rules",
                     "benefit-rules",
                     "withholding-records",
@@ -4346,6 +4369,7 @@ export function CountryWorkflows({
                             "inventory-valuation-control",
                             "obligation-bank-allocations",
                             "india-msme-payment-timing",
+                            "india-payroll-basis-proration",
                             "payroll-ledger-rollforward",
                             "india-esic-population",
                             "india-document-series",
@@ -5933,6 +5957,23 @@ export function CountryWorkflows({
             Population basis: {body.population_completeness}. Calculations do
             not determine a statutory compliance conclusion.
           </p>
+          {body.workflow === "india-payroll-basis-proration" && (
+            <PayrollBasisSegments rows={rows} />
+          )}
+          {body.workflow === "india-payroll-basis-proration" &&
+            detail.data.freshness === "CURRENT" &&
+            body.review_status === "REVIEWED" &&
+            !body.blocked &&
+            body.monthly_basis_complete === true &&
+            body.payroll_proration_contract ===
+              "india-payroll-basis-proration/1" && (
+              <ProratedPayrollSource
+                key={`${tenant}:${eid}:${selected}`}
+                eid={eid}
+                resultId={selected}
+                onCreated={setSelected}
+              />
+            )}
           {["uae-pension-review", "india-payroll-rules"].includes(
             body.workflow || "",
           ) &&
@@ -6844,6 +6885,7 @@ export function CountryWorkflows({
               compactCredit ||
               compactWithholding ||
               compactReserve ||
+              body.workflow === "india-payroll-basis-proration" ||
               body.table_type === "benefit-service-exclusions" ||
               compactImport) && (
               <label style={{ display: "flex", alignItems: "center", gap: 8 }}>

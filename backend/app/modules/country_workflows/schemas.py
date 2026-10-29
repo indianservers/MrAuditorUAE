@@ -41,6 +41,7 @@ from app.modules.country_workflows.party_confirmations import (
     ConfirmationItemCoverage,
     PartyConfirmation,
 )
+from app.modules.country_workflows.payroll_basis_proration import ROW_TYPES as PRORATION_ROW_TYPES
 from app.modules.country_workflows.payroll_ledger_schemas import PAYROLL_LEDGER_ROW_TYPES
 from app.modules.country_workflows.payroll_schemas import PAYROLL_ROW_TYPES
 from app.modules.country_workflows.pension_schemas import PENSION_ROW_TYPES
@@ -304,6 +305,7 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
     **RESERVE_ROW_TYPES,
     "benefit-service-exclusions": ServiceExclusion,
     **PAYROLL_ROW_TYPES,
+    **PRORATION_ROW_TYPES,
     **PAYROLL_LEDGER_ROW_TYPES,
     **PENSION_ROW_TYPES,
     **AUDIT_ROW_TYPES,
@@ -440,6 +442,8 @@ class SourceInput(Strict):
         "pension-rules",
         "pension-reported",
         "payroll-bases",
+        "payroll-basis-segments",
+        "payroll-cap-rules",
         "payroll-rules",
         "transactions",
         "bank-account-evidence",
@@ -943,6 +947,7 @@ class WorkflowInput(Strict):
         "credit-note-applications",
         "open-item-allocations",
         "india-payroll-rules",
+        "india-payroll-basis-proration",
         "uae-pension-review",
         "subledger-control",
         "subsequent-settlements",
@@ -1024,6 +1029,10 @@ class WorkflowInput(Strict):
 
     @model_validator(mode="after")
     def independent_sources(self):
+        if self.workflow == "india-payroll-basis-proration" and (
+            self.currency != "INR" or self.tolerance != 0 or self.date_tolerance != 0
+        ):
+            raise ValueError("Dated PF wage bases require INR and exact amount/calendar controls")
         if self.workflow == "merchant-settlement-bridge" and (
             self.period_start is None
             or self.period_start > self.as_of

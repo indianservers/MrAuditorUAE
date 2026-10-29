@@ -30,6 +30,8 @@ def rounding(amount, method):
 
 
 def payroll_rules(data, tables):
+    from app.modules.country_workflows.payroll_basis_proration import rate_profile_error
+
     if data.currency != "INR":
         raise ValueError("India payroll rule calculations require INR")
     bases, selected, expected, problems = {}, {}, {}, {}
@@ -64,6 +66,9 @@ def payroll_rules(data, tables):
             problems[identity] = "RULE_MISSING_OR_SPLIT_PERIOD" if not rules else "AMBIGUOUS_RULE"
             continue
         rule = selected[identity] = rules[0]
+        if error := rate_profile_error(row, rule):
+            problems[identity] = error
+            continue
         if not row["eligible"]:
             expected[identity] = Decimal(0)
         elif rule["formula"] == "fixed":
@@ -77,7 +82,12 @@ def payroll_rules(data, tables):
     # establishment and month. An absent/ambiguous pension row is never zero.
     for identity, row in bases.items():
         rule = selected.get(identity)
-        if not rule or rule["formula"] != "employer-minus-eps" or identity in expected:
+        if (
+            not rule
+            or rule["formula"] != "employer-minus-eps"
+            or identity in expected
+            or identity in problems
+        ):
             continue
         pension_key = identity[:3] + ("PF:EPS", identity[4])
         if pension_key not in expected:
@@ -154,6 +164,21 @@ def payroll_rules(data, tables):
                 "eligibility_reference": basis["eligibility_reference"] if basis else None,
                 "eligible_as_declared": basis["eligible"] if basis else None,
                 "assessed_base": basis["amount"] if basis else None,
+                **(
+                    {
+                        "post_cap_basis_contract": basis["post_cap_basis_contract"],
+                        "proration_result_row_id": basis["proration_result_row_id"],
+                        "monthly_control_source_id": basis["monthly_control_source_id"],
+                        "segment_source_ids": [
+                            segment["id"] for segment in basis["proration_segments"]
+                        ],
+                        "cap_rule_source_ids": sorted(
+                            {segment["cap_rule_id"] for segment in basis["proration_segments"]}
+                        ),
+                    }
+                    if basis and basis.get("post_cap_basis_contract")
+                    else {}
+                ),
                 "expected_amount": str(wanted) if wanted is not None else None,
                 "reported_amount": str(actual["amount"]) if actual else None,
                 "reported_source_ids": actual["ids"] if actual else [],

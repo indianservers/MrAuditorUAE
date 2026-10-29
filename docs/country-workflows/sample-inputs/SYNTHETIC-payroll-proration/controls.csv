@@ -1,0 +1,10 @@
+id,registration,subject,period,component,currency,rule_group,jurisdiction,eligible,eligibility_reference,assessment,amount
+A:PF:EMPLOYEE,SYN-EST,SYN-A,2026-09,PF:EMPLOYEE,INR,A,SYNTHETIC,True,SYN-MEMBERSHIP,Synthetic assessed membership option only,9333.33
+A:PF:EMPLOYER,SYN-EST,SYN-A,2026-09,PF:EMPLOYER,INR,A,SYNTHETIC,True,SYN-MEMBERSHIP,Synthetic assessed membership option only,9333.33
+A:PF:EPS,SYN-EST,SYN-A,2026-09,PF:EPS,INR,A,SYNTHETIC,True,SYN-MEMBERSHIP,Synthetic assessed membership option only,9333.33
+B:PF:EMPLOYEE,SYN-EST,SYN-B,2026-09,PF:EMPLOYEE,INR,B,SYNTHETIC,True,SYN-MEMBERSHIP,Synthetic assessed membership option only,20000.00
+B:PF:EMPLOYER,SYN-EST,SYN-B,2026-09,PF:EMPLOYER,INR,B,SYNTHETIC,True,SYN-MEMBERSHIP,Synthetic assessed membership option only,20000.00
+B:PF:EPS,SYN-EST,SYN-B,2026-09,PF:EPS,INR,B,SYNTHETIC,True,SYN-MEMBERSHIP,Synthetic assessed membership option only,9333.33
+C:PF:EMPLOYEE,SYN-EST,SYN-C,2026-09,PF:EMPLOYEE,INR,C,SYNTHETIC,True,SYN-MEMBERSHIP,Synthetic assessed membership option only,17333.33
+C:PF:EMPLOYER,SYN-EST,SYN-C,2026-09,PF:EMPLOYER,INR,C,SYNTHETIC,True,SYN-MEMBERSHIP,Synthetic assessed membership option only,17333.33
+C:PF:EPS,SYN-EST,SYN-C,2026-09,PF:EPS,INR,C,SYNTHETIC,True,SYN-MEMBERSHIP,Synthetic assessed membership option only,17333.33

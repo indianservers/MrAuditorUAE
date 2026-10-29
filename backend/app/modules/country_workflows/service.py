@@ -202,6 +202,13 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "parser_version": "committed-ledger-1",
         }, [*dependencies, receipt]
     if operation == "workflow-source":
+        if (
+            data.table_type in {"payroll-basis-segments", "payroll-cap-rules"}
+            and package.country != "IN"
+        ):
+            raise HTTPException(
+                422, "Dated PF wage and ceiling sources require an India engagement"
+            )
         if data.table_type.startswith("msme-") and package.country != "IN":
             raise HTTPException(422, "MSE supplier/invoice sources require an India engagement")
         if data.table_type == "esic-members" and package.country != "IN":
@@ -391,6 +398,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 data.table_type
                 not in {
                     "payroll-rules",
+                    "payroll-cap-rules",
                     "pension-rules",
                     "benefit-rules",
                     "withholding-records",
@@ -602,7 +610,13 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                     label="Inventory valuation documents",
                 )
             )
-        if data.table_type in {"payroll-rules", "pension-rules", "benefit-rules", "fx-rates"}:
+        if data.table_type in {
+            "payroll-rules",
+            "payroll-cap-rules",
+            "pension-rules",
+            "benefit-rules",
+            "fx-rates",
+        }:
             dependencies.extend(
                 await payroll_rule_documents(
                     db,
@@ -711,6 +725,27 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
     contributors = {str(ctx.user_id)}
     for role, identifier in data.source_ids.items():
         source = await intelligence.event(db, ctx, eng.id, identifier, True)
+        if data.workflow == "india-payroll-basis-proration" and role in {"segments", "controls"}:
+            from app.modules.country_workflows.payroll_basis_proration import month_span
+
+            if any(
+                not period.start_date
+                <= month_span(row["period"])[0]
+                <= month_span(row["period"])[1]
+                <= data.as_of
+                for row in source.body.get("rows", [])
+            ):
+                raise HTTPException(
+                    422, "Dated PF wage months must be fully within the engagement reporting period"
+                )
+        if (
+            data.workflow == "india-payroll-basis-proration"
+            and source.body.get("review_status") != "REVIEWED"
+        ):
+            raise HTTPException(
+                409,
+                "Independently review every wage segment, ceiling policy and monthly basis control source",
+            )
         if (
             data.workflow == "uae-benefit-review"
             and "service_calendar" in data.source_ids
@@ -1096,7 +1131,12 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         dependencies.extend(
             await verify_pension(db, ctx, eng, sources, data, contributors, profile_kind="pension")
         )
-    elif data.workflow in {"india-payroll-rules", "uae-benefit-review", "uae-pension-review"}:
+    elif data.workflow in {
+        "india-payroll-rules",
+        "india-payroll-basis-proration",
+        "uae-benefit-review",
+        "uae-pension-review",
+    }:
         dependencies.extend(
             await payroll_rule_documents(
                 db, ctx, eng, sources["rules"]["rows"], contributors=contributors
@@ -1135,6 +1175,12 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         dependencies.extend(
             await verify_contributions(db, ctx, eng, sources["expected"], contributors)
         )
+    if sources.get("bases", {}).get("parser_version") == "prorated-payroll-bases/1":
+        from app.modules.country_workflows.payroll_proration_source import (
+            verify as verify_proration,
+        )
+
+        dependencies.extend(await verify_proration(db, ctx, eng, sources["bases"], contributors))
     if sources.get("books", {}).get("parser_version") == "uae-vat201-composition/1":
         from app.modules.country_workflows.vat_composition import verify as verify_composition
 

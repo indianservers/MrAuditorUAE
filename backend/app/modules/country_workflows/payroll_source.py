@@ -102,6 +102,11 @@ async def derive(db, ctx, eng, bases, data, *, profile_kind="payroll"):
             params = getattr(rule, profile_kind + "_parameters")
             if not params or any(getattr(params, field) != basis[field] for field in scope_fields):
                 continue
+            if profile_kind == "payroll":
+                from app.modules.country_workflows.payroll_basis_proration import rate_profile_error
+
+                if rate_profile_error(basis, params.model_dump(mode="json")):
+                    continue
             if (
                 (
                     profile_kind == "payroll"

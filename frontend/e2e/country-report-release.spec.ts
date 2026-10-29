@@ -1,4 +1,5 @@
 import { runMerchantBrowserWorkflow } from "./merchant-browser-workflow";
+import { runPayrollProrationBrowserWorkflow } from "./payroll-proration-browser-workflow";
 import { runBenefitSettlementBrowserWorkflow } from "./benefit-settlement-browser-workflow";
 import {
   test,
@@ -938,6 +939,14 @@ for (const code of ["AE", "IN"] as const) {
       screenshots,
       entity.name,
     );
+    if (code === "IN")
+      await runPayrollProrationBrowserWorkflow(
+        page,
+        reviewer,
+        engagement.id,
+        identities.tenant_id,
+        screenshots,
+      );
     expect(errors).toEqual([]);
     await reviewerContext.close();
   });

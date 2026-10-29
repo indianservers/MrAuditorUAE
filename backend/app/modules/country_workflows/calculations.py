@@ -897,6 +897,12 @@ def calculate(
 
         sources, account_scope = bind(data, country, sources, *bank_account_review)
     for role, table in sources.items():
+        if table.get("parser_version") == "prorated-payroll-bases/1" and (
+            data.workflow != "india-payroll-rules" or role != "bases"
+        ):
+            raise ValueError(
+                "Post-ceiling wage sources can establish only India contribution bases"
+            )
         if table.get("parser_version") == "withholding-obligations/1" and (
             role not in table.get("allowed_source_roles", [])
             or table.get("native_metadata", {}).get("controls", {}).get("cutoff_date")
@@ -1199,6 +1205,12 @@ def calculate(
             result = msme_payment_timing(data, tables)
         elif data.workflow in PENSION_CALCULATORS:
             result = PENSION_CALCULATORS[data.workflow](data, tables)
+        elif data.workflow == "india-payroll-basis-proration":
+            from app.modules.country_workflows.payroll_basis_proration import (
+                calculate as prorate_basis,
+            )
+
+            result = prorate_basis(data, tables)
         elif data.workflow in PAYROLL_CALCULATORS:
             result = PAYROLL_CALCULATORS[data.workflow](data, tables)
         elif data.workflow == "uae-benefit-review":

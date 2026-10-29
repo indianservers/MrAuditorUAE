@@ -74,7 +74,15 @@ def _parse_csv(content, data, defaults=None):
     totals: defaultdict[str, Decimal] = defaultdict(Decimal)
     for index, raw in enumerate(reader, 2):
         if data.table_type.startswith(
-            ("grant-", "media-", "msme-", "merchant-", "benefit-service-")
+            (
+                "grant-",
+                "media-",
+                "msme-",
+                "merchant-",
+                "benefit-service-",
+                "payroll-basis-",
+                "payroll-cap-",
+            )
         ) and any(
             value is not None and value != value.strip()
             for value in raw.values()
@@ -274,6 +282,7 @@ def _parse_csv(content, data, defaults=None):
         "expense-claims",
         "benefit-employees",
         "payroll-bases",
+        "payroll-basis-segments",
         "pension-bases",
         "pension-reported",
         "trade-lines",

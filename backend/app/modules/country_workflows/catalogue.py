@@ -10,6 +10,7 @@ from app.modules.country_workflows.grant_utilisation import ROLES as GRANT_ROLES
 from app.modules.country_workflows.merchant_reserves import ROLES as RESERVE_ROLES
 from app.modules.country_workflows.msme_schemas import MSME_WORKFLOWS
 from app.modules.country_workflows.operations_schemas import OPERATION_WORKFLOWS
+from app.modules.country_workflows.payroll_basis_proration import ROLES as PRORATION_ROLES
 from app.modules.country_workflows.payroll_ledger_schemas import PAYROLL_LEDGER_WORKFLOWS
 from app.modules.country_workflows.payroll_schemas import PAYROLL_WORKFLOWS
 from app.modules.country_workflows.pension_schemas import PENSION_WORKFLOWS
@@ -28,6 +29,11 @@ OPTIONAL_ROLES = {
 }
 
 WORKFLOWS = {
+    "india-payroll-basis-proration": (
+        "India dated PF wage bases / assessed ceilings / monthly controls",
+        ["IN"],
+        PRORATION_ROLES,
+    ),
     "merchant-reserve-rollforward": (
         "Processor reserve holds / releases / opening-closing / ledger controls",
         ["AE", "IN"],

@@ -8,6 +8,28 @@ import {
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { CountryWorkflows } from "@/features/country-workflows";
 
+it.each([
+  ["CURRENT", "REVIEWED", false, "india-payroll-basis-proration/1", true],
+  ["STALE", "REVIEWED", false, "india-payroll-basis-proration/1", false],
+  ["CURRENT", "UNVERIFIED", false, "india-payroll-basis-proration/1", false],
+  ["CURRENT", "REVIEWED", true, "india-payroll-basis-proration/1", false],
+  ["CURRENT", "REVIEWED", false, "old", false],
+])("gates dated PF monthly-source preparation by freshness, independent review and contract (%s/%s/%s/%s)", (freshness, review_status, blocked, contract, allowed) => {
+  state.country = "IN";
+  state.result = {id:"result", kind:"country-workflow", version:1, freshness, body:{
+    workflow:"india-payroll-basis-proration", title:"Dated PF basis controls", review_status, blocked,
+    payroll_proration_contract:contract, monthly_basis_complete:true, rows:[{
+      id:"p1", subject:"SYN-EMP", component:"PF:EMPLOYEE", period:"2026-09", currency:"INR",
+      computed_monthly_basis:"9333.33", controlled_monthly_basis:"9333.33", difference:"0.00", state:"MATCHED",
+      segment_trace:[{id:"s1",subject:"SYN-EMP",component:"PF:EMPLOYEE",segment_start:"2026-09-17",segment_end:"2026-09-30",eligible:true,post_cap_segment_basis:"9333.33"}],
+    }]}};
+  render(<CountryWorkflows eid="engagement" mode="country-workflow"/>);
+  fireEvent.change(screen.getByLabelText("Saved source or result"), {target:{value:"result"}});
+  expect(screen.getByRole("region", {name:"Dated PF wage-basis evidence"})).toBeVisible();
+  expect(screen.getByRole("columnheader",{name:/^computed monthly basis$/})).toBeVisible();
+  expect(screen.queryByRole("region",{name:"Reviewed monthly PF wage source"}) !== null).toBe(allowed);
+});
+
 it("shows the selected workbook population and excluded scope before approval", () => {
   state.result = { id: "result", kind: "workflow-source", version: 1, freshness: "CURRENT",
     body: { title: "Workbook scope", review_status: "UNVERIFIED", rows: [],

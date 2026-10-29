@@ -1,6 +1,17 @@
 def approval_error(body):
     from app.modules.intelligence.matching_review import saved_candidates_complete
 
+    if body.get("workflow") == "india-payroll-basis-proration":
+        from app.modules.country_workflows.payroll_basis_proration import CONTRACT
+
+        if (
+            body.get("payroll_proration_contract") != CONTRACT
+            or body.get("monthly_basis_complete") is not True
+        ):
+            return (
+                "Regenerate complete dated PF wage bases with current independent monthly controls"
+            )
+
     if (
         body.get("workflow") == "uae-benefit-review"
         and body.get("service_calendar_basis") == "DATED_CONTROLLED_SOURCE"

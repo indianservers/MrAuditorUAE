@@ -1,0 +1,96 @@
+{
+  "dataset_kind": "SYNTHETIC_AUTHORED_MECHANICAL_EXAMPLE",
+  "as_of": "2026-09-30",
+  "files": {
+    "segments": {
+      "file": "segments.csv",
+      "sha256": "a30db0d2db119ac7f08667d054dc2acfda3cfc359e6607a20245f2761ed42a4b",
+      "table_type": "payroll-basis-segments",
+      "expected_rows": 18,
+      "control_totals": {
+        "INR": "180000.00"
+      }
+    },
+    "rules": {
+      "file": "rules.csv",
+      "sha256": "76d803e8b8ed8b172e4ab9bfbbc29cda6bbd4e7cf8e90a407e2d5f706e054db2",
+      "table_type": "payroll-cap-rules",
+      "expected_rows": 18,
+      "control_totals": {}
+    },
+    "controls": {
+      "file": "controls.csv",
+      "sha256": "6dd782478644a45d086aa566c7390b84c118989514631828d5c915c31cee6ca4",
+      "table_type": "payroll-bases",
+      "expected_rows": 9,
+      "control_totals": {
+        "INR": "129333.31"
+      }
+    }
+  },
+  "authored_expected": [
+    {
+      "subject": "SYN-A",
+      "component": "PF:EMPLOYEE",
+      "computed_monthly_basis": "9333.33",
+      "state": "MATCHED"
+    },
+    {
+      "subject": "SYN-A",
+      "component": "PF:EMPLOYER",
+      "computed_monthly_basis": "9333.33",
+      "state": "MATCHED"
+    },
+    {
+      "subject": "SYN-A",
+      "component": "PF:EPS",
+      "computed_monthly_basis": "9333.33",
+      "state": "MATCHED"
+    },
+    {
+      "subject": "SYN-B",
+      "component": "PF:EMPLOYEE",
+      "computed_monthly_basis": "20000.00",
+      "state": "MATCHED"
+    },
+    {
+      "subject": "SYN-B",
+      "component": "PF:EMPLOYER",
+      "computed_monthly_basis": "20000.00",
+      "state": "MATCHED"
+    },
+    {
+      "subject": "SYN-B",
+      "component": "PF:EPS",
+      "computed_monthly_basis": "9333.33",
+      "state": "MATCHED"
+    },
+    {
+      "subject": "SYN-C",
+      "component": "PF:EMPLOYEE",
+      "computed_monthly_basis": "17333.33",
+      "state": "MATCHED"
+    },
+    {
+      "subject": "SYN-C",
+      "component": "PF:EMPLOYER",
+      "computed_monthly_basis": "17333.33",
+      "state": "MATCHED"
+    },
+    {
+      "subject": "SYN-C",
+      "component": "PF:EPS",
+      "computed_monthly_basis": "17333.33",
+      "state": "MATCHED"
+    }
+  ],
+  "derived_source_controls": {
+    "expected_rows": 9,
+    "control_total": "129333.31"
+  },
+  "limits": [
+    "All input wages, eligibility, dates, ceilings and contribution rates are synthetic supplied assumptions, not a published legal rule pack or independent client expectation",
+    "Select a separately retained clean synthetic supporting document for rules; its exact UUID and hash are bound during source preparation",
+    "Component-basis totals count each component separately and are not gross payroll or contribution totals"
+  ]
+}

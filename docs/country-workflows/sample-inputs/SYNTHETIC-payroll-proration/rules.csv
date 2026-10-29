@@ -1,0 +1,19 @@
+id,rule_group,component,jurisdiction,effective_from,effective_to,cap_mode,monthly_ceiling,source_url,source_version,evidence_reference,applicability_review
+A:PF:EMPLOYEE:policy:before,A,PF:EMPLOYEE,SYNTHETIC,2026-09-01,2026-09-16,CAPPED,15000,https://synthetic.invalid/assessed-policy,SYNTHETIC-1,SYN-POLICY,Synthetic reviewed cohort ceiling option
+A:PF:EMPLOYEE:policy:after,A,PF:EMPLOYEE,SYNTHETIC,2026-09-17,2026-09-30,CAPPED,25000,https://synthetic.invalid/assessed-policy,SYNTHETIC-1,SYN-POLICY,Synthetic reviewed cohort ceiling option
+A:PF:EMPLOYER:policy:before,A,PF:EMPLOYER,SYNTHETIC,2026-09-01,2026-09-16,CAPPED,15000,https://synthetic.invalid/assessed-policy,SYNTHETIC-1,SYN-POLICY,Synthetic reviewed cohort ceiling option
+A:PF:EMPLOYER:policy:after,A,PF:EMPLOYER,SYNTHETIC,2026-09-17,2026-09-30,CAPPED,25000,https://synthetic.invalid/assessed-policy,SYNTHETIC-1,SYN-POLICY,Synthetic reviewed cohort ceiling option
+A:PF:EPS:policy:before,A,PF:EPS,SYNTHETIC,2026-09-01,2026-09-16,CAPPED,15000,https://synthetic.invalid/assessed-policy,SYNTHETIC-1,SYN-POLICY,Synthetic reviewed cohort ceiling option
+A:PF:EPS:policy:after,A,PF:EPS,SYNTHETIC,2026-09-17,2026-09-30,CAPPED,25000,https://synthetic.invalid/assessed-policy,SYNTHETIC-1,SYN-POLICY,Synthetic reviewed cohort ceiling option
+B:PF:EMPLOYEE:policy:before,B,PF:EMPLOYEE,SYNTHETIC,2026-09-01,2026-09-16,ASSESSED_ACTUAL_BASIS,,https://synthetic.invalid/assessed-policy,SYNTHETIC-1,SYN-POLICY,Synthetic reviewed cohort ceiling option
+B:PF:EMPLOYEE:policy:after,B,PF:EMPLOYEE,SYNTHETIC,2026-09-17,2026-09-30,ASSESSED_ACTUAL_BASIS,,https://synthetic.invalid/assessed-policy,SYNTHETIC-1,SYN-POLICY,Synthetic reviewed cohort ceiling option
+B:PF:EMPLOYER:policy:before,B,PF:EMPLOYER,SYNTHETIC,2026-09-01,2026-09-16,ASSESSED_ACTUAL_BASIS,,https://synthetic.invalid/assessed-policy,SYNTHETIC-1,SYN-POLICY,Synthetic reviewed cohort ceiling option
+B:PF:EMPLOYER:policy:after,B,PF:EMPLOYER,SYNTHETIC,2026-09-17,2026-09-30,ASSESSED_ACTUAL_BASIS,,https://synthetic.invalid/assessed-policy,SYNTHETIC-1,SYN-POLICY,Synthetic reviewed cohort ceiling option
+B:PF:EPS:policy:before,B,PF:EPS,SYNTHETIC,2026-09-01,2026-09-16,CAPPED,15000,https://synthetic.invalid/assessed-policy,SYNTHETIC-1,SYN-POLICY,Synthetic reviewed cohort ceiling option
+B:PF:EPS:policy:after,B,PF:EPS,SYNTHETIC,2026-09-17,2026-09-30,CAPPED,25000,https://synthetic.invalid/assessed-policy,SYNTHETIC-1,SYN-POLICY,Synthetic reviewed cohort ceiling option
+C:PF:EMPLOYEE:policy:before,C,PF:EMPLOYEE,SYNTHETIC,2026-09-01,2026-09-16,CAPPED,15000,https://synthetic.invalid/assessed-policy,SYNTHETIC-1,SYN-POLICY,Synthetic reviewed cohort ceiling option
+C:PF:EMPLOYEE:policy:after,C,PF:EMPLOYEE,SYNTHETIC,2026-09-17,2026-09-30,CAPPED,25000,https://synthetic.invalid/assessed-policy,SYNTHETIC-1,SYN-POLICY,Synthetic reviewed cohort ceiling option
+C:PF:EMPLOYER:policy:before,C,PF:EMPLOYER,SYNTHETIC,2026-09-01,2026-09-16,CAPPED,15000,https://synthetic.invalid/assessed-policy,SYNTHETIC-1,SYN-POLICY,Synthetic reviewed cohort ceiling option
+C:PF:EMPLOYER:policy:after,C,PF:EMPLOYER,SYNTHETIC,2026-09-17,2026-09-30,CAPPED,25000,https://synthetic.invalid/assessed-policy,SYNTHETIC-1,SYN-POLICY,Synthetic reviewed cohort ceiling option
+C:PF:EPS:policy:before,C,PF:EPS,SYNTHETIC,2026-09-01,2026-09-16,CAPPED,15000,https://synthetic.invalid/assessed-policy,SYNTHETIC-1,SYN-POLICY,Synthetic reviewed cohort ceiling option
+C:PF:EPS:policy:after,C,PF:EPS,SYNTHETIC,2026-09-17,2026-09-30,CAPPED,25000,https://synthetic.invalid/assessed-policy,SYNTHETIC-1,SYN-POLICY,Synthetic reviewed cohort ceiling option

@@ -1,5 +1,11 @@
 # Country workflows — first implementation increment
 
+The [India dated PF wage-basis bridge](payroll-basis-proration.md) adds reviewed
+mid-month wage segments, effective-dated assessed ceiling policies and independent
+monthly controls. Its reviewed output feeds the existing contribution/remittance/
+bank-allocation flow with a guard against applying a ceiling twice. This is an
+assessed-input workflow; qualified legal cohorts and native ECR filing remain open.
+
 Later additions, verification receipts and remaining native-format gaps are documented in [Native adapters](native-adapters.md), including [India split withholding bank settlement](native-adapters.md#india-withholding-records-to-split-bank-settlement), [India document series and cancellation counts](native-adapters.md#india-gstr-1-document-series-and-cancellation-counts), [reviewed account links for reconciliation and settlements](native-adapters.md#reviewed-account-links-for-bank-reconciliation-and-settlements), [bank account identity and owner evidence](native-adapters.md#bank-account-identity-and-owner-evidence--uae-and-india), [GSTR-1 outward invoice/note sections](native-adapters.md#india-gstr-1-outward-invoicenote-sections), [GSTR-1 summary metric reconciliation](native-adapters.md#india-gstr-1-summary-metric-reconciliation), [GSTR-2B document import](gstr2b.md) and [reviewed payroll contribution rules](payroll-rules.md). The original twelve-workflow/142-scenario and delivery receipts below describe the first increment, rather than all subsequent workspace changes.
 
 UAE first, then India. This increment adds twelve operational workflows and 142 named synthetic reference scenarios. It does **not** complete the entire regulatory roadmap or qualify the application for production statutory reporting.
