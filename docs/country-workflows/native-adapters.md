@@ -4622,3 +4622,54 @@ and HTTP tests cover those traces. Exact originals, artifact digest, assertions
 and limits are in `../phase-12/msme-interest-browser-393b414.json`. This is browser
 proof for that source; its full hosted backend suite was still running when
 recorded. The initial failed attempt remains preserved separately.
+
+
+### UAE WPS single-line record validation and source upgrades
+
+The EDR/SCR-only `uae-wps-sif` reader now uses strict CSV parsing and rejects
+embedded CR/LF characters in any field before trimming. Previously it accepted
+five demonstrated malformed populations: a newline appended to a quoted salary,
+a newline appended to the employer ID, an embedded newline in a reference, an
+unclosed final quote and an extra space after a closing quote. All five passed the original
+reader with the same independent row/amount controls. They now fail preparation;
+the original uploaded bytes remain available for audit. This is a parser
+correctness change, not a new legal or bank-variant qualification.
+
+Normal LF, CRLF and CR record endings and quoted single-line numeric fields
+remain accepted. File-name, employer, employee, account, period, salary and
+independent control checks remain in force. New metadata records the physical
+record count and `wps-single-line-records/1` validation contract. For the EVP
+profile, physical count still includes EVP records without double-counting salary.
+
+Older EDR/SCR-only sources without that contract are now STALE, as are dependent
+payroll comparisons and approvals. Their historical financial bodies and review
+records are preserved. Re-prepare from the retained original upload, independently
+review the new source, and recalculate dependent procedures. A malformed upload
+must first be replaced by a correctly exported original; no silent repair is
+performed. The EVP reader already enforced strict raw CSV and single-line fields
+from its introduction, so its previously current sources are preserved rather
+than subjected to this base-reader upgrade gate.
+
+Regression coverage includes malformed-reader rejection, normal line endings,
+both profile variants, retained malformed upload/job failure, original-byte
+download, independent review, synthetic historical-contract upgrade, recursive
+staleness without financial rewrites, and explicit re-preparation of unchanged
+valid originals. The historical-contract HTTP case temporarily stamps a prior
+version on a valid synthetic source; it is not an actual production migration or
+client qualification. HTTP tests use real API, database, storage and processor
+with explicit scanner/dispatch doubles. Complete local verification is pending
+until the final source-bound receipt is saved. No frontend or browser workflow
+implementation changed; existing screenshot evidence remains tied to its stated
+source commits.
+
+
+Final local verification passed 3,433 backend tests with four pre-existing
+connector-infrastructure skips: 3,421 passing unit cases and twelve selected
+HTTP cases across record-boundary upgrade/rejection, native readers, EVP and
+UAE/India bank allocation. These are not the complete hosted backend suite.
+Ruff passed with 751 files already formatted; mypy passed 405 application files.
+Runtime API/payload snapshots matched in the unit suite. The exact original JUnit
+and staged-source hashes are recorded in
+`../phase-12/wps-record-boundaries-validation.json`. Hosted verification of this
+source remains separate. Earlier MSE browser proof is not execution proof for
+this WPS parser update; no browser implementation changed in this increment.

@@ -1,0 +1,86 @@
+{
+  "recorded_at": "2026-10-29T20:20:52.360497+00:00",
+  "base_commit": "0834c9c23a0ababc4b8a2bdbb65dc266cdc3beb9",
+  "feature": "UAE WPS strict single-line native instruction records and bounded source upgrade",
+  "contract": "wps-single-line-records/1",
+  "observed_pre_fix": {
+    "failed_regressions": 5,
+    "passing_positive_controls": 3,
+    "details": [
+      "Quoted salary newline trimmed into a valid amount",
+      "Quoted employer newline trimmed into a valid identifier",
+      "Multiline trailer reference accepted",
+      "Unclosed final quoted reference accepted",
+      "Extra space after closing quote accepted"
+    ]
+  },
+  "receipts": [
+    {
+      "path": "docs/phase-12/wps-record-boundaries-final.xml",
+      "sha256": "d5c635f55f8ecedd002527672d6e386a2766b65eb20d5b9ab6715cef8462d17b",
+      "size_bytes": 530689,
+      "counts": {
+        "tests": 3437,
+        "errors": 0,
+        "failures": 0,
+        "skipped": 4
+      }
+    }
+  ],
+  "sources": [
+    {
+      "path": ".gitattributes",
+      "sha256": "3c6858a34ba4013eae827bf1f91af6f9a2db197c70f941e3b4fb90df547f9c6f",
+      "size_bytes": 2067,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/native_sources.py",
+      "sha256": "0ceab8e9b215ff24a7b18cc7bdb8efeed19afc96b25502dc0367cc8d2585573c",
+      "size_bytes": 37884,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/intelligence/service.py",
+      "sha256": "697b330c535e9687f19d1ca37c809d5a7a3adbf674ca22e4f669d13060cb3ef5",
+      "size_bytes": 50221,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/tests/unit/test_wps_record_boundaries.py",
+      "sha256": "fff0e335456e878f5644195bee1969406409d2ccaf42f4a22ddfc4646ffef6fa",
+      "size_bytes": 2757,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_wps_record_boundaries.py",
+      "sha256": "70db788c16a868af73ecc4439c8ad53c231f42b28489ccb939ffddd53db4244e",
+      "size_bytes": 6352,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    }
+  ],
+  "checks": {
+    "backend_units": "3421 passed, 4 pre-existing connector-infrastructure skips",
+    "selected_http": "12 passed: four WPS record-boundary cases, four native source cases, two EVP cases and two UAE/India allocation cases",
+    "ruff_check": "passed",
+    "ruff_format": "751 files already formatted",
+    "mypy": "405 application source files passed",
+    "api_payload_contracts": "current runtime snapshots match in full unit suite"
+  },
+  "scope": [
+    "Reject embedded CR/LF before field stripping; strict CSV rejects unclosed or malformed quoted records",
+    "Preserve ordinary LF/CRLF/CR record endings and quoted single-line amounts",
+    "Mark older base EDR/SCR sources stale; recursively stale existing comparisons and approvals without rewriting historical financial bodies",
+    "Explicitly re-prepare unchanged valid original uploads under the new contract",
+    "Preserve previously current EVP sources: their raw reader already enforced strict CSV and single-line fields",
+    "Retain malformed original upload/download bytes while the preparation job fails without a result"
+  ],
+  "limits": [
+    "Synthetic authored malformed and valid instructions; no representative client or new bank-variant qualification",
+    "HTTP uses real API, database, private storage and processor; scanner/dispatch are explicit doubles",
+    "Historical-contract case temporarily stamps a prior version on valid synthetic data; it is not an actual production migration",
+    "No frontend or browser implementation changed; no new browser result is claimed by these local receipts",
+    "New-source hosted verification remains pending; earlier MSE browser captures and full suites are source-bound, not substituted",
+    "Original legal-country qualification, live providers, actual client pilots and production release gates remain open"
+  ]
+}

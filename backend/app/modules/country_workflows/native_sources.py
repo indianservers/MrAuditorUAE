@@ -20,6 +20,8 @@ from pydantic import ValidationError
 from app.modules.country_workflows.schemas import Transaction
 from app.modules.country_workflows.sources import MAX_BYTES
 
+WPS_RECORD_CONTRACT = "wps-single-line-records/1"
+
 FORMATS: list[dict[str, Any]] = [
     {
         "id": "india-esic-members-xls",
@@ -544,13 +546,17 @@ def _mt940_page(content, data, *, intermediate=False):
 
 def wps(content, data, filename):
     try:
-        records = list(csv.reader(io.StringIO(content.decode("utf-8-sig"), newline="")))
+        records = list(
+            csv.reader(io.StringIO(content.decode("utf-8-sig"), newline=""), strict=True)
+        )
     except (UnicodeDecodeError, csv.Error):
         raise ValueError("Invalid WPS SIF encoding or CSV records") from None
     if not 1 <= len(records) <= 5001 or any(
-        len(r) != 10 or any(len(v) > 4000 for v in r) for r in records
+        len(r) != 10 or any(len(v) > 4000 or "\r" in v or "\n" in v for v in r) for r in records
     ):
-        raise ValueError("The supported WPS profile requires ten fields per EDR/SCR record")
+        raise ValueError(
+            "The supported WPS profile requires ten single-line fields per EDR/SCR record"
+        )
     if records[-1][0] != "SCR" or any(r[0] != "EDR" for r in records[:-1]):
         raise ValueError(
             "The supported WPS profile requires EDR records followed by exactly one SCR trailer"
@@ -658,6 +664,8 @@ def wps(content, data, filename):
         raise ValueError("WPS SCR total salary does not agree to fixed plus variable income")
     return rows, {
         "employer_registration": employer,
+        "record_boundary_contract": WPS_RECORD_CONTRACT,
+        "physical_record_count": len(records),
         "salary_month": salary_month,
         "employee_count": len(rows),
         "fixed_total": str(fixed_total),

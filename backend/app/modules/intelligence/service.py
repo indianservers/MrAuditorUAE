@@ -194,6 +194,19 @@ async def _head(db, ctx, obj):
 async def current(db, ctx, obj, visited=None):
     if obj.tenant_id != ctx.tenant_id:
         return False
+    # EVP has enforced strict raw record boundaries since its introduction.
+    if (
+        getattr(obj, "kind", None) == "workflow-source"
+        and obj.body.get("native_format") == "uae-wps-sif"
+    ):
+        from app.modules.country_workflows.native_sources import WPS_RECORD_CONTRACT
+
+        metadata = obj.body.get("native_metadata")
+        if (
+            not isinstance(metadata, dict)
+            or metadata.get("record_boundary_contract") != WPS_RECORD_CONTRACT
+        ):
+            return False
     if (
         getattr(obj, "kind", None) == "country-workflow"
         and obj.body.get("workflow") == "india-payroll-rules"
