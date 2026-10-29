@@ -8,6 +8,18 @@ import {
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { CountryWorkflows } from "@/features/country-workflows";
 
+it.each([undefined,"india-monthly-rule-intersections/1","india-monthly-rule-intersections/2"])("requires current India payroll policy selection before approval or remittance (%s)",(contract)=>{
+  state.country="IN";
+  state.result={id:"result",kind:"country-workflow",version:1,freshness:"CURRENT",body:{workflow:"india-payroll-rules",title:"Saved payroll contributions",review_status:"REVIEWED",blocked:false,payroll_rule_selection_contract:contract,expected_total_complete:true,rows:[{id:"P1",subject:"EMP",period:"2026-06",component:"PF:EMPLOYEE",currency:"INR",expected_amount:"1800",reported_amount:"1800",difference:"0",state:"MATCHED"}]}};
+  render(<CountryWorkflows eid="engagement" mode="country-workflow"/>);
+  fireEvent.change(screen.getByLabelText("Saved source or result"),{target:{value:"result"}});
+  const current=contract==="india-monthly-rule-intersections/2";
+  expect(screen.queryByRole("region",{name:"Payroll policy selection version"})===null).toBe(current);
+  expect(screen.queryByRole("region",{name:"Expected contribution remittances"})!==null).toBe(current);
+  expect(screen.getByRole("button",{name:"Independent approval"})).toHaveProperty("disabled",!current);
+  expect(screen.getByRole("cell",{name:"EMP"})).toBeVisible();
+});
+
 it.each([["AE",false],["IN",true]])("offers establishment charge sources only for India (%s)",(country,available)=>{
   state.country=String(country);
   render(<CountryWorkflows eid="engagement" mode="workflow-source"/>);

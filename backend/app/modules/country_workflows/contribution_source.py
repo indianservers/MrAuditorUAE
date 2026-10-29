@@ -10,6 +10,7 @@ from fastapi import HTTPException
 from pydantic import Field, model_validator
 from starlette.concurrency import run_in_threadpool
 
+from app.modules.country_workflows.payroll_calculations import CONTRACT as PAYROLL_CONTRACT
 from app.modules.country_workflows.payroll_establishment_charges import CONTRACT as CHARGE_CONTRACT
 from app.modules.country_workflows.savings_scheme import CONTRACT as SAVINGS_CONTRACT
 from app.modules.country_workflows.savings_scheme import SavingsScope
@@ -73,6 +74,13 @@ def source_rows(body, data):
     pension = workflow == "uae-pension-review"
     savings = workflow == "uae-savings-review"
     charges = workflow == "india-establishment-charges"
+    if (
+        workflow == "india-payroll-rules"
+        and body.get("payroll_rule_selection_contract") != PAYROLL_CONTRACT
+    ):
+        raise ValueError(
+            "Regenerate India payroll with current whole-month policy intersection checks"
+        )
     if charges and (
         body.get("establishment_charge_contract") != CHARGE_CONTRACT
         or body.get("establishment_charge_document_binding") != "RETAINED_DOCUMENT_BYTES_VERIFIED"

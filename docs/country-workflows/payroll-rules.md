@@ -22,6 +22,10 @@ The UI defaults to the contribution comparison and totals. **Show rule provenanc
 
 Rules must cover the whole selected wage month. Mid-month changes require a separate supported assessment rather than an automatic prorating assumption. Source-based rounding options are nearest whole rupee, ceiling, floor or paise. These are calculation options; no option is automatically selected as legally applicable.
 
+The monthly rule selector checks every policy that intersects the wage month for the exact component, rule group, jurisdiction and assessed salary band. A competing policy beginning or ending during that month blocks resolution even when another policy covers the entire month; first-day and last-day intersections are included. Policies entirely outside the month or in another salary band do not compete. An unresolved EPS policy also leaves the employer PF residual unresolved, never zero.
+
+Current results carry `payroll_rule_selection_contract: india-monthly-rule-intersections/2`. Results without this contract, and records depending on them, become stale and require regeneration before new approval or downstream use. Original financial bodies remain unchanged. The result UI explains this requirement, disables approval and hides expected-remittance preparation for older versions. This is an implementation upgrade check; it does not establish a statutory rate or allow automatic mid-month contribution-rate proration.
+
 ## Source controls
 
 Preparing a rule source verifies every cited retained-document hash and links its evidence receipt to that source. Calculation rechecks original-file integrity. Superseded or quarantined documents make rule sources and dependent results stale. At most fifty distinct cited documents and 100 MiB of cited content are verified per preparation/calculation. Ordinary source CSV bounds still apply.

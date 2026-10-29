@@ -1,0 +1,150 @@
+{
+  "recorded_at": "2026-10-29T18:05:12.197622+00:00",
+  "feature": "India payroll whole-month policy intersections and upgrade freshness",
+  "contract": "india-monthly-rule-intersections/2",
+  "base_commit": "b6954e94ce46c52fe418800101fde1343e6bf2c9",
+  "problem": "A full-month rule previously hid competing partial-month rules for the same component, group, jurisdiction and salary band; this could also leave an employer PF residual resolved under an unresolved mid-month EPS policy.",
+  "observed_pre_fix_run": {
+    "passed": 19,
+    "failed": 6,
+    "policy_regression_failures": 5,
+    "separate_fixture_error": "The sixth failure was a CSV helper header mismatch in the other-band case; corrected by explicitly including threshold_from on both authored rules."
+  },
+  "change": [
+    "Consider every effective-date intersection before selecting a whole-month rule, including one-day intersections on either month boundary",
+    "Block partial/split/competing policy coverage instead of falling back to a full-month rule; preserve other-month and other-band exclusions",
+    "Unresolved EPS leaves the employer residual unresolved, never zero",
+    "Emit a current implementation contract; older results and their dependents become STALE without changing saved financial bodies",
+    "Prevent legacy approval and expected-remittance derivation; show regeneration guidance and disable approval/remittance preparation in UI"
+  ],
+  "receipts": [
+    {
+      "path": "docs/phase-12/payroll-policy-intersections-final.xml",
+      "sha256": "4591d4fdc0d90d316994b4a1816b3a31e50c712ebd5085002e4f67606a7bd9ba",
+      "size_bytes": 518633,
+      "counts": {
+        "tests": 3360,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 4
+      }
+    },
+    {
+      "path": "docs/phase-12/payroll-policy-intersections-frontend.xml",
+      "sha256": "ab8a7d8d3433eed3763c36760d75405eae8aa8a754fa10139938859924378668",
+      "size_bytes": 83340,
+      "counts": {
+        "tests": 348,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "sources": [
+    {
+      "path": ".gitattributes",
+      "sha256": "6e3d68aa5f0ae245a2425b4fe47691a7856eca777851bfad2447a04ef5d3e0d9",
+      "size_bytes": 1728,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/contribution_source.py",
+      "sha256": "5d847c4ee3e65c48eaa3b846f72f7595776e7e606a5e082ddb4703e75aef2814",
+      "size_bytes": 14081,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/payroll_calculations.py",
+      "sha256": "966c2ea6bc518e07d95c851fa6142f6222142797f05375df2e6c7677f081c4b8",
+      "size_bytes": 10453,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/review.py",
+      "sha256": "05477b8c40dc0edef3bc52844b4b670d4d32c1b286929776d730d36fa82495a3",
+      "size_bytes": 5288,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/app/modules/intelligence/service.py",
+      "sha256": "2903be49086d29dc18a29eb3b780afaa9b874bcccb50b5226eb04409795972e3",
+      "size_bytes": 49231,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_payroll_rule_workflow.py",
+      "sha256": "3bb80995c3c48d9d92a33b4f3206b78cec9f9f183187fb6559535fee8e1a4179",
+      "size_bytes": 11294,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/tests/unit/test_contribution_source.py",
+      "sha256": "06247f7db993ad7b5dcd452ccdeb736cf4b97bde122f10381a8faed03b659cff",
+      "size_bytes": 9565,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "backend/tests/unit/test_payroll_rule_workflow.py",
+      "sha256": "4b48b6a808c58e822a0df865182d8f4f3443e21030d83defa62d855e922ee770",
+      "size_bytes": 11544,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "docs/country-workflows/payroll-rules.md",
+      "sha256": "cda3e3920dd845319e7249dfada4030201ca389e0eaca430c187acf0bac356b3",
+      "size_bytes": 11400,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "4b0def925f41274d198ade4a1d653b6f4b85561cd5cdf902259d1453963abb88",
+      "size_bytes": 298193,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "f8687d65ea4432ebfd9c078892f3e1a234f3effd8722f713950a5e3300eea015",
+      "size_bytes": 162730,
+      "basis": "EXACT_STAGED_GIT_BLOB"
+    }
+  ],
+  "backend_scope": {
+    "passed": 3356,
+    "skipped": 4,
+    "unit_passes": 3341,
+    "selected_database_cases": 15,
+    "new_unit_cases": 10,
+    "new_database_cases": 2,
+    "population": "All current backend units plus monthly-payroll (5), published-profile (1), dated-PF-proration (3), establishment-charge (2), UAE-savings (4) HTTP/database/storage/processor cases; not the entire hosted backend suite",
+    "boundaries": "Owned disposable PostgreSQL/Redis/object storage; scanner and dispatch are explicit API doubles"
+  },
+  "legacy_upgrade_evidence": {
+    "simulation": "The API test temporarily selects a prior implementation contract to create a synthetic saved approval and expected source, then restores the current implementation; no real client or production record is changed",
+    "assertions": "Old approved parent and prepared expected source become STALE; both complete financial bodies remain equal; renewed approval and source derivation return 409",
+    "missing_contract": "Absence and prior-version remittance/approval rejection also tested separately in unit cases"
+  },
+  "frontend_scope": {
+    "passed": 348,
+    "files": 68,
+    "new_cases": 3,
+    "typecheck": "PASSED",
+    "production_build": "PASSED",
+    "lint": "PASSED_WITH_ONE_PREEXISTING_UNUSED_VARIABLE_WARNING"
+  },
+  "checks": {
+    "ruff": "PASSED, 743 formatted files",
+    "mypy": "PASSED, 402 app files",
+    "api_contract_snapshots": "MATCH_CURRENT_RUNTIME",
+    "frontend_api_types": "MATCH_OPENAPI",
+    "git_diff_check": "PASSED"
+  },
+  "hosted_status": "NEW APPLICATION SOURCE NOT YET PUSHED AT RECEIPT CREATION; subsequent hosted CI is required. Prior green runs do not establish this fix.",
+  "limits": [
+    "No rates, ceilings, eligibility, legal dates or statutory applicability inferred or installed",
+    "No automatic contribution-rate proration; dated wage-cap proration remains a separate workflow",
+    "Four local connector-infrastructure opt-in cases skipped; their prior supplemental proof remains separate",
+    "Authored synthetic rules/native ECR are test evidence, not real-client or approved statutory qualification",
+    "The previously rejected bulk global roadmap/checkpoint mutation was not retried; this is source-specific evidence"
+  ]
+}

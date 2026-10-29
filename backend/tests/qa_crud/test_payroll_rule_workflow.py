@@ -14,7 +14,7 @@ pytestmark = pytest.mark.skipif(
 )
 
 
-async def prepared(c, monkeypatch):
+async def prepared(c, monkeypatch, partial_policy=False):
     double_boundaries(monkeypatch)
     h, eid, base = await india_context(c)
     reviewer = await actor(h, "Firm Administrator", "payroll-source-reviewer")
@@ -35,6 +35,10 @@ async def prepared(c, monkeypatch):
     )
     assert legal.status_code == 201, legal.text
     bases, rules, _ = pf_fixture()
+    if partial_policy:
+        rules.append(
+            {**rules[1], "id": "PARTIAL-EPS", "effective_from": "2026-06-16", "rate": "0.10"}
+        )
     for rule in rules:
         rule.update(
             source_evidence_version_id=legal.json()["id"], source_sha256=legal.json()["sha256"]
@@ -206,3 +210,67 @@ async def test_selected_retained_document_fills_missing_citation_fields_without_
         rule_document_version_id=legal["id"],
         failed="CSV rule document differs",
     )
+
+
+async def test_partial_month_policy_blocks_approved_native_comparison_and_remittance(
+    environment, monkeypatch
+):
+    c = environment
+    h, eid, _, reviewer, _, _, _, payload, _ = await prepared(c, monkeypatch, partial_policy=True)
+    prefix = f"/api/v1/intelligence/engagements/{eid}"
+    for role, identifier in list(payload["source_ids"].items()):
+        obj = (await c.get(prefix + "/events/" + identifier, headers=h)).json()
+        response = await decision(c, reviewer[0], eid, obj)
+        assert response.status_code == 201, response.text
+        payload["source_ids"][role] = response.json()["id"]
+    result = await execute(c, h, eid, "country-workflow", payload)
+    rows = {row["component"]: row for row in result["body"]["rows"]}
+    assert result["body"]["blocked"] and not result["body"]["expected_total_complete"]
+    assert rows["PF:EMPLOYEE"]["expected_amount"] == "1800"
+    assert rows["PF:EPS"]["expected_amount"] is None
+    assert rows["PF:EPS"]["state"] == "RULE_MISSING_OR_SPLIT_PERIOD"
+    assert rows["PF:EMPLOYER"]["state"] == "PENSION_COMPONENT_UNRESOLVED"
+    response = await decision(c, reviewer[0], eid, result)
+    assert response.status_code == 409, response.text
+
+
+async def test_approved_legacy_calculation_cannot_bypass_current_intersection_checks(
+    environment, monkeypatch
+):
+    from copy import deepcopy
+
+    from app.modules.country_workflows import contribution_source, payroll_calculations
+    from tests.unit.test_contribution_source import request
+
+    c = environment
+    h, eid, _, reviewer, _, legal, _, payload, _ = await prepared(c, monkeypatch)
+    prefix = f"/api/v1/intelligence/engagements/{eid}"
+    for role, identifier in list(payload["source_ids"].items()):
+        obj = (await c.get(prefix + "/events/" + identifier, headers=h)).json()
+        response = await decision(c, reviewer[0], eid, obj)
+        assert response.status_code == 201, response.text
+        payload["source_ids"][role] = response.json()["id"]
+    # Simulate a saved approval from the prior engine contract, then upgrade.
+    with monkeypatch.context() as legacy:
+        legacy.setattr(payroll_calculations, "CONTRACT", "india-monthly-rule-intersections/1")
+        legacy.setattr(
+            contribution_source, "PAYROLL_CONTRACT", "india-monthly-rule-intersections/1"
+        )
+        result = await execute(c, h, eid, "country-workflow", payload)
+        response = await decision(c, reviewer[0], eid, result)
+        assert response.status_code == 201, response.text
+        result = response.json()
+        bridge = request("IN").model_dump(mode="json")
+        bridge.update(result_id=result["id"], due_date_evidence_version_id=legal["id"])
+        response = await c.post(prefix + "/contribution-obligation-source", headers=h, json=bridge)
+        assert response.status_code == 201, response.text
+        expected = response.json()
+    original = deepcopy(result["body"])
+    original_expected = deepcopy(expected["body"])
+    assert (await decision(c, reviewer[0], eid, result)).status_code == 409
+    response = await c.post(prefix + "/contribution-obligation-source", headers=h, json=bridge)
+    assert response.status_code == 409, response.text
+    saved = (await c.get(prefix + "/events/" + result["id"], headers=h)).json()
+    assert saved["body"] == original and saved["freshness"] == "STALE"
+    saved_expected = (await c.get(prefix + "/events/" + expected["id"], headers=h)).json()
+    assert saved_expected["body"] == original_expected and saved_expected["freshness"] == "STALE"

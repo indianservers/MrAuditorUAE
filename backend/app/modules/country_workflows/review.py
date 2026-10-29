@@ -1,6 +1,12 @@
 def approval_error(body):
     from app.modules.intelligence.matching_review import saved_candidates_complete
 
+    if body.get("workflow") == "india-payroll-rules":
+        from app.modules.country_workflows.payroll_calculations import CONTRACT
+
+        if body.get("payroll_rule_selection_contract") != CONTRACT:
+            return "Regenerate India payroll with current whole-month policy intersection checks"
+
     if body.get("workflow") == "uae-savings-review" and (
         body.get("savings_contribution_contract") != "uae-savings-basic-contributions/1"
         or body.get("savings_document_binding") != "RETAINED_DOCUMENT_BYTES_VERIFIED"

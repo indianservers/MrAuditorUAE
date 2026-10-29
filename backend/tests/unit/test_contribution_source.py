@@ -67,6 +67,21 @@ def test_india_keeps_pf_employee_pension_and_employer_distinct():
     assert all("pension_scope" not in row for row in rows)
 
 
+@pytest.mark.parametrize("contract", [None, "india-monthly-rule-intersections/1"])
+def test_old_payroll_results_need_regeneration_before_approval_or_remittance(contract):
+    from app.modules.country_workflows.review import approval_error
+
+    body = payroll_run(*pf_fixture())
+    assert approval_error(body) is None
+    if contract is None:
+        body.pop("payroll_rule_selection_contract")
+    else:
+        body["payroll_rule_selection_contract"] = contract
+    assert "Regenerate India payroll" in approval_error(body)
+    with pytest.raises(ValueError, match="Regenerate India payroll"):
+        source_rows(body, request("IN"))
+
+
 @pytest.mark.parametrize(
     "field,value",
     [("amount", "700.01"), ("expected_rows", 2), ("period", "2026-05"), ("registration", "OTHER")],

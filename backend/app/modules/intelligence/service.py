@@ -194,6 +194,14 @@ async def _head(db, ctx, obj):
 async def current(db, ctx, obj, visited=None):
     if obj.tenant_id != ctx.tenant_id:
         return False
+    if (
+        getattr(obj, "kind", None) == "country-workflow"
+        and obj.body.get("workflow") == "india-payroll-rules"
+    ):
+        from app.modules.country_workflows.payroll_calculations import CONTRACT
+
+        if obj.body.get("payroll_rule_selection_contract") != CONTRACT:
+            return False
     if getattr(obj, "kind", None) in {"workflow-source", "country-workflow"} and (
         obj.body.get("workflow") == "india-msme-payment-timing"
         or str(obj.body.get("table_type") or "").startswith("msme-")

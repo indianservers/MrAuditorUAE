@@ -183,6 +183,59 @@ def test_overlapping_rules_do_not_select_arbitrarily():
     assert result["blocked"] and result["rows"][0]["state"] == "AMBIGUOUS_RULE"
 
 
+@pytest.mark.parametrize(
+    "dates",
+    [
+        {"effective_from": "2026-06-16"},
+        {"effective_to": "2026-06-15"},
+        {"effective_from": "2026-06-30"},
+        {"effective_to": "2026-06-01"},
+    ],
+)
+def test_whole_month_policy_does_not_hide_a_competing_partial_month_policy(dates):
+    result = run([basis()], [rule(), rule(id="PARTIAL", rate="0.10", **dates)], [reported()])
+    assert result["blocked"]
+    assert result["rows"][0]["state"] == "RULE_MISSING_OR_SPLIT_PERIOD"
+    assert result["rows"][0]["expected_amount"] is None
+    assert result["expected_total_complete"] is False
+
+
+@pytest.mark.parametrize(
+    "dates",
+    [
+        {"effective_to": "2026-05-31"},
+        {"effective_from": "2026-07-01"},
+    ],
+)
+def test_rules_outside_the_wage_month_do_not_compete(dates):
+    result = run([basis()], [rule(), rule(id="OUTSIDE", rate="0.10", **dates)], [reported()])
+    assert not result["blocked"] and result["rows"][0]["state"] == "MATCHED"
+
+
+def test_partial_month_eps_policy_cannot_be_replaced_by_zero_in_employer_residual():
+    bases, rules, actual = pf_fixture()
+    rules.append(rule("PF:EPS", id="CHANGED-EPS", effective_from="2026-06-16", rate="0.10"))
+    result = run(bases, rules, actual)
+    indexed = {row["component"]: row for row in result["rows"]}
+    assert result["blocked"] and not result["expected_total_complete"]
+    assert indexed["PF:EMPLOYEE"]["expected_amount"] == "1800"
+    assert indexed["PF:EPS"]["expected_amount"] is None
+    assert indexed["PF:EMPLOYER"]["expected_amount"] is None
+    assert indexed["PF:EMPLOYER"]["state"] == "PENSION_COMPONENT_UNRESOLVED"
+
+
+def test_partial_policy_for_another_salary_band_does_not_compete():
+    result = run(
+        [basis()],
+        [
+            rule(threshold_from="0"),
+            rule(id="OTHER-BAND", effective_from="2026-06-16", threshold_from="30000"),
+        ],
+        [reported()],
+    )
+    assert not result["blocked"] and result["rows"][0]["state"] == "MATCHED"
+
+
 def test_missing_pension_is_not_zero_and_excluded_pension_is_explicit():
     bases, rules, actual = pf_fixture()
     missing = run([row for row in bases if row["component"] != "PF:EPS"], rules, actual)

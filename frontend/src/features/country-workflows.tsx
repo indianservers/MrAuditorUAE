@@ -299,6 +299,7 @@ type Result = {
   collection_totals?: Record<string, number>;
   body: {
     workflow?: string;
+    payroll_rule_selection_contract?: string;
     savings_contribution_contract?: string;
     establishment_charge_contract?: string;
     establishment_charge_document_binding?: string;
@@ -788,6 +789,10 @@ export function CountryWorkflows({
     (f) => f.id === sourceFormat,
   );
   const body = detail.data?.body;
+  const obsoletePayrollPolicySelection =
+    body?.workflow === "india-payroll-rules" &&
+    body.payroll_rule_selection_contract !==
+      "india-monthly-rule-intersections/2";
   const compactVAT = body?.workflow === "uae-vat-return";
   const rows: Record<string, unknown>[] =
     body?.workflow === "india-document-series" && !showRuleProvenance
@@ -6124,11 +6129,24 @@ export function CountryWorkflows({
                 onCreated={setSelected}
               />
             )}
-          {[
-            "uae-pension-review",
-            "india-payroll-rules",
-            "india-establishment-charges",
-          ].includes(body.workflow || "") &&
+          {obsoletePayrollPolicySelection && (
+            <section
+              aria-label="Payroll policy selection version"
+              className="main-panel"
+            >
+              <p>
+                Regenerate India payroll with current whole-month policy
+                intersection checks before approval or remittance preparation.
+                The recorded amounts in this saved result are preserved.
+              </p>
+            </section>
+          )}
+          {!obsoletePayrollPolicySelection &&
+            [
+              "uae-pension-review",
+              "india-payroll-rules",
+              "india-establishment-charges",
+            ].includes(body.workflow || "") &&
             detail.data.freshness === "CURRENT" &&
             body.review_status === "REVIEWED" &&
             !body.blocked &&
@@ -6975,6 +6993,7 @@ export function CountryWorkflows({
               disabled={
                 action.isPending ||
                 detail.data.freshness !== "CURRENT" ||
+                obsoletePayrollPolicySelection ||
                 !!body.blocked
               }
               onClick={() => decide("approve")}

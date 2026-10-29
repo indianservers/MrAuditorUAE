@@ -6,6 +6,8 @@ from datetime import date
 from decimal import ROUND_CEILING, ROUND_FLOOR, ROUND_HALF_UP, Decimal
 from typing import Any
 
+CONTRACT = "india-monthly-rule-intersections/2"
+
 
 def key(row):
     return (
@@ -51,17 +53,26 @@ def payroll_rules(data, tables):
         if last > data.as_of:
             raise ValueError("Payroll wage month closes after the reconciliation date")
         base = Decimal(row["amount"])
-        rules = [
+        overlapping = [
             rule
             for rule in rule_groups[(row["rule_group"], row["component"], row["jurisdiction"])]
-            if date.fromisoformat(rule["effective_from"]) <= first
+            if date.fromisoformat(rule["effective_from"]) <= last
             and (
                 "selected_wage_months" not in rule or row["period"] in rule["selected_wage_months"]
             )
-            and date.fromisoformat(rule["effective_to"]) >= last
+            and date.fromisoformat(rule["effective_to"]) >= first
             and Decimal(rule["threshold_from"]) <= base
             and (rule["threshold_to"] is None or base < Decimal(rule["threshold_to"]))
         ]
+        rules = [
+            rule
+            for rule in overlapping
+            if date.fromisoformat(rule["effective_from"]) <= first
+            and date.fromisoformat(rule["effective_to"]) >= last
+        ]
+        if len(rules) != len(overlapping):
+            problems[identity] = "RULE_MISSING_OR_SPLIT_PERIOD"
+            continue
         if len(rules) != 1:
             problems[identity] = "RULE_MISSING_OR_SPLIT_PERIOD" if not rules else "AMBIGUOUS_RULE"
             continue
@@ -196,6 +207,7 @@ def payroll_rules(data, tables):
         "expected_total_basis": "RESOLVED_ASSESSED_COMPONENTS_ONLY_NOT_GROSS_PAYROLL",
         "reported_total": str(sum((row["amount"] for row in reported.values()), Decimal(0))),
         "currency": "INR",
+        "payroll_rule_selection_contract": CONTRACT,
         "limitations": [
             "Rates, wage bases, membership, continuity, exemptions and jurisdiction/cohort choices are explicit reviewed inputs; no legal entitlement is inferred",
             "Each selected rule must cover the whole wage month; mid-month changes require a separate supported assessment",
