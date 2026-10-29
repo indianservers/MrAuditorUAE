@@ -1,0 +1,68 @@
+{
+  "contract": "merchant-reserve-browser/1",
+  "date": "2026-10-29",
+  "source_commit": "9ba08d4920c598b1137761180e246858a71d1e1f",
+  "run_id": 40879567200,
+  "job_id": 123467139124,
+  "job_url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40879567200/job/123467139124",
+  "conclusion": "success",
+  "reported_cases_passed": 3,
+  "reported_duration": "1.7m",
+  "artifact": {
+    "id": 12900225959,
+    "size_bytes": 3235147,
+    "sha256": "c312578d445b43305314b4896df175786814630c6cbeb7b4e41c00da17a61368",
+    "download_digest_verified": true
+  },
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-reserve-ledger-withdrawn-stale-9ba08d4.png",
+      "sha256": "a8967d44c0b06a0bae93c0a3125c187287e9177b9ece9447b313e51242944724",
+      "size_bytes": 114005,
+      "width": 1563,
+      "height": 1063,
+      "individually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/AE-reserve-reviewed-ledger-9ba08d4.png",
+      "sha256": "67293159717b3070269e43c62bfb203dfc27f0e6df14e71bbdc49ff6d3c68a71",
+      "size_bytes": 116405,
+      "width": 1563,
+      "height": 1063,
+      "individually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-reserve-ledger-withdrawn-stale-9ba08d4.png",
+      "sha256": "664248d774684a1cb92d1d5e6cb084b835e8770202a2d0b8438dd61f83ca3527",
+      "size_bytes": 113617,
+      "width": 1563,
+      "height": 1063,
+      "individually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-reserve-reviewed-ledger-9ba08d4.png",
+      "sha256": "c83d79eb4a72061436ec57031690768917a49e26640824a77816aa8665499d87",
+      "size_bytes": 116014,
+      "width": 1563,
+      "height": 1063,
+      "individually_inspected": true
+    }
+  ],
+  "coverage": [
+    "Existing AE report/native-bank/gratuity/merchant, IN report/MSE/merchant and session cases retained; both merchant cases now include reserve continuity",
+    "Reuse the original independently reviewed processor source; API prepare/review three controlled movement/balance/GL sources using the real scanner/broker/worker",
+    "UI selects four sources, reporting period and original currency, queues calculation and independently approves the result",
+    "UI downloads original XLSX; Python reads bytes and asserts complete two-movement sheet, final balance 145 and one balance-account link",
+    "API withdraws the ledger source review; dependent result becomes STALE, complete saved financial body remains structurally equal, and UI independent approval is disabled",
+    "All four original result-card images individually inspected: AE/AED and IN/INR, 100 opening, 50 held, 5 released, 145 closing, three matched rows, current/reviewed versus stale/disabled approval"
+  ],
+  "limits": [
+    "Synthetic mechanics only; not independent client or country legal qualification",
+    "Three browser cases are not 154 browser scenarios",
+    "Source preparation/reviews and withdrawal use APIs; reserve calculation, final approval, download and stale-state assertions use UI",
+    "New source controls widget has unit/integrated UI tests, not a hosted upload-form screenshot in this run",
+    "Collapsed provenance means screenshots do not show individual movement dates/sequence; those are retained in result/export and calculation tests",
+    "No processor authentication, bank receipt, legal reserve ownership, FX, impairment or payment instruction established",
+    "Full current hosted backend regression is still running and must be observed separately"
+  ]
+}

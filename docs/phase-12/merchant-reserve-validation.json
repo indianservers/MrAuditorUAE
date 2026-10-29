@@ -38,13 +38,13 @@
     "mypy": "396 source files passed",
     "api_contracts": "current runtime snapshots verified; frontend types regenerated"
   },
-  "browser": "Extended both hosted country cases to reuse the reviewed processor source, calculate/review/export reserve continuity in UI and withdraw GL review; not executed on this source yet",
+  "browser": "All three hosted cases passed on 9ba08d4 in 1.7m, including new AE/IN reserve UI calculation/review/XLSX and withdrawn-ledger staleness. Original artifact digest verified and all four exact result images individually inspected; see merchant-reserve-browser-9ba08d4.json.",
   "limits": [
     "Authored synthetic examples only; no independent client or statutory qualification",
     "API tests use real database, HTTP, storage and job processor with explicit scanner/dispatch doubles",
     "Focused API receipt has two new AE/IN reserve workflows plus two existing merchant workflows",
     "No processor authentication, bank receipt, FX, impairment, reserve ownership or payment instruction established",
-    "Full hosted backend, browser, security and container checks must be observed for this source separately"
+    "Five of six current hosted jobs passed; complete backend verify remains running and is not yet claimed as passing"
   ],
   "normalized_lf_sources": [
     {
@@ -115,5 +115,53 @@
       "path": "frontend/tests/merchant-reserve-controls.test.tsx",
       "sha256": "0e8b24f8c0fe08aa5f18ce28883e00a373c88a3d2038ad695fa61cc9132014ab"
     }
-  ]
+  ],
+  "source_commit": "9ba08d4920c598b1137761180e246858a71d1e1f",
+  "hosted_checkpoint": {
+    "run_id": 40879567200,
+    "source_commit": "9ba08d4920c598b1137761180e246858a71d1e1f",
+    "jobs": {
+      "security": {
+        "id": 123467138621,
+        "conclusion": "success",
+        "status": "completed"
+      },
+      "ml": {
+        "id": 123467139624,
+        "conclusion": "success",
+        "status": "completed"
+      },
+      "frontend": {
+        "id": 123467138929,
+        "status": "completed",
+        "conclusion": "success"
+      },
+      "browser-smoke": {
+        "id": 123467139124,
+        "status": "completed",
+        "conclusion": "success"
+      },
+      "containers": {
+        "id": 123467139140,
+        "status": "completed",
+        "conclusion": "success"
+      },
+      "verify": {
+        "id": 123467139159,
+        "status": "in_progress"
+      }
+    },
+    "interpretation": "Observed live job handles; not final conclusions. Re-query run/jobs before using these states.",
+    "observed_at_utc": "2026-10-29T13:17:34Z",
+    "separate_frontend": {
+      "run_id": 40879567139,
+      "job_id": 123467137482,
+      "conclusion": "success",
+      "tests_passed": 307,
+      "files_passed": 65,
+      "production_build": "passed",
+      "audit": "zero reported vulnerabilities"
+    }
+  },
+  "browser_receipt": "docs/phase-12/merchant-reserve-browser-9ba08d4.json"
 }

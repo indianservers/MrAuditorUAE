@@ -82,3 +82,35 @@ bank workflow retains its own document-link and authentication limits. Source
 completeness, opening balance validity, original statement chronology and account
 mapping still require an independent human assessment. Synthetic examples and
 automated tests do not qualify actual clients or legal cohorts.
+
+## Retained verification
+
+On application commit `9ba08d4`, local validation passed 3,203 backend unit tests
+(five skipped), four focused database/API workflows and 307 frontend tests across
+65 files, plus production build, TypeScript, Ruff and mypy. The API receipt
+contains the two new country reserve flows and two existing payout flows. Scanner
+and dispatch are explicit doubles in those API tests. The 401-movement export
+unit case verifies complete individual records beyond a single Excel cell limit.
+
+All three hosted browser cases passed in 1.7 minutes on the same application
+source, using the real scanner, broker and worker. Both country cases reuse a
+reviewed processor source, calculate and independently approve reserves in UI,
+download and inspect XLSX, then withdraw the GL source review and verify staleness
+without changing saved financial rows. Source preparation/reviews use APIs. The
+new upload-controls widget is covered by frontend tests; no hosted screenshot of
+that upload form is claimed here.
+
+The original artifact digest and four individually inspected result images are
+retained in [the browser receipt](../phase-12/merchant-reserve-browser-9ba08d4.json):
+
+- [UAE reviewed reserve result](screenshots/browser-workflows/AE-reserve-reviewed-ledger-9ba08d4.png)
+- [UAE withdrawn ledger source](screenshots/browser-workflows/AE-reserve-ledger-withdrawn-stale-9ba08d4.png)
+- [India reviewed reserve result](screenshots/browser-workflows/IN-reserve-reviewed-ledger-9ba08d4.png)
+- [India withdrawn ledger source](screenshots/browser-workflows/IN-reserve-ledger-withdrawn-stale-9ba08d4.png)
+
+These images show 100 opening, separate holds of 50 and releases of 5, closing 145,
+the position/GL/batch rows and disabled stale approval. Individual dated movement
+details are retained in the body and export, but collapsed provenance is not
+visual evidence of those details. Five hosted CI jobs passed on this source;
+complete current backend regression is still running at this checkpoint. Prior
+full-suite proof on `b315b53` does not verify the reserve changes.
