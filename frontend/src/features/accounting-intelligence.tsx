@@ -22,6 +22,7 @@ import {
   type BankAmbiguity,
 } from "./bank-matching-candidates";
 import { CountryWorkflows } from "./country-workflows";
+import { StatutoryReportPreview } from "./statutory-report-preview";
 import { IntelligenceExports } from "./intelligence-exports";
 import { PDFGridEditor, buildPDFGrid, emptyPDFGrid } from "./pdf-grid-editor";
 
@@ -994,6 +995,14 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
               />
             </div>
             <p className="subtle">SHA-256: {detail.data.sha256}</p>
+            {detail.data.kind === "statutory-report" && body && (
+              <StatutoryReportPreview
+                key={selected}
+                body={body}
+                freshness={detail.data.freshness}
+                eid={eid}
+              />
+            )}
             {body?.fields && typeof body.fields === "object" ? (
               <div className="toolbar" style={{ alignItems: "start" }}>
                 <div style={{ flex: 1 }}>

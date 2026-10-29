@@ -1,7 +1,11 @@
 import { defineConfig } from "@playwright/test";
 export default defineConfig({
   testDir: "./e2e",
-  testMatch: ["release-smoke.spec.ts", "country-report-release.spec.ts"],
+  testMatch: [
+    "release-smoke.spec.ts",
+    "country-report-release.spec.ts",
+    "form26-fields-release.spec.ts",
+  ],
   workers: 1,
   reporter: "list",
   use: {

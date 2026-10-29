@@ -251,15 +251,18 @@ for (const code of ["AE", "IN"] as const) {
         })
         .selectOption("india-form26-index:A/1");
       await expect(
+        page.getByLabel("Evidence/calculation source required for item 1", {
+          exact: true,
+        }),
+      ).toBeDisabled();
+      await page
+        .getByLabel("Search report requirements", { exact: true })
+        .fill("form26.schedule.quantities");
+      await expect(
         page.getByLabel("Requirement reference 65", { exact: true }),
       ).toHaveValue("form26.schedule.quantities");
       await expect(
         page.getByLabel("Requirement reference 65", { exact: true }),
-      ).toBeDisabled();
-      await expect(
-        page.getByLabel("Evidence/calculation source required for item 1", {
-          exact: true,
-        }),
       ).toBeDisabled();
       await expect(
         page.getByRole("button", {

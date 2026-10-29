@@ -1,0 +1,87 @@
+{
+  "contract": "saved-report-preview-validation/1",
+  "frontend": {
+    "passed": 373,
+    "failures": 0,
+    "receipt": "docs/phase-12/report-preview-frontend.xml"
+  },
+  "checks": {
+    "production_build": "passed",
+    "typescript": "passed",
+    "eslint": "passed with pre-existing unused-variable warning",
+    "seed_script_ruff": "passed",
+    "seed_script_format": "passed"
+  },
+  "implemented": [
+    "Shared UAE and India saved statutory report preview; saved scope, template receipt, draft status and stale warning",
+    "Complete requirement and report-block pagination, exact saved source row/financial table values and lazy full source content",
+    "Four isolated synthetic identities for preparer, audit-manager, audit-partner and independent template reviewer",
+    "Browser scenarios for both new report parts with all 877 keys retained, last-field UI amendment, hidden block selection retention, independent review, generation, XLSX and historical staleness checks"
+  ],
+  "prior_browser_failure": {
+    "source_commit": "2b6653e0e1f46d12a7fc9e63c8dbfdf8d57ec24a",
+    "run_id": 40972345889,
+    "job_id": 123791899299,
+    "failed_cases": 1,
+    "passed_cases": 2,
+    "failure": "Existing India test tried to locate requirement 65 on the first 20-item page",
+    "correction": "Assert first-item guard before filtering, then use actual requirement search to locate item 65"
+  },
+  "new_browser_verification": "PENDING_HOSTED_EXECUTION; source setup is API-based and source files are synthetic; no new capture claimed yet",
+  "limits": [
+    "Read-only preview does not change saved report data, evidence decisions, calculations or authentication",
+    "Full original source content remains available; displayed field coverage does not qualify statutory completeness, a signed opinion or filing",
+    "b03cf19 hosted receipts are exact older-source evidence and do not qualify this preview or expanded inventory",
+    "Real client, current legal/professional and production qualification remain open"
+  ],
+  "staged_sources": [
+    {
+      "path": ".gitattributes",
+      "sha256": "773a498b66800b73b42310e3b6a495e9b50c6af6b7816ca1e446ab919ecff48b"
+    },
+    {
+      "path": "docs/phase-12/b03cf19-hosted-coverage.json",
+      "sha256": "41c5a19322a016bbb760176eb2eb8bb4a4577905f848b31ddb3bc7a75473bc0d"
+    },
+    {
+      "path": "docs/phase-12/b03cf19-hosted-full.xml",
+      "sha256": "8cdc547aaed279aae3267f48089d4b5345d87dd81ef0664b3ed4b8bbd3a6bf58"
+    },
+    {
+      "path": "docs/phase-12/b03cf19-hosted-verification.json",
+      "sha256": "4fb36c7498a74b8e23d70bb5723cd04c14581c3e5748670963a69055a0df2edf"
+    },
+    {
+      "path": "docs/phase-12/report-preview-frontend.xml",
+      "sha256": "68de2157213a29b182b8be1ba1ac2dd2620f8695a5faeb8fe5d910d170eda7fb"
+    },
+    {
+      "path": "frontend/e2e/country-report-release.spec.ts",
+      "sha256": "fe359bfb67d8f44ecf665bd5964ee6dc451d2013098935c64ee99a43e860c709"
+    },
+    {
+      "path": "frontend/e2e/form26-fields-release.spec.ts",
+      "sha256": "f3f5ccf5a74bdfde6f1db64e8ea2ccbaee3745fd8e525320c35833a89042955a"
+    },
+    {
+      "path": "frontend/playwright.smoke.config.ts",
+      "sha256": "8859811f37d2186ce864d3cd76152736cee8ef8490b6c46583d5adcf7c9a247e"
+    },
+    {
+      "path": "frontend/src/features/accounting-intelligence.tsx",
+      "sha256": "032f2bf28842a48f676cf54aaae1abad5b265cea46cfeacc15722a823b10f03f"
+    },
+    {
+      "path": "frontend/src/features/statutory-report-preview.tsx",
+      "sha256": "53209c7fc1ec6d9bcc84ce0c682037e8a79803db100a41391fd0a718942a2dbf"
+    },
+    {
+      "path": "frontend/tests/statutory-report-preview.test.tsx",
+      "sha256": "9b25735464d87e552d60e276b8affe615f7f47d1c291f0773b918053ca41d754"
+    },
+    {
+      "path": "scripts/seed_release_smoke.py",
+      "sha256": "46e37a6d29fa85024be24db98cd8bfb1f594c4787148ce662a8419444af4bcfb"
+    }
+  ]
+}

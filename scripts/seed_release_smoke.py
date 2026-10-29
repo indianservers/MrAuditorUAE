@@ -61,6 +61,37 @@ async def main():
             "reviewer_membership_id": str(reviewer_membership.id),
             "reviewer_role_id": str(role.id),
         }
+        for name, role_name in [
+            ("manager", "Audit Manager"),
+            ("partner", "Audit Partner"),
+        ]:
+            email = f"release-{name}@synthetic.example"
+            if email in {owner.email, reviewer_email}:
+                raise ValueError(
+                    "Distinct synthetic preparer and review-stage identities required"
+                )
+            selected_role = await db.scalar(select(Role).where(Role.name == role_name))
+            stage_user = User(
+                email=email,
+                password_hash=hash_password(os.environ["AUDITOS_SMOKE_PASSWORD"]),
+            )
+            db.add(stage_user)
+            await db.flush()
+            stage_member = Membership(
+                tenant_id=membership.tenant_id, user_id=stage_user.id
+            )
+            db.add(stage_member)
+            await db.flush()
+            db.add(
+                MembershipRole(membership_id=stage_member.id, role_id=selected_role.id)
+            )
+            identities.update(
+                {
+                    f"{name}_email": email,
+                    f"{name}_membership_id": str(stage_member.id),
+                    f"{name}_role_id": str(selected_role.id),
+                }
+            )
     target = (
         Path(__file__).resolve().parents[1]
         / ".local-runtime/release-smoke/identities.json"

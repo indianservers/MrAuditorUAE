@@ -56,3 +56,7 @@ docs/phase-12/report-navigation-frontend.xml -text
 docs/phase-12/81a448d-hosted-full.xml -text
 docs/phase-12/81a448d-hosted-coverage.json -text
 docs/phase-12/form26-fields-*.xml -text
+
+docs/phase-12/report-preview-frontend.xml -text
+docs/phase-12/b03cf19-hosted-full.xml -text
+docs/phase-12/b03cf19-hosted-coverage.json -text
