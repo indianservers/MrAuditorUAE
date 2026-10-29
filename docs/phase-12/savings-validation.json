@@ -1,0 +1,207 @@
+{
+  "contract": "savings-basic-contribution-validation/1",
+  "date": "2026-10-29",
+  "source_commit": "b3c308210a633824d7b31ee00e4f201a0ecbc945",
+  "observed_at_utc": "2026-10-29T16:29:56.745152+00:00",
+  "receipts": [
+    {
+      "path": "docs/phase-12/savings-backend.xml",
+      "sha256": "84fb723e30fa4f89a1387e389307db37a3ab129a8faf445feea2843208c632fd",
+      "size_bytes": 510697,
+      "tests": 3310,
+      "passed": 3306,
+      "skipped": 4,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "path": "docs/phase-12/savings-api.xml",
+      "sha256": "c1ae70bc57d9f9f5a637bb5578c12686332b48635271e380ea95f4ade2273b7f",
+      "size_bytes": 1765,
+      "tests": 9,
+      "passed": 9,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    },
+    {
+      "path": "docs/phase-12/savings-frontend.xml",
+      "sha256": "786f395b9a5616fceb1cd25f385e992c75daf36441f6018fa35ec33afd1f92dd",
+      "size_bytes": 81188,
+      "tests": 338,
+      "passed": 338,
+      "skipped": 0,
+      "failures": 0,
+      "errors": 0
+    }
+  ],
+  "source_files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "a29b3673de39a9ba12b285a13e4a73711e7ddec0ab8d6291d1dc7376b0ae73d0"
+    },
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "sha256": "72415dce6a561199566c95f4cdaab712f98b5d606c435ebfa8af3d98703eb16d"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/calculations.py",
+      "sha256": "761bae6a128786ea9a75bc9b5f8e2981ffd8baff7f9701767d56a0358e3db538"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/catalogue.py",
+      "sha256": "3919c74489696467aa29da0f00a1162b376ea41cc33e95431cad4e3c0168afa4"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/contribution_source.py",
+      "sha256": "4b269b2a7c2e9eac183993ad26a89214303876f6d388be463a308a18dd624abb"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/dues_allocations.py",
+      "sha256": "bcb475e95c3b6aa5754e5d65f2e93618a4f8e5a408fc6645590b3cdbc368bd63"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/obligation_scope.py",
+      "sha256": "ee454f8b21a5ce064b6b5dd9edec917601086af597de3711ed182cda171982bb"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/review.py",
+      "sha256": "bc15fb4d225bfbc4ead4cd499fc4437b61ab2d6bf3a4faf37b7065dafa09cd22"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/savings_reported_source.py",
+      "sha256": "d2f7f61a9fa6bf2b61e3aa448d6dc25451084ebdca7fc2360ae520e6c75bed6a"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/savings_scheme.py",
+      "sha256": "bd9361d923fb91bcb0e291730e488760b5dbca83f9c3fa487b7c923c68f8d831"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/schemas.py",
+      "sha256": "38a60fa0bd191df6bb7f01b589c32ab92bc490ea79cfd35ca0c8d139c952df62"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/service.py",
+      "sha256": "b111554a913253be8c405a62fd01b100342bf0a3084eef5de335e3d66b11f867"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/sources.py",
+      "sha256": "b53742b53a65224c6c3d5209634a977c8da3868e6630a18fef70a6ee96f2b85b"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_savings_scheme.py",
+      "sha256": "dcb446f3ba3745e7c49de666f1cd6518f775b0c42373fdc86916ac998d085dd6"
+    },
+    {
+      "path": "backend/tests/unit/test_savings_scheme.py",
+      "sha256": "d1c49d9accdbff881a986ae6c0c7a2ae1b3135e8996e91b841f8e6d7dc9aa2f4"
+    },
+    {
+      "path": "docs/country-workflows/README.md",
+      "sha256": "2fa576bd65ff9165626f4ecd63707d87ca5e73562af8b3e4285f8cf9cf76e5c9"
+    },
+    {
+      "path": "docs/country-workflows/job-input-contracts.json",
+      "sha256": "9167f05f3a10f5d90cabfc3babbb43b691a1e3ffbd77af8a4d5940357cc04479"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-savings-scheme/README.md",
+      "sha256": "f494b47f8c3dbb2a1c959e0abdfea38f7d61c4d03a402e18a71189d339954b90"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-savings-scheme/bases.csv",
+      "sha256": "0943b3434a39cd0cef7145b198be2496e6da2ea72ca886e0f822c6f096e410c9"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-savings-scheme/controls.json",
+      "sha256": "c7fdb3af3a8e7d6a3b9616b46693ae21cadb5f5312a28e599f2be0c7899ec4f9"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-savings-scheme/due-date.txt",
+      "sha256": "ac7a58831eac48f4bcdd9a37cca16f48bae56e41d68d3b9a88a9d1a53186edbd"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-savings-scheme/enrolment.txt",
+      "sha256": "b77cd715fa09a5728a2c87acce804788e935394e74b124d2cc9b979fc6df2b23"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-savings-scheme/policy.txt",
+      "sha256": "2f695d56ea672002069a48d75247afe79eb35f1c01780079edf7d86c877c245e"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-savings-scheme/reported.csv",
+      "sha256": "a878e9d79ee56cf3a450c315f0debe208871925db8e089e8b07084aff6873506"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-savings-scheme/rules.csv",
+      "sha256": "dd6da9cd2cf5e2efe5d1faebc144398c885ba4a1031c5dd47ce6859632b4f404"
+    },
+    {
+      "path": "docs/country-workflows/savings-scheme.md",
+      "sha256": "cc0b8eecb2f75ab9594f3edbc4bb3297ac39c63712126b0efa5c36781d87abd2"
+    },
+    {
+      "path": "docs/phase-12/openapi.json",
+      "sha256": "0e7b32eac5ac8bec9be1a8ba745dd27a20adc30c03cd964793670ca760ff9afa"
+    },
+    {
+      "path": "frontend/e2e/country-report-release.spec.ts",
+      "sha256": "d4db4f0c0586d840fc8c6702c322898e30c955d80f2eca22931b79c30d1a2e35"
+    },
+    {
+      "path": "frontend/e2e/savings-browser-workflow.ts",
+      "sha256": "cc5e5dbb8789d69ff3ed3f35453f51e2e3c6a74e44fed69a7c1efce6d8961c4b"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "40f32d7c9fbca0d7b8c4d557ee4d57b21d3a8253ba51e0be03c73a9787ba3498"
+    },
+    {
+      "path": "frontend/src/features/savings-scheme.tsx",
+      "sha256": "717d950b98d590c3e3837e5849309eaec643b6881911da02b8abeef6968e2288"
+    },
+    {
+      "path": "frontend/src/types/api.generated.ts",
+      "sha256": "7de19c1bcaccdaea4ab810666b0cfdfa306c0e11fa87c4e79a27b6420f769821"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "a5dc2c99cf2ec5063f709c09eff63c24b2dabeebeae5d9692cf310ec623d4c11"
+    },
+    {
+      "path": "frontend/tests/savings-scheme.test.tsx",
+      "sha256": "cd3bd713cf1d6617cdc77a4424df8f3414ade558299cb4072a9f66c15d69b3f4"
+    }
+  ],
+  "backend_checks": {
+    "ruff_check": "passed",
+    "ruff_format_files": 740,
+    "mypy_app_files": 401,
+    "api_contract_snapshots": "current"
+  },
+  "frontend_checks": {
+    "tests_passed": 338,
+    "files_passed": 68,
+    "lint": "passed with one existing unused-variable warning in uae-business-cases.tsx",
+    "typecheck": "passed",
+    "production_build": "passed",
+    "generated_api_types": "current"
+  },
+  "verified_behavior": [
+    "Full local backend suite: 3306 passed/four isolated connector opt-in skips, including all 154 authored scenarios and 39 new savings tests",
+    "Nine actual HTTP/database/storage/processor workflows passed: four new savings paths plus five existing payroll/contribution regressions; scanner and dispatch remain explicit doubles",
+    "The new API paths calculate four synthetic enrolled participants across two funds, retain full/part-time and explicitly supplied covered-period salary bases, independently approve and derive separate expected and fund-reported remittances, then allocate independent bank cash",
+    "Enrolment-document and policy-document replacements stale contribution/expected/bank results while leaving the independent fund-reported derivative current; fund-source review withdrawal and original-file replacement also stale that derivative. Every saved body is compared unchanged",
+    "Typed fund, membership, enrolment and coverage identities prevent amount-only fund matching; participant groups need separate fund controls. Fund reporting cannot establish expectations or bank payments",
+    "338 frontend tests across 68 files passed. New forms retain blank independent controls, selected fund groups across result pages, exact typed posted totals, separate retained enrolment evidence, country-specific choices and current/reviewed/document-binding gates",
+    "Hosted UAE browser code adds UI calculation/final approval/XLSX, filled separate fund expectation controls, reported-source preparation, source withdrawal and whole-body equality checks. Execution must be observed separately after this source push"
+  ],
+  "limits": [
+    "Synthetic supplied wages, service bands, funds, membership, rates and dates are not independent client expectations or a qualified legal pack",
+    "Complete operative legal text/version, fund approval, eligibility, comparators, cohort boundaries and rounding require professional qualification; no statutory rate or service-band classification is automatically supplied",
+    "Pre-enrolment gratuity, pension, voluntary contributions, fund investment/NAV, redemptions, native provider layouts and actual payment/filing execution are separate",
+    "The original four connector unit skips remain in the full-run count; prior separate isolated connector receipts do not establish live provider authentication",
+    "Production deployment/rollback, authorized external providers and real client pilots remain open",
+    "The earlier bulk roadmap/checkpoint mutation was rejected by automatic approval review and has not been retried; the global checkpoint does not yet describe this new source. This source-specific implementation and evidence remain separate"
+  ]
+}
