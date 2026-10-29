@@ -1,0 +1,59 @@
+{
+  "contract": "savings-document-label-correction/1",
+  "date": "2026-10-29",
+  "failed_source_commit": "b3c308210a633824d7b31ee00e4f201a0ecbc945",
+  "run_id": 40911598531,
+  "job_id": 123580730813,
+  "job_url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40911598531/job/123580730813",
+  "original_browser_result": {
+    "passed": 2,
+    "failed": 1,
+    "minutes": 2.2
+  },
+  "original_artifact": {
+    "id": 12915020667,
+    "size_bytes": 4520590,
+    "sha256": "74646828c0073eb4bcdc414816b123abd1ea0b5b9527957549de154f6d154d00",
+    "download_digest_verified": true
+  },
+  "failure": "UAE savings calculation, independent approval and exact XLSX passed, then the exact due-date select label was not found within 20 seconds; later preparation and stale assertions did not execute",
+  "original_screenshot": {
+    "path": "docs/country-workflows/screenshots/browser-workflows/AE-savings-due-date-label-timeout-b3c3082.png",
+    "size_bytes": 300158,
+    "sha256": "dd6d901234ef9e50c2bf9154b1a12c456cb26a32ea4d8bf3f9f5e67f128a0d56",
+    "visually_inspected": true
+  },
+  "correction": "Give the retained enrolment and remittance due-date selects explicit stable accessible names; financial inputs/calculations are unchanged",
+  "correction_source_files": [
+    {
+      "path": "frontend/src/features/savings-scheme.tsx",
+      "sha256": "4166b94c43c585c4f2a42bf5ebe1bd9da21b982a95580b1f226e60789cbef973",
+      "hash_basis": "normalized LF Git source bytes"
+    }
+  ],
+  "offline_browser_reproduction": {
+    "network_requests": 0,
+    "old_exact_label_matches": 0,
+    "explicit_label_matches": 1,
+    "selected_value": "doc",
+    "scope": "Minimal embedded-select HTML reproduction, not a running application preview or full workflow pass"
+  },
+  "frontend_receipt": {
+    "path": "docs/phase-12/savings-label-frontend.xml",
+    "size_bytes": 81194,
+    "sha256": "58d714746db09ebfd98802cdba8701d31394c2c87f22cfe526bf092b3e1b9099",
+    "passed": 338,
+    "skipped": 0
+  },
+  "checks": {
+    "typecheck": "passed",
+    "production_build": "passed",
+    "lint": "passed with one pre-existing warning"
+  },
+  "limits": [
+    "The initial failure capture is not proof that expectation or reported-source preparation completed",
+    "The corrected hosted browser workflow still requires a new source-specific observed execution",
+    "Backend is unchanged from b3c3082; original 3306-unit/four-skip and nine-API receipts remain separate",
+    "Original legal/native/provider/client and production qualification gates remain open"
+  ]
+}

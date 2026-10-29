@@ -30,7 +30,11 @@ export function SavingsEnrolmentDocument({
     <>
       <label>
         Retained savings enrolment document (optional shared document)
-        <select value={value} onChange={(e) => onChange(e.target.value)}>
+        <select
+          aria-label="Retained savings enrolment document (optional shared document)"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+        >
           <option value="">
             Use enrolment document references from the CSV
           </option>
@@ -221,7 +225,11 @@ export function SavingsContributionExpectations({
       </label>
       <label>
         Retained savings remittance due-date evidence
-        <select value={document} onChange={(e) => setDocument(e.target.value)}>
+        <select
+          aria-label="Retained savings remittance due-date evidence"
+          value={document}
+          onChange={(e) => setDocument(e.target.value)}
+        >
           <option value="">Select retained due-date support</option>
           {evidence
             .filter((e) => e.scan_status === "CLEAN")
