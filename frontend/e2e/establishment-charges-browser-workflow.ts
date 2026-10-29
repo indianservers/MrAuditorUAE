@@ -16,6 +16,28 @@ export async function runEstablishmentChargesBrowserWorkflow(
 ) {
   const { prefix, headers, post, evidence, prepare, completed } =
     makeWorkflowHarness(page, eid, tenant);
+  async function captureCompleteSchedule(name: string) {
+    const previousViewport = page.viewportSize();
+    try {
+      await page.setViewportSize({ width: 2200, height: 3400 });
+      const title = page.getByRole("heading", {
+        name: "SYNTHETIC India establishment charges",
+        exact: true,
+      });
+      await title.scrollIntoViewIfNeeded();
+      await expect(title).toBeInViewport();
+      // The application scrolls inside its shell; fullPage alone clips rows.
+      await expect(
+        page.getByRole("row", { name: /SYN-EST-C.*PF:EDLI/ }),
+      ).toBeInViewport();
+      await page.screenshot({
+        path: `${screenshots}/${name}.png`,
+        fullPage: true,
+      });
+    } finally {
+      if (previousViewport) await page.setViewportSize(previousViewport);
+    }
+  }
   const root =
     "../docs/country-workflows/sample-inputs/SYNTHETIC-establishment-charges/";
   const manifest = JSON.parse(readFileSync(root + "controls.json", "utf8")) as {
@@ -169,10 +191,7 @@ export async function runEstablishmentChargesBrowserWorkflow(
     .fill(
       "Synthetic independent group amounts and July 15 due-date support for all six selected establishment components",
     );
-  await page.screenshot({
-    path: `${screenshots}/IN-establishment-charges-reviewed.png`,
-    fullPage: true,
-  });
+  await captureCompleteSchedule("IN-establishment-charges-reviewed");
   const prepared = page.waitForResponse(
     (r) =>
       r.url().endsWith("/contribution-obligation-source") &&
@@ -227,8 +246,5 @@ export async function runEstablishmentChargesBrowserWorkflow(
       exact: true,
     }),
   ).toHaveCount(0);
-  await page.screenshot({
-    path: `${screenshots}/IN-establishment-charges-withdrawn-stale.png`,
-    fullPage: true,
-  });
+  await captureCompleteSchedule("IN-establishment-charges-withdrawn-stale");
 }

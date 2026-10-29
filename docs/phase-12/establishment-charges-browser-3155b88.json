@@ -1,0 +1,45 @@
+{
+  "source_commit": "3155b88956f816d8598c583bf096ba6de8ffe8b4",
+  "run_id": 40922272286,
+  "browser_job_id": 123618396224,
+  "browser_result": "SUCCESS: all three cases passed in 2.3 minutes",
+  "artifact": {
+    "id": 12919102179,
+    "size_bytes": 4790699,
+    "sha256": "b356a9fc395b461fbd96a0f6cb5a6f1478e8a12f3b6db7e0bc64fe0c85b3dd92"
+  },
+  "images": [
+    {
+      "archive_entry": "country-reports/IN-establishment-charges-reviewed.png",
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-establishment-charges-reviewed-3155b88.png",
+      "sha256": "e2643b0defa88f10556d43ea7bc8744782574bcbdd57584ebf6c9261f515b01a",
+      "size_bytes": 276179
+    },
+    {
+      "archive_entry": "country-reports/IN-establishment-charges-withdrawn-stale.png",
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-establishment-charges-withdrawn-stale-3155b88.png",
+      "sha256": "a6807b6f9b74c3730cc09870790648827973833a77d631e65bd169969583ee9d",
+      "size_bytes": 246278
+    }
+  ],
+  "observed_behavior": [
+    "Original synthetic files uploaded through real scanner/storage; source preparation and independent source review through APIs",
+    "UI calculation produces six matched establishment/component rows and INR 1750 expected total",
+    "Independent result approval through UI",
+    "UI fills independent count, amount, due date, assessment and policy-document controls and prepares six expected-only remittance rows",
+    "Replacing the original policy document makes the approved calculation and prepared remittance stale; full financial bodies remain equal",
+    "Stale UI removes remittance preparation and disables independent approval"
+  ],
+  "visual_inspection": {
+    "reviewed": "Title, CURRENT/REVIEWED badges, filled independent controls and first four financial rows are visible. Lower two financial rows and rightmost disposition are clipped by the 1440x1600 shell viewport.",
+    "stale": "Title and STALE badge are visible, with remittance form removed; financial rows and disabled approval are below this captured viewport.",
+    "conclusion": "Genuine passing browser evidence with partial visual coverage, not complete-schedule screenshots.",
+    "follow_up": "Capture-only helper now uses a 2200x3400 viewport and asserts both the title and last component row are in the viewport; fresh hosted execution still required."
+  },
+  "limits": [
+    "Bank allocation is covered by the local HTTP/API scenarios, not the new browser helper",
+    "Sources are authored synthetic examples, not independent clients or qualified statutory profiles",
+    "Full hosted backend suite on this revision is still running; browser success is not all-six-jobs success"
+  ],
+  "prior_failure_receipt": "docs/phase-12/establishment-charges-label-correction.json"
+}
