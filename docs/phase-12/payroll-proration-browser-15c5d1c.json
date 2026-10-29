@@ -1,0 +1,49 @@
+{
+  "contract": "country-workflow-browser-proof/1",
+  "date": "2026-10-29",
+  "source_commit": "15c5d1cadc48189e850169030b16cc0b30328f81",
+  "run_id": 40902878885,
+  "job_id": 123549651137,
+  "job_url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40902878885/job/123549651137",
+  "conclusion": "success",
+  "browser_cases_passed": 3,
+  "browser_duration_minutes": 2.0,
+  "artifact": {
+    "id": 12910052906,
+    "size_bytes": 4015126,
+    "sha256": "68c9ac6de44f958189008b77a322a7d1cc44624341ab7e8ff8c3a34bd08e7e2f",
+    "download_digest_verified": true
+  },
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-payroll-proration-reviewed-15c5d1c.png",
+      "size_bytes": 312713,
+      "sha256": "aa370f3b3b28e3173bbfe9c56cadadb316df95527c6c8307995355f34844bf29",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-payroll-proration-withdrawn-stale-15c5d1c.png",
+      "size_bytes": 272488,
+      "sha256": "034174b17ddfd0f718545198862b0a18433286aa3da622839a74431ae8e89768",
+      "visually_inspected": true
+    }
+  ],
+  "verified_behavior": [
+    "All three hosted cases passed, preserving existing UAE/India report, bank, MSE, gratuity, merchant/reserve and session checks",
+    "New India setup uploads original synthetic wages, ceiling policies and independent monthly controls through real source APIs with real scanner, broker and worker; supporting policy bytes and source reviews are retained",
+    "UI selects the dated PF workflow, queues calculation, independently approves and downloads XLSX; nine monthly MATCHED bases and all 18 segment records are asserted",
+    "Original reviewed screenshot shows an unobstructed title, CURRENT/REVIEWED, 18 dated segment records, explicit excluded and eligible periods, 16/14-day calendar partitions, post-cap segment amounts and nine monthly component controls",
+    "Monthly bases distinguish three assessed synthetic cohorts: 9333.33 for newly eligible components, 20000.00 for actual-wage components and 17333.33 for the assessed capped transition",
+    "The monthly-source UI starts with blank independent row and INR controls; the test fills nine rows/129333.31, creates an UNVERIFIED nine-row source through the actual endpoint and checks its response",
+    "Source review withdrawal makes the parent and prepared monthly source STALE with whole saved-body equality; UI disables approval and removes the monthly-source preparation form",
+    "The original stale screenshot retains all dated and monthly amounts, shows STALE and disabled independent approval, and has no monthly-source form"
+  ],
+  "limits": [
+    "The reviewed screenshot is captured before monthly-source preparation and shows its blank form; actual preparation is an executed test assertion, not a filled-form screenshot",
+    "Source setup/reviews use APIs; the new source-upload widgets are not separately exercised through browser forms",
+    "A small request notification is partially visible at the reviewed image bottom and does not obscure the dated or monetary rows",
+    "Synthetic supplied wages, membership options, ceilings, dates and rates only; no independently qualified client or legal rule pack",
+    "Three browser cases are not 154 independently executed browser scenarios",
+    "Full current hosted backend remains running and needs its own observed proof; prior complete service-calendar proof predates this new India implementation"
+  ]
+}
