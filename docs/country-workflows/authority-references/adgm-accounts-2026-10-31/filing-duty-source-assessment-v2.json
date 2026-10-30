@@ -1,0 +1,64 @@
+{
+  "profile": "adgm-company-accounts-cr20260626-guidance20261014/2",
+  "reviewed_on": "2026-10-31",
+  "primary_source": "https://en.adgm.thomsonreuters.com/sites/default/files/net_file_store/ADGM1547_20963_VER20260626.pdf",
+  "complete_relevant_pages_inspected": [
+    250,
+    252,
+    256,
+    257,
+    258
+  ],
+  "sections": [
+    "411(3),(7) and 412 publication trigger",
+    "415 filing scope",
+    "422 unlimited company filing exemption",
+    "423 dormant subsidiary individual accounts and five supporting deliveries",
+    "424 PIE/financial institution exclusions",
+    "425 parent guarantee conditions"
+  ],
+  "scope": "Versioned condition logic over independently assessed facts; separate individual-accounts and supporting-document duties. Not a complete accounts/audit/reporting qualification.",
+  "limits": [
+    "Publication, ownership/control throughout the reference period, knowledge, guarantee authentication, group-account inclusion and actual timely delivery are independently assessed original-evidence inputs.",
+    "The code does not verify a registry, authenticate a guarantee, execute a filing, determine an audit exemption or waive group/tax/other authority duties.",
+    "The primary file version is not inferred commencement. The separately adopted operative window, actual entity scope and professional conclusions remain required.",
+    "The new v2 browser/scanner preflight has not yet produced hosted execution or inspected successful UI proof."
+  ],
+  "files": [
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-companies-consolidated-ver20260626.pdf",
+      "size_bytes": 3568746,
+      "sha256": "8aae2ffcfa9cdc927894ad82e41e08e3eba235092c63d4a64a3349e0268249f0"
+    },
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-annual-accounts-v2-20261014.pdf",
+      "size_bytes": 515781,
+      "sha256": "aa34c1cf43afd0b4a281750f072b55bf177f48ed361f86bb6c614bf9204745af"
+    },
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-law-page-250.png",
+      "size_bytes": 242575,
+      "sha256": "685ac538baefea88d15033fc0449b857bd9722f1889282819150888e45b772a8"
+    },
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-law-page-252.png",
+      "size_bytes": 219577,
+      "sha256": "a1944beee712adc636ea50522ebe841b14dfd8c0575af1077be24da64c548c35"
+    },
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-law-page-256.png",
+      "size_bytes": 294495,
+      "sha256": "c950ce60bd4ad42655ea693a81c66b69c4be1854e7b08e9ed7e58484a902d758"
+    },
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-law-page-257.png",
+      "size_bytes": 250358,
+      "sha256": "85d49f9c730a1fd9799f39c3b0b9769ce2c445f0cb50fb9e5ed5e4c6e9af4493"
+    },
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-law-page-258.png",
+      "size_bytes": 285958,
+      "sha256": "8be53d3155be56937ea3027e9dddfbefc4c827ad1eba98907af9937c69ac4271"
+    }
+  ]
+}

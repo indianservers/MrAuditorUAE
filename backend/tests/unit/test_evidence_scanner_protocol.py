@@ -116,3 +116,81 @@ def test_multiple_payload_chunks_preserve_wire_bytes(monkeypatch):
         (4).to_bytes(4, "big") + b"tail",
         b"\0\0\0\0",
     ]
+
+
+def test_configured_budget_allows_a_complete_verdict_after_twenty_seconds(monkeypatch):
+    client, connect = connection(monkeypatch, [b"stream: OK\0"])
+    monkeypatch.setattr(
+        evidence,
+        "settings",
+        lambda: SimpleNamespace(
+            evidence_clamav_host="scanner.invalid",
+            evidence_clamav_port=3310,
+            evidence_clamav_timeout_seconds=90,
+        ),
+    )
+    times = iter([0, 1, 2, 3, 25])
+    monkeypatch.setattr(evidence.time, "monotonic", lambda: next(times))
+    stream = io.BytesIO(b"synthetic")
+    assert evidence.scan(stream) == "CLEAN"
+    assert client.settimeout.call_args.args[0] == 65
+    assert connect.call_args.kwargs["timeout"] == 20
+    assert stream.tell() == 0
+
+
+def test_configured_budget_remains_one_deadline_for_fragmented_replies(monkeypatch):
+    client, _ = connection(monkeypatch, [b"s", b"t", b"ream: OK\0"])
+    monkeypatch.setattr(
+        evidence,
+        "settings",
+        lambda: SimpleNamespace(
+            evidence_clamav_host="scanner.invalid",
+            evidence_clamav_port=3310,
+            evidence_clamav_timeout_seconds=90,
+        ),
+    )
+    times = iter([0, 1, 2, 3, 4, 89.5, 91])
+    monkeypatch.setattr(evidence.time, "monotonic", lambda: next(times))
+    stream = io.BytesIO(b"synthetic")
+    assert evidence.scan(stream) == "QUARANTINED"
+    assert client.recv.call_count == 2
+    assert client.settimeout.call_args.args[0] == 0.5
+    assert stream.tell() == 0
+
+
+@pytest.mark.parametrize("seconds", [0, 91, -1])
+def test_scanner_budget_configuration_is_bounded(seconds):
+    from app.core.config import Settings
+
+    with pytest.raises(ValueError, match="evidence_clamav_timeout_seconds"):
+        Settings(
+            _env_file=None,
+            environment="test",
+            database_url="postgresql+asyncpg://synthetic@localhost/synthetic_test",
+            jwt_secret="SYNTHETIC" * 8,
+            evidence_clamav_timeout_seconds=seconds,
+        )
+
+
+@pytest.mark.parametrize(
+    ("reply", "expected", "reason"),
+    [
+        (b"stream: OK\0", "CLEAN", "COMPLETE_CLEAN_VERDICT"),
+        (b"stream: SYNTHETIC-sensitive-name FOUND\0", "REJECTED", "NON_CLEAN_VERDICT"),
+        (b"stream: OK\0extra", "QUARANTINED", "INVALID_VERDICT_FRAMING"),
+        (
+            TimeoutError("SYNTHETIC-sensitive-network-details"),
+            "QUARANTINED",
+            "SCANNER_NETWORK_TIMEOUT",
+        ),
+    ],
+)
+def test_scan_diagnostics_are_bounded_and_do_not_echo_content_or_network_details(
+    monkeypatch, reply, expected, reason
+):
+    connection(monkeypatch, [reply])
+    details = {}
+    stream = io.BytesIO(b"SYNTHETIC-sensitive-content")
+    assert evidence.scan(stream, diagnostics=details) == expected
+    assert details == {"status": expected, "reason": reason}
+    assert stream.tell() == 0

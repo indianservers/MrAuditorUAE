@@ -30,7 +30,7 @@ test("source-pinned ADGM first accounts timetable retains original authority and
   page,
   browser,
 }) => {
-  test.setTimeout(240000);
+  test.setTimeout(360000);
   const ids = JSON.parse(
     readFileSync("../.local-runtime/release-smoke/identities.json", "utf8"),
   );
@@ -143,6 +143,7 @@ test("source-pinned ADGM first accounts timetable retains original authority and
         ["facts", ""],
         ["calendar", ""],
         ["readiness", ""],
+        ["duty", ""],
       ]) {
         let recordId: string;
         if (name) {
@@ -155,6 +156,7 @@ test("source-pinned ADGM first accounts timetable retains original authority and
             `/api/backend/${audit}/evidence-files/${record.id}`,
             {
               headers,
+              timeout: 120000,
               multipart: {
                 file: {
                   name,
@@ -167,7 +169,10 @@ test("source-pinned ADGM first accounts timetable retains original authority and
             },
           );
           expect(response.status(), await response.text()).toBe(201);
-          expect((await response.json()).scan_status).toBe("CLEAN");
+          expect(
+            (await response.json()).scan_status,
+            `Original source ${name} requires a complete clean scanner verdict`,
+          ).toBe("CLEAN");
           recordId = record.id;
         } else {
           const file = await harness.evidence(
@@ -306,6 +311,188 @@ test("source-pinned ADGM first accounts timetable retains original authority and
       ).toBeDisabled();
       await result.screenshot({
         path: `${screenshots}/${country}-ADGM-calendar-withdrawn-stale.png`,
+      });
+      // Re-review this same original for a new v2 obligation; the historical v1 body stays stale.
+      let calendar = await get(`${audit}/records/${originals.calendar.id}`);
+      calendar = await action(page.request, audit, calendar, "submit");
+      originals.calendar = await action(
+        reviewer.request,
+        audit,
+        calendar,
+        "approve",
+      );
+      const dutyBody = JSON.parse(
+        readFileSync(
+          "../docs/country-workflows/sample-inputs/SYNTHETIC-adgm-filing-duty/supporting-documents.json",
+          "utf8",
+        ),
+      );
+      Object.assign(dutyBody, {
+        owner_id: ids.preparer_user_id,
+        entity_id: entity.id,
+        rule_evidence_id: originals.rule.id,
+        adgm_guidance_evidence_id: originals.guidance.id,
+        calendar_evidence_id: originals.calendar.id,
+        fact_evidence_ids: [originals.facts.id, originals.duty.id],
+        readiness_evidence_ids: [originals.readiness.id],
+        reviewer_id: ids.reviewer_user_id,
+        filing_stage: "preparing",
+      });
+      for (const fact of dutyBody.adgm_accounts_scope.filing_duty_checks
+        .facts) {
+        fact.evidence_ids =
+          fact.answer === "unassessed" ? [] : [originals.duty.id];
+      }
+      const pendingBody = structuredClone(dutyBody);
+      pendingBody.adgm_accounts_scope.filing_duty_checks.facts =
+        pendingBody.adgm_accounts_scope.filing_duty_checks.facts.filter(
+          (fact: { key: string }) => fact.key !== "guarantee_authenticated",
+        );
+      pendingBody.adgm_accounts_scope.filing_duty = "unassessed";
+      pendingBody.jurisdiction_scope.applicability = "potential";
+      let pending = await post(page.request, `${base}/records/obligation`, {
+        reference: "SYN-ADGM-DUTY-PENDING",
+        title: "SYNTHETIC missing guarantee assessment",
+        body: pendingBody,
+      });
+      pending = await action(page.request, base, pending, "submit");
+      await post(
+        reviewer.request,
+        `${base}/records/${pending.id}/actions`,
+        {
+          version: pending.version,
+          action: "approve",
+          comments: "SYNTHETIC missing guarantee cannot support approval",
+        },
+        409,
+      );
+      const dutyReference = "SYN-ADGM-DUTY-SUPPORT";
+      let dutyPaper = await post(page.request, `${base}/records/obligation`, {
+        reference: dutyReference,
+        title: "SYNTHETIC separately required dormant supporting filings",
+        body: dutyBody,
+      });
+      dutyPaper = await post(
+        page.request,
+        `${base}/obligations/${dutyPaper.id}/filing-stage`,
+        { version: dutyPaper.version, stage: "under_review" },
+        200,
+      );
+      dutyPaper = await action(page.request, base, dutyPaper, "submit");
+      dutyPaper = await action(reviewer.request, base, dutyPaper, "approve");
+      async function openDuty() {
+        await reviewer.goto(`/grc/${eid}/obligations`);
+        await reviewer
+          .getByRole("gridcell", { name: dutyReference, exact: true })
+          .click();
+        const panel = reviewer.getByRole("region", {
+          name: "ADGM filing duty conditions",
+          exact: true,
+        });
+        await expect(panel).toContainText(
+          "Selected procedure: dormant subsidiary supporting documents",
+        );
+        await expect(panel).toContainText(
+          "Individual-accounts exemption does not remove the five supporting-document filings",
+        );
+        await expect(
+          panel
+            .getByRole("list", {
+              name: "Dormant subsidiary supporting documents",
+              exact: true,
+            })
+            .getByRole("listitem"),
+        ).toHaveCount(5);
+        await expect(panel).toContainText(
+          "Authenticated parent guarantee statement under section 425: unassessed",
+        );
+        return panel;
+      }
+      let dutyPanel = await openDuty();
+      await filing
+        .getByRole("combobox", { name: "Next filing stage", exact: true })
+        .selectOption("approved_for_submission");
+      const dutyApproval = reviewer.waitForResponse(
+        (r) =>
+          r.url().includes(`/obligations/${dutyPaper.id}/filing-stage`) &&
+          r.request().method() === "POST",
+      );
+      await filing
+        .getByRole("button", {
+          name: "Record evidenced filing stage",
+          exact: true,
+        })
+        .click();
+      const dutyApproved = await dutyApproval;
+      expect(dutyApproved.status(), await dutyApproved.text()).toBe(200);
+      dutyPaper = await dutyApproved.json();
+      await expect(
+        reviewer.getByRole("region", {
+          name: "ADGM accounts timetable assessment",
+          exact: true,
+        }),
+      ).toContainText("Source freshness: CURRENT");
+      await dutyPanel
+        .getByRole("heading", {
+          name: "ADGM filing duty conditions",
+          exact: true,
+        })
+        .scrollIntoViewIfNeeded();
+      await reviewer.screenshot({
+        path: `${screenshots}/${country}-ADGM-duty-support-reviewed.png`,
+      });
+      await dutyPanel
+        .getByRole("list", {
+          name: "Dormant subsidiary supporting documents",
+          exact: true,
+        })
+        .screenshot({
+          path: `${screenshots}/${country}-ADGM-duty-five-supporting-documents.png`,
+        });
+      await dutyPanel
+        .getByText(/Review source-bound filing-duty conditions/)
+        .click();
+      const guaranteeCheck = dutyPanel
+        .getByRole("list", { name: "Retained filing duty checks", exact: true })
+        .getByRole("listitem")
+        .filter({
+          has: reviewer.getByText("guarantee authenticated", { exact: true }),
+        });
+      await guaranteeCheck.screenshot({
+        path: `${screenshots}/${country}-ADGM-duty-guarantee-source.png`,
+      });
+      const dutyRetained = structuredClone(dutyPaper.body);
+      await action(reviewer.request, audit, originals.duty, "reopen");
+      expect((await get(`${audit}/records/${dutyPaper.id}`)).body).toEqual(
+        dutyRetained,
+      );
+      dutyPanel = await openDuty();
+      await expect(
+        reviewer.getByRole("region", {
+          name: "ADGM accounts timetable assessment",
+          exact: true,
+        }),
+      ).toContainText("Source freshness: STALE");
+      await dutyPanel
+        .getByRole("heading", {
+          name: "ADGM filing duty conditions",
+          exact: true,
+        })
+        .scrollIntoViewIfNeeded();
+      await reviewer.screenshot({
+        path: `${screenshots}/${country}-ADGM-duty-conditions-withdrawn-stale.png`,
+      });
+      await filing
+        .getByLabel("Actual submission evidence record ID", { exact: true })
+        .fill(originals.readiness.id);
+      const dutyAction = filing.getByRole("button", {
+        name: "Record evidenced filing stage",
+        exact: true,
+      });
+      await expect(dutyAction).toBeDisabled();
+      await dutyAction.scrollIntoViewIfNeeded();
+      await reviewer.screenshot({
+        path: `${screenshots}/${country}-ADGM-duty-stale-actions.png`,
       });
       expect((await get(`entities/${entity.id}`)).country).toBe(country);
     }

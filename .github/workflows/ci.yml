@@ -192,6 +192,7 @@ jobs:
       AUDITOS_E2E_ORIGIN: http://127.0.0.1:3005
       EVIDENCE_CLAMAV_HOST: 127.0.0.1
       EVIDENCE_CLAMAV_PORT: "3310"
+      EVIDENCE_CLAMAV_TIMEOUT_SECONDS: "90"
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
@@ -212,6 +213,9 @@ jobs:
       - run: backend/.venv/bin/python scripts/seed_release_smoke.py
       - run: npm ci && npm run build && npx playwright install --with-deps chromium
         working-directory: frontend
+      - name: Verify exact authority originals with the real scanner
+        timeout-minutes: 8
+        run: backend/.venv/bin/python scripts/verify_authority_scans.py --output .local-runtime/release-smoke/authority-scans.json
       - name: Start isolated local test services
         shell: bash
         run: |
@@ -241,3 +245,9 @@ jobs:
         with:
           name: country-report-browser-evidence
           path: frontend/test-results/**/*.png
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: authority-scan-evidence
+          path: .local-runtime/release-smoke/authority-scans.json
+          include-hidden-files: true

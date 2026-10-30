@@ -1,3 +1,8 @@
+import {
+  ADGMFilingDutyResult,
+  type ADGMFilingDutyAssessment,
+} from "./adgm-filing-duty-result";
+
 export type ADGMAccountsAssessment = {
   profile: string;
   state: string;
@@ -10,6 +15,7 @@ export type ADGMAccountsAssessment = {
   assessed_on?: string;
   issues: string[];
   limitations?: string;
+  filing_duty_assessment?: ADGMFilingDutyAssessment | null;
 };
 
 export function ADGMAccountsResult({
@@ -48,7 +54,9 @@ export function ADGMAccountsResult({
               {assessment.filing_required === true
                 ? "Required on assessed facts"
                 : assessment.filing_required === false
-                  ? "Assessed exempt; no filing deadline"
+                  ? assessment.filing_duty_assessment
+                    ? "Selected procedure not required on assessed facts"
+                    : "Assessed exempt; no filing deadline"
                   : "Unresolved"}
             </dd>
             <dt>Company status immediately before reference period end</dt>
@@ -71,6 +79,11 @@ export function ADGMAccountsResult({
                 "Unresolved"}
             </dd>
           </dl>
+          {assessment.filing_duty_assessment && (
+            <ADGMFilingDutyResult
+              assessment={assessment.filing_duty_assessment}
+            />
+          )}
           <p>
             The accounting reference date drives the timetable and can differ
             from the accounts period end. Separate original calendar evidence

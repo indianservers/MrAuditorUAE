@@ -14,6 +14,7 @@ x-env: &env
   SOURCE_S3_REGION: me-central-1
   SOURCE_KMS_KEY: ${SOURCE_KMS_KEY:?KMS key required}
   EVIDENCE_CLAMAV_HOST: scanner
+  EVIDENCE_CLAMAV_TIMEOUT_SECONDS: ${EVIDENCE_CLAMAV_TIMEOUT_SECONDS:-20}
   SYNTHETIC_DATA_ENABLED: "false"
   RELEASE_ID: ${RELEASE_ID:?Immutable release identifier required}
 services:

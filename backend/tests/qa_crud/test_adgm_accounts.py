@@ -16,6 +16,8 @@ from tests.integration.test_platform import environment as environment
 from tests.phase4.test_workflows import action, actor, approve, create, grant, setup
 from tests.qa_crud.test_country_workflows import double_boundaries
 from tests.unit.test_adgm_accounts import first_long
+from tests.unit.test_adgm_filing_duty import dormant
+from tests.unit.test_adgm_filing_duty import payload as duty_payload
 
 pytestmark = pytest.mark.skipif(
     os.getenv("INTEGRATION_TESTS") != "1", reason="Owned migrated test DB required"
@@ -26,9 +28,17 @@ ROOT = (
 )
 
 
-@pytest.mark.parametrize("withdraw", ["guidance", "calendar"])
+@pytest.mark.parametrize(
+    ("procedure", "withdraw"),
+    [
+        (None, "guidance"),
+        (None, "calendar"),
+        ("individual_accounts", "duty"),
+        ("dormant_subsidiary_supporting_documents", "duty"),
+    ],
+)
 async def test_adgm_original_sources_independent_review_and_unchanged_stale_filing(
-    environment, monkeypatch, withdraw
+    environment, monkeypatch, procedure, withdraw
 ):
     c = environment
     double_boundaries(monkeypatch)
@@ -43,6 +53,7 @@ async def test_adgm_original_sources_independent_review_and_unchanged_stale_fili
         ("facts", None),
         ("calendar", None),
         ("readiness", None),
+        *([("duty", None)] if procedure else []),
     ]:
         record = await create(
             c, h, audit, "evidence", {"category": "Other", "retain_until": "2036-12-31"}
@@ -63,7 +74,10 @@ async def test_adgm_original_sources_independent_review_and_unchanged_stale_fili
         assert uploaded.status_code == 201, uploaded.text
         record = (await c.get(audit + "/records/" + record["id"], headers=h)).json()
         originals[role] = await approve(c, h, reviewer[0], audit, record)
-    body = first_long()
+    body = duty_payload(first_long()) if procedure else first_long()
+    if procedure == "dormant_subsidiary_supporting_documents":
+        body = dormant(body, delivered=None)
+        body["adgm_accounts_scope"]["filing_procedure"] = procedure
     body.update(
         owner_id=str(decode_token(h["Authorization"].split()[1])),
         entity_id=entity,
@@ -75,6 +89,12 @@ async def test_adgm_original_sources_independent_review_and_unchanged_stale_fili
         reviewer_id=reviewer[3],
         filing_stage="preparing",
     )
+    if procedure:
+        body["fact_evidence_ids"].append(originals["duty"]["id"])
+        for fact in body["adgm_accounts_scope"]["filing_duty_checks"]["facts"]:
+            fact["evidence_ids"] = (
+                [originals["duty"]["id"]] if fact["answer"] != "unassessed" else []
+            )
     base = f"/api/v1/grc/engagements/{eid}"
 
     async def post(value, reference="SYN-ADGM-TIMETABLE"):
@@ -95,6 +115,19 @@ async def test_adgm_original_sources_independent_review_and_unchanged_stale_fili
     )
     wrong = await post(swapped)
     assert wrong.status_code == 409 and "exact retained original PDFs" in wrong.text
+    if procedure:
+        unbound = deepcopy(body)
+        unbound["adgm_accounts_scope"]["filing_duty_checks"]["facts"][0]["evidence_ids"] = [
+            originals["calendar"]["id"]
+        ]
+        rejected = await post(unbound)
+        assert rejected.status_code == 422, rejected.text
+        wrong_year = deepcopy(body)
+        wrong_year["adgm_accounts_scope"]["filing_duty_checks"]["accounts_period_end"] = (
+            "2027-12-30"
+        )
+        rejected = await post(wrong_year)
+        assert rejected.status_code == 422, rejected.text
     async with Session() as db, db.begin():
         await tenant_context(db, h["X-Tenant-ID"])
         version = await db.scalar(
@@ -121,9 +154,66 @@ async def test_adgm_original_sources_independent_review_and_unchanged_stale_fili
     assert calendar["adgm_accounts_assessment"]["issues"] == []
     assert calendar["adgm_accounts_assessment"]["accounting_reference_end"] == "2027-12-31"
     assert calendar["deadline_comparison"]["selected_before_rolling"] == "2028-06-30"
+    exemption = None
+    if procedure:
+        duty = calendar["adgm_accounts_assessment"]["filing_duty_assessment"]
+        assert duty["procedure"] == procedure and duty["filing_required"] is True
+        assert any(originals["duty"]["id"] in fact["evidence_ids"] for fact in duty["checks"])
+        if procedure == "dormant_subsidiary_supporting_documents":
+            assert duty["supporting_documents_required"] is True
+            assert duty["dormant_individual_accounts_exemption"] is None
+            assert len(duty["supporting_documents"]) == 5
+            completed = deepcopy(body)
+            completed.pop("deadline_rule")
+            completed.pop("calendar_evidence_id")
+            completed["jurisdiction_scope"]["applicability"] = "assessed_not_applicable"
+            completed["adgm_accounts_scope"].update(
+                filing_procedure="individual_accounts", filing_duty="assessed_exempt"
+            )
+            for fact in completed["adgm_accounts_scope"]["filing_duty_checks"]["facts"]:
+                if (
+                    fact["key"].endswith("_delivered")
+                    or fact["key"] == "support_delivery_within_filing_period_assessed"
+                ):
+                    fact.update(
+                        answer="assessed_yes",
+                        evidence_ids=[originals["duty"]["id"]],
+                        assessment="SYNTHETIC completed-delivery alternative over the exact financial year; not real delivery evidence",
+                    )
+            response = await post(completed, "SYN-ADGM-INDIVIDUAL-EXEMPT")
+            assert response.status_code == 201, response.text
+            exemption = await approve(c, h, reviewer[0], base, response.json())
+            reviewed = (
+                await c.get(base + f"/compliance-calendar?record_id={exemption['id']}", headers=h)
+            ).json()["items"][0]
+            assert (
+                reviewed["deadline"] is None
+                and reviewed["calendar_state"] == "ASSESSED_NOT_APPLICABLE"
+            )
+            checked = reviewed["adgm_accounts_assessment"]["filing_duty_assessment"]
+            assert (
+                checked["filing_required"] is False
+                and checked["supporting_documents_required"] is True
+            )
+            impossible = await c.post(
+                base + f"/obligations/{exemption['id']}/filing-stage",
+                headers=reviewer[0],
+                json={"version": exemption["version"], "stage": "approved_for_submission"},
+            )
+            assert impossible.status_code == 422, impossible.text
 
     pending_body = deepcopy(body)
     pending_body["adgm_accounts_scope"]["period_validity"] = "unresolved"
+    if procedure:
+        key = (
+            "restricted_scope_company"
+            if procedure == "individual_accounts"
+            else "guarantee_authenticated"
+        )
+        checks = pending_body["adgm_accounts_scope"]["filing_duty_checks"]
+        checks["facts"] = [fact for fact in checks["facts"] if fact["key"] != key]
+        pending_body["adgm_accounts_scope"]["filing_duty"] = "unassessed"
+        pending_body["jurisdiction_scope"]["applicability"] = "potential"
     pending = await post(pending_body, "SYN-ADGM-UNRESOLVED")
     assert pending.status_code == 201, pending.text
     pending = await action(c, h, base, pending.json(), "submit")
@@ -160,6 +250,11 @@ async def test_adgm_original_sources_independent_review_and_unchanged_stale_fili
         "items"
     ][0]
     assert stale["freshness"] == "STALE" and stale["reassessment_required"] is True
+    if exemption:
+        companion = (
+            await c.get(base + f"/compliance-calendar?record_id={exemption['id']}", headers=h)
+        ).json()["items"][0]
+        assert companion["freshness"] == "STALE" and companion["reassessment_required"] is True
     blocked = await c.post(
         base + f"/obligations/{obj['id']}/filing-stage",
         headers=h,

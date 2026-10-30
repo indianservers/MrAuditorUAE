@@ -1,0 +1,254 @@
+{
+  "owner_id": "e22f94e0-0e1d-4885-b056-3ff6c19d68a0",
+  "entity_id": "e4948455-234e-49e9-948a-ab64d66ce773",
+  "module": "license",
+  "source_url": "https://en.adgm.thomsonreuters.com/rulebook/companies-regulations-2020",
+  "jurisdiction": "AE",
+  "jurisdiction_scope": {
+    "entity_country": "AE",
+    "obligation_country": "AE",
+    "relationship": "domestic",
+    "applicability": "assessed_applicable",
+    "registration_reference": "SYNTHETIC-ADGM-1",
+    "assessment": "SYNTHETIC independently assessed exact DMCC entity scope"
+  },
+  "obligation_period_start": "2026-09-30",
+  "obligation_period_end": "2027-12-31",
+  "effective_from": "2025-01-01",
+  "deadline_kind": "firm_internal",
+  "rule_evidence_id": "0ba45ad7-e6f4-400e-95f4-49b1d605d8bd",
+  "fact_evidence_ids": [
+    "180a3a08-4f42-43ad-a587-d94f4de8f461"
+  ],
+  "entity_facts": {
+    "assessment": "SYNTHETIC original licence, company facts and auditor assessment"
+  },
+  "required_evidence": "Independent exact source versions and company facts",
+  "compliance_assessment": "pending",
+  "deadline_rule": {
+    "identifier": "SYNTHETIC-ADGM-reference-date",
+    "version": 1,
+    "effective_from": "2025-01-01",
+    "effective_to": "2030-12-31",
+    "date_basis": "specified_event",
+    "trigger": "2027-09-30",
+    "months_after": 9,
+    "month_end_policy": "preserve_month_end",
+    "timezone": "Asia/Dubai",
+    "convention": "following",
+    "rolling_calendar": {
+      "coverage_start": "2026-01-01",
+      "coverage_end": "2030-12-31",
+      "weekend_days": [
+        5,
+        6
+      ],
+      "holidays": [],
+      "independent_holiday_count": 0,
+      "assessment": "SYNTHETIC explicitly zero holidays for arithmetic testing, not a national calendar"
+    },
+    "later_of": [
+      {
+        "identifier": "SYNTHETIC-reference-end",
+        "date_basis": "specified_event",
+        "trigger": "2027-12-31",
+        "months_after": 3
+      }
+    ]
+  },
+  "adgm_guidance_evidence_id": "6da02323-fd7f-4a79-a17e-8ad85843de86",
+  "calendar_evidence_id": "c5b62263-03dc-4f2c-8351-0ac985544a45",
+  "adgm_accounts_scope": {
+    "profile": "adgm-company-accounts-cr20260626-guidance20261014/2",
+    "registration": "assessed_yes",
+    "legal_form": "company",
+    "company_status_at_reference_end": "private",
+    "filing_duty": "assessed_required",
+    "duty_basis": "SYNTHETIC independently assessed s415 filing duty and exceptions; no real entity qualification",
+    "accounting_reference_start": "2026-09-30",
+    "accounting_reference_end": "2027-12-31",
+    "incorporation_date": "2026-09-30",
+    "period_classification": "first_long",
+    "period_validity": "assessed_valid",
+    "shortened_period": "assessed_no",
+    "other_authority_modifications": "assessed_none",
+    "operative_from": "2025-01-01",
+    "operative_through": "2030-12-31",
+    "assessed_on": "2028-01-31",
+    "assessment": "SYNTHETIC adopted operative window and reference period assessment; not professional qualification",
+    "first_anniversary": "2027-09-30",
+    "filing_procedure": "dormant_subsidiary_supporting_documents",
+    "filing_duty_checks": {
+      "accounts_period_start": "2026-09-30",
+      "accounts_period_end": "2027-12-31",
+      "reference_period_start": "2026-09-30",
+      "reference_period_end": "2027-12-31",
+      "facts": [
+        {
+          "key": "restricted_scope_company",
+          "answer": "assessed_no",
+          "evidence_ids": [
+            "180a3a08-4f42-43ad-a587-d94f4de8f461"
+          ],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "unlimited_company",
+          "answer": "assessed_no",
+          "evidence_ids": [
+            "180a3a08-4f42-43ad-a587-d94f4de8f461"
+          ],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "dormant_subsidiary_exemption_claimed",
+          "answer": "assessed_yes",
+          "evidence_ids": [
+            "180a3a08-4f42-43ad-a587-d94f4de8f461"
+          ],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "subsidiary_undertaking",
+          "answer": "assessed_yes",
+          "evidence_ids": [
+            "180a3a08-4f42-43ad-a587-d94f4de8f461"
+          ],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "dormant_whole_financial_year",
+          "answer": "assessed_yes",
+          "evidence_ids": [
+            "180a3a08-4f42-43ad-a587-d94f4de8f461"
+          ],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "public_interest_entity_any_time",
+          "answer": "assessed_no",
+          "evidence_ids": [
+            "180a3a08-4f42-43ad-a587-d94f4de8f461"
+          ],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "financial_institution_any_time",
+          "answer": "assessed_no",
+          "evidence_ids": [
+            "180a3a08-4f42-43ad-a587-d94f4de8f461"
+          ],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "all_members_agree_for_year",
+          "answer": "assessed_yes",
+          "evidence_ids": [
+            "180a3a08-4f42-43ad-a587-d94f4de8f461"
+          ],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "guarantee_authenticated",
+          "answer": "assessed_yes",
+          "evidence_ids": [
+            "180a3a08-4f42-43ad-a587-d94f4de8f461"
+          ],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "guarantee_parent_identity_complete",
+          "answer": "assessed_yes",
+          "evidence_ids": [
+            "180a3a08-4f42-43ad-a587-d94f4de8f461"
+          ],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "guarantee_subsidiary_identity_matches",
+          "answer": "assessed_yes",
+          "evidence_ids": [
+            "180a3a08-4f42-43ad-a587-d94f4de8f461"
+          ],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "guarantee_statement_dated",
+          "answer": "assessed_yes",
+          "evidence_ids": [
+            "180a3a08-4f42-43ad-a587-d94f4de8f461"
+          ],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "guarantee_financial_year_matches",
+          "answer": "assessed_yes",
+          "evidence_ids": [
+            "180a3a08-4f42-43ad-a587-d94f4de8f461"
+          ],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "guarantee_all_outstanding_liabilities_covered",
+          "answer": "assessed_yes",
+          "evidence_ids": [
+            "180a3a08-4f42-43ad-a587-d94f4de8f461"
+          ],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "included_in_parent_ifrs_accounts",
+          "answer": "assessed_yes",
+          "evidence_ids": [
+            "180a3a08-4f42-43ad-a587-d94f4de8f461"
+          ],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "parent_notes_disclose_exemption",
+          "answer": "assessed_yes",
+          "evidence_ids": [
+            "180a3a08-4f42-43ad-a587-d94f4de8f461"
+          ],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "members_agreement_notice_delivered",
+          "answer": "unassessed",
+          "evidence_ids": [],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "guarantee_statement_delivered",
+          "answer": "unassessed",
+          "evidence_ids": [],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "parent_consolidated_accounts_delivered",
+          "answer": "unassessed",
+          "evidence_ids": [],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "parent_auditor_report_delivered",
+          "answer": "unassessed",
+          "evidence_ids": [],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "parent_consolidated_annual_report_delivered",
+          "answer": "unassessed",
+          "evidence_ids": [],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        },
+        {
+          "key": "support_delivery_within_filing_period_assessed",
+          "answer": "unassessed",
+          "evidence_ids": [],
+          "assessment": "SYNTHETIC independent assessment for the explicitly retained year/reference period; not a client conclusion"
+        }
+      ]
+    }
+  }
+}

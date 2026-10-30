@@ -40,6 +40,7 @@ class Settings(BaseSettings):
     ai_max_tokens: int = 512
     evidence_clamav_host: str = ""
     evidence_clamav_port: int = 3310
+    evidence_clamav_timeout_seconds: int = Field(default=20, ge=1, le=90)
     document_max_pages: int = Field(default=20, ge=1, le=100)
     document_max_bytes: int = Field(default=25 * 1024 * 1024, ge=1024, le=100 * 1024 * 1024)
     audit_ai_external_approved: bool = False

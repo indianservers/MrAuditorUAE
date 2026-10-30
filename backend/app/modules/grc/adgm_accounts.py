@@ -7,6 +7,8 @@ from zoneinfo import ZoneInfo
 from pydantic import AwareDatetime, Field, model_validator
 
 from app.modules.audit_execution.schemas import Strict
+from app.modules.grc.adgm_filing_duty import PROFILE as DUTY_PROFILE
+from app.modules.grc.adgm_filing_duty import FilingDutyChecks
 from app.modules.grc.deadlines import CalendarDate, calendar_offset, candidates
 
 PROFILE = "adgm-company-accounts-cr20260626-guidance20261014/1"
@@ -15,7 +17,10 @@ GUIDANCE_SHA256 = "aa34c1cf43afd0b4a281750f072b55bf177f48ed361f86bb6c614bf920474
 
 
 class ADGMAccountsScope(Strict):
-    profile: Literal["adgm-company-accounts-cr20260626-guidance20261014/1"]
+    profile: Literal[
+        "adgm-company-accounts-cr20260626-guidance20261014/1",
+        "adgm-company-accounts-cr20260626-guidance20261014/2",
+    ]
     registration: Literal["assessed_yes", "assessed_no", "unassessed"]
     legal_form: Literal["company", "llp", "foundation", "branch", "unassessed"]
     company_status_at_reference_end: Literal["private", "public", "unassessed"]
@@ -36,9 +41,22 @@ class ADGMAccountsScope(Strict):
     assessed_on: CalendarDate
     assessment: str = Field(min_length=10, max_length=4000)
     extension_applied_at: AwareDatetime | None = None
+    filing_procedure: (
+        Literal["individual_accounts", "dormant_subsidiary_supporting_documents"] | None
+    ) = Field(default=None, exclude_if=lambda value: value is None)
+    filing_duty_checks: FilingDutyChecks | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
 
     @model_validator(mode="after")
     def facts(self):
+        if self.profile == DUTY_PROFILE:
+            if self.filing_procedure is None or self.filing_duty_checks is None:
+                raise ValueError(
+                    "ADGM filing-duty profile v2 requires an explicit procedure and structured condition assessment"
+                )
+        elif self.filing_procedure is not None or self.filing_duty_checks is not None:
+            raise ValueError("Structured filing-duty checks require the explicit ADGM v2 profile")
         if self.accounting_reference_end < self.accounting_reference_start:
             raise ValueError("Retain an ordered ADGM accounting reference period")
         if self.operative_through < self.operative_from or any(
@@ -83,6 +101,18 @@ def assess(data):
         return None
     issues = []
     required = {"assessed_required": True, "assessed_exempt": False}.get(scope.filing_duty)
+    duty = None
+    if scope.filing_duty_checks is not None:
+        from app.modules.grc.adgm_filing_duty import assess as assess_duty
+
+        duty = assess_duty(
+            scope.filing_duty_checks,
+            scope.filing_procedure,
+            company_scope_established=scope.registration == "assessed_yes"
+            and scope.legal_form == "company",
+        )
+        required = duty["filing_required"]
+        issues.extend(duty["issues"])
     if scope.registration != "assessed_yes":
         required = None
         issues.append("ADGM_COMPANY_REGISTRATION_NOT_ESTABLISHED")
@@ -154,7 +184,8 @@ def assess(data):
         if data.deadline and not scope.operative_from <= data.deadline <= scope.operative_through:
             issues.append("ADOPTED_WINDOW_DOES_NOT_COVER_BASE_DEADLINE")
     return {
-        "profile": PROFILE,
+        "profile": scope.profile,
+        "filing_duty_assessment": duty,
         "state": "REVIEW_REQUIRED"
         if issues
         else "TIMETABLE_ON_ASSESSED_FACTS"
@@ -201,6 +232,9 @@ def validate(data):
         raise ValueError(
             "An ADGM company needs its own UAE legal entity; a foreign parent's branch cannot inherit this company timetable"
         )
+    from app.modules.grc.adgm_filing_duty import validate_binding as validate_duty_binding
+
+    validate_duty_binding(data)
     result = assess(data)
     required = result["filing_required"]
     applicability = data.jurisdiction_scope.applicability
@@ -297,8 +331,10 @@ def saved_assessment(body):
     try:
         return assess(Obligation.model_validate(clean(body)))
     except (ValueError, TypeError, KeyError, OverflowError):
+        raw_scope = body.get("adgm_accounts_scope")
+        saved_profile = raw_scope.get("profile") if isinstance(raw_scope, dict) else None
         return {
-            "profile": PROFILE,
+            "profile": DUTY_PROFILE if saved_profile == DUTY_PROFILE else PROFILE,
             "state": "REVIEW_REQUIRED",
             "filing_required": None,
             "issues": ["SAVED_ADGM_SCOPE_REQUIRES_REASSESSMENT"],

@@ -1,0 +1,37 @@
+{
+  "source_commit": "02a4cb00b2ac931cded527f88800a2b1760fee0f",
+  "run_id": 41123913301,
+  "job_id": 124297376128,
+  "job_conclusion": "failure",
+  "suite_passed": 13,
+  "suite_failed": 1,
+  "suite_duration": "9.8m",
+  "failed_case": "source-pinned ADGM first accounts timetable retains original authority and calendar evidence",
+  "case_duration_seconds": 23.6,
+  "failure": {
+    "location": "frontend/e2e/adgm-accounts-release.spec.ts:170",
+    "expected": "CLEAN",
+    "received": "QUARANTINED",
+    "specific_original": "The old assertion did not emit its public filename",
+    "cause": "Not established by the old report; elapsed duration is consistent with the existing 20-second scan budget. Timeout remains an inference."
+  },
+  "artifact": {
+    "id": 13011180377,
+    "size_bytes": 18774091,
+    "sha256": "f0c617f0327b9c4e2fcc6cae65edcb46e9be70e619a9004ab7ddeebf1d3aed18"
+  },
+  "failure_screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/ADGM-original-scan-quarantined-02a4cb0-1.png",
+      "sha256": "2027c0297fb857b81d46ebeb4db93d24e527681669624830014a52b98110cca8",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/ADGM-original-scan-quarantined-02a4cb0-2.png",
+      "sha256": "aa3ab88499e07cfa56dec7279d2d5e699d043bbe4a7942dabb34226353888112",
+      "visually_inspected": true
+    }
+  ],
+  "visual_scope": "Failure captures remain at country selection before an ADGM workpaper review. They are diagnostic context, not successful ADGM timetable or stale-filing visual proof.",
+  "next_verification": "Exact-original real-scanner preflight with verdict, bounded reason and elapsed timing; clean scanning remains mandatory for actual uploads. New v2 and budget code need their own hosted proof."
+}

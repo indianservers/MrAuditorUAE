@@ -1,0 +1,129 @@
+{
+  "scope": "ADGM profile v2 structured filing-duty conditions and separate supporting-document obligations; bounded original-evidence scan configuration/diagnostics and hosted exact-original preflight.",
+  "full_goal_complete": false,
+  "profile": "adgm-company-accounts-cr20260626-guidance20261014/2",
+  "reports": [
+    {
+      "path": "docs/phase-12/adgm-duty-all-units.xml",
+      "sha256": "fa47cb6ec15b2db3584a91e741d3a7f8f6ffb1c04b76019593b7081d40cd7b49",
+      "tests": 4407,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "path": "docs/phase-12/adgm-duty-focused.xml",
+      "sha256": "210fc76a32a06193e13238daee5f3eff17c87aeb954cb676ab69b3d50aa7550a",
+      "tests": 196,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/adgm-duty-frontend.xml",
+      "sha256": "d5bca4c9f0866f699c46d18609cda28871d181e83877a663d73f7186403a5cc7",
+      "tests": 483,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "static_checks": {
+    "ruff": "passed all changed Python files",
+    "mypy": "passed all 425 app source files",
+    "frontend_types_eslint": "passed",
+    "production_frontend_build": "passed",
+    "api_contracts": "current",
+    "new_browser_discovery": "one expanded ADGM case discovered",
+    "ci_and_staging_yaml": "parsed using the installed js-yaml library; every workflow step has run or uses",
+    "scanner_cli": "import/help passed; no local real-scanner verdict claimed"
+  },
+  "source_files": [
+    {
+      "path": ".env.example",
+      "sha256": "0bbfa7501ac4870d5c9c1c89fef88994f47b94317503efd6c246bf2dc08a3ce8"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "5971ad2617bef173ce4422354ab2c2cd8cd3687a835b2f04c574e81e2f0e0d7d"
+    },
+    {
+      "path": "backend/app/core/config.py",
+      "sha256": "eb42605fb62b1e888970570d6b5a1407e362815782461a37c10fcb54cf8d9074"
+    },
+    {
+      "path": "backend/app/modules/audit_execution/evidence.py",
+      "sha256": "069dfadb36f68782aa75fbeaf5db99d0bae20d3f22214595cc2c29f172798d75"
+    },
+    {
+      "path": "backend/app/modules/grc/adgm_accounts.py",
+      "sha256": "815064abd89446460be73082bac6b8c84db19d61061e784be2c6b6dfa611d744"
+    },
+    {
+      "path": "backend/app/modules/grc/adgm_filing_duty.py",
+      "sha256": "9f70a1ddc7b8741601e0b237f4c9c2daec0457bb7d134847abcb6e5c0dc15675"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_adgm_accounts.py",
+      "sha256": "d3ab4b0719f090cce3a6c6a8bab914b3f1242aa9e977d74352391d91412faf55"
+    },
+    {
+      "path": "backend/tests/unit/test_adgm_filing_duty.py",
+      "sha256": "b7efede70069dd1533d5b1afc05ddb8619f10b07b63df5abb1651fb25a1df897"
+    },
+    {
+      "path": "backend/tests/unit/test_evidence_scanner_protocol.py",
+      "sha256": "4f83d2c8d31a3f04183ccfc825c3281cb1b230d3851500686dbabd874ccaf6fc"
+    },
+    {
+      "path": "deploy/compose.staging.yml",
+      "sha256": "bab025a3079df6e714cdec9b1a6633f03bab55ef0d1df950451e323412748a20"
+    },
+    {
+      "path": "frontend/e2e/adgm-accounts-release.spec.ts",
+      "sha256": "b56737400513b6654b28d447a6af178310ffdc8690c2a2ab2f0b8c4856c39326"
+    },
+    {
+      "path": "frontend/src/features/adgm-accounts-result.tsx",
+      "sha256": "2c896f3d2269f93f2de4746f8e384c1710744f5747dc89e9a6e6f3334c39eada"
+    },
+    {
+      "path": "frontend/src/features/adgm-filing-duty-result.tsx",
+      "sha256": "07944e7a91a19e8fd9965be4e7e5e80f3f995111527a9b8b3a1ed7fb1ae695e6"
+    },
+    {
+      "path": "frontend/tests/adgm-filing-duty-result.test.tsx",
+      "sha256": "ff22c9db46b68efc81f27b6d74d992a8d0acc4c5313e7bbcd65e792567dcfc37"
+    },
+    {
+      "path": "scripts/verify_authority_scans.py",
+      "sha256": "45acddefb788a8cab58668a0eef5c9a1dafac894a9deec1938cd1e1e90682c42"
+    }
+  ],
+  "verified_scope": [
+    "Both positive and negative duty facts require bound original company-fact evidence and exact accounts/reference periods. Missing criteria do not become negative facts.",
+    "Restricted-scope notice/publication, each unlimited exclusion, all dormant eligibility/guarantee conditions, each supporting delivery and timely-delivery assessment.",
+    "Separate individual-accounts and supporting-document procedures, plus unknown company/form preconditions and preserved v1 serialization.",
+    "Real HTTP independent evidence/filing review; unbound and wrong-period rejection; unresolved approval blocking; companion individual exemption preserves supporting duties; condition-source withdrawal stales unchanged records.",
+    "Original and configured scanner budgets preserve a single deadline, exact clean framing, quarantine/rejection and stream rewind. Diagnostic enums do not echo content, replies or network exception details."
+  ],
+  "hosted_prior_source": {
+    "commit": "02a4cb00b2ac931cded527f88800a2b1760fee0f",
+    "browser_job": 124297376128,
+    "passed": 13,
+    "failed": 1,
+    "failure": "ADGM original upload returned QUARANTINED; timeout is inferred from timing, not established by old diagnostics.",
+    "receipt": "docs/phase-12/adgm-browser-ingestion-failure-02a4cb0.json"
+  },
+  "pending": [
+    "Actual hosted original-source scans under the explicit bounded CI budget, with new verdict/reason/timing report.",
+    "Expanded v2 browser execution, successful UI/screenshot inspection and complete source-specific hosted backend verification.",
+    "Complete country/legal/native/authority qualification, independently checked real-client pilots, authorized live services and production release qualification."
+  ],
+  "limits": [
+    "Local HTTP tests use explicit scan/queue doubles. Scanner protocol tests use socket doubles. Neither establishes real ClamAV timing or qualification.",
+    "Broader and focused suites overlap; counts must not be added as distinct use cases.",
+    "No synthetic catalogue or qualified real-client count was increased.",
+    "No actual production runtime, deployment or external filing was changed."
+  ]
+}

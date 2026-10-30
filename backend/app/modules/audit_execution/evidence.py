@@ -133,14 +133,20 @@ def validate_file(stream, filename):
     return TYPES[extension]
 
 
-def scan(stream):
+def scan(stream, *, diagnostics=None):
+    def finish(status, reason):
+        if diagnostics is not None:
+            diagnostics.update({"status": status, "reason": reason})
+        return status
+
     try:
         config = settings()
         if not config.evidence_clamav_host:
-            return "QUARANTINED"
-        deadline = time.monotonic() + 20
+            return finish("QUARANTINED", "SCANNER_NOT_CONFIGURED")
+        budget = getattr(config, "evidence_clamav_timeout_seconds", 20)
+        deadline = time.monotonic() + budget
         with socket.create_connection(
-            (config.evidence_clamav_host, config.evidence_clamav_port), timeout=20
+            (config.evidence_clamav_host, config.evidence_clamav_port), timeout=min(20, budget)
         ) as client:
 
             def remaining():
@@ -162,15 +168,21 @@ def scan(stream):
                 remaining()
                 part = client.recv(4096 - len(reply))
                 if not part:
-                    return "QUARANTINED"
+                    return finish("QUARANTINED", "INCOMPLETE_VERDICT")
                 reply.extend(part)
                 if b"\x00" in reply:
                     # zINSTREAM has one NUL-terminated reply, not a suffix match.
                     if reply.find(b"\x00") != len(reply) - 1 or len(reply) > 4096:
-                        return "QUARANTINED"
-                    return "CLEAN" if reply == b"stream: OK\x00" else "REJECTED"
-            return "QUARANTINED"
+                        return finish("QUARANTINED", "INVALID_VERDICT_FRAMING")
+                    return (
+                        finish("CLEAN", "COMPLETE_CLEAN_VERDICT")
+                        if reply == b"stream: OK\x00"
+                        else finish("REJECTED", "NON_CLEAN_VERDICT")
+                    )
+            return finish("QUARANTINED", "VERDICT_SIZE_LIMIT")
+    except TimeoutError:
+        return finish("QUARANTINED", "SCANNER_NETWORK_TIMEOUT")
     except OSError:
-        return "QUARANTINED"
+        return finish("QUARANTINED", "SCANNER_NETWORK_FAILURE")
     finally:
         stream.seek(0)
