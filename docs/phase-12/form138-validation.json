@@ -1,0 +1,39 @@
+{
+  "profile": "india-form138-regular-20260722-v1.1",
+  "validation_reports": [
+    {
+      "path": "docs/phase-12/form138-all-units.xml",
+      "sha256": "6b1930404ac5d09d6c9457f99f9d5dfca05ca3371f83a04a2947d6635b6f7b51",
+      "cases": 4471,
+      "passed": 4467,
+      "skipped": 4
+    },
+    {
+      "path": "docs/phase-12/form138-focused.xml",
+      "sha256": "5aa93ea2cb90c5b45861d27da619f1f436d91c2afc6899ef3342b478a7e6c3df",
+      "cases": 150,
+      "passed": 150,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/form138-frontend.xml",
+      "sha256": "6e6b0782d01c787e03388f952dce26e9d22ef39837aa9ba422246d2804f6c88c",
+      "cases": 485,
+      "passed": 485,
+      "skipped": 0
+    }
+  ],
+  "additional_checks": [
+    "mypy: 426 application files passed",
+    "Ruff: seven changed Python files passed lint and format",
+    "Frontend TypeScript, changed-file ESLint, API types and production build passed",
+    "Final source explanation/label change: 14 focused UI tests passed"
+  ],
+  "scope": [
+    "Full unit report includes the 64 new salary cases; focused report overlaps unit cases and includes 16 HTTP integration cases across five native profiles. Counts are not additive.",
+    "HTTP tests use owned disposable database and scanner/queue doubles; they prove review/export/comparison/freshness logic, not real scanner/queue deployment.",
+    "485 frontend tests passed; the final explanation/label changes were additionally checked by 14 focused UI tests.",
+    "Expanded real-browser salary path authored and statically checked; hosted execution and screenshot inspection pending.",
+    "No client pilot, current issuer/FVU, full salary computation, Q4 or historical24Q qualification."
+  ]
+}

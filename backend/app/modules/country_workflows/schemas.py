@@ -24,6 +24,7 @@ from app.modules.country_workflows.gst_summary import METRICS, GSTSummaryMetric
 from app.modules.country_workflows.gstr1_schemas import GSTR1SectionControl
 from app.modules.country_workflows.gstr2b_part_schemas import GSTR2BPart
 from app.modules.country_workflows.import_nil_schemas import ImportNilScope
+from app.modules.country_workflows.india_form138_native import Form138Controls
 from app.modules.country_workflows.india_form143_native import Form143Controls
 from app.modules.country_workflows.india_withholding_native import NativeWithholdingControls
 from app.modules.country_workflows.inventory_controls import InventoryQuantityControl
@@ -372,6 +373,9 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
 
 class SourceInput(Strict):
     native_withholding_controls: NativeWithholdingControls | None = None
+    form138_controls: Form138Controls | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
     form143_controls: Form143Controls | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
@@ -446,6 +450,7 @@ class SourceInput(Strict):
         "india-27eq-regular-v6.9",
         "india-27q-regular-v7.5",
         "india-form143-regular-20260722-v1.1",
+        "india-form138-regular-20260722-v1.1",
     ] = "canonical-csv"
     gstr1_section_controls: list[GSTR1SectionControl] = Field(default_factory=list, max_length=10)
     gstr1_context_evidence_version_id: uuid.UUID | None = None
@@ -617,6 +622,20 @@ class SourceInput(Strict):
         elif self.form143_controls is not None:
             raise ValueError(
                 "Form 143 controls cannot be substituted into a legacy or other source layout"
+            )
+        if self.file_format == "india-form138-regular-20260722-v1.1":
+            if (
+                self.table_type != "withholding-records"
+                or self.form138_controls is None
+                or self.expected_rows != len(self.form138_controls.groups)
+                or set(self.control_totals) != {"INR"}
+            ):
+                raise ValueError(
+                    "Dated Form 138 source requires its own complete controls, mapped rows and independent INR total"
+                )
+        elif self.form138_controls is not None:
+            raise ValueError(
+                "Form 138 controls cannot be substituted into a legacy or other source layout"
             )
         if self.file_format == "un-sc-consolidated-xml":
             if (

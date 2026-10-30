@@ -1,0 +1,45 @@
+India salary return observations: dated Form 138
+
+Profile india-form138-regular-20260722-v1.1 reads the retained 22 July 2026
+numbered workbook for declared TY202627 Q1-Q3. It reuses the original-file
+upload, scanner, queued source preparation, separate retained crosswalk,
+independent review, reported-only withholding comparison, export and source
+freshness controls. It creates TDS deductor observations; it does not calculate
+the employee's salary tax or turn prepared deposit statements into bank payment.
+
+Source differences remain unresolved. Protean's regular-return page lists
+v1.2, while downloaded workbook cell A2 says v1.1. The unchanged public sample
+declares TY202526/AY202627 and 2025 employee dates. It omits the challan/DDO
+identifier, interest/penalty allocations and employee deposited flags. The
+numbered DD29 field at E181 specifies size seven, while G181 requires DDMMYYYY.
+General notes also refer to FH16 although numbered FH and sample have 18 fields.
+The exact original workbook and sample, source URLs and hashes are under
+authority-references/form138-2026-07-22/. No issuer file has been repaired.
+
+The observation reader explicitly requires an assessed DD29 interpretation:
+DD29_EIGHT_DIGIT_DATE_PER_NUMBERED_REMARKS. This permits eight-digit dates under
+the numbered remarks only. It does not resolve the issuer discrepancy, qualify
+the full current layout or claim FVU acceptance. The UI exposes this assessment
+and omits Q4. All original dates remain available in the hash-verified original.
+
+The source requires one independently controlled batch, exact ASCII/CRLF record
+population, TAN, year, quarter, counts, gross challan components and allocations,
+employee tax/deposit totals, payment base and complete original-party crosswalk.
+Missing inputs do not become zero. Recorded penalty remains distinct from fees.
+Positive deductions/deposits need their dates; zero amounts require absent tax
+dates. Prepared employee dates, flags, reason/certificate syntax, section codes
+and challan identifiers remain observations requiring independent assessment.
+No legal rate or certificate entitlement is inferred from a code or certificate.
+
+sample-inputs/SYNTHETIC-dated-form138/ contains a separately labelled completion
+and fictional controls for exercising the workflow. Its changes include modern
+years/dates and explicitly populated missing fields. These are authored test
+inputs, not the issuer's valid sample or an independently approved client pilot.
+The 154-case authored engine catalogue and real pilot count are unchanged.
+
+Still required for broader salary qualification: current issuer discrepancy
+resolution, Q4 annual salary annexure, historical 24Q profiles, corrections,
+complete employee/cohort salary and tax calculations, full conditional-code and
+certificate checks, CSI/FVU validation, current portal evidence, actual payment
+and credit evidence, and real client inputs with independent expected results.
+This dated reader does not close those remaining roadmap requirements.

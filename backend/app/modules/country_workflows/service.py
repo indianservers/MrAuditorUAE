@@ -367,6 +367,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "india-27eq-regular-v6.9": {"text/plain"},
             "india-27q-regular-v7.5": {"text/plain"},
             "india-form143-regular-20260722-v1.1": {"text/plain"},
+            "india-form138-regular-20260722-v1.1": {"text/plain"},
             "un-sc-consolidated-xml": {"application/xml", "text/xml"},
             "india-esic-members-xls": {"application/vnd.ms-excel"},
             "canonical-csv": {
@@ -456,7 +457,9 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 }
 
         native_withholding_document = None
-        withholding_controls = data.native_withholding_controls or data.form143_controls
+        withholding_controls = (
+            data.native_withholding_controls or data.form143_controls or data.form138_controls
+        )
         if withholding_controls is not None:
             native_withholding_document, _ = await intelligence.evidence(
                 db, ctx, eng, withholding_controls.crosswalk_document_version_id

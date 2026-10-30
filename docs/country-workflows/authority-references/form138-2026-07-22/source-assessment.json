@@ -1,0 +1,30 @@
+{
+  "profile": "india-form138-regular-20260722-v1.1",
+  "checked_on": "2026-10-31",
+  "authority_page": "https://tinpan.proteantech.in/downloads/e-tds/eTDS-download-regular.html",
+  "page_version": "1.2",
+  "workbook_version": "1.1",
+  "sheet": "File Format_R",
+  "originals": [
+    {
+      "filename": "protean-form138-22072026.xlsx",
+      "size_bytes": 34844,
+      "sha256": "d58fd86b69932c6a7a4f518990c17d2112f55c65042d9c3bf2799ed201cbaf6c",
+      "source_url": "https://tinpan.proteantech.in/downloads/e-tds/Form%20Number%20138-24Q%20-%20Q1%20to%20Q3_22072026.xlsx"
+    },
+    {
+      "filename": "protean-form138-original-sample.txt",
+      "size_bytes": 692,
+      "sha256": "3cd9ca7ff46668bcdd102db133959380f39b765c3e0b15448b1fe6a5cb43eb4e",
+      "source_url": "https://tinpan.proteantech.in/downloads/e-tds/138RQ1.txt"
+    }
+  ],
+  "conflicts": [
+    "A2 workbook title v1.1 differs from current page v1.2.",
+    "General notes describe FH16; numbered FH and sample have 18 fields.",
+    "DD29 E181 specifies seven characters but G181 requires eight-digit DDMMYYYY; this observation profile requires an explicit assessment before using eight digits.",
+    "Public sample declares AY202627/TY202526 and 2025 employee dates despite modern form138 identifier.",
+    "Public sample omits CD17, CD24/CD25 allocations and both DD18 deposited flags."
+  ],
+  "qualification": "Dated salary observations only for declared TY202627 Q1-Q3. Not current issuer/FVU, Q4 salary annexure, historical24Q, complete tax/certificate/rate, CSI, bank settlement or filing qualification."
+}

@@ -1,0 +1,43 @@
+{
+  "tax_year": "202627",
+  "tan": "BLRF02329F",
+  "quarter": "Q1",
+  "observed_on": "2026-10-31",
+  "date_width_assessment": "DD29_EIGHT_DIGIT_DATE_PER_NUMBERED_REMARKS",
+  "batch_count": 1,
+  "challan_count": 1,
+  "party_count": 2,
+  "tax_deducted": "4000",
+  "allocated_deposit": "4000",
+  "challan_deposit": "24100",
+  "payment_base": "4200",
+  "challan_tax": "22000",
+  "challan_interest": "1000",
+  "challan_fee": "1000",
+  "challan_penalty": "100",
+  "allocated_interest": "1000",
+  "allocated_penalty": "100",
+  "record_status": "current",
+  "crosswalk_document_version_id": "00000000-0000-4000-8000-000000000138",
+  "assessment": "SYNTHETIC separate controls and explicitly assessed source year, version and DD29 size/notes conflict; no issuer qualification",
+  "groups": [
+    {
+      "transaction_reference": "SYN-SALARY-1",
+      "transaction_date": "2026-05-06",
+      "period": "2026-05",
+      "rule_reference": "SYN-ASSESSED-SALARY",
+      "party_records": [
+        "1/1/1"
+      ]
+    },
+    {
+      "transaction_reference": "SYN-SALARY-2",
+      "transaction_date": "2026-05-06",
+      "period": "2026-05",
+      "rule_reference": "SYN-ASSESSED-SALARY",
+      "party_records": [
+        "1/1/2"
+      ]
+    }
+  ]
+}

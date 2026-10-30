@@ -37,6 +37,101 @@ const value = {
   ]),
 };
 
+describe("dated salary source", () => {
+  const salary = {
+    ...value,
+    tax_year: "202627",
+    tax_deducted: "100",
+    challan_tax: "900",
+    challan_interest: "50",
+    challan_fee: "0",
+    challan_penalty: "50",
+    allocated_interest: "50",
+    allocated_penalty: "50",
+    date_width_assessment: "DD29_EIGHT_DIGIT_DATE_PER_NUMBERED_REMARKS",
+  };
+  it("requires the source-date assessment and excludes Q4", () => {
+    const payload = nativeWithholdingPayload(salary, "138", "1");
+    expect(payload).toMatchObject({
+      tax_deducted: "100",
+      challan_penalty: "50",
+      date_width_assessment: salary.date_width_assessment,
+    });
+    expect(payload).not.toHaveProperty("financial_year");
+    expect(payload).not.toHaveProperty("tax_collected");
+    expect(() =>
+      nativeWithholdingPayload({ ...salary, quarter: "Q4" }, "138", "1"),
+    ).toThrow(/Q1–Q3/);
+    expect(() =>
+      nativeWithholdingPayload(
+        { ...salary, date_width_assessment: "" },
+        "138",
+        "1",
+      ),
+    ).toThrow(/assessment/);
+    render(
+      <NativeWithholdingSource
+        value={salary}
+        onChange={vi.fn()}
+        form="138"
+        documents={[]}
+      />,
+    );
+    expect(
+      screen.queryByRole("option", { name: "Q4" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByLabelText(/Salary deposit-date source conflict assessment/),
+    ).toHaveValue(salary.date_width_assessment);
+    expect(
+      screen.getByLabelText("Native challan penalty control (INR)"),
+    ).toHaveValue("50");
+  });
+  it("shows deposit dates and penalty without invented rate or component tax", () => {
+    render(
+      <>
+        <NativeWithholdingLinks
+          rows={[
+            {
+              recorded_deposit_date: "2026-05-09",
+              recorded_deposited_flag: "Y",
+              total_tax: "100",
+            },
+          ]}
+        />
+        <NativeWithholdingChallans
+          rows={[
+            {
+              recorded_payment_mode: "B",
+              recorded_penalty: "50",
+              allocated_penalty: "50",
+            },
+          ]}
+        />
+      </>,
+    );
+    const parties = screen.getByRole("table", {
+      name: "Native withholding party links",
+    });
+    expect(within(parties).getByText("2026-05-09")).toBeVisible();
+    expect(
+      within(parties).queryByRole("columnheader", { name: "recorded rate" }),
+    ).not.toBeInTheDocument();
+    expect(
+      within(parties).queryByRole("columnheader", { name: "income tax" }),
+    ).not.toBeInTheDocument();
+    const challans = screen.getByRole("table", {
+      name: "Native withholding challans",
+    });
+    expect(
+      within(challans).getByRole("columnheader", { name: "allocated penalty" }),
+    ).toBeVisible();
+    expect(
+      within(challans).queryByRole("columnheader", { name: "recorded other" }),
+    ).not.toBeInTheDocument();
+  });
+});
+
 describe("native withholding controls", () => {
   it("separates dated Form 143 controls from legacy component and financial-year inputs", () => {
     const dated = {

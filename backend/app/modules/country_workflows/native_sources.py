@@ -32,6 +32,14 @@ FORMATS: list[dict[str, Any]] = [
         "source": "https://tinpan.proteantech.in/downloads/e-tds/eTDS-download-regular.html",
     },
     {
+        "id": "india-form138-regular-20260722-v1.1",
+        "label": "India Form 138 dated numbered layout v1.1 (22 July 2026)",
+        "countries": ["IN"],
+        "table_type": "withholding-records",
+        "description": "TY 2026-27 regular salary TDS observations under the retained numbered workbook v1.1. Page v1.2 and historical sample years, missing fields and explicitly assessed DD29 date-width conflict remain unresolved source differences; no complete current-layout, legal, FVU, filing or bank-payment qualification.",
+        "source": "https://tinpan.proteantech.in/downloads/e-tds/eTDS-download-regular.html",
+    },
+    {
         "id": "india-27q-regular-v7.5",
         "label": "India historical 27Q nonresident regular statement v7.5",
         "countries": ["IN"],
@@ -743,6 +751,10 @@ def parse_native(content, data, country, filename):
                 from app.modules.country_workflows.india_form143_native import parse_form143
 
                 rows, metadata = parse_form143(content, data)
+            elif data.file_format == "india-form138-regular-20260722-v1.1":
+                from app.modules.country_workflows.india_form138_native import parse_form138
+
+                rows, metadata = parse_form138(content, data)
             elif data.file_format == "un-sc-consolidated-xml":
                 from app.modules.country_workflows.un_sanctions_source import parse_un_sanctions
 
@@ -827,6 +839,7 @@ def parse_native(content, data, country, filename):
             "india-27eq-regular-v6.9",
             "india-27q-regular-v7.5",
             "india-form143-regular-20260722-v1.1",
+            "india-form138-regular-20260722-v1.1",
         }
         else "ESIC_DECLARED_MEMBER_DAY_ZERO_WAGE_AND_WAGE_CONTROLS"
         if data.file_format == "india-esic-members-xls"
@@ -869,6 +882,7 @@ def parse_native(content, data, country, filename):
                 "india-27eq-regular-v6.9",
                 "india-27q-regular-v7.5",
                 "india-form143-regular-20260722-v1.1",
+                "india-form138-regular-20260722-v1.1",
             }
             else {}
         ),

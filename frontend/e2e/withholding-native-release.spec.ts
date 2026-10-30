@@ -19,7 +19,7 @@ async function login(page: Page, email: string) {
   await page.waitForURL("**/dashboard");
 }
 
-test("India historical native samples and explicit dated Form 143 fixture, controlled forms, full lineage and crosswalk staleness", async ({
+test("India historical native samples and explicit dated Form 138/143 fixtures, controlled forms, full lineage and crosswalk staleness", async ({
   page,
   browser,
 }) => {
@@ -98,33 +98,44 @@ test("India historical native samples and explicit dated Form 143 fixture, contr
       eid,
       identities.tenant_id,
     );
-    for (const form of ["26Q", "27EQ", "27Q", "143"] as const) {
+    for (const form of ["26Q", "27EQ", "27Q", "143", "138"] as const) {
       const count =
-        form === "143" ? 1 : form === "26Q" ? 4 : form === "27Q" ? 2 : 10;
-      const month =
-        form === "143"
-          ? "2026-05"
-          : form === "26Q"
-            ? "2020-04"
-            : form === "27Q"
-              ? "2019-12"
-              : "2020-10";
+        form === "138"
+          ? 2
+          : form === "143"
+            ? 1
+            : form === "26Q"
+              ? 4
+              : form === "27Q"
+                ? 2
+                : 10;
+      const month = ["143", "138"].includes(form)
+        ? "2026-05"
+        : form === "26Q"
+          ? "2020-04"
+          : form === "27Q"
+            ? "2019-12"
+            : "2020-10";
       const total =
-        form === "143"
-          ? "700"
-          : form === "26Q"
-            ? "1900"
-            : form === "27Q"
-              ? "166000"
-              : "1000";
+        form === "138"
+          ? "4000"
+          : form === "143"
+            ? "700"
+            : form === "26Q"
+              ? "1900"
+              : form === "27Q"
+                ? "166000"
+                : "1000";
       const gross =
-        form === "143"
-          ? "213000"
-          : form === "26Q"
-            ? "100000"
-            : form === "27Q"
-              ? "20000000"
-              : "10000";
+        form === "138"
+          ? "24100"
+          : form === "143"
+            ? "213000"
+            : form === "26Q"
+              ? "100000"
+              : form === "27Q"
+                ? "20000000"
+                : "10000";
       const groups = Array.from({ length: count }, (_, i) => ({
         transaction_reference: `SYN-ASSESSMENT-${i + 1}`,
         transaction_date: month + (form === "27Q" ? "-10" : "-01"),
@@ -133,9 +144,11 @@ test("India historical native samples and explicit dated Form 143 fixture, contr
         party_records: [`1/1/${i + 1}`],
       }));
       const publicOriginal = readFileSync(
-        form === "143"
-          ? "../docs/country-workflows/authority-references/form143-2026-07-22/protean-form143-original-sample.txt"
-          : `../docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-${form}-original-sample.txt`,
+        form === "138"
+          ? "../docs/country-workflows/authority-references/form138-2026-07-22/protean-form138-original-sample.txt"
+          : form === "143"
+            ? "../docs/country-workflows/authority-references/form143-2026-07-22/protean-form143-original-sample.txt"
+            : `../docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-${form}-original-sample.txt`,
       );
       let sourceBytes = publicOriginal;
       if (form === "143") {
@@ -161,9 +174,18 @@ test("India historical native samples and explicit dated Form 143 fixture, contr
           "ascii",
         );
       }
+      if (form === "138") {
+        await evidence(
+          "public-issuer-138-conflicted-original-sample.txt",
+          publicOriginal,
+        );
+        sourceBytes = readFileSync(
+          "../docs/country-workflows/sample-inputs/SYNTHETIC-dated-form138/SYNTHETIC-explicit-completion-138.txt",
+        );
+      }
       const file = await evidence(
-        form === "143"
-          ? "SYNTHETIC-explicit-completion-143.txt"
+        ["143", "138"].includes(form)
+          ? `SYNTHETIC-explicit-completion-${form}.txt`
           : `public-issuer-${form}-original-sample.txt`,
         sourceBytes,
       );
@@ -186,13 +208,15 @@ test("India historical native samples and explicit dated Form 143 fixture, contr
       await page
         .getByRole("combobox", { name: "Source file format", exact: true })
         .selectOption(
-          form === "143"
-            ? "india-form143-regular-20260722-v1.1"
-            : form === "26Q"
-              ? "india-26q-regular-v7.8"
-              : form === "27Q"
-                ? "india-27q-regular-v7.5"
-                : "india-27eq-regular-v6.9",
+          form === "138"
+            ? "india-form138-regular-20260722-v1.1"
+            : form === "143"
+              ? "india-form143-regular-20260722-v1.1"
+              : form === "26Q"
+                ? "india-26q-regular-v7.8"
+                : form === "27Q"
+                  ? "india-27q-regular-v7.5"
+                  : "india-27eq-regular-v6.9",
         );
       await page
         .getByRole("combobox", { name: "Clean retained evidence", exact: true })
@@ -202,7 +226,7 @@ test("India historical native samples and explicit dated Form 143 fixture, contr
           name: "Native statement quarter",
           exact: true,
         })
-        .selectOption(form === "26Q" || form === "143" ? "Q1" : "Q3");
+        .selectOption(["26Q", "143", "138"].includes(form) ? "Q1" : "Q3");
       await page
         .getByRole("combobox", {
           name: "Assessed native source selection",
@@ -219,43 +243,62 @@ test("India historical native samples and explicit dated Form 143 fixture, contr
         ["Schedule title", title],
         ["Expected data rows", String(count)],
         ["Independent totals by currency", `INR=${total}`],
-        ["Native statement TAN", form === "143" ? "BLRF02329F" : "MUMN77777A"],
         [
-          form === "143"
+          "Native statement TAN",
+          ["143", "138"].includes(form) ? "BLRF02329F" : "MUMN77777A",
+        ],
+        [
+          ["143", "138"].includes(form)
             ? "Native tax year (six digits)"
             : "Native financial year (six digits)",
-          form === "143" ? "202627" : form === "27Q" ? "201920" : "202021",
+          ["143", "138"].includes(form)
+            ? "202627"
+            : form === "27Q"
+              ? "201920"
+              : "202021",
         ],
         ["Native observation cutoff", "2026-10-30"],
         ["Native batch count", "1"],
         ["Native challan count", "1"],
         ["Native party count", String(count)],
-        ...(form === "143"
+        ...(form === "138"
           ? [
-              ["Native tax collected control (INR)", "700"],
-              ["Native challan tax control (INR)", "210000"],
+              ["Native tax deducted control (INR)", "4000"],
+              ["Native challan tax control (INR)", "22000"],
               ["Native challan interest control (INR)", "1000"],
               ["Native challan fee control (INR)", "1000"],
-              ["Native challan other control (INR)", "1000"],
+              ["Native challan penalty control (INR)", "100"],
               ["Native allocated interest control (INR)", "1000"],
-              ["Native allocated other control (INR)", "1000"],
+              ["Native allocated penalty control (INR)", "100"],
             ]
-          : [
-              ["Native income tax control (INR)", total],
-              ["Native surcharge control (INR)", "0"],
-              ["Native cess control (INR)", "0"],
-            ]),
+          : form === "143"
+            ? [
+                ["Native tax collected control (INR)", "700"],
+                ["Native challan tax control (INR)", "210000"],
+                ["Native challan interest control (INR)", "1000"],
+                ["Native challan fee control (INR)", "1000"],
+                ["Native challan other control (INR)", "1000"],
+                ["Native allocated interest control (INR)", "1000"],
+                ["Native allocated other control (INR)", "1000"],
+              ]
+            : [
+                ["Native income tax control (INR)", total],
+                ["Native surcharge control (INR)", "0"],
+                ["Native cess control (INR)", "0"],
+              ]),
         ["Native allocated deposit control (INR)", total],
         ["Native challan deposit control (INR)", gross],
         [
           "Native payment base control (INR)",
-          form === "143"
-            ? "21000"
-            : form === "26Q"
-              ? "19000"
-              : form === "27Q"
-                ? "26600000"
-                : "10000",
+          form === "138"
+            ? "4200"
+            : form === "143"
+              ? "21000"
+              : form === "26Q"
+                ? "19000"
+                : form === "27Q"
+                  ? "26600000"
+                  : "10000",
         ],
         ["Native crosswalk groups (JSON)", JSON.stringify(groups)],
         [
@@ -264,6 +307,14 @@ test("India historical native samples and explicit dated Form 143 fixture, contr
         ],
       ])
         await page.getByLabel(label, { exact: true }).fill(value);
+      if (form === "138") {
+        await page
+          .getByRole("combobox", {
+            name: "Salary deposit-date source conflict assessment",
+            exact: true,
+          })
+          .selectOption("DD29_EIGHT_DIGIT_DATE_PER_NUMBERED_REMARKS");
+      }
       if (form === "27EQ")
         await page
           .getByLabel("Native purchase value control (INR)", { exact: true })
@@ -332,13 +383,15 @@ test("India historical native samples and explicit dated Form 143 fixture, contr
       await expect(
         challans.getByRole("cell", {
           name:
-            form === "143"
-              ? "5000032"
-              : form === "26Q"
-                ? "0000809"
-                : form === "27Q"
-                  ? "0000525"
-                  : "0000897",
+            form === "138"
+              ? "2000090"
+              : form === "143"
+                ? "5000032"
+                : form === "26Q"
+                  ? "0000809"
+                  : form === "27Q"
+                    ? "0000525"
+                    : "0000897",
           exact: true,
         }),
       ).toBeVisible();
@@ -373,7 +426,7 @@ test("India historical native samples and explicit dated Form 143 fixture, contr
             `assert sum(Decimal(x['total_tax']) for x in r)==Decimal('${total}')`,
             `assert r[-1]['party_key']=='1/1/${count}'`,
             "c=list(w['Withholding challans'].values);assert len(c)==2",
-            `assert c[1][c[0].index('bsr_or_form24g_reference')]=='${form === "143" ? "5000032" : form === "26Q" ? "0000809" : form === "27Q" ? "0000525" : "0000897"}'`,
+            `assert c[1][c[0].index('bsr_or_form24g_reference')]=='${form === "138" ? "2000090" : form === "143" ? "5000032" : form === "26Q" ? "0000809" : form === "27Q" ? "0000525" : "0000897"}'`,
             ...(form === "143"
               ? [
                   "assert r[0]['recorded_deposited_flag']=='Y'",
@@ -381,6 +434,13 @@ test("India historical native samples and explicit dated Form 143 fixture, contr
                   "assert c[1][c[0].index('ddo_serial')]=='00001'",
                   "assert c[1][c[0].index('recorded_payment_mode')]=='B'",
                   "assert c[1][c[0].index('allocated_interest')]=='1000.00'",
+                ]
+              : []),
+            ...(form === "138"
+              ? [
+                  "assert [x['recorded_deposit_date'] for x in r]==['2026-05-09']*2",
+                  "assert 'recorded_rate' not in r[0]",
+                  "assert c[1][c[0].index('recorded_penalty')]=='100.00'",
                 ]
               : []),
             ...(form === "27Q"
