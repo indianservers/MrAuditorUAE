@@ -1,0 +1,122 @@
+{
+  "feature": "Explicit assessed obligation period, separate from the engagement financial year and home-country identity.",
+  "source_hash_basis": "Exact staged Git blob bytes; checkout line endings may differ.",
+  "sources": [
+    {
+      "path": "backend/app/api/v1/grc.py",
+      "sha256": "c8148d6cc51bffffa615f4a3a1f0ddfb638e1087be741610646c8939b4ba139b"
+    },
+    {
+      "path": "backend/app/modules/grc/deadlines.py",
+      "sha256": "a0cfd72d1d7f735e811bfbc5a8b1bba22670d982ba5aea7ca0b9d99ffe2ed97b"
+    },
+    {
+      "path": "backend/app/modules/grc/filing.py",
+      "sha256": "af83ba10c61f8283a28d925cfb704c5d5d16e983b8564e4e235fec0a8e4eb205"
+    },
+    {
+      "path": "backend/app/modules/grc/notifications.py",
+      "sha256": "ae7414cbfb80a197f793838f406343402435223fd254eeca2d4d17d9f938dcb5"
+    },
+    {
+      "path": "backend/app/modules/grc/schemas.py",
+      "sha256": "a683ac4b8c2745c2f40190cb1a0237eb27fd6dd8eecbf9bbf8743d86958b448a"
+    },
+    {
+      "path": "backend/app/modules/grc/service.py",
+      "sha256": "9a6784d09ee9d8840191760299ed4b18ffeb6c56b709320deb46ae53826aac0e"
+    },
+    {
+      "path": "backend/tests/unit/test_obligation_jurisdiction.py",
+      "sha256": "eeeff7e8e372aa6c224d52217d382757a296165d5e28869d10a089ae743c1389"
+    },
+    {
+      "path": "backend/tests/unit/test_filing_scope.py",
+      "sha256": "a338f5a2e777d064f1911789473b0cf90c184935fa12621d1f7235b5ca2f71fa"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_obligation_jurisdiction.py",
+      "sha256": "5d56e69347f3051597d9c95d41b37d90e9be4a2eb2dde044d30bfe824c42209d"
+    },
+    {
+      "path": "frontend/src/features/compliance-filing.tsx",
+      "sha256": "358796eed0173b2f0f8eea66a5bdabcbe80843a95229086a83b17a10b9ab00ec"
+    },
+    {
+      "path": "frontend/tests/compliance-filing.test.tsx",
+      "sha256": "4e9e642ff4834bc62ae9eedda33abce510396d8d044bd405979217900777d04a"
+    },
+    {
+      "path": "docs/country-workflows/obligation-jurisdiction-scope.txt",
+      "sha256": "ea63f0798b8ece515d57e97683d27768f7bd558e728ee39323eaabe8c6459cea"
+    }
+  ],
+  "receipts": [
+    {
+      "path": "docs/phase-12/obligation-period-focused.xml",
+      "sha256": "23453c8e60d65e6b9107c4456dead6ccfb3c71a02b4d2588c441173156ff64c8",
+      "tests": 120,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/obligation-period-regression.xml",
+      "sha256": "6baa08acc07005f3e9066a1dabceacdd5748106357f5856ec7c799eabbc0e16c",
+      "tests": 3716,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "path": "docs/phase-12/obligation-period-regression-final.xml",
+      "sha256": "a2854ee9a1e7f9f32046de7c107768751f797f97e1e8161a7d6b5fb794564c3f",
+      "tests": 3718,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "path": "docs/phase-12/obligation-period-frontend.xml",
+      "sha256": "0a4e6f7d05675d84438f2e3b505fd152f58c14f0a3feb6eb613988f28a73ba95",
+      "tests": 395,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "final_checks": {
+    "backend_passed": 3714,
+    "backend_skipped": 4,
+    "frontend_passed": 395,
+    "frontend_files": 74,
+    "mypy_app_files": 413,
+    "ruff_check_and_format": "PASS",
+    "api_and_job_input_contract_check": "PASS_UNCHANGED",
+    "frontend_typecheck": "PASS",
+    "frontend_lint": "PASS_WITH_EXISTING_UNUSED_VARIABLE_WARNING",
+    "production_build": "PASS"
+  },
+  "verified_behavior": [
+    "Paired exact calendar dates and date order are validated; timestamps and an explicit period without assessed country scope are rejected.",
+    "Structured country period-end rules require an explicit obligation period and a trigger equal to that period end.",
+    "Actual API fixture retains AE home country, AED default and engagement end 2026-12-31 while using the assessed foreign period 2025-04-01 to 2026-03-31.",
+    "A fictional seven-day rule yields 2026-04-07; an engagement-end trigger is rejected for this explicit foreign period. This is synthetic arithmetic, not a legal deadline.",
+    "Approved obligation periods are protected across AE/IN and IN/AE cases and all approved filing stages; return to preparing allows reassessment.",
+    "Assessed-applicable historical structured period rules missing explicit dates are projected PERIOD_SCOPE_PENDING, require reassessment and suppress filing reminders; saved history remains unchanged.",
+    "Historical unstructured obligations retain their original engagement-period basis.",
+    "Frontend displays the explicit period, does not invent missing dates, and blocks period-incomplete stage actions."
+  ],
+  "receipt_scope": [
+    "Focused and initial broad receipts precede the final historical-period projection extension. Final broad receipt includes the two new historical projection cases.",
+    "All test counts overlap and are not additional distinct clients.",
+    "A final import-spacing-only lint repair occurred after the full backend run; no production behavior or assertion changed."
+  ],
+  "limitations": [
+    "Synthetic sources and actors, with explicit scanner/broker doubles; not real-client or legal qualification.",
+    "Periods, rule versions, timezone and working-day conventions remain independently assessed inputs; no country fiscal year or statutory deadline is inferred.",
+    "No native foreign tax computation, portal filing or external submission performed.",
+    "Four isolated connector database checks remain skipped in the selected local broad run.",
+    "Full hosted checks and new browser visual qualification for this source remain pending."
+  ]
+}

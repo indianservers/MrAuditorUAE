@@ -19,3 +19,13 @@ After approval for submission, country scope and existing receipts cannot be cha
 Historical records without structured scope remain without structured scope. Their free-text jurisdiction is not automatically treated as a verified domestic or foreign assessment.
 
 Limits: declared two-letter country identifiers and source references do not qualify an entire country legal corpus, establish registration authenticity, prepare native foreign forms, activate foreign-country tax calculations in the home-country engagement, or execute external filing. Country-specific rate/threshold rules, professional applicability conclusions, native adapters and representative client validation remain separate work.
+
+Explicit obligation periods
+
+obligation_period_start and obligation_period_end are optional top-level obligation fields. Supply both exact ISO calendar dates or neither; the end cannot precede the start. Explicit periods require structured assessed country scope. They may differ from the engagement financial period and do not change it. No January-December, April-March, monthly, quarterly or other legal year is inferred from the country code.
+
+A country-scoped deadline rule with date_basis=period_end requires these explicit dates, and its trigger must equal obligation_period_end. The existing versioned rule, timezone and explicitly assessed calendar conventions still determine the calculated deadline. This is controlled date arithmetic on a retained rule, not verification of its legal correctness. The calendar and filing panel show the retained obligation period separately.
+
+Historical obligations without structured country scope retain their original engagement-period deadline basis. No foreign period is invented for them. Existing approved obligation periods cannot be changed while retaining the approved filing stage; return to preparing for reassessment.
+
+An assessed-applicable historical structured country scope with a period-end rule but no explicit obligation period is projected as PERIOD_SCOPE_PENDING with reassessment required. Filing reminders and stage actions remain unavailable until the explicit period is recorded through a reviewed revision. The saved historical body is not rewritten. This does not change the original engagement basis of historical unstructured obligations.

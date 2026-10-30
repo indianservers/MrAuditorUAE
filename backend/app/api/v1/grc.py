@@ -55,7 +55,7 @@ async def filing_stage(
 
 @router.get("/engagements/{eid}/compliance-calendar")
 async def compliance_calendar(eid: uuid.UUID, db: DB, ctx: Actor):
-    from app.modules.grc.deadlines import local_today, state
+    from app.modules.grc.deadlines import local_today, missing_obligation_period, state
     from app.modules.lineage.working_papers import freshness
 
     await audit.engagement(db, ctx, eid, "grc.read")
@@ -82,13 +82,16 @@ async def compliance_calendar(eid: uuid.UUID, db: DB, ctx: Actor):
                 "reference": obj.reference,
                 "jurisdiction": obj.body.get("jurisdiction"),
                 "jurisdiction_scope": obj.body.get("jurisdiction_scope"),
+                "obligation_period_start": obj.body.get("obligation_period_start"),
+                "obligation_period_end": obj.body.get("obligation_period_end"),
                 "deadline": obj.body.get("deadline"),
                 "extension_deadline": obj.body.get("extension_deadline"),
                 "deadline_kind": obj.body.get("deadline_kind", "unresolved"),
                 "filing_stage": obj.body.get("filing_stage", "not_started"),
                 "calendar_state": state(obj.body, local_today(obj.body)),
                 "freshness": current,
-                "reassessment_required": current != "CURRENT",
+                "reassessment_required": current != "CURRENT"
+                or missing_obligation_period(obj.body),
                 "review_status": obj.status,
                 "owner_id": obj.body["owner_id"],
                 "reviewer_id": obj.body.get("reviewer_id"),

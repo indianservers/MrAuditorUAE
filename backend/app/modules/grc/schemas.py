@@ -524,6 +524,8 @@ class Obligation(Body):
     source_url: str = Field(min_length=1, max_length=2000)
     jurisdiction: Text
     jurisdiction_scope: ObligationJurisdictionScope | None = None
+    obligation_period_start: Annotated[date, BeforeValidator(calendar_date)] | None = None
+    obligation_period_end: Annotated[date, BeforeValidator(calendar_date)] | None = None
     effective_from: date
     deadline: date | None = None
     deadline_kind: Literal[
@@ -558,7 +560,23 @@ class Obligation(Body):
 
     @model_validator(mode="after")
     def filing_contract(self):
+        if (self.obligation_period_start is None) != (self.obligation_period_end is None):
+            raise ValueError("Retain both obligation period dates, or neither")
+        if self.obligation_period_start is not None:
+            if self.jurisdiction_scope is None:
+                raise ValueError("An explicit obligation period requires assessed country scope")
+            assert self.obligation_period_end is not None
+            if self.obligation_period_end < self.obligation_period_start:
+                raise ValueError("Obligation period end cannot precede its start")
         if self.jurisdiction_scope:
+            if (
+                self.deadline_rule
+                and self.deadline_rule.date_basis == "period_end"
+                and self.obligation_period_end is None
+            ):
+                raise ValueError(
+                    "Country-scoped period-end rules require an explicit obligation period"
+                )
             scope = self.jurisdiction_scope
             if self.jurisdiction != scope.obligation_country:
                 raise ValueError(

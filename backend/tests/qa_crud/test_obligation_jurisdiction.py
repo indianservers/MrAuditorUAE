@@ -2,11 +2,13 @@
 
 import os
 from copy import deepcopy
-from datetime import date
+from uuid import UUID
 
 import pytest
 
 from app.core.security import decode_token
+from app.db.models.platform import FinancialPeriod
+from app.db.session import Session, tenant_context
 from app.modules.grc.service import clean
 from tests.integration.test_platform import environment as environment
 from tests.phase4.test_workflows import action, actor, approve, create, grant, setup
@@ -46,6 +48,14 @@ async def test_uae_entity_retains_explicit_indian_obligation_without_switching_c
         paper = (await c.get(audit_base + "/records/" + paper["id"], headers=h)).json()
         originals.append(paper)
     base = f"/api/v1/grc/engagements/{eid}"
+
+    async def engagement_period_end():
+        async with Session() as db, db.begin():
+            await tenant_context(db, h["X-Tenant-ID"])
+            period = await db.get(FinancialPeriod, UUID(opts["period_id"]))
+            return period.end_date.isoformat()
+
+    assert await engagement_period_end() == "2026-12-31"
     body = payload()
     body.update(
         owner_id=str(decode_token(h["Authorization"].split()[1])),
@@ -54,7 +64,20 @@ async def test_uae_entity_retains_explicit_indian_obligation_without_switching_c
         fact_evidence_ids=[originals[1]["id"]],
         readiness_evidence_ids=[originals[2]["id"]],
         reviewer_id=reviewer[3],
-        deadline=str(date.today()),
+        effective_from="2025-04-01",
+        obligation_period_start="2025-04-01",
+        obligation_period_end="2026-03-31",
+        deadline=None,
+        deadline_rule={
+            "identifier": "SYNTHETIC-foreign-period-rule",
+            "version": 1,
+            "effective_from": "2025-01-01",
+            "effective_to": "2026-12-31",
+            "trigger": "2026-03-31",
+            "date_basis": "period_end",
+            "days_after": 7,
+            "timezone": "Asia/Kolkata",
+        },
         deadline_kind="firm_internal",
         notifications_enabled=True,
         reminder_days=[0],
@@ -102,13 +125,23 @@ async def test_uae_entity_retains_explicit_indian_obligation_without_switching_c
     wrong["jurisdiction_scope"].update(entity_country="IN", relationship="domestic")
     denied = await post(wrong)
     assert denied.status_code == 422 and "actual legal entity" in denied.text, denied.text
+    wrong_period = deepcopy(body)
+    wrong_period["deadline_rule"]["trigger"] = "2026-12-31"
+    denied = await post(wrong_period)
+    assert denied.status_code == 422 and "explicit obligation period end" in denied.text
     created = await post(body)
     assert created.status_code == 201, created.text
+    assert created.json()["body"]["deadline"] == "2026-04-07"
+    assert created.json()["body"]["obligation_period_end"] == "2026-03-31"
     obj = await approve(c, h, reviewer[0], base, created.json())
     assert obj["body"]["jurisdiction_scope"]["relationship"] == "foreign"
     calendar = (await c.get(base + "/compliance-calendar", headers=h)).json()
     assert calendar["items"][0]["calendar_state"] == "APPLICABILITY_PENDING"
     assert calendar["items"][0]["jurisdiction_scope"] == body["jurisdiction_scope"]
+    assert calendar["items"][0]["obligation_period_start"] == "2025-04-01"
+    assert calendar["items"][0]["obligation_period_end"] == "2026-03-31"
+    assert calendar["items"][0]["deadline"] == "2026-04-07"
+    assert await engagement_period_end() == "2026-12-31"
     reminders = await c.post(base + "/compliance-reminders", headers=h)
     assert reminders.status_code == 200 and reminders.json()["recorded"] == 0
     metadata = (
@@ -148,6 +181,19 @@ async def test_uae_entity_retains_explicit_indian_obligation_without_switching_c
     retained = deepcopy(obj["body"])
     changed = deepcopy(clean(retained))
     changed["jurisdiction_scope"]["registration_reference"] = "SYN-REPLACEMENT"
+    denied = await c.patch(
+        base + f"/records/{obj['id']}",
+        headers=h,
+        json={
+            "version": obj["version"],
+            "reference": obj["reference"],
+            "title": obj["title"],
+            "body": changed,
+        },
+    )
+    assert denied.status_code == 409 and "Approved filing inputs changed" in denied.text
+    changed = deepcopy(clean(retained))
+    changed["obligation_period_start"] = "2025-03-01"
     denied = await c.patch(
         base + f"/records/{obj['id']}",
         headers=h,

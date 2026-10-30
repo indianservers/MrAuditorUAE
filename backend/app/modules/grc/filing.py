@@ -95,9 +95,18 @@ async def validate_transition(db, ctx, eng, data, record_id):
         if data.deadline_rule.date_basis == "period_end":
             from app.db.models.platform import FinancialPeriod
 
-            period = await db.get(FinancialPeriod, eng.period_id)
-            if not period or data.deadline_rule.trigger != period.end_date:
-                raise HTTPException(422, "Period-end rule trigger must equal engagement period end")
+            if data.obligation_period_end is not None:
+                if data.deadline_rule.trigger != data.obligation_period_end:
+                    raise HTTPException(
+                        422, "Period-end rule trigger must equal the explicit obligation period end"
+                    )
+            else:
+                # Historical unstructured obligations retain their original engagement basis.
+                period = await db.get(FinancialPeriod, eng.period_id)
+                if not period or data.deadline_rule.trigger != period.end_date:
+                    raise HTTPException(
+                        422, "Period-end rule trigger must equal engagement period end"
+                    )
     if old != new:
         if STAGES.index(new) != STAGES.index(old) + 1 and new not in {"not_started", "preparing"}:
             raise HTTPException(409, "Filing stages must advance one step at a time")
@@ -126,6 +135,8 @@ async def validate_transition(db, ctx, eng, data, record_id):
             "module",
             "jurisdiction",
             "jurisdiction_scope",
+            "obligation_period_start",
+            "obligation_period_end",
             "source_url",
             "effective_from",
             "deadline_kind",

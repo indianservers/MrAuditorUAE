@@ -175,3 +175,77 @@ it("keeps entity country and foreign obligation country distinct and blocks unas
     screen.getByRole("button", { name: "Record evidenced filing stage" }),
   ).toBeEnabled();
 });
+
+it("shows the explicit obligation period without substituting the home engagement year", () => {
+  const { rerender } = render(
+    <ComplianceFiling
+      base="grc/engagements/scoped"
+      paper={{
+        ...paper,
+        body: {
+          filing_stage: "under_review",
+          jurisdiction: "IN",
+          obligation_period_start: "2025-04-01",
+          obligation_period_end: "2026-03-31",
+          jurisdiction_scope: {
+            entity_country: "AE",
+            obligation_country: "IN",
+            relationship: "foreign",
+            applicability: "assessed_applicable",
+          },
+        },
+      }}
+    />,
+  );
+  expect(
+    screen.getByText(/Obligation period: 2025-04-01 to 2026-03-31/),
+  ).toBeVisible();
+  rerender(
+    <ComplianceFiling
+      base="grc/engagements/scoped"
+      paper={{
+        ...paper,
+        body: {
+          filing_stage: "under_review",
+          jurisdiction: "IN",
+          jurisdiction_scope: {
+            entity_country: "AE",
+            obligation_country: "IN",
+            relationship: "foreign",
+            applicability: "potential",
+          },
+        },
+      }}
+    />,
+  );
+  expect(screen.getByText(/Obligation period: Not specified/)).toBeVisible();
+});
+
+it("flags a historical country-scoped period rule without inventing a period", () => {
+  render(
+    <ComplianceFiling
+      base="grc/engagements/scoped"
+      paper={{
+        ...paper,
+        body: {
+          filing_stage: "under_review",
+          jurisdiction: "IN",
+          deadline_rule: { date_basis: "period_end" },
+          jurisdiction_scope: {
+            entity_country: "AE",
+            obligation_country: "IN",
+            relationship: "foreign",
+            applicability: "assessed_applicable",
+          },
+        },
+      }}
+    />,
+  );
+  expect(
+    screen.getByText(/Record the explicit obligation period/),
+  ).toBeVisible();
+  expect(screen.getByText(/Obligation period: Not specified/)).toBeVisible();
+  expect(
+    screen.getByRole("button", { name: "Record evidenced filing stage" }),
+  ).toBeDisabled();
+});

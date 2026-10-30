@@ -64,6 +64,16 @@ def calculate(rule: DeadlineRule):
     raise ValueError("Calendar has no working day in bounded search")
 
 
+def missing_obligation_period(body):
+    rule = body.get("deadline_rule")
+    return (
+        isinstance(body.get("jurisdiction_scope"), dict)
+        and isinstance(rule, dict)
+        and rule.get("date_basis") == "period_end"
+        and (not body.get("obligation_period_start") or not body.get("obligation_period_end"))
+    )
+
+
 def state(body, today):
     scope = body.get("jurisdiction_scope")
     if isinstance(scope, dict):
@@ -71,6 +81,8 @@ def state(body, today):
             return "ASSESSED_NOT_APPLICABLE"
         if scope.get("applicability") != "assessed_applicable":
             return "APPLICABILITY_PENDING"
+        if missing_obligation_period(body):
+            return "PERIOD_SCOPE_PENDING"
     deadline = body.get("extension_deadline") or body.get("deadline")
     if not deadline:
         return "UNRESOLVED"

@@ -42,6 +42,15 @@ export function ComplianceFiling({
     countryScope &&
     countryScope.applicability !== "assessed_applicable" &&
     ["approved_for_submission", "submitted", "acknowledged"].includes(stage);
+  const deadlineRule =
+    paper.body.deadline_rule && typeof paper.body.deadline_rule === "object"
+      ? (paper.body.deadline_rule as Record<string, unknown>)
+      : null;
+  const periodMissing = Boolean(
+    countryScope &&
+    deadlineRule?.date_basis === "period_end" &&
+    (!paper.body.obligation_period_start || !paper.body.obligation_period_end),
+  );
   const permitted =
     stage === "approved_for_submission" ? canApprove : canManage;
   const validReceipt =
@@ -76,6 +85,26 @@ export function ComplianceFiling({
           {String(countryScope.applicability).replaceAll("_", " ")}. This
           assessment does not change the entity country or activate a foreign
           tax engine.
+        </p>
+      )}
+      {Boolean(
+        countryScope ||
+        paper.body.obligation_period_start ||
+        paper.body.obligation_period_end,
+      ) && (
+        <p>
+          Obligation period:{" "}
+          {paper.body.obligation_period_start &&
+          paper.body.obligation_period_end
+            ? `${String(paper.body.obligation_period_start)} to ${String(paper.body.obligation_period_end)}`
+            : "Not specified"}
+          . This period is separate from the engagement financial period.
+        </p>
+      )}
+      {periodMissing && (
+        <p role="status">
+          Record the explicit obligation period and return to preparing for
+          reassessment.
         </p>
       )}
       {scopePending && (
@@ -143,6 +172,7 @@ export function ComplianceFiling({
           action.isPending ||
           locked ||
           Boolean(scopePending) ||
+          periodMissing ||
           !permitted ||
           stage === current ||
           (receiptRequired && !validReceipt)

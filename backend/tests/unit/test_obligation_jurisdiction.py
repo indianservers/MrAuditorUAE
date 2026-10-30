@@ -111,3 +111,71 @@ def test_legacy_scope_remains_unassessed_without_being_auto_populated():
     body.pop("jurisdiction_scope")
     assert Obligation.model_validate(body).jurisdiction_scope is None
     assert state(body, date(2026, 10, 30)) == "UNRESOLVED"
+
+
+@pytest.mark.parametrize("entity,obligation", [("AE", "IN"), ("IN", "AE"), ("AE", "AE")])
+def test_obligation_period_is_explicit_without_a_country_year_default(entity, obligation):
+    body = payload(entity, obligation)
+    body.update(obligation_period_start="2025-04-01", obligation_period_end="2026-03-31")
+    data = Obligation.model_validate(body)
+    assert data.obligation_period_start == date(2025, 4, 1)
+    assert data.obligation_period_end == date(2026, 3, 31)
+    assert Obligation.model_validate(payload(entity, obligation)).obligation_period_end is None
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"obligation_period_start": "2025-04-01"},
+        {"obligation_period_end": "2026-03-31"},
+        {"obligation_period_start": "2026-04-01", "obligation_period_end": "2026-03-31"},
+        {"obligation_period_start": "2025-04-01T00:00:00Z", "obligation_period_end": "2026-03-31"},
+        {
+            "obligation_period_start": "2025-04-01",
+            "obligation_period_end": "2026-03-31",
+            "jurisdiction_scope": None,
+        },
+    ],
+)
+def test_partial_reversed_timestamp_or_unscoped_periods_are_rejected(changes):
+    body = payload()
+    body.update(changes)
+    with pytest.raises(ValidationError):
+        Obligation.model_validate(body)
+
+
+def test_scoped_period_end_rule_requires_its_own_assessed_period():
+    body = payload()
+    body["deadline_rule"] = {
+        "identifier": "SYNTHETIC-period-rule",
+        "version": 1,
+        "effective_from": "2025-01-01",
+        "trigger": "2026-03-31",
+        "date_basis": "period_end",
+        "days_after": 7,
+        "timezone": "Asia/Kolkata",
+    }
+    with pytest.raises(ValidationError, match="explicit obligation period"):
+        Obligation.model_validate(body)
+    body.update(obligation_period_start="2025-04-01", obligation_period_end="2026-03-31")
+    assert Obligation.model_validate(body).deadline == date(2026, 4, 7)
+
+
+@pytest.mark.parametrize(
+    "structured,expected", [(True, "PERIOD_SCOPE_PENDING"), (False, "OVERDUE")]
+)
+def test_historical_scoped_period_requires_reassessment_without_rewriting_history(
+    structured, expected
+):
+    from copy import deepcopy
+
+    from app.modules.grc.deadlines import missing_obligation_period
+
+    body = payload(applicability="assessed_applicable")
+    body.update(deadline="2026-04-07", deadline_rule={"date_basis": "period_end"})
+    if not structured:
+        body.pop("jurisdiction_scope")
+    retained = deepcopy(body)
+    assert missing_obligation_period(body) is structured
+    assert state(body, date(2026, 10, 30)) == expected
+    assert body == retained

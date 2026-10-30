@@ -56,7 +56,7 @@ async def compliance_reminders(db, ctx, eid, today):
 
     from app.modules.audit_execution.models import AuditRecord
     from app.modules.grc import service
-    from app.modules.grc.deadlines import local_today
+    from app.modules.grc.deadlines import local_today, missing_obligation_period
     from app.modules.lineage.working_papers import freshness
 
     papers = (
@@ -83,6 +83,7 @@ async def compliance_reminders(db, ctx, eid, today):
                 isinstance(body.get("jurisdiction_scope"), dict)
                 and body["jurisdiction_scope"].get("applicability") != "assessed_applicable"
             )
+            or missing_obligation_period(body)
             or not due
             or body.get("filing_stage") in {"submitted", "acknowledged"}
             or await freshness(db, ctx, paper) != "CURRENT"
