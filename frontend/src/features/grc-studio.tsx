@@ -12,7 +12,11 @@ import {
 import type { Engagement, Page, RecordRow } from "@/types/models";
 import { PageHeader } from "./shared";
 import { PaperEditor, label, type Paper, type Schema } from "./grc-forms";
-import { ComplianceFiling, type FilingVerification } from "./compliance-filing";
+import {
+  ComplianceFiling,
+  type FilingVerification,
+  type DeadlineComparison,
+} from "./compliance-filing";
 import { DMCCAuditResult, type DMCCAssessment } from "./dmcc-audit-result";
 import { SoDCalculation, SoDInputAssignments } from "./sod-results";
 
@@ -178,6 +182,7 @@ function Panel({
       freshness: string;
       calendar_state: string;
       reassessment_required: boolean;
+      deadline_comparison?: DeadlineComparison | null;
       dmcc_audit_assessment?: DMCCAssessment | null;
     }[];
   }>(
@@ -213,6 +218,7 @@ function Panel({
             freshness: checked.freshness,
             calendar_state: checked.calendar_state,
             reassessment_required: checked.reassessment_required,
+            deadline_comparison: checked.deadline_comparison,
           }
         : {
             state: calendar.data ? "unavailable" : "pending",

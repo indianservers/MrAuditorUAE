@@ -57,7 +57,12 @@ async def filing_stage(
 async def compliance_calendar(
     eid: uuid.UUID, db: DB, ctx: Actor, record_id: uuid.UUID | None = None
 ):
-    from app.modules.grc.deadlines import local_today, missing_obligation_period, state
+    from app.modules.grc.deadlines import (
+        comparison_trace,
+        local_today,
+        missing_obligation_period,
+        state,
+    )
     from app.modules.grc.dmcc_audit import saved_assessment
     from app.modules.lineage.working_papers import freshness
 
@@ -80,6 +85,7 @@ async def compliance_calendar(
         await service.authorize_record(db, ctx, obj)
         current = await freshness(db, ctx, obj)
         dmcc = saved_assessment(obj.body)
+        comparison = comparison_trace(obj.body)
         items.append(
             {
                 "record_id": str(obj.id),
@@ -93,12 +99,16 @@ async def compliance_calendar(
                 "extension_deadline": obj.body.get("extension_deadline"),
                 "deadline_kind": obj.body.get("deadline_kind", "unresolved"),
                 "filing_stage": obj.body.get("filing_stage", "not_started"),
-                "calendar_state": state(obj.body, local_today(obj.body)),
+                "calendar_state": "DEADLINE_REASSESSMENT_REQUIRED"
+                if comparison and comparison["state"] == "REASSESSMENT_REQUIRED"
+                else state(obj.body, local_today(obj.body)),
                 "freshness": current,
                 "dmcc_audit_assessment": dmcc,
+                "deadline_comparison": comparison,
                 "reassessment_required": current != "CURRENT"
                 or missing_obligation_period(obj.body)
-                or bool(dmcc and dmcc["issues"]),
+                or bool(dmcc and dmcc["issues"])
+                or bool(comparison and comparison["state"] == "REASSESSMENT_REQUIRED"),
                 "review_status": obj.status,
                 "owner_id": obj.body["owner_id"],
                 "reviewer_id": obj.body.get("reviewer_id"),

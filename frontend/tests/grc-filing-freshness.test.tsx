@@ -81,6 +81,69 @@ function check(version: number, freshness = "CURRENT", reassessment = false) {
     ],
   };
 }
+
+it("shows the server comparison only for the selected version and blocks a mismatched saved deadline", () => {
+  mock.record.body = {
+    filing_stage: "under_review",
+    deadline: "2027-03-31",
+    deadline_rule: {
+      identifier: "SYN-notice",
+      trigger: "2026-12-01",
+      months_after: 1,
+      later_of: [
+        { identifier: "SYN-period", trigger: "2026-12-31", months_after: 3 },
+      ],
+    },
+  };
+  const trace = {
+    state: "CONSISTENT_WITH_SAVED_RULE",
+    selected_before_rolling: "2027-03-31",
+    calculated_deadline: "2027-03-31",
+    convention: "calendar",
+    candidates: [
+      {
+        identifier: "SYN-notice",
+        unadjusted_date: "2027-01-01",
+        selected: false,
+      },
+      {
+        identifier: "SYN-period",
+        unadjusted_date: "2027-03-31",
+        selected: true,
+      },
+    ],
+  };
+  mock.check = {
+    items: [{ ...check(7).items[0], deadline_comparison: trace }],
+  };
+  mock.fetching = false;
+  const { rerender } = render(<GRCStudio eid="E" area="obligations" />);
+  fireEvent.click(screen.getByRole("button", { name: "Open SYN-SCOPE" }));
+  const section = () =>
+    screen.getByRole("region", { name: "Later-of deadline comparison" });
+  expect(section()).toHaveTextContent("2027-01-01");
+  expect(section()).toHaveTextContent("Calculated base deadline: 2027-03-31");
+  expect(section()).toHaveTextContent("Selected");
+  mock.record = { ...mock.record, version: 8 };
+  rerender(<GRCStudio eid="E" area="obligations" />);
+  expect(section()).not.toHaveTextContent("2027-01-01");
+  expect(section()).toHaveTextContent("Awaiting server calculation");
+  mock.check = {
+    items: [
+      {
+        ...check(8, "CURRENT", true).items[0],
+        deadline_comparison: { state: "REASSESSMENT_REQUIRED" },
+      },
+    ],
+  };
+  rerender(<GRCStudio eid="E" area="obligations" />);
+  expect(section()).toHaveTextContent(
+    "Review the retained rule and saved deadline",
+  );
+  expect(
+    screen.getByRole("button", { name: "Record evidenced filing stage" }),
+  ).toBeDisabled();
+});
 it("requires a currentness projection matching the selected record version", () => {
   const { rerender } = render(<GRCStudio eid="E" area="obligations" />);
   fireEvent.click(screen.getByRole("button", { name: "Open SYN-SCOPE" }));

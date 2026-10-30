@@ -1,0 +1,68 @@
+{
+  "source_commit": "699b0bab776ba4a3e3844de5383ee7a9d139c70f",
+  "run_id": 41112022439,
+  "job_id": 124256262223,
+  "job_conclusion": "success",
+  "suite_passed": 13,
+  "suite_failed": 0,
+  "suite_duration": "7.0m",
+  "business_day_and_comparison_case_duration": "17.5s",
+  "artifact": {
+    "id": 13005575207,
+    "size_bytes": 16542199,
+    "sha256": "de78bbf8ac1e41e598b4452b35ae1d515446be7c813319fc79c4a4b76fbd0687"
+  },
+  "source_files": [
+    {
+      "path": "frontend/e2e/business-day-deadline-release.spec.ts",
+      "sha256": "d7869c1cb1ab8287d2cdc9e89e5e23753ee1b926f5c08bc4fa11cca6292127fc"
+    },
+    {
+      "path": "frontend/src/features/compliance-filing.tsx",
+      "sha256": "e5a296df76557089b663c43ebd930af4a35a3f4d38d061297fcec2c597deb4ea"
+    },
+    {
+      "path": "backend/app/modules/grc/deadlines.py",
+      "sha256": "7b8a775123d840ee011a5ce5f41f0505658693100f372dd224c69f9f82e6495f"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-later-of-reviewed-699b0ba.png",
+      "size_bytes": 59629,
+      "sha256": "76dce91229cfa2636febc22e80f3f4ce80c26ba1da078075cb06f1700352be20",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-later-of-facts-withdrawn-stale-699b0ba.png",
+      "size_bytes": 63628,
+      "sha256": "a0eff0aa4c4d672f44256d26634eb9090fb25c8e9aa7b8e8ce271cfd515de53c",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-later-of-reviewed-699b0ba.png",
+      "size_bytes": 59811,
+      "sha256": "7388321c1fc506e6e1dfb54170361f75ac4027be56e8353c1925265e45c6a293",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-later-of-facts-withdrawn-stale-699b0ba.png",
+      "size_bytes": 63791,
+      "sha256": "4a765ac293d7766ea4998dc5b03fa41e99b740615531a1effc50cbaf53a550b2",
+      "visually_inspected": true
+    }
+  ],
+  "verified_scope": [
+    "Actual hosted scanning and independent review of separate synthetic comparison rule/fact originals in UAE and India.",
+    "Later-of calculation, explicit period, independent filing approval, immutable saved body and stale source status after facts are reopened; submission remains disabled with a supplied receipt when sources are stale."
+  ],
+  "visual_findings": [
+    "Both current panels show version 5, approved_for_submission, deadline 2027-03-31, the two distinct December 2026 triggers with one/three-month offsets, explicit 2026 obligation period and correct Dubai/Kolkata timezone.",
+    "Both stale panels preserve the deadline, triggers and stage while showing STALE and reassessment required; their filing buttons remain disabled despite populated submission evidence.",
+    "The original narrow panel crowds the table header and adjacent date/offset values. Original captures are preserved. The new source replaces this table with stacked candidate cards and adds server-derived dates; its visual execution remains pending."
+  ],
+  "limits": [
+    "This source predates the server-derived comparison trace and stacked-card layout; their browser assertions and screenshots require a separate run.",
+    "Full backend verification for this source was still running when the browser evidence was recorded. This is not six-job completion or real-client/professional legal qualification."
+  ]
+}

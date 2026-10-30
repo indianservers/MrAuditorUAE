@@ -5,6 +5,18 @@ import { useAction } from "@/hooks/use-api";
 import { Button, ErrorState } from "@/components/ui/primitives";
 import type { Paper } from "./grc-forms";
 
+export type DeadlineComparison = {
+  state: string;
+  candidates?: {
+    identifier: string;
+    unadjusted_date: string;
+    selected: boolean;
+  }[];
+  selected_before_rolling?: string;
+  calculated_deadline?: string;
+  convention?: string;
+};
+
 export type FilingVerification =
   | { state: "pending" | "unavailable" }
   | {
@@ -12,6 +24,7 @@ export type FilingVerification =
       freshness: string;
       calendar_state: string;
       reassessment_required: boolean;
+      deadline_comparison?: DeadlineComparison | null;
     };
 
 const stages = [
@@ -69,6 +82,8 @@ export function ComplianceFiling({
     !Array.isArray(deadlineRule.business_calendar)
       ? (deadlineRule.business_calendar as Record<string, unknown>)
       : null;
+  const comparison =
+    verification?.state === "known" ? verification.deadline_comparison : null;
   const periodMissing = Boolean(
     countryScope &&
     [
@@ -112,36 +127,71 @@ export function ComplianceFiling({
               {String(paper.body.rule_evidence_id ?? "Not supplied")}. Timezone:{" "}
               {String(deadlineRule.timezone ?? "Not supplied")}.
             </p>
-            <div style={{ overflowX: "auto" }}>
-              <table aria-label="Deadline triggering events">
-                <thead>
-                  <tr>
-                    <th>Candidate</th>
-                    <th>Date basis</th>
-                    <th>Trigger</th>
-                    <th>Months after</th>
-                    <th>Days after</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[deadlineRule, ...deadlineRule.later_of].map(
-                    (candidate, index) => (
-                      <tr key={index}>
-                        <td>
-                          {String(candidate?.identifier ?? "Not supplied")}
-                        </td>
-                        <td>
-                          {String(candidate?.date_basis ?? "Not supplied")}
-                        </td>
-                        <td>{String(candidate?.trigger ?? "Not supplied")}</td>
-                        <td>{String(candidate?.months_after ?? 0)}</td>
-                        <td>{String(candidate?.days_after ?? 0)}</td>
-                      </tr>
-                    ),
-                  )}
-                </tbody>
-              </table>
-            </div>
+            {comparison?.state === "REASSESSMENT_REQUIRED" && (
+              <p role="alert">
+                Review the retained rule and saved deadline before recording
+                filing.
+              </p>
+            )}
+            {comparison?.state === "CONSISTENT_WITH_SAVED_RULE" && (
+              <p>
+                Latest date before adjustment:{" "}
+                {comparison.selected_before_rolling}. Convention:{" "}
+                {comparison.convention}. Calculated base deadline:{" "}
+                {comparison.calculated_deadline}.
+              </p>
+            )}
+            {[deadlineRule, ...deadlineRule.later_of].map(
+              (candidate, index) => {
+                const derived = comparison?.candidates?.find(
+                  (row) => row.identifier === candidate?.identifier,
+                );
+                return (
+                  <section
+                    role="group"
+                    aria-label={`Deadline candidate ${String(candidate?.identifier ?? index + 1)}`}
+                    key={index}
+                    style={{
+                      padding: 12,
+                      marginBlock: 8,
+                      border: "1px solid var(--border)",
+                      borderRadius: 6,
+                      overflowWrap: "anywhere",
+                    }}
+                  >
+                    <h5>
+                      {String(candidate?.identifier ?? "Not supplied")}
+                      {derived?.selected ? " · Selected" : ""}
+                    </h5>
+                    <dl
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)",
+                        gap: "4px 12px",
+                      }}
+                    >
+                      <dt>Date basis</dt>
+                      <dd>
+                        {String(
+                          candidate?.date_basis ?? "Not supplied",
+                        ).replaceAll("_", " ")}
+                      </dd>
+                      <dt>Trigger</dt>
+                      <dd>{String(candidate?.trigger ?? "Not supplied")}</dd>
+                      <dt>Months after</dt>
+                      <dd>{String(candidate?.months_after ?? 0)}</dd>
+                      <dt>Days after</dt>
+                      <dd>{String(candidate?.days_after ?? 0)}</dd>
+                      <dt>Calculated date</dt>
+                      <dd>
+                        {derived?.unadjusted_date ??
+                          "Awaiting server calculation"}
+                      </dd>
+                    </dl>
+                  </section>
+                );
+              },
+            )}
           </section>
         )}
       <p>

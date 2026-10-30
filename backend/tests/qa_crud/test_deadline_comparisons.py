@@ -143,6 +143,18 @@ async def test_later_of_dates_retain_independent_review_period_controls_and_sour
     assert approved.status_code == 200, approved.text
     obj = approved.json()
     retained = deepcopy(obj["body"])
+    before = await c.get(base + f"/compliance-calendar?record_id={obj['id']}", headers=h)
+    assert before.status_code == 200, before.text
+    projection = before.json()["items"][0]
+    trace = projection["deadline_comparison"]
+    assert projection["freshness"] == "CURRENT" and not projection["reassessment_required"]
+    assert trace["state"] == "CONSISTENT_WITH_SAVED_RULE"
+    assert [(row["unadjusted_date"], row["selected"]) for row in trace["candidates"]] == [
+        ("2027-01-01", False),
+        ("2027-03-31", True),
+    ]
+    assert trace["rule_evidence_id"] == originals["rule"]["id"]
+    assert trace["fact_evidence_ids"] == [originals["facts"]["id"]]
     await action(c, reviewer[0], audit_base, originals["facts"], "reopen")
     saved = (await c.get(audit_base + f"/records/{obj['id']}", headers=h)).json()
     assert saved["body"] == retained
@@ -151,3 +163,4 @@ async def test_later_of_dates_retain_independent_review_period_controls_and_sour
     item = calendar.json()["items"][0]
     assert item["deadline"] == "2027-03-31" and item["freshness"] == "STALE"
     assert item["reassessment_required"] is True
+    assert item["deadline_comparison"] == trace

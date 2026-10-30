@@ -401,6 +401,22 @@ test("explicit UAE and India business-day calendars, independent filing and repl
         await expect(basis).toContainText("2026-12-01");
         await expect(basis).toContainText("2026-12-31");
         await expect(basis).toContainText(comparisonDocs.rule.id);
+        await expect(basis).toContainText("2027-01-01");
+        await expect(basis).toContainText(
+          "Calculated base deadline: 2027-03-31",
+        );
+        await expect(
+          basis.getByRole("group", {
+            name: "Deadline candidate SYN-period",
+            exact: true,
+          }),
+        ).toContainText("Selected");
+        await expect(
+          basis.getByRole("group", {
+            name: "Deadline candidate SYN-notice",
+            exact: true,
+          }),
+        ).not.toContainText("Selected");
         await expect(readiness).toContainText("2027-03-31");
         return readiness;
       }

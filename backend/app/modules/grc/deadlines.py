@@ -224,10 +224,61 @@ def missing_obligation_period(body):
         and isinstance(rule, dict)
         and any(
             isinstance(candidate, dict) and candidate.get("date_basis") == "period_end"
-            for candidate in [rule, *rule.get("later_of", [])]
+            for candidate in [
+                rule,
+                *(rule["later_of"] if isinstance(rule.get("later_of"), list) else []),
+            ]
         )
         and (not body.get("obligation_period_start") or not body.get("obligation_period_end"))
     )
+
+
+def comparison_trace(body):
+    raw = body.get("deadline_rule")
+    if not isinstance(raw, dict) or not raw.get("later_of"):
+        return None
+    contract = "retained-deadline-comparison/1"
+    try:
+        rule = DeadlineRule.model_validate(raw)
+        dates = [
+            {
+                "identifier": candidate.identifier,
+                "date_basis": candidate.date_basis,
+                "trigger": candidate.trigger.isoformat(),
+                "months_after": candidate.months_after,
+                "days_after": candidate.days_after,
+                "unadjusted_date": calendar_offset(
+                    candidate.trigger, candidate.months_after, candidate.days_after
+                ).isoformat(),
+            }
+            for candidate in candidates(rule)
+        ]
+        selected = max(candidate["unadjusted_date"] for candidate in dates)
+        deadline = calculate(rule).isoformat()
+        consistent = deadline == str(body.get("deadline"))
+        return {
+            "contract": contract,
+            "state": "CONSISTENT_WITH_SAVED_RULE" if consistent else "REASSESSMENT_REQUIRED",
+            "issues": [] if consistent else ["SAVED_DEADLINE_DIFFERS_FROM_RETAINED_RULE"],
+            "candidates": [
+                {**candidate, "selected": candidate["unadjusted_date"] == selected}
+                for candidate in dates
+            ],
+            "selected_before_rolling": selected,
+            "convention": rule.convention,
+            "calculated_deadline": deadline,
+            "saved_deadline": body.get("deadline"),
+            "timezone": rule.timezone,
+            "rule_evidence_id": body.get("rule_evidence_id"),
+            "fact_evidence_ids": body.get("fact_evidence_ids", []),
+            "extension_included": False,
+        }
+    except (ValueError, TypeError, OverflowError):
+        return {
+            "contract": contract,
+            "state": "REASSESSMENT_REQUIRED",
+            "issues": ["RETAINED_DEADLINE_COMPARISON_INVALID"],
+        }
 
 
 def state(body, today):

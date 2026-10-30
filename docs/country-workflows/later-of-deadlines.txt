@@ -59,3 +59,32 @@ comparison policy/fact originals in both countries. It checks visible triggers,
 server deadline, independent filing approval and unchanged stale bodies after
 fact withdrawal, with four planned captures. Discovery is not execution; new
 hosted proof and screenshot inspection remain pending for the committed source.
+
+The compliance-calendar projection now supplies a server-derived comparison
+breakdown under retained-deadline-comparison/1. It retains each triggering
+date, separate offsets, unadjusted candidate result, all tied latest candidates,
+selected date before rolling, final calculated base deadline, convention,
+timezone and the original rule/fact record references. Extensions remain a
+separate recorded basis. This projection does not rewrite the saved obligation
+body or replace its original evidence dependencies.
+
+A missing/different saved base date or invalid retained candidate yields an
+explicit reassessment state. The calendar does not treat that result as an open
+verified deadline. Filing readiness shows the calculated dates and winning
+candidates only from the server projection matching the selected record version;
+while checking a different version it shows that calculation is pending. An
+arithmetic breakdown remains visible after source withdrawal, alongside STALE
+freshness and disabled filing actions. Consistent arithmetic does not resolve
+changed or unreviewed facts. The hosted comparison extension now also asserts
+the displayed candidate dates and selected row before its captures; its new
+execution is still a separate gate.
+
+Hosted source 699b0ba subsequently passed all thirteen browser cases in seven
+minutes; the combined calendar/comparison case passed in 17.5 seconds. All four
+comparison captures were saved and inspected. Both countries show the approved
+2027-03-31 deadline and their own timezone, then retain those same facts with
+STALE status and disabled filing actions after source withdrawal. Original narrow
+table captures expose cramped adjacent date/offset text. The newer source uses
+stacked candidate cards and server-calculated candidate dates; its own hosted
+visual proof remains pending. The source-specific receipt is
+docs/phase-12/later-of-browser-699b0ba.json.

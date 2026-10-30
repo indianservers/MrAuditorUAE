@@ -1,0 +1,77 @@
+{
+  "contract": "retained-deadline-comparison-trace-verification/1",
+  "parent_commit": "ea11a4bcfac59eac605d5f4602d09efb5d7c0567",
+  "source_basis": "STAGED_GIT_OBJECT_BYTES_BEFORE_COMMIT",
+  "source_files": [
+    {
+      "path": "backend/app/api/v1/grc.py",
+      "sha256": "caa27bd24dd418294474d0c61979e4fb326d9e6b0a9ab192559ccea15a02f916"
+    },
+    {
+      "path": "backend/app/modules/grc/deadlines.py",
+      "sha256": "b67a492d29b8e335d1468b23575c60804577529db8e4a38d42f44835f16c9332"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_deadline_comparisons.py",
+      "sha256": "5e639dd190e16d29fa888f87f766f326a85ddce026064c027c3794656da93cd4"
+    },
+    {
+      "path": "backend/tests/unit/test_deadline_comparison_trace.py",
+      "sha256": "7c4176c3d33e9588052ce9cf6f6eca098b426fc4ec6a654177608f97cb5bb695"
+    },
+    {
+      "path": "frontend/e2e/business-day-deadline-release.spec.ts",
+      "sha256": "5b4094474f0aa8905d63eb0dfe560f255cab2450eec99a91c7ef9cb5eb3a44fe"
+    },
+    {
+      "path": "frontend/src/features/compliance-filing.tsx",
+      "sha256": "72a7343c1e250501f8caae3d202d3176bbafc191be310ba121b1fcf359ff2905"
+    },
+    {
+      "path": "frontend/src/features/grc-studio.tsx",
+      "sha256": "eca5e00f25c632f5cff4268b53ca58fb794c8118a74e334b20677db2ced3618d"
+    },
+    {
+      "path": "frontend/tests/grc-filing-freshness.test.tsx",
+      "sha256": "862a407914794328c9a2b1424b596321f08c00895c5daa669347080a6d04a438"
+    }
+  ],
+  "reports": [
+    {
+      "path": "docs/phase-12/later-of-trace-final.xml",
+      "passed": 155,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "4257dc32fb972f9559b12b2e33a222ee13900f869f33c6e2b59d3f02603c49a2"
+    },
+    {
+      "path": "docs/phase-12/later-of-trace-frontend.xml",
+      "passed": 469,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "4668435ad7ae802082e86e65a3f92002be222bd9f423c17878b8ee3f531f49a9"
+    }
+  ],
+  "count_basis": "155 related backend checks comprise 148 unit cases and seven real PostgreSQL/HTTP cases. The 469 frontend tests are a full run across 82 files. Earlier full backend-unit and hosted results retain their separate source revisions; they are not relabelled as a current full backend run.",
+  "checks": {
+    "scoped_ruff_lint_and_format": "PASS",
+    "mypy": "PASS_422_APP_FILES",
+    "typescript": "PASS",
+    "scoped_eslint": "PASS",
+    "production_next_build": "PASS",
+    "api_contracts": "CURRENT",
+    "generated_api_types": "CURRENT",
+    "extended_browser_case": "ONE_DISCOVERED_NOT_EXECUTED_FOR_TRACE_SOURCE"
+  },
+  "scope": [
+    "Server-derived candidate dates, all tied latest candidates, final rolling, rule/fact references and separate authority-extension basis without rewriting saved bodies.",
+    "Invalid candidates and missing/different saved dates require reassessment. Consistent arithmetic remains distinct from stale source facts.",
+    "UAE and India actual HTTP/database filing workflows retain identical traces and immutable bodies after fact withdrawal while their filing currentness becomes STALE.",
+    "Frontend displays the calculation only from the projection matching the selected record version; a different or unavailable version shows pending calculation and keeps filing controls blocked."
+  ],
+  "limits": [
+    "No complete automatically selected ADGM applicability, legislative qualification, government submission or professional legal conclusion. Authored catalogue remains 154 synthetic cases.",
+    "API scanning/queue boundaries are explicit doubles. Hosted business-day/later-of source 699b0ba is separate from the newer trace assertions; new trace browser execution remains pending.",
+    "Synthetic records and test doubles do not establish independent client pilots, external provider authenticity or production readiness."
+  ]
+}
