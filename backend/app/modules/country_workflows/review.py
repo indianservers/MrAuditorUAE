@@ -1,4 +1,8 @@
 def approval_error(body):
+    from app.modules.country_workflows.withholding_provisions import saved_withdrawn_expectation
+
+    if saved_withdrawn_expectation(body):
+        return "Correct the positive 206C(1H) expectation for the withdrawn period and regenerate before approval"
     if (
         body.get("workflow") == "stock-audit"
         and body.get("quantity_coverage_contract") != "stock-declared-count-coverage/1"

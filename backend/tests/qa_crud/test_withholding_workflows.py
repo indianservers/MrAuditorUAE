@@ -22,6 +22,7 @@ pytestmark = pytest.mark.skipif(
     "legal_role",
     [
         "deductor",
+        "collector-withdrawn",
         "collectee",
         "collectee-cap",
         "collectee-26AS",
@@ -34,7 +35,14 @@ async def test_separate_withholding_sources_review_export_workpaper_and_superses
 ):
     c = environment
     scope = legal_role
-    legal_role = "deductor" if scope == "deductor" else "collectee"
+    legal_role = (
+        "deductor"
+        if scope == "deductor"
+        else "collector"
+        if scope == "collector-withdrawn"
+        else "collectee"
+    )
+    liability = legal_role in {"deductor", "collector"}
     double_boundaries(monkeypatch)
     h, eid, base = await india_context(c)
     reviewer = await actor(h, "Firm Administrator", "withholding-source-reviewer")
@@ -48,6 +56,8 @@ async def test_separate_withholding_sources_review_export_workpaper_and_superses
     for rows in records.values():
         for row in rows:
             row.update(legal_role=legal_role, tax_kind="TDS" if legal_role == "deductor" else "TCS")
+            if scope == "collector-withdrawn":
+                row["rule_reference"] = "206C(1H)"
             if scope in {"collectee-26AS", "collectee-168", "collectee-TRACES"}:
                 row["registration"] = PAN
                 if scope == "collectee-26AS":
@@ -77,13 +87,13 @@ async def test_separate_withholding_sources_review_export_workpaper_and_superses
         files={"file": ("SYNTHETIC-assessment.pdf", assessment_bytes, "application/pdf")},
     )
     assert assessment_upload.status_code == 201, assessment_upload.text
-    assessed_role = "expected" if legal_role == "deductor" else "certificate"
+    assessed_role = "expected" if liability else "certificate"
     for row in records[assessed_role]:
         row.update(
             assessment_evidence_version_id=assessment_upload.json()["id"],
             assessment_sha256=assessment_upload.json()["sha256"],
         )
-    if legal_role == "deductor":
+    if liability:
         invalid = [{**records[assessed_role][0], "assessment_sha256": "0" * 64}]
         await source(
             c,
@@ -98,7 +108,7 @@ async def test_separate_withholding_sources_review_export_workpaper_and_superses
     for row in records[assessed_role]:
         row.pop("assessment_evidence_version_id")
         row.pop("assessment_sha256")
-    statement_role = "reported" if legal_role == "deductor" else "statement"
+    statement_role = "reported" if liability else "statement"
     records[statement_role].append(
         {
             **records[statement_role][0],
@@ -131,9 +141,7 @@ async def test_separate_withholding_sources_review_export_workpaper_and_superses
         assert reviewed.status_code == 201, reviewed.text
         prepared[role] = reviewed.json()
     payload = {
-        "workflow": "india-withholding-liability"
-        if legal_role == "deductor"
-        else "india-withholding-credit",
+        "workflow": "india-withholding-liability" if liability else "india-withholding-credit",
         "withholding_role": legal_role,
         "source_ids": {role: obj["id"] for role, obj in prepared.items()},
         "as_of": "2026-06-30",
@@ -144,6 +152,24 @@ async def test_separate_withholding_sources_review_export_workpaper_and_superses
     row = result["body"]["rows"][0]
     assert row["amounts"][statement_role] == "100"
     assert row["excluded_source_ids"][statement_role] == ["superseded"]
+    if scope == "collector-withdrawn":
+        assert result["body"]["blocked"] and row["comparison_state"] == "MATCHED"
+        assert row["statutory_scope_issues"] == ["WITHDRAWN_206C_1H_POSITIVE_EXPECTATION"]
+        assert (await decision(c, final_reviewer[0], eid, result)).status_code == 409
+        documented = await decision(c, h, eid, result, "accept", item_id=row["id"])
+        assert documented.status_code == 201, documented.text
+        assert (await decision(c, final_reviewer[0], eid, documented.json())).status_code == 409
+        exported = await c.get(
+            f"/api/v1/intelligence/engagements/{eid}/events/{result['id']}/export?format=xlsx",
+            headers=h,
+        )
+        assert exported.status_code == 200, exported.text
+        workbook = load_workbook(io.BytesIO(exported.content))
+        values = list(workbook["Rows"].values)
+        assert "WITHDRAWN_206C_1H_POSITIVE_EXPECTATION" in str(
+            values[1][values[0].index("statutory_scope_issues")]
+        )
+        return
     if scope in {"collectee-26AS", "collectee-168", "collectee-TRACES"}:
         assert row["annual_statement"] == expected_header
         assert result["body"]["annual_statement_scope_contract"] == "india-annual-statement-scope/1"

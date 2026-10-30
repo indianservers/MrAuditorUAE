@@ -1617,6 +1617,13 @@ async def generate_paper(
             409,
             "Regenerate stock count coverage with current quantity and sign controls before paper generation",
         )
+    from app.modules.country_workflows.withholding_provisions import saved_withdrawn_expectation
+
+    if saved_withdrawn_expectation(obj.body):
+        raise HTTPException(
+            409,
+            "Correct the positive 206C(1H) expectation for the withdrawn period and regenerate before paper generation",
+        )
     summary = {
         key: value
         for key, value in obj.body.items()
@@ -1637,6 +1644,7 @@ async def generate_paper(
             "comparison_basis",
             "selected_current_totals",
             "assessment_contract_version",
+            "withholding_provision_scope",
             "turnover_contract",
             "turnover_basis",
             "turnover_difference_totals",

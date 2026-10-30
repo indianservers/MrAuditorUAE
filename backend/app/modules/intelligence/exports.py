@@ -127,6 +127,7 @@ def render(event, format):
             "source_snapshot_id",
             "source_filename",
             "coverage",
+            "withholding_provision_scope",
             "quantity_coverage_basis",
             "quantity_coverage_contract",
             "adjusted_book_balance",

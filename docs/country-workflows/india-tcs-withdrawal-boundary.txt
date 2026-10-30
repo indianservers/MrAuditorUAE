@@ -1,0 +1,34 @@
+India: explicit 206C(1H) positive expectation boundary
+
+The Income Tax Department's Finance Act 2025, section 72(c), records the inserted
+proviso making section 206C(1H) inapplicable from 1 April 2025. The official source
+was read on 30 October 2026:
+https://www.incometaxindia.gov.in/w/section-72-94
+
+The liability reconciliation now flags a positive expected amount when its
+explicit collector/TCS reference is 206C(1H) (case and whitespace normalized,
+with an optional literal TCS: prefix) and its declared transaction date or
+reporting month is on/after the cutoff. The raw expected, withheld, reported and
+deposited observations remain visible even when all amounts agree. A separate
+statutory scope issue blocks approval. An exception disposition cannot override
+the boundary. The API also checks retained older result rows before approval or
+new draft generation, without rewriting those saved rows.
+
+Historical transactions and reporting months are not rejected merely because
+settlement or review is later. An explicit zero expectation remains distinct;
+actual positive collections against it still produce an ordinary variance.
+Collectee credit observations remain evidence comparisons and do not determine
+entitlement or recovery. This narrow named-provision check does not map arbitrary
+aliases, infer receipt-trigger facts, compute thresholds/rates, qualify every TCS
+provision, activate an India rule for UAE, or qualify native return formats.
+
+Collector liability results retain the boundary source and cutoff in their scope
+metadata and complete exports. Other selected roles do not receive that collector
+scope metadata. The independent assessment/document controls remain required.
+
+Verification: 132 targeted backend tests passed, including before/at/after-cutoff
+fixtures, current agreeing but blocked liability, historical later payment, zero
+expectation with erroneous collection, collectee observations, legacy row and
+paper guards, retained source documents and API review/disposition/export checks.
+Ruff and mypy passed (416 application files). These are synthetic application
+checks, not an independently qualified client or complete legal-rule corpus.

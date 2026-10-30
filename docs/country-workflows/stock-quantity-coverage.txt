@@ -52,3 +52,12 @@ The test verifies complete XLSX rows and unchanged stale history after source
 withdrawal, plus the disabled working-paper action, with four new captures.
 TypeScript, scoped lint and test discovery passed; hosted execution and actual
 visual review of these new captures remain pending.
+
+Hosted proof for source 9eea28e: run 41050465092, browser job 124044934385,
+passed all nine release cases (6.4m). The extended stock/GP and declared-quantity
+case passed in 29.6s for UAE then India. Four original quantity reviewed/stale
+captures were downloaded with verified archive size/hash and individually viewed.
+They show retained 40% partial coverage with negative/missing positions unresolved,
+and stale retained results with connected draft generation disabled. Exact tested
+source and original image hashes are in stock-quantity-browser-9eea28e.json under
+docs/phase-12. This proof predates the separate TCS withdrawal boundary change.

@@ -1,0 +1,100 @@
+{
+  "scope": "Source-specific hosted UAE then India declared count quantity browser proof",
+  "head_sha": "9eea28e836aab6e725013c2830a9b5f690ac345d",
+  "run_id": 41050465092,
+  "job_id": 124044934385,
+  "result": {
+    "passed": 9,
+    "failed": 0,
+    "minutes": 6.4,
+    "extended_inventory_case_seconds": 29.6
+  },
+  "archive": {
+    "artifact_id": 12974358787,
+    "bytes": 13521821,
+    "sha256": "26398305a379493cf2e6a277841cb13947060f74e831f4c79a64e00478aa4fe1"
+  },
+  "tested_sources": [
+    {
+      "path": "frontend/e2e/inventory-performance-release.spec.ts",
+      "sha256": "afdd6112fb5f63727b0c630a969c65915339920f229af06e24c94a4c4e31215c"
+    },
+    {
+      "path": "frontend/e2e/stock-quantity-browser-workflow.ts",
+      "sha256": "e8efcb627042086f2ed65bd734574e71993970764c4c7c4d708fbb80deabd62a"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "84f26b912b0c686911f747080fcf18880afe63a8936e56b35cadbaf28b3c7c31"
+    },
+    {
+      "path": "frontend/src/features/accounting-intelligence.tsx",
+      "sha256": "6042277251c8c65ffc0339dad2550faae7fe242f2e3a92d66e8df2f838463127"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/calculations.py",
+      "sha256": "77f3b7a87a170192d03b35931d2887f6a5f78cb0385c0493fcb8a60b9970ffcd"
+    },
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "sha256": "42c620af31ffb22a62676a7dd2e225305cc2a94c8851ae4470e2fb3f7b8be79c"
+    }
+  ],
+  "original_screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-stock-quantity-reviewed-9eea28e.png",
+      "sha256": "243b790ebd3b3927d6c137eea7a814c220f383c607806f58e752b54b63c65e0e",
+      "dimensions": [
+        1963,
+        982
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-stock-quantity-stale-paper-disabled-9eea28e.png",
+      "sha256": "8bd0a6d48dde12b28d03fee756c1f55edae374c61962f5ec1d5653c400ef9c6c",
+      "dimensions": [
+        2200,
+        2600
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-stock-quantity-reviewed-9eea28e.png",
+      "sha256": "8debc69567953a7eee1562e34d7a589d93fb489efd05a5b33b500e482c83affc",
+      "dimensions": [
+        1963,
+        982
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-stock-quantity-stale-paper-disabled-9eea28e.png",
+      "sha256": "dae5dd4bf53dd736b1750d99ac05780f85e695eb9aa8530638ec2a69a049d2d7",
+      "dimensions": [
+        2200,
+        2600
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    }
+  ],
+  "verified": [
+    "Actual BFF authentication, clean ClamAV CSV uploads, queued worker source preparation and independent source reviews.",
+    "Three book positions and two declared counts retain independent directional quantity controls.",
+    "UI calculation retains partial count 4 of 10 at 40%, negative count with null coverage and missing count with null coverage.",
+    "Monetary supported value is 40 out of book value 230; negative quantities do not inflate it.",
+    "Independent approval is rejected before dispositions; documented gaps retain unchanged 40% rather than implying completeness.",
+    "Complete XLSX retains all three positions and null negative coverage.",
+    "Count source withdrawal marks approved result STALE with unchanged body/version; connected working-paper creation is disabled.",
+    "Original reviewed captures show AED for UAE and INR for India with distinct unresolved states; stale lead captures show retained history and disabled draft action."
+  ],
+  "limits": [
+    "Synthetic declared quantities; no physical attendance or client/professional qualification.",
+    "Full backend job was still running when this browser evidence was archived.",
+    "This source predates the new TCS withdrawal boundary change."
+  ]
+}

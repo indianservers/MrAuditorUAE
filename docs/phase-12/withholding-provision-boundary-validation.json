@@ -1,0 +1,59 @@
+{
+  "scope": "Explicit collector/TCS 206C(1H) positive expectation boundary in liability comparison, approval and draft generation",
+  "source_files": [
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "sha256": "257e281fb05aa5637f6d9fcc7e79bb1811e17faa554e48534fec2882b5cdbbdd"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/review.py",
+      "sha256": "60ce9004f6904f96770bdec52519689a461cd46fbed8525b9d40e43fe5406482"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/withholding_calculations.py",
+      "sha256": "1df3dcb460b350e7228ff5012800b2af222e5260e7ca998d2935c79547d12734"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/withholding_provisions.py",
+      "sha256": "2ae1bfe3a143adf5c864f018d7f39dee64b9784c571a4ee908a21ec00ebccf49"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "sha256": "c9f11c42a75e3a84c862bb85e2d461c0aa672b7bb31568ccc71fe8f53516187d"
+    },
+    {
+      "path": "backend/tests/unit/test_withholding_provision_boundary.py",
+      "sha256": "59ead50f1c75960891370d35909233ff7bf515f6f9f028d470b9904c7b7e232a"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_withholding_workflows.py",
+      "sha256": "6ddf636e8743cae2276d22f4fe6f99110066216d80bd3380b0078f630c8afed6"
+    },
+    {
+      "path": "docs/phase-12/withholding-provision-boundary-final.xml",
+      "sha256": "854e57608f6c478d58382888ccbc2a78e76902a2125711b9edea8fb8740befb6"
+    }
+  ],
+  "authoritative_boundary": {
+    "url": "https://www.incometaxindia.gov.in/w/section-72-94",
+    "act": "Finance Act 2025",
+    "section": "72(c)",
+    "read_date": "2026-10-30",
+    "effective_date": "2025-04-01",
+    "retrieval": "Official HTML amendment text read; separate consolidated section URL returned 403 and booklet URL returned 404. No PDF inspection claimed."
+  },
+  "verification": {
+    "backend_regression_passed": 132,
+    "backend_regression_failed": 0,
+    "ruff": "passed",
+    "mypy": "passed, 416 application files",
+    "live_api": "Controlled source uploads, retained rule bytes, separate source/final reviewers, blocked positive expectation, disposition cannot override, complete XLSX scope issue. Scanner and broker explicitly doubled.",
+    "legacy_paper_guard": "Focused endpoint unit test with mocked retained legacy event; no paper creation is called."
+  },
+  "limits": [
+    "Named explicit-reference guard only; not a complete alias, threshold, rate, receipt-trigger or legal corpus.",
+    "Collectee evidence comparison does not establish entitlement; historical settlement is not rejected solely for later payment/review.",
+    "Synthetic application verification, no independently qualified client results.",
+    "New hosted verification remains pending; earlier browser proof is separate and source-specific."
+  ]
+}

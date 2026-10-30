@@ -6,6 +6,12 @@ from typing import Any
 
 from app.modules.country_workflows.annual_tax_statement import CONTRACT, validate_population
 from app.modules.country_workflows.audit_calculations import result
+from app.modules.country_workflows.withholding_provisions import (
+    CUTOFF,
+    ISSUE,
+    REFERENCE,
+    withdrawn_expectation,
+)
 
 KEY_FIELDS = (
     "registration",
@@ -185,6 +191,11 @@ def withholding(data, tables):
         comparison_state = state
         if issues and state != "MISSING_CURRENT_RECORD":
             state = "ASSESSMENT_NOT_SUPPORTED"
+        statutory_scope_issues = (
+            [ISSUE] if liability and baseline and withdrawn_expectation(baseline) else []
+        )
+        if statutory_scope_issues:
+            state = "WITHDRAWN_PROVISION_LIABILITY"
         provenance = (
             {field: assessed.get(field) for field in ASSESSMENT_FIELDS} if assessed else None
         )
@@ -202,6 +213,7 @@ def withholding(data, tables):
                 "state": state,
                 "comparison_state": comparison_state,
                 "assessment_issues": issues,
+                "statutory_scope_issues": statutory_scope_issues,
                 "assessment_role": assessment_role,
                 "assessment_provenance": provenance,
                 "amounts": {
@@ -235,7 +247,7 @@ def withholding(data, tables):
     return {
         **result(
             rows,
-            any(row["assessment_issues"] for row in rows),
+            any(row["assessment_issues"] or row["statutory_scope_issues"] for row in rows),
             [
                 "Legal roles are separate; beneficiary credit never clears a deductor/collector liability",
                 "Current/superseded/cancelled status is an assessed source selection, not live portal verification",
@@ -247,6 +259,20 @@ def withholding(data, tables):
         ),
         "withholding_role": data.withholding_role,
         "assessment_contract_version": "withholding-assessment/1",
+        **(
+            {
+                "withholding_provision_scope": {
+                    "contract": "named-withholding-provision-boundary/1",
+                    "reference": "206C(1H)",
+                    "positive_expectation_unavailable_from": CUTOFF,
+                    "source": REFERENCE,
+                    "basis": "Explicit collector/TCS reference and declared transaction/reporting period; not a complete provision or alias corpus",
+                    "historical_eligibility": "NOT_DETERMINED",
+                }
+            }
+            if liability and data.withholding_role == "collector"
+            else {}
+        ),
         "comparison_basis": "LIABILITY" if liability else "BENEFICIARY_CREDIT",
         **(
             {
