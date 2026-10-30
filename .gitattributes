@@ -222,3 +222,8 @@ docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-24
 docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-24Q-*.zip -text
 docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-24Q-*.txt -text whitespace=cr-at-eol
 docs/phase-12/24q-*.xml -text whitespace=cr-at-eol
+
+docs/country-workflows/sample-inputs/SYNTHETIC-annual-24q/*.txt -text whitespace=cr-at-eol
+docs/phase-12/q4-*.xml -text whitespace=cr-at-eol
+
+backend/app/modules/country_workflows/india_salary_q4_layout.json -text

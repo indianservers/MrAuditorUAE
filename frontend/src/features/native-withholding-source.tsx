@@ -49,6 +49,7 @@ export type NativeWithholdingDraft = Record<
   | (typeof AMOUNTS)[number]
   | (typeof FORM143_AMOUNTS)[number]
   | (typeof FORM138_AMOUNTS)[number]
+  | "annual_controls"
   | "date_width_assessment"
   | "tan"
   | "financial_year"
@@ -68,6 +69,7 @@ export const EMPTY_NATIVE_WITHHOLDING: NativeWithholdingDraft =
       ...AMOUNTS,
       ...FORM143_AMOUNTS,
       ...FORM138_AMOUNTS,
+      "annual_controls",
       "date_width_assessment",
       "tan",
       "financial_year",
@@ -132,6 +134,10 @@ export function nativeWithholdingPayload(
   if (form === "24Q" && value.quarter === "Q4")
     throw new Error(
       "Historical 24Q Q4 requires its separate annual salary records.",
+    );
+  if (form === "24Q-Q4" && (value.quarter !== "Q4" || year < 2011))
+    throw new Error(
+      "Annual 24Q requires historical Q4 from FY2011–12 onwards.",
     );
   const counts = Object.fromEntries(
     COUNTS.map((key) => {
@@ -270,9 +276,11 @@ export function NativeWithholdingSource({
           onChange={(e) => update("quarter", e.target.value)}
         >
           <option value="">Select declared quarter</option>
-          {(["138", "24Q"].includes(form)
-            ? ["Q1", "Q2", "Q3"]
-            : ["Q1", "Q2", "Q3", "Q4"]
+          {(form === "24Q-Q4"
+            ? ["Q4"]
+            : ["138", "24Q"].includes(form)
+              ? ["Q1", "Q2", "Q3"]
+              : ["Q1", "Q2", "Q3", "Q4"]
           ).map((q) => (
             <option key={q}>{q}</option>
           ))}
@@ -352,6 +360,24 @@ export function NativeWithholdingSource({
         for one PAN, source section code and month. Expected source rows count
         mapped groups; the native party count controls original DD records.
       </p>
+      {form === "24Q-Q4" && (
+        <label>
+          Annual salary populations and totals (JSON)
+          <textarea
+            value={value.annual_controls}
+            onChange={(e) => update("annual_controls", e.target.value)}
+          />
+        </label>
+      )}
+      {form === "24Q-Q4" && (
+        <p>
+          Declare all six annual record counts, including zero, and independent
+          salary/pension gross income, taxable income and net tax totals, salary
+          tax deducted and signed shortfall. Retain the full annual assessment
+          with the selected independent crosswalk. Quarterly TDS rows and annual
+          income records remain separate.
+        </p>
+      )}
       <label>
         Native source and crosswalk assessment
         <textarea
@@ -611,4 +637,23 @@ export function NativeWithholdingChallans({
       </div>
     </section>
   );
+}
+
+export function salaryAnnualPayload(value: string) {
+  const parsed = JSON.parse(value);
+  if (
+    !parsed ||
+    typeof parsed !== "object" ||
+    Array.isArray(parsed) ||
+    !parsed.record_counts ||
+    ["SD", "S16", "C6A", "94P", "P16", "P6A"].some(
+      (tag) =>
+        !Number.isInteger(parsed.record_counts[tag]) ||
+        parsed.record_counts[tag] < 0,
+    )
+  )
+    throw new Error(
+      "Declare all six independent annual record populations, including explicit zeros.",
+    );
+  return parsed;
 }

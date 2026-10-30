@@ -3023,6 +3023,145 @@
             "title": "PurchaseQuantityControl",
             "type": "object"
           },
+          "SalaryAnnualControls": {
+            "additionalProperties": false,
+            "properties": {
+              "record_counts": {
+                "additionalProperties": {
+                  "maximum": 5000,
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "propertyNames": {
+                  "enum": [
+                    "SD",
+                    "S16",
+                    "C6A",
+                    "94P",
+                    "P16",
+                    "P6A"
+                  ]
+                },
+                "title": "Record Counts",
+                "type": "object"
+              },
+              "salary_gross_income": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Salary Gross Income"
+              },
+              "salary_taxable_income": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Salary Taxable Income"
+              },
+              "salary_net_tax_payable": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Salary Net Tax Payable"
+              },
+              "salary_tax_deducted": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Salary Tax Deducted"
+              },
+              "salary_shortfall": {
+                "anyOf": [
+                  {
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Salary Shortfall"
+              },
+              "pension_gross_income": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Pension Gross Income"
+              },
+              "pension_taxable_income": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Pension Taxable Income"
+              },
+              "pension_net_tax_payable": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Pension Net Tax Payable"
+              },
+              "assessment": {
+                "maxLength": 2000,
+                "minLength": 10,
+                "title": "Assessment",
+                "type": "string"
+              }
+            },
+            "required": [
+              "record_counts",
+              "salary_gross_income",
+              "salary_taxable_income",
+              "salary_net_tax_payable",
+              "salary_tax_deducted",
+              "salary_shortfall",
+              "pension_gross_income",
+              "pension_taxable_income",
+              "pension_net_tax_payable",
+              "assessment"
+            ],
+            "title": "SalaryAnnualControls",
+            "type": "object"
+          },
           "SeriesCounts": {
             "additionalProperties": false,
             "properties": {
@@ -3143,6 +3282,17 @@
         },
         "additionalProperties": false,
         "properties": {
+          "salary_annual_controls": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/SalaryAnnualControls"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
           "native_withholding_controls": {
             "anyOf": [
               {
@@ -3733,6 +3883,7 @@
               "india-27eq-regular-v6.9",
               "india-27q-regular-v7.5",
               "india-24q-regular-q1q3-v6.3",
+              "india-24q-regular-q4-v7.5",
               "india-form143-regular-20260722-v1.1",
               "india-form138-regular-20260722-v1.1"
             ],

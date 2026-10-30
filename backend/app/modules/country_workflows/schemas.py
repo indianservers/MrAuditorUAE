@@ -26,6 +26,7 @@ from app.modules.country_workflows.gstr2b_part_schemas import GSTR2BPart
 from app.modules.country_workflows.import_nil_schemas import ImportNilScope
 from app.modules.country_workflows.india_form138_native import Form138Controls
 from app.modules.country_workflows.india_form143_native import Form143Controls
+from app.modules.country_workflows.india_salary_annual import SalaryAnnualControls
 from app.modules.country_workflows.india_withholding_native import NativeWithholdingControls
 from app.modules.country_workflows.inventory_controls import InventoryQuantityControl
 from app.modules.country_workflows.inventory_custody import (
@@ -372,6 +373,9 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
 
 
 class SourceInput(Strict):
+    salary_annual_controls: SalaryAnnualControls | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
     native_withholding_controls: NativeWithholdingControls | None = None
     form138_controls: Form138Controls | None = Field(
         default=None, exclude_if=lambda value: value is None
@@ -450,6 +454,7 @@ class SourceInput(Strict):
         "india-27eq-regular-v6.9",
         "india-27q-regular-v7.5",
         "india-24q-regular-q1q3-v6.3",
+        "india-24q-regular-q4-v7.5",
         "india-form143-regular-20260722-v1.1",
         "india-form138-regular-20260722-v1.1",
     ] = "canonical-csv"
@@ -597,6 +602,7 @@ class SourceInput(Strict):
             "india-27eq-regular-v6.9",
             "india-27q-regular-v7.5",
             "india-24q-regular-q1q3-v6.3",
+            "india-24q-regular-q4-v7.5",
         }:
             if (
                 self.table_type != "withholding-records"
@@ -611,6 +617,18 @@ class SourceInput(Strict):
             raise ValueError(
                 "Native withholding controls apply only to the selected regular statement profiles"
             )
+        if self.file_format == "india-24q-regular-q4-v7.5":
+            if (
+                self.salary_annual_controls is None
+                or self.native_withholding_controls is None
+                or self.native_withholding_controls.quarter != "Q4"
+                or int(self.native_withholding_controls.financial_year[:4]) < 2011
+            ):
+                raise ValueError(
+                    "Annual 24Q requires its full annual controls and matching historical Q4 controls"
+                )
+        elif self.salary_annual_controls is not None:
+            raise ValueError("Annual salary controls require the explicit historical Q4 profile")
         if self.file_format == "india-form143-regular-20260722-v1.1":
             if (
                 self.table_type != "withholding-records"

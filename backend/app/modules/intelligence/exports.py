@@ -1009,6 +1009,46 @@ def render(event, format):
                 append(native_challans, challan_fields)
                 for challan in body["native_metadata"]["challan_controls"]:
                     append(native_challans, [challan.get(field) for field in challan_fields])
+            annual = (body.get("native_metadata") or {}).get("salary_annual")
+            if (
+                isinstance(annual, dict)
+                and annual.get("contract") == "historical-salary-annual-observations/1"
+            ):
+                for tag, columns in annual["columns"].items():
+                    sheet = workbook.create_sheet("Salary " + tag)
+                    append(
+                        sheet,
+                        [
+                            "source_line",
+                            "batch",
+                            "parent_record",
+                            "record_number",
+                            "parent_pan",
+                            *[str(c["number"]) + ": " + c["label"] for c in columns],
+                        ],
+                    )
+                    for row in annual["records"]:
+                        if row["record_type"] == tag:
+                            append(
+                                sheet,
+                                [
+                                    row["source_line"],
+                                    row["batch"],
+                                    row["parent_record"],
+                                    row["record_number"],
+                                    row["pan"],
+                                    *row["fields"],
+                                ],
+                            )
+                summary = workbook.create_sheet("Salary annual controls")
+                append(summary, ["metric", "observed", "independently_declared"])
+                for key, value in annual["totals"].items():
+                    append(summary, [key, value, annual["controls"][key]])
+                for tag, count in annual["record_counts"].items():
+                    append(
+                        summary,
+                        [tag + " record count", count, annual["controls"]["record_counts"][tag]],
+                    )
             if body.get("workflow") == "sanctions-name-review":
                 candidates = workbook.create_sheet("Screening candidates")
                 candidate_fields = [

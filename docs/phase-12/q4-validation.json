@@ -1,0 +1,38 @@
+{
+  "profile": "india-24q-regular-q4-v7.5",
+  "reports": [
+    {
+      "path": "docs/phase-12/q4-all-units.xml",
+      "sha256": "aa430500c9dc22eb0ec3314c2c5302afcb4e7de9519707a6a9f0ba1ba48afb19",
+      "cases": 4583,
+      "passed": 4579,
+      "skipped": 4
+    },
+    {
+      "path": "docs/phase-12/q4-focused.xml",
+      "sha256": "409f8ad93a5f0c2d54b346d93681306514de76158908d1d445d56f63ba46519d",
+      "cases": 201,
+      "passed": 201,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/q4-frontend.xml",
+      "sha256": "e06167f4f45dc59bd150fd8a76f38a67313c7d4c7da71ce595be19d237a2dd1f",
+      "cases": 491,
+      "passed": 491,
+      "skipped": 0
+    }
+  ],
+  "additional_checks": [
+    "mypy: all 427 application files passed",
+    "Ruff: eight changed Python files passed lint and format",
+    "Frontend typecheck, changed-file ESLint and production build passed; browser-selector change additionally passed typecheck/ESLint"
+  ],
+  "scope": [
+    "Full unit report precedes three added source-pinning, superannuation and landlord/lender cases; final focused report includes them. Reports overlap; counts are not additive.",
+    "201 focused tests include 179 salary unit cases and 22 HTTP cases across existing source profiles and the new annual pipeline. HTTP tests use an owned disposable DB with scanner/queue test doubles.",
+    "491 frontend tests across 85 files passed, including record 201 and field88 pagination, blank/zero/signed preservation, malformed-data handling and Q4-only controls.",
+    "Historical39acc82 browser failed a duplicate numeric selector; exact failure evidence is retained separately. Header-specific selector correction and expanded Q4 path await a fresh hosted run.",
+    "Selected recorded arithmetic and complete declared populations only: not full legal/cohort/certificate qualification, FVU/CSI, all-quarter reconciliation, actual bank/credit or real client pilot evidence."
+  ]
+}

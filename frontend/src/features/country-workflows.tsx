@@ -36,6 +36,7 @@ import { Button, ErrorState, Status } from "@/components/ui/primitives";
 import { TaxCloseExposures } from "./tax-close-exposures";
 import { PageHeader } from "./shared";
 import { IntelligenceExports } from "./intelligence-exports";
+import { NativeSalaryAnnualDetails } from "./native-salary-annual";
 import { WithholdingPANReview } from "./withholding-pan-review";
 import { BankCarryforwardSource } from "./bank-carryforward-source";
 import { BankCashReview } from "./bank-cash-review";
@@ -46,6 +47,7 @@ import {
   NativeWithholdingChallans,
   EMPTY_NATIVE_WITHHOLDING,
   nativeWithholdingPayload,
+  salaryAnnualPayload,
 } from "./native-withholding-source";
 import {
   UNSanctionsSource,
@@ -1803,6 +1805,7 @@ export function CountryWorkflows({
                 "india-27eq-regular-v6.9",
                 "india-27q-regular-v7.5",
                 "india-24q-regular-q1q3-v6.3",
+                "india-24q-regular-q4-v7.5",
                 "india-form143-regular-20260722-v1.1",
                 "india-form138-regular-20260722-v1.1",
               ].includes(sourceFormat)
@@ -1818,15 +1821,25 @@ export function CountryWorkflows({
                           ? "138"
                           : sourceFormat.includes("form143")
                             ? "143"
-                            : sourceFormat.includes("24q")
-                              ? "24Q"
-                              : sourceFormat.includes("27eq")
-                                ? "27EQ"
-                                : sourceFormat.includes("27q")
-                                  ? "27Q"
-                                  : "26Q",
+                            : sourceFormat.includes("24q") &&
+                                sourceFormat.includes("q4")
+                              ? "24Q-Q4"
+                              : sourceFormat.includes("24q")
+                                ? "24Q"
+                                : sourceFormat.includes("27eq")
+                                  ? "27EQ"
+                                  : sourceFormat.includes("27q")
+                                    ? "27Q"
+                                    : "26Q",
                         expectedRows,
                       ),
+                  }
+                : {}),
+              ...(sourceFormat === "india-24q-regular-q4-v7.5"
+                ? {
+                    salary_annual_controls: salaryAnnualPayload(
+                      nativeWithholding.annual_controls,
+                    ),
                   }
                 : {}),
               ...(sourceFormat === "un-sc-consolidated-xml"
@@ -2869,6 +2882,7 @@ export function CountryWorkflows({
                     "india-27eq-regular-v6.9",
                     "india-27q-regular-v7.5",
                     "india-24q-regular-q1q3-v6.3",
+                    "india-24q-regular-q4-v7.5",
                     "india-form143-regular-20260722-v1.1",
                     "india-form138-regular-20260722-v1.1",
                   ].includes(sourceFormat) && (
@@ -2880,13 +2894,16 @@ export function CountryWorkflows({
                           ? "138"
                           : sourceFormat.includes("form143")
                             ? "143"
-                            : sourceFormat.includes("24q")
-                              ? "24Q"
-                              : sourceFormat.includes("27eq")
-                                ? "27EQ"
-                                : sourceFormat.includes("27q")
-                                  ? "27Q"
-                                  : "26Q"
+                            : sourceFormat.includes("24q") &&
+                                sourceFormat.includes("q4")
+                              ? "24Q-Q4"
+                              : sourceFormat.includes("24q")
+                                ? "24Q"
+                                : sourceFormat.includes("27eq")
+                                  ? "27EQ"
+                                  : sourceFormat.includes("27q")
+                                    ? "27Q"
+                                    : "26Q"
                       }
                       documents={(inputs.data?.evidence || []).filter(
                         (doc) =>
@@ -7336,11 +7353,22 @@ export function CountryWorkflows({
                 }
               />
             )}
+          {compactNativeWithholding &&
+            body.native_metadata?.salary_annual != null &&
+            typeof body.native_metadata.salary_annual === "object" && (
+              <NativeSalaryAnnualDetails
+                key={`${selected}:annual`}
+                annual={
+                  body.native_metadata.salary_annual as Record<string, unknown>
+                }
+              />
+            )}
           {body.native_metadata && (
             <details>
               <summary>Original source controls and calculation basis</summary>
               <dl>
                 {Object.entries(body.native_metadata)
+                  .filter(([key]) => key !== "salary_annual")
                   .filter(
                     ([key]) =>
                       ![

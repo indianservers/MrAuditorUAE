@@ -21,6 +21,7 @@ Text = Annotated[str, Field(min_length=1, max_length=120, pattern=r"^\S(?:.*\S)?
 PartyKey = Annotated[str, Field(pattern=r"^[1-9][0-9]{0,8}/[1-9][0-9]{0,8}/[1-9][0-9]{0,8}$")]
 WIDTHS = {"FH": 18, "BH": 72, "CD": 41, "DD": 54}
 FORMATS = {
+    "india-24q-regular-q4-v7.5": ("24Q", "TDS", "deductor"),
     "india-24q-regular-q1q3-v6.3": ("24Q", "TDS", "deductor"),
     "india-26q-regular-v7.8": ("26Q", "TDS", "deductor"),
     "india-27eq-regular-v6.9": ("27EQ", "TCS", "collector"),
@@ -105,9 +106,17 @@ def parse_regular(content, data):
     if controls is None:
         raise ValueError("Native withholding requires independent statement and crosswalk controls")
     form, scheme, role = FORMATS[data.file_format]
-    if form == "24Q" and controls.quarter == "Q4":
+    annual_profile = data.file_format == "india-24q-regular-q4-v7.5"
+    if form == "24Q" and controls.quarter == "Q4" and not annual_profile:
         raise ValueError("Historical 24Q Q4 requires its separate annual salary record profile")
     limits, limits_sha256 = profile_limits()
+    selected_limits = limits[form]
+    annual_payload = None
+    if annual_profile:
+        from app.modules.country_workflows.india_salary_annual import annual_layout
+
+        selected_limits, limits_sha256 = annual_layout()
+    widths = {tag: len(values) for tag, values in selected_limits["field_lengths"].items()}
     if (
         form == "27EQ"
         and controls.purchase_value is None
@@ -157,14 +166,14 @@ def parse_regular(content, data):
     for ordinal, line in enumerate(lines, 1):
         fields = line.split("^")
         tag = fields[1] if len(fields) > 1 else ""
-        if tag not in WIDTHS or len(fields) != WIDTHS[tag] or integer(fields[0]) != ordinal:
+        if tag not in widths or len(fields) != widths[tag] or integer(fields[0]) != ordinal:
             raise ValueError(
                 "Native statement record type, exact field count or line sequence does not agree"
             )
         records.append(fields)
         if any(
             limit is not None and len(value) > limit
-            for value, limit in zip(fields, limits[form]["field_lengths"][tag], strict=True)
+            for value, limit in zip(fields, selected_limits["field_lengths"][tag], strict=True)
         ):
             raise ValueError("Native record field exceeds the selected issuer layout width")
     first = records[0]
@@ -332,6 +341,8 @@ def parse_regular(content, data):
                 raise ValueError("An explicit native section/collection code is required")
             parties[key] = {"fields": fields, "period": observed_period, "code": code}
             challan_parties.setdefault(challan, []).append(fields)
+        elif annual_profile and tag in {"SD", "S16", "C6A", "94P", "P16", "P6A"}:
+            continue
         else:
             raise ValueError(
                 "Only one initial FH followed by complete BH/CD/DD populations is supported"
@@ -387,6 +398,18 @@ def parse_regular(content, data):
     if set(mapped) != set(parties):
         raise ValueError(
             "The retained crosswalk must cover every native party identity exactly once"
+        )
+    if annual_profile:
+        from app.modules.country_workflows.india_salary_annual import assess_annual
+
+        annual_payload = assess_annual(
+            records,
+            batches,
+            controls,
+            data.salary_annual_controls,
+            selected_limits,
+            integer,
+            calendar,
         )
     digest = hashlib.sha256(content).hexdigest()
     rows, links = [], []
@@ -501,7 +524,12 @@ def parse_regular(content, data):
     return rows, {
         "contract": CONTRACT,
         "layout_limits_sha256": limits_sha256,
-        "layout_specification_sha256": limits[form]["source_sha256"],
+        "layout_specification_sha256": selected_limits["source_sha256"],
+        **(
+            {"salary_annual": annual_payload, "adopted_layout": data.file_format}
+            if annual_profile
+            else {}
+        ),
         "form": form,
         "source": SOURCE,
         "source_sha256": digest,

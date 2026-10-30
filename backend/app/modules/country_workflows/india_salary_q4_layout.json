@@ -1,0 +1,2407 @@
+{
+  "profile": "india-24q-regular-q4-v7.5",
+  "source_sha256": "085268dd1be1685ba23e6aa147bed7cedf114a635463c4ca6e917062eed9706f",
+  "field_lengths": {
+    "FH": [
+      9,
+      2,
+      3,
+      1,
+      8,
+      9,
+      1,
+      10,
+      9,
+      75,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      null
+    ],
+    "BH": [
+      9,
+      2,
+      9,
+      9,
+      4,
+      0,
+      0,
+      0,
+      15,
+      0,
+      0,
+      0,
+      10,
+      8,
+      10,
+      6,
+      6,
+      2,
+      75,
+      75,
+      25,
+      25,
+      25,
+      25,
+      25,
+      2,
+      6,
+      75,
+      5,
+      10,
+      1,
+      1,
+      75,
+      20,
+      25,
+      25,
+      25,
+      25,
+      25,
+      2,
+      6,
+      75,
+      10,
+      5,
+      10,
+      1,
+      15,
+      9,
+      9,
+      15,
+      1,
+      1,
+      1,
+      2,
+      20,
+      20,
+      3,
+      150,
+      10,
+      7,
+      10,
+      5,
+      10,
+      75,
+      5,
+      10,
+      75,
+      7,
+      15,
+      9,
+      15,
+      0
+    ],
+    "CD": [
+      9,
+      2,
+      9,
+      9,
+      9,
+      1,
+      0,
+      0,
+      0,
+      0,
+      0,
+      5,
+      0,
+      9,
+      0,
+      7,
+      0,
+      8,
+      0,
+      0,
+      null,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      1,
+      14,
+      15,
+      3,
+      0
+    ],
+    "DD": [
+      9,
+      2,
+      9,
+      9,
+      9,
+      1,
+      9,
+      0,
+      0,
+      10,
+      0,
+      10,
+      75,
+      15,
+      15,
+      15,
+      15,
+      0,
+      15,
+      0,
+      0,
+      15,
+      8,
+      8,
+      8,
+      0,
+      0,
+      0,
+      0,
+      1,
+      75,
+      14,
+      3,
+      10,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      0
+    ],
+    "SD": [
+      9,
+      2,
+      9,
+      9,
+      1,
+      0,
+      10,
+      10,
+      75,
+      1,
+      8,
+      8,
+      15,
+      null,
+      9,
+      15,
+      15,
+      15,
+      15,
+      0,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      75,
+      75,
+      75,
+      15,
+      15,
+      15,
+      15,
+      1,
+      1,
+      1,
+      10,
+      75,
+      10,
+      75,
+      10,
+      75,
+      10,
+      75,
+      1,
+      1,
+      10,
+      75,
+      10,
+      75,
+      10,
+      75,
+      10,
+      75,
+      1,
+      75,
+      8,
+      8,
+      15,
+      7,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      1,
+      15,
+      15,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "S16": [
+      9,
+      3,
+      9,
+      9,
+      9,
+      15,
+      15,
+      0
+    ],
+    "C6A": [
+      9,
+      3,
+      9,
+      9,
+      9,
+      15,
+      15,
+      15,
+      15,
+      0
+    ],
+    "94P": [
+      9,
+      3,
+      9,
+      9,
+      1,
+      10,
+      75,
+      1,
+      1,
+      15,
+      9,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      0
+    ],
+    "P16": [
+      9,
+      3,
+      9,
+      9,
+      9,
+      15,
+      15,
+      0
+    ],
+    "P6A": [
+      9,
+      3,
+      9,
+      9,
+      9,
+      15,
+      15,
+      15,
+      15,
+      0
+    ]
+  },
+  "columns": {
+    "FH": [
+      {
+        "number": 1,
+        "label": "Line Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 2,
+        "label": "Record Type",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 3,
+        "label": "File Type",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 4,
+        "label": "Upload Type",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 5,
+        "label": "File Creation Date",
+        "type": "DATE",
+        "required_marker": "M"
+      },
+      {
+        "number": 6,
+        "label": "File Sequence No.",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 7,
+        "label": "Uploader Type",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 8,
+        "label": "TAN of Employer",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 9,
+        "label": "Total No. of Batches ",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 10,
+        "label": "Name of Return Preparation Utility",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 11,
+        "label": "Record Hash (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 12,
+        "label": "FVU Version (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 13,
+        "label": "File Hash (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 14,
+        "label": "Sam Version (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 15,
+        "label": "SAM Hash (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 16,
+        "label": "SCM Version (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 17,
+        "label": "SCM Hash (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 18,
+        "label": "Consolidated file hash",
+        "type": "NA",
+        "required_marker": "NA"
+      }
+    ],
+    "BH": [
+      {
+        "number": 1,
+        "label": "Line Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 2,
+        "label": "Record Type",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 3,
+        "label": "Batch Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 4,
+        "label": "Count of Challan/transfer voucher Records",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 5,
+        "label": "Form Number",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 6,
+        "label": "Transaction Type   (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 7,
+        "label": "Batch Updation Indicator  (Not applicable) ",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 8,
+        "label": "Original Token Number (Token Number of Regular statement) - (Not applicable) of the statement",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 9,
+        "label": "Token no. of previous regular statement (Form no. 24Q).",
+        "type": "INTEGER",
+        "required_marker": "O"
+      },
+      {
+        "number": 10,
+        "label": "Token Number of the statement submitted - (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 11,
+        "label": "Token Number date - (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 12,
+        "label": "Last TAN of Employer (Used for Verification)  (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 13,
+        "label": "TAN of Employer ",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 14,
+        "label": "Receipt number (eight digit) provided by TIN",
+        "type": "CHAR",
+        "required_marker": "NA"
+      },
+      {
+        "number": 15,
+        "label": "PAN of Deductor / Employer",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 16,
+        "label": "Assessment Yr",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 17,
+        "label": "Financial Yr",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 18,
+        "label": "Period",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 19,
+        "label": "Name of Employer  ",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 20,
+        "label": "Employer Branch/ Division",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 21,
+        "label": "Employer Address1",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 22,
+        "label": "Employer Address2",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 23,
+        "label": "Employer Address3",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 24,
+        "label": "Employer Address4",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 25,
+        "label": "Employer Address5",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 26,
+        "label": "Employer State",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 27,
+        "label": "Employer PIN",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 28,
+        "label": "Employer  / Deductor Email ID",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 29,
+        "label": "Employer  / Deductor's STD code",
+        "type": "INTEGER",
+        "required_marker": "O"
+      },
+      {
+        "number": 30,
+        "label": "Employer  / Deductor 's Tel-Phone No.",
+        "type": "INTEGER",
+        "required_marker": "O"
+      },
+      {
+        "number": 31,
+        "label": "Change of Address of employer since last Return",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 32,
+        "label": "Deductor   Type",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 33,
+        "label": "Name of Person responsible for paying salary / Deduction ",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 34,
+        "label": "Designation of the Person responsible for paying salary / Deduction ",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 35,
+        "label": "Responsible Person's  Address1",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 36,
+        "label": "Responsible Person's  Address2",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 37,
+        "label": "Responsible Person's  Address3",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 38,
+        "label": "Responsible Person's  Address4",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 39,
+        "label": "Responsible Person's  Address5",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 40,
+        "label": "Responsible Person's State",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 41,
+        "label": "Responsible Person's PIN",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 42,
+        "label": "Responsible Person's Email ID -1",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 43,
+        "label": "Mobile number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 44,
+        "label": "Responsible Person's STD CODE",
+        "type": "INTEGER",
+        "required_marker": "O"
+      },
+      {
+        "number": 45,
+        "label": "Responsible Person's Tel-Phone No.",
+        "type": "INTEGER",
+        "required_marker": "O"
+      },
+      {
+        "number": 46,
+        "label": "Change of Address of Responsible person since last Return",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 47,
+        "label": "Batch Total of - Total of Deposit Amount as per Challan",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 48,
+        "label": "Unmatched challan count",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 49,
+        "label": "Count of Salary Details  Records ",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 50,
+        "label": "Batch Total of - Gross Total Income as per Salary Detail",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 51,
+        "label": "AO Approval ",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 52,
+        "label": "Whether regular statement for Form 24Q filed for earlier period",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 53,
+        "label": "Last Deductor Type",
+        "type": "CHAR",
+        "required_marker": "NA"
+      },
+      {
+        "number": 54,
+        "label": "State Name",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 55,
+        "label": "PAO Code",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 56,
+        "label": "DDO Code",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 57,
+        "label": "Ministry Name",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 58,
+        "label": "Ministry Name Other",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 59,
+        "label": "PAN of Responsible Person",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 60,
+        "label": "PAO Registration No",
+        "type": "INTEGER",
+        "required_marker": "O"
+      },
+      {
+        "number": 61,
+        "label": "DDO Registration No",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 62,
+        "label": "Employer  / Deductor's STD code (Alternate)",
+        "type": "INTEGER",
+        "required_marker": "O"
+      },
+      {
+        "number": 63,
+        "label": "Employer  / Deductor 's Tel-Phone No. (Alternate)",
+        "type": "INTEGER",
+        "required_marker": "O"
+      },
+      {
+        "number": 64,
+        "label": "Employer  / Deductor Email ID (Alternate)",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 65,
+        "label": "Responsible Person's STD Code (Alternate)",
+        "type": "INTEGER",
+        "required_marker": "O"
+      },
+      {
+        "number": 66,
+        "label": "Responsible Person's Tel-Phone No. (Alternate)",
+        "type": "INTEGER",
+        "required_marker": "O"
+      },
+      {
+        "number": 67,
+        "label": "Responsible Person's Email ID (Alternate)",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 68,
+        "label": "Account Office Identification Number (AIN) of PAO/ TO/ CDDO",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 69,
+        "label": "Goods and Service Tax Number (GSTN)",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 70,
+        "label": "Count of Section 194P Details  Records ",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 71,
+        "label": "Batch Total of - Gross Total Income as per Section 194P Detail Records",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 72,
+        "label": "Record Hash  (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      }
+    ],
+    "CD": [
+      {
+        "number": 1,
+        "label": "Line Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 2,
+        "label": "Record Type",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 3,
+        "label": "Batch Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 4,
+        "label": "Challan-Detail Record Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 5,
+        "label": "Count of Deductee / Party Records",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 6,
+        "label": "NIL Challan Indicator",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 7,
+        "label": "Challan Updation Indicator  (Not applicable)",
+        "type": "NA",
+        "required_marker": "O"
+      },
+      {
+        "number": 8,
+        "label": "Filler 2  (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 9,
+        "label": "Filler 3  (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 10,
+        "label": "Filler 4  (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 11,
+        "label": "Last Bank Challan No ( Used for Verification)  (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 12,
+        "label": "Bank Challan No",
+        "type": "INTEGER",
+        "required_marker": "O"
+      },
+      {
+        "number": 13,
+        "label": "Last Transfer Voucher No ( Used for Verification)  (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 14,
+        "label": "DDO serial Number of Form No. 24G",
+        "type": "INTEGER",
+        "required_marker": "O"
+      },
+      {
+        "number": 15,
+        "label": "Last Bank-Branch Code/ Form 24G Receipt Number ( Used for Verification) (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 16,
+        "label": "Bank-Branch Code/ Form 24G Receipt Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 17,
+        "label": "Last Date of 'Bank Challan No / Transfer Voucher No' ( Used for Verification)  (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 18,
+        "label": "Date of 'Bank Challan / Transfer Voucher'",
+        "type": "DATE",
+        "required_marker": "M"
+      },
+      {
+        "number": 19,
+        "label": "Filler 5  (Not applicable)",
+        "type": "",
+        "required_marker": "NA"
+      },
+      {
+        "number": 20,
+        "label": "Filler 6  (Not applicable)",
+        "type": "",
+        "required_marker": "NA"
+      },
+      {
+        "number": 21,
+        "label": "Section",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 22,
+        "label": " 'Oltas  TDS / TCS -Income Tax '",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 23,
+        "label": " 'Oltas TDS / TCS  -Surcharge '",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 24,
+        "label": " 'Oltas TDS / TCS - Cess'",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 25,
+        "label": "Oltas TDS / TCS - Interest Amount",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 26,
+        "label": "Oltas TDS / TCS - Others (amount)",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 27,
+        "label": "Total of Deposit Amount as per Challan/Transfer Voucher Number  (  'Oltas TDS/ TCS -Income Tax ' +  'Oltas TDS / TCS  -Surcharge ' +  'Oltas TDS/ TCS - Cess'  +  Oltas TDS/ TCS - Interest Amount + Fee + Oltas TDS/ TCS - Others (amount)",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 28,
+        "label": "Last Total of Deposit Amount as per Challan ( Used for Verification)",
+        "type": "INTEGER",
+        "required_marker": "O"
+      },
+      {
+        "number": 29,
+        "label": "Total Tax Deposit Amount as per deductee annexure  (Total Sum of 324)",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 30,
+        "label": " 'TDS / TCS -Income Tax '",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 31,
+        "label": " 'TDS / TCS -Surcharge '",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 32,
+        "label": " 'TDS / TCS - Cess'",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 33,
+        "label": "Sum of 'Total Income Tax Deducted at Source' (TDS/ TCS - Income Tax + TDS/ TCS - Surcharge + TDS/TCS - Cess ) ",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 34,
+        "label": "TDS/ TCS - Interest Amount",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 35,
+        "label": "TDS / TCS - Others (amount)",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 36,
+        "label": "Cheque / DD No. (if any)",
+        "type": "INTEGER",
+        "required_marker": "O"
+      },
+      {
+        "number": 37,
+        "label": "By Book entry / Cash",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 38,
+        "label": "Remarks",
+        "type": "CHAR",
+        "required_marker": "NA"
+      },
+      {
+        "number": 39,
+        "label": "Fee",
+        "type": "INTEGER",
+        "required_marker": "O"
+      },
+      {
+        "number": 40,
+        "label": "Minor Head of Challan",
+        "type": "INTEGER",
+        "required_marker": "O"
+      },
+      {
+        "number": 41,
+        "label": "Record Hash  (Not applicable)",
+        "type": "NA",
+        "required_marker": "O"
+      }
+    ],
+    "DD": [
+      {
+        "number": 1,
+        "label": "Line Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 2,
+        "label": "Record Type",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 3,
+        "label": "Batch Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 4,
+        "label": "Challan-Detail Record Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 5,
+        "label": "Deductee / Party Detail Record No",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 6,
+        "label": "Mode",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 7,
+        "label": "Employee Serial No (Employee Reference Number provided by Employer)",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 8,
+        "label": "Deductee / Party Code  (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 9,
+        "label": "Last Employee / Party  PAN ( Used for Verification)  (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 10,
+        "label": "Employee PAN",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 11,
+        "label": "Last  Employee/Party PAN Ref. No. (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 12,
+        "label": "PAN Ref. No.",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 13,
+        "label": "Name of Employee / Party",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 14,
+        "label": "TDS / TCS -Income Tax for the period  ",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 15,
+        "label": "TDS / TCS -Surcharge  for the period ",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 16,
+        "label": "Health and Education Cess",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 17,
+        "label": "Total Income Tax Deducted at Source (TDS / TCS Income Tax+ TDS / TCS Surcharge + TDS / TCS -Cess)",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 18,
+        "label": "Last Total Income Tax Deducted at Source (Income Tax +Surcharge+Cess)  ( Used for Verification)  (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 19,
+        "label": "Total Tax Deposited",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 20,
+        "label": "Last Total Tax Deposited  ( Used for Verification)  (Not applicable)",
+        "type": "NA",
+        "required_marker": ""
+      },
+      {
+        "number": 21,
+        "label": "Total Value of Purchase  (Not applicable)",
+        "type": "NA",
+        "required_marker": ""
+      },
+      {
+        "number": 22,
+        "label": "Amount of Payment  / Credit (Rs.)",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 23,
+        "label": "Date on which Amount paid / Credited ",
+        "type": "DATE",
+        "required_marker": "M"
+      },
+      {
+        "number": 24,
+        "label": "Date on which tax Deducted ",
+        "type": "DATE",
+        "required_marker": "O"
+      },
+      {
+        "number": 25,
+        "label": "Date of Deposit",
+        "type": "DATE",
+        "required_marker": "M"
+      },
+      {
+        "number": 26,
+        "label": "Rate at which Tax Deducted / Collected (Not applicable)",
+        "type": "NA",
+        "required_marker": "O"
+      },
+      {
+        "number": 27,
+        "label": "Grossing up Indicator  (Not applicable)",
+        "type": "NA",
+        "required_marker": ""
+      },
+      {
+        "number": 28,
+        "label": "Book Entry / Cash Indicator  (Not applicable)",
+        "type": "NA",
+        "required_marker": ""
+      },
+      {
+        "number": 29,
+        "label": "Date of furnishing Tax Deduction Certificate  (Not applicable)",
+        "type": "NA",
+        "required_marker": ""
+      },
+      {
+        "number": 30,
+        "label": "Remarks 1 (Reason for non-deduction / lower deduction/ higher deduction)",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 31,
+        "label": "Remarks  (For future use)",
+        "type": "CHAR",
+        "required_marker": ""
+      },
+      {
+        "number": 32,
+        "label": "Remarks   (For future use)",
+        "type": "CHAR",
+        "required_marker": ""
+      },
+      {
+        "number": 33,
+        "label": "Section Code under which payment made",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 34,
+        "label": "Certificate number issued by the Assessing Officer u/s 197 for non-deduction/lower deduction.",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 35,
+        "label": "Filler 1",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 36,
+        "label": "Filler 2",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 37,
+        "label": "Filler 3",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 38,
+        "label": "Filler 4",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 39,
+        "label": "Filler 5",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 40,
+        "label": "Filler 6",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 41,
+        "label": "Filler 7",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 42,
+        "label": "Filler 8",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 43,
+        "label": "Filler 9",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 44,
+        "label": "Filler 10",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 45,
+        "label": "Filler 11",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 46,
+        "label": "Filler 12",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 47,
+        "label": "Filler 13",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 48,
+        "label": "Filler 14",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 49,
+        "label": "Filler 15",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 50,
+        "label": "Filler 16",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 51,
+        "label": "Filler 17",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 52,
+        "label": "Filler 18",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 53,
+        "label": "Filler 19",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 54,
+        "label": "Record Hash  (Not applicable)",
+        "type": "NA",
+        "required_marker": ""
+      }
+    ],
+    "SD": [
+      {
+        "number": 1,
+        "label": "Line Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 2,
+        "label": "Record Type",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 3,
+        "label": "Batch Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 4,
+        "label": "Salary Details  Record No (Serial Number of Employee)",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 5,
+        "label": "Mode ",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 6,
+        "label": "Filler7",
+        "type": "NA",
+        "required_marker": ""
+      },
+      {
+        "number": 7,
+        "label": "Employee PAN",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 8,
+        "label": "PAN Ref. No.",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 9,
+        "label": "Name of Employee",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 10,
+        "label": "Category of Employee",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 11,
+        "label": "Period of Employment From - Date",
+        "type": "DATE",
+        "required_marker": "M"
+      },
+      {
+        "number": 12,
+        "label": "Period of Employment To - Date",
+        "type": "DATE",
+        "required_marker": "M"
+      },
+      {
+        "number": 13,
+        "label": "Total amount of salary (338 + 339)",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 14,
+        "label": "Filler 8",
+        "type": "NA",
+        "required_marker": ""
+      },
+      {
+        "number": 15,
+        "label": "Count of ' Salary Details  - Section 16 Detail ' Records  associated with this Deductee ",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 16,
+        "label": "Gross Total of 'Total Deduction under section 16' under associated 'Salary Details  - Section 16 Detail' ",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 17,
+        "label": "Income chargeable under the head Salaries",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 18,
+        "label": "Income (including admissible loss from house property) under any head other than income under the head \"salaries\" offered for TDS [section 192 (2B)]",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 19,
+        "label": "Gross Total Income (351 + 352 + 354)",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 20,
+        "label": "Last Gross Total Income  ( Used for Verification)  (Not applicable)",
+        "type": "NA",
+        "required_marker": ""
+      },
+      {
+        "number": 21,
+        "label": "Count of ' Salary Details  - Chapter VI-A Detail ' Records  associated with Deductee - Chapter VIA Detail ",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 22,
+        "label": "Gross Total of 'Amount deductible under provisions of chapter VI-A' under  associated ' Salary Details  - Chapter VIA Detail '",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 23,
+        "label": "Total Taxable Income ( 355-366)",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 24,
+        "label": "Income Tax on Total Income",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 25,
+        "label": "Surcharge",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 26,
+        "label": "Education Cess",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 27,
+        "label": "Income Tax Relief u/s 89 when salary etc is paid in arrear or advance",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 28,
+        "label": "Net Income Tax payable [368+370+371-(369+372)]",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 29,
+        "label": "Total amount of tax deducted/collected at source for the whole year (Total of field 36, 37, 65 & 81)",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 30,
+        "label": "Shortfall in tax deduction (+)/Excess tax deduction(-) [373 - 376]",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 31,
+        "label": "Aggregate amount of deductions admissible under section 80C, 80CCC and 80CCD(1)",
+        "type": "CHAR",
+        "required_marker": ""
+      },
+      {
+        "number": 32,
+        "label": "Remarks  (For future use)",
+        "type": "CHAR",
+        "required_marker": ""
+      },
+      {
+        "number": 33,
+        "label": "Remarks  (For future use)",
+        "type": "CHAR",
+        "required_marker": ""
+      },
+      {
+        "number": 34,
+        "label": "Taxable Amount on which tax is deducted by the current employer (335 + 336 + 337)",
+        "type": "DECIMAL",
+        "required_marker": "O"
+      },
+      {
+        "number": 35,
+        "label": "Reported Taxable Amount on which tax is deducted by previous employer(s)",
+        "type": "DECIMAL",
+        "required_marker": "O"
+      },
+      {
+        "number": 36,
+        "label": "Total Amount of tax deducted at source by the current employer for the whole year [aggregate of the amount in column 323 of Annexure I for all the four quarters in respect of each employee]",
+        "type": "DECIMAL",
+        "required_marker": "O"
+      },
+      {
+        "number": 37,
+        "label": "Reported amount of tax deducted at source by other employer(s) (income in respect of which included in computing total taxable income in column 367)",
+        "type": "DECIMAL",
+        "required_marker": "O"
+      },
+      {
+        "number": 38,
+        "label": "Whether tax deducted at Higher rate due to non furnishing of PAN by deductee",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 39,
+        "label": "Whether aggregate rent payment exceeds rupees one lakh during previous year",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 40,
+        "label": "Count of PAN of the landlord",
+        "type": "DECIMAL",
+        "required_marker": "O"
+      },
+      {
+        "number": 41,
+        "label": "PAN of landlord 1",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 42,
+        "label": "Name of landlord 1",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 43,
+        "label": "PAN of landlord 2",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 44,
+        "label": "Name of landlord 2",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 45,
+        "label": "PAN of landlord 3",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 46,
+        "label": "Name of landlord 3",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 47,
+        "label": "PAN of landlord 4",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 48,
+        "label": "Name of landlord 4",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 49,
+        "label": "Whether Interest paid  to the lender under the head 'Income from house property'.",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 50,
+        "label": "Count of PAN of the lender",
+        "type": "DECIMAL",
+        "required_marker": "O"
+      },
+      {
+        "number": 51,
+        "label": "In case of deduction of interest under the head income from house property - PAN of lender 1",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 52,
+        "label": "In case of deduction of interest under the head income from house property - Name of lender 1",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 53,
+        "label": "In case of deduction of interest under the head income from house property - PAN of lender 2",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 54,
+        "label": "In case of deduction of interest under the head income from house property - Name of lender 2",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 55,
+        "label": "In case of deduction of interest under the head income from house property - PAN of lender 3",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 56,
+        "label": "In case of deduction of interest under the head income from house property - Name of lender 3",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 57,
+        "label": "In case of deduction of interest under the head income from house property - PAN of lender 4",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 58,
+        "label": "In case of deduction of interest under the head income from house property - Name of lender 4",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 59,
+        "label": "Whether contributions paid by the trustees of an approved superannuation fund",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 60,
+        "label": "Name of the superannuation fund",
+        "type": "CHAR",
+        "required_marker": "O"
+      },
+      {
+        "number": 61,
+        "label": "Date from which the employee has contributed to the superannuation fund",
+        "type": "DATE",
+        "required_marker": "O"
+      },
+      {
+        "number": 62,
+        "label": "Date to which the employee has contributed to the superannuation fund",
+        "type": "DATE",
+        "required_marker": "O"
+      },
+      {
+        "number": 63,
+        "label": "The amount of contribution repaid on account of principal and interest from superannuation fund",
+        "type": "DECIMAL",
+        "required_marker": "O"
+      },
+      {
+        "number": 64,
+        "label": "The average rate of deduction of tax during the preceding three years",
+        "type": "DECIMAL",
+        "required_marker": "O"
+      },
+      {
+        "number": 65,
+        "label": "The amount of tax deducted on repayment of superannuation fund",
+        "type": "DECIMAL",
+        "required_marker": "O"
+      },
+      {
+        "number": 66,
+        "label": "Gross total income including contribution repaid on account of principal and interest from superannuation fund",
+        "type": "DECIMAL",
+        "required_marker": "O"
+      },
+      {
+        "number": 67,
+        "label": "(a) Gross Salary as per provisions contained in sec.17(1)",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 68,
+        "label": "(b) Value of perquisites [section 17(2)]\n(as per FormNo.12BA, wherever applicable)\n",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 69,
+        "label": "(c) Profits in lieu of salary [section 17(3)]\n(as per Form No.12BA, wherever applicable) \n",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 70,
+        "label": "Travel concession or assistance [section 10(5)]",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 71,
+        "label": "Death-cum-retirement gratuity [section 10(10)]",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 72,
+        "label": "Commuted value of pension [section 10(10A)]",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 73,
+        "label": "Cash equivalent of leave salary encashment \n[section 10(10AA)]",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 74,
+        "label": "House rent allowance [section 10(13A)]",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 75,
+        "label": "Amount of any other exemption under section 10",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 76,
+        "label": "Total amount of exemption claimed under section 10 (340+341+342+343+345+346A+346B)",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 77,
+        "label": "Income under the head other sources offered for TDS [section 192 (2B)]",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 78,
+        "label": "Rebate under section 87A, if applicable",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 79,
+        "label": "Whether opting for taxation u/s 115BAC?\nOR\nWhether opting out from taxation u/s 115BAC(1A) (Applicable from FY 2023-24 onwards)\n[Yes/No] ",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 80,
+        "label": "Other special allowances under section 10(14) ",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 81,
+        "label": "Amount reported as per section 192(2B), of other tax deducted at source or tax collected at source, other than (388)",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 82,
+        "label": "Filler 10  (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 83,
+        "label": "Filler 11  (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 84,
+        "label": "Filler 12  (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 85,
+        "label": "Filler 13  (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 86,
+        "label": "Filler 14  (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 87,
+        "label": "Filler 15  (Not applicable)",
+        "type": "NA",
+        "required_marker": "NA"
+      },
+      {
+        "number": 88,
+        "label": "Record Hash  (Not applicable)",
+        "type": "NA",
+        "required_marker": ""
+      }
+    ],
+    "S16": [
+      {
+        "number": 1,
+        "label": "Line Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 2,
+        "label": "Record Type",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 3,
+        "label": "Batch Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 4,
+        "label": "Salary Detail Record No",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 5,
+        "label": "Salary Detail  - Section 16 Details Record No",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 6,
+        "label": "Section 16 section ID",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 7,
+        "label": "Total Deduction under Section 16",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 8,
+        "label": "Record Hash  (Not applicable)",
+        "type": "NA",
+        "required_marker": ""
+      }
+    ],
+    "C6A": [
+      {
+        "number": 1,
+        "label": "Line Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 2,
+        "label": "Record Type",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 3,
+        "label": "Batch Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 4,
+        "label": "Salary Detail Record No",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 5,
+        "label": "Salary Detail - Chapter VI -A Details Record No",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 6,
+        "label": "Chapter VI-A Section ID",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 7,
+        "label": "Total Deductible amount under Chapter VI-A",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 8,
+        "label": "Total Gross amount under Chapter VI-A",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 9,
+        "label": "Total Qualifying amount under Chapter VI-A",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 10,
+        "label": "Record Hash  (Not applicable)",
+        "type": "NA",
+        "required_marker": ""
+      }
+    ],
+    "94P": [
+      {
+        "number": 1,
+        "label": "Line Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 2,
+        "label": "Record Type",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 3,
+        "label": "Batch Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 4,
+        "label": "194P Details  Record No (Serial Number)",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 5,
+        "label": "Mode ",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 6,
+        "label": "Permanent Account Number (PAN) of the Specified Senior Citizen",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 7,
+        "label": "Name of the Specified Senior Citizen",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 8,
+        "label": "Category of Deductee i.e. Senior\nCitizen or Super Senior Citizen",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 9,
+        "label": "Whether opting for taxation u/s 115BAC?\nOR\nWhether opting out from taxation u/s \n115BAC(1A) (Applicable from FY 2023-24 onwards)\n[Yes/No] ",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 10,
+        "label": "Gross Pension as per provisions contained in clause (ii) section 17(1).",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 11,
+        "label": "Count of ' Section 194P  - Section 16 Detail ' Records  associated with this Deductee ",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 12,
+        "label": "Gross Total of 'Total Deduction under section 16' under associated 'Section 194P  - Section 16 Details' ",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 13,
+        "label": "Income  under the head \"Salaries\" (396-399).",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 14,
+        "label": "Interest Income under the other sources paid by the specified bank",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 15,
+        "label": "Gross Total Income(400+401)",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 16,
+        "label": "Last Gross Total Income  ( Used for Verification)  (Not applicable)",
+        "type": "NA",
+        "required_marker": "M"
+      },
+      {
+        "number": 17,
+        "label": "Total Deduction u/s 80C, 80CCC and 80CCD(1) [does not exceed Rs. 1,50,000] (404+406+408)",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 18,
+        "label": "Count of 'Section 194P - Chapter VI-A Details' Records  associated with Deductee - Chapter VIA Detail ",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 19,
+        "label": "Aggregate of deductible amount \nunder Chapter VI-A under associated 'Section 194P - Chapter VIA Detail'",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 20,
+        "label": "Total taxable income (402-426)",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 21,
+        "label": "Tax on total income",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 22,
+        "label": "Rebate under section 87A, if applicable",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 23,
+        "label": "Surcharge, wherever applicable.",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 24,
+        "label": "Health and education cess.",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 25,
+        "label": "Tax Payable [428 + 430 +(431-429)]",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 26,
+        "label": "Relief under section 89",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 27,
+        "label": "Net tax Payable",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 28,
+        "label": "Record Hash  (Not applicable)",
+        "type": "NA",
+        "required_marker": ""
+      }
+    ],
+    "P16": [
+      {
+        "number": 1,
+        "label": "Line Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 2,
+        "label": "Record Type",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 3,
+        "label": "Batch Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 4,
+        "label": "Section 194P Detail Record No",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 5,
+        "label": "Section 194P - Section 16 Details Record No",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 6,
+        "label": "Section 16 section ID",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 7,
+        "label": "Total Deduction under Section 16",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 8,
+        "label": "Record Hash  (Not applicable)",
+        "type": "NA",
+        "required_marker": ""
+      }
+    ],
+    "P6A": [
+      {
+        "number": 1,
+        "label": "Line Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 2,
+        "label": "Record Type",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 3,
+        "label": "Batch Number",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 4,
+        "label": "Section 194P Detail Record No",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 5,
+        "label": "Section 194P - Chapter VI-A Details Record No",
+        "type": "INTEGER",
+        "required_marker": "M"
+      },
+      {
+        "number": 6,
+        "label": "Chapter VI-A Section ID",
+        "type": "CHAR",
+        "required_marker": "M"
+      },
+      {
+        "number": 7,
+        "label": "Total Gross amount under Chapter VI-A",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 8,
+        "label": "Total Qualifying amount under Chapter VI-A",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 9,
+        "label": "Total Deductible amount under Chapter VI-A",
+        "type": "DECIMAL",
+        "required_marker": "M"
+      },
+      {
+        "number": 10,
+        "label": "Record Hash  (Not applicable)",
+        "type": "NA",
+        "required_marker": ""
+      }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "source_commit": "39acc829d0782272279e9332e6f893f03bf42783",
+  "run_id": 41134633714,
+  "job_id": 124333924545,
+  "job_conclusion": "failure",
+  "suite_passed": 13,
+  "suite_failed": 1,
+  "suite_duration": "9.4m",
+  "failed_case_duration": "26.8s",
+  "failure": "Strict locator matched both gross deposit and allocated deposit because both original values are 1000.00. Assertion stopped before export and crosswalk-staleness checks for historical24Q.",
+  "location": "frontend/e2e/withholding-native-release.spec.ts:419",
+  "correction": "Find gross deposit by its column header and assert the value in that exact data-row cell; do not select an arbitrary matching amount.",
+  "artifact": {
+    "id": 13015852850,
+    "size_bytes": 19535126,
+    "sha256": "61743573275519c93c5b9ad60e32743d71b80db8c983896221a94283dca44b26"
+  },
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/IN-24Q-browser-selector-failure-1-39acc82.png",
+      "sha256": "c39b02f8c151a81cd30813f9891de960fbd26894c97f894adb71aa1218babb08",
+      "size_bytes": 132081,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-24Q-browser-selector-failure-2-39acc82.png",
+      "sha256": "2f6403f249f586e4303d60f1454ec511c12a2a3f1f36cc1d819434b21251726d",
+      "size_bytes": 261851,
+      "visually_inspected": true
+    }
+  ],
+  "visual_review": "Original failure screenshots inspected: preparer input controls and the upper portion of the reviewer current-result page. The actual challan row is below the second capture; the duplicate-cell diagnosis comes from the terminal job log, not a claimed visual inspection of that row.",
+  "limits": [
+    "Failed browser suite is not successful acceptance proof. Corrected selector and new Q4 path await a fresh hosted run.",
+    "No client, legal, FVU or deployment qualification."
+  ]
+}

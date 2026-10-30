@@ -1,0 +1,19 @@
+{
+  "record_counts": {
+    "SD": 1,
+    "S16": 1,
+    "C6A": 1,
+    "94P": 1,
+    "P16": 1,
+    "P6A": 1
+  },
+  "salary_gross_income": "96000",
+  "salary_taxable_income": "95000",
+  "salary_net_tax_payable": "10400",
+  "salary_tax_deducted": "12000",
+  "salary_shortfall": "-1600",
+  "pension_gross_income": "49000",
+  "pension_taxable_income": "48500",
+  "pension_net_tax_payable": "1030",
+  "assessment": "SYNTHETIC independently specified annual salary and specified-senior population and arithmetic, not issuer/client or tax qualification"
+}

@@ -40,6 +40,14 @@ FORMATS: list[dict[str, Any]] = [
         "source": "https://tinpan.proteantech.in/downloads/e-tds/eTDS-download-regular.html",
     },
     {
+        "id": "india-24q-regular-q4-v7.5",
+        "label": "India historical 24Q Q4 annual salary observations v7.5",
+        "countries": ["IN"],
+        "table_type": "withholding-records",
+        "description": "FY2011–12 through FY2025–26 Q4 quarterly deductions plus complete declared SD/S16/C6A/94P/P16/P6A annual observations. Independent annual controls and recorded-component arithmetic; no complete tax, entitlement, all-quarter, FVU/CSI or filing qualification.",
+        "source": "https://tinpan.proteantech.in/downloads/e-tds/eTDS-download-regular.html",
+    },
+    {
         "id": "india-24q-regular-q1q3-v6.3",
         "label": "India historical 24Q salary regular Q1–Q3 v6.3",
         "countries": ["IN"],
@@ -752,6 +760,7 @@ def parse_native(content, data, country, filename):
                 "india-27eq-regular-v6.9",
                 "india-27q-regular-v7.5",
                 "india-24q-regular-q1q3-v6.3",
+                "india-24q-regular-q4-v7.5",
             }:
                 from app.modules.country_workflows.india_withholding_native import parse_regular
 
@@ -848,6 +857,7 @@ def parse_native(content, data, country, filename):
             "india-27eq-regular-v6.9",
             "india-27q-regular-v7.5",
             "india-24q-regular-q1q3-v6.3",
+            "india-24q-regular-q4-v7.5",
             "india-form143-regular-20260722-v1.1",
             "india-form138-regular-20260722-v1.1",
         }
@@ -892,6 +902,7 @@ def parse_native(content, data, country, filename):
                 "india-27eq-regular-v6.9",
                 "india-27q-regular-v7.5",
                 "india-24q-regular-q1q3-v6.3",
+                "india-24q-regular-q4-v7.5",
                 "india-form143-regular-20260722-v1.1",
                 "india-form138-regular-20260722-v1.1",
             }

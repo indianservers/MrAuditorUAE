@@ -1,0 +1,55 @@
+Historical Form24Q Q4 annual observations
+
+Profile india-24q-regular-q4-v7.5 adopts the unchanged numbered workbook
+protean-24Q-Q4-7.5.xls, sheet File Format, SHA256
+085268dd1be1685ba23e6aa147bed7cedf114a635463c4ca6e917062eed9706f.
+The retained source filename starts with FY2011-12; the adopted observation
+profile is explicitly bounded to FY2011-12 through FY2025-26 and Q4. Earlier
+Q4 layouts and successor Form138 remain separate. The v7.5 public Q4 sample
+has BH70/DD48/SD80, unlike the numbered BH72/DD54/SD88. Its original bytes remain
+unchanged, and the reader rejects it rather than widening it silently.
+
+The shared historical reader continues to control the quarterly FH/BH/CD/DD
+population, tax components, challan totals and independently assessed crosswalk.
+The Q4 profile additionally retains every original SD/S16/C6A/94P/P16/P6A record,
+including its source line, parent identity, original PAN and all numbered fields.
+These annual records are not appended to or double-counted as quarterly TDS rows.
+
+Required independent annual controls declare all six record counts, including
+explicit zeros; salary gross total income, taxable income, net tax payable,
+annual tax deducted and signed shortfall/excess; and specified-senior gross
+income, taxable income and recorded net tax payable. The assessment accompanies
+the retained independent crosswalk. Source preparation, original hashes, separate
+reviewer, allowed reported-only role and source replacement freshness use the
+existing protected workflow. No source can serve as its own crosswalk.
+
+The reader checks exact widths and full source sequence, annual batch/parent
+binding, child serials and distinct recorded section IDs, child counts and sums,
+batch income/count controls and selected recorded-component arithmetic. C6A's
+deductible amount is field7; P6A's is field9. Signed salary other-head income and
+shortfall are retained. Period-specific source fields and recorded regime flags
+govern the adopted component checks. A recorded flag is not verified legal
+eligibility. Original landlord/lender identities, employment and superannuation
+details remain source observations requiring independent assessment.
+
+The UI pages every annual record and every numbered field, with separate type
+filtering and field pagination. Blank values remain distinct from explicit zero
+or a negative amount. XLSX exports one complete sheet per annual record type
+plus independent control comparisons; original field strings remain unchanged.
+Review history remains unchanged and becomes stale when the crosswalk changes.
+
+Source limitations remain explicit. SD field80 has conflicting earlier-year
+wording; this profile adopts its explicit FY2023+ applicability sentence. The
+194P recorded net-after-relief value is controlled independently; no formula is
+asserted where the numbered workbook supplies none. This is selected recorded
+arithmetic and population validation, not complete conditional FVU/CSI, legal
+deduction/certificate entitlement, tax recomputation or all-quarter reconciliation.
+Rates, tax due, current filing, actual payment and credit are not established.
+
+sample-inputs/SYNTHETIC-annual-24q/ contains an entirely fictional completion
+with salary and specified-senior parents and all six annual record types. It uses
+a separately adapted controlled quarterly prefix, not a repaired issuer Q4 sample.
+Its independent controls are authored test inputs. They are not client evidence
+or professional approval and do not change the 154-case engine catalogue or
+real client pilot count. Full legal/cohort qualification and external evidence
+remain outstanding roadmap requirements.
