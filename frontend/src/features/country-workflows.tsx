@@ -72,6 +72,7 @@ import { PayrollPostingLinks } from "./payroll-posting-links";
 import { InventoryEvidenceTable } from "./inventory-evidence-table";
 import { VATCompositionSource } from "./vat-composition-source";
 import { TurnoverLedgerSource } from "./turnover-ledger-source";
+import { draftCurrency, reportingCurrency } from "./workflow-currency";
 import { TurnoverBooksComposition } from "./turnover-books-composition";
 import {
   AnnualGSTScopeForm,
@@ -596,6 +597,7 @@ export function CountryWorkflows({
   const canUseVAT = useCan("vat.read");
   const config = useAPI<{
     country: string;
+    default_currency?: string | null;
     items: Workflow[];
     vat201_layouts?: Record<string, { label: string; boxes: string[] }>;
     source_formats?: {
@@ -807,7 +809,24 @@ export function CountryWorkflows({
   const [bankOwnerName, setBankOwnerName] = useState("");
   const [bankOwnerScheme, setBankOwnerScheme] = useState("");
   const [bankOwnerIdentifier, setBankOwnerIdentifier] = useState("");
-  const [currency, setCurrency] = useState("AED");
+  const [currencySelection, setCurrencySelection] = useState<{
+    eid: string | undefined;
+    tenant: string;
+    value: string;
+  } | null>(null);
+  const requiredCurrency =
+    mode === "country-workflow"
+      ? reportingCurrency(workflow, config.data?.country)
+      : null;
+  const currency =
+    requiredCurrency ??
+    (currencySelection &&
+    currencySelection.eid === eid &&
+    currencySelection.tenant === tenant
+      ? currencySelection.value
+      : draftCurrency(config.data));
+  const setCurrency = (value: string) =>
+    setCurrencySelection({ eid, tenant, value });
   const [balances, setBalances] = useState<Record<string, string>>({});
   const [comments, setComments] = useState("");
   const [reason, setReason] = useState("");
@@ -2086,24 +2105,7 @@ export function CountryWorkflows({
           as_of: asOf,
           title: label,
           rationale: reason,
-          currency: [
-            "india-esic-population",
-            "india-document-series",
-            "india-gstr1-documents",
-            "india-gstr1-summary",
-            "india-payroll-basis-proration",
-            "india-establishment-charges",
-            "india-payroll-rules",
-            "india-gst",
-            "india-invoice-register",
-            "india-withholding",
-            "india-withholding-liability",
-            "india-withholding-credit",
-          ].includes(workflow)
-            ? "INR"
-            : ["uae-pension-review", "uae-savings-review"].includes(workflow)
-              ? "AED"
-              : currency,
+          currency,
           ...([
             "bank-subsequent-clearance",
             "subsequent-settlements",
@@ -2611,6 +2613,7 @@ export function CountryWorkflows({
                     Ledger functional currency
                     <input
                       value={currency}
+                      readOnly={Boolean(requiredCurrency)}
                       onChange={(e) =>
                         setCurrency(e.target.value.toUpperCase())
                       }
@@ -4364,10 +4367,6 @@ export function CountryWorkflows({
                   onChange={(e) => {
                     setWorkflow(e.target.value);
                     setAnnualGST(emptyAnnualGST());
-                    if (e.target.value === "tax-turnover-bridge")
-                      setCurrency(
-                        config.data?.country === "IN" ? "INR" : "AED",
-                      );
                     setInvoiceFaceAmounts(false);
                     setInvoiceDirection("");
                     setWithholdingRole("");
@@ -4384,6 +4383,28 @@ export function CountryWorkflows({
                   ))}
                 </select>
               </label>
+              {requiredCurrency && (
+                <label>
+                  Reporting currency
+                  <input value={currency} readOnly maxLength={3} />
+                </label>
+              )}
+              {workflow === "india-invoice-register" && (
+                <label>
+                  Invoice comparison currency
+                  <input
+                    aria-label="Invoice comparison currency"
+                    aria-describedby="invoice-currency-scope"
+                    value={currency}
+                    maxLength={3}
+                    onChange={(e) => setCurrency(e.target.value.toUpperCase())}
+                  />
+                  <small id="invoice-currency-scope">
+                    Original source currencies stay separate; no conversion is
+                    performed.
+                  </small>
+                </label>
+              )}
               {workflow === "tax-turnover-bridge" &&
                 config.data?.country === "IN" && (
                   <AnnualGSTScopeForm
@@ -4470,6 +4491,7 @@ export function CountryWorkflows({
                         Inventory reporting currency
                         <input
                           value={currency}
+                          readOnly={Boolean(requiredCurrency)}
                           maxLength={3}
                           onChange={(e) =>
                             setCurrency(e.target.value.toUpperCase())
@@ -4530,6 +4552,7 @@ export function CountryWorkflows({
                   Arrear comparison currency
                   <input
                     value={currency}
+                    readOnly={Boolean(requiredCurrency)}
                     maxLength={3}
                     onChange={(e) => setCurrency(e.target.value.toUpperCase())}
                   />
@@ -4987,6 +5010,7 @@ export function CountryWorkflows({
                     Account currency
                     <input
                       value={currency}
+                      readOnly={Boolean(requiredCurrency)}
                       onChange={(e) =>
                         setCurrency(e.target.value.toUpperCase())
                       }
@@ -5048,6 +5072,7 @@ export function CountryWorkflows({
                     Account currency
                     <input
                       value={currency}
+                      readOnly={Boolean(requiredCurrency)}
                       onChange={(e) =>
                         setCurrency(e.target.value.toUpperCase())
                       }
@@ -5256,6 +5281,7 @@ export function CountryWorkflows({
                     Account currency
                     <input
                       value={currency}
+                      readOnly={Boolean(requiredCurrency)}
                       onChange={(e) =>
                         setCurrency(e.target.value.toUpperCase())
                       }
@@ -5292,6 +5318,7 @@ export function CountryWorkflows({
                     <input
                       aria-label="Reserve comparison currency"
                       value={currency}
+                      readOnly={Boolean(requiredCurrency)}
                       maxLength={3}
                       onChange={(event) =>
                         setCurrency(event.target.value.toUpperCase())
@@ -5323,6 +5350,7 @@ export function CountryWorkflows({
                     Settlement currency
                     <input
                       value={currency}
+                      readOnly={Boolean(requiredCurrency)}
                       onChange={(e) =>
                         setCurrency(e.target.value.toUpperCase())
                       }
@@ -5352,6 +5380,7 @@ export function CountryWorkflows({
                     Account currency
                     <input
                       value={currency}
+                      readOnly={Boolean(requiredCurrency)}
                       onChange={(e) =>
                         setCurrency(e.target.value.toUpperCase())
                       }

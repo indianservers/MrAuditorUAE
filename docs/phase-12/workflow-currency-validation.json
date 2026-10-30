@@ -1,0 +1,110 @@
+{
+  "status": "LOCALLY_VERIFIED_HOSTED_EXECUTION_PENDING",
+  "resolved_finding": "docs/phase-12/gst-annual-browser-f92310a.json:new_followup",
+  "changes": [
+    "Authorized workflow metadata supplies the legal entity functional currency with an explicit basis",
+    "Fresh common workflows use configured entity currency; missing configured defaults stay blank",
+    "Explicit user currency choices are scoped to tenant and engagement and survive metadata refresh",
+    "Existing reporting currencies are derived consistently for fixed workflows and shown read-only",
+    "India original-invoice comparison accepts explicit original currency instead of unconditionally substituting INR",
+    "Annual browser workflow now asserts fresh India forms use INR before calculation and after stale-result reload"
+  ],
+  "checks": [
+    {
+      "path": "docs/phase-12/workflow-currency-regression.xml",
+      "tests": 92,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/workflow-currency-api-final.xml",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/workflow-currency-frontend.xml",
+      "tests": 388,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/workflow-currency-focused-final.xml",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "additional_checks": [
+    "mypy: 413 application files passed",
+    "Ruff application and affected tests passed",
+    "Frontend typecheck, lint and API type snapshots passed; one preexisting unused-variable warning",
+    "Runtime API/job input snapshots unchanged",
+    "Production Next.js build passed",
+    "Annual browser test discovered; actual new hosted execution pending"
+  ],
+  "coverage": [
+    "India INR and USD-functional entities; UAE AED and EUR-functional entities with different presentation currencies",
+    "Unauthorized tenant-header metadata request denied",
+    "Late metadata arrival, explicit override retained through refresh, new tenant/engagement gets its own default",
+    "GST/VAT fixed reporting fields and return to original editable common-account choice",
+    "Full persisted reviewed USD original-invoice source/job/review path produces USD MATCHED rows without GST return contract or statutory qualification"
+  ],
+  "limitations": [
+    "Full frontend receipt predates type-only removal of unsupported RTL exact options; focused final receipt repeats all eight new cases on final test source",
+    "The 92-check backend regression precedes addition of the original-USD HTTP case; the final six-case HTTP receipt includes it",
+    "No rates or amount conversion added; original row currencies remain separate",
+    "HTTP source/job tests use real storage/database/domain execution with explicit scanner/broker test doubles; hosted browser uses configured real services",
+    "No live-provider, real-client, filing or professional qualification claim"
+  ],
+  "source_blobs": [
+    {
+      "path": ".gitattributes",
+      "sha256": "798a8b39b06e83dee31cd8fcde771c3ecbd98204da6d93939d7ced92d669c94a"
+    },
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "sha256": "821a784d793dd085f178acae46778991f7f3a8efabed243e4126973f79b991ca"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_workflow_currency_defaults.py",
+      "sha256": "2d53c502f0e00739ecd41dabc368eab80c220892ced55d043813649a290e9f1d"
+    },
+    {
+      "path": "docs/phase-12/workflow-currency-api-final.xml",
+      "sha256": "ff323de069875ba103fcba6dc1893524e6065ba577c32b62f54022989a1f197b"
+    },
+    {
+      "path": "docs/phase-12/workflow-currency-focused-final.xml",
+      "sha256": "d2676e1e00c0ef5d73e7df439d83698d8a199e0a0be3b4f30dda0095271ea613"
+    },
+    {
+      "path": "docs/phase-12/workflow-currency-frontend.xml",
+      "sha256": "e57456d0cfd2450baa684286bd1c21cfbc58ad877769199499572c2b2a038834"
+    },
+    {
+      "path": "docs/phase-12/workflow-currency-regression.xml",
+      "sha256": "b2300101f2dadc99646e4a04e27906604aa41defdbd9eefb8f8461e8672e8aa8"
+    },
+    {
+      "path": "frontend/e2e/annual-gst-release.spec.ts",
+      "sha256": "d33797b73a564e50234b30ab19e6bc2c4a4efa2af75dbde48575a92aaa8a0dd1"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "827f559fb58fb42818a883c408bd0a89de628640ad06f9a1f175430284e5dc04"
+    },
+    {
+      "path": "frontend/src/features/workflow-currency.ts",
+      "sha256": "dda8fd5fb6d474a82df78b9fe1f0ce9203adcc43634ed3b24c9523ee19ee67ec"
+    },
+    {
+      "path": "frontend/tests/workflow-currency-defaults.test.tsx",
+      "sha256": "ab57080aa9b6d74468057699ef9caa4ecccde211b789f87c716273821cba83bc"
+    }
+  ]
+}

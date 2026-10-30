@@ -525,6 +525,7 @@ async def capabilities(ctx: Actor):
 
 @router.get("/engagements/{eid}/country-workflows")
 async def country_workflows(eid: uuid.UUID, db: DB, ctx: Actor):
+    from app.db.models.platform import LegalEntity
     from app.modules.country_workflows.catalogue import catalogue, check_templates, scenarios
     from app.modules.country_workflows.schemas import ROW_TYPES
     from app.modules.country_workflows.vat201_layouts import EMIRATES, LAYOUTS
@@ -535,7 +536,12 @@ async def country_workflows(eid: uuid.UUID, db: DB, ctx: Actor):
     package, _ = await resolved(db, ctx, eng)
     from app.modules.country_workflows.native_sources import formats
 
+    entity = await db.get(LegalEntity, eng.entity_id)
+    if entity is None or entity.tenant_id != ctx.tenant_id:
+        raise HTTPException(404, "Entity not found")
     return {
+        "default_currency": entity.functional_currency,
+        "default_currency_basis": "ENTITY_FUNCTIONAL_CURRENCY",
         "source_formats": formats(package.country),
         "vat201_layouts": LAYOUTS if package.country == "AE" else {},
         "vat201_emirates": EMIRATES if package.country == "AE" else {},

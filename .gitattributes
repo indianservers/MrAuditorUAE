@@ -87,3 +87,5 @@ docs/phase-12/9615b86-hosted-coverage.json -text
 docs/phase-12/connector-isolated-db-final.xml -text whitespace=cr-at-eol
 
 docs/phase-12/hosted-skips-windows-worker.xml -text whitespace=cr-at-eol
+
+docs/phase-12/workflow-currency-*.xml -text whitespace=cr-at-eol

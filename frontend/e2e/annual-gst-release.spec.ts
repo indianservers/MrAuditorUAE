@@ -150,6 +150,9 @@ test("synthetic India annual GST PAN facts, pending controls, independent approv
     const facts = sample.gst_annual_scope;
     async function fillScope(complete: boolean) {
       await page.goto(`/intelligence/${eid}/country-workflow`);
+      await expect(
+        page.getByRole("textbox", { name: "Account currency", exact: true }),
+      ).toHaveValue("INR");
       await page
         .getByRole("combobox", { name: "Workflow", exact: true })
         .selectOption("tax-turnover-bridge");
@@ -427,6 +430,9 @@ test("synthetic India annual GST PAN facts, pending controls, independent approv
       }),
     ).toBeDisabled();
     await reviewer.setViewportSize({ width: 2200, height: 2600 });
+    await expect(
+      reviewer.getByRole("textbox", { name: "Account currency", exact: true }),
+    ).toHaveValue("INR");
     const stalePanel = reviewer
       .getByRole("heading", {
         name: "SYNTHETIC annual GST controlled result",

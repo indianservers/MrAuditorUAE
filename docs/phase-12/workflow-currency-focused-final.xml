@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="8" failures="0" errors="0" time="0.532536">
+    <testsuite name="tests/workflow-currency-defaults.test.tsx" timestamp="2026-10-30T02:46:11.228Z" hostname="DESKTOP-B3SR465" tests="8" failures="0" errors="0" skipped="0" time="0.532536">
+        <testcase classname="tests/workflow-currency-defaults.test.tsx" name="uses the entity currency for a fresh IN common workflow (INR)" time="0.1461738">
+        </testcase>
+        <testcase classname="tests/workflow-currency-defaults.test.tsx" name="uses the entity currency for a fresh AE common workflow (AED)" time="0.0213394">
+        </testcase>
+        <testcase classname="tests/workflow-currency-defaults.test.tsx" name="uses the entity currency for a fresh IN common workflow (USD)" time="0.0204084">
+        </testcase>
+        <testcase classname="tests/workflow-currency-defaults.test.tsx" name="uses the entity currency for a fresh AE common workflow (EUR)" time="0.0176598">
+        </testcase>
+        <testcase classname="tests/workflow-currency-defaults.test.tsx" name="adapts to delayed metadata, preserves an explicit foreign choice on refresh, and scopes it to the engagement" time="0.0797742">
+        </testcase>
+        <testcase classname="tests/workflow-currency-defaults.test.tsx" name="uses fixed reporting currency for GST and VAT while preserving an explicit common-account currency" time="0.0966606">
+        </testcase>
+        <testcase classname="tests/workflow-currency-defaults.test.tsx" name="queues the explicit original-invoice currency rather than substituting INR" time="0.1213655">
+        </testcase>
+        <testcase classname="tests/workflow-currency-defaults.test.tsx" name="keeps a missing configured currency blank instead of inventing AED" time="0.027014">
+        </testcase>
+    </testsuite>
+</testsuites>
