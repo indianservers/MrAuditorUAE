@@ -339,6 +339,7 @@
               "inventory-custody-confirmations",
               "party-balance-confirmations",
               "inventory-valuation-control",
+              "inventory-fifo-cost",
               "india-esic-population",
               "india-document-series",
               "payroll-ledger-rollforward",
@@ -1695,6 +1696,136 @@
       "model": "SourceInput",
       "payload_schema": {
         "$defs": {
+          "CostControl": {
+            "additionalProperties": false,
+            "properties": {
+              "site": {
+                "maxLength": 120,
+                "minLength": 1,
+                "title": "Site",
+                "type": "string"
+              },
+              "sku": {
+                "maxLength": 120,
+                "minLength": 1,
+                "title": "Sku",
+                "type": "string"
+              },
+              "lot": {
+                "default": "",
+                "maxLength": 120,
+                "title": "Lot",
+                "type": "string"
+              },
+              "uom": {
+                "maxLength": 120,
+                "minLength": 1,
+                "title": "Uom",
+                "type": "string"
+              },
+              "currency": {
+                "pattern": "^[A-Z]{3}$",
+                "title": "Currency",
+                "type": "string"
+              },
+              "expected_rows": {
+                "maximum": 5000,
+                "minimum": 1,
+                "title": "Expected Rows",
+                "type": "integer"
+              },
+              "opening_quantity": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Opening Quantity"
+              },
+              "receipt_quantity": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Receipt Quantity"
+              },
+              "issue_quantity": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Issue Quantity"
+              },
+              "opening_cost": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Opening Cost"
+              },
+              "receipt_cost": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Receipt Cost"
+              },
+              "rounding_places": {
+                "maximum": 8,
+                "minimum": 0,
+                "title": "Rounding Places",
+                "type": "integer"
+              },
+              "rounding_method": {
+                "enum": [
+                  "HALF_UP",
+                  "HALF_EVEN"
+                ],
+                "title": "Rounding Method",
+                "type": "string"
+              }
+            },
+            "required": [
+              "site",
+              "sku",
+              "uom",
+              "currency",
+              "expected_rows",
+              "opening_quantity",
+              "receipt_quantity",
+              "issue_quantity",
+              "opening_cost",
+              "receipt_cost",
+              "rounding_places",
+              "rounding_method"
+            ],
+            "title": "CostControl",
+            "type": "object"
+          },
           "CustodyQuantityControl": {
             "additionalProperties": false,
             "properties": {
@@ -2404,6 +2535,22 @@
             "default": null,
             "title": "Purchase Quantity Controls"
           },
+          "inventory_fifo_controls": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/$defs/CostControl"
+                },
+                "maxItems": 5000,
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null,
+            "title": "Inventory Fifo Controls"
+          },
           "inventory_cost_document_version_id": {
             "anyOf": [
               {
@@ -3030,6 +3177,7 @@
               "grant-allocations",
               "grant-utilisation-controls",
               "inventory-valuations",
+              "inventory-cost-movements",
               "esic-members",
               "gst-document-series",
               "gst-summary-metrics",
@@ -7215,6 +7363,133 @@
         "assessment"
       ],
       "title": "ImportVATLine",
+      "type": "object"
+    },
+    "inventory-cost-movements": {
+      "additionalProperties": false,
+      "properties": {
+        "site": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Site",
+          "type": "string"
+        },
+        "sku": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Sku",
+          "type": "string"
+        },
+        "lot": {
+          "default": "",
+          "maxLength": 120,
+          "title": "Lot",
+          "type": "string"
+        },
+        "uom": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Uom",
+          "type": "string"
+        },
+        "currency": {
+          "pattern": "^[A-Z]{3}$",
+          "title": "Currency",
+          "type": "string"
+        },
+        "id": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Id",
+          "type": "string"
+        },
+        "date": {
+          "format": "date",
+          "title": "Date",
+          "type": "string"
+        },
+        "sequence": {
+          "maximum": 1000000000,
+          "minimum": 0,
+          "title": "Sequence",
+          "type": "integer"
+        },
+        "kind": {
+          "enum": [
+            "opening",
+            "receipt",
+            "issue"
+          ],
+          "title": "Kind",
+          "type": "string"
+        },
+        "quantity": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "title": "Quantity"
+        },
+        "unit_cost": {
+          "anyOf": [
+            {
+              "minimum": 0.0,
+              "type": "number"
+            },
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit Cost"
+        },
+        "source_evidence_version_id": {
+          "format": "uuid",
+          "title": "Source Evidence Version Id",
+          "type": "string"
+        },
+        "source_sha256": {
+          "pattern": "^[a-f0-9]{64}$",
+          "title": "Source Sha256",
+          "type": "string"
+        },
+        "evidence_reference": {
+          "maxLength": 120,
+          "minLength": 1,
+          "title": "Evidence Reference",
+          "type": "string"
+        },
+        "assessment": {
+          "maxLength": 2000,
+          "minLength": 10,
+          "title": "Assessment",
+          "type": "string"
+        }
+      },
+      "required": [
+        "site",
+        "sku",
+        "uom",
+        "currency",
+        "id",
+        "date",
+        "sequence",
+        "kind",
+        "quantity",
+        "source_evidence_version_id",
+        "source_sha256",
+        "evidence_reference",
+        "assessment"
+      ],
+      "title": "CostMovement",
       "type": "object"
     },
     "inventory-custody-confirmations": {

@@ -1,6 +1,11 @@
 def approval_error(body):
     from app.modules.intelligence.matching_review import saved_candidates_complete
 
+    if body.get("workflow") == "inventory-fifo-cost" and (
+        body.get("inventory_fifo_contract") != "inventory-fifo-cost/1"
+        or body.get("inventory_fifo_document_binding") != "RETAINED_DOCUMENT_BYTES_VERIFIED"
+    ):
+        return "Regenerate FIFO cost roll-forward with retained current cost/policy evidence"
     if body.get("workflow") == "tax-turnover-bridge":
         from app.modules.country_workflows.gst_annual_scope import saved_current
 

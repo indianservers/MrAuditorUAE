@@ -1,0 +1,58 @@
+Assessed FIFO cost roll-forward — shared UAE and India workflow
+
+Workflow: inventory-fifo-cost. Contract: inventory-fifo-cost/1.
+Sources: movements (inventory-cost-movements), books (stock).
+Both sources require independent review. Closing books require independent
+directional quantity controls. The explicit cost window must lie inside the
+engagement period; opening layers must be dated at that window's start.
+
+Each movement retains an exact identifier, date, sequence, kind, positive
+quantity, site, SKU, lot, unit, currency, original support version/hash,
+reference and assessment. Opening/receipt unit cost is assessed and nonnegative;
+an issue's cost is calculated from oldest then-available layers. Date/sequence
+ties are rejected. Sequence explicitly declares opening-layer order.
+
+Independent controls declare row count, opening/receipt/issue quantities,
+opening/receipt extended costs and rounding method/places for every exact
+partition. Zero is supplied explicitly. No cross-partition offset, FX conversion,
+unit conversion, aggregate-value netting or inferred costing policy is applied.
+The supported population is 1–5000 events, with no omitted allocation rows.
+
+Results retain issue-to-layer allocations, movement covered costs, unresolved
+issue quantities, closing layers, independent controls, raw and rounded closing
+costs, rounding differences, covered issue cost and raw cost conservation.
+Book gross value is quantity multiplied by book unit cost, compared using the
+same declared rounding. Nonzero rounded differences are exceptions. An issue
+without then-available stock blocks release; later receipts cannot backfill it.
+Remaining layers after such a shortage are explicitly provisional, with no
+complete FIFO closing valuation asserted.
+
+Original cost/policy support must be distinct from the normalized movement CSV.
+The retained-document verifier permits at most 50 distinct supporting originals
+and 100 MiB in total; larger populations require separately scoped reviewed runs.
+Source version/hash checks use actual retained bytes. Replacing support stales
+the source/result without rewriting its historical body. Source contributors
+cannot approve their own derived result. Independent approval also requires the
+current FIFO contract and retained-document verification marker.
+
+The UI provides controlled source entry, explicit policy/window assessment and
+independent 20-row pages for allocations, events, closing layers and controls.
+The XLSX retains complete dedicated sheets, independent of page projections.
+
+Scope: assessed gross FIFO arithmetic, reusable in UAE/AED and India/INR and
+other explicitly declared currencies. This does not select an accounting or tax
+framework, establish physical existence/title/NRV, calculate manufacturing or
+landed-cost allocation, infer returns/transfers/revaluations, support weighted
+average/specific identification, cost negative stock, or issue an audit opinion.
+Those require their own supported workflows and independently assessed evidence.
+
+Primary context consulted 2026-10-30:
+https://www.ifrs.org/issued-standards/list-of-standards/ias-2-inventories/
+The IAS 2 overview describes cost and lower-of-cost/NRV measurement and FIFO or
+weighted-average formulas for interchangeable inventory. It is context for this
+limited arithmetic workflow, not evidence that a given entity must adopt FIFO.
+No native statutory filing or country legal qualification is claimed.
+
+Validation inputs are authored synthetic fixtures, including both country
+contexts and exact 5000-event population. They are separate from the empty
+real-client pilot intake folders. Passing them does not qualify real clients.

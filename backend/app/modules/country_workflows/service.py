@@ -605,6 +605,28 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                     else "Inventory custody documents",
                 )
             )
+        if data.table_type == "inventory-cost-movements":
+            from app.modules.country_workflows.inventory_fifo import documents as fifo_documents
+
+            copies = fifo_documents(result["rows"])
+            if any(
+                str(item["source_evidence_version_id"]) == str(evidence.id)
+                or item["source_sha256"] == evidence.sha256
+                for item in copies
+            ):
+                raise HTTPException(
+                    422, "FIFO movements require distinct original cost/policy documents"
+                )
+            dependencies.extend(
+                await payroll_rule_documents(
+                    db,
+                    ctx,
+                    eng,
+                    copies,
+                    contributors=supporting_contributors,
+                    label="FIFO cost/policy documents",
+                )
+            )
         if data.table_type == "inventory-valuations":
             from app.modules.country_workflows.inventory_valuation import documents
 
@@ -793,6 +815,9 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             raise HTTPException(
                 422, "Merchant settlement review window must be within the engagement period"
             )
+    elif data.workflow == "inventory-fifo-cost":
+        if data.period_start is None or not period.start_date <= data.period_start <= data.as_of:
+            raise HTTPException(422, "FIFO cost window must be within the engagement period")
     elif data.workflow == "grant-utilisation":
         if data.period_start is None or not period.start_date <= data.period_start <= data.as_of:
             raise HTTPException(
@@ -944,7 +969,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 "Independently review cutoff documents, recognition allocations and ledger postings before comparison",
             )
         if (
-            data.workflow == "inventory-valuation-control"
+            data.workflow in {"inventory-valuation-control", "inventory-fifo-cost"}
             and source.body.get("review_status") != "REVIEWED"
         ):
             raise HTTPException(
@@ -1401,6 +1426,19 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 else "Inventory custody documents",
             )
         )
+    if data.workflow == "inventory-fifo-cost":
+        from app.modules.country_workflows.inventory_fifo import documents as fifo_documents
+
+        dependencies.extend(
+            await payroll_rule_documents(
+                db,
+                ctx,
+                eng,
+                fifo_documents(sources["movements"]["rows"]),
+                contributors=contributors,
+                label="FIFO cost/policy documents",
+            )
+        )
     if data.workflow == "inventory-valuation-control":
         from app.modules.country_workflows.inventory_valuation import documents
 
@@ -1508,6 +1546,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         from app.modules.country_workflows.bank_consumption import manifest
 
         result["bank_consumption_manifest"] = manifest(data, sources["bank"], result)
+    if data.workflow == "inventory-fifo-cost":
+        result["inventory_fifo_document_binding"] = "RETAINED_DOCUMENT_BYTES_VERIFIED"
     if data.workflow == "uae-savings-review":
         result["savings_document_binding"] = "RETAINED_DOCUMENT_BYTES_VERIFIED"
     if data.workflow == "india-establishment-charges":

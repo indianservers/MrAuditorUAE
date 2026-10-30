@@ -193,6 +193,9 @@ def render(event, format):
             "benefit_service_calendar_contract",
             "service_calendar_basis",
             "reserve_control_receipts",
+            "inventory_fifo_contract",
+            "inventory_fifo_scope",
+            "inventory_fifo_document_binding",
             "annual_statement_scope_contract",
             "annual_statement_scope_basis",
             "annual_statement_scopes",
@@ -226,6 +229,16 @@ def render(event, format):
         summary["count_bridges"] = (
             f"{len(body['count_bridges'])} bridge rows; complete original count details and individual movement links are retained in the XLSX Count date bridges and Inventory movement links sheets"
         )
+    for field in (
+        "fifo_allocations",
+        "fifo_event_costs",
+        "fifo_closing_layers",
+        "inventory_fifo_controls",
+    ):
+        if isinstance(body.get(field), list):
+            summary[field] = (
+                f"{len(body[field])} records; complete detail is retained in its dedicated FIFO XLSX sheet"
+            )
     if isinstance(body.get("inventory_quantity_controls"), list):
         summary["inventory_quantity_controls"] = (
             f"{len(body['inventory_quantity_controls'])} controlled partitions; complete row and directional quantity controls are retained in the XLSX Inventory quantity controls sheet"
@@ -925,6 +938,18 @@ def render(event, format):
                 append(posting_links, posting_fields)
                 for link in body["payroll_posting_links"]:
                     append(posting_links, [link.get(key) for key in posting_fields])
+            for field, title in (
+                ("fifo_allocations", "FIFO allocations"),
+                ("fifo_event_costs", "FIFO events"),
+                ("fifo_closing_layers", "FIFO closing layers"),
+                ("inventory_fifo_controls", "FIFO source controls"),
+            ):
+                if body.get(field) is not None:
+                    sheet = workbook.create_sheet(title)
+                    keys = list(dict.fromkeys(key for item in body[field] for key in item))
+                    append(sheet, keys)
+                    for item in body[field]:
+                        append(sheet, [item.get(key) for key in keys])
             if body.get("inventory_quantity_controls") is not None:
                 controls = workbook.create_sheet("Inventory quantity controls")
                 fields = [

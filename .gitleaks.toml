@@ -16,3 +16,12 @@ description = "Reviewed SOD rule UUID in synthetic demonstration inventory"
 paths = ['''(?:^|[\\/])docs[\\/]phase-10[\\/]demo-verification\.json$''']
 regexTarget = "secret"
 regexes = ['''^6d9e57b5-bc1f-4850-96ea-ca0b2ffa95b0$''']
+
+[[rules]]
+id = "generic-api-key"
+[[rules.allowlists]]
+description = "Two reviewed synthetic job idempotency UUIDs in the original failed FIFO API receipt; not credentials"
+condition = "AND"
+paths = ['''(?:^|[\\/])docs[\\/]phase-12[\\/]inventory-fifo-api\.xml$''']
+regexTarget = "secret"
+regexes = ['''^28df771d-65bb-4a30-a8f3-7d0af63f695b$''', '''^6c38d679-b033-4bc3-8d2f-6e6fa8f19ecc$''']

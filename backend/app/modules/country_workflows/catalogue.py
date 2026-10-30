@@ -100,6 +100,11 @@ WORKFLOWS = {
             "responses": "party-confirmations",
         },
     ),
+    "inventory-fifo-cost": (
+        "Assessed FIFO opening / receipt / issue / gross book cost roll-forward",
+        [],
+        {"movements": "inventory-cost-movements", "books": "stock"},
+    ),
     "inventory-valuation-control": (
         "Inventory cost / NRV evidence and recorded GL controls",
         [],

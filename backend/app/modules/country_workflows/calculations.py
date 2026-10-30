@@ -1185,6 +1185,10 @@ def calculate(
             from app.modules.country_workflows.party_confirmations import compare as compare_parties
 
             result = compare_parties(data, sources)
+        elif data.workflow == "inventory-fifo-cost":
+            from app.modules.country_workflows.inventory_fifo import compare as compare_fifo
+
+            result = compare_fifo(data, sources)
         elif data.workflow == "inventory-valuation-control":
             from app.modules.country_workflows.inventory_valuation import (
                 compare as compare_inventory_values,

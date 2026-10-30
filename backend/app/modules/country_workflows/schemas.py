@@ -30,6 +30,7 @@ from app.modules.country_workflows.inventory_custody import (
     CustodyPosition,
     CustodyQuantityControl,
 )
+from app.modules.country_workflows.inventory_fifo import CostControl, CostMovement
 from app.modules.country_workflows.inventory_valuation import (
     InventoryValuation,
     InventoryValueControl,
@@ -334,6 +335,7 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
     "party-confirmations": PartyConfirmation,
     "confirmation-item-coverage": ConfirmationItemCoverage,
     "inventory-valuations": InventoryValuation,
+    "inventory-cost-movements": CostMovement,
     "esic-members": ESICMember,
     "gst-document-series": DocumentSeries,
     "gst-summary-metrics": GSTSummaryMetric,
@@ -379,6 +381,7 @@ class SourceInput(Strict):
     purchase_quantity_controls: list[PurchaseQuantityControl] | None = Field(
         default=None, max_length=5000
     )
+    inventory_fifo_controls: list[CostControl] | None = Field(default=None, max_length=5000)
     inventory_cost_document_version_id: uuid.UUID | None = None
     inventory_nrv_document_version_id: uuid.UUID | None = None
     inventory_valuation_controls: list[InventoryValueControl] | None = Field(
@@ -478,6 +481,7 @@ class SourceInput(Strict):
         "grant-allocations",
         "grant-utilisation-controls",
         "inventory-valuations",
+        "inventory-cost-movements",
         "esic-members",
         "gst-document-series",
         "gst-summary-metrics",
@@ -640,6 +644,17 @@ class SourceInput(Strict):
             raise ValueError(
                 "Shared inventory documents apply only to canonical valuation evidence sources"
             )
+        if self.table_type == "inventory-cost-movements":
+            if (
+                self.inventory_fifo_controls is None
+                or self.control_totals
+                or self.file_format != "canonical-csv"
+            ):
+                raise ValueError(
+                    "FIFO movements require canonical evidence and independent per-partition quantity/value/rounding controls without mixed money totals"
+                )
+        elif self.inventory_fifo_controls is not None:
+            raise ValueError("FIFO controls apply only to FIFO movement sources")
         if self.table_type == "inventory-valuations":
             if self.inventory_valuation_controls is None or self.control_totals:
                 raise ValueError(
@@ -1019,6 +1034,7 @@ class WorkflowInput(Strict):
         "inventory-custody-confirmations",
         "party-balance-confirmations",
         "inventory-valuation-control",
+        "inventory-fifo-cost",
         "india-esic-population",
         "india-document-series",
         "payroll-ledger-rollforward",
@@ -1181,7 +1197,19 @@ class WorkflowInput(Strict):
             raise ValueError(
                 "Grant utilisation requires an explicit ordered period and exact controls without netting tolerance"
             )
-        if self.workflow == "inventory-valuation-control":
+        if self.workflow == "inventory-fifo-cost":
+            if (
+                self.period_start is None
+                or self.period_start > self.as_of
+                or len(self.inventory_scope_assessment.strip()) < 10
+                or self.inventory_gl_basis is not None
+                or self.tolerance != 0
+                or self.date_tolerance != 0
+            ):
+                raise ValueError(
+                    "FIFO requires an explicit ordered period, assessed gross-cost policy, and exact comparisons; NRV/GL basis remains separate"
+                )
+        elif self.workflow == "inventory-valuation-control":
             if (
                 self.inventory_gl_basis is None
                 or self.review_through is None

@@ -316,6 +316,7 @@ vi.mock("@/hooks/use-api", () => ({
                   closing: "payroll-account-balances",
                 },
               },
+              { id: "inventory-fifo-cost", title: "Assessed FIFO cost", available: true, roles: { movements: "inventory-cost-movements", books: "stock" } },
               { id: "inventory-valuation-control", title: "Inventory valuation and GL controls", available: true, roles: { books: "stock", valuations: "inventory-valuations", controls: "accounting-controls" } },
               { id: "procurement-match", title: "Controlled procurement", available: true, roles: { orders: "purchase-lines", receipts: "purchase-lines", invoices: "purchase-lines", payments: "purchase-lines" } },
               {id:"expense-cutoff", title:"Expense cutoff", available:true, roles:{documents:"cutoff-documents"}, optional_roles:{recognitions:"cutoff-recognition-lines",postings:"cutoff-posting-lines"}},
@@ -484,6 +485,7 @@ vi.mock("@/hooks/use-api", () => ({
               "inventory-custody-confirmations": {id:{required:true,type:"str"}},
               "party-confirmations": { id: { required: true, type: "str" }, requested_amount: { required: true, type: "Decimal" } },
               "purchase-lines": { id: { required: true, type: "str" }, uom: { required: false, type: "str" } },
+              "inventory-cost-movements": { id: { required: true, type: "str" } },
               "inventory-valuations": { id: { required: true, type: "str" }, assessed_unit_cost: { required: true, type: "Decimal" } },
               "esic-members": { id: { required: true, type: "str" }, amount: { required: true, type: "Decimal" } },
               "gst-document-series": {},
@@ -648,6 +650,7 @@ vi.mock("@/hooks/use-api", () => ({
                         freshness: status === "stale" ? "STALE" : "CURRENT",
                         review_status: status === "unreviewed" ? "UNVERIFIED" : "REVIEWED", blocked: status === "blocked",
                       })),
+                      { id: "fifo-movements", label: "Reviewed FIFO movements", kind: "workflow-source", table_type: "inventory-cost-movements", freshness: "CURRENT", version: 1, review_status: "REVIEWED" },
                       ...["valuations", "controls"].map((role) => ({ id: "valuation-" + role, label: "Reviewed inventory " + role, kind: "workflow-source", table_type: role === "valuations" ? "inventory-valuations" : "accounting-controls", freshness: "CURRENT", version: 1, review_status: "REVIEWED" })),
                       ...["items", "controls", "responses"].map(role => ({ id: "party-" + role, label: "Reviewed party " + role, kind: "workflow-source", table_type: role === "items" ? "audit-open-items" : role === "controls" ? "balance-controls" : "party-confirmations", freshness: "CURRENT", version: 1, review_status: "REVIEWED" })),
                       ...["documents", "recognitions", "postings"].map(role => ({id:"cutoff-"+role,label:"Reviewed cutoff "+role,kind:"workflow-source",table_type:role === "documents" ? "cutoff-documents" : role === "recognitions" ? "cutoff-recognition-lines" : "cutoff-posting-lines",freshness:"CURRENT",version:1,review_status:"REVIEWED"})),
@@ -3678,4 +3681,25 @@ it("requires explicit complete account coverage dates without changing the repor
   fireEvent.click(screen.getByRole("button",{name:"Queue calculation"}));
   await waitFor(()=>expect(state.mutate).toHaveBeenCalled());
   expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({workflow:"bank-account-evidence",as_of:"2027-03-31",bank_observation_from:"2026-03-01",bank_observation_through:"2027-04-05",bank_observation_assessment:"Reviewed all three source assertions for original and post-year payments"});
+});
+
+
+it.each(["AE", "IN"])("queues independent FIFO controls for %s", async country => {
+  state.country = country;
+  render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+  const controls = [{ site: "WH", sku: "S", lot: "", uom: "PCS", currency: country === "AE" ? "AED" : "INR", expected_rows: 1, opening_quantity: "1", receipt_quantity: "0", issue_quantity: "0", opening_cost: "10", receipt_cost: "0", rounding_places: 2, rounding_method: "HALF_UP" }];
+  for (const [label, value] of [["Source table type", "inventory-cost-movements"], ["Clean retained evidence", "clean"], ["Schedule title", "FIFO controlled movements"], ["Expected data rows", "1"], ["FIFO control partitions (JSON)", JSON.stringify(controls)]]) fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({ table_type: "inventory-cost-movements", inventory_fifo_controls: controls, control_totals: {} });
+});
+
+it.each(["AE", "IN"])("queues an explicit FIFO cost period and assessment for %s", async country => {
+  state.country = country;
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Workflow"), { target: { value: "inventory-fifo-cost" } });
+  for (const [label, value] of [["FIFO period start", "2026-06-01"], ["FIFO policy and scope assessment", "Independently assessed opening layers and gross FIFO cost policy"], ["Schedule title", "FIFO cost bridge"], ["Reconciliation date", "2026-06-30"], ["movements source", "fifo-movements"], ["books source", "inventory-books"], ["Scope and source rationale", "Independent source controls and original cost support"]]) fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({ workflow: "inventory-fifo-cost", period_start: "2026-06-01", tolerance: "0", date_tolerance: 0, source_ids: { movements: "fifo-movements", books: "inventory-books" } });
 });

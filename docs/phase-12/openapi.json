@@ -30003,6 +30003,29 @@
             }
           },
           {
+            "name": "fifo_offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Fifo Offset"
+            }
+          },
+          {
+            "name": "fifo_limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Fifo Limit"
+            }
+          },
+          {
             "name": "inventory_offset",
             "in": "query",
             "required": false,

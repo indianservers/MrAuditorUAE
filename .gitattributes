@@ -102,3 +102,5 @@ docs/phase-12/6cb6391-hosted-*.json -text
 docs/phase-12/annual-portal-label-*.xml -text whitespace=cr-at-eol
 # Preserve verbatim whitespace in this original failed-test diagnostic receipt.
 docs/phase-12/annual-portal-label-regression.xml -text whitespace=-blank-at-eol,cr-at-eol
+
+docs/phase-12/inventory-fifo-*.xml -text whitespace=cr-at-eol

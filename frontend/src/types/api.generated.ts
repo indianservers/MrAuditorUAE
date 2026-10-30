@@ -30344,6 +30344,8 @@ export interface operations {
                 turnover_limit?: number;
                 excluded_offset?: number;
                 excluded_limit?: number;
+                fifo_offset?: number;
+                fifo_limit?: number;
                 inventory_offset?: number;
                 inventory_limit?: number;
                 bridge_offset?: number;

@@ -1,0 +1,173 @@
+{
+  "scope": "inventory-fifo-cost/1 shared assessed gross-cost workflow; not a global roadmap completion declaration",
+  "base_commit": "1e1acebee78f54de23163607f052bda8f01f90dd",
+  "source_hash_basis": "Exact staged Git blob bytes; receipt bytes retained without edits",
+  "sources": [
+    {
+      "path": ".gitattributes",
+      "sha256": "3f220493e8dd2ff14e91edd86bf1d361f7b9242f2f1790b45cf7c5aec46d9ddb"
+    },
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "sha256": "1d144d6421463e4af4e4a6c8a1c94e7cf46d4b4938967aad09f48725f075d5ba"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/calculations.py",
+      "sha256": "0d3f0aab10914684c80764d30dfc8e1f7bd7ac5206668f49a779cdbebf768274"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/catalogue.py",
+      "sha256": "ec17fe5ee0a89b17a161a50b223f7491bf995adafcee1451e22630f9a2c4bc15"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/inventory_fifo.py",
+      "sha256": "be1dba8f36f9b127f1e2961530aa3182f6150654b3ca46ecffce6bcaeb8162cc"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/review.py",
+      "sha256": "29ff732d7dad8221055c1617e4c6297c086c0e4b3191debd4271d8f4d207bd93"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/schemas.py",
+      "sha256": "fae4dc5b3a9259afc388c5d94af2526059350067504a4cd00ccae5eb06c6ede1"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/service.py",
+      "sha256": "a3b5fcf19e7917a147dea6f7399884fb3636e0fda7d6c01b1deb50084f19fd19"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/sources.py",
+      "sha256": "d131a4377890182e19cdd7dd16eb4960f3bca915dc54d5fef71c5df5468f20f6"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "sha256": "bb9108f471e5a22dfca367f2b5cc2d411c6ffb1c42ccf0a972fdf487b57489f3"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_inventory_fifo.py",
+      "sha256": "46fcb18bd782aa8a3dac19a20e7c02f81b7bd545b6783bb29bbcfe541bede4bf"
+    },
+    {
+      "path": "backend/tests/unit/test_inventory_fifo.py",
+      "sha256": "8a1f72bcdd5d88806f0ec646258231331ef0b8383b52b768a62496bee22f3c2f"
+    },
+    {
+      "path": "docs/country-workflows/inventory-fifo-cost.txt",
+      "sha256": "06228c0fbb38d649621e553d2e971a4dabd971eaa3e0e45716280cd667f05e7d"
+    },
+    {
+      "path": "docs/country-workflows/job-input-contracts.json",
+      "sha256": "6d7f902bdcc46027899209505d244abfc1563558cb6bdf3f83b3d0e5075e47e2"
+    },
+    {
+      "path": "docs/phase-12/openapi.json",
+      "sha256": "d478fa02d3bb80c21fde7d59aad5b4321121bd9cb8c9b6a63ae9beedd8c155b0"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "697b6c9f41173023ca4dd12e5f16fe8f6f7b76d5ba74b62cba27a7b4ff32b5f2"
+    },
+    {
+      "path": "frontend/src/features/inventory-fifo-details.tsx",
+      "sha256": "507c4080a1c3f6cea0ec7797accec9f3f23a41bf218b086981fe1692fb6f3f5b"
+    },
+    {
+      "path": "frontend/src/types/api.generated.ts",
+      "sha256": "ff5f9584a3d2b902f6fdec15458ec59b5b9d234c6115a23c8c37133542839106"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "cc311ef2f0f3c34b6b5cc86a322566201b38d526aedbb6e2bb733e1001260d10"
+    },
+    {
+      "path": "frontend/tests/inventory-fifo-details.test.tsx",
+      "sha256": "fee5447f6102b05abefe6811a87f5320ebc40c9c089cfd3a4c490f97a572310d"
+    },
+    {
+      "path": ".gitleaks.toml",
+      "sha256": "b41354f5997c963e3cc73591aa3ab74a0be9f6914285d6d470157bd81f853fbb"
+    }
+  ],
+  "original_test_receipts": [
+    {
+      "path": "docs/phase-12/inventory-fifo-api-final.xml",
+      "sha256": "8c4649b73d16cdc3d3462e0b3703a6eab51308bd49a82ad8f0f99aaf918111ce",
+      "totals": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "docs/phase-12/inventory-fifo-api.xml",
+      "sha256": "0a4e25439b03c590761eebdb92e4807b346f162353667cea85c05aa31cb9ca9e",
+      "totals": {
+        "tests": 2,
+        "failures": 2,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "docs/phase-12/inventory-fifo-focused-final.xml",
+      "sha256": "3533ddf072e55ac23e51d17359eee899067bf33d797f2cd9c1a1d54572d433d7",
+      "totals": {
+        "tests": 35,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "docs/phase-12/inventory-fifo-frontend.xml",
+      "sha256": "70ecd76d14b6fdfa7e96447b98abc1fb655f5829ae9f6fa14d5b5b748a801e6f",
+      "totals": {
+        "tests": 405,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "docs/phase-12/inventory-fifo-regression.xml",
+      "sha256": "0f088abe6a8a1c8bb0634fab9bf69308b90937b6181c9e02a2bb1ea881d80d93",
+      "totals": {
+        "tests": 3759,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 4
+      }
+    },
+    {
+      "path": "docs/phase-12/inventory-fifo-unit.xml",
+      "sha256": "73e3d29975f24c2728e84fce5db97cda9d9614897c6321b4701e46654722188a",
+      "totals": {
+        "tests": 32,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "verification": {
+    "backend_regression": "3755 passed, 4 skipped; all unit tests plus FIFO and existing inventory valuation API tests",
+    "final_focused": "35 passed after adding hash-mismatch rejection and verification-bound/approval assertions; production code unchanged from broader regression",
+    "frontend": "405 passed in 76 files, including both country submission tests and independent pagination",
+    "ruff": "passed",
+    "mypy": "passed, 414 source files",
+    "frontend_typecheck": "passed",
+    "frontend_lint": "0 errors; existing unused _ warning in uae-business-cases.tsx:143",
+    "api_contracts": "runtime export check and frontend generated API type check passed",
+    "production_build": "passed Next.js 16.4.2",
+    "secret_scan_context": "Initial scans flagged only the two synthetic idempotency UUIDs repeated in the original failed API receipt. Rule-scoped allowlist requires BOTH this exact receipt path AND either exact UUID; compatible with pinned Gitleaks 8.24.3. Original bytes preserved. Final scan must pass before push."
+  },
+  "failed_receipt_explanation": "inventory-fifo-api.xml retains the initial two failures: the new FIFO workflow lacked an engagement-contained subperiod branch. service.py now explicitly bounds the cost window within the engagement period; both country API reruns passed. The earlier 1-failure unit trial was stdout only, corrected an invalid ownership fixture enum, not the production check.",
+  "limits": [
+    "Authored synthetic fixtures only; zero real client pilot approvals supplied",
+    "No native statutory filing, inventory audit opinion or country legal qualification",
+    "Original support verifier bound: 50 distinct originals / 100 MiB; events bound 5000",
+    "No new browser screenshot or hosted FIFO result claimed in this receipt",
+    "Earlier source c85595c hosted six jobs independently observed successful; not proof of this FIFO source"
+  ]
+}

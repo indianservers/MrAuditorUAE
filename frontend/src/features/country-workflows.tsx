@@ -69,6 +69,7 @@ import {
 import { ImportNilScopeForm, type ImportNilDraft } from "./import-nil-scope";
 import { BankTransactionDates } from "./bank-transaction-dates";
 import { PayrollPostingLinks } from "./payroll-posting-links";
+import { InventoryFIFODetails } from "./inventory-fifo-details";
 import { InventoryEvidenceTable } from "./inventory-evidence-table";
 import { VATCompositionSource } from "./vat-composition-source";
 import { TurnoverLedgerSource } from "./turnover-ledger-source";
@@ -455,6 +456,10 @@ type Result = {
     count_bridges?: Record<string, unknown>[];
     payroll_posting_links?: Record<string, unknown>[];
     transaction_dates?: Record<string, unknown>[];
+    inventory_fifo_controls?: Record<string, unknown>[];
+    fifo_allocations?: Record<string, unknown>[];
+    fifo_event_costs?: Record<string, unknown>[];
+    fifo_closing_layers?: Record<string, unknown>[];
     inventory_quantity_controls?: Record<string, unknown>[];
     purchase_quantity_controls?: Record<string, unknown>[];
     limitations?: string[];
@@ -693,6 +698,7 @@ export function CountryWorkflows({
     useState("{}");
   const [inventoryCostEvidence, setInventoryCostEvidence] = useState("");
   const [inventoryNRVEvidence, setInventoryNRVEvidence] = useState("");
+  const [inventoryFIFOControls, setInventoryFIFOControls] = useState("[]");
   const [inventoryGLBasis, setInventoryGLBasis] = useState("");
   const [inventoryScopeAssessment, setInventoryScopeAssessment] = useState("");
   const [stockControlled, setStockControlled] = useState(false);
@@ -1910,6 +1916,9 @@ export function CountryWorkflows({
                     msme_context_assessment: msmeContextAssessment,
                   }
                 : {}),
+              ...(tableType === "inventory-cost-movements"
+                ? { inventory_fifo_controls: JSON.parse(inventoryFIFOControls) }
+                : {}),
               ...(tableType === "inventory-valuations"
                 ? {
                     inventory_valuation_controls: JSON.parse(
@@ -2048,6 +2057,14 @@ export function CountryWorkflows({
           ...(workflow === "tax-turnover-bridge" &&
           config.data?.country === "IN"
             ? annualGSTPayload(annualGST)
+            : {}),
+          ...(workflow === "inventory-fifo-cost"
+            ? {
+                period_start: periodStart,
+                inventory_scope_assessment: inventoryScopeAssessment,
+                tolerance: "0",
+                date_tolerance: 0,
+              }
             : {}),
           ...(workflow === "inventory-valuation-control"
             ? {
@@ -4146,6 +4163,28 @@ export function CountryWorkflows({
                       </p>
                     </fieldset>
                   )}
+                  {tableType === "inventory-cost-movements" && (
+                    <fieldset>
+                      <legend>Independent FIFO source controls</legend>
+                      <label>
+                        FIFO control partitions (JSON)
+                        <textarea
+                          value={inventoryFIFOControls}
+                          onChange={(e) =>
+                            setInventoryFIFOControls(e.target.value)
+                          }
+                        />
+                      </label>
+                      <p>
+                        Declare row count, opening/receipt/issue quantities,
+                        opening/receipt extended costs and explicit rounding for
+                        every exact site/SKU/lot/UOM/currency partition. Each
+                        CSV row must identify its retained original support
+                        version, SHA-256, reference and assessment. Independent
+                        review of all sources is required.
+                      </p>
+                    </fieldset>
+                  )}
                   {tableType === "inventory-valuations" && (
                     <fieldset>
                       <legend>Inventory valuation evidence controls</legend>
@@ -4429,6 +4468,35 @@ export function CountryWorkflows({
                   comparing original invoice amounts.
                 </p>
               )}
+              {workflow === "inventory-fifo-cost" && (
+                <fieldset>
+                  <legend>Assessed FIFO cost period</legend>
+                  <label>
+                    FIFO period start
+                    <input
+                      type="date"
+                      value={periodStart}
+                      max={asOf}
+                      onChange={(e) => setPeriodStart(e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    FIFO policy and scope assessment
+                    <textarea
+                      value={inventoryScopeAssessment}
+                      onChange={(e) =>
+                        setInventoryScopeAssessment(e.target.value)
+                      }
+                    />
+                  </label>
+                  <p>
+                    Opening layers must be dated at period start and sequenced
+                    in assessed FIFO order. Only opening layers, receipts and
+                    issues are supported. Closing books require independent
+                    quantity controls. Any uncosted issue blocks release.
+                  </p>
+                </fieldset>
+              )}
               {workflow === "inventory-valuation-control" && (
                 <fieldset>
                   <legend>Inventory valuation and recorded GL scope</legend>
@@ -4657,7 +4725,10 @@ export function CountryWorkflows({
                           r.kind === "workflow-source" &&
                           r.table_type === type &&
                           r.freshness === "CURRENT" &&
-                          (workflow !== "inventory-valuation-control" ||
+                          (![
+                            "inventory-valuation-control",
+                            "inventory-fifo-cost",
+                          ].includes(workflow) ||
                             role !== "books" ||
                             r.inventory_controls_verified === true) &&
                           (r.native_format !== "india-gstr1-documents-json" ||
@@ -4718,6 +4789,7 @@ export function CountryWorkflows({
                             "ownership-lookthrough",
                             "bank-account-evidence",
                             "inventory-valuation-control",
+                            "inventory-fifo-cost",
                             "obligation-bank-allocations",
                             "india-msme-payment-timing",
                             "india-msme-interest",
@@ -6914,6 +6986,15 @@ export function CountryWorkflows({
                 body.purchase_quantity_controls.length
               }
               purchase
+            />
+          )}
+          {(body.workflow === "inventory-fifo-cost" ||
+            body.table_type === "inventory-cost-movements") && (
+            <InventoryFIFODetails
+              prefix={prefix}
+              selected={selected}
+              body={body}
+              totals={detail.data.collection_totals}
             />
           )}
           {body.inventory_quantity_controls && (

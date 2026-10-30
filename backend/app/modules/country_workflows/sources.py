@@ -75,6 +75,7 @@ def _parse_csv(content, data, defaults=None):
     for index, raw in enumerate(reader, 2):
         if data.table_type.startswith(
             (
+                "inventory-cost-",
                 "grant-",
                 "media-",
                 "msme-",
@@ -165,6 +166,12 @@ def _parse_csv(content, data, defaults=None):
             amount = getattr(item, "scope_balance")
         if amount is not None:
             totals[getattr(item, "currency")] += amount
+    if data.table_type == "inventory-cost-movements":
+        from app.modules.country_workflows.inventory_fifo import verify_controls as verify_fifo
+
+        verify_fifo(
+            rows, [control.model_dump(mode="json") for control in data.inventory_fifo_controls]
+        )
     if data.table_type == "inventory-valuations":
         from app.modules.country_workflows.inventory_valuation import (
             verify_controls as verify_values,
@@ -365,6 +372,17 @@ def _parse_csv(content, data, defaults=None):
                 ]
             }
             if data.inventory_valuation_controls is not None
+            else {}
+        ),
+        **(
+            {
+                "inventory_fifo_controls": [
+                    control.model_dump(mode="json") for control in data.inventory_fifo_controls
+                ],
+                "allowed_workflows": ["inventory-fifo-cost"],
+                "allowed_source_roles": ["movements"],
+            }
+            if data.inventory_fifo_controls is not None
             else {}
         ),
         **({"esic_population_controls": esic_controls} if esic_controls is not None else {}),
