@@ -1,0 +1,62 @@
+{
+  "date": "2026-10-31",
+  "change": "Raise pypdf minimum and locked version from 6.21.2 to 6.21.4; no other locked package version changed",
+  "failed_hosted_source": {
+    "commit": "4ea947886705661e0b7dc0b6de8c617d12d66c62",
+    "run_id": 41144786232,
+    "job_id": 124367256074,
+    "artifact_id": 13019139046,
+    "artifact_bytes": 2019,
+    "artifact_sha256": "1f036c459dd7f02f3771736b92651d3e75bc9a3da70817e12d8dc755e1928dd1",
+    "raw_report": "pypdf-security-before-4ea9478.json",
+    "raw_sha256": "a96b34c9b3d97892b3d802cc9f594ee30c849540111f336efae09dc042a55120"
+  },
+  "reported_vulnerabilities": [
+    "CVE-2026-119208",
+    "CVE-2026-119206",
+    "CVE-2026-119209",
+    "CVE-2026-119207"
+  ],
+  "upstream": [
+    "https://github.com/py-pdf/pypdf/releases/tag/6.21.3",
+    "https://github.com/py-pdf/pypdf/releases/tag/6.21.4"
+  ],
+  "local_pdf_verification": {
+    "tests": 125,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "seconds": 106.76,
+    "runtime": "Isolated 6.21.4 overlay with inherited PYTHONPATH; actual child interpreter version verified. Shared environment left unchanged.",
+    "scope": "PDF extraction, supporting-bank tables, Unicode, complete report exports, Form26 index and real document subprocess tests"
+  },
+  "local_audit": {
+    "pypdf_version": "6.21.4",
+    "exported_lock_records": 120,
+    "known_vulnerabilities": 0,
+    "method": "uv frozen export, pip-audit with fully pinned exported versions and no dependency resolution; isolated pypdf distribution audited separately"
+  },
+  "uv_lock_check": "PASS",
+  "reports": [
+    {
+      "path": "docs/phase-12/pypdf-patched-tests.xml",
+      "bytes": 20677,
+      "sha256": "fff678290d54f144244435c4b9f656cc86b42d80721835899fc9d80d3dcd559d"
+    },
+    {
+      "path": "docs/phase-12/pypdf-lock-audit.json",
+      "bytes": 6827,
+      "sha256": "ddbd3dbde8e5db85c1ade4950ef9fa4975bb5922308b9c454805207152d289fc"
+    },
+    {
+      "path": "docs/phase-12/pypdf-patched-audit.json",
+      "bytes": 86,
+      "sha256": "b7351a153cd849529cc6a02f1d4e22b10d78074eb909f3acdbd3e4aee4707143"
+    }
+  ],
+  "limits": [
+    "Local audit is a time-specific advisory snapshot; hosted Linux locked-environment audit remains necessary",
+    "125 selected regression tests are not the entire backend suite; new hosted checks will run the full suite",
+    "This security maintenance does not close client, legal, professional or production acceptance gates"
+  ]
+}
