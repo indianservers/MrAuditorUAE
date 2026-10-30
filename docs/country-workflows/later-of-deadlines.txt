@@ -88,3 +88,13 @@ table captures expose cramped adjacent date/offset text. The newer source uses
 stacked candidate cards and server-calculated candidate dates; its own hosted
 visual proof remains pending. The source-specific receipt is
 docs/phase-12/later-of-browser-699b0ba.json.
+
+Hosted trace/card source 0b1d27d: all thirteen browser cases passed in 7.3
+minutes; the combined calendar/comparison case passed in 19.4 seconds. Four
+original captures were inspected. They visibly separate each candidate's date,
+offset and server-calculated result, with the latest candidate selected, and
+retain those values alongside STALE after fact withdrawal. The scrollable pane
+clips the header or action footer in these element captures. The unchanged
+originals and explicit visual limits are in
+docs/phase-12/later-of-trace-browser-0b1d27d.json. The new month-end fixture adds
+separate summary, candidate and action captures; its execution remains pending.

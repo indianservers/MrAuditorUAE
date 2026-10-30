@@ -1,0 +1,56 @@
+Explicit preservation of a triggering month-end
+
+The shared DeadlineRule now supports month_end_policy=preserve_month_end.
+When the trigger is the last day of its month, a month offset ends on the last
+day of the target month. Other trigger dates keep their corresponding day,
+capped by the target month's length. Any separate day offset is applied after
+the month calculation. Later-of candidates use the same explicitly adopted
+policy before selecting the latest date and applying the rolling convention.
+
+The default remains clamp and is omitted from stored serialization, preserving
+existing corresponding-day behavior and historical bodies. Choosing UAE or India
+does not select a policy. The fixed adopted DMCC profile rejects a changed policy
+until separately adopted; this increment cannot silently extend its timetable.
+Business-day counting rejects an unrelated month policy instead of ignoring it.
+
+Review of the official current Companies Regulations PDF exposed the gap:
+section 417 distinguishes corresponding-day and month-end calculations. The
+50-page guidance's general corresponding-date summary was insufficient to
+establish all boundary dates. The unchanged consolidated 633-page PDF and
+complete rendered pages 252-253 are retained with exact hashes in the separate
+month-end-source-assessment.json. Those relevant sections were read and the
+two pages visually inspected. The entire regulation is not claimed qualified.
+The filename version date is not an inferred commencement date for every rule.
+
+For example, a declared June 30 trigger plus nine months produces March 31
+under preserve_month_end, compared with March 30 under the existing default.
+This difference is shown in the server-derived comparison breakdown. Changing
+the declared policy without a matching saved deadline yields reassessment.
+Filing readiness identifies the explicitly declared policy, alongside the rule
+and fact evidence, without asserting statutory applicability or an exemption.
+
+Both countries' real PostgreSQL/HTTP cases cover explicit month-end policy and
+the default, independent source and filing approval, false period-end and
+declared-deadline rejection, complete candidate dates and unchanged stale
+historical bodies after fact withdrawal. Unit cases include leap-year triggers,
+ordinary dates, separate day offsets, tied/winning candidates, legacy omission,
+unknown-policy rejection and DMCC/business-day guards. API scan and dispatch
+boundaries remain explicit doubles. No portal submission or extension is inferred.
+
+The hosted calendar/comparison case now uses separate synthetic rule/fact
+originals declaring June 30 plus nine months and explicit month-end preservation
+in both countries. It checks March 31, the alternative event's July 1 date, the
+selected candidate card, independent review and stale facts. The earlier
+corresponding-day comparison and stacked-card browser proofs retain their own
+source revisions. New month-end execution and visual proof remain pending.
+The scrollable detail panel clipped the header or action footer in earlier
+element captures. Originals are preserved with that limit. The new harness
+separately scrolls to and captures the summary, each bounded candidate card and
+the action viewport; its corrected captures remain pending for the new source.
+
+This is the shared calculation needed by a future independently qualified ADGM
+authority profile. Complete applicability, entity form and exemptions, company
+status at period end, first/shortened periods, calendar coverage, auditor/report
+requirements, corporate-tax interactions and actual original portal/extension
+evidence remain separate requirements. The authored catalogue remains 154
+synthetic cases; no real-client pilot or professional sign-off is supplied.

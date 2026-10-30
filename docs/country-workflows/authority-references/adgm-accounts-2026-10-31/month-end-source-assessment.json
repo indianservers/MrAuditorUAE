@@ -1,0 +1,44 @@
+{
+  "retrieved_on": "2026-10-31",
+  "listing": "https://en.adgm.thomsonreuters.com/rulebook/companies-regulations-2020",
+  "original_url": "https://en.adgm.thomsonreuters.com/sites/default/files/net_file_store/ADGM1547_20963_VER20260626.pdf",
+  "retrieval": "Official Commercial Legislation > Companies Regulations > Companies Regulations 2020 > View Current PDF; original downloaded through the browser.",
+  "original_pages": 633,
+  "files": [
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-companies-consolidated-ver20260626.pdf",
+      "size_bytes": 3568746,
+      "sha256": "8aae2ffcfa9cdc927894ad82e41e08e3eba235092c63d4a64a3349e0268249f0"
+    },
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-law-page-252.png",
+      "size_bytes": 219577,
+      "sha256": "a1944beee712adc636ea50522ebe841b14dfd8c0575af1077be24da64c548c35"
+    },
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-law-page-253.png",
+      "size_bytes": 229619,
+      "sha256": "df29fff820c46cc3ca03d72b9a7330c9b8b43938297a1320c300bb38ef364e8f"
+    }
+  ],
+  "relevant_pages_read": [
+    251,
+    252,
+    253
+  ],
+  "relevant_pages_rendered_and_visually_inspected": [
+    252,
+    253
+  ],
+  "implementation_scope": "Explicit shared month-end policy only; no automatic ADGM authority applicability profile.",
+  "findings": [
+    "Section 416 compares private/public ordinary periods, long first-period alternatives and shortened-period notice dates. Extensions and company status remain separate criteria.",
+    "Section 417(3) preserves a triggering month-end in the target month. Section 417(4) handles specified non-month-end dates falling into February.",
+    "A plain corresponding-day summary does not establish all month-end boundaries. The default generic calculation is preserved; a separately assessed rule may explicitly select the new policy."
+  ],
+  "limits": [
+    "Only relevant account-filing sections are assessed here; this is not a complete review or qualification of 633 pages, all amendments, other company/LLP forms, accounts, audit or reporting laws.",
+    "The file-version date is not inferred commencement or entity applicability. Operative versions, event facts, business calendars and professional conclusions require independent assessment.",
+    "The guidance and primary regulation discuss extensions at different levels; no local calculation is treated as an ORS request, written notice, accepted submission or government receipt."
+  ]
+}

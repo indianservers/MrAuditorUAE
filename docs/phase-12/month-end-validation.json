@@ -1,0 +1,82 @@
+{
+  "contract": "explicit-month-end-deadline-verification/1",
+  "parent_commit": "0b1d27da499fc9278c5f2a0b00252bc711fddb3e",
+  "source_basis": "STAGED_GIT_OBJECT_BYTES_BEFORE_COMMIT",
+  "source_files": [
+    {
+      "path": "backend/app/modules/grc/deadlines.py",
+      "sha256": "7cc8e2a35329f9525e77d6861979874482873a086f1cdd0144174fea88b380cd"
+    },
+    {
+      "path": "backend/app/modules/grc/dmcc_audit.py",
+      "sha256": "e0311ab7b7242a3381a27a2fa76a99286ae2c9cb2e54781da388c0c70897b4cd"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_deadline_comparisons.py",
+      "sha256": "1613903994b9eef7538d16c1fc0bd2b64a97bfa8eae3fe27c7d21d37b279584b"
+    },
+    {
+      "path": "backend/tests/unit/test_deadline_month_end_policy.py",
+      "sha256": "41ea1164f3729fe52af926455f79c9090eb9682edb4cdcbb1111726903210cf9"
+    },
+    {
+      "path": "frontend/e2e/business-day-deadline-release.spec.ts",
+      "sha256": "e7a56ed1a1eb10e858dde5fc060dfa02b244246f08f4430017c28b4e50db210b"
+    },
+    {
+      "path": "frontend/src/features/compliance-filing.tsx",
+      "sha256": "0601a63c0693f30860f19cf11a126bfc6c29dd0159fa889f1029d6a4614ec0d4"
+    },
+    {
+      "path": "frontend/tests/compliance-filing.test.tsx",
+      "sha256": "af39f4d216450cc6cd9f75cce02f18f076706ef80e825ef642bc7a10e65079b7"
+    }
+  ],
+  "reports": [
+    {
+      "path": "docs/phase-12/month-end-all-units.xml",
+      "passed": 4261,
+      "skipped": 4,
+      "failed": 0,
+      "sha256": "0a1bebe2c622f94da22d43bb7556359efa39528c6c4eae54372e8f7004e9bdb5"
+    },
+    {
+      "path": "docs/phase-12/month-end-final.xml",
+      "passed": 171,
+      "skipped": 0,
+      "failed": 0,
+      "sha256": "7ad2d23871a04cc4250651bc5ae9f39bf7f1c25a756c253fa8de51fd28b68fb3"
+    },
+    {
+      "path": "docs/phase-12/month-end-frontend.xml",
+      "passed": 471,
+      "skipped": 0,
+      "failed": 0,
+      "sha256": "40169d8041cc3464989e22545d02f1f36ddb438495436f6060940018f94e79e8"
+    }
+  ],
+  "count_basis": "The focused 171 backend checks comprise 162 unit cases and nine real PostgreSQL/HTTP cases. These unit cases overlap the 4261 full-unit passes; counts are not summed as distinct scenarios. Four existing connector tests remain explicitly skipped in the full unit run. All 471 frontend tests in 82 files passed.",
+  "checks": {
+    "scoped_ruff_lint_and_format": "PASS",
+    "mypy": "PASS_422_APP_FILES",
+    "typescript": "PASS",
+    "scoped_eslint": "PASS",
+    "production_next_build": "PASS",
+    "api_contracts": "CURRENT",
+    "generated_api_types": "CURRENT",
+    "updated_comparison_browser": "ONE_DISCOVERED_NOT_EXECUTED_FOR_MONTH_END_SOURCE"
+  },
+  "verified_scope": [
+    "Explicit preserve_month_end policy for separately adopted calendar rules, with unchanged omitted legacy clamp default.",
+    "Leap and ordinary trigger dates, separate day offsets, later-of ties/winners, retained policy in comparison traces and reassessment for a mismatched saved date.",
+    "Fixed DMCC profile and business-day counting reject an unsupported policy; selecting UAE or India never creates a legal default.",
+    "Both countries use actual HTTP/database independent source and filing review, explicit period controls and unchanged stale bodies after fact withdrawal."
+  ],
+  "primary_source_assessment": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/month-end-source-assessment.json",
+  "limits": [
+    "Shared explicit date arithmetic, not a complete automatically selected or professionally qualified ADGM accounts/audit/applicability profile.",
+    "Original consolidated regulation retained unchanged; relevant sections 415-417 read and complete pages 252-253 visually inspected. No complete 633-page qualification or commencement inferred from its file-version date.",
+    "API scan and dispatch boundaries are explicit doubles. New month-end hosted browser execution remains pending; earlier trace/card evidence has a separate source revision.",
+    "No real-client pilot, external filing/payment, provider authenticity or professional legal conclusion is supplied. The authored catalogue remains 154 synthetic cases."
+  ]
+}

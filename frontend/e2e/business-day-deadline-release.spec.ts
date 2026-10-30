@@ -328,7 +328,7 @@ test("explicit UAE and India business-day calendars, independent filing and repl
         const original = await evidence(
           `SYNTHETIC-${country}-later-of-${role}.txt`,
           Buffer.from(
-            `SYNTHETIC ${role}: notice 2026-12-01 plus one month versus period end 2026-12-31 plus three months; explicit later-of policy, not statutory qualification`,
+            `SYNTHETIC ${role}: notice 2026-06-01 plus one month versus period end 2026-06-30 plus nine months; explicitly preserve month-end and select later date; not statutory qualification`,
           ),
         );
         let record: Paper = await get(`${audit}/records/${original.record}`);
@@ -356,24 +356,25 @@ test("explicit UAE and India business-day calendars, independent filing and repl
         deadline: null,
         calendar_evidence_id: null,
         obligation_period_start: "2026-01-01",
-        obligation_period_end: "2026-12-31",
+        obligation_period_end: "2026-06-30",
         rule_evidence_id: comparisonDocs.rule.id,
         fact_evidence_ids: [comparisonDocs.facts.id],
-        entity_facts: { notice: "2026-12-01", period_end: "2026-12-31" },
+        entity_facts: { notice: "2026-06-01", period_end: "2026-06-30" },
         deadline_rule: {
           identifier: "SYN-notice",
           version: 1,
           effective_from: "2026-01-01",
-          trigger: "2026-12-01",
+          trigger: "2026-06-01",
           date_basis: "specified_event",
           months_after: 1,
+          month_end_policy: "preserve_month_end",
           timezone: country === "AE" ? "Asia/Dubai" : "Asia/Kolkata",
           later_of: [
             {
               identifier: "SYN-period",
-              trigger: "2026-12-31",
+              trigger: "2026-06-30",
               date_basis: "period_end",
-              months_after: 3,
+              months_after: 9,
             },
           ],
         },
@@ -398,10 +399,13 @@ test("explicit UAE and India business-day calendars, independent filing and repl
           name: "Later-of deadline comparison",
           exact: true,
         });
-        await expect(basis).toContainText("2026-12-01");
-        await expect(basis).toContainText("2026-12-31");
+        await expect(basis).toContainText("2026-06-01");
+        await expect(basis).toContainText("2026-06-30");
         await expect(basis).toContainText(comparisonDocs.rule.id);
-        await expect(basis).toContainText("2027-01-01");
+        await expect(basis).toContainText("2026-07-01");
+        await expect(readiness).toContainText(
+          "Month offsets preserve a triggering month-end",
+        );
         await expect(basis).toContainText(
           "Calculated base deadline: 2027-03-31",
         );
@@ -420,6 +424,41 @@ test("explicit UAE and India business-day calendars, independent filing and repl
         await expect(readiness).toContainText("2027-03-31");
         return readiness;
       }
+      async function captureComparisonEvidence(
+        state: "reviewed" | "facts-withdrawn-stale",
+      ) {
+        const readiness = reviewer.getByRole("region", {
+          name: "Filing readiness",
+          exact: true,
+        });
+        await readiness
+          .getByRole("heading", { name: "Filing readiness", exact: true })
+          .scrollIntoViewIfNeeded();
+        await reviewer.screenshot({
+          path: `${screenshots}/${country}-later-of-${state}.png`,
+        });
+        if (state === "reviewed") {
+          for (const id of ["SYN-notice", "SYN-period"]) {
+            const card = readiness.getByRole("group", {
+              name: `Deadline candidate ${id}`,
+              exact: true,
+            });
+            await card.scrollIntoViewIfNeeded();
+            await card.screenshot({
+              path: `${screenshots}/${country}-later-of-${id}-candidate.png`,
+            });
+          }
+        }
+        await readiness
+          .getByRole("button", {
+            name: "Record evidenced filing stage",
+            exact: true,
+          })
+          .scrollIntoViewIfNeeded();
+        await reviewer.screenshot({
+          path: `${screenshots}/${country}-later-of-${state}-actions.png`,
+        });
+      }
       await openComparison(page);
       paper = await stage(page, "under_review");
       paper = await action(page.request, base, paper, "submit");
@@ -428,9 +467,7 @@ test("explicit UAE and India business-day calendars, independent filing and repl
       paper = await stage(reviewer, "approved_for_submission");
       await expect(panel).toContainText("Source freshness: CURRENT");
       if (await notice.count()) await notice.last().click();
-      await panel.screenshot({
-        path: `${screenshots}/${country}-later-of-reviewed.png`,
-      });
+      await captureComparisonEvidence("reviewed");
       const comparisonRetained = structuredClone(paper.body);
       await action(reviewer.request, audit, comparisonDocs.facts, "reopen");
       const unchanged: Paper = await get(`${audit}/records/${paper.id}`);
@@ -446,9 +483,7 @@ test("explicit UAE and India business-day calendars, independent filing and repl
           exact: true,
         }),
       ).toBeDisabled();
-      await panel.screenshot({
-        path: `${screenshots}/${country}-later-of-facts-withdrawn-stale.png`,
-      });
+      await captureComparisonEvidence("facts-withdrawn-stale");
     }
     expect(errors).toEqual([]);
   } finally {

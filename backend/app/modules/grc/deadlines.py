@@ -64,12 +64,18 @@ class DeadlineCandidate(Strict):
     days_after: int = Field(default=0, ge=0, le=3660, strict=True)
 
 
-def calendar_offset(trigger, months_after, days_after):
+def calendar_offset(trigger, months_after, days_after, month_end_policy="clamp"):
     try:
         month = trigger.year * 12 + trigger.month - 1 + months_after
         year, index = divmod(month, 12)
         month = index + 1
-        day = min(trigger.day, calendar.monthrange(year, month)[1])
+        last_day = calendar.monthrange(year, month)[1]
+        day = (
+            last_day
+            if month_end_policy == "preserve_month_end"
+            and trigger.day == calendar.monthrange(trigger.year, trigger.month)[1]
+            else min(trigger.day, last_day)
+        )
         return date(year, month, day) + timedelta(days=days_after)
     except (ValueError, OverflowError) as exc:
         raise ValueError("Deadline offset exceeds the supported calendar date range") from exc
@@ -99,6 +105,9 @@ class DeadlineRule(Strict):
     )
     later_of: list[DeadlineCandidate] = Field(
         default_factory=list, max_length=8, exclude_if=lambda value: not value
+    )
+    month_end_policy: Literal["clamp", "preserve_month_end"] = Field(
+        default="clamp", exclude_if=lambda value: value == "clamp"
     )
 
     @model_validator(mode="before")
@@ -145,6 +154,7 @@ class DeadlineRule(Strict):
                 or self.convention != "calendar"
                 or self.weekend_days
                 or self.holidays
+                or self.month_end_policy != "clamp"
             ):
                 raise ValueError(
                     "Business-day counting requires its complete calendar, positive day offset and no mixed month/rolling convention"
@@ -168,9 +178,14 @@ class DeadlineRule(Strict):
                     self.effective_to and candidate.trigger > self.effective_to
                 ):
                     raise ValueError("Rule not effective at a comparison triggering event")
-                calendar_offset(candidate.trigger, candidate.months_after, candidate.days_after)
+                calendar_offset(
+                    candidate.trigger,
+                    candidate.months_after,
+                    candidate.days_after,
+                    self.month_end_policy,
+                )
         if self.day_count_basis == "calendar":
-            calendar_offset(self.trigger, self.months_after, self.days_after)
+            calendar_offset(self.trigger, self.months_after, self.days_after, self.month_end_policy)
         return self
 
 
@@ -203,7 +218,9 @@ def calculate(rule: DeadlineRule):
                     return cursor
         raise ValueError("Business calendar coverage cannot establish the complete deadline")
     result = max(
-        calendar_offset(candidate.trigger, candidate.months_after, candidate.days_after)
+        calendar_offset(
+            candidate.trigger, candidate.months_after, candidate.days_after, rule.month_end_policy
+        )
         for candidate in candidates(rule)
     )
     for _ in range(370):
@@ -248,7 +265,10 @@ def comparison_trace(body):
                 "months_after": candidate.months_after,
                 "days_after": candidate.days_after,
                 "unadjusted_date": calendar_offset(
-                    candidate.trigger, candidate.months_after, candidate.days_after
+                    candidate.trigger,
+                    candidate.months_after,
+                    candidate.days_after,
+                    rule.month_end_policy,
                 ).isoformat(),
             }
             for candidate in candidates(rule)
@@ -266,6 +286,7 @@ def comparison_trace(body):
             ],
             "selected_before_rolling": selected,
             "convention": rule.convention,
+            "month_end_policy": rule.month_end_policy,
             "calculated_deadline": deadline,
             "saved_deadline": body.get("deadline"),
             "timezone": rule.timezone,

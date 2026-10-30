@@ -1,0 +1,77 @@
+{
+  "source_commit": "0b1d27da499fc9278c5f2a0b00252bc711fddb3e",
+  "run_id": 41114452476,
+  "job_id": 124264903840,
+  "job_conclusion": "success",
+  "suite_passed": 13,
+  "suite_failed": 0,
+  "suite_duration": "7.3m",
+  "business_day_and_comparison_case_duration": "19.4s",
+  "artifact": {
+    "id": 13004339833,
+    "size_bytes": 16545650,
+    "sha256": "30b628633695d508328c6f33020bd9ab9f9ac4ccd4aab188580b8ec3ae9ea0fe"
+  },
+  "source_files": [
+    {
+      "path": "frontend/e2e/business-day-deadline-release.spec.ts",
+      "sha256": "5b4094474f0aa8905d63eb0dfe560f255cab2450eec99a91c7ef9cb5eb3a44fe"
+    },
+    {
+      "path": "frontend/src/features/compliance-filing.tsx",
+      "sha256": "72a7343c1e250501f8caae3d202d3176bbafc191be310ba121b1fcf359ff2905"
+    },
+    {
+      "path": "frontend/src/features/grc-studio.tsx",
+      "sha256": "eca5e00f25c632f5cff4268b53ca58fb794c8118a74e334b20677db2ced3618d"
+    },
+    {
+      "path": "backend/app/modules/grc/deadlines.py",
+      "sha256": "b67a492d29b8e335d1468b23575c60804577529db8e4a38d42f44835f16c9332"
+    },
+    {
+      "path": "backend/app/api/v1/grc.py",
+      "sha256": "caa27bd24dd418294474d0c61979e4fb326d9e6b0a9ab192559ccea15a02f916"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-later-of-reviewed-0b1d27d.png",
+      "size_bytes": 59826,
+      "sha256": "23ecd814edd3444d62150515873d15971ebf2b22d5de3a8ea2b44baffcd5cadf",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-later-of-facts-withdrawn-stale-0b1d27d.png",
+      "size_bytes": 62184,
+      "sha256": "849b63cd8e17215eba54e9efea8d6d93911bf3b1a1dd2d215a297391816e65b0",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-later-of-reviewed-0b1d27d.png",
+      "size_bytes": 59955,
+      "sha256": "7960c396c826739170391874450c24e37fdf7d069b25604f3d61b30f114f82fb",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-later-of-facts-withdrawn-stale-0b1d27d.png",
+      "size_bytes": 62551,
+      "sha256": "68095bed0ae978d54fcc5ad86acb3e63f6b3c5bcf83fc566d6c647ac7a04eb95",
+      "visually_inspected": true
+    }
+  ],
+  "verified_scope": [
+    "Actual hosted original scanning, independent source review, server comparison projection, separately dated candidates, selected-candidate card, independent filing approval and unchanged-body/source-withdrawal checks in UAE and India.",
+    "Browser assertions verify the complete calculated dates, selected row, CURRENT then STALE freshness, and disabled filing with a supplied receipt after facts are withdrawn."
+  ],
+  "visual_findings": [
+    "Both countries show readable stacked cards: notice 2026-12-01 plus one month yields 2027-01-01; period end 2026-12-31 plus three months yields selected 2027-03-31. Their Dubai/Kolkata timezones and current source status are visible.",
+    "The stale originals retain those same cards and STALE status with a populated receipt. The action footer is outside the captured visible scroll area; the current originals clip the filing header/version. These are partial visual evidence, not complete full-panel captures.",
+    "The newer harness scrolls to and separately captures the summary viewport, each bounded candidate card, and the action viewport. That correction is configured with the new explicit month-end fixture and awaits its own visual proof."
+  ],
+  "limits": [
+    "This source predates explicit preserve_month_end handling; its fixtures use the legacy corresponding-day policy.",
+    "The original clipped captures are unchanged and are not presented as complete header/footer evidence.",
+    "Full backend verification for this source was still running when browser evidence was recorded. Synthetic workflow verification does not establish professional legal or real-client qualification."
+  ]
+}

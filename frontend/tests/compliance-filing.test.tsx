@@ -21,6 +21,55 @@ const paper: Paper = {
 beforeEach(() => mock.mutate.mockClear());
 
 it.each(["AE", "IN"])(
+  "shows month-end preservation only when explicitly declared for %s",
+  (country) => {
+    const body = {
+      filing_stage: "preparing",
+      jurisdiction: country,
+      deadline: "2027-03-31",
+      deadline_rule: {
+        identifier: "SYN-month-end",
+        trigger: "2026-06-30",
+        months_after: 9,
+        month_end_policy: "preserve_month_end",
+      },
+    };
+    const { rerender } = render(
+      <ComplianceFiling
+        base="grc/engagements/scoped"
+        paper={{ ...paper, body }}
+      />,
+    );
+    expect(
+      screen.getByText(/Month offsets preserve a triggering month-end/),
+    ).toBeVisible();
+    expect(
+      screen.getByText(/independently assessed rule and event evidence/),
+    ).toBeVisible();
+    rerender(
+      <ComplianceFiling
+        base="grc/engagements/scoped"
+        paper={{
+          ...paper,
+          body: {
+            ...body,
+            deadline: "2027-03-30",
+            deadline_rule: {
+              identifier: "SYN-month-end",
+              trigger: "2026-06-30",
+              months_after: 9,
+            },
+          },
+        }}
+      />,
+    );
+    expect(
+      screen.queryByText(/Month offsets preserve a triggering month-end/),
+    ).not.toBeInTheDocument();
+  },
+);
+
+it.each(["AE", "IN"])(
   "retains all comparison triggers and blocks a missing candidate period for %s",
   (country) => {
     render(

@@ -113,6 +113,13 @@ export function ComplianceFiling({
         . Record an evidenced human decision; this does not submit to an
         authority.
       </p>
+      {deadlineRule?.month_end_policy === "preserve_month_end" && (
+        <p>
+          Month offsets preserve a triggering month-end. A non-month-end trigger
+          keeps its day where available. Apply this declared policy only with
+          independently assessed rule and event evidence.
+        </p>
+      )}
       {Array.isArray(deadlineRule?.later_of) &&
         deadlineRule.later_of.length > 0 && (
           <section aria-label="Later-of deadline comparison">

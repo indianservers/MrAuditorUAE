@@ -198,5 +198,6 @@ docs/phase-12/de7ecb2-hosted-full.xml -text whitespace=cr-at-eol
 docs/phase-12/de7ecb2-hosted-coverage.json -text
 docs/phase-12/withholding-pan-*.xml -text whitespace=cr-at-eol
 docs/phase-12/later-of-*.xml -text whitespace=cr-at-eol
+docs/phase-12/month-end-*.xml -text whitespace=cr-at-eol
 docs/country-workflows/sample-inputs/SYNTHETIC-missing-pan-treatment/*.csv -text whitespace=cr-at-eol
 docs/country-workflows/sample-inputs/SYNTHETIC-dated-form143/SYNTHETIC-explicit-completion-143.txt -text whitespace=cr-at-eol

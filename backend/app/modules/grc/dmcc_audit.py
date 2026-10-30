@@ -222,6 +222,8 @@ def validate(data):
     elif required is True and data.jurisdiction_scope.applicability == "assessed_not_applicable":
         raise ValueError("DMCC requirement contradicts the declared non-applicability")
     rule = data.deadline_rule
+    if rule and rule.month_end_policy != "clamp":
+        raise ValueError("The adopted DMCC profile requires its original month-end policy")
     if rule and rule.later_of:
         raise ValueError(
             "The adopted DMCC timetable does not permit additional deadline candidates"

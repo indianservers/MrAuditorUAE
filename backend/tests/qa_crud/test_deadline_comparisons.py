@@ -17,8 +17,9 @@ pytestmark = pytest.mark.skipif(
 
 
 @pytest.mark.parametrize("country,timezone", [("AE", "Asia/Dubai"), ("IN", "Asia/Kolkata")])
+@pytest.mark.parametrize("month_end", [False, True])
 async def test_later_of_dates_retain_independent_review_period_controls_and_source_staleness(
-    environment, monkeypatch, country, timezone
+    environment, monkeypatch, country, timezone, month_end
 ):
     c = environment
     double_boundaries(monkeypatch)
@@ -100,6 +101,22 @@ async def test_later_of_dates_retain_independent_review_period_controls_and_sour
         "filing_stage": "preparing",
     }
 
+    if month_end:
+        body["obligation_period_end"] = "2026-06-30"
+        body["deadline_rule"].update(
+            trigger="2026-06-01",
+            month_end_policy="preserve_month_end",
+            later_of=[
+                {
+                    "identifier": "SYN-period",
+                    "trigger": "2026-06-30",
+                    "date_basis": "period_end",
+                    "months_after": 9,
+                }
+            ],
+        )
+        body["entity_facts"] = {"notice": "2026-06-01", "period_end": "2026-06-30"}
+
     async def post(value):
         return await c.post(
             base + "/records/obligation",
@@ -150,10 +167,11 @@ async def test_later_of_dates_retain_independent_review_period_controls_and_sour
     assert projection["freshness"] == "CURRENT" and not projection["reassessment_required"]
     assert trace["state"] == "CONSISTENT_WITH_SAVED_RULE"
     assert [(row["unadjusted_date"], row["selected"]) for row in trace["candidates"]] == [
-        ("2027-01-01", False),
+        ("2026-07-01" if month_end else "2027-01-01", False),
         ("2027-03-31", True),
     ]
     assert trace["rule_evidence_id"] == originals["rule"]["id"]
+    assert trace["month_end_policy"] == ("preserve_month_end" if month_end else "clamp")
     assert trace["fact_evidence_ids"] == [originals["facts"]["id"]]
     await action(c, reviewer[0], audit_base, originals["facts"], "reopen")
     saved = (await c.get(audit_base + f"/records/{obj['id']}", headers=h)).json()
