@@ -1,0 +1,49 @@
+{
+  "dataset_kind": "SYNTHETIC_ENGINE_FIXTURE",
+  "real_client_data": false,
+  "professional_validation": "NOT_ESTABLISHED",
+  "source_fixture": "backend/tests/unit/country_workflow_cases.py",
+  "source_fixture_sha256": "d689b2869025ec1471c10ad0620a134f643ee5939b78803504875168611454ae",
+  "case": {
+    "id": "RW-087",
+    "title": "Missing NRV is not a clean valuation",
+    "workflow": "stock-audit",
+    "country": "AE",
+    "sources": {
+      "books": [
+        {
+          "id": "1",
+          "site": "WH-1",
+          "sku": "SKU-1",
+          "uom": "EA",
+          "currency": "AED",
+          "quantity": "10",
+          "unit_cost": "10",
+          "unit_nrv": null,
+          "ownership": "owned",
+          "condition": "good",
+          "count_date": "2026-06-30"
+        }
+      ],
+      "count": [
+        {
+          "id": "C1",
+          "site": "WH-1",
+          "sku": "SKU-1",
+          "uom": "EA",
+          "currency": "AED",
+          "quantity": "10",
+          "unit_cost": "10",
+          "unit_nrv": "12",
+          "ownership": "owned",
+          "condition": "good",
+          "count_date": "2026-06-30"
+        }
+      ]
+    },
+    "expected": {
+      "state": "VALUATION_INPUT_MISSING"
+    },
+    "parameters": {}
+  }
+}

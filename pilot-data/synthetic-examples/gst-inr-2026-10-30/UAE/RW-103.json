@@ -1,0 +1,37 @@
+{
+  "dataset_kind": "SYNTHETIC_ENGINE_FIXTURE",
+  "real_client_data": false,
+  "professional_validation": "NOT_ESTABLISHED",
+  "source_fixture": "backend/tests/unit/country_workflow_cases.py",
+  "source_fixture_sha256": "d689b2869025ec1471c10ad0620a134f643ee5939b78803504875168611454ae",
+  "case": {
+    "id": "RW-103",
+    "title": "trade-licence: expiry on review date remains current",
+    "workflow": "vendor-diligence",
+    "country": "AE",
+    "sources": {
+      "checks": [
+        {
+          "id": "1",
+          "subject": "ENTITY-1",
+          "requirement": "trade-licence",
+          "state": "supported",
+          "evidence_reference": "retained-document-1",
+          "expires_on": "2026-06-30",
+          "rationale": "Reviewed source scope"
+        }
+      ]
+    },
+    "expected": {
+      "state": "SUPPORTED"
+    },
+    "parameters": {
+      "required_checks": [
+        "trade-licence"
+      ],
+      "subjects": [
+        "ENTITY-1"
+      ]
+    }
+  }
+}

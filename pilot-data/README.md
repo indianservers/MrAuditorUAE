@@ -71,3 +71,10 @@ professional-qualification claim. Consent, real-client origin, preparer identity
 independence, document meaning and completeness still need human verification.
 A valid template is deliberately insufficient. Synthetic temporary-file tests
 exercise the validator; they do not populate these client folders.
+
+
+The corrected INR GST comparison examples are saved separately in
+`synthetic-examples/gst-inr-2026-10-30/`, with their own `catalog.json` and fixture
+source hash. The original `synthetic-examples/UAE/` and `India/` files remain
+historical snapshots. Their prior non-INR India GST examples are not current
+reporting-currency controls. Neither version is real client evidence.

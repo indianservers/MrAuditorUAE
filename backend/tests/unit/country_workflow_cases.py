@@ -228,7 +228,7 @@ bank_case(
 )
 
 for workflow, country, component in [("uae-vat", "AE", "VAT"), ("india-gst", "IN", "CGST")]:
-    d = document(component=component)
+    d = document(component=component, currency="INR" if country == "IN" else "AED")
 
     def tax_case(title, left, right, expected, **params):
         add(
@@ -237,6 +237,7 @@ for workflow, country, component in [("uae-vat", "AE", "VAT"), ("india-gst", "IN
             {"books": left, "return": right},
             expected,
             country,
+            currency="INR" if country == "IN" else "AED",
             **params,
         )
 

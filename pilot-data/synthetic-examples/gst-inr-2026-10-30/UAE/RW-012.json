@@ -1,0 +1,47 @@
+{
+  "dataset_kind": "SYNTHETIC_ENGINE_FIXTURE",
+  "real_client_data": false,
+  "professional_validation": "NOT_ESTABLISHED",
+  "source_fixture": "backend/tests/unit/country_workflow_cases.py",
+  "source_fixture_sha256": "d689b2869025ec1471c10ad0620a134f643ee5939b78803504875168611454ae",
+  "case": {
+    "id": "RW-012",
+    "title": "Old outstanding cheque is visibly stale",
+    "workflow": "bank-brs",
+    "country": "AE",
+    "sources": {
+      "books": [
+        {
+          "id": "1",
+          "account": "BANK-1",
+          "reference": "PAY-1",
+          "date": "2026-01-01",
+          "currency": "AED",
+          "amount": "-100",
+          "counterparty": "Customer"
+        }
+      ],
+      "statement": [
+        {
+          "id": "S1",
+          "account": "BANK-1",
+          "reference": "PAY-1",
+          "date": "2026-06-01",
+          "currency": "AED",
+          "amount": "20",
+          "counterparty": "Customer"
+        }
+      ]
+    },
+    "expected": {
+      "stale": true
+    },
+    "parameters": {
+      "account": "BANK-1",
+      "book_opening": "0",
+      "book_closing": "-100",
+      "statement_opening": "0",
+      "statement_closing": "20"
+    }
+  }
+}

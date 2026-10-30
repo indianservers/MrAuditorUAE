@@ -70,3 +70,32 @@ def test_different_case_or_unrecognized_metadata_is_never_overwritten(
     with pytest.raises(FileExistsError):
         module.export()
     assert path.read_bytes() == before
+
+
+def test_explicit_new_version_preserves_historical_examples(tmp_path, monkeypatch):
+    module, source, path = exporter(tmp_path, monkeypatch)
+    module.export()
+    before = path.read_bytes()
+    source.write_text(
+        source.read_text(encoding="utf-8").replace("'blocked': False", "'blocked': True"),
+        encoding="utf-8",
+    )
+    destination = tmp_path / "pilot-data" / "synthetic-examples" / "versions" / "corrected-currency"
+    module.export(destination)
+    assert path.read_bytes() == before
+    assert (
+        json.loads((destination / "UAE/RW-001.json").read_text(encoding="utf-8"))["case"][
+            "expected"
+        ]["blocked"]
+        is True
+    )
+    with pytest.raises(ValueError):
+        module.export(tmp_path / "outside")
+
+
+def test_synthetic_exports_cannot_enter_real_pilot_input_folders(tmp_path, monkeypatch):
+    module, _, _ = exporter(tmp_path, monkeypatch)
+    destination = tmp_path / "pilot-data" / "UAE" / "redacted-inputs"
+    with pytest.raises(ValueError):
+        module.export(destination)
+    assert not destination.exists()

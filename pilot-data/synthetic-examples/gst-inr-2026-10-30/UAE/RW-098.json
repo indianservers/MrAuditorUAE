@@ -1,0 +1,38 @@
+{
+  "dataset_kind": "SYNTHETIC_ENGINE_FIXTURE",
+  "real_client_data": false,
+  "professional_validation": "NOT_ESTABLISHED",
+  "source_fixture": "backend/tests/unit/country_workflow_cases.py",
+  "source_fixture_sha256": "d689b2869025ec1471c10ad0620a134f643ee5939b78803504875168611454ae",
+  "case": {
+    "id": "RW-098",
+    "title": "access-review: unexplained non-applicability blocked",
+    "workflow": "controls",
+    "country": "AE",
+    "sources": {
+      "checks": [
+        {
+          "id": "1",
+          "subject": "ENTITY-1",
+          "requirement": "access-review",
+          "state": "not-applicable",
+          "evidence_reference": "retained-document-1",
+          "expires_on": "2026-12-31",
+          "rationale": ""
+        }
+      ]
+    },
+    "expected": {
+      "state": "RATIONALE_MISSING",
+      "blocked": true
+    },
+    "parameters": {
+      "required_checks": [
+        "access-review"
+      ],
+      "subjects": [
+        "ENTITY-1"
+      ]
+    }
+  }
+}

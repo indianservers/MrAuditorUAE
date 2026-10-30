@@ -1,6 +1,12 @@
 def approval_error(body):
     from app.modules.intelligence.matching_review import saved_candidates_complete
 
+    if body.get("workflow") == "india-gst":
+        from app.modules.country_workflows.gst_currency import current
+
+        if not current(body):
+            return "Regenerate India GST comparison with explicit INR reporting controls"
+
     if body.get("workflow") == "bank-account-evidence":
         from app.modules.country_workflows.bank_observation_scope import saved_scope
 

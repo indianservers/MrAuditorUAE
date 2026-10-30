@@ -194,6 +194,11 @@ async def _head(db, ctx, obj):
 async def current(db, ctx, obj, visited=None):
     if obj.tenant_id != ctx.tenant_id:
         return False
+    if getattr(obj, "kind", None) == "country-workflow" and obj.body.get("workflow") == "india-gst":
+        from app.modules.country_workflows.gst_currency import current as gst_current
+
+        if not gst_current(obj.body):
+            return False
     if (
         getattr(obj, "kind", None) == "country-workflow"
         and obj.body.get("workflow") == "bank-account-evidence"

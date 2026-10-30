@@ -4370,6 +4370,14 @@ export function CountryWorkflows({
                   ))}
                 </select>
               </label>
+              {workflow === "india-gst" && (
+                <p>
+                  GST return comparisons require INR reporting amounts. Retain
+                  separately assessed conversion support for foreign-currency
+                  invoices; use invoice-to-books evidence comparison when
+                  comparing original invoice amounts.
+                </p>
+              )}
               {workflow === "inventory-valuation-control" && (
                 <fieldset>
                   <legend>Inventory valuation and recorded GL scope</legend>

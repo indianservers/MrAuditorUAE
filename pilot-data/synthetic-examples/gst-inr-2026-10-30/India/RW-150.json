@@ -1,0 +1,86 @@
+{
+  "dataset_kind": "SYNTHETIC_ENGINE_FIXTURE",
+  "real_client_data": false,
+  "professional_validation": "NOT_ESTABLISHED",
+  "source_fixture": "backend/tests/unit/country_workflow_cases.py",
+  "source_fixture_sha256": "d689b2869025ec1471c10ad0620a134f643ee5939b78803504875168611454ae",
+  "case": {
+    "id": "RW-150",
+    "title": "India leading-zero account mismatch cannot be approved as ownership evidence",
+    "workflow": "bank-account-evidence",
+    "country": "IN",
+    "sources": {
+      "register": [
+        {
+          "id": "register-1",
+          "account": "SYN-BANK",
+          "bank_country": "IN",
+          "account_scheme": "LOCAL",
+          "account_number": "000123456789",
+          "routing_code": "SYNB0ABC123",
+          "currency": "INR",
+          "owner_country": "IN",
+          "owner_name": "SYNTHETIC Entity LLC",
+          "owner_identifier_scheme": "SYNTHETIC-REGISTRY",
+          "owner_identifier": "00123",
+          "valid_from": "2026-01-01",
+          "valid_through": "2026-12-31",
+          "assertion_status": "confirmed",
+          "evidence_reference": "SYNTHETIC register",
+          "assessment": "Independently specified synthetic account ownership evidence"
+        }
+      ],
+      "ledger": [
+        {
+          "id": "ledger-1",
+          "account": "SYN-BANK",
+          "bank_country": "IN",
+          "account_scheme": "LOCAL",
+          "account_number": "000123456789",
+          "routing_code": "SYNB0ABC123",
+          "currency": "INR",
+          "owner_country": "IN",
+          "owner_name": "SYNTHETIC Entity LLC",
+          "owner_identifier_scheme": "SYNTHETIC-REGISTRY",
+          "owner_identifier": "00123",
+          "valid_from": "2026-01-01",
+          "valid_through": "2026-12-31",
+          "assertion_status": "confirmed",
+          "evidence_reference": "SYNTHETIC ledger",
+          "assessment": "Independently specified synthetic account ownership evidence"
+        }
+      ],
+      "bank": [
+        {
+          "id": "bank-1",
+          "account": "SYN-BANK",
+          "bank_country": "IN",
+          "account_scheme": "LOCAL",
+          "account_number": "123456789",
+          "routing_code": "SYNB0ABC123",
+          "currency": "INR",
+          "owner_country": "IN",
+          "owner_name": "SYNTHETIC Entity LLC",
+          "owner_identifier_scheme": "SYNTHETIC-REGISTRY",
+          "owner_identifier": "00123",
+          "valid_from": "2026-01-01",
+          "valid_through": "2026-12-31",
+          "assertion_status": "confirmed",
+          "evidence_reference": "SYNTHETIC bank",
+          "assessment": "Independently specified synthetic account ownership evidence"
+        }
+      ]
+    },
+    "expected": {
+      "exceptions": 1,
+      "blocked": true
+    },
+    "parameters": {
+      "account": "SYN-BANK",
+      "currency": "INR",
+      "bank_owner_name": "SYNTHETIC Entity LLC",
+      "bank_owner_identifier_scheme": "SYNTHETIC-REGISTRY",
+      "bank_owner_identifier": "00123"
+    }
+  }
+}

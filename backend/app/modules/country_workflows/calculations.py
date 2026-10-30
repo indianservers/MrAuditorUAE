@@ -1296,7 +1296,17 @@ def calculate(
         elif data.workflow in {"uae-vat", "india-gst", "india-gstr1-documents"}:
             if data.workflow == "india-gstr1-documents" and data.currency != "INR":
                 raise ValueError("Outward GSTR-1 reconciliation requires INR")
+            if data.workflow == "india-gst":
+                from app.modules.country_workflows.gst_currency import validate
+
+                validate(data, tables)
             result = tax_documents(data, tables)
+            if data.workflow == "india-gst":
+                from app.modules.country_workflows.gst_currency import CONTRACT
+
+                result["gst_reporting_currency_contract"] = CONTRACT
+                result["gst_reporting_currency"] = "INR"
+                result["gst_fx_basis"] = "SOURCE_INR_AMOUNTS_NO_AUTOMATIC_CONVERSION"
             if data.workflow == "india-gstr1-documents":
                 from app.modules.country_workflows.india_gstr1_source import month_end
 

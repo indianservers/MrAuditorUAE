@@ -1,0 +1,731 @@
+{
+  "status": "LOCAL_IMPLEMENTATION_VERIFIED_HOSTED_GATES_PENDING",
+  "contract": "india-gst-inr-comparison/1",
+  "checks": [
+    {
+      "path": "docs/phase-12/gst-currency-final.xml",
+      "tests": 3539,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "path": "docs/phase-12/gst-currency-boundary-final.xml",
+      "tests": 24,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/gst-currency-frontend.xml",
+      "tests": 375,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "additional_checks": [
+    "Ruff passed",
+    "mypy: 411 application files passed",
+    "API snapshots unchanged",
+    "Next.js production build passed"
+  ],
+  "scope": [
+    "Explicit INR workflow parameter and every reporting-population row required",
+    "Legacy or malformed GST comparisons stale and not approvable; retained body unchanged",
+    "Original foreign invoice comparison remains a separate workflow",
+    "XLSX cover retains currency-control metadata",
+    "Explicit nil populations supported without invented rows"
+  ],
+  "limitations": [
+    "INR labels do not independently verify FX valuation or conversion evidence",
+    "No automatic conversion, tax filing or professional qualification",
+    "154 synthetic scenarios, including 12 corrected GST cases; no real-client pilot evidence"
+  ],
+  "source_blobs": [
+    {
+      "path": ".gitattributes",
+      "sha256": "1b099100f914d6a93ab34a308893e675c8d61e822adcf69a936fd9ac78cdb0f2"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/calculations.py",
+      "sha256": "2210b726f7eccb280c251ec9005f32ed9b2287b76716a7353febc0ebe845ba01"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/gst_currency.py",
+      "sha256": "0f43feeea9eb548596e3e1da6485622c576a0a5ca071e10c68f413f98bfee94b"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/review.py",
+      "sha256": "19980214354cade0da92bab2a0cf1f6aa832cbc35429458813dbd3f63739239a"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "sha256": "ba3bb1d988f4d0e1206ea32dcfdd76be7e3bcb1eb27e2fb552c0d4ef59dbd64c"
+    },
+    {
+      "path": "backend/app/modules/intelligence/service.py",
+      "sha256": "30bf6133c36ddaf516a489381984c48a3908e460ab76e86714e796e6482a191f"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_gst_currency.py",
+      "sha256": "335febf16f9f0f0207a10585bf5b4f4eb700bc27d75365d752cced7c88ecc9b8"
+    },
+    {
+      "path": "backend/tests/unit/country_workflow_cases.py",
+      "sha256": "f6eb8c6ef969fc0ac20dffb94dd08960ec551ba2f8dc3bec541e61f265469c59"
+    },
+    {
+      "path": "backend/tests/unit/test_gst_currency.py",
+      "sha256": "dabbd4bb816416b1e5483d9d87ea26910959aa05b7ccdc502a215b52dab3cd62"
+    },
+    {
+      "path": "backend/tests/unit/test_pilot_example_preservation.py",
+      "sha256": "93ae29bf150af0d8fcdd6ed7940c96749c79d52fe03620492621a2c977cbbba0"
+    },
+    {
+      "path": "docs/phase-12/gst-currency-boundary-final.xml",
+      "sha256": "1629fb0e5d644f82f16ddfbed1f201ecdd07d4fb50de954c7633b813802e2e32"
+    },
+    {
+      "path": "docs/phase-12/gst-currency-final.xml",
+      "sha256": "c03070ad1bb9922f7a75bb8525ff206cc0961b0966974ddc794e89a5f393aa6e"
+    },
+    {
+      "path": "docs/phase-12/gst-currency-frontend.xml",
+      "sha256": "4a9d5a0e762220f260357682c3a105b6a4c78b27a2dfd8ba8e398e4c6c228457"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "015a73e8629e1624bb0ed5a360aab89447daa6e248a653022456a26296afcd1f"
+    },
+    {
+      "path": "pilot-data/README.md",
+      "sha256": "00cae4888566b25e61c438da7d3ad77fb4829a97b992c4cc25e8e07779037290"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-029.json",
+      "sha256": "13f7b6955bdbf53099d4fd1151d47ed0915164fb7c9becbecf44bdbc4454710b"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-030.json",
+      "sha256": "8daa2cb023f77e0f5ee90c6fce616e9f32a244211b3aa16ee0de41883fb0da28"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-031.json",
+      "sha256": "1a3e86014c733cc26fb89929ef2527cebca8bee7ed554e50f16750f4d7334477"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-032.json",
+      "sha256": "2c0db6182327bad6f292ca69ff709d8dd4d291631205a3fead2167032839b40c"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-033.json",
+      "sha256": "b98ac7daa8141cf7d1d834bde97414f29b5897be1f260d62da63fae859369798"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-034.json",
+      "sha256": "7a04567b943ff965c846a9b3edfb05d63d14771caee695897e332f521063b8da"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-035.json",
+      "sha256": "3e51a5abd9c0639a109180fd7f22f5387b7c42558fde9e6d5ac2ec33641caba7"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-036.json",
+      "sha256": "e2430261bc5d68a1e8f2d36814e8ec93bab41ac58a407a1d48cb0848c2601d3f"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-037.json",
+      "sha256": "a751a8bfdc44d18f2d8c948ebedd65b6556be498cb16b124b68ac0d1bba060e3"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-038.json",
+      "sha256": "6f0c56ebd260a86c875902082baa5b170b25863438fdeba9dbe33c9bf8bb638a"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-039.json",
+      "sha256": "50946a4dfdd973b4f674bb3892abe60a72cf66023671653e7ffa96b79ad6155f"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-040.json",
+      "sha256": "021b5ffeef4b0df7f315395f5603e949c894cc2655552430a85f3538ab0f0b84"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-053.json",
+      "sha256": "61208513a3949d389cbec4517dd2495c1ad8d9c71bc8a105c3aa3874bdb7e370"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-054.json",
+      "sha256": "9f7fe389c2f58e273c474fde63f798ee239b695b01937104b23131cb85f4e95e"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-055.json",
+      "sha256": "b62e9ed59c49d9e4915a4dfd6f2ee9215f8740e6786caa0c990484ebf8120d89"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-056.json",
+      "sha256": "8a91b9d2f4682200d65d522e598d2e50f50ed2f4605923afbc89fd0b79b01140"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-057.json",
+      "sha256": "2cbbd183afcafa015166cec3d99c520dd2e04187ce5aca7d477ed7357579df8d"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-058.json",
+      "sha256": "c513c17b2e760b4aed62c60729ed1e3b71703ea6b59c8fa21392a8c05fb1777f"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-059.json",
+      "sha256": "ff367995ddd07a5d5b934ec0cdd250278881220968b74b39e32ecd28b5d66c9b"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-060.json",
+      "sha256": "57eb9eb8da53b339d74cae660359aba931f0d5cea02bf68bb32b26e915368f27"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-061.json",
+      "sha256": "50612f352a2b81f415a37937321e83ddee1a19a4a434cb5cdd6f2bd1c5490796"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-062.json",
+      "sha256": "a34af33d8167c071986b2bcda375de9a41f35ca68bfda2d1e841ff9bba95672c"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-063.json",
+      "sha256": "2868e2d24352b6683c1e99a696e7b57f2b005d62306f186ad8efb8c63a41c7f7"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-064.json",
+      "sha256": "cc654ca09723fabb04bd85407a6fc010f3aa93ab712c077eb7f777005a89641b"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-065.json",
+      "sha256": "a0af7ddae8ea7dcceb773e4c0bc3d79058f714c578f96ff64f68301bc3ee212d"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-066.json",
+      "sha256": "2b2b2a9f98f5162904afc1bcc8323aca6f85f7b88220b1785deb594d95346596"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-067.json",
+      "sha256": "6824cbeba377ea571b24a99e10024338b64dd82d2bd3d7593c86dc0c3e7a73da"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-068.json",
+      "sha256": "3794c911dc0f9e61cbd7c29c76243ad8637fa472fb324d1ee4c603a57bd5a6d3"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-069.json",
+      "sha256": "71c169b648ce7b9b8822332d867beb5809e191c64ce06d2d911bc71b82f83da7"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-070.json",
+      "sha256": "27b94c755d537800f3d34aaf23b0cd0e8c1f1b1f7d8d2b4d6f1a00174271d3df"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-071.json",
+      "sha256": "0e920550f9a99041915195e5896a53fba7f8bb8167d08d992613ecddb29279df"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-072.json",
+      "sha256": "91ca575f9a106120f62bcfcc4f925249ea2edcd4c7749c008357b84ba19fbf3d"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-073.json",
+      "sha256": "6379c5c15df63444a9b2a0a543752330e0ca4c993ca59fe7f09318c9a81b95f2"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-074.json",
+      "sha256": "4ce75ffa476cdf814ad03c164842303d88ac0eb0283e9feea4f1958baede8c78"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-075.json",
+      "sha256": "5dc81a3f8adbd6369269bf880af79f2f738f545f1c5d525f9490c001d579e7e3"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-076.json",
+      "sha256": "5201f534b0f03506b1fca18795be81a50f77e6a4d5ef19b26e7929839d9cc950"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-121.json",
+      "sha256": "e7cd07fd23ea7d2ca64aa37abf683ad049bf95b6b0f38384a4ebe329a70b6ac0"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-122.json",
+      "sha256": "b92419d445662e0ae8b98fd334ab9759925aa836291737ab07d272202ff16f68"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-123.json",
+      "sha256": "9ed64fb056693d67b3d9ae0bd4c73e8783061fbd9355526d355402ece7454d93"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-124.json",
+      "sha256": "caae492529b1490071ab1f6b284f8abcc337bc065367e59230023d35c91d73fb"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-125.json",
+      "sha256": "07d9a25244ed6b616bc7f2308caeab6be05a0380faa70542e4b5fbc7b7d487ee"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-126.json",
+      "sha256": "75b2a174a6f4c234c5ba865a2448481af16a65a204100b5164b7f5d421c879ce"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-127.json",
+      "sha256": "33221fef09d3eb8963dfccacb667222ddcdc450c51845d9e9b426d944befd6a0"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-128.json",
+      "sha256": "6464ece65530d420bbf4624487c4dedb682a8630327cc446794ab1300dc66b7d"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-129.json",
+      "sha256": "f451244502dff48e970d939812573e3c20c55e4fafa2434c86c23212a8715fb6"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-130.json",
+      "sha256": "6f8c06123c35795368dfef95c697ba64fa6c891a969b41a139977199faef4288"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-147.json",
+      "sha256": "dde982e8c521dd6b63234d4f51e96185c8f78e5309a0e045a3ac9f5edd6b343e"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-148.json",
+      "sha256": "4627b9146620cba9540bfc24c8864bb2962eeb90d09ce1d8b3fa4ee88c0cefac"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-150.json",
+      "sha256": "e57b92b2f07d2b00b48de851b6ec2a0c3a6e348d0786d347fae0d708f3a0fc73"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-151.json",
+      "sha256": "41984ef6951461951835c5f56faf24db20676d5b6f659250920637724d814acc"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-152.json",
+      "sha256": "3726f496d121ae7be1cd16269a5c4fafa6d1baf2441282941b8654fdffcbca38"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-153.json",
+      "sha256": "1d4d906df84f14ba1e491ff4ea4451ed39c1beac655e394ac34da895e4f4ce1f"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/India/RW-154.json",
+      "sha256": "51eaa55b745f046c54a961c6faea8e3cb93101b8548fe4bfe0b936e301dc7774"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-001.json",
+      "sha256": "b035391588f8fe190754982fe0a7828239b763c57ca62dceebe6a20f9ec9aeb5"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-002.json",
+      "sha256": "5297c56f1e05339c4ea05aa9d4819d8ea10c66ee51939bbe55c2b27c6f0e30e1"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-003.json",
+      "sha256": "edc20fcf7688626d4c0f153c28a43a734f3ecd393552dc1e91f2508e4a192a77"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-004.json",
+      "sha256": "9a40c9f2565ab5d5030ec2924c45d7bd1ec1b1b4211d483546d6a824c3253b2f"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-005.json",
+      "sha256": "8b5298797236951615cc88815e2511fd520545fbf306a815721d594545a0a930"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-006.json",
+      "sha256": "843ff674728d8ebc3f49fe571f410c34c2448881f0b241fd57b27695b6767a0f"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-007.json",
+      "sha256": "b45c120ffbc8f1e593d6ebdf4dff85577df328751b22a5409eb12ee721e3a20b"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-008.json",
+      "sha256": "b0ed83e8fc5dc87e9189a7a15d8ffb20ed73adc881dc12fd30f97d65ab7355c7"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-009.json",
+      "sha256": "885a21b5b76c34ec0b913accc2c3391b750f78cef0906ad7b803f893f96e8891"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-010.json",
+      "sha256": "8d3f8f10ea2dd5b0b1c74a57ff6116d5a9c6ac8b8d1c6bb892b539e81d3d781b"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-011.json",
+      "sha256": "892bbf447cc5d0f2a685762a178534e45acd854128ba9d5027a49d0c9a4ef350"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-012.json",
+      "sha256": "573241a680a040156c18d23e04faaa8268e3581ea2c77db34dd84f2069ccdc6d"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-013.json",
+      "sha256": "1a0eb4c450b4c473c172633a09ec610b1c399515382a7cee4f4e93161df5c53f"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-014.json",
+      "sha256": "f58657accf00adf4ba2f5bd0cce02a5ae83358809da497d8be81437d648039d3"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-015.json",
+      "sha256": "6ebae8b5d4c8c75acaa68fd9de17494b0d1c3047f879d24904c7fb66e93bf3b1"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-016.json",
+      "sha256": "ba295d4dd32136db5d3b4ffa4b4b3ea1cacd12081f036319f51d74c57422f551"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-017.json",
+      "sha256": "fa3dba660d19c21dcdfbd60f9e0c7d593698c0f6bb06db9e370a561696afbf7d"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-018.json",
+      "sha256": "2133694c08049b794b2f8d3b16e931a80306fc33e4e6500e8b93f1497efc194d"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-019.json",
+      "sha256": "fd78f408c8c16253b0227789b265f5b9042c916f4b6a92121564ad35eec521f3"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-020.json",
+      "sha256": "a44c4d246d29245c58b2571e0d2f25b6641980991cd542b3ab5025848e4398d0"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-021.json",
+      "sha256": "64ad7635fbacf5b0e5b0b762d4c1816b78e73c16c182c02cb03176e8084f9621"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-022.json",
+      "sha256": "181ef96314b2be07438d5282c107d7441fc506aac4678b5c818f08d550bff79d"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-023.json",
+      "sha256": "beac356afb68082140f23b6f0fb6351cfe2093f4addabed168fc805728f9a0cf"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-024.json",
+      "sha256": "80bd1dc6cb02fa5d543b0398d771bdd520d2c00fc0fa17d131aac973330f85ea"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-025.json",
+      "sha256": "c3d9c83bddda5b2f967fa4ff0cb13522e70c63a1f2193691ae5865f0d3fac57a"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-026.json",
+      "sha256": "69cb7d3815b38fe272b1a04dc6bcffd2801fa3b3a80b25686c40fee2c5a88bcb"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-027.json",
+      "sha256": "d4b714114e6d4458d6998f0377ddec4bce9a9d790f2bbf773f35abd678a3f6e8"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-028.json",
+      "sha256": "c9a2fdcaef51ece4b9d1dcf71b8e0367f753bf2e917f8bd13b70c796e4012032"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-041.json",
+      "sha256": "3fa6c164d6cc8e6deb3c2964dd7f2988830299e0a66b9316cf8f222a08ab83eb"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-042.json",
+      "sha256": "60e6f7e1180b28bb10b307012ef60b60b2ac1a7773893d17445852f637c37d20"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-043.json",
+      "sha256": "a96d4e1115c2ab3e9324ad547b69b91d60c7248bc0e989a4ea166ae34f895736"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-044.json",
+      "sha256": "290a9d907920d8e895271006b79d74de089f615cff8a7ef4304ddfb31e8fe6d4"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-045.json",
+      "sha256": "13a65c17af2ce46ebb3a5ddf3df1da2669a5783f80dbc3a76dae470ea29d0b19"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-046.json",
+      "sha256": "19cf79c5470ffc31ac1ce9668e315a6a7721565908db77a23b736653d28aee10"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-047.json",
+      "sha256": "7d4a1cb23442c45c3e0854d55aea413c58188e19321482055ac62e1cda72e534"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-048.json",
+      "sha256": "31046fd448fc8ac43d32d1797bf76dabaf93040d5ddf4d8d9b33645b7f0c404a"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-049.json",
+      "sha256": "b2b008813f5f725d84e50360df12922bb04774e86a8b90a1e493c61de6afdcdc"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-050.json",
+      "sha256": "b52157917414b5e8981b0be0d4da09b26b80d88958aea385c3b7d22328e8a2af"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-051.json",
+      "sha256": "e12b0c3b0351ddc982438da8e7f86faffd3c0ac6fc017086674a8ec85ed5928a"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-052.json",
+      "sha256": "583870443d96ca504f352745f917ed7eba17b7765b14df13f2c546d6a3daf903"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-077.json",
+      "sha256": "dbedae5c5ad856ca1b60123c1e0837ea90c42e44aff57a0bc72b0d0639215d61"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-078.json",
+      "sha256": "4a22e08fc9001b1d9bfa3c91105a1c1a88f36c65a4714129db8b287a18ffe42a"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-079.json",
+      "sha256": "c8bf3bad289d20407fa07109f394f4a84bb9228e4724b3ff3c69a9f302d7285e"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-080.json",
+      "sha256": "4f8217fd66cebf96428cb9499e7e0915002c3add24aa06cc6bb25a2deacae24f"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-081.json",
+      "sha256": "fad5d66456c4ba5d9d0945a169608ee7a582d08b2820884bf6a83baf17b4f6e4"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-082.json",
+      "sha256": "c7f44e8302a10c2092693b7329610552035b73a1c74c093fce67c5f9916d3b14"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-083.json",
+      "sha256": "ae4f711ee2f56da7ea65cb33faac154ed5e4fd4b0b8b3b93a7d364daba8ace4c"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-084.json",
+      "sha256": "4a545f5acfd7fd08a571debc245a9d39fb0ee439e95910c53b66e6a2fc58231c"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-085.json",
+      "sha256": "e0c4f74198429f74058b6373105edd6f923fbfc3b3bf8628b51b23468e22ffa3"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-086.json",
+      "sha256": "27f5536df7a015ca4c862c1833bddc4e36c610f60c30f5cbe67cb9b9702dc727"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-087.json",
+      "sha256": "6aab4e9b76219912fe229a1e8b430435aa3d257190703ac9d08d89154fca261e"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-088.json",
+      "sha256": "13572eb277f5906b7412e4ed165edc528321088968f2f9d8c5d7f19678ce9e6b"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-089.json",
+      "sha256": "6da98f41e46d52831a36a9edce448302348019f004f0ddc9536baa8fa560e756"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-090.json",
+      "sha256": "dd3bc2e912a6afff53d00957f242c938657c2db94addb75023a1dc5fbb330916"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-091.json",
+      "sha256": "a13a7ab7223db3cf02ef8961328daee1d0cdfdc777c251b139490d36f08299c8"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-092.json",
+      "sha256": "31829a8247de544d6ad97953d2c6a08bdc36aa693d13cd189bba796fe60ee51e"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-093.json",
+      "sha256": "99883afffcc1ee7914c5167e2af1525eef21a2a4d87be153e27f7e684518e2e7"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-094.json",
+      "sha256": "28c4428af4d39fca57e1eca236076c6fe84bdb8a45ca7984a9124ac4446f7e68"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-095.json",
+      "sha256": "3a83fe45ab35bdd145d6849424bc0a86fa1b5ce8124b8199093c2c42f3d1e8d6"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-096.json",
+      "sha256": "156cb44f820ce4aeaee183f1aa28e32083efd2223e2697924ea0f478867e7e33"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-097.json",
+      "sha256": "625d71274eb6f7e5aa8baa510f12db26be9b32c7e5d4b6544ab10edeb3a511a0"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-098.json",
+      "sha256": "4592d33ce6e04c1e425d829f3593b5907cc545b5e54a45a824665a225c643737"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-099.json",
+      "sha256": "26a2c881fa3e6e1756d04c561310aa5a6b5afc99e1fb430b78182ff8df761bd0"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-100.json",
+      "sha256": "5adb8e11c0168d24befd5cfa7d4420d9c6da5b3a95b235568c1831a52a76407f"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-101.json",
+      "sha256": "20d73a2cbb37f93ea0e4e11abf16f38f8aa1a7452496bcf522b1fb20bd753e7d"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-102.json",
+      "sha256": "86eff86d5e16fe53353b48ad2370d09c6233481d8f472618b42eaa4cb1890134"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-103.json",
+      "sha256": "393055c37c33ddc4b7d99a96cf96ab792455dbcaa0bb1d7a01ab3eeb4bd244a2"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-104.json",
+      "sha256": "cf02570a02a579588bea3b270f7a82fa2b0caaf827be32695bc3721a49c281a4"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-105.json",
+      "sha256": "6b2f17af4f670e9429bfa33a65e56ca121c6384b2b5e058ff843e9198fe64953"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-106.json",
+      "sha256": "ee5efa657386763595d1e667d65cf69f243798d58e20aa99b2a1446e2f6b0359"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-107.json",
+      "sha256": "aaffe3a147f904af61a58e13e7dd8b28ac83c246c9c4b0af8a5b2caa4495bd3e"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-108.json",
+      "sha256": "5903e462a4381828ba179185f65f8d7cb57c351696e92808df2865d9c918d29a"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-109.json",
+      "sha256": "a0ae719acebab7958e02a4d95655a566c1e5f5d628e2a6d22688a45a5683e95a"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-110.json",
+      "sha256": "2290bdc4a537e3429814c611ae90a8278f7232d8781982aab5a95508d295092b"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-111.json",
+      "sha256": "1ffaecb8aa825227b3b5538700b87d76500b9324c22ba29edc1a6d88eead7927"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-112.json",
+      "sha256": "ce27e86d71fbe182f2ab07ea4e82ff292c950700deecdf83090114868151107f"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-113.json",
+      "sha256": "932eb69b11b6f8425c223115e672d2ecf1edc7ea22826c592f4970fe7dc49fd8"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-114.json",
+      "sha256": "26d54105fe681dcc360ac0df83481ae285e611315f2cd90e95115a9e7ef78617"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-115.json",
+      "sha256": "b67b790cef72e8a6eab31d92dc1b6094a2e28456d941bc191262bf0b63fad385"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-116.json",
+      "sha256": "77dbca85ef247bddb6e7816d846c9653ef61f5af02932466f6b880206ec65300"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-117.json",
+      "sha256": "838cdec1444f4ee919bb55fb949e7580049f44d4152f582de1abe05c98884886"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-118.json",
+      "sha256": "78991b8e80123385fa2f8a2a58add175a5884eef9611ba71ed914cad38c59010"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-119.json",
+      "sha256": "ba69e10f91ec18a960d5a21aa33c69da984a3e6524e93f5cc5b5f152bc8268b2"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-120.json",
+      "sha256": "c239a37c130370e271d943131e67fbeab9d864cee79a5a77a636363b02e91f61"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-131.json",
+      "sha256": "0511187f9c1f6ad1c98c13f84e926d83fcce7442522ed964f99e0d5b61d3194c"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-132.json",
+      "sha256": "524226a82f412afe7ae8aaf3e1b7cd3a2ed4b03475edf4b93da0035d5a6f414a"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-133.json",
+      "sha256": "8ad2b65bc589fbb96d9cbcc4047fa16a097e4e7fcc2a48d7de88d1338082b6e8"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-134.json",
+      "sha256": "0ed2b679a193e4ff16a15c301e1e4248971b7b88f747803b03d0fa40dc674ba8"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-135.json",
+      "sha256": "4a88649ad520fff8529773ccd15a805b85d0f3539baa3406b37c7310a9b7c31d"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-136.json",
+      "sha256": "d4558d444e06f2b2576279151b2b2e97e8de0bdc0819c9408eeaf9507c2b9f72"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-137.json",
+      "sha256": "b7f6f22d2fd76f3ab6de18eedf14a1974c4531e5649b94139bb07d13f31f0ab0"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-138.json",
+      "sha256": "51f534571f9661006808364ed0ee1a2e7419d0d3f37b8fdbb4837353ecba4a2d"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-139.json",
+      "sha256": "927e76c9e89effcccff4fc15cfb4a6226c97a378b3ad9f28bbbd0e13dc1838d7"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-140.json",
+      "sha256": "d527d36c684960b45cf0e2973e36d1ba73252624df5b2fb91db2c0f954b991c3"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-141.json",
+      "sha256": "57efd7ac457bf3a471947c2d7d736a2c4622a52319793aa9bd5bfd2229652c66"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-142.json",
+      "sha256": "a5cb31fdd102cf3f348e494a00f1f8ac72fc26cb40e7a93a818dc6a813d639a6"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-143.json",
+      "sha256": "1b480713d248b8be10b75240648aa783253cc0aa9d15fe67b4e89f2c46596f01"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-144.json",
+      "sha256": "ac672d5b760076669be1f588161c85b3095ce1f7e15e09ab977449e1509b2829"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-145.json",
+      "sha256": "38e19db661dd1f8ccc348efd8d5c6430f7974d6ced96ec26f9b3129b9768de07"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-146.json",
+      "sha256": "0ec551ca989af728dc0f0609db33883667cfa9aeacdf24597be0a85d6486a8b0"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/UAE/RW-149.json",
+      "sha256": "4b96ae8158ba467910f5b2382d28b81f538b8c7094f68eca783a29371ba1097e"
+    },
+    {
+      "path": "pilot-data/synthetic-examples/gst-inr-2026-10-30/catalog.json",
+      "sha256": "afb8b49a1415554e6b890e00a2986b785aaa4bae2490c96a19e2b5a2f2dcd49b"
+    },
+    {
+      "path": "scripts/export_country_pilot_examples.py",
+      "sha256": "eae985d497b5644cf3317ad66f21695d3782cd00501c37d15a477bf9665c30b1"
+    }
+  ]
+}

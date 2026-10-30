@@ -63,3 +63,5 @@ docs/phase-12/b03cf19-hosted-coverage.json -text
 
 docs/phase-12/retained-result-selection-*.xml -text
 docs/phase-12/form26-full-gates-correction.xml -text
+
+docs/phase-12/gst-currency-*.xml -text
