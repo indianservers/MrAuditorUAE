@@ -1,0 +1,45 @@
+{
+  "contract": "india-gst-reporting-currency-gap-review/1",
+  "reviewed_at": "2026-10-30",
+  "status": "CONFIRMED_APPLICATION_GAP_IMPLEMENTATION_PENDING",
+  "source_commit": "1bbb5cf5b60900259ba097711e4c6106e55c74f2",
+  "reproduction": {
+    "case": "RW-029",
+    "workflow": "india-gst",
+    "source_currencies": [
+      "AED"
+    ],
+    "actual_states": [
+      "MATCHED"
+    ],
+    "india_gst_fixture_cases": 12,
+    "execution": "Current fixture parsed through actual CSV source parser and calculate under isolated test environment"
+  },
+  "source_references": [
+    {
+      "url": "https://cbic-gst.gov.in/pdf/01012022-CGST-Rules-2017-amended-Part-B.pdf",
+      "source_date": "2022-01-01",
+      "page_index_zero_based": 133,
+      "finding": "Published Form 2B explicitly denotes INR amounts in all sections",
+      "limitations": "Historical official compilation; current whole-form/schema qualification is not inferred"
+    },
+    {
+      "url": "https://taxinformation.cbic.gov.in/content-page/explore-rules/1000120/1000001",
+      "finding": "Rule 34 distinguishes goods and services valuation exchange-rate bases; do not assume one universal RBI conversion rate",
+      "retrieval_status": "SEARCH_EXCERPT_ONLY_DIRECT_OPEN_TIMED_OUT"
+    }
+  ],
+  "implementation_scope": [
+    "Require INR reporting amounts for India GST return comparisons, including controlled CSV populations",
+    "Preserve original foreign-currency invoice-to-books comparison as a distinct workflow",
+    "Do not infer FX rates or legal conversion dates; require separately assessed and evidenced conversion before statutory comparison",
+    "Correct affected fixtures and save a separately versioned current synthetic population without overwriting historical examples",
+    "Guard legacy foreign-currency GST comparison approval/currentness and preserve historical saved bodies"
+  ],
+  "professional_approval": false,
+  "original_pdf_bytes_archived": false,
+  "limits": [
+    "No corrective runtime guard is claimed by this review",
+    "This records a source-specific implementation defect, not statutory or client qualification"
+  ]
+}

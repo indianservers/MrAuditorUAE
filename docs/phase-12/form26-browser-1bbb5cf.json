@@ -1,0 +1,115 @@
+{
+  "contract": "source-bound-browser-evidence/1",
+  "source_commit": "1bbb5cf5b60900259ba097711e4c6106e55c74f2",
+  "run_id": 40976934773,
+  "job_id": 123807166933,
+  "conclusion": "success",
+  "passed_cases": 5,
+  "failed_cases": 0,
+  "elapsed": "4.6 minutes",
+  "part_A_seconds": 55.3,
+  "part_B_seconds": 56.3,
+  "artifact": {
+    "id": 12942074826,
+    "size_bytes": 10640911,
+    "sha256": "470a5aefd6545a90e1bd681144ca40d33f4a32502a930f3f9bc650fb597a64db",
+    "download_digest_verified": true
+  },
+  "captures": [
+    {
+      "part": "A",
+      "state": "final-field-revision",
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-A-final-field-revision-1bbb5cf.png",
+      "artifact_entry": "country-reports/IN-form26-A-final-field-revision.png",
+      "sha256": "770f59595e7fc7fd4f299840f4f768fa4e942f6e007240ef60f88c14586d57b4",
+      "size_bytes": 449292,
+      "width": 2200,
+      "height": 3400,
+      "original_unmodified": true,
+      "visually_inspected": true
+    },
+    {
+      "part": "A",
+      "state": "generated-current",
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-A-generated-current-1bbb5cf.png",
+      "artifact_entry": "country-reports/IN-form26-A-generated-current.png",
+      "sha256": "1ba0bd5b3224274fe10436910b4d35b9bc4c114054342e16eacf6a56aecc858b",
+      "size_bytes": 486733,
+      "width": 2200,
+      "height": 3400,
+      "original_unmodified": true,
+      "visually_inspected": true
+    },
+    {
+      "part": "A",
+      "state": "generated-stale",
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-A-generated-stale-1bbb5cf.png",
+      "artifact_entry": "country-reports/IN-form26-A-generated-stale.png",
+      "sha256": "3e27f299ac9d626bf97dbe05d34f337c9f82cd0372f0360e6b49ca0583507033",
+      "size_bytes": 587020,
+      "width": 2200,
+      "height": 3400,
+      "original_unmodified": true,
+      "visually_inspected": true
+    },
+    {
+      "part": "B",
+      "state": "final-field-revision",
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-B-final-field-revision-1bbb5cf.png",
+      "artifact_entry": "country-reports/IN-form26-B-final-field-revision.png",
+      "sha256": "93e5a78866e01889f7fda4a5e3a6cc233fbae264bf56edadd99cd822f09466cf",
+      "size_bytes": 448143,
+      "width": 2200,
+      "height": 3400,
+      "original_unmodified": true,
+      "visually_inspected": true
+    },
+    {
+      "part": "B",
+      "state": "generated-current",
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-B-generated-current-1bbb5cf.png",
+      "artifact_entry": "country-reports/IN-form26-B-generated-current.png",
+      "sha256": "0d86c3fcf6c1a51d0739f5180403ec2c2c95519f72ee6ae30e8f0aaee771b81b",
+      "size_bytes": 486523,
+      "width": 2200,
+      "height": 3400,
+      "original_unmodified": true,
+      "visually_inspected": true
+    },
+    {
+      "part": "B",
+      "state": "generated-stale",
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-B-generated-stale-1bbb5cf.png",
+      "artifact_entry": "country-reports/IN-form26-B-generated-stale.png",
+      "sha256": "6cac15d193ea30da6be441c6812cee52d01c45fefb72c0a111907de5c3e407b8",
+      "size_bytes": 589667,
+      "width": 2200,
+      "height": 3400,
+      "original_unmodified": true,
+      "visually_inspected": true
+    }
+  ],
+  "executed": [
+    "Baseline UAE, India and release authentication cases passed",
+    "Both Form 26 A/2 and B/2 use real API evidence upload and independent evidence/manager/partner source reviews; no browser source-upload widget claim",
+    "UI selects a retained complete template, loads a new revision and explicitly amends requirement 877",
+    "All 877 saved requirements and nine normalized source blocks remain intact; hidden last-block selections survive uncheck/recheck",
+    "Separate report reviewer performs UI template approval and generates the saved report",
+    "UI XLSX download has 878 coverage rows including its header; exact key membership is additionally checked by the separately archived HTTP tests",
+    "Reopening the ninth source workpaper marks the report stale; complete parsed saved bodies remain equal and approval is disabled"
+  ],
+  "visible": [
+    "Both selected report parts, assessed tax period, last protected reference 877 and changed basis are visible in revision captures",
+    "Current previews show original report title, draft status, template version, tax period/part, final coverage row linked to fields-800 and published page 17",
+    "Current previews show all later source blocks six through nine and retained source versions",
+    "Stale previews show unchanged report title/draft status and explicit historical-content warning, first requirement page and disabled approval"
+  ],
+  "visual_followup": "After source reopening, the result selector shows its empty placeholder although the saved report remains open. A separate UI follow-up retains that authorized selected historical event; these original captures are preserved unchanged.",
+  "limits": [
+    "Synthetic workflow mechanics; no independently qualified statutory calculations, professional opinion, signature or filing",
+    "Financial field population and source context are authored synthetic fixtures, not real client evidence",
+    "Captures do not show all 877 rows or all nine blocks simultaneously; complete population retention is established by executed API/UI assertions and XLSX controls",
+    "New retained-result selection follow-up needs its own hosted verification",
+    "Full hosted backend job for this exact source remains a separate running gate; no all-six-jobs success claim"
+  ]
+}

@@ -230,7 +230,25 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
     boxScope.mode === "SELECTED_REQUIRED_BOXES"
       ? (boxScope as Record<string, unknown>)
       : null;
-  const choices = records.data?.items || [];
+  const listedChoices = records.data?.items || [];
+  const retainedChoice =
+    detail.data?.id === selected &&
+    !listedChoices.some((item) => item.id === selected)
+      ? detail.data
+      : null;
+  const choices = retainedChoice
+    ? [
+        {
+          ...retainedChoice,
+          label:
+            retainedChoice.label ||
+            (typeof retainedChoice.body.title === "string"
+              ? retainedChoice.body.title
+              : "Selected retained result"),
+        },
+        ...listedChoices,
+      ]
+    : listedChoices;
   const choose = (id: string) => {
     setSelected(id);
     setOffset(0);

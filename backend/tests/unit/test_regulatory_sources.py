@@ -15,18 +15,29 @@ from app.modules.regulatory.source_documents import verification_snapshot
         {"country": "ZZ"},
         {"source_url": "http://mof.gov.ae/"},
         {"source_url": "https://user:password@mof.gov.ae/"},
-        {"retrieved_on": date.today() + timedelta(days=1)},
+        {"retrieved_on": "tomorrow"},
     ],
 )
-def test_reference_metadata_rejects_invalid_country_credentials_or_retrieval(changes):
+def test_reference_metadata_rejects_invalid_country_credentials_or_retrieval(changes, monkeypatch):
+    today = date.today()
+
+    class ReviewDate(date):
+        @classmethod
+        def today(cls):
+            return today
+
+    monkeypatch.setattr("app.modules.regulatory.schemas.date", ReviewDate)
+    resolved = dict(changes)
+    if resolved.get("retrieved_on") == "tomorrow":
+        resolved["retrieved_on"] = today + timedelta(days=1)
     with pytest.raises(ValueError):
         SourceDocumentMetadata.model_validate(
             {
                 "title": "Synthetic source",
                 "country": "AE",
                 "source_url": "https://mof.gov.ae/",
-                "retrieved_on": date.today(),
-                **changes,
+                "retrieved_on": today,
+                **resolved,
             }
         )
 

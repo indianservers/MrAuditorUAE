@@ -4,6 +4,8 @@ import { AccountingIntelligence } from "@/features/accounting-intelligence";
 
 const state = vi.hoisted(() => ({
   kind: "reconciliation",
+  freshness: "CURRENT",
+  detailId: "result",
   legacy: false,
   unmatched: 1,
   findings: 0,
@@ -65,10 +67,10 @@ vi.mock("@/hooks/use-api", () => ({
       const offset = Number(params.get("ambiguity_offset") || 0);
       return {
         data: {
-          id: "result",
+          id: state.detailId,
           kind: state.kind,
           version: 1,
-          freshness: "CURRENT",
+          freshness: state.freshness,
           body: {
             bank_account_binding: state.binding
               ? {
@@ -128,6 +130,8 @@ vi.mock("@/hooks/use-api", () => ({
 }));
 beforeEach(() => {
   state.kind = "reconciliation";
+  state.freshness = "CURRENT";
+  state.detailId = "result";
   state.legacy = false;
   state.unmatched = 1;
   state.findings = 0;
@@ -275,4 +279,34 @@ it("queues an explicit source account declaration without changing the original 
       }),
     ),
   );
+});
+
+it("retains a directly opened stale report in its result selector without enabling approval", () => {
+  state.kind = "statutory-report";
+  state.freshness = "STALE";
+  render(<AccountingIntelligence eid="e" area="lead" />);
+  const select = screen.getByRole("combobox", { name: "Result version" });
+  expect(select).toHaveValue("result");
+  expect(
+    within(select).getByRole("option", {
+      name: /Selected retained result.*STALE/,
+    }),
+  ).toBeInTheDocument();
+  expect(
+    screen.getByRole("button", { name: "Record independent approval" }),
+  ).toBeDisabled();
+  expect(screen.getByRole("alert")).toHaveTextContent(
+    "This saved report is STALE",
+  );
+  expect(state.mutate).not.toHaveBeenCalled();
+});
+
+it("does not name a different result as the selected historical event", () => {
+  state.detailId = "different-result";
+  render(<AccountingIntelligence eid="e" area="lead" />);
+  const select = screen.getByRole("combobox", { name: "Result version" });
+  expect(
+    within(select).queryByRole("option", { name: /Selected retained result/ }),
+  ).not.toBeInTheDocument();
+  expect(state.mutate).not.toHaveBeenCalled();
 });

@@ -144,7 +144,9 @@ async def test_uae_preset_is_not_available_for_india(environment):
     prefix = f"/api/v1/regulatory/engagements/{eid}"
     response = await c.get(prefix + "/report-presets", headers=h)
     assert response.status_code == 200 and response.json()["country"] == "IN"
-    assert len(response.json()["items"]) == 2
+    assert {pack["id"] for pack in response.json()["items"]} == {
+        f"india-form26-index:{part}/{version}" for part in ("A", "B") for version in ("1", "2")
+    }
     assert all(p["category"] == "india-tax-audit" for p in response.json()["items"])
     from app.modules.regulatory.report_packs import manifest
 

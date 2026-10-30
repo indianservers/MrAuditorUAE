@@ -1,0 +1,104 @@
+{
+  "contract": "retained-result-selection-and-full-gates-validation/1",
+  "frontend_passed": 375,
+  "focused_backend_api_passed": 39,
+  "checks": {
+    "frontend_types": "passed",
+    "frontend_lint": "passed with existing unused-variable warning",
+    "production_build": "passed",
+    "modified_backend_test_ruff": "passed",
+    "modified_backend_test_format": "passed"
+  },
+  "changes": [
+    "Keep an authorized directly opened result named in the selector when current-history filtering omits it, without changing saved content or review permissions",
+    "Do not substitute a different result ID while a selection is loading",
+    "Require the historical result selector to retain report ID in both expanded browser scenarios",
+    "Check exact India A/1 B/1 A/2 B/2 catalogue versions in the country-isolation HTTP test",
+    "Evaluate future retrieval dates at test execution under a frozen validator clock, avoiding midnight collection/execution races"
+  ],
+  "prior_full_backend_failure": {
+    "source_commit": "2b6653e0e1f46d12a7fc9e63c8dbfdf8d57ec24a",
+    "run_id": 40972345889,
+    "job_id": 123791898797,
+    "passed": 4430,
+    "failed": 2,
+    "skipped": 9,
+    "causes": [
+      "Country-isolation HTTP test still expected two presets instead of four",
+      "Future date computed at collection became today after the long run crossed UTC midnight"
+    ]
+  },
+  "browser_evidence": "docs/phase-12/form26-browser-1bbb5cf.json",
+  "limits": [
+    "All five browser scenarios passed on exact earlier source 1bbb5cf; the new historical-selection follow-up needs separate hosted verification",
+    "Broader full hosted backend gate remains open after the two focused test corrections",
+    "India GST reporting-currency defect is confirmed and separately recorded but runtime correction remains pending",
+    "Real client and statutory/professional qualification remain open"
+  ],
+  "staged_sources": [
+    {
+      "path": ".gitattributes",
+      "sha256": "a2a617df9daee8174d31d8652206d4704c78c72aa3fb708aa353f5d1c2c862ba"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_report_packs.py",
+      "sha256": "53e49b1ea6ca20354cfa713b1430227d986c4223b7149c3e0efde6e4d4dda761"
+    },
+    {
+      "path": "backend/tests/unit/test_regulatory_sources.py",
+      "sha256": "86f664c1f005ebed423a2910ad6cba6ef70cb0fe3aab31633b180e6c8c47d8b3"
+    },
+    {
+      "path": "docs/country-workflows/legal-sources/india-gst-reporting-currency-gap-review.json",
+      "sha256": "88eb2383487d3d9ca720b346a3b673d7f2dde9a101a9dff4b3df4a437b1b1aa3"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-A-final-field-revision-1bbb5cf.png",
+      "sha256": "770f59595e7fc7fd4f299840f4f768fa4e942f6e007240ef60f88c14586d57b4"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-A-generated-current-1bbb5cf.png",
+      "sha256": "1ba0bd5b3224274fe10436910b4d35b9bc4c114054342e16eacf6a56aecc858b"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-A-generated-stale-1bbb5cf.png",
+      "sha256": "3e27f299ac9d626bf97dbe05d34f337c9f82cd0372f0360e6b49ca0583507033"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-B-final-field-revision-1bbb5cf.png",
+      "sha256": "93e5a78866e01889f7fda4a5e3a6cc233fbae264bf56edadd99cd822f09466cf"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-B-generated-current-1bbb5cf.png",
+      "sha256": "0d86c3fcf6c1a51d0739f5180403ec2c2c95519f72ee6ae30e8f0aaee771b81b"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-B-generated-stale-1bbb5cf.png",
+      "sha256": "6cac15d193ea30da6be441c6812cee52d01c45fefb72c0a111907de5c3e407b8"
+    },
+    {
+      "path": "docs/phase-12/form26-browser-1bbb5cf.json",
+      "sha256": "5c2a62df79d060962429a8c1935290f12f352ad3762fceddac1b2352099a526c"
+    },
+    {
+      "path": "docs/phase-12/form26-full-gates-correction.xml",
+      "sha256": "cd23db8229d6f6e9b50f1daa4996042585a0dca902bf3168855d4ad8359526eb"
+    },
+    {
+      "path": "docs/phase-12/retained-result-selection-frontend.xml",
+      "sha256": "c9183ac4c37ca96bb0733c61f9c1d1833b2f6c7ace1077922cb78f14c81e6f6e"
+    },
+    {
+      "path": "frontend/e2e/form26-fields-release.spec.ts",
+      "sha256": "c0b5af8791e3bc6363a6e4e22000849c10f58d0d71fb4aa64d7c874f95c933b0"
+    },
+    {
+      "path": "frontend/src/features/accounting-intelligence.tsx",
+      "sha256": "760318d397072b11548b69f58f0a1a177b01a30d50e3619c75e2732edc6c6086"
+    },
+    {
+      "path": "frontend/tests/generic-matching-candidates.test.tsx",
+      "sha256": "46409f5f4ac1ea23f0f737523bbb9a7b6079ce2e08224ef1cdcb8399f6b0f4ee"
+    }
+  ]
+}

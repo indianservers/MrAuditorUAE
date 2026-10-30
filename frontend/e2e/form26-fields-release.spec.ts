@@ -632,6 +632,9 @@ for (const part of ["A", "B"] as const) {
       expect(stale.body).toEqual(historical);
       await reviewer.reload();
       await expect(
+        reviewer.getByRole("combobox", { name: "Result version", exact: true }),
+      ).toHaveValue(report.id);
+      await expect(
         reviewer.getByText("STALE", { exact: true }).first(),
       ).toBeVisible();
       await reviewer.setViewportSize({ width: 2200, height: 3400 });
