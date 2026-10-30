@@ -1,0 +1,59 @@
+Committed stock and gross-profit comparison — common UAE/India/global arithmetic
+
+Purpose: the stock-audit reference includes current/prior closing-stock movement
+and gross-profit trends, distinct from physical verification and bank drawing
+power. Source reviewed 2026-10-30: https://coraa.ai/solutions/stock-audit . Its FAQ
+expressly excludes drawing-power calculation. This feature addresses its actual
+ledger-side analytical requirement; it does not implement lending calculations.
+
+Contract: committed-inventory-performance/1. Entry: Run workflows, then "Review
+stock and gross-profit trends from committed accounts". POST endpoint:
+/api/v1/intelligence/engagements/{eid}/inventory-performance . Options and account
+selectors expose authorized active committed sources for the same entity. Current
+snapshot must match the engagement period. Prior snapshot must precede it.
+
+Select inventory, revenue and cost-of-sales accounts separately for both periods.
+Each group requires at least one actual retained account (maximum 100), an
+independently entered count and signed amount, and a scope assessment. Selections
+within a period cannot overlap. No account name, country code or chart prefix
+automatically determines a metric. Missing selected accounts or control differences
+are rejected. A zero inventory total requires its own nil/netting assessment and
+actual ledger-account selection; a missing account is never silently zero.
+
+Measurement bases:
+Inventory: debit-normal closing balance.
+Revenue: period credits less debits, excluding opening balances.
+Cost of sales: period debits less credits, excluding opening balances.
+Gross profit: revenue less cost of sales.
+Gross-profit margin: gross profit divided by positive net revenue, times 100.
+Stock change percentage: current minus prior stock, divided by positive prior
+stock, times 100. Gross-profit margin change is in percentage points, not percent.
+Reversals retain their sign. Nonpositive denominators leave percentages null and
+surface a review exception; no zero percentage is invented.
+
+Users explicitly assess period/accounting-policy comparability, display rounding
+and thresholds. Threshold comparison uses unrounded arithmetic and strict greater
+than, before display rounding. There are no UAE/India rate, margin or materiality
+defaults. An assessed-incomparable period or an unbalanced source blocks approval.
+Other analytical exceptions require documented dispositions before independent
+approval. Account/source preparers cannot approve their own output.
+
+The arithmetic observation states the current/prior margin and assessed-threshold
+signal; it does not infer causes or an audit conclusion. Different period lengths
+remain visible and are not silently annualized. Both snapshots use the entity's
+explicit functional currency; no FX conversion or currency relabelling occurs.
+
+All account links retain snapshot ID, account ID/code/name, opening, debit, credit,
+closing and normalized amount. Six independent control records remain separate.
+The UI pages account lineage independently of the five metric rows; all links and
+controls are retained in dedicated XLSX sheets. Raw arithmetic remains in saved
+rows and the full-column view. Source supersession stales the saved result without
+rewriting its body or version.
+
+This is source-account selection arithmetic, not proof of complete classification,
+source-system completeness, physical attendance, inventory condition/title/NRV,
+tax treatment, framework applicability or a statutory audit opinion. Imported TB
+debit/credit semantics still require the existing source mapping and independent
+controls; TB arithmetic is not transaction-level audit evidence. UAE/India legal
+and professional reporting packs remain separate. Real-client pilot qualification
+and the full original roadmap remain open. Authored fixtures are synthetic only.

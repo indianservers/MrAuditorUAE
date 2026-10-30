@@ -2751,6 +2751,40 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/intelligence/engagements/{eid}/inventory-performance": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Inventory Performance */
+        post: operations["inventory_performance_api_v1_intelligence_engagements__eid__inventory_performance_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/intelligence/engagements/{eid}/inventory-performance-options": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Inventory Performance Options */
+        get: operations["inventory_performance_options_api_v1_intelligence_engagements__eid__inventory_performance_options_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/intelligence/engagements/{eid}/turnover-books-composition": {
         parameters: {
             query?: never;
@@ -8029,6 +8063,32 @@ export interface components {
              */
             limit: number;
         };
+        /** InventoryPerformanceInput */
+        InventoryPerformanceInput: {
+            current: components["schemas"]["PeriodSelection"];
+            prior: components["schemas"]["PeriodSelection"];
+            /** Currency */
+            currency: string;
+            /** Periods Comparable */
+            periods_comparable: boolean;
+            /** Comparability Assessment */
+            comparability_assessment: string;
+            /** Stock Change Threshold Percent */
+            stock_change_threshold_percent: number | string;
+            /** Gp Change Threshold Pp */
+            gp_change_threshold_pp: number | string;
+            /** Rounding Places */
+            rounding_places: number;
+            /**
+             * Rounding Method
+             * @enum {string}
+             */
+            rounding_method: "HALF_UP" | "HALF_EVEN";
+            /** Label */
+            label: string;
+            /** Rationale */
+            rationale: string;
+        };
         /** Invite */
         Invite: {
             /**
@@ -8238,6 +8298,22 @@ export interface components {
             status: "active" | "disabled";
             /** Role Ids */
             role_ids: string[];
+        };
+        /** MetricSelection */
+        MetricSelection: {
+            /** Account Ids */
+            account_ids: string[];
+            /** Expected Accounts */
+            expected_accounts: number;
+            /** Expected Amount */
+            expected_amount: number | string;
+            /** Assessment */
+            assessment: string;
+            /**
+             * Nil Inventory Assessment
+             * @default
+             */
+            nil_inventory_assessment: string;
         };
         /** ModelOut */
         ModelOut: {
@@ -8605,6 +8681,17 @@ export interface components {
              * Format: date
              */
             end_date: string;
+        };
+        /** PeriodSelection */
+        PeriodSelection: {
+            /**
+             * Snapshot Id
+             * Format: uuid
+             */
+            snapshot_id: string;
+            inventory: components["schemas"]["MetricSelection"];
+            revenue: components["schemas"]["MetricSelection"];
+            cost_of_sales: components["schemas"]["MetricSelection"];
         };
         /** Permissions */
         Permissions: {
@@ -28054,6 +28141,202 @@ export interface operations {
             };
         };
     };
+    inventory_performance_api_v1_intelligence_engagements__eid__inventory_performance_post: {
+        parameters: {
+            query?: never;
+            header: {
+                "x-tenant-id": string;
+            };
+            path: {
+                eid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["InventoryPerformanceInput"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Request Entity Too Large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
+    inventory_performance_options_api_v1_intelligence_engagements__eid__inventory_performance_options_get: {
+        parameters: {
+            query?: never;
+            header: {
+                "x-tenant-id": string;
+            };
+            path: {
+                eid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": unknown;
+                };
+            };
+            /** @description Unauthorized */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Forbidden */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Conflict */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Request Entity Too Large */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Unprocessable Entity */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Too Many Requests */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+            /** @description Service Unavailable */
+            503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ErrorResponse"];
+                };
+            };
+        };
+    };
     turnover_books_composition_api_v1_intelligence_engagements__eid__turnover_books_composition_post: {
         parameters: {
             query?: never;
@@ -30346,6 +30629,8 @@ export interface operations {
                 excluded_limit?: number;
                 fifo_offset?: number;
                 fifo_limit?: number;
+                inventory_performance_offset?: number;
+                inventory_performance_limit?: number;
                 inventory_offset?: number;
                 inventory_limit?: number;
                 bridge_offset?: number;
@@ -30872,6 +31157,7 @@ export interface operations {
             query: {
                 snapshot_id: string;
                 search?: string;
+                comparative?: boolean;
             };
             header: {
                 "x-tenant-id": string;

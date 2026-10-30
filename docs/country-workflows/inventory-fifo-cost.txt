@@ -77,3 +77,12 @@ historical bytes after original support replacement, with positive/stale capture
 The test is included in playwright.smoke.config.ts. Local discovery, scoped ESLint
 and TypeScript checks passed; hosted execution and screenshot inspection require
 their own run evidence and are not established merely by adding the test.
+
+Hosted FIFO proof for source 29c52fe: browser job 123999353469 in run41036751335
+passed all eight release cases (4.0 minutes); the dedicated UAE then India FIFO
+case passed in 13.2 seconds. Four original reviewed-page/stale captures were
+downloaded and visually inspected, with tested source and original image hashes
+retained in docs/phase-12/inventory-fifo-browser-29c52fe.json. Earlier failures
+remain archived separately. This proof covers original per-row UAE support and
+the explicitly selected shared India packet, complete exports and unchanged
+stale history. It does not certify later stock/GP source changes or real clients.

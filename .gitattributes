@@ -110,3 +110,7 @@ docs/phase-12/c85595c-hosted-coverage.json -text
 docs/phase-12/c85595c-hosted-compliance-runtime-connector.json -text
 docs/phase-12/c85595c-hosted-filing-lifecycle.json -text
 docs/phase-12/c85595c-hosted-worker-recovery.json -text
+
+docs/phase-12/inventory-performance-*.xml -text whitespace=cr-at-eol
+# Preserve verbatim DOM text spacing in the original failed UI diagnostic.
+docs/phase-12/inventory-performance-frontend.xml -text whitespace=-blank-at-eol,cr-at-eol

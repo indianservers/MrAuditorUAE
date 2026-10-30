@@ -1,6 +1,13 @@
 def approval_error(body):
     from app.modules.intelligence.matching_review import saved_candidates_complete
 
+    if body.get("workflow") == "inventory-performance" and (
+        body.get("inventory_performance_contract") != "committed-inventory-performance/1"
+        or body.get("inventory_performance_binding")
+        != "COMMITTED_SNAPSHOT_ACCOUNT_CONTROLS_VERIFIED"
+    ):
+        return "Regenerate stock/GP comparison from current committed snapshots and independent account controls"
+
     if body.get("workflow") == "inventory-fifo-cost" and (
         body.get("inventory_fifo_contract") != "inventory-fifo-cost/1"
         or body.get("inventory_fifo_document_binding") != "RETAINED_DOCUMENT_BYTES_VERIFIED"

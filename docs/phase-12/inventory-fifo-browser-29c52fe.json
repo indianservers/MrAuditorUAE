@@ -1,0 +1,116 @@
+{
+  "scope": "Hosted FIFO source 29c52fe, UAE then India; not later stock/GP work",
+  "head_sha": "29c52fe922a0748a39d3bc61bbcb2a552ff2c239",
+  "run_id": 41036751335,
+  "job_id": 123999353469,
+  "observed_jobs": {
+    "browser-smoke": "completed/success",
+    "frontend": "completed/success",
+    "containers": "completed/success",
+    "security": "completed/success",
+    "ml": "completed/success",
+    "verify": "in_progress at observation; no full-suite pass claimed"
+  },
+  "browser_result": {
+    "passed": 8,
+    "failed": 0,
+    "suite_minutes": 4.0,
+    "new_fifo_case_seconds": 13.2
+  },
+  "archive": {
+    "artifact_id": 12968587731,
+    "bytes": 12307233,
+    "sha256": "1d4176e1013864978c89923a701806f249815d530f5f2cf88f626ed5f0f0d324"
+  },
+  "source_hashes_at_tested_revision": [
+    {
+      "path": "frontend/e2e/inventory-fifo-release.spec.ts",
+      "sha256": "7b338b3087d42b746c73c168f850ff4a0cf011b98db0143cf35bdbeaaf24a880"
+    },
+    {
+      "path": "frontend/playwright.smoke.config.ts",
+      "sha256": "06c7d2c74ba723f6a82553d8cf528ba0e2f00de8a7588dba838d78cf9fcb9b04"
+    },
+    {
+      "path": "frontend/src/features/inventory-fifo-details.tsx",
+      "sha256": "507c4080a1c3f6cea0ec7797accec9f3f23a41bf218b086981fe1692fb6f3f5b"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "e4170ffd206588033bb265281ca7122baa0a8aea184ea2b4b8ea224b34afcece"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/inventory_fifo.py",
+      "sha256": "be1dba8f36f9b127f1e2961530aa3182f6150654b3ca46ecffce6bcaeb8162cc"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/service.py",
+      "sha256": "675ffe810f0e5c036c54db19d95962333888851fc0ca6237f069ddd8e7c7887f"
+    }
+  ],
+  "original_screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-FIFO-reviewed-pages-29c52fe.png",
+      "sha256": "7c2ffb89b0b727743759f45d850cdff64463d6c7f87030b42b3269f65d377ea2",
+      "dimensions": [
+        1921,
+        1028
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-FIFO-original-replaced-stale-29c52fe.png",
+      "sha256": "74160da50dc613cd3fdef5ac1d9b0ace353745fa165369fbe99ad58ccce306a4",
+      "dimensions": [
+        1963,
+        954
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-FIFO-reviewed-pages-29c52fe.png",
+      "sha256": "753ef79c282b5d5b18de47f9de7cf35d3bf64abf5ef594e46b93bfcf6042d173",
+      "dimensions": [
+        1921,
+        1028
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-FIFO-original-replaced-stale-29c52fe.png",
+      "sha256": "1c3a57d289af68d6cca99c60a2c555bdcca0f19dc766b3c4d0bccc70f53e009b",
+      "dimensions": [
+        1963,
+        954
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    }
+  ],
+  "asserted_scope": [
+    "Real BFF login and separate synthetic identities",
+    "AE/AED then IN/INR same code; original per-row evidence for UAE and explicit shared packet for India",
+    "Actual configured ClamAV upload path and real queued worker execution",
+    "Independent source approval; exact source IDs and hashes retained",
+    "UI calculation; author self approval 403; separate reviewer approval 201",
+    "Wait for approved immutable event selection before opening collections",
+    "Allocation page rows21\u201324 and movement page rows21\u201326 independently retained",
+    "Complete XLSX:24 allocations,26 movement rows,1 closing layer,1 control partition",
+    "Original packet replacement makes both historical outputs STALE; exact full saved body/version unchanged",
+    "Stale UI independent approval disabled; no page JavaScript errors"
+  ],
+  "visual_findings": [
+    "Both reviewed captures show O20\u2013O23 allocation rows, last issue quantity24 cost240, closing O24 layer1 unit cost10, source control25 opening units cost250 and rounding HALF_UP/2",
+    "Currency remains AED for AE and INR for IN; no FX or country relabelling",
+    "Both stale captures show REVIEWED and STALE badges, disabled approval and compact closing quantity/cost/difference table"
+  ],
+  "limits": [
+    "Synthetic only; zero real-client pilot approvals",
+    "No legal/framework applicability, physical inventory or audit-opinion qualification",
+    "Original failed runs retained separately; not rewritten or relabelled successful",
+    "Frozen154-case count unchanged; hosted skips/full-suite qualification separate"
+  ]
+}

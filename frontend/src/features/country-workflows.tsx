@@ -70,6 +70,10 @@ import { ImportNilScopeForm, type ImportNilDraft } from "./import-nil-scope";
 import { BankTransactionDates } from "./bank-transaction-dates";
 import { PayrollPostingLinks } from "./payroll-posting-links";
 import { InventoryFIFODetails } from "./inventory-fifo-details";
+import {
+  InventoryPerformance,
+  InventoryPerformanceEvidence,
+} from "./inventory-performance";
 import { InventoryEvidenceTable } from "./inventory-evidence-table";
 import { VATCompositionSource } from "./vat-composition-source";
 import { TurnoverLedgerSource } from "./turnover-ledger-source";
@@ -460,6 +464,10 @@ type Result = {
     fifo_allocations?: Record<string, unknown>[];
     fifo_event_costs?: Record<string, unknown>[];
     fifo_closing_layers?: Record<string, unknown>[];
+    inventory_performance_links?: Record<string, unknown>[];
+    inventory_performance_controls?: Record<string, unknown>[];
+    inventory_performance_scope?: Record<string, unknown>;
+    gp_arithmetic_observation?: string;
     inventory_quantity_controls?: Record<string, unknown>[];
     purchase_quantity_controls?: Record<string, unknown>[];
     limitations?: string[];
@@ -1537,80 +1545,91 @@ export function CountryWorkflows({
                         "state",
                         "reviewer_disposition",
                       ].filter((key) => allColumns.includes(key))
-                    : body?.workflow === "inventory-fifo-cost" &&
+                    : body?.workflow === "inventory-performance" &&
                         !showRuleProvenance
                       ? [
-                          "site",
-                          "sku",
-                          "lot",
-                          "uom",
+                          "metric",
                           "currency",
-                          "expected_closing_quantity",
-                          "book_quantity",
-                          "rounded_fifo_closing_cost",
-                          "rounded_book_gross_cost",
-                          "book_minus_fifo",
+                          "current_display",
+                          "prior_display",
+                          "change_display",
+                          "change_basis",
                           "state",
                         ].filter((key) => allColumns.includes(key))
-                      : body?.workflow === "inventory-valuation-control" &&
+                      : body?.workflow === "inventory-fifo-cost" &&
                           !showRuleProvenance
-                        ? (inventoryView === "gl-controls"
-                            ? [
-                                "account",
-                                "currency",
-                                "recorded_book_value",
-                                "gl_amount",
-                                "difference",
-                                "state",
-                              ]
-                            : [
-                                "site",
-                                "sku",
-                                "lot",
-                                "uom",
-                                "currency",
-                                "book_quantity",
-                                "book_unit_cost",
-                                "assessed_unit_cost",
-                                "book_unit_nrv",
-                                "assessed_unit_nrv",
-                                "recorded_gl_basis_value",
-                                "assessed_lower_cost_nrv_value",
-                                "recorded_minus_assessed_value",
-                                "exceptions",
-                                "state",
-                              ]
-                          ).filter((key) => allColumns.includes(key))
-                        : body?.table_type === "esic-members" &&
+                        ? [
+                            "site",
+                            "sku",
+                            "lot",
+                            "uom",
+                            "currency",
+                            "expected_closing_quantity",
+                            "book_quantity",
+                            "rounded_fifo_closing_cost",
+                            "rounded_book_gross_cost",
+                            "book_minus_fifo",
+                            "state",
+                          ].filter((key) => allColumns.includes(key))
+                        : body?.workflow === "inventory-valuation-control" &&
                             !showRuleProvenance
-                          ? [
-                              "subject",
-                              "member_name",
-                              "period",
-                              "currency",
-                              "amount",
-                              "paid_days",
-                              "zero_wage_reason",
-                              "zero_day_reason",
-                              "last_working_day",
-                              "source_row",
-                            ].filter((key) => allColumns.includes(key))
-                          : body?.workflow === "india-esic-population" &&
+                          ? (inventoryView === "gl-controls"
+                              ? [
+                                  "account",
+                                  "currency",
+                                  "recorded_book_value",
+                                  "gl_amount",
+                                  "difference",
+                                  "state",
+                                ]
+                              : [
+                                  "site",
+                                  "sku",
+                                  "lot",
+                                  "uom",
+                                  "currency",
+                                  "book_quantity",
+                                  "book_unit_cost",
+                                  "assessed_unit_cost",
+                                  "book_unit_nrv",
+                                  "assessed_unit_nrv",
+                                  "recorded_gl_basis_value",
+                                  "assessed_lower_cost_nrv_value",
+                                  "recorded_minus_assessed_value",
+                                  "exceptions",
+                                  "state",
+                                ]
+                            ).filter((key) => allColumns.includes(key))
+                          : body?.table_type === "esic-members" &&
                               !showRuleProvenance
                             ? [
                                 "subject",
-                                "payroll_member_name",
-                                "reported_member_name",
-                                "payroll_amount",
-                                "reported_amount",
-                                "wage_difference",
-                                "payroll_paid_days",
-                                "reported_paid_days",
-                                "paid_day_difference",
-                                "exceptions",
-                                "state",
+                                "member_name",
+                                "period",
+                                "currency",
+                                "amount",
+                                "paid_days",
+                                "zero_wage_reason",
+                                "zero_day_reason",
+                                "last_working_day",
+                                "source_row",
                               ].filter((key) => allColumns.includes(key))
-                            : baseColumns;
+                            : body?.workflow === "india-esic-population" &&
+                                !showRuleProvenance
+                              ? [
+                                  "subject",
+                                  "payroll_member_name",
+                                  "reported_member_name",
+                                  "payroll_amount",
+                                  "reported_amount",
+                                  "wage_difference",
+                                  "payroll_paid_days",
+                                  "reported_paid_days",
+                                  "paid_day_difference",
+                                  "exceptions",
+                                  "state",
+                                ].filter((key) => allColumns.includes(key))
+                              : baseColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -2351,6 +2370,16 @@ export function CountryWorkflows({
             ))}
         </ul>
       </details>
+      {mode === "country-workflow" && (
+        <InventoryPerformance
+          key={`inventory-performance:${eid}`}
+          eid={eid}
+          onCreated={(id) => {
+            setSelected(id);
+            setOffset(0);
+          }}
+        />
+      )}
       {mode === "workflow-source" && config.data?.country === "AE" && (
         <VATCompositionSource
           eid={eid}
@@ -7033,6 +7062,23 @@ export function CountryWorkflows({
               purchase
             />
           )}
+          {body.workflow === "inventory-performance" &&
+            body.inventory_performance_scope && (
+              <InventoryPerformanceEvidence
+                key={`inventory-performance:${selected}`}
+                prefix={prefix}
+                selected={selected}
+                initial={body.inventory_performance_links || []}
+                total={
+                  detail.data.collection_totals?.inventory_performance_links ??
+                  body.inventory_performance_links?.length ??
+                  0
+                }
+                controls={body.inventory_performance_controls || []}
+                scope={body.inventory_performance_scope}
+                observation={body.gp_arithmetic_observation}
+              />
+            )}
           {(body.workflow === "inventory-fifo-cost" ||
             body.table_type === "inventory-cost-movements") && (
             <InventoryFIFODetails
@@ -7545,6 +7591,7 @@ export function CountryWorkflows({
               body.workflow === "payroll-ledger-rollforward" ||
               body.workflow === "inventory-valuation-control" ||
               body.workflow === "inventory-fifo-cost" ||
+              body.workflow === "inventory-performance" ||
               body.workflow === "sanctions-name-review" ||
               body.workflow === "procurement-match" ||
               body.workflow === "party-balance-confirmations" ||

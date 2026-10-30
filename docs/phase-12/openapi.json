@@ -26709,6 +26709,268 @@
         }
       }
     },
+    "/api/v1/intelligence/engagements/{eid}/inventory-performance": {
+      "post": {
+        "tags": [
+          "Accounting intelligence"
+        ],
+        "summary": "Inventory Performance",
+        "operationId": "inventory_performance_api_v1_intelligence_engagements__eid__inventory_performance_post",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "eid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Eid"
+            }
+          },
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "X-Tenant-Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/InventoryPerformanceInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request Entity Too Large"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
+    "/api/v1/intelligence/engagements/{eid}/inventory-performance-options": {
+      "get": {
+        "tags": [
+          "Accounting intelligence"
+        ],
+        "summary": "Inventory Performance Options",
+        "operationId": "inventory_performance_options_api_v1_intelligence_engagements__eid__inventory_performance_options_get",
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "eid",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "Eid"
+            }
+          },
+          {
+            "name": "x-tenant-id",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "title": "X-Tenant-Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unauthorized"
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Forbidden"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Not Found"
+          },
+          "409": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Conflict"
+          },
+          "413": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Request Entity Too Large"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Unprocessable Entity"
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Too Many Requests"
+          },
+          "503": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Service Unavailable"
+          }
+        }
+      }
+    },
     "/api/v1/intelligence/engagements/{eid}/turnover-books-composition": {
       "post": {
         "tags": [
@@ -30026,6 +30288,29 @@
             }
           },
           {
+            "name": "inventory_performance_offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 0,
+              "title": "Inventory Performance Offset"
+            }
+          },
+          {
+            "name": "inventory_performance_limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 100,
+              "minimum": 1,
+              "default": 20,
+              "title": "Inventory Performance Limit"
+            }
+          },
+          {
             "name": "inventory_offset",
             "in": "query",
             "required": false,
@@ -31103,6 +31388,16 @@
               "maxLength": 100,
               "default": "",
               "title": "Search"
+            }
+          },
+          {
+            "name": "comparative",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Comparative"
             }
           },
           {
@@ -62358,6 +62653,97 @@
         ],
         "title": "Inference"
       },
+      "InventoryPerformanceInput": {
+        "properties": {
+          "current": {
+            "$ref": "#/components/schemas/PeriodSelection"
+          },
+          "prior": {
+            "$ref": "#/components/schemas/PeriodSelection"
+          },
+          "currency": {
+            "type": "string",
+            "pattern": "^[A-Z]{3}$",
+            "title": "Currency"
+          },
+          "periods_comparable": {
+            "type": "boolean",
+            "title": "Periods Comparable"
+          },
+          "comparability_assessment": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 10,
+            "title": "Comparability Assessment"
+          },
+          "stock_change_threshold_percent": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Stock Change Threshold Percent"
+          },
+          "gp_change_threshold_pp": {
+            "anyOf": [
+              {
+                "type": "number",
+                "minimum": 0.0
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Gp Change Threshold Pp"
+          },
+          "rounding_places": {
+            "type": "integer",
+            "maximum": 8.0,
+            "minimum": 0.0,
+            "title": "Rounding Places"
+          },
+          "rounding_method": {
+            "type": "string",
+            "enum": [
+              "HALF_UP",
+              "HALF_EVEN"
+            ],
+            "title": "Rounding Method"
+          },
+          "label": {
+            "type": "string",
+            "maxLength": 200,
+            "minLength": 3,
+            "title": "Label"
+          },
+          "rationale": {
+            "type": "string",
+            "maxLength": 4000,
+            "minLength": 10,
+            "title": "Rationale"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "current",
+          "prior",
+          "currency",
+          "periods_comparable",
+          "comparability_assessment",
+          "stock_change_threshold_percent",
+          "gp_change_threshold_pp",
+          "rounding_places",
+          "rounding_method",
+          "label",
+          "rationale"
+        ],
+        "title": "InventoryPerformanceInput"
+      },
       "Invite": {
         "properties": {
           "email": {
@@ -62831,6 +63217,58 @@
           "role_ids"
         ],
         "title": "MemberUpdate"
+      },
+      "MetricSelection": {
+        "properties": {
+          "account_ids": {
+            "items": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "type": "array",
+            "maxItems": 100,
+            "minItems": 1,
+            "title": "Account Ids"
+          },
+          "expected_accounts": {
+            "type": "integer",
+            "maximum": 100.0,
+            "minimum": 1.0,
+            "title": "Expected Accounts"
+          },
+          "expected_amount": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Expected Amount"
+          },
+          "assessment": {
+            "type": "string",
+            "maxLength": 2000,
+            "minLength": 10,
+            "title": "Assessment"
+          },
+          "nil_inventory_assessment": {
+            "type": "string",
+            "maxLength": 2000,
+            "title": "Nil Inventory Assessment",
+            "default": ""
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "account_ids",
+          "expected_accounts",
+          "expected_amount",
+          "assessment"
+        ],
+        "title": "MetricSelection"
       },
       "ModelOut": {
         "properties": {
@@ -63864,6 +64302,33 @@
           "end_date"
         ],
         "title": "PeriodOut"
+      },
+      "PeriodSelection": {
+        "properties": {
+          "snapshot_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Snapshot Id"
+          },
+          "inventory": {
+            "$ref": "#/components/schemas/MetricSelection"
+          },
+          "revenue": {
+            "$ref": "#/components/schemas/MetricSelection"
+          },
+          "cost_of_sales": {
+            "$ref": "#/components/schemas/MetricSelection"
+          }
+        },
+        "additionalProperties": false,
+        "type": "object",
+        "required": [
+          "snapshot_id",
+          "inventory",
+          "revenue",
+          "cost_of_sales"
+        ],
+        "title": "PeriodSelection"
       },
       "Permissions": {
         "properties": {

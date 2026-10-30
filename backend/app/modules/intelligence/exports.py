@@ -194,6 +194,10 @@ def render(event, format):
             "service_calendar_basis",
             "reserve_control_receipts",
             "inventory_fifo_contract",
+            "inventory_performance_contract",
+            "inventory_performance_binding",
+            "inventory_performance_scope",
+            "gp_arithmetic_observation",
             "inventory_fifo_scope",
             "inventory_fifo_document_binding",
             "annual_statement_scope_contract",
@@ -231,6 +235,8 @@ def render(event, format):
         )
     for field in (
         "fifo_allocations",
+        "inventory_performance_links",
+        "inventory_performance_controls",
         "fifo_event_costs",
         "fifo_closing_layers",
         "inventory_fifo_controls",
@@ -939,6 +945,8 @@ def render(event, format):
                 for link in body["payroll_posting_links"]:
                     append(posting_links, [link.get(key) for key in posting_fields])
             for field, title in (
+                ("inventory_performance_links", "Stock GP account lineage"),
+                ("inventory_performance_controls", "Stock GP source controls"),
                 ("fifo_allocations", "FIFO allocations"),
                 ("fifo_event_costs", "FIFO events"),
                 ("fifo_closing_layers", "FIFO closing layers"),

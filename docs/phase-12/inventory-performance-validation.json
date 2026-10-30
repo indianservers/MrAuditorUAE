@@ -1,0 +1,170 @@
+{
+  "scope": "Committed stock/GP account comparison and separately scoped FIFO browser archive",
+  "base_commit": "29c52fe922a0748a39d3bc61bbcb2a552ff2c239",
+  "hash_basis": "Exact staged Git blobs; original XML/PNG bytes preserved, including genuine DOM trailing spaces in the failed UI diagnostic",
+  "sources": [
+    {
+      "path": ".gitattributes",
+      "sha256": "3f55561b29876ebf9bbc27ed3406fbcc69ccd3ae18b9e3fa079f630ea968fb21"
+    },
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "sha256": "babbab80c49ed9dcdee25fa9df6fc5da7ec290f03d06d2f37badb90e1307d6d6"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/inventory_performance.py",
+      "sha256": "949ce7d599e131a8647c9326bc52e44e6ff538a1899e963396aec854db7d83bc"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/review.py",
+      "sha256": "5f91bf7dae390ed657a6508006712c1d6776d0717a310cdfeb06e8d2ed6d304b"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "sha256": "2a48cf7a707f7a7d19126c0d37cf4b516103bcee3314d1089837a4df653c08a8"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_inventory_performance.py",
+      "sha256": "a8a13f64774393d5f2e9edaf88571237c9c10675b455e52df220e05978fdfacc"
+    },
+    {
+      "path": "backend/tests/unit/test_inventory_performance.py",
+      "sha256": "dea4e465412de0e0b956b4172f1f1f5fa453a13e66d08fb51acfea790c2bc75a"
+    },
+    {
+      "path": "docs/country-workflows/inventory-fifo-cost.txt",
+      "sha256": "480cfc94e253f2510849de070bafabb52033052edc0e6005816baacd3ef7f625"
+    },
+    {
+      "path": "docs/country-workflows/inventory-performance.txt",
+      "sha256": "51c3af7154f59f79988ae69d1c6a453af3710d9a1d20263869ac7da28d479297"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-FIFO-original-replaced-stale-29c52fe.png",
+      "sha256": "74160da50dc613cd3fdef5ac1d9b0ace353745fa165369fbe99ad58ccce306a4"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-FIFO-reviewed-pages-29c52fe.png",
+      "sha256": "7c2ffb89b0b727743759f45d850cdff64463d6c7f87030b42b3269f65d377ea2"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-FIFO-original-replaced-stale-29c52fe.png",
+      "sha256": "1c3a57d289af68d6cca99c60a2c555bdcca0f19dc766b3c4d0bccc70f53e009b"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-FIFO-reviewed-pages-29c52fe.png",
+      "sha256": "753ef79c282b5d5b18de47f9de7cf35d3bf64abf5ef594e46b93bfcf6042d173"
+    },
+    {
+      "path": "docs/phase-12/inventory-fifo-browser-29c52fe.json",
+      "sha256": "83dde6db4b3a832a0bdd2b6d740ea6665301c41d3b094252ddb9342a8c8bf125"
+    },
+    {
+      "path": "docs/phase-12/openapi.json",
+      "sha256": "2a403fd2bd95132dfbc44ed0e30940d230fc490d3a12d96cc50bc82768bc2a09"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "ba84b890292d88972df2b9122a4ebdb82f6be0f2a7c5d80c65252ec5d8ec92db"
+    },
+    {
+      "path": "frontend/src/features/inventory-performance.tsx",
+      "sha256": "c095b1a1ff251f2e646deb50fc76bdd45e69825ba75222e563ecfb7ca0cb52d2"
+    },
+    {
+      "path": "frontend/src/types/api.generated.ts",
+      "sha256": "58e6635fe90d0bb4193621d71b5c1ad194cc4ff9e659a4360841abc233cbcf72"
+    },
+    {
+      "path": "frontend/tests/inventory-performance.test.tsx",
+      "sha256": "98892b7a44a43ce707bcc865c7ac541652b5a9f6e71b8e252cc76874bb232e05"
+    }
+  ],
+  "original_test_receipts": [
+    {
+      "path": "docs/phase-12/inventory-performance-api.xml",
+      "sha256": "0b1a3f70f869e39efb3144254ff63f23708db69b4fc9c78dfca955fc2dde9dcb",
+      "totals": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "docs/phase-12/inventory-performance-frontend-all.xml",
+      "sha256": "2d580ebbc7b0d242b187d5367ef62da60f8bc087ef10bd3b0c6e7d4858386629",
+      "totals": {
+        "tests": 414,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "docs/phase-12/inventory-performance-frontend-final.xml",
+      "sha256": "cbbda748b1bff342197c6d23e7d55a394c507dec4d1e30af595331467d765ecc",
+      "totals": {
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "docs/phase-12/inventory-performance-frontend.xml",
+      "sha256": "5682a995d9b8438c2c7f87044bd4a9e757ea1805e4dbcecc8d823b9d260ef004",
+      "totals": {
+        "tests": 140,
+        "failures": 1,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "docs/phase-12/inventory-performance-regression.xml",
+      "sha256": "6b4e695e2874bef3bcdc5e897c7266546d4447873ce5d0d346d030c13de4e39e",
+      "totals": {
+        "tests": 3777,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 4
+      }
+    },
+    {
+      "path": "docs/phase-12/inventory-performance-unit.xml",
+      "sha256": "5b6626ec89cdd6c5e3ee1a3830f2e6d84c60d3e4d5d2e521bce1b10de09bf7cf",
+      "totals": {
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "verification": {
+    "backend_regression": "3773 passed,4 skipped: all backend units plus stock/GP and FIFO database/API workflows",
+    "new_backend_focus": "15 units and two actual committed-ledger API cases, AE/AED and IN/INR",
+    "frontend_all": "414 passed in77 files",
+    "frontend_initial_failure": "139 passed,1 failed: zero-cell query ambiguous across control and lineage tables. Scoped assertion to lineage. Original receipt retained; six focused and full414 then passed.",
+    "static": "Ruff and six-file formatting check passed; mypy415; frontend types/generated API check passed; lint0 errors with pre-existing unused _ warning in uae-business-cases.tsx:143; Next.js16.4.2 build passed",
+    "contracts": "Runtime OpenAPI and frontend types regenerated; generic job schema unchanged",
+    "fifo_browser": "Separate revision29c52fe:8 passed; dedicated UAE/India case13.2s; four original captures inspected and retained",
+    "stock_gp_browser": "No actual browser execution or screenshot of new stock/GP UI claimed; frontend tests and real API coverage only"
+  },
+  "new_api_assertions": [
+    "Independent current/prior inventory/revenue/COGS account counts and signed amounts",
+    "Closing stock versus signed period flow; openings excluded from GP",
+    "Same authorized entity,current engagement period and earlier comparative; actual functional currency",
+    "Wrong amount,missing account and wrong currency rejected",
+    "Self approval403; separate independent reviewer approval201",
+    "Complete account/control XLSX and independent account-link pagination",
+    "Prior batch supersession stales result without changing body/version; stale approval409"
+  ],
+  "qualification": [
+    "Explicit committed account selection only; no complete source-system or financial-statement population claim",
+    "No physical inventory/title/NRV,statutory opinion,country legal corpus or provider qualification",
+    "Zero/negative percentage denominators stay null; analytic exceptions require disposition",
+    "Full original goal active; frozen154 authored scenarios unchanged; zero real-client approvals supplied"
+  ]
+}

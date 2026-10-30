@@ -23,6 +23,7 @@ from app.modules.country_workflows.benefit_settlement_source import BenefitSettl
 from app.modules.country_workflows.benefit_source import BenefitSourceInput
 from app.modules.country_workflows.contribution_source import ContributionSourceInput
 from app.modules.country_workflows.import_vat_source import ImportVATSourceInput
+from app.modules.country_workflows.inventory_performance import InventoryPerformanceInput
 from app.modules.country_workflows.payroll_proration_source import ProratedBasisInput
 from app.modules.country_workflows.payroll_source import PayrollSourceInput, PensionSourceInput
 from app.modules.country_workflows.savings_reported_source import SavingsReportedInput
@@ -126,6 +127,61 @@ async def turnover_ledger_source(
 
     eng = await service.scope(db, ctx, eid, "workflow-ledger", True)
     return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))
+
+
+@router.post("/engagements/{eid}/inventory-performance", status_code=201)
+async def inventory_performance(
+    eid: uuid.UUID, data: InventoryPerformanceInput, db: DB, ctx: Actor, request: Request
+):
+    from app.modules.country_workflows.inventory_performance import prepare
+
+    eng = await service.scope(db, ctx, eid, "workflow-ledger", True)
+    return audit.serialize(await prepare(db, ctx, eng, data, request.state.request_id))
+
+
+@router.get("/engagements/{eid}/inventory-performance-options")
+async def inventory_performance_options(eid: uuid.UUID, db: DB, ctx: Actor):
+    from app.db.models.platform import FinancialPeriod, LegalEntity
+    from app.modules.accounting.models import ImportBatch, ImportSnapshot
+
+    eng = await service.scope(db, ctx, eid)
+    await engagement_permissions(db, ctx, eid, "accounting.read")
+    period = await db.get(FinancialPeriod, eng.period_id)
+    entity = await db.get(LegalEntity, eng.entity_id)
+    if not entity or not period:
+        raise HTTPException(422, "Retained entity and financial period required")
+    result: dict = {"currency": entity.functional_currency, "limit": 100, "truncated": {}}
+    for side in ("current", "prior"):
+        rows = (
+            await db.execute(
+                select(ImportSnapshot, FinancialPeriod, ImportBatch.kind)
+                .join(ImportBatch, ImportBatch.id == ImportSnapshot.batch_id)
+                .join(FinancialPeriod, FinancialPeriod.id == ImportSnapshot.period_id)
+                .where(
+                    ImportSnapshot.tenant_id == ctx.tenant_id,
+                    ImportSnapshot.entity_id == eng.entity_id,
+                    FinancialPeriod.entity_id == eng.entity_id,
+                    ImportBatch.status == "active",
+                    ImportBatch.kind.in_(["gl", "journals", "tb"]),
+                    ImportSnapshot.period_id == eng.period_id
+                    if side == "current"
+                    else FinancialPeriod.end_date < period.start_date,
+                )
+                .order_by(FinancialPeriod.end_date.desc(), ImportSnapshot.created_at.desc())
+                .limit(101)
+            )
+        ).all()
+        result[side] = [
+            {
+                "id": str(snapshot.id),
+                "label": f"{source_kind} {window.start_date} – {window.end_date} · {snapshot.id}",
+                "start": window.start_date.isoformat(),
+                "end": window.end_date.isoformat(),
+            }
+            for snapshot, window, source_kind in rows[:100]
+        ]
+        result["truncated"][side] = len(rows) > 100
+    return result
 
 
 @router.post("/engagements/{eid}/turnover-books-composition", status_code=201)
@@ -847,6 +903,8 @@ async def event_details(
     excluded_limit: int = Query(100, ge=1, le=500),
     fifo_offset: int = Query(0, ge=0),
     fifo_limit: int = Query(20, ge=1, le=100),
+    inventory_performance_offset: int = Query(0, ge=0),
+    inventory_performance_limit: int = Query(20, ge=1, le=100),
     inventory_offset: int = Query(0, ge=0),
     inventory_limit: int = Query(100, ge=1, le=500),
     bridge_offset: int = Query(0, ge=0),
@@ -924,6 +982,7 @@ async def event_details(
         ("confirmation_coverage_links", confirmation_link_offset, confirmation_link_limit),
         ("purchase_quantity_controls", purchase_offset, purchase_limit),
         ("fifo_allocations", fifo_offset, fifo_limit),
+        ("inventory_performance_links", inventory_performance_offset, inventory_performance_limit),
         ("fifo_event_costs", fifo_offset, fifo_limit),
         ("fifo_closing_layers", fifo_offset, fifo_limit),
         ("inventory_fifo_controls", fifo_offset, fifo_limit),
@@ -1140,13 +1199,14 @@ async def account_choices(
     db: DB,
     ctx: Actor,
     search: str = Query("", max_length=100),
+    comparative: bool = False,
 ):
     from sqlalchemy import or_
 
     from app.modules.accounting.models import Account, SourceRecord
 
     eng = await service.scope(db, ctx, eid)
-    snap, _ = await service.snapshot(db, ctx, eng, snapshot_id)
+    snap, _ = await service.snapshot(db, ctx, eng, snapshot_id, comparative)
     query = select(Account).where(
         Account.tenant_id == ctx.tenant_id,
         Account.entity_id == eng.entity_id,

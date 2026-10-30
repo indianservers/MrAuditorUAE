@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="6" failures="0" errors="0" time="1.7557567">
+    <testsuite name="tests/inventory-performance.test.tsx" timestamp="2026-10-30T10:16:05.010Z" hostname="DESKTOP-B3SR465" tests="6" failures="0" errors="0" skipped="0" time="1.7557567">
+        <testcase classname="tests/inventory-performance.test.tsx" name="committed stock and gross-profit scope &gt; retains the entity functional currency AED without legal or account defaults" time="0.5819935">
+        </testcase>
+        <testcase classname="tests/inventory-performance.test.tsx" name="committed stock and gross-profit scope &gt; retains the entity functional currency INR without legal or account defaults" time="0.3396821">
+        </testcase>
+        <testcase classname="tests/inventory-performance.test.tsx" name="committed stock and gross-profit scope &gt; retains the entity functional currency USD without legal or account defaults" time="0.3287146">
+        </testcase>
+        <testcase classname="tests/inventory-performance.test.tsx" name="committed stock and gross-profit scope &gt; retains selected accounts outside the search and clears scopes on snapshot change" time="0.3032816">
+        </testcase>
+        <testcase classname="tests/inventory-performance.test.tsx" name="committed stock and gross-profit scope &gt; requires an explicit zero inventory assessment before accepting a zero control" time="0.1515268">
+        </testcase>
+        <testcase classname="tests/inventory-performance.test.tsx" name="committed stock and gross-profit scope &gt; pages complete account lineage without hiding zero or changing controls" time="0.0482826">
+        </testcase>
+    </testsuite>
+</testsuites>
