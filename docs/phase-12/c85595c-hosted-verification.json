@@ -1,0 +1,64 @@
+{
+  "scope": "Full hosted evidence for c85595c cross-border obligation source; not verification of later FIFO changes",
+  "head_sha": "c85595c7db6047b4e19084669fe35bd2a69b651c",
+  "run_id": 41003324115,
+  "verify_job_id": 123892489892,
+  "all_six_jobs_observed": "completed/success",
+  "archive": {
+    "artifact_id": 12958375382,
+    "bytes": 233896,
+    "sha256": "309a990c1c9945502cd931bcd9a9eb834f2f9f320f8d87f078cc77dff0f4f65c"
+  },
+  "original_receipts": [
+    {
+      "entry": "backend/verification-results.xml",
+      "path": "docs/phase-12/c85595c-hosted-full.xml",
+      "bytes": 713627,
+      "sha256": "53425158b9937b51b202c4141d028698a318d127b6bec68ee5744d826890e26e"
+    },
+    {
+      "entry": "backend/coverage.json",
+      "path": "docs/phase-12/c85595c-hosted-coverage.json",
+      "bytes": 1818088,
+      "sha256": "a602e8da99fcb312739fbed575e2483d8fe6710bdd254111a2cfe791c23fa0fe"
+    },
+    {
+      "entry": ".local-runtime/ci-verification/operations/compliance-runtime-connector.json",
+      "path": "docs/phase-12/c85595c-hosted-compliance-runtime-connector.json",
+      "bytes": 5196,
+      "sha256": "0b249e3dc18c4cf510a3e03908fa8f1c6a861d62b4e36066cea72edefae190c8"
+    },
+    {
+      "entry": ".local-runtime/ci-verification/operations/filing-lifecycle.json",
+      "path": "docs/phase-12/c85595c-hosted-filing-lifecycle.json",
+      "bytes": 3070,
+      "sha256": "39c45db6ed0d27e1f57552e6329ee6af9341493c4c64e8f86d97a1f368601d08"
+    },
+    {
+      "entry": ".local-runtime/ci-verification/operations/worker-recovery.json",
+      "path": "docs/phase-12/c85595c-hosted-worker-recovery.json",
+      "bytes": 218,
+      "sha256": "1f87e67f62c237062a9d3655c9f0257257ad6b8333d3ec8e627fa11fd92318db"
+    }
+  ],
+  "backend": {
+    "passed": 4643,
+    "skipped": 9,
+    "failures": 0,
+    "errors": 0,
+    "junit_seconds": 5453.191,
+    "coverage_percent": 86.67426532533823,
+    "core_coverage": "831/930 = 89.35% per completed job log"
+  },
+  "skip_scope": "Four authorized live-provider tests, four isolated connector DB tests and one Windows-only worker test; not counted as passing here",
+  "operations_assertions": [
+    "Unresolved obligation retains deadline null",
+    "Connector simulated, failed partial-page completeness and live_qualified false",
+    "No external requests or filing submission",
+    "Acknowledged record stales after source correction",
+    "Duplicate reminders suppressed",
+    "Abandoned worker claim requires manual retry; pending outbox dispatch 1; no automatic reexecution"
+  ],
+  "browser_evidence": "Previously archived separately in foreign-obligation-browser-c85595c.json and original screenshot files; this archive adds complete backend evidence",
+  "qualification": "Synthetic only; no real-client or legal/provider qualification; full roadmap remains incomplete"
+}

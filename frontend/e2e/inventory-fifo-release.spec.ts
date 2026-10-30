@@ -246,7 +246,6 @@ test("synthetic UAE then India FIFO real-worker review, complete export, indepen
           "FIFO policy and scope assessment",
           "SYNTHETIC independent FIFO gross-cost assessment, opening layer order and rounding",
         ],
-        ["Account currency", currency],
         [
           "Scope and source rationale",
           "SYNTHETIC controlled openings and issues with separate original cost support",

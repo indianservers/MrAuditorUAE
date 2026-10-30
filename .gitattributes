@@ -104,3 +104,9 @@ docs/phase-12/annual-portal-label-*.xml -text whitespace=cr-at-eol
 docs/phase-12/annual-portal-label-regression.xml -text whitespace=-blank-at-eol,cr-at-eol
 
 docs/phase-12/inventory-fifo-*.xml -text whitespace=cr-at-eol
+
+docs/phase-12/c85595c-hosted-full.xml -text whitespace=cr-at-eol
+docs/phase-12/c85595c-hosted-coverage.json -text
+docs/phase-12/c85595c-hosted-compliance-runtime-connector.json -text
+docs/phase-12/c85595c-hosted-filing-lifecycle.json -text
+docs/phase-12/c85595c-hosted-worker-recovery.json -text
