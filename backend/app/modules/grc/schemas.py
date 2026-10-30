@@ -620,11 +620,16 @@ class Obligation(Body):
                 raise ValueError("Declared deadline differs from versioned calculation")
             self.deadline = computed
         business_days = self.deadline_rule and self.deadline_rule.day_count_basis == "business"
+        rolling = self.deadline_rule and self.deadline_rule.rolling_calendar is not None
         if business_days and (
             not self.calendar_evidence_id or self.calendar_evidence_id == self.rule_evidence_id
         ):
             raise ValueError("Business-day deadlines require separate retained calendar evidence")
-        if self.calendar_evidence_id and not business_days:
+        if rolling and (
+            not self.calendar_evidence_id or self.calendar_evidence_id == self.rule_evidence_id
+        ):
+            raise ValueError("Rolling deadlines require separate retained calendar evidence")
+        if self.calendar_evidence_id and not business_days and not rolling:
             raise ValueError("Calendar evidence belongs to an explicit business-day deadline")
         if self.extension_deadline and (
             not self.extension_evidence_id

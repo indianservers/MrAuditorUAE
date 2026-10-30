@@ -18,8 +18,9 @@ pytestmark = pytest.mark.skipif(
 
 
 @pytest.mark.parametrize("country,timezone", [("AE", "Asia/Dubai"), ("IN", "Asia/Kolkata")])
+@pytest.mark.parametrize("calendar_mode", ["count_business_days", "roll_calendar_date"])
 async def test_business_calendar_requires_independent_evidence_and_stales_filing(
-    environment, monkeypatch, country, timezone
+    environment, monkeypatch, country, timezone, calendar_mode
 ):
     c = environment
     double_boundaries(monkeypatch)
@@ -82,6 +83,28 @@ async def test_business_calendar_requires_independent_evidence_and_stales_filing
         "filing_stage": "preparing",
     }
 
+    expected = "2026-07-06"
+    if calendar_mode == "roll_calendar_date":
+        body["deadline_rule"] = {
+            "identifier": "SYNTHETIC-five-calendar-days-then-roll",
+            "version": 1,
+            "effective_from": "2026-01-01",
+            "trigger": "2026-06-26",
+            "date_basis": "specified_event",
+            "days_after": 5,
+            "timezone": timezone,
+            "convention": "following",
+            "rolling_calendar": {
+                "coverage_start": "2026-06-01",
+                "coverage_end": "2026-07-31",
+                "weekend_days": [5, 6],
+                "holidays": ["2026-07-01", "2026-07-02"],
+                "independent_holiday_count": 2,
+                "assessment": "SYNTHETIC independently assessed rolling calendar only",
+            },
+        }
+        expected = "2026-07-03"
+
     async def post(value):
         return await c.post(
             base + "/records/obligation",
@@ -93,13 +116,18 @@ async def test_business_calendar_requires_independent_evidence_and_stales_filing
             },
         )
 
+    if calendar_mode == "roll_calendar_date":
+        assert (await post({**body, "calendar_evidence_id": None})).status_code == 422
+        assert (
+            await post({**body, "calendar_evidence_id": originals["rule"]["id"]})
+        ).status_code == 422
     denied = await post(body)
     assert denied.status_code == 409, denied.text
     originals["calendar"] = await approve(c, h, reviewer[0], audit_base, originals["calendar"])
     created = await post(body)
     assert created.status_code == 201, created.text
     obj = created.json()
-    assert obj["body"]["deadline"] == "2026-07-06"
+    assert obj["body"]["deadline"] == expected
     staged = await c.post(
         base + f"/obligations/{obj['id']}/filing-stage",
         headers=h,
@@ -121,6 +149,7 @@ async def test_business_calendar_requires_independent_evidence_and_stales_filing
     calendar = await c.get(base + f"/compliance-calendar?record_id={obj['id']}", headers=h)
     assert calendar.status_code == 200, calendar.text
     assert calendar.json()["items"][0]["freshness"] == "STALE"
+    assert calendar.json()["items"][0]["deadline"] == expected
     assert calendar.json()["items"][0]["reassessment_required"] is True
     denied = await c.post(
         base + f"/obligations/{obj['id']}/filing-stage",

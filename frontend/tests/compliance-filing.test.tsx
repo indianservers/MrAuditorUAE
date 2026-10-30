@@ -20,6 +20,53 @@ const paper: Paper = {
 };
 beforeEach(() => mock.mutate.mockClear());
 
+it.each([2, 0, undefined])(
+  "retains the rolling calendar scope, evidence and holiday control (%s)",
+  (count) => {
+    render(
+      <ComplianceFiling
+        base="grc/engagements/scoped"
+        paper={{
+          ...paper,
+          body: {
+            filing_stage: "preparing",
+            deadline: "2026-07-03",
+            calendar_evidence_id: "SYN-independent-calendar",
+            deadline_rule: {
+              convention: "following",
+              rolling_calendar: {
+                coverage_start: "2026-06-01",
+                coverage_end: "2026-07-31",
+                weekend_days: [5, 6],
+                holidays: count === 2 ? ["2026-07-01", "2026-07-02"] : [],
+                independent_holiday_count: count,
+                assessment: "SYNTHETIC complete reviewed operating calendar",
+              },
+            },
+          },
+        }}
+      />,
+    );
+    const section = screen.getByRole("region", {
+      name: "Deadline adjustment calendar",
+    });
+    expect(section).toHaveTextContent("following adjustment");
+    expect(section).toHaveTextContent("2026-06-01 to 2026-07-31");
+    expect(section).toHaveTextContent("Saturday, Sunday");
+    expect(section).toHaveTextContent("SYN-independent-calendar");
+    expect(section).toHaveTextContent(
+      "national holidays and legal applicability require independent review",
+    );
+    expect(section).toHaveTextContent(
+      count === 2
+        ? "2026-07-01, 2026-07-02"
+        : count === 0
+          ? "Explicitly none"
+          : "Empty list without an independent zero control",
+    );
+  },
+);
+
 it.each(["AE", "IN"])(
   "shows month-end preservation only when explicitly declared for %s",
   (country) => {

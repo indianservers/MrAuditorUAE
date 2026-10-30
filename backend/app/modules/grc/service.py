@@ -154,7 +154,7 @@ async def validate_body(db, ctx, eng, kind, data, record_id=None):
         checked_evidence[rid] = await evidence(db, ctx, eng.id, uuid.UUID(rid))
     if key == "obligation" and data.calendar_evidence_id:
         if checked_evidence[str(data.calendar_evidence_id)].kind != "evidence":
-            raise HTTPException(422, "Business-day calendar requires original retained evidence")
+            raise HTTPException(422, "Deadline calendars require original retained evidence")
     if key == "obligation" and data.dmcc_audit_scope:
         from app.modules.grc.dmcc_audit import verify_sources
 

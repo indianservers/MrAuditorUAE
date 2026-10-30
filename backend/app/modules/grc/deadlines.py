@@ -103,6 +103,9 @@ class DeadlineRule(Strict):
     business_calendar: BusinessDayCalendar | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
+    rolling_calendar: BusinessDayCalendar | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
     later_of: list[DeadlineCandidate] = Field(
         default_factory=list, max_length=8, exclude_if=lambda value: not value
     )
@@ -117,7 +120,7 @@ class DeadlineRule(Strict):
             explicit_calendar_date(value.get("trigger"))
             if type(value.get("days_after")) is not int:
                 raise ValueError("Business-day offsets require an explicit integer")
-        if isinstance(value, dict) and value.get("later_of"):
+        if isinstance(value, dict) and (value.get("later_of") or value.get("rolling_calendar")):
             explicit_calendar_date(value.get("trigger"))
             if any(
                 type(value.get(field, 0)) is not int for field in ("months_after", "days_after")
@@ -143,7 +146,10 @@ class DeadlineRule(Strict):
             self.weekend_days
         ):
             raise ValueError("Distinct weekday numbers 0 through 6 required")
-        if self.convention != "calendar" and (not self.weekend_days or len(self.weekend_days) == 7):
+        weekends = (
+            self.rolling_calendar.weekend_days if self.rolling_calendar else self.weekend_days
+        )
+        if self.convention != "calendar" and (not weekends or len(weekends) == 7):
             raise ValueError("Explicit usable working-week convention required")
         if self.day_count_basis == "business":
             if (
@@ -155,6 +161,7 @@ class DeadlineRule(Strict):
                 or self.weekend_days
                 or self.holidays
                 or self.month_end_policy != "clamp"
+                or self.rolling_calendar is not None
             ):
                 raise ValueError(
                     "Business-day counting requires its complete calendar, positive day offset and no mixed month/rolling convention"
@@ -167,6 +174,15 @@ class DeadlineRule(Strict):
                 raise ValueError("Business calendar must cover the explicit triggering event")
         elif self.business_calendar is not None or self.business_trigger_policy is not None:
             raise ValueError("A business calendar applies only to explicit business-day counting")
+        if self.rolling_calendar is not None and (
+            self.day_count_basis != "calendar"
+            or self.convention == "calendar"
+            or self.weekend_days
+            or self.holidays
+        ):
+            raise ValueError(
+                "A rolling calendar requires following/preceding calendar offsets without duplicate working-week or holiday lists"
+            )
         if self.later_of:
             if self.day_count_basis != "calendar":
                 raise ValueError("Later-of candidates require calendar offsets before date rolling")
@@ -186,6 +202,8 @@ class DeadlineRule(Strict):
                 )
         if self.day_count_basis == "calendar":
             calendar_offset(self.trigger, self.months_after, self.days_after, self.month_end_policy)
+        if self.rolling_calendar is not None:
+            calculate(self)
         return self
 
 
@@ -223,14 +241,24 @@ def calculate(rule: DeadlineRule):
         )
         for candidate in candidates(rule)
     )
+    rolling = rule.rolling_calendar
+    excluded_weekdays = set(rolling.weekend_days if rolling else rule.weekend_days)
+    excluded_holidays = set(rolling.holidays if rolling else rule.holidays)
     for _ in range(370):
+        if rolling and not rolling.coverage_start <= result <= rolling.coverage_end:
+            raise ValueError("Rolling calendar coverage cannot establish the complete deadline")
         if (
             rule.convention == "calendar"
-            or result.weekday() not in rule.weekend_days
-            and result not in rule.holidays
+            or result.weekday() not in excluded_weekdays
+            and result not in excluded_holidays
         ):
             return result
-        result += timedelta(days=1 if rule.convention == "following" else -1)
+        try:
+            result += timedelta(days=1 if rule.convention == "following" else -1)
+        except OverflowError as exc:
+            raise ValueError(
+                "Calendar adjustment exceeds the supported calendar date range"
+            ) from exc
     raise ValueError("Calendar has no working day in bounded search")
 
 
@@ -293,6 +321,14 @@ def comparison_trace(body):
             "rule_evidence_id": body.get("rule_evidence_id"),
             "fact_evidence_ids": body.get("fact_evidence_ids", []),
             "extension_included": False,
+            "calendar_evidence_id": body.get("calendar_evidence_id"),
+            "rolling_calendar_coverage": {
+                "from": rule.rolling_calendar.coverage_start.isoformat(),
+                "through": rule.rolling_calendar.coverage_end.isoformat(),
+                "independent_holiday_count": rule.rolling_calendar.independent_holiday_count,
+            }
+            if rule.rolling_calendar
+            else None,
         }
     except (ValueError, TypeError, OverflowError):
         return {

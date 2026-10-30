@@ -1,0 +1,9 @@
+Bounded deadline adjustment calendars
+
+Shared UAE/India foundation: calendar month/day offsets and later-of selection can use a separately retained, independently reviewed calendar for following/preceding adjustment. Coverage bounds, excluded weekdays, explicit holiday count and completeness assessment are required. Missing coverage fails validation. Calendar evidence withdrawal marks the filing stale and blocks submission. Country selection never supplies assumed holidays.
+
+The filing review panel shows the retained adjustment calendar and original evidence reference. Browser regression coverage includes original-calendar withdrawal for both countries; execution of this new browser revision remains pending hosted CI. This is not a qualified ADGM timetable profile or proof of real-client coverage.
+
+Validation: full backend unit run 4,276 passed, four skipped; frontend 474 passed plus production build. These broader runs precede the final two date-range boundary tests and the same-calendar counting comparison refinement. The separately retained focused final report covers those final changes. Scoped Ruff and mypy checks passed.
+
+Original hosted Form 143 reports for source f5e0facafc412cbf6e8b60d7ae19553bdacebd31 are retained separately as f5e0fac-hosted-full.xml and f5e0fac-hosted-coverage.json. Run 41102124562, backend verification job 124220955736: 5,145 passed, nine skipped, 117 warnings. That revision had a failing browser job; these backend results do not establish an all-green pipeline or validate later deadline changes.

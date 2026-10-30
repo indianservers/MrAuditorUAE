@@ -1,0 +1,88 @@
+{
+  "scope": "Bounded rolling calendars; synthetic UAE/India regression coverage",
+  "final_focused_backend": {
+    "passed": 190,
+    "skipped": 0
+  },
+  "broader_backend_before_final_boundary_guard": {
+    "passed": 4276,
+    "skipped": 4
+  },
+  "frontend": {
+    "passed": 474,
+    "production_build": "passed"
+  },
+  "checks": [
+    "scoped Ruff",
+    "mypy",
+    "API contract snapshots",
+    "browser test discovery"
+  ],
+  "pending": [
+    "Hosted execution and visual review of new rolling-calendar browser revision",
+    "Real client pilot files and independent expected results",
+    "Qualified country and authority coverage beyond retained source profiles"
+  ],
+  "staged_files": [
+    {
+      "path": ".gitattributes",
+      "sha256": "e6a6ded795bf5150b81effe8d94adcb352814f81da6a384a86fb501cc05dc2f0"
+    },
+    {
+      "path": "backend/app/modules/grc/deadlines.py",
+      "sha256": "8742c020bf231f3305323552db990146b869331970b6478474d6c725a1d6d703"
+    },
+    {
+      "path": "backend/app/modules/grc/schemas.py",
+      "sha256": "7b0fb708e6ca3b3ab55b53be7521bb8f65dc6288e1f828b2b06d69102071307b"
+    },
+    {
+      "path": "backend/app/modules/grc/service.py",
+      "sha256": "017a2aa2286c5b1f7046763677e91b4fdafb9c9819c682b1548d2744d159f88c"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_business_day_deadlines.py",
+      "sha256": "7bc26fa037806ecfe1192677680fc14934076c43a96c4c00fa480a1536902bc8"
+    },
+    {
+      "path": "backend/tests/unit/test_rolling_deadline_calendars.py",
+      "sha256": "327d1ff35e3113d28d10c76b1ea3823f4d737a21bd7cad7375d2d54ea3a12369"
+    },
+    {
+      "path": "docs/country-workflows/rolling-calendar-deadlines.txt",
+      "sha256": "75b19b640aee3da9f693249cab2c5a2093211f0fc3a722792d7a32d914a1210e"
+    },
+    {
+      "path": "docs/phase-12/f5e0fac-hosted-coverage.json",
+      "sha256": "333b4377fecfd85860ba5189a48b91e038d7d553a98a770417fc251678737b69"
+    },
+    {
+      "path": "docs/phase-12/f5e0fac-hosted-full.xml",
+      "sha256": "45257f3f282d63f592528e665342d3c0ecaa5167a2b95661b39f178dcc4172cd"
+    },
+    {
+      "path": "docs/phase-12/rolling-calendar-all-units.xml",
+      "sha256": "0200d3381f7deac0170e30a0819a21fc5225c0af40cbd6736fc47d835e94a4f5"
+    },
+    {
+      "path": "docs/phase-12/rolling-calendar-final.xml",
+      "sha256": "6e6d615f24dff88997c3ff49914e521d2cb12c783f2a3db70afcc08fab7f168b"
+    },
+    {
+      "path": "docs/phase-12/rolling-calendar-frontend.xml",
+      "sha256": "486c4103e127e79906dce91c98bf074c0b1b5c3fbc45832a6de1f84c8f0d376e"
+    },
+    {
+      "path": "frontend/e2e/business-day-deadline-release.spec.ts",
+      "sha256": "00d972577f931749362eb414debf6f6bfcab24b2d8c802296737f474eb385390"
+    },
+    {
+      "path": "frontend/src/features/compliance-filing.tsx",
+      "sha256": "3fd82d85a1a21a452e5b492805fd7105d103d9966b2ac83d9d339c6fbdd84ab8"
+    },
+    {
+      "path": "frontend/tests/compliance-filing.test.tsx",
+      "sha256": "fb6a48dbc59e639aacb5382c171eb440150750ed0c6c2d73518bfe6e06982d43"
+    }
+  ]
+}

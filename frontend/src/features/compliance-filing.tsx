@@ -84,6 +84,12 @@ export function ComplianceFiling({
       : null;
   const comparison =
     verification?.state === "known" ? verification.deadline_comparison : null;
+  const rollingCalendar =
+    deadlineRule?.rolling_calendar &&
+    typeof deadlineRule.rolling_calendar === "object" &&
+    !Array.isArray(deadlineRule.rolling_calendar)
+      ? (deadlineRule.rolling_calendar as Record<string, unknown>)
+      : null;
   const periodMissing = Boolean(
     countryScope &&
     [
@@ -267,6 +273,71 @@ export function ComplianceFiling({
             )}
             . This counts the assessed calendar; it does not verify national
             holidays or legal applicability.
+          </p>
+        </section>
+      )}
+      {rollingCalendar && (
+        <section aria-label="Deadline adjustment calendar">
+          <h4>Deadline adjustment calendar</h4>
+          <p>
+            Apply {String(deadlineRule?.convention ?? "Not supplied")}{" "}
+            adjustment after the calendar offsets and latest-date comparison.
+            The assessed calendar must cover the date before adjustment and
+            every date searched.
+          </p>
+          <p>
+            Assessed coverage:{" "}
+            {String(rollingCalendar.coverage_start ?? "Not supplied")} to{" "}
+            {String(rollingCalendar.coverage_end ?? "Not supplied")}.
+            Independently counted holidays:{" "}
+            {String(
+              rollingCalendar.independent_holiday_count ?? "Not supplied",
+            )}
+            .
+          </p>
+          <p>
+            Excluded weekdays:{" "}
+            {Array.isArray(rollingCalendar.weekend_days)
+              ? rollingCalendar.weekend_days
+                  .map(
+                    (day) =>
+                      [
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
+                        "Sunday",
+                      ][Number(day)] ?? "Invalid weekday",
+                  )
+                  .join(", ")
+              : "Not supplied"}
+            .
+          </p>
+          <details>
+            <summary>Review adjustment-calendar holidays</summary>
+            <p>
+              {Array.isArray(rollingCalendar.holidays)
+                ? rollingCalendar.holidays.length
+                  ? rollingCalendar.holidays.map(String).join(", ")
+                  : rollingCalendar.independent_holiday_count === 0
+                    ? "Explicitly none"
+                    : "Empty list without an independent zero control"
+                : "Not supplied"}
+            </p>
+          </details>
+          <p>
+            Calendar evidence:{" "}
+            {String(paper.body.calendar_evidence_id ?? "Not supplied")}.{" "}
+            {String(
+              rollingCalendar.assessment ?? "Calendar assessment not supplied",
+            )}
+            .
+          </p>
+          <p>
+            This adjusts dates within the assessed calendar; national holidays
+            and legal applicability require independent review.
           </p>
         </section>
       )}
