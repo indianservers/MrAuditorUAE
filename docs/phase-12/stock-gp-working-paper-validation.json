@@ -1,0 +1,39 @@
+{
+  "scope": "Reviewed stock/GP source context retained in generated draft papers; XLSX browser assertion corrected",
+  "source_files": [
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "sha256": "2c12eec1eba1e6f4f6ea08ba50634e00db5590007c55a0540589f386ed336603"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_inventory_performance.py",
+      "sha256": "e6abb7cd38af2db887a9337176eea7a0ac8991592ab885384e3c2f978a159a64"
+    },
+    {
+      "path": "frontend/e2e/inventory-performance-release.spec.ts",
+      "sha256": "0eba3d12314a1c9b8fac0209de2d764251aaac827c5be3922e569032523ade22"
+    },
+    {
+      "path": "docs/phase-12/stock-gp-paper-regression.xml",
+      "sha256": "badcfaf7fa17fade38f1e8a70096cba212ce0305db7d4a5861ea1b638152e446"
+    }
+  ],
+  "verification": {
+    "backend_regression": {
+      "passed": 21,
+      "failed": 0,
+      "junit": "docs/phase-12/stock-gp-paper-regression.xml"
+    },
+    "ruff": "passed for changed backend files",
+    "mypy": "passed, 415 source files",
+    "frontend_typecheck": "passed",
+    "frontend_scoped_eslint": "passed",
+    "playwright_filtered_discovery": "one stock/GP case discovered",
+    "exact_browser_python_assertion": "generated valid XLSX passes; incorrect GP change fails"
+  },
+  "limits": [
+    "Synthetic source/API checks only; no independently validated real-client pilot.",
+    "Prior hosted browser run 8f029d1 failed, retained separately. Follow-up hosted execution remains pending.",
+    "Draft generation does not perform audit procedures, determine statutory ratios or issue an opinion."
+  ]
+}

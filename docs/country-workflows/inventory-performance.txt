@@ -68,3 +68,12 @@ Four reviewed/stale screenshots are captured. The test is registered in release
 smoke; local TypeScript, scoped lint and discovery passed. Hosted execution and
 visual inspection require the resulting run and original artifacts; adding the
 test is not a passed-browser claim.
+
+Generated draft working papers now retain the exact current/prior source scope,
+all six independent controls, arithmetic observation, population boundary and
+qualification flag alongside the immutable source ID, hash and version. The five
+metric rows remain the source schedule. Papers require a current independently
+reviewed result; unreviewed and superseded sources cannot generate a new paper.
+Generation continues to require auditor-authored procedures and conclusions.
+The dedicated UAE/India API checks and existing workflow regression passed
+(21 tests); this does not qualify statutory ratios or real-client results.

@@ -1,0 +1,65 @@
+{
+  "scope": "Original failed browser diagnostics; not a passed stock/GP release claim",
+  "head_sha": "8f029d18a5e63cd041da3d0e575a1c317294bbfa",
+  "run_id": 41043437823,
+  "job_id": 124021566277,
+  "result": {
+    "passed": 7,
+    "failed": 2,
+    "minutes": 5.6
+  },
+  "archive": {
+    "artifact_id": 12972246417,
+    "bytes": 10259975,
+    "sha256": "b3ed7fd363b12693aea29bde76637f4964e3cf4bb25e917c6231283a4ece2866"
+  },
+  "original_screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/GP-browser-failed-1-8f029d1.png",
+      "sha256": "4281c83ae3a3baa1536cddb0b8070d7df34c005aaae8426714e98594f232c67a",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/GP-browser-failed-2-8f029d1.png",
+      "sha256": "d656af85c0173548ca7f0fde0242754327193a7a6fcb54b6f4c514309de7b8d9",
+      "dimensions": [
+        2200,
+        2600
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/payroll-browser-failed-1-8f029d1.png",
+      "sha256": "b042801acf9c6d95cfda9dc3718b1a1b4157d16db058caf5bacba0fe6d8227de",
+      "dimensions": [
+        1440,
+        1600
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/payroll-browser-failed-2-8f029d1.png",
+      "sha256": "c1a30609551f5e31fdaed0a598b730007cae59b4d8796a19871033c1d14414de",
+      "dimensions": [
+        2200,
+        3400
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    }
+  ],
+  "observations": [
+    "UAE stock/GP reviewed CURRENT result shows six controls, 46 source links, last lineage page rows 41-46, closing stock 126/105 and GP margin 20/25 with -5 percentage-point movement.",
+    "Stock/GP test failed in local Python XLSX validation because Worksheet.values was incorrectly called. India iteration and prior-source staleness were not reached in this test.",
+    "India country-report test failed with apiRequestContext.post read ECONNRESET while withdrawing original payroll evidence after deriving the monthly wage source. Screenshots show the reviewed source and matching monthly bases; source-withdrawal outcome is unproven.",
+    "Annual GST browser case passed in this run.",
+    "No production timeout, review, numeric or source-freshness check is weakened by the follow-up XLSX assertion correction."
+  ]
+}

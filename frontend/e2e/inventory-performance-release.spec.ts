@@ -446,7 +446,7 @@ test("synthetic UAE then India stock GP UI controls, independent approval, full 
             "w=load_workbook(io.BytesIO(sys.stdin.buffer.read()))",
             "assert w['Stock GP account lineage'].max_row == 47",
             "assert w['Stock GP source controls'].max_row == 7",
-            "r=list(w['Rows'].values());gp=r[-1];assert str(gp[r[0].index('change_display')])=='-5.00'",
+            "r=list(w['Rows'].values);gp=r[-1];assert str(gp[r[0].index('change_display')])=='-5.00'",
           ].join("\n"),
         ],
         { input: readFileSync(downloaded!), timeout: 15000 },

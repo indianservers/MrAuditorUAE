@@ -148,6 +148,16 @@ async def test_committed_stock_gp_comparison_controls_review_export_and_prior_su
         "-5.00",
     )
     assert result["body"]["rows"][0]["current_display"] == "120.00"
+    unreviewed_paper = await c.post(
+        prefix + "/events/" + result["id"] + "/working-paper",
+        headers=h,
+        json={
+            "reference": "UNREVIEWED-STOCK-GP",
+            "title": "Unreviewed synthetic stock comparison",
+            "objective": "Attempt generation before independent stock comparison review",
+        },
+    )
+    assert unreviewed_paper.status_code == 409, unreviewed_paper.text
     assert (await decision(c, h, eid, result)).status_code == 403
     reviewer = await actor(h, "Firm Administrator", "stock-gp-independent-reviewer")
     await grant(c, h, base, reviewer)
@@ -155,6 +165,33 @@ async def test_committed_stock_gp_comparison_controls_review_export_and_prior_su
     assert reviewed.status_code == 201, reviewed.text
     result = reviewed.json()
     path = prefix + "/events/" + result["id"]
+    paper_input = {
+        "reference": "STOCK-GP-SYNTHETIC",
+        "title": "Synthetic stock and gross profit working paper",
+        "objective": "Assess selected stock and gross profit movements and source controls",
+    }
+    paper = await c.post(path + "/working-paper", headers=h, json=paper_input)
+    assert paper.status_code == 201, paper.text
+    paper_body = paper.json()["body"]
+    assert paper_body["sources"] == [{"kind": "intelligence", "id": result["id"]}]
+    calculations = paper_body["financial_tables"][0]
+    assert calculations["source_event_id"] == result["id"]
+    assert calculations["source_sha256"] == result["sha256"]
+    assert calculations["input_version"] == result["version"]
+    for key in (
+        "inventory_performance_contract",
+        "inventory_performance_binding",
+        "inventory_performance_scope",
+        "inventory_performance_controls",
+        "gp_arithmetic_observation",
+        "population_completeness",
+        "statutory_calculation_qualified",
+        "limitations",
+    ):
+        assert calculations["values"][key] == result["body"][key]
+    assert len(calculations["values"]["inventory_performance_controls"]) == 6
+    assert paper_body["financial_tables"][1]["rows"] == result["body"]["rows"]
+    assert paper_body["conclusion"].startswith("Draft only.")
     page = await c.get(
         path + "?inventory_performance_offset=4&inventory_performance_limit=2", headers=h
     )
@@ -181,3 +218,5 @@ async def test_committed_stock_gp_comparison_controls_review_export_and_prior_su
     assert historical["freshness"] == "STALE"
     assert historical["body"] == retained["body"] and historical["version"] == retained["version"]
     assert (await decision(c, reviewer[0], eid, result)).status_code == 409
+    stale_paper = await c.post(path + "/working-paper", headers=h, json=paper_input)
+    assert stale_paper.status_code == 409, stale_paper.text
