@@ -1,0 +1,64 @@
+{
+  "scope": "Original failed stock/GP and annual GST browser diagnostics, not a passed release claim",
+  "head_sha": "4ebf9f01051560a59f19f01ed2d2164c2a7c3fce",
+  "run_id": 41041237973,
+  "job_id": 124014281779,
+  "result": {
+    "passed": 7,
+    "failed": 2,
+    "minutes": 7.1
+  },
+  "archive": {
+    "artifact_id": 12970369255,
+    "bytes": 12724315,
+    "sha256": "1f4a22d3ad05b93da2e861b33f646a6acd9e431820fc44ba6c7cadc6c038034f"
+  },
+  "original_screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/GP-browser-failed-1-4ebf9f0.png",
+      "sha256": "e16edb5076efcce25938cb1dd514743a2d6509a754c90c7cc47eb4165d1d019d",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/GP-browser-failed-2-4ebf9f0.png",
+      "sha256": "78702e3af350690f2386c8af531375d325816c68262b6f410e17dafe132e6fbf",
+      "dimensions": [
+        2200,
+        2600
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/GST-browser-failed-1-4ebf9f0.png",
+      "sha256": "d20911ba824b004c61efa171a19ea750f38fed754d874554a6b870fdb042b6aa",
+      "dimensions": [
+        1280,
+        720
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/GST-browser-failed-2-4ebf9f0.png",
+      "sha256": "966cd7990f08b54789f1b3aeed40bc7ff5f1a4f4eea6d8d2a9b3ed4edf12cd39",
+      "dimensions": [
+        2200,
+        2600
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    }
+  ],
+  "stock_gp_failure": "Exact label-text selector did not locate the current snapshot select, although the form was open and its functional currency loaded. New calculation/review/export assertions were not reached.",
+  "confirmed_cause": "Minimal real headless Chromium reproduction: native label containing select options yielded getByLabel exact count0, accessible combobox role count1; native multiple select listbox role count1. This is a test locator mismatch, not a missing snapshot control.",
+  "stock_gp_correction": "Use native combobox/listbox roles with exact accessible names for selects; calculation, independent-review, pagination, full XLSX and historical-body assertions unchanged.",
+  "annual_gst_failure": "Parent panel viewport intersection was0.9998141527175903 instead of exact1; capture showed retained STALE/REVIEWED output and financial row.",
+  "annual_gst_correction": "Capture the complete result element rather than whole viewport; keep strict full-viewport checks on heading and last registration row, plus actual body-equality/stale/approval assertions.",
+  "qualification": "Synthetic only. Corrected full hosted execution remains pending. Original failures are preserved; no native challan or legal/professional qualification claimed."
+}

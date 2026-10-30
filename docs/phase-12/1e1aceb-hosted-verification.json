@@ -1,0 +1,77 @@
+{
+  "scope": "Full hosted annual-statement portal-label source1e1aceb; not later FIFO or stock/GP source verification",
+  "head_sha": "1e1acebee78f54de23163607f052bda8f01f90dd",
+  "run_id": 41006406389,
+  "verify_job_id": 123902189264,
+  "all_six_jobs_observed": "completed/success",
+  "archive": {
+    "artifact_id": 12959037594,
+    "bytes": 234136,
+    "sha256": "65ed066c6e4d576d80158e45eeb131e9ff35337ff8ace011c91654b1bf0f4eff"
+  },
+  "original_receipts": [
+    {
+      "entry": "backend/verification-results.xml",
+      "path": "docs/phase-12/1e1aceb-hosted-full.xml",
+      "bytes": 715681,
+      "sha256": "9c14ea2bc372c934bae1c54fcec80e0b54214793be81f4154e9ccc513d2b3118"
+    },
+    {
+      "entry": "backend/coverage.json",
+      "path": "docs/phase-12/1e1aceb-hosted-coverage.json",
+      "bytes": 1818225,
+      "sha256": "6964f3e6ac35f6aebf2bbc40f7f1f84ccbe2f14dce507e29d375ffdf56b7988c"
+    },
+    {
+      "entry": ".local-runtime/ci-verification/operations/compliance-runtime-connector.json",
+      "path": "docs/phase-12/1e1aceb-hosted-compliance-runtime-connector.json",
+      "bytes": 5196,
+      "sha256": "b7d7552a131bf03ca82011d81f5d70358afd13669daaffb29e4f7f26a2a7357b"
+    },
+    {
+      "entry": ".local-runtime/ci-verification/operations/filing-lifecycle.json",
+      "path": "docs/phase-12/1e1aceb-hosted-filing-lifecycle.json",
+      "bytes": 3070,
+      "sha256": "b665d3980ad8769a0b0b4ec65afee998953af1310bf1a8afcc989e589ad6f898"
+    },
+    {
+      "entry": ".local-runtime/ci-verification/operations/worker-recovery.json",
+      "path": "docs/phase-12/1e1aceb-hosted-worker-recovery.json",
+      "bytes": 218,
+      "sha256": "1f87e67f62c237062a9d3655c9f0257257ad6b8333d3ec8e627fa11fd92318db"
+    }
+  ],
+  "backend": {
+    "passed": 4656,
+    "skipped": 9,
+    "failures": 0,
+    "errors": 0,
+    "junit_seconds": 5367.137,
+    "coverage_percent": 86.67723635642976,
+    "core": "831/930 =89.35% per completed job log"
+  },
+  "skip_reasons": [
+    "Live Zoho requires explicit opt-in and authorized OAuth credentials",
+    "Full ledger smoke needs authorized read-only access and independent source totals",
+    "Live Tally requires an explicitly authorized local installation",
+    "Requires explicit opt-in, vendor credentials and independently exported control totals",
+    "Run scripts/connector_operations_run.py for isolated real DB tests",
+    "Run scripts/connector_operations_run.py for isolated real DB tests",
+    "Run scripts/connector_operations_run.py for isolated real DB tests",
+    "Run scripts/connector_operations_run.py for isolated real DB tests",
+    "Windows suspended-start and job-assignment control"
+  ],
+  "operations_assertions": [
+    "Unresolved deadline remains null",
+    "Connector simulated; live_qualified false; no external request",
+    "Acknowledged filing stales after source correction without external filing",
+    "Duplicate reminders suppressed",
+    "Abandoned worker requires manual retry; outbox1; no auto-reexecution"
+  ],
+  "qualified_scope": "Tests support retained TRACES portal-label separation from statutory-form assertion and earlier scoped workflows, not native portal parsing or legal/professional qualification",
+  "limits": [
+    "Source predates FIFO/stock-GP; do not substitute for their hosted proof",
+    "Synthetic fixtures and operational failure injection only",
+    "Full objective remains active; zero real client pilot approvals supplied"
+  ]
+}

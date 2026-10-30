@@ -440,7 +440,14 @@ test("synthetic India annual GST PAN facts, pending controls, independent approv
       })
       .locator("..");
     await stalePanel.scrollIntoViewIfNeeded();
-    await expect(stalePanel).toBeInViewport({ ratio: 1 });
+    // Capture the entire result element, including subpixel borders. Verify
+    // the first and last substantive content separately in the viewport.
+    await expect(
+      stalePanel.getByRole("heading", {
+        name: "SYNTHETIC annual GST controlled result",
+        exact: true,
+      }),
+    ).toBeInViewport({ ratio: 1 });
     await expect(
       reviewer.getByRole("row").filter({
         has: reviewer.getByRole("cell", {
@@ -449,7 +456,7 @@ test("synthetic India annual GST PAN facts, pending controls, independent approv
         }),
       }),
     ).toBeInViewport({ ratio: 1 });
-    await reviewer.screenshot({
+    await stalePanel.screenshot({
       path: `${screenshots}/IN-annual-gst-withdrawn-source-stale.png`,
     });
     expect(errors).toEqual([]);

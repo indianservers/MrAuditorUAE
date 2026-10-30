@@ -236,7 +236,10 @@ test("synthetic UAE then India stock GP UI controls, independent approval, full 
         ["prior", prior],
       ] as const) {
         await page
-          .getByLabel(`${side} stock/GP snapshot`, { exact: true })
+          .getByRole("combobox", {
+            name: `${side} stock/GP snapshot`,
+            exact: true,
+          })
           .selectOption(source.snapshot);
         for (const metric of ["inventory", "revenue", "cost_of_sales"]) {
           const name = `${side} ${metric.replaceAll("_", " ")}`;
@@ -248,7 +251,7 @@ test("synthetic UAE then India stock GP UI controls, independent approval, full 
                 )
               : [metric === "revenue" ? "400" : "500"];
           await page
-            .getByLabel(`${name} accounts`, { exact: true })
+            .getByRole("listbox", { name: `${name} accounts`, exact: true })
             .selectOption(codes.map((code) => accounts[side][code]));
           await page
             .getByLabel(`Independent ${name} account count`, { exact: true })
@@ -276,10 +279,16 @@ test("synthetic UAE then India stock GP UI controls, independent approval, full 
         }
       }
       await page
-        .getByLabel("Stock/GP periods assessed comparable", { exact: true })
+        .getByRole("combobox", {
+          name: "Stock/GP periods assessed comparable",
+          exact: true,
+        })
         .selectOption("yes");
       await page
-        .getByLabel("Stock/GP display rounding", { exact: true })
+        .getByRole("combobox", {
+          name: "Stock/GP display rounding",
+          exact: true,
+        })
         .selectOption("HALF_UP");
       const title = `SYNTHETIC ${country} stock and GP comparison`;
       for (const [label, value] of [
