@@ -199,7 +199,10 @@ async def current(db, ctx, obj, visited=None):
 
         if not vat_current(obj.body):
             return False
-    if getattr(obj, "kind", None) == "country-workflow" and obj.body.get("workflow") == "india-gst":
+    if getattr(obj, "kind", None) == "country-workflow" and obj.body.get("workflow") in {
+        "india-gst",
+        "india-gstr1-documents",
+    }:
         from app.modules.country_workflows.gst_currency import current as gst_current
 
         if not gst_current(obj.body):

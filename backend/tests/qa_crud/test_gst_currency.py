@@ -16,8 +16,9 @@ from tests.unit.country_workflow_cases import document
 pytestmark = pytest.mark.skipif(os.getenv("INTEGRATION_TESTS") != "1", reason="Dedicated test DB")
 
 
+@pytest.mark.parametrize("workflow", ["india-gst", "india-gstr1-documents"])
 async def test_inr_reporting_comparison_export_and_foreign_source_rejection(
-    environment, monkeypatch
+    environment, monkeypatch, workflow
 ):
     c = environment
     double_boundaries(monkeypatch)
@@ -39,7 +40,7 @@ async def test_inr_reporting_comparison_export_and_foreign_source_rejection(
         assert reviewed.status_code == 201, reviewed.text
         sources[role] = reviewed.json()
     data = {
-        "workflow": "india-gst",
+        "workflow": workflow,
         "source_ids": {role: sources[role]["id"] for role in ["books", "return"]},
         "as_of": "2026-06-30",
         "currency": "INR",
@@ -75,6 +76,6 @@ async def test_inr_reporting_comparison_export_and_foreign_source_rejection(
 
     wrong = deepcopy(data)
     wrong["currency"] = "AED"
-    await execute(c, h, eid, "country-workflow", wrong, failed="INR reporting amounts")
+    await execute(c, h, eid, "country-workflow", wrong, failed="requires INR")
     retained = await c.get(endpoint, headers=h)
     assert retained.json()["freshness"] == "CURRENT" and retained.json()["body"] == historical

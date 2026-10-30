@@ -1,0 +1,33 @@
+{
+  "source_commit": "e39d0aec62db2c5f8e114cfda396480c1c4cd9c1",
+  "run_id": 40981042965,
+  "job_id": 123820901946,
+  "job_conclusion": "failure",
+  "browser_summary": "4 passed, 1 failed; Form 26 B/2 reload selection failed before stale capture",
+  "artifact": {
+    "id": 12945665763,
+    "bytes": 10998126,
+    "sha256": "e817872917a4096593e58d55b723e70120bbdd798cb54519e987bfa6d4ff5774"
+  },
+  "inspected": [
+    "All four original test-failed PNGs individually viewed",
+    "Failure image 2 shows reviewer lead page with empty result selector, no loaded report detail and empty execution queue",
+    "Other images show author editor and manager/partner dashboards"
+  ],
+  "saved_original": {
+    "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-B-empty-reload-e39d0ae.png",
+    "sha256": "c8d5e3bfef14ee7b6904935d30b9fe77ee3c284ccee92cd45c45b93208a4da92"
+  },
+  "failure": {
+    "expected_result_id": "26375b6d-68f2-478d-a2f2-c294ca8b548a",
+    "received": "",
+    "assertion_timeout_ms": 5000,
+    "line": 636
+  },
+  "correction": "Wait for exact GET detail response after reload, require HTTP 200, expected event ID, STALE freshness and unchanged original body before existing selector and disabled-approval assertions",
+  "limitations": [
+    "Screenshots alone do not establish whether the detail response was delayed or failed",
+    "No assertion removed, no retry added, browser success for correction still pending",
+    "This failed source run is not complete hosted verification"
+  ]
+}

@@ -67,3 +67,5 @@ docs/phase-12/form26-full-gates-correction.xml -text
 docs/phase-12/gst-currency-*.xml -text
 
 docs/phase-12/uae-vat-currency-*.xml -text
+
+docs/phase-12/gstr1-currency-*.xml -text

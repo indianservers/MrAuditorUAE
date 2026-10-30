@@ -630,7 +630,20 @@ for (const part of ["A", "B"] as const) {
       );
       expect(stale.freshness).toBe("STALE");
       expect(stale.body).toEqual(historical);
+      const reloadedDetailResponse = reviewer.waitForResponse(
+        (response) =>
+          response.request().method() === "GET" &&
+          new URL(response.url()).pathname ===
+            `/api/backend/intelligence/engagements/${eid}/events/${report.id}`,
+        { timeout: 30000 },
+      );
       await reviewer.reload();
+      const reloadedDetail = await reloadedDetailResponse;
+      expect(reloadedDetail.status(), await reloadedDetail.text()).toBe(200);
+      const reloadedReport = await reloadedDetail.json();
+      expect(reloadedReport.id).toBe(report.id);
+      expect(reloadedReport.freshness).toBe("STALE");
+      expect(reloadedReport.body).toEqual(historical);
       await expect(
         reviewer.getByRole("combobox", { name: "Result version", exact: true }),
       ).toHaveValue(report.id);

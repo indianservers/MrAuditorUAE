@@ -1,0 +1,99 @@
+{
+  "status": "LOCAL_IMPLEMENTATION_VERIFIED_HOSTED_GATES_PENDING",
+  "contract": "india-gst-inr-comparison/1",
+  "extended_workflow": "india-gstr1-documents",
+  "reproduction_before": {
+    "source_commit": "da174d8344ec572e3b483043231a6d703858172c",
+    "source": "existing native GSTR-1 test fixture plus USD-labelled sales books",
+    "accepted": true,
+    "result_currencies": [
+      "INR",
+      "USD"
+    ],
+    "states": [
+      "BOOKS_ONLY",
+      "RETURN_ONLY"
+    ]
+  },
+  "scope": [
+    "Reuse existing GST control for GSTR-1 document workflow parameter and all reporting source rows",
+    "Retain original GSTR-1 parameter-error message",
+    "Reject foreign canonical and native-return-supported books without automatic conversion",
+    "Retain shared INR metadata in original result and XLSX",
+    "Older uncontrolled GSTR-1 comparisons stale and not independently approvable",
+    "Separate India original-invoice and UAE AED behavior retained"
+  ],
+  "checks": [
+    {
+      "path": "docs/phase-12/gstr1-currency-regression.xml",
+      "tests": 3571,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "path": "docs/phase-12/gstr1-currency-focused-final.xml",
+      "tests": 56,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "additional_checks": [
+    "Ruff application and affected tests passed",
+    "mypy: 412 application files passed",
+    "API snapshots unchanged",
+    "Frontend typecheck and lint passed with one preexisting unused-variable warning"
+  ],
+  "limitations": [
+    "Broad regression precedes import-only test sorting; focused final receipt covers sorted test source",
+    "No UI production code changed; browser reload response instrumentation awaits hosted execution",
+    "No full-return completeness, FX valuation, filing or real-client qualification claimed"
+  ],
+  "source_blobs": [
+    {
+      "path": ".gitattributes",
+      "sha256": "b3bb79186991ef45bdabe05a0a84d9027f9c4f922de6becdbcdf1c6571cf23b0"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/calculations.py",
+      "sha256": "5c730b5bf509ce285ce396936db224032b64915b0afc1437dfc4bf2b9540f5dc"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/review.py",
+      "sha256": "112b92d982de32e9722795e786217fca3ef5014d42c4c4e887c16dfcc1b99b8b"
+    },
+    {
+      "path": "backend/app/modules/intelligence/service.py",
+      "sha256": "4d976397d6f756221f9bd41c19f6b8cfb4a8e0eff21f0313f0d897132757e615"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_gst_currency.py",
+      "sha256": "b3226a7d8935e8f40ecaa4c9bc4ee71d4751231ee01d3fc193226c089df51a71"
+    },
+    {
+      "path": "backend/tests/unit/test_gst_currency.py",
+      "sha256": "7b798f7a6db8d8827c9b95a8c844cdfa0484e8660d71772c7dfaed3fdc6eebc0"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-B-empty-reload-e39d0ae.png",
+      "sha256": "c8d5e3bfef14ee7b6904935d30b9fe77ee3c284ccee92cd45c45b93208a4da92"
+    },
+    {
+      "path": "docs/phase-12/form26-browser-e39d0ae-failure.json",
+      "sha256": "36f7ba309fe506433cc61e79671131da50a51bc9d9a2709d126ff5660ccc5c00"
+    },
+    {
+      "path": "docs/phase-12/gstr1-currency-focused-final.xml",
+      "sha256": "03fb0c82240da1d05148d3744e2464cc630f69eee556068f3f646beb6c99ad80"
+    },
+    {
+      "path": "docs/phase-12/gstr1-currency-regression.xml",
+      "sha256": "eaa0ef539feb88ee2aff9da5fbdd96a43134c25277bd9908f636509a475632d5"
+    },
+    {
+      "path": "frontend/e2e/form26-fields-release.spec.ts",
+      "sha256": "5c27b2c464075677d7c3bb83dc1fa3e1c3758072812e7319d6a11bd7a0295e56"
+    }
+  ]
+}

@@ -35,23 +35,25 @@ def fixture(workflow="india-gst", **changes):
 
 @pytest.mark.parametrize("role", ["books", "return", "both"])
 @pytest.mark.parametrize("currency", ["AED", "USD", "EUR"])
-def test_each_foreign_reporting_population_is_rejected_without_conversion(role, currency):
-    data, sources = fixture()
+@pytest.mark.parametrize("workflow", ["india-gst", "india-gstr1-documents"])
+def test_each_foreign_reporting_population_is_rejected_without_conversion(workflow, role, currency):
+    data, sources = fixture(workflow)
     for selected_role in ["books", "return"] if role == "both" else [role]:
         sources[selected_role]["rows"][0]["currency"] = currency
     with pytest.raises(ValueError, match="requires INR reporting amounts"):
         calculate(data, "IN", sources)
 
 
-def test_inr_compares_exactly_and_preserves_original_source_populations():
-    data, sources = fixture()
+@pytest.mark.parametrize("workflow", ["india-gst", "india-gstr1-documents"])
+def test_inr_compares_exactly_and_preserves_original_source_populations(workflow):
+    data, sources = fixture(workflow)
     original = deepcopy(sources)
     result = calculate(data, "IN", sources)
     assert result["rows"][0]["state"] == "MATCHED" and result["gst_reporting_currency"] == "INR"
     assert current(result) and approval_error(result) is None
     assert sources == original
     data.currency = "AED"
-    with pytest.raises(ValueError, match="requires INR reporting amounts"):
+    with pytest.raises(ValueError, match="requires INR"):
         calculate(data, "IN", sources)
 
 
@@ -66,8 +68,11 @@ def test_foreign_original_invoice_comparison_stays_available_as_a_distinct_workf
 
 
 @pytest.mark.parametrize("fault", ["contract", "currency", "parameter", "rows", "null-parameters"])
-async def test_legacy_or_malformed_comparison_is_stale_and_not_approvable_without_rewriting(fault):
-    data, sources = fixture()
+@pytest.mark.parametrize("workflow", ["india-gst", "india-gstr1-documents"])
+async def test_legacy_or_malformed_comparison_is_stale_and_not_approvable_without_rewriting(
+    workflow, fault
+):
+    data, sources = fixture(workflow)
     body = calculate(data, "IN", sources)
     if fault == "contract":
         body.pop("gst_reporting_currency_contract")
@@ -90,11 +95,14 @@ async def test_legacy_or_malformed_comparison_is_stale_and_not_approvable_withou
     assert body == original
 
 
-def test_explicit_nil_reporting_populations_retain_the_inr_contract_without_inventing_rows():
+@pytest.mark.parametrize("workflow", ["india-gst", "india-gstr1-documents"])
+def test_explicit_nil_reporting_populations_retain_the_inr_contract_without_inventing_rows(
+    workflow,
+):
     from app.modules.country_workflows.schemas import SourceInput, TaxDocument
     from app.modules.country_workflows.sources import parse_csv
 
-    data, _ = fixture()
+    data, _ = fixture(workflow)
     source = parse_csv(
         (",".join(TaxDocument.model_fields) + "\n").encode(),
         SourceInput(
@@ -109,3 +117,14 @@ def test_explicit_nil_reporting_populations_retain_the_inr_contract_without_inve
     assert result["rows"] == [] and result["nil_population"]
     assert current(result) and result["gst_reporting_currency"] == "INR"
     assert result["statutory_calculation_qualified"] is False
+
+
+def test_native_outward_return_cannot_compare_foreign_books_under_an_inr_parameter():
+    from tests.unit.test_india_gstr1_source import books, workflow
+    from tests.unit.test_india_gstr1_source import parsed as native_return
+
+    population = books()
+    for row in population["rows"]:
+        row["currency"] = "USD"
+    with pytest.raises(ValueError, match="requires INR reporting amounts"):
+        calculate(workflow(), "IN", {"books": population, "return": native_return()})

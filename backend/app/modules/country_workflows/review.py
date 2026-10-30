@@ -7,7 +7,7 @@ def approval_error(body):
         if not current(body):
             return "Regenerate UAE VAT comparison with explicit AED reporting controls"
 
-    if body.get("workflow") == "india-gst":
+    if body.get("workflow") in {"india-gst", "india-gstr1-documents"}:
         from app.modules.country_workflows.gst_currency import current
 
         if not current(body):
