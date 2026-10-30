@@ -1,0 +1,102 @@
+{
+  "status": "LOCAL_IMPLEMENTATION_VERIFIED_HOSTED_GATES_PENDING",
+  "contract": "uae-vat-aed-comparison/1",
+  "checks": [
+    {
+      "path": "docs/phase-12/uae-vat-currency-focused.xml",
+      "tests": 39,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/uae-vat-currency-regression.xml",
+      "tests": 3550,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "path": "docs/phase-12/uae-vat-currency-frontend.xml",
+      "tests": 375,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "additional_checks": [
+    "Ruff application and new tests passed",
+    "mypy: 412 application files passed",
+    "API snapshots unchanged",
+    "Frontend typecheck and lint passed with one preexisting unused-variable warning",
+    "Next.js production build passed"
+  ],
+  "scope": [
+    "AED required in workflow parameter and every canonical reporting row",
+    "Foreign reporting books, returns and both populations rejected without automatic conversion",
+    "Legacy and malformed results stale and not approvable; historical body preserved",
+    "Nil population supported without invented liability",
+    "Persisted approved result and XLSX metadata verified",
+    "Existing India INR tests retained"
+  ],
+  "limitations": [
+    "Currency labels cannot verify FX valuation, tax treatment or retained conversion evidence",
+    "No full legal corpus, professional qualification or filing claim",
+    "Focused 39-test receipt precedes test wording/import cleanup; final regression covers final source",
+    "Synthetic fixtures do not replace real client inputs and independently checked expectations"
+  ],
+  "source_blobs": [
+    {
+      "path": ".gitattributes",
+      "sha256": "b8e3ad75de1aa73f4205ab56384a910672ec3a126d1b6ae2975bd5401d7edcd8"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/calculations.py",
+      "sha256": "c7608a35a2ab8e7dde5c90173a81d5dad7a1b2d90491eac1426c4ada4af212c2"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/review.py",
+      "sha256": "fe863326a60f408169c7da57e7fd0709cd37c2356fc5297054aa26cfb2a4a15d"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/uae_vat_currency.py",
+      "sha256": "c7863517e268b9468fe5199be68523834f7da253785aa93b330f8bb1808a9931"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "sha256": "12732d00c7ebed1721a4bd72a2fe8754924308c8f6758121c1d125d1308f2dd7"
+    },
+    {
+      "path": "backend/app/modules/intelligence/service.py",
+      "sha256": "de1bc841b53a4e705ec9c60ac6693eed09bbfbe5a3772d3f46e611bc1e453853"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_uae_vat_currency.py",
+      "sha256": "69f393c2600570f79c88956d1e44da24108d6eb824c8fbce78d179914ea8fa5f"
+    },
+    {
+      "path": "backend/tests/unit/test_uae_vat_currency.py",
+      "sha256": "77b6ead88ff91b7c89d84986239b0904980f3d3c8fcbe3ccc087d086db899baf"
+    },
+    {
+      "path": "docs/country-workflows/legal-sources/uae-vat-reporting-currency-review.json",
+      "sha256": "2c6b5f1b1d68930a01d2677ad9025b290a02d601c937dd83704faaa64526a9e3"
+    },
+    {
+      "path": "docs/phase-12/uae-vat-currency-focused.xml",
+      "sha256": "8e16d508b392b982c46aa12256c9af3f29447217a36c1c7592a1bc4158623d6a"
+    },
+    {
+      "path": "docs/phase-12/uae-vat-currency-frontend.xml",
+      "sha256": "65b6bb24bce65184d96f49a7beedc0fb8f0355baa6838991f6f657eb4f70b9db"
+    },
+    {
+      "path": "docs/phase-12/uae-vat-currency-regression.xml",
+      "sha256": "21fce99ea670463184642458759b2aa4dd27f89b592df5fe4f4920eeedf1d985"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "a6020990bfecadc4f54da009beb8eff7b2e4375918042a67493a8a1884b3942e"
+    }
+  ]
+}

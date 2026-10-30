@@ -1,0 +1,35 @@
+{
+  "status": "APPLICATION_CURRENCY_CONTROL_IMPLEMENTED_LOCAL_REGRESSION_PASSED",
+  "workflow": "uae-vat",
+  "contract": "uae-vat-aed-comparison/1",
+  "scope": "Canonical document-level VAT comparison requires declared AED reporting amounts in the workflow and every source row. Existing native VAT201 and turnover controls are separate and unchanged.",
+  "legal_source_observation": {
+    "observed_on": "2026-10-30",
+    "primary_search_sources": [
+      "https://uaelegislation.gov.ae/en/legislations/1227/download",
+      "https://mof.gov.ae/wp-content/uploads/2025/07/Federal-Decree-Law-No.-8-of-2017-and-amendments.pdf"
+    ],
+    "article": "69 - Currency Used in Tax Invoices",
+    "paraphrase": "The indexed primary texts describe conversion of non-AED tax invoice amounts using the Central Bank approved exchange rate at the date of supply.",
+    "retrieval_limitations": [
+      "Primary search excerpts available; direct legislation download returned 403 and Ministry PDF returned 404 during this review",
+      "No original PDF bytes archived or whole-document/current-amendment qualification claimed",
+      "Invoice conversion rule does not itself prove every return field, valuation or tax treatment"
+    ]
+  },
+  "implementation_limits": [
+    "Rejects foreign reporting labels without relabelling or converting amounts",
+    "Does not determine the exchange rate, date of supply, VAT liability or recoverability",
+    "An AED label is not independent proof of correct conversion; retained assessed support remains necessary",
+    "No statutory filing or professional qualification claimed"
+  ],
+  "regressions_to_verify": [
+    "AED comparison and original source preservation",
+    "Foreign books, return and both populations rejected",
+    "Wrong workflow currency rejected",
+    "Explicit nil populations retain control without invented rows",
+    "Legacy or malformed results stale and not approvable without body rewrite",
+    "Persisted approved result and XLSX control metadata",
+    "India INR and separate original-invoice behavior retained"
+  ]
+}

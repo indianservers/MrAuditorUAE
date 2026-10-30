@@ -1,6 +1,12 @@
 def approval_error(body):
     from app.modules.intelligence.matching_review import saved_candidates_complete
 
+    if body.get("workflow") == "uae-vat":
+        from app.modules.country_workflows.uae_vat_currency import current
+
+        if not current(body):
+            return "Regenerate UAE VAT comparison with explicit AED reporting controls"
+
     if body.get("workflow") == "india-gst":
         from app.modules.country_workflows.gst_currency import current
 

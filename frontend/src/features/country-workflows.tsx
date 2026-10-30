@@ -4370,6 +4370,13 @@ export function CountryWorkflows({
                   ))}
                 </select>
               </label>
+              {workflow === "uae-vat" && (
+                <p>
+                  UAE VAT comparisons require AED reporting amounts. Retain
+                  separately assessed conversion support for foreign-currency
+                  invoices; no exchange rate or conversion date is inferred.
+                </p>
+              )}
               {workflow === "india-gst" && (
                 <p>
                   GST return comparisons require INR reporting amounts. Retain

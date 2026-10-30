@@ -1300,7 +1300,17 @@ def calculate(
                 from app.modules.country_workflows.gst_currency import validate
 
                 validate(data, tables)
+            if data.workflow == "uae-vat":
+                from app.modules.country_workflows.uae_vat_currency import validate
+
+                validate(data, tables)
             result = tax_documents(data, tables)
+            if data.workflow == "uae-vat":
+                from app.modules.country_workflows.uae_vat_currency import CONTRACT
+
+                result["vat_reporting_currency_contract"] = CONTRACT
+                result["vat_reporting_currency"] = "AED"
+                result["vat_fx_basis"] = "SOURCE_AED_AMOUNTS_NO_AUTOMATIC_CONVERSION"
             if data.workflow == "india-gst":
                 from app.modules.country_workflows.gst_currency import CONTRACT
 
