@@ -402,6 +402,11 @@ type Result = {
     title: string;
     review_status: string;
     obligation_population_scope?: string;
+    withholding_provision_scope?: {
+      reference: string;
+      positive_expectation_unavailable_from: string;
+      basis: string;
+    };
     outward_gst_scope?: Record<string, unknown>;
     invoice_evidence_scope?: { direction: string; filing_status: string };
     execution_mode?: string;
@@ -1003,6 +1008,13 @@ export function CountryWorkflows({
         Array.isArray(row.assessment_issues) &&
         row.assessment_issues.length > 0,
     );
+  const statutoryScopeAttention =
+    compactWithholding &&
+    rows.some(
+      (row) =>
+        Array.isArray(row.statutory_scope_issues) &&
+        row.statutory_scope_issues.length > 0,
+    );
   const standardColumns =
     body?.workflow === "india-msme-annual-tax"
       ? [
@@ -1119,8 +1131,12 @@ export function CountryWorkflows({
                         "period",
                         "currency",
                         "amounts",
-                        ...(assessmentAttention
-                          ? ["comparison_state", "assessment_issues"]
+                        ...(assessmentAttention || statutoryScopeAttention
+                          ? ["comparison_state"]
+                          : []),
+                        ...(assessmentAttention ? ["assessment_issues"] : []),
+                        ...(statutoryScopeAttention
+                          ? ["rule_reference", "statutory_scope_issues"]
                           : []),
                         "differences_from_expected",
                         "differences_from_books",
@@ -7077,6 +7093,25 @@ export function CountryWorkflows({
               Quantity coverage: {body.quantity_coverage_basis}
             </p>
           )}
+          {compactWithholding && body.withholding_provision_scope && (
+            <section aria-label="Withholding provision boundary">
+              <h3>Named TCS provision boundary</h3>
+              <p>
+                Positive {body.withholding_provision_scope.reference}{" "}
+                expectations are unavailable from{" "}
+                {
+                  body.withholding_provision_scope
+                    .positive_expectation_unavailable_from
+                }
+                .
+              </p>
+              <p>{body.withholding_provision_scope.basis}</p>
+              <p>
+                Historical settlement and beneficiary credit require their
+                separate evidence assessments.
+              </p>
+            </section>
+          )}
           {obsoleteStockCoverage && (
             <p role="status">
               Regenerate stock count coverage with current quantity and sign
@@ -7701,16 +7736,22 @@ export function CountryWorkflows({
                               Full balance not compared.
                             </span>
                           ) : ((compactWithholding &&
-                              k === "assessment_issues") ||
+                              [
+                                "assessment_issues",
+                                "statutory_scope_issues",
+                              ].includes(k)) ||
                               (body.workflow === "procurement-match" &&
                                 k === "exceptions")) &&
                             Array.isArray(row[k]) ? (
                             <ul>
                               {(row[k] as unknown[]).map((issue) => (
                                 <li key={String(issue)}>
-                                  {text(issue)
-                                    .replaceAll("_", " ")
-                                    .toLowerCase()}
+                                  {issue ===
+                                  "WITHDRAWN_206C_1H_POSITIVE_EXPECTATION"
+                                    ? "Correct the positive 206C(1H) expectation for the withdrawn period and regenerate the result."
+                                    : text(issue)
+                                        .replaceAll("_", " ")
+                                        .toLowerCase()}
                                 </li>
                               ))}
                             </ul>

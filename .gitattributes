@@ -128,3 +128,9 @@ docs/country-workflows/authority-references/form143-2026-07-22/protean-form143-o
 # Preserve literal DOM spacing in the failed stock provenance-toggle diagnostic.
 docs/phase-12/stock-review-columns-initial.xml -text whitespace=-blank-at-eol,cr-at-eol
 docs/phase-12/stock-review-columns-final.xml -text whitespace=cr-at-eol
+
+docs/phase-12/8f029d1-hosted-full.xml -text whitespace=cr-at-eol
+docs/phase-12/8f029d1-hosted-coverage.json -text
+docs/phase-12/8f029d1-hosted-compliance-runtime-connector.json -text
+docs/phase-12/8f029d1-hosted-filing-lifecycle.json -text
+docs/phase-12/8f029d1-hosted-worker-recovery.json -text

@@ -1425,6 +1425,24 @@ describe("country workflows", () => {
     expect(screen.getByText("reported: 90")).toBeVisible();
     expect(screen.getByText("reported: -10")).toBeVisible();
   });
+  it.each([{ issues: [] }, { issues: ["RETAINED_ASSESSMENT_DOCUMENT_MISSING"] }])("shows the withdrawn TCS reason even when source amounts match (%j)", ({ issues: assessmentIssues }) => {
+    state.country = "IN";
+    state.result = { id: "result", kind: "country-workflow", version: 1, freshness: "CURRENT", body: {
+      workflow: "india-withholding-liability", title: "TCS named provision check", blocked: true, review_status: "UNVERIFIED",
+      withholding_provision_scope: { reference: "206C(1H)", positive_expectation_unavailable_from: "2025-04-01", basis: "Explicit collector reference and declared transaction or reporting period only" },
+      rows: [{ id: "withholding-1", legal_role: "collector", tax_kind: "TCS", rule_reference: "206C(1H)", period: "2026-05", currency: "INR", amounts: { expected: "100", withheld: "100", reported: "100", deposited: "100" }, comparison_state: "MATCHED", assessment_issues: assessmentIssues, statutory_scope_issues: ["WITHDRAWN_206C_1H_POSITIVE_EXPECTATION"], state: "WITHDRAWN_PROVISION_LIABILITY" }],
+    } };
+    render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+    fireEvent.change(screen.getByLabelText("Saved source or result"), { target: { value: "result" } });
+    expect(screen.getByRole("region", { name: "Withholding provision boundary" })).toHaveTextContent("2025-04-01");
+    expect(screen.getByRole("columnheader", { name: "statutory scope issues" })).toBeVisible();
+    expect(screen.getAllByRole("columnheader", { name: "comparison state" })).toHaveLength(1);
+    expect(screen.getByText("Correct the positive 206C(1H) expectation for the withdrawn period and regenerate the result.")).toBeVisible();
+    expect(screen.getByText("expected: 100")).toBeVisible();
+    expect(screen.getByRole("button", { name: "Independent approval" })).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "Independent approval" }));
+    expect(state.mutate).not.toHaveBeenCalled();
+  });
   it("keeps liability and credit role choices separate and requires explicit assessment", async () => {
     state.country = "IN";
     render(<CountryWorkflows eid="engagement" mode="country-workflow" />);

@@ -1,5 +1,6 @@
 import { runMerchantBrowserWorkflow } from "./merchant-browser-workflow";
 import { runPayrollProrationBrowserWorkflow } from "./payroll-proration-browser-workflow";
+import { runWithholdingBoundaryBrowserWorkflow } from "./withholding-boundary-browser-workflow";
 import { runSavingsBrowserWorkflow } from "./savings-browser-workflow";
 import { runEstablishmentChargesBrowserWorkflow } from "./establishment-charges-browser-workflow";
 import { runMSMEInterestBrowserWorkflow } from "./msme-interest-browser-workflow";
@@ -996,6 +997,14 @@ for (const code of ["AE", "IN"] as const) {
         identities.tenant_id,
         screenshots,
         coveredAccount.id,
+      );
+    if (code === "IN")
+      await runWithholdingBoundaryBrowserWorkflow(
+        page,
+        reviewer,
+        engagement.id,
+        identities.tenant_id,
+        screenshots,
       );
     expect(errors).toEqual([]);
     await reviewerContext.close();

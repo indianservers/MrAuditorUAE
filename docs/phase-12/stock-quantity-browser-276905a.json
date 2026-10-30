@@ -1,0 +1,89 @@
+{
+  "scope": "Source-specific stock workflow and stale lead display proof; not later TCS boundary UI proof",
+  "head_sha": "276905a8a0f3bf884f724c5fa5e6ad830e4e1b43",
+  "run_id": 41053383126,
+  "job_id": 124054726273,
+  "result": {
+    "passed": 9,
+    "failed": 0,
+    "minutes": 4.7,
+    "extended_inventory_case_seconds": 19.2
+  },
+  "archive": {
+    "artifact_id": 12976500940,
+    "bytes": 13455803,
+    "sha256": "231dc93d0e0c3d6cf6a98ee19ee0468b804625c8678dd5360156db401e081068"
+  },
+  "tested_sources": [
+    {
+      "path": "frontend/src/features/stock-review-columns.ts",
+      "sha256": "082566ff85f19494bd3376bad0e1890383372058511061f653ec924279a6878a"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "17961ed8f1039de6ce36bfef204a8a26dcf93e645ee18915b307e2f81c433fb4"
+    },
+    {
+      "path": "frontend/src/features/accounting-intelligence.tsx",
+      "sha256": "fdc21199dc539981755f47a976e11b66dff9b9db0d662d8e7a48776caf1eb0dd"
+    },
+    {
+      "path": "frontend/e2e/stock-quantity-browser-workflow.ts",
+      "sha256": "4e1313c37f2505ede3d952f38df69ec0b47842d6e2f778f2a8926997a399fe06"
+    }
+  ],
+  "original_screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-stock-quantity-reviewed-276905a.png",
+      "sha256": "826d855546c2e13bdc74fb3f65802cbf484c648764357632486c49ed41d65533",
+      "dimensions": [
+        1963,
+        847
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-stock-quantity-stale-paper-disabled-276905a.png",
+      "sha256": "3560f0643d13be8a8994ed1d1675dadb78c34b634a446488314438704028879a",
+      "dimensions": [
+        2200,
+        2600
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-stock-quantity-reviewed-276905a.png",
+      "sha256": "79927d2c07730247cc37275616ed0d608ca1fa3a002dfcfa74f6d484f0592e0c",
+      "dimensions": [
+        1963,
+        847
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-stock-quantity-stale-paper-disabled-276905a.png",
+      "sha256": "bb3da7d7202aed13efc69e0f162463f8647e6ea75140246b84138739df390185",
+      "dimensions": [
+        2200,
+        2600
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    }
+  ],
+  "verified": [
+    "UAE then India actual retained uploads, independent reviews and UI calculation.",
+    "Reviewed workflow defaults show position, units, currency, book/count/supported quantities, 40% partial coverage and unresolved negative/missing states.",
+    "Stale lead defaults show the same quantities and coverage without expanding provenance.",
+    "Stale lead connected draft action remains disabled; saved body/version are unchanged.",
+    "Complete XLSX position values and null negative coverage remain verified by the release case."
+  ],
+  "limits": [
+    "Synthetic source controls; no physical count or client qualification.",
+    "This source predates the new TCS boundary explanation and hosted extension.",
+    "Full backend verification remains separate and source-specific."
+  ]
+}

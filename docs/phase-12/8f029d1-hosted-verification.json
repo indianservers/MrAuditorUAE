@@ -1,0 +1,86 @@
+{
+  "scope": "Full hosted backend proof for stock/GP source8f029d1; not later quantity, TCS or draft-scope source verification",
+  "head_sha": "8f029d18a5e63cd041da3d0e575a1c317294bbfa",
+  "run_id": 41043437823,
+  "verify_job_id": 124021565818,
+  "archive": {
+    "artifact_id": 12976461762,
+    "bytes": 236590,
+    "sha256": "e2560a3f02e14694c1cebc63d00342464f2fc348e3151dc35f40a5fd33283526"
+  },
+  "original_receipts": [
+    {
+      "entry": "backend/verification-results.xml",
+      "path": "docs/phase-12/8f029d1-hosted-full.xml",
+      "bytes": 724051,
+      "sha256": "41c5f6371f6cd6374ec4bd82617b4ba698937b5248359e00b60ccbd2740f7429"
+    },
+    {
+      "entry": "backend/coverage.json",
+      "path": "docs/phase-12/8f029d1-hosted-coverage.json",
+      "bytes": 1834681,
+      "sha256": "6dc2d8dae3f9a5ead700beb0ad06288aa5a950506800fe39509ad1fbb932bb9e"
+    },
+    {
+      "entry": ".local-runtime/ci-verification/operations/compliance-runtime-connector.json",
+      "path": "docs/phase-12/8f029d1-hosted-compliance-runtime-connector.json",
+      "bytes": 5196,
+      "sha256": "d40a64af53c781b39fa40ee84963552586d0e36c624501624e0c72b7bbafb8aa"
+    },
+    {
+      "entry": ".local-runtime/ci-verification/operations/filing-lifecycle.json",
+      "path": "docs/phase-12/8f029d1-hosted-filing-lifecycle.json",
+      "bytes": 3070,
+      "sha256": "b00974ad37b15cdca4549e1a0364017609135c2994652d408a1cf339fe9f95b7"
+    },
+    {
+      "entry": ".local-runtime/ci-verification/operations/worker-recovery.json",
+      "path": "docs/phase-12/8f029d1-hosted-worker-recovery.json",
+      "bytes": 218,
+      "sha256": "1f87e67f62c237062a9d3655c9f0257257ad6b8333d3ec8e627fa11fd92318db"
+    }
+  ],
+  "backend": {
+    "passed": 4712,
+    "skipped": 9,
+    "failures": 0,
+    "errors": 0,
+    "junit_seconds": 5448.99,
+    "coverage_percent": 86.75071127244188,
+    "covered_lines": 35370,
+    "statements": 40772,
+    "core": "831/930 =89.35% per completed job log"
+  },
+  "job_outcomes": {
+    "verify": "success",
+    "ml": "success",
+    "containers": "success",
+    "security": "success",
+    "frontend": "success",
+    "browser-smoke": "failure"
+  },
+  "browser_failure_evidence": "docs/phase-12/stock-gp-payroll-browser-failed-8f029d1.json",
+  "skip_reasons": [
+    "Live Zoho requires explicit opt-in and authorized OAuth credentials",
+    "Full ledger smoke needs authorized read-only access and independent source totals",
+    "Live Tally requires an explicitly authorized local installation",
+    "Requires explicit opt-in, vendor credentials and independently exported control totals",
+    "Run scripts/connector_operations_run.py for isolated real DB tests",
+    "Run scripts/connector_operations_run.py for isolated real DB tests",
+    "Run scripts/connector_operations_run.py for isolated real DB tests",
+    "Run scripts/connector_operations_run.py for isolated real DB tests",
+    "Windows suspended-start and job-assignment control"
+  ],
+  "operations_assertions": [
+    "Unresolved deadline remains null.",
+    "Connector live qualification remains false; no external requests were performed.",
+    "Filing source correction marks retained acknowledged history STALE; duplicate reminders suppressed; no external submission performed.",
+    "Expired worker claim needs manual retry; one pending outbox dispatch and no automatic re-execution."
+  ],
+  "limits": [
+    "Five jobs passed and browser smoke failed on this source; this is not an all-six-success claim.",
+    "Later source-specific passed browser receipts remain separate.",
+    "No real client, legal qualification, authorized live-provider qualification or production sign-off is established.",
+    "Original synthetic operational receipts do not represent actual filing or provider execution."
+  ]
+}

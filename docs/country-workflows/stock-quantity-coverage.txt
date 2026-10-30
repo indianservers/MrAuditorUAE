@@ -73,3 +73,11 @@ The initial two failures exposed the missing workflow provenance toggle; the
 original failed diagnostic is retained, and the toggle is enabled. New hosted
 captures require source-specific verification and are not established by earlier
 screenshots.
+
+Display source 276905a passed all nine hosted browser cases (4.7m), including the
+extended inventory case in 19.2s. Four original quantity captures were downloaded,
+hash checked and individually viewed. Both reviewed workflow tables and stale
+lead tables now show the supported quantity and 40% without expanding provenance;
+negative and missing positions remain unresolved, and stale paper creation stays
+disabled. See stock-quantity-browser-276905a.json under docs/phase-12. This display
+proof does not verify the later named TCS boundary UI extension.

@@ -32,3 +32,18 @@ expectation with erroneous collection, collectee observations, legacy row and
 paper guards, retained source documents and API review/disposition/export checks.
 Ruff and mypy passed (416 application files). These are synthetic application
 checks, not an independently qualified client or complete legal-rule corpus.
+
+UI follow-up: default withholding columns show statutory scope issues separately
+from amount agreement and retained-document issues. The named cutoff and limited
+assessment basis appear above the table. Combined document and provision issues
+show one comparison-state column. The corrective message stays visible while
+approval is disabled. All 140 tests in the affected frontend suite, scoped lint
+and TypeScript pass. The parameterized combined-issue fixture was corrected after
+type checking exposed an incorrectly supplied issue list.
+
+Hosted extension: the India country-report release case now prepares four actual
+controlled uploaded observations with a distinct clean retained assessment file,
+uses the UI to calculate a post-withdrawal positive expectation with all amounts
+equal, and verifies blocked status, visible corrective reason, independent review
+HTTP 409 and unchanged body/version. A dedicated screenshot is requested. This
+new browser extension awaits hosted execution and actual capture inspection.

@@ -1,0 +1,53 @@
+{
+  "scope": "Visible named TCS boundary explanation and hosted test extension",
+  "source_files": [
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "eadb111baf96924423ba7e796cf6f8b82e7247f2c3639da8efb548fd0b3ab167"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "bdd130813be6f71b2fc6dc4f814b5bc531a09a0f178f8522853a98c431b44fbf"
+    },
+    {
+      "path": "frontend/e2e/country-report-release.spec.ts",
+      "sha256": "d46f4941c46cdbe0171b5c46df296b501b7ff487536d82ffc79067727dba8fdd"
+    },
+    {
+      "path": "frontend/e2e/withholding-boundary-browser-workflow.ts",
+      "sha256": "d982766692ce7d3d8d8b6da966e83449a03c238e3b49d65898e3368d88ac8612"
+    },
+    {
+      "path": "docs/phase-12/withholding-boundary-ui-final.xml",
+      "sha256": "15528d58b5e01c9112ad113a4a046beb2f744ff2930b538b3fc273e7a724732d"
+    }
+  ],
+  "local_verification": {
+    "frontend_passed": 140,
+    "frontend_failed": 0,
+    "scoped_eslint": "passed",
+    "typescript": "passed"
+  },
+  "test_fixture_correction": "TypeScript exposed the incorrectly parameterized issue-list fixture. The corrected final run exercises actual arrays for both statutory-only and combined assessment/statutory issues.",
+  "behavior": [
+    "Named cutoff and assessment basis visible above default table.",
+    "Amount MATCHED state remains distinct from the blocking statutory scope reason.",
+    "Combined issue types do not duplicate comparison-state columns.",
+    "Approval disabled and corrective action message visible."
+  ],
+  "hosted_extension": {
+    "status": "PENDING_FOR_THIS_SOURCE",
+    "checks": [
+      "Actual clean retained assessment and four controlled CSV sources with independent reviews.",
+      "UI collector-liability calculation with all four INR amounts at 100 still blocked under withdrawn provision.",
+      "Visible reason and disabled approval; direct independent review returns 409.",
+      "Failed approval preserves body/version; dedicated original capture required."
+    ],
+    "local_discovery": "Country-report module uses CI-owned identities at import; no fake local identities were created to claim browser execution."
+  },
+  "limits": [
+    "Component checks and static compilation are not passed hosted execution.",
+    "Earlier stock display captures and full backend source8f029d1 receipts are separate.",
+    "Authorized live registry/sanctions provider selection remains pending user input."
+  ]
+}
