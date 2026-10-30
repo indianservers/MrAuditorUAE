@@ -1,0 +1,72 @@
+{
+  "source_commit": "b7445317b81331067b88c97d4b9efd16c64bb7db",
+  "run_id": 41086034890,
+  "job_id": 124167310093,
+  "conclusion": "failure",
+  "passed": 11,
+  "failed": 1,
+  "suite_duration": "8.0m",
+  "artifact": {
+    "id": 12992930147,
+    "size_bytes": 15199417,
+    "sha256": "29784736f5d3ebca81d32caa579bb05623d1e084f430057d0a9560ab7ff1aa0b"
+  },
+  "source_files": [
+    {
+      "path": "frontend/e2e/business-day-deadline-release.spec.ts",
+      "sha256": "6c82cbdec54181d615c7c3c4f2cb388860ad71c2a440316b5f4bc0ed3fab56b3"
+    },
+    {
+      "path": "frontend/e2e/merchant-browser-workflow.ts",
+      "sha256": "2c6a6b886f07bfafe63fbb4fb56f83e27e2b39f06ff22dd23e43549e15d58605"
+    },
+    {
+      "path": "backend/app/modules/grc/deadlines.py",
+      "sha256": "661158ce936976496212b134277e5a0834ea867656462c3c5020fc97c2772d2a"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-business-deadline-reviewed-b744531.png",
+      "sha256": "aa4e0644a659249b256e14b49403805ecfbd29ef2466a45fe24f2f4d0892e618",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-merchant-cash-released-replacement-approved-b744531.png",
+      "sha256": "00285dac0c0d3d40d9565277b0c32413a1f589a0166925dbabbc852b05856dff",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-merchant-cash-released-replacement-approved-b744531.png",
+      "sha256": "f297c4a3a6dea43471cc6bb4c15fd00036179c187b39ac9f844f76375c8184e1",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/business-deadline-approved-calendar-upload-rejected-b744531-1.png",
+      "sha256": "cc816cc6d365881ae99eff44c61762890ea74d1fd6411ed17933485e2b3c5dea",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/business-deadline-approved-calendar-upload-rejected-b744531-2.png",
+      "sha256": "31db3a2614f8c954ad6251eb2fd62a93427b8df6a23d87e886390560607990d5",
+      "visually_inspected": true
+    }
+  ],
+  "failure": {
+    "status": 409,
+    "message": "Editable evidence record required",
+    "location": "business-day-deadline-release.spec.ts original line 280",
+    "cause": "The harness attempted to upload replacement bytes to an independently approved evidence record without explicitly reopening it.",
+    "correction": "Assert that the protected upload is rejected, explicitly reopen the calendar evidence using its current version, then upload and test stale filing readiness. Application approval/edit guards are unchanged."
+  },
+  "visual_findings": [
+    "The original UAE reviewed capture shows deadline 2026-07-06, five business days, excluded trigger 2026-06-26, Dubai timezone, June/July coverage, one fictional June 29 holiday, Saturday/Sunday exclusions and CURRENT filing sources.",
+    "Corrected merchant replacement captures in both countries show ACTIVE_APPROVED_ALLOCATION and an unobstructed footer after notification dismissal. These resolve the earlier 2674b72 India notification overlap for this source.",
+    "Two original failure screenshots are retained. One shows an unverified/loading source-state message and a notification overlay; neither establishes a completed stale-calendar flow."
+  ],
+  "limits": [
+    "UAE review was reached before the replacement failure; no successful replacement or India business-day execution is claimed from this run.",
+    "New corrected harness execution is pending. The full backend job was separate and still running at receipt creation.",
+    "All facts/holidays are synthetic, not client, national calendar or statutory qualification."
+  ]
+}

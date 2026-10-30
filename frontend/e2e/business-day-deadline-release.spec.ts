@@ -277,6 +277,28 @@ test("explicit UAE and India business-day calendars, independent filing and repl
         path: `${screenshots}/${country}-business-deadline-reviewed.png`,
       });
       const retained = structuredClone(paper.body);
+      const protectedUpload = await page.request.post(
+        `/api/backend/${audit}/evidence-files/${calendarRecord}`,
+        {
+          headers,
+          multipart: {
+            file: {
+              name: "SYNTHETIC-forbidden-approved-calendar-replacement.txt",
+              mimeType: "text/plain",
+              buffer: Buffer.from(
+                "SYNTHETIC approved evidence must be reopened before replacing original bytes",
+              ),
+            },
+          },
+        },
+      );
+      expect(protectedUpload.status(), await protectedUpload.text()).toBe(409);
+      documents.calendar = await action(
+        reviewer.request,
+        audit,
+        documents.calendar,
+        "reopen",
+      );
       await upload(
         calendarRecord,
         `SYNTHETIC-${country}-business-calendar-replacement.txt`,
