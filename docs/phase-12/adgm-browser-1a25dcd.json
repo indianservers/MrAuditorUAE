@@ -1,0 +1,71 @@
+{
+  "source_commit": "1a25dcde4a256fcb80f2032f75f5125b34646921",
+  "run_id": 41129296629,
+  "job_id": 124315806700,
+  "job_conclusion": "success",
+  "suite_passed": 14,
+  "suite_failed": 0,
+  "suite_duration": "9.5m",
+  "target_case_duration": "13.4s",
+  "artifact": {
+    "id": 13011604588,
+    "size_bytes": 19382203,
+    "sha256": "ef046c1bf27b5c8a42f79b244c93f14151cb4ba07656ca4b0ff53c753adb1ad3"
+  },
+  "scanner_artifact": {
+    "id": 13012562713,
+    "size_bytes": 818,
+    "sha256": "7474fc6c20d2750868ad2a08265be5fc1ccf0dbf8bcf9c5dcfade3245462d9cb",
+    "original_report": "docs/phase-12/adgm-authority-scans-1a25dcd.json"
+  },
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-ADGM-calendar-withdrawn-stale-1a25dcd.png",
+      "size_bytes": 35346,
+      "sha256": "87a2ec5170220a9d3f48713503e3ad75add83b0bc68cfd2a82d2b6d530ef34af",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-ADGM-duty-conditions-withdrawn-stale-1a25dcd.png",
+      "size_bytes": 320164,
+      "sha256": "38c56a17b5ac5654f13c249dfefffa02f2d0fb7fc6e04d561515b47a6f8d6607",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-ADGM-duty-five-supporting-documents-1a25dcd.png",
+      "size_bytes": 9240,
+      "sha256": "4b263a9cde78c7ac417a0d32e57a4cc8d160c9f1e93e1a0170a36e63498fbd3f",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-ADGM-duty-guarantee-source-1a25dcd.png",
+      "size_bytes": 9985,
+      "sha256": "12941b718cc4b8800f59df6d8c6b46df666943b600c91ceb80141d0f2e364622",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-ADGM-duty-stale-actions-1a25dcd.png",
+      "size_bytes": 320150,
+      "sha256": "0ab3ee2b3a35b844f69e2545fdd52e428704d035961b04fba9ae202e1ce71fcc",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-ADGM-duty-support-reviewed-1a25dcd.png",
+      "size_bytes": 325761,
+      "sha256": "09594e7fe8bf7dfcb37fd35131bd94a1bb435fbb48b5b45d921f9a1a6abf4b34",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-ADGM-procedure-reviewed-1a25dcd.png",
+      "size_bytes": 32957,
+      "sha256": "2ea390998b61cf4543a9c0a87e5fddba0021d89c0eb619c7a17af1905905c636",
+      "visually_inspected": true
+    }
+  ],
+  "limits": [
+    "Synthetic application engagements using exact public authority originals, separate preparer/reviewer and assessed facts; not a real client pilot or complete statutory qualification.",
+    "Full backend CI remained running when browser evidence was retrieved.",
+    "Original scan metadata supersedes the earlier missing-timings limitation without rewriting that historical receipt."
+  ],
+  "visual_review": "Seven original screenshots inspected. Segmented captures expose the five supporting documents, guarantee source, current/stale timetable and disabled stale filing action. Full-page detail panes clip lower content; these captures do not establish visual inspection of every condition row."
+}

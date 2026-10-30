@@ -210,3 +210,5 @@ docs/phase-12/adgm-*.xml -text whitespace=cr-at-eol
 
 docs/phase-12/0b1d27d-hosted-full.xml -text whitespace=cr-at-eol
 docs/phase-12/0b1d27d-hosted-coverage.json -text
+
+docs/phase-12/adgm-authority-scans-1a25dcd.json -text
