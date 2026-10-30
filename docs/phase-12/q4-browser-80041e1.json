@@ -1,0 +1,54 @@
+{
+  "source_revision": "80041e14df8acd17b2346ca521b2b771c0c505b9",
+  "run_id": 41138261078,
+  "browser_job_id": 124345983211,
+  "conclusion": "success",
+  "suite": {
+    "passed": 14,
+    "duration": "9.5m",
+    "native_withholding_case_seconds": 45.2
+  },
+  "artifact": {
+    "id": 13018776399,
+    "bytes": 20347804,
+    "sha256": "596cafd443a713c4b70c251f77fc7b8c45b83b889ce68f0b554e2dabc706a08b"
+  },
+  "images": [
+    {
+      "file": "IN-24Q-Q4-annual-field88-80041e1.png",
+      "sha256": "301886fb4739bc280538e77224dbe1df4089f54e5ac996b09536e254ad6c334a",
+      "bytes": 141340
+    },
+    {
+      "file": "IN-24Q-Q4-native-crosswalk-superseded-stale-80041e1.png",
+      "sha256": "8d0bfc2f87cf8971422a5819425f153339bb303640962bc48ed47e3cbf2b5c12",
+      "bytes": 171478
+    },
+    {
+      "file": "IN-24Q-Q4-native-regular-reviewed-80041e1.png",
+      "sha256": "062972ddafe0a1fb65b260035d09806ea9e0113371c5b611ee183b59c3d12466",
+      "bytes": 171574
+    },
+    {
+      "file": "IN-24Q-Q4-pension-chapter-lineage-80041e1.png",
+      "sha256": "e266c6151febebe02d5ffe8a9362d86b82d840b705d9f44775c25f2e9b535e62",
+      "bytes": 100270
+    }
+  ],
+  "visual_review": [
+    "Reviewed/current source shows one quarterly party and challan; annual populations remain separately labelled.",
+    "Field 88 is reachable; blank filler/hash fields display Not recorded and zero amounts remain zero.",
+    "P6A shows gross 700 and deductible 500 as separate fields.",
+    "Crosswalk replacement retains the original body and reviewed status while freshness changes to STALE.",
+    "Whole-panel captures contain blank space and do not visibly show every annual field; targeted annual captures cover the inspected segments."
+  ],
+  "automated_scope": [
+    "Seven native profiles plus the separate missing-PAN workflow in the compound browser case",
+    "Independent reviewer, self-review prohibition, native party/challan display, downloaded XLSX source-field checks and crosswalk supersession"
+  ],
+  "limits": [
+    "This source does not include new Form140/144 browser cases",
+    "No real-client, legal-rate, all-quarter salary, FVU or production qualification",
+    "Full backend job was still running when this browser receipt was recorded; browser success is not an all-jobs-success claim"
+  ]
+}
