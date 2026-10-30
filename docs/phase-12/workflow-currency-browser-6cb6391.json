@@ -1,0 +1,35 @@
+{
+  "source_commit": "6cb6391e13795c04a55f6e93a100e1e77f280fff",
+  "run_url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/40994380826",
+  "job_id": 123863980721,
+  "browser_tests_passed": 6,
+  "browser_duration": "6.5 minutes",
+  "annual_gst_case_duration_seconds": 17.5,
+  "artifact": {
+    "id": 12950514728,
+    "bytes": 11161363,
+    "sha256": "63da4c21ce15502e2313705f4e1a299e5e1d40206d333cf2423913d684d7b93a"
+  },
+  "original_screenshot": {
+    "path": "docs/country-workflows/screenshots/IN-annual-gst-withdrawn-source-stale-6cb6391.png",
+    "archive_entry": "country-reports/IN-annual-gst-withdrawn-source-stale.png",
+    "width": 2200,
+    "height": 2600,
+    "sha256": "37252e9de1671bfb47ae616951a7fa6f0a7b2b6f3e578c0485106a53f27580e2"
+  },
+  "visually_checked": [
+    "Fresh bank draft Account currency shows INR in India after reload.",
+    "Annual GST full result remains visible with PAN, financial year, rule-review date, explicit aggregate 30000000 INR and explicit other turnover zero.",
+    "Retained result shows REVIEWED and STALE; independent approval disabled; original one-row INR schedule remains visible."
+  ],
+  "executed_assertions": [
+    "Fresh India bank draft defaults INR before workflow selection and again after stale-result reload.",
+    "Annual GST pending controls, explicit PAN scope, independent approval and exact XLSX metadata/rows.",
+    "Source rejection makes the approved saved result stale without changing the retained result body."
+  ],
+  "limitations": [
+    "Synthetic input and actors; not a real-client pilot or professional legal qualification.",
+    "Full backend verification for this source is still running when this receipt was recorded.",
+    "Other screenshots in the same artifact are not newly visually qualified by this receipt."
+  ]
+}
