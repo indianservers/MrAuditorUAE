@@ -14,6 +14,7 @@ from tests.phase4.test_workflows import actor, create, grant, setup
 from tests.qa_crud.test_country_workflows import decision, double_boundaries, execute, source
 from tests.qa_crud.test_india_ecr_source import india_context
 from tests.unit.native_source_examples import SIF, SIF_FILENAME
+from tests.unit.test_dues_allocations import example, parameters
 from tests.unit.test_india_ecr_source import ECR
 
 pytestmark = pytest.mark.skipif(
@@ -54,6 +55,44 @@ def declared_expected(country):
         for index, (subject, component, amount, _) in enumerate(records, 1)
     ]
     return records, expected
+
+
+async def test_whitespace_in_india_component_does_not_activate_it_in_uae(environment, monkeypatch):
+    c = environment
+    double_boundaries(monkeypatch)
+    h, _, eid, base = await setup(c)
+    reviewer = await actor(h, "Firm Administrator", "country-component-reviewer")
+    await grant(c, h, base, reviewer)
+    population = example(component="pf : employee")
+    kinds = {
+        "expected": "obligations",
+        "reported": "obligations",
+        "bank": "transactions",
+        "allocations": "obligation-allocations",
+    }
+    selected = {}
+    for role, rows in population.items():
+        total = sum(Decimal(row["amount"]) for row in rows)
+        imported = await source(
+            c,
+            h,
+            eid,
+            rows,
+            "SYNTHETIC whitespace country scope " + role,
+            kinds[role],
+            {"AED": str(total)},
+        )
+        reviewed = await decision(c, reviewer[0], eid, imported)
+        assert reviewed.status_code == 201, reviewed.text
+        selected[role] = reviewed.json()["id"]
+    await execute(
+        c,
+        h,
+        eid,
+        "country-workflow",
+        {**parameters(), "source_ids": selected},
+        failed="Indian domestic",
+    )
 
 
 @pytest.mark.parametrize(

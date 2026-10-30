@@ -1,0 +1,75 @@
+{
+  "scope": "Complete backend and all-six-job proof for stock review display source 276905a; not later TCS, UN or boundary corrections",
+  "head_sha": "276905a8a0f3bf884f724c5fa5e6ad830e4e1b43",
+  "run_id": 41053383126,
+  "verify_job_id": 124054726524,
+  "all_six_jobs": "success",
+  "artifact": {
+    "id": 12979827007,
+    "bytes": 236726,
+    "sha256": "baeae80331c0fb0a9a1163638c7b8f90063d086b375fa0ba1429528198d712b1"
+  },
+  "junit": {
+    "tests": 4754,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 9
+  },
+  "passed": 4745,
+  "coverage_totals": {
+    "covered_lines": 35405,
+    "num_statements": 40808,
+    "percent_covered": 86.75994902960204,
+    "percent_covered_display": "87",
+    "missing_lines": 5403,
+    "excluded_lines": 5,
+    "percent_statements_covered": 86.75994902960204,
+    "percent_statements_covered_display": "87"
+  },
+  "original_artifacts": [
+    {
+      "path": "docs/phase-12/276905a-hosted-full.xml",
+      "sha256": "ee5640a6ca9f70cc9abb0ba5d90de346e2a55ad5ae7dc7805e9e5424e44f9cde",
+      "bytes": 729657,
+      "original_bytes": true
+    },
+    {
+      "path": "docs/phase-12/276905a-hosted-coverage.json",
+      "sha256": "e2b79bec657e1b0e74442bab7193fe05b9efc6ca1a49651691f3e85ae8eac194",
+      "bytes": 1836941,
+      "original_bytes": true
+    },
+    {
+      "path": "docs/phase-12/276905a-hosted-compliance-runtime-connector.json",
+      "sha256": "a191bebe5b5d2ffc34515c32a8d3814f51900dc10737f4514e1f771d054bd280",
+      "bytes": 5196,
+      "original_bytes": true
+    },
+    {
+      "path": "docs/phase-12/276905a-hosted-filing-lifecycle.json",
+      "sha256": "2510733e47893568f23ea74825b7220ee649fb080c83ff9df3f4c6d82fec03da",
+      "bytes": 3070,
+      "original_bytes": true
+    },
+    {
+      "path": "docs/phase-12/276905a-hosted-worker-recovery.json",
+      "sha256": "1f87e67f62c237062a9d3655c9f0257257ad6b8333d3ec8e627fa11fd92318db",
+      "bytes": 218,
+      "original_bytes": true
+    }
+  ],
+  "limitations": [
+    "Nine skipped checks remain; skips do not establish live vendor qualification",
+    "Browser evidence for this exact source is retained separately in stock-quantity-browser-276905a.json",
+    "Later commits require their own hosted verification; no current-main all-green claim"
+  ],
+  "skip_reasons": {
+    "Live Zoho requires explicit opt-in and authorized OAuth credentials": 1,
+    "Full ledger smoke needs authorized read-only access and independent source totals": 1,
+    "Live Tally requires an explicitly authorized local installation": 1,
+    "Requires explicit opt-in, vendor credentials and independently exported control totals": 1,
+    "Run scripts/connector_operations_run.py for isolated real DB tests": 4,
+    "Windows suspended-start and job-assignment control": 1
+  },
+  "operations_assertions": "Synthetic unresolved deadline retained; simulated connector not live-qualified; no external requests/submission; source correction stale while acknowledgment retained; duplicate reminders suppressed; abandoned claim requires manual retry, one pending outbox dispatch and no automatic reexecution"
+}

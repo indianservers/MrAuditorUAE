@@ -321,7 +321,14 @@ def test_nil_bank_source_requires_zero_movement_controls():
 
 @pytest.mark.parametrize(
     "component,country,period",
-    [("PF", "AE", "2026-05"), ("PT", "AE", "2026-05"), ("TCS:206C(1H)", "IN", "2025-04")],
+    [
+        ("PF", "AE", "2026-05"),
+        ("PT", "AE", "2026-05"),
+        ("TCS:206C(1H)", "IN", "2025-04"),
+        (" pf : employee ", "AE", "2026-05"),
+        ("\ttcs:206C(1G)", "AE", "2026-05"),
+        (" tds ", "AE", "2026-05"),
+    ],
 )
 def test_country_and_withdrawn_components_do_not_produce_liabilities(component, country, period):
     from tests.unit.country_workflow_cases import obligation
@@ -339,3 +346,50 @@ def test_country_and_withdrawn_components_do_not_produce_liabilities(component, 
     )
     with pytest.raises(ValueError):
         calculate(data, country, sources)
+
+
+@pytest.mark.parametrize("component", ["TCS:206C(1H)", "tcs: 206c ( 1h )"])
+@pytest.mark.parametrize("expected", ["0", "100"])
+def test_aggregate_withdrawn_component_distinguishes_expected_liability_from_observed_amounts(
+    component, expected
+):
+    from copy import deepcopy
+
+    from tests.unit.country_workflow_cases import obligation
+
+    sources = {
+        role: parsed(
+            "obligations",
+            [
+                obligation(
+                    id=role,
+                    currency="INR",
+                    component=component,
+                    amount=expected if role == "expected" else "100",
+                )
+            ],
+        )
+        for role in ("expected", "return", "payment")
+    }
+    data = WorkflowInput(
+        workflow="statutory-dues",
+        source_ids={role: uuid.uuid4() for role in sources},
+        as_of="2026-06-30",
+        title="Synthetic post-withdrawal observations",
+        rationale="Explicit zero expectation remains separate from erroneous observed collection",
+    )
+    if expected == "100":
+        with pytest.raises(ValueError, match="withdrawn"):
+            calculate(data, "IN", sources)
+    else:
+        result = calculate(data, "IN", sources)
+        row = result["rows"][0]
+        assert row["amounts"] == {"expected": "0", "return": "100", "payment": "100"}
+        assert row["state"] == "VARIANCE"
+        assert "withdrawn period" not in (approval_error(result) or "")
+        legacy = deepcopy(result)
+        legacy["rows"][0].update(state="MATCHED", auditor_status="EXCEPTION_DOCUMENTED")
+        legacy["rows"][0]["amounts"]["expected"] = "100"
+        retained = deepcopy(legacy)
+        assert "withdrawn period" in approval_error(legacy)
+        assert legacy == retained

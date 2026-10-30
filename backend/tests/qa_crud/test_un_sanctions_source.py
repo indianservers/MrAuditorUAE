@@ -105,6 +105,22 @@ async def test_native_un_source_review_screening_export_and_withdrawal(
     row = result["body"]["rows"][0]
     assert row["state"] == "POTENTIAL_NAME_MATCH" and row["candidate_count"] == 2
     assert {v["native_alias_quality"] for v in row["candidates"]} == {"Good", "Low"}
+    before = result
+    documented = await decision(c, h, eid, result, action="accept", item_id=row["id"])
+    assert documented.status_code == 201, documented.text
+    result = documented.json()
+    assert result["body"]["rows"][0]["reviewer_disposition"] == "OBSERVATIONS_DOCUMENTED"
+    assert result["body"]["rows"][0]["state"] == "POTENTIAL_NAME_MATCH"
+    assert result["body"]["rows"][0]["candidates"] == row["candidates"]
+    historical_before = await c.get(
+        f"/api/v1/intelligence/engagements/{eid}/events/{before['id']}", headers=h
+    )
+    assert historical_before.json()["body"] == before["body"]
+    own_review = await decision(c, h, eid, result)
+    assert own_review.status_code == 403
+    approved = await decision(c, reviewer[0], eid, result)
+    assert approved.status_code == 201, approved.text
+    result = approved.json()
     prefix = f"/api/v1/intelligence/engagements/{eid}/events/{result['id']}"
     exported = await c.get(prefix + "/export?format=xlsx", headers=h)
     assert exported.status_code == 200, exported.text

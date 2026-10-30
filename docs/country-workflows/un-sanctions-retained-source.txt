@@ -63,3 +63,23 @@ captures are requested. Local lint/type checks and targeted discovery pass;
 synthetic XML fixture. Hosted execution and capture inspection are still pending.
 Whole-suite local discovery lacks the hosted identity file; no identities or
 services were fabricated to bypass that prerequisite.
+
+Hosted source 42be0e4: all ten smoke cases passed in 7.8 minutes; the new UAE
+then India UN case passed in 20 seconds. Four original captures are retained
+and visually inspected, with archive/source/image hashes in the source-specific
+un-browser-42be0e4.json receipt. Both alias qualities and the permanent reference
+remain visible after source withdrawal; approval is disabled on stale results.
+Visual review found that generic exception documentation left the subject
+reviewer_disposition at UNREVIEWED despite a reviewed observation schedule.
+The follow-up saves OBSERVATIONS_DOCUMENTED, preserves all candidate scores and
+references, and explains that this is not positive identification, a false-positive
+decision or sanctions clearance. Older saved versions are not rewritten.
+The hosted case now asserts the new marker and unchanged POTENTIAL_NAME_MATCH
+state. Corrected-marker hosted execution remains separate from these originals.
+
+Disposition correction validation: 47 targeted backend checks, 149 focused
+frontend checks and all 432 frontend tests pass. Current candidate identities,
+scores, POTENTIAL_NAME_MATCH state, independence controls and older saved
+versions remain intact. Next.js production build, scoped static checks and
+current API payload contracts pass. The marker correction awaits its own
+hosted capture; the source 42be0e4 captures intentionally remain original.

@@ -66,3 +66,40 @@ remain visible and approval is disabled. The browser also asserts separate
 review HTTP 409 and unchanged saved body/version. Source-specific receipt:
 docs/phase-12/withholding-browser-da1151a.json. This proves the synthetic
 boundary UI, not complete native TCS returns, rate/threshold rules or client work.
+
+Cross-workflow correction: regression tests exposed five positive-expectation
+bypasses in the bank-obligation transformer (explicit TCS prefix or transaction
+date after cutoff despite an earlier declared reporting month). The old guard
+also rejected both reported positive observations and explicit zero expectations.
+The transformer, bank-allocation calculator and aggregate dues comparison now
+reuse the narrow named-provision boundary for expected positive amounts only.
+Raw TCS:206C(1H) components and typed collector scopes are checked without
+inventing mappings for arbitrary provision names. Reported observations remain
+available for reconciliation; historical March expectations can settle later.
+Saved legacy bank-allocation and aggregate dues results are checked again before
+new approval or draft generation; documenting exceptions cannot override them.
+Previously reserved bank cash is not silently released by this change; the
+existing explicit withdrawal process remains required. Saved bodies are not
+rewritten. The hosted TCS case now uses an explicit TCS: prefix, separates actual
+deposit dates from expectations and asserts the bank-obligation route returns
+422 for the withdrawn positive expectation. This extension awaits hosted proof.
+An attempt to reopen the previously assessed official boundary URL during this
+follow-up was redirected to an inaccessible host; no new legal-source inspection
+or broader legal qualification is claimed. The existing retained source scope
+continues to apply.
+
+Country normalization follow-up: an internally spaced PF component bypassed
+the previous UAE domestic-component check. The original failing parser-level
+test is retained. Both aggregate dues and bank-allocation workflows now compare
+case/whitespace-normalized explicit PF/ESI/PT/TDS/TCS scheme names for UAE
+isolation while retaining source spelling. A real uploaded-source/job API case
+confirms that pf : employee cannot activate India domestic dues in UAE.
+Final related backend validation: 359 tests passed across country workflow,
+withholding, dues allocation and bank-cash reservation/withdrawal suites. The
+42 SQLAlchemy distinct-on deprecation warnings are pre-existing; no failure or
+skip occurred. Ruff, mypy (418 files), TypeScript and API contract checks pass.
+Initial regression: seven failures reproduced the five bypasses and two
+over-rejections. One subsequent API/unit test iteration needed the existing
+error-envelope assertion and explicit nil-allocation fixture rationale corrected;
+production nil-population controls were not weakened. Synthetic validation
+does not qualify a complete India rate/threshold/form corpus or real clients.

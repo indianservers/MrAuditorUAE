@@ -1,0 +1,94 @@
+{
+  "scope": "Source-specific shared native UN uploaded XML browser proof; visible disposition inconsistency found for follow-up",
+  "head_sha": "42be0e44d40f2a581623562a362b04f572041cdf",
+  "run_id": 41060409490,
+  "job_id": 124078417441,
+  "result": {
+    "passed": 10,
+    "failed": 0,
+    "minutes": 7.8,
+    "new_uae_india_case_seconds": 20.0
+  },
+  "archive": {
+    "artifact_id": 12980665379,
+    "bytes": 13917369,
+    "sha256": "ec9d82650adbcc3469dbd627cba2022742780bff693f1bacc780fd25362a9518"
+  },
+  "tested_sources": [
+    {
+      "path": "frontend/e2e/un-sanctions-release.spec.ts",
+      "sha256": "ad1c20a5a7bb445970a9c9ffd8d761a3fe0ff3d809957200995b2d1a88b44466"
+    },
+    {
+      "path": "frontend/src/features/un-sanctions-source.tsx",
+      "sha256": "ad00c3c9b4d03e14deb970c5e08e2d6daf355636fb9fe494267eb2ad15ee1fee"
+    },
+    {
+      "path": "frontend/src/features/screening-candidates.tsx",
+      "sha256": "c2c4a995818d5a4ac332a3b6785bfd75312208f5d82f93f13f03bee41e49a50f"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/un_sanctions_source.py",
+      "sha256": "458512065a27c5cc471ec2edb6ce07ca08d3973184b50e95f58d7205da065947"
+    },
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "sha256": "257e281fb05aa5637f6d9fcc7e79bb1811e17faa554e48534fec2882b5cdbbdd"
+    }
+  ],
+  "original_screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-UN-alias-quality-reviewed-42be0e4.png",
+      "sha256": "7c1cc74f538f2898f61a9e1600498142a0b3b58d6a7160fbd51b35952f1c45ca",
+      "dimensions": [
+        1621,
+        434
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-UN-source-withdrawn-stale-42be0e4.png",
+      "sha256": "6753584248895b7e4fb2f550d72da5dbde0f52044bf37a8c7fd373a30f1631e2",
+      "dimensions": [
+        1663,
+        1176
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-UN-alias-quality-reviewed-42be0e4.png",
+      "sha256": "7c1cc74f538f2898f61a9e1600498142a0b3b58d6a7160fbd51b35952f1c45ca",
+      "dimensions": [
+        1621,
+        434
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-UN-source-withdrawn-stale-42be0e4.png",
+      "sha256": "7c3736b10c58931390718af4820550fbe426e679fb9fd75270b443a4f5b5fb88",
+      "dimensions": [
+        1663,
+        1176
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    }
+  ],
+  "asserted": [
+    "Actual configured ClamAV evidence upload and six-control form submitted through BFF",
+    "Queued native parse and exact snapshot policy, independent source review; source self-review 403",
+    "Two alias candidates for one subject with Good and Low quality and permanent reference",
+    "Unadjudicated result review 409; generic documented observations followed by independent approval",
+    "Complete XLSX candidate fields and source withdrawal retaining unchanged stale result/version"
+  ],
+  "visual_finding": "Original captures show both quality levels, references and stale disabled approval. The subject row still says UNREVIEWED after generic exception documentation and review; follow-up records OBSERVATIONS_DOCUMENTED without implying identity clearance. These originals remain unchanged.",
+  "limitations": [
+    "This run predates the disposition-marker correction and added bank-obligation bypass assertion",
+    "Synthetic names and exact uploaded snapshot controls, not real client identity adjudication",
+    "No live list authenticity, PEP/registry integration, domestic legal clearance or full backend CI claim"
+  ]
+}

@@ -67,6 +67,13 @@ export function ScreeningCandidates({
             "Not retained in this historical result",
         )}
       </p>
+      {subject.reviewer_disposition === "OBSERVATIONS_DOCUMENTED" && (
+        <p>
+          Observation assessment documented. The saved notes and independent
+          review do not establish positive identification, a false positive or
+          sanctions clearance.
+        </p>
+      )}
       {(subject.candidate_preview_truncated === true ||
         (subject.candidate_count !== undefined &&
           subject.candidate_count !== candidates.length)) && (

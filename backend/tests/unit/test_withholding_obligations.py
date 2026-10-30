@@ -6,11 +6,13 @@ from uuid import uuid4
 import pytest
 
 from app.modules.country_workflows.calculations import calculate
+from app.modules.country_workflows.review import approval_error
 from app.modules.country_workflows.schemas import Obligation, WorkflowInput
 from app.modules.country_workflows.withholding_obligations import (
     WithholdingObligationInput,
     source_rows,
 )
+from app.modules.country_workflows.withholding_provisions import saved_withdrawn_expectation
 from tests.unit.test_dues_allocations import example, parameters
 from tests.unit.test_withholding_workflows import record
 
@@ -188,6 +190,142 @@ def test_unsupported_or_uncontrolled_source_cannot_establish_obligations(change)
         population[0]["transaction_date"] = "2026-07-01"
     with pytest.raises(ValueError):
         bridge(population=population, **overrides)
+
+
+@pytest.mark.parametrize("reference", ["206C(1H)", "TCS:206C(1H)", "tcs: 206c ( 1h )"])
+@pytest.mark.parametrize(
+    "transaction_date,period", [("2025-04-01", "2025-03"), ("2025-03-31", "2025-04")]
+)
+def test_positive_withdrawn_expectation_cannot_bypass_bank_obligation_boundary(
+    reference, transaction_date, period
+):
+    population = [records(legal_role="collector")[0]]
+    population[0].update(
+        rule_reference=reference,
+        transaction_date=transaction_date,
+        period=period,
+        tax_year_start="2025-01-01",
+        tax_year_end="2025-12-31",
+        assessment_period_start="2025-01-01",
+        assessment_period_end="2025-12-31",
+    )
+    with pytest.raises(ValueError, match="withdrawn"):
+        bridge(legal_role="collector", population=population, expected_current_rows=1, amount="100")
+
+
+@pytest.mark.parametrize("purpose,amount", [("reported", "100"), ("expected", "0")])
+def test_observed_erroneous_collection_and_zero_expectation_remain_distinct(purpose, amount):
+    population = [records(purpose, "collector")[0]]
+    population[0].update(rule_reference="206C(1H)", amount=amount)
+    rows, totals, _ = bridge(
+        purpose, "collector", population=population, expected_current_rows=1, amount=amount
+    )
+    assert totals == {"INR": amount}
+    assert rows[0]["amount"] == amount
+    assert rows[0]["withholding_scope"]["legal_role"] == "collector"
+
+
+def test_historical_march_expectation_can_be_settled_later_without_new_liability():
+    population = [records(legal_role="collector")[0]]
+    population[0].update(
+        rule_reference="TCS:206C(1H)",
+        transaction_date="2025-03-31",
+        period="2025-03",
+        tax_year_start="2024-04-01",
+        tax_year_end="2025-03-31",
+        assessment_period_start="2024-04-01",
+        assessment_period_end="2025-03-31",
+        due_date="2025-04-07",
+    )
+    rows, _, _ = bridge(
+        legal_role="collector", population=population, expected_current_rows=1, amount="100"
+    )
+    assert rows[0]["withholding_scope"]["transaction_date"] == "2025-03-31"
+
+
+def test_observed_erroneous_collection_survives_zero_expected_cash_reconciliation():
+    population = settlement("collector")
+    for role in ("expected", "reported"):
+        for row in population[role]:
+            row["withholding_scope"]["rule_reference"] = "TCS:206C(1H)"
+            if role == "expected":
+                row["amount"] = "0"
+    population["allocations"] = []
+    typed_sources = {
+        role: {
+            "table_type": {
+                "expected": "obligations",
+                "reported": "obligations",
+                "bank": "transactions",
+                "allocations": "obligation-allocations",
+            }[role],
+            "rows": rows,
+            "control_totals": {},
+        }
+        for role, rows in population.items()
+    }
+    typed_sources["allocations"]["nil_reason"] = (
+        "Synthetic independent assessment: no bank allocation has been made"
+    )
+    output = calculate(
+        WorkflowInput.model_validate(
+            {
+                **parameters(),
+                "currency": "INR",
+                "obligation_month_start": "2026-05",
+                "obligation_month_end": "2026-05",
+            }
+        ),
+        "IN",
+        typed_sources,
+    )
+    rows = [r for r in output["rows"] if r["kind"] == "obligation"]
+    assert all(r["expected_amount"] == "0" for r in rows)
+    assert {r["reported_amount"] for r in rows} == {"100", "80"}
+    assert not saved_withdrawn_expectation(output)
+
+
+@pytest.mark.parametrize("scoped", [True, False])
+def test_saved_cash_results_cannot_use_documented_exception_to_approve_withdrawn_positive_expectation(
+    scoped,
+):
+    output = run(
+        settlement("collector"),
+        currency="INR",
+        obligation_month_start="2026-05",
+        obligation_month_end="2026-05",
+    )
+    for row in output["rows"]:
+        row["auditor_status"] = "EXCEPTION_DOCUMENTED"
+        if row["kind"] == "obligation":
+            if scoped:
+                row["withholding_scope"]["rule_reference"] = "tcs: 206c ( 1h )"
+            else:
+                row.pop("withholding_scope")
+                row["component"] = "TCS:206C(1H)"
+    retained = deepcopy(output)
+    assert saved_withdrawn_expectation(output)
+    assert "withdrawn period" in approval_error(output)
+    assert output == retained
+
+
+def test_expected_cash_source_cannot_bypass_boundary_with_canonical_scope_or_component():
+    for scoped in (True, False):
+        population = settlement("collector")
+        for role in ("expected", "reported"):
+            for row in population[role]:
+                if scoped:
+                    row["withholding_scope"]["rule_reference"] = "TCS:206C(1H)"
+                else:
+                    row.pop("withholding_scope")
+                    row["component"] = " tcs: 206c ( 1h ) "
+        with pytest.raises(ValueError, match="withdrawn"):
+            run(
+                population,
+                currency="INR",
+                obligation_month_start="2026-05",
+                obligation_month_end="2026-05",
+            )
 
 
 @pytest.mark.parametrize(

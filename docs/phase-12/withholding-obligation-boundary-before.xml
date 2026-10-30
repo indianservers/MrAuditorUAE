@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="7" skipped="0" tests="30" time="2.059" timestamp="2026-10-30T18:37:15.275594+05:30" hostname="DESKTOP-B3SR465"><testcase classname="tests.unit.test_withholding_obligations" name="test_split_and_pooled_bank_cash_keeps_transactions_and_history_separate[deductor]" time="0.005" /><testcase classname="tests.unit.test_withholding_obligations" name="test_split_and_pooled_bank_cash_keeps_transactions_and_history_separate[collector]" time="0.002" /><testcase classname="tests.unit.test_withholding_obligations" name="test_partial_payment_preserves_residual_and_does_not_claim_posted_tax_credit" time="0.001" /><testcase classname="tests.unit.test_withholding_obligations" name="test_unsupported_or_uncontrolled_source_cannot_establish_obligations[count]" time="0.001" /><testcase classname="tests.unit.test_withholding_obligations" name="test_unsupported_or_uncontrolled_source_cannot_establish_obligations[amount]" time="0.001" /><testcase classname="tests.unit.test_withholding_obligations" name="test_unsupported_or_uncontrolled_source_cannot_establish_obligations[no-current]" time="0.001" /><testcase classname="tests.unit.test_withholding_obligations" name="test_unsupported_or_uncontrolled_source_cannot_establish_obligations[ambiguous]" time="0.001" /><testcase classname="tests.unit.test_withholding_obligations" name="test_unsupported_or_uncontrolled_source_cannot_establish_obligations[payment]" time="0.001" /><testcase classname="tests.unit.test_withholding_obligations" name="test_unsupported_or_uncontrolled_source_cannot_establish_obligations[due]" time="0.001" /><testcase classname="tests.unit.test_withholding_obligations" name="test_unsupported_or_uncontrolled_source_cannot_establish_obligations[assessment]" time="0.001" /><testcase classname="tests.unit.test_withholding_obligations" name="test_unsupported_or_uncontrolled_source_cannot_establish_obligations[coverage]" time="0.001" /><testcase classname="tests.unit.test_withholding_obligations" name="test_unsupported_or_uncontrolled_source_cannot_establish_obligations[retired]" time="0.001" /><testcase classname="tests.unit.test_withholding_obligations" name="test_unsupported_or_uncontrolled_source_cannot_establish_obligations[role]" time="0.001" /><testcase classname="tests.unit.test_withholding_obligations" name="test_unsupported_or_uncontrolled_source_cannot_establish_obligations[future]" time="0.001" /><testcase classname="tests.unit.test_withholding_obligations" name="test_positive_withdrawn_expectation_cannot_bypass_bank_obligation_boundary[2025-04-01-2025-03-206C(1H)]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">reference = '206C(1H)', transaction_date = '2025-04-01', period = '2025-03'
+
+    @pytest.mark.parametrize("reference", ["206C(1H)", "TCS:206C(1H)", "tcs: 206c ( 1h )"])
+    @pytest.mark.parametrize(
+        "transaction_date,period", [("2025-04-01", "2025-03"), ("2025-03-31", "2025-04")]
+    )
+    def test_positive_withdrawn_expectation_cannot_bypass_bank_obligation_boundary(
+        reference, transaction_date, period
+    ):
+        population = [records(legal_role="collector")[0]]
+        population[0].update(
+            rule_reference=reference,
+            transaction_date=transaction_date,
+            period=period,
+            tax_year_start="2025-01-01",
+            tax_year_end="2025-12-31",
+            assessment_period_start="2025-01-01",
+            assessment_period_end="2025-12-31",
+        )
+&gt;       with pytest.raises(ValueError, match="withdrawn"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\unit\test_withholding_obligations.py:210: Failed</failure></testcase><testcase classname="tests.unit.test_withholding_obligations" name="test_positive_withdrawn_expectation_cannot_bypass_bank_obligation_boundary[2025-04-01-2025-03-TCS:206C(1H)]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">reference = 'TCS:206C(1H)', transaction_date = '2025-04-01', period = '2025-03'
+
+    @pytest.mark.parametrize("reference", ["206C(1H)", "TCS:206C(1H)", "tcs: 206c ( 1h )"])
+    @pytest.mark.parametrize(
+        "transaction_date,period", [("2025-04-01", "2025-03"), ("2025-03-31", "2025-04")]
+    )
+    def test_positive_withdrawn_expectation_cannot_bypass_bank_obligation_boundary(
+        reference, transaction_date, period
+    ):
+        population = [records(legal_role="collector")[0]]
+        population[0].update(
+            rule_reference=reference,
+            transaction_date=transaction_date,
+            period=period,
+            tax_year_start="2025-01-01",
+            tax_year_end="2025-12-31",
+            assessment_period_start="2025-01-01",
+            assessment_period_end="2025-12-31",
+        )
+&gt;       with pytest.raises(ValueError, match="withdrawn"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\unit\test_withholding_obligations.py:210: Failed</failure></testcase><testcase classname="tests.unit.test_withholding_obligations" name="test_positive_withdrawn_expectation_cannot_bypass_bank_obligation_boundary[2025-04-01-2025-03-tcs: 206c ( 1h )]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">reference = 'tcs: 206c ( 1h )', transaction_date = '2025-04-01'
+period = '2025-03'
+
+    @pytest.mark.parametrize("reference", ["206C(1H)", "TCS:206C(1H)", "tcs: 206c ( 1h )"])
+    @pytest.mark.parametrize(
+        "transaction_date,period", [("2025-04-01", "2025-03"), ("2025-03-31", "2025-04")]
+    )
+    def test_positive_withdrawn_expectation_cannot_bypass_bank_obligation_boundary(
+        reference, transaction_date, period
+    ):
+        population = [records(legal_role="collector")[0]]
+        population[0].update(
+            rule_reference=reference,
+            transaction_date=transaction_date,
+            period=period,
+            tax_year_start="2025-01-01",
+            tax_year_end="2025-12-31",
+            assessment_period_start="2025-01-01",
+            assessment_period_end="2025-12-31",
+        )
+&gt;       with pytest.raises(ValueError, match="withdrawn"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\unit\test_withholding_obligations.py:210: Failed</failure></testcase><testcase classname="tests.unit.test_withholding_obligations" name="test_positive_withdrawn_expectation_cannot_bypass_bank_obligation_boundary[2025-03-31-2025-04-206C(1H)]" time="0.001" /><testcase classname="tests.unit.test_withholding_obligations" name="test_positive_withdrawn_expectation_cannot_bypass_bank_obligation_boundary[2025-03-31-2025-04-TCS:206C(1H)]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">reference = 'TCS:206C(1H)', transaction_date = '2025-03-31', period = '2025-04'
+
+    @pytest.mark.parametrize("reference", ["206C(1H)", "TCS:206C(1H)", "tcs: 206c ( 1h )"])
+    @pytest.mark.parametrize(
+        "transaction_date,period", [("2025-04-01", "2025-03"), ("2025-03-31", "2025-04")]
+    )
+    def test_positive_withdrawn_expectation_cannot_bypass_bank_obligation_boundary(
+        reference, transaction_date, period
+    ):
+        population = [records(legal_role="collector")[0]]
+        population[0].update(
+            rule_reference=reference,
+            transaction_date=transaction_date,
+            period=period,
+            tax_year_start="2025-01-01",
+            tax_year_end="2025-12-31",
+            assessment_period_start="2025-01-01",
+            assessment_period_end="2025-12-31",
+        )
+&gt;       with pytest.raises(ValueError, match="withdrawn"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\unit\test_withholding_obligations.py:210: Failed</failure></testcase><testcase classname="tests.unit.test_withholding_obligations" name="test_positive_withdrawn_expectation_cannot_bypass_bank_obligation_boundary[2025-03-31-2025-04-tcs: 206c ( 1h )]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">reference = 'tcs: 206c ( 1h )', transaction_date = '2025-03-31'
+period = '2025-04'
+
+    @pytest.mark.parametrize("reference", ["206C(1H)", "TCS:206C(1H)", "tcs: 206c ( 1h )"])
+    @pytest.mark.parametrize(
+        "transaction_date,period", [("2025-04-01", "2025-03"), ("2025-03-31", "2025-04")]
+    )
+    def test_positive_withdrawn_expectation_cannot_bypass_bank_obligation_boundary(
+        reference, transaction_date, period
+    ):
+        population = [records(legal_role="collector")[0]]
+        population[0].update(
+            rule_reference=reference,
+            transaction_date=transaction_date,
+            period=period,
+            tax_year_start="2025-01-01",
+            tax_year_end="2025-12-31",
+            assessment_period_start="2025-01-01",
+            assessment_period_end="2025-12-31",
+        )
+&gt;       with pytest.raises(ValueError, match="withdrawn"):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\unit\test_withholding_obligations.py:210: Failed</failure></testcase><testcase classname="tests.unit.test_withholding_obligations" name="test_observed_erroneous_collection_and_zero_expectation_remain_distinct[reported-100]" time="0.001"><failure message="ValueError: Section206C(1H) is withdrawn for this obligation period">purpose = 'reported', amount = '100'
+
+    @pytest.mark.parametrize("purpose,amount", [("reported", "100"), ("expected", "0")])
+    def test_observed_erroneous_collection_and_zero_expectation_remain_distinct(purpose, amount):
+        population = [records(purpose, "collector")[0]]
+        population[0].update(rule_reference="206C(1H)", amount=amount)
+&gt;       rows, totals, _ = bridge(
+            purpose, "collector", population=population, expected_current_rows=1, amount=amount
+        )
+
+tests\unit\test_withholding_obligations.py:218: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\unit\test_withholding_obligations.py:67: in bridge
+    return source_rows(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+body = {'table_type': 'withholding-records', 'rows': [{'id': 'reported-1', 'registration': 'SYN-ENTITY', 'counterparty': 'SYN-SAME-PARTY', 'legal_role': 'collector', ...}]}
+data = WithholdingObligationInput(purpose='reported', legal_role='collector', cutoff_date=datetime.date(2026, 6, 30), expecte...SYNTHETIC tax obligations', assessment='Independent withholding population, due dates and split cash settlement scope')
+
+    def source_rows(body, data):
+        if body.get("table_type") != "withholding-records":
+            raise ValueError(
+                "Select retained withholding records, not beneficiary credit or bank evidence"
+            )
+        selected, inactive = select_records(
+            body["rows"], data.legal_role, data.cutoff_date, data.purpose
+        )
+        if len(selected) != data.expected_current_rows or inactive.keys() - selected.keys():
+            raise ValueError(
+                "Every withholding identity needs one current record and agreeing independent row control; cancelled history is not zero"
+            )
+        rows = []
+        with localcontext() as arithmetic:
+            arithmetic.prec = 80
+            total = sum((Decimal(row["amount"]) for row in selected.values()), Decimal(0))
+            if total != data.amount:
+                raise ValueError("Independent current withholding amount control does not agree")
+            for key, record in sorted(selected.items()):
+                if record.get("payment_date"):
+                    raise ValueError(
+                        "Payment dates cannot establish expected/reported obligations; retain independent allocated bank evidence"
+                    )
+                if data.purpose == "expected" and (
+                    not record.get("due_date") or assessment_issues(record, "rule", {})
+                ):
+                    raise ValueError(
+                        "Expected withholding needs a retained rule assessment, transaction coverage and explicit due date"
+                    )
+                scope = WithholdingSettlementScope.model_validate(
+                    {field: record[field] for field in WithholdingSettlementScope.model_fields}
+                )
+                if (
+                    scope.tax_kind == "TCS"
+                    and scope.rule_reference.upper().replace(" ", "") == "206C(1H)"
+                    and record["period"] &gt;= "2025-04"
+                ):
+&gt;                   raise ValueError("Section206C(1H) is withdrawn for this obligation period")
+E                   ValueError: Section206C(1H) is withdrawn for this obligation period
+
+app\modules\country_workflows\withholding_obligations.py:82: ValueError</failure></testcase><testcase classname="tests.unit.test_withholding_obligations" name="test_observed_erroneous_collection_and_zero_expectation_remain_distinct[expected-0]" time="0.001"><failure message="ValueError: Section206C(1H) is withdrawn for this obligation period">purpose = 'expected', amount = '0'
+
+    @pytest.mark.parametrize("purpose,amount", [("reported", "100"), ("expected", "0")])
+    def test_observed_erroneous_collection_and_zero_expectation_remain_distinct(purpose, amount):
+        population = [records(purpose, "collector")[0]]
+        population[0].update(rule_reference="206C(1H)", amount=amount)
+&gt;       rows, totals, _ = bridge(
+            purpose, "collector", population=population, expected_current_rows=1, amount=amount
+        )
+
+tests\unit\test_withholding_obligations.py:218: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+tests\unit\test_withholding_obligations.py:67: in bridge
+    return source_rows(
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+body = {'table_type': 'withholding-records', 'rows': [{'id': 'expected-1', 'registration': 'SYN-ENTITY', 'counterparty': 'SYN-SAME-PARTY', 'legal_role': 'collector', ...}]}
+data = WithholdingObligationInput(purpose='expected', legal_role='collector', cutoff_date=datetime.date(2026, 6, 30), expecte...SYNTHETIC tax obligations', assessment='Independent withholding population, due dates and split cash settlement scope')
+
+    def source_rows(body, data):
+        if body.get("table_type") != "withholding-records":
+            raise ValueError(
+                "Select retained withholding records, not beneficiary credit or bank evidence"
+            )
+        selected, inactive = select_records(
+            body["rows"], data.legal_role, data.cutoff_date, data.purpose
+        )
+        if len(selected) != data.expected_current_rows or inactive.keys() - selected.keys():
+            raise ValueError(
+                "Every withholding identity needs one current record and agreeing independent row control; cancelled history is not zero"
+            )
+        rows = []
+        with localcontext() as arithmetic:
+            arithmetic.prec = 80
+            total = sum((Decimal(row["amount"]) for row in selected.values()), Decimal(0))
+            if total != data.amount:
+                raise ValueError("Independent current withholding amount control does not agree")
+            for key, record in sorted(selected.items()):
+                if record.get("payment_date"):
+                    raise ValueError(
+                        "Payment dates cannot establish expected/reported obligations; retain independent allocated bank evidence"
+                    )
+                if data.purpose == "expected" and (
+                    not record.get("due_date") or assessment_issues(record, "rule", {})
+                ):
+                    raise ValueError(
+                        "Expected withholding needs a retained rule assessment, transaction coverage and explicit due date"
+                    )
+                scope = WithholdingSettlementScope.model_validate(
+                    {field: record[field] for field in WithholdingSettlementScope.model_fields}
+                )
+                if (
+                    scope.tax_kind == "TCS"
+                    and scope.rule_reference.upper().replace(" ", "") == "206C(1H)"
+                    and record["period"] &gt;= "2025-04"
+                ):
+&gt;                   raise ValueError("Section206C(1H) is withdrawn for this obligation period")
+E                   ValueError: Section206C(1H) is withdrawn for this obligation period
+
+app\modules\country_workflows\withholding_obligations.py:82: ValueError</failure></testcase><testcase classname="tests.unit.test_withholding_obligations" name="test_historical_march_expectation_can_be_settled_later_without_new_liability" time="0.001" /><testcase classname="tests.unit.test_withholding_obligations" name="test_cash_allocation_cannot_cross_tax_scope_even_when_amount_and_party_agree[rule_reference-DIFFERENT-SECTION]" time="0.001" /><testcase classname="tests.unit.test_withholding_obligations" name="test_cash_allocation_cannot_cross_tax_scope_even_when_amount_and_party_agree[tax_year_start-2025-04-01]" time="0.001" /><testcase classname="tests.unit.test_withholding_obligations" name="test_cash_allocation_cannot_cross_tax_scope_even_when_amount_and_party_agree[transaction_reference-OTHER-TX]" time="0.001" /><testcase classname="tests.unit.test_withholding_obligations" name="test_cash_allocation_cannot_cross_tax_scope_even_when_amount_and_party_agree[transaction_date-2026-05-16]" time="0.001" /><testcase classname="tests.unit.test_withholding_obligations" name="test_bank_outflow_cannot_precede_withholding_transaction" time="0.001" /><testcase classname="tests.unit.test_withholding_obligations" name="test_cross_country_and_invalid_scope_component_rejected" time="0.002" /><testcase classname="tests.unit.test_withholding_obligations" name="test_non_current_observation_selection_remains_visible_and_not_aggregated" time="0.001" /></testsuite></testsuites>

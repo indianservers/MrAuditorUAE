@@ -1288,6 +1288,8 @@ async def review(
             auditor=str(ctx.user_id),
             auditor_at=datetime.now(UTC).isoformat(),
         )
+        if body.get("workflow") == "sanctions-name-review":
+            selected_row["reviewer_disposition"] = "OBSERVATIONS_DOCUMENTED"
         body.update(
             rows=rows,
             review_status="PREPARED",

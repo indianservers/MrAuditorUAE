@@ -16,7 +16,9 @@ from app.modules.country_workflows.payroll_calculations import PAYROLL_CALCULATO
 from app.modules.country_workflows.pension_calculations import PENSION_CALCULATORS
 from app.modules.country_workflows.practice_calculations import PRACTICE_CALCULATORS
 from app.modules.country_workflows.sector_calculations import SECTOR_CALCULATORS
+from app.modules.country_workflows.statutory_components import india_domestic_component
 from app.modules.country_workflows.withholding_calculations import withholding
+from app.modules.country_workflows.withholding_provisions import withdrawn_obligation
 from app.modules.intelligence.matching import reconcile_transactions
 
 
@@ -381,7 +383,6 @@ def obligations(data, tables, country):
     roles = list(WORKFLOWS[data.workflow][2])
     expected_role = roles[0]
     groups: dict[str, defaultdict[tuple, dict[str, Any]]] = {}
-    forbidden = {"PF", "ESI", "PT", "TDS", "TCS"} if country == "AE" else set()
     for role, source in tables.items():
         grouped: defaultdict[tuple, dict[str, Any]] = defaultdict(
             lambda: {
@@ -395,11 +396,11 @@ def obligations(data, tables, country):
         )
         for r in source:
             component = r["component"].upper()
-            if component.split(":")[0] in forbidden:
+            if country == "AE" and india_domestic_component(component):
                 raise ValueError("Indian domestic statutory component cannot run in a UAE workflow")
-            if component == "TCS:206C(1H)" and r["period"] >= "2025-04":
+            if country == "IN" and role == expected_role and withdrawn_obligation(r):
                 raise ValueError(
-                    "Section206C(1H) is withdrawn for this period; select a qualified applicable obligation"
+                    "Positive section206C(1H) expectations are withdrawn for this transaction/reporting period"
                 )
             if (
                 role in {"payment", "channel", "bank"}

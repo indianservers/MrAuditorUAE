@@ -7,6 +7,8 @@ from decimal import Decimal
 from app.modules.country_workflows.audit_calculations import result
 from app.modules.country_workflows.bank_dates import date_details
 from app.modules.country_workflows.obligation_scope import scope_key
+from app.modules.country_workflows.statutory_components import india_domestic_component
+from app.modules.country_workflows.withholding_provisions import withdrawn_obligation
 
 
 def allocate(data, tables, country):
@@ -45,13 +47,7 @@ def allocate(data, tables, country):
                 raise ValueError(
                     "Negative obligations require an assessed restated population before allocation"
                 )
-            if country == "AE" and row["component"].upper().split(":")[0] in {
-                "PF",
-                "ESI",
-                "PT",
-                "TDS",
-                "TCS",
-            }:
+            if country == "AE" and india_domestic_component(row["component"]):
                 raise ValueError("Indian domestic statutory component cannot run in a UAE workflow")
             scope = row.get("withholding_scope")
             savings = row.get("savings_scope")
@@ -80,15 +76,10 @@ def allocate(data, tables, country):
                 raise ValueError(
                     "Withholding settlement scopes require India and matching INR tax components"
                 )
-            if (
-                scope is not None
-                and scope["tax_kind"] == "TCS"
-                and scope["rule_reference"].upper().replace(" ", "") == "206C(1H)"
-                and row["period"] >= "2025-04"
-            ):
-                raise ValueError("Section206C(1H) is withdrawn for this obligation period")
-            if row["component"].upper() == "TCS:206C(1H)" and row["period"] >= "2025-04":
-                raise ValueError("Section206C(1H) is withdrawn for this obligation period")
+            if country == "IN" and role == "expected" and withdrawn_obligation(row):
+                raise ValueError(
+                    "Positive section206C(1H) expectations are withdrawn for this transaction/reporting period"
+                )
             if row.get("payment_date"):
                 raise ValueError(
                     "Expected/reported payment dates cannot replace independent allocated bank evidence"

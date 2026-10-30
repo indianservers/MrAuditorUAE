@@ -183,6 +183,8 @@ def test_missing_month_and_reported_variance_are_not_zeroed():
 def test_country_component_rules_and_explicit_positive_sign():
     with pytest.raises(ValueError, match="Indian domestic"):
         run(example(component="PF:EMPLOYEE"))
+    with pytest.raises(ValueError, match="Indian domestic"):
+        run(example(component=" pf : employee "))
     with pytest.raises(ValueError, match="withdrawn"):
         run(example("INR", "TCS:206C(1H)"), "IN", currency="INR")
     data = example()

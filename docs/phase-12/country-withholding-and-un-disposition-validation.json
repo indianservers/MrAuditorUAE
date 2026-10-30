@@ -1,0 +1,150 @@
+{
+  "scope": "TCS expected-liability boundary across derivation, bank/aggregate comparison and legacy review; normalized India/UAE component isolation; truthful documented UN observation marker",
+  "source_files": [
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "sha256": "5fa4c0c3848ed56578087f9926633047111aa55504588ff03380ee3fb73d8391"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/calculations.py",
+      "sha256": "9041bcf37cc5817259d6596a3eb7a63b822f5ee5a689cacbf9bf551b5323f74a"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/dues_allocations.py",
+      "sha256": "3fb4b1773380ed3eea4b6f5a41dfd12a381d861d0b768adc2004926681bb072a"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/statutory_components.py",
+      "sha256": "22ea1af940d45b31c19c2d4d3a5558bd0dcaa824d86b50e26a7ee5a5974a13c2"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/withholding_obligations.py",
+      "sha256": "2ffacfe850f5ac86e8a463d868ba47907aa5c8a8a875a07dcc9ef5d14168c119"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/withholding_provisions.py",
+      "sha256": "37824bf62110cd8f635f0f2af9a4baff454a181a400cfd7627cafb8a162ab8b8"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_dues_allocations.py",
+      "sha256": "031e746086427c5dbf80862135c86bd6d0600d63fcffb53f5bb663b90a9b82a8"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_un_sanctions_source.py",
+      "sha256": "b7b8401125601a1675aa06f2313fd74c953106c1bffcd4840194f3d192902715"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_withholding_obligations.py",
+      "sha256": "6f5d17879cd6fb77a61b570c65e3ef409930a50a7989014a4e8e3d2206d03171"
+    },
+    {
+      "path": "backend/tests/unit/test_country_workflows.py",
+      "sha256": "a6d8df411b31e863c1302612f0796abca158158666633ac23e1f42b668eeb6a8"
+    },
+    {
+      "path": "backend/tests/unit/test_dues_allocations.py",
+      "sha256": "c27f76b0bf8890dba04c0ca09e83cb1771fd9262abedc5c8d67fa3d5f9ec23a0"
+    },
+    {
+      "path": "backend/tests/unit/test_withholding_obligations.py",
+      "sha256": "94dca69a5164a6b7c361a47594e3f8779d0877b828d77aa05aca24f388519bb0"
+    },
+    {
+      "path": "backend/tests/unit/test_withholding_provision_boundary.py",
+      "sha256": "911d172516c4b1c7a14d67a459d7eab45c5603450f23ae87e1e17960561957fb"
+    },
+    {
+      "path": "frontend/e2e/un-sanctions-release.spec.ts",
+      "sha256": "e2b2b1ad52eef39207033bc4e422e1f8f652056ee7cd3cd2b3012c0cbe3aaf7f"
+    },
+    {
+      "path": "frontend/e2e/withholding-boundary-browser-workflow.ts",
+      "sha256": "345dc2e950d01b84cb731e60a92931bcbe102e6690339ae0703303586b65ddfd"
+    },
+    {
+      "path": "frontend/src/features/screening-candidates.tsx",
+      "sha256": "42804ae636800ea61050bc8af013c424ffc603a9f5f8d32464adc4429f5d6717"
+    },
+    {
+      "path": "frontend/tests/un-sanctions-source.test.tsx",
+      "sha256": "903b8e5632926f07c7aa4faa9af5aa2484d3bbd838612a9ff6db5d8c8897097b"
+    }
+  ],
+  "original_reports": [
+    {
+      "path": "docs/phase-12/country-withholding-boundary-final.xml",
+      "sha256": "a9c410db5105240d95be36ce02f6b0e371255dc2b9f133feb865c03465791bd1",
+      "original_bytes": true,
+      "tests": 359,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/un-disposition-verified.xml",
+      "sha256": "e96291b8ea7cfcf8776700d6874f89f96e857005071600598f9e7eb96b792e46",
+      "original_bytes": true,
+      "tests": 47,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/un-disposition-ui.xml",
+      "sha256": "fb3a21c626b002a2c85f821dc0f76cb37ff00569be6d209283d08d54b717e961",
+      "original_bytes": true,
+      "tests": 149,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/un-disposition-frontend-full.xml",
+      "sha256": "c1937bdc549acd0bbeee5714e1e7ca9c724490ffd6ade4449901d65e00b6e029",
+      "original_bytes": true,
+      "tests": 432,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/withholding-obligation-boundary-before.xml",
+      "sha256": "ffdfcec6bd532cc89e1b3779d170a622add3cbd5f96de08e5c193deb1e2e3d26",
+      "original_bytes": true,
+      "tests": 30,
+      "failures": 7,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/country-component-whitespace-before.xml",
+      "sha256": "1ddb2fe8af6ac156d9d6d7ede8362d3df30d75f76935bcb46c8139af85dbf919",
+      "original_bytes": true,
+      "tests": 6,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "checks": {
+    "mypy": "418 application files passed",
+    "ruff": "scoped checks passed",
+    "eslint": "scoped checks passed",
+    "typescript": "passed",
+    "api_payload_snapshots": "current runtime models match",
+    "frontend_production_build": "Next.js 16.4.2 passed"
+  },
+  "retained_previous_hosted_proof": [
+    "docs/phase-12/withholding-browser-da1151a.json",
+    "docs/phase-12/un-browser-42be0e4.json",
+    "docs/phase-12/276905a-hosted-verification.json"
+  ],
+  "reviewed_limitations": [
+    "New bank-obligation browser assertion and corrected UN disposition marker require their own hosted run",
+    "Existing immutable bank-cash claims remain reserved until explicit withdrawal",
+    "API scanner and broker are explicit test doubles; hosted UN source 42be0e4 used configured actual ClamAV",
+    "Observed notes do not determine identity, false-positive disposition, legal clearance or PEP status",
+    "No complete legal rate/threshold/form corpus, representative client pilot or professional approval is claimed"
+  ],
+  "diagnostic_history": "Initial unit regressions reproduced seven issues; whitespace check reproduced one additional UAE isolation bypass. An intermediate test-only iteration corrected explicit nil-allocation fixture rationale and error-envelope assertion. Production nil controls remain unchanged."
+}

@@ -97,7 +97,10 @@ def test_saved_legacy_rows_and_documented_exception_cannot_bypass_boundary():
     assert legacy == retained
 
 
-async def test_legacy_reviewed_positive_expectation_cannot_generate_new_paper(monkeypatch):
+@pytest.mark.parametrize("workflow", ["india-withholding-liability", "obligation-bank-allocations"])
+async def test_legacy_reviewed_positive_expectation_cannot_generate_new_paper(
+    monkeypatch, workflow
+):
     from fastapi import HTTPException
 
     from app.api.v1 import intelligence
@@ -105,6 +108,17 @@ async def test_legacy_reviewed_positive_expectation_cannot_generate_new_paper(mo
 
     body = run(records("2026-05-15"), "collector")
     body.update(review_status="REVIEWED", blocked=False)
+    if workflow == "obligation-bank-allocations":
+        body["workflow"] = workflow
+        for row in body["rows"]:
+            row.update(
+                kind="obligation",
+                expected_amount="100",
+                withholding_scope={
+                    field: row[field]
+                    for field in ("legal_role", "tax_kind", "rule_reference", "transaction_date")
+                },
+            )
     monkeypatch.setattr(intelligence.audit, "engagement", AsyncMock(return_value=SimpleNamespace()))
     monkeypatch.setattr(
         intelligence.service, "event", AsyncMock(return_value=SimpleNamespace(body=body))

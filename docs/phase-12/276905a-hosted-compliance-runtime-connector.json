@@ -1,0 +1,151 @@
+{
+  "synthetic": true,
+  "calendar": {
+    "items": [
+      {
+        "record_id": "fbf1ae0f-bc24-449b-ab3b-992a20ebdd1f",
+        "version": 1,
+        "reference": "SYN-UNRESOLVED",
+        "jurisdiction": "SYNTHETIC",
+        "jurisdiction_scope": null,
+        "obligation_period_start": null,
+        "obligation_period_end": null,
+        "deadline": null,
+        "extension_deadline": null,
+        "deadline_kind": "unresolved",
+        "filing_stage": "not_started",
+        "calendar_state": "UNRESOLVED",
+        "freshness": "CURRENT",
+        "reassessment_required": false,
+        "review_status": "IN_PROGRESS",
+        "owner_id": "311afe13-a9e8-4525-8bac-28d6779940b2",
+        "reviewer_id": "aeba4c34-14c3-4ac8-b156-f5048229235e"
+      }
+    ],
+    "bounded_to": 200,
+    "external_submission_performed": false
+  },
+  "reviewed_obligation": {
+    "engagement_id": "8611e7f5-14e6-4855-8a03-29a5f6299959",
+    "kind": "grc-obligation",
+    "reference": "SYN-UNRESOLVED",
+    "title": "Synthetic unresolved deadline",
+    "status": "APPROVED",
+    "body": {
+      "area": "",
+      "module": "policy",
+      "sources": [],
+      "blockers": [],
+      "deadline": null,
+      "due_date": null,
+      "owner_id": "311afe13-a9e8-4525-8bac-28d6779940b2",
+      "entity_id": "aa1245c5-c6a5-4adb-948c-fc4a285f4ae6",
+      "narrative": "",
+      "assertions": [],
+      "source_url": "https://synthetic.invalid/internal-policy",
+      "reviewer_id": "aeba4c34-14c3-4ac8-b156-f5048229235e",
+      "entity_facts": {},
+      "evidence_ids": [],
+      "filing_stage": "under_review",
+      "jurisdiction": "SYNTHETIC",
+      "review_cycle": 3,
+      "review_stage": 1,
+      "deadline_kind": "unresolved",
+      "deadline_rule": null,
+      "reminder_days": [],
+      "effective_from": "2026-01-01",
+      "review_approvers": [
+        "aeba4c34-14c3-4ac8-b156-f5048229235e"
+      ],
+      "rule_evidence_id": null,
+      "fact_evidence_ids": [],
+      "required_evidence": "Independent source and computation review",
+      "extension_deadline": null,
+      "jurisdiction_scope": null,
+      "statutory_record_id": null,
+      "compliance_assessment": "not_assessed",
+      "escalation_after_days": null,
+      "extension_evidence_id": null,
+      "notifications_enabled": false,
+      "obligation_period_end": null,
+      "readiness_evidence_ids": [],
+      "submission_evidence_id": null,
+      "obligation_period_start": null,
+      "acknowledgment_evidence_id": null
+    },
+    "version": 5,
+    "prepared_by": "311afe13-a9e8-4525-8bac-28d6779940b2",
+    "tenant_id": "742e325e-f07c-48db-ba87-ead1f6f7e495",
+    "created_by": "311afe13-a9e8-4525-8bac-28d6779940b2",
+    "id": "fbf1ae0f-bc24-449b-ab3b-992a20ebdd1f",
+    "created_at": "2026-10-30T12:46:04.798745+00:00",
+    "updated_at": "2026-10-30T12:46:05.338044+00:00"
+  },
+  "runtime": {
+    "language": {
+      "state": "not_configured",
+      "observation": "recent tenant execution, not a live probe",
+      "observed_at": null,
+      "error_category": null,
+      "reachability_ttl_seconds": 300,
+      "deterministic_engines_require_gateway": false,
+      "local_ml_requires_gateway": false,
+      "narrative_is_independent_verification": false
+    },
+    "local_ml": {
+      "runtime": "TensorFlow.js Node CPU",
+      "state": "inspect_model_registry",
+      "readiness": "per-model deployment and artifact validation required",
+      "allowed_modes": [
+        "trained_model",
+        "statistical_baseline",
+        "rules_baseline",
+        "diagnostic_mock",
+        "unavailable"
+      ]
+    }
+  },
+  "connector": {
+    "connection_id": "580f2579-51f6-4022-afcb-878efaa6a707",
+    "operational_health": {
+      "provider": "file",
+      "connection_type": "import_export_adapter",
+      "last_attempt_at": "2026-10-30T12:46:05.638308+00:00",
+      "last_success_at": null,
+      "success_lookup": "latest 100 attempts; older history may exist",
+      "lag_seconds": null,
+      "status": "failed",
+      "completeness": "insufficient_evidence",
+      "complete": false,
+      "error_category": "partial_page_failure",
+      "counts": {
+        "gl": 12
+      },
+      "count_semantics": "provider-extracted counts; committed/rejected import totals require the linked validation report",
+      "committed_import_records": null,
+      "rejected_import_records": null,
+      "checkpoint": {
+        "downloaded": 2
+      },
+      "execution_mode": "simulated",
+      "live_qualified": false,
+      "remediation": "Inspect rejected records and controls; renew authorization for auth errors; resume retained checkpoint or use controlled file import"
+    },
+    "status": "configured",
+    "live_qualified": false,
+    "records": [],
+    "actions": [
+      "resume_failed_session",
+      "renew_consent",
+      "run_source_controls",
+      "verify_vendor_contract"
+    ],
+    "credential_storage": "encrypted; never included in diagnostics",
+    "capabilities": {
+      "native_balance_controls": "independent opening/closing reports required; no undocumented report endpoint assumed",
+      "automatic_activation": false,
+      "signed_windows_release": "not_applicable"
+    }
+  },
+  "external_requests_performed": false
+}

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="6" time="1.368" timestamp="2026-10-30T18:51:36.367515+05:30" hostname="DESKTOP-B3SR465"><testcase classname="tests.unit.test_country_workflows" name="test_country_and_withdrawn_components_do_not_produce_liabilities[PF-AE-2026-05]" time="0.003" /><testcase classname="tests.unit.test_country_workflows" name="test_country_and_withdrawn_components_do_not_produce_liabilities[PT-AE-2026-05]" time="0.001" /><testcase classname="tests.unit.test_country_workflows" name="test_country_and_withdrawn_components_do_not_produce_liabilities[TCS:206C(1H)-IN-2025-04]" time="0.001" /><testcase classname="tests.unit.test_country_workflows" name="test_country_and_withdrawn_components_do_not_produce_liabilities[ pf : employee -AE-2026-05]" time="0.001"><failure message="Failed: DID NOT RAISE ValueError">component = ' pf : employee ', country = 'AE', period = '2026-05'
+
+    @pytest.mark.parametrize(
+        "component,country,period",
+        [("PF", "AE", "2026-05"), ("PT", "AE", "2026-05"), ("TCS:206C(1H)", "IN", "2025-04"),
+         (" pf : employee ", "AE", "2026-05"), ("\ttcs:206C(1G)", "AE", "2026-05"), (" tds ", "AE", "2026-05")],
+    )
+    def test_country_and_withdrawn_components_do_not_produce_liabilities(component, country, period):
+        from tests.unit.country_workflow_cases import obligation
+    
+        sources = {
+            r: parsed("obligations", [obligation(id=r, component=component, period=period)])
+            for r in ["expected", "return", "payment"]
+        }
+        data = WorkflowInput(
+            workflow="statutory-dues",
+            source_ids={r: uuid.uuid4() for r in sources},
+            as_of="2026-06-30",
+            title="Synthetic test",
+            rationale="Synthetic country safeguards",
+        )
+&gt;       with pytest.raises(ValueError):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests\unit\test_country_workflows.py:341: Failed</failure></testcase><testcase classname="tests.unit.test_country_workflows" name="test_country_and_withdrawn_components_do_not_produce_liabilities[\ttcs:206C(1G)-AE-2026-05]" time="0.001" /><testcase classname="tests.unit.test_country_workflows" name="test_country_and_withdrawn_components_do_not_produce_liabilities[ tds -AE-2026-05]" time="0.001" /></testsuite></testsuites>

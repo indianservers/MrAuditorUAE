@@ -19,7 +19,7 @@ pytestmark = pytest.mark.skipif(
 )
 
 
-async def retain_withholding(c, h, eid, base, reviewer, legal_role="deductor"):
+async def retain_withholding(c, h, eid, base, reviewer, legal_role="deductor", rule_reference=None):
     record = await create(
         c, h, base, "evidence", {"category": "Other", "retain_until": "2036-12-31"}
     )
@@ -45,6 +45,8 @@ async def retain_withholding(c, h, eid, base, reviewer, legal_role="deductor"):
     for purpose in ("expected", "reported"):
         population = records(purpose, legal_role)
         for row in population:
+            if rule_reference is not None:
+                row["rule_reference"] = rule_reference
             row.update(
                 assessment_evidence_version_id=uploaded.json()["id"],
                 assessment_sha256=uploaded.json()["sha256"],
@@ -62,6 +64,35 @@ async def retain_withholding(c, h, eid, base, reviewer, legal_role="deductor"):
         assert approved.status_code == 201, approved.text
         sources[purpose] = approved.json()
     return sources, record
+
+
+@pytest.mark.parametrize("reference", ["206C(1H)", "TCS:206C(1H)"])
+async def test_withdrawn_positive_expected_source_rejected_but_reported_observation_retained(
+    environment, monkeypatch, reference
+):
+    c = environment
+    double_boundaries(monkeypatch)
+    h, eid, base = await india_context(c)
+    reviewer = await actor(h, "Firm Administrator", "withdrawn-obligation-reviewer")
+    await grant(c, h, base, reviewer)
+    parents, _ = await retain_withholding(c, h, eid, base, reviewer, "collector", reference)
+    prefix = f"/api/v1/intelligence/engagements/{eid}"
+    for purpose, parent in parents.items():
+        response = await c.post(
+            prefix + f"/events/{parent['id']}/withholding-obligation-source",
+            headers=h,
+            json=controls(purpose=purpose, legal_role="collector").model_dump(mode="json"),
+        )
+        if purpose == "expected":
+            assert response.status_code == 422, response.text
+            assert "withdrawn" in response.text
+        else:
+            assert response.status_code == 201, response.text
+            body = response.json()["body"]
+            assert body["allowed_source_roles"] == ["reported"]
+            assert body["control_totals"] == {"INR": "180"}
+            assert all(r["withholding_scope"]["rule_reference"] == reference for r in body["rows"])
+            assert body["statutory_calculation_qualified"] is False
 
 
 async def prepare_withholding_settlement(c, h, eid, base, reviewer, legal_role="deductor"):

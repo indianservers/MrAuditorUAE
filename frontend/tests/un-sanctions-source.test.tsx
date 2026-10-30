@@ -78,4 +78,20 @@ describe("controlled UN XML source", () => {
       screen.getByText(/Low-quality aliases alone are insufficient/),
     ).toBeInTheDocument();
   });
+  it("distinguishes documented observations from an identity disposition", () => {
+    render(
+      <ScreeningCandidates
+        rows={[
+          {
+            id: "S1",
+            reviewer_disposition: "OBSERVATIONS_DOCUMENTED",
+            candidates: [],
+          },
+        ]}
+      />,
+    );
+    expect(
+      screen.getByText(/Observation assessment documented/),
+    ).toHaveTextContent("do not establish positive identification");
+  });
 });

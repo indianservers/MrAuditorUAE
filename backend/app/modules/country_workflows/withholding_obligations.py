@@ -15,6 +15,7 @@ from app.modules.country_workflows.withholding_calculations import (
     assessment_issues,
     select_records,
 )
+from app.modules.country_workflows.withholding_provisions import withdrawn_expectation
 from app.modules.country_workflows.withholding_scope import WithholdingSettlementScope
 from app.modules.jurisdictions.packages import fingerprint
 from app.modules.jurisdictions.profiles import Strict
@@ -74,12 +75,10 @@ def source_rows(body, data):
             scope = WithholdingSettlementScope.model_validate(
                 {field: record[field] for field in WithholdingSettlementScope.model_fields}
             )
-            if (
-                scope.tax_kind == "TCS"
-                and scope.rule_reference.upper().replace(" ", "") == "206C(1H)"
-                and record["period"] >= "2025-04"
-            ):
-                raise ValueError("Section206C(1H) is withdrawn for this obligation period")
+            if data.purpose == "expected" and withdrawn_expectation(record):
+                raise ValueError(
+                    "Positive section206C(1H) expectations are withdrawn for this transaction/reporting period"
+                )
             identifier = fingerprint(dict(zip(KEY_FIELDS, key, strict=True)))[:32]
             canonical = Obligation(
                 id="wh-" + data.purpose + "-" + identifier,

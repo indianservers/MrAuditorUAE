@@ -294,11 +294,18 @@ test("synthetic UAE then India native UN XML controls, alias adjudication, compl
             "SYNTHETIC independent review of the complete candidate observations and recorded disposition; no client clearance",
         },
       );
+      expect(reviewed.body.rows[0].reviewer_disposition).toBe(
+        "OBSERVATIONS_DOCUMENTED",
+      );
+      expect(reviewed.body.rows[0].state).toBe("POTENTIAL_NAME_MATCH");
       await reviewer.goto(
         `/intelligence/${eid}/country-workflow?event=${reviewed.id}`,
       );
       await expect(
         reviewer.getByText("REVIEWED", { exact: true }),
+      ).toBeVisible();
+      await expect(
+        reviewer.getByText(/Observation assessment documented/),
       ).toBeVisible();
       await reviewer
         .getByRole("region", {

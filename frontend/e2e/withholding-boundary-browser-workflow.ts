@@ -24,7 +24,7 @@ export async function runWithholdingBoundaryBrowserWorkflow(
       counterparty: "SYN-BUYER",
       legal_role: "collector",
       tax_kind: "TCS",
-      rule_reference: "206C(1H)",
+      rule_reference: "TCS:206C(1H)",
       tax_year_start: "2026-04-01",
       tax_year_end: "2027-03-31",
       period: "2026-05",
@@ -36,7 +36,7 @@ export async function runWithholdingBoundaryBrowserWorkflow(
       source_reference: `SYN-${role}-original`,
       source_version: "1",
       due_date: "2026-06-07",
-      payment_date: "2026-06-01",
+      payment_date: role === "deposited" ? "2026-06-01" : "",
       ...(role === "expected"
         ? {
             assessment_kind: "rule",
@@ -163,6 +163,24 @@ export async function runWithholdingBoundaryBrowserWorkflow(
   const history = await retained.json();
   expect(history.body).toEqual(result.body);
   expect(history.version).toBe(result.version);
+  const bankObligation = await page.request.post(
+    `/api/backend/${prefix}/events/${sources.expected}/withholding-obligation-source`,
+    {
+      headers,
+      data: {
+        purpose: "expected",
+        legal_role: "collector",
+        cutoff_date: "2026-06-30",
+        expected_current_rows: 1,
+        amount: "100",
+        label: "SYNTHETIC withdrawn expected bank obligation",
+        assessment:
+          "SYNTHETIC prefixed withdrawn positive expectation must not bypass the liability boundary through the bank-obligation route",
+      },
+    },
+  );
+  expect(bankObligation.status()).toBe(422);
+  expect(await bankObligation.text()).toContain("withdrawn");
   await reviewer
     .getByRole("heading", { name: title, exact: true })
     .locator("..")
