@@ -47,3 +47,13 @@ uses the UI to calculate a post-withdrawal positive expectation with all amounts
 equal, and verifies blocked status, visible corrective reason, independent review
 HTTP 409 and unchanged body/version. A dedicated screenshot is requested. This
 new browser extension awaits hosted execution and actual capture inspection.
+
+Hosted source 0bd9c0b: eight cases passed and the India case failed before
+TCS calculation at the wrapped native role dropdown exact-label locator.
+Both original failure captures are retained and visually inspected. The
+locator now uses the exact accessible combobox role; offline native Chrome
+reproduced label count zero and role count one and successfully selected
+collector. Calculation, review-blocking and unchanged-history assertions
+remain intact. Corrected hosted execution is still required; the failed
+captures do not establish TCS result UI proof. See the source-specific
+withholding-browser-failed-0bd9c0b.json receipt.

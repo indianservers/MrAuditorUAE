@@ -1,0 +1,37 @@
+{
+  "scope": "Failed hosted TCS browser extension; no TCS calculation or screenshot proof reached",
+  "head_sha": "0bd9c0bd71b27d922fdbfb7a9d714985147b71d2",
+  "run_id": 41055445317,
+  "job_id": 124061696172,
+  "result": {
+    "passed": 8,
+    "failed": 1,
+    "minutes": 5.9
+  },
+  "failure": "Exact-label locator for wrapped native Organization legal withholding role select timed out before TCS calculation",
+  "correction": "Use exact accessible combobox role; offline native Chrome reproduction confirmed label count zero and role count one; assertions and timeout unchanged",
+  "archive": {
+    "artifact_id": 12977480692,
+    "bytes": 14073720,
+    "sha256": "6486f971cd38864bc50f8bd661a9c0e1f092c09a966e29b9644eb48879bed8ea"
+  },
+  "original_screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/TCS-browser-failed-1-0bd9c0b.png",
+      "sha256": "4c0cb760e11fc3ec11d58b095daa4477b579008ba6131cdcbe209a9078411d01",
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/TCS-browser-failed-2-0bd9c0b.png",
+      "sha256": "1afbd8695443efdc8e945d7291ceb761cc4951b416fa10dd9a63fd85f3faf684",
+      "original_bytes": true,
+      "visually_inspected": true
+    }
+  ],
+  "limitations": [
+    "Failed run does not prove withdrawn TCS result UI or approval blocking",
+    "Screenshots show pre-calculation state and earlier annual tax result",
+    "Corrected hosted execution remains required"
+  ]
+}

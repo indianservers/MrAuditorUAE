@@ -82,7 +82,10 @@ export async function runWithholdingBoundaryBrowserWorkflow(
     .getByLabel("Workflow", { exact: true })
     .selectOption("india-withholding-liability");
   await page
-    .getByLabel("Organization legal withholding role", { exact: true })
+    .getByRole("combobox", {
+      name: "Organization legal withholding role",
+      exact: true,
+    })
     .selectOption("collector");
   for (const [role, id] of Object.entries(sources))
     await page.getByLabel(`${role} source`, { exact: true }).selectOption(id);
