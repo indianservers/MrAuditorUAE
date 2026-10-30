@@ -37,18 +37,26 @@ const FORM138_AMOUNTS = [
   "allocated_interest",
   "allocated_penalty",
 ] as const;
-const isDated = (form: string) => ["143", "138"].includes(form);
+const DEDUCTION_AMOUNTS = [
+  ...FORM138_AMOUNTS,
+  "cash_withdrawal_general",
+  "cash_withdrawal_cooperative",
+] as const;
+const isDated = (form: string) => ["143", "138", "140", "144"].includes(form);
 const selectedAmounts = (form: string) =>
-  form === "138"
-    ? [...FORM138_AMOUNTS]
-    : form === "143"
-      ? [...FORM143_AMOUNTS]
-      : AMOUNTS.filter((key) => key !== "purchase_value" || form === "27EQ");
+  ["140", "144"].includes(form)
+    ? [...DEDUCTION_AMOUNTS]
+    : form === "138"
+      ? [...FORM138_AMOUNTS]
+      : form === "143"
+        ? [...FORM143_AMOUNTS]
+        : AMOUNTS.filter((key) => key !== "purchase_value" || form === "27EQ");
 export type NativeWithholdingDraft = Record<
   | (typeof COUNTS)[number]
   | (typeof AMOUNTS)[number]
   | (typeof FORM143_AMOUNTS)[number]
   | (typeof FORM138_AMOUNTS)[number]
+  | (typeof DEDUCTION_AMOUNTS)[number]
   | "annual_controls"
   | "date_width_assessment"
   | "tan"
@@ -69,6 +77,7 @@ export const EMPTY_NATIVE_WITHHOLDING: NativeWithholdingDraft =
       ...AMOUNTS,
       ...FORM143_AMOUNTS,
       ...FORM138_AMOUNTS,
+      ...DEDUCTION_AMOUNTS,
       "annual_controls",
       "date_width_assessment",
       "tan",
@@ -415,6 +424,7 @@ export function NativeWithholdingLinks({
     "native_tax_date",
     ...(rows.some(
       (row) =>
+        "numbered_form" in row ||
         "recorded_section202_opt_out" in row ||
         ("recorded_deposit_date" in row && "recorded_deposited_flag" in row),
     )
@@ -433,6 +443,25 @@ export function NativeWithholdingLinks({
       : ["recorded_rate"]),
     "reason_flag",
     "certificate_reference",
+    ...(rows.some((row) => "numbered_form" in row)
+      ? [
+          "numbered_form",
+          "recorded_deposited_flag",
+          "recorded_cash_withdrawal_general",
+          "recorded_cash_withdrawal_cooperative",
+          "recorded_unique_form_reference",
+          "recorded_nonresident_status",
+          "recorded_202_opt_out",
+          "recorded_remittance_code",
+          "recorded_destination_country",
+          "recorded_gross_up_flag",
+          "recorded_numbered_rate_basis",
+          "recorded_residence_address",
+          "recorded_residence_email",
+          "recorded_residence_contact",
+          "recorded_foreign_tax_identifier",
+        ].filter((key) => rows.some((row) => key in row))
+      : []),
     ...(rows.some((row) => "recorded_section202_opt_out" in row)
       ? [
           "recorded_nonresident_flag",
@@ -498,6 +527,15 @@ export function NativeWithholdingLinks({
           date uses the explicitly assessed eight-digit interpretation of
           conflicting source instructions. It does not establish FVU acceptance,
           bank payment or tax credit.
+        </p>
+      )}
+      {rows.some((row) => "numbered_form" in row) && (
+        <p>
+          Dated Form140/144 v1.1 observations differ from the page's v1.2 label.
+          Deducted tax and allocated deposits remain separate. Recorded rate
+          basis, residence, status, gross-up and references require independent
+          assessment; they do not establish treaty, certificate, filing or
+          payment eligibility.
         </p>
       )}
       <label>

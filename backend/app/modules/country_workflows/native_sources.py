@@ -24,6 +24,22 @@ WPS_RECORD_CONTRACT = "wps-single-line-records/1"
 
 FORMATS: list[dict[str, Any]] = [
     {
+        "id": "india-form140-regular-20260722-v1.1",
+        "label": "India Form 140 dated numbered non-salary deductions v1.1 (22 July 2026)",
+        "countries": ["IN"],
+        "table_type": "withholding-records",
+        "description": "Declared TY2026–27 regular TDS and separate allocated-deposit/cash observations under retained v1.1. Page v1.2 and incomplete issuer sample remain unresolved. No complete current-layout, legal/rate/treaty/certificate, FVU/CSI, bank-payment or filing qualification.",
+        "source": "https://tinpan.proteantech.in/downloads/e-tds/eTDS-download-regular.html",
+    },
+    {
+        "id": "india-form144-regular-20260722-v1.1",
+        "label": "India Form 144 dated numbered nonresident deductions v1.1 (22 July 2026)",
+        "countries": ["IN"],
+        "table_type": "withholding-records",
+        "description": "Declared TY2026–27 regular TDS and separate allocated-deposit/cash observations under retained v1.1. Page v1.2 and incomplete issuer sample remain unresolved. No complete current-layout, legal/rate/treaty/certificate, FVU/CSI, bank-payment or filing qualification.",
+        "source": "https://tinpan.proteantech.in/downloads/e-tds/eTDS-download-regular.html",
+    },
+    {
         "id": "india-form143-regular-20260722-v1.1",
         "label": "India Form 143 dated numbered layout v1.1 (22 July 2026)",
         "countries": ["IN"],
@@ -765,6 +781,13 @@ def parse_native(content, data, country, filename):
                 from app.modules.country_workflows.india_withholding_native import parse_regular
 
                 rows, metadata = parse_regular(content, data)
+            elif data.file_format in {
+                "india-form140-regular-20260722-v1.1",
+                "india-form144-regular-20260722-v1.1",
+            }:
+                from app.modules.country_workflows.india_numbered_deductions import parse_deductions
+
+                rows, metadata = parse_deductions(content, data)
             elif data.file_format == "india-form143-regular-20260722-v1.1":
                 from app.modules.country_workflows.india_form143_native import parse_form143
 
@@ -859,6 +882,8 @@ def parse_native(content, data, country, filename):
             "india-24q-regular-q1q3-v6.3",
             "india-24q-regular-q4-v7.5",
             "india-form143-regular-20260722-v1.1",
+            "india-form140-regular-20260722-v1.1",
+            "india-form144-regular-20260722-v1.1",
             "india-form138-regular-20260722-v1.1",
         }
         else "ESIC_DECLARED_MEMBER_DAY_ZERO_WAGE_AND_WAGE_CONTROLS"
@@ -904,6 +929,8 @@ def parse_native(content, data, country, filename):
                 "india-24q-regular-q1q3-v6.3",
                 "india-24q-regular-q4-v7.5",
                 "india-form143-regular-20260722-v1.1",
+                "india-form140-regular-20260722-v1.1",
+                "india-form144-regular-20260722-v1.1",
                 "india-form138-regular-20260722-v1.1",
             }
             else {}

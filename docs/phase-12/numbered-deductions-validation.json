@@ -1,0 +1,44 @@
+{
+  "scope": "Dated India Form 140/144 imports and shared Form 143 original-byte reader",
+  "validation_date": "2026-10-31",
+  "backend_full_units": {
+    "tests": 4689,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 4,
+    "passed": 4685,
+    "report": "numbered-deductions-all-units.xml",
+    "sha256": "086304907f25580abb152eb98cc7c96f9eef6c5d6e9f86cd1312616b4acd946c"
+  },
+  "focused_backend": {
+    "passed": 199,
+    "seconds": 96.08,
+    "scope": "102 numbered deduction units, 70 existing Form143 units, 27 native withholding HTTP cases; additional late Form143 regression included in full unit report"
+  },
+  "frontend": {
+    "passed": 496,
+    "test_files": 85,
+    "seconds": 55.99
+  },
+  "checks": {
+    "ruff_check": "PASS",
+    "ruff_format": "824 files unchanged",
+    "mypy": "429 source files PASS",
+    "contracts": "CURRENT",
+    "frontend_api_types": "CURRENT",
+    "frontend_typecheck": "PASS",
+    "frontend_lint": "PASS with existing unused-variable warning in uae-business-cases.tsx",
+    "frontend_production_build": "PASS"
+  },
+  "form143_complete_payload_compatibility": [
+    "base unchanged",
+    "zero unchanged",
+    "Q4 unchanged"
+  ],
+  "limits": [
+    "No dedicated hosted browser run for this new change yet",
+    "Prepared-statement observations only; no complete FVU/CSI or legal/treaty/certificate qualification",
+    "No real client pilot files or independent professional approvals supplied",
+    "The complete global roadmap remains open"
+  ]
+}

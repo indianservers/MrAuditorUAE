@@ -227,6 +227,8 @@ vi.mock("@/hooks/use-api", () => ({
               { id: "india-27eq-regular-v6.9", label: "India historical 27EQ regular statement v6.9", available: state.country === "IN", table_type: "withholding-records" },
               { id: "india-27q-regular-v7.5", label: "India historical 27Q nonresident regular statement v7.5", available: state.country === "IN", table_type: "withholding-records" },
               { id: "india-form143-regular-20260722-v1.1", label: "India Form 143 dated numbered layout v1.1 (22 July 2026)", available: state.country === "IN", table_type: "withholding-records" },
+              { id: "india-form140-regular-20260722-v1.1", label: "India Form 140 dated numbered layout v1.1 (22 July 2026)", available: state.country === "IN", table_type: "withholding-records" },
+              { id: "india-form144-regular-20260722-v1.1", label: "India Form 144 dated numbered layout v1.1 (22 July 2026)", available: state.country === "IN", table_type: "withholding-records" },
               { id: "un-sc-consolidated-xml", label: "UN consolidated sanctions XML", available: true, table_type: "sanctions-entries" },
               {
                 id: "india-gstr1-document-series-json",
@@ -3825,25 +3827,27 @@ it.each(["AE", "IN"])("shows shared cash controls for merchant approvals (%s)", 
   expect(screen.getByText(/Cash claim: UNRESERVED/)).toBeVisible();
 });
 
-it("queues dated Form 143 with its own tax-year and allocation controls", async () => {
+it.each(["143", "140", "144"])("queues dated Form %s with its own tax-year and allocation controls", async (form) => {
   state.country = "IN";
   render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
   fireEvent.change(screen.getByLabelText("Source table type"), {target:{value:"withholding-records"}});
-  fireEvent.change(screen.getByLabelText("Source file format"), {target:{value:"india-form143-regular-20260722-v1.1"}});
+  fireEvent.change(screen.getByLabelText("Source file format"), {target:{value:`india-form${form}-regular-20260722-v1.1`}});
   for (const [label,value] of [
     ["Clean retained evidence","clean"],["Schedule title","SYNTHETIC dated Form 143 observations"],["Expected data rows","1"],["Independent totals by currency","INR=700"],
     ["Native statement TAN","BLRF02329F"],["Native tax year (six digits)","202627"],["Native statement quarter","Q1"],["Native observation cutoff","2026-10-30"],["Assessed native source selection","current"],
-    ["Native batch count","1"],["Native challan count","1"],["Native party count","1"],["Native tax collected control (INR)","700"],["Native allocated deposit control (INR)","700"],["Native challan deposit control (INR)","213000"],["Native payment base control (INR)","21000"],
-    ["Native challan tax control (INR)","210000"],["Native challan interest control (INR)","1000"],["Native challan fee control (INR)","1000"],["Native challan other control (INR)","1000"],["Native allocated interest control (INR)","1000"],["Native allocated other control (INR)","1000"],
+    ["Native batch count","1"],["Native challan count","1"],["Native party count","1"],[form === "143" ? "Native tax collected control (INR)" : "Native tax deducted control (INR)","700"],["Native allocated deposit control (INR)","700"],["Native challan deposit control (INR)","213000"],["Native payment base control (INR)","21000"],
+    ["Native challan tax control (INR)","210000"],["Native challan interest control (INR)","1000"],["Native challan fee control (INR)","1000"],[form === "143" ? "Native challan other control (INR)" : "Native challan penalty control (INR)","1000"],["Native allocated interest control (INR)","1000"],[form === "143" ? "Native allocated other control (INR)" : "Native allocated penalty control (INR)","1000"],
+    ...(form === "143" ? [] : [["Native cash withdrawal general control (INR)","0"],["Native cash withdrawal cooperative control (INR)","0"]]),
     ["Retained native transaction and section crosswalk","context-clean"],["Native crosswalk groups (JSON)",JSON.stringify([{transaction_reference:"SYN-1",transaction_date:"2026-05-01",period:"2026-05",rule_reference:"SYN-ASSESSMENT",party_records:["1/1/1"]}])],["Native source and crosswalk assessment","SYNTHETIC independently assessed dated numbered layout and explicit source completions"],
   ]) fireEvent.change(screen.getByLabelText(label), {target:{value}});
   expect(screen.getByRole("note")).toHaveTextContent("v1.2");
   fireEvent.click(screen.getByRole("button",{name:"Queue calculation"}));
   await waitFor(()=>expect(state.mutate).toHaveBeenCalled());
   const payload=state.mutate.mock.calls[0][0].body.payload;
-  expect(payload).toMatchObject({file_format:"india-form143-regular-20260722-v1.1",form143_controls:{tax_year:"202627",tax_collected:"700",allocated_interest:"1000",allocated_other:"1000",crosswalk_document_version_id:"context-clean"}});
+  const key=form === "143" ? "form143_controls" : "numbered_deduction_controls";
+  expect(payload).toMatchObject({file_format:`india-form${form}-regular-20260722-v1.1`,[key]:{tax_year:"202627",[form === "143" ? "tax_collected" : "tax_deducted"]:"700",allocated_interest:"1000",[form === "143" ? "allocated_other" : "allocated_penalty"]:"1000",crosswalk_document_version_id:"context-clean"}});
   expect(payload).not.toHaveProperty("native_withholding_controls");
-  expect(payload.form143_controls).not.toHaveProperty("income_tax");
+  expect(payload[key]).not.toHaveProperty("income_tax");
 });
 
 it("shows missing-PAN treatment review on the withholding result",()=>{

@@ -26,6 +26,7 @@ from app.modules.country_workflows.gstr2b_part_schemas import GSTR2BPart
 from app.modules.country_workflows.import_nil_schemas import ImportNilScope
 from app.modules.country_workflows.india_form138_native import Form138Controls
 from app.modules.country_workflows.india_form143_native import Form143Controls
+from app.modules.country_workflows.india_numbered_deductions import NumberedDeductionControls
 from app.modules.country_workflows.india_salary_annual import SalaryAnnualControls
 from app.modules.country_workflows.india_withholding_native import NativeWithholdingControls
 from app.modules.country_workflows.inventory_controls import InventoryQuantityControl
@@ -373,6 +374,9 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
 
 
 class SourceInput(Strict):
+    numbered_deduction_controls: NumberedDeductionControls | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
     salary_annual_controls: SalaryAnnualControls | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
@@ -456,6 +460,8 @@ class SourceInput(Strict):
         "india-24q-regular-q1q3-v6.3",
         "india-24q-regular-q4-v7.5",
         "india-form143-regular-20260722-v1.1",
+        "india-form140-regular-20260722-v1.1",
+        "india-form144-regular-20260722-v1.1",
         "india-form138-regular-20260722-v1.1",
     ] = "canonical-csv"
     gstr1_section_controls: list[GSTR1SectionControl] = Field(default_factory=list, max_length=10)
@@ -629,6 +635,23 @@ class SourceInput(Strict):
                 )
         elif self.salary_annual_controls is not None:
             raise ValueError("Annual salary controls require the explicit historical Q4 profile")
+        if self.file_format in {
+            "india-form140-regular-20260722-v1.1",
+            "india-form144-regular-20260722-v1.1",
+        }:
+            if (
+                self.numbered_deduction_controls is None
+                or self.table_type != "withholding-records"
+                or self.expected_rows != len(self.numbered_deduction_controls.groups)
+                or set(self.control_totals) != {"INR"}
+            ):
+                raise ValueError(
+                    "Dated Form140/144 require their own complete deduction/cash controls and mapped INR observations"
+                )
+        elif self.numbered_deduction_controls is not None:
+            raise ValueError(
+                "Numbered deduction controls cannot be substituted into another source layout"
+            )
         if self.file_format == "india-form143-regular-20260722-v1.1":
             if (
                 self.table_type != "withholding-records"

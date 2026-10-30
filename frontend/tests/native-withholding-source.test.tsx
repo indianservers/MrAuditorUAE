@@ -194,6 +194,96 @@ describe("historical salary source", () => {
   });
 });
 
+describe("numbered non-salary deductions", () => {
+  it.each(["140", "144"])(
+    "keeps deducted tax, penalty and independent cash controls separate for Form %s",
+    (form) => {
+      const draft = {
+        ...value,
+        tax_year: "202627",
+        tax_deducted: "900",
+        challan_tax: "10000",
+        challan_interest: "1000",
+        challan_fee: "100",
+        challan_penalty: "100",
+        allocated_interest: "1000",
+        allocated_penalty: "100",
+        cash_withdrawal_general: "0",
+        cash_withdrawal_cooperative: "0",
+      };
+      const payload = nativeWithholdingPayload(draft, form, "1");
+      expect(payload).toMatchObject({
+        tax_deducted: "900",
+        challan_penalty: "100",
+        cash_withdrawal_general: "0",
+      });
+      expect(payload).not.toHaveProperty("income_tax");
+      expect(payload).not.toHaveProperty("tax_collected");
+      expect(() =>
+        nativeWithholdingPayload(
+          { ...draft, cash_withdrawal_general: "" },
+          form,
+          "1",
+        ),
+      ).toThrow(/cash withdrawal general/);
+      render(
+        <NativeWithholdingSource
+          form={form}
+          value={draft}
+          onChange={vi.fn()}
+          documents={[]}
+        />,
+      );
+      expect(screen.getByLabelText("Native tax year (six digits)")).toHaveValue(
+        "202627",
+      );
+      expect(
+        screen.getByLabelText(
+          "Native cash withdrawal cooperative control (INR)",
+        ),
+      ).toHaveValue("0");
+    },
+  );
+  it("retains numbered nonresident fields without legacy flags or invented component tax", () => {
+    render(
+      <NativeWithholdingLinks
+        rows={[
+          {
+            numbered_form: "144",
+            recorded_deposited_flag: "N",
+            recorded_destination_country: "04",
+            recorded_numbered_rate_basis: "B",
+            recorded_202_opt_out: "Y",
+            recorded_gross_up_flag: "N",
+            allocated_deposit: "0.00",
+            total_tax: "2000.00",
+          },
+        ]}
+      />,
+    );
+    const table = screen.getByRole("table", {
+      name: "Native withholding party links",
+    });
+    expect(
+      within(table).getByRole("columnheader", {
+        name: "recorded destination country",
+      }),
+    ).toBeVisible();
+    expect(within(table).getByRole("cell", { name: "04" })).toBeVisible();
+    expect(
+      within(table).getByRole("columnheader", {
+        name: "recorded numbered rate basis",
+      }),
+    ).toBeVisible();
+    expect(
+      within(table).queryByRole("columnheader", { name: "income tax" }),
+    ).not.toBeInTheDocument();
+    expect(
+      within(table).queryByRole("columnheader", { name: "recorded pe flag" }),
+    ).not.toBeInTheDocument();
+  });
+});
+
 describe("native withholding controls", () => {
   it("separates dated Form 143 controls from legacy component and financial-year inputs", () => {
     const dated = {

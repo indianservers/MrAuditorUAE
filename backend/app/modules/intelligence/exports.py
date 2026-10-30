@@ -965,6 +965,18 @@ def render(event, format):
                 if body["native_metadata"].get("form") == "24Q":
                     native_fields = [f for f in native_fields if f != "recorded_rate"]
                     native_fields += ["recorded_employee_reference", "recorded_deposit_date"]
+                if body["native_metadata"].get("form") in {"140", "144"}:
+                    from app.modules.country_workflows.india_numbered_deductions import (
+                        PARTY_FIELDS as DEDUCTION_FIELDS,
+                    )
+
+                    native_fields = [
+                        f for f in native_fields if f not in {"income_tax", "surcharge", "cess"}
+                    ]
+                    native_fields += [
+                        "numbered_form",
+                        *DEDUCTION_FIELDS[body["native_metadata"]["form"]],
+                    ]
                 append(native_links, native_fields)
                 for link in body["native_metadata"]["party_links"]:
                     append(native_links, [link.get(field) for field in native_fields])
@@ -993,7 +1005,7 @@ def render(event, format):
                     challan_fields = [
                         field for field in challan_fields if field != "book_entry_flag"
                     ] + CHALLAN_EXTRA_FIELDS
-                if body["native_metadata"].get("form") == "138":
+                if body["native_metadata"].get("form") in {"138", "140", "144"}:
                     challan_fields = [
                         f
                         for f in challan_fields

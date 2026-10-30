@@ -227,3 +227,10 @@ docs/country-workflows/sample-inputs/SYNTHETIC-annual-24q/*.txt -text whitespace
 docs/phase-12/q4-*.xml -text whitespace=cr-at-eol
 
 backend/app/modules/country_workflows/india_salary_q4_layout.json -text
+backend/app/modules/country_workflows/india_form140_layout.json -text
+backend/app/modules/country_workflows/india_form144_layout.json -text
+docs/country-workflows/authority-references/form140-2026-07-22/* -text
+docs/country-workflows/authority-references/form144-2026-07-22/* -text
+docs/country-workflows/authority-references/form140-2026-07-22/*.txt whitespace=cr-at-eol
+docs/country-workflows/authority-references/form144-2026-07-22/*.txt whitespace=cr-at-eol
+docs/phase-12/numbered-deductions-all-units.xml -text whitespace=cr-at-eol

@@ -1807,30 +1807,39 @@ export function CountryWorkflows({
                 "india-24q-regular-q1q3-v6.3",
                 "india-24q-regular-q4-v7.5",
                 "india-form143-regular-20260722-v1.1",
+                "india-form140-regular-20260722-v1.1",
+                "india-form144-regular-20260722-v1.1",
                 "india-form138-regular-20260722-v1.1",
               ].includes(sourceFormat)
                 ? {
-                    [sourceFormat.includes("form138")
-                      ? "form138_controls"
-                      : sourceFormat.includes("form143")
-                        ? "form143_controls"
-                        : "native_withholding_controls"]:
+                    [sourceFormat.includes("form140") ||
+                    sourceFormat.includes("form144")
+                      ? "numbered_deduction_controls"
+                      : sourceFormat.includes("form138")
+                        ? "form138_controls"
+                        : sourceFormat.includes("form143")
+                          ? "form143_controls"
+                          : "native_withholding_controls"]:
                       nativeWithholdingPayload(
                         nativeWithholding,
-                        sourceFormat.includes("form138")
-                          ? "138"
-                          : sourceFormat.includes("form143")
-                            ? "143"
-                            : sourceFormat.includes("24q") &&
-                                sourceFormat.includes("q4")
-                              ? "24Q-Q4"
-                              : sourceFormat.includes("24q")
-                                ? "24Q"
-                                : sourceFormat.includes("27eq")
-                                  ? "27EQ"
-                                  : sourceFormat.includes("27q")
-                                    ? "27Q"
-                                    : "26Q",
+                        sourceFormat.includes("form140")
+                          ? "140"
+                          : sourceFormat.includes("form144")
+                            ? "144"
+                            : sourceFormat.includes("form138")
+                              ? "138"
+                              : sourceFormat.includes("form143")
+                                ? "143"
+                                : sourceFormat.includes("24q") &&
+                                    sourceFormat.includes("q4")
+                                  ? "24Q-Q4"
+                                  : sourceFormat.includes("24q")
+                                    ? "24Q"
+                                    : sourceFormat.includes("27eq")
+                                      ? "27EQ"
+                                      : sourceFormat.includes("27q")
+                                        ? "27Q"
+                                        : "26Q",
                         expectedRows,
                       ),
                   }
@@ -2884,26 +2893,32 @@ export function CountryWorkflows({
                     "india-24q-regular-q1q3-v6.3",
                     "india-24q-regular-q4-v7.5",
                     "india-form143-regular-20260722-v1.1",
+                    "india-form140-regular-20260722-v1.1",
+                    "india-form144-regular-20260722-v1.1",
                     "india-form138-regular-20260722-v1.1",
                   ].includes(sourceFormat) && (
                     <NativeWithholdingSource
                       value={nativeWithholding}
                       onChange={setNativeWithholding}
                       form={
-                        sourceFormat.includes("form138")
-                          ? "138"
-                          : sourceFormat.includes("form143")
-                            ? "143"
-                            : sourceFormat.includes("24q") &&
-                                sourceFormat.includes("q4")
-                              ? "24Q-Q4"
-                              : sourceFormat.includes("24q")
-                                ? "24Q"
-                                : sourceFormat.includes("27eq")
-                                  ? "27EQ"
-                                  : sourceFormat.includes("27q")
-                                    ? "27Q"
-                                    : "26Q"
+                        sourceFormat.includes("form140")
+                          ? "140"
+                          : sourceFormat.includes("form144")
+                            ? "144"
+                            : sourceFormat.includes("form138")
+                              ? "138"
+                              : sourceFormat.includes("form143")
+                                ? "143"
+                                : sourceFormat.includes("24q") &&
+                                    sourceFormat.includes("q4")
+                                  ? "24Q-Q4"
+                                  : sourceFormat.includes("24q")
+                                    ? "24Q"
+                                    : sourceFormat.includes("27eq")
+                                      ? "27EQ"
+                                      : sourceFormat.includes("27q")
+                                        ? "27Q"
+                                        : "26Q"
                       }
                       documents={(inputs.data?.evidence || []).filter(
                         (doc) =>

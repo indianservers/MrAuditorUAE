@@ -2950,6 +2950,253 @@
             "title": "NativeWithholdingGroup",
             "type": "object"
           },
+          "NumberedDeductionControls": {
+            "additionalProperties": false,
+            "properties": {
+              "tax_year": {
+                "const": "202627",
+                "title": "Tax Year",
+                "type": "string"
+              },
+              "tan": {
+                "pattern": "^[A-Z]{4}[0-9]{5}[A-Z]$",
+                "title": "Tan",
+                "type": "string"
+              },
+              "quarter": {
+                "enum": [
+                  "Q1",
+                  "Q2",
+                  "Q3",
+                  "Q4"
+                ],
+                "title": "Quarter",
+                "type": "string"
+              },
+              "observed_on": {
+                "format": "date",
+                "title": "Observed On",
+                "type": "string"
+              },
+              "batch_count": {
+                "const": 1,
+                "title": "Batch Count",
+                "type": "integer"
+              },
+              "challan_count": {
+                "maximum": 5000,
+                "minimum": 1,
+                "title": "Challan Count",
+                "type": "integer"
+              },
+              "party_count": {
+                "maximum": 5000,
+                "minimum": 1,
+                "title": "Party Count",
+                "type": "integer"
+              },
+              "tax_deducted": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Tax Deducted"
+              },
+              "allocated_deposit": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Allocated Deposit"
+              },
+              "challan_deposit": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Challan Deposit"
+              },
+              "payment_base": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Payment Base"
+              },
+              "challan_tax": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Challan Tax"
+              },
+              "challan_interest": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Challan Interest"
+              },
+              "challan_fee": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Challan Fee"
+              },
+              "challan_penalty": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Challan Penalty"
+              },
+              "allocated_interest": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Allocated Interest"
+              },
+              "allocated_penalty": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Allocated Penalty"
+              },
+              "cash_withdrawal_general": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Cash Withdrawal General"
+              },
+              "cash_withdrawal_cooperative": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Cash Withdrawal Cooperative"
+              },
+              "record_status": {
+                "enum": [
+                  "current",
+                  "superseded",
+                  "cancelled"
+                ],
+                "title": "Record Status",
+                "type": "string"
+              },
+              "crosswalk_document_version_id": {
+                "format": "uuid",
+                "title": "Crosswalk Document Version Id",
+                "type": "string"
+              },
+              "assessment": {
+                "maxLength": 2000,
+                "minLength": 10,
+                "title": "Assessment",
+                "type": "string"
+              },
+              "groups": {
+                "items": {
+                  "$ref": "#/$defs/NativeWithholdingGroup"
+                },
+                "maxItems": 5000,
+                "minItems": 1,
+                "title": "Groups",
+                "type": "array"
+              }
+            },
+            "required": [
+              "tax_year",
+              "tan",
+              "quarter",
+              "observed_on",
+              "batch_count",
+              "challan_count",
+              "party_count",
+              "tax_deducted",
+              "allocated_deposit",
+              "challan_deposit",
+              "payment_base",
+              "challan_tax",
+              "challan_interest",
+              "challan_fee",
+              "challan_penalty",
+              "allocated_interest",
+              "allocated_penalty",
+              "cash_withdrawal_general",
+              "cash_withdrawal_cooperative",
+              "record_status",
+              "crosswalk_document_version_id",
+              "assessment",
+              "groups"
+            ],
+            "title": "NumberedDeductionControls",
+            "type": "object"
+          },
           "PurchaseQuantityControl": {
             "additionalProperties": false,
             "properties": {
@@ -3282,6 +3529,17 @@
         },
         "additionalProperties": false,
         "properties": {
+          "numbered_deduction_controls": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/NumberedDeductionControls"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
           "salary_annual_controls": {
             "anyOf": [
               {
@@ -3885,6 +4143,8 @@
               "india-24q-regular-q1q3-v6.3",
               "india-24q-regular-q4-v7.5",
               "india-form143-regular-20260722-v1.1",
+              "india-form140-regular-20260722-v1.1",
+              "india-form144-regular-20260722-v1.1",
               "india-form138-regular-20260722-v1.1"
             ],
             "title": "File Format",

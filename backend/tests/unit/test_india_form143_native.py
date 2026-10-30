@@ -367,3 +367,17 @@ def test_history_retains_source_amounts_and_never_creates_zero_current_observati
         "history.txt",
     )
     assert result["rows"][0]["record_status"] == status and result["rows"][0]["amount"] == "700.00"
+
+
+def test_late_collection_keeps_source_date_after_payment_quarter():
+    controls = controls143()
+    controls["groups"][0]["period"] = "2026-07"
+    result = parse_native(
+        edit(synthetic143(), 4, 27, "10072026"),
+        options143(form143_controls=controls),
+        "IN",
+        "SYNTHETIC-late-collection.txt",
+    )
+    assert result["rows"][0]["period"] == "2026-07"
+    assert result["native_metadata"]["quarter"] == "Q1"
+    assert result["native_metadata"]["party_links"][0]["native_tax_date"] == "2026-07-10"

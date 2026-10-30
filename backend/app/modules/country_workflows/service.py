@@ -369,6 +369,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
             "india-24q-regular-q1q3-v6.3": {"text/plain"},
             "india-24q-regular-q4-v7.5": {"text/plain"},
             "india-form143-regular-20260722-v1.1": {"text/plain"},
+            "india-form140-regular-20260722-v1.1": {"text/plain"},
+            "india-form144-regular-20260722-v1.1": {"text/plain"},
             "india-form138-regular-20260722-v1.1": {"text/plain"},
             "un-sc-consolidated-xml": {"application/xml", "text/xml"},
             "india-esic-members-xls": {"application/vnd.ms-excel"},
@@ -460,7 +462,10 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
 
         native_withholding_document = None
         withholding_controls = (
-            data.native_withholding_controls or data.form143_controls or data.form138_controls
+            data.native_withholding_controls
+            or data.form143_controls
+            or data.form138_controls
+            or data.numbered_deduction_controls
         )
         if withholding_controls is not None:
             native_withholding_document, _ = await intelligence.evidence(

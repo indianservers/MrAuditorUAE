@@ -1,0 +1,62 @@
+Dated India Form 140 and Form 144 imports
+=======================================
+
+Implemented profiles: india-form140-regular-20260722-v1.1 and
+india-form144-regular-20260722-v1.1. These are prepared-statement
+observations for India, TY 2026-27, Q1-Q4, in INR. They reuse the numbered
+withholding reader and the existing independent evidence/review/export flow.
+
+Original sources
+---------------
+Publisher page: https://tinpan.proteantech.in/downloads/e-tds/eTDS-download-regular.html
+The page identifies v1.2 while these downloaded workbooks identify v1.1.
+Exact original workbooks and public samples are retained alongside the code:
+authority-references/form140-2026-07-22 and form144-2026-07-22.
+The compiled layouts pin the original workbook SHA-256, not the page label.
+Both layouts contain FH18, BH72, CD30 and DD45 fields.
+
+The unchanged public samples omit mandatory challan/allocated amounts and
+the deposited flag. The Form 144 sample also omits its reason-A certificate.
+They are rejected. Unit/API tests complete separate explicitly synthetic
+copies; originals are never repaired or represented as qualified client data.
+
+Controls and retained observations
+----------------------------------
+Each import requires its own independently retained crosswalk, complete party
+population, batch/challan/party counts, tax deducted, allocated deposits,
+gross challan deposits, payment bases, challan tax/interest/fee/penalty,
+allocated interest/penalty, and both explicit cash-withdrawal totals.
+Positive deducted tax can remain undeposited: the N flag requires zero
+allocation, rather than fabricating payment. General/cooperative cash fields
+are conditional on the source section codes and independently controlled.
+
+Form 144 preserves recorded nonresident status, regime opt-out, destination,
+remittance, gross-up, rate basis, residence/contact/tax-ID fields and references.
+Its missing-PAN low-rate reason-C source condition requires all four residence
+fields. Unknown filler fields remain blank-only. These recorded fields do not
+establish treaty entitlement, legal rates, certificate authenticity or residency.
+
+The Form 144 reference label mentions Form15CA while its remark mentions
+Form121. The reader retains the generic reference without claiming either
+filing or acknowledgment authenticity. Complete annexure/code qualification,
+FVU/CSI, tax-credit matching and portal submission remain outside this profile.
+
+Shared date correction
+----------------------
+For dated Forms 140/143/144, the original DD27 remarks set the beginning of
+the payment quarter as the earliest deduction/collection date. They do not
+set its end as the latest date. The shared reader now retains late tax dates
+after that quarter, up to the independently supplied observation date.
+Payment dates remain bounded by the declared payment quarter. Dates requiring
+a tax-year mapping after 31 March 2027 are explicitly rejected pending a
+separate assessed mapping. Ordinary Form 143 outputs retain exact compatibility
+in three complete-payload regression comparisons (base, zero-tax and Q4).
+
+Acceptance limits
+-----------------
+Synthetic parser, HTTP review/export/staleness and frontend tests exercise
+the implementation. They do not constitute professional or production signoff.
+The latest changes have not yet received a dedicated hosted browser run.
+Real redacted pilot inputs and independent expected results belong in
+pilot-data/India and pilot-data/UAE. These folders contain no real client
+qualification evidence until such files and approvals are supplied.
