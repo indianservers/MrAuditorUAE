@@ -913,6 +913,15 @@ def render(event, format):
                     )
 
                     native_fields += list(NONRESIDENT_FIELDS)
+                elif body["native_metadata"].get("form") == "143":
+                    from app.modules.country_workflows.india_form143_native import PARTY_FIELDS
+
+                    native_fields = [
+                        field
+                        for field in native_fields
+                        if field not in {"income_tax", "surcharge", "cess"}
+                    ]
+                    native_fields += list(PARTY_FIELDS)
                 append(native_links, native_fields)
                 for link in body["native_metadata"]["party_links"]:
                     append(native_links, [link.get(field) for field in native_fields])
@@ -933,6 +942,14 @@ def render(event, format):
                     "recorded_other",
                     "fee",
                 ]
+                if body["native_metadata"].get("form") == "143":
+                    from app.modules.country_workflows.india_form143_native import (
+                        CHALLAN_EXTRA_FIELDS,
+                    )
+
+                    challan_fields = [
+                        field for field in challan_fields if field != "book_entry_flag"
+                    ] + CHALLAN_EXTRA_FIELDS
                 append(native_challans, challan_fields)
                 for challan in body["native_metadata"]["challan_controls"]:
                     append(native_challans, [challan.get(field) for field in challan_fields])

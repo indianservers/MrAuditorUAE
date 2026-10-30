@@ -1,0 +1,73 @@
+Dated India Form 143 observations
+
+The india-form143-regular-20260722-v1.1 profile reuses original evidence storage,
+clean scanning, queued source preparation, independent review, the reported-only
+withholding liability comparison, complete party/challan XLSX and source
+replacement staleness. It is available only for India, separately from legacy
+27EQ. Its explicit tax-year controls currently cover TY 2026-27. It does not
+automatically adopt future years, correction statements or another workbook.
+
+This is the retained numbered workbook 1.1 dated in its 22 July 2026 download
+URL. The live Protean page labels the link 1.2. Both the workbook and original
+TXT sample were fetched again on 30 October 2026 and compared byte-for-byte
+with the retained originals. Their hashes, URLs and source conflicts are in
+authority-references/form143-2026-07-22/form143-source-assessment.json. No
+workbook version was silently relabelled as the current page version.
+
+The numbered layout has FH 18, BH 72, CD 30 and DD 45 fields. Its changed
+challan components and DD party/challan reference order cannot use the legacy
+27EQ positions. The general-notes example still says FH 16; numbered rows
+and actual sample establish the selected FH 18 layout. The compiled limits
+retain the exact source workbook SHA-256 and their own byte hash.
+
+The unchanged public sample does not pass this bounded profile. Its CD interest
+and other allocations and DD deposited flag are blank despite being marked
+mandatory in the numbered table. It also lacks the DDO serial reference that
+this non-nil profile explicitly requires for a supported identified challan.
+The latter is a conservative profile requirement; it is not a claim that every
+issuer-accepted file must satisfy a complete FVU rule implemented here.
+Unknown fields are never converted to zero, Y or N. A failed source job has
+no result to approve. The public original is preserved unchanged. Separately
+labelled synthetic fixtures fill these four fields explicitly for software
+verification; those changes are not issuer corrections or client evidence.
+
+Independent counts, reported tax, party allocated deposits, receipt base,
+gross challan, tax/interest/fee/other components and interest/other allocations
+are all required. The example's 700 party tax, 21,000 receipt base, 210,000
+challan tax and 213,000 gross deposit remain different amounts. The profile
+does not invent a surcharge/cess split where the new layout does not provide
+one. A recorded rate is retained, not used to calculate a legal liability.
+The recorded B/C payment mode remains a source claim, not a bank transaction.
+
+Separate party links retain nonresident, PE, section-202 opt-out and deposited
+flags, collectee/collection codes, recorded rate, reason/certificate and any
+TDS-related reference/date. The deposited flag does not create an executed
+payment or posted tax credit. Missing-PAN parties need separate crosswalk
+groups. Groups cannot merge different PAN/code/month or recorded tax contexts.
+Counts, parents, amounts, fiscal-quarter dates and all four quarters including
+January-March rollover are tested without using upload date as the tax year.
+
+The controls and UI deliberately distinguish this tax-year layout from legacy
+financial-year inputs. Legacy tax component fields are omitted from its payload,
+review and export. Legacy profiles do not receive the new controls or change
+their output columns. Required source versions are checked for tenant/engagement
+access, clean scanning, original bytes and separate identity/hash; a file cannot
+act as its own crosswalk under another evidence record.
+
+API tests use real PostgreSQL/HTTP with explicit scan and queue doubles. They
+cover source failure without result, cloned/self/quarantined crosswalk rejection,
+self-review rejection, independent review, a separately specified expected
+schedule, complete XLSX and unchanged historical bodies after replacement.
+Frontend tests exercise the complete source form, version-conflict note, distinct
+controls and source claims. Exact final counts and staged source hashes are in
+the validation receipt. The hosted native browser case also includes this
+separately labelled synthetic completion with actual scanning, form entry,
+independent review, export and stale-source capture; execution on the committed
+source remains pending until the hosted evidence is inspected.
+
+Complete current issuer-layout/FVU/CSI qualification, all conditional legal-code
+rules, certificate eligibility, residence/PE/elections, rates, government filing
+and actual client pilots remain open. Form 138/140/144 and corrections require
+their own adopted layouts. This observed-file profile does not establish legal
+compliance under the 2025 Act. The existing 154 authored synthetic scenarios are
+not increased or reclassified as real-client qualification by these tests.

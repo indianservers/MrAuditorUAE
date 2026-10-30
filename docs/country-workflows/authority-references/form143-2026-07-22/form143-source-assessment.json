@@ -1,0 +1,36 @@
+{
+  "checked_on": "2026-10-30",
+  "authority_page": "https://tinpan.proteantech.in/downloads/e-tds/eTDS-download-regular.html",
+  "profile": "india-form143-regular-20260722-v1.1",
+  "page_version": "1.2",
+  "retained_numbered_workbook_version": "1.1",
+  "originals": [
+    {
+      "path": "docs/country-workflows/authority-references/form143-2026-07-22/protean-form143-22072026.xlsx",
+      "size_bytes": 37837,
+      "sha256": "c487ddd78125433aefc4063ccb93ebe820156c42e1d2a58986ae110c50fc51a7",
+      "source_url": "https://tinpan.proteantech.in/downloads/e-tds/Form%20Number%20143-27EQ%20-%20Q1%20to%20Q4_22072026.xlsx"
+    },
+    {
+      "path": "docs/country-workflows/authority-references/form143-2026-07-22/protean-form143-original-sample.txt",
+      "size_bytes": 546,
+      "sha256": "3e89997614f6ee2781fa7d2f72e44d5b78ca2d240a9debc5d77f08b5815b20ab",
+      "source_url": "https://tinpan.proteantech.in/downloads/e-tds/143.txt"
+    }
+  ],
+  "live_retrieval": "Both current downloads compared byte-for-byte against unchanged retained originals.",
+  "inspected_sheet": "FIleformat_R",
+  "numbered_record_widths": {
+    "FH": 18,
+    "BH": 72,
+    "CD": 30,
+    "DD": 45
+  },
+  "source_conflicts": [
+    "Page version 1.2 differs from workbook title 1.1.",
+    "General-notes FH-16 example differs from numbered FH-18 and original sample.",
+    "Public sample CD24/CD25 allocations and DD18 deposited flag are blank while marked mandatory in the numbered table."
+  ],
+  "profile_requirement": "The selected identified non-nil profile additionally requires the original challan/DDO serial reference; the sample leaves CD17 blank. This is not complete FVU qualification.",
+  "qualification": "Dated numbered observations for declared TY 2026-27 only. No automatically adopted future/current issuer layout, full conditional-law/rate/certificate, FVU/CSI, portal or filing qualification."
+}

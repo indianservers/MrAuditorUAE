@@ -1,0 +1,118 @@
+{
+  "contract": "dated-india-form143-observations-verification/1",
+  "source_basis": "STAGED_GIT_OBJECT_BYTES_BEFORE_COMMIT",
+  "parent_commit": "de7ecb2582bc96b20d5f22198f44bd9486fcb4cc",
+  "source_files": [
+    {
+      "path": "backend/app/modules/country_workflows/india_form143_layout.json",
+      "sha256": "c54a42038ffd87113e5f4c53c7a57b5e87706baab24030506cedfb6b6c692ec9"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/india_form143_native.py",
+      "sha256": "04a707913f780ed8f5a841e824ae93f807aed43809b8e49e8ab0a23f0901599f"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/native_sources.py",
+      "sha256": "1f0a2d33aaa31568213f120d072b2639577e7cc00437639523409de31360e94a"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/schemas.py",
+      "sha256": "edf8b07880a732022703609e69cbcada36796d76b6870dcbecb14fdd99c41356"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/service.py",
+      "sha256": "5cadeb03a09fdab78c6063792b52049cff1a7e02e7fc3d605f75c8514b21006e"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "sha256": "f0a010a36742f5f0e86d61bfffa5e2e6a8f2b1ea2b816e99bae479b57b9094a5"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_india_withholding_native.py",
+      "sha256": "b6a1e7283f71ece6f397a345a5435707a61e382b3f0e43de6560c8034ec4c645"
+    },
+    {
+      "path": "backend/tests/unit/test_india_form143_native.py",
+      "sha256": "88266e27a45156f017e4364545b0c45d714afdfa64bc4b544add1f300a844d48"
+    },
+    {
+      "path": "frontend/e2e/merchant-browser-workflow.ts",
+      "sha256": "c6bacb6cbccba4f7224a3748c14f3ce1490653c14dab20c95455b03f88900f59"
+    },
+    {
+      "path": "frontend/e2e/withholding-native-release.spec.ts",
+      "sha256": "c156c9d3d79536a06ab69a7cee3c931d77eeca8a8abcf388afb401136d642b92"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "a0b90f39b17d78ae5940699770300bab15fe1d7ad03b70f0aa6541106f8b539d"
+    },
+    {
+      "path": "frontend/src/features/native-withholding-source.tsx",
+      "sha256": "da80a23e68cb9d41ba6ecb4581d4b535f58dd716f3ce6947c9dce0f849190526"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "cf9b094d3bd206c33766ece59fd8c812591bce028c9c259f5dfffc56ff72b4bf"
+    },
+    {
+      "path": "frontend/tests/native-withholding-source.test.tsx",
+      "sha256": "40687f6ffa46912f6bc57c093514fd6501267451002ce8ed0471c7d059e83123"
+    }
+  ],
+  "reports": [
+    {
+      "path": "docs/phase-12/form143-final-typed.xml",
+      "passed": 337,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "1cf8809ccfe9e315fa4aa11dabf97f2b384f43097cbd7d8447ecba6672f31915"
+    },
+    {
+      "path": "docs/phase-12/form143-zero-and-boundaries.xml",
+      "passed": 70,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "20af5e63f94d432a1896b7e5d4abbbc083650358953656f4a3bd59c6da41a248"
+    },
+    {
+      "path": "docs/phase-12/form143-frontend-final.xml",
+      "passed": 460,
+      "failed": 0,
+      "skipped": 0,
+      "sha256": "04e726286e4661877b4f869c8784cdd2f7fe150c52729ed61fe715cc9ae8269d"
+    }
+  ],
+  "backend_distinct_passes": 339,
+  "frontend_passes": 460,
+  "count_basis": "The 337-case broad report and 70-case expanded Form 143 unit report overlap by 68 cases; their union is 339, not 407. The latter adds two explicit zero-tax flag cases after the broad run. Production source did not change between those runs.",
+  "checks": {
+    "scoped_ruff_lint_and_format": "PASS",
+    "mypy": "PASS_421_APP_FILES",
+    "typescript": "PASS",
+    "scoped_eslint": "PASS",
+    "production_next_build": "PASS",
+    "api_contracts": "CURRENT",
+    "generated_api_types": "CURRENT",
+    "extended_native_browser_case": "ONE_DISCOVERED_NOT_EXECUTED_FOR_NEW_SOURCE"
+  },
+  "verified_scope": [
+    "Dated numbered workbook 1.1 has distinct CD30/DD45 positions and explicit TY 2026-27 controls. Page version 1.2 and incomplete original sample remain visible source conflicts.",
+    "Original public sample fails rather than receiving implicit zeros, flags or identifiers. Separate labelled synthetic fixture fills four source fields explicitly.",
+    "Complete counts, source parents, changed DD party/challan order, independent component/allocation controls, all four quarters and Q4 year rollover are checked.",
+    "Reported tax, receipt base, gross challan, prepared components and allocated charges remain separate. Explicit zero tax preserves recorded flags and other amounts without inferring an exemption or payment.",
+    "Real PostgreSQL/HTTP source review, self-review rejection, independently specified expected schedules, complete XLSX and unchanged historical bodies/downstream staleness after crosswalk replacement.",
+    "Missing/self/cloned/quarantined source context produces failed jobs without approvable results; legacy controls cannot replace the dated controls.",
+    "Frontend form submission uses its own tax-year/allocation fields. Review/export omit invented legacy income-tax/surcharge/cess fields and retain B/C mode and source flags."
+  ],
+  "authority_assessment": "docs/country-workflows/authority-references/form143-2026-07-22/form143-source-assessment.json",
+  "prior_hosted_browser_evidence": "docs/phase-12/india-27q-browser-de7ecb2.json",
+  "warnings": "10 existing SQLAlchemy distinct-on deprecation warnings in the broad obligation tests.",
+  "limits": [
+    "Dated numbered observations only; not complete current page-version 1.2, future tax years, corrections or other successor forms.",
+    "API scan/dispatch doubles; newly extended Form 143 hosted browser and full-backend execution remain pending for the committed source.",
+    "No complete conditional legal-code/rate/certificate/residency/PE/election, FVU/CSI, government filing, bank execution or tax-credit qualification.",
+    "Synthetic explicit completions do not repair the public original or supply independently checked real-client pilots. Authored scenario count remains 154.",
+    "Prior passing merchant viewport captures are retained with visual limits; exact approved-event/full-card capture correction awaits new hosted proof."
+  ]
+}

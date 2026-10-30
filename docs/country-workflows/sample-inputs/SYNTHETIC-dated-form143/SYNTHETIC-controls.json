@@ -1,0 +1,66 @@
+{
+  "classification": "SYNTHETIC_EXPLICIT_SOURCE_COMPLETION_AND_CROSSWALK_NOT_ISSUER_CORRECTION_OR_CLIENT_QUALIFICATION",
+  "source_profile": "india-form143-regular-20260722-v1.1",
+  "expected_mapped_rows": 1,
+  "main_control_totals": {
+    "INR": "700"
+  },
+  "requires_replacement": [
+    "controls.crosswalk_document_version_id"
+  ],
+  "explicit_synthetic_changes": [
+    {
+      "record": "CD1",
+      "field": 17,
+      "value": "00001"
+    },
+    {
+      "record": "CD1",
+      "field": 24,
+      "value": "1000.00"
+    },
+    {
+      "record": "CD1",
+      "field": 25,
+      "value": "1000.00"
+    },
+    {
+      "record": "DD1",
+      "field": 18,
+      "value": "Y"
+    }
+  ],
+  "controls": {
+    "tax_year": "202627",
+    "tan": "BLRF02329F",
+    "quarter": "Q1",
+    "observed_on": "2026-10-30",
+    "batch_count": 1,
+    "challan_count": 1,
+    "party_count": 1,
+    "tax_collected": "700",
+    "allocated_deposit": "700",
+    "challan_deposit": "213000",
+    "payment_base": "21000",
+    "challan_tax": "210000",
+    "challan_interest": "1000",
+    "challan_fee": "1000",
+    "challan_other": "1000",
+    "allocated_interest": "1000",
+    "allocated_other": "1000",
+    "record_status": "current",
+    "crosswalk_document_version_id": "00000000-0000-0000-0000-000000000000",
+    "assessment": "SYNTHETIC explicit completion of missing source fields and independently assessed counts and crosswalk; no issuer, client or legal qualification",
+    "groups": [
+      {
+        "transaction_reference": "SYN-ASSESSMENT-1",
+        "transaction_date": "2026-05-01",
+        "period": "2026-05",
+        "rule_reference": "SYN-ASSESSED-SECTION",
+        "party_records": [
+          "1/1/1"
+        ]
+      }
+    ]
+  }
+}

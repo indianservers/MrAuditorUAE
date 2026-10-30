@@ -13,6 +13,7 @@ from tests.qa_crud.test_country_workflows import decision, double_boundaries, ex
 from tests.qa_crud.test_country_workflows import source as csv_source
 from tests.qa_crud.test_india_ecr_source import india_context
 from tests.unit.test_india_27q_native import controls27, options27, original27
+from tests.unit.test_india_form143_native import controls143, options143, original143, synthetic143
 from tests.unit.test_india_withholding_native import controls as legacy_controls
 from tests.unit.test_india_withholding_native import options as legacy_options
 from tests.unit.test_india_withholding_native import original as legacy_original
@@ -23,14 +24,22 @@ pytestmark = pytest.mark.skipif(
 
 
 def controls(form="26Q"):
+    if form == "143":
+        return controls143()
     return controls27() if form == "27Q" else legacy_controls(form)
 
 
 def options(form="26Q", **changes):
+    if form == "143":
+        if "native_withholding_controls" in changes:
+            changes["form143_controls"] = changes.pop("native_withholding_controls")
+        return options143(**changes)
     return options27(**changes) if form == "27Q" else legacy_options(form, **changes)
 
 
 def original(form="26Q"):
+    if form == "143":
+        return synthetic143()
     return original27() if form == "27Q" else legacy_original(form)
 
 
@@ -47,7 +56,56 @@ async def upload(c, h, base, name, content):
     return record, response.json()
 
 
-@pytest.mark.parametrize("form", ["26Q", "27EQ", "27Q"])
+@pytest.mark.parametrize(
+    "scenario",
+    ["incomplete_original", "self_crosswalk", "cloned_crosswalk", "quarantined_crosswalk"],
+)
+async def test_dated_form143_source_cannot_create_a_result_from_missing_or_unverified_evidence(
+    environment, monkeypatch, scenario
+):
+    c = environment
+    double_boundaries(monkeypatch)
+    h, eid, base = await india_context(c)
+    content = original143() if scenario == "incomplete_original" else synthetic143()
+    _, file = await upload(
+        c,
+        h,
+        base,
+        "unchanged-public-143.txt"
+        if scenario == "incomplete_original"
+        else "SYNTHETIC-explicit-completion-143.txt",
+        content,
+    )
+    if scenario == "self_crosswalk":
+        document = file
+    else:
+        if scenario == "quarantined_crosswalk":
+            double_boundaries(monkeypatch, scan="INFECTED")
+        _, document = await upload(
+            c,
+            h,
+            base,
+            "SYNTHETIC-crosswalk.txt",
+            content
+            if scenario == "cloned_crosswalk"
+            else b"SYNTHETIC separate assessed transaction and collection-code crosswalk",
+        )
+    declared = {**controls143(), "crosswalk_document_version_id": document["id"]}
+    payload = options143(evidence_version_id=file["id"], form143_controls=declared).model_dump(
+        mode="json"
+    )
+    reason = (
+        "identifiers"
+        if scenario == "incomplete_original"
+        else "quarantined"
+        if scenario == "quarantined_crosswalk"
+        else "separate independent"
+    )
+    job = await execute(c, h, eid, "workflow-source", payload, failed=reason)
+    assert job["result_id"] is None
+
+
+@pytest.mark.parametrize("form", ["26Q", "27EQ", "27Q", "143"])
 async def test_native_regular_statement_with_crosswalk_retains_complete_reported_observations(
     environment, monkeypatch, form
 ):
@@ -56,7 +114,15 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
     h, eid, base = await india_context(c)
     reviewer = await actor(h, "Firm Administrator", "native-withholding-reviewer")
     await grant(c, h, base, reviewer)
-    _, file = await upload(c, h, base, "public-issuer-" + form + "-sample.txt", original(form))
+    _, file = await upload(
+        c,
+        h,
+        base,
+        ("SYNTHETIC-explicit-completion-" if form == "143" else "public-issuer-")
+        + form
+        + "-sample.txt",
+        original(form),
+    )
     crosswalk, document = await upload(
         c,
         h,
@@ -65,6 +131,7 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
         b"SYNTHETIC independent original-party to transaction and section crosswalk; no client or legal qualification",
     )
     declared = controls(form)
+    tax_total = declared["tax_collected"] if form == "143" else declared["income_tax"]
     declared["crosswalk_document_version_id"] = document["id"]
     payload = options(
         form, evidence_version_id=file["id"], native_withholding_controls=declared
@@ -90,7 +157,11 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
     assert len(links) == declared["party_count"] + 1
     records = [dict(zip(links[0], row, strict=True)) for row in links[1:]]
     assert records[-1]["party_key"] == f"1/1/{declared['party_count']}"
-    assert sum(Decimal(row["total_tax"]) for row in records) == Decimal(declared["income_tax"])
+    assert sum(Decimal(row["total_tax"]) for row in records) == Decimal(tax_total)
+    if form == "143":
+        assert records[0]["recorded_deposited_flag"] == "Y"
+        assert records[0]["recorded_section202_opt_out"] == "N"
+        assert "income_tax" not in records[0] and metadata["workbook_version"] == "1.1"
     if form == "27Q":
         assert [r["recorded_rate_basis"] for r in records] == ["B", "B"]
         assert [r["nature_of_remittance_code"] for r in records] == ["21", "49"]
@@ -101,9 +172,26 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
     assert len(challans) == 2
     declared_challan = dict(zip(challans[0], challans[1], strict=True))
     assert declared_challan["bsr_or_form24g_reference"] == (
-        "0000809" if form == "26Q" else "0000525" if form == "27Q" else "0000897"
+        "5000032"
+        if form == "143"
+        else "0000809"
+        if form == "26Q"
+        else "0000525"
+        if form == "27Q"
+        else "0000897"
     )
     assert Decimal(declared_challan["gross_deposit"]) == Decimal(declared["challan_deposit"])
+    if form == "143":
+        assert (
+            declared_challan["recorded_payment_mode"] == "B"
+            and declared_challan["ddo_serial"] == "00001"
+        )
+        assert (
+            declared_challan["allocated_interest"]
+            == declared_challan["allocated_other"]
+            == "1000.00"
+        )
+        assert "book_entry_flag" not in declared_challan
     book.close()
     rule_record, rule_file = await upload(
         c,
@@ -114,30 +202,66 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
     )
     selected = {"reported": reviewed["id"]}
     expected_amounts = (
-        ["1000", "500", "200", "200"]
+        ["700"]
+        if form == "143"
+        else ["1000", "500", "200", "200"]
         if form == "26Q"
         else ["11000", "155000"]
         if form == "27Q"
         else ["100"] * 10
     )
-    month = "2020-04" if form == "26Q" else "2019-12" if form == "27Q" else "2020-10"
-    due = "2020-05-07" if form == "26Q" else "2020-01-07" if form == "27Q" else "2020-11-07"
-    paid = "2020-05-01" if form == "26Q" else "2020-01-01" if form == "27Q" else "2020-11-01"
+    month = (
+        "2026-05"
+        if form == "143"
+        else "2020-04"
+        if form == "26Q"
+        else "2019-12"
+        if form == "27Q"
+        else "2020-10"
+    )
+    due = (
+        "2026-06-07"
+        if form == "143"
+        else "2020-05-07"
+        if form == "26Q"
+        else "2020-01-07"
+        if form == "27Q"
+        else "2020-11-07"
+    )
+    paid = (
+        "2026-06-01"
+        if form == "143"
+        else "2020-05-01"
+        if form == "26Q"
+        else "2020-01-01"
+        if form == "27Q"
+        else "2020-11-01"
+    )
     for role in ("expected", "withheld", "deposited"):
         rows = [
             {
                 "id": f"SYN-{role}-{i}",
-                "registration": "MUMN77777A",
-                "counterparty": ["GHSPL9563J", "HNSPL7485K"][i - 1]
+                "registration": declared["tan"],
+                "counterparty": "BRNPA7455N"
+                if form == "143"
+                else ["GHSPL9563J", "HNSPL7485K"][i - 1]
                 if form == "27Q"
                 else "AAAPA1234A",
-                "legal_role": "collector" if form == "27EQ" else "deductor",
-                "tax_kind": "TCS" if form == "27EQ" else "TDS",
+                "legal_role": "collector" if form in {"27EQ", "143"} else "deductor",
+                "tax_kind": "TCS" if form in {"27EQ", "143"} else "TDS",
                 "rule_reference": "SYN-NR-ASSESSED-SECTION"
                 if form == "27Q"
                 else "SYN-ASSESSED-SECTION",
-                "tax_year_start": "2019-04-01" if form == "27Q" else "2020-04-01",
-                "tax_year_end": "2020-03-31" if form == "27Q" else "2021-03-31",
+                "tax_year_start": "2026-04-01"
+                if form == "143"
+                else "2019-04-01"
+                if form == "27Q"
+                else "2020-04-01",
+                "tax_year_end": "2027-03-31"
+                if form == "143"
+                else "2020-03-31"
+                if form == "27Q"
+                else "2021-03-31",
                 "period": month,
                 "transaction_reference": f"SYN-NR-{i}" if form == "27Q" else f"SYN-ASSESSMENT-{i}",
                 "transaction_date": month + ("-10" if form == "27Q" else "-01"),
@@ -151,8 +275,16 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
                 **(
                     {
                         "assessment_kind": "rule",
-                        "assessment_period_start": "2019-04-01" if form == "27Q" else "2020-04-01",
-                        "assessment_period_end": "2020-03-31" if form == "27Q" else "2021-03-31",
+                        "assessment_period_start": "2026-04-01"
+                        if form == "143"
+                        else "2019-04-01"
+                        if form == "27Q"
+                        else "2020-04-01",
+                        "assessment_period_end": "2027-03-31"
+                        if form == "143"
+                        else "2020-03-31"
+                        if form == "27Q"
+                        else "2021-03-31",
                     }
                     if role == "expected"
                     else {}
@@ -167,7 +299,7 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
             rows,
             "SYNTHETIC independent " + role,
             "withholding-records",
-            {"INR": declared["income_tax"]},
+            {"INR": tax_total},
             **({"rule_document_version_id": rule_file["id"]} if role == "expected" else {}),
         )
         accepted = await decision(c, reviewer[0], eid, imported)
@@ -180,7 +312,7 @@ async def test_native_regular_statement_with_crosswalk_retains_complete_reported
         "country-workflow",
         {
             "workflow": "india-withholding-liability",
-            "withholding_role": "collector" if form == "27EQ" else "deductor",
+            "withholding_role": "collector" if form in {"27EQ", "143"} else "deductor",
             "source_ids": selected,
             "as_of": "2026-06-30",
             "title": "SYNTHETIC independently controlled native statement comparison",

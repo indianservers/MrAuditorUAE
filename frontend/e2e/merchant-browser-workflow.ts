@@ -449,16 +449,33 @@ export async function runMerchantBrowserWorkflow(
   await reviewer
     .getByRole("button", { name: "Independent approval", exact: true })
     .click();
-  expect((await replacement).status()).toBe(201);
+  const replacementResponse = await replacement;
+  expect(replacementResponse.status()).toBe(201);
+  const approvedReplacement =
+    (await replacementResponse.json()) as WorkflowEvent;
+  expect(approvedReplacement.body.review_status).toBe("REVIEWED");
+  expect(approvedReplacement.freshness).toBe("CURRENT");
+  await reviewer.goto(
+    `/intelligence/${eid}/country-workflow?event=${approvedReplacement.id}`,
+  );
+  const replacementCard = reviewer
+    .getByRole("heading", {
+      name: String(approvedReplacement.body.title),
+      exact: true,
+    })
+    .locator("..");
+  await expect(
+    replacementCard.getByText("REVIEWED", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    replacementCard.getByText("CURRENT", { exact: true }),
+  ).toBeVisible();
   await expect(cash).toContainText("ACTIVE_APPROVED_ALLOCATION");
   if (await notification.count()) await notification.last().click();
   await expect(cash).toContainText("ACTIVE_APPROVED_ALLOCATION");
-  await cash.scrollIntoViewIfNeeded();
-  // A notification-triggered refresh can replace the region between resolving
-  // an element screenshot and scrolling it. Capture the asserted viewport.
-  await reviewer.screenshot({
+  await replacementCard.scrollIntoViewIfNeeded();
+  await replacementCard.screenshot({
     path: `${screenshots}/${country}-merchant-cash-released-replacement-approved.png`,
-    fullPage: false,
   });
   expect(reviewerErrors).toEqual([]);
 }

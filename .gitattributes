@@ -188,3 +188,8 @@ docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-27
 docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-27Q-original-sample.txt -text whitespace=cr-at-eol
 docs/phase-12/india-27q-final-verified.xml -text whitespace=cr-at-eol
 docs/phase-12/india-27q-frontend-final.xml -text whitespace=cr-at-eol
+backend/app/modules/country_workflows/india_form143_layout.json text eol=lf
+docs/phase-12/form143-final-typed.xml -text whitespace=cr-at-eol
+docs/phase-12/form143-frontend-final.xml -text whitespace=cr-at-eol
+docs/phase-12/form143-zero-and-boundaries.xml -text whitespace=cr-at-eol
+docs/country-workflows/sample-inputs/SYNTHETIC-dated-form143/SYNTHETIC-explicit-completion-143.txt -text whitespace=cr-at-eol

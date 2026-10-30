@@ -1,0 +1,78 @@
+{
+  "source_commit": "de7ecb2582bc96b20d5f22198f44bd9486fcb4cc",
+  "run_id": 41098025260,
+  "job_id": 124208746373,
+  "conclusion": "success",
+  "passed": 13,
+  "failed": 0,
+  "suite_duration": "8.9m",
+  "native_case_duration": "16.0s",
+  "artifact": {
+    "id": 12998061534,
+    "size_bytes": 15788867,
+    "sha256": "75c6d0fdbd21a3e6c45e632eb2f3af27dfa10e9f10530ea733f9d1ab570b591d"
+  },
+  "source_files": [
+    {
+      "path": "frontend/e2e/withholding-native-release.spec.ts",
+      "sha256": "23f7f080e2ff3b221a4ca62823d0904b77ea8b7abe6b66e9a96119892b1cdb14"
+    },
+    {
+      "path": "frontend/e2e/merchant-browser-workflow.ts",
+      "sha256": "e86f75a55805de1840730f9536a8f97300dc947cebe985182f531d5c279f3766"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/india_withholding_native.py",
+      "sha256": "3558ed26323527417d3f29acebf303698cb7f3208bb146afed606907f2bdd3b8"
+    },
+    {
+      "path": "frontend/src/features/native-withholding-source.tsx",
+      "sha256": "7beb96295625b48adf79510b5130ee94128f32fab1003d3dbf76dc50ac40a713"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-merchant-cash-released-replacement-approved-de7ecb2.png",
+      "sha256": "ae798d8ceb2c89b28f0931368420b25536ce0ff80c1878b462d69204220dbb76",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-27Q-native-crosswalk-superseded-stale-de7ecb2.png",
+      "sha256": "c3418d9ed0792de7f49052e75e1c19d5cae39efb7597a42f2c2f016ad29733dd",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-27Q-native-regular-reviewed-de7ecb2.png",
+      "sha256": "417b7728d060b85117d24cb2becd16c11e8a17ed88abcd04993a2c2822ce96fe",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-27Q-nonresident-recorded-fields-de7ecb2.png",
+      "sha256": "6180f51d3c016cd7a9b86d5ab0b020203083fe43153b4cb3207db99276de9a93",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-merchant-cash-released-replacement-approved-de7ecb2.png",
+      "sha256": "c76b5f5583b293c4e52c61c1dfc2afa87e847d32bed930b311f45424f1cd62a5",
+      "visually_inspected": true
+    }
+  ],
+  "verified_scope": [
+    "Real clean-file scanning, form entry and independent native source review for the original historical 26Q/27EQ/27Q samples with explicit synthetic crosswalks.",
+    "Complete 27Q XLSX includes retained rate-basis/remittance/residence data and leading-zero challan/BSR references.",
+    "Replacing the crosswalk makes the reviewed source stale, leaves historical body unchanged and disables further approval."
+  ],
+  "visual_observations": [
+    "27Q current and stale captures preserve both distinct parties and the separate 20,000,000 gross versus 166,000 allocated challan amounts.",
+    "Separate horizontally scrolled capture preserves nonresident code/blank fields; left-side identity is outside that crop and remains visible in the companion full result capture.",
+    "UAE merchant viewport captured UNVERIFIED/STALE v1 while the root cash status showed an active allocation; it does not prove the approved replacement version.",
+    "India merchant viewport captured REVIEWED/CURRENT v2 and active allocation but cut off the lower result."
+  ],
+  "capture_correction": "Read the actual approved replacement response, open its exact event ID, assert REVIEWED and CURRENT, then capture the full replacement card. New corrected captures remain pending for the next committed source.",
+  "limits": [
+    "A passing browser suite is not sufficient visual proof of all capture claims; both limited merchant originals are retained.",
+    "This source predates the new dated Form 143 profile and cannot qualify it.",
+    "Full backend verification is a separate pending job.",
+    "Synthetic assessed mappings and public samples are not real-client, treaty, professional or statutory qualification."
+  ]
+}

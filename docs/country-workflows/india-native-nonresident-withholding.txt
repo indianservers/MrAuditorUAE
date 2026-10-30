@@ -74,3 +74,11 @@ Earlier 26Q/27EQ browser and full backend proof retain their original source
 revisions. No real-client pilot or professional approval is supplied by the
 public samples, synthetic crosswalks or software tests. The authored synthetic
 154-case catalogue and overall production qualification remain unchanged.
+
+Hosted source de7ecb2: all 13 browser cases passed, including the three historical
+native forms in 16.0 seconds. The original reviewed/stale 27Q captures and the
+separate scrolled nonresident-fields image have been saved and visually inspected.
+The companion receipt india-27q-browser-de7ecb2.json preserves the exact source
+and captures. Both merchant viewport captures from that passing suite have
+explicit visual limitations; they are not substituted for complete approved
+replacement evidence. That source predates the separate dated Form 143 profile.

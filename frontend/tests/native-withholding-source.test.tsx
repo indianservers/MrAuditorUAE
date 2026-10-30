@@ -38,6 +38,117 @@ const value = {
 };
 
 describe("native withholding controls", () => {
+  it("separates dated Form 143 controls from legacy component and financial-year inputs", () => {
+    const dated = {
+      ...value,
+      tax_year: "202627",
+      tax_collected: "700",
+      challan_tax: "210000",
+      challan_interest: "1000",
+      challan_fee: "1000",
+      challan_other: "1000",
+      allocated_interest: "1000",
+      allocated_other: "1000",
+    };
+    const payload = nativeWithholdingPayload(dated, "143", "1");
+    expect(payload).toMatchObject({
+      tax_year: "202627",
+      tax_collected: "700",
+      allocated_interest: "1000",
+    });
+    for (const field of [
+      "financial_year",
+      "income_tax",
+      "surcharge",
+      "cess",
+      "purchase_value",
+    ])
+      expect(payload).not.toHaveProperty(field);
+    expect(() =>
+      nativeWithholdingPayload({ ...dated, tax_year: "202728" }, "143", "1"),
+    ).toThrow(/dated Form 143/);
+    expect(() =>
+      nativeWithholdingPayload(
+        { ...dated, allocated_interest: "" },
+        "143",
+        "1",
+      ),
+    ).toThrow(/allocated interest/);
+    expect(
+      nativeWithholdingPayload({ ...dated, allocated_other: "0" }, "143", "1"),
+    ).toMatchObject({ allocated_other: "0" });
+    render(
+      <NativeWithholdingSource
+        value={dated}
+        onChange={vi.fn()}
+        form="143"
+        documents={[]}
+      />,
+    );
+    expect(screen.getByLabelText("Native tax year (six digits)")).toHaveValue(
+      "202627",
+    );
+    expect(
+      screen.queryByLabelText("Native financial year (six digits)"),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("note")).toHaveTextContent("v1.2");
+    expect(
+      screen.queryByLabelText("Native income tax control (INR)"),
+    ).not.toBeInTheDocument();
+    expect(nativeWithholdingPayload(dated, "26Q", "1")).not.toHaveProperty(
+      "tax_collected",
+    );
+  });
+  it("shows Form 143 source flags and book mode without presenting bank settlement or invented component tax", () => {
+    render(
+      <>
+        <NativeWithholdingLinks
+          rows={[
+            {
+              party_key: "1/1/1",
+              recorded_section202_opt_out: "N",
+              recorded_nonresident_flag: "Y",
+              recorded_pe_flag: "N",
+              recorded_deposited_flag: "Y",
+              total_tax: "700.00",
+            },
+          ]}
+        />
+        <NativeWithholdingChallans
+          rows={[
+            {
+              recorded_payment_mode: "B",
+              ddo_serial: "00001",
+              allocated_interest: "1000.00",
+              allocated_other: "1000.00",
+            },
+          ]}
+        />
+      </>,
+    );
+    const party = screen.getByRole("table", {
+      name: "Native withholding party links",
+    });
+    expect(
+      within(party).queryByRole("columnheader", { name: "income tax" }),
+    ).not.toBeInTheDocument();
+    expect(
+      within(party).getByRole("columnheader", {
+        name: "recorded deposited flag",
+      }),
+    ).toBeVisible();
+    expect(
+      screen.getByText(/They do not establish residence/),
+    ).toHaveTextContent("bank payment");
+    const challan = screen.getByRole("table", {
+      name: "Native withholding challans",
+    });
+    expect(
+      within(challan).queryByRole("columnheader", { name: "book entry flag" }),
+    ).not.toBeInTheDocument();
+    expect(within(challan).getByRole("cell", { name: "B" })).toBeVisible();
+    expect(within(challan).getByRole("cell", { name: "00001" })).toBeVisible();
+  });
   it("preserves nonresident source codes and blanks while distinguishing treaty claims from qualification", () => {
     render(
       <NativeWithholdingLinks
