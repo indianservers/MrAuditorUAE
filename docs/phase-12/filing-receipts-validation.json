@@ -1,0 +1,24 @@
+{
+  "change": "Previously recorded submission and acknowledgment receipts require explicit reassessment before replacement, while first receipts can still be added as filing advances.",
+  "regression": {
+    "path": "docs/phase-12/filing-receipts-regression.xml",
+    "sha256": "16ccb861d18d7869173c34a8ccefe9a06dc3674cae4ba9b89808c9166c8c414c",
+    "passed": 81,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "checks": [
+    "Twelve new receipt replacement cases reproduce the prior gap, covering AE and IN and all three approved filing stages.",
+    "All 78 scope/receipt unit cases also permit an explicit return to preparing.",
+    "Actual reopened acknowledged-record API rejects replacing each receipt with another independently retained evidence record; saved body and version remain unchanged.",
+    "Original API first-submission/first-acknowledgment, independent review, lock, reminders and stale-source flow pass.",
+    "Ruff check and format pass; mypy passes all 413 application files."
+  ],
+  "previous_broader_regression": "filing-scope-validation.json records 3656 passed and 4 skipped before this receipt extension; it is not a full-suite claim for this change.",
+  "limitations": [
+    "Synthetic internal evidence lifecycle; no external filing or authority contact.",
+    "Not a complete foreign-obligation registry or real-client country qualification.",
+    "Full hosted checks for this new source have not completed."
+  ]
+}

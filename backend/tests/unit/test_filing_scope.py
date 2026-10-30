@@ -26,6 +26,8 @@ from app.modules.grc import filing, schemas
         ("entity_id", None),
         ("evidence_ids", [str(uuid4())]),
         ("statutory_record_id", str(uuid4())),
+        ("submission_evidence_id", str(uuid4())),
+        ("acknowledgment_evidence_id", str(uuid4())),
     ],
 )
 async def test_approved_scope_change_requires_preparing(monkeypatch, stage, field, value, country):
@@ -45,8 +47,12 @@ async def test_approved_scope_change_requires_preparing(monkeypatch, stage, fiel
             "reviewer_id": str(reviewer),
             "readiness_evidence_ids": [str(uuid4())],
             "filing_stage": stage,
-            "submission_evidence_id": str(uuid4()) if stage != "approved_for_submission" else None,
-            "acknowledgment_evidence_id": str(uuid4()) if stage == "acknowledged" else None,
+            "submission_evidence_id": str(uuid4())
+            if stage != "approved_for_submission" or field == "submission_evidence_id"
+            else None,
+            "acknowledgment_evidence_id": str(uuid4())
+            if stage == "acknowledged" or field == "acknowledgment_evidence_id"
+            else None,
         }
     )
     previous = SimpleNamespace(body=original.model_dump(mode="json"), status="REVISED")

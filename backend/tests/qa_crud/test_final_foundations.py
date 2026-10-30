@@ -261,6 +261,24 @@ async def test_evidenced_filing_lifecycle_reminders_and_stale_receipt(
     obj = await approve(c, h, reviewer[0], base, obj)
     calendar = (await c.get(base + "/compliance-calendar", headers=h)).json()
     assert calendar["items"][0]["calendar_state"] == "ACKNOWLEDGED"
+    obj = await action(c, reviewer[0], base, obj, "reopen")
+    retained = obj["body"]
+    for field in ("submission_evidence_id", "acknowledgment_evidence_id"):
+        changed = await c.patch(
+            base + f"/records/{obj['id']}",
+            headers=h,
+            json={
+                "version": obj["version"],
+                "reference": obj["reference"],
+                "title": obj["title"],
+                "body": {**clean(retained), field: evidences[0]["id"]},
+            },
+        )
+        assert changed.status_code == 409, changed.text
+        assert "Approved filing inputs changed" in changed.text
+        unchanged = (await c.get(audit_base + f"/records/{obj['id']}", headers=h)).json()
+        assert unchanged["version"] == obj["version"] and unchanged["body"] == retained
+    obj = await approve(c, h, reviewer[0], base, obj)
     obj = await action(c, reviewer[0], base, obj, "lock")
     locked = await c.post(
         base + f"/obligations/{obj['id']}/filing-stage",

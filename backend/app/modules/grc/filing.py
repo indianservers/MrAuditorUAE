@@ -142,6 +142,13 @@ async def validate_transition(db, ctx, eng, data, record_id):
             "extension_evidence_id",
             "reviewer_id",
         ]
+        # First receipts may be added as the filing advances. Previously recorded
+        # receipts cannot be replaced while preserving the approved filing stage.
+        protected.extend(
+            field
+            for field in ("submission_evidence_id", "acknowledgment_evidence_id")
+            if previous.body.get(field) is not None
+        )
         payload = data.model_dump(mode="json")
         if any(previous.body.get(k) != payload.get(k) for k in protected) and new not in {
             "not_started",
