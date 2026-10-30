@@ -58,6 +58,7 @@ async def compliance_calendar(
     eid: uuid.UUID, db: DB, ctx: Actor, record_id: uuid.UUID | None = None
 ):
     from app.modules.grc.deadlines import local_today, missing_obligation_period, state
+    from app.modules.grc.dmcc_audit import saved_assessment
     from app.modules.lineage.working_papers import freshness
 
     await audit.engagement(db, ctx, eid, "grc.read")
@@ -78,6 +79,7 @@ async def compliance_calendar(
     for obj in rows:
         await service.authorize_record(db, ctx, obj)
         current = await freshness(db, ctx, obj)
+        dmcc = saved_assessment(obj.body)
         items.append(
             {
                 "record_id": str(obj.id),
@@ -93,8 +95,10 @@ async def compliance_calendar(
                 "filing_stage": obj.body.get("filing_stage", "not_started"),
                 "calendar_state": state(obj.body, local_today(obj.body)),
                 "freshness": current,
+                "dmcc_audit_assessment": dmcc,
                 "reassessment_required": current != "CURRENT"
-                or missing_obligation_period(obj.body),
+                or missing_obligation_period(obj.body)
+                or bool(dmcc and dmcc["issues"]),
                 "review_status": obj.status,
                 "owner_id": obj.body["owner_id"],
                 "reviewer_id": obj.body.get("reviewer_id"),

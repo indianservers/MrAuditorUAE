@@ -12,6 +12,7 @@ export default defineConfig({
     "un-sanctions-release.spec.ts",
     "withholding-native-release.spec.ts",
     "business-day-deadline-release.spec.ts",
+    "dmcc-audit-release.spec.ts",
   ],
   workers: 1,
   reporter: "list",

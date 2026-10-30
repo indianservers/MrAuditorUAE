@@ -1,0 +1,58 @@
+{
+  "source_commit": "37249b3d224399bdefb9af4fa2b9915d5a372e0e",
+  "run_id": 41088486247,
+  "job_id": 124175818758,
+  "conclusion": "success",
+  "passed": 12,
+  "failed": 0,
+  "suite_duration": "6.4m",
+  "business_case_duration": "11.2s",
+  "artifact": {
+    "id": 12993191944,
+    "size_bytes": 14996150,
+    "sha256": "7600f15e6d237f3b8009cedd703df780fa59d8ea6ce73451a14fd815ae0aa7ca"
+  },
+  "source_files": [
+    {
+      "path": "frontend/e2e/business-day-deadline-release.spec.ts",
+      "sha256": "efd0da967ed91b08250749822ffd730d761d1bf56e726d38dd3b5e7e6ff0c566"
+    },
+    {
+      "path": "backend/app/modules/grc/deadlines.py",
+      "sha256": "661158ce936976496212b134277e5a0834ea867656462c3c5020fc97c2772d2a"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-business-calendar-replaced-stale-37249b3.png",
+      "sha256": "4d175aee81aea1b8d8501d8e8c0b62526505fc4e5d45027659a2940654c274c7",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-business-deadline-reviewed-37249b3.png",
+      "sha256": "dbc6470191ed2042b8691ba646ebd819db1ddac092f6ddb1decf00dbff22cd47",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-business-calendar-replaced-stale-37249b3.png",
+      "sha256": "489dc10cb5f00e2f0b9cea5ec332c576d30e2108be615597021157325b7e17d0",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-business-deadline-reviewed-37249b3.png",
+      "sha256": "f42f58b79cdbe13b6ea1bc4964b5dee11d14a1faa14b5a8fc5ee968ac0768efd",
+      "visually_inspected": true
+    }
+  ],
+  "observations": [
+    "Both countries show July 6 from June 26 with five business days, excluded trigger, declared weekend and one synthetic holiday.",
+    "Both independently approved records show current readiness before replacement.",
+    "Protected direct upload returns 409; explicit reopening followed by replacement makes readiness stale, preserves original body and disables submission."
+  ],
+  "limits": [
+    "Synthetic calendar and entity facts; no real-client or national-holiday authenticity qualification.",
+    "Source predates new DMCC profile and generic optional-profile editor fix; these screenshots do not prove either.",
+    "Evidence identity and assessment text touch in the original capture; later whitespace correction is not proven by these images.",
+    "Full backend job must be assessed separately."
+  ]
+}

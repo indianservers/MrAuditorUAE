@@ -58,3 +58,14 @@ Next.js production build, TypeScript, scoped ESLint/Ruff, mypy (419 app files),
 current API/payload snapshots and generated API types. The new browser case is
 discoverable; discovery does not establish execution. Original final reports
 and exact staged source hashes are retained in business-day-deadline-validation.json.
+
+Source 37249b3 subsequently passed all twelve hosted browser cases in 6.4 minutes,
+including the corrected paired UAE/India business-day case in 11.2 seconds.
+The approved-record upload guard is asserted before an explicit reopen and actual
+replacement. Four original reviewed/stale filing-panel captures were downloaded
+with verified archive digest and visually inspected. They preserve the July 6
+deadline, explicit event/holiday/weekend basis and country-specific timezone;
+stale views retain the original body and disable filing despite a valid-format
+receipt ID. These synthetic holidays are not national holiday assertions. A
+minor missing space between the evidence reference and assessment is corrected
+in the next source. This hosted source predates the new DMCC profile.

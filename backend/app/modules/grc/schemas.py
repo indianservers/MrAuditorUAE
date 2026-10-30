@@ -9,6 +9,7 @@ from pydantic import BeforeValidator, Field, model_validator
 from app.modules.audit_execution.schemas import Body, Strict
 from app.modules.grc.deadlines import DeadlineRule
 from app.modules.grc.deadlines import calculate as calculate_deadline
+from app.modules.grc.dmcc_audit import DMCCAuditScope
 
 Money = Annotated[Decimal, Field(max_digits=28, decimal_places=8)]
 Nonnegative = Annotated[Money, Field(ge=0)]
@@ -536,6 +537,12 @@ class Obligation(Body):
     calendar_evidence_id: uuid.UUID | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
+    dmcc_audit_scope: DMCCAuditScope | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
+    dmcc_guideline_evidence_id: uuid.UUID | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
     extension_deadline: date | None = None
     extension_evidence_id: uuid.UUID | None = None
     entity_facts: dict[str, str] = Field(default_factory=dict, max_length=30)
@@ -647,6 +654,9 @@ class Obligation(Body):
             and self.submission_evidence_id == self.acknowledgment_evidence_id
         ):
             raise ValueError("Submission and acknowledgment must be separate evidence")
+        from app.modules.grc.dmcc_audit import validate as validate_dmcc
+
+        validate_dmcc(self)
         return self
 
 

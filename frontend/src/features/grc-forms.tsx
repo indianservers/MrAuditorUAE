@@ -95,7 +95,10 @@ export function Field({
               value={values[key]}
               depth={depth + 1}
               change={(v) => {
-                const next = { ...values };
+                const next =
+                  value == null
+                    ? { ...(initial(s, root) as Record<string, unknown>) }
+                    : { ...values };
                 if (v === undefined) delete next[key];
                 else next[key] = v;
                 change(next);
@@ -157,7 +160,7 @@ export function Field({
     return (
       <label>
         {label(name)}
-        <output>{String(s.const)}</output>
+        <output>{String(value ?? s.const)}</output>
       </label>
     );
   if (s.type === "boolean")

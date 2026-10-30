@@ -1,0 +1,87 @@
+DMCC source-pinned authority procedure assessment
+
+This optional GRC obligation profile reuses original evidence, independent
+review, exact country/period scope, deadline calculation, filing readiness and
+source staleness. It is separate from the existing UAE corporate-tax audit
+threshold. A foreign UAE obligation of an India entity remains a foreign
+obligation; it does not change the entity country or activate a domestic UAE
+tax engine.
+Within this profile a registered DMCC company has its own UAE legal-entity
+scope; a foreign parent uses a separately declared branch scope. Definitions
+on printed page 6 and company status on page 12 of the original amended
+regulations were inspected for this distinction; page 12 was also rendered
+and visually inspected in this increment.
+
+Select dmcc_audit_scope and its exact profile version in an obligation whose
+module is license or governance. Retain the UAE obligation country, explicit
+registration reference and financial-year dates. The original amended DMCC
+Company Regulations PDF and April 2025 submission-guideline PDF must be separate
+current independently approved clean evidence records. The backend checks their
+exact pinned SHA-256 values, media type, physical size and actual stored bytes
+before validating/approving the record. Derived summaries cannot substitute.
+The existing original copies are under authority-references/dmcc-audit-2026-10-30/.
+
+The profile takes explicit assessed membership, legal form, whole-year dormancy,
+holding-company status, separate accounts/audit shareholder-notice assessments,
+branch group-auditor facts, auditor identity/status, other authority variations,
+an adopted operative window and assessment date. No missing boolean defaults
+to a legal exemption. Publication/update dates are not inferred commencement
+dates. Notice validity, membership, auditor status, period validity and document
+substance are professionally assessed inputs; the engine does not authenticate
+registries or automatically validate notice ownership/timing thresholds.
+
+Accounts timetable and portal submission use distinct named procedures with an
+explicit six-calendar-month period-end rule and Dubai timezone. Registrar
+filing uses the retained actual general-meeting event and five business days,
+with separate calendar evidence, Dubai weekend exclusions and explicit
+trigger-day treatment. A 180-day substitution, different trigger, other working
+week or mixed rolling convention is rejected. Extensions require separately
+retained original authority evidence through the existing extension controls.
+Calendar-month addition preserves the trigger day, clamped to the destination
+month's final day; it does not automatically preserve month-end status. For
+example, June 30 plus six months produces December 30. The retained original
+sources do not resolve every month-counting interpretation. Reviewers must
+independently confirm the operative due date for their actual year end; the
+December 31 browser fixture does not qualify other month-end interpretations.
+
+Determinations keep individual accounts, audit, group accounts, selected
+procedure and auditor requirement separate. A branch group-auditor exception
+does not become a portal-submission exemption. Assessed dormant-company notices
+are separate; an accounts notice does not automatically become an audit notice.
+Unresolved dormancy/notice combinations, dormant group accounts, dormant portal
+treatment, other legal forms and authority variations remain visible issues.
+Unknown applicability must remain potential. Unresolved issues block independent
+approval/locking and filing approval rather than becoming an exemption.
+
+The read-only assessment shows its status, assessment date, source freshness,
+separate determinations, issues and limits to authorized GRC readers. Reopening
+or replacing a supporting rule/guideline invalidates current filing readiness
+without rewriting the saved body. Changing/removing an approved scope or its
+guideline reference requires a return to preparing and independent reassessment.
+All original filing/approval evidence remains retained. No signing, audit opinion
+or external submission is produced. Full appointment consent/eligibility,
+auditor-report contents, live approved-auditor registration, complete authority
+directions and professional/legal qualification remain separate work.
+
+The generic editor now initializes required fixed values when an optional
+nested profile is first edited. It preserves and displays a retained existing
+fixed value rather than silently upgrading it when another field is changed.
+The regression first reproduced omission of the visible profile identifier,
+then verified initialization, explicit clearing/recreation and retained values.
+
+Final local verification: 208 related backend cases passed without skips or
+failures, including real PostgreSQL/HTTP source-pinning, swapped-source and
+physical-corruption rejection, unresolved-review rejection, independent filing,
+source staleness and India foreign-obligation country preservation. API scan
+and dispatch are explicit doubles. One existing Alembic configuration warning
+remains. All 455 frontend tests in 81 files and the Next.js production build pass.
+Scoped lint/format, TypeScript, mypy over 420 app files and current API contracts
+are checked separately in the source-bound validation receipt.
+
+The new hosted browser case is configured for actual scanning of the original
+public PDFs, separate review, visible company/foreign-branch determinations,
+UI filing approval and stale guideline captures. Discovery does not establish
+execution. New hosted full-backend/browser results and visual inspection remain
+pending for the committed source. Source documents plus synthetic entity facts
+are not real-client pilots or professional qualification. The existing authored
+154-scenario catalogue and overall roadmap completion status are unchanged.

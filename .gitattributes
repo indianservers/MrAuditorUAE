@@ -177,3 +177,7 @@ docs/country-workflows/authority-references/dmcc-audit-2026-10-30/dmcc-company-r
 docs/country-workflows/authority-references/dmcc-audit-2026-10-30/dmcc-afs-guidelines-2025-04-29.pdf -text
 docs/phase-12/business-days-final.xml -text whitespace=cr-at-eol
 docs/phase-12/business-days-frontend-final.xml -text whitespace=cr-at-eol
+docs/phase-12/dmcc-complete-final.xml -text whitespace=cr-at-eol
+docs/phase-12/dmcc-frontend-verified.xml -text whitespace=cr-at-eol
+docs/phase-12/dmcc-source-binding-final.xml -text whitespace=cr-at-eol
+docs/phase-12/dmcc-ui-verified-final.xml -text whitespace=cr-at-eol

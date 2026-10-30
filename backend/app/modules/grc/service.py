@@ -155,6 +155,10 @@ async def validate_body(db, ctx, eng, kind, data, record_id=None):
     if key == "obligation" and data.calendar_evidence_id:
         if checked_evidence[str(data.calendar_evidence_id)].kind != "evidence":
             raise HTTPException(422, "Business-day calendar requires original retained evidence")
+    if key == "obligation" and data.dmcc_audit_scope:
+        from app.modules.grc.dmcc_audit import verify_sources
+
+        await verify_sources(db, ctx, data, checked_evidence)
     if key == "obligation" and data.jurisdiction_scope:
         from app.db.models.platform import LegalEntity
 
@@ -402,6 +406,13 @@ async def validate_action(db, ctx, eid, obj, action):
         key = obj.kind.removeprefix("grc-")
         data: Any = s.BODIES[key].model_validate(clean(obj.body))
         await validate_body(db, ctx, eng, obj.kind, data, obj.id)
+        if key == "obligation" and data.dmcc_audit_scope and action in {"approve", "lock"}:
+            from app.modules.grc.dmcc_audit import assess
+
+            if assess(data)["issues"]:
+                raise HTTPException(
+                    409, "Resolve DMCC procedure assessment issues before independent approval"
+                )
         if key == "test":
             if data.test_type in {"operating", "retest"}:
                 if not data.sample_run_id or not data.population_snapshot_id:

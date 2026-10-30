@@ -154,7 +154,7 @@ export function ComplianceFiling({
           </p>
           <p>
             Calendar evidence:{" "}
-            {String(paper.body.calendar_evidence_id ?? "Not supplied")}.
+            {String(paper.body.calendar_evidence_id ?? "Not supplied")}.{" "}
             {String(
               businessCalendar?.assessment ??
                 "Calendar assessment not supplied",

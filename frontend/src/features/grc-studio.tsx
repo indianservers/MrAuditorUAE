@@ -13,6 +13,7 @@ import type { Engagement, Page, RecordRow } from "@/types/models";
 import { PageHeader } from "./shared";
 import { PaperEditor, label, type Paper, type Schema } from "./grc-forms";
 import { ComplianceFiling, type FilingVerification } from "./compliance-filing";
+import { DMCCAuditResult, type DMCCAssessment } from "./dmcc-audit-result";
 import { SoDCalculation, SoDInputAssignments } from "./sod-results";
 
 export const grcAreas = [
@@ -177,6 +178,7 @@ function Panel({
       freshness: string;
       calendar_state: string;
       reassessment_required: boolean;
+      dmcc_audit_assessment?: DMCCAssessment | null;
     }[];
   }>(
     `${base}/compliance-calendar?record_id=${selected?.id || ""}`,
@@ -429,6 +431,14 @@ function Panel({
                 ) : (
                   <Narrative value={detail.body} />
                 )}
+                {area === "obligations" &&
+                  Boolean(detail.body.dmcc_audit_scope) && (
+                    <DMCCAuditResult
+                      assessment={checked?.dmcc_audit_assessment}
+                      available={filingVerification.state === "known"}
+                      freshness={checked?.freshness}
+                    />
+                  )}
                 {area === "obligations" &&
                   (permissions.includes("compliance.manage") ||
                     permissions.includes("compliance.approve")) && (

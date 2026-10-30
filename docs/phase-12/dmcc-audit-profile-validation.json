@@ -1,0 +1,109 @@
+{
+  "contract": "dmcc-audit-profile-verification/1",
+  "source_basis": "STAGED_GIT_OBJECT_BYTES_BEFORE_COMMIT",
+  "parent_commit": "37249b3d224399bdefb9af4fa2b9915d5a372e0e",
+  "source_files": [
+    {
+      "path": "backend/app/api/v1/grc.py",
+      "sha256": "093aacd40a31b4f3cc871ae91eec2c5b634ec766e20fa4f2c335fbc6426f3e3c"
+    },
+    {
+      "path": "backend/app/modules/grc/dmcc_audit.py",
+      "sha256": "0b7fe41656ba152cce21fbe40660b88d4288d3d491088fd7c3c7021f4ad0a7d5"
+    },
+    {
+      "path": "backend/app/modules/grc/filing.py",
+      "sha256": "e3b6fa236d4b7145a629dbb355642b10d72b9d5a6ddd34a6644d163cdbdfe5a1"
+    },
+    {
+      "path": "backend/app/modules/grc/schemas.py",
+      "sha256": "8221af6a9e5ae26e1defaf08ce75dfdccbade91408955140a8b28568cce13231"
+    },
+    {
+      "path": "backend/app/modules/grc/service.py",
+      "sha256": "852bba4d752e17271b208a68e2e8afb89e66a35abf2649b85a56316c63f94ed0"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_dmcc_audit.py",
+      "sha256": "95bdb030e38a08990a9b9bfd9a50cea5192bc5f4dd4e55384a2b21db6d131146"
+    },
+    {
+      "path": "backend/tests/unit/test_dmcc_audit.py",
+      "sha256": "0a70d147ada611e0b5a097822a4493ef153aba68075da11d846cf51c8f4e0303"
+    },
+    {
+      "path": "frontend/e2e/dmcc-audit-release.spec.ts",
+      "sha256": "f8823bd303b2270daa9ddd8153113109c5db226ffdf54dffe6d0b4e4e427e169"
+    },
+    {
+      "path": "frontend/playwright.smoke.config.ts",
+      "sha256": "6e5aff256671461c0c26a3912f4e247f3fbcef6d4b66a731b44ec1443600d944"
+    },
+    {
+      "path": "frontend/src/features/compliance-filing.tsx",
+      "sha256": "866c05a82afc660837047cf6d2dec4642a36199797e11e5eb659941d65061ceb"
+    },
+    {
+      "path": "frontend/src/features/dmcc-audit-result.tsx",
+      "sha256": "1963de41c669ab41dede79972a756dd43a15e9143145a2b9ba6873b880ca98e6"
+    },
+    {
+      "path": "frontend/src/features/grc-forms.tsx",
+      "sha256": "5634d55ea2db60c2846d4f27d5acba6a491f9fc763f9df3198fd7db373d0b581"
+    },
+    {
+      "path": "frontend/src/features/grc-studio.tsx",
+      "sha256": "0c50ff2373c8e3ad28fc6b6dfe8472e5cf81d6c7c4cfb290b6a4621507fdf1f7"
+    },
+    {
+      "path": "frontend/tests/dmcc-audit-result.test.tsx",
+      "sha256": "12268a9b924991a5d2be11b041e1b3779e42a21203917859169c58c1a0d8f4cb"
+    },
+    {
+      "path": "frontend/tests/grc-optional-profile.test.tsx",
+      "sha256": "7d98fb4c888b3ffd247b42c09bf2a1c285876ce02491bb4faf7e9d31900a03f8"
+    }
+  ],
+  "reports": [
+    {
+      "path": "docs/phase-12/dmcc-source-binding-final.xml",
+      "passed": 208,
+      "failures": 0,
+      "skipped": 0,
+      "sha256": "db623b7b2a5c77c980bfb9016cb8bb4bf8a1aec54de1068f061cf9def12f899a"
+    },
+    {
+      "path": "docs/phase-12/dmcc-ui-verified-final.xml",
+      "passed": 455,
+      "failures": 0,
+      "skipped": 0,
+      "sha256": "9c7e82c6112d215f842aa9e769e8564d7b537db729c7db8fed995ba615f46175"
+    }
+  ],
+  "checks": {
+    "mypy_app_files": 420,
+    "mypy": "PASS",
+    "scoped_ruff_lint_and_format": "PASS",
+    "typescript": "PASS",
+    "scoped_eslint": "PASS",
+    "next_production_build": "PASS",
+    "api_contracts": "CURRENT",
+    "generated_api_types": "CURRENT",
+    "new_browser_case": "ONE_DISCOVERED_NOT_EXECUTED"
+  },
+  "verified_scope": [
+    "Exact original regulation and guideline bytes, media type, size, scan status and independent review required. Swapped or corrupt originals rejected.",
+    "Separate company, branch, dormancy, notices, auditor and procedure determinations; unresolved facts block approval.",
+    "Registered company requires UAE legal-entity country; India parent can retain its country with explicit UAE branch obligation.",
+    "Source reopening makes readiness stale without rewriting historical body; protected filing fields require preparing and reassessment.",
+    "Optional nested profile editor initializes fixed values and preserves existing retained values."
+  ],
+  "limits": [
+    "API scanning and dispatch use explicit doubles; hosted DMCC browser and full backend validation remain pending.",
+    "Calendar-month addition preserves trigger day and clamps destination day. Other legal month-end interpretations require independent confirmation; December 31 fixture does not qualify them.",
+    "Professional source assessments, live auditor eligibility, original notice validity, audit opinions and external submission remain outside automatic qualification.",
+    "No real client pilot files or professional approvals have been supplied. Authored 154 scenarios are synthetic, not 154 qualified real client cases."
+  ],
+  "backend_warning": "One existing Alembic path_separator deprecation warning",
+  "earlier_reports": "dmcc-complete-final.xml and dmcc-frontend-verified.xml retain earlier runs; do not add their counts to final results."
+}
