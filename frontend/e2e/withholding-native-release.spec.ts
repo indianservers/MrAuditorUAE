@@ -19,7 +19,7 @@ async function login(page: Page, email: string) {
   await page.waitForURL("**/dashboard");
 }
 
-test("India historical native samples and explicit dated Form 138/143 fixtures, controlled forms, full lineage and crosswalk staleness", async ({
+test("India historical native samples and explicit dated Form 138/140/143/144 fixtures, controlled forms, full lineage and crosswalk staleness", async ({
   page,
   browser,
 }) => {
@@ -104,57 +104,89 @@ test("India historical native samples and explicit dated Form 138/143 fixtures, 
       "27Q",
       "143",
       "138",
+      "140",
+      "144",
       "24Q",
       "24Q-Q4",
     ] as const) {
-      const count = form.startsWith("24Q")
-        ? 1
-        : form === "138"
-          ? 2
-          : form === "143"
-            ? 1
-            : form === "26Q"
-              ? 4
-              : form === "27Q"
-                ? 2
-                : 10;
+      const isNumbered = ["138", "140", "143", "144"].includes(form);
+      const isDeduction = ["140", "144"].includes(form);
+      const bsr =
+        form === "140"
+          ? "3000012"
+          : form === "144"
+            ? "4000013"
+            : form.startsWith("24Q")
+              ? "0000412"
+              : form === "138"
+                ? "2000090"
+                : form === "143"
+                  ? "5000032"
+                  : form === "26Q"
+                    ? "0000809"
+                    : form === "27Q"
+                      ? "0000525"
+                      : "0000897";
+      const count =
+        form.startsWith("24Q") || isDeduction
+          ? 1
+          : form === "138"
+            ? 2
+            : form === "143"
+              ? 1
+              : form === "26Q"
+                ? 4
+                : form === "27Q"
+                  ? 2
+                  : 10;
       const month =
         form === "24Q-Q4"
           ? "2025-02"
           : form.startsWith("24Q")
             ? "2018-12"
-            : ["143", "138"].includes(form)
+            : isNumbered
               ? "2026-05"
               : form === "26Q"
                 ? "2020-04"
                 : form === "27Q"
                   ? "2019-12"
                   : "2020-10";
-      const total = form.startsWith("24Q")
-        ? "1000"
-        : form === "138"
-          ? "4000"
-          : form === "143"
-            ? "700"
-            : form === "26Q"
-              ? "1900"
-              : form === "27Q"
-                ? "166000"
-                : "1000";
-      const gross = form.startsWith("24Q")
-        ? "1000"
-        : form === "138"
-          ? "24100"
-          : form === "143"
-            ? "213000"
-            : form === "26Q"
-              ? "100000"
-              : form === "27Q"
-                ? "20000000"
-                : "10000";
+      const total =
+        form === "140"
+          ? "900"
+          : form === "144"
+            ? "2000"
+            : form.startsWith("24Q")
+              ? "1000"
+              : form === "138"
+                ? "4000"
+                : form === "143"
+                  ? "700"
+                  : form === "26Q"
+                    ? "1900"
+                    : form === "27Q"
+                      ? "166000"
+                      : "1000";
+      const gross =
+        form === "140"
+          ? "11200"
+          : form === "144"
+            ? "24000"
+            : form.startsWith("24Q")
+              ? "1000"
+              : form === "138"
+                ? "24100"
+                : form === "143"
+                  ? "213000"
+                  : form === "26Q"
+                    ? "100000"
+                    : form === "27Q"
+                      ? "20000000"
+                      : "10000";
       const groups = Array.from({ length: count }, (_, i) => ({
         transaction_reference: `SYN-ASSESSMENT-${i + 1}`,
-        transaction_date: month + (form === "27Q" ? "-10" : "-01"),
+        transaction_date:
+          month + (form === "140" ? "-02" : form === "27Q" ? "-10" : "-01"),
         period: month,
         rule_reference: "SYN-ASSESSED-SECTION",
         party_records: [`1/1/${i + 1}`],
@@ -166,14 +198,14 @@ test("India historical native samples and explicit dated Form 138/143 fixtures, 
             ? "../docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-24Q-Q3-original-sample.txt"
             : form === "138"
               ? "../docs/country-workflows/authority-references/form138-2026-07-22/protean-form138-original-sample.txt"
-              : form === "143"
-                ? "../docs/country-workflows/authority-references/form143-2026-07-22/protean-form143-original-sample.txt"
+              : form === "143" || isDeduction
+                ? `../docs/country-workflows/authority-references/form${form}-2026-07-22/protean-form${form}-original-sample.txt`
                 : `../docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-${form}-original-sample.txt`,
       );
       let sourceBytes = publicOriginal;
-      if (form === "143") {
+      if (form === "143" || isDeduction) {
         await evidence(
-          "public-issuer-143-incomplete-original-sample.txt",
+          `public-issuer-${form}-incomplete-original-sample.txt`,
           publicOriginal,
         );
         expect(publicOriginal.subarray(-2).toString("ascii")).toBe("\r\n");
@@ -185,10 +217,11 @@ test("India historical native samples and explicit dated Form 138/143 fixtures, 
         for (const [line, field, value] of [
           [3, 17, "00001"],
           [3, 24, "1000.00"],
-          [3, 25, "1000.00"],
+          [3, 25, form === "140" ? "100.00" : "1000.00"],
           [4, 18, "Y"],
         ] as const)
           records[line - 1][field - 1] = value;
+        if (form === "144") records[3][32] = "1234567890";
         sourceBytes = Buffer.from(
           records.map((row) => row.join("^")).join("\r\n") + "\r\n",
           "ascii",
@@ -213,7 +246,7 @@ test("India historical native samples and explicit dated Form 138/143 fixtures, 
         );
       }
       const file = await evidence(
-        ["143", "138", "24Q-Q4"].includes(form)
+        isNumbered || form === "24Q-Q4"
           ? `SYNTHETIC-explicit-completion-${form}.txt`
           : `public-issuer-${form}-original-sample.txt`,
         sourceBytes,
@@ -251,15 +284,13 @@ test("India historical native samples and explicit dated Form 138/143 fixtures, 
             ? "india-24q-regular-q4-v7.5"
             : form.startsWith("24Q")
               ? "india-24q-regular-q1q3-v6.3"
-              : form === "138"
-                ? "india-form138-regular-20260722-v1.1"
-                : form === "143"
-                  ? "india-form143-regular-20260722-v1.1"
-                  : form === "26Q"
-                    ? "india-26q-regular-v7.8"
-                    : form === "27Q"
-                      ? "india-27q-regular-v7.5"
-                      : "india-27eq-regular-v6.9",
+              : isNumbered
+                ? `india-form${form}-regular-20260722-v1.1`
+                : form === "26Q"
+                  ? "india-26q-regular-v7.8"
+                  : form === "27Q"
+                    ? "india-27q-regular-v7.5"
+                    : "india-27eq-regular-v6.9",
         );
       await page
         .getByRole("combobox", { name: "Clean retained evidence", exact: true })
@@ -270,11 +301,7 @@ test("India historical native samples and explicit dated Form 138/143 fixtures, 
           exact: true,
         })
         .selectOption(
-          form === "24Q-Q4"
-            ? "Q4"
-            : ["26Q", "143", "138"].includes(form)
-              ? "Q1"
-              : "Q3",
+          form === "24Q-Q4" ? "Q4" : form === "26Q" || isNumbered ? "Q1" : "Q3",
         );
       await page
         .getByRole("combobox", {
@@ -292,15 +319,12 @@ test("India historical native samples and explicit dated Form 138/143 fixtures, 
         ["Schedule title", title],
         ["Expected data rows", String(count)],
         ["Independent totals by currency", `INR=${total}`],
+        ["Native statement TAN", isNumbered ? "BLRF02329F" : "MUMN77777A"],
         [
-          "Native statement TAN",
-          ["143", "138"].includes(form) ? "BLRF02329F" : "MUMN77777A",
-        ],
-        [
-          ["143", "138"].includes(form)
+          isNumbered
             ? "Native tax year (six digits)"
             : "Native financial year (six digits)",
-          ["143", "138"].includes(form)
+          isNumbered
             ? "202627"
             : form === "24Q-Q4"
               ? "202425"
@@ -314,46 +338,74 @@ test("India historical native samples and explicit dated Form 138/143 fixtures, 
         ["Native batch count", "1"],
         ["Native challan count", "1"],
         ["Native party count", String(count)],
-        ...(form === "138"
+        ...(isDeduction
           ? [
-              ["Native tax deducted control (INR)", "4000"],
-              ["Native challan tax control (INR)", "22000"],
+              ["Native tax deducted control (INR)", total],
+              [
+                "Native challan tax control (INR)",
+                form === "140" ? "10000" : "21000",
+              ],
               ["Native challan interest control (INR)", "1000"],
-              ["Native challan fee control (INR)", "1000"],
-              ["Native challan penalty control (INR)", "100"],
+              [
+                "Native challan fee control (INR)",
+                form === "140" ? "100" : "1000",
+              ],
+              [
+                "Native challan penalty control (INR)",
+                form === "140" ? "100" : "1000",
+              ],
               ["Native allocated interest control (INR)", "1000"],
-              ["Native allocated penalty control (INR)", "100"],
+              [
+                "Native allocated penalty control (INR)",
+                form === "140" ? "100" : "1000",
+              ],
+              ["Native cash withdrawal general control (INR)", "0"],
+              ["Native cash withdrawal cooperative control (INR)", "0"],
             ]
-          : form === "143"
+          : form === "138"
             ? [
-                ["Native tax collected control (INR)", "700"],
-                ["Native challan tax control (INR)", "210000"],
+                ["Native tax deducted control (INR)", "4000"],
+                ["Native challan tax control (INR)", "22000"],
                 ["Native challan interest control (INR)", "1000"],
                 ["Native challan fee control (INR)", "1000"],
-                ["Native challan other control (INR)", "1000"],
+                ["Native challan penalty control (INR)", "100"],
                 ["Native allocated interest control (INR)", "1000"],
-                ["Native allocated other control (INR)", "1000"],
+                ["Native allocated penalty control (INR)", "100"],
               ]
-            : [
-                ["Native income tax control (INR)", total],
-                ["Native surcharge control (INR)", "0"],
-                ["Native cess control (INR)", "0"],
-              ]),
+            : form === "143"
+              ? [
+                  ["Native tax collected control (INR)", "700"],
+                  ["Native challan tax control (INR)", "210000"],
+                  ["Native challan interest control (INR)", "1000"],
+                  ["Native challan fee control (INR)", "1000"],
+                  ["Native challan other control (INR)", "1000"],
+                  ["Native allocated interest control (INR)", "1000"],
+                  ["Native allocated other control (INR)", "1000"],
+                ]
+              : [
+                  ["Native income tax control (INR)", total],
+                  ["Native surcharge control (INR)", "0"],
+                  ["Native cess control (INR)", "0"],
+                ]),
         ["Native allocated deposit control (INR)", total],
         ["Native challan deposit control (INR)", gross],
         [
           "Native payment base control (INR)",
-          form.startsWith("24Q")
-            ? "10000"
-            : form === "138"
-              ? "4200"
-              : form === "143"
-                ? "21000"
-                : form === "26Q"
-                  ? "19000"
-                  : form === "27Q"
-                    ? "26600000"
-                    : "10000",
+          form === "140"
+            ? "1000"
+            : form === "144"
+              ? "2100"
+              : form.startsWith("24Q")
+                ? "10000"
+                : form === "138"
+                  ? "4200"
+                  : form === "143"
+                    ? "21000"
+                    : form === "26Q"
+                      ? "19000"
+                      : form === "27Q"
+                        ? "26600000"
+                        : "10000",
         ],
         ["Native crosswalk groups (JSON)", JSON.stringify(groups)],
         [
@@ -448,17 +500,7 @@ test("India historical native samples and explicit dated Form 138/143 fixtures, 
       await expect(challans.getByRole("row")).toHaveCount(2);
       await expect(
         challans.getByRole("cell", {
-          name: form.startsWith("24Q")
-            ? "0000412"
-            : form === "138"
-              ? "2000090"
-              : form === "143"
-                ? "5000032"
-                : form === "26Q"
-                  ? "0000809"
-                  : form === "27Q"
-                    ? "0000525"
-                    : "0000897",
+          name: bsr,
           exact: true,
         }),
       ).toBeVisible();
@@ -497,7 +539,25 @@ test("India historical native samples and explicit dated Form 138/143 fixtures, 
             `assert sum(Decimal(x['total_tax']) for x in r)==Decimal('${total}')`,
             `assert r[-1]['party_key']=='1/1/${count}'`,
             "c=list(w['Withholding challans'].values);assert len(c)==2",
-            `assert c[1][c[0].index('bsr_or_form24g_reference')]=='${form.startsWith("24Q") ? "0000412" : form === "138" ? "2000090" : form === "143" ? "5000032" : form === "26Q" ? "0000809" : form === "27Q" ? "0000525" : "0000897"}'`,
+            `assert c[1][c[0].index('bsr_or_form24g_reference')]=='${bsr}'`,
+            ...(isDeduction
+              ? [
+                  `assert r[0]['numbered_form']=='${form}'`,
+                  "assert r[0]['recorded_deposited_flag']=='Y'",
+                  "assert 'income_tax' not in r[0] and 'surcharge' not in r[0] and 'cess' not in r[0]",
+                  "assert r[0]['recorded_cash_withdrawal_general'] is None",
+                  "assert r[0]['recorded_cash_withdrawal_cooperative'] is None",
+                  `assert c[1][c[0].index('recorded_penalty')]=='${form === "140" ? "100.00" : "1000.00"}'`,
+                ]
+              : []),
+            ...(form === "144"
+              ? [
+                  "assert r[0]['recorded_destination_country']=='04'",
+                  "assert r[0]['recorded_numbered_rate_basis']=='B'",
+                  "assert r[0]['recorded_residence_contact']=='69877877878'",
+                  "assert 'recorded_section202_opt_out' not in r[0]",
+                ]
+              : []),
             ...(form === "143"
               ? [
                   "assert r[0]['recorded_deposited_flag']=='Y'",
@@ -582,6 +642,36 @@ test("India historical native samples and explicit dated Form 138/143 fixtures, 
         await annual.screenshot({
           path: `${screenshots}/IN-24Q-Q4-pension-chapter-lineage.png`,
         });
+      }
+      if (isDeduction) {
+        await expect(
+          links.getByRole("columnheader", { name: "income tax", exact: true }),
+        ).toHaveCount(0);
+        await links.locator("..").evaluate((element) => {
+          const header = Array.from(element.querySelectorAll("th")).find(
+            (node) => node.textContent === "numbered form",
+          );
+          if (!header) throw new Error("Numbered source lineage missing");
+          element.scrollLeft = header.offsetLeft;
+        });
+        await links.locator("..").screenshot({
+          path: `${screenshots}/IN-${form}-numbered-source-fields.png`,
+        });
+        if (form === "144") {
+          await links.locator("..").evaluate((element) => {
+            const header = Array.from(element.querySelectorAll("th")).find(
+              (node) => node.textContent === "recorded residence address",
+            );
+            if (!header) throw new Error("Numbered residence lineage missing");
+            element.scrollLeft = header.offsetLeft;
+          });
+          await expect(
+            links.getByRole("cell", { name: "69877877878", exact: true }),
+          ).toBeVisible();
+          await links.locator("..").screenshot({
+            path: `${screenshots}/IN-144-recorded-residence-fields.png`,
+          });
+        }
       }
       if (form === "27Q") {
         expect(metadata.nonresident_treaty_and_residence_qualification).toBe(
