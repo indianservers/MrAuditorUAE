@@ -1,0 +1,53 @@
+{
+  "scope": "Original failed FIFO browser diagnostic; no result/review/export qualification",
+  "source_sha": "9e51df614ff5f848d177e9daffacf399ab51b8c1",
+  "run_id": 41033123236,
+  "job_id": 123987390837,
+  "observed_result": {
+    "passed": 7,
+    "failed": 1,
+    "new_fifo_test_seconds": 25.3
+  },
+  "failure": "Timeout filling Account currency: this FIFO screen does not display that field; the synthetic engagement already declares AED/INR functional currency. Calculation was not queued in this failed case.",
+  "correction_source": "3c001daf5e6fbf87303fb19b56f21d3fd3891bde",
+  "correction": "Removed only the nonexistent currency-field fill. Result-currency assertion remains. Hosted corrected browser result is pending; not represented as passed here.",
+  "local_corrected_checks": [
+    "TypeScript passed",
+    "scoped ESLint passed",
+    "new FIFO test discovery passed; full local smoke discovery unavailable because release identities are provisioned by CI"
+  ],
+  "archive": {
+    "artifact_id": 12966942437,
+    "bytes": 12266159,
+    "sha256": "451c01443dbf0b798c5fb59a3e9b996b7d6b3089b0b4bdc4581fb7904399e64b"
+  },
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-FIFO-preparer-failed-9e51df6.png",
+      "sha256": "a303af730d278d1603e0787715d477853553db08bfaf72243df99a921b351a88",
+      "original_dimensions": [
+        1280,
+        720
+      ],
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-FIFO-reviewer-failed-9e51df6.png",
+      "sha256": "78702e3af350690f2386c8af531375d325816c68262b6f410e17dafe132e6fbf",
+      "original_dimensions": [
+        2200,
+        2600
+      ],
+      "visually_inspected": true
+    }
+  ],
+  "visual_findings": [
+    "Preparer capture shows assessed FIFO workflow, explicit June cost period and policy, reviewed sources and no Account currency field",
+    "Reviewer capture remains on UAE country configuration; it is not a FIFO result capture"
+  ],
+  "limits": [
+    "No FIFO browser calculation/approval/export/staleness success established by this failed run",
+    "Synthetic service identities and fixtures only; no real client validation",
+    "Earlier seven smoke cases passed; their success does not qualify the new test"
+  ]
+}
