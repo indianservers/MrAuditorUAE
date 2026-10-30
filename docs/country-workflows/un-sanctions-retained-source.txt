@@ -1,0 +1,53 @@
+Controlled uploaded UN consolidated sanctions XML
+
+Shared workflow: UAE, India and other configured countries can import a bounded,
+retained UN consolidated XML snapshot as sanctions-entries for the list role of
+sanctions-name-review. Existing evidence storage, quarantine, queued jobs,
+independent source review, dependency tracking and screening review are reused.
+No remote fetch or schema-location fetch occurs during processing.
+
+The operator must independently declare the exact timezone-aware XML generated
+instant and six separate population controls: individuals, entities, identifying
+original-script names, individual named aliases, entity named aliases, and
+blank/literal na alias records. Expanded source rows must equal the first five
+controls. Empty alias records are controlled separately. No monetary totals
+apply. The profile rejects unsafe XML, changed subject identifiers or controls,
+unknown subject/alias fields, unsupported alias quality, missing primary names,
+duplicate identifiers/references and excessive rows. No partial list is emitted.
+
+Every primary name, meaningful original-script name and named alias is retained,
+including duplicate spellings and low-quality aliases. Stable subject IDs,
+permanent references, regime, name origin and alias quality survive candidate
+review and the complete Screening candidates export sheet. The list version is
+UN-SC: plus the SHA-256 of the exact original bytes. Screening policy must select
+that exact version and an explicit maximum generated-date age. A source review
+withdrawal makes dependent saved results stale without rewriting their history.
+
+The frontend requires explicit controls, including literal zero, and shows native
+alias context during adjudication. Existing name similarity remains a rules
+baseline. Low-quality aliases alone are insufficient for positive identification.
+No match automatically clears or rejects a subject. Original date-of-birth,
+identity-document and address information remains in the retained XML and is not
+compared by this name-only profile. Generated date is not designation date.
+
+Authority explanation: https://main.un.org/securitycouncil/en/content/un-sc-consolidated-list
+Original XML endpoint: https://scsanctions.un.org/resources/xml/en/consolidated.xml
+The exact 30 October 2026 retrieved snapshot is retained under authority-references,
+with timestamp, original SHA-256 and structural observations in the source-specific
+un-sanctions-retained-snapshot.json receipt. It is historical test evidence,
+never an automatically selected runtime list or proof of current authenticity.
+
+Verification: 89 targeted backend checks and 148 focused frontend checks pass,
+including UAE/India actual HTTP uploads/jobs, separate source review, two aliases
+for one subject, complete XLSX context and stale unchanged saved results. Scanner
+and broker are explicit API test doubles. The exact public issuer XML was parsed
+separately for both countries with 4,136 names and all six population controls.
+Backend mypy (417 files), scoped Ruff/ESLint, TypeScript, API payload contract
+checks and frontend production build pass. Full frontend results are retained
+separately. These checks do not constitute professionally qualified client work.
+
+Remaining scope: live issuer/list authenticity and update monitoring; country
+local measures/lists and legal applicability; identifiers/transliteration and
+independent identity adjudication; licensed PEP/registry integrations; and real
+redacted UAE/India pilots with independent expected results. No client results
+or professional approvals are created by these synthetic tests or pilot folders.

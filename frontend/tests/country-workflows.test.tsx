@@ -223,6 +223,7 @@ vi.mock("@/hooks/use-api", () => ({
                   }
                 : {},
             source_formats: [
+              { id: "un-sc-consolidated-xml", label: "UN consolidated sanctions XML", available: true, table_type: "sanctions-entries" },
               {
                 id: "india-gstr1-document-series-json",
                 label: "India GSTR-1 document issue series JSON",
@@ -3761,4 +3762,22 @@ it("shows FIFO closing quantities and cost differences before expanded arithmeti
   fireEvent.click(screen.getByRole("checkbox", { name: "Show source provenance and all columns" }));
   expect(screen.getByRole("cell", { name: "12.1932631112635269" })).toBeVisible();
   expect(screen.getByRole("columnheader", { name: "raw cost rollforward difference" })).toBeVisible();
+});
+
+
+it.each(["AE", "IN"])("queues independent UN snapshot controls without monetary totals for %s", async (country) => {
+  state.country = country;
+  render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+  fireEvent.change(screen.getByLabelText("Source file format"), { target: { value: "un-sc-consolidated-xml" } });
+  for (const [label, value] of [
+    ["Clean retained evidence", "clean"], ["Schedule title", "Synthetic UN XML snapshot"], ["Expected data rows", "6"],
+    ["UN XML generated timestamp with timezone", "2026-06-29T23:00:00Z"],
+    ["UN individuals", "1"], ["UN entities", "1"], ["UN original script names", "1"],
+    ["UN individual alias names", "2"], ["UN entity alias names", "1"], ["UN empty alias records", "2"],
+    ["UN snapshot population assessment", "Independent synthetic subject and alias control assessment"],
+  ]) fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  expect(screen.queryByLabelText("Independent totals by currency")).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
+  await waitFor(() => expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({ file_format: "un-sc-consolidated-xml", table_type: "sanctions-entries", expected_rows: 6, control_totals: {}, un_sanctions_controls: { generated_at: "2026-06-29T23:00:00Z", individuals: 1, entities: 1, original_script_names: 1, individual_alias_names: 2, entity_alias_names: 1, empty_alias_records: 2 } });
 });

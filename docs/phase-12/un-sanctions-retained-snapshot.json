@@ -1,0 +1,49 @@
+{
+  "source_url": "https://scsanctions.un.org/resources/xml/en/consolidated.xml",
+  "publisher_explanation": "https://main.un.org/securitycouncil/en/content/un-sc-consolidated-list",
+  "retrieved_on": "2026-10-30",
+  "generated_at": "2026-10-29T23:00:03.345Z",
+  "original_path": "..\\docs\\country-workflows\\authority-references\\un-consolidated-2026-10-30.xml",
+  "bytes": 2177571,
+  "sha256": "4a7d1ae8bd07117e89935dc058076329d92bb904ffd116159a98d1fdc90e1fcc",
+  "publisher_page_subject_counts": {
+    "individuals": 733,
+    "entities": 274
+  },
+  "structural_execution": [
+    {
+      "country": "AE",
+      "name_rows": 4136,
+      "counts": {
+        "individuals": 733,
+        "entities": 274,
+        "original_script_names": 376,
+        "individual_alias_names": 2150,
+        "entity_alias_names": 603,
+        "empty_alias_records": 293
+      },
+      "list_version": "UN-SC:4a7d1ae8bd07117e89935dc058076329d92bb904ffd116159a98d1fdc90e1fcc",
+      "review_status": "UNVERIFIED"
+    },
+    {
+      "country": "IN",
+      "name_rows": 4136,
+      "counts": {
+        "individuals": 733,
+        "entities": 274,
+        "original_script_names": 376,
+        "individual_alias_names": 2150,
+        "entity_alias_names": 603,
+        "empty_alias_records": 293
+      },
+      "list_version": "UN-SC:4a7d1ae8bd07117e89935dc058076329d92bb904ffd116159a98d1fdc90e1fcc",
+      "review_status": "UNVERIFIED"
+    }
+  ],
+  "limitations": [
+    "Dated retained public issuer snapshot, never an automatic runtime list or freshness guarantee",
+    "Alias/script/empty counts were structurally inspected, not independently professionally qualified",
+    "No client identity adjudication, current-list authentication, domestic implementation, PEP or registry clearance",
+    "No live connector, issuer polling, filing or external transmission was performed by this workflow"
+  ]
+}

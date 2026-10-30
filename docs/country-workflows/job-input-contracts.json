@@ -2394,10 +2394,85 @@
             ],
             "title": "ServiceDayControls",
             "type": "object"
+          },
+          "UNSanctionsControls": {
+            "additionalProperties": false,
+            "properties": {
+              "generated_at": {
+                "format": "date-time",
+                "title": "Generated At",
+                "type": "string"
+              },
+              "individuals": {
+                "maximum": 5000,
+                "minimum": 0,
+                "title": "Individuals",
+                "type": "integer"
+              },
+              "entities": {
+                "maximum": 5000,
+                "minimum": 0,
+                "title": "Entities",
+                "type": "integer"
+              },
+              "original_script_names": {
+                "maximum": 5000,
+                "minimum": 0,
+                "title": "Original Script Names",
+                "type": "integer"
+              },
+              "individual_alias_names": {
+                "maximum": 5000,
+                "minimum": 0,
+                "title": "Individual Alias Names",
+                "type": "integer"
+              },
+              "entity_alias_names": {
+                "maximum": 5000,
+                "minimum": 0,
+                "title": "Entity Alias Names",
+                "type": "integer"
+              },
+              "empty_alias_records": {
+                "maximum": 5000,
+                "minimum": 0,
+                "title": "Empty Alias Records",
+                "type": "integer"
+              },
+              "assessment": {
+                "maxLength": 2000,
+                "minLength": 10,
+                "title": "Assessment",
+                "type": "string"
+              }
+            },
+            "required": [
+              "generated_at",
+              "individuals",
+              "entities",
+              "original_script_names",
+              "individual_alias_names",
+              "entity_alias_names",
+              "empty_alias_records",
+              "assessment"
+            ],
+            "title": "UNSanctionsControls",
+            "type": "object"
           }
         },
         "additionalProperties": false,
         "properties": {
+          "un_sanctions_controls": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/UNSanctionsControls"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
           "workbook_sheet": {
             "anyOf": [
               {
@@ -2926,6 +3001,7 @@
           "file_format": {
             "default": "canonical-csv",
             "enum": [
+              "un-sc-consolidated-xml",
               "india-esic-members-xls",
               "canonical-csv",
               "camt053",

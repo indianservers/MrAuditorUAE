@@ -24,6 +24,13 @@ export function ScreeningCandidates({
     "published_on",
     "evidence_reference",
     "name_similarity",
+    ...[
+      "native_subject_kind",
+      "native_reference_number",
+      "native_regime",
+      "native_name_origin",
+      "native_alias_quality",
+    ].filter((field) => candidates.some((candidate) => field in candidate)),
   ];
   return (
     <section aria-label="Screening candidate review">
@@ -32,7 +39,9 @@ export function ScreeningCandidates({
         Every candidate needs independent adjudication. Name similarity is a
         baseline score, not a probability or sanctions clearance. Select a
         subject from this schedule page; use the schedule pages to reach other
-        subjects.
+        subjects. Low-quality aliases alone are insufficient for positive
+        identification; original script and alias quality remain source
+        observations.
       </p>
       <label>
         Screening subject

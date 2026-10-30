@@ -39,6 +39,11 @@ import { IntelligenceExports } from "./intelligence-exports";
 import { BankCarryforwardSource } from "./bank-carryforward-source";
 import { BankCashReview } from "./bank-cash-review";
 import { ScreeningCandidates } from "./screening-candidates";
+import {
+  UNSanctionsSource,
+  EMPTY_UN_SNAPSHOT,
+  buildUNSnapshot,
+} from "./un-sanctions-source";
 import { OwnershipPathEvidence } from "./ownership-path-evidence";
 import { PartyConfirmationEvidence } from "./party-confirmation-evidence";
 import {
@@ -697,6 +702,7 @@ export function CountryWorkflows({
     sourceOrigin === "vat" && canUseVAT,
   );
   const [sourceFormat, setSourceFormat] = useState("canonical-csv");
+  const [unSnapshot, setUNSnapshot] = useState(EMPTY_UN_SNAPSHOT);
   const [workbookSheet, setWorkbookSheet] = useState("");
   const [workbookAssessment, setWorkbookAssessment] = useState("");
   const [inventoryControlsEnabled, setInventoryControlsEnabled] =
@@ -1755,6 +1761,14 @@ export function CountryWorkflows({
           : {
               evidence_version_id: evidence,
               file_format: sourceFormat,
+              ...(sourceFormat === "un-sc-consolidated-xml"
+                ? {
+                    un_sanctions_controls: buildUNSnapshot(
+                      unSnapshot,
+                      expectedRows,
+                    ),
+                  }
+                : {}),
               ...(sourceFormat === "canonical-csv" && workbookSheet
                 ? {
                     workbook_sheet: workbookSheet,
@@ -2779,6 +2793,12 @@ export function CountryWorkflows({
                   </label>
                   {sourceFormat !== "canonical-csv" && (
                     <p>{formatInfo?.description}</p>
+                  )}
+                  {sourceFormat === "un-sc-consolidated-xml" && (
+                    <UNSanctionsSource
+                      value={unSnapshot}
+                      onChange={setUNSnapshot}
+                    />
                   )}
                   {sourceFormat === "canonical-csv" && (
                     <>

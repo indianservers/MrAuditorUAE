@@ -363,6 +363,7 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         from app.modules.country_workflows.native_sources import parse_native
 
         supported_media = {
+            "un-sc-consolidated-xml": {"application/xml", "text/xml"},
             "india-esic-members-xls": {"application/vnd.ms-excel"},
             "canonical-csv": {
                 "text/csv",

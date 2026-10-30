@@ -102,6 +102,17 @@ def sanctions(data, tables, country):
                         "published_on": entry["published_on"],
                         "evidence_reference": entry["evidence_reference"],
                         "name_similarity": score,
+                        **{
+                            field: entry[field]
+                            for field in (
+                                "native_subject_kind",
+                                "native_reference_number",
+                                "native_regime",
+                                "native_name_origin",
+                                "native_alias_quality",
+                            )
+                            if field in entry
+                        },
                     }
                 )
         hits.sort(key=lambda h: (-h["name_similarity"], h["source_id"]))

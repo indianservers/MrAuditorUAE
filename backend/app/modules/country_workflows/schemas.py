@@ -57,6 +57,7 @@ from app.modules.country_workflows.savings_scheme import ROW_TYPES as SAVINGS_RO
 from app.modules.country_workflows.savings_scheme import SavingsScope
 from app.modules.country_workflows.sector_schemas import SECTOR_ROW_TYPES
 from app.modules.country_workflows.turnover import ROW_TYPES as TURNOVER_ROW_TYPES
+from app.modules.country_workflows.un_sanctions_source import UNSanctionsControls
 from app.modules.country_workflows.vat201_layouts import LAYOUTS, VAT201Layout
 from app.modules.country_workflows.withholding_schemas import WithholdingRecord, WithholdingRole
 from app.modules.country_workflows.withholding_scope import WithholdingSettlementScope
@@ -368,6 +369,7 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
 
 
 class SourceInput(Strict):
+    un_sanctions_controls: UNSanctionsControls | None = None
     workbook_sheet: str | None = Field(default=None, min_length=1, max_length=31)
     workbook_assessment: str = Field(default="", max_length=2000)
     custody_quantity_controls: list[CustodyQuantityControl] | None = Field(
@@ -420,6 +422,7 @@ class SourceInput(Strict):
     debit_column: Identifier | None = None
     credit_column: Identifier | None = None
     file_format: Literal[
+        "un-sc-consolidated-xml",
         "india-esic-members-xls",
         "canonical-csv",
         "camt053",
@@ -573,6 +576,20 @@ class SourceInput(Strict):
 
     @model_validator(mode="after")
     def declared_nil(self):
+        if self.file_format == "un-sc-consolidated-xml":
+            if (
+                self.table_type != "sanctions-entries"
+                or self.un_sanctions_controls is None
+                or self.control_totals
+                or self.expected_rows != self.un_sanctions_controls.name_rows
+            ):
+                raise ValueError(
+                    "UN XML requires independent subject, script and alias controls with exact expanded name rows and no monetary totals"
+                )
+        elif self.un_sanctions_controls is not None:
+            raise ValueError(
+                "UN snapshot controls apply only to the explicit consolidated XML profile"
+            )
         if self.savings_enrolment_document_version_id is not None and (
             self.table_type != "savings-bases"
             or self.file_format != "canonical-csv"

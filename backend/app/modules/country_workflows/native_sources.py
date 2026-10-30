@@ -24,6 +24,14 @@ WPS_RECORD_CONTRACT = "wps-single-line-records/1"
 
 FORMATS: list[dict[str, Any]] = [
     {
+        "id": "un-sc-consolidated-xml",
+        "label": "UN consolidated sanctions XML - retained names and aliases",
+        "countries": [],
+        "table_type": "sanctions-entries",
+        "description": "Explicit snapshot/subject/script/alias controls, source reference and alias quality; no live authenticity, identity match, domestic clearance or PEP inference",
+        "source": "https://main.un.org/securitycouncil/en/content/un-sc-consolidated-list",
+    },
+    {
         "id": "india-esic-members-xls",
         "label": "India ESIC six-column text XLS",
         "countries": ["IN"],
@@ -691,7 +699,11 @@ def parse_native(content, data, country, filename):
     with localcontext() as arithmetic:
         arithmetic.prec = 80
         try:
-            if data.file_format == "india-esic-members-xls":
+            if data.file_format == "un-sc-consolidated-xml":
+                from app.modules.country_workflows.un_sanctions_source import parse_un_sanctions
+
+                rows, metadata = parse_un_sanctions(content, data)
+            elif data.file_format == "india-esic-members-xls":
                 from app.modules.country_workflows.esic_xls import parse_esic_xls
 
                 rows, metadata = parse_esic_xls(content, data, filename)
@@ -743,7 +755,10 @@ def parse_native(content, data, country, filename):
             raise ValueError("Native source exceeds 5,000 derived rows")
         totals: dict[str, Decimal] = {}
         for row in (
-            [] if data.table_type in {"gst-summary-metrics", "gst-document-series"} else rows
+            []
+            if data.table_type
+            in {"gst-summary-metrics", "gst-document-series", "sanctions-entries"}
+            else rows
         ):
             totals[row["currency"]] = totals.get(row["currency"], Decimal(0)) + Decimal(
                 row["tax"] if data.table_type == "tax-documents" else row["amount"]
@@ -759,7 +774,9 @@ def parse_native(content, data, country, filename):
         "rows": rows,
         "row_count": len(rows),
         "control_totals": {k: str(v) for k, v in sorted(totals.items())},
-        "population_completeness": "ESIC_DECLARED_MEMBER_DAY_ZERO_WAGE_AND_WAGE_CONTROLS"
+        "population_completeness": "DECLARED_UN_XML_SUBJECT_SCRIPT_AND_ALIAS_CONTROLS"
+        if data.file_format == "un-sc-consolidated-xml"
+        else "ESIC_DECLARED_MEMBER_DAY_ZERO_WAGE_AND_WAGE_CONTROLS"
         if data.file_format == "india-esic-members-xls"
         else "RETAINED_DOCUMENT_SERIES_COUNTS_NOT_INVOICE_COMPLETENESS"
         if data.file_format == "india-gstr1-document-series-json"
@@ -784,6 +801,11 @@ def parse_native(content, data, country, filename):
         "parser_version": data.file_format
         + ("-3" if data.file_format in {"swift-mt940", "camt053"} else "-1"),
         "native_format": data.file_format,
+        **(
+            {"allowed_source_roles": ["list"], "allowed_workflows": ["sanctions-name-review"]}
+            if data.file_format == "un-sc-consolidated-xml"
+            else {}
+        ),
         **(
             {
                 "allowed_source_roles": ["reported"],

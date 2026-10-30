@@ -1,0 +1,106 @@
+{
+  "scope": "Controlled uploaded UN XML name/alias profile shared across countries; not live identity or legal qualification",
+  "source_files": [
+    {
+      "path": "backend/app/modules/country_workflows/diligence_calculations.py",
+      "sha256": "19c2b89d28a3710baa9e95cc91e2a6a35e6b23425ae383d539e310a89946a42d"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/native_sources.py",
+      "sha256": "3639b11fbb90234db17334dfe68be8aef1ec868ed53a8ea2e7441c29918faf9b"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/schemas.py",
+      "sha256": "ecc09412d3ecd0f13f921f3309708298fb5cebf4a4ff4c237efcb3f30ffe656c"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/service.py",
+      "sha256": "4d576004d45719be1f5cbeaff61a14587b88017a83fad0b9e7f90b750689d484"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/un_sanctions_source.py",
+      "sha256": "458512065a27c5cc471ec2edb6ce07ca08d3973184b50e95f58d7205da065947"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "sha256": "bd16420bb7aba97bec116847b169daf9e9cf3cc435de58c365c6d4694a39a3f9"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_un_sanctions_source.py",
+      "sha256": "edb8428d46a8564e78bda9214a0665d801ae1adbfd0638dbe73ab717c78fe02d"
+    },
+    {
+      "path": "backend/tests/unit/test_un_sanctions_source.py",
+      "sha256": "2fbca29c21a3c1378a3f15c412f7e91f6d1f4ac07c3532233579583761947477"
+    },
+    {
+      "path": "docs/country-workflows/job-input-contracts.json",
+      "sha256": "a4140adc61e93ee6ea18d4422b15dbfdcafc5803ddf62e19f4da97e24dfa76dd"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "b0be246832ceb8862c0bafb6020bfd12c83fdd129de161bd11d4f720cc3aca28"
+    },
+    {
+      "path": "frontend/src/features/screening-candidates.tsx",
+      "sha256": "c2c4a995818d5a4ac332a3b6785bfd75312208f5d82f93f13f03bee41e49a50f"
+    },
+    {
+      "path": "frontend/src/features/un-sanctions-source.tsx",
+      "sha256": "ad00c3c9b4d03e14deb970c5e08e2d6daf355636fb9fe494267eb2ad15ee1fee"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "775a6f0eda6a51b6ddd418b4dac4201e0015641dde184232c4b197db9c4435c5"
+    },
+    {
+      "path": "frontend/tests/un-sanctions-source.test.tsx",
+      "sha256": "883c5da488fca21296b4a2171d9f812e833dd292df3614e4a9bb3abc48268ca7"
+    }
+  ],
+  "original_test_reports": [
+    {
+      "path": "docs/phase-12/un-sanctions-focused.xml",
+      "sha256": "742519c571fdb0291fcfe4a6722ff828121aff25cfced3671ece79e19806affb",
+      "tests": 89,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "original_bytes": true
+    },
+    {
+      "path": "docs/phase-12/un-sanctions-ui-final.xml",
+      "sha256": "d7a498a913311b11079bdb8ebb579520e2da0923ad806aa72da103118992df8f",
+      "tests": 148,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "original_bytes": true
+    },
+    {
+      "path": "docs/phase-12/un-sanctions-frontend-full.xml",
+      "sha256": "247d1d67f0bd9edfe7628a120a93d4a5b44c06e805e04e07acc0f83cee2da23b",
+      "tests": 431,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "original_bytes": true
+    }
+  ],
+  "checks": {
+    "mypy": "417 source files passed",
+    "scoped_ruff": "passed",
+    "scoped_eslint": "passed",
+    "typescript": "passed",
+    "api_payload_snapshots": "match current runtime models",
+    "frontend_api_types": "current",
+    "production_build": "Next.js 16.4.2 passed"
+  },
+  "publisher_original_whitespace": "Three issuer COMMENTS1 lines contain trailing spaces; original bytes preserved using a whitespace attribute scoped to the single dated XML file",
+  "limitations": [
+    "API scanner and broker are explicit test doubles",
+    "No hosted browser proof for the new UN form yet",
+    "Public snapshot structure does not qualify authenticity or client identities",
+    "No real client pilot or professional approval supplied"
+  ]
+}

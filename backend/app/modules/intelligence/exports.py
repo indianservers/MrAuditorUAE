@@ -893,6 +893,11 @@ def render(event, format):
                     "published_on",
                     "evidence_reference",
                     "name_similarity",
+                    "native_subject_kind",
+                    "native_reference_number",
+                    "native_regime",
+                    "native_name_origin",
+                    "native_alias_quality",
                 ]
                 append(
                     candidates,
