@@ -1,0 +1,7 @@
+{
+  "synthetic": true,
+  "failure_injection": "persisted expired worker claim",
+  "abandoned_claim": "failed_requires_manual_retry",
+  "pending_outbox_dispatched": 1,
+  "abandoned_job_automatically_reexecuted": false
+}

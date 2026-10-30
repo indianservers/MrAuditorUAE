@@ -1,0 +1,56 @@
+{
+  "source_commit": "c85595c7db6047b4e19084669fe35bd2a69b651c",
+  "run_url": "https://github.com/indianservers/MrAuditorUAE/actions/runs/41003324115",
+  "browser_job_id": 123892489537,
+  "browser_tests_passed": 7,
+  "suite_duration": "3.7 minutes",
+  "foreign_obligation_case_seconds": 6.5,
+  "archive": {
+    "artifact_id": 12954662001,
+    "bytes": 11929148,
+    "sha256": "1a78d04a5ddae0402cb37b7da38426f5a5a37cc8d92d0b12a0db3433c0fa1ebb"
+  },
+  "original_screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-IN-foreign-obligation-pending-c85595c.png",
+      "archive_entry": "country-reports/AE-IN-foreign-obligation-pending.png",
+      "width": 2200,
+      "height": 2600,
+      "sha256": "e2d77baaa4ba12f1a09199cf3f094bab371b27b5d14ab5070d70101479d00edb"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-IN-foreign-obligation-reviewed-period-c85595c.png",
+      "archive_entry": "country-reports/AE-IN-foreign-obligation-reviewed-period.png",
+      "width": 2200,
+      "height": 2600,
+      "sha256": "7d40925e7acfb6f40e4393a949e2211c0d10d5fc2ffe22414c83364944bcaac8"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-IN-foreign-obligation-withdrawn-stale-c85595c.png",
+      "archive_entry": "country-reports/AE-IN-foreign-obligation-withdrawn-stale.png",
+      "width": 2200,
+      "height": 2600,
+      "sha256": "3cf4d5768322ed699f557927e0f3d72ab5efb2e8cf2ff20e51a91cc6af23a9c8"
+    }
+  ],
+  "visually_inspected": [
+    "Pending: AE entity / IN foreign obligation, 2025-04-01 to 2026-03-31 explicit period, applicability potential, CURRENT sources with APPLICABILITY PENDING calendar and disabled filing approval.",
+    "Reviewed: unchanged foreign period, version 7 APPROVED saved review, assessed applicable scope and CURRENT sources; next submission requires an actual evidence record, which is not supplied.",
+    "Withdrawn source: same version 7 APPROVED historical review and same period, STALE source freshness and reassessment warning; selecting preparing still leaves recording disabled.",
+    "All three filing-readiness sections and their controls are visible. The upper raw narrative is internally scrolled and is not claimed as a complete visual review of every saved field."
+  ],
+  "executed_assertions": [
+    "Configured real ClamAV reports CLEAN for three uploaded synthetic original source records; independent evidence approval.",
+    "Generic GRC form retains the explicit foreign period and saves an applicability revision.",
+    "Preparer self-review denied with 403; separate reviewer uses the UI for independent record and filing-stage approval.",
+    "Source withdrawal preserves the entire saved body and version; filtered calendar reports STALE and reassessment; UI blocks filing with no receipt-related reason masking the check.",
+    "AE workflow country and AED default retained; no page JavaScript errors."
+  ],
+  "resolves_browser_pending_for": "docs/phase-12/obligation-freshness-validation.json",
+  "limitations": [
+    "Full hosted backend verification for c85595c is still running when this receipt is recorded.",
+    "Synthetic sources and actors; the seven-day rule and its 2026-04-07 deadline are fictional arithmetic, not qualified Indian law.",
+    "No real-client qualification, external registration verification, foreign native tax calculation or authority submission.",
+    "Screenshots are original artifact bytes, not edited or cropped; model viewing may resize them."
+  ]
+}
