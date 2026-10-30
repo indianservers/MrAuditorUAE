@@ -1,0 +1,85 @@
+{
+  "status": "COMPILED_AND_DISCOVERED_HOSTED_EXECUTION_PENDING",
+  "test": "annual-gst-release.spec.ts: synthetic India annual GST PAN facts, pending controls, independent approval, export and stale history",
+  "checks": {
+    "frontend_typecheck": "passed",
+    "frontend_lint": "passed with one preexisting unused-variable warning",
+    "playwright_discovery": "1 test in 1 file",
+    "diff_check": "passed"
+  },
+  "scope": [
+    "Real BFF login with separately seeded author and reviewer",
+    "India FY 2025-26 engagement and team grant through actual APIs",
+    "Original four synthetic CSVs uploaded with configured real ClamAV; source jobs and independent review through real APIs",
+    "Annual form UI queues missing controls as null and incomplete, remains pending, disables approval and rejects direct forced approval",
+    "Full explicit PAN form submits unchanged facts and separate GSTR-9 / GSTR-9C candidates without professional or filing qualification",
+    "Author self-approval returns 403; independent reviewer approves through UI",
+    "Downloaded XLSX validated for exact candidate metadata, amounts, false qualification and full source result row",
+    "Source rejection makes approved result stale; entire historical body remains equal, selection retained and approval disabled",
+    "Four explicit screenshots plus browser JS error check"
+  ],
+  "limits": [
+    "Source setup and source review use APIs; this test does not exercise source-upload form widgets",
+    "No local HTTP preview server was started",
+    "No browser execution or pass claimed before hosted run completes",
+    "All inputs and credentials are isolated synthetic fixtures, not a client pilot"
+  ],
+  "source_blobs": [
+    {
+      "path": "frontend/e2e/annual-gst-release.spec.ts",
+      "sha256": "dfce87bcb6548a5f04387e87c0a6195de5271128f33917f36da77c7704694b75"
+    },
+    {
+      "path": "frontend/playwright.smoke.config.ts",
+      "sha256": "156fd1e87985d1d192d7d623031773ad9b7ffe463473d4bc75bb9568b19de335"
+    },
+    {
+      "path": "frontend/e2e/msme-browser-workflow.ts",
+      "sha256": "214b4716b3380343387f642db31e6223e2c0c06b14ca169181ac60f01f400e73"
+    },
+    {
+      "path": "frontend/src/features/annual-gst-scope.tsx",
+      "sha256": "1fecbdf923605311e8847ab6029e7bb56506420bf28b12c74b0a32422b763365"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "24db9479160f9b40cbe6715b5bc668b4c1ca1d53e2a90f46681f46f061b92c73"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/gst_annual_scope.py",
+      "sha256": "a1efc6099f83ab0acbb1e1259a3f75586ae3737869677154b80397b0d5d1a49d"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/calculations.py",
+      "sha256": "384d1008f2a4c433a8870213eb297982dfef030182dc5d4300ae91726e087fcb"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/service.py",
+      "sha256": "ae471a37f04d2a2384def39f18bc54879965f75e2d321c94628b7c9983b7eeba"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_gst_annual_scope.py",
+      "sha256": "420e42ab12e1ba2ec366cb587214c651dbd3c6438c2c9050d9a5ec4daa9f83e8"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-annual-gst/adjustments.csv",
+      "sha256": "7675830de3677801e71cd8c99db7b43e9fbb86874721c7a1d95d1b4cb0bd0638"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-annual-gst/books.csv",
+      "sha256": "c3110ee0d691e37779ba00546a3be039c715c872a7028aef1ff918a7c008cf8f"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-annual-gst/parameters-and-expectations.json",
+      "sha256": "8a9700add65c88ac6a9d4a5c9a94633b3a1850391390bcd9d2f0ca9f4392f1ec"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-annual-gst/return.csv",
+      "sha256": "0aa2160ec513cddbd6e792025359c42b05e0a6e0141918d139365feec063ca40"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-annual-gst/scope.csv",
+      "sha256": "0298ad24aaf6e05202059c9e2f74eb8a18072d1bd9b0253780c2f0c1e1257615"
+    }
+  ]
+}

@@ -5,6 +5,7 @@ export default defineConfig({
     "release-smoke.spec.ts",
     "country-report-release.spec.ts",
     "form26-fields-release.spec.ts",
+    "annual-gst-release.spec.ts",
   ],
   workers: 1,
   reporter: "list",
