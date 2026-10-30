@@ -67,6 +67,100 @@
       "model": "WorkflowInput",
       "payload_schema": {
         "$defs": {
+          "AnnualGSTScope": {
+            "additionalProperties": false,
+            "properties": {
+              "pan": {
+                "pattern": "^[A-Z]{5}[0-9]{4}[A-Z]$",
+                "title": "Pan",
+                "type": "string"
+              },
+              "financial_year_start": {
+                "format": "date",
+                "title": "Financial Year Start",
+                "type": "string"
+              },
+              "financial_year_end": {
+                "format": "date",
+                "title": "Financial Year End",
+                "type": "string"
+              },
+              "rule_review_date": {
+                "format": "date",
+                "title": "Rule Review Date",
+                "type": "string"
+              },
+              "taxpayer_type": {
+                "enum": [
+                  "regular",
+                  "isd",
+                  "section-51",
+                  "section-52",
+                  "casual",
+                  "non-resident",
+                  "government-local-authority-audited",
+                  "composition",
+                  "mixed",
+                  "unknown"
+                ],
+                "title": "Taxpayer Type",
+                "type": "string"
+              },
+              "aggregate_turnover": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Aggregate Turnover"
+              },
+              "other_pan_turnover": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Other Pan Turnover"
+              },
+              "pan_population_complete": {
+                "default": false,
+                "title": "Pan Population Complete",
+                "type": "boolean"
+              },
+              "assessment": {
+                "maxLength": 4000,
+                "minLength": 10,
+                "title": "Assessment",
+                "type": "string"
+              }
+            },
+            "required": [
+              "pan",
+              "financial_year_start",
+              "financial_year_end",
+              "rule_review_date",
+              "taxpayer_type",
+              "assessment"
+            ],
+            "title": "AnnualGSTScope",
+            "type": "object"
+          },
           "ImportNilScope": {
             "additionalProperties": false,
             "properties": {
@@ -707,6 +801,17 @@
             "maxLength": 2000,
             "title": "Box Scope Assessment",
             "type": "string"
+          },
+          "gst_annual_scope": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/AnnualGSTScope"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
           },
           "subjects": {
             "items": {

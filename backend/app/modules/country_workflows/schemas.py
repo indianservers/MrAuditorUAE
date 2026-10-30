@@ -19,6 +19,7 @@ from app.modules.country_workflows.document_series import DocumentSeries, Series
 from app.modules.country_workflows.ecr_arrear_schemas import ECRArrearControls
 from app.modules.country_workflows.esic_population import ESICMember
 from app.modules.country_workflows.grant_utilisation import ROW_TYPES as GRANT_ROW_TYPES
+from app.modules.country_workflows.gst_annual_scope import AnnualGSTScope
 from app.modules.country_workflows.gst_summary import METRICS, GSTSummaryMetric
 from app.modules.country_workflows.gstr1_schemas import GSTR1SectionControl
 from app.modules.country_workflows.gstr2b_part_schemas import GSTR2BPart
@@ -1112,6 +1113,7 @@ class WorkflowInput(Strict):
     required_boxes: list[Identifier] = Field(default_factory=list, max_length=50)
     restrict_to_required_boxes: bool = False
     box_scope_assessment: str = Field(default="", max_length=2000)
+    gst_annual_scope: AnnualGSTScope | None = None
     subjects: list[Identifier] = Field(default_factory=list, max_length=100)
 
     @model_validator(mode="after")
@@ -1119,6 +1121,8 @@ class WorkflowInput(Strict):
         from app.modules.country_workflows.bank_observation_scope import selected_scope
 
         selected_scope(self)
+        if self.gst_annual_scope is not None and self.workflow != "tax-turnover-bridge":
+            raise ValueError("Annual GST assessment requires the tax-turnover bridge")
         if (
             self.workflow not in {"india-msme-interest", "india-msme-annual-tax"}
             and len(self.source_ids) > 4

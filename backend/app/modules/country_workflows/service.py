@@ -773,6 +773,14 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         raise HTTPException(422, "MSE payment timing requires an India engagement")
     if not period or not period.start_date <= data.as_of <= period.end_date:
         raise HTTPException(422, "Reconciliation date must be within the engagement period")
+    if data.gst_annual_scope is not None and (
+        package.country != "IN"
+        or data.gst_annual_scope.financial_year_start != period.start_date
+        or data.gst_annual_scope.financial_year_end != period.end_date
+    ):
+        raise HTTPException(
+            422, "Annual GST assessment must match the India engagement financial year"
+        )
     if data.tax_year_start and data.tax_year_start > data.as_of:
         raise HTTPException(422, "Tax year cannot start after the reconciliation date")
     if data.workflow == "payroll-ledger-rollforward":

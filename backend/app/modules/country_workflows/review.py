@@ -1,6 +1,12 @@
 def approval_error(body):
     from app.modules.intelligence.matching_review import saved_candidates_complete
 
+    if body.get("workflow") == "tax-turnover-bridge":
+        from app.modules.country_workflows.gst_annual_scope import saved_current
+
+        if not saved_current(body):
+            return "Regenerate annual GST candidates with the retained PAN scope"
+
     if body.get("workflow") == "uae-vat":
         from app.modules.country_workflows.uae_vat_currency import current
 

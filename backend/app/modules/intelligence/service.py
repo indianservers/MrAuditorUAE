@@ -194,6 +194,14 @@ async def _head(db, ctx, obj):
 async def current(db, ctx, obj, visited=None):
     if obj.tenant_id != ctx.tenant_id:
         return False
+    if (
+        getattr(obj, "kind", None) == "country-workflow"
+        and obj.body.get("workflow") == "tax-turnover-bridge"
+    ):
+        from app.modules.country_workflows.gst_annual_scope import saved_current
+
+        if not saved_current(obj.body):
+            return False
     if getattr(obj, "kind", None) == "country-workflow" and obj.body.get("workflow") == "uae-vat":
         from app.modules.country_workflows.uae_vat_currency import current as vat_current
 

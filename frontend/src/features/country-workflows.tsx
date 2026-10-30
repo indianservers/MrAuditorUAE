@@ -25,7 +25,7 @@ import {
   BankMatchedProposals,
   type BankProposal,
 } from "./bank-matched-proposals";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { MSMEInterestDetails } from "./msme-interest";
 import { MSMETaxDetails, type MSMETaxBody } from "./msme-tax";
 import { MerchantSettlementDetails } from "./merchant-settlement-details";
@@ -73,6 +73,12 @@ import { InventoryEvidenceTable } from "./inventory-evidence-table";
 import { VATCompositionSource } from "./vat-composition-source";
 import { TurnoverLedgerSource } from "./turnover-ledger-source";
 import { TurnoverBooksComposition } from "./turnover-books-composition";
+import {
+  AnnualGSTScopeForm,
+  AnnualGSTResult,
+  annualGSTPayload,
+  emptyAnnualGST,
+} from "./annual-gst-scope";
 import {
   PublishedBenefitSource,
   PublishedPayrollSource,
@@ -340,6 +346,7 @@ type Result = {
     currency_scope?: string[];
     review_window?: { from: string; through: string };
     turnover_contract?: string;
+    annual_gst_assessment?: Record<string, unknown>;
     service_calendar_basis?: string;
     benefit_service_controls?: {
       employee_count: number;
@@ -641,6 +648,8 @@ export function CountryWorkflows({
     !!selected,
   );
   const [workflow, setWorkflow] = useState("bank-brs");
+  const [annualGST, setAnnualGST] = useState(emptyAnnualGST);
+  useEffect(() => setAnnualGST(emptyAnnualGST()), [eid]);
   const isMSEWorkflow = [
     "india-msme-payment-timing",
     "india-msme-interest",
@@ -2015,6 +2024,10 @@ export function CountryWorkflows({
           );
         payload = {
           workflow,
+          ...(workflow === "tax-turnover-bridge" &&
+          config.data?.country === "IN"
+            ? annualGSTPayload(annualGST)
+            : {}),
           ...(workflow === "inventory-valuation-control"
             ? {
                 inventory_gl_basis: inventoryGLBasis,
@@ -4350,6 +4363,7 @@ export function CountryWorkflows({
                   value={workflow}
                   onChange={(e) => {
                     setWorkflow(e.target.value);
+                    setAnnualGST(emptyAnnualGST());
                     if (e.target.value === "tax-turnover-bridge")
                       setCurrency(
                         config.data?.country === "IN" ? "INR" : "AED",
@@ -4370,6 +4384,13 @@ export function CountryWorkflows({
                   ))}
                 </select>
               </label>
+              {workflow === "tax-turnover-bridge" &&
+                config.data?.country === "IN" && (
+                  <AnnualGSTScopeForm
+                    value={annualGST}
+                    onChange={setAnnualGST}
+                  />
+                )}
               {workflow === "uae-vat" && (
                 <p>
                   UAE VAT comparisons require AED reporting amounts. Retain
@@ -5615,6 +5636,9 @@ export function CountryWorkflows({
               register compared with invoice evidence. This comparison does not
               establish GST return filing or IRP authenticity.
             </p>
+          )}
+          {body.annual_gst_assessment && (
+            <AnnualGSTResult value={body.annual_gst_assessment} />
           )}
           {body.turnover_contract && (
             <section aria-label="Turnover bridge assessment">

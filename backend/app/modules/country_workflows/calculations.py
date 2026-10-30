@@ -1164,6 +1164,15 @@ def calculate(
             from app.modules.country_workflows.turnover import compare as turnover_compare
 
             result = turnover_compare(data, tables, country)
+            if data.gst_annual_scope is not None:
+                from app.modules.country_workflows.gst_annual_scope import assess
+
+                result["annual_gst_assessment"] = assess(
+                    data.gst_annual_scope, result, country, data.as_of
+                )
+                result["blocked"] = result["blocked"] or bool(
+                    result["annual_gst_assessment"]["pending_reasons"]
+                )
         elif data.workflow == "grant-utilisation":
             from app.modules.country_workflows.grant_utilisation import compare as grant_compare
 

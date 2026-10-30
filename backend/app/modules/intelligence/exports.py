@@ -183,6 +183,7 @@ def render(event, format):
             "vat_reporting_currency_contract",
             "vat_reporting_currency",
             "vat_fx_basis",
+            "annual_gst_assessment",
             "gst_reporting_currency_contract",
             "gst_reporting_currency",
             "gst_fx_basis",

@@ -1,0 +1,169 @@
+{
+  "status": "LOCAL_IMPLEMENTATION_VERIFIED_HOSTED_AND_CLIENT_QUALIFICATION_PENDING",
+  "contract": "india-annual-gst-candidates/1",
+  "workflow": "tax-turnover-bridge",
+  "country": "IN",
+  "financial_years": [
+    "2024-25",
+    "2025-26"
+  ],
+  "checks": [
+    {
+      "path": "docs/phase-12/gst-annual-regression.xml",
+      "tests": 3594,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "path": "docs/phase-12/gst-annual-worker-isolated.xml",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/gst-annual-regression-final.xml",
+      "tests": 3594,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "path": "docs/phase-12/gst-annual-frontend-final.xml",
+      "tests": 380,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "additional_checks": [
+    "Ruff application and affected tests passed",
+    "mypy: 413 application files passed",
+    "Frontend typecheck, lint and API type snapshots passed; one preexisting unused-variable warning",
+    "Runtime API/job input contracts regenerated and checked",
+    "Next.js production build passed"
+  ],
+  "initial_failure": {
+    "test": "tests.unit.test_document_worker_runtime::test_job_assignment_failure_never_resumes_document_processing",
+    "observation": "No-processing marker remained absent but immediate psutil.pid_exists assertion failed; original test passed unchanged in isolation and in final complete rerun",
+    "worker_or_assertion_changed": false,
+    "concurrent_frontend_work": "Present during initial run; absent during final backend rerun",
+    "cause": "Not proven; do not treat the original failure as a pass"
+  },
+  "covered": [
+    "Exact 2-crore inclusive and 5-crore strict boundaries with eight-decimal precision",
+    "Two GSTINs under one PAN plus explicitly assessed other PAN turnover",
+    "Missing, partial, mismatched and unresolved populations pending without zero inference",
+    "Country/PAN/year/review-window guards and closed-year limits",
+    "Existing independently reviewed source requirement reused",
+    "HTTP candidate generation, independent approval and original XLSX metadata",
+    "Source rejection stales complete original result body unchanged",
+    "Frontend explicit facts, exact decimal strings, null versus zero and separate candidate outcomes"
+  ],
+  "limitations": [
+    "Candidate assessment only; no professional legal qualification, native GSTR-9/9C preparation or filing",
+    "Profile requires complete full-year registration partitions; new/cancelled registrations and mixed regimes remain separate work",
+    "Primary source retrieval limitations and partial legal review are retained in india-annual-gst-candidate-review.json",
+    "Synthetic sample files and engine tests do not establish real-client qualification",
+    "New annual form has unit/component and API coverage; hosted browser coverage for this new assessment is pending"
+  ],
+  "source_blobs": [
+    {
+      "path": ".gitattributes",
+      "sha256": "21eea23a7e77e07784ecb404380a1e2aee2ecc4f6e3518dadd48c35d521de40e"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/calculations.py",
+      "sha256": "384d1008f2a4c433a8870213eb297982dfef030182dc5d4300ae91726e087fcb"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/gst_annual_scope.py",
+      "sha256": "a1efc6099f83ab0acbb1e1259a3f75586ae3737869677154b80397b0d5d1a49d"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/review.py",
+      "sha256": "d26833aa08df81a4bce9e1966bc13f1f0989637cd9d2f32aad7c065ab555f863"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/schemas.py",
+      "sha256": "ea3c94c050d79c8c8e5fcd18f9596ac4bee305b899f7a1d3ac91a51bf0da7d84"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/service.py",
+      "sha256": "ae471a37f04d2a2384def39f18bc54879965f75e2d321c94628b7c9983b7eeba"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "sha256": "e0bce8453c3c90e63890650f5d052324824cbe8891aa5b849137f299a7bbb065"
+    },
+    {
+      "path": "backend/app/modules/intelligence/service.py",
+      "sha256": "b13729cf6d18ff72ed7fbbc8c7fcaf11161c649cc5bde19a71ac31d9a578a16f"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_gst_annual_scope.py",
+      "sha256": "420e42ab12e1ba2ec366cb587214c651dbd3c6438c2c9050d9a5ec4daa9f83e8"
+    },
+    {
+      "path": "backend/tests/unit/test_gst_annual_scope.py",
+      "sha256": "e35589f6242f925179da6bc6f0eb96f6306a67995e8a36235076c184d67c8413"
+    },
+    {
+      "path": "docs/country-workflows/job-input-contracts.json",
+      "sha256": "5676077a5c11bf4d09bcdf320554a2ac5eac2f999239ffcb61f86238c4ea3f1f"
+    },
+    {
+      "path": "docs/country-workflows/legal-sources/india-annual-gst-candidate-review.json",
+      "sha256": "da34f58f5e376ecf46e31aa9031eb9e3145f1e35172974f4b71da8a1e153fe0c"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-annual-gst/adjustments.csv",
+      "sha256": "7675830de3677801e71cd8c99db7b43e9fbb86874721c7a1d95d1b4cb0bd0638"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-annual-gst/books.csv",
+      "sha256": "c3110ee0d691e37779ba00546a3be039c715c872a7028aef1ff918a7c008cf8f"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-annual-gst/parameters-and-expectations.json",
+      "sha256": "8a9700add65c88ac6a9d4a5c9a94633b3a1850391390bcd9d2f0ca9f4392f1ec"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-annual-gst/return.csv",
+      "sha256": "0aa2160ec513cddbd6e792025359c42b05e0a6e0141918d139365feec063ca40"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-annual-gst/scope.csv",
+      "sha256": "0298ad24aaf6e05202059c9e2f74eb8a18072d1bd9b0253780c2f0c1e1257615"
+    },
+    {
+      "path": "docs/phase-12/gst-annual-frontend-final.xml",
+      "sha256": "76a04f838590aac240fd764379995e98edfd84a53b7ee02bcdea49aaf9c68ef0"
+    },
+    {
+      "path": "docs/phase-12/gst-annual-regression-final.xml",
+      "sha256": "66f94cf87553bc1fc635b96c6cc283f694b493810e091a84510b2c886b8cf022"
+    },
+    {
+      "path": "docs/phase-12/gst-annual-regression.xml",
+      "sha256": "8852fac1ef30b2058695b6e5293e49224969b8120303a747ddcd82121821511e"
+    },
+    {
+      "path": "docs/phase-12/gst-annual-worker-isolated.xml",
+      "sha256": "5f3552470ba9aa1b3ad4feb5092170702c78f461c25a795cf64b0aa3815a7eb8"
+    },
+    {
+      "path": "frontend/src/features/annual-gst-scope.tsx",
+      "sha256": "1fecbdf923605311e8847ab6029e7bb56506420bf28b12c74b0a32422b763365"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "24db9479160f9b40cbe6715b5bc668b4c1ca1d53e2a90f46681f46f061b92c73"
+    },
+    {
+      "path": "frontend/tests/annual-gst-scope.test.tsx",
+      "sha256": "8810b6e192f62948ac753dd1bff911643b49762a5398cfb6ef025c474a4025cd"
+    }
+  ]
+}

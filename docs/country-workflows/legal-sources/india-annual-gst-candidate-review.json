@@ -1,0 +1,69 @@
+{
+  "status": "IMPLEMENTED_CANDIDATE_PROFILE_LOCAL_REGRESSION_PASSED",
+  "contract": "india-annual-gst-candidates/1",
+  "countries": [
+    "IN"
+  ],
+  "supported_financial_year_starts": [
+    "2024-04-01",
+    "2025-04-01"
+  ],
+  "rule_review_window": [
+    "2025-09-17",
+    "2026-10-30"
+  ],
+  "sources": [
+    {
+      "url": "https://taxinformation.cbic.gov.in/view-pdf/1010465/ENG/Notifications",
+      "scope": "Notification 15/2025-Central Tax, 17 September 2025; annual-return exemption up to INR 20,000,000 for FY 2024-25 onwards",
+      "retrieval": "Direct PDF returned 502; primary government-hosted indexed text and corresponding West Bengal notification used for candidate research; no original central PDF archived"
+    },
+    {
+      "url": "https://gst.kar.nic.in/Documents/NOTIFICATIONS/CTN1519092025.pdf",
+      "scope": "Government-hosted central notification copy indexed with FY 2024-25 onwards text",
+      "retrieval": "Direct web fetch 502; local DNS lookup failed"
+    },
+    {
+      "url": "https://comtax.wb.gov.in/GST/GST_Notifications/WBGST%20Notification_07-2025.pdf",
+      "scope": "West Bengal notification 07/2025, 22 September 2025; explicitly identifies corresponding central notification 15/2025 and FY 2024-25 onwards",
+      "retrieval": "One-page primary PDF text read; screenshot rendering failed, no visual qualification or original-byte archival claimed; state instrument is not substituted as the central enactment"
+    },
+    {
+      "url": "https://taxinformation.cbic.gov.in/content-page/explore-act/1000315/1000001",
+      "scope": "Section 44 exclusions and self-certified annual reconciliation context",
+      "retrieval": "Primary indexed text inspected; current source must be independently reviewed"
+    },
+    {
+      "url": "https://taxinformation.cbic.gov.in/content-page/explore-rules/1000468/1000001",
+      "scope": "Rule 80(3): aggregate turnover exceeds INR 50,000,000 for self-certified GSTR-9C, distinct from annual-return exemption",
+      "retrieval": "Primary indexed text inspected; direct open 502; historical amendment snippets not treated as current rule without review"
+    },
+    {
+      "url": "https://cbic-gst.gov.in/sectoral-faq.html",
+      "scope": "PAN-wide all-India aggregate turnover concept under section 2(6), with separate assessed other turnover and no inferred tax/RCM classifications",
+      "retrieval": "Primary indexed excerpts inspected; unrelated historical FAQ advice not adopted"
+    },
+    {
+      "url": "https://tutorial.gst.gov.in/userguide/returns/Manual_gstr9.htm",
+      "scope": "Portal preparation context; annual return uses separate GSTR-1, GSTR-3B and GSTR-2B populations",
+      "retrieval": "Primary manual opened; no native GSTR-9/9C reader or filing execution claimed"
+    }
+  ],
+  "engineering_controls": [
+    "Explicit optional assessment on existing reviewed turnover bridge; no change to normal UAE/India bridge",
+    "Matching India engagement April-March financial year required",
+    "Each registration must match PAN and have contiguous full-year partitions",
+    "Independent aggregate turnover must equal reconciled registration turnover plus explicit other PAN turnover",
+    "All financial differences must be exact zero for annual candidates, irrespective of comparison tolerance",
+    "Missing amounts are null, explicit zero is preserved",
+    "Unknown/mixed/composition regimes, partial years and out-of-profile dates remain pending",
+    "Candidate return and self-certified reconciliation outcomes remain separate; no statutory qualification or filing status inferred"
+  ],
+  "remaining": [
+    "Original current central PDF and whole-rule corpus qualification",
+    "New/cancelled registration and mixed-regime profiles",
+    "Legally assessed aggregate-turnover classifications and other-relief decisions",
+    "Native annual forms, complete annual reconciliation schedules, fees/extensions and authorized filing",
+    "Independent professional and real-client qualification"
+  ]
+}

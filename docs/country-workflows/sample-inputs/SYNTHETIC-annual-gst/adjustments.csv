@@ -1,0 +1,2 @@
+registration,period_start,period_end,currency,assessment,id,reference,amount,reason
+29ABCDE1234F1Z5,2025-04-01,2026-03-31,INR,SYNTHETIC independently assessed net-of-tax population,adjustment,BRIDGE-1,0,assessed-nil
