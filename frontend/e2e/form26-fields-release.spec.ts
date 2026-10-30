@@ -416,7 +416,10 @@ for (const part of ["A", "B"] as const) {
         })
         .click();
       await page
-        .getByLabel("Template / review rationale", { exact: true })
+        .getByRole("textbox", {
+          name: "Template / review rationale",
+          exact: true,
+        })
         .fill(
           "Synthetic browser amendment of retained field scope; no substantive legal qualification",
         );
@@ -428,27 +431,45 @@ for (const part of ["A", "B"] as const) {
       ).toHaveValue(pack.id);
       const last = pack.requirements[876];
       await page
-        .getByLabel("Search report requirements", { exact: true })
+        .getByRole("textbox", {
+          name: "Search report requirements",
+          exact: true,
+        })
         .fill(last.key);
       await expect(
-        page.getByLabel("Requirement reference 877", { exact: true }),
+        page.getByRole("textbox", {
+          name: "Requirement reference 877",
+          exact: true,
+        }),
       ).toHaveValue(last.key);
       await expect(
-        page.getByLabel("Requirement reference 877", { exact: true }),
+        page.getByRole("textbox", {
+          name: "Requirement reference 877",
+          exact: true,
+        }),
       ).toBeDisabled();
       const revisedBasis =
         "Synthetic browser revision of final field scope; substantive legal sufficiency remains unqualified";
       await page
-        .getByLabel("Applicability and source basis 877", { exact: true })
+        .getByRole("textbox", {
+          name: "Applicability and source basis 877",
+          exact: true,
+        })
         .fill(revisedBasis);
       const lastBlock = page.getByRole("group", {
         name: `Coverage for ${blocks[8].title}`,
         exact: true,
       });
       await lastBlock
-        .getByLabel(`Search Coverage for ${blocks[8].title}`, { exact: true })
+        .getByRole("textbox", {
+          name: `Search Coverage for ${blocks[8].title}`,
+          exact: true,
+        })
         .fill(last.key);
-      const lastCheckbox = lastBlock.getByLabel(last.title, { exact: true });
+      const lastCheckbox = lastBlock.getByRole("checkbox", {
+        name: last.title,
+        exact: true,
+      });
       await expect(lastCheckbox).toBeChecked();
       await lastCheckbox.uncheck();
       await lastCheckbox.check();
@@ -462,10 +483,16 @@ for (const part of ["A", "B"] as const) {
       });
       await editor.scrollIntoViewIfNeeded();
       await expect(
-        page.getByLabel("Requirement reference 877", { exact: true }),
+        page.getByRole("textbox", {
+          name: "Requirement reference 877",
+          exact: true,
+        }),
       ).toBeInViewport();
       await expect(
-        page.getByLabel("Applicability and source basis 877", { exact: true }),
+        page.getByRole("textbox", {
+          name: "Applicability and source basis 877",
+          exact: true,
+        }),
       ).toBeInViewport();
       await page.screenshot({
         path: `${screenshots}/IN-form26-${part}-final-field-revision.png`,
@@ -507,7 +534,10 @@ for (const part of ["A", "B"] as const) {
         coverage.getByRole("cell", { name: "COVERED", exact: true }),
       ).toHaveCount(877);
       await reviewer
-        .getByLabel("Template / review rationale", { exact: true })
+        .getByRole("textbox", {
+          name: "Template / review rationale",
+          exact: true,
+        })
         .fill(
           "Independent synthetic complete-population mapping mechanics review only",
         );
@@ -566,7 +596,10 @@ for (const part of ["A", "B"] as const) {
         exact: true,
       });
       await preview
-        .getByLabel("Search saved report requirements", { exact: true })
+        .getByRole("textbox", {
+          name: "Search saved report requirements",
+          exact: true,
+        })
         .fill(last.key);
       await expect(
         preview.getByRole("cell", { name: last.key, exact: true }),

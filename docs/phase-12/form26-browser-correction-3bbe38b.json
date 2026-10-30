@@ -1,0 +1,50 @@
+{
+  "contract": "form26-expanded-browser-correction/1",
+  "source_commit": "3bbe38b34c321c019a7cf5e5df655559403aa452",
+  "run_id": 40975563126,
+  "job_id": 123802600267,
+  "conclusion": "failure",
+  "passed_cases": 3,
+  "failed_cases": 2,
+  "artifact": {
+    "id": 12941474541,
+    "size_bytes": 9357962,
+    "sha256": "ed4c7276ffe12db57166fe40ee9dd39a5734306a469a68f18a6dd620d35b702d",
+    "download_digest_verified": true
+  },
+  "reached": [
+    "Real API upload, independent evidence and nine workpaper reviews, source rule validation/publishing and source-bound tax-audit applicability",
+    "UI engagement and saved-template selection, loading all retained field mappings, explicit revision rationale",
+    "UI search and exact protected reference assertions for requirement 877"
+  ],
+  "failure": "Exact-label lookup did not resolve a prefilled applicability/source-basis textarea; role lookup fixes are checked independently in offline Chromium",
+  "correction": "Use textbox and checkbox roles for all remaining report field controls; preserve exact names and all assertions",
+  "diagnostic": "docs/phase-12/form26-offline-selector-check.json",
+  "captures": [
+    {
+      "part": "A",
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-A-prefilled-selector-failed-3bbe38b.png",
+      "sha256": "00592d0aa14e7560c2b1dc249235ecf6ae847cdd5ecf9c19a5057cbecdb97a1c",
+      "size_bytes": 141290,
+      "width": 1280,
+      "height": 720,
+      "original_unmodified": true,
+      "visually_inspected": true
+    },
+    {
+      "part": "B",
+      "path": "docs/country-workflows/screenshots/browser-workflows/IN-form26-B-prefilled-selector-failed-3bbe38b.png",
+      "sha256": "883cca1762e69f6e466515e078ba7b05df0d640bba9d272af9c5728512270162",
+      "size_bytes": 141251,
+      "width": 1280,
+      "height": 720,
+      "original_unmodified": true,
+      "visually_inspected": true
+    }
+  ],
+  "visible_limits": [
+    "Captures show the correct report part, selected expanded preset, loaded assessment and search; requirement 877 and its basis are below the captured viewport",
+    "Editing the final basis, saving/reviewing the revision, generation, export and staleness are not yet verified by this source run",
+    "Baseline UAE, India and release-login scenarios passed; new corrected full scenarios need hosted execution"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "contract": "offline-component-selector-check/1",
+  "component": "frontend/src/features/report-requirements.tsx",
+  "real_chromium": true,
+  "network_offline": true,
+  "http_server_started": false,
+  "actual_component_server_render": true,
+  "button_style_stub": true,
+  "old_exact_label_count": 0,
+  "role_textbox_fill": "passed",
+  "role_combobox": "passed",
+  "role_checkbox_guard": "passed",
+  "scope": "One prefilled actual editor requirement; selector mechanics only, not application authentication or full 877-item browser verification",
+  "component_git_blob_sha256": "180551c9283857339cb735142a0877b8de3025a5d1cd0627627b855dd537e618",
+  "component_working_file_sha256": "180551c9283857339cb735142a0877b8de3025a5d1cd0627627b855dd537e618"
+}
