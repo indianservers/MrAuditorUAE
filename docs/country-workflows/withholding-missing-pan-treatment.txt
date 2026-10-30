@@ -82,3 +82,13 @@ now creates a separate 2026-27 period and engagement and grants its reviewer.
 The guard is preserved. TypeScript, scoped lint and browser discovery pass;
 corrected hosted execution remains pending. Original failure captures and
 source hashes are in docs/phase-12/withholding-pan-browser-12503b6.json.
+
+Corrected source 377f199: all thirteen hosted browser cases passed in 9.1
+minutes. The native/PAN compound case passed in 30.0 seconds. All three full
+PAN cards were saved and visually inspected: pending treatment blocks approval,
+documented treatment is independently reviewed with the original marker and
+unchanged amounts, and supporting-source replacement marks the retained result
+STALE. Expanded evidence context remains visible and authentication remains
+NOT_PERFORMED. The source-specific receipt is
+docs/phase-12/withholding-pan-browser-377f199.json. This source predates later-of
+deadline comparisons; its full backend completion remains a separate gate.

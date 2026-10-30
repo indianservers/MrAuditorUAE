@@ -1,0 +1,63 @@
+{
+  "source_commit": "377f199fd790d9333a346c2955b8d40cc065d673",
+  "run_id": 41109939756,
+  "job_id": 124249441243,
+  "job_conclusion": "success",
+  "suite_passed": 13,
+  "suite_failed": 0,
+  "suite_duration": "9.1m",
+  "native_compound_case_duration": "30.0s",
+  "artifact": {
+    "id": 13004705063,
+    "size_bytes": 16305089,
+    "sha256": "76816d0a8f7ce29eb4e0b0df08ea9d728552346f3ce22dcd4a15de03bf0fda91"
+  },
+  "source_files": [
+    {
+      "path": "frontend/e2e/withholding-native-release.spec.ts",
+      "sha256": "693fd81989d094263e2e3e1a0d84ab8705a0e8b6e9bde7558c09a9235d4a2202"
+    },
+    {
+      "path": "frontend/e2e/withholding-pan-browser-workflow.ts",
+      "sha256": "74b6dca5488f9b7a62b03ada6edaa765de03639058f47f15b01f95d54f798f25"
+    },
+    {
+      "path": "frontend/src/features/withholding-pan-review.tsx",
+      "sha256": "c680f5075ffd1aa4d58d4074501110d535b60a1c8ebddb16510fc0df15d825f2"
+    }
+  ],
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/IN-PAN-marker-pending-377f199.png",
+      "size_bytes": 158900,
+      "sha256": "ec5c7e40ea6af8ccc8af0978d2988bbe65daf4042805c2024f68e94d649813e9",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-PAN-treatment-reviewed-377f199.png",
+      "size_bytes": 174924,
+      "sha256": "707bf7b5165e1f5e8b09dc021c66419a87b06a70654fb86809412a490a6e4372",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-PAN-rule-replaced-stale-377f199.png",
+      "size_bytes": 175775,
+      "sha256": "0de150628cfb3000a70e216b12a846f71ca3c5083ad8dabd08f5dfec5eec7609",
+      "visually_inspected": true
+    }
+  ],
+  "verified_scope": [
+    "Historical native statements and separate explicit synthetic Form 143 completion still pass before the separate current-period PAN workflow.",
+    "Actual hosted scanning, independent source review, UI calculation, pending approval guard, documented treatment with unchanged amounts, independent result approval, full PAN XLSX and supporting-document replacement staleness."
+  ],
+  "visual_findings": [
+    "Pending card: UNVERIFIED/CURRENT, one pending marker, explicit missing-treatment issue, all four amounts 100, three zero differences and disabled approval.",
+    "Reviewed card: REVIEWED/CURRENT, zero pending and one documented, original PANNOTAVBL marker and NOT_PERFORMED authentication, expanded assessed party/rule/date/narrative/evidence UUID/SHA, four unchanged amounts and MATCHED.",
+    "Stale card: REVIEWED/STALE, same original marker, evidence, assessment and financial rows after supporting source replacement. No notification obscures these full-card captures."
+  ],
+  "limits": [
+    "This source predates later-of deadline comparisons; their browser execution remains a separate gate.",
+    "The full backend job for this source was still running when this browser evidence was recorded; browser success does not establish six-job completion.",
+    "Synthetic collector facts only; API/unit evidence covers other roles separately. No real-client, legal-rate/certificate qualification, PAN authentication or actual statutory filing."
+  ]
+}
