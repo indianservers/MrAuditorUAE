@@ -56,6 +56,25 @@ class BusinessDayCalendar(Strict):
         return self
 
 
+class DeadlineCandidate(Strict):
+    identifier: str = Field(min_length=1, max_length=100, pattern=r"^\S(?:.*\S)?$")
+    trigger: CalendarDate
+    date_basis: Literal["period_end", "registration", "licence_expiry", "specified_event"]
+    months_after: int = Field(default=0, ge=0, le=120, strict=True)
+    days_after: int = Field(default=0, ge=0, le=3660, strict=True)
+
+
+def calendar_offset(trigger, months_after, days_after):
+    try:
+        month = trigger.year * 12 + trigger.month - 1 + months_after
+        year, index = divmod(month, 12)
+        month = index + 1
+        day = min(trigger.day, calendar.monthrange(year, month)[1])
+        return date(year, month, day) + timedelta(days=days_after)
+    except (ValueError, OverflowError) as exc:
+        raise ValueError("Deadline offset exceeds the supported calendar date range") from exc
+
+
 class DeadlineRule(Strict):
     identifier: str = Field(min_length=1, max_length=100)
     version: int = Field(ge=1)
@@ -78,6 +97,9 @@ class DeadlineRule(Strict):
     business_calendar: BusinessDayCalendar | None = Field(
         default=None, exclude_if=lambda value: value is None
     )
+    later_of: list[DeadlineCandidate] = Field(
+        default_factory=list, max_length=8, exclude_if=lambda value: not value
+    )
 
     @model_validator(mode="before")
     @classmethod
@@ -86,6 +108,12 @@ class DeadlineRule(Strict):
             explicit_calendar_date(value.get("trigger"))
             if type(value.get("days_after")) is not int:
                 raise ValueError("Business-day offsets require an explicit integer")
+        if isinstance(value, dict) and value.get("later_of"):
+            explicit_calendar_date(value.get("trigger"))
+            if any(
+                type(value.get(field, 0)) is not int for field in ("months_after", "days_after")
+            ):
+                raise ValueError("Comparison offsets require explicit integers")
         return value
 
     @model_validator(mode="after")
@@ -129,7 +157,25 @@ class DeadlineRule(Strict):
                 raise ValueError("Business calendar must cover the explicit triggering event")
         elif self.business_calendar is not None or self.business_trigger_policy is not None:
             raise ValueError("A business calendar applies only to explicit business-day counting")
+        if self.later_of:
+            if self.day_count_basis != "calendar":
+                raise ValueError("Later-of candidates require calendar offsets before date rolling")
+            names = [self.identifier, *(candidate.identifier for candidate in self.later_of)]
+            if len(set(names)) != len(names):
+                raise ValueError("Deadline comparison candidates require distinct identifiers")
+            for candidate in self.later_of:
+                if candidate.trigger < self.effective_from or (
+                    self.effective_to and candidate.trigger > self.effective_to
+                ):
+                    raise ValueError("Rule not effective at a comparison triggering event")
+                calendar_offset(candidate.trigger, candidate.months_after, candidate.days_after)
+        if self.day_count_basis == "calendar":
+            calendar_offset(self.trigger, self.months_after, self.days_after)
         return self
+
+
+def candidates(rule: DeadlineRule) -> list[DeadlineRule | DeadlineCandidate]:
+    return [rule, *rule.later_of]
 
 
 def calculate(rule: DeadlineRule):
@@ -156,11 +202,10 @@ def calculate(rule: DeadlineRule):
                 if remaining == 0:
                     return cursor
         raise ValueError("Business calendar coverage cannot establish the complete deadline")
-    month = rule.trigger.year * 12 + rule.trigger.month - 1 + rule.months_after
-    year, index = divmod(month, 12)
-    month = index + 1
-    day = min(rule.trigger.day, calendar.monthrange(year, month)[1])
-    result = date(year, month, day) + timedelta(days=rule.days_after)
+    result = max(
+        calendar_offset(candidate.trigger, candidate.months_after, candidate.days_after)
+        for candidate in candidates(rule)
+    )
     for _ in range(370):
         if (
             rule.convention == "calendar"
@@ -177,7 +222,10 @@ def missing_obligation_period(body):
     return (
         isinstance(body.get("jurisdiction_scope"), dict)
         and isinstance(rule, dict)
-        and rule.get("date_basis") == "period_end"
+        and any(
+            isinstance(candidate, dict) and candidate.get("date_basis") == "period_end"
+            for candidate in [rule, *rule.get("later_of", [])]
+        )
         and (not body.get("obligation_period_start") or not body.get("obligation_period_end"))
     )
 

@@ -1,0 +1,61 @@
+Multiple triggering events and later-of deadlines
+
+The shared obligation deadline engine now accepts up to eight additional
+later_of candidates. Each retains its own identifier, date basis, exact ISO
+trigger date, month offset and day offset. The base rule remains a candidate.
+The engine computes each calendar offset separately, selects the latest date,
+then applies the one declared following/preceding/calendar convention. It does
+not add the offsets together or replace one triggering fact with another.
+Every candidate must use the adopted rule's effective window. Duplicate
+identifiers, mixed business-day counting, implicit timestamp/numeric dates,
+non-integer offsets and out-of-range calendar dates are rejected.
+
+This closes a calculation gap exposed by the retained ADGM Annual Accounts
+Guidance v2.0 (2026), pages 34-35. Its long-first-period example compares the
+first incorporation anniversary plus nine months with period end plus three
+months. The example dates select 30 June 2028. A shortened-period rule also
+compares the normal deadline with a separately dated notice-receipt offset.
+These are separate triggers, not a single generic nine-month date.
+
+The original 50-page PDF is retained with its exact SHA-256 in the accompanying
+adgm-accounts-2026-10-31 source assessment. Relevant complete pages 34-36 were
+rendered and visually inspected. This increment implements shared calendar
+comparison arithmetic; it does not automatically select ADGM applicability,
+company size, first-year/shortening eligibility, anniversary, registrar notice,
+exemption, reporting currency or external portal status. Those facts and the
+operative legal version need independent assessment and retained originals.
+The PDF's current extension process differs from the older website summary;
+no automatic extension is inferred or submitted by this implementation.
+
+Both UAE and India obligations reuse the comparison engine. No candidate is
+added by selecting a country. The existing required rule document, entity-fact
+documents, country scope and independent filing reviewer are preserved. Any
+period-end candidate must match the explicit obligation period end, even when
+the base trigger is a specified event. A country-scoped rule needs both period
+dates when any candidate is based on period end. The existing source-dependency
+graph stales the unchanged approved filing when the retained facts change.
+The adopted fixed DMCC profile explicitly rejects extra comparison candidates;
+this new generic facility cannot extend its six-month timetable.
+
+Filing readiness displays all retained candidates and their offsets alongside
+the server-calculated deadline, timezone and rule evidence. A missing period
+in a comparison blocks the filing action just as it does for a base period-end
+rule. The generic schema editor exposes the new list through existing nested
+object/array controls. Empty comparison lists are omitted from serialized old
+rules, preserving their historical bodies.
+
+Verification includes independent stated dates from the retained example,
+both winning branches, ties, month-end and final rolling, candidate bounds,
+invalid dates/offsets, effective windows, unchanged old serialization and the
+DMCC bypass guard. Real PostgreSQL/HTTP cases cover both countries, false
+period-end and false declared-deadline rejection, separate source approval,
+independent filing approval and retained-body staleness after fact withdrawal.
+Tests use labelled synthetic entity facts, original scan/queue doubles and
+no external filing. Exact final reports are recorded separately. No additional
+authored scenario or qualified real-client count is claimed.
+
+The existing hosted business-day case is extended with separate synthetic
+comparison policy/fact originals in both countries. It checks visible triggers,
+server deadline, independent filing approval and unchanged stale bodies after
+fact withdrawal, with four planned captures. Discovery is not execution; new
+hosted proof and screenshot inspection remain pending for the committed source.

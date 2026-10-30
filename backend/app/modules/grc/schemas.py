@@ -7,7 +7,7 @@ from typing import Annotated, Literal
 from pydantic import BeforeValidator, Field, model_validator
 
 from app.modules.audit_execution.schemas import Body, Strict
-from app.modules.grc.deadlines import DeadlineRule
+from app.modules.grc.deadlines import DeadlineRule, candidates
 from app.modules.grc.deadlines import calculate as calculate_deadline
 from app.modules.grc.dmcc_audit import DMCCAuditScope
 
@@ -581,7 +581,10 @@ class Obligation(Body):
         if self.jurisdiction_scope:
             if (
                 self.deadline_rule
-                and self.deadline_rule.date_basis == "period_end"
+                and any(
+                    candidate.date_basis == "period_end"
+                    for candidate in candidates(self.deadline_rule)
+                )
                 and self.obligation_period_end is None
             ):
                 raise ValueError(

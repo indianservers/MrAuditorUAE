@@ -323,6 +323,116 @@ test("explicit UAE and India business-day calendars, independent filing and repl
       await panel.screenshot({
         path: `${screenshots}/${country}-business-calendar-replaced-stale.png`,
       });
+      const comparisonDocs: Record<string, Paper> = {};
+      for (const role of ["rule", "facts"]) {
+        const original = await evidence(
+          `SYNTHETIC-${country}-later-of-${role}.txt`,
+          Buffer.from(
+            `SYNTHETIC ${role}: notice 2026-12-01 plus one month versus period end 2026-12-31 plus three months; explicit later-of policy, not statutory qualification`,
+          ),
+        );
+        let record: Paper = await get(`${audit}/records/${original.record}`);
+        record = await action(page.request, audit, record, "submit");
+        comparisonDocs[role] = await action(
+          reviewer.request,
+          audit,
+          record,
+          "approve",
+        );
+      }
+      const comparisonBody = {
+        ...Object.fromEntries(
+          Object.entries(paper.body).filter(
+            ([key]) =>
+              !["review_stage", "review_cycle", "review_approvers"].includes(
+                key,
+              ),
+          ),
+        ),
+        filing_stage: "preparing",
+        source_url: "https://synthetic.invalid/later-of-policy",
+        required_evidence:
+          "Independent original policy, both dated event facts and readiness evidence",
+        deadline: null,
+        calendar_evidence_id: null,
+        obligation_period_start: "2026-01-01",
+        obligation_period_end: "2026-12-31",
+        rule_evidence_id: comparisonDocs.rule.id,
+        fact_evidence_ids: [comparisonDocs.facts.id],
+        entity_facts: { notice: "2026-12-01", period_end: "2026-12-31" },
+        deadline_rule: {
+          identifier: "SYN-notice",
+          version: 1,
+          effective_from: "2026-01-01",
+          trigger: "2026-12-01",
+          date_basis: "specified_event",
+          months_after: 1,
+          timezone: country === "AE" ? "Asia/Dubai" : "Asia/Kolkata",
+          later_of: [
+            {
+              identifier: "SYN-period",
+              trigger: "2026-12-31",
+              date_basis: "period_end",
+              months_after: 3,
+            },
+          ],
+        },
+      };
+      const comparisonReference = `SYN-LATER-OF-${country}`;
+      paper = await post(page.request, `${base}/records/obligation`, {
+        reference: comparisonReference,
+        title: `SYNTHETIC ${country} separately triggered later-of deadline`,
+        body: comparisonBody,
+      });
+      expect(paper.body.deadline).toBe("2027-03-31");
+      async function openComparison(actor: Page) {
+        await actor.goto(`/grc/${eid}/obligations`);
+        await actor
+          .getByRole("gridcell", { name: comparisonReference, exact: true })
+          .click();
+        const readiness = actor.getByRole("region", {
+          name: "Filing readiness",
+          exact: true,
+        });
+        const basis = readiness.getByRole("region", {
+          name: "Later-of deadline comparison",
+          exact: true,
+        });
+        await expect(basis).toContainText("2026-12-01");
+        await expect(basis).toContainText("2026-12-31");
+        await expect(basis).toContainText(comparisonDocs.rule.id);
+        await expect(readiness).toContainText("2027-03-31");
+        return readiness;
+      }
+      await openComparison(page);
+      paper = await stage(page, "under_review");
+      paper = await action(page.request, base, paper, "submit");
+      paper = await action(reviewer.request, base, paper, "approve");
+      panel = await openComparison(reviewer);
+      paper = await stage(reviewer, "approved_for_submission");
+      await expect(panel).toContainText("Source freshness: CURRENT");
+      if (await notice.count()) await notice.last().click();
+      await panel.screenshot({
+        path: `${screenshots}/${country}-later-of-reviewed.png`,
+      });
+      const comparisonRetained = structuredClone(paper.body);
+      await action(reviewer.request, audit, comparisonDocs.facts, "reopen");
+      const unchanged: Paper = await get(`${audit}/records/${paper.id}`);
+      expect(unchanged.body).toEqual(comparisonRetained);
+      panel = await openComparison(reviewer);
+      await expect(panel).toContainText("Source freshness: STALE");
+      await panel
+        .getByLabel("Actual submission evidence record ID", { exact: true })
+        .fill(documents.readiness.id);
+      await expect(
+        panel.getByRole("button", {
+          name: "Record evidenced filing stage",
+          exact: true,
+        }),
+      ).toBeDisabled();
+      await panel.screenshot({
+        path: `${screenshots}/${country}-later-of-facts-withdrawn-stale.png`,
+      });
     }
     expect(errors).toEqual([]);
   } finally {

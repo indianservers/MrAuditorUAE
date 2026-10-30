@@ -71,7 +71,10 @@ export function ComplianceFiling({
       : null;
   const periodMissing = Boolean(
     countryScope &&
-    deadlineRule?.date_basis === "period_end" &&
+    [
+      deadlineRule,
+      ...(Array.isArray(deadlineRule?.later_of) ? deadlineRule.later_of : []),
+    ].some((candidate) => candidate?.date_basis === "period_end") &&
     (!paper.body.obligation_period_start || !paper.body.obligation_period_end),
   );
   const permitted =
@@ -95,6 +98,52 @@ export function ComplianceFiling({
         . Record an evidenced human decision; this does not submit to an
         authority.
       </p>
+      {Array.isArray(deadlineRule?.later_of) &&
+        deadlineRule.later_of.length > 0 && (
+          <section aria-label="Later-of deadline comparison">
+            <h4>Later-of deadline comparison</h4>
+            <p>
+              The calculation selects the latest calendar date from these
+              triggers, then applies the retained date-rolling convention.
+              Entity facts and legal applicability require independent review.
+            </p>
+            <p>
+              Rule evidence:{" "}
+              {String(paper.body.rule_evidence_id ?? "Not supplied")}. Timezone:{" "}
+              {String(deadlineRule.timezone ?? "Not supplied")}.
+            </p>
+            <div style={{ overflowX: "auto" }}>
+              <table aria-label="Deadline triggering events">
+                <thead>
+                  <tr>
+                    <th>Candidate</th>
+                    <th>Date basis</th>
+                    <th>Trigger</th>
+                    <th>Months after</th>
+                    <th>Days after</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[deadlineRule, ...deadlineRule.later_of].map(
+                    (candidate, index) => (
+                      <tr key={index}>
+                        <td>
+                          {String(candidate?.identifier ?? "Not supplied")}
+                        </td>
+                        <td>
+                          {String(candidate?.date_basis ?? "Not supplied")}
+                        </td>
+                        <td>{String(candidate?.trigger ?? "Not supplied")}</td>
+                        <td>{String(candidate?.months_after ?? 0)}</td>
+                        <td>{String(candidate?.days_after ?? 0)}</td>
+                      </tr>
+                    ),
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </section>
+        )}
       <p>
         Jurisdiction: {String(paper.body.jurisdiction || "Not recorded")}.
         Changes to approved country scope, obligation criteria or existing

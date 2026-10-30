@@ -1,0 +1,90 @@
+{
+  "contract": "retained-later-of-deadline-verification/1",
+  "parent_commit": "377f199fd790d9333a346c2955b8d40cc065d673",
+  "source_basis": "STAGED_GIT_OBJECT_BYTES_BEFORE_COMMIT",
+  "source_files": [
+    {
+      "path": "backend/app/modules/grc/deadlines.py",
+      "sha256": "7b8a775123d840ee011a5ce5f41f0505658693100f372dd224c69f9f82e6495f"
+    },
+    {
+      "path": "backend/app/modules/grc/dmcc_audit.py",
+      "sha256": "c453ed00cdb57f5fe70891c2f48b45606bc5a118a93dfd9a421b1e920cf87b99"
+    },
+    {
+      "path": "backend/app/modules/grc/filing.py",
+      "sha256": "b6f6f2fd523b7295c9c29b4d87f350df4e7a07e0c2599712b813a0fae0a4e4d5"
+    },
+    {
+      "path": "backend/app/modules/grc/schemas.py",
+      "sha256": "598b5f9bbcfaad710b1e8cc0a80b7cdc0fcd92406bed04c2c87ec535093e3945"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_deadline_comparisons.py",
+      "sha256": "46e6198efad94a6e37846fe4e8e7210a198d30f09e6b0ad997dee7ba0277e16a"
+    },
+    {
+      "path": "backend/tests/unit/test_deadline_comparisons.py",
+      "sha256": "7514f3ed6b063ae640446d9c9655800edcfd809d516d9698799a62a4e46eb0ca"
+    },
+    {
+      "path": "frontend/e2e/business-day-deadline-release.spec.ts",
+      "sha256": "d7869c1cb1ab8287d2cdc9e89e5e23753ee1b926f5c08bc4fa11cca6292127fc"
+    },
+    {
+      "path": "frontend/src/features/compliance-filing.tsx",
+      "sha256": "e5a296df76557089b663c43ebd930af4a35a3f4d38d061297fcec2c597deb4ea"
+    },
+    {
+      "path": "frontend/tests/compliance-filing.test.tsx",
+      "sha256": "a59ef7d21250f8145903d81102e58a08a4cfea7b0acc1d9896eabf513d68cf7a"
+    }
+  ],
+  "reports": [
+    {
+      "path": "docs/phase-12/later-of-all-units.xml",
+      "passed": 4234,
+      "skipped": 4,
+      "failed": 0,
+      "sha256": "8b3086ee576b38fc3363c46e2c11dbc7edeac2c930dc94fb3a9e9738070506ef"
+    },
+    {
+      "path": "docs/phase-12/later-of-final.xml",
+      "passed": 142,
+      "skipped": 0,
+      "failed": 0,
+      "sha256": "d7264e36fec0a6a70f7fc1cbab5050cf74eb0aa20260a32b0df16e58d8f35207"
+    },
+    {
+      "path": "docs/phase-12/later-of-frontend.xml",
+      "passed": 468,
+      "skipped": 0,
+      "failed": 0,
+      "sha256": "106a199df2733bf6f8314234d23168004de7802cda497e79f84e96b09b6e0ee3"
+    }
+  ],
+  "count_basis": "The full unit run passed 4234 with four connector skips before extracting the identical combined candidate list into a typed helper. The final 142-case run then passed 135 affected unit cases and seven real PostgreSQL/HTTP cases after that typing change. These reports overlap and are not summed as distinct scenarios. Final production change afterwards was whitespace formatting only.",
+  "checks": {
+    "scoped_ruff_lint_and_format": "PASS",
+    "mypy": "PASS_422_APP_FILES",
+    "typescript": "PASS",
+    "scoped_eslint": "PASS",
+    "production_next_build": "PASS",
+    "api_contracts": "CURRENT",
+    "generated_api_types": "CURRENT",
+    "extended_business_day_browser": "ONE_COMPOUND_CASE_DISCOVERED_NOT_EXECUTED"
+  },
+  "scope": [
+    "Up to eight separately dated comparison candidates, latest calendar offset then explicit rolling, exact date/integer/range/effective-window checks and unchanged empty-list legacy serialization.",
+    "Any period-end candidate must retain and match the obligation period; UAE and India source review, filing approval and immutable-body source staleness are verified through actual HTTP/database execution.",
+    "The fixed adopted DMCC profile rejects added comparison candidates.",
+    "Filing readiness displays all triggering events and prevents missing comparator periods from supporting filing actions."
+  ],
+  "source_assessment": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/source-assessment.json",
+  "limits": [
+    "Shared assessed date arithmetic only. No automatically selected or fully qualified ADGM accounts/audit/applicability, operative law, holiday, reporting or extension pack.",
+    "Original ADGM PDF is unchanged; complete relevant pages 34-36 were read, rendered and visually inspected. Other extracted sections are not presented as a completed 50-page qualification.",
+    "API scan/dispatch boundaries are explicit doubles; browser extension uses actual hosted scanning/review but its new execution and visual evidence remain pending.",
+    "Four full-unit connector skips remain skips. No new real-client or professional approval, external filing or bank/PAN authentication. Authored catalogue remains 154 synthetic cases."
+  ]
+}

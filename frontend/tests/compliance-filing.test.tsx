@@ -21,6 +21,60 @@ const paper: Paper = {
 beforeEach(() => mock.mutate.mockClear());
 
 it.each(["AE", "IN"])(
+  "retains all comparison triggers and blocks a missing candidate period for %s",
+  (country) => {
+    render(
+      <ComplianceFiling
+        base="grc/engagements/scoped"
+        paper={{
+          ...paper,
+          body: {
+            filing_stage: "under_review",
+            deadline: "2027-03-31",
+            rule_evidence_id: "independent-rule",
+            jurisdiction_scope: {
+              entity_country: country,
+              obligation_country: country,
+              relationship: "domestic",
+              applicability: "assessed_applicable",
+            },
+            deadline_rule: {
+              identifier: "SYN-notice",
+              date_basis: "specified_event",
+              trigger: "2026-12-01",
+              months_after: 1,
+              timezone: country === "AE" ? "Asia/Dubai" : "Asia/Kolkata",
+              later_of: [
+                {
+                  identifier: "SYN-period",
+                  date_basis: "period_end",
+                  trigger: "2026-12-31",
+                  months_after: 3,
+                },
+              ],
+            },
+          },
+        }}
+      />,
+    );
+    const comparison = screen.getByRole("region", {
+      name: "Later-of deadline comparison",
+    });
+    expect(comparison).toHaveTextContent("SYN-notice");
+    expect(comparison).toHaveTextContent("SYN-period");
+    expect(comparison).toHaveTextContent("2026-12-01");
+    expect(comparison).toHaveTextContent("2026-12-31");
+    expect(comparison).toHaveTextContent("independent-rule");
+    expect(comparison).toHaveTextContent(
+      "legal applicability require independent review",
+    );
+    expect(
+      screen.getByRole("button", { name: "Record evidenced filing stage" }),
+    ).toBeDisabled();
+  },
+);
+
+it.each(["AE", "IN"])(
   "shows the explicit business-day calendar and trigger treatment for %s",
   (country) => {
     render(

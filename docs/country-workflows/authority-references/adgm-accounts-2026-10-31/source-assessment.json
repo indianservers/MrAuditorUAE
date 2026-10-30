@@ -1,0 +1,46 @@
+{
+  "retrieved_on": "2026-10-31",
+  "guidance_page": "https://www.adgm.com/legal-framework/guidance-and-policy-statements#guidance-for-registered",
+  "original_url": "https://assets.adgm.com/download/assets/20261014+ADGM+Annual+Accounts+Guidance.pdf/30a374e65ada11ef92bcda675695d30e",
+  "original_title": "Annual Accounts Guidance (Version 2.0, 2026)",
+  "original_pages": 50,
+  "retrieval": "Official guidance accordion link; downloaded with the browser after direct HTTP returned 403. Original PDF is unchanged.",
+  "files": [
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-annual-accounts-v2-20261014.pdf",
+      "size_bytes": 515781,
+      "sha256": "aa34c1cf43afd0b4a281750f072b55bf177f48ed361f86bb6c614bf9204745af"
+    },
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-page-34.png",
+      "size_bytes": 232774,
+      "sha256": "05d438902385677df637f340f161dc628540a40e52c212633864c6d8b26a942e"
+    },
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-page-35.png",
+      "size_bytes": 268126,
+      "sha256": "2321da451ee7f1a42be819de772a36ff555c8a36a011a6dfe2febd6b6fab0e7f"
+    },
+    {
+      "path": "docs/country-workflows/authority-references/adgm-accounts-2026-10-31/adgm-page-36.png",
+      "size_bytes": 301536,
+      "sha256": "0fd3d6b0488ee0275541ea814ecbb9c37f931e31139767a769d1d75422c36cf6"
+    }
+  ],
+  "relevant_pages_read_and_visually_inspected": [
+    34,
+    35,
+    36
+  ],
+  "implementation_scope": "Shared explicit later-of calendar comparison only, not an automatically selected ADGM authority profile.",
+  "findings": [
+    "Long first-period and shortened-period deadlines require comparison of separately dated triggers.",
+    "The PDF includes a period-end-plus-three-months candidate omitted from the older web overview for long first periods.",
+    "The current PDF consolidates and retires September 2024 extension guidance and describes automated timely ORS requests; older web summary describes registrar approval. Do not infer a portal extension from local date arithmetic."
+  ],
+  "remaining": [
+    "Adopt and qualify the operative underlying Companies Regulations and LLP rules, entity facts, first-year/shortening applicability, complete working calendars, extension conditions and original portal evidence.",
+    "Separate size/group/exemption, QFZP tax-audit, DLT/foundation, reporting-currency, complete accounts/report/disclosure and auditor-eligibility qualification.",
+    "No professional legal approval, real-client pilot, bank execution or government submission supplied."
+  ]
+}
