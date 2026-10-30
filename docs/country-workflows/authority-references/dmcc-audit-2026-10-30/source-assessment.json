@@ -1,0 +1,33 @@
+{
+  "retrieved_on": "2026-10-30",
+  "implementation_scope": "Shared evidence-backed business-day counting only; not a complete automatic DMCC audit applicability or filing engine",
+  "sources": [
+    {
+      "path": "dmcc-company-regulations-amended.pdf",
+      "url": "https://dmcc.ae/hubfs/Compliance%20Documents%202024/DMCCA%20Company%20Regulations%20-%202024%20%5BAmended%5D.pdf?hsLang=en",
+      "size_bytes": 1060466,
+      "sha256": "96748cccb799efffb84d89492cee342faf52eaac39bbe45d997eb8db656e45d1",
+      "pages": 82,
+      "printed_issue_date": "2024-10-10",
+      "printed_update_date": "2025-01-02",
+      "relevant_pages_rendered_and_visually_inspected": [6, 42, 43, 44, 45, 46],
+      "assessment": "Definitions separate companies limited by shares from branches and describe Dubai business days. Articles 73.6 and 73.7 use different triggers and month/business-day periods. Dormancy and shareholder notices require separate treatment under 73.4-73.5 and 78.11-78.12. Article 77 permits authority modifications. These distinctions prevent treating a calendar-day offset as a complete DMCC audit rule."
+    },
+    {
+      "path": "dmcc-afs-guidelines-2025-04-29.pdf",
+      "url": "https://dmcc.ae/hubfs/website%20support%20documents/Guidelines-Audited%20Financial%20Statements%20Submission.pdf?hsLang=en",
+      "size_bytes": 162706,
+      "sha256": "8fa1747da919b757f1605bf411638345d428f44ad492bfa62173eb4ff8847aa7",
+      "pages": 2,
+      "printed_update_date": "2025-04-29",
+      "printed_version": "1",
+      "relevant_pages_rendered_and_visually_inspected": [1, 2],
+      "assessment": "Submission guidance includes subsidiaries and branches. Its group-auditor branch exception concerns approved-auditor requirements rather than a blanket submission exemption. Portal documents and manual review remain separate from software generation or actual filing."
+    }
+  ],
+  "limits": [
+    "Retrieved original HTTPS bytes; no digital-signature or current legal completeness qualification is claimed.",
+    "Issue/update dates are not inferred commencement dates. Operative scope, authority directions, actual holidays, legal counting conventions and individual company status require separately reviewed evidence.",
+    "No approved-auditor list authentication, dormancy qualification, shareholder-notice eligibility, live portal filing or professional issuance was performed."
+  ]
+}

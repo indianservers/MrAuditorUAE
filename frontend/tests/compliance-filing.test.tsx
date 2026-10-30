@@ -20,6 +20,83 @@ const paper: Paper = {
 };
 beforeEach(() => mock.mutate.mockClear());
 
+it.each(["AE", "IN"])(
+  "shows the explicit business-day calendar and trigger treatment for %s",
+  (country) => {
+    render(
+      <ComplianceFiling
+        base="grc/engagements/scoped"
+        paper={{
+          ...paper,
+          body: {
+            filing_stage: "preparing",
+            jurisdiction: country,
+            deadline: "2026-07-06",
+            calendar_evidence_id: "separate-calendar",
+            deadline_rule: {
+              day_count_basis: "business",
+              days_after: 5,
+              trigger: "2026-06-26",
+              business_trigger_policy: "exclude",
+              timezone: country === "AE" ? "Asia/Dubai" : "Asia/Kolkata",
+              business_calendar: {
+                coverage_start: "2026-06-01",
+                coverage_end: "2026-07-31",
+                weekend_days: [5, 6],
+                holidays: ["2026-06-29"],
+                independent_holiday_count: 1,
+                assessment:
+                  "Synthetic independently assessed complete calendar",
+              },
+            },
+          },
+        }}
+      />,
+    );
+    const section = screen.getByRole("region", {
+      name: "Business-day deadline basis",
+    });
+    expect(section).toHaveTextContent("exclude the triggering day");
+    expect(section).toHaveTextContent("Saturday, Sunday");
+    expect(section).toHaveTextContent("2026-06-01 to 2026-07-31");
+    expect(section).toHaveTextContent("2026-06-29");
+    expect(section).toHaveTextContent("separate-calendar");
+    expect(section).toHaveTextContent(
+      "does not verify national holidays or legal applicability",
+    );
+  },
+);
+
+it.each([0, undefined])(
+  "distinguishes a declared zero from a missing holiday control (%s)",
+  (count) => {
+    render(
+      <ComplianceFiling
+        base="grc/engagements/scoped"
+        paper={{
+          ...paper,
+          body: {
+            deadline_rule: {
+              day_count_basis: "business",
+              business_calendar: {
+                holidays: [],
+                independent_holiday_count: count,
+              },
+            },
+          },
+        }}
+      />,
+    );
+    expect(
+      screen.getByRole("region", { name: "Business-day deadline basis" }),
+    ).toHaveTextContent(
+      count === 0
+        ? "Explicitly none"
+        : "Empty list without an independent zero control",
+    );
+  },
+);
+
 it("requires actual submission evidence and retains the scoped version", () => {
   render(<ComplianceFiling base="grc/engagements/scoped" paper={paper} />);
   expect(screen.getByText(/Deadline: Unresolved/)).toBeVisible();

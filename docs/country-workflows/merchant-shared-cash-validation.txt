@@ -35,9 +35,13 @@ cross-engagement access protection. Scanner and dispatch are explicit API double
 The existing hosted UAE/India merchant browser harness now requests duplicate
 approval, verifies the conflict view, withdraws the stale original claim through
 the UI and approves the replacement through the UI. Four new source-specific
-capture names are configured. Execution and visual inspection remain pending
-until the new committed source runs; previous browser images do not prove this
-change. The authored 154-scenario count is unchanged. No real client pilot or
+capture names are configured. At source 2674b72 all eleven hosted browser cases
+passed in 8.4 minutes. Four original conflict/replacement section captures were
+downloaded with verified archive digest and visually inspected. The India
+replacement image has a notification over part of its footer; the next harness
+dismisses it before capture. The exact originals and visual limit are retained
+in merchant-shared-cash-browser-2674b72.json. These captures predate the new
+business-day deadline source. The authored 154-scenario count is unchanged. No real client pilot or
 professional/statutory qualification is inferred from these synthetic cases.
 
 Final local verification: 150 related backend cases passed without skips or

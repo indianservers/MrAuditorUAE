@@ -1,0 +1,68 @@
+{
+  "source_commit": "2674b72291e2deb4b17e52765a562cf55d32ef58",
+  "run_id": 41082286630,
+  "job_id": 124154246783,
+  "conclusion": "success",
+  "passed_cases": 11,
+  "suite_duration": "8.4m",
+  "country_report_case_durations": {
+    "AE": "1.6m",
+    "IN": "2.2m"
+  },
+  "artifact": {
+    "id": 12991500399,
+    "size_bytes": 14755876,
+    "sha256": "f5c3c4383f342f1a50d95fbaa904bfa5453c0baa9a981583c0c5a47b37cdc739"
+  },
+  "source_files": [
+    {
+      "path": "frontend/e2e/merchant-browser-workflow.ts",
+      "sha256": "edeb07737996d53a51a584dbca39320ab7450a9b367075a20eff62ca05565d93"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/bank_consumption.py",
+      "sha256": "0764d717bd46ab44c6bb8f4807ed93ea70922eb3ef15701be8c8a19b112d8e6b"
+    },
+    {
+      "path": "frontend/src/features/bank-cash-review.tsx",
+      "sha256": "afef9d8d37db0617f130e1e38222fc53060db556ecb74ababbcc1cfd2c1eadf9"
+    }
+  ],
+  "captures": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-merchant-shared-cash-conflict-2674b72.png",
+      "sha256": "9fb99f7022b00eabc3b89c07237e8b2a026439d39f08661071638c3fc302ecff",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-merchant-cash-released-replacement-approved-2674b72.png",
+      "sha256": "00285dac0c0d3d40d9565277b0c32413a1f589a0166925dbabbc852b05856dff",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-merchant-shared-cash-conflict-2674b72.png",
+      "sha256": "d686dda63d944b2943a1788272e35a9f6350a350832878ffc176405dfc224cb2",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-merchant-cash-released-replacement-approved-2674b72.png",
+      "sha256": "770a8b963651c8c5b22bb040cc95306f4dd34f1e067cb9fd2d472a56e9cb2448",
+      "visually_inspected": true
+    }
+  ],
+  "visual_findings": [
+    "Both countries' original conflict captures show an UNRESERVED candidate with one movement and BANK_MOVEMENT_OVERALLOCATED_ACROSS_REVIEWS, with the competing country-specific review link.",
+    "Both original replacement captures show ACTIVE_APPROVED_ALLOCATION with one movement after the earlier stale claim was explicitly withdrawn.",
+    "The India replacement capture has a success notification over part of the footer. The status and primary controls remain visible. The next source dismisses the notification before capture; it has not yet produced a corrected original image."
+  ],
+  "automated_assertions": [
+    "Actual scanner/broker/worker; duplicate merchant approval returns 409 both before and after account evidence withdrawal.",
+    "Stale original body is unchanged; explicit UI cash withdrawal returns 201; replacement independent UI approval returns 201.",
+    "Complete XLSX retains an 800 capacity/800 allocated bank cash claim with original source SHA alongside the gross-to-net row."
+  ],
+  "limits": [
+    "Synthetic mechanics, not client qualification, bank authentication or legal applicability.",
+    "These section captures do not themselves display the full financial schedule; the workbook assertion is separate.",
+    "Full hosted backend verification was still in progress at receipt creation. This source predates the business-day deadline feature."
+  ]
+}

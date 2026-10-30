@@ -152,6 +152,9 @@ async def validate_body(db, ctx, eng, kind, data, record_id=None):
     checked_evidence = {}
     for rid in evidences:
         checked_evidence[rid] = await evidence(db, ctx, eng.id, uuid.UUID(rid))
+    if key == "obligation" and data.calendar_evidence_id:
+        if checked_evidence[str(data.calendar_evidence_id)].kind != "evidence":
+            raise HTTPException(422, "Business-day calendar requires original retained evidence")
     if key == "obligation" and data.jurisdiction_scope:
         from app.db.models.platform import LegalEntity
 

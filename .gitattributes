@@ -173,3 +173,7 @@ docs/phase-12/2b171c4-hosted-worker-recovery.json -text
 docs/phase-12/native-book-entry-final.xml -text whitespace=cr-at-eol
 docs/phase-12/merchant-cash-verified.xml -text whitespace=cr-at-eol
 docs/phase-12/merchant-cash-frontend-verified.xml -text whitespace=cr-at-eol
+docs/country-workflows/authority-references/dmcc-audit-2026-10-30/dmcc-company-regulations-amended.pdf -text
+docs/country-workflows/authority-references/dmcc-audit-2026-10-30/dmcc-afs-guidelines-2025-04-29.pdf -text
+docs/phase-12/business-days-final.xml -text whitespace=cr-at-eol
+docs/phase-12/business-days-frontend-final.xml -text whitespace=cr-at-eol

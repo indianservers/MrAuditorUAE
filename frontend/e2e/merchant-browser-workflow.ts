@@ -451,6 +451,7 @@ export async function runMerchantBrowserWorkflow(
     .click();
   expect((await replacement).status()).toBe(201);
   await expect(cash).toContainText("ACTIVE_APPROVED_ALLOCATION");
+  if (await notification.count()) await notification.last().click();
   await cash.screenshot({
     path: `${screenshots}/${country}-merchant-cash-released-replacement-approved.png`,
   });

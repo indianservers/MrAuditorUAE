@@ -533,6 +533,9 @@ class Obligation(Body):
     ] = "unresolved"
     deadline_rule: DeadlineRule | None = None
     rule_evidence_id: uuid.UUID | None = None
+    calendar_evidence_id: uuid.UUID | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
     extension_deadline: date | None = None
     extension_evidence_id: uuid.UUID | None = None
     entity_facts: dict[str, str] = Field(default_factory=dict, max_length=30)
@@ -606,6 +609,13 @@ class Obligation(Body):
             if self.deadline is not None and self.deadline != computed:
                 raise ValueError("Declared deadline differs from versioned calculation")
             self.deadline = computed
+        business_days = self.deadline_rule and self.deadline_rule.day_count_basis == "business"
+        if business_days and (
+            not self.calendar_evidence_id or self.calendar_evidence_id == self.rule_evidence_id
+        ):
+            raise ValueError("Business-day deadlines require separate retained calendar evidence")
+        if self.calendar_evidence_id and not business_days:
+            raise ValueError("Calendar evidence belongs to an explicit business-day deadline")
         if self.extension_deadline and (
             not self.extension_evidence_id
             or not self.deadline

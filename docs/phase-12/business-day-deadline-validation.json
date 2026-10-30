@@ -1,0 +1,94 @@
+{
+  "contract": "business-day-deadline-verification/1",
+  "source_basis": "STAGED_GIT_OBJECT_BYTES_BEFORE_COMMIT",
+  "parent_commit": "2674b72291e2deb4b17e52765a562cf55d32ef58",
+  "source_files": [
+    {
+      "path": "backend/app/modules/grc/deadlines.py",
+      "sha256": "661158ce936976496212b134277e5a0834ea867656462c3c5020fc97c2772d2a"
+    },
+    {
+      "path": "backend/app/modules/grc/filing.py",
+      "sha256": "dc3869b77accb746bb692265a98e840b0b33a9882fe0193a3879dc3d218676bd"
+    },
+    {
+      "path": "backend/app/modules/grc/schemas.py",
+      "sha256": "72de8717c1ff4dcc9bce55cc46d6a0f49ef52e92aaec2325ec7b658f88faff1e"
+    },
+    {
+      "path": "backend/app/modules/grc/service.py",
+      "sha256": "d8433306b008109853fec38f98c10b0b56d4ab17ed1d4e8c9549ca8b1b6c850d"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_business_day_deadlines.py",
+      "sha256": "274144a23e749775d6637a7ea25471f07a9e089a650c4e144d06352f32cd93f5"
+    },
+    {
+      "path": "backend/tests/unit/test_business_day_deadlines.py",
+      "sha256": "18caeabcc18c18fe400d4b145a9c52c107cd0439e285121b6bdf4c9000ffaf07"
+    },
+    {
+      "path": "frontend/e2e/business-day-deadline-release.spec.ts",
+      "sha256": "6c82cbdec54181d615c7c3c4f2cb388860ad71c2a440316b5f4bc0ed3fab56b3"
+    },
+    {
+      "path": "frontend/e2e/merchant-browser-workflow.ts",
+      "sha256": "2c6a6b886f07bfafe63fbb4fb56f83e27e2b39f06ff22dd23e43549e15d58605"
+    },
+    {
+      "path": "frontend/playwright.smoke.config.ts",
+      "sha256": "50bf3f3c3d604ec4bddb60e6087b72c21fdf5b795f1b34e2eebd2215578c1839"
+    },
+    {
+      "path": "frontend/src/features/compliance-filing.tsx",
+      "sha256": "3ce6cbc8bf978d13ffab55a497cb79ffed5cccc7d5d76b939ccebcb5865f7811"
+    },
+    {
+      "path": "frontend/tests/compliance-filing.test.tsx",
+      "sha256": "83931e2502600821e13d7ced11ec36d21bc97ccbb6a653185b138b8bc96f764b"
+    }
+  ],
+  "reports": [
+    {
+      "path": "docs/phase-12/business-days-final.xml",
+      "passed": 161,
+      "skipped": 0,
+      "failures": 0,
+      "sha256": "cfb5df1b6407b976260dc53825bcec89a547395033ce7b113df33942d77442f6"
+    },
+    {
+      "path": "docs/phase-12/business-days-frontend-final.xml",
+      "passed": 449,
+      "skipped": 0,
+      "failures": 0,
+      "sha256": "1bd84707e62fcd03cf204b23f867895801804b150d244bfb57ee25bb7cae9d29"
+    }
+  ],
+  "backend_warning": "One existing Alembic path_separator deprecation warning",
+  "checks": {
+    "mypy_419_app_files": "PASS",
+    "scoped_ruff_lint_and_format": "PASS",
+    "typescript": "PASS",
+    "scoped_eslint": "PASS",
+    "production_next_build": "PASS",
+    "api_payload_snapshots": "CURRENT",
+    "generated_api_types": "CURRENT",
+    "new_hosted_browser_case_discovery": "ONE_TEST_DISCOVERED_NOT_EXECUTED"
+  },
+  "verified_scope": [
+    "Business-day counting distinguishes explicit include/exclude trigger treatment, declared work weeks, holiday control and finite calendar coverage from calendar-day addition and final-date rolling.",
+    "Calendar dates and business offsets reject timestamps, numeric dates, booleans and numeric strings; no missing count or holiday list becomes zero.",
+    "Legacy calendar-rule serialization stays unchanged; mixed months/rolling/alternate calendar fields fail.",
+    "Separate original calendar evidence is required; derived summaries cannot substitute. Changing an approved filing's calendar requires preparing and reassessment.",
+    "UAE and India API flows require independent original calendar approval and preserve historical bodies while calendar reopening makes filing readiness stale and prevents a subsequent stage.",
+    "Boundary tests cover event weekends/holidays, alternative working weeks, year end, leap day, missing/duplicate holidays, incomplete coverage and exact declared deadline agreement."
+  ],
+  "authority_review": "docs/country-workflows/authority-references/dmcc-audit-2026-10-30/source-assessment.json",
+  "prior_hosted_merchant_proof": "docs/phase-12/merchant-shared-cash-browser-2674b72.json",
+  "limits": [
+    "Synthetic calendars and API scan/dispatch doubles; no real-client or national-holiday authenticity qualification.",
+    "The shared counting mechanism does not establish full automatic DMCC applicability, dormant-company eligibility, approved-auditor verification or filing.",
+    "The new hosted business-calendar case and corrected merchant notification capture await execution on the committed source. Earlier hosted evidence remains bound to its original commit.",
+    "Full legal/country/provider/client and production qualification remain open; authored scenario count remains 154."
+  ]
+}

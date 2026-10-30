@@ -1,0 +1,60 @@
+Explicit business-day deadline counting - UAE first, India reuse
+
+GRC obligations now distinguish calendar-day addition/final-date rolling from
+counting actual working days. Select deadline_rule.day_count_basis business,
+positive integer days_after, explicit business_trigger_policy (exclude or
+include_if_working), timezone and a complete assessed business_calendar. Months,
+legacy holidays/weekends and a rolling convention cannot be mixed into this
+profile. Existing calendar rules keep their original serialized shape.
+
+The business calendar declares coverage dates, integer excluded weekdays, exact
+holiday dates, an independent holiday count including explicit zero and a
+meaningful completeness assessment. Dates are explicit ISO calendar dates;
+timestamps, numeric dates, boolean day counts and numeric-string offsets are
+not coerced. The count must finish within retained coverage. No country choice
+supplies a default working week or presumed empty national holiday feed.
+
+A separate calendar_evidence_id must reference current independently approved,
+clean original evidence. A derived workpaper cannot substitute for that original.
+Rule evidence and calendar evidence are distinct. The existing source graph
+captures the calendar and makes dependent filing readiness stale on replacement
+or reopening, while preserving saved amounts/dates and historical bodies.
+Changing the approved calendar reference requires return to preparing and a new
+review cycle, just like changing the approved rule. No external submission occurs.
+
+The filing panel shows trigger treatment, timezone, coverage, excluded weekdays,
+original holiday dates and count, evidence reference and assessment. Missing
+controls remain visibly missing rather than becoming zero holidays. Calendar
+agreement does not authenticate a holiday list or qualify legal applicability.
+
+DMCC source review exposed the gap: amended Company Regulations distinguish
+the six-month accounts timetable from the event-triggered business-day filing
+period. The retained source assessment also identifies company/branch scope,
+dormancy, shareholder requests and authority modifications. This increment
+implements the shared counting/evidence mechanism; it does not implement a
+complete automatic DMCC applicability, dormancy, approved-auditor or filing pack.
+The publication/update dates are not asserted to be legal commencement dates.
+The separate CT audited-financial-statements threshold engine remains separate.
+
+Original authority PDFs and exact URLs/hashes are retained in
+authority-references/dmcc-audit-2026-10-30/. Six relevant regulations pages and
+both guideline pages were rendered and visually inspected. Original bytes have
+not been edited. The synthetic June 29 holiday in tests is not a UAE or India
+holiday assertion, professional approval or real-client expected result.
+
+The hosted business-day deadline case is configured for actual scanning,
+independent source review, UI filing-stage approval and replacement staleness
+with unchanged historical body. Four new captures are requested. Execution and
+visual inspection remain pending for the new committed source. The existing
+154 authored synthetic use-case count is unchanged; full country/professional,
+provider/client and production-release qualification remain open.
+
+Final local verification: 161 backend cases passed without skips or failures,
+including exact date/count controls, explicit trigger policy, legacy calendar
+serialization, approved calendar-reference protection, original-evidence guard
+and both-country real API filing/staleness flows. One existing Alembic config
+deprecation warning remains. All 449 frontend tests in 79 files passed, as did
+Next.js production build, TypeScript, scoped ESLint/Ruff, mypy (419 app files),
+current API/payload snapshots and generated API types. The new browser case is
+discoverable; discovery does not establish execution. Original final reports
+and exact staged source hashes are retained in business-day-deadline-validation.json.

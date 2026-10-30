@@ -62,6 +62,13 @@ export function ComplianceFiling({
     paper.body.deadline_rule && typeof paper.body.deadline_rule === "object"
       ? (paper.body.deadline_rule as Record<string, unknown>)
       : null;
+  const businessCalendar =
+    deadlineRule?.day_count_basis === "business" &&
+    deadlineRule.business_calendar &&
+    typeof deadlineRule.business_calendar === "object" &&
+    !Array.isArray(deadlineRule.business_calendar)
+      ? (deadlineRule.business_calendar as Record<string, unknown>)
+      : null;
   const periodMissing = Boolean(
     countryScope &&
     deadlineRule?.date_basis === "period_end" &&
@@ -93,6 +100,70 @@ export function ComplianceFiling({
         Changes to approved country scope, obligation criteria or existing
         receipts require a return to preparing and independent reassessment.
       </p>
+      {deadlineRule?.day_count_basis === "business" && (
+        <section aria-label="Business-day deadline basis">
+          <h4>Business-day deadline basis</h4>
+          <p>
+            Count {String(deadlineRule.days_after ?? "Not supplied")} working
+            days from {String(deadlineRule.trigger ?? "Not supplied")}. Trigger
+            treatment:{" "}
+            {deadlineRule.business_trigger_policy === "exclude"
+              ? "exclude the triggering day"
+              : deadlineRule.business_trigger_policy === "include_if_working"
+                ? "include the triggering day only if it is a working day"
+                : "not supplied"}
+            . Timezone: {String(deadlineRule.timezone ?? "Not supplied")}.
+          </p>
+          <p>
+            Assessed calendar coverage:{" "}
+            {String(businessCalendar?.coverage_start ?? "Not supplied")} to{" "}
+            {String(businessCalendar?.coverage_end ?? "Not supplied")}.
+            Independently counted holidays:{" "}
+            {String(
+              businessCalendar?.independent_holiday_count ?? "Not supplied",
+            )}
+            .
+          </p>
+          <p>
+            Excluded weekdays:{" "}
+            {Array.isArray(businessCalendar?.weekend_days)
+              ? businessCalendar.weekend_days
+                  .map(
+                    (day) =>
+                      [
+                        "Monday",
+                        "Tuesday",
+                        "Wednesday",
+                        "Thursday",
+                        "Friday",
+                        "Saturday",
+                        "Sunday",
+                      ][Number(day)] ?? "Invalid weekday",
+                  )
+                  .join(", ")
+              : "Not supplied"}
+            . Declared holidays:{" "}
+            {Array.isArray(businessCalendar?.holidays)
+              ? businessCalendar.holidays.length
+                ? businessCalendar.holidays.map(String).join(", ")
+                : businessCalendar.independent_holiday_count === 0
+                  ? "Explicitly none"
+                  : "Empty list without an independent zero control"
+              : "Not supplied"}
+            .
+          </p>
+          <p>
+            Calendar evidence:{" "}
+            {String(paper.body.calendar_evidence_id ?? "Not supplied")}.
+            {String(
+              businessCalendar?.assessment ??
+                "Calendar assessment not supplied",
+            )}
+            . This counts the assessed calendar; it does not verify national
+            holidays or legal applicability.
+          </p>
+        </section>
+      )}
       {countryScope && (
         <p>
           Declared entity country: {String(countryScope.entity_country)} ·

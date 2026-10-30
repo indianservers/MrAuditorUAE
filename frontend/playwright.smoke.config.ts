@@ -11,6 +11,7 @@ export default defineConfig({
     "inventory-performance-release.spec.ts",
     "un-sanctions-release.spec.ts",
     "withholding-native-release.spec.ts",
+    "business-day-deadline-release.spec.ts",
   ],
   workers: 1,
   reporter: "list",
