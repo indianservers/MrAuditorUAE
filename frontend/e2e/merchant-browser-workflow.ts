@@ -308,7 +308,7 @@ export async function runMerchantBrowserWorkflow(
     python,
     [
       "-c",
-      "import io,sys;from openpyxl import load_workbook;r=list(load_workbook(io.BytesIO(sys.stdin.buffer.read()))['Rows'].values);assert r[1][r[0].index('expected_net')]=='800';assert r[1][r[0].index('bank_allocated')]=='800';assert r[1][r[0].index('bank_difference')]=='0'",
+      "import io,sys;from openpyxl import load_workbook;w=load_workbook(io.BytesIO(sys.stdin.buffer.read()));r=list(w['Rows'].values);assert r[1][r[0].index('expected_net')]=='800';assert r[1][r[0].index('bank_allocated')]=='800';assert r[1][r[0].index('bank_difference')]=='0';c=list(w['Bank cash claims'].values);assert len(c)==2;assert c[1][c[0].index('capacity')]=='800';assert c[1][c[0].index('allocated')]=='800';assert len(c[1][c[0].index('source_sha256')])==64",
     ],
     { input: workbook, timeout: 15000 },
   );
@@ -345,6 +345,48 @@ export async function runMerchantBrowserWorkflow(
     screenshots,
     sourceIds.processor,
   );
+  const competing = await prepare(
+    {
+      workflow: "merchant-settlement-bridge",
+      source_ids: sourceIds,
+      as_of: "2026-06-30",
+      period_start: "2026-06-01",
+      account: "ACCT",
+      currency: manifest.currency,
+      title: `SYNTHETIC ${country} competing merchant cash claim`,
+      rationale:
+        "SYNTHETIC repeated original bank evidence must not support two independent active cash claims",
+    },
+    "country-workflow",
+  );
+  async function competingApproval() {
+    const rejected = await reviewer.request.post(
+      `/api/backend/${prefix}/events/${competing.id}/review`,
+      {
+        headers,
+        data: {
+          expected_version: competing.version,
+          action: "approve",
+          comments:
+            "SYNTHETIC duplicate original cash capacity must block approval",
+        },
+      },
+    );
+    expect(rejected.status(), await rejected.text()).toBe(409);
+    expect(await rejected.text()).toContain("OVERALLOCATED");
+  }
+  await competingApproval();
+  await reviewer.goto(
+    `/intelligence/${eid}/country-workflow?event=${competing.id}`,
+  );
+  const cash = reviewer.getByRole("region", {
+    name: "Shared bank cash approval controls",
+    exact: true,
+  });
+  await expect(cash.getByRole("alert")).toContainText("OVERALLOCATED");
+  await cash.screenshot({
+    path: `${screenshots}/${country}-merchant-shared-cash-conflict.png`,
+  });
   await reviewer.goto(
     `/intelligence/${eid}/country-workflow?event=${reviewed.id}`,
   );
@@ -372,6 +414,45 @@ export async function runMerchantBrowserWorkflow(
   await expect(resultCard.getByText("STALE", { exact: true })).toBeInViewport();
   await resultCard.screenshot({
     path: `${screenshots}/${country}-merchant-withdrawn-source-stale.png`,
+  });
+  await competingApproval();
+  await expect(cash).toContainText("ACTIVE_APPROVED_ALLOCATION");
+  await cash
+    .getByLabel("Bank cash withdrawal reason", { exact: true })
+    .fill(
+      "SYNTHETIC original merchant claim superseded; explicitly release capacity while retaining historical evidence",
+    );
+  const withdrawal = reviewer.waitForResponse(
+    (r) =>
+      r.url().endsWith(`/events/${reviewed.id}/withdraw-bank-cash`) &&
+      r.request().method() === "POST",
+  );
+  await cash
+    .getByRole("button", { name: "Withdraw bank cash claim", exact: true })
+    .click();
+  expect((await withdrawal).status()).toBe(201);
+  await reviewer.goto(
+    `/intelligence/${eid}/country-workflow?event=${competing.id}`,
+  );
+  await expect(cash).toContainText("UNRESERVED");
+  await expect(cash.getByRole("alert")).toHaveCount(0);
+  await reviewer
+    .getByLabel("Review / exception rationale", { exact: true })
+    .fill(
+      "SYNTHETIC independent replacement review after explicit original cash claim withdrawal",
+    );
+  const replacement = reviewer.waitForResponse(
+    (r) =>
+      r.url().endsWith(`/events/${competing.id}/review`) &&
+      r.request().method() === "POST",
+  );
+  await reviewer
+    .getByRole("button", { name: "Independent approval", exact: true })
+    .click();
+  expect((await replacement).status()).toBe(201);
+  await expect(cash).toContainText("ACTIVE_APPROVED_ALLOCATION");
+  await cash.screenshot({
+    path: `${screenshots}/${country}-merchant-cash-released-replacement-approved.png`,
   });
   expect(reviewerErrors).toEqual([]);
 }

@@ -1581,10 +1581,12 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
     if grant_documents_receipts is not None:
         result["grant_document_binding"] = "RETAINED_DOCUMENT_BYTES_VERIFIED"
         result["retained_grant_documents"] = grant_documents_receipts
-    if data.workflow == "obligation-bank-allocations":
+    if data.workflow in {"obligation-bank-allocations", "merchant-settlement-bridge"}:
         from app.modules.country_workflows.bank_consumption import manifest
 
-        result["bank_consumption_manifest"] = manifest(data, sources["bank"], result)
+        result["bank_consumption_manifest"] = manifest(
+            data, sources["bank"], result, allocations=sources.get("allocations")
+        )
     if data.workflow == "inventory-fifo-cost":
         result["inventory_fifo_document_binding"] = "RETAINED_DOCUMENT_BYTES_VERIFIED"
     if data.workflow == "uae-savings-review":

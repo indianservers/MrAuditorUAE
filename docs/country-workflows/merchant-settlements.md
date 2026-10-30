@@ -92,8 +92,32 @@ For separate opening/closing processor reserve continuity, dated holds/releases
 and receivable ledger controls, use [Processor reserve continuity](merchant-reserves.md).
 That linked procedure reuses the original processor source without inferring bank receipt.
 
-This procedure does not authenticate banks or processors, reserve cash across
-other workflows, post journals, execute payments, prove complete sales populations,
+Independent approval now shares bank-movement capacity with other merchant and
+obligation-allocation approvals across this legal entity's engagements in the
+current firm. Calculation alone does not create a claim. An approved claim
+continues to hold capacity when supporting evidence becomes stale, until an
+independent reviewer explicitly withdraws it with a retained reason. The same
+result root can be re-reviewed without charging itself twice. Separate legal
+entities and firms do not share capacity. BRS is a separate evidence comparison
+and does not consume this allocation capacity.
+
+Both incoming settlements and negative net settlements use positive absolute
+movement capacity; opposite directions cannot cancel claims. Original source
+positions and retained hashes identify the movement. Reuploads with otherwise
+indistinguishable economic fields are conservatively checked as potentially
+overlapping, using the existing shared control. Edited bank fields and unlinked
+account aliases still require separate assessment. This is an approval control,
+not a bank instruction or actual funds reservation. Earlier approved merchant
+results without a cached manifest reconstruct claims from retained original bank
+and allocation sources; unverifiable historical claims block conflicting approval
+until explicitly withdrawn or qualified.
+
+The result screen now exposes the existing shared-cash status, related reviews,
+conflicts and independent withdrawal action for merchant results. Complete XLSX
+retains the bank claim manifest alongside the unchanged gross-to-net schedule.
+
+This procedure does not authenticate banks or processors, post journals,
+execute payments, prove complete sales populations,
 roll forward reserve liabilities, calculate FX or qualify tax/filing obligations.
 Unrepresented processor components require a separately assessed supported
 procedure; do not silently fold them into fees or net them away.

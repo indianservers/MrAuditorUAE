@@ -120,7 +120,10 @@ async def test_entity_cash_cross_engagement_race_access_and_release(
     win_eid, lose_eid = (first, second)[winner_index], (first, second)[1 - winner_index]
     marker = winner["body"]["bank_consumption_review"]
     assert marker["entity_id"] == engagement["entity_id"]
-    assert marker["approval_scope"] == "OBLIGATION_APPROVALS_WITHIN_ONE_TENANT_LEGAL_ENTITY"
+    assert (
+        marker["approval_scope"]
+        == "OBLIGATION_AND_MERCHANT_APPROVALS_WITHIN_ONE_TENANT_LEGAL_ENTITY"
+    )
     status_url = (
         f"/api/v1/intelligence/engagements/{lose_eid}/events/{loser['id']}/bank-cash-status"
     )

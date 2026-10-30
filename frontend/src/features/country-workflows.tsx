@@ -6633,7 +6633,10 @@ export function CountryWorkflows({
               rates={body.retained_interest_rate_rows}
             />
           )}
-          {body.workflow === "obligation-bank-allocations" && (
+          {[
+            "obligation-bank-allocations",
+            "merchant-settlement-bridge",
+          ].includes(body.workflow ?? "") && (
             <BankCashReview
               key={`${tenant}:${eid}:${selected}`}
               eid={eid}

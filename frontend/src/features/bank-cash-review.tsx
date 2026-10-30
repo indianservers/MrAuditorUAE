@@ -36,11 +36,11 @@ export function BankCashReview({
     <section aria-label="Shared bank cash approval controls">
       <h3>Shared bank cash approval controls</h3>
       <p>
-        Approval checks bank capacity against active obligation allocation
-        reviews across this legal entity’s engagements in the current firm.
-        Calculations do not reserve cash. Stale approvals hold their claims
-        until explicitly withdrawn. BRS evidence can support the same payment
-        separately; this control does not post payments.
+        Approval checks bank capacity against active merchant and obligation
+        allocation reviews across this legal entity’s engagements in the current
+        firm. Calculations do not reserve cash. Stale approvals hold their
+        claims until explicitly withdrawn. BRS evidence can support the same
+        payment separately; this control does not post payments.
       </p>
       {status.error && <ErrorState error={status.error} />}
       {!status.data && !status.error && (

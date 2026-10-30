@@ -1,0 +1,52 @@
+Merchant shared cash approval controls - UAE first, India reuse
+
+The existing bank-cash-consumption/1 identity and capacity engine now covers
+merchant-settlement-bridge as well as obligation-bank-allocations. This preserves
+existing obligation manifests and immutable historical amounts. Approval markers
+now explicitly describe both procedures within one tenant legal entity.
+
+Retained original merchant allocation sources are reconciled to saved batch
+bank_allocated controls, exact original bank rows, currency and direction before
+building positive absolute claims. Every bank row remains represented in the
+validation; zero allocations do not consume capacity. Positive and negative net
+settlements do not offset. The same source position cannot be spent twice by
+renaming the workflow, transaction ID, account alias or engagement. The existing
+conservative economic-key check still applies to other captures. It does not
+authenticate banks, identify every edited/reformatted movement, infer legal
+entitlement, post journals or execute payment instructions.
+
+Entity transaction locks serialize approvals. Both procedures participate in the
+same latest-per-root claim query, current status and explicit withdrawal route.
+Stale approved results retain claims; current calculations alone reserve none.
+Historical merchant approvals without cached claims reconstruct them from their
+retained bank/allocation source versions, not from current replacement bytes.
+Unverifiable or inaccessible peer evidence blocks approval without leaking it.
+
+Verification includes same-file reuse between procedures; both movement signs;
+opposite-direction batches with zero signed net and four separate cash claims;
+duplicate/missing/currency/direction/capacity/reversal changes; and historical
+manifest reconstruction. Real PostgreSQL API cases run concurrent merchant and
+obligation approvals for UAE/AED and India/INR, within one engagement and across
+two engagements of the same legal entity. Exactly one approval wins, staleness
+preserves the original body and cash claim, and explicit independent withdrawal
+permits the competing review. Existing tests retain separate-entity capacity and
+cross-engagement access protection. Scanner and dispatch are explicit API doubles.
+
+The existing hosted UAE/India merchant browser harness now requests duplicate
+approval, verifies the conflict view, withdraws the stale original claim through
+the UI and approves the replacement through the UI. Four new source-specific
+capture names are configured. Execution and visual inspection remain pending
+until the new committed source runs; previous browser images do not prove this
+change. The authored 154-scenario count is unchanged. No real client pilot or
+professional/statutory qualification is inferred from these synthetic cases.
+
+Final local verification: 150 related backend cases passed without skips or
+failures, including native account binding, merchant reserve continuity and
+withholding-obligation regressions. The run retains 100 existing SQLAlchemy
+DISTINCT ON deprecation warnings. All 445 frontend tests in 79 files pass, as
+do Next.js production build, TypeScript, scoped ESLint/Ruff, mypy (419 files),
+runtime API/payload snapshots and generated API types. One initial frontend
+run exposed an old broad test mock returning a result object for the new cash
+status request; the mock now supplies the actual status-response shape.
+Original final reports and staged-source hashes are retained in the separate
+merchant-shared-cash-validation.json receipt. New hosted proof remains pending.

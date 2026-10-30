@@ -300,7 +300,7 @@ def compare(data, sources, country):
         [
             "Gross sales, refunds and chargebacks are compared separately; no amount-only or inferred bank allocation",
             "Fee tax, withholding and reserves are assessed source components; no statutory rate, recovery eligibility, credit entitlement or reserve roll-forward is calculated",
-            "Bank amounts use credit-positive signed movements. Allocations prevent double counting only within this result, not across other workflows; no payment, journal or global cash reservation is executed",
+            "Bank amounts use credit-positive signed movements. Independent approval checks shared capacity against active merchant and obligation allocations within this tenant legal entity; calculations do not reserve cash or execute payments or journals",
             "Uploaded source controls do not establish complete merchant populations or authenticate processor/bank evidence",
         ],
     )

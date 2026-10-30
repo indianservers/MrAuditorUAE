@@ -41,11 +41,11 @@ router = APIRouter(prefix="/intelligence", tags=["Accounting intelligence"])
 
 @router.get("/engagements/{eid}/events/{identifier}/bank-cash-status")
 async def bank_cash_status(eid: uuid.UUID, identifier: uuid.UUID, db: DB, ctx: Actor):
-    from app.modules.country_workflows.bank_consumption import WORKFLOW, status
+    from app.modules.country_workflows.bank_consumption import WORKFLOWS, status
 
     obj = await service.event(db, ctx, eid, identifier, False)
-    if obj.kind != "country-workflow" or obj.body.get("workflow") != WORKFLOW:
-        raise HTTPException(422, "Select an obligation bank allocation review")
+    if obj.kind != "country-workflow" or obj.body.get("workflow") not in WORKFLOWS:
+        raise HTTPException(422, "Select an obligation or merchant bank allocation review")
     return await status(db, ctx, obj)
 
 
@@ -55,7 +55,7 @@ async def withdraw_bank_cash(
 ):
     from app.modules.country_workflows.bank_consumption import (
         WITHDRAWN,
-        WORKFLOW,
+        WORKFLOWS,
         current_decision,
         entity_scope,
         is_active,
@@ -66,10 +66,12 @@ async def withdraw_bank_cash(
     obj = await service.event(db, ctx, eid, identifier, False)
     if (
         obj.kind != "country-workflow"
-        or obj.body.get("workflow") != WORKFLOW
+        or obj.body.get("workflow") not in WORKFLOWS
         or data.action != "reject"
     ):
-        raise HTTPException(422, "Explicit rejection of an obligation cash review is required")
+        raise HTTPException(
+            422, "Explicit rejection of an obligation or merchant cash review is required"
+        )
     if obj.version != data.expected_version or await service.head(db, ctx, obj) != obj.version:
         raise HTTPException(409, "Result version conflict")
     if str(ctx.user_id) in obj.body.get("contributors", [str(obj.created_by)]):
@@ -1548,10 +1550,10 @@ async def review(
                     raise HTTPException(
                         409, "Accepted supporting extraction needs independent field review"
                     )
-        if (
-            obj.kind == "country-workflow"
-            and obj.body.get("workflow") == "obligation-bank-allocations"
-        ):
+        if obj.kind == "country-workflow" and obj.body.get("workflow") in {
+            "obligation-bank-allocations",
+            "merchant-settlement-bridge",
+        }:
             from app.modules.country_workflows.bank_consumption import (
                 WITHDRAWN,
                 approve,

@@ -3813,3 +3813,12 @@ it("keeps assessed native history status visible without opening all provenance"
   expect(screen.getByRole("cell",{name:"superseded"})).toBeVisible();
   expect(screen.getByRole("cell",{name:"1000.00"})).toBeVisible();
 });
+
+it.each(["AE", "IN"])("shows shared cash controls for merchant approvals (%s)", (country) => {
+  state.country = country;
+  state.result = { id: "result", kind: "country-workflow", version: 1, freshness: "CURRENT", body: { workflow: "merchant-settlement-bridge", title: "Synthetic merchant allocation", merchant_settlement_contract: "explicit-gross-net-bank/2", blocked: false, rows: [] } };
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Saved source or result"), { target: { value: "result" } });
+  expect(screen.getByRole("region", { name: "Shared bank cash approval controls" })).toHaveTextContent("active merchant and obligation allocation");
+  expect(screen.getByText(/Cash claim: UNRESERVED/)).toBeVisible();
+});

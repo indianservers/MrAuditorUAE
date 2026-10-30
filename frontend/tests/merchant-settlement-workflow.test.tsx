@@ -63,73 +63,80 @@ vi.mock("@/hooks/use-api", () => ({
     error: null,
   }),
   useAPI: (path: string) => ({
-    data: path.endsWith("country-workflows")
+    data: path.endsWith("bank-cash-status")
       ? {
-          country: state.country,
-          items: [
-            {
-              id: "merchant-settlement-bridge",
-              title: "Merchant gross to bank",
-              available: true,
-              roles,
-            },
-          ],
-          source_contracts: Object.fromEntries(
-            Object.values(roles).map((kind) => [kind, {}]),
-          ),
-          source_formats: [],
-          check_templates: {},
-          scenarios: [],
+          state: "UNRESERVED",
+          claim_count: 1,
+          approval_error: null,
+          related_reviews: [],
         }
-      : path.endsWith("inputs")
+      : path.endsWith("country-workflows")
         ? {
-            evidence: [
+            country: state.country,
+            items: [
               {
-                id: "csv",
-                label: "SYNTHETIC processor CSV",
-                scan_status: "CLEAN",
+                id: "merchant-settlement-bridge",
+                title: "Merchant gross to bank",
+                available: true,
+                roles,
               },
             ],
-            snapshots: [],
+            source_contracts: Object.fromEntries(
+              Object.values(roles).map((kind) => [kind, {}]),
+            ),
+            source_formats: [],
+            check_templates: {},
+            scenarios: [],
           }
-        : path.includes("/events/merchant-result")
+        : path.endsWith("inputs")
           ? {
-              id: "merchant-result",
-              version: 1,
-              kind: "country-workflow",
-              freshness: "CURRENT",
-              body: {
-                title: "SYNTHETIC merchant result",
-                workflow: "merchant-settlement-bridge",
-                review_status: "UNVERIFIED",
-                rows: [
-                  {
-                    id: "PAYOUT",
-                    kind: "MERCHANT_SETTLEMENT",
-                    merchant: "SHOP",
-                    processor: "PSP",
-                    batch: "BATCH-1",
-                    currency: "AED",
-                    sales: "1000",
-                    refunds: "100",
-                    chargebacks: "20",
-                    fees: "30",
-                    fee_tax: "2",
-                    withholding: "3",
-                    reserve_held: "50",
-                    reserve_released: "5",
-                    amount: "800",
-                    expected_net: "800",
-                    bank_allocated: "800",
-                    bank_difference: "0",
-                    state: "MATCHED",
-                  },
-                ],
-                limitations: [],
-                professional_conclusion: "NOT_DETERMINED",
-              },
+              evidence: [
+                {
+                  id: "csv",
+                  label: "SYNTHETIC processor CSV",
+                  scan_status: "CLEAN",
+                },
+              ],
+              snapshots: [],
             }
-          : { items: [] },
+          : path.includes("/events/merchant-result")
+            ? {
+                id: "merchant-result",
+                version: 1,
+                kind: "country-workflow",
+                freshness: "CURRENT",
+                body: {
+                  title: "SYNTHETIC merchant result",
+                  workflow: "merchant-settlement-bridge",
+                  review_status: "UNVERIFIED",
+                  rows: [
+                    {
+                      id: "PAYOUT",
+                      kind: "MERCHANT_SETTLEMENT",
+                      merchant: "SHOP",
+                      processor: "PSP",
+                      batch: "BATCH-1",
+                      currency: "AED",
+                      sales: "1000",
+                      refunds: "100",
+                      chargebacks: "20",
+                      fees: "30",
+                      fee_tax: "2",
+                      withholding: "3",
+                      reserve_held: "50",
+                      reserve_released: "5",
+                      amount: "800",
+                      expected_net: "800",
+                      bank_allocated: "800",
+                      bank_difference: "0",
+                      state: "MATCHED",
+                    },
+                  ],
+                  limitations: [],
+                  professional_conclusion: "NOT_DETERMINED",
+                },
+              }
+            : { items: [] },
     error: null,
     isFetching: false,
     refetch: vi.fn(),

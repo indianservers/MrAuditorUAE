@@ -1,4 +1,4 @@
-"""Approval-time cash capacity across obligation reviews for one legal entity.
+"""Approval-time cash capacity across obligation/merchant reviews for one legal entity.
 
 Review/release routes hold engagement and entity transaction locks through commit.
 An immutable approval claim survives source staleness until explicit withdrawal.
@@ -22,11 +22,13 @@ from app.modules.jurisdictions.packages import fingerprint
 
 CONTRACT = "bank-cash-consumption/1"
 WORKFLOW = "obligation-bank-allocations"
+MERCHANT = "merchant-settlement-bridge"
+WORKFLOWS = {WORKFLOW, MERCHANT}
 ACTIVE = "ACTIVE_APPROVED_ALLOCATION"
 WITHDRAWN = "WITHDRAWN"
 MAX_PEERS = 1000
 MAX_CLAIMS = 50000
-APPROVAL_SCOPE = "OBLIGATION_APPROVALS_WITHIN_ONE_TENANT_LEGAL_ENTITY"
+APPROVAL_SCOPE = "OBLIGATION_AND_MERCHANT_APPROVALS_WITHIN_ONE_TENANT_LEGAL_ENTITY"
 
 
 async def entity_scope(db, ctx, eid, *, lock=False):
@@ -51,16 +53,67 @@ async def entity_scope(db, ctx, eid, *, lock=False):
     return entity_id
 
 
-def manifest(data, source, body):
+def merchant_cash(source, allocations, body):
+    """Reconstruct signed claims from retained allocations, including legacy reviews."""
+    if not allocations or allocations.get("table_type") != "merchant-bank-allocations":
+        raise ValueError("Merchant cash claims need the retained original allocation source")
+    bank = {row["id"]: row for row in source["rows"]}
+    batches = {row["id"]: row for row in body["rows"] if row.get("kind") == "MERCHANT_SETTLEMENT"}
+    used: dict[str, Decimal] = defaultdict(Decimal)
+    batch_used: dict[str, Decimal] = defaultdict(Decimal)
+    seen, pairs = set(), set()
+    with localcontext() as arithmetic:
+        arithmetic.prec = 80
+        for link in allocations["rows"]:
+            movement = bank.get(link["bank_transaction_id"])
+            batch = batches.get(link["settlement_id"])
+            pair = (link["bank_transaction_id"], link["settlement_id"])
+            amount = Decimal(link["amount"])
+            if (
+                movement is None
+                or batch is None
+                or pair in pairs
+                or link["id"] in seen
+                or not amount.is_finite()
+                or not amount
+                or link["currency"] != movement["currency"]
+                or link["currency"] != batch["currency"]
+                or amount * Decimal(movement["amount"]) <= 0
+                or amount * Decimal(batch["amount"]) <= 0
+            ):
+                raise ValueError(
+                    "Merchant cash allocation identity, currency or direction disagrees"
+                )
+            seen.add(link["id"])
+            pairs.add(pair)
+            used[movement["id"]] += amount
+            batch_used[batch["id"]] += amount
+        if any(batch_used[key] != Decimal(row["bank_allocated"]) for key, row in batches.items()):
+            raise ValueError("Merchant original allocations differ from saved batch controls")
+        return {
+            key: {
+                "source_id": key,
+                "currency": row["currency"],
+                "bank_amount": row["amount"],
+                "allocated": str(abs(used[key])),
+            }
+            for key, row in bank.items()
+        }
+
+
+def manifest(data, source, body, *, allocations=None):
     """Use original source positions, not user-renamable transaction IDs alone."""
-    if data.workflow != WORKFLOW or source.get("table_type") != "transactions":
-        raise ValueError("Bank cash claims require the obligation allocation workflow")
+    if data.workflow not in WORKFLOWS or source.get("table_type") != "transactions":
+        raise ValueError("Bank cash claims require an obligation or merchant allocation workflow")
     allocated = {}
     for row in body["rows"]:
         if row.get("kind") == "bank":
             if row["source_id"] in allocated:
                 raise ValueError("Duplicate bank result identity")
             allocated[row["source_id"]] = row
+    merchant = data.workflow == MERCHANT
+    if merchant:
+        allocated = merchant_cash(source, allocations, body)
     digest = source.get("evidence_sha256") or source.get("source_sha256")
     if not isinstance(digest, str) or len(digest) != 64:
         raise ValueError("Bank source needs retained original-file or committed-snapshot integrity")
@@ -95,7 +148,7 @@ def manifest(data, source, body):
             seen.add(bank["id"])
             output = allocated[bank["id"]]
             used = Decimal(output["allocated"])
-            capacity = Decimal(bank["amount"]) * sign
+            capacity = abs(Decimal(bank["amount"])) if merchant else Decimal(bank["amount"]) * sign
             if (
                 not used.is_finite()
                 or used < 0
@@ -150,7 +203,7 @@ def manifest(data, source, body):
             )
         if seen != allocated.keys():
             raise ValueError("Bank result includes movements outside its retained source")
-        if sum((Decimal(row["allocated"]) for row in rows), Decimal(0)) != Decimal(
+        if not merchant and sum((Decimal(row["allocated"]) for row in rows), Decimal(0)) != Decimal(
             body["allocation_controls"]["allocated_amount"]
         ):
             raise ValueError("Bank claim total disagrees with allocation controls")
@@ -159,7 +212,9 @@ def manifest(data, source, body):
         "rows": rows,
         "cash_keys": sorted({row["cash_key"] for row in rows}),
         "economic_keys": sorted({row["economic_key"] for row in rows}),
-        "scope": "OBLIGATION_APPROVALS_WITHIN_ONE_ENGAGEMENT",
+        "scope": "MERCHANT_APPROVALS_WITHIN_ONE_ENGAGEMENT"
+        if merchant
+        else "OBLIGATION_APPROVALS_WITHIN_ONE_ENGAGEMENT",
         "identity_limit": "EDITED_BANK_FIELDS_OR_UNLINKED_ACCOUNT_ALIASES_REQUIRE_SEPARATE_ASSESSMENT",
     }
 
@@ -231,7 +286,7 @@ def decisions(ctx, eid=None, *, entity_id=None):
         statement.where(
             event.tenant_id == ctx.tenant_id,
             event.kind == "country-workflow",
-            event.body["workflow"].astext == WORKFLOW,
+            event.body["workflow"].astext.in_(WORKFLOWS),
             or_(
                 event.body["review_status"].astext.in_(["REVIEWED", "REJECTED"]),
                 marker.in_([ACTIVE, WITHDRAWN]),
@@ -259,7 +314,14 @@ async def event_manifest(db, ctx, obj, *, current=False):
     try:
         data = WorkflowInput.model_validate(obj.body["parameters"])
         bank = await service.event(db, ctx, obj.engagement_id, data.source_ids["bank"], current)
-        built = manifest(data, bank.body, obj.body)
+        allocations = (
+            await service.event(db, ctx, obj.engagement_id, data.source_ids["allocations"], current)
+            if data.workflow == MERCHANT
+            else None
+        )
+        built = manifest(
+            data, bank.body, obj.body, allocations=allocations.body if allocations else None
+        )
         if obj.body.get("bank_consumption_manifest") not in (None, built):
             raise ValueError("Bank cash manifest changed")
         return built

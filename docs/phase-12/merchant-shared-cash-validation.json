@@ -1,0 +1,98 @@
+{
+  "contract": "merchant-shared-cash-verification/1",
+  "source_basis": "STAGED_GIT_OBJECT_BYTES_BEFORE_COMMIT",
+  "parent_commit": "0a4cf8d5de3ec8b2bed9568ee8c308e340ef93f7",
+  "source_files": [
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "sha256": "ece1688749e4906fe67f5b68967fc39f642eb5292640885dd23ceed2deefd1bb"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/bank_consumption.py",
+      "sha256": "0764d717bd46ab44c6bb8f4807ed93ea70922eb3ef15701be8c8a19b112d8e6b"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/merchant_settlements.py",
+      "sha256": "f3be89006768f1c616b413503b339b191b80bd7ad01905ea1174f57953ac151a"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/service.py",
+      "sha256": "035e3ea22a29f4d633dd02551a7a767c319d15c3932e71ac96f1645b926e7ac5"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_bank_consumption.py",
+      "sha256": "dbca2800266b60f1289652b687f603734bbf3023c4d89a4350f7f72bad180500"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_merchant_cash_consumption.py",
+      "sha256": "d806eb423213f9f3265c2273da023e27333b4f517394ed5aa07a04153196744e"
+    },
+    {
+      "path": "backend/tests/unit/test_merchant_cash_consumption.py",
+      "sha256": "0a3710d932e178bb3fc77bf3d742ccb177a1b043b730aa03d30f20c1ce4350ca"
+    },
+    {
+      "path": "frontend/e2e/merchant-browser-workflow.ts",
+      "sha256": "edeb07737996d53a51a584dbca39320ab7450a9b367075a20eff62ca05565d93"
+    },
+    {
+      "path": "frontend/src/features/bank-cash-review.tsx",
+      "sha256": "afef9d8d37db0617f130e1e38222fc53060db556ecb74ababbcc1cfd2c1eadf9"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "ad26886acd21ce328abe90073e46bb49c3dee03a5fe20fd1d1248d4c1bab9ea2"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "c4be69f0f4546109d6d3a343836dd18b8bbc4dd412f29b2c4a1f1587c625e974"
+    },
+    {
+      "path": "frontend/tests/merchant-settlement-workflow.test.tsx",
+      "sha256": "bfc2f93fd4a9bd3d53d335e12612fda48880c0419888c0f6834212bebb5d8686"
+    }
+  ],
+  "reports": [
+    {
+      "path": "docs/phase-12/merchant-cash-verified.xml",
+      "passed": 150,
+      "skipped": 0,
+      "failures": 0,
+      "sha256": "0ec2012a02e20a93b9a1c6ba7634df16b52522e078aae3671028a47f80c2c962"
+    },
+    {
+      "path": "docs/phase-12/merchant-cash-frontend-verified.xml",
+      "passed": 445,
+      "skipped": 0,
+      "failures": 0,
+      "sha256": "f6c5d34373f08716e3a5bdd971ef10831a3a064ac3bbd09980d9185150da2137"
+    }
+  ],
+  "backend_warning_count": 100,
+  "backend_warning": "Existing SQLAlchemy DISTINCT ON deprecation warning in bank_consumption.decisions",
+  "checks": {
+    "scoped_ruff_lint_and_format": "PASS",
+    "mypy_419_app_files": "PASS",
+    "typescript": "PASS",
+    "scoped_eslint": "PASS",
+    "production_next_build": "PASS",
+    "runtime_api_payload_snapshots": "CURRENT",
+    "generated_api_types": "CURRENT"
+  },
+  "verified_scope": [
+    "Merchant and obligation approvals share the existing bank-cash-consumption/1 manifests and legal-entity transaction lock.",
+    "Concurrent cross-procedure approvals allow exactly one winner for both movement signs, UAE/AED and India/INR, within one engagement and across two engagements of the same entity.",
+    "Stale supporting evidence does not release an approved claim; original saved bodies remain unchanged; independent explicit withdrawal releases capacity for the competing result.",
+    "Original allocation/identity/currency/capacity/reversal changes fail; positive and negative batches do not cancel absolute cash claims.",
+    "Historical merchant results without cached manifests reconstruct claims from retained original bank and allocation source versions.",
+    "Existing native account binding, merchant reserve, obligation withdrawal, entity isolation and peer-access regressions remain passing.",
+    "Merchant views expose the shared claim/status/withdrawal UI in both countries; all frontend tests pass."
+  ],
+  "limitations": [
+    "Synthetic source mechanics with API scan and dispatch doubles; not independently checked client files, legal qualification or bank authenticity.",
+    "New hosted browser assertions/captures for conflict and stale-claim withdrawal are configured but not yet executed or visually inspected at receipt creation.",
+    "Prior hosted browser/full-backend results belong to earlier commits and do not qualify this change.",
+    "The authored 154-scenario count is unchanged; provider licensing, real pilots, full country-law coverage and actual production release remain open.",
+    "Edited bank fields, differently represented movements and unlinked account aliases can require independent assessment beyond retained-file/economic identity controls."
+  ]
+}
