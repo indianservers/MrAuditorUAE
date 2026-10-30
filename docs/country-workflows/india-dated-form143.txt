@@ -71,3 +71,11 @@ and actual client pilots remain open. Form 138/140/144 and corrections require
 their own adopted layouts. This observed-file profile does not establish legal
 compliance under the 2025 Act. The existing 154 authored synthetic scenarios are
 not increased or reclassified as real-client qualification by these tests.
+
+Hosted source f5e0fac subsequently passed the native browser case in 12.1
+seconds, including the separate Form 143 synthetic completion. Both original
+reviewed and crosswalk-superseded captures were saved and visually inspected;
+the source-specific receipt is docs/phase-12/form143-browser-f5e0fac.json.
+That browser suite as a whole failed two merchant assertions (11 passed,
+two failed). A correction reloads the exact returned reviewed event before
+checking computed freshness; its later execution remains separate proof.

@@ -1,0 +1,44 @@
+{
+  "source_commit": "de7ecb2582bc96b20d5f22198f44bd9486fcb4cc",
+  "run_id": 41098025260,
+  "job_id": 124208745810,
+  "conclusion": "success",
+  "passed": 5070,
+  "skipped": 9,
+  "failed": 0,
+  "overall_coverage_percent": 86.90401581256327,
+  "core_coverage": {
+    "covered": 831,
+    "total": 930,
+    "percent_displayed": 89.35
+  },
+  "artifact": {
+    "id": 13002470781,
+    "size_bytes": 244504,
+    "sha256": "ec4b476c8f09ef9c026bab2eb6d0779d5e2534b0a629c3e0aff42f21a5c45a2c"
+  },
+  "original_reports": [
+    {
+      "path": "docs/phase-12/de7ecb2-hosted-full.xml",
+      "size_bytes": 787502,
+      "sha256": "86022ad7e9df2dfeaca0499056fc6b4956a06d3dc66f67652fc0448e7f24992f"
+    },
+    {
+      "path": "docs/phase-12/de7ecb2-hosted-coverage.json",
+      "size_bytes": 1860811,
+      "sha256": "d9780116b170707c25028e46d2d596c4702aa4379e118d7f3a050ec4866e5660"
+    }
+  ],
+  "jobs": {
+    "verify": "success",
+    "frontend": "success",
+    "browser-smoke": "success",
+    "security": "success",
+    "containers": "success",
+    "ml": "success"
+  },
+  "limits": [
+    "Source includes DMCC and historical nonresident 27Q; it predates dated Form 143 and missing-PAN treatment. Their proof remains separate.",
+    "Nine full-suite skips remain skips. Synthetic CI is not representative-client, legal or production qualification."
+  ]
+}
