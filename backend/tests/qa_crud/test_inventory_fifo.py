@@ -164,6 +164,30 @@ async def test_fifo_review_complete_export_paging_and_original_support_staleness
     assert approved.status_code == 201, approved.text
     result = approved.json()
     path = f"/api/v1/intelligence/engagements/{eid}/events/{result['id']}"
+    paper_input = {
+        "reference": "FIFO-SYNTHETIC",
+        "title": "Synthetic independently reviewed FIFO working paper",
+        "objective": "Assess source-supported FIFO gross cost and the selected movement period",
+    }
+    paper = await c.post(path + "/working-paper", headers=h, json=paper_input)
+    assert paper.status_code == 201, paper.text
+    body = paper.json()["body"]
+    assert body["sources"] == [{"kind": "intelligence", "id": result["id"]}]
+    calculation = body["financial_tables"][0]
+    assert calculation["source_event_id"] == result["id"]
+    assert calculation["source_sha256"] == result["sha256"]
+    assert calculation["input_version"] == result["version"]
+    for key in (
+        "inventory_fifo_contract",
+        "inventory_fifo_scope",
+        "inventory_fifo_document_binding",
+        "population_completeness",
+        "statutory_calculation_qualified",
+        "limitations",
+    ):
+        assert calculation["values"][key] == result["body"][key]
+    assert body["financial_tables"][1]["rows"] == result["body"]["rows"]
+    assert body["conclusion"].startswith("Draft only.")
     paged = await c.get(path + "?fifo_offset=20&fifo_limit=20", headers=h)
     assert paged.status_code == 200, paged.text
     assert len(paged.json()["body"]["fifo_allocations"]) == 5
@@ -190,3 +214,5 @@ async def test_fifo_review_complete_export_paging_and_original_support_staleness
     stale = (await c.get(path, headers=h)).json()
     assert stale["freshness"] == "STALE"
     assert stale["body"] == retained["body"] and stale["version"] == retained["version"]
+    stale_paper = await c.post(path + "/working-paper", headers=h, json=paper_input)
+    assert stale_paper.status_code == 409, stale_paper.text

@@ -1,0 +1,32 @@
+{
+  "scope": "FIFO draft paper source context and original-replacement freshness guards",
+  "source_files": [
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "sha256": "b43afc6e7de08684ba37a21d2107deff00ed35ee1c1eb11a5a89e22752838ae9"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_inventory_fifo.py",
+      "sha256": "d22d67f5c1723510edc0a3f1ac142a2d6319dec796fabba6c4245f9b79b17260"
+    },
+    {
+      "path": "docs/phase-12/inventory-paper-regression.xml",
+      "sha256": "f751b050176bb11a0d6531481e77d7bd63b883017722a6d0576aa92a6f9f6103"
+    }
+  ],
+  "verification": {
+    "backend_regression": {
+      "passed": 10,
+      "failed": 0,
+      "junit": "docs/phase-12/inventory-paper-regression.xml"
+    },
+    "fifo_variants": "UAE/India, each with per-row and shared retained cost support",
+    "ruff": "passed for changed backend files",
+    "mypy": "passed, 415 source files"
+  },
+  "limits": [
+    "Synthetic API evidence with scanner and broker doubled; no real-client qualification.",
+    "Full allocations, events, layers and controls remain in the immutable source and XLSX; draft papers retain source lineage and position rows.",
+    "Existing hosted FIFO evidence is source-specific; this commit requires its own hosted verification."
+  ]
+}

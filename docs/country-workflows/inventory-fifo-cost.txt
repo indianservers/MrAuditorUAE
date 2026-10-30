@@ -86,3 +86,11 @@ retained in docs/phase-12/inventory-fifo-browser-29c52fe.json. Earlier failures
 remain archived separately. This proof covers original per-row UAE support and
 the explicitly selected shared India packet, complete exports and unchanged
 stale history. It does not certify later stock/GP source changes or real clients.
+
+Generated draft working papers retain the FIFO contract, assessed movement
+period and retained-original verification status, with the source ID, hash and
+version. Position rows are copied into the source schedule. Complete allocations,
+events, layers and source controls remain in the linked immutable result and its
+XLSX export. Original support replacement blocks new paper generation from the
+stale result. Four API variants cover UAE/India and row-specific/shared packets;
+the combined inventory and existing workflow regression passed ten tests.
