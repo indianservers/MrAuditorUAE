@@ -9,9 +9,13 @@ bindings, immutable result, export and downstream freshness rules are reused.
 ## Country and period rules
 
 The [Income Tax Department's e-filing procedure](https://www.incometaxindia.gov.in/tax-services/process-annual-tax-statement-e-filing-form-26as-form-168)
-distinguishes Form 26AS through previous year 2025–26 / assessment year 2026–27
-from Form 168 starting in tax year 2026–27. Both can display `2026-27`, but the
-underlying periods differ. The schema requires the complete April–March period,
+distinguishes the declared statutory Form 26AS through previous year 2025–26 /
+assessment year 2026–27 from Form 168 starting in tax year 2026–27. The separate
+[TRACES procedure](https://www.incometaxindia.gov.in/tax-services/process-annual-tax-statement-traces-form-26as-form-168)
+still calls its modern portal statement Form 26AS while asking for a tax year.
+A printed portal label must therefore not be used to infer statutory-form
+equivalence. Historical AY and modern TY headers can both display `2026-27`,
+but their underlying periods differ. The schema requires the complete April–March period,
 the exact form, PAN, displayed year, explicit assessment-year/tax-year basis and
 snapshot generation date. A transaction or reporting month cannot postdate the
 snapshot. A snapshot may be generated during the underlying year; it does not
@@ -91,3 +95,34 @@ including separate AY/TY display cases. Production build, frontend type checks,
 scoped lint, Python typing across 393 application files and contract consistency
 checks passed. These counts overlap; this increment adds no claim of native
 statement browser verification or a completed independent client pilot.
+
+
+## Explicit modern TRACES portal-label declaration
+
+When retaining a modern TRACES statement without asserting a statutory form
+number, use `form: null`, `source_channel: "TRACES"` and the exact nonblank
+`portal_statement_label`. For example:
+
+```json
+{"form":null,"pan":"ABCDE1234F","period_start":"2026-04-01","period_end":"2027-03-31","displayed_year_basis":"TAX_YEAR","displayed_year":"2026-27","generated_on":"2026-06-30","source_channel":"TRACES","portal_statement_label":"Form 26AS"}
+```
+
+This is a complete declared header object, not a null `annual_statement` CSV
+cell. The statutory form remains unasserted. The label and channel are retained
+in reviewed sources, results and XLSX; the UI identifies a portal statement and
+shows its printed label. No equivalence with Form 168 or a historical Form 26AS
+population is inferred. Portal and statutory declarations cannot be mixed as
+amendment snapshots in one normalized source. All PAN, underlying-year,
+transaction-date, snapshot, role and independent-control checks still apply.
+
+Do not attach these portal-label fields to an asserted statutory form. Older
+statutory headers keep their original serialized shape: absent optional portal
+fields are not inserted as null metadata. Neither mode is a native TRACES/AIS
+export parser, a complete statement-population assessment, credit entitlement
+or portal authenticity verification.
+
+The naming distinction was reviewed against the two official procedures on
+30 October 2026. Official Form 168 guidance describes broader AIS information;
+that does not supply a complete TRACES export grammar. Direct local retrieval
+of that guidance PDF returned HTTP 403, so no new original-PDF checksum or full
+visual-format qualification is asserted by this increment.

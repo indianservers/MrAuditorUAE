@@ -12,13 +12,19 @@ CONTRACT = "india-annual-statement-scope/1"
 
 
 class AnnualTaxStatement(Strict):
-    form: Literal["26AS", "168"]
+    form: Literal["26AS", "168"] | None
     pan: str = Field(pattern=r"^[A-Z]{5}[0-9]{4}[A-Z]$")
     period_start: date
     period_end: date
     displayed_year_basis: Literal["ASSESSMENT_YEAR", "TAX_YEAR"]
     displayed_year: str = Field(pattern=r"^[0-9]{4}-[0-9]{2}$")
     generated_on: date
+    source_channel: Literal["TRACES"] | None = Field(
+        default=None, exclude_if=lambda value: value is None
+    )
+    portal_statement_label: str | None = Field(
+        default=None, min_length=1, max_length=200, exclude_if=lambda value: value is None
+    )
 
     @model_validator(mode="after")
     def form_and_year(self):
@@ -31,9 +37,20 @@ class AnnualTaxStatement(Strict):
         ):
             raise ValueError("Annual statement scope requires one complete April-March tax year")
         modern = start >= TRANSITION
-        if self.form != ("168" if modern else "26AS"):
+        if self.form is None:
+            if not modern or self.source_channel != "TRACES" or not self.portal_statement_label:
+                raise ValueError(
+                    "A modern TRACES portal statement requires its explicit channel and printed label without asserting a statutory form"
+                )
+            if self.portal_statement_label != self.portal_statement_label.strip():
+                raise ValueError("Retain an exact nonblank portal statement label")
+        elif self.source_channel is not None or self.portal_statement_label is not None:
             raise ValueError(
-                "Form 26AS ends with previous year 2025-26; Form 168 starts in 2026-27"
+                "Keep a TRACES portal-label declaration separate from an asserted statutory form"
+            )
+        elif self.form != ("168" if modern else "26AS"):
+            raise ValueError(
+                "Declared statutory form and underlying year disagree; a modern TRACES portal label needs the separate form-null declaration"
             )
         basis = "TAX_YEAR" if modern else "ASSESSMENT_YEAR"
         year = start.year if modern else start.year + 1

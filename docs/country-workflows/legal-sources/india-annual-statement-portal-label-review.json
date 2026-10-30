@@ -1,0 +1,25 @@
+{
+  "reviewed_on": "2026-10-30",
+  "finding": "Preserve portal statement naming separately from an asserted statutory form; do not infer equivalence from a title.",
+  "primary_sources": [
+    {
+      "url": "https://www.incometaxindia.gov.in/tax-services/process-annual-tax-statement-e-filing-form-26as-form-168",
+      "observed": "The e-filing procedure distinguishes historical Form 26AS assessment-year access from Form 168 tax-year access."
+    },
+    {
+      "url": "https://www.incometaxindia.gov.in/tax-services/process-annual-tax-statement-traces-form-26as-form-168",
+      "observed": "The TRACES procedure continues to use the Form 26AS annual-statement label for modern tax-year access."
+    },
+    {
+      "url": "https://www.incometaxindia.gov.in/documents/d/guest/fn-168",
+      "observed": "Indexed guidance describes Form 168 as AIS covering multiple information categories, not only beneficiary withholding observations.",
+      "access": "Web text readable; direct local retrieval HTTP 403. No original bytes or new visual-page qualification retained."
+    }
+  ],
+  "implementation": "An explicitly declared modern TRACES channel/printed label with form=null retains source identity without asserting statutory-form equivalence.",
+  "limitations": [
+    "These public descriptions are not a complete native portal export grammar.",
+    "No authenticated portal access, live schema qualification, statement completeness, legal interpretation or real-client pilot established.",
+    "Existing independently assessed statutory-form declarations remain supported separately."
+  ]
+}

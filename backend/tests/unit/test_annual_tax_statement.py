@@ -192,3 +192,60 @@ def test_indian_statement_scope_never_enables_another_country(country):
 def test_csv_does_not_drop_malformed_or_null_header_claims(value):
     with pytest.raises(ValueError):
         WithholdingRecord.model_validate(observation(annual_statement=value))
+
+
+def portal_header(**changes):
+    return header(form=None, source_channel="TRACES", portal_statement_label="Form 26AS", **changes)
+
+
+def test_modern_portal_label_does_not_assert_statutory_form_equivalence():
+    data = AnnualTaxStatement.model_validate(portal_header())
+    assert data.form is None and data.source_channel == "TRACES"
+    assert data.model_dump(mode="json") == portal_header()
+    for year in [2025, 2026]:
+        assert AnnualTaxStatement.model_validate(header(year)).model_dump(mode="json") == header(
+            year
+        )
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"source_channel": None},
+        {"portal_statement_label": None},
+        {"portal_statement_label": "  "},
+        {"portal_statement_label": " Form 26AS"},
+        {"source_channel": "UNKNOWN"},
+        {"displayed_year_basis": "ASSESSMENT_YEAR"},
+        {"form": "168"},
+        {"form": "26AS"},
+    ],
+)
+def test_portal_declaration_cannot_silently_supply_a_form_or_year_basis(changes):
+    value = portal_header()
+    value.update(changes)
+    with pytest.raises(ValueError):
+        AnnualTaxStatement.model_validate(value)
+
+
+def test_portal_declaration_is_not_backdated_to_a_legacy_assessment_year():
+    value = header(2025, form=None, source_channel="TRACES", portal_statement_label="Form 26AS")
+    with pytest.raises(ValueError):
+        AnnualTaxStatement.model_validate(value)
+
+
+def test_credit_comparison_retains_portal_label_and_no_statutory_form():
+    p = credit_population()
+    p["statement"][0]["annual_statement"] = json.dumps(portal_header())
+    out = run(p, "deductee")
+    assert out["rows"][0]["state"] == "MATCHED"
+    assert out["rows"][0]["annual_statement"] == portal_header()
+    assert out["annual_statement_scopes"] == [{"source_version": "1", **portal_header()}]
+    assert out["rows"][0]["credit_entitlement"] == "NOT_DETERMINED"
+
+
+def test_portal_and_statutory_headers_cannot_be_merged_as_equivalent_snapshots():
+    one = observation(annual_statement=portal_header())
+    two = observation(id="other-statement", source_version="2", annual_statement=header())
+    with pytest.raises(ValueError, match="one PAN, form and underlying year"):
+        validate_population({"statement": [one, two]})

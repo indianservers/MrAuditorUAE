@@ -14970,12 +14970,19 @@
           "additionalProperties": false,
           "properties": {
             "form": {
-              "enum": [
-                "26AS",
-                "168"
+              "anyOf": [
+                {
+                  "enum": [
+                    "26AS",
+                    "168"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
               ],
-              "title": "Form",
-              "type": "string"
+              "title": "Form"
             },
             "pan": {
               "pattern": "^[A-Z]{5}[0-9]{4}[A-Z]$",
@@ -15009,6 +15016,33 @@
               "format": "date",
               "title": "Generated On",
               "type": "string"
+            },
+            "source_channel": {
+              "anyOf": [
+                {
+                  "const": "TRACES",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Source Channel"
+            },
+            "portal_statement_label": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "default": null,
+              "title": "Portal Statement Label"
             }
           },
           "required": [

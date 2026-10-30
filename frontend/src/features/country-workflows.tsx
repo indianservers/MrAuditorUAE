@@ -475,7 +475,9 @@ type Result = {
     native_metadata?: Record<string, unknown>;
     annual_statement_scopes?: {
       source_version: string;
-      form: string;
+      form: string | null;
+      source_channel?: "TRACES";
+      portal_statement_label?: string;
       pan: string;
       period_start: string;
       period_end: string;
@@ -6245,8 +6247,11 @@ export function CountryWorkflows({
                 <ul>
                   {body.annual_statement_scopes.map((scope) => (
                     <li key={scope.source_version}>
-                      Form {scope.form} · PAN {scope.pan} · Underlying period{" "}
-                      {scope.period_start} to {scope.period_end} ·{" "}
+                      {scope.form === null
+                        ? `TRACES annual statement · Printed label: ${scope.portal_statement_label} · Statutory form not asserted`
+                        : `Form ${scope.form}`}{" "}
+                      · PAN {scope.pan} · Underlying period {scope.period_start}{" "}
+                      to {scope.period_end} ·{" "}
                       {scope.displayed_year_basis === "ASSESSMENT_YEAR"
                         ? "Assessment year"
                         : "Tax year"}{" "}

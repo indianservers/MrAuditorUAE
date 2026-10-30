@@ -1305,8 +1305,9 @@ describe("country workflows", () => {
       screen.getByRole("button", { name: "Independent approval" }),
     ).toBeDisabled();
   });
-  it.each(["26AS", "168"])("shows the correct displayed year basis for Form %s", (form) => {
+  it.each(["26AS", "168", "TRACES"])("shows the correct displayed year basis for statement profile %s", (form) => {
     const historical = form === "26AS";
+    const portal = form === "TRACES";
     state.result = {
       id: "result",
       kind: "country-workflow",
@@ -1320,7 +1321,8 @@ describe("country workflows", () => {
         annual_statement_scopes: [
           {
             source_version: "1",
-            form,
+            form: portal ? null : form,
+            ...(portal ? { source_channel: "TRACES", portal_statement_label: "Form 26AS" } : {}),
             pan: "ABCDE1234F",
             period_start: historical ? "2025-04-01" : "2026-04-01",
             period_end: historical ? "2026-03-31" : "2027-03-31",
@@ -1338,7 +1340,14 @@ describe("country workflows", () => {
     const scope = screen.getByRole("region", {
       name: "Declared annual tax statement scope",
     });
-    expect(scope).toHaveTextContent(`Form ${form}`);
+    if (portal) {
+      expect(scope).toHaveTextContent("TRACES annual statement");
+      expect(scope).toHaveTextContent("Printed label: Form 26AS");
+      expect(scope).toHaveTextContent("Statutory form not asserted");
+      expect(scope).not.toHaveTextContent("Form 168");
+    } else {
+      expect(scope).toHaveTextContent(`Form ${form}`);
+    }
     expect(scope).toHaveTextContent(
       `${historical ? "Assessment year" : "Tax year"} 2026-27`,
     );

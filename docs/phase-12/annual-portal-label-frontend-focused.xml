@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="127" failures="0" errors="0" time="25.445452">
+    <testsuite name="tests/country-workflows.test.tsx" timestamp="2026-10-30T04:49:59.092Z" hostname="DESKTOP-B3SR465" tests="127" failures="0" errors="0" skipped="0" time="25.445452">
+        <testcase classname="tests/country-workflows.test.tsx" name="requires current India payroll policy selection before approval or remittance (undefined)" time="0.2396216">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="requires current India payroll policy selection before approval or remittance (india-monthly-rule-intersections/1)" time="0.0697548">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="requires current India payroll policy selection before approval or remittance (india-monthly-rule-intersections/2)" time="0.0744206">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="offers establishment charge sources only for India (AE)" time="0.1288856">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="offers establishment charge sources only for India (IN)" time="0.1255064">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates establishment charge remittances and shows one establishment minimum (CURRENT/REVIEWED/false/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.1202315">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates establishment charge remittances and shows one establishment minimum (STALE/REVIEWED/false/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.1193433">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates establishment charge remittances and shows one establishment minimum (CURRENT/UNVERIFIED/false/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.1110025">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates establishment charge remittances and shows one establishment minimum (CURRENT/REVIEWED/true/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.1013171">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates establishment charge remittances and shows one establishment minimum (CURRENT/REVIEWED/false/NOT_VERIFIED)" time="0.100911">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="offers MOHRE savings source contracts only for UAE (AE)" time="0.1290025">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="offers MOHRE savings source contracts only for UAE (IN)" time="0.1099999">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="binds separate retained enrolment evidence and independent wage controls for savings sources" time="0.267984">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates savings expectations by current independent review and retained documents (CURRENT/REVIEWED/false/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.1031462">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates savings expectations by current independent review and retained documents (STALE/REVIEWED/false/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.0930816">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates savings expectations by current independent review and retained documents (CURRENT/UNVERIFIED/false/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.0975307">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates savings expectations by current independent review and retained documents (CURRENT/REVIEWED/true/RETAINED_DOCUMENT_BYTES_VERIFIED)" time="0.097686">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates savings expectations by current independent review and retained documents (CURRENT/REVIEWED/false/NOT_VERIFIED)" time="0.0986234">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="keeps savings fund and membership identity visible in compact bank allocations" time="0.095771">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates dated PF monthly-source preparation by freshness, independent review and contract (CURRENT/REVIEWED/false/india-payroll-basis-proration/1)" time="0.1075799">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates dated PF monthly-source preparation by freshness, independent review and contract (STALE/REVIEWED/false/india-payroll-basis-proration/1)" time="0.1206725">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates dated PF monthly-source preparation by freshness, independent review and contract (CURRENT/UNVERIFIED/false/india-payroll-basis-proration/1)" time="0.1128481">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates dated PF monthly-source preparation by freshness, independent review and contract (CURRENT/REVIEWED/true/india-payroll-basis-proration/1)" time="0.1103458">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="gates dated PF monthly-source preparation by freshness, independent review and contract (CURRENT/REVIEWED/false/old)" time="0.1127083">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows the selected workbook population and excluded scope before approval" time="0.1004949">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="retains the explicit worksheet and population assessment in a workbook source" time="0.2263209">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues separate requested and written-response controls with retained party documents" time="0.2868992">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues only reviewed positive-party sources with an explicit review window" time="0.2688072">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="retains independent purchase quantity controls separately from money controls" time="0.190667">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows an explicit salary eligibility exclusion alongside zero pension contributions" time="0.083575">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; offers every export format and actionable errors in AE" time="0.0967324">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; offers every export format and actionable errors in IN" time="0.1027062">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; opens a linked retained review even outside the first source-history page" time="0.1020183">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; keeps obligation, reported and bank amounts readable without changing retained provenance" time="0.1747977">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; requires explicit settlement choices and independently reviewed obligation sources" time="0.3922049">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows readable CAMT page controls and retains the complete page provenance" time="0.1015144">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; prepares only explicitly selected reviewed BRS book exceptions with independent controls" time="0.2972808">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; binds a selected retained assessment document when preparing withholding records" time="0.2061558">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; binds the selected retained quote while preparing an exchange rate source" time="0.1851179">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows unsupported assessment scope even when the numerical comparison matches" time="0.1001667">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows the correct displayed year basis for statement profile 26AS" time="0.0828086">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows the correct displayed year basis for statement profile 168" time="0.083611">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows the correct displayed year basis for statement profile TRACES" time="0.0769472">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; offers the gratuity bridge only for a reviewed current UAE result: AE CURRENT" time="0.0806022">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; offers the gratuity bridge only for a reviewed current UAE result: AE STALE" time="0.0745043">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; offers the gratuity bridge only for a reviewed current UAE result: IN CURRENT" time="0.0761499">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows employment service dates in the compact gratuity settlement comparison" time="0.1025986">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; renders withholding amounts as labelled values with readable differences" time="0.0886873">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; keeps liability and credit role choices separate and requires explicit assessment" time="0.1672782">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; keeps credit residual balances visible before expanding application provenance" time="0.1355766">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; requires a pre-application balance confirmation for credit applications" time="0.1850089">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows open-item balances first while retaining every provenance column" time="0.1323869">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; keeps recent job results accessible without expanding the entire history" time="0.1508339">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues reviewed open items with explicit payable sign and reporting-date scope" time="0.2883794">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues reviewed bank-table reuse with its original evidence and independent controls" time="0.2256568">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues the explicitly selected bank debit/credit convention" time="0.2804441">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; submits explicit original CSV headings and exclusions without changing values" time="0.312639">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues GSTR-2B with the recipient, return month and separate document control" time="0.2631571">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows pension amounts in AED with the authority and membership cohort" time="0.1339757">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues AED pension review using only independently reviewed sources" time="0.1971328">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; does not offer UAE pension review for an India engagement" time="0.0795193">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows payroll amounts first and reveals rule references on request" time="0.13049">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; binds payroll-rules imports to a selected clean retained document" time="0.1850361">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; binds pension-rules imports to a selected clean retained document" time="0.1932981">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; binds benefit-rules imports to a selected clean retained document" time="0.1864049">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; keeps derived expected dues out of the independent return role" time="0.0744824">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues original numbered GSTR-2B files with independent per-file controls" time="0.3824914">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues INR payroll calculations using only independently reviewed rule sources" time="0.262764">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; links only reviewed ESIC populations with explicit component coverage and reviewed sources" time="0.3547524">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; prepares ECR with declared establishment, wage month, members and amounts" time="0.2876983">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues an India invoice with explicit GSTIN, direction, month and component controls" time="0.2695732">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues a credit-normal payable GL control without a movement date" time="0.2468391">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues a committed account selection without asking for an exported copy" time="0.2322381">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; filters unavailable country workflows and wrong source types" time="0.0724362">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; offers native instructions only for the channel role, keeping independent schedules selectable" time="0.070817">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues the selected independent bank sources and exact balances" time="0.2957743">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues subsequent bank clearance with an explicit window and AED scope" time="0.2907255">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; queues subsequent bank clearance with an explicit window and INR scope" time="0.3097879">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; keeps quarantined evidence disabled and rejects malformed currency controls" time="0.1867361">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="country workflows &gt; shows missing evidence as a blocker and disables approval" time="0.0728064">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; submits an explicit selected-box scope rather than silently filtering a full return" time="0.2355762">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; pages excluded rows without changing the selected comparison rows" time="0.8491082">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; prepares selected boxes only from a current independently reviewed import result" time="0.379042">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; requires an explicitly entered zero row count rather than coercing a blank" time="0.3088869">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; does not offer an import bridge for unreviewed results" time="0.0773751">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; does not offer an import bridge for stale results" time="0.0839381">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; does not offer an import bridge for blocked results" time="0.0828868">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; requires separate source tax and taxable-base controls" time="0.2079043">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="UAE import VAT review &gt; does not offer a domestic UAE import review in India" time="0.0845358">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows VAT201 monetary differences first and preserves original provenance" time="0.1432241">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues the explicit WPS EVP profile with separate employee and component controls" time="0.2781761">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="submits independently declared inventory partition controls with the retained CSV" time="0.2439401">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="uses only reviewed quantity-controlled inventory sources in bidirectional mode" time="0.2763696">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues the separate arrear profile with retained context and six independent controls" time="0.398924">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="keeps regular payments out of an explicitly arrear-only comparison" time="0.2403761">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="reviewed bank residual carry-forward &gt; requires independent directional controls before carrying the full residual population" time="0.1256707">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="reviewed bank residual carry-forward &gt; hides carry-forward for UNVERIFIED / CURRENT" time="0.0875946">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="reviewed bank residual carry-forward &gt; hides carry-forward for REVIEWED / STALE" time="0.0821546">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="prepares native ESIC XLS with separate employer/month context and independent controls" time="0.3832301">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues retained inventory valuation documents with separate extended cost and NRV controls" time="0.2538048">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="requires explicit recorded GL basis and inventory review scope" time="0.2711748">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues independently controlled ESIC wage populations without contribution inference" time="0.2793786">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="payroll accounting bridge &gt; queues a scoped accounting window with reviewed sources for AE" time="0.26436">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="payroll accounting bridge &gt; queues a scoped accounting window with reviewed sources for IN" time="0.2633424">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="payroll accounting bridge &gt; pages individual posting links independently of the comparison rows" time="0.6955572">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="requires all twenty explicit VAT201 boxes after selecting the emirate layout" time="0.2045847">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="compares invoice evidence with an independent register without offering it as filed return evidence" time="0.2519032">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="keeps native invoice JSON out of the India GST return selector" time="0.0819312">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues GSTR-1 summary metrics with separate independent controls and no mixed currency total" time="0.3048415">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows original summary metrics and count units without inventing liability totals" time="0.1302192">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues outward invoice sections with distinct request context and independent section controls" time="0.410335">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="keeps inward GSTR-2B and outward GSTR-1 native responses in their own workflow return pickers" time="0.1048801">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows the bank date blocker and avoids an inverted range on an empty exception schedule" time="0.0956933">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="requires scoped owner evidence and only offers independently reviewed account sources" time="0.4081879">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="links only current reviewed account evidence with an explicit financial scope assessment" time="0.3777932">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues document-series counts independently from money with separately retained scope context" time="0.369312">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows document counts and missing ranges as labelled values without currency tolerance" time="0.1273515">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues expense cutoff with explicit reviewed recognition and posting sources" time="0.2597802">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="queues independently controlled inventory response quantities with retained correspondence" time="0.2146932">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows independent VAT201 summary errors even when box comparisons match" time="0.0920612">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="pages all retained turnover adjustments independently of registration rows" time="0.7095644">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="retains independent signed monetary controls when preparing turnover amounts" time="0.1908312">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="uploads merchant-reserve-movements with distinct controls and no mixed generic total" time="0.2773685">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="uploads merchant-reserve-balances with distinct controls and no mixed generic total" time="0.2763832">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="uploads dated benefit exclusions with independent day/count controls and clears them when changing source type" time="0.2795542">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="shows exact eligible days in compact benefits while preserving full service-year precision in provenance" time="0.1462488">
+        </testcase>
+        <testcase classname="tests/country-workflows.test.tsx" name="requires explicit complete account coverage dates without changing the reporting cutoff" time="0.4438155">
+        </testcase>
+    </testsuite>
+</testsuites>

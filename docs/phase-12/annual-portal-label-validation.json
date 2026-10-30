@@ -1,0 +1,112 @@
+{
+  "feature": "Retain a declared modern TRACES portal label separately from an asserted statutory-form number.",
+  "status": "LOCALLY_VERIFIED_HOSTED_PENDING",
+  "source_review": "docs/country-workflows/legal-sources/india-annual-statement-portal-label-review.json",
+  "source_hash_basis": "Exact staged Git blob bytes; checkout line endings may differ.",
+  "sources": [
+    {
+      "path": "backend/app/modules/country_workflows/annual_tax_statement.py",
+      "sha256": "f83bd9c9f71d2bff8e3d66587a9ae2798a14de78edd76e5d6781a4359993d1ab"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_withholding_workflows.py",
+      "sha256": "7c6024fed2afba8d04fad8be720ed3920070e27fe40ca0ff8b755bd52f05a8d6"
+    },
+    {
+      "path": "backend/tests/unit/test_annual_tax_statement.py",
+      "sha256": "b040ccfc68f61d39284fcb2ea9cb6953efb74da16cb3ab40267e0256e09d427b"
+    },
+    {
+      "path": "docs/country-workflows/annual-tax-statements.md",
+      "sha256": "53bf831652e5540200114a0a8a71713fb6f597148c51bdea536adbd788f14751"
+    },
+    {
+      "path": "docs/country-workflows/job-input-contracts.json",
+      "sha256": "604964af47426a6e580c2c2c31e1b86c99b5717f36a3bcd055f4afde6520bd31"
+    },
+    {
+      "path": "docs/country-workflows/legal-sources/india-annual-statement-portal-label-review.json",
+      "sha256": "182e0c9c49c892a1ba9896ba71985c204fa541bb52ca83c7d3ce58eb41952b5c"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "221e43ecb2208f1ddf995c1e7bbac2eedd6cc5c02e20e27cb06a956b9f30136f"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "07bc0a7268c5e55bd008d3264b70c2785c209c792b24e5076a889d76a71c8589"
+    }
+  ],
+  "receipts": [
+    {
+      "path": "docs/phase-12/annual-portal-label-focused.xml",
+      "sha256": "360e851028d7ebb22752cc22ae41606d194a0c14d4fa035ec353f0859875850d",
+      "tests": 62,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/annual-portal-label-regression.xml",
+      "sha256": "32a33ded017e069cb9aadfed45a107b21c238ccc414fde935fcb268537407928",
+      "tests": 3727,
+      "failures": 1,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "path": "docs/phase-12/annual-portal-label-regression-final.xml",
+      "sha256": "5c18ed8090fb3a340efb0e34f3981f2dc7d10200312bbbde3b2d8787f8d6c40a",
+      "tests": 3727,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 4
+    },
+    {
+      "path": "docs/phase-12/annual-portal-label-frontend-focused.xml",
+      "sha256": "ccc7f9e8869600f4284fc31f5a2200af37dc6fb09e61c7393aea01d7710e79af",
+      "tests": 127,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/annual-portal-label-frontend.xml",
+      "sha256": "b15eaa9df7a3d5d9ae5e1569d826641b24982f74e500a41b6bc44ff73578e2f9",
+      "tests": 399,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "final_checks": {
+    "backend_passed": 3723,
+    "backend_skipped": 4,
+    "frontend_passed": 399,
+    "frontend_files": 75,
+    "mypy_app_files": 413,
+    "ruff_check_and_format": "PASS",
+    "frontend_typecheck": "PASS",
+    "frontend_lint": "PASS_WITH_EXISTING_UNUSED_VARIABLE_WARNING",
+    "job_input_contract": "REGENERATED_AND_CHECKED",
+    "openapi_and_frontend_api_types": "UNCHANGED_AND_CHECKED",
+    "production_build": "PASS"
+  },
+  "verified_behavior": [
+    "Explicit form=null plus source_channel=TRACES and a nonblank exact printed label is accepted only for a modern tax-year statement declaration.",
+    "A portal label is not combined with an asserted statutory-form number or a historical AY declaration.",
+    "Absent optional portal fields are omitted from serialized legacy headers; old Form 26AS and Form 168 header shapes remain unchanged.",
+    "Statutory and portal profiles cannot be merged as equivalent source-version snapshots.",
+    "PAN, period, snapshot, legal role and source-role checks are reused; credit entitlement remains NOT_DETERMINED.",
+    "Actual persisted synthetic collectee sources follow independent review, controlled comparison, XLSX export, working-paper creation and source-currentness controls with the portal label retained.",
+    "Frontend shows TRACES and the printed label with statutory form unasserted; it does not display Form 168 for that declaration."
+  ],
+  "initial_failure": "The first broad run retained one stale job-input contract snapshot failure, with 3722 passed and 4 skipped. Regenerated the contract; the final broad run passed 3723 with 4 skipped.",
+  "limitations": [
+    "Counts overlap; fixtures and reviewed actors are synthetic, not independent real-client qualification.",
+    "Public portal descriptions are not a complete native export grammar. No native TRACES/Form 168 parser, authenticated portal access or external filing is introduced.",
+    "No statutory equivalence or complete legal/credit eligibility conclusion is inferred from the printed label.",
+    "Direct local retrieval of the Form 168 guidance PDF returned HTTP 403; no new original-PDF bytes/checksum or visual-format qualification is claimed.",
+    "Four isolated connector database checks remain skipped in the selected broad run; full hosted new-source verification is pending."
+  ]
+}
