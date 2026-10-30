@@ -47255,6 +47255,23 @@
             }
           },
           {
+            "name": "record_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Record Id"
+            }
+          },
+          {
             "name": "x-tenant-id",
             "in": "header",
             "required": true,

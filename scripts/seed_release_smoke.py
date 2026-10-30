@@ -58,6 +58,8 @@ async def main():
         identities = {
             "synthetic_only": True,
             "tenant_id": str(membership.tenant_id),
+            "preparer_user_id": str(owner.id),
+            "reviewer_user_id": str(reviewer.id),
             "reviewer_membership_id": str(reviewer_membership.id),
             "reviewer_role_id": str(role.id),
         }

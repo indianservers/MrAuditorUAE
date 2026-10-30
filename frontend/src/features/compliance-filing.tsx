@@ -5,6 +5,15 @@ import { useAction } from "@/hooks/use-api";
 import { Button, ErrorState } from "@/components/ui/primitives";
 import type { Paper } from "./grc-forms";
 
+export type FilingVerification =
+  | { state: "pending" | "unavailable" }
+  | {
+      state: "known";
+      freshness: string;
+      calendar_state: string;
+      reassessment_required: boolean;
+    };
+
 const stages = [
   "not_started",
   "preparing",
@@ -19,11 +28,13 @@ export function ComplianceFiling({
   paper,
   canManage = true,
   canApprove = true,
+  verification,
 }: {
   base: string;
   paper: Paper;
   canManage?: boolean;
   canApprove?: boolean;
+  verification?: FilingVerification;
 }) {
   const current = String(paper.body.filing_stage || "not_started");
   const next = stages[Math.min(stages.indexOf(current) + 1, stages.length - 1)];
@@ -32,6 +43,11 @@ export function ComplianceFiling({
   const action = useAction();
   const receiptRequired = stage === "submitted" || stage === "acknowledged";
   const locked = paper.status === "LOCKED";
+  const verificationBlocked =
+    verification &&
+    (verification.state !== "known" ||
+      verification.freshness !== "CURRENT" ||
+      verification.reassessment_required);
   const countryScope =
     paper.body.jurisdiction_scope &&
     typeof paper.body.jurisdiction_scope === "object" &&
@@ -137,6 +153,23 @@ export function ComplianceFiling({
             : "A user with filing management permission must record this stage."}
         </p>
       )}
+      {verification?.state === "pending" && (
+        <p role="status">Checking current obligation sources…</p>
+      )}
+      {verification?.state === "unavailable" && (
+        <p role="status">
+          Current obligation sources could not be verified. Reload the record
+          before recording a filing stage.
+        </p>
+      )}
+      {verification?.state === "known" && (
+        <p role="status">
+          Source freshness: {verification.freshness} · Calendar:{" "}
+          {verification.calendar_state.replaceAll("_", " ")}.
+          {verificationBlocked &&
+            " Reassessment required before recording a filing stage."}
+        </p>
+      )}
       <label>
         Next filing stage
         <select
@@ -171,6 +204,7 @@ export function ComplianceFiling({
         disabled={
           action.isPending ||
           locked ||
+          Boolean(verificationBlocked) ||
           Boolean(scopePending) ||
           periodMissing ||
           !permitted ||

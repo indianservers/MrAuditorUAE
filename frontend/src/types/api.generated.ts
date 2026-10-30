@@ -42386,7 +42386,9 @@ export interface operations {
     };
     compliance_calendar_api_v1_grc_engagements__eid__compliance_calendar_get: {
         parameters: {
-            query?: never;
+            query?: {
+                record_id?: string | null;
+            };
             header: {
                 "x-tenant-id": string;
             };

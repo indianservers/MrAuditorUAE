@@ -12,7 +12,7 @@ import {
 import type { Engagement, Page, RecordRow } from "@/types/models";
 import { PageHeader } from "./shared";
 import { PaperEditor, label, type Paper, type Schema } from "./grc-forms";
-import { ComplianceFiling } from "./compliance-filing";
+import { ComplianceFiling, type FilingVerification } from "./compliance-filing";
 import { SoDCalculation, SoDInputAssignments } from "./sod-results";
 
 export const grcAreas = [
@@ -170,6 +170,18 @@ function Panel({
     `${base}/records/${kind}?limit=50&offset=${page * 50}&search=${encodeURIComponent(filter)}`,
     !!kind && !!workspace.data,
   );
+  const calendar = useAPI<{
+    items: {
+      record_id: string;
+      version: number;
+      freshness: string;
+      calendar_state: string;
+      reassessment_required: boolean;
+    }[];
+  }>(
+    `${base}/compliance-calendar?record_id=${selected?.id || ""}`,
+    area === "obligations" && !!selected && !!workspace.data,
+  );
   const action = useAction();
   const [reason, setReason] = useState("");
   const permissions = workspace.data?.permissions || [];
@@ -186,6 +198,28 @@ function Panel({
   const detail = selected
     ? rows.find((x) => x.id === selected.id) || selected
     : undefined;
+  const checked = calendar.data?.items.find(
+    (item) => item.record_id === detail?.id && item.version === detail?.version,
+  );
+  const filingVerification: FilingVerification = calendar.error
+    ? { state: "unavailable" }
+    : calendar.isFetching
+      ? { state: "pending" }
+      : checked
+        ? {
+            state: "known",
+            freshness: checked.freshness,
+            calendar_state: checked.calendar_state,
+            reassessment_required: checked.reassessment_required,
+          }
+        : {
+            state: calendar.data ? "unavailable" : "pending",
+          };
+  const obligationReviewBlocked =
+    area === "obligations" &&
+    (filingVerification.state !== "known" ||
+      filingVerification.freshness !== "CURRENT" ||
+      filingVerification.reassessment_required);
   const switchKind = (value: string) => {
     setKind(value);
     setSelected(undefined);
@@ -324,7 +358,15 @@ function Panel({
           {area === "remediation" && (
             <ActionLanes rows={rows} onSelect={setSelected} />
           )}
-          {area === "obligations" && <Calendar rows={rows} />}
+          {area === "obligations" && (
+            <>
+              <p>
+                Calendar entries show the saved filing stage. Open an obligation
+                for its current source status.
+              </p>
+              <Calendar rows={rows} />
+            </>
+          )}
           {area === "third-parties" && <VendorReview rows={rows} />}
           <div
             className={
@@ -396,6 +438,7 @@ function Panel({
                       paper={detail}
                       canManage={permissions.includes("compliance.manage")}
                       canApprove={permissions.includes("compliance.approve")}
+                      verification={filingVerification}
                     />
                   )}
                 {area === "engagement" && (
@@ -495,7 +538,9 @@ function Panel({
                     )}
                   {detail.status === "REVIEW_REQUIRED" && canReview && (
                     <Button
-                      disabled={!reason || action.isPending}
+                      disabled={
+                        !reason || action.isPending || obligationReviewBlocked
+                      }
                       onClick={() =>
                         action.mutate({
                           path: `${base}/records/${detail.id}/actions`,

@@ -54,7 +54,9 @@ async def filing_stage(
 
 
 @router.get("/engagements/{eid}/compliance-calendar")
-async def compliance_calendar(eid: uuid.UUID, db: DB, ctx: Actor):
+async def compliance_calendar(
+    eid: uuid.UUID, db: DB, ctx: Actor, record_id: uuid.UUID | None = None
+):
     from app.modules.grc.deadlines import local_today, missing_obligation_period, state
     from app.modules.lineage.working_papers import freshness
 
@@ -66,6 +68,7 @@ async def compliance_calendar(eid: uuid.UUID, db: DB, ctx: Actor):
                 AuditRecord.tenant_id == ctx.tenant_id,
                 AuditRecord.engagement_id == eid,
                 AuditRecord.kind == "grc-obligation",
+                *([AuditRecord.id == record_id] if record_id is not None else []),
             )
             .order_by(AuditRecord.created_at.desc(), AuditRecord.id)
             .limit(200)

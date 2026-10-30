@@ -1,0 +1,118 @@
+{
+  "feature": "Current source verification for selected obligation records and a new hosted cross-border browser regression.",
+  "source_hash_basis": "Exact staged Git blob bytes; checkout line endings may differ.",
+  "sources": [
+    {
+      "path": "backend/app/api/v1/grc.py",
+      "sha256": "fe334bcaf534326ea287e695d421fc87fa2e19dc16cf2cb5efff5f296a04c029"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_obligation_jurisdiction.py",
+      "sha256": "fe83d424abff368823dc274dc86af9f2ce6d4c91057ac44e2e3939ebbcc8d55c"
+    },
+    {
+      "path": "docs/phase-12/openapi.json",
+      "sha256": "2c94f0231f7e1c968befff2f07086d6d3a760a0d9034ada2fe5f8c3e61c2b1a7"
+    },
+    {
+      "path": "frontend/src/types/api.generated.ts",
+      "sha256": "908e1d3f0907ec633f0ec679c4bebad4bcf7af2a08a9c0c3b7b9709237de49c5"
+    },
+    {
+      "path": "frontend/src/features/compliance-filing.tsx",
+      "sha256": "12e030196d5c4e8e22f76ea7dda5eabe050781669bd412d3f9823f989e0da480"
+    },
+    {
+      "path": "frontend/src/features/grc-studio.tsx",
+      "sha256": "1e01111b0611abeac81a25822507df8a534031f4b0b40744e53046b5d3b1a581"
+    },
+    {
+      "path": "frontend/tests/grc-filing-freshness.test.tsx",
+      "sha256": "7b4c7a9b509d32f2b830c1191b677818db1231a317d5d682442ee3cd903af948"
+    },
+    {
+      "path": "frontend/e2e/foreign-obligation-release.spec.ts",
+      "sha256": "78813093df0d88341a91fd623e135b9d9430fbd45e2992f3a9fcb6c17368e172"
+    },
+    {
+      "path": "frontend/playwright.smoke.config.ts",
+      "sha256": "40f49a2cca24f82529d6559acc3777b4e4d269f0d909d9d9f2d129c7aae9fb29"
+    },
+    {
+      "path": "scripts/seed_release_smoke.py",
+      "sha256": "051d06f8f49d09fb0ba905556c67510f310ef2d722bdd194b770448aca80cf6e"
+    },
+    {
+      "path": "docs/country-workflows/obligation-jurisdiction-scope.txt",
+      "sha256": "7a440e9e7a66dc3df32bb75162ca8b5568056a47f974b3083d532557fd7bf9b4"
+    }
+  ],
+  "receipts": [
+    {
+      "path": "docs/phase-12/obligation-freshness-api.xml",
+      "sha256": "785daa35d512ce69638a2776fffb914e02b7909d1ff143e412bf98e4328fa5e8",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/obligation-freshness-regression.xml",
+      "sha256": "238cb0267688e5cc97629b7706414259bfbe445b63f32d287629e8f624d173e8",
+      "tests": 9,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/obligation-freshness-bounded-api.xml",
+      "sha256": "d3b86845e10d4402b1b2b471ecb318b20debdad8acefb9707b4b7b389b25ecea",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/obligation-freshness-frontend.xml",
+      "sha256": "2370c1f1d48d5964836a790789b61e000727e8a0fb94adef9b58267ca6b9e612",
+      "tests": 398,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "checks": {
+    "frontend_tests_passed": 398,
+    "frontend_test_files": 75,
+    "targeted_grc_api_regression_passed": 9,
+    "bounded_extension_passed": 1,
+    "mypy_app_files": 413,
+    "ruff_check_and_format": "PASS",
+    "frontend_typecheck": "PASS",
+    "frontend_lint": "PASS_WITH_EXISTING_UNUSED_VARIABLE_WARNING",
+    "api_and_job_contracts": "PASS_REGENERATED_OPENAPI",
+    "frontend_api_types": "PASS_REGENERATED_AND_CHECKED",
+    "production_build": "PASS",
+    "new_browser_case": "DISCOVERED_NOT_YET_EXECUTED"
+  },
+  "verified_behavior": [
+    "Selected record ID and version must match the currentness projection before filing actions are enabled.",
+    "Loading, errors, wrong IDs/versions, stale sources and reassessment flags block filing; cached CURRENT data is not reused during a refresh or failed request.",
+    "The actual GRC parent component passes currentness into filing controls and disables independent obligation review for stale/unverified sources.",
+    "The optional calendar record_id filter remains tenant/engagement/permission scoped and precedes the 200-record bound.",
+    "Actual API fixture adds 201 newer unreviewed synthetic draft rows; the older target is absent from the bounded list but its filtered lookup returns the correct stale state.",
+    "No input/result body is rewritten merely to display currentness."
+  ],
+  "new_browser_intent": [
+    "Real login and BFF requests with configured ClamAV-scanned synthetic rule/fact/readiness evidence.",
+    "AE entity/Dec year and assessed IN obligation/March period; pending applicability, generic form revision, rejected self-review, independent UI review and filing-stage approval.",
+    "Source withdrawal, exact retained body/version and stale UI with a disabled return-to-preparing action.",
+    "Three original screenshots are captured only when the hosted case actually executes."
+  ],
+  "limitations": [
+    "The new browser case is only discovered locally; hosted execution and screenshots remain pending.",
+    "API regression and bounded extension overlap and do not represent ten distinct clients; 201 load rows are not real-world use cases.",
+    "Synthetic data and actors; no real-client/legal qualification, foreign native calculation or external filing.",
+    "The selected local API run is not the full hosted backend suite."
+  ]
+}

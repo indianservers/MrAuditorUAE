@@ -29,3 +29,9 @@ A country-scoped deadline rule with date_basis=period_end requires these explici
 Historical obligations without structured country scope retain their original engagement-period deadline basis. No foreign period is invented for them. Existing approved obligation periods cannot be changed while retaining the approved filing stage; return to preparing for reassessment.
 
 An assessed-applicable historical structured country scope with a period-end rule but no explicit obligation period is projected as PERIOD_SCOPE_PENDING with reassessment required. Filing reminders and stage actions remain unavailable until the explicit period is recorded through a reviewed revision. The saved historical body is not rewritten. This does not change the original engagement basis of historical unstructured obligations.
+
+Selected-record source verification
+
+The obligation detail panel requests the current compliance-calendar projection for its exact record ID and version. Loading, failed checks, mismatched versions, stale sources and reassessment states disable filing-stage recording; stale or unverified obligations also cannot be approved through the GRC screen. Cached CURRENT results are not reused while a refresh is running or has failed. Backend authorization and currentness checks still enforce every action.
+
+The calendar list remains bounded to 200 records. Its optional record_id filter is applied before that bound, so an explicitly selected older obligation can still be checked. Calendar summaries retain saved filing stages; opening a record adds the current source status. None of these source checks constitutes a legal applicability opinion or an external filing.

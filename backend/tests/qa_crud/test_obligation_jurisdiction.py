@@ -141,6 +141,10 @@ async def test_uae_entity_retains_explicit_indian_obligation_without_switching_c
     assert calendar["items"][0]["obligation_period_start"] == "2025-04-01"
     assert calendar["items"][0]["obligation_period_end"] == "2026-03-31"
     assert calendar["items"][0]["deadline"] == "2026-04-07"
+    filtered = await c.get(base + f"/compliance-calendar?record_id={obj['id']}", headers=h)
+    assert filtered.status_code == 200 and filtered.json()["items"] == calendar["items"]
+    absent = await c.get(base + f"/compliance-calendar?record_id={UUID(int=0)}", headers=h)
+    assert absent.status_code == 200 and absent.json()["items"] == []
     assert await engagement_period_end() == "2026-12-31"
     reminders = await c.post(base + "/compliance-reminders", headers=h)
     assert reminders.status_code == 200 and reminders.json()["recorded"] == 0
@@ -215,3 +219,45 @@ async def test_uae_entity_retains_explicit_indian_obligation_without_switching_c
         calendar["items"][0]["freshness"] == "STALE"
         and calendar["items"][0]["reassessment_required"] is True
     )
+
+    # Explicit load fixtures: unreviewed synthetic drafts, not additional client cases.
+    from app.modules.audit_execution.models import AuditRecord
+    from app.modules.grc.schemas import Obligation
+
+    draft = Obligation.model_validate(
+        {
+            "owner_id": body["owner_id"],
+            "entity_id": opts["entity_id"],
+            "module": "policy",
+            "source_url": "https://synthetic.invalid/load-fixture",
+            "jurisdiction": "SYNTHETIC",
+            "effective_from": "2026-01-01",
+            "required_evidence": "Synthetic unreviewed load fixture only",
+            "compliance_assessment": "not_assessed",
+        }
+    ).model_dump(mode="json")
+    async with Session() as db, db.begin():
+        await tenant_context(db, h["X-Tenant-ID"])
+        db.add_all(
+            [
+                AuditRecord(
+                    tenant_id=UUID(h["X-Tenant-ID"]),
+                    engagement_id=UUID(eid),
+                    created_by=UUID(body["owner_id"]),
+                    prepared_by=UUID(body["owner_id"]),
+                    kind="grc-obligation",
+                    reference=f"SYNTHETIC-LOAD-{index}",
+                    title="Synthetic unreviewed draft",
+                    body=draft,
+                )
+                for index in range(201)
+            ]
+        )
+    bounded = (await c.get(base + "/compliance-calendar", headers=h)).json()
+    assert len(bounded["items"]) == 200
+    assert not any(item["record_id"] == obj["id"] for item in bounded["items"])
+    filtered = await c.get(base + f"/compliance-calendar?record_id={obj['id']}", headers=h)
+    assert filtered.status_code == 200, filtered.text
+    assert len(filtered.json()["items"]) == 1
+    assert filtered.json()["items"][0]["record_id"] == obj["id"]
+    assert filtered.json()["items"][0]["freshness"] == "STALE"

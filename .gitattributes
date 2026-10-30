@@ -96,3 +96,4 @@ docs/phase-12/filing-receipts-regression.xml -text whitespace=cr-at-eol
 docs/phase-12/filing-controls-frontend.xml -text whitespace=cr-at-eol
 docs/phase-12/obligation-jurisdiction-*.xml -text whitespace=cr-at-eol
 docs/phase-12/obligation-period-*.xml -text whitespace=cr-at-eol
+docs/phase-12/obligation-freshness-*.xml -text whitespace=cr-at-eol
