@@ -98,3 +98,5 @@ clips the header or action footer in these element captures. The unchanged
 originals and explicit visual limits are in
 docs/phase-12/later-of-trace-browser-0b1d27d.json. The new month-end fixture adds
 separate summary, candidate and action captures; its execution remains pending.
+
+The complete backend verification for trace/card source 0b1d27d subsequently passed: 5,230 tests, nine skips and 86.96% displayed overall coverage. All six jobs for that exact source passed. Exact original full JUnit/coverage and the source-specific receipt are archived as docs/phase-12/later-of-trace-hosted-full-0b1d27d.json. This proof predates month-end preservation, bounded rolling calendars and the ADGM profiles.

@@ -1,0 +1,33 @@
+{
+  "source_commit": "1a25dcde4a256fcb80f2032f75f5125b34646921",
+  "run_id": 41129296629,
+  "job_id": 124315806700,
+  "step": "Verify exact authority originals with the real scanner",
+  "step_status": "completed",
+  "step_conclusion": "success",
+  "started_at": "2026-10-30T21:14:43Z",
+  "completed_at": "2026-10-30T21:15:10Z",
+  "elapsed_step_seconds": 27,
+  "evidence_basis": "GitHub job-step metadata plus source inspection: this exact script returns success only after all four expected original hashes match and every scan returns CLEAN.",
+  "expected_originals": 4,
+  "all_original_hashes_and_clean_verdicts_passed": true,
+  "source_files": [
+    {
+      "path": "scripts/verify_authority_scans.py",
+      "sha256": "45acddefb788a8cab58668a0eef5c9a1dafac894a9deec1938cd1e1e90682c42"
+    },
+    {
+      "path": "backend/app/modules/audit_execution/evidence.py",
+      "sha256": "069dfadb36f68782aa75fbeaf5db99d0bae20d3f22214595cc2c29f172798d75"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "sha256": "5971ad2617bef173ce4422354ab2c2cd8cd3687a835b2f04c574e81e2f0e0d7d"
+    }
+  ],
+  "limits": [
+    "Individual scan timings and the original authority-scan-evidence JSON artifact were not yet available when this step receipt was recorded.",
+    "This is the scanner preflight only. Actual application uploads, expanded v2 browser completion, successful visual review and full backend proof remain separate gates.",
+    "The earlier QUARANTINED verdict did not emit a reason; a timeout explanation remains an inference rather than a recovered old diagnostic."
+  ]
+}

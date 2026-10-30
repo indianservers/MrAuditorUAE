@@ -1,0 +1,41 @@
+{
+  "source_commit": "0b1d27da499fc9278c5f2a0b00252bc711fddb3e",
+  "run_id": 41114452476,
+  "job_id": 124264903612,
+  "conclusion": "success",
+  "passed": 5230,
+  "skipped": 9,
+  "failed": 0,
+  "overall_coverage_percent": 86.95641791044775,
+  "duration_seconds": 3512.75,
+  "artifact": {
+    "id": 13008618647,
+    "size_bytes": 247402,
+    "sha256": "9c7bd463b2ac3a477bad30b84edb08676dd686c287d6c3f36ef0dd04be932c33"
+  },
+  "original_reports": [
+    {
+      "path": "docs/phase-12/0b1d27d-hosted-full.xml",
+      "size_bytes": 814736,
+      "sha256": "129712b6ace5e34d490c66c49b874947a7a7f1372e922c156577adf88a22ad22"
+    },
+    {
+      "path": "docs/phase-12/0b1d27d-hosted-coverage.json",
+      "size_bytes": 1876537,
+      "sha256": "10ff4eb1ecc0ae6d3d81160eb7e696e0bb562fda1aa90bc03f77319ee458210b"
+    }
+  ],
+  "jobs": {
+    "verify": "success",
+    "frontend": "success",
+    "browser-smoke": "success",
+    "security": "success",
+    "containers": "success",
+    "ml": "success"
+  },
+  "limits": [
+    "This source includes server comparison traces/cards but predates month-end policy, rolling calendars, ADGM timetables and v2 filing-duty conditions. Their current proof remains separate.",
+    "Nine skipped tests remain skipped. Synthetic source-specific CI is not client, legal or production qualification.",
+    "Original browser captures for this source have their separately documented viewport clipping limitations."
+  ]
+}
