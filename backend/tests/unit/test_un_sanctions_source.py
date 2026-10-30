@@ -2,6 +2,7 @@
 
 import hashlib
 import uuid
+from pathlib import Path
 
 import pytest
 
@@ -49,6 +50,14 @@ def options(**changes):
             **changes,
         }
     )
+
+
+def test_browser_sample_preserves_the_exact_synthetic_population():
+    sample = (
+        Path(__file__).resolve().parents[3]
+        / "docs/country-workflows/sample-inputs/SYNTHETIC-un-consolidated.xml"
+    )
+    assert sample.read_bytes() == XML
 
 
 @pytest.mark.parametrize("country", ["AE", "IN", "GB"])

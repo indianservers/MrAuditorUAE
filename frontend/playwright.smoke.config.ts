@@ -9,6 +9,7 @@ export default defineConfig({
     "foreign-obligation-release.spec.ts",
     "inventory-fifo-release.spec.ts",
     "inventory-performance-release.spec.ts",
+    "un-sanctions-release.spec.ts",
   ],
   workers: 1,
   reporter: "list",

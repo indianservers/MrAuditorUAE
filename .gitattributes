@@ -140,3 +140,5 @@ docs/country-workflows/authority-references/un-consolidated-2026-10-30.xml -text
 docs/phase-12/un-sanctions-focused.xml -text whitespace=cr-at-eol
 docs/phase-12/un-sanctions-ui-final.xml -text whitespace=cr-at-eol
 docs/phase-12/un-sanctions-frontend-full.xml -text whitespace=cr-at-eol
+
+docs/phase-12/un-browser-sample.xml -text whitespace=cr-at-eol

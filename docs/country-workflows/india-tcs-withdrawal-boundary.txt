@@ -57,3 +57,12 @@ collector. Calculation, review-blocking and unchanged-history assertions
 remain intact. Corrected hosted execution is still required; the failed
 captures do not establish TCS result UI proof. See the source-specific
 withholding-browser-failed-0bd9c0b.json receipt.
+
+Hosted correction source da1151a: all nine browser cases passed in 7.2 minutes,
+including the India case in 2.0 minutes. The original TCS capture is retained
+and visually inspected: all four amounts are 100 and comparison is MATCHED,
+but the named cutoff, corrective scope reason and withdrawn liability state
+remain visible and approval is disabled. The browser also asserts separate
+review HTTP 409 and unchanged saved body/version. Source-specific receipt:
+docs/phase-12/withholding-browser-da1151a.json. This proves the synthetic
+boundary UI, not complete native TCS returns, rate/threshold rules or client work.

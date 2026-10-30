@@ -1,0 +1,51 @@
+{
+  "scope": "Source-specific hosted India withdrawn TCS positive-expectation UI and rejection proof; not later UN browser proof",
+  "head_sha": "da1151a8f4b0dc827d94a6770855af2923503a9e",
+  "run_id": 41058680641,
+  "job_id": 124072585480,
+  "result": {
+    "passed": 9,
+    "failed": 0,
+    "minutes": 7.2,
+    "india_case_minutes": 2.0
+  },
+  "archive": {
+    "artifact_id": 12978731381,
+    "bytes": 13556289,
+    "sha256": "0201f7062b806b4747395bdfbd4e320b6c519f0dae6f459eea24e3f164913f35"
+  },
+  "tested_sources": [
+    {
+      "path": "frontend/e2e/withholding-boundary-browser-workflow.ts",
+      "sha256": "d7525f65f05a1613ff94f46ee8dd98d3f31694953b72f8e782ec5f8defd12679"
+    },
+    {
+      "path": "frontend/e2e/country-report-release.spec.ts",
+      "sha256": "d46f4941c46cdbe0171b5c46df296b501b7ff487536d82ffc79067727dba8fdd"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "eadb111baf96924423ba7e796cf6f8b82e7247f2c3639da8efb548fd0b3ab167"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/withholding_provisions.py",
+      "sha256": "2ae1bfe3a143adf5c864f018d7f39dee64b9784c571a4ee908a21ec00ebccf49"
+    }
+  ],
+  "original_screenshot": {
+    "path": "docs/country-workflows/screenshots/IN-TCS-withdrawn-positive-expectation-blocked-da1151a.png",
+    "sha256": "080a5fa5939b15f6b4c1c88a09bd0b72cd7c6e4d30f26bd8c1931cea04d96fea",
+    "dimensions": [
+      1963,
+      1033
+    ],
+    "original_bytes": true,
+    "visually_inspected": true
+  },
+  "observed": "All expected/reported/withheld/deposited amounts 100 and comparison MATCHED; named 2025-04-01 boundary and corrective scope reason visible; state WITHDRAWN_PROVISION_LIABILITY and approval disabled",
+  "asserted": "Real evidence uploads, four reviewed sources, UI calculation, independent review HTTP 409 and retained unchanged body/version",
+  "limitations": [
+    "Synthetic expected observations, not native TCS return qualification or complete legal thresholds/rates",
+    "All-nine browser pass does not prove later source commits or full backend CI completion"
+  ]
+}

@@ -51,3 +51,15 @@ local measures/lists and legal applicability; identifiers/transliteration and
 independent identity adjudication; licensed PEP/registry integrations; and real
 redacted UAE/India pilots with independent expected results. No client results
 or professional approvals are created by these synthetic tests or pilot folders.
+
+Browser follow-up: the hosted smoke configuration includes an independent UN
+case for UAE then India. It uses actual evidence upload and configured ClamAV,
+source-form submission with all six controls, queued worker calculation, separate
+source review, two retained aliases including Low quality, blocked unadjudicated
+approval, documented candidate observations, independent result review, complete
+XLSX fields and source withdrawal with stale unchanged history. Four source-specific
+captures are requested. Local lint/type checks and targeted discovery pass;
+33 source-profile tests include byte equality between the unit and browser
+synthetic XML fixture. Hosted execution and capture inspection are still pending.
+Whole-suite local discovery lacks the hosted identity file; no identities or
+services were fabricated to bypass that prerequisite.
