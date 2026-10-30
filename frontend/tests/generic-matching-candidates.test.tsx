@@ -6,6 +6,8 @@ const state = vi.hoisted(() => ({
   kind: "reconciliation",
   freshness: "CURRENT",
   detailId: "result",
+  detailStatus: "ready",
+  refetch: vi.fn(),
   legacy: false,
   unmatched: 1,
   findings: 0,
@@ -64,6 +66,16 @@ vi.mock("@/hooks/use-api", () => ({
       };
     }
     if (path.includes("events/result?")) {
+      if (state.detailStatus !== "ready")
+        return {
+          data: undefined,
+          isLoading: state.detailStatus === "loading",
+          error:
+            state.detailStatus === "error"
+              ? new Error("Synthetic detail request failed")
+              : null,
+          refetch: state.refetch,
+        };
       const offset = Number(params.get("ambiguity_offset") || 0);
       return {
         data: {
@@ -132,6 +144,8 @@ beforeEach(() => {
   state.kind = "reconciliation";
   state.freshness = "CURRENT";
   state.detailId = "result";
+  state.detailStatus = "ready";
+  state.refetch.mockClear();
   state.legacy = false;
   state.unmatched = 1;
   state.findings = 0;
@@ -308,5 +322,55 @@ it("does not name a different result as the selected historical event", () => {
   expect(
     within(select).queryByRole("option", { name: /Selected retained result/ }),
   ).not.toBeInTheDocument();
+  expect(state.mutate).not.toHaveBeenCalled();
+});
+
+it("retains the requested ID while report detail loads and then shows the authorized stale result", () => {
+  state.kind = "statutory-report";
+  state.freshness = "STALE";
+  state.detailStatus = "loading";
+  const view = render(<AccountingIntelligence eid="e" area="lead" />);
+  const select = screen.getByRole("combobox", { name: "Result version" });
+  expect(select).toHaveValue("result");
+  expect(
+    within(select).getByRole("option", { name: "Loading selected result…" }),
+  ).toBeDisabled();
+  expect(screen.getByText("Loading authorized records…")).toBeInTheDocument();
+  expect(
+    screen.queryByRole("heading", { name: "Select a result" }),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.queryByRole("button", { name: "Record independent approval" }),
+  ).not.toBeInTheDocument();
+  state.detailStatus = "ready";
+  view.rerender(<AccountingIntelligence eid="e" area="lead" />);
+  expect(select).toHaveValue("result");
+  expect(
+    screen.queryByText("Loading authorized records…"),
+  ).not.toBeInTheDocument();
+  expect(
+    screen.getByRole("button", { name: "Record independent approval" }),
+  ).toBeDisabled();
+  expect(state.mutate).not.toHaveBeenCalled();
+});
+
+it("shows a failed detail request and retries that request without treating it as an empty selection", () => {
+  state.detailStatus = "error";
+  render(<AccountingIntelligence eid="e" area="lead" />);
+  const select = screen.getByRole("combobox", { name: "Result version" });
+  expect(select).toHaveValue("result");
+  expect(
+    within(select).getByRole("option", { name: "Selected result unavailable" }),
+  ).toBeDisabled();
+  expect(screen.getByRole("alert")).toHaveTextContent(
+    "Synthetic detail request failed",
+  );
+  expect(
+    screen.queryByRole("heading", { name: "Select a result" }),
+  ).not.toBeInTheDocument();
+  fireEvent.click(
+    screen.getByRole("button", { name: "Retry selected result" }),
+  );
+  expect(state.refetch).toHaveBeenCalledOnce();
   expect(state.mutate).not.toHaveBeenCalled();
 });

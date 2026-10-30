@@ -11,6 +11,7 @@ import {
   Button,
   Empty,
   ErrorState,
+  Loading,
   Status,
 } from "@/components/ui/primitives";
 import { PageHeader, LineageDetail } from "./shared";
@@ -938,6 +939,13 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
           Result version
           <select value={selected} onChange={(e) => choose(e.target.value)}>
             <option value="">Select result</option>
+            {selected && !choices.some((item) => item.id === selected) && (
+              <option value={selected} disabled>
+                {detail.error
+                  ? "Selected result unavailable"
+                  : "Loading selected result…"}
+              </option>
+            )}
             {choices.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.kind} • {c.label} • v{c.version} • {c.freshness}
@@ -950,7 +958,18 @@ function IntelligenceBody({ eid, area }: { eid: string; area: Area }) {
             Load older sources and results
           </Button>
         )}
-        {!detail.data ? (
+        {!detail.data && selected ? (
+          detail.error ? (
+            <div role="status">
+              <p>The selected result could not be loaded.</p>
+              <Button onClick={() => detail.refetch()}>
+                Retry selected result
+              </Button>
+            </div>
+          ) : (
+            <Loading />
+          )
+        ) : !detail.data ? (
           <Empty title="Select a result">
             Completed runs and human decisions retain their original source
             receipts.

@@ -69,3 +69,5 @@ docs/phase-12/gst-currency-*.xml -text
 docs/phase-12/uae-vat-currency-*.xml -text
 
 docs/phase-12/gstr1-currency-*.xml -text
+
+docs/phase-12/selected-result-loading-*.xml -text

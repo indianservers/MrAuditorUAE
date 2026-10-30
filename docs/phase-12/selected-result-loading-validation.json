@@ -1,0 +1,43 @@
+{
+  "status": "LOCAL_IMPLEMENTATION_VERIFIED_HOSTED_CHECKS_PENDING",
+  "problem": "A directly opened saved report showed Select a result while its authorized detail was not yet loaded.",
+  "change": [
+    "Retain requested event selection with a disabled loading option until listed or independently loaded detail is available",
+    "Show authorized-record loading state rather than empty-selection instruction",
+    "On failure retain selection, preserve visible request error and offer read-only detail refetch",
+    "Preserve existing stale-result warning, approval guards and original stored result body"
+  ],
+  "checks": {
+    "frontend_junit": "docs/phase-12/selected-result-loading-frontend.xml",
+    "tests": 377,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "production_build": "passed",
+    "typecheck": "passed",
+    "lint": "passed with one preexisting unused-variable warning"
+  },
+  "limits": [
+    "No claim that this UI state change resolves the earlier hosted request delay/failure",
+    "No new backend behavior or real-client qualification",
+    "Browser instrumentation in source 33f040f awaits hosted results"
+  ],
+  "source_blobs": [
+    {
+      "path": ".gitattributes",
+      "sha256": "6b326f7a6c710c1a8d2f16d769e21bef5dba530b2a5b286c287cd91842947366"
+    },
+    {
+      "path": "docs/phase-12/selected-result-loading-frontend.xml",
+      "sha256": "9ca0ec236b90914e893e3e64cbbdadb0af7ecf078fa3a9b97c228f8f817e7aa7"
+    },
+    {
+      "path": "frontend/src/features/accounting-intelligence.tsx",
+      "sha256": "3d41b0c7ade0b1b12720ea43b20c47f3ebd1c8ac5a1958876b90503034e744df"
+    },
+    {
+      "path": "frontend/tests/generic-matching-candidates.test.tsx",
+      "sha256": "52cbedd68cf6f8c701913ecb2674df424418f05e0a3bc32a73f1028968ef5f57"
+    }
+  ]
+}
