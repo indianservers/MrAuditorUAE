@@ -192,9 +192,22 @@ test("synthetic UAE then India FIFO real-worker review, complete export, indepen
                   count_date: "2026-06-30",
                 },
               ];
+        const shared = country === "IN" && role === "movements";
+        const retainedRows = shared
+          ? input.map((row) =>
+              Object.fromEntries(
+                Object.entries(row).filter(
+                  ([key]) =>
+                    !["source_evidence_version_id", "source_sha256"].includes(
+                      key,
+                    ),
+                ),
+              ),
+            )
+          : input;
         const file = await evidence(
           `SYNTHETIC-${country}-${role}.csv`,
-          csv(input),
+          csv(retainedRows),
         );
         const source = await prepare({
           evidence_version_id: file.version.id,
@@ -203,6 +216,7 @@ test("synthetic UAE then India FIFO real-worker review, complete export, indepen
           label: `SYNTHETIC FIFO ${country} ${role}`,
           expected_rows: input.length,
           control_totals: {},
+          ...(shared ? { rule_document_version_id: original.version.id } : {}),
           ...(role === "movements"
             ? { inventory_fifo_controls: controls }
             : {
@@ -216,6 +230,12 @@ test("synthetic UAE then India FIFO real-worker review, complete export, indepen
                 ],
               }),
         });
+        if (role === "movements") {
+          expect(source.body.rows[0]).toMatchObject({
+            source_evidence_version_id: original.version.id,
+            source_sha256: original.version.sha256,
+          });
+        }
         const reviewed = await post(
           reviewer.request,
           `${prefix}/events/${source.id}/review`,
@@ -311,6 +331,20 @@ test("synthetic UAE then India FIFO real-worker review, complete export, indepen
       );
       const approved: WorkflowEvent = await approvedResponse.json();
       expect(approved.body.review_status).toBe("REVIEWED");
+      // Approval appends a new immutable event. Wait for the UI to select it
+      // before opening keyed collections, which correctly reset on selection.
+      await expect(
+        reviewer.getByLabel("Saved source or result", { exact: true }),
+      ).toHaveValue(approved.id);
+      await expect(
+        reviewer.getByText("REVIEWED", { exact: true }),
+      ).toBeVisible();
+      await expect(
+        reviewer.getByRole("button", {
+          name: "Independent approval",
+          exact: true,
+        }),
+      ).toBeEnabled();
       const panel = reviewer.getByRole("region", {
         name: "FIFO cost evidence",
         exact: true,

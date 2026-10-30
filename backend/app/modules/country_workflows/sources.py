@@ -129,6 +129,8 @@ def _parse_csv(content, data, defaults=None):
                 raise ValueError(
                     "CSV valuation document differs from the explicitly selected retained evidence"
                     if data.table_type == "inventory-valuations"
+                    else "CSV FIFO cost/policy document differs from the explicitly selected retained evidence"
+                    if data.table_type == "inventory-cost-movements"
                     else "CSV confirmation document differs from the explicitly selected retained evidence"
                     if data.table_type == "party-confirmations"
                     else "CSV rule document differs from the explicitly selected retained evidence"

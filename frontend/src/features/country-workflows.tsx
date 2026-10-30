@@ -699,6 +699,7 @@ export function CountryWorkflows({
   const [inventoryCostEvidence, setInventoryCostEvidence] = useState("");
   const [inventoryNRVEvidence, setInventoryNRVEvidence] = useState("");
   const [inventoryFIFOControls, setInventoryFIFOControls] = useState("[]");
+  const [inventoryFIFODocument, setInventoryFIFODocument] = useState("");
   const [inventoryGLBasis, setInventoryGLBasis] = useState("");
   const [inventoryScopeAssessment, setInventoryScopeAssessment] = useState("");
   const [stockControlled, setStockControlled] = useState(false);
@@ -1536,65 +1537,80 @@ export function CountryWorkflows({
                         "state",
                         "reviewer_disposition",
                       ].filter((key) => allColumns.includes(key))
-                    : body?.workflow === "inventory-valuation-control" &&
+                    : body?.workflow === "inventory-fifo-cost" &&
                         !showRuleProvenance
-                      ? (inventoryView === "gl-controls"
-                          ? [
-                              "account",
-                              "currency",
-                              "recorded_book_value",
-                              "gl_amount",
-                              "difference",
-                              "state",
-                            ]
-                          : [
-                              "site",
-                              "sku",
-                              "lot",
-                              "uom",
-                              "currency",
-                              "book_quantity",
-                              "book_unit_cost",
-                              "assessed_unit_cost",
-                              "book_unit_nrv",
-                              "assessed_unit_nrv",
-                              "recorded_gl_basis_value",
-                              "assessed_lower_cost_nrv_value",
-                              "recorded_minus_assessed_value",
-                              "exceptions",
-                              "state",
-                            ]
-                        ).filter((key) => allColumns.includes(key))
-                      : body?.table_type === "esic-members" &&
+                      ? [
+                          "site",
+                          "sku",
+                          "lot",
+                          "uom",
+                          "currency",
+                          "expected_closing_quantity",
+                          "book_quantity",
+                          "rounded_fifo_closing_cost",
+                          "rounded_book_gross_cost",
+                          "book_minus_fifo",
+                          "state",
+                        ].filter((key) => allColumns.includes(key))
+                      : body?.workflow === "inventory-valuation-control" &&
                           !showRuleProvenance
-                        ? [
-                            "subject",
-                            "member_name",
-                            "period",
-                            "currency",
-                            "amount",
-                            "paid_days",
-                            "zero_wage_reason",
-                            "zero_day_reason",
-                            "last_working_day",
-                            "source_row",
-                          ].filter((key) => allColumns.includes(key))
-                        : body?.workflow === "india-esic-population" &&
+                        ? (inventoryView === "gl-controls"
+                            ? [
+                                "account",
+                                "currency",
+                                "recorded_book_value",
+                                "gl_amount",
+                                "difference",
+                                "state",
+                              ]
+                            : [
+                                "site",
+                                "sku",
+                                "lot",
+                                "uom",
+                                "currency",
+                                "book_quantity",
+                                "book_unit_cost",
+                                "assessed_unit_cost",
+                                "book_unit_nrv",
+                                "assessed_unit_nrv",
+                                "recorded_gl_basis_value",
+                                "assessed_lower_cost_nrv_value",
+                                "recorded_minus_assessed_value",
+                                "exceptions",
+                                "state",
+                              ]
+                          ).filter((key) => allColumns.includes(key))
+                        : body?.table_type === "esic-members" &&
                             !showRuleProvenance
                           ? [
                               "subject",
-                              "payroll_member_name",
-                              "reported_member_name",
-                              "payroll_amount",
-                              "reported_amount",
-                              "wage_difference",
-                              "payroll_paid_days",
-                              "reported_paid_days",
-                              "paid_day_difference",
-                              "exceptions",
-                              "state",
+                              "member_name",
+                              "period",
+                              "currency",
+                              "amount",
+                              "paid_days",
+                              "zero_wage_reason",
+                              "zero_day_reason",
+                              "last_working_day",
+                              "source_row",
                             ].filter((key) => allColumns.includes(key))
-                          : baseColumns;
+                          : body?.workflow === "india-esic-population" &&
+                              !showRuleProvenance
+                            ? [
+                                "subject",
+                                "payroll_member_name",
+                                "reported_member_name",
+                                "payroll_amount",
+                                "reported_amount",
+                                "wage_difference",
+                                "payroll_paid_days",
+                                "reported_paid_days",
+                                "paid_day_difference",
+                                "exceptions",
+                                "state",
+                              ].filter((key) => allColumns.includes(key))
+                            : baseColumns;
   async function run() {
     setLocalError(null);
     try {
@@ -1917,7 +1933,12 @@ export function CountryWorkflows({
                   }
                 : {}),
               ...(tableType === "inventory-cost-movements"
-                ? { inventory_fifo_controls: JSON.parse(inventoryFIFOControls) }
+                ? {
+                    inventory_fifo_controls: JSON.parse(inventoryFIFOControls),
+                    ...(inventoryFIFODocument
+                      ? { rule_document_version_id: inventoryFIFODocument }
+                      : {}),
+                  }
                 : {}),
               ...(tableType === "inventory-valuations"
                 ? {
@@ -4167,6 +4188,27 @@ export function CountryWorkflows({
                     <fieldset>
                       <legend>Independent FIFO source controls</legend>
                       <label>
+                        Retained FIFO cost/policy packet (optional shared
+                        document)
+                        <select
+                          value={inventoryFIFODocument}
+                          onChange={(e) =>
+                            setInventoryFIFODocument(e.target.value)
+                          }
+                        >
+                          <option value="">
+                            Use document references from the CSV
+                          </option>
+                          {inputs.data?.evidence
+                            .filter((item) => item.scan_status === "CLEAN")
+                            .map((item) => (
+                              <option key={item.id} value={item.id}>
+                                {item.label}
+                              </option>
+                            ))}
+                        </select>
+                      </label>
+                      <label>
                         FIFO control partitions (JSON)
                         <textarea
                           value={inventoryFIFOControls}
@@ -4180,8 +4222,11 @@ export function CountryWorkflows({
                         opening/receipt extended costs and explicit rounding for
                         every exact site/SKU/lot/UOM/currency partition. Each
                         CSV row must identify its retained original support
-                        version, SHA-256, reference and assessment. Independent
-                        review of all sources is required.
+                        version and SHA-256, or use the selected shared packet
+                        to fill blank document fields. Conflicting row
+                        references are rejected. Keep each row's reference and
+                        assessment. Independent review of all sources is
+                        required.
                       </p>
                     </fieldset>
                   )}
@@ -7499,6 +7544,7 @@ export function CountryWorkflows({
               body.workflow === "bank-account-evidence" ||
               body.workflow === "payroll-ledger-rollforward" ||
               body.workflow === "inventory-valuation-control" ||
+              body.workflow === "inventory-fifo-cost" ||
               body.workflow === "sanctions-name-review" ||
               body.workflow === "procurement-match" ||
               body.workflow === "party-balance-confirmations" ||

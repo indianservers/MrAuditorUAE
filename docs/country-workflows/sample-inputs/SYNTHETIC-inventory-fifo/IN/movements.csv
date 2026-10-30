@@ -1,0 +1,4 @@
+id,site,sku,lot,uom,currency,date,sequence,kind,quantity,unit_cost,evidence_reference,assessment
+OPEN,SYN-SITE,SYN-SKU,SYN-LOT,PCS,INR,2026-06-01,0,opening,10,10,SYN-OPENING-PACKET,SYNTHETIC assessed opening order and gross cost only
+RECEIPT,SYN-SITE,SYN-SKU,SYN-LOT,PCS,INR,2026-06-02,0,receipt,10,20,SYN-RECEIPT-PACKET,SYNTHETIC assessed receipt gross cost only
+ISSUE,SYN-SITE,SYN-SKU,SYN-LOT,PCS,INR,2026-06-03,0,issue,15,,SYN-ISSUE-PACKET,SYNTHETIC assessed issue quantity and date only

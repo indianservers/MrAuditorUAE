@@ -18,8 +18,9 @@ pytestmark = pytest.mark.skipif(
 
 
 @pytest.mark.parametrize("country,currency", [("AE", "AED"), ("IN", "INR")])
+@pytest.mark.parametrize("shared", [False, True])
 async def test_fifo_review_complete_export_paging_and_original_support_staleness(
-    environment, monkeypatch, country, currency
+    environment, monkeypatch, country, currency, shared
 ):
     c = environment
     double_boundaries(monkeypatch)
@@ -75,16 +76,44 @@ async def test_fifo_review_complete_export_paging_and_original_support_staleness
         inventory_fifo_controls=controls,
         failed="hash differs",
     )
+    if shared:
+        await source(
+            c,
+            h,
+            eid,
+            [{**row, "source_sha256": "b" * 64} for row in rows],
+            "SYNTHETIC conflicting shared FIFO packet",
+            "inventory-cost-movements",
+            {},
+            inventory_fifo_controls=controls,
+            rule_document_version_id=document["id"],
+            failed="CSV FIFO cost/policy document differs",
+        )
+    movement_rows = (
+        [
+            {
+                key: value
+                for key, value in row.items()
+                if key not in {"source_evidence_version_id", "source_sha256"}
+            }
+            for row in rows
+        ]
+        if shared
+        else rows
+    )
     movements = await source(
         c,
         h,
         eid,
-        rows,
+        movement_rows,
         "SYNTHETIC FIFO movements",
         "inventory-cost-movements",
         {},
         inventory_fifo_controls=controls,
+        **({"rule_document_version_id": document["id"]} if shared else {}),
     )
+    assert movements["body"]["rows"][0]["source_evidence_version_id"] == document["id"]
+    assert movements["body"]["rows"][0]["source_sha256"] == document["sha256"]
     closing = book(currency=currency, quantity="0", unit_cost="10")
     quantity = [
         {

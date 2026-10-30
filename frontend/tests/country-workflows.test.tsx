@@ -3684,14 +3684,16 @@ it("requires explicit complete account coverage dates without changing the repor
 });
 
 
-it.each(["AE", "IN"])("queues independent FIFO controls for %s", async country => {
+it.each([["AE", false], ["AE", true], ["IN", false], ["IN", true]] as const)("queues independent FIFO controls for %s (shared=%s)", async (country, shared) => {
   state.country = country;
   render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
   const controls = [{ site: "WH", sku: "S", lot: "", uom: "PCS", currency: country === "AE" ? "AED" : "INR", expected_rows: 1, opening_quantity: "1", receipt_quantity: "0", issue_quantity: "0", opening_cost: "10", receipt_cost: "0", rounding_places: 2, rounding_method: "HALF_UP" }];
   for (const [label, value] of [["Source table type", "inventory-cost-movements"], ["Clean retained evidence", "clean"], ["Schedule title", "FIFO controlled movements"], ["Expected data rows", "1"], ["FIFO control partitions (JSON)", JSON.stringify(controls)]]) fireEvent.change(screen.getByLabelText(label), { target: { value } });
+  if (shared) fireEvent.change(screen.getByLabelText("Retained FIFO cost/policy packet (optional shared document)"), { target: { value: "context-clean" } });
   fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
   await waitFor(() => expect(state.mutate).toHaveBeenCalled());
   expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({ table_type: "inventory-cost-movements", inventory_fifo_controls: controls, control_totals: {} });
+  expect(state.mutate.mock.calls[0][0].body.payload.rule_document_version_id).toBe(shared ? "context-clean" : undefined);
 });
 
 it.each(["AE", "IN"])("queues an explicit FIFO cost period and assessment for %s", async country => {
@@ -3702,4 +3704,17 @@ it.each(["AE", "IN"])("queues an explicit FIFO cost period and assessment for %s
   fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
   await waitFor(() => expect(state.mutate).toHaveBeenCalled());
   expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({ workflow: "inventory-fifo-cost", period_start: "2026-06-01", tolerance: "0", date_tolerance: 0, source_ids: { movements: "fifo-movements", books: "inventory-books" } });
+});
+
+
+it("shows FIFO closing quantities and cost differences before expanded arithmetic provenance", () => {
+  state.result = { id: "result", kind: "country-workflow", version: 1, freshness: "CURRENT", body: { workflow: "inventory-fifo-cost", title: "Assessed FIFO cost", blocked: false, rows: [{ id: "fifo:1", site: "WH", sku: "S", lot: "L", uom: "PCS", currency: "AED", expected_closing_quantity: "1", book_quantity: "1", rounded_fifo_closing_cost: "12.19", rounded_book_gross_cost: "12.19", book_minus_fifo: "0.00", raw_fifo_closing_cost: "12.1932631112635269", raw_cost_rollforward_difference: "0", state: "MATCHED" }] } };
+  render(<CountryWorkflows eid="engagement" mode="country-workflow" />);
+  fireEvent.change(screen.getByLabelText("Saved source or result"), { target: { value: "result" } });
+  expect(screen.getByRole("columnheader", { name: "expected closing quantity" })).toBeVisible();
+  expect(screen.getByRole("columnheader", { name: "rounded fifo closing cost" })).toBeVisible();
+  expect(screen.queryByRole("columnheader", { name: "raw fifo closing cost" })).toBeNull();
+  fireEvent.click(screen.getByRole("checkbox", { name: "Show source provenance and all columns" }));
+  expect(screen.getByRole("cell", { name: "12.1932631112635269" })).toBeVisible();
+  expect(screen.getByRole("columnheader", { name: "raw cost rollforward difference" })).toBeVisible();
 });

@@ -1,0 +1,43 @@
+{
+  "scope": "Original second failed FIFO browser diagnostic; not a completed browser qualification",
+  "source_sha": "3c001daf5e6fbf87303fb19b56f21d3fd3891bde",
+  "run_id": 41034499550,
+  "job_id": 123991899910,
+  "observed_result": {
+    "passed": 7,
+    "failed": 1,
+    "new_fifo_test_seconds": 13.5
+  },
+  "failure": "O23 allocation cell was not visible after paging. Reviewer capture shows the approved immutable event with all keyed evidence sections closed.",
+  "evidence_reached": [
+    "Real-worker UAE calculation and retained-document binding assertions passed",
+    "Self approval rejected with 403 before independent approval",
+    "Independent reviewer approval response was 201; reviewer capture shows REVIEWED result",
+    "Expected raw closing cost 10 and covered issue cost 240 are retained; source control counts visible"
+  ],
+  "diagnosis": "Approval appends a new event and UI selects its returned ID asynchronously after query invalidation. The test opened collections before waiting for that selection; keys correctly reset on changed event.",
+  "correction": "Wait for Saved source or result to equal approved.id, REVIEWED badge and completed action before opening collections; keep O23 visibility and all paging/export/stale assertions intact. Updated hosted proof remains pending.",
+  "additional_product_change": "FIFO position table now defaults to quantities, rounded costs, difference and state, with original raw arithmetic available via all-columns control and XLSX; this capture predates that compact view.",
+  "archive": {
+    "artifact_id": 12968376071,
+    "bytes": 12336663,
+    "sha256": "b346510f9a5b63c6ed949d2a4536d1a1cfbe57a498bd199c128fa07a59dfeb6b"
+  },
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-FIFO-preparer-failed-3c001da.png",
+      "sha256": "a2d1827185e5886c32aec1de6ddc330b4c44adb28bf3c848c545ea558eafc0a0",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-FIFO-reviewer-failed-3c001da.png",
+      "sha256": "9d917fad55965c7175c0fc8b9f86671cad9f9f3e6229e324ec13017b7b8860c7",
+      "visually_inspected": true
+    }
+  ],
+  "limits": [
+    "Original captures are not edited",
+    "No successful FIFO browser pagination/export/staleness or India journey proved by this failed run",
+    "Synthetic only; no real-client or professional legal qualification"
+  ]
+}

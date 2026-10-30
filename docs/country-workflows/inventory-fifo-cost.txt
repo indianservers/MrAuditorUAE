@@ -28,6 +28,14 @@ Remaining layers after such a shortage are explicitly provisional, with no
 complete FIFO closing valuation asserted.
 
 Original cost/policy support must be distinct from the normalized movement CSV.
+During preparation, select "Retained FIFO cost/policy packet" to fill omitted
+document version/hash fields from an actual clean retained upload. The existing
+rule_document_version_id request field carries that explicit selection; it is
+permitted only for canonical FIFO CSV and other already supported source types.
+Without a selection, every movement must supply its own original version/hash.
+With a selection, any conflicting nonblank CSV reference is rejected. Row-specific
+evidence_reference and assessment remain required. Selection does not prove that
+one packet supports every row; independent source review must establish its scope.
 The retained-document verifier permits at most 50 distinct supporting originals
 and 100 MiB in total; larger populations require separately scoped reviewed runs.
 Source version/hash checks use actual retained bytes. Replacing support stales
@@ -37,6 +45,9 @@ current FIFO contract and retained-document verification marker.
 
 The UI provides controlled source entry, explicit policy/window assessment and
 independent 20-row pages for allocations, events, closing layers and controls.
+Position rows default to closing quantities, rounded costs, differences and
+state; "Show source provenance and all columns" exposes raw precision, rounding
+differences and the complete cost roll-forward without altering saved values.
 The XLSX retains complete dedicated sheets, independent of page projections.
 
 Scope: assessed gross FIFO arithmetic, reusable in UAE/AED and India/INR and

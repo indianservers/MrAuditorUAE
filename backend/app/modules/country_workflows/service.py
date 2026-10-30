@@ -429,12 +429,13 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                     "withholding-records",
                     "fx-rates",
                     "grant-budgets",
+                    "inventory-cost-movements",
                 }
                 or data.file_format != "canonical-csv"
             ):
                 raise HTTPException(
                     422,
-                    "A source document can be selected only for canonical payroll/pension/benefit rules, withholding assessments or exchange rates",
+                    "A source document can be selected only for supported canonical rules, assessments, FIFO cost movements or exchange rates",
                 )
             rule_document, _ = await intelligence.evidence(
                 db, ctx, eng, data.rule_document_version_id

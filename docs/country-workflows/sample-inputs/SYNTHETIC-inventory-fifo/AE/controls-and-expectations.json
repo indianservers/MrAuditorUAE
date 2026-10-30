@@ -1,0 +1,66 @@
+{
+  "synthetic_only": true,
+  "real_client_validation": false,
+  "country": "AE",
+  "currency": "AED",
+  "movements_source": {
+    "table_type": "inventory-cost-movements",
+    "expected_rows": 3,
+    "control_totals": {},
+    "inventory_fifo_controls": [
+      {
+        "site": "SYN-SITE",
+        "sku": "SYN-SKU",
+        "lot": "SYN-LOT",
+        "uom": "PCS",
+        "currency": "AED",
+        "expected_rows": 3,
+        "opening_quantity": "10",
+        "receipt_quantity": "10",
+        "issue_quantity": "15",
+        "opening_cost": "100",
+        "receipt_cost": "200",
+        "rounding_places": 2,
+        "rounding_method": "HALF_UP"
+      }
+    ]
+  },
+  "books_source": {
+    "table_type": "stock",
+    "expected_rows": 1,
+    "control_totals": {},
+    "inventory_quantity_controls": [
+      {
+        "site": "SYN-SITE",
+        "sku": "SYN-SKU",
+        "lot": "SYN-LOT",
+        "uom": "PCS",
+        "currency": "AED",
+        "expected_rows": 1,
+        "positive_quantity": "5",
+        "negative_quantity": "0"
+      }
+    ]
+  },
+  "workflow": {
+    "workflow": "inventory-fifo-cost",
+    "period_start": "2026-06-01",
+    "as_of": "2026-06-30",
+    "tolerance": "0",
+    "date_tolerance": 0,
+    "inventory_scope_assessment": "SYNTHETIC FIFO gross cost assessment and explicitly assessed opening layer order",
+    "currency": "AED"
+  },
+  "literal_expected_arithmetic": {
+    "expected_closing_quantity": "5",
+    "raw_fifo_closing_cost": "100",
+    "covered_issue_cost": "200",
+    "raw_cost_rollforward_difference": "0",
+    "allocation_costs": [
+      "100",
+      "100"
+    ],
+    "blocked": false,
+    "statutory_calculation_qualified": false
+  }
+}

@@ -1,0 +1,172 @@
+{
+  "scope": "Explicit retained FIFO shared packet, compact cost review, shipped UAE/India synthetic uploads and browser selection synchronization",
+  "base_commit": "616329f3eb0d1ce643734752a344a59e362fd14e",
+  "hash_basis": "Exact staged Git blob bytes; original XML and PNG bytes preserved",
+  "sources": [
+    {
+      "path": "backend/app/modules/country_workflows/service.py",
+      "sha256": "675ffe810f0e5c036c54db19d95962333888851fc0ca6237f069ddd8e7c7887f"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/sources.py",
+      "sha256": "5e70c5d1b9aaa77ea969aa650d91eb2a4efdf31471d7a570926c9a364ef8940a"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_inventory_fifo.py",
+      "sha256": "a64f36f8b651f5bcaf949b163b0715b0058a86aa661ef05d43b18d8f394ce039"
+    },
+    {
+      "path": "backend/tests/unit/test_inventory_fifo_samples.py",
+      "sha256": "b4c8d12293411a3fda2f9c8147cf7b164869b41ddc54e92366ab42770b46406e"
+    },
+    {
+      "path": "docs/country-workflows/inventory-fifo-cost.txt",
+      "sha256": "aa6612848140f6418218f7da0c03a3d6452690a556e463da99301b8f92d04223"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-inventory-fifo/AE/closing-books.csv",
+      "sha256": "9c8e13fa1e75a12337de22c2ae59a29baba06f5a654beafef66fd5ae3835a157"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-inventory-fifo/AE/controls-and-expectations.json",
+      "sha256": "260ad3bfe24b7e0969bd337f825e60a5909434bbba9a7fb311789e6fe05a3972"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-inventory-fifo/AE/movements.csv",
+      "sha256": "0162d6acfa8ccb30874d0df4abe4e81410ac168ea1873705e5631cda7e533121"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-inventory-fifo/IN/closing-books.csv",
+      "sha256": "fc50a5ccbe5f9e77836d128654339fd8f144b327e1f2b12c8d8b693b1b023975"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-inventory-fifo/IN/controls-and-expectations.json",
+      "sha256": "dd3e91508696b6d73b4695e09211c898799747b5a8dae976673bceea9924200c"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-inventory-fifo/IN/movements.csv",
+      "sha256": "8d3713a1178b70aeb30331e785ecfd7dcc30a4a1624c63b6f968151cbb53a31f"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-inventory-fifo/README.txt",
+      "sha256": "ef11d58dc68b61a35861fddde9624f2c1271e7c9cec71f5aa053fb35dab61e7f"
+    },
+    {
+      "path": "docs/country-workflows/sample-inputs/SYNTHETIC-inventory-fifo/SYNTHETIC-cost-policy.txt",
+      "sha256": "eb72ebae19d3da3a395211007fc2e13a72dbc812957f0edd789fb6ed008cf711"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-FIFO-preparer-failed-3c001da.png",
+      "sha256": "a2d1827185e5886c32aec1de6ddc330b4c44adb28bf3c848c545ea558eafc0a0"
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-FIFO-reviewer-failed-3c001da.png",
+      "sha256": "9d917fad55965c7175c0fc8b9f86671cad9f9f3e6229e324ec13017b7b8860c7"
+    },
+    {
+      "path": "docs/phase-12/inventory-fifo-browser-failed-3c001da.json",
+      "sha256": "16f5467f33191aab23327bb628ac4966cbf6acd65b014c9dd5dabc903df78dba"
+    },
+    {
+      "path": "frontend/e2e/inventory-fifo-release.spec.ts",
+      "sha256": "7b338b3087d42b746c73c168f850ff4a0cf011b98db0143cf35bdbeaaf24a880"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "e4170ffd206588033bb265281ca7122baa0a8aea184ea2b4b8ea224b34afcece"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "38ad965c3cfa53d97ce3309a763cc956c7075ba05ab9846c58146060cf3b5248"
+    }
+  ],
+  "original_test_receipts": [
+    {
+      "path": "docs/phase-12/inventory-fifo-shared-packet-frontend-all.xml",
+      "sha256": "86bbc99249c4b4e6db86e5c08e1d9ed3ec62b503dc42482abee50dbd232c43f1",
+      "totals": {
+        "tests": 407,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "docs/phase-12/inventory-fifo-shared-packet-frontend-final.xml",
+      "sha256": "417a34daf7d4c0d2df5b8a443b27a1bb15561b1daf4083639b5797b671e2913b",
+      "totals": {
+        "tests": 136,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "docs/phase-12/inventory-fifo-shared-packet-frontend.xml",
+      "sha256": "5fcc3df0cc457533b1139d8bee0ba891a49a515e1ff2f8b45c9c8a8a94d49b53",
+      "totals": {
+        "tests": 133,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 127
+      }
+    },
+    {
+      "path": "docs/phase-12/inventory-fifo-shared-packet-regression.xml",
+      "sha256": "8ecb87b1e4be890930b009492b2b1b15715b9648364c0f6be2e459a3f5c0f176",
+      "totals": {
+        "tests": 108,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "docs/phase-12/inventory-fifo-shared-packet.xml",
+      "sha256": "44066bc9bd209e341b8798920c12f2e9415f119044a95fdb14d10a5728115ae6",
+      "totals": {
+        "tests": 37,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "path": "docs/phase-12/inventory-fifo-upload-samples.xml",
+      "sha256": "0b2a3878e47152d48f3299ed943a4eef6e4b29cef49eff7b04cfb7f1a01e190c",
+      "totals": {
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "checks": {
+    "backend_focused": "37 passed: 33 FIFO units and four UAE/India API combinations using per-row/shared support",
+    "backend_regression": "108 passed: shared CSV mapping/native-source/payroll tests plus FIFO and existing valuation API workflows",
+    "sample_inputs": "2 passed: actual AE/AED and IN/INR shipped CSV/JSON examples through the shared packet parser and literal expected arithmetic",
+    "frontend_all_before_compact_change": "407 passed in 76 files; same shared-packet production behavior, before adding compact result columns",
+    "frontend_final_affected_modules": "136 passed in 2 files after compact-column change, including all 134 country-workflow cases and two independent FIFO pagination cases",
+    "mypy": "414 app sources passed",
+    "ruff": "passed for app and changed backend tests",
+    "runtime_contracts": "unchanged schemas; exporter --check passed",
+    "final_frontend": "scoped ESLint, typecheck and production build passed",
+    "full_lint_before_compact_change": "0 errors; pre-existing unused _ warning in uae-business-cases.tsx:143",
+    "browser_discovery": "FIFO release case discovered; corrected selector synchronization and India shared-packet execution still require hosted result"
+  },
+  "browser_failure_receipt": "docs/phase-12/inventory-fifo-browser-failed-3c001da.json preserves original inspected captures and the second failed run. No current browser pass is claimed.",
+  "changes": [
+    "Select one actual clean retained packet without manually copying IDs/hash into all CSV rows",
+    "Conflicting nonblank document ID/hash rejected; no overwrite",
+    "Distinct original-file integrity, independent review and stale propagation remain required",
+    "Closing quantities/cost differences visible before complete raw arithmetic; all-column switch and XLSX preserve precision",
+    "Authored sample uploads and policy packet provided separately from real pilot folders"
+  ],
+  "limits": [
+    "Synthetic fixtures only; no new real-client or professional approvals",
+    "No increase to frozen 154 scenario count",
+    "No legal/framework applicability, tax treatment, physical inventory or audit opinion qualification",
+    "Full goal remains active; country/native/provider/client and other roadmap gaps remain"
+  ]
+}

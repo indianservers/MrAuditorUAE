@@ -1,0 +1,20 @@
+SYNTHETIC DEMONSTRATION PACKET — NOT INDEPENDENT CLIENT EVIDENCE
+
+Fictional June 2026 inventory population, site SYN-SITE, SKU SYN-SKU, lot SYN-LOT,
+unit PCS. Use only the corresponding AE/AED or IN/INR example, never combine them.
+This packet is authored alongside the example, not independently verified.
+
+SYN-OPENING-PACKET: assessed opening layer on 2026-06-01, sequence 0, 10 PCS at
+10 currency units per PCS. No other opening layers are included in this example.
+SYN-RECEIPT-PACKET: assessed receipt on 2026-06-02, sequence 0, 10 PCS at 20 each.
+SYN-ISSUE-PACKET: assessed issue on 2026-06-03, sequence 0, 15 PCS; FIFO computes
+its cost from then-available oldest layers. No issue unit cost is supplied.
+
+Assessed demonstration method: gross FIFO, no FX/unit conversion, each exact
+site/SKU/lot/unit/currency partition separate. Retain raw decimal arithmetic;
+compare closing position values rounded to 2 places using HALF_UP.
+
+Fictional closing books declare 5 PCS at gross unit cost 20 on 2026-06-30.
+Ownership, condition and NRV in the CSV are hypothetical declarations. No
+physical attendance, ownership verification, legal/framework applicability,
+tax treatment, registry authentication or audit opinion is established.
