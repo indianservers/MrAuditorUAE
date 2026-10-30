@@ -2269,6 +2269,240 @@
             "title": "InventoryValueControl",
             "type": "object"
           },
+          "NativeWithholdingControls": {
+            "additionalProperties": false,
+            "properties": {
+              "tan": {
+                "pattern": "^[A-Z]{4}[0-9]{5}[A-Z]$",
+                "title": "Tan",
+                "type": "string"
+              },
+              "financial_year": {
+                "pattern": "^20[0-9]{4}$",
+                "title": "Financial Year",
+                "type": "string"
+              },
+              "quarter": {
+                "enum": [
+                  "Q1",
+                  "Q2",
+                  "Q3",
+                  "Q4"
+                ],
+                "title": "Quarter",
+                "type": "string"
+              },
+              "observed_on": {
+                "format": "date",
+                "title": "Observed On",
+                "type": "string"
+              },
+              "batch_count": {
+                "maximum": 100,
+                "minimum": 1,
+                "title": "Batch Count",
+                "type": "integer"
+              },
+              "challan_count": {
+                "maximum": 5000,
+                "minimum": 1,
+                "title": "Challan Count",
+                "type": "integer"
+              },
+              "party_count": {
+                "maximum": 5000,
+                "minimum": 1,
+                "title": "Party Count",
+                "type": "integer"
+              },
+              "income_tax": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Income Tax"
+              },
+              "surcharge": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Surcharge"
+              },
+              "cess": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Cess"
+              },
+              "allocated_deposit": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Allocated Deposit"
+              },
+              "challan_deposit": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Challan Deposit"
+              },
+              "payment_base": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  }
+                ],
+                "title": "Payment Base"
+              },
+              "purchase_value": {
+                "anyOf": [
+                  {
+                    "minimum": 0.0,
+                    "type": "number"
+                  },
+                  {
+                    "type": "string"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ],
+                "default": null,
+                "title": "Purchase Value"
+              },
+              "record_status": {
+                "enum": [
+                  "current",
+                  "superseded",
+                  "cancelled"
+                ],
+                "title": "Record Status",
+                "type": "string"
+              },
+              "crosswalk_document_version_id": {
+                "format": "uuid",
+                "title": "Crosswalk Document Version Id",
+                "type": "string"
+              },
+              "assessment": {
+                "maxLength": 2000,
+                "minLength": 10,
+                "title": "Assessment",
+                "type": "string"
+              },
+              "groups": {
+                "items": {
+                  "$ref": "#/$defs/NativeWithholdingGroup"
+                },
+                "maxItems": 5000,
+                "minItems": 1,
+                "title": "Groups",
+                "type": "array"
+              }
+            },
+            "required": [
+              "tan",
+              "financial_year",
+              "quarter",
+              "observed_on",
+              "batch_count",
+              "challan_count",
+              "party_count",
+              "income_tax",
+              "surcharge",
+              "cess",
+              "allocated_deposit",
+              "challan_deposit",
+              "payment_base",
+              "record_status",
+              "crosswalk_document_version_id",
+              "assessment",
+              "groups"
+            ],
+            "title": "NativeWithholdingControls",
+            "type": "object"
+          },
+          "NativeWithholdingGroup": {
+            "additionalProperties": false,
+            "properties": {
+              "transaction_reference": {
+                "maxLength": 120,
+                "minLength": 1,
+                "pattern": "^\\S(?:.*\\S)?$",
+                "title": "Transaction Reference",
+                "type": "string"
+              },
+              "transaction_date": {
+                "format": "date",
+                "title": "Transaction Date",
+                "type": "string"
+              },
+              "period": {
+                "pattern": "^\\d{4}-(0[1-9]|1[0-2])$",
+                "title": "Period",
+                "type": "string"
+              },
+              "rule_reference": {
+                "maxLength": 120,
+                "minLength": 1,
+                "pattern": "^\\S(?:.*\\S)?$",
+                "title": "Rule Reference",
+                "type": "string"
+              },
+              "party_records": {
+                "items": {
+                  "pattern": "^[1-9][0-9]{0,8}/[1-9][0-9]{0,8}/[1-9][0-9]{0,8}$",
+                  "type": "string"
+                },
+                "maxItems": 5000,
+                "minItems": 1,
+                "title": "Party Records",
+                "type": "array"
+              }
+            },
+            "required": [
+              "transaction_reference",
+              "transaction_date",
+              "period",
+              "rule_reference",
+              "party_records"
+            ],
+            "title": "NativeWithholdingGroup",
+            "type": "object"
+          },
           "PurchaseQuantityControl": {
             "additionalProperties": false,
             "properties": {
@@ -2462,6 +2696,17 @@
         },
         "additionalProperties": false,
         "properties": {
+          "native_withholding_controls": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/NativeWithholdingControls"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": null
+          },
           "un_sanctions_controls": {
             "anyOf": [
               {
@@ -3014,7 +3259,9 @@
               "india-gstr2b-json",
               "india-gstr1-summary-json",
               "india-gstr1-document-series-json",
-              "india-gstr1-documents-json"
+              "india-gstr1-documents-json",
+              "india-26q-regular-v7.8",
+              "india-27eq-regular-v6.9"
             ],
             "title": "File Format",
             "type": "string"

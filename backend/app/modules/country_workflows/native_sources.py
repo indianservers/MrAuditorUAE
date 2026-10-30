@@ -24,6 +24,22 @@ WPS_RECORD_CONTRACT = "wps-single-line-records/1"
 
 FORMATS: list[dict[str, Any]] = [
     {
+        "id": "india-26q-regular-v7.8",
+        "label": "India historical 26Q regular statement v7.8",
+        "countries": ["IN"],
+        "table_type": "withholding-records",
+        "description": "FY 2010-11 through 2025-26 regular uploaded TDS observations with complete counts, tax/challan controls and retained independent transaction/section crosswalk; no FVU, CSI, filing, current portal status or bank-payment inference",
+        "source": "https://tinpan.proteantech.in/downloads/e-tds/eTDS-download-regular.html",
+    },
+    {
+        "id": "india-27eq-regular-v6.9",
+        "label": "India historical 27EQ regular statement v6.9",
+        "countries": ["IN"],
+        "table_type": "withholding-records",
+        "description": "FY 2010-11 through 2025-26 regular uploaded TCS observations with complete counts, tax/challan controls and retained independent transaction/section crosswalk; successor Form 143 and corrections are separate",
+        "source": "https://tinpan.proteantech.in/downloads/e-tds/eTDS-download-regular.html",
+    },
+    {
         "id": "un-sc-consolidated-xml",
         "label": "UN consolidated sanctions XML - retained names and aliases",
         "countries": [],
@@ -699,7 +715,11 @@ def parse_native(content, data, country, filename):
     with localcontext() as arithmetic:
         arithmetic.prec = 80
         try:
-            if data.file_format == "un-sc-consolidated-xml":
+            if data.file_format in {"india-26q-regular-v7.8", "india-27eq-regular-v6.9"}:
+                from app.modules.country_workflows.india_withholding_native import parse_regular
+
+                rows, metadata = parse_regular(content, data)
+            elif data.file_format == "un-sc-consolidated-xml":
                 from app.modules.country_workflows.un_sanctions_source import parse_un_sanctions
 
                 rows, metadata = parse_un_sanctions(content, data)
@@ -776,6 +796,8 @@ def parse_native(content, data, country, filename):
         "control_totals": {k: str(v) for k, v in sorted(totals.items())},
         "population_completeness": "DECLARED_UN_XML_SUBJECT_SCRIPT_AND_ALIAS_CONTROLS"
         if data.file_format == "un-sc-consolidated-xml"
+        else "DECLARED_NATIVE_WITHHOLDING_PARTIES_AND_CROSSWALK_CONTROLS"
+        if data.file_format in {"india-26q-regular-v7.8", "india-27eq-regular-v6.9"}
         else "ESIC_DECLARED_MEMBER_DAY_ZERO_WAGE_AND_WAGE_CONTROLS"
         if data.file_format == "india-esic-members-xls"
         else "RETAINED_DOCUMENT_SERIES_COUNTS_NOT_INVOICE_COMPLETENESS"
@@ -804,6 +826,14 @@ def parse_native(content, data, country, filename):
         **(
             {"allowed_source_roles": ["list"], "allowed_workflows": ["sanctions-name-review"]}
             if data.file_format == "un-sc-consolidated-xml"
+            else {}
+        ),
+        **(
+            {
+                "allowed_source_roles": ["reported"],
+                "allowed_workflows": ["india-withholding-liability"],
+            }
+            if data.file_format in {"india-26q-regular-v7.8", "india-27eq-regular-v6.9"}
             else {}
         ),
         **(

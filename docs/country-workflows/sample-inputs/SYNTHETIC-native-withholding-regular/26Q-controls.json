@@ -1,0 +1,66 @@
+{
+  "classification": "SYNTHETIC_CROSSWALK_FOR_PUBLIC_ISSUER_SAMPLE_NOT_CLIENT_OR_LEGAL_QUALIFICATION",
+  "expected_mapped_rows": 4,
+  "main_control_totals": {
+    "INR": "1900"
+  },
+  "requires_replacement": [
+    "controls.crosswalk_document_version_id"
+  ],
+  "controls": {
+    "tan": "MUMN77777A",
+    "financial_year": "202021",
+    "quarter": "Q1",
+    "observed_on": "2026-10-30",
+    "batch_count": 1,
+    "challan_count": 1,
+    "party_count": 4,
+    "income_tax": "1900",
+    "surcharge": "0",
+    "cess": "0",
+    "allocated_deposit": "1900",
+    "challan_deposit": "100000",
+    "payment_base": "19000",
+    "record_status": "current",
+    "crosswalk_document_version_id": "00000000-0000-0000-0000-000000000000",
+    "assessment": "SYNTHETIC independent public-sample transaction crosswalk and arithmetic controls; not legal or client qualification",
+    "groups": [
+      {
+        "transaction_reference": "SYN-ASSESSMENT-1",
+        "transaction_date": "2020-04-01",
+        "period": "2020-04",
+        "rule_reference": "SYN-ASSESSED-SECTION",
+        "party_records": [
+          "1/1/1"
+        ]
+      },
+      {
+        "transaction_reference": "SYN-ASSESSMENT-2",
+        "transaction_date": "2020-04-01",
+        "period": "2020-04",
+        "rule_reference": "SYN-ASSESSED-SECTION",
+        "party_records": [
+          "1/1/2"
+        ]
+      },
+      {
+        "transaction_reference": "SYN-ASSESSMENT-3",
+        "transaction_date": "2020-04-01",
+        "period": "2020-04",
+        "rule_reference": "SYN-ASSESSED-SECTION",
+        "party_records": [
+          "1/1/3"
+        ]
+      },
+      {
+        "transaction_reference": "SYN-ASSESSMENT-4",
+        "transaction_date": "2020-04-01",
+        "period": "2020-04",
+        "rule_reference": "SYN-ASSESSED-SECTION",
+        "party_records": [
+          "1/1/4"
+        ]
+      }
+    ]
+  }
+}

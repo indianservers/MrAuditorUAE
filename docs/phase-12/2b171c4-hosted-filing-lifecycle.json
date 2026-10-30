@@ -1,0 +1,90 @@
+{
+  "synthetic": true,
+  "acknowledged_record": {
+    "engagement_id": "828d9da9-98ec-42ce-9eea-dc260c2f9365",
+    "kind": "grc-obligation",
+    "reference": "SYN-FILING",
+    "title": "Synthetic filing lifecycle",
+    "status": "LOCKED",
+    "body": {
+      "area": "",
+      "module": "policy",
+      "sources": [],
+      "blockers": [],
+      "deadline": "2026-10-30",
+      "due_date": null,
+      "owner_id": "3661a162-1505-487c-a463-12e4acdb564d",
+      "entity_id": "343bd80f-34a5-4bb2-b8cb-9a66fffec1fe",
+      "narrative": "",
+      "assertions": [],
+      "source_url": "https://synthetic.invalid/policy",
+      "reviewer_id": "9a5bcb25-f8e4-4ca3-921e-3c6b221769d8",
+      "entity_facts": {},
+      "evidence_ids": [],
+      "filing_stage": "acknowledged",
+      "jurisdiction": "SYNTHETIC",
+      "review_cycle": 16,
+      "review_stage": 1,
+      "deadline_kind": "firm_internal",
+      "deadline_rule": null,
+      "reminder_days": [
+        0
+      ],
+      "effective_from": "2026-01-01",
+      "review_approvers": [
+        "9a5bcb25-f8e4-4ca3-921e-3c6b221769d8"
+      ],
+      "rule_evidence_id": null,
+      "fact_evidence_ids": [],
+      "required_evidence": "Synthetic readiness and authorization documents",
+      "extension_deadline": null,
+      "jurisdiction_scope": null,
+      "statutory_record_id": null,
+      "compliance_assessment": "pending",
+      "escalation_after_days": null,
+      "extension_evidence_id": null,
+      "notifications_enabled": true,
+      "obligation_period_end": null,
+      "readiness_evidence_ids": [
+        "a98b16ab-c351-4a19-acbd-f5a65ccf6f7a"
+      ],
+      "submission_evidence_id": "084fa6d3-ea08-4a61-8c0c-33325e1159b4",
+      "obligation_period_start": null,
+      "acknowledgment_evidence_id": "8ad1f7de-c321-41e5-927b-7d896d82a36a"
+    },
+    "version": 19,
+    "prepared_by": "3661a162-1505-487c-a463-12e4acdb564d",
+    "tenant_id": "7da5f881-1e74-4dbc-ad38-7c26cb094c54",
+    "created_by": "3661a162-1505-487c-a463-12e4acdb564d",
+    "id": "61700a31-bb71-46a8-912f-03822702c528",
+    "created_at": "2026-10-30T14:11:32.328475+00:00",
+    "updated_at": "2026-10-30T14:11:36.864704+00:00"
+  },
+  "source_correction": {
+    "items": [
+      {
+        "record_id": "61700a31-bb71-46a8-912f-03822702c528",
+        "version": 19,
+        "reference": "SYN-FILING",
+        "jurisdiction": "SYNTHETIC",
+        "jurisdiction_scope": null,
+        "obligation_period_start": null,
+        "obligation_period_end": null,
+        "deadline": "2026-10-30",
+        "extension_deadline": null,
+        "deadline_kind": "firm_internal",
+        "filing_stage": "acknowledged",
+        "calendar_state": "ACKNOWLEDGED",
+        "freshness": "STALE",
+        "reassessment_required": true,
+        "review_status": "LOCKED",
+        "owner_id": "3661a162-1505-487c-a463-12e4acdb564d",
+        "reviewer_id": "9a5bcb25-f8e4-4ca3-921e-3c6b221769d8"
+      }
+    ],
+    "bounded_to": 200,
+    "external_submission_performed": false
+  },
+  "duplicate_reminders_suppressed": true,
+  "external_submission_performed": false
+}

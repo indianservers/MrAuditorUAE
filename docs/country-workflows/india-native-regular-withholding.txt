@@ -1,0 +1,84 @@
+Controlled historical India regular withholding observations
+
+Profiles: india-26q-regular-v7.8 and india-27eq-regular-v6.9. These reuse
+original evidence storage, scanning, queued source jobs, source/result review,
+withholding liability comparison, lineage, complete export and staleness.
+They are available only for India engagements. They accept the selected ASCII
+CRLF FH/BH/CD/DD layouts for FY 2010-11 through 2025-26. Forms 140/143 from
+TY 2026-27, salary/nonresident forms and correction statements are separate.
+
+This is an observed-amount import, not government file validation. Exact field
+counts and pinned issuer field-width limits are checked, together with record
+sequence/parentage, TAN, declared financial/assessment year and quarter,
+independent batch/challan/party counts, dates, tax components, gross challan
+arithmetic, party allocation totals and complete crosswalk coverage. Mandatory
+field flags have period-dependent exceptions; the importer does not claim all
+FVU conditional, legal-code, rate, certificate or CSI checks. No filing receipt,
+portal-currentness, bank payment or beneficiary credit is inferred.
+
+The source form requires explicit independent component and gross-deposit
+controls, selected current/superseded/cancelled status and a separate clean
+retained transaction/section crosswalk. No missing amount becomes zero. The
+main INR control is total party tax, not gross challan deposits. The original
+published samples illustrate why: 26Q shows 1,900 total party tax against
+100,000 gross challan deposit; 27EQ shows 1,000 against 10,000. These original
+examples are not client files, independent client expectations or professional
+qualification. The numbered tables and samples have FH 18, BH 72, CD 41 and
+DD 54 fields; the general-notes FH-16 example is not used to guess the layout.
+
+A crosswalk group names transaction_reference, transaction_date, period,
+rule_reference and party_records. Keys are batch/challan/party, for example
+1/1/1. Every original party must appear once, with no overlap or omission.
+A group can combine multiple parties/challans for one PAN, source section code
+and reporting month. Mapped dates and section references are independently
+assessed facts retained in the supporting document, not inferred legal mappings.
+Expected source rows count groups; the separate party count controls original
+DD records. The original tax/payment dates, code, recorded rate, reason flag,
+certificate reference and source line stay linked. Gross challans have their
+own one-row-per-CD review and export schedule, preserving leading-zero challan
+and BSR/Form24G references. Gross amounts are never repeated as party payments.
+
+The output can supply only reported observations in the liability comparison.
+It cannot establish expected tax, withholding, payment or credit roles. Current
+means selected by this assessment, not independently verified portal status.
+Historical source statuses preserve amounts rather than silently becoming zero.
+Source rows show the selected history status in the compact default view.
+
+A separate crosswalk is checked for engagement/tenant access, clean scanning,
+current retained version and original hash/size. The native file cannot be its
+own crosswalk, even if uploaded under another record with identical bytes.
+Replacing that document makes both the source and downstream comparison stale
+without rewriting their saved bodies. Independently specified expected schedules
+are still required. A reviewed prepared statement does not qualify its law or
+prove government filing or bank settlement.
+
+Authority page: https://tinpan.proteantech.in/downloads/e-tds/eTDS-download-regular.html
+Exact original XLS specifications and extracted original sample bytes are under
+authority-references/protean-legacy-2025-05-27/. Lexical limits are compiled from
+those numbered source tables and retain specification hashes. The dated source
+assessment lists original URLs and hashes. No RPU/FVU executable was run.
+
+Verification includes the original two public samples with synthetic assessed
+crosswalks, altered structure/counts/amounts, tax and surcharge/cess conservation,
+partial allocated deposits, multiple challans, overlapping/uncovered mappings,
+5,000 parties without partial output, country/role isolation, quarantine, source
+review independence, complete XLSX, independently specified per-party comparison
+and source/downstream staleness. API scanner and queue dispatch are explicit
+test doubles. A separate hosted browser case is configured for actual ClamAV,
+form submission, review/export and crosswalk-supersession captures; that new
+native UI case awaits hosted execution and visual inspection.
+
+Remaining: complete FVU/CSI and conditional-field qualification, correction and
+successor/native salary/nonresident profiles, complete legally approved
+rate/threshold/certificate rules and code crosswalks, actual issuer/portal
+verification, authorized filing and real independently checked client pilots.
+The existing synthetic scenario count is not increased by these samples/tests.
+
+Final checks: 232 related backend regression cases plus eight additional
+quarter-boundary cases pass (240 distinct cases across retained reports). The
+83-case native unit report includes the prior 75 native cases and eight new
+boundaries; it is not counted as 83 additional cases. All 443 frontend tests,
+Next.js build, mypy (419 application files), scoped lint and current API payload
+contracts pass. The configured native browser case awaits hosted execution.
+Synthetic public-sample controls and explicit placeholder-document guidance
+are saved under sample-inputs/SYNTHETIC-native-withholding-regular/.

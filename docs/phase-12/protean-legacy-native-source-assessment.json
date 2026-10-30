@@ -1,0 +1,75 @@
+{
+  "scope": "Dated original public issuer references for controlled regular statement observations; not full government validation or client qualification",
+  "retrieved_on": "2026-10-30",
+  "publisher_page": "https://tinpan.proteantech.in/downloads/e-tds/eTDS-download-regular.html",
+  "references": [
+    {
+      "form": "26Q",
+      "layout_version": "7.8",
+      "originals": [
+        {
+          "path": "docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-26Q-7.8.xls",
+          "url": "https://tinpan.proteantech.in/downloads/e-tds/File_Format_26Q_Regular_Q1_to_Q4_Version_7.8_27052025_201011.xls",
+          "sha256": "82a95aa3b997a6b45202dc0ccdfeb7851f15d676a0496d43bea665fc74c5cab2",
+          "bytes": 127488,
+          "original_bytes": true
+        },
+        {
+          "path": "docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-26Q-original-sample.txt",
+          "url": "https://tinpan.proteantech.in/downloads/e-tds/download/uat/26QQ1.zip",
+          "sha256": "ab3e66ab3ab105ec01f3af7c2dbfb6cfec1fd55073d39ba233f872d50a073c38",
+          "bytes": 1038,
+          "original_bytes": true
+        }
+      ],
+      "sample_archive_sha256": "284733dce485be8f22d5631db2af4f873803781df821a51f16755f22c059ce9b",
+      "exact_sample_archive_entry": "26QRQ1.txt",
+      "sample_financial_year": "202021",
+      "field_counts": {
+        "FH": 18,
+        "BH": 72,
+        "CD": 41,
+        "DD": 54
+      }
+    },
+    {
+      "form": "27EQ",
+      "layout_version": "6.9",
+      "originals": [
+        {
+          "path": "docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-27EQ-6.9.xls",
+          "url": "https://tinpan.proteantech.in/downloads/e-tds/File_Format_27EQ_Regular_Q1_to_Q4_Version_6.9_%2027052025_201011.xls",
+          "sha256": "f9d010207b3d9bdc400d747cae77993610d5515606a61a4d7e33162c60b03f03",
+          "bytes": 122368,
+          "original_bytes": true
+        },
+        {
+          "path": "docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-27EQ-original-sample.txt",
+          "url": "https://tinpan.proteantech.in/downloads/e-tds/download/uat/27EQRQ3.zip",
+          "sha256": "2c29bc6bb89fe55e71fcfd301eb972980ca2d3cc9f648d6f43eaf6c4b55bade3",
+          "bytes": 1936,
+          "original_bytes": true
+        }
+      ],
+      "sample_archive_sha256": "4146adffc4c52a430fd9073fa8dcf6d09bc156253163326beaf350d6cc424ab3",
+      "exact_sample_archive_entry": "27EQRQ3.txt",
+      "sample_financial_year": "202021",
+      "field_counts": {
+        "FH": 18,
+        "BH": 72,
+        "CD": 41,
+        "DD": 54
+      }
+    }
+  ],
+  "assessment": [
+    "Source page distinguishes legacy FY up to 2025-26 from successor forms for 2026-27 onward",
+    "Numbered tables and samples agree on 18/72/41/54 actual fields; general-note FH-16 example is not used as the layout",
+    "Mandatory-cell flags have period-specific exceptions; no unconditional mandatory-field/FVU qualification is asserted",
+    "Read-only XLS inspection supplied lexical width limits and original reference hashes; no workbook visual QA or authoring is claimed",
+    "Public sample structure plus synthetic independently specified mappings/amount expectations is not real-client/professional validation"
+  ],
+  "professional_approval": false,
+  "fvu_or_csi_executed": false,
+  "legal_rate_threshold_certificate_corpus_qualified": false
+}

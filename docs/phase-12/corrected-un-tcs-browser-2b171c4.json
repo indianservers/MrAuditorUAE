@@ -1,0 +1,105 @@
+{
+  "scope": "Corrected UN observation marker and TCS bank-obligation guard hosted proof; not later native statement imports",
+  "head_sha": "2b171c46a7cec24eea832753f2c83b9c01464759",
+  "run_id": 41063339005,
+  "job_id": 124088312383,
+  "result": {
+    "passed": 10,
+    "failed": 0,
+    "minutes": 7.5,
+    "uae_india_un_case_seconds": 20.4
+  },
+  "archive": {
+    "id": 12980908551,
+    "bytes": 13942268,
+    "sha256": "b8ae9f944c19e3c00b4d97b44756aa33894f0a35c373e9f278d1f3e8b155d244"
+  },
+  "tested_sources": [
+    {
+      "path": "frontend/e2e/un-sanctions-release.spec.ts",
+      "sha256": "e2b2b1ad52eef39207033bc4e422e1f8f652056ee7cd3cd2b3012c0cbe3aaf7f"
+    },
+    {
+      "path": "frontend/e2e/withholding-boundary-browser-workflow.ts",
+      "sha256": "345dc2e950d01b84cb731e60a92931bcbe102e6690339ae0703303586b65ddfd"
+    },
+    {
+      "path": "frontend/src/features/screening-candidates.tsx",
+      "sha256": "42804ae636800ea61050bc8af013c424ffc603a9f5f8d32464adc4429f5d6717"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/withholding_provisions.py",
+      "sha256": "37824bf62110cd8f635f0f2af9a4baff454a181a400cfd7627cafb8a162ab8b8"
+    },
+    {
+      "path": "backend/app/api/v1/intelligence.py",
+      "sha256": "5fa4c0c3848ed56578087f9926633047111aa55504588ff03380ee3fb73d8391"
+    }
+  ],
+  "original_screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-UN-alias-quality-reviewed-2b171c4.png",
+      "sha256": "683fd05459f22f3d50f2c224c8f408c608e9995d6dcc05848fe0f6218a5a072a",
+      "dimensions": [
+        1621,
+        455
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/AE-UN-source-withdrawn-stale-2b171c4.png",
+      "sha256": "487c955a9c993ef2bf291495500ec05269c8848d07ff9d014a1fc8cdb942a984",
+      "dimensions": [
+        1663,
+        1224
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-UN-alias-quality-reviewed-2b171c4.png",
+      "sha256": "683fd05459f22f3d50f2c224c8f408c608e9995d6dcc05848fe0f6218a5a072a",
+      "dimensions": [
+        1621,
+        455
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-UN-source-withdrawn-stale-2b171c4.png",
+      "sha256": "9592cbfc74723eb830c8ec6c8d8c7a4f2b65900289bc72e33b3dfb3b9d8aa6d8",
+      "dimensions": [
+        1663,
+        1224
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-TCS-withdrawn-positive-expectation-blocked-2b171c4.png",
+      "sha256": "b80cafc53693f507ee09ebca64a753ccb3464f40d78dfded30d0f61a16a96f7b",
+      "dimensions": [
+        1963,
+        1033
+      ],
+      "original_bytes": true,
+      "visually_inspected": true
+    }
+  ],
+  "observed": [
+    "Both countries show documented observation explanation, preserved Good/Low aliases and permanent references",
+    "Stale reviewed results visibly retain OBSERVATIONS_DOCUMENTED and POTENTIAL_NAME_MATCH with approval disabled",
+    "TCS-prefixed 206C(1H) row remains blocked despite four agreeing amounts of 100; corrective reason and cutoff are visible"
+  ],
+  "asserted": [
+    "Bank-obligation creation from the withdrawn positive expected source returns 422",
+    "Documented UN observation marker does not alter candidates or assert identity clearance",
+    "Source withdrawal keeps saved results and versions unchanged"
+  ],
+  "limitations": [
+    "Source-specific synthetic browser proof, not native 26Q/27EQ UI proof",
+    "No latest full-backend or client/legal qualification claim"
+  ]
+}

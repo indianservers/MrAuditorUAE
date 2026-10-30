@@ -10,6 +10,7 @@ export default defineConfig({
     "inventory-fifo-release.spec.ts",
     "inventory-performance-release.spec.ts",
     "un-sanctions-release.spec.ts",
+    "withholding-native-release.spec.ts",
   ],
   workers: 1,
   reporter: "list",

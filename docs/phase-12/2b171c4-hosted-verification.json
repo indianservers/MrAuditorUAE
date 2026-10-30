@@ -1,0 +1,75 @@
+{
+  "scope": "Complete backend and all-six-job source-specific proof for corrected TCS/country isolation and UN marker; not later native statement imports",
+  "head_sha": "2b171c46a7cec24eea832753f2c83b9c01464759",
+  "run_id": 41063339005,
+  "verify_job_id": 124088311986,
+  "all_six_jobs": "success",
+  "artifact": {
+    "id": 12986209974,
+    "bytes": 238827,
+    "sha256": "f23880ed90abc59d24a5e6e9e0167938255add1056dd69f35c72ba2113831c62"
+  },
+  "junit": {
+    "tests": 4813,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 9
+  },
+  "passed": 4804,
+  "coverage_totals": {
+    "covered_lines": 35542,
+    "num_statements": 40949,
+    "percent_covered": 86.79577034848226,
+    "percent_covered_display": "87",
+    "missing_lines": 5407,
+    "excluded_lines": 5,
+    "percent_statements_covered": 86.79577034848226,
+    "percent_statements_covered_display": "87"
+  },
+  "skip_reasons": {
+    "Live Zoho requires explicit opt-in and authorized OAuth credentials": 1,
+    "Full ledger smoke needs authorized read-only access and independent source totals": 1,
+    "Live Tally requires an explicitly authorized local installation": 1,
+    "Requires explicit opt-in, vendor credentials and independently exported control totals": 1,
+    "Run scripts/connector_operations_run.py for isolated real DB tests": 4,
+    "Windows suspended-start and job-assignment control": 1
+  },
+  "original_artifacts": [
+    {
+      "path": "docs/phase-12/2b171c4-hosted-full.xml",
+      "sha256": "543d6f616c2336cfad8e0e48558f87ca072d207566c37f3a7ac246f7532e9d28",
+      "bytes": 740121,
+      "original_bytes": true
+    },
+    {
+      "path": "docs/phase-12/2b171c4-hosted-coverage.json",
+      "sha256": "5057815b0a81b3bd309b9f011d420afddbf0b29b31cfdccbde5e9b77c50e3e5a",
+      "bytes": 1844142,
+      "original_bytes": true
+    },
+    {
+      "path": "docs/phase-12/2b171c4-hosted-compliance-runtime-connector.json",
+      "sha256": "736abcdd316dff62335af66ff0247f65f0443f1ef0a737b4e1b306fcff2d208d",
+      "bytes": 5196,
+      "original_bytes": true
+    },
+    {
+      "path": "docs/phase-12/2b171c4-hosted-filing-lifecycle.json",
+      "sha256": "e58473b8f66560112a77112521bcc79a6270d6fda3725a803548651cd552881f",
+      "bytes": 3070,
+      "original_bytes": true
+    },
+    {
+      "path": "docs/phase-12/2b171c4-hosted-worker-recovery.json",
+      "sha256": "1f87e67f62c237062a9d3655c9f0257257ad6b8333d3ec8e627fa11fd92318db",
+      "bytes": 218,
+      "original_bytes": true
+    }
+  ],
+  "operations_assertions": "Synthetic unresolved deadline retained; connector not live-qualified; no external request/submission; source-correction stale while acknowledgment retained; duplicate reminders suppressed; manual retry required, one outbox dispatch and no automatic reexecution",
+  "limitations": [
+    "Nine skipped checks remain; no live-vendor qualification is established",
+    "New native 26Q/27EQ imports require their own hosted run",
+    "This does not qualify client cases or a complete country legal corpus"
+  ]
+}

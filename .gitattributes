@@ -155,3 +155,18 @@ docs/phase-12/276905a-hosted-worker-recovery.json -text
 docs/phase-12/un-disposition-frontend-full.xml -text whitespace=cr-at-eol
 docs/phase-12/country-withholding-boundary-final.xml -text whitespace=cr-at-eol
 docs/phase-12/country-component-whitespace-before.xml -text whitespace=-blank-at-eol,cr-at-eol
+
+# Exact original legacy statement specifications/samples and portable compiled limits.
+docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-26Q-7.8.xls -text
+docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-26Q-original-sample.txt -text whitespace=cr-at-eol
+docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-27EQ-6.9.xls -text
+docs/country-workflows/authority-references/protean-legacy-2025-05-27/protean-27EQ-original-sample.txt -text whitespace=cr-at-eol
+backend/app/modules/country_workflows/india_withholding_native_limits.json text eol=lf
+docs/phase-12/withholding-native-verified-final.xml -text whitespace=cr-at-eol
+docs/phase-12/withholding-native-frontend-final.xml -text whitespace=cr-at-eol
+docs/phase-12/withholding-native-quarter-verified.xml -text whitespace=cr-at-eol
+docs/phase-12/2b171c4-hosted-full.xml -text whitespace=cr-at-eol
+docs/phase-12/2b171c4-hosted-coverage.json -text
+docs/phase-12/2b171c4-hosted-compliance-runtime-connector.json -text
+docs/phase-12/2b171c4-hosted-filing-lifecycle.json -text
+docs/phase-12/2b171c4-hosted-worker-recovery.json -text

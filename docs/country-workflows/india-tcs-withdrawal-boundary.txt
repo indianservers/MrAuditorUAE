@@ -103,3 +103,5 @@ over-rejections. One subsequent API/unit test iteration needed the existing
 error-envelope assertion and explicit nil-allocation fixture rationale corrected;
 production nil-population controls were not weakened. Synthetic validation
 does not qualify a complete India rate/threshold/form corpus or real clients.
+
+Hosted corrected source 2b171c4: all ten browser cases passed in 7.5 minutes. The India case uses the explicit TCS:206C(1H) prefix and also asserts bank-obligation creation returns 422 for the withdrawn positive expectation. The original capture was visually inspected: all amounts agree at 100 but the liability state, corrective reason, cutoff and disabled approval remain visible. Source-specific receipt: docs/phase-12/corrected-un-tcs-browser-2b171c4.json.

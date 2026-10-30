@@ -363,6 +363,8 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
         from app.modules.country_workflows.native_sources import parse_native
 
         supported_media = {
+            "india-26q-regular-v7.8": {"text/plain"},
+            "india-27eq-regular-v6.9": {"text/plain"},
             "un-sc-consolidated-xml": {"application/xml", "text/xml"},
             "india-esic-members-xls": {"application/vnd.ms-excel"},
             "canonical-csv": {
@@ -451,6 +453,20 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                     "assessment_sha256": rule_document.sha256,
                 }
 
+        native_withholding_document = None
+        if data.native_withholding_controls is not None:
+            native_withholding_document, _ = await intelligence.evidence(
+                db, ctx, eng, data.native_withholding_controls.crosswalk_document_version_id
+            )
+            if (
+                native_withholding_document.id == evidence.id
+                or native_withholding_document.sha256 == evidence.sha256
+            ):
+                raise HTTPException(
+                    422,
+                    "Retain a separate independent native transaction/section crosswalk document",
+                )
+
         for prefix, identifier in (
             ("cost", data.inventory_cost_document_version_id),
             ("nrv", data.inventory_nrv_document_version_id),
@@ -510,6 +526,27 @@ async def compute(db, ctx, eng, operation, data, package, dependencies):
                 return parse_native(path.read_bytes(), data, package.country, evidence.filename)
 
         result = await run_in_threadpool(load)
+        if native_withholding_document is not None:
+            dependencies.extend(
+                await payroll_rule_documents(
+                    db,
+                    ctx,
+                    eng,
+                    [
+                        {
+                            "source_evidence_version_id": str(native_withholding_document.id),
+                            "source_sha256": native_withholding_document.sha256,
+                        }
+                    ],
+                    label="Native withholding crosswalk",
+                    contributors=supporting_contributors,
+                )
+            )
+            result["native_metadata"].update(
+                crosswalk_document_sha256=native_withholding_document.sha256,
+                crosswalk_document_filename=native_withholding_document.filename,
+                crosswalk_basis="INDEPENDENTLY_ASSESSED_RETAINED_DOCUMENT_NOT_MACHINE_AUTHENTICATED",
+            )
         if gstr1_context is not None:
             result["native_metadata"].update(
                 context_sha256=gstr1_context.sha256,

@@ -883,6 +883,53 @@ def render(event, format):
                 append(coverage, fields)
                 for link in body["confirmation_coverage_links"]:
                     append(coverage, [link.get(field) for field in fields])
+            if (
+                body.get("native_metadata", {}).get("contract")
+                == "retained-regular-withholding-observations/1"
+            ):
+                native_links = workbook.create_sheet("Withholding party links")
+                native_fields = [
+                    "group_id",
+                    "party_key",
+                    "source_line",
+                    "name",
+                    "pan",
+                    "native_section_code",
+                    "native_payment_date",
+                    "native_tax_date",
+                    "income_tax",
+                    "surcharge",
+                    "cess",
+                    "total_tax",
+                    "allocated_deposit",
+                    "payment_base",
+                    "recorded_rate",
+                    "reason_flag",
+                    "certificate_reference",
+                ]
+                append(native_links, native_fields)
+                for link in body["native_metadata"]["party_links"]:
+                    append(native_links, [link.get(field) for field in native_fields])
+                native_challans = workbook.create_sheet("Withholding challans")
+                challan_fields = [
+                    "batch",
+                    "challan",
+                    "source_line",
+                    "challan_number",
+                    "ddo_serial",
+                    "bsr_or_form24g_reference",
+                    "challan_date",
+                    "nil_flag",
+                    "book_entry_flag",
+                    "gross_deposit",
+                    "allocated_deposit",
+                    "recorded_interest",
+                    "recorded_other",
+                    "fee",
+                ]
+                append(native_challans, challan_fields)
+                for challan in body["native_metadata"]["challan_controls"]:
+                    append(native_challans, [challan.get(field) for field in challan_fields])
             if body.get("workflow") == "sanctions-name-review":
                 candidates = workbook.create_sheet("Screening candidates")
                 candidate_fields = [

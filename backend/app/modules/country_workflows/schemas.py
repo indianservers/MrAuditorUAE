@@ -24,6 +24,7 @@ from app.modules.country_workflows.gst_summary import METRICS, GSTSummaryMetric
 from app.modules.country_workflows.gstr1_schemas import GSTR1SectionControl
 from app.modules.country_workflows.gstr2b_part_schemas import GSTR2BPart
 from app.modules.country_workflows.import_nil_schemas import ImportNilScope
+from app.modules.country_workflows.india_withholding_native import NativeWithholdingControls
 from app.modules.country_workflows.inventory_controls import InventoryQuantityControl
 from app.modules.country_workflows.inventory_custody import (
     CustodyConfirmation,
@@ -369,6 +370,7 @@ ROW_TYPES: dict[str, type[BaseModel]] = {
 
 
 class SourceInput(Strict):
+    native_withholding_controls: NativeWithholdingControls | None = None
     un_sanctions_controls: UNSanctionsControls | None = None
     workbook_sheet: str | None = Field(default=None, min_length=1, max_length=31)
     workbook_assessment: str = Field(default="", max_length=2000)
@@ -436,6 +438,8 @@ class SourceInput(Strict):
         "india-gstr1-summary-json",
         "india-gstr1-document-series-json",
         "india-gstr1-documents-json",
+        "india-26q-regular-v7.8",
+        "india-27eq-regular-v6.9",
     ] = "canonical-csv"
     gstr1_section_controls: list[GSTR1SectionControl] = Field(default_factory=list, max_length=10)
     gstr1_context_evidence_version_id: uuid.UUID | None = None
@@ -576,6 +580,20 @@ class SourceInput(Strict):
 
     @model_validator(mode="after")
     def declared_nil(self):
+        if self.file_format in {"india-26q-regular-v7.8", "india-27eq-regular-v6.9"}:
+            if (
+                self.table_type != "withholding-records"
+                or self.native_withholding_controls is None
+                or self.expected_rows != len(self.native_withholding_controls.groups)
+                or set(self.control_totals) != {"INR"}
+            ):
+                raise ValueError(
+                    "Regular withholding source requires mapped observations, independent INR tax total and complete native controls"
+                )
+        elif self.native_withholding_controls is not None:
+            raise ValueError(
+                "Native withholding controls apply only to the selected regular statement profiles"
+            )
         if self.file_format == "un-sc-consolidated-xml":
             if (
                 self.table_type != "sanctions-entries"

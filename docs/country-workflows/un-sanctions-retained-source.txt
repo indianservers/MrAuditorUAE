@@ -83,3 +83,5 @@ scores, POTENTIAL_NAME_MATCH state, independence controls and older saved
 versions remain intact. Next.js production build, scoped static checks and
 current API payload contracts pass. The marker correction awaits its own
 hosted capture; the source 42be0e4 captures intentionally remain original.
+
+Hosted corrected source 2b171c4: all ten browser cases passed in 7.5 minutes. Four original UN captures were retained and visually inspected: documented-observation explanation and OBSERVATIONS_DOCUMENTED now appear without changing POTENTIAL_NAME_MATCH, source references or alias quality. Stale approval stays disabled. Source-specific receipt: docs/phase-12/corrected-un-tcs-browser-2b171c4.json.

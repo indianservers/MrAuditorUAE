@@ -1,0 +1,112 @@
+{
+  "scope": "Controlled historical regular 26Q/27EQ observation imports, independent crosswalks, role/country isolation, component/challan conservation, full lineage and source/downstream staleness",
+  "source_files": [
+    {
+      "path": "backend/app/modules/country_workflows/india_withholding_native.py",
+      "sha256": "f3418780a2067f77d4945e9996dcc1f03506d7739f398bc6562fd1af1bb379ca"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/india_withholding_native_limits.json",
+      "sha256": "2ff295d205024664211753832cd1b86b5eee59fbd1f47313af6aaf78460d618c"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/native_sources.py",
+      "sha256": "31d674bf4b44645d7daa4bb6732e2aa6974b922bb54be2e73e958f596e8d39b7"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/schemas.py",
+      "sha256": "da3e52b4db6a99fcebc43026bc6aa042231afcdf37452787eb2786172c267e79"
+    },
+    {
+      "path": "backend/app/modules/country_workflows/service.py",
+      "sha256": "2e5df2fec4f68f9f116e50c35730a7204811ab07dc514e5b42e8841744cf311e"
+    },
+    {
+      "path": "backend/app/modules/intelligence/exports.py",
+      "sha256": "4ae307e0805de49c2ee5c30ccbb681f3443a38742ddff4ee3c8817548c6feeaf"
+    },
+    {
+      "path": "backend/tests/qa_crud/test_india_withholding_native.py",
+      "sha256": "d99ca45249663fbede6085dfd6eb6aeb0df359ee1996042a116fe08649e0e6cd"
+    },
+    {
+      "path": "backend/tests/unit/test_india_withholding_native.py",
+      "sha256": "bf07e88a9c441ef91eec9ef043b76d89e10f3fbe74067d7a3d5a6b754ff82fc1"
+    },
+    {
+      "path": "frontend/e2e/withholding-native-release.spec.ts",
+      "sha256": "1c708f11105759a6f383a5e5689868be3b1746d41f0b064f0a80e0e45d3e7edf"
+    },
+    {
+      "path": "frontend/playwright.smoke.config.ts",
+      "sha256": "2f4b415419d3f160581ed641619f4882bf4785653a951720e2b4d38d1264b863"
+    },
+    {
+      "path": "frontend/src/features/country-workflows.tsx",
+      "sha256": "882dd7a2bef8ecd41302e5cf4fbb686b06b4e352622484440136a0273eab3263"
+    },
+    {
+      "path": "frontend/src/features/native-withholding-source.tsx",
+      "sha256": "2ab0b0bb7dc7054b379c90c8cd3e240367c458cd9da64d93aef809dd538d293d"
+    },
+    {
+      "path": "frontend/tests/country-workflows.test.tsx",
+      "sha256": "fe5c9599a158f2a332410c8ebcc624183a464d4b53a1708577402810f14fc600"
+    },
+    {
+      "path": "frontend/tests/native-withholding-source.test.tsx",
+      "sha256": "15341f429f3577dbc1f5adc39106cf36f47eeb8aee2b7f5376e32c2982959b4d"
+    }
+  ],
+  "original_test_reports": [
+    {
+      "path": "docs/phase-12/withholding-native-verified-final.xml",
+      "sha256": "79019c46286f3e1730acad58aa7b26d40ac8fb8e063c42703a7feda575587841",
+      "original_bytes": true,
+      "tests": 232,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/withholding-native-quarter-verified.xml",
+      "sha256": "64d184a64a22d469c99232a94d6d651e0caf4362d287ac92e9f59d99fe4fa0bd",
+      "original_bytes": true,
+      "tests": 83,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "docs/phase-12/withholding-native-frontend-final.xml",
+      "sha256": "ab0e98ea09aa92584e47f9d7ab05602ffc47425a8a728f62541d90568c04bfae",
+      "original_bytes": true,
+      "tests": 443,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "unique_targeted_backend_cases": 240,
+  "count_basis": "232 regression cases and eight new quarter-boundary cases; the 83-case unit report overlaps the prior 75 native cases and is not added wholesale",
+  "checks": {
+    "mypy": "419 application files passed",
+    "ruff": "scoped checks passed",
+    "eslint": "scoped checks passed",
+    "typescript": "passed",
+    "api_payload_snapshots": "current runtime model match",
+    "frontend_api_types": "current",
+    "frontend_production_build": "Next.js 16.4.2 passed",
+    "native_browser_discovery": "one new targeted hosted case discovered; execution pending"
+  },
+  "original_reference_receipt": "docs/phase-12/protean-legacy-native-source-assessment.json",
+  "previous_source_hosted_proof": "docs/phase-12/2b171c4-hosted-verification.json",
+  "limitations": [
+    "Native hosted form execution/capture inspection remain pending",
+    "API scanner and queue dispatch are explicit test doubles",
+    "Published sample structure plus synthetic crosswalks/expectations, not real client files or professional approvals",
+    "Conditional mandatory-field, legal-code, certificate and FVU/CSI checks are not qualified by this import",
+    "No correction, 24Q/27Q or current successor-form profile is enabled",
+    "No live portal authentication, government filing, bank payment or beneficiary credit is inferred"
+  ]
+}

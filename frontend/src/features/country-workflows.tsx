@@ -40,6 +40,13 @@ import { BankCarryforwardSource } from "./bank-carryforward-source";
 import { BankCashReview } from "./bank-cash-review";
 import { ScreeningCandidates } from "./screening-candidates";
 import {
+  NativeWithholdingSource,
+  NativeWithholdingLinks,
+  NativeWithholdingChallans,
+  EMPTY_NATIVE_WITHHOLDING,
+  nativeWithholdingPayload,
+} from "./native-withholding-source";
+import {
   UNSanctionsSource,
   EMPTY_UN_SNAPSHOT,
   buildUNSnapshot,
@@ -703,6 +710,9 @@ export function CountryWorkflows({
   );
   const [sourceFormat, setSourceFormat] = useState("canonical-csv");
   const [unSnapshot, setUNSnapshot] = useState(EMPTY_UN_SNAPSHOT);
+  const [nativeWithholding, setNativeWithholding] = useState(
+    EMPTY_NATIVE_WITHHOLDING,
+  );
   const [workbookSheet, setWorkbookSheet] = useState("");
   const [workbookAssessment, setWorkbookAssessment] = useState("");
   const [inventoryControlsEnabled, setInventoryControlsEnabled] =
@@ -988,13 +998,17 @@ export function CountryWorkflows({
       "ARREARS_ONLY_NOT_COMPLETE_MONTHLY_RETURN";
   const compactWPS =
     body?.native_metadata?.profile === "emirates-islamic-edr-evp-scr/1";
+  const compactNativeWithholding =
+    body?.native_metadata?.contract ===
+    "retained-regular-withholding-observations/1";
   const compactSource =
     detail.data?.kind === "workflow-source" &&
     (["transactions", "audit-open-items", "bank-outstanding"].includes(
       body?.table_type || "",
     ) ||
       compactWPS ||
-      compactArrear);
+      compactArrear ||
+      compactNativeWithholding);
   const compactCredit = body?.workflow === "credit-note-applications";
   const compactReserve = body?.workflow === "merchant-reserve-rollforward";
   const compactBankClearance = body?.workflow === "bank-subsequent-clearance";
@@ -1175,30 +1189,46 @@ export function CountryWorkflows({
                             "state",
                           ].filter((key) => allColumns.includes(key))
                         : compactSource && !showRuleProvenance
-                          ? (body?.table_type === "transactions"
+                          ? (compactNativeWithholding
                               ? [
-                                  "reference",
-                                  "account",
-                                  "date",
+                                  "registration",
+                                  "counterparty",
+                                  "legal_role",
+                                  "tax_kind",
+                                  "rule_reference",
+                                  "period",
+                                  "transaction_reference",
+                                  "transaction_date",
                                   "currency",
                                   "amount",
-                                  "counterparty",
-                                  "source_debit",
-                                  "source_credit",
+                                  "record_status",
+                                  "native_party_count",
+                                  "native_section_code",
                                 ]
-                              : [
-                                  "reference",
-                                  "counterparty",
-                                  "account",
-                                  "side",
-                                  "currency",
-                                  "document_type",
-                                  "document_date",
-                                  "due_date",
-                                  "balance_date",
-                                  "amount",
-                                  "supporting_reported_open_amount",
-                                ]
+                              : body?.table_type === "transactions"
+                                ? [
+                                    "reference",
+                                    "account",
+                                    "date",
+                                    "currency",
+                                    "amount",
+                                    "counterparty",
+                                    "source_debit",
+                                    "source_credit",
+                                  ]
+                                : [
+                                    "reference",
+                                    "counterparty",
+                                    "account",
+                                    "side",
+                                    "currency",
+                                    "document_type",
+                                    "document_date",
+                                    "due_date",
+                                    "balance_date",
+                                    "amount",
+                                    "supporting_reported_open_amount",
+                                  ]
                             ).filter((key) => allColumns.includes(key))
                           : [
                                 "india-payroll-rules",
@@ -1761,6 +1791,18 @@ export function CountryWorkflows({
           : {
               evidence_version_id: evidence,
               file_format: sourceFormat,
+              ...([
+                "india-26q-regular-v7.8",
+                "india-27eq-regular-v6.9",
+              ].includes(sourceFormat)
+                ? {
+                    native_withholding_controls: nativeWithholdingPayload(
+                      nativeWithholding,
+                      sourceFormat.includes("27eq") ? "27EQ" : "26Q",
+                      expectedRows,
+                    ),
+                  }
+                : {}),
               ...(sourceFormat === "un-sc-consolidated-xml"
                 ? {
                     un_sanctions_controls: buildUNSnapshot(
@@ -1858,7 +1900,9 @@ export function CountryWorkflows({
                 "pension-rules",
                 "benefit-rules",
                 "withholding-records",
-              ].includes(tableType) && ruleDocument
+              ].includes(tableType) &&
+              sourceFormat === "canonical-csv" &&
+              ruleDocument
                 ? { rule_document_version_id: ruleDocument }
                 : {}),
               ...(tableType === "savings-bases" && savingsEnrolmentDocument
@@ -2794,6 +2838,26 @@ export function CountryWorkflows({
                   {sourceFormat !== "canonical-csv" && (
                     <p>{formatInfo?.description}</p>
                   )}
+                  {[
+                    "india-26q-regular-v7.8",
+                    "india-27eq-regular-v6.9",
+                  ].includes(sourceFormat) && (
+                    <NativeWithholdingSource
+                      value={nativeWithholding}
+                      onChange={setNativeWithholding}
+                      form={sourceFormat.includes("27eq") ? "27EQ" : "26Q"}
+                      documents={(inputs.data?.evidence || []).filter(
+                        (doc) =>
+                          doc.scan_status === "CLEAN" &&
+                          doc.id !== evidence &&
+                          (!doc.sha256 ||
+                            doc.sha256 !==
+                              inputs.data?.evidence.find(
+                                (item) => item.id === evidence,
+                              )?.sha256),
+                      )}
+                    />
+                  )}
                   {sourceFormat === "un-sc-consolidated-xml" && (
                     <UNSanctionsSource
                       value={unSnapshot}
@@ -3102,126 +3166,128 @@ export function CountryWorkflows({
                     "pension-rules",
                     "benefit-rules",
                     "withholding-records",
-                  ].includes(tableType) && (
-                    <>
-                      <label>
-                        {tableType === "grant-budgets"
-                          ? "Retained grant mandate (optional shared document)"
-                          : tableType === "fx-rates"
-                            ? "Retained exchange-rate quote (optional shared document)"
-                            : [
-                                  "msme-interest-policies",
-                                  "msme-bank-rates",
-                                  "msme-tax-bases",
-                                  "msme-interest-pnl",
-                                ].includes(tableType)
-                              ? `${["msme-tax-bases", "msme-interest-pnl"].includes(tableType) ? "MSE annual tax" : "MSE interest"} supporting document (optional shared document)`
-                              : tableType === "withholding-records"
-                                ? "Withholding assessment document (optional shared document)"
-                                : `${tableType === "savings-rules" ? "Savings contribution" : tableType === "benefit-rules" ? "Benefit" : tableType === "pension-rules" ? "Pension" : "Payroll"} rule source document (optional shared document)`}
-                        <select
-                          aria-label={
-                            [
+                  ].includes(tableType) &&
+                    sourceFormat === "canonical-csv" && (
+                      <>
+                        <label>
+                          {tableType === "grant-budgets"
+                            ? "Retained grant mandate (optional shared document)"
+                            : tableType === "fx-rates"
+                              ? "Retained exchange-rate quote (optional shared document)"
+                              : [
+                                    "msme-interest-policies",
+                                    "msme-bank-rates",
+                                    "msme-tax-bases",
+                                    "msme-interest-pnl",
+                                  ].includes(tableType)
+                                ? `${["msme-tax-bases", "msme-interest-pnl"].includes(tableType) ? "MSE annual tax" : "MSE interest"} supporting document (optional shared document)`
+                                : tableType === "withholding-records"
+                                  ? "Withholding assessment document (optional shared document)"
+                                  : `${tableType === "savings-rules" ? "Savings contribution" : tableType === "benefit-rules" ? "Benefit" : tableType === "pension-rules" ? "Pension" : "Payroll"} rule source document (optional shared document)`}
+                          <select
+                            aria-label={
+                              [
+                                "msme-interest-policies",
+                                "msme-bank-rates",
+                                "msme-tax-bases",
+                                "msme-interest-pnl",
+                              ].includes(tableType)
+                                ? `${["msme-tax-bases", "msme-interest-pnl"].includes(tableType) ? "MSE annual tax" : "MSE interest"} supporting document (optional shared document)`
+                                : undefined
+                            }
+                            value={ruleDocument}
+                            onChange={(e) => setRuleDocument(e.target.value)}
+                          >
+                            <option value="">
+                              Use document references from the CSV
+                            </option>
+                            {inputs.data?.evidence
+                              .filter((item) => item.scan_status === "CLEAN")
+                              .map((item) => (
+                                <option key={item.id} value={item.id}>
+                                  {item.label}
+                                </option>
+                              ))}
+                          </select>
+                        </label>
+                        <p>
+                          {tableType === "grant-budgets" ? (
+                            <>
+                              Select a distinct retained mandate to fill blank
+                              document ID/hash fields. Declare country, donor,
+                              project, validity dates, category ceiling and
+                              whole-fund ceiling in the CSV. Source totals
+                              control category ceilings only; they are not cash
+                              available. Independently review the mandate
+                              schedule before comparison.
+                            </>
+                          ) : tableType === "fx-rates" ? (
+                            <>
+                              Select the retained quote to bind its document ID
+                              and hash to blank CSV fields. Conflicting
+                              references are rejected. Declare the direct
+                              currency pair, effective coverage, rate method and
+                              applicability assessment in the CSV; independently
+                              review the rate source before conversion.
+                            </>
+                          ) : [
                               "msme-interest-policies",
                               "msme-bank-rates",
                               "msme-tax-bases",
                               "msme-interest-pnl",
-                            ].includes(tableType)
-                              ? `${["msme-tax-bases", "msme-interest-pnl"].includes(tableType) ? "MSE annual tax" : "MSE interest"} supporting document (optional shared document)`
-                              : undefined
-                          }
-                          value={ruleDocument}
-                          onChange={(e) => setRuleDocument(e.target.value)}
-                        >
-                          <option value="">
-                            Use document references from the CSV
-                          </option>
-                          {inputs.data?.evidence
-                            .filter((item) => item.scan_status === "CLEAN")
-                            .map((item) => (
-                              <option key={item.id} value={item.id}>
-                                {item.label}
-                              </option>
-                            ))}
-                        </select>
-                      </label>
-                      <p>
-                        {tableType === "grant-budgets" ? (
-                          <>
-                            Select a distinct retained mandate to fill blank
-                            document ID/hash fields. Declare country, donor,
-                            project, validity dates, category ceiling and
-                            whole-fund ceiling in the CSV. Source totals control
-                            category ceilings only; they are not cash available.
-                            Independently review the mandate schedule before
-                            comparison.
-                          </>
-                        ) : tableType === "fx-rates" ? (
-                          <>
-                            Select the retained quote to bind its document ID
-                            and hash to blank CSV fields. Conflicting references
-                            are rejected. Declare the direct currency pair,
-                            effective coverage, rate method and applicability
-                            assessment in the CSV; independently review the rate
-                            source before conversion.
-                          </>
-                        ) : [
-                            "msme-interest-policies",
-                            "msme-bank-rates",
-                            "msme-tax-bases",
-                            "msme-interest-pnl",
-                          ].includes(tableType) ? (
-                          <>
-                            {["msme-tax-bases", "msme-interest-pnl"].includes(
-                              tableType,
-                            )
-                              ? "Select the retained annual tax or P&L assessment to fill blank document IDs and hashes. Declare the correct tax year, assessed bases and prior-tax references in the source."
-                              : "Select the retained policy or RBI bank-rate document to fill blank document IDs and hashes. Declare explicit validity and applicability in the CSV."}{" "}
-                            Conflicting references are rejected. Source review
-                            and byte verification do not establish legal
-                            applicability.
-                          </>
-                        ) : tableType === "withholding-records" ? (
-                          <>
-                            Select a retained assessment document to fill blank
-                            evidence IDs and hashes. Declare the assessment kind
-                            and coverage dates in the CSV; certificate
-                            assessments also require a shared amount cap.
-                            Expected liability and certificate-credit records
-                            need this support before approval. Selection does
-                            not establish legal applicability.
-                          </>
-                        ) : tableType === "savings-rules" ? (
-                          <>
-                            Bind the retained contribution policy to its exact
-                            fund, regime, cohort, work model and assessed
-                            service-rate band. One policy must cover each
-                            complete wage-coverage interval. No membership,
-                            statutory rate, fund approval or gratuity
-                            entitlement is inferred.
-                          </>
-                        ) : tableType === "payroll-cap-rules" ? (
-                          <>
-                            Bind the retained ceiling policy to its explicit
-                            dated PF wage segments. A policy may cover part of a
-                            wage month; split a segment at any policy change.
-                            Monthly contribution rates remain a separate
-                            reviewed source.
-                          </>
-                        ) : (
-                          <>
-                            Select a retained document to fill blank
-                            source-document references and hashes in the CSV.
-                            Conflicting references are rejected. Independently
-                            review this source before calculating expected dues.
-                            Payroll rules must cover the whole wage month;
-                            benefit rules must cover the service-end date and
-                            assessed employment regime.
-                          </>
-                        )}
-                      </p>
-                    </>
-                  )}
+                            ].includes(tableType) ? (
+                            <>
+                              {["msme-tax-bases", "msme-interest-pnl"].includes(
+                                tableType,
+                              )
+                                ? "Select the retained annual tax or P&L assessment to fill blank document IDs and hashes. Declare the correct tax year, assessed bases and prior-tax references in the source."
+                                : "Select the retained policy or RBI bank-rate document to fill blank document IDs and hashes. Declare explicit validity and applicability in the CSV."}{" "}
+                              Conflicting references are rejected. Source review
+                              and byte verification do not establish legal
+                              applicability.
+                            </>
+                          ) : tableType === "withholding-records" ? (
+                            <>
+                              Select a retained assessment document to fill
+                              blank evidence IDs and hashes. Declare the
+                              assessment kind and coverage dates in the CSV;
+                              certificate assessments also require a shared
+                              amount cap. Expected liability and
+                              certificate-credit records need this support
+                              before approval. Selection does not establish
+                              legal applicability.
+                            </>
+                          ) : tableType === "savings-rules" ? (
+                            <>
+                              Bind the retained contribution policy to its exact
+                              fund, regime, cohort, work model and assessed
+                              service-rate band. One policy must cover each
+                              complete wage-coverage interval. No membership,
+                              statutory rate, fund approval or gratuity
+                              entitlement is inferred.
+                            </>
+                          ) : tableType === "payroll-cap-rules" ? (
+                            <>
+                              Bind the retained ceiling policy to its explicit
+                              dated PF wage segments. A policy may cover part of
+                              a wage month; split a segment at any policy
+                              change. Monthly contribution rates remain a
+                              separate reviewed source.
+                            </>
+                          ) : (
+                            <>
+                              Select a retained document to fill blank
+                              source-document references and hashes in the CSV.
+                              Conflicting references are rejected. Independently
+                              review this source before calculating expected
+                              dues. Payroll rules must cover the whole wage
+                              month; benefit rules must cover the service-end
+                              date and assessed employment regime.
+                            </>
+                          )}
+                        </p>
+                      </>
+                    )}
                   {["camt053", "swift-mt940"].includes(sourceFormat) && (
                     <label>
                       Statement account identifier (optional selection)
@@ -7197,6 +7263,27 @@ export function CountryWorkflows({
               establish payment of PF contributions.
             </p>
           )}
+          {compactNativeWithholding &&
+            Array.isArray(body.native_metadata?.party_links) && (
+              <NativeWithholdingLinks
+                key={selected}
+                rows={
+                  body.native_metadata.party_links as Record<string, unknown>[]
+                }
+              />
+            )}
+          {compactNativeWithholding &&
+            Array.isArray(body.native_metadata?.challan_controls) && (
+              <NativeWithholdingChallans
+                key={`${selected}:challans`}
+                rows={
+                  body.native_metadata.challan_controls as Record<
+                    string,
+                    unknown
+                  >[]
+                }
+              />
+            )}
           {body.native_metadata && (
             <details>
               <summary>Original source controls and calculation basis</summary>
@@ -7204,7 +7291,12 @@ export function CountryWorkflows({
                 {Object.entries(body.native_metadata)
                   .filter(
                     ([key]) =>
-                      !["message_controls", "page_controls"].includes(key) ||
+                      ![
+                        "message_controls",
+                        "page_controls",
+                        "party_links",
+                        "challan_controls",
+                      ].includes(key) ||
                       !Array.isArray(body.native_metadata?.[key]),
                   )
                   .map(([key, value]) => (

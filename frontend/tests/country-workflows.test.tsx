@@ -223,6 +223,8 @@ vi.mock("@/hooks/use-api", () => ({
                   }
                 : {},
             source_formats: [
+              { id: "india-26q-regular-v7.8", label: "India historical 26Q regular statement v7.8", available: state.country === "IN", table_type: "withholding-records" },
+              { id: "india-27eq-regular-v6.9", label: "India historical 27EQ regular statement v6.9", available: state.country === "IN", table_type: "withholding-records" },
               { id: "un-sc-consolidated-xml", label: "UN consolidated sanctions XML", available: true, table_type: "sanctions-entries" },
               {
                 id: "india-gstr1-document-series-json",
@@ -3780,4 +3782,34 @@ it.each(["AE", "IN"])("queues independent UN snapshot controls without monetary 
   fireEvent.click(screen.getByRole("button", { name: "Queue calculation" }));
   await waitFor(() => expect(state.mutate).toHaveBeenCalled());
   expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({ file_format: "un-sc-consolidated-xml", table_type: "sanctions-entries", expected_rows: 6, control_totals: {}, un_sanctions_controls: { generated_at: "2026-06-29T23:00:00Z", individuals: 1, entities: 1, original_script_names: 1, individual_alias_names: 2, entity_alias_names: 1, empty_alias_records: 2 } });
+});
+
+
+it("queues a native regular statement with separate retained crosswalk and independent tax controls", async () => {
+  state.country = "IN";
+  render(<CountryWorkflows eid="engagement" mode="workflow-source" />);
+  fireEvent.change(screen.getByLabelText("Source table type"), { target: { value: "withholding-records" } });
+  fireEvent.change(screen.getByLabelText("Withholding assessment document (optional shared document)"), { target: { value: "context-clean" } });
+  fireEvent.change(screen.getByLabelText("Source file format"), { target: { value: "india-26q-regular-v7.8" } });
+  for (const [label,value] of [
+    ["Clean retained evidence","clean"],["Schedule title","Synthetic native 26Q observations"],["Expected data rows","1"],["Independent totals by currency","INR=100"],
+    ["Native statement TAN","MUMN77777A"],["Native financial year (six digits)","202021"],["Native statement quarter","Q1"],["Native observation cutoff","2026-10-30"],["Assessed native source selection","current"],
+    ["Native batch count","1"],["Native challan count","1"],["Native party count","1"],["Native income tax control (INR)","100"],["Native surcharge control (INR)","0"],["Native cess control (INR)","0"],["Native allocated deposit control (INR)","100"],["Native challan deposit control (INR)","1000"],["Native payment base control (INR)","1000"],
+    ["Retained native transaction and section crosswalk","context-clean"],["Native crosswalk groups (JSON)",JSON.stringify([{transaction_reference:"SYN-1",transaction_date:"2020-04-01",period:"2020-04",rule_reference:"SYN-ASSESSMENT",party_records:["1/1/1"]}])],["Native source and crosswalk assessment","Synthetic independent original statement and retained crosswalk assessment"],
+  ]) fireEvent.change(screen.getByLabelText(label), {target:{value}});
+  fireEvent.click(screen.getByRole("button",{name:"Queue calculation"}));
+  await waitFor(()=>expect(state.mutate).toHaveBeenCalled());
+  expect(state.mutate.mock.calls[0][0].body.payload).not.toHaveProperty("rule_document_version_id");
+  expect(state.mutate.mock.calls[0][0].body.payload).toMatchObject({file_format:"india-26q-regular-v7.8",table_type:"withholding-records",expected_rows:1,control_totals:{INR:"100"},native_withholding_controls:{tan:"MUMN77777A",party_count:1,record_status:"current",crosswalk_document_version_id:"context-clean",income_tax:"100",allocated_deposit:"100",challan_deposit:"1000"}});
+});
+
+
+it("keeps assessed native history status visible without opening all provenance",()=>{
+  state.country="IN";
+  state.result={id:"result",kind:"workflow-source",version:1,freshness:"CURRENT",body:{table_type:"withholding-records",title:"Retained superseded native observations",review_status:"UNVERIFIED",native_metadata:{contract:"retained-regular-withholding-observations/1"},rows:[{id:"26Q:group:1",registration:"MUMN77777A",counterparty:"AAAPA1234A",legal_role:"deductor",tax_kind:"TDS",rule_reference:"SYN-ASSESSMENT",period:"2020-04",transaction_reference:"SYN-1",transaction_date:"2020-04-01",currency:"INR",amount:"1000.00",record_status:"superseded",native_party_count:1,native_section_code:"BA1"}]}};
+  render(<CountryWorkflows eid="engagement" mode="workflow-source"/>);
+  fireEvent.change(screen.getByLabelText("Saved source or result"),{target:{value:"result"}});
+  expect(screen.getByRole("columnheader",{name:"record status"})).toBeVisible();
+  expect(screen.getByRole("cell",{name:"superseded"})).toBeVisible();
+  expect(screen.getByRole("cell",{name:"1000.00"})).toBeVisible();
 });
