@@ -7,6 +7,7 @@ export default defineConfig({
     "form26-fields-release.spec.ts",
     "annual-gst-release.spec.ts",
     "foreign-obligation-release.spec.ts",
+    "inventory-fifo-release.spec.ts",
   ],
   workers: 1,
   reporter: "list",

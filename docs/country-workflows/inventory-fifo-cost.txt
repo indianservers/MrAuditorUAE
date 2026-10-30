@@ -56,3 +56,13 @@ No native statutory filing or country legal qualification is claimed.
 Validation inputs are authored synthetic fixtures, including both country
 contexts and exact 5000-event population. They are separate from the empty
 real-client pilot intake folders. Passing them does not qualify real clients.
+
+Hosted browser release test: frontend/e2e/inventory-fifo-release.spec.ts.
+It creates UAE then India synthetic engagements, uploads originals through the
+configured ClamAV service, prepares sources through the actual worker, reviews
+them independently, and uses the UI to calculate and independently approve.
+It checks independent allocation/event paging, full XLSX row counts and unchanged
+historical bytes after original support replacement, with positive/stale captures.
+The test is included in playwright.smoke.config.ts. Local discovery, scoped ESLint
+and TypeScript checks passed; hosted execution and screenshot inspection require
+their own run evidence and are not established merely by adding the test.
