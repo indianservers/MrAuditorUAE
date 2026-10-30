@@ -449,10 +449,29 @@ test("India historical native samples and explicit dated Form 143 fixture, contr
           path: `${screenshots}/IN-${form}-native-crosswalk-superseded-stale.png`,
         });
     }
+    const panPeriod = await create("financial-periods", {
+      entity_id: entity.id,
+      start_date: "2026-04-01",
+      end_date: "2027-03-31",
+    });
+    const panEngagement = await create("engagements", {
+      entity_id: entity.id,
+      period_id: panPeriod.id,
+      name: "SYNTHETIC current missing-PAN treatment review",
+      engagement_type: "External Audit",
+    });
+    await create(
+      `engagements/${panEngagement.id}/audit/team`,
+      {
+        membership_id: identities.reviewer_membership_id,
+        role_id: identities.reviewer_role_id,
+      },
+      200,
+    );
     await runWithholdingPANBrowserWorkflow(
       page,
       reviewer,
-      eid,
+      panEngagement.id,
       identities.tenant_id,
       screenshots,
     );

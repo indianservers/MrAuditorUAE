@@ -54,3 +54,13 @@ run exposed an old broad test mock returning a result object for the new cash
 status request; the mock now supplies the actual status-response shape.
 Original final reports and staged-source hashes are retained in the separate
 merchant-shared-cash-validation.json receipt. New hosted proof remains pending.
+
+Hosted source 12503b6 subsequently passed both country-report cases, including
+the shared cash conflict, explicit independent withdrawal and replacement
+approval. Both exact approved replacement cards were reloaded and captured in
+full. The saved originals visibly show REVIEWED, CURRENT, active approved cash
+allocation and a matched amount of 800 in the correct AED/INR currency, with
+no notification obscuring the card. Component and bank-date details remain
+collapsed. The receipt withholding-pan-browser-12503b6.json retains the source
+hashes and visual findings. That overall suite still failed its separate new
+PAN test on an out-of-period fixture; twelve cases passed and one failed.

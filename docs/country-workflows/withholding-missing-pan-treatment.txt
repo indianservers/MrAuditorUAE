@@ -74,3 +74,11 @@ execution and visual review remain pending for the committed source.
 No real-client inputs, external PAN authentication, professional legal opinion
 or statutory production qualification are supplied by these tests. The original
 154 authored scenarios are not relabelled or expanded into qualified client cases.
+
+Hosted source 12503b6: twelve browser cases passed and one compound native case
+failed at the new PAN calculation. Its June 2026 cutoff was outside the reused
+historical 2020-21 engagement; the worker correctly rejected the job. The test
+now creates a separate 2026-27 period and engagement and grants its reviewer.
+The guard is preserved. TypeScript, scoped lint and browser discovery pass;
+corrected hosted execution remains pending. Original failure captures and
+source hashes are in docs/phase-12/withholding-pan-browser-12503b6.json.

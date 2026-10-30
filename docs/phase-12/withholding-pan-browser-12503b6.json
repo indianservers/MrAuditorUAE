@@ -1,0 +1,69 @@
+{
+  "source_commit": "12503b694710adf74ec950601eab2d1fe20f1710",
+  "run_id": 41108246056,
+  "job_id": 124243616698,
+  "job_conclusion": "failure",
+  "suite_passed": 12,
+  "suite_failed": 1,
+  "suite_duration": "6.9m",
+  "source_files": [
+    {
+      "path": "frontend/e2e/merchant-browser-workflow.ts",
+      "sha256": "b153fb64bbedade7c635732aa981598d940d902e8b9a9293ba5ed308c9a49d38"
+    },
+    {
+      "path": "frontend/e2e/withholding-native-release.spec.ts",
+      "sha256": "ab645016d5e3b73d7739c7af956f03e1c6030b50ca8e5cc3a75a0f137afcd566"
+    },
+    {
+      "path": "frontend/e2e/withholding-pan-browser-workflow.ts",
+      "sha256": "74b6dca5488f9b7a62b03ada6edaa765de03639058f47f15b01f95d54f798f25"
+    }
+  ],
+  "artifact": {
+    "id": 13002163421,
+    "size_bytes": 16208100,
+    "sha256": "ed26872c2f6bce5305a3fa93ccc8e0e96510a94b907e32c9c236ffc6738d3a47"
+  },
+  "screenshots": [
+    {
+      "path": "docs/country-workflows/screenshots/AE-merchant-replacement-approved-12503b6.png",
+      "size_bytes": 125854,
+      "sha256": "f8c4defeaafc8ef73e41f606bcdcd1c66c0a79b6e9f31d808dac800d62a7d6f2",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-merchant-replacement-approved-12503b6.png",
+      "size_bytes": 125594,
+      "sha256": "ddf46c829f25fb44a60fdb8b4b0acb982d779ce9c40000110a8089d64d376e88",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-PAN-period-rejection-12503b6-1.png",
+      "size_bytes": 142063,
+      "sha256": "4ab30ea50ee905f657eac9f9c389ed2b6c61513ee757f5ade5fe0cb3429879a5",
+      "visually_inspected": true
+    },
+    {
+      "path": "docs/country-workflows/screenshots/IN-PAN-period-rejection-12503b6-2.png",
+      "size_bytes": 250106,
+      "sha256": "10a5fc4e867ea1094b77bfa48c6a2d6386121eb5f939c722ecbcf4e04e447b6b",
+      "visually_inspected": true
+    }
+  ],
+  "merchant_scope": "Both country-report cases passed, including shared merchant/obligation capacity conflict, independent withdrawal and replacement approval. Exact approved events were reloaded before checking derived freshness and capturing the complete card.",
+  "merchant_visual_findings": "Both retained replacement cards visibly show REVIEWED, CURRENT, zero exceptions, ACTIVE_APPROVED_ALLOCATION and one MATCHED allocation of 800 in AED or INR. No toast covers the card. Component and bank-date details remain collapsed; these captures are not proof of every hidden detail or live bank authenticity.",
+  "failure": "The new PAN helper queued its June 2026 calculation inside the existing 2020-21 historical native engagement. The worker rejected it: Reconciliation date must be within the engagement period. The first pending result was not created, so pending/documented/stale PAN browser states are not verified by this run.",
+  "failure_visual_findings": "The preparer image shows the June 2026 PAN form and accepted-request notification, not a completed result or visible worker rejection. The reviewer image still shows the previous stale native Form 143 source. Neither is substituted for PAN success evidence.",
+  "correction": "Create a separate 2026-27 financial period and engagement for the same synthetic India entity, explicitly grant the independent reviewer, and pass that engagement to the PAN helper. Historical source fixtures and production period guards are unchanged.",
+  "correction_checks": {
+    "typescript": "PASS",
+    "scoped_eslint": "PASS",
+    "playwright_discovery": "ONE_COMPOUND_CASE_DISCOVERED",
+    "hosted_execution": "PENDING_FOR_CORRECTED_SOURCE"
+  },
+  "limits": [
+    "Overall suite failed despite both merchant cases passing.",
+    "No real-client, professional legal, live bank/PAN registry or production qualification."
+  ]
+}
